@@ -1,0 +1,27 @@
+set -e
+DIR=/opt/ai-relay/services/gitee-passthrough
+sudo mkdir -p "$DIR"
+cd "$DIR"
+echo "=== files before build ==="
+ls -la
+test -f server.mjs || { echo "MISSING server.mjs — 重跑 server p1~p3 + decode"; exit 1; }
+test -f fix-marketplace-meta.mjs || { echo "MISSING fix-marketplace-meta.mjs — 重跑 fix p1~p2 + decode"; exit 1; }
+if ! test -f catalog.json; then
+  echo "catalog.json missing, try copy from old image..."
+  sudo docker run --rm --entrypoint cat keyo-gitee-passthrough /app/catalog.json 2>/dev/null | sudo tee catalog.json >/dev/null || true
+fi
+test -f catalog.json || { echo "MISSING catalog.json"; exit 1; }
+cd /opt/ai-relay
+sudo docker build -t keyo-gitee-passthrough ./services/gitee-passthrough
+sudo docker rm -f ai-relay-gitee-passthrough 2>/dev/null || true
+sudo docker run -d --name ai-relay-gitee-passthrough --restart always --network host \
+  --env-file /opt/ai-relay/.env.gitee \
+  -v /opt/ai-relay/data/new-api:/data:rw \
+  -e NEW_API_DB=/data/one-api.db \
+  -e CATALOG=/app/catalog.json \
+  keyo-gitee-passthrough
+sleep 2
+curl -sS http://127.0.0.1:3010/healthz || true
+echo
+sudo docker logs --tail 20 ai-relay-gitee-passthrough
+echo DONE_PASSTHROUGH_PRIVACY

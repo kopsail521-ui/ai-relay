@@ -1,0 +1,1028 @@
+{
+  "provider": "gitee",
+  "name": "模力方舟 Serverless",
+  "baseUrl": "https://ai.gitee.com/v1",
+  "docs": "https://ai.gitee.com/docs/openapi/v1",
+  "catalog": "https://ai.gitee.com/serverless-api",
+  "markup": 5,
+  "fx": 7.3,
+  "note": "售价 = 上游成本 ×5；免费上游按成本底价 ¥0.01×5=¥0.05（按次类）。token 模型按百万 tokens。usage 单位类在 New API 按 ModelPrice（单位售价）按次近似扣费。",
+  "categories": {
+    "vision_cv": [
+      "VajraV1",
+      "sam3"
+    ],
+    "image_process": [
+      "AnimeSharp",
+      "Real-ESRGAN",
+      "UVDoc",
+      "RMBG-2.0"
+    ],
+    "document_ocr": [
+      "MinerU2.5-Pro",
+      "Unlimited-OCR",
+      "DeepSeek-OCR-2"
+    ],
+    "digital_human": [
+      "Duix-Avatar",
+      "InfiniteTalk"
+    ],
+    "asr": [
+      "MOSS-Audio-8B-Thinking",
+      "Fun-ASR-Nano-2512",
+      "GLM-ASR",
+      "whisper-large-v3",
+      "whisper-large-v3-turbo"
+    ],
+    "tts": [
+      "Qwen3-TTS",
+      "CosyVoice3",
+      "GLM-TTS",
+      "IndexTTS-2",
+      "Step-Audio-TTS-3B"
+    ],
+    "moderation": [
+      "nonescape-v0",
+      "moark-text-moderation",
+      "Security-semantic-filtering",
+      "nsfw-classifier"
+    ],
+    "chat_vlm": [
+      "gemma-4-26B-A4B-it"
+    ]
+  },
+  "models": [
+    {
+      "id": "VajraV1",
+      "upstream": "VajraV1",
+      "category": "vision_cv",
+      "category_zh": "视觉检测/分割",
+      "description": "基于 YOLO 的实时视觉模型：目标检测、图像分割与人体关键点，适用于监控、零售与工业视觉。",
+      "cover": "https://gitee-ai.su.bcebos.com/v1/uploads/img/id-fewbv2w6l-avatar-vayuai.png",
+      "paths": [
+        "v1/images/object-detection",
+        "v1/images/segmentation",
+        "v1/images/pose-detection"
+      ],
+      "operations": [
+        {
+          "name": "目标检测",
+          "type": "image2text",
+          "path": "v1/images/object-detection",
+          "price_cny": 0.01,
+          "unit_tag": 0,
+          "in_m": 0,
+          "out_m": 0
+        },
+        {
+          "name": "图像分割",
+          "type": "image2text",
+          "path": "v1/images/segmentation",
+          "price_cny": 0.01,
+          "unit_tag": 0,
+          "in_m": 0,
+          "out_m": 0
+        },
+        {
+          "name": "人体关键点检测",
+          "type": "image2text",
+          "path": "v1/images/pose-detection",
+          "price_cny": 0.01,
+          "unit_tag": 0,
+          "in_m": 0,
+          "out_m": 0
+        }
+      ],
+      "billing": {
+        "mode": "unit",
+        "unit": "per_call",
+        "unit_label": "次",
+        "unit_note": "按次计费",
+        "unit_tag": 0,
+        "cost_cny": 0.01,
+        "sell_cny": 0.05,
+        "model_price_usd": 0.006849,
+        "free_upstream": false
+      },
+      "relay": "gitee_passthrough",
+      "markup": 5
+    },
+    {
+      "id": "sam3",
+      "upstream": "sam3",
+      "category": "vision_cv",
+      "category_zh": "视觉检测/分割",
+      "description": "Meta SAM 3 开放词汇图像分割，无需预定义类别即可对任意目标做像素级 Mask。",
+      "cover": "https://gitee-ai.su.bcebos.com/v1/uploads/img/id-3m5kohlqm-avatar-meta.png",
+      "paths": [
+        "v1/images/object-detection",
+        "v1/images/segmentation"
+      ],
+      "operations": [
+        {
+          "name": "物体检测",
+          "type": "image2text",
+          "path": "v1/images/object-detection",
+          "price_cny": 0.02,
+          "unit_tag": 0,
+          "in_m": 0,
+          "out_m": 0
+        },
+        {
+          "name": "图片切割",
+          "type": "image2text",
+          "path": "v1/images/segmentation",
+          "price_cny": 0.02,
+          "unit_tag": 0,
+          "in_m": 0,
+          "out_m": 0
+        }
+      ],
+      "billing": {
+        "mode": "unit",
+        "unit": "per_call",
+        "unit_label": "次",
+        "unit_note": "按次计费",
+        "unit_tag": 0,
+        "cost_cny": 0.02,
+        "sell_cny": 0.1,
+        "model_price_usd": 0.013699,
+        "free_upstream": false
+      },
+      "relay": "gitee_passthrough",
+      "markup": 5
+    },
+    {
+      "id": "AnimeSharp",
+      "upstream": "AnimeSharp",
+      "category": "image_process",
+      "category_zh": "图像处理",
+      "description": "动漫/插画超分（4x-AnimeSharp/ESRGAN），放大并锐化线稿，保留二次元风格细节。",
+      "cover": "https://gitee-ai.su.bcebos.com/v1/uploads/img/id-asdd24puu-ChatGPT Image 2025年6月20日 10_11_15.png",
+      "paths": [
+        "v1/images/upscaling"
+      ],
+      "operations": [
+        {
+          "name": "图片高清",
+          "type": "image2image",
+          "path": "v1/images/upscaling",
+          "price_cny": 0.01,
+          "unit_tag": 0,
+          "in_m": 0,
+          "out_m": 0
+        }
+      ],
+      "billing": {
+        "mode": "unit",
+        "unit": "per_call",
+        "unit_label": "次",
+        "unit_note": "按次计费",
+        "unit_tag": 0,
+        "cost_cny": 0.01,
+        "sell_cny": 0.05,
+        "model_price_usd": 0.006849,
+        "free_upstream": false
+      },
+      "relay": "gitee_passthrough",
+      "markup": 5
+    },
+    {
+      "id": "Real-ESRGAN",
+      "upstream": "Real-ESRGAN",
+      "category": "image_process",
+      "category_zh": "图像处理",
+      "description": "通用真实图像超分辨率，放大照片并恢复细节，输出更清晰。",
+      "cover": "https://gitee-ai.su.bcebos.com/v1/uploads/img/id-bo4q8iwjw-avatar-realesrgan.png",
+      "paths": [
+        "v1/images/upscaling"
+      ],
+      "operations": [
+        {
+          "name": "图片高清",
+          "type": "image2image",
+          "path": "v1/images/upscaling",
+          "price_cny": 0.01,
+          "unit_tag": 0,
+          "in_m": 0,
+          "out_m": 0
+        }
+      ],
+      "billing": {
+        "mode": "unit",
+        "unit": "per_call",
+        "unit_label": "次",
+        "unit_note": "按次计费",
+        "unit_tag": 0,
+        "cost_cny": 0.01,
+        "sell_cny": 0.05,
+        "model_price_usd": 0.006849,
+        "free_upstream": false
+      },
+      "relay": "gitee_passthrough",
+      "markup": 5
+    },
+    {
+      "id": "UVDoc",
+      "upstream": "UVDoc",
+      "category": "image_process",
+      "category_zh": "图像处理",
+      "description": "文档图片矫正：将弯曲、倾斜的扫描件展平，提升后续 OCR 准确率。",
+      "cover": "https://gitee-ai.su.bcebos.com/v1/uploads/img/news_cover_1-img_v3_02i3_48e0fb33-0ae6-4774-af38-7c5a7b3e145g.png",
+      "paths": [
+        "v1/images/unwarping"
+      ],
+      "operations": [
+        {
+          "name": "图片矫正",
+          "type": "image2image",
+          "path": "v1/images/unwarping",
+          "price_cny": 0.02,
+          "unit_tag": 0,
+          "in_m": 0,
+          "out_m": 0
+        }
+      ],
+      "billing": {
+        "mode": "unit",
+        "unit": "per_call",
+        "unit_label": "次",
+        "unit_note": "按次计费",
+        "unit_tag": 0,
+        "cost_cny": 0.02,
+        "sell_cny": 0.1,
+        "model_price_usd": 0.013699,
+        "free_upstream": false
+      },
+      "relay": "gitee_passthrough",
+      "markup": 5
+    },
+    {
+      "id": "RMBG-2.0",
+      "upstream": "RMBG-2.0",
+      "category": "image_process",
+      "category_zh": "图像处理",
+      "description": "BRIA RMBG 智能抠图去背景，适用于商品图、人像与设计素材的高精度抠图。",
+      "cover": "https://gitee-ai.su.bcebos.com/v1/uploads/img/news_cover_3-avatar-bria.png",
+      "paths": [
+        "v1/images/mattings"
+      ],
+      "operations": [
+        {
+          "name": "抠图",
+          "type": "image_matting",
+          "path": "v1/images/mattings",
+          "price_cny": 0.01,
+          "unit_tag": 0,
+          "in_m": 0,
+          "out_m": 0
+        }
+      ],
+      "billing": {
+        "mode": "unit",
+        "unit": "per_call",
+        "unit_label": "次",
+        "unit_note": "按次计费",
+        "unit_tag": 0,
+        "cost_cny": 0.01,
+        "sell_cny": 0.05,
+        "model_price_usd": 0.006849,
+        "free_upstream": false
+      },
+      "relay": "gitee_passthrough",
+      "markup": 5
+    },
+    {
+      "id": "MinerU2.5-Pro",
+      "upstream": "MinerU2.5-Pro",
+      "category": "document_ocr",
+      "category_zh": "文档/OCR",
+      "description": "复杂文档解析与 OCR：从 PDF/图片提取文字、版面、表格与结构，输出结构化结果。",
+      "cover": "https://gitee-ai.su.bcebos.com/v1/uploads/img/id-spiywsbrp-id-btfubx0rb-avatar-mineru.png",
+      "paths": [
+        "v1/async/documents/parse"
+      ],
+      "operations": [
+        {
+          "name": "文档解析",
+          "type": "doc2md",
+          "path": "v1/async/documents/parse",
+          "price_cny": 0.02,
+          "unit_tag": 1203,
+          "in_m": 0,
+          "out_m": 0
+        }
+      ],
+      "billing": {
+        "mode": "unit",
+        "unit": "per_page",
+        "unit_label": "页",
+        "unit_note": "文档解析按页（上游 unit_tag=1203）",
+        "unit_tag": 1203,
+        "cost_cny": 0.02,
+        "sell_cny": 0.1,
+        "model_price_usd": 0.013699,
+        "free_upstream": false
+      },
+      "relay": "gitee_passthrough",
+      "markup": 5
+    },
+    {
+      "id": "Unlimited-OCR",
+      "upstream": "Unlimited-OCR",
+      "category": "document_ocr",
+      "category_zh": "文档/OCR",
+      "description": "面向长文档的智能 OCR，支持版面理解与结构化提取，可通过 chat/completions 调用。",
+      "cover": "https://gitee-ai.su.bcebos.com/v1/uploads/img/id-681ssg5yg-avatar-baidu.png",
+      "paths": [
+        "v1/chat/completions",
+        "v1/async/documents/parse"
+      ],
+      "operations": [
+        {
+          "name": "文本对话",
+          "type": "text2text",
+          "path": "v1/chat/completions",
+          "price_cny": 0.02,
+          "unit_tag": 0,
+          "in_m": 2.8,
+          "out_m": 2.8
+        },
+        {
+          "name": "文档解析",
+          "type": "doc2md",
+          "path": "v1/async/documents/parse",
+          "price_cny": 0.02,
+          "unit_tag": 1203,
+          "in_m": 0,
+          "out_m": 0
+        }
+      ],
+      "billing": {
+        "mode": "token",
+        "cost_in_cny_per_m": 2.8,
+        "cost_out_cny_per_m": 2.8,
+        "sell_in_cny_per_m": 14,
+        "sell_out_cny_per_m": 14,
+        "model_ratio": 0.958904,
+        "completion_ratio": 1
+      },
+      "relay": "mixed",
+      "markup": 5
+    },
+    {
+      "id": "DeepSeek-OCR-2",
+      "upstream": "DeepSeek-OCR-2",
+      "category": "document_ocr",
+      "category_zh": "文档/OCR",
+      "description": "高精度 OCR，可从图片/PDF 提取文字，并按阅读顺序整理表格、多栏与复杂排版。",
+      "cover": "https://gitee-ai.su.bcebos.com/v1/uploads/img/id-00z769y98-deepseek.png",
+      "paths": [
+        "v1/chat/completions"
+      ],
+      "operations": [
+        {
+          "name": "文本对话",
+          "type": "text2text",
+          "path": "v1/chat/completions",
+          "price_cny": 0.02,
+          "unit_tag": 0,
+          "in_m": 2.8,
+          "out_m": 2.8
+        }
+      ],
+      "billing": {
+        "mode": "token",
+        "cost_in_cny_per_m": 2.8,
+        "cost_out_cny_per_m": 2.8,
+        "sell_in_cny_per_m": 14,
+        "sell_out_cny_per_m": 14,
+        "model_ratio": 0.958904,
+        "completion_ratio": 1
+      },
+      "relay": "newapi_native",
+      "markup": 5
+    },
+    {
+      "id": "Duix-Avatar",
+      "upstream": "Duix-Avatar",
+      "category": "digital_human",
+      "category_zh": "数字人/视频",
+      "description": "音频+视频驱动的数字人（异步），生成口型同步与表情互动，适合虚拟角色说话场景。",
+      "cover": "https://gitee-ai.su.bcebos.com/v1/uploads/img/id-11g3myb8s-id-rb71nnf85-olynv1vmvrx.png",
+      "paths": [
+        "v1/async/videos/audio-video-to-video"
+      ],
+      "operations": [
+        {
+          "name": "数字人生成",
+          "type": "audio_video2video",
+          "path": "v1/async/videos/audio-video-to-video",
+          "price_cny": 0.01,
+          "unit_tag": 1264,
+          "in_m": 0,
+          "out_m": 0
+        }
+      ],
+      "billing": {
+        "mode": "unit",
+        "unit": "per_second",
+        "unit_label": "秒",
+        "unit_note": "数字人按秒（上游 unit_tag=1264）",
+        "unit_tag": 1264,
+        "cost_cny": 0.01,
+        "sell_cny": 0.05,
+        "model_price_usd": 0.006849,
+        "free_upstream": false
+      },
+      "relay": "gitee_passthrough",
+      "markup": 5
+    },
+    {
+      "id": "InfiniteTalk",
+      "upstream": "InfiniteTalk",
+      "category": "digital_human",
+      "category_zh": "数字人/视频",
+      "description": "音频驱动的数字人讲述视频（异步）：图/视频 + 音频生成自然口型与肢体动作，时长跟随音频。",
+      "cover": "https://gitee-ai.su.bcebos.com/v1/uploads/img/id-djjdtgpgh-avatar-infinitetalk.png",
+      "paths": [
+        "v1/async/videos/image-to-video"
+      ],
+      "operations": [
+        {
+          "name": "图生视频",
+          "type": "image2video",
+          "path": "v1/async/videos/image-to-video",
+          "price_cny": 0.5,
+          "unit_tag": 0,
+          "in_m": 0,
+          "out_m": 0
+        }
+      ],
+      "billing": {
+        "mode": "unit",
+        "unit": "per_call",
+        "unit_label": "次",
+        "unit_note": "按次计费",
+        "unit_tag": 0,
+        "cost_cny": 0.5,
+        "sell_cny": 2.5,
+        "model_price_usd": 0.342466,
+        "free_upstream": false
+      },
+      "relay": "gitee_passthrough",
+      "markup": 5
+    },
+    {
+      "id": "MOSS-Audio-8B-Thinking",
+      "upstream": "MOSS-Audio-8B-Thinking",
+      "category": "asr",
+      "category_zh": "语音识别 ASR",
+      "description": "具备语音理解与推理的音频大模型，可转写并分析多人对话，适用于会议与语音交互。",
+      "cover": "https://gitee-ai.su.bcebos.com/v1/uploads/img/id-3nousg63u-20260610-144832.jpg",
+      "paths": [
+        "v1/audio/transcriptions"
+      ],
+      "operations": [
+        {
+          "name": "语音识别",
+          "type": "speech2text",
+          "path": "v1/audio/transcriptions",
+          "price_cny": 0.03,
+          "unit_tag": 0,
+          "in_m": 0,
+          "out_m": 0
+        }
+      ],
+      "billing": {
+        "mode": "unit",
+        "unit": "per_call",
+        "unit_label": "次",
+        "unit_note": "按次计费",
+        "unit_tag": 0,
+        "cost_cny": 0.03,
+        "sell_cny": 0.15,
+        "model_price_usd": 0.020548,
+        "free_upstream": false
+      },
+      "relay": "newapi_native",
+      "markup": 5
+    },
+    {
+      "id": "Fun-ASR-Nano-2512",
+      "upstream": "Fun-ASR-Nano-2512",
+      "category": "asr",
+      "category_zh": "语音识别 ASR",
+      "description": "轻量多语言语音识别，低延迟，适合实时转写、会议记录与语音交互。",
+      "cover": "https://gitee-ai.su.bcebos.com/v1/uploads/img/id-xegyngmvu-avatar-qwen.png",
+      "paths": [
+        "v1/audio/transcriptions"
+      ],
+      "operations": [
+        {
+          "name": "语音识别",
+          "type": "speech2text",
+          "path": "v1/audio/transcriptions",
+          "price_cny": 0.015,
+          "unit_tag": 0,
+          "in_m": 0,
+          "out_m": 0
+        }
+      ],
+      "billing": {
+        "mode": "unit",
+        "unit": "per_call",
+        "unit_label": "次",
+        "unit_note": "按次计费",
+        "unit_tag": 0,
+        "cost_cny": 0.015,
+        "sell_cny": 0.075,
+        "model_price_usd": 0.010274,
+        "free_upstream": false
+      },
+      "relay": "newapi_native",
+      "markup": 5
+    },
+    {
+      "id": "GLM-ASR",
+      "upstream": "GLM-ASR",
+      "category": "asr",
+      "category_zh": "语音识别 ASR",
+      "description": "超轻量中文语音识别，适合端侧/低资源场景的实时转写。",
+      "cover": "https://gitee-ai.su.bcebos.com/v1/uploads/img/tag-icons/id-vs79e29q6-avatar-zhipuai.png",
+      "paths": [
+        "v1/audio/transcriptions"
+      ],
+      "operations": [
+        {
+          "name": "语音识别",
+          "type": "speech2text",
+          "path": "v1/audio/transcriptions",
+          "price_cny": 0,
+          "unit_tag": 0,
+          "in_m": 0,
+          "out_m": 0
+        }
+      ],
+      "billing": {
+        "mode": "unit",
+        "unit": "per_call",
+        "unit_label": "次",
+        "unit_note": "按次计费",
+        "unit_tag": 0,
+        "cost_cny": 0.01,
+        "sell_cny": 0.05,
+        "model_price_usd": 0.006849,
+        "free_upstream": true
+      },
+      "relay": "newapi_native",
+      "markup": 5
+    },
+    {
+      "id": "whisper-large-v3",
+      "upstream": "whisper-large-v3",
+      "category": "asr",
+      "category_zh": "语音识别 ASR",
+      "description": "OpenAI Whisper Large V3 高精度多语种语音转写，适用于转录与语音应用。",
+      "cover": "https://gitee-ai.su.bcebos.com/v1/uploads/img/id-g090bszvx-avatar-openai.png",
+      "paths": [
+        "v1/audio/transcriptions"
+      ],
+      "operations": [
+        {
+          "name": "语音识别",
+          "type": "speech2text",
+          "path": "v1/audio/transcriptions",
+          "price_cny": 0.015,
+          "unit_tag": 0,
+          "in_m": 0,
+          "out_m": 0
+        }
+      ],
+      "billing": {
+        "mode": "unit",
+        "unit": "per_call",
+        "unit_label": "次",
+        "unit_note": "按次计费",
+        "unit_tag": 0,
+        "cost_cny": 0.015,
+        "sell_cny": 0.075,
+        "model_price_usd": 0.010274,
+        "free_upstream": false
+      },
+      "relay": "newapi_native",
+      "markup": 5
+    },
+    {
+      "id": "whisper-large-v3-turbo",
+      "upstream": "whisper-large-v3-turbo",
+      "category": "asr",
+      "category_zh": "语音识别 ASR",
+      "description": "Whisper Large V3 Turbo：更快的多语种语音转写，在准确度与延迟之间更均衡。",
+      "cover": "https://gitee-ai.su.bcebos.com/v1/uploads/img/news_cover_1-avatar-openai.png",
+      "paths": [
+        "v1/audio/transcriptions"
+      ],
+      "operations": [
+        {
+          "name": "语音识别",
+          "type": "speech2text",
+          "path": "v1/audio/transcriptions",
+          "price_cny": 0.015,
+          "unit_tag": 0,
+          "in_m": 0,
+          "out_m": 0
+        }
+      ],
+      "billing": {
+        "mode": "unit",
+        "unit": "per_call",
+        "unit_label": "次",
+        "unit_note": "按次计费",
+        "unit_tag": 0,
+        "cost_cny": 0.015,
+        "sell_cny": 0.075,
+        "model_price_usd": 0.010274,
+        "free_upstream": false
+      },
+      "relay": "newapi_native",
+      "markup": 5
+    },
+    {
+      "id": "Qwen3-TTS",
+      "upstream": "Qwen3-TTS",
+      "category": "tts",
+      "category_zh": "语音合成 TTS",
+      "description": "通义 Qwen3 文本转语音（异步），自然多语言合成，支持短样本快速音色克隆。",
+      "cover": "https://gitee-ai.su.bcebos.com/v1/uploads/img/id-xegyngmvu-avatar-qwen.png",
+      "paths": [
+        "v1/async/audio/speech"
+      ],
+      "operations": [
+        {
+          "name": "语音生成(异步)",
+          "type": "text2speech",
+          "path": "v1/async/audio/speech",
+          "price_cny": 0.8,
+          "unit_tag": 1261,
+          "in_m": 0,
+          "out_m": 0
+        }
+      ],
+      "billing": {
+        "mode": "unit",
+        "unit": "per_10k_chars",
+        "unit_label": "万字符",
+        "unit_note": "TTS 按万字符（上游 unit_tag=1261）",
+        "unit_tag": 1261,
+        "cost_cny": 0.8,
+        "sell_cny": 4,
+        "model_price_usd": 0.547945,
+        "free_upstream": false
+      },
+      "relay": "gitee_passthrough",
+      "markup": 5
+    },
+    {
+      "id": "CosyVoice3",
+      "upstream": "CosyVoice3",
+      "category": "tts",
+      "category_zh": "语音合成 TTS",
+      "description": "CosyVoice 3 多语言零样本 TTS，支持流式、方言及情绪/语速等控制。",
+      "cover": "https://gitee-ai.su.bcebos.com/v1/uploads/img/id-6ne2iig3f-avatar-funaudiollm.png",
+      "paths": [
+        "v1/async/audio/speech"
+      ],
+      "operations": [
+        {
+          "name": "语音生成",
+          "type": "text2speech",
+          "path": "v1/async/audio/speech",
+          "price_cny": 2,
+          "unit_tag": 1261,
+          "in_m": 0,
+          "out_m": 0
+        }
+      ],
+      "billing": {
+        "mode": "unit",
+        "unit": "per_10k_chars",
+        "unit_label": "万字符",
+        "unit_note": "TTS 按万字符（上游 unit_tag=1261）",
+        "unit_tag": 1261,
+        "cost_cny": 2,
+        "sell_cny": 10,
+        "model_price_usd": 1.369863,
+        "free_upstream": false
+      },
+      "relay": "gitee_passthrough",
+      "markup": 5
+    },
+    {
+      "id": "GLM-TTS",
+      "upstream": "GLM-TTS",
+      "category": "tts",
+      "category_zh": "语音合成 TTS",
+      "description": "智谱 GLM 文本转语音，支持零样本音色克隆、情感控制与低延迟合成。",
+      "cover": "https://gitee-ai.su.bcebos.com/v1/uploads/img/tag-icons/id-vs79e29q6-avatar-zhipuai.png",
+      "paths": [
+        "v1/audio/speech"
+      ],
+      "operations": [
+        {
+          "name": "语音生成",
+          "type": "text2speech",
+          "path": "v1/audio/speech",
+          "price_cny": 0.02,
+          "unit_tag": 0,
+          "in_m": 0,
+          "out_m": 0
+        }
+      ],
+      "billing": {
+        "mode": "unit",
+        "unit": "per_call",
+        "unit_label": "次",
+        "unit_note": "按次计费",
+        "unit_tag": 0,
+        "cost_cny": 0.02,
+        "sell_cny": 0.1,
+        "model_price_usd": 0.013699,
+        "free_upstream": false
+      },
+      "relay": "newapi_native",
+      "markup": 5
+    },
+    {
+      "id": "IndexTTS-2",
+      "upstream": "IndexTTS-2",
+      "category": "tts",
+      "category_zh": "语音合成 TTS",
+      "description": "IndexTTS 零样本 TTS，可通过音频或文本提示控制音色、情感与语气。",
+      "cover": "https://gitee-ai.su.bcebos.com/v1/uploads/img/id-87u5tah3x-avatar-indextts.png",
+      "paths": [
+        "v1/audio/speech",
+        "v1/async/audio/speech"
+      ],
+      "operations": [
+        {
+          "name": "语音生成(音频控制语气)",
+          "type": "text2speech",
+          "path": "v1/audio/speech",
+          "price_cny": 2,
+          "unit_tag": 1261,
+          "in_m": 0,
+          "out_m": 0
+        },
+        {
+          "name": "语音生成(文本控制语气)",
+          "type": "text2speech",
+          "path": "v1/audio/speech",
+          "price_cny": 2,
+          "unit_tag": 1261,
+          "in_m": 0,
+          "out_m": 0
+        },
+        {
+          "name": "语音生成异步(音频控制语气)",
+          "type": "text2speech",
+          "path": "v1/async/audio/speech",
+          "price_cny": 2,
+          "unit_tag": 1261,
+          "in_m": 0,
+          "out_m": 0
+        },
+        {
+          "name": "语音生成异步(文本控制语气)",
+          "type": "text2speech",
+          "path": "v1/async/audio/speech",
+          "price_cny": 2,
+          "unit_tag": 1261,
+          "in_m": 0,
+          "out_m": 0
+        }
+      ],
+      "billing": {
+        "mode": "unit",
+        "unit": "per_10k_chars",
+        "unit_label": "万字符",
+        "unit_note": "TTS 按万字符（上游 unit_tag=1261）",
+        "unit_tag": 1261,
+        "cost_cny": 2,
+        "sell_cny": 10,
+        "model_price_usd": 1.369863,
+        "free_upstream": false
+      },
+      "relay": "mixed",
+      "markup": 5
+    },
+    {
+      "id": "Step-Audio-TTS-3B",
+      "upstream": "Step-Audio-TTS-3B",
+      "category": "tts",
+      "category_zh": "语音合成 TTS",
+      "description": "Step-Audio TTS 3B 自然语言合成，支持多种语音风格与口音。",
+      "cover": "https://gitee-ai.su.bcebos.com/v1/uploads/img/id-6lmx4hwxl-178004800.png",
+      "paths": [
+        "v1/audio/speech"
+      ],
+      "operations": [
+        {
+          "name": "语音生成",
+          "type": "text2speech",
+          "path": "v1/audio/speech",
+          "price_cny": 0.02,
+          "unit_tag": 0,
+          "in_m": 0,
+          "out_m": 0
+        }
+      ],
+      "billing": {
+        "mode": "unit",
+        "unit": "per_call",
+        "unit_label": "次",
+        "unit_note": "按次计费",
+        "unit_tag": 0,
+        "cost_cny": 0.02,
+        "sell_cny": 0.1,
+        "model_price_usd": 0.013699,
+        "free_upstream": false
+      },
+      "relay": "newapi_native",
+      "markup": 5
+    },
+    {
+      "id": "nonescape-v0",
+      "upstream": "nonescape-v0",
+      "category": "moderation",
+      "category_zh": "内容风控",
+      "description": "AI 生成图检测：判断图片是真实拍摄还是模型生成。",
+      "cover": "https://gitee-ai.su.bcebos.com/v1/uploads/img/id-kgkfeor0y-avatar-aedilic.png",
+      "paths": [
+        "v1/moderations"
+      ],
+      "operations": [
+        {
+          "name": "AI图片检测",
+          "type": "moderation",
+          "path": "v1/moderations",
+          "price_cny": 0,
+          "unit_tag": 0,
+          "in_m": 0,
+          "out_m": 0
+        }
+      ],
+      "billing": {
+        "mode": "unit",
+        "unit": "per_call",
+        "unit_label": "次",
+        "unit_note": "按次计费",
+        "unit_tag": 0,
+        "cost_cny": 0.01,
+        "sell_cny": 0.05,
+        "model_price_usd": 0.006849,
+        "free_upstream": true
+      },
+      "relay": "newapi_native",
+      "markup": 5
+    },
+    {
+      "id": "moark-text-moderation",
+      "upstream": "moark-text-moderation",
+      "category": "moderation",
+      "category_zh": "内容风控",
+      "description": "文本内容审核：识别色情、暴力、辱骂等风险，适用于社交、评论与即时通讯。",
+      "cover": "https://gitee-ai.su.bcebos.com/v1/uploads/img/id-eszdrzhp3-id-mehttf0rq-MoArk-M1 (1).png",
+      "paths": [
+        "v1/moderations"
+      ],
+      "operations": [
+        {
+          "name": "文本审核",
+          "type": "moderation",
+          "path": "v1/moderations",
+          "price_cny": 0.0002,
+          "unit_tag": 1212,
+          "in_m": 0,
+          "out_m": 0
+        }
+      ],
+      "billing": {
+        "mode": "unit",
+        "unit": "per_char",
+        "unit_label": "字符",
+        "unit_note": "文本审核按字符（上游 unit_tag=1212）",
+        "unit_tag": 1212,
+        "cost_cny": 0.0002,
+        "sell_cny": 0.001,
+        "model_price_usd": 0.000137,
+        "free_upstream": false
+      },
+      "relay": "newapi_native",
+      "markup": 5
+    },
+    {
+      "id": "Security-semantic-filtering",
+      "upstream": "Security-semantic-filtering",
+      "category": "moderation",
+      "category_zh": "内容风控",
+      "description": "安全语义过滤：在内容触达用户或模型前拦截敏感与合规风险信息。",
+      "cover": "https://gitee-ai.su.bcebos.com/v1/uploads/img/news_cover_1-avatar-nsfwclassifier.png",
+      "paths": [
+        "v1/moderations"
+      ],
+      "operations": [
+        {
+          "name": "文本风控识别",
+          "type": "moderation",
+          "path": "v1/moderations",
+          "price_cny": 0,
+          "unit_tag": 0,
+          "in_m": 0,
+          "out_m": 0
+        }
+      ],
+      "billing": {
+        "mode": "unit",
+        "unit": "per_call",
+        "unit_label": "次",
+        "unit_note": "按次计费",
+        "unit_tag": 0,
+        "cost_cny": 0.01,
+        "sell_cny": 0.05,
+        "model_price_usd": 0.006849,
+        "free_upstream": true
+      },
+      "relay": "newapi_native",
+      "markup": 5
+    },
+    {
+      "id": "nsfw-classifier",
+      "upstream": "nsfw-classifier",
+      "category": "moderation",
+      "category_zh": "内容风控",
+      "description": "NSFW 图片分类，实时识别并过滤不适宜公开的敏感视觉内容。",
+      "cover": "https://gitee-ai.su.bcebos.com/v1/uploads/img/news_cover_1-avatar-nsfwclassifier.png",
+      "paths": [
+        "v1/moderations"
+      ],
+      "operations": [
+        {
+          "name": "色情图片识别",
+          "type": "moderation",
+          "path": "v1/moderations",
+          "price_cny": 0,
+          "unit_tag": 0,
+          "in_m": 0,
+          "out_m": 0
+        }
+      ],
+      "billing": {
+        "mode": "unit",
+        "unit": "per_call",
+        "unit_label": "次",
+        "unit_note": "按次计费",
+        "unit_tag": 0,
+        "cost_cny": 0.01,
+        "sell_cny": 0.05,
+        "model_price_usd": 0.006849,
+        "free_upstream": true
+      },
+      "relay": "newapi_native",
+      "markup": 5
+    },
+    {
+      "id": "gemma-4-26B-A4B-it",
+      "upstream": "gemma-4-26B-A4B-it",
+      "category": "chat_vlm",
+      "category_zh": "多模态对话",
+      "description": "Google Gemma 4 26B MoE 指令模型（约激活 4B 参数），擅长推理、编程与多模态对话。",
+      "cover": "https://gitee-ai-testing.su.bcebos.com/v1/uploads/img/id-gn1fj2m0h-id-jqljwahbf-WtA3YYitedOr9n02eHfJe.webp",
+      "paths": [
+        "v1/chat/completions"
+      ],
+      "operations": [
+        {
+          "name": "文本对话",
+          "type": "text2text",
+          "path": "v1/chat/completions",
+          "price_cny": 0.02,
+          "unit_tag": 0,
+          "in_m": 3.5,
+          "out_m": 3.5
+        }
+      ],
+      "billing": {
+        "mode": "token",
+        "cost_in_cny_per_m": 3.5,
+        "cost_out_cny_per_m": 3.5,
+        "sell_in_cny_per_m": 17.5,
+        "sell_out_cny_per_m": 17.5,
+        "model_ratio": 1.19863,
+        "completion_ratio": 1
+      },
+      "relay": "newapi_native",
+      "markup": 5
+    }
+  ]
+}

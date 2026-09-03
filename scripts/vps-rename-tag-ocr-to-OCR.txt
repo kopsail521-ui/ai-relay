@@ -1,0 +1,5 @@
+# ① ocr → OCR（整行复制）
+sudo docker run --rm -v /opt/ai-relay/data/new-api:/data python:3.12-alpine python -c 'import sqlite3,time;db=sqlite3.connect("/data/one-api.db");n=int(time.time());c=db.execute("UPDATE models SET tags=?,updated_time=? WHERE lower(tags)=? AND deleted_at IS NULL",("OCR",n,"ocr"));db.commit();print("renamed",c.rowcount)'
+
+# ② 重启
+sudo docker restart ai-relay-new-api && sleep 3 && echo DONE_RENAME_OCR

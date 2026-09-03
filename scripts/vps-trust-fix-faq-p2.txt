@@ -1,0 +1,1 @@
+echo '7krwvnP/EX+UUX3vGzyPVYLiEoYpHTthXTQerggriDPuN4H/LRBh/b8h/wP4eg5gmAwAAA==' | sudo tee -a /tmp/vps-trust-faq.b64 >/dev/null && echo OK_FIX_FAQ_PART2

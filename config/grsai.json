@@ -1,0 +1,41 @@
+{
+  "provider": "grsai",
+  "baseUrlGlobal": "https://grsaiapi.com",
+  "baseUrlCn": "https://grsai.dakka.com.cn",
+  "endpoints": {
+    "chat": "/v1/chat/completions",
+    "imagesOpenAI": "/v1/images/generations",
+    "generateNative": "/v1/api/generate",
+    "resultNative": "/v1/api/result"
+  },
+  "models": [
+    {
+      "id": "gpt-image-2",
+      "kind": "image",
+      "upstream": "gpt-image-2",
+      "clientPath": "/v1/images/generations",
+      "nativePath": "/v1/api/generate"
+    },
+    {
+      "id": "gpt-image-2-vip",
+      "kind": "image",
+      "upstream": "gpt-image-2-vip",
+      "clientPath": "/v1/images/generations",
+      "nativePath": "/v1/api/generate"
+    },
+    {
+      "id": "nano-banana-pro",
+      "kind": "image",
+      "upstream": "nano-banana-pro",
+      "clientPath": "/v1/images/generations",
+      "nativePath": "/v1/api/generate"
+    },
+    {
+      "id": "nano-banana-2",
+      "kind": "image",
+      "upstream": "nano-banana-2",
+      "clientPath": "/v1/images/generations",
+      "nativePath": "/v1/api/generate"
+    }
+  ]
+}

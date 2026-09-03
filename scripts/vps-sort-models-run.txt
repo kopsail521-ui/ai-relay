@@ -1,0 +1,1 @@
+sudo docker run --rm -v /opt/ai-relay/data/new-api:/data -v /tmp/sort-models.py:/fix.py:ro python:3.12-alpine python /fix.py /data/one-api.db && sudo docker restart ai-relay-new-api && sleep 3 && echo DONE_SORT_MODELS

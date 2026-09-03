@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>价格后台 · 成本 / 售价 / 官方价</title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <div id="login-view" class="login-wrap hidden">
+    <form id="login-form" class="login-card">
+      <h1>价格后台</h1>
+      <p>对照：成本 · 售价 · 官方 API 价</p>
+      <label>管理密码</label>
+      <input id="password" type="password" autocomplete="current-password" required />
+      <button type="submit">登录</button>
+      <p id="login-error" class="error"></p>
+    </form>
+  </div>
+
+  <div id="app-view" class="hidden">
+    <header class="topbar">
+      <div>
+        <h1>价格后台</h1>
+        <p class="sub">文本单位：¥ / M tokens · 图片单位：¥ / 次 · 售价默认按成本 ×3 预填，可改</p>
+      </div>
+      <div class="actions">
+        <button type="button" id="btn-add">新增模型</button>
+        <button type="button" id="btn-seed" class="ghost">恢复示例数据</button>
+        <a class="ghost btn-link" href="/api/export.csv">导出 CSV</a>
+        <button type="button" id="btn-logout" class="ghost">退出</button>
+      </div>
+    </header>
+
+    <section class="filters">
+      <label>
+        类型
+        <select id="filter-kind">
+          <option value="all">全部</option>
+          <option value="text">文本</option>
+          <option value="image">图片</option>
+          <option value="video">视频</option>
+        </select>
+      </label>
+      <label class="grow">
+        搜索
+        <input id="filter-q" type="search" placeholder="模型名…" />
+      </label>
+      <label class="check">
+        <input id="filter-enabled" type="checkbox" checked />
+        只看启用
+      </label>
+    </section>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>模型</th>
+            <th>类型</th>
+            <th class="cost">成本</th>
+            <th class="sell">售价</th>
+            <th class="official">官方价</th>
+            <th>毛利率</th>
+            <th>比官方便宜</th>
+            <th>启用</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="tbody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <dialog id="edit-dialog">
+    <form method="dialog" id="edit-form">
+      <h2 id="edit-title">编辑模型</h2>
+      <input type="hidden" id="edit-id" />
+      <div class="grid">
+        <label>名称<input id="f-name" required /></label>
+        <label>类型
+          <select id="f-kind">
+            <option value="text">文本</option>
+            <option value="image">图片</option>
+            <option value="video">视频</option>
+          </select>
+        </label>
+      </div>
+
+      <div id="fields-text" class="grid three">
+        <fieldset>
+          <legend class="cost">成本</legend>
+          <label>Input<input id="f-cost-in" type="number" step="any" /></label>
+          <label>Output<input id="f-cost-out" type="number" step="any" /></label>
+        </fieldset>
+        <fieldset>
+          <legend class="sell">售价</legend>
+          <label>Input<input id="f-sell-in" type="number" step="any" /></label>
+          <label>Output<input id="f-sell-out" type="number" step="any" /></label>
+          <button type="button" id="btn-x3-text" class="ghost small">成本×3 填入售价</button>
+        </fieldset>
+        <fieldset>
+          <legend class="official">官方价</legend>
+          <label>Input<input id="f-official-in" type="number" step="any" /></label>
+          <label>Output<input id="f-official-out" type="number" step="any" /></label>
+        </fieldset>
+      </div>
+
+      <div id="fields-image" class="grid three hidden">
+        <fieldset>
+          <legend class="cost">成本 / 次</legend>
+          <label><input id="f-cost-call" type="number" step="any" /></label>
+        </fieldset>
+        <fieldset>
+          <legend class="sell">售价 / 次</legend>
+          <label><input id="f-sell-call" type="number" step="any" /></label>
+          <button type="button" id="btn-x3-image" class="ghost small">成本×3 填入售价</button>
+        </fieldset>
+        <fieldset>
+          <legend class="official">官方价 / 次</legend>
+          <label><input id="f-official-call" type="number" step="any" /></label>
+        </fieldset>
+      </div>
+
+      <label>备注<textarea id="f-note" rows="2"></textarea></label>
+      <label class="check"><input id="f-enabled" type="checkbox" checked /> 启用</label>
+
+      <div class="dialog-actions">
+        <button type="button" id="btn-cancel" class="ghost" value="cancel">取消</button>
+        <button type="submit" id="btn-save" value="save">保存</button>
+      </div>
+    </form>
+  </dialog>
+
+  <script src="/app.js"></script>
+</body>
+</html>

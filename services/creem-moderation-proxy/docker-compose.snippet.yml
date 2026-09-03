@@ -1,0 +1,15 @@
+# Merge into /opt/ai-relay/docker-compose.yml (or run alongside new-api).
+# Caddy should reverse_proxy to 127.0.0.1:3001 instead of :3000.
+services:
+  creem-moderation-proxy:
+    build: ./services/creem-moderation-proxy
+    container_name: ai-relay-creem-moderation
+    restart: always
+    network_mode: host
+    environment:
+      - UPSTREAM_URL=http://127.0.0.1:3000
+      - LISTEN_HOST=127.0.0.1
+      - PORT=3001
+      - CREEM_API_KEY=${CREEM_API_KEY}
+      - CREEM_TEST_MODE=${CREEM_TEST_MODE:-true}
+      - CREEM_MODERATION_TIMEOUT_MS=5000

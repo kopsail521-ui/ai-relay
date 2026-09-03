@@ -1,0 +1,6 @@
+# Google 未勾选隐私条款时弹出提醒
+# 依次整行粘贴到 Workbench：
+# 1) scripts/vps-oauth-legal-remind-p1.txt → OK_MOD_P1
+# 2) scripts/vps-oauth-legal-remind-p2.txt → OK_MOD_P2
+# 3) scripts/vps-oauth-legal-remind-run.txt → DONE_OAUTH_REMIND
+# 然后浏览器 Ctrl+F5 打开登录页，不勾选条款点「使用 Google 继续」应弹出提醒

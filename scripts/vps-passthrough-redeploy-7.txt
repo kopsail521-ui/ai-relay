@@ -1,0 +1,16 @@
+sudo tee /opt/ai-relay/.env.gitee >/dev/null <<EOF
+GITEE_API_KEY=3JSANG4OMVY26VF5KB4SEKJBTNHJM9ILQ6X9CV13
+GITEE_BASE_URL=https://ai.gitee.com
+NEW_API_BASE=http://127.0.0.1:3000
+NEW_API_DB=/data/one-api.db
+CATALOG=/app/catalog.json
+PORT=3010
+LISTEN_HOST=127.0.0.1
+EOF
+cd /opt/ai-relay && sudo docker build -t keyo-gitee-passthrough ./services/gitee-passthrough && sudo docker rm -f ai-relay-gitee-passthrough 2>/dev/null || true
+sudo docker run -d --name ai-relay-gitee-passthrough --restart always --network host --env-file /opt/ai-relay/.env.gitee -v /opt/ai-relay/data/new-api:/data:rw -e NEW_API_DB=/data/one-api.db -e CATALOG=/app/catalog.json keyo-gitee-passthrough
+sleep 2
+curl -sS http://127.0.0.1:3010/healthz || true
+echo
+sudo docker logs --tail 20 ai-relay-gitee-passthrough
+echo DONE_PASSTHROUGH_REDEPLOY

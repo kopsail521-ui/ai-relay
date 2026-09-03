@@ -1,0 +1,61 @@
+{
+  "positioning": "OpenAI-compatible multi-model API gateway for global developers",
+  "avoidTerms": [
+    "AI relay",
+    "unofficial OpenAI API",
+    "cheap ChatGPT API",
+    "resold API",
+    "bypass regional restrictions"
+  ],
+  "highIntent": {
+    "integration": [
+      "OpenAI compatible API",
+      "OpenAI compatible API gateway",
+      "multi model AI API",
+      "unified AI API gateway",
+      "OpenAI SDK custom base URL",
+      "OpenAI SDK alternative endpoint",
+      "Python OpenAI compatible API",
+      "Node.js OpenAI compatible API",
+      "Cursor custom OpenAI API",
+      "one API for multiple AI models"
+    ],
+    "tutorial": [
+      "how to change OpenAI base URL",
+      "how to use OpenAI compatible API in Python",
+      "how to use OpenAI compatible API in Node.js",
+      "how to call Claude with OpenAI SDK",
+      "how to call Gemini with OpenAI SDK",
+      "how to call DeepSeek with OpenAI SDK",
+      "OpenAI compatible image generation API",
+      "OpenAI compatible speech to text API"
+    ],
+    "troubleshooting": [
+      "OpenAI API 401 invalid authentication",
+      "OpenAI API 429 rate limit exceeded",
+      "OpenAI API model not found",
+      "OpenAI API insufficient quota",
+      "OpenAI SDK connection timeout",
+      "Cursor custom API not working"
+    ]
+  },
+  "deprioritize": [
+    "AI",
+    "ChatGPT",
+    "best AI",
+    "artificial intelligence",
+    "AI news"
+  ],
+  "pageMapping": {
+    "/": ["one API for multiple AI models", "OpenAI compatible API gateway"],
+    "/models": ["multi model AI API", "unified AI API gateway"],
+    "/integrations/python": ["Python OpenAI compatible API"],
+    "/integrations/nodejs": ["Node.js OpenAI compatible API"],
+    "/integrations/cursor": ["Cursor custom OpenAI API"],
+    "/integrations/openai-sdk": ["OpenAI SDK custom base URL", "how to change OpenAI base URL"],
+    "/use-cases/image-generation": ["OpenAI compatible image generation API"],
+    "/use-cases/speech-to-text": ["OpenAI compatible speech to text API"],
+    "/docs": ["OpenAI compatible API"],
+    "/blog": ["how to use OpenAI compatible API in Python", "how to use OpenAI compatible API in Node.js"]
+  }
+}

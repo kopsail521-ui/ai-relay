@@ -1,0 +1,32 @@
+# dependencies
+node_modules/
+
+# runtime / local data
+data/
+
+# env & secrets (.env.example kept)
+.env
+.env.*
+!.env.example
+!**/.env.example
+credentials
+**/credentials
+*.pem
+
+# logs
+*.log
+*.out.txt
+
+# OS
+.DS_Store
+
+# binaries
+bin/*.exe
+bin/*.exe.*
+**/*.exe
+**/*.exe.*
+
+# local temp / diagnostic artifacts
+tmp-*
+_tmp_*
+scripts/_*.txt

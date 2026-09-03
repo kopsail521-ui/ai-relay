@@ -1,0 +1,5 @@
+# ① 文生图 → 图片（整行复制粘贴）
+sudo docker run --rm -v /opt/ai-relay/data/new-api:/data python:3.12-alpine python -c 'import sqlite3,time;db=sqlite3.connect("/data/one-api.db");n=int(time.time());c=db.execute("UPDATE models SET tags=?,updated_time=? WHERE tags=? AND deleted_at IS NULL",("图片",n,"文生图"));db.commit();print("renamed",c.rowcount)'
+
+# ② 重启刷新缓存
+sudo docker restart ai-relay-new-api && sleep 3 && echo DONE_RENAME_TAG

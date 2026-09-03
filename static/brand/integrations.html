@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>KeyoAPI Integrations</title>
+<meta name="description" content="Connect KeyoAPI to Cursor, ChatBox, OpenAI SDKs and more with one OpenAI-compatible endpoint." />
+<link rel="canonical" href="https://www.keyoapi.xyz/integrations" />
+<style>
+  :root { --bg:#f7fafc; --ink:#0f172a; --muted:#64748b; --line:#e2e8f0; --accent:#2563eb; --card:#0f172a; --card-ink:#e2e8f0; }
+  body { margin:0; font-family: ui-sans-serif, system-ui, sans-serif; background:linear-gradient(180deg,#f7fafc,#eef6ff); color:var(--ink); }
+  .wrap { max-width:760px; margin:0 auto; padding:48px 20px 72px; }
+  h1 { font-size:1.75rem; margin:0 0 8px; }
+  .sub { color:var(--muted); margin:0 0 24px; line-height:1.6; }
+  .panel { background:var(--card); color:var(--card-ink); border-radius:12px; padding:16px 18px; font-family:ui-monospace, Menlo, Consolas, monospace; font-size:13px; margin-bottom:22px; }
+  .label { color:#94a3b8; margin:12px 0 4px; }
+  .label:first-child { margin-top:0; }
+  ul { padding-left:1.2em; line-height:1.8; }
+  a { color:var(--accent); }
+  .foot { margin-top:28px; color:var(--muted); font-size:14px; }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>Integrations</h1>
+    <p class="sub">One OpenAI-compatible endpoint for Cursor, ChatBox, Python/Node SDKs, and more. Create a key, set the Base URL, pick a model from the catalog.</p>
+    <div class="panel">
+      <div class="label">Base URL</div>
+      <div>https://www.keyoapi.xyz/v1</div>
+      <div class="label">Auth</div>
+      <div>Authorization: Bearer sk-...</div>
+      <div class="label">Example</div>
+      <div>POST /v1/chat/completions · model=gpt-5.6-luna</div>
+    </div>
+    <ul>
+      <li><strong>Cursor / Continue</strong> — custom OpenAI provider → Base URL above + your key</li>
+      <li><strong>ChatBox / Lobe Chat / Cherry Studio</strong> — OpenAI-compatible mode</li>
+      <li><strong>OpenAI Python / Node SDK</strong> — set <code>base_url</code> / <code>baseURL</code></li>
+    </ul>
+    <p class="foot">
+      Full docs: <a href="/brand/keyo-docs.html">/brand/keyo-docs.html</a> ·
+      Models: <a href="/pricing">/pricing</a> ·
+      Support: <a href="mailto:support@keyoapi.xyz">support@keyoapi.xyz</a>
+    </p>
+  </div>
+</body>
+</html>

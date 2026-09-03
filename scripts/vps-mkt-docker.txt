@@ -1,0 +1,1 @@
+echo 'H4sIAAAAAAACCkXNuwrCMBQA0D1fccls2lo3wamNINKkVKiKiITkDq15kVTBvxcnf+Cc/SA78MHgtq6ZsnHySM5yOLaHAUoVI2lkf4WM6Y2pcHMGp9ITl2iVRuaCQct0iJ9izsFDURIuRhCy5Q8uxl1Mwbz0MgVP+KWXJw6bqlqTpmvhRn8pXQH92/ROvuMM2FKPAAAA' | sudo tee /tmp/vps-mkt-docker.b64 >/dev/null && echo OK_DOCKER_B64

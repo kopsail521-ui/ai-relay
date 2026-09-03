@@ -1,0 +1,1328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>KeyoAPI Docs</title>
+<!--
+  Multilingual brand docs (en / zhCN / zhTW / ja / fr / ru / vi).
+  Syncs with New API shell via postMessage { lang } when embedded.
+-->
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Source+Sans+3:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Noto+Sans+SC:wght@400;500;600;700&display=swap');
+
+  :root {
+    --bg: #f6f7f9;
+    --surface: #ffffff;
+    --ink: #0f172a;
+    --ink-2: #334155;
+    --muted: #64748b;
+    --line: #e2e8f0;
+    --line-strong: #cbd5e1;
+    --accent: #2563eb;
+    --accent-soft: #eff6ff;
+    --accent-ink: #1d4ed8;
+    --code-bg: #0f172a;
+    --code-ink: #e2e8f0;
+    --code-muted: #94a3b8;
+    --ok: #059669;
+    --radius: 10px;
+    --shadow: 0 1px 2px rgba(15, 23, 42, 0.04), 0 8px 24px rgba(15, 23, 42, 0.04);
+    --font: 'Source Sans 3', 'Noto Sans SC', system-ui, sans-serif;
+    --mono: 'IBM Plex Mono', ui-monospace, monospace;
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    font-family: var(--font);
+    color: var(--ink);
+    background:
+      radial-gradient(1200px 500px at 10% -10%, #dbeafe 0%, transparent 55%),
+      radial-gradient(900px 400px at 100% 0%, #f1f5f9 0%, transparent 50%),
+      var(--bg);
+    line-height: 1.6;
+    text-wrap: pretty;
+  }
+
+  a { color: var(--accent-ink); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  .wrap {
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: 40px 24px 80px;
+    display: grid;
+    grid-template-columns: 200px minmax(0, 1fr);
+    gap: 40px;
+    align-items: start;
+  }
+
+  .toc {
+    position: sticky;
+    top: 28px;
+    padding: 4px 0;
+  }
+  .toc .brand {
+    font-weight: 700;
+    font-size: 15px;
+    letter-spacing: -0.02em;
+    margin-bottom: 18px;
+    color: var(--ink);
+  }
+  .toc .brand span {
+    color: var(--accent);
+  }
+  .toc nav {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .toc a {
+    display: block;
+    padding: 7px 10px;
+    border-radius: 8px;
+    color: var(--muted);
+    font-size: 13.5px;
+    font-weight: 500;
+    text-decoration: none;
+    border-left: 2px solid transparent;
+  }
+  .toc a:hover {
+    color: var(--ink);
+    background: rgba(255,255,255,0.7);
+  }
+  .toc a.active {
+    color: var(--accent-ink);
+    background: var(--accent-soft);
+    border-left-color: var(--accent);
+  }
+
+  .main { min-width: 0; }
+
+  .hero {
+    margin-bottom: 36px;
+    padding-bottom: 28px;
+    border-bottom: 1px solid var(--line);
+  }
+  .hero .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--accent-ink);
+    margin-bottom: 12px;
+  }
+  .hero .eyebrow::before {
+    content: '';
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--accent);
+  }
+  .hero h1 {
+    margin: 0 0 12px;
+    font-size: clamp(28px, 4vw, 36px);
+    line-height: 1.15;
+    letter-spacing: -0.03em;
+    font-weight: 700;
+  }
+  .hero p {
+    margin: 0;
+    max-width: 52ch;
+    color: var(--ink-2);
+    font-size: 16.5px;
+  }
+
+  section {
+    margin-bottom: 44px;
+    scroll-margin-top: 24px;
+  }
+  .sec-head {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+  .sec-head .num {
+    font-family: var(--mono);
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--accent-ink);
+    letter-spacing: 0.04em;
+  }
+  .sec-head h2 {
+    margin: 0;
+    font-size: 20px;
+    letter-spacing: -0.02em;
+    font-weight: 700;
+  }
+  .sec-desc {
+    margin: -6px 0 18px;
+    color: var(--muted);
+    font-size: 14.5px;
+  }
+
+  .creds {
+    display: grid;
+    gap: 10px;
+  }
+  .cred {
+    display: grid;
+    grid-template-columns: 110px minmax(0, 1fr) auto;
+    gap: 12px;
+    align-items: center;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 12px 14px;
+    box-shadow: var(--shadow);
+  }
+  .cred .label {
+    font-size: 12.5px;
+    font-weight: 600;
+    color: var(--muted);
+    letter-spacing: 0.02em;
+  }
+  .cred .value {
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--ink);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .cred .value.note {
+    font-family: var(--font);
+    white-space: normal;
+    color: var(--ink-2);
+    font-size: 13.5px;
+    line-height: 1.45;
+  }
+
+  .btn-copy {
+    appearance: none;
+    border: 1px solid var(--line-strong);
+    background: var(--surface);
+    color: var(--ink-2);
+    font-family: var(--font);
+    font-size: 12.5px;
+    font-weight: 600;
+    padding: 6px 11px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background .15s, border-color .15s, color .15s;
+    white-space: nowrap;
+  }
+  .btn-copy:hover {
+    border-color: var(--accent);
+    color: var(--accent-ink);
+    background: var(--accent-soft);
+  }
+  .btn-copy.copied {
+    border-color: #a7f3d0;
+    background: #ecfdf5;
+    color: var(--ok);
+  }
+
+  .endpoint {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 12px;
+  }
+  .method {
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    color: #fff;
+    background: var(--accent);
+    padding: 4px 8px;
+    border-radius: 6px;
+  }
+  .path {
+    font-family: var(--mono);
+    font-size: 13.5px;
+    color: var(--ink);
+  }
+
+  .code-block {
+    background: var(--code-bg);
+    border-radius: 12px;
+    overflow: hidden;
+    margin: 0 0 16px;
+    box-shadow: var(--shadow);
+  }
+  .code-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 12px;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.18);
+  }
+  .code-bar .lang {
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--code-muted);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  .code-bar .btn-copy {
+    background: transparent;
+    border-color: rgba(148, 163, 184, 0.35);
+    color: var(--code-muted);
+  }
+  .code-bar .btn-copy:hover {
+    background: rgba(255,255,255,0.06);
+    border-color: rgba(147, 197, 253, 0.5);
+    color: #bfdbfe;
+  }
+  .code-bar .btn-copy.copied {
+    border-color: rgba(52, 211, 153, 0.45);
+    background: rgba(16, 185, 129, 0.12);
+    color: #6ee7b7;
+  }
+  .code-block pre {
+    margin: 0;
+    padding: 16px 18px 18px;
+    overflow-x: auto;
+    font-family: var(--mono);
+    font-size: 12.5px;
+    line-height: 1.65;
+    color: var(--code-ink);
+  }
+  .code-block code { font-family: inherit; }
+  .tok-key { color: #93c5fd; }
+  .tok-str { color: #86efac; }
+  .tok-cmd { color: #fcd34d; }
+
+  .table-wrap {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    margin-bottom: 12px;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13.5px;
+  }
+  th, td {
+    padding: 10px 14px;
+    text-align: left;
+    border-bottom: 1px solid var(--line);
+  }
+  th {
+    font-size: 11.5px;
+    font-weight: 600;
+    color: var(--muted);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    background: #f8fafc;
+  }
+  tr:last-child td { border-bottom: 0; }
+  td.model {
+    font-family: var(--mono);
+    font-size: 12.5px;
+    text-align: left;
+    vertical-align: middle;
+  }
+  .model-btn {
+    appearance: none;
+    border: 0;
+    background: transparent;
+    font: inherit;
+    color: var(--accent-ink);
+    cursor: pointer;
+    padding: 0;
+    margin: 0;
+    display: inline-block;
+    max-width: 100%;
+    text-align: left;
+    white-space: normal;
+    word-break: break-all;
+    line-height: 1.45;
+    border-bottom: 1px dashed rgba(37, 99, 235, 0.35);
+  }
+  .model-btn:hover { border-bottom-style: solid; }
+  td.price { font-family: var(--mono); font-size: 12.5px; color: var(--ink-2); }
+  td.note-cell { color: var(--muted); }
+
+  .hint {
+    font-size: 13px;
+    color: var(--muted);
+    margin: 0;
+  }
+
+  .client-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+  .client-card {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 16px;
+    box-shadow: var(--shadow);
+  }
+  .client-card h3 {
+    margin: 0 0 10px;
+    font-size: 14px;
+    font-weight: 700;
+  }
+  .client-card dl {
+    margin: 0;
+    display: grid;
+    gap: 8px;
+  }
+  .client-card dt {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+  .client-card dd {
+    margin: 2px 0 0;
+    font-family: var(--mono);
+    font-size: 12.5px;
+    color: var(--ink);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+  }
+
+  .footer-note {
+    margin-top: 8px;
+    padding: 18px 20px;
+    border-radius: var(--radius);
+    background: var(--surface);
+    border: 1px solid var(--line);
+    color: var(--ink-2);
+    font-size: 14px;
+  }
+  .footer-note strong { color: var(--ink); }
+  .page-foot {
+    margin-top: 40px;
+    padding-top: 20px;
+    border-top: 1px solid var(--line);
+    color: var(--muted);
+    font-size: 13px;
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  @media (max-width: 860px) {
+    .wrap {
+      grid-template-columns: 1fr;
+      padding: 24px 16px 64px;
+      gap: 20px;
+    }
+    .toc {
+      position: static;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px 4px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--line);
+    }
+    .toc .brand { width: 100%; margin-bottom: 4px; }
+    .toc nav { flex-direction: row; flex-wrap: wrap; width: 100%; gap: 4px; }
+    .toc a {
+      border-left: 0;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      font-size: 12.5px;
+      padding: 5px 10px;
+    }
+    .toc a.active { border-color: #bfdbfe; }
+    .cred {
+      grid-template-columns: 1fr auto;
+      grid-template-rows: auto auto;
+    }
+    .cred .label { grid-column: 1 / -1; }
+    .client-grid { grid-template-columns: 1fr; }
+  }
+</style>
+<style>
+  .lang-bar {
+    position: fixed;
+    top: 12px;
+    right: 12px;
+    z-index: 20;
+  }
+  .lang-bar.embedded { display: none; }
+  .lang-bar select {
+    border: 1px solid var(--line-strong);
+    background: #fff;
+    border-radius: 8px;
+    padding: 6px 10px;
+    font-size: 12px;
+    color: var(--ink);
+  }
+</style>
+</head>
+<body>
+  <div class="lang-bar" id="langBar">
+    <select id="langSelect" aria-label="Language"></select>
+  </div>
+  <div class="wrap">
+    <aside class="toc">
+      <div class="brand">Keyo<span>API</span></div>
+      <nav id="toc-nav">
+        <a href="#access" data-i18n="tocAccess"></a>
+        <a href="#chat" data-i18n="tocChat"></a>
+        <a href="#image" data-i18n="tocImage"></a>
+        <a href="#clients" data-i18n="tocClients"></a>
+        <a href="#support" data-i18n="tocSupport"></a>
+      </nav>
+    </aside>
+
+    <div class="main">
+      <header class="hero">
+        <div class="eyebrow">Documentation</div>
+        <h1 data-i18n="docTitle"></h1>
+        <p data-i18n="heroSub"></p>
+      </header>
+
+      <section id="access">
+        <div class="sec-head">
+          <span class="num">01</span>
+          <h2 data-i18n="accessTitle"></h2>
+        </div>
+        <p class="sec-desc" data-i18n="accessDesc"></p>
+        <div class="creds">
+          <div class="cred">
+            <div class="label">Base URL</div>
+            <div class="value" id="base-url">https://www.keyoapi.xyz/v1</div>
+            <button type="button" class="btn-copy" data-copy="https://www.keyoapi.xyz/v1" data-i18n="copy"></button>
+          </div>
+          <div class="cred">
+            <div class="label">API Key</div>
+            <div class="value note" data-i18n="apiKeyNote"></div>
+            <a class="btn-copy" href="https://www.keyoapi.xyz" target="_blank" rel="noopener noreferrer" style="text-decoration:none;display:inline-flex;align-items:center;" data-i18n="goCreate"></a>
+          </div>
+          <div class="cred">
+            <div class="label" data-i18n="authLabel"></div>
+            <div class="value" id="auth-header" data-i18n="authValue"></div>
+            <button type="button" class="btn-copy" data-copy-i18n="authValue" data-i18n="copy"></button>
+          </div>
+        </div>
+      </section>
+
+      <section id="chat">
+        <div class="sec-head">
+          <span class="num">02</span>
+          <h2 data-i18n="chatTitle"></h2>
+        </div>
+        <div class="endpoint">
+          <span class="method">POST</span>
+          <span class="path">/v1/chat/completions</span>
+          <button type="button" class="btn-copy" data-copy="https://www.keyoapi.xyz/v1/chat/completions" data-i18n="copyUrl"></button>
+        </div>
+
+        <div class="code-block">
+          <div class="code-bar">
+            <span class="lang">cURL</span>
+            <button type="button" class="btn-copy" data-copy-target="curl-chat" data-i18n="copy"></button>
+          </div>
+          <pre id="curl-chat"></pre>
+        </div>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th data-i18n="thModel"></th>
+                <th data-i18n="thIn"></th>
+                <th data-i18n="thOut"></th>
+                <th data-i18n="thNote"></th>
+              </tr>
+            </thead>
+            <tbody>
+<tr><td class="model"><button type="button" class="model-btn" data-copy="gpt-5.6-luna">gpt-5.6-luna</button></td><td class="price">~$0.10</td><td class="price">~$0.62</td><td class="note-cell" data-i18n="nLuna"></td></tr>
+<tr><td class="model"><button type="button" class="model-btn" data-copy="gpt-5.6-terra">gpt-5.6-terra</button></td><td class="price">~$0.37</td><td class="price">~$2.21</td><td class="note-cell" data-i18n="nTerra"></td></tr>
+<tr><td class="model"><button type="button" class="model-btn" data-copy="gpt-5.6-sol">gpt-5.6-sol</button></td><td class="price">~$0.92</td><td class="price">~$5.52</td><td class="note-cell" data-i18n="nSol"></td></tr>
+<tr><td class="model"><button type="button" class="model-btn" data-copy="claude-sonnet-5">claude-sonnet-5</button></td><td class="price">~$0.88</td><td class="price">~$4.41</td><td class="note-cell" data-i18n="nClaudeBal"></td></tr>
+<tr><td class="model"><button type="button" class="model-btn" data-copy="claude-opus-5">claude-opus-5</button></td><td class="price">~$2.21</td><td class="price">~$11.03</td><td class="note-cell" data-i18n="nClaudeStrong"></td></tr>
+<tr><td class="model"><button type="button" class="model-btn" data-copy="claude-fable-5">claude-fable-5</button></td><td class="price">~$8.82</td><td class="price">~$44.12</td><td class="note-cell" data-i18n="nClaudeFlag"></td></tr>
+<tr><td class="model"><button type="button" class="model-btn" data-copy="claude-fable-5-1">claude-fable-5-1</button></td><td class="price">~$14.71</td><td class="price">~$73.53</td><td class="note-cell" data-i18n="nClaudeFlag51"></td></tr>
+<tr><td class="model"><button type="button" class="model-btn" data-copy="gemini-3.7-flash">gemini-3.7-flash</button></td><td class="price">~$0.28</td><td class="price">~$1.38</td><td class="note-cell" data-i18n="nGemFast"></td></tr>
+<tr><td class="model"><button type="button" class="model-btn" data-copy="deepseek-v4-flash">deepseek-v4-flash</button></td><td class="price">~$1.10</td><td class="price">~$3.30</td><td class="note-cell" data-i18n="nDsFast"></td></tr>
+<tr><td class="model"><button type="button" class="model-btn" data-copy="deepseek-v4-pro-0813">deepseek-v4-pro-0813</button></td><td class="price">~$3.30</td><td class="price">~$9.90</td><td class="note-cell" data-i18n="nDsStrong"></td></tr>
+<tr><td class="model"><button type="button" class="model-btn" data-copy="kimi-k3">kimi-k3</button></td><td class="price">~$7.50</td><td class="price">~$37.50</td><td class="note-cell" data-i18n="nKimi"></td></tr>
+<tr><td class="model"><button type="button" class="model-btn" data-copy="grok-4.6">grok-4.6</button></td><td class="price">~$0.74</td><td class="price">~$2.21</td><td class="note-cell" data-i18n="nGrok"></td></tr>
+<tr><td class="model"><button type="button" class="model-btn" data-copy="MiniMax-M3">MiniMax-M3</button></td><td class="price">~$0.75</td><td class="price">~$3.00</td><td class="note-cell" data-i18n="nMinimax"></td></tr>
+<tr><td class="model"><button type="button" class="model-btn" data-copy="glm-5.3">glm-5.3</button></td><td class="price">~$3.50</td><td class="price">~$11.00</td><td class="note-cell" data-i18n="nGlm"></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="hint" data-i18n="chatHint"></p>
+      </section>
+
+      <section id="image">
+        <div class="sec-head">
+          <span class="num">03</span>
+          <h2 data-i18n="imageTitle"></h2>
+        </div>
+        <div class="endpoint">
+          <span class="method">POST</span>
+          <span class="path">/v1/images/generations</span>
+          <button type="button" class="btn-copy" data-copy="https://www.keyoapi.xyz/v1/images/generations" data-i18n="copyUrl"></button>
+        </div>
+
+        <div class="code-block">
+          <div class="code-bar">
+            <span class="lang">cURL</span>
+            <button type="button" class="btn-copy" data-copy-target="curl-image" data-i18n="copy"></button>
+          </div>
+          <pre id="curl-image"></pre>
+        </div>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th data-i18n="thModel"></th>
+                <th data-i18n="thPrice"></th>
+              </tr>
+            </thead>
+            <tbody>
+<tr><td class="model"><button type="button" class="model-btn" data-copy="gpt-image-2">gpt-image-2</button></td><td class="price">¥0.05 <span data-i18n="perImage"></span></td></tr>
+<tr><td class="model"><button type="button" class="model-btn" data-copy="gpt-image-2-vip">gpt-image-2-vip</button></td><td class="price">¥0.20 <span data-i18n="perImage"></span></td></tr>
+<tr><td class="model"><button type="button" class="model-btn" data-copy="nano-banana-2">nano-banana-2</button></td><td class="price">¥0.15 <span data-i18n="perImage"></span></td></tr>
+<tr><td class="model"><button type="button" class="model-btn" data-copy="nano-banana-pro">nano-banana-pro</button></td><td class="price">¥0.20 <span data-i18n="perImage"></span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="clients">
+        <div class="sec-head">
+          <span class="num">04</span>
+          <h2 data-i18n="clientsTitle"></h2>
+        </div>
+        <p class="sec-desc" data-i18n="clientsDesc"></p>
+
+        <div class="client-grid">
+          <div class="client-card">
+            <h3 data-i18n="clientsTools"></h3>
+            <dl>
+              <div>
+                <dt data-i18n="apiAddress"></dt>
+                <dd>
+                  <span>https://www.keyoapi.xyz/v1</span>
+                  <button type="button" class="btn-copy" data-copy="https://www.keyoapi.xyz/v1" data-i18n="copy"></button>
+                </dd>
+              </div>
+              <div>
+                <dt>API Key</dt>
+                <dd><span data-i18n="yourKey"></span></dd>
+              </div>
+              <div>
+                <dt data-i18n="modelLabel"></dt>
+                <dd><span data-i18n="pickModel"></span></dd>
+              </div>
+            </dl>
+          </div>
+          <div class="client-card">
+            <h3 data-i18n="listModels"></h3>
+            <dl>
+              <div>
+                <dt>Endpoint</dt>
+                <dd>
+                  <span>GET /v1/models</span>
+                  <button type="button" class="btn-copy" data-copy-target="curl-models" data-i18n="copyCurl"></button>
+                </dd>
+              </div>
+            </dl>
+            <pre id="curl-models" hidden></pre>
+          </div>
+        </div>
+
+        <div class="code-block">
+          <div class="code-bar">
+            <span class="lang">Python · OpenAI SDK</span>
+            <button type="button" class="btn-copy" data-copy-target="py-sdk" data-i18n="copy"></button>
+          </div>
+          <pre id="py-sdk"></pre>
+        </div>
+      </section>
+
+      <section id="support">
+        <div class="sec-head">
+          <span class="num">05</span>
+          <h2 data-i18n="supportTitle"></h2>
+        </div>
+        <div class="footer-note" data-i18n-html="supportBody"></div>
+      </section>
+
+      <div class="page-foot">
+        <span data-i18n="footA"></span>
+        <span data-i18n="footB"></span>
+      </div>
+    </div>
+  </div>
+
+<script>
+const I18N = {
+  "en": {
+    "title": "KeyoAPI Docs",
+    "docTitle": "KeyoAPI Integration Docs",
+    "heroSub": "One Base URL + one API Key. OpenAI-compatible — works with Cursor, ChatBox, and official SDKs.",
+    "tocAccess": "Connection",
+    "tocChat": "Chat",
+    "tocImage": "Images",
+    "tocClients": "Clients",
+    "tocSupport": "Billing & support",
+    "accessTitle": "Connection",
+    "accessDesc": "Get the Base URL and key first — every request uses these two.",
+    "apiKeyNote": "Sign in → Tokens → create, or use a key from support: sk-...",
+    "authLabel": "Auth header",
+    "authValue": "Authorization: Bearer sk-YOUR_KEY",
+    "goCreate": "Create key",
+    "copy": "Copy",
+    "copyUrl": "Copy full URL",
+    "chatTitle": "Chat",
+    "thModel": "Model",
+    "thIn": "Input / MTok",
+    "thOut": "Output / MTok",
+    "thNote": "Notes",
+    "nLuna": "Budget default",
+    "nTerra": "Daily coding / chat",
+    "nSol": "Premium",
+    "nClaudeBal": "Claude balanced",
+    "nClaudeStrong": "Claude strong",
+    "nClaudeFlag": "Claude flagship",
+    "nGemFast": "Gemini fast",
+    "nDsFast": "DeepSeek fast",
+    "nDsStrong": "DeepSeek strong",
+    "nKimi": "Kimi",
+    "nGrok": "Grok",
+    "nMinimax": "MiniMax",
+    "nGlm": "Zhipu GLM",
+    "chatHint": "Click a model name to copy. Billed by token usage (console is source of truth). Top up when quota runs out.",
+    "imageTitle": "Images",
+    "thPrice": "Approx. price",
+    "perImage": "/ image",
+    "clientsTitle": "Clients",
+    "clientsDesc": "Fill these in common tools. Model names must match the table exactly.",
+    "clientsTools": "ChatBox / Cursor etc.",
+    "apiAddress": "API base",
+    "modelLabel": "Model",
+    "pickModel": "Pick one from the table",
+    "yourKey": "sk-YOUR_KEY",
+    "listModels": "List models",
+    "copyCurl": "Copy curl",
+    "supportTitle": "Billing & support",
+    "supportBody": "<strong>Console</strong>: <a href=\"https://www.keyoapi.xyz\" target=\"_blank\" rel=\"noopener noreferrer\">https://www.keyoapi.xyz</a> — check usage; keep tokens private.<br /><strong>Top-up</strong>: pay as agreed, then an admin adds quota (online payments may follow).<br /><strong>Common errors</strong>: wrong model name, invalid key, insufficient balance.",
+    "footA": "KeyoAPI · One endpoint, many models",
+    "footB": "OpenAI-compatible · usage-based billing",
+    "copied": "Copied",
+    "selectText": "Select text",
+    "manualCopyTitle": "Copy manually",
+    "manualCopyHint": "Auto-copy failed. Select the text below and press Ctrl+C / ⌘C.",
+    "close": "Close",
+    "hello": "Hello"
+  },
+  "zhCN": {
+    "title": "KeyoAPI 接入文档",
+    "docTitle": "KeyoAPI 接入文档",
+    "heroSub": "一个 Base URL + 一把 API Key，兼容 OpenAI 协议。可直接用于 Cursor、ChatBox 与官方 SDK。",
+    "tocAccess": "接入信息",
+    "tocChat": "文本对话",
+    "tocImage": "图片生成",
+    "tocClients": "客户端接入",
+    "tocSupport": "充值与支持",
+    "accessTitle": "接入信息",
+    "accessDesc": "先备好地址和密钥，后面所有请求都用这两样。",
+    "apiKeyNote": "登录控制台 →「令牌」创建，或由客服发放的 sk-...",
+    "authLabel": "鉴权头",
+    "authValue": "Authorization: Bearer sk-你的密钥",
+    "goCreate": "去创建",
+    "copy": "复制",
+    "copyUrl": "复制完整 URL",
+    "chatTitle": "文本对话",
+    "thModel": "模型",
+    "thIn": "输入 / MTok",
+    "thOut": "输出 / MTok",
+    "thNote": "说明",
+    "nLuna": "便宜主力",
+    "nTerra": "日常编程 / 对话",
+    "nSol": "高档",
+    "nClaudeBal": "Claude 均衡",
+    "nClaudeStrong": "Claude 强档",
+    "nClaudeFlag": "Claude 旗舰",
+    "nGemFast": "Gemini 快",
+    "nDsFast": "DeepSeek 快",
+    "nDsStrong": "DeepSeek 强",
+    "nKimi": "Kimi",
+    "nGrok": "Grok",
+    "nMinimax": "MiniMax",
+    "nGlm": "智谱",
+    "chatHint": "点击模型名即可复制。计费按 token 用量，以控制台实时扣费为准；额度用完需充值。",
+    "imageTitle": "图片生成",
+    "thPrice": "约价",
+    "perImage": "/ 张",
+    "clientsTitle": "客户端接入",
+    "clientsDesc": "在常见工具里这样填；模型名必须与上表完全一致。",
+    "clientsTools": "ChatBox / Cursor 等",
+    "apiAddress": "API 地址",
+    "modelLabel": "模型",
+    "pickModel": "从上表选一个",
+    "yourKey": "sk-你的密钥",
+    "listModels": "查可用模型",
+    "copyCurl": "复制 curl",
+    "supportTitle": "充值与支持",
+    "supportBody": "<strong>控制台</strong>：<a href=\"https://www.keyoapi.xyz\" target=\"_blank\" rel=\"noopener noreferrer\">https://www.keyoapi.xyz</a> · 可查看用量，令牌请自行保管。<br /><strong>充值</strong>：按约定付款后由管理员加额度（或后续开通在线支付）。<br /><strong>常见报错</strong>：模型名写错、Key 无效、余额不足。",
+    "footA": "KeyoAPI · 一个地址，多模型",
+    "footB": "OpenAI 兼容 · 按量计费",
+    "copied": "已复制",
+    "selectText": "点此选中",
+    "manualCopyTitle": "手动复制",
+    "manualCopyHint": "自动复制未成功，请选中下方内容后 Ctrl+C / ⌘C。",
+    "close": "关闭",
+    "hello": "你好"
+  },
+  "zhTW": {
+    "title": "KeyoAPI 接入文件",
+    "docTitle": "KeyoAPI 接入文件",
+    "heroSub": "一個 Base URL + 一把 API Key，相容 OpenAI 協定。可直接用於 Cursor、ChatBox 與官方 SDK。",
+    "tocAccess": "接入資訊",
+    "tocChat": "文字對話",
+    "tocImage": "圖片生成",
+    "tocClients": "客戶端接入",
+    "tocSupport": "儲值與支援",
+    "accessTitle": "接入資訊",
+    "accessDesc": "先備好位址和金鑰，後面所有請求都用這兩樣。",
+    "apiKeyNote": "登入控制台 →「令牌」建立，或由客服發放的 sk-...",
+    "authLabel": "驗證標頭",
+    "authValue": "Authorization: Bearer sk-你的金鑰",
+    "goCreate": "去建立",
+    "copy": "複製",
+    "copyUrl": "複製完整 URL",
+    "chatTitle": "文字對話",
+    "thModel": "模型",
+    "thIn": "輸入 / MTok",
+    "thOut": "輸出 / MTok",
+    "thNote": "說明",
+    "nLuna": "便宜主力",
+    "nTerra": "日常程式／對話",
+    "nSol": "高檔",
+    "nClaudeBal": "Claude 均衡",
+    "nClaudeStrong": "Claude 強檔",
+    "nClaudeFlag": "Claude 旗艦",
+    "nGemFast": "Gemini 快",
+    "nDsFast": "DeepSeek 快",
+    "nDsStrong": "DeepSeek 強",
+    "nKimi": "Kimi",
+    "nGrok": "Grok",
+    "nMinimax": "MiniMax",
+    "nGlm": "智譜",
+    "chatHint": "點擊模型名即可複製。計費依 token 用量，以控制台即時扣費為準；額度用完需儲值。",
+    "imageTitle": "圖片生成",
+    "thPrice": "約價",
+    "perImage": "/ 張",
+    "clientsTitle": "客戶端接入",
+    "clientsDesc": "在常見工具裡這樣填；模型名必須與上表完全一致。",
+    "clientsTools": "ChatBox / Cursor 等",
+    "apiAddress": "API 位址",
+    "modelLabel": "模型",
+    "pickModel": "從上表選一個",
+    "yourKey": "sk-你的金鑰",
+    "listModels": "查可用模型",
+    "copyCurl": "複製 curl",
+    "supportTitle": "儲值與支援",
+    "supportBody": "<strong>控制台</strong>：<a href=\"https://www.keyoapi.xyz\" target=\"_blank\" rel=\"noopener noreferrer\">https://www.keyoapi.xyz</a> · 可查看用量，令牌請自行保管。<br /><strong>儲值</strong>：依約定付款後由管理員加額度（或後續開通線上支付）。<br /><strong>常見錯誤</strong>：模型名寫錯、Key 無效、餘額不足。",
+    "footA": "KeyoAPI · 一個位址，多模型",
+    "footB": "OpenAI 相容 · 按量計費",
+    "copied": "已複製",
+    "selectText": "點此選取",
+    "manualCopyTitle": "手動複製",
+    "manualCopyHint": "自動複製未成功，請選取下方內容後 Ctrl+C / ⌘C。",
+    "close": "關閉",
+    "hello": "你好"
+  },
+  "ja": {
+    "title": "KeyoAPI ドキュメント",
+    "docTitle": "KeyoAPI 連携ドキュメント",
+    "heroSub": "1つの Base URL と 1つの API Key。OpenAI 互換で Cursor / ChatBox / 公式 SDK にそのまま使えます。",
+    "tocAccess": "接続情報",
+    "tocChat": "チャット",
+    "tocImage": "画像生成",
+    "tocClients": "クライアント",
+    "tocSupport": "課金とサポート",
+    "accessTitle": "接続情報",
+    "accessDesc": "まず Base URL とキーを用意。以降のリクエストはすべてこの2つです。",
+    "apiKeyNote": "コンソールにログイン →「トークン」で作成、またはサポート発行の sk-...",
+    "authLabel": "認証ヘッダー",
+    "authValue": "Authorization: Bearer sk-YOUR_KEY",
+    "goCreate": "作成する",
+    "copy": "コピー",
+    "copyUrl": "URL をコピー",
+    "chatTitle": "チャット",
+    "thModel": "モデル",
+    "thIn": "入力 / MTok",
+    "thOut": "出力 / MTok",
+    "thNote": "メモ",
+    "nLuna": "コスパ定番",
+    "nTerra": "日常コーディング / 会話",
+    "nSol": "プレミアム",
+    "nClaudeBal": "Claude バランス",
+    "nClaudeStrong": "Claude 強",
+    "nClaudeFlag": "Claude 旗艦",
+    "nGemFast": "Gemini 高速",
+    "nDsFast": "DeepSeek 高速",
+    "nDsStrong": "DeepSeek 強",
+    "nKimi": "Kimi",
+    "nGrok": "Grok",
+    "nMinimax": "MiniMax",
+    "nGlm": "Zhipu GLM",
+    "chatHint": "モデル名をクリックでコピー。課金はトークン使用量（コンソールが正）。残高不足時はチャージ。",
+    "imageTitle": "画像生成",
+    "thPrice": "目安価格",
+    "perImage": "/ 枚",
+    "clientsTitle": "クライアント",
+    "clientsDesc": "よく使うツールではこう設定。モデル名は表と完全一致させてください。",
+    "clientsTools": "ChatBox / Cursor など",
+    "apiAddress": "API ベース",
+    "modelLabel": "モデル",
+    "pickModel": "上表から1つ選ぶ",
+    "yourKey": "sk-YOUR_KEY",
+    "listModels": "利用可能モデル",
+    "copyCurl": "curl をコピー",
+    "supportTitle": "課金とサポート",
+    "supportBody": "<strong>コンソール</strong>：<a href=\"https://www.keyoapi.xyz\" target=\"_blank\" rel=\"noopener noreferrer\">https://www.keyoapi.xyz</a> — 使用量を確認。トークンは厳重に。<br /><strong>チャージ</strong>：合意どおり支払い後、管理者が枠を追加（オンライン決済は後日）。<br /><strong>よくあるエラー</strong>：モデル名ミス、無効キー、残高不足。",
+    "footA": "KeyoAPI · ひとつのエンドポイントで多モデル",
+    "footB": "OpenAI 互換 · 従量課金",
+    "copied": "コピー済み",
+    "selectText": "選択する",
+    "manualCopyTitle": "手動コピー",
+    "manualCopyHint": "自動コピーに失敗しました。下の文字を選んで Ctrl+C / ⌘C。",
+    "close": "閉じる",
+    "hello": "こんにちは"
+  },
+  "fr": {
+    "title": "Docs KeyoAPI",
+    "docTitle": "Documentation d’intégration KeyoAPI",
+    "heroSub": "Une Base URL + une clé API. Compatible OpenAI — Cursor, ChatBox et SDK officiels.",
+    "tocAccess": "Connexion",
+    "tocChat": "Chat",
+    "tocImage": "Images",
+    "tocClients": "Clients",
+    "tocSupport": "Paiement & support",
+    "accessTitle": "Connexion",
+    "accessDesc": "Préparez l’URL et la clé — toutes les requêtes les utilisent.",
+    "apiKeyNote": "Connexion → Jetons → créer, ou clé fournie : sk-...",
+    "authLabel": "En-tête d’auth",
+    "authValue": "Authorization: Bearer sk-YOUR_KEY",
+    "goCreate": "Créer une clé",
+    "copy": "Copier",
+    "copyUrl": "Copier l’URL",
+    "chatTitle": "Chat",
+    "thModel": "Modèle",
+    "thIn": "Entrée / MTok",
+    "thOut": "Sortie / MTok",
+    "thNote": "Notes",
+    "nLuna": "Économique",
+    "nTerra": "Code / chat quotidien",
+    "nSol": "Premium",
+    "nClaudeBal": "Claude équilibré",
+    "nClaudeStrong": "Claude fort",
+    "nClaudeFlag": "Claude phare",
+    "nGemFast": "Gemini rapide",
+    "nDsFast": "DeepSeek rapide",
+    "nDsStrong": "DeepSeek fort",
+    "nKimi": "Kimi",
+    "nGrok": "Grok",
+    "nMinimax": "MiniMax",
+    "nGlm": "Zhipu GLM",
+    "chatHint": "Cliquez un modèle pour copier. Facturation au token (console = référence). Rechargez si le quota est épuisé.",
+    "imageTitle": "Images",
+    "thPrice": "Prix approx.",
+    "perImage": "/ image",
+    "clientsTitle": "Clients",
+    "clientsDesc": "Remplissez ainsi dans vos outils. Les noms de modèles doivent correspondre exactement.",
+    "clientsTools": "ChatBox / Cursor etc.",
+    "apiAddress": "Base API",
+    "modelLabel": "Modèle",
+    "pickModel": "Choisir dans le tableau",
+    "yourKey": "sk-YOUR_KEY",
+    "listModels": "Lister les modèles",
+    "copyCurl": "Copier curl",
+    "supportTitle": "Paiement & support",
+    "supportBody": "<strong>Console</strong> : <a href=\"https://www.keyoapi.xyz\" target=\"_blank\" rel=\"noopener noreferrer\">https://www.keyoapi.xyz</a> — usage ; gardez les jetons privés.<br /><strong>Recharge</strong> : paiement convenu, puis quota ajouté par un admin.<br /><strong>Erreurs fréquentes</strong> : mauvais modèle, clé invalide, solde insuffisant.",
+    "footA": "KeyoAPI · Un endpoint, plusieurs modèles",
+    "footB": "Compatible OpenAI · facturation à l’usage",
+    "copied": "Copié",
+    "selectText": "Sélectionner",
+    "manualCopyTitle": "Copie manuelle",
+    "manualCopyHint": "Échec de la copie auto. Sélectionnez le texte puis Ctrl+C / ⌘C.",
+    "close": "Fermer",
+    "hello": "Bonjour"
+  },
+  "ru": {
+    "title": "Документация KeyoAPI",
+    "docTitle": "Документация по подключению KeyoAPI",
+    "heroSub": "Один Base URL + один API Key. Совместимо с OpenAI — Cursor, ChatBox и официальные SDK.",
+    "tocAccess": "Подключение",
+    "tocChat": "Чат",
+    "tocImage": "Изображения",
+    "tocClients": "Клиенты",
+    "tocSupport": "Оплата и поддержка",
+    "accessTitle": "Подключение",
+    "accessDesc": "Сначала Base URL и ключ — дальше все запросы используют их.",
+    "apiKeyNote": "Войти → Токены → создать, или ключ от поддержки: sk-...",
+    "authLabel": "Заголовок auth",
+    "authValue": "Authorization: Bearer sk-YOUR_KEY",
+    "goCreate": "Создать ключ",
+    "copy": "Копировать",
+    "copyUrl": "Копировать URL",
+    "chatTitle": "Чат",
+    "thModel": "Модель",
+    "thIn": "Вход / MTok",
+    "thOut": "Выход / MTok",
+    "thNote": "Заметки",
+    "nLuna": "Бюджетный",
+    "nTerra": "Код / чат ежедневно",
+    "nSol": "Премиум",
+    "nClaudeBal": "Claude баланс",
+    "nClaudeStrong": "Claude сильный",
+    "nClaudeFlag": "Claude флагман",
+    "nGemFast": "Gemini быстрый",
+    "nDsFast": "DeepSeek быстрый",
+    "nDsStrong": "DeepSeek сильный",
+    "nKimi": "Kimi",
+    "nGrok": "Grok",
+    "nMinimax": "MiniMax",
+    "nGlm": "Zhipu GLM",
+    "chatHint": "Клик по модели — копировать. Оплата по токенам (консоль источник истины). Пополняйте при нулевом балансе.",
+    "imageTitle": "Изображения",
+    "thPrice": "Примерно",
+    "perImage": "/ изобр.",
+    "clientsTitle": "Клиенты",
+    "clientsDesc": "Так заполняйте в инструментах. Имена моделей — точно как в таблице.",
+    "clientsTools": "ChatBox / Cursor и др.",
+    "apiAddress": "API base",
+    "modelLabel": "Модель",
+    "pickModel": "Выберите из таблицы",
+    "yourKey": "sk-YOUR_KEY",
+    "listModels": "Список моделей",
+    "copyCurl": "Копировать curl",
+    "supportTitle": "Оплата и поддержка",
+    "supportBody": "<strong>Консоль</strong>: <a href=\"https://www.keyoapi.xyz\" target=\"_blank\" rel=\"noopener noreferrer\">https://www.keyoapi.xyz</a> — расход; храните токены.<br /><strong>Пополнение</strong>: оплата по договорённости, админ добавляет квоту.<br /><strong>Частые ошибки</strong>: неверная модель, неверный ключ, мало баланса.",
+    "footA": "KeyoAPI · Один endpoint — много моделей",
+    "footB": "Совместимо с OpenAI · оплата по использованию",
+    "copied": "Скопировано",
+    "selectText": "Выделить",
+    "manualCopyTitle": "Скопировать вручную",
+    "manualCopyHint": "Автокопирование не удалось. Выделите текст и Ctrl+C / ⌘C.",
+    "close": "Закрыть",
+    "hello": "Привет"
+  },
+  "vi": {
+    "title": "Tài liệu KeyoAPI",
+    "docTitle": "Tài liệu tích hợp KeyoAPI",
+    "heroSub": "Một Base URL + một API Key. Tương thích OpenAI — dùng với Cursor, ChatBox và SDK chính thức.",
+    "tocAccess": "Kết nối",
+    "tocChat": "Chat",
+    "tocImage": "Ảnh",
+    "tocClients": "Client",
+    "tocSupport": "Nạp tiền & hỗ trợ",
+    "accessTitle": "Kết nối",
+    "accessDesc": "Chuẩn bị Base URL và key trước — mọi request đều dùng hai thứ này.",
+    "apiKeyNote": "Đăng nhập → Token → tạo, hoặc key từ hỗ trợ: sk-...",
+    "authLabel": "Header xác thực",
+    "authValue": "Authorization: Bearer sk-YOUR_KEY",
+    "goCreate": "Tạo key",
+    "copy": "Sao chép",
+    "copyUrl": "Sao chép URL",
+    "chatTitle": "Chat",
+    "thModel": "Model",
+    "thIn": "Input / MTok",
+    "thOut": "Output / MTok",
+    "thNote": "Ghi chú",
+    "nLuna": "Rẻ, mặc định",
+    "nTerra": "Code / chat hàng ngày",
+    "nSol": "Cao cấp",
+    "nClaudeBal": "Claude cân bằng",
+    "nClaudeStrong": "Claude mạnh",
+    "nClaudeFlag": "Claude flagship",
+    "nGemFast": "Gemini nhanh",
+    "nDsFast": "DeepSeek nhanh",
+    "nDsStrong": "DeepSeek mạnh",
+    "nKimi": "Kimi",
+    "nGrok": "Grok",
+    "nMinimax": "MiniMax",
+    "nGlm": "Zhipu GLM",
+    "chatHint": "Bấm tên model để sao chép. Tính theo token (console là chuẩn). Hết hạn mức thì nạp thêm.",
+    "imageTitle": "Ảnh",
+    "thPrice": "Giá ước tính",
+    "perImage": "/ ảnh",
+    "clientsTitle": "Client",
+    "clientsDesc": "Điền như sau trong công cụ. Tên model phải khớp bảng.",
+    "clientsTools": "ChatBox / Cursor v.v.",
+    "apiAddress": "API base",
+    "modelLabel": "Model",
+    "pickModel": "Chọn một trong bảng",
+    "yourKey": "sk-YOUR_KEY",
+    "listModels": "Liệt kê model",
+    "copyCurl": "Sao chép curl",
+    "supportTitle": "Nạp tiền & hỗ trợ",
+    "supportBody": "<strong>Console</strong>: <a href=\"https://www.keyoapi.xyz\" target=\"_blank\" rel=\"noopener noreferrer\">https://www.keyoapi.xyz</a> — xem usage; giữ token riêng.<br /><strong>Nạp tiền</strong>: thanh toán theo thỏa thuận, admin cộng hạn mức.<br /><strong>Lỗi thường gặp</strong>: sai model, key lỗi, hết số dư.",
+    "footA": "KeyoAPI · Một endpoint, nhiều mô hình",
+    "footB": "Tương thích OpenAI · tính theo usage",
+    "copied": "Đã sao chép",
+    "selectText": "Chọn chữ",
+    "manualCopyTitle": "Sao chép thủ công",
+    "manualCopyHint": "Tự sao chép thất bại. Chọn chữ bên dưới rồi Ctrl+C / ⌘C.",
+    "close": "Đóng",
+    "hello": "Xin chào"
+  }
+};
+
+const LANG_LABELS = {
+  en: 'English',
+  zhCN: '简体中文',
+  zhTW: '繁體中文',
+  ja: '日本語',
+  fr: 'Français',
+  ru: 'Русский',
+  vi: 'Tiếng Việt'
+};
+
+function normalizeLang(raw) {
+  if (!raw) return 'en';
+  const v = String(raw).trim().replace(/_/g, '-');
+  if (v === 'zhCN' || /^zh(-cn|-hans)?$/i.test(v)) return 'zhCN';
+  if (v === 'zhTW' || /^zh-(tw|hk|mo|hant)/i.test(v)) return 'zhTW';
+  const short = v.split('-')[0].toLowerCase();
+  if (['en', 'ja', 'fr', 'ru', 'vi'].includes(short)) return short;
+  return 'en';
+}
+
+let current = 'en';
+const embedded = window.parent !== window;
+
+function escapeHtml(s) {
+  return String(s)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
+function renderSamples(dict) {
+  const key = dict.yourKey || 'sk-YOUR_KEY';
+  const hello = dict.hello || 'Hello';
+  const chat = document.getElementById('curl-chat');
+  const image = document.getElementById('curl-image');
+  const models = document.getElementById('curl-models');
+  const py = document.getElementById('py-sdk');
+  if (chat) {
+    chat.innerHTML = '<code><span class="tok-cmd">curl</span> https://www.keyoapi.xyz/v1/chat/completions \\\n' +
+      '  -H <span class="tok-str">"Authorization: Bearer ' + escapeHtml(key) + '"</span> \\\n' +
+      '  -H <span class="tok-str">"Content-Type: application/json"</span> \\\n' +
+      '  -d <span class="tok-str">\'{\n    "model": "gpt-5.6-luna",\n    "messages": [{"role":"user","content":"' + escapeHtml(hello) + '"}]\n  }\'</span></code>';
+  }
+  if (image) {
+    image.innerHTML = '<code><span class="tok-cmd">curl</span> https://www.keyoapi.xyz/v1/images/generations \\\n' +
+      '  -H <span class="tok-str">"Authorization: Bearer ' + escapeHtml(key) + '"</span> \\\n' +
+      '  -H <span class="tok-str">"Content-Type: application/json"</span> \\\n' +
+      '  -d <span class="tok-str">\'{\n    "model": "nano-banana-2",\n    "prompt": "a red circle on white background",\n    "size": "1024x1024"\n  }\'</span></code>';
+  }
+  if (models) {
+    models.textContent = 'curl https://www.keyoapi.xyz/v1/models \\\n  -H "Authorization: Bearer ' + key + '"';
+  }
+  if (py) {
+    py.innerHTML = '<code><span class="tok-cmd">from</span> openai <span class="tok-cmd">import</span> OpenAI\n' +
+      'client = OpenAI(\n' +
+      '    base_url=<span class="tok-str">"https://www.keyoapi.xyz/v1"</span>,\n' +
+      '    api_key=<span class="tok-str">"' + escapeHtml(key) + '"</span>,\n' +
+      ')\n' +
+      'r = client.chat.completions.create(\n' +
+      '    model=<span class="tok-str">"gpt-5.6-luna"</span>,\n' +
+      '    messages=[{<span class="tok-str">"role"</span>: <span class="tok-str">"user"</span>, <span class="tok-str">"content"</span>: <span class="tok-str">"' + escapeHtml(hello) + '"</span>}],\n' +
+      ')\n' +
+      'print(r.choices[0].message.content)</code>';
+  }
+}
+
+function applyLang(raw) {
+  const code = normalizeLang(raw);
+  current = code;
+  const dict = I18N[code] || I18N.en;
+  document.documentElement.lang = code === 'zhCN' ? 'zh-CN' : code === 'zhTW' ? 'zh-TW' : code;
+  document.title = dict.title || 'KeyoAPI Docs';
+  document.querySelectorAll('[data-i18n]').forEach((el) => {
+    const key = el.getAttribute('data-i18n');
+    if (dict[key] != null) el.textContent = dict[key];
+  });
+  document.querySelectorAll('[data-i18n-html]').forEach((el) => {
+    const key = el.getAttribute('data-i18n-html');
+    if (dict[key] != null) el.innerHTML = dict[key];
+  });
+  document.querySelectorAll('[data-copy-i18n]').forEach((el) => {
+    const key = el.getAttribute('data-copy-i18n');
+    if (dict[key] != null) el.setAttribute('data-copy', dict[key]);
+  });
+  renderSamples(dict);
+  const sel = document.getElementById('langSelect');
+  if (sel && sel.value !== code) sel.value = code;
+}
+
+function readStoredLang() {
+  try { return localStorage.getItem('i18nextLng') || ''; } catch { return ''; }
+}
+
+function signalReady() {
+  if (!embedded) return;
+  try { window.parent.postMessage({ type: 'keyo-brand-ready' }, '*'); } catch {}
+}
+
+(function () {
+  const langBar = document.getElementById('langBar');
+  const langSelect = document.getElementById('langSelect');
+  if (embedded) langBar.classList.add('embedded');
+  Object.entries(LANG_LABELS).forEach(([code, label]) => {
+    const opt = document.createElement('option');
+    opt.value = code;
+    opt.textContent = label;
+    langSelect.appendChild(opt);
+  });
+  langSelect.addEventListener('change', () => {
+    applyLang(langSelect.value);
+    try { localStorage.setItem('i18nextLng', langSelect.value); } catch {}
+  });
+
+  window.addEventListener('message', (event) => {
+    const data = event.data;
+    if (!data || typeof data !== 'object') return;
+    if (data.lang) applyLang(data.lang);
+  });
+  window.addEventListener('storage', (event) => {
+    if (event.key === 'i18nextLng') applyLang(event.newValue || 'en');
+  });
+
+  applyLang(readStoredLang() || navigator.language || 'en');
+  signalReady();
+  if (embedded) {
+    let n = 0;
+    const retry = setInterval(() => {
+      signalReady();
+      if (++n >= 8) clearInterval(retry);
+    }, 250);
+  }
+  setInterval(() => {
+    const lang = readStoredLang();
+    if (lang && normalizeLang(lang) !== current) applyLang(lang);
+  }, 800);
+
+  function plainTextFrom(el) {
+    return (el.innerText || el.textContent || '').replace(/\u00a0/g, ' ').trim();
+  }
+  function fallbackCopy(text) {
+    var ta = document.createElement('textarea');
+    ta.value = text;
+    ta.setAttribute('readonly', '');
+    ta.style.cssText = 'position:fixed;top:0;left:0;width:2px;height:2px;padding:0;border:none;outline:none;box-shadow:none;background:transparent';
+    document.body.appendChild(ta);
+    ta.focus(); ta.select(); ta.setSelectionRange(0, text.length);
+    var ok = false;
+    try { ok = document.execCommand('copy'); } catch (e) { ok = false; }
+    document.body.removeChild(ta);
+    if (!ok) throw new Error('copy failed');
+  }
+  function showCopyFallback(text) {
+    var dict = I18N[current] || I18N.en;
+    var existing = document.getElementById('copy-fallback');
+    if (existing) existing.remove();
+    var mask = document.createElement('div');
+    mask.id = 'copy-fallback';
+    mask.style.cssText = 'position:fixed;inset:0;background:rgba(15,23,42,.45);display:flex;align-items:center;justify-content:center;z-index:9999;padding:20px;';
+    var panel = document.createElement('div');
+    panel.style.cssText = 'background:#fff;border-radius:12px;max-width:560px;width:100%;padding:18px 18px 14px;box-shadow:0 20px 50px rgba(15,23,42,.2);';
+    panel.innerHTML = '<div style="font-weight:700;margin-bottom:8px;color:#0f172a;">' + (dict.manualCopyTitle || 'Copy') + '</div><div style="font-size:13px;color:#64748b;margin-bottom:10px;">' + (dict.manualCopyHint || '') + '</div>';
+    var area = document.createElement('textarea');
+    area.value = text;
+    area.readOnly = true;
+    area.style.cssText = 'width:100%;min-height:110px;font-family:IBM Plex Mono,ui-monospace,monospace;font-size:12.5px;padding:10px;border:1px solid #e2e8f0;border-radius:8px;resize:vertical;color:#0f172a;';
+    var close = document.createElement('button');
+    close.type = 'button';
+    close.textContent = dict.close || 'Close';
+    close.style.cssText = 'margin-top:12px;appearance:none;border:1px solid #cbd5e1;background:#fff;border-radius:8px;padding:7px 12px;font-weight:600;cursor:pointer;';
+    close.onclick = function () { mask.remove(); };
+    mask.onclick = function (ev) { if (ev.target === mask) mask.remove(); };
+    panel.appendChild(area); panel.appendChild(close); mask.appendChild(panel);
+    document.body.appendChild(mask);
+    area.focus(); area.select();
+  }
+  async function copyText(text) {
+    if (navigator.clipboard && window.isSecureContext) {
+      try { await navigator.clipboard.writeText(text); return; } catch (e) {}
+    }
+    try { fallbackCopy(text); } catch (e) { showCopyFallback(text); throw e; }
+  }
+  function flash(btn, ok) {
+    var dict = I18N[current] || I18N.en;
+    var prev = btn.getAttribute('data-label') || btn.textContent;
+    btn.setAttribute('data-label', prev);
+    if (ok) {
+      btn.classList.add('copied');
+      btn.textContent = dict.copied || 'Copied';
+      setTimeout(function () { btn.classList.remove('copied'); btn.textContent = prev; }, 1600);
+    } else {
+      btn.textContent = dict.selectText || 'Select';
+      setTimeout(function () { btn.textContent = prev; }, 1600);
+    }
+  }
+  document.addEventListener('click', function (e) {
+    var btn = e.target.closest('[data-copy], [data-copy-target], [data-copy-i18n]');
+    if (!btn || btn.tagName === 'A') return;
+    e.preventDefault();
+    var text = '';
+    if (btn.hasAttribute('data-copy-target')) {
+      var target = document.getElementById(btn.getAttribute('data-copy-target'));
+      if (!target) return;
+      text = plainTextFrom(target);
+    } else {
+      text = btn.getAttribute('data-copy') || '';
+    }
+    copyText(text).then(function () { flash(btn, true); }).catch(function () { flash(btn, false); });
+  });
+
+  var links = Array.prototype.slice.call(document.querySelectorAll('#toc-nav a'));
+  var sections = links.map(function (a) {
+    return document.querySelector(a.getAttribute('href'));
+  }).filter(Boolean);
+  function setActive() {
+    var y = window.scrollY + 80;
+    var currentSec = sections[0];
+    for (var i = 0; i < sections.length; i++) {
+      if (sections[i].offsetTop <= y) currentSec = sections[i];
+    }
+    links.forEach(function (a) {
+      a.classList.toggle('active', a.getAttribute('href') === '#' + currentSec.id);
+    });
+  }
+  window.addEventListener('scroll', setActive, { passive: true });
+  setActive();
+})();
+</script>
+</body>
+</html>

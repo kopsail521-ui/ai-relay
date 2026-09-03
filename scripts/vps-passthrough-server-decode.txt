@@ -1,0 +1,1 @@
+sudo mkdir -p /opt/ai-relay/services/gitee-passthrough && base64 -d /tmp/pt-server.b64 | gunzip | sudo tee /opt/ai-relay/services/gitee-passthrough/server.mjs >/dev/null && echo OK_SERVER_FILE

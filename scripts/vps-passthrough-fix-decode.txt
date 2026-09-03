@@ -1,0 +1,1 @@
+sudo mkdir -p /opt/ai-relay/services/gitee-passthrough && base64 -d /tmp/pt-fix.b64 | gunzip | sudo tee /opt/ai-relay/services/gitee-passthrough/fix-marketplace-meta.mjs >/dev/null && ls -la /opt/ai-relay/services/gitee-passthrough/ && echo OK_FIX_FILE

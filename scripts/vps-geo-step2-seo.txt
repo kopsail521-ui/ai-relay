@@ -1,0 +1,34 @@
+set -e
+sudo mkdir -p /opt/ai-relay/static/seo
+sudo curl -fsSL 'https://litter.catbox.moe/t2873o.txt' -o /opt/ai-relay/static/seo/robots.txt
+sudo curl -fsSL 'https://litter.catbox.moe/cqwlxw.xml' -o /opt/ai-relay/static/seo/sitemap.xml
+sudo cp -a /etc/caddy/Caddyfile "/etc/caddy/Caddyfile.bak.geo-$(date +%Y%m%d%H%M%S)"
+sudo python3 - <<'PY'
+from pathlib import Path
+p = Path("/etc/caddy/Caddyfile")
+t = p.read_text()
+if "static/seo" in t and "/robots.txt" in t:
+    print("Caddy already has seo handles")
+else:
+    block = """
+	handle /robots.txt {
+		root * /opt/ai-relay/static/seo
+		file_server
+	}
+	handle /sitemap.xml {
+		root * /opt/ai-relay/static/seo
+		file_server
+	}
+"""
+    needle = "handle_path /brand/*"
+    if needle not in t:
+        raise SystemExit("cannot find brand handle in Caddyfile; abort")
+    t = t.replace(needle, block.strip() + "\n\t" + needle, 1)
+    p.write_text(t)
+    print("patched Caddyfile")
+PY
+sudo caddy validate --config /etc/caddy/Caddyfile
+sudo systemctl reload caddy
+curl -fsSI https://www.keyoapi.xyz/robots.txt | head -n 5
+curl -fsSI https://www.keyoapi.xyz/sitemap.xml | head -n 5
+echo DONE_GEO_SEO

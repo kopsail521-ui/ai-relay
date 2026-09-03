@@ -1,0 +1,7 @@
+set -e
+sudo mkdir -p /opt/ai-relay/static/brand
+sudo curl -fsSL 'https://litter.catbox.moe/618znz.html' -o /opt/ai-relay/static/brand/keyo-home.html
+grep -q 'One API for Multiple AI Models' /opt/ai-relay/static/brand/keyo-home.html
+grep -q 'OpenAI-Compatible API Gateway' /opt/ai-relay/static/brand/keyo-home.html
+echo DONE_GEO_HOME
+head -n 8 /opt/ai-relay/static/brand/keyo-home.html

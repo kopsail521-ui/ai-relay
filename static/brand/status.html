@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>KeyoAPI Status</title>
+<meta name="description" content="KeyoAPI service status — OpenAI-compatible API gateway uptime check." />
+<link rel="canonical" href="https://www.keyoapi.xyz/status" />
+<style>
+  :root { --bg:#f7fafc; --ink:#0f172a; --muted:#64748b; --ok:#059669; --bad:#dc2626; --line:#e2e8f0; --accent:#2563eb; }
+  body { margin:0; font-family: ui-sans-serif, system-ui, sans-serif; background:linear-gradient(180deg,#f7fafc,#eef6ff); color:var(--ink); }
+  .wrap { max-width:640px; margin:0 auto; padding:48px 20px 64px; }
+  h1 { font-size:1.75rem; margin:0 0 8px; }
+  .sub { color:var(--muted); margin:0 0 28px; }
+  .card { background:#fff; border:1px solid var(--line); border-radius:12px; padding:22px; }
+  .row { display:flex; align-items:center; gap:10px; margin-bottom:16px; }
+  .dot { width:12px; height:12px; border-radius:50%; background:var(--muted); }
+  .dot.ok { background:var(--ok); }
+  .dot.bad { background:var(--bad); }
+  dl { margin:0; display:grid; gap:10px; font-size:14px; }
+  dt { color:var(--muted); }
+  dd { margin:0; font-family:ui-monospace, SFMono-Regular, Menlo, monospace; font-size:13px; word-break:break-all; }
+  .pair { display:flex; justify-content:space-between; gap:16px; border-top:1px solid var(--line); padding-top:10px; }
+  .pair:first-of-type { border-top:0; padding-top:0; }
+  a { color:var(--accent); }
+  .foot { margin-top:24px; color:var(--muted); font-size:14px; line-height:1.7; }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>Service Status</h1>
+    <p class="sub">KeyoAPI — OpenAI-compatible API gateway</p>
+    <div class="card">
+      <div class="row">
+        <span class="dot" id="dot"></span>
+        <strong id="headline">Checking…</strong>
+      </div>
+      <dl id="meta"></dl>
+    </div>
+    <p class="foot">
+      Support: <a href="mailto:support@keyoapi.xyz">support@keyoapi.xyz</a><br />
+      Docs: <a href="/brand/keyo-docs.html">/brand/keyo-docs.html</a> ·
+      FAQ: <a href="/faq">/faq</a> ·
+      Pricing: <a href="/pricing">/pricing</a>
+    </p>
+  </div>
+<script>
+(async function () {
+  const dot = document.getElementById("dot");
+  const headline = document.getElementById("headline");
+  const meta = document.getElementById("meta");
+  try {
+    const r = await fetch("/api/status", { cache: "no-store" });
+    if (!r.ok) throw new Error("status " + r.status);
+    const j = await r.json();
+    const d = j.data || j;
+    dot.className = "dot ok";
+    headline.textContent = "All systems operational";
+    const rows = [
+      ["System", d.system_name || "KeyoAPI"],
+      ["Version", d.version || "—"],
+      ["API endpoint", "https://www.keyoapi.xyz/v1"],
+      ["Checked", new Date().toISOString()],
+    ];
+    meta.innerHTML = rows
+      .map(
+        ([k, v]) =>
+          `<div class="pair"><dt>${k}</dt><dd>${String(v)}</dd></div>`
+      )
+      .join("");
+  } catch (e) {
+    dot.className = "dot bad";
+    headline.textContent = "Unable to reach API status";
+    meta.innerHTML =
+      '<div class="pair"><dt>Error</dt><dd>' +
+      String(e.message || e) +
+      "</dd></div>";
+  }
+})();
+</script>
+</body>
+</html>

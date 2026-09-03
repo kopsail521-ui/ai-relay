@@ -1,0 +1,1 @@
+echo 'H4sIAAAAAAACCkWOQQuCMBiG7/sVHzvnnHYIAk+6SEonKlZEyNAVmrqhK/r50S4dn/d5D88u5wlMqpVb33fEoLtJohPPD1Gcgyu0RiHPLrDI+S1nMvYL3LuPM4r5KY0eRCOdURphRSOMGNSD9IuagLiIpRWkPGI1S6tAz6p9NaZTk90znpfBmnrU0jEuSpbWe16UgedvCCWUeIidM14wsK8wieCKf5l4Bfhfg2/oC7VOLG7BAAAA' | base64 -d | gunzip | sudo tee /opt/ai-relay/services/gitee-passthrough/Dockerfile >/dev/null && echo OK_4_DOCKER

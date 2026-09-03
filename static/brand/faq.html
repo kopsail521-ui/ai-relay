@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>KeyoAPI FAQ</title>
+<meta name="description" content="KeyoAPI frequently asked questions — top-up, API keys, models, billing." />
+<link rel="canonical" href="https://www.keyoapi.xyz/faq" />
+<style>
+  :root { --bg:#f7fafc; --ink:#0f172a; --muted:#64748b; --line:#e2e8f0; --accent:#2563eb; }
+  body { margin:0; font-family: ui-sans-serif, system-ui, "Segoe UI", sans-serif; background:linear-gradient(180deg,#f7fafc,#eef6ff); color:var(--ink); }
+  .wrap { max-width:720px; margin:0 auto; padding:48px 20px 72px; }
+  h1 { font-size:1.75rem; margin:0 0 8px; }
+  .sub { color:var(--muted); margin:0 0 28px; }
+  details { background:#fff; border:1px solid var(--line); border-radius:12px; padding:14px 16px; margin:0 0 10px; }
+  summary { cursor:pointer; font-weight:600; }
+  details p { margin:10px 0 0; color:#334155; line-height:1.65; font-size:15px; }
+  a { color:var(--accent); }
+  .foot { margin-top:28px; color:var(--muted); font-size:14px; line-height:1.7; }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>FAQ</h1>
+    <p class="sub">KeyoAPI 常见问题 · Frequently asked questions</p>
+
+    <details open>
+      <summary>如何开始使用？</summary>
+      <p>注册 / 登录 → 钱包充值 → 创建 API Key → 将 Base URL 设为 <code>https://www.keyoapi.xyz/v1</code>。公开价目见 <a href="/pricing">/pricing</a>。</p>
+    </details>
+    <details>
+      <summary>如何充值？</summary>
+      <p>登录后打开<strong>钱包 / Wallet</strong>，通过 Creem（或其他已开通支付通道）在线支付预付额度。额度即时到账用于 API 调用。</p>
+    </details>
+    <details>
+      <summary>价格单位是什么？</summary>
+      <p>控制台与模型广场以 <strong>USD</strong> 展示。文本模型多为按百万 tokens；图片等按次计费。以控制台实时扣费为准。</p>
+    </details>
+    <details>
+      <summary>未登录能看价格吗？</summary>
+      <p>可以。访问 <a href="/pricing">/pricing</a>（模型广场）。旧链接 <code>/models</code> 会自动跳转到公开价目页。</p>
+    </details>
+    <details>
+      <summary>支持哪些客户端？</summary>
+      <p>任何 OpenAI 兼容客户端：Cursor、ChatBox、OpenAI Python/Node SDK 等。接入说明见 <a href="/brand/keyo-docs.html">文档</a>。</p>
+    </details>
+    <details>
+      <summary>常见报错？</summary>
+      <p>模型名写错、API Key 无效、余额不足。请核对模型名与 <a href="/pricing">/pricing</a> 完全一致，并确认钱包有余额。</p>
+    </details>
+    <details>
+      <summary>如何联系客服？</summary>
+      <p>发邮件至 <a href="mailto:support@keyoapi.xyz">support@keyoapi.xyz</a>，通常 3 个工作日内回复。服务状态：<a href="/status">/status</a>。</p>
+    </details>
+
+    <p class="foot">
+      Legal:
+      <a href="/brand/privacy.html">Privacy</a> ·
+      <a href="/brand/terms.html">Terms</a> ·
+      <a href="/brand/aup.html">Acceptable Use</a>
+    </p>
+  </div>
+</body>
+</html>

@@ -1,0 +1,19 @@
+# 修正模型广场左侧：供应商 + 标签
+
+之前命令没真正改库（乱码 / SyntaxError），所以页面还是旧的。
+
+## 只粘贴 4 次（每次一整行）
+
+1. scripts/vps-fix-marketplace-p1.txt → 应看到 OK_PART1
+2. scripts/vps-fix-marketplace-p2.txt → 应看到 OK_PART2
+3. scripts/vps-fix-marketplace-run.txt → 应看到 JSON（含 大语言模型，multiTag: []）
+   首次可能拉 python 镜像，等 1～2 分钟
+4. scripts/vps-fix-marketplace-step2.txt → DONE_FIX_MARKETPLACE
+
+然后网站模型广场 Ctrl+F5。
+
+期望左侧：
+- 供应商：无「模力方舟」，未知为「其他」
+- 有现成 logo 的：Meta / 腾讯 / 百度 / BRIA AI / 哔哩哔哩 / 阶跃星辰
+- 标签：大语言模型 / OCR / 语音识别 / 语音合成 / 内容风控 / 图像处理 / 数字人 / 图片
+- 每个模型只有 1 个标签

@@ -1,0 +1,1 @@
+base64 -d /tmp/add-fable51.b64 | gunzip | sudo tee /tmp/add-fable51.py >/dev/null && sudo docker run --rm -v /opt/ai-relay/data/new-api:/data -v /tmp/add-fable51.py:/fix.py:ro python:3.12-alpine python /fix.py /data/one-api.db && sudo docker restart ai-relay-new-api && sleep 3 && echo DONE_ADD_CLAUDE_FABLE_5_1

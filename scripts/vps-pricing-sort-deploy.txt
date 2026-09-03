@@ -1,0 +1,16 @@
+set -e
+sudo mkdir -p /opt/ai-relay/services/creem-moderation-proxy
+base64 -d /tmp/mod-server.b64 | gunzip | sudo tee /opt/ai-relay/services/creem-moderation-proxy/server.mjs >/dev/null
+cd /opt/ai-relay
+sudo docker build -t keyo-creem-moderation ./services/creem-moderation-proxy
+sudo docker rm -f ai-relay-creem-moderation 2>/dev/null || true
+sudo docker run -d --name ai-relay-creem-moderation --restart always --network host \
+  --env-file /opt/ai-relay/.env.moderation \
+  -e UPSTREAM_URL=http://127.0.0.1:3000 \
+  -e LISTEN_HOST=127.0.0.1 \
+  -e PORT=3001 \
+  keyo-creem-moderation
+sleep 2
+curl -sS http://127.0.0.1:3001/api/pricing | head -c 400
+echo
+echo DONE_PRICING_SORT

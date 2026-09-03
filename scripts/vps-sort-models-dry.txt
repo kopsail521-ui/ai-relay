@@ -1,0 +1,1 @@
+base64 -d /tmp/sort-models.b64 | gunzip | sudo tee /tmp/sort-models.py >/dev/null && sudo docker run --rm -v /opt/ai-relay/data/new-api:/data -v /tmp/sort-models.py:/fix.py:ro python:3.12-alpine python /fix.py /data/one-api.db --dry

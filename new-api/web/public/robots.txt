@@ -1,0 +1,17 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://www.keyoapi.xyz/sitemap.xml
+
+Allow: /brand/
+Allow: /pricing
+Allow: /about
+Allow: /privacy-policy
+Allow: /user-agreement
+
+Disallow: /dashboard
+Disallow: /console
+Disallow: /sign-in
+Disallow: /sign-up
+Disallow: /setup
+Disallow: /admin

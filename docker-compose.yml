@@ -1,0 +1,52 @@
+# AI 出海中转站：New API（网关）+ 价格后台
+# 启动：docker compose up -d
+# New API: http://localhost:3000
+# 价格后台: http://localhost:3100
+
+services:
+  new-api:
+    image: calciumion/new-api:latest
+    container_name: ai-relay-new-api
+    restart: always
+    command: --log-dir /app/logs
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./data/new-api:/data
+      - ./data/logs:/app/logs
+    environment:
+      - TZ=Asia/Shanghai
+      - ERROR_LOG_ENABLED=true
+      - BATCH_UPDATE_ENABLED=true
+      # 首次启动后在网页初始化管理员账号
+      # 多机部署时请改成随机长字符串：
+      # - SESSION_SECRET=please-change-me
+      # - CRYPTO_SECRET=please-change-me
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "wget -q -O - http://localhost:3000/api/status | grep -o '\"success\":\\s*true' || exit 1",
+        ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  pricing-admin:
+    build: ./pricing-admin
+    container_name: ai-relay-pricing
+    restart: always
+    ports:
+      - "3100:3100"
+    volumes:
+      - ./data/pricing:/app/data
+    environment:
+      - PORT=3100
+      - TZ=Asia/Shanghai
+      - ADMIN_PASSWORD=admin123
+      - DATA_DIR=/app/data
+      # 可选：同步售价到 New API（填管理员令牌后启用）
+      - NEW_API_BASE=http://new-api:3000
+      # - NEW_API_TOKEN=
+    depends_on:
+      - new-api

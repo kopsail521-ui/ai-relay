@@ -1,0 +1,8 @@
+FROM node:22-alpine
+WORKDIR /app
+COPY server.mjs fix-marketplace-meta.mjs catalog.json ./
+ENV NODE_ENV=production
+ENV PORT=3010
+ENV LISTEN_HOST=127.0.0.1
+EXPOSE 3010
+CMD ["node", "server.mjs"]

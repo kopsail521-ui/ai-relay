@@ -1,0 +1,15 @@
+# 上线 gemini-3.8-flash（OpenLux ×5）
+
+上游：https://api.openlux.ai
+售价（最便宜组 Anti-Gemini-1 ×5）：
+- 输入 ~$0.28 / M
+- 输出 ~$1.38 / M
+- ModelRatio=0.137869 CompletionRatio=5
+
+按顺序粘贴：
+1. scripts/vps-add-gemini-3.8-flash-p1.txt → OK_GEM38_1
+2. scripts/vps-add-gemini-3.8-flash-p2.txt → OK_GEM38_2
+3. scripts/vps-add-gemini-3.8-flash-run.txt → DONE_ADD_GEMINI_3_8_FLASH
+
+然后网站 Ctrl+F5，模型广场应出现 gemini-3.8-flash（Google / 大语言模型）。
+也可本地：node scripts/setup-openlux-models.mjs gemini-3.8-flash

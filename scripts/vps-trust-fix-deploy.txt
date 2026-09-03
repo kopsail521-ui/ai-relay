@@ -1,0 +1,18 @@
+set -e
+base64 -d /tmp/vps-trust-faq.b64 | gunzip | sudo tee /opt/ai-relay/static/brand/faq.html >/dev/null
+base64 -d /tmp/vps-trust-terms.b64 | gunzip | sudo tee /opt/ai-relay/static/brand/terms.html >/dev/null
+wc -c /opt/ai-relay/static/brand/faq.html /opt/ai-relay/static/brand/terms.html
+if [ -d /opt/ai-relay/data/new-api ]; then
+  sudo mkdir -p /opt/ai-relay/data/new-api/brand
+  sudo cp -f /opt/ai-relay/static/brand/faq.html /opt/ai-relay/static/brand/terms.html /opt/ai-relay/data/new-api/brand/
+fi
+if [ -d /opt/ai-relay/new-api/web/public/brand ]; then
+  sudo cp -f /opt/ai-relay/static/brand/faq.html /opt/ai-relay/static/brand/terms.html /opt/ai-relay/new-api/web/public/brand/
+fi
+if sudo docker inspect ai-relay-new-api >/dev/null 2>&1; then
+  sudo docker cp /opt/ai-relay/static/brand/faq.html ai-relay-new-api:/app/web/dist/brand/faq.html 2>/dev/null || true
+  sudo docker cp /opt/ai-relay/static/brand/terms.html ai-relay-new-api:/app/web/dist/brand/terms.html 2>/dev/null || true
+  sudo docker cp /opt/ai-relay/static/brand/faq.html ai-relay-new-api:/app/web/public/brand/faq.html 2>/dev/null || true
+  sudo docker cp /opt/ai-relay/static/brand/terms.html ai-relay-new-api:/app/web/public/brand/terms.html 2>/dev/null || true
+fi
+echo DONE_TRUST_FIX_FAQ_TERMS

@@ -1,0 +1,1 @@
+sudo docker restart ai-relay-new-api && sleep 3 && echo DONE_FIX_MARKETPLACE

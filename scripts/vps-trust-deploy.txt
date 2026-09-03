@@ -1,0 +1,44 @@
+set -e
+sudo mkdir -p /opt/ai-relay/services/creem-moderation-proxy /opt/ai-relay/static/brand /opt/ai-relay/scripts
+# brand static (New API usually serves /brand from this path or a bind-mount — copy both common places)
+for f in keyo-home.html keyo-docs.html status.html faq.html integrations.html terms.html privacy.html aup.html; do true; done
+base64 -d /tmp/vps-trust-mod.b64 | gunzip | sudo tee /opt/ai-relay/services/creem-moderation-proxy/server.mjs >/dev/null
+base64 -d /tmp/vps-trust-home.b64 | gunzip | sudo tee /opt/ai-relay/static/brand/keyo-home.html >/dev/null
+base64 -d /tmp/vps-trust-docs.b64 | gunzip | sudo tee /opt/ai-relay/static/brand/keyo-docs.html >/dev/null
+base64 -d /tmp/vps-trust-status.b64 | gunzip | sudo tee /opt/ai-relay/static/brand/status.html >/dev/null
+base64 -d /tmp/vps-trust-faq.b64 | gunzip | sudo tee /opt/ai-relay/static/brand/faq.html >/dev/null
+base64 -d /tmp/vps-trust-integ.b64 | gunzip | sudo tee /opt/ai-relay/static/brand/integrations.html >/dev/null
+base64 -d /tmp/vps-trust-terms.b64 | gunzip | sudo tee /opt/ai-relay/static/brand/terms.html >/dev/null
+base64 -d /tmp/vps-trust-privacy.b64 | gunzip | sudo tee /opt/ai-relay/static/brand/privacy.html >/dev/null
+base64 -d /tmp/vps-trust-aup.b64 | gunzip | sudo tee /opt/ai-relay/static/brand/aup.html >/dev/null
+base64 -d /tmp/vps-trust-py.b64 | gunzip | sudo tee /opt/ai-relay/scripts/vps-update-trust-facade.py >/dev/null
+# also sync into new-api web public if present
+if [ -d /opt/ai-relay/data/new-api ]; then
+  sudo mkdir -p /opt/ai-relay/data/new-api/brand
+  sudo cp -f /opt/ai-relay/static/brand/*.html /opt/ai-relay/data/new-api/brand/ 2>/dev/null || true
+fi
+if [ -d /opt/ai-relay/new-api/web/public/brand ]; then
+  sudo cp -f /opt/ai-relay/static/brand/*.html /opt/ai-relay/new-api/web/public/brand/ 2>/dev/null || true
+fi
+# common docker volume path for calciumion/new-api custom brand
+if sudo docker inspect ai-relay-new-api >/dev/null 2>&1; then
+  sudo docker cp /opt/ai-relay/static/brand/. ai-relay-new-api:/app/web/dist/brand/ 2>/dev/null || true
+  sudo docker cp /opt/ai-relay/static/brand/. ai-relay-new-api:/app/web/public/brand/ 2>/dev/null || true
+fi
+sudo python3 /opt/ai-relay/scripts/vps-update-trust-facade.py /opt/ai-relay/data/new-api/one-api.db
+cd /opt/ai-relay
+sudo docker build -t keyo-creem-moderation ./services/creem-moderation-proxy
+sudo docker rm -f ai-relay-creem-moderation 2>/dev/null || true
+sudo docker run -d --name ai-relay-creem-moderation --restart always --network host \
+  --env-file /opt/ai-relay/.env.moderation \
+  -e UPSTREAM_URL=http://127.0.0.1:3000 \
+  -e LISTEN_HOST=127.0.0.1 \
+  -e PORT=3001 \
+  keyo-creem-moderation
+sudo docker restart ai-relay-new-api 2>/dev/null || true
+sleep 3
+echo "status=$(curl -sS -o /dev/null -w '%{http_code}' -L --max-redirs 0 http://127.0.0.1:3001/status || true)"
+echo "faq=$(curl -sS -o /dev/null -w '%{http_code}' -L --max-redirs 0 http://127.0.0.1:3001/faq || true)"
+echo "integ=$(curl -sS -o /dev/null -w '%{http_code}' -L --max-redirs 0 http://127.0.0.1:3001/integrations || true)"
+curl -sS http://127.0.0.1:3001/ | grep -oE 'keyo-models-public|support@keyoapi.xyz' | sort -u || true
+echo DONE_TRUST_FACADE

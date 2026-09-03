@@ -1,0 +1,25 @@
+set -e
+decode() {
+  local name="$1" dest="$2" expect_sha="$3"
+  tr -d '\n\r\t ' < "/tmp/vps-trust-${name}.b64" | base64 -d | gunzip | sudo tee "$dest" >/dev/null
+  local got
+  got=$(sha256sum "$dest" | awk '{print $1}')
+  echo "${name}_bytes=$(wc -c < "$dest") sha=$got"
+  test "$got" = "$expect_sha"
+}
+decode faq /opt/ai-relay/static/brand/faq.html b08911bdc8efbf465677c48e246bece8bdeaace74dc1beb5621fc8128ee835ba
+decode terms /opt/ai-relay/static/brand/terms.html 5c9be3ee0c49d0985f351c141da697831a5a957af9f19ea4fa78ea7e8a0a3d8b
+if [ -d /opt/ai-relay/data/new-api ]; then
+  sudo mkdir -p /opt/ai-relay/data/new-api/brand
+  sudo cp -f /opt/ai-relay/static/brand/faq.html /opt/ai-relay/static/brand/terms.html /opt/ai-relay/data/new-api/brand/
+fi
+if [ -d /opt/ai-relay/new-api/web/public/brand ]; then
+  sudo cp -f /opt/ai-relay/static/brand/faq.html /opt/ai-relay/static/brand/terms.html /opt/ai-relay/new-api/web/public/brand/
+fi
+if sudo docker inspect ai-relay-new-api >/dev/null 2>&1; then
+  sudo docker cp /opt/ai-relay/static/brand/faq.html ai-relay-new-api:/app/web/dist/brand/faq.html 2>/dev/null || true
+  sudo docker cp /opt/ai-relay/static/brand/terms.html ai-relay-new-api:/app/web/dist/brand/terms.html 2>/dev/null || true
+  sudo docker cp /opt/ai-relay/static/brand/faq.html ai-relay-new-api:/app/web/public/brand/faq.html 2>/dev/null || true
+  sudo docker cp /opt/ai-relay/static/brand/terms.html ai-relay-new-api:/app/web/public/brand/terms.html 2>/dev/null || true
+fi
+echo DONE_TRUST_FIX2

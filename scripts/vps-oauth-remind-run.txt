@@ -1,0 +1,1 @@
+base64 -d /tmp/mod_server.b64 | gunzip | sudo tee /opt/ai-relay/services/creem-moderation-proxy/server.mjs >/dev/null && sudo docker cp /opt/ai-relay/services/creem-moderation-proxy/server.mjs ai-relay-creem-moderation:/app/server.mjs && sudo docker restart ai-relay-creem-moderation && sleep 2 && echo DONE_OAUTH_REMIND

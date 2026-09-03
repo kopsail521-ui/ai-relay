@@ -1,0 +1,1 @@
+base64 -d /tmp/reorder-models.b64 | gunzip | sudo tee /tmp/reorder-models.py >/dev/null && sudo docker run --rm -v /opt/ai-relay/data/new-api:/data -v /tmp/reorder-models.py:/fix.py:ro python:3.12-alpine python /fix.py /data/one-api.db --dry

@@ -1,0 +1,2236 @@
+{
+  "VajraV1": {
+    "description": "基于 YOLO 的实时视觉模型：目标检测、图像分割与人体关键点，适用于监控、零售与工业视觉。 计费：$0.006849/次。",
+    "descriptions": {
+      "zhCN": "基于 YOLO 的实时视觉模型：目标检测、图像分割与人体关键点，适用于监控、零售与工业视觉。 计费：$0.006849/次。",
+      "zhTW": "基於 YOLO 的即時視覺模型：目標偵測、影像分割與人體關鍵點，適用於監控、零售與工業視覺。 計費：$0.006849/次。",
+      "en": "YOLO-based realtime vision: object detection, image segmentation, and human pose keypoints for monitoring, retail, and industrial CV. Pricing: $0.006849 / request.",
+      "fr": "Vision temps réel basée sur YOLO : détection d’objets, segmentation et points clés du corps pour la surveillance, le retail et l’industrie. Tarif : $0.006849 / requête.",
+      "ru": "YOLO‑модель реального времени: детекция объектов, сегментация и ключевые точки тела для мониторинга, ритейла и промышленности. Тариф: $0.006849 / запрос.",
+      "ja": "YOLO 系リアルタイム視覚モデル。物体検出・画像分割・人体キーポイント。監視・小売・産業向け。 料金：$0.006849/ 回。",
+      "vi": "Mô hình thị giác thời gian thực dựa trên YOLO: phát hiện đối tượng, phân đoạn ảnh và điểm khớp cơ thể cho giám sát, bán lẻ và công nghiệp. Giá: $0.006849/ lần."
+    },
+    "unit": "request",
+    "badge": {
+      "zhCN": "按次计费",
+      "zhTW": "按次計費",
+      "en": "Per Request",
+      "fr": "Par requête",
+      "ru": "За запрос",
+      "ja": "リクエスト課金",
+      "vi": "Theo lần gọi"
+    },
+    "suffix": {
+      "zhCN": "/次",
+      "zhTW": "/次",
+      "en": "/ request",
+      "fr": "/ requête",
+      "ru": "/ запрос",
+      "ja": "/ 回",
+      "vi": "/ lần"
+    },
+    "price_key": {
+      "zhCN": "每次请求",
+      "zhTW": "每次請求",
+      "en": "Per request",
+      "fr": "Par requête",
+      "ru": "За запрос",
+      "ja": "リクエストごと",
+      "vi": "Mỗi lần gọi"
+    },
+    "description_zh": "基于 YOLO 的实时视觉模型：目标检测、图像分割与人体关键点，适用于监控、零售与工业视觉。 计费：$0.006849/次。",
+    "description_en": "YOLO-based realtime vision: object detection, image segmentation, and human pose keypoints for monitoring, retail, and industrial CV. Pricing: $0.006849 / request.",
+    "badge_zh": "按次计费",
+    "badge_en": "Per Request",
+    "suffix_zh": "/次",
+    "suffix_en": "/ request",
+    "price_key_zh": "每次请求",
+    "price_key_en": "Per request"
+  },
+  "sam3": {
+    "description": "Meta SAM 3 开放词汇图像分割，无需预定义类别即可对任意目标做像素级 Mask。 计费：$0.0137/次。",
+    "descriptions": {
+      "zhCN": "Meta SAM 3 开放词汇图像分割，无需预定义类别即可对任意目标做像素级 Mask。 计费：$0.0137/次。",
+      "zhTW": "Meta SAM 3 開放詞彙影像分割，無需預定義類別即可對任意目標做像素級 Mask。 計費：$0.0137/次。",
+      "en": "Meta SAM 3 open-vocabulary image segmentation — pixel-level masks for arbitrary objects without predefined classes. Pricing: $0.0137 / request.",
+      "fr": "Segmentation d’image open-vocabulary Meta SAM 3 — masques pixel pour des objets arbitraires sans classes prédéfinies. Tarif : $0.0137 / requête.",
+      "ru": "Сегментация Meta SAM 3 без фиксированных классов — пиксельные маски для произвольных объектов. Тариф: $0.0137 / запрос.",
+      "ja": "Meta SAM 3 のオープン語彙画像分割。事前定義クラスなしで任意対象のピクセルマスクを生成。 料金：$0.0137/ 回。",
+      "vi": "Phân đoạn ảnh open-vocabulary Meta SAM 3 — mask cấp pixel cho mọi đối tượng mà không cần lớp cố định. Giá: $0.0137/ lần."
+    },
+    "unit": "request",
+    "badge": {
+      "zhCN": "按次计费",
+      "zhTW": "按次計費",
+      "en": "Per Request",
+      "fr": "Par requête",
+      "ru": "За запрос",
+      "ja": "リクエスト課金",
+      "vi": "Theo lần gọi"
+    },
+    "suffix": {
+      "zhCN": "/次",
+      "zhTW": "/次",
+      "en": "/ request",
+      "fr": "/ requête",
+      "ru": "/ запрос",
+      "ja": "/ 回",
+      "vi": "/ lần"
+    },
+    "price_key": {
+      "zhCN": "每次请求",
+      "zhTW": "每次請求",
+      "en": "Per request",
+      "fr": "Par requête",
+      "ru": "За запрос",
+      "ja": "リクエストごと",
+      "vi": "Mỗi lần gọi"
+    },
+    "description_zh": "Meta SAM 3 开放词汇图像分割，无需预定义类别即可对任意目标做像素级 Mask。 计费：$0.0137/次。",
+    "description_en": "Meta SAM 3 open-vocabulary image segmentation — pixel-level masks for arbitrary objects without predefined classes. Pricing: $0.0137 / request.",
+    "badge_zh": "按次计费",
+    "badge_en": "Per Request",
+    "suffix_zh": "/次",
+    "suffix_en": "/ request",
+    "price_key_zh": "每次请求",
+    "price_key_en": "Per request"
+  },
+  "AnimeSharp": {
+    "description": "动漫/插画超分（4x-AnimeSharp/ESRGAN），放大并锐化线稿，保留二次元风格细节。 计费：$0.006849/次。",
+    "descriptions": {
+      "zhCN": "动漫/插画超分（4x-AnimeSharp/ESRGAN），放大并锐化线稿，保留二次元风格细节。 计费：$0.006849/次。",
+      "zhTW": "動漫/插畫超分（4x-AnimeSharp/ESRGAN），放大並銳化線稿，保留二次元風格細節。 計費：$0.006849/次。",
+      "en": "Anime/illustration super-resolution (4x-AnimeSharp/ESRGAN). Upscales and sharpens anime-style images while preserving line art. Pricing: $0.006849 / request.",
+      "fr": "Super-résolution anime/illustration (4x-AnimeSharp/ESRGAN). Agrandit et affine les traits tout en préservant le style. Tarif : $0.006849 / requête.",
+      "ru": "Суперразрешение аниме/иллюстраций (4x-AnimeSharp/ESRGAN): увеличение и резкость с сохранением линии. Тариф: $0.006849 / запрос.",
+      "ja": "アニメ/イラスト超解像（4x-AnimeSharp/ESRGAN）。線画を保ちつつ拡大・シャープ化。 料金：$0.006849/ 回。",
+      "vi": "Siêu phân giải anime/minh họa (4x-AnimeSharp/ESRGAN): phóng to và làm nét, giữ nét vẽ. Giá: $0.006849/ lần."
+    },
+    "unit": "request",
+    "badge": {
+      "zhCN": "按次计费",
+      "zhTW": "按次計費",
+      "en": "Per Request",
+      "fr": "Par requête",
+      "ru": "За запрос",
+      "ja": "リクエスト課金",
+      "vi": "Theo lần gọi"
+    },
+    "suffix": {
+      "zhCN": "/次",
+      "zhTW": "/次",
+      "en": "/ request",
+      "fr": "/ requête",
+      "ru": "/ запрос",
+      "ja": "/ 回",
+      "vi": "/ lần"
+    },
+    "price_key": {
+      "zhCN": "每次请求",
+      "zhTW": "每次請求",
+      "en": "Per request",
+      "fr": "Par requête",
+      "ru": "За запрос",
+      "ja": "リクエストごと",
+      "vi": "Mỗi lần gọi"
+    },
+    "description_zh": "动漫/插画超分（4x-AnimeSharp/ESRGAN），放大并锐化线稿，保留二次元风格细节。 计费：$0.006849/次。",
+    "description_en": "Anime/illustration super-resolution (4x-AnimeSharp/ESRGAN). Upscales and sharpens anime-style images while preserving line art. Pricing: $0.006849 / request.",
+    "badge_zh": "按次计费",
+    "badge_en": "Per Request",
+    "suffix_zh": "/次",
+    "suffix_en": "/ request",
+    "price_key_zh": "每次请求",
+    "price_key_en": "Per request"
+  },
+  "Real-ESRGAN": {
+    "description": "通用真实图像超分辨率，放大照片并恢复细节，输出更清晰。 计费：$0.006849/次。",
+    "descriptions": {
+      "zhCN": "通用真实图像超分辨率，放大照片并恢复细节，输出更清晰。 计费：$0.006849/次。",
+      "zhTW": "通用真實影像超解析度，放大照片並還原細節，輸出更清晰。 計費：$0.006849/次。",
+      "en": "General real-world image super-resolution. Upscales photos and restores detail for clearer output. Pricing: $0.006849 / request.",
+      "fr": "Super-résolution d’images réelles. Agrandit les photos et restaure les détails. Tarif : $0.006849 / requête.",
+      "ru": "Суперразрешение реальных фото: увеличение и восстановление деталей. Тариф: $0.006849 / запрос.",
+      "ja": "実写画像の汎用超解像。写真を拡大し細部を復元。 料金：$0.006849/ 回。",
+      "vi": "Siêu phân giải ảnh thật: phóng to và khôi phục chi tiết. Giá: $0.006849/ lần."
+    },
+    "unit": "request",
+    "badge": {
+      "zhCN": "按次计费",
+      "zhTW": "按次計費",
+      "en": "Per Request",
+      "fr": "Par requête",
+      "ru": "За запрос",
+      "ja": "リクエスト課金",
+      "vi": "Theo lần gọi"
+    },
+    "suffix": {
+      "zhCN": "/次",
+      "zhTW": "/次",
+      "en": "/ request",
+      "fr": "/ requête",
+      "ru": "/ запрос",
+      "ja": "/ 回",
+      "vi": "/ lần"
+    },
+    "price_key": {
+      "zhCN": "每次请求",
+      "zhTW": "每次請求",
+      "en": "Per request",
+      "fr": "Par requête",
+      "ru": "За запрос",
+      "ja": "リクエストごと",
+      "vi": "Mỗi lần gọi"
+    },
+    "description_zh": "通用真实图像超分辨率，放大照片并恢复细节，输出更清晰。 计费：$0.006849/次。",
+    "description_en": "General real-world image super-resolution. Upscales photos and restores detail for clearer output. Pricing: $0.006849 / request.",
+    "badge_zh": "按次计费",
+    "badge_en": "Per Request",
+    "suffix_zh": "/次",
+    "suffix_en": "/ request",
+    "price_key_zh": "每次请求",
+    "price_key_en": "Per request"
+  },
+  "UVDoc": {
+    "description": "文档图片矫正：将弯曲、倾斜的扫描件展平，提升后续 OCR 准确率。 计费：$0.0137/次。",
+    "descriptions": {
+      "zhCN": "文档图片矫正：将弯曲、倾斜的扫描件展平，提升后续 OCR 准确率。 计费：$0.0137/次。",
+      "zhTW": "文件影像矯正：將彎曲、傾斜的掃描件展平，提升後續 OCR 準確率。 計費：$0.0137/次。",
+      "en": "Document image unwarping. Flattens curved/skewed scans to improve OCR accuracy. Pricing: $0.0137 / request.",
+      "fr": "Redressement d’images de documents. Aplatit les scans courbés/inclinés pour améliorer l’OCR. Tarif : $0.0137 / requête.",
+      "ru": "Выпрямление изображений документов: убирает изгибы/перекосы для лучшего OCR. Тариф: $0.0137 / запрос.",
+      "ja": "文書画像の歪み補正。曲がった/傾いたスキャンを平坦化し OCR 精度を向上。 料金：$0.0137/ 回。",
+      "vi": "Chỉnh phẳng ảnh tài liệu bị cong/nghiêng để cải thiện độ chính xác OCR. Giá: $0.0137/ lần."
+    },
+    "unit": "request",
+    "badge": {
+      "zhCN": "按次计费",
+      "zhTW": "按次計費",
+      "en": "Per Request",
+      "fr": "Par requête",
+      "ru": "За запрос",
+      "ja": "リクエスト課金",
+      "vi": "Theo lần gọi"
+    },
+    "suffix": {
+      "zhCN": "/次",
+      "zhTW": "/次",
+      "en": "/ request",
+      "fr": "/ requête",
+      "ru": "/ запрос",
+      "ja": "/ 回",
+      "vi": "/ lần"
+    },
+    "price_key": {
+      "zhCN": "每次请求",
+      "zhTW": "每次請求",
+      "en": "Per request",
+      "fr": "Par requête",
+      "ru": "За запрос",
+      "ja": "リクエストごと",
+      "vi": "Mỗi lần gọi"
+    },
+    "description_zh": "文档图片矫正：将弯曲、倾斜的扫描件展平，提升后续 OCR 准确率。 计费：$0.0137/次。",
+    "description_en": "Document image unwarping. Flattens curved/skewed scans to improve OCR accuracy. Pricing: $0.0137 / request.",
+    "badge_zh": "按次计费",
+    "badge_en": "Per Request",
+    "suffix_zh": "/次",
+    "suffix_en": "/ request",
+    "price_key_zh": "每次请求",
+    "price_key_en": "Per request"
+  },
+  "RMBG-2.0": {
+    "description": "BRIA RMBG 智能抠图去背景，适用于商品图、人像与设计素材的高精度抠图。 计费：$0.006849/次。",
+    "descriptions": {
+      "zhCN": "BRIA RMBG 智能抠图去背景，适用于商品图、人像与设计素材的高精度抠图。 计费：$0.006849/次。",
+      "zhTW": "BRIA RMBG 智慧去背，適用於商品圖、人像與設計素材的高精度去背。 計費：$0.006849/次。",
+      "en": "BRIA RMBG background removal. High-accuracy cutouts for product photos, portraits, and design assets. Pricing: $0.006849 / request.",
+      "fr": "Détourage BRIA RMBG. Découpes précises pour produits, portraits et assets design. Tarif : $0.006849 / requête.",
+      "ru": "Удаление фона BRIA RMBG: точные вырезы для товаров, портретов и дизайна. Тариф: $0.006849 / запрос.",
+      "ja": "BRIA RMBG 背景除去。商品・人物・デザイン素材向け高精度切り抜き。 料金：$0.006849/ 回。",
+      "vi": "Gỡ nền BRIA RMBG: cắt nền chính xác cho ảnh sản phẩm, chân dung và tài nguyên thiết kế. Giá: $0.006849/ lần."
+    },
+    "unit": "request",
+    "badge": {
+      "zhCN": "按次计费",
+      "zhTW": "按次計費",
+      "en": "Per Request",
+      "fr": "Par requête",
+      "ru": "За запрос",
+      "ja": "リクエスト課金",
+      "vi": "Theo lần gọi"
+    },
+    "suffix": {
+      "zhCN": "/次",
+      "zhTW": "/次",
+      "en": "/ request",
+      "fr": "/ requête",
+      "ru": "/ запрос",
+      "ja": "/ 回",
+      "vi": "/ lần"
+    },
+    "price_key": {
+      "zhCN": "每次请求",
+      "zhTW": "每次請求",
+      "en": "Per request",
+      "fr": "Par requête",
+      "ru": "За запрос",
+      "ja": "リクエストごと",
+      "vi": "Mỗi lần gọi"
+    },
+    "description_zh": "BRIA RMBG 智能抠图去背景，适用于商品图、人像与设计素材的高精度抠图。 计费：$0.006849/次。",
+    "description_en": "BRIA RMBG background removal. High-accuracy cutouts for product photos, portraits, and design assets. Pricing: $0.006849 / request.",
+    "badge_zh": "按次计费",
+    "badge_en": "Per Request",
+    "suffix_zh": "/次",
+    "suffix_en": "/ request",
+    "price_key_zh": "每次请求",
+    "price_key_en": "Per request"
+  },
+  "MinerU2.5-Pro": {
+    "description": "复杂文档解析与 OCR：从 PDF/图片提取文字、版面、表格与结构，输出结构化结果。 计费：$0.0137/页。",
+    "descriptions": {
+      "zhCN": "复杂文档解析与 OCR：从 PDF/图片提取文字、版面、表格与结构，输出结构化结果。 计费：$0.0137/页。",
+      "zhTW": "複雜文件解析與 OCR：從 PDF/圖片提取文字、版面、表格與結構，輸出結構化結果。 計費：$0.0137/頁。",
+      "en": "Complex document parsing & OCR. Extracts text, layout, tables, and structure from PDFs/images into machine-readable output. Pricing: $0.0137 / page.",
+      "fr": "Analyse documentaire et OCR. Extrait texte, mise en page, tableaux et structure depuis PDF/images. Tarif : $0.0137 / page.",
+      "ru": "Разбор сложных документов и OCR: текст, вёрстка, таблицы и структура из PDF/изображений. Тариф: $0.0137 / стр..",
+      "ja": "複雑文書の解析と OCR。PDF/画像から文字・レイアウト・表・構造を抽出。 料金：$0.0137/ ページ。",
+      "vi": "Phân tích tài liệu phức tạp & OCR: trích xuất chữ, bố cục, bảng và cấu trúc từ PDF/ảnh. Giá: $0.0137/ trang."
+    },
+    "unit": "page",
+    "badge": {
+      "zhCN": "按页计费",
+      "zhTW": "按頁計費",
+      "en": "Per Page",
+      "fr": "Par page",
+      "ru": "За страницу",
+      "ja": "ページ課金",
+      "vi": "Theo trang"
+    },
+    "suffix": {
+      "zhCN": "/页",
+      "zhTW": "/頁",
+      "en": "/ page",
+      "fr": "/ page",
+      "ru": "/ стр.",
+      "ja": "/ ページ",
+      "vi": "/ trang"
+    },
+    "price_key": {
+      "zhCN": "每页",
+      "zhTW": "每頁",
+      "en": "Per page",
+      "fr": "Par page",
+      "ru": "За страницу",
+      "ja": "ページごと",
+      "vi": "Mỗi trang"
+    },
+    "description_zh": "复杂文档解析与 OCR：从 PDF/图片提取文字、版面、表格与结构，输出结构化结果。 计费：$0.0137/页。",
+    "description_en": "Complex document parsing & OCR. Extracts text, layout, tables, and structure from PDFs/images into machine-readable output. Pricing: $0.0137 / page.",
+    "badge_zh": "按页计费",
+    "badge_en": "Per Page",
+    "suffix_zh": "/页",
+    "suffix_en": "/ page",
+    "price_key_zh": "每页",
+    "price_key_en": "Per page"
+  },
+  "Unlimited-OCR": {
+    "description": "面向长文档的智能 OCR，支持版面理解与结构化提取，可通过 chat/completions 调用。 计费：输入 $1.92 / 输出 $1.92（每百万 tokens）。",
+    "descriptions": {
+      "zhCN": "面向长文档的智能 OCR，支持版面理解与结构化提取，可通过 chat/completions 调用。 计费：输入 $1.92 / 输出 $1.92（每百万 tokens）。",
+      "zhTW": "面向長文件的智慧 OCR，支援版面理解與結構化提取，可透過 chat/completions 呼叫。 計費：輸入 $1.92 / 輸出 $1.92（每百萬 tokens）。",
+      "en": "Long-document OCR with layout understanding and structured extraction via chat/completions. Pricing: $1.92 input / $1.92 output per 1M tokens.",
+      "fr": "OCR pour longs documents avec compréhension de mise en page et extraction structurée via chat/completions. Tarif : $1.92 entrée / $1.92 sortie pour 1M tokens.",
+      "ru": "OCR длинных документов с пониманием вёрстки и структурированным извлечением через chat/completions. Тариф: вход $1.92 / выход $1.92 за 1M токенов.",
+      "ja": "長文書向け OCR。レイアウト理解と構造化抽出。chat/completions で呼び出し可能。 料金：入力 $1.92 / 出力 $1.92（100万 tokens あたり）。",
+      "vi": "OCR tài liệu dài với hiểu bố cục và trích xuất có cấu trúc qua chat/completions. Giá: vào $1.92 / ra $1.92 mỗi 1M tokens."
+    },
+    "unit": "token",
+    "badge": {
+      "zhCN": "按 Token 计费",
+      "zhTW": "按 Token 計費",
+      "en": "Token-based",
+      "fr": "Au token",
+      "ru": "По токенам",
+      "ja": "Token 課金",
+      "vi": "Theo token"
+    },
+    "suffix": {
+      "zhCN": "",
+      "zhTW": "",
+      "en": "",
+      "fr": "",
+      "ru": "",
+      "ja": "",
+      "vi": ""
+    },
+    "price_key": {
+      "zhCN": "",
+      "zhTW": "",
+      "en": "",
+      "fr": "",
+      "ru": "",
+      "ja": "",
+      "vi": ""
+    },
+    "description_zh": "面向长文档的智能 OCR，支持版面理解与结构化提取，可通过 chat/completions 调用。 计费：输入 $1.92 / 输出 $1.92（每百万 tokens）。",
+    "description_en": "Long-document OCR with layout understanding and structured extraction via chat/completions. Pricing: $1.92 input / $1.92 output per 1M tokens.",
+    "badge_zh": "按 Token 计费",
+    "badge_en": "Token-based",
+    "suffix_zh": "",
+    "suffix_en": "",
+    "price_key_zh": "",
+    "price_key_en": ""
+  },
+  "DeepSeek-OCR-2": {
+    "description": "高精度 OCR，可从图片/PDF 提取文字，并按阅读顺序整理表格、多栏与复杂排版。 计费：输入 $1.92 / 输出 $1.92（每百万 tokens）。",
+    "descriptions": {
+      "zhCN": "高精度 OCR，可从图片/PDF 提取文字，并按阅读顺序整理表格、多栏与复杂排版。 计费：输入 $1.92 / 输出 $1.92（每百万 tokens）。",
+      "zhTW": "高精度 OCR，可從圖片/PDF 提取文字，並按閱讀順序整理表格、多欄與複雜排版。 計費：輸入 $1.92 / 輸出 $1.92（每百萬 tokens）。",
+      "en": "High-accuracy OCR for images/PDFs. Reads tables, multi-column layouts, and complex pages in reading order. Pricing: $1.92 input / $1.92 output per 1M tokens.",
+      "fr": "OCR haute précision pour images/PDF. Lit tableaux, multi-colonnes et pages complexes dans l’ordre de lecture. Tarif : $1.92 entrée / $1.92 sortie pour 1M tokens.",
+      "ru": "Точный OCR для изображений/PDF: таблицы, многоколоночная и сложная вёрстка в порядке чтения. Тариф: вход $1.92 / выход $1.92 за 1M токенов.",
+      "ja": "高精度 OCR。画像/PDF から文字を抽出し、表・段組・複雑レイアウトを読順で整理。 料金：入力 $1.92 / 出力 $1.92（100万 tokens あたり）。",
+      "vi": "OCR độ chính xác cao cho ảnh/PDF: đọc bảng, nhiều cột và trang phức tạp theo thứ tự đọc. Giá: vào $1.92 / ra $1.92 mỗi 1M tokens."
+    },
+    "unit": "token",
+    "badge": {
+      "zhCN": "按 Token 计费",
+      "zhTW": "按 Token 計費",
+      "en": "Token-based",
+      "fr": "Au token",
+      "ru": "По токенам",
+      "ja": "Token 課金",
+      "vi": "Theo token"
+    },
+    "suffix": {
+      "zhCN": "",
+      "zhTW": "",
+      "en": "",
+      "fr": "",
+      "ru": "",
+      "ja": "",
+      "vi": ""
+    },
+    "price_key": {
+      "zhCN": "",
+      "zhTW": "",
+      "en": "",
+      "fr": "",
+      "ru": "",
+      "ja": "",
+      "vi": ""
+    },
+    "description_zh": "高精度 OCR，可从图片/PDF 提取文字，并按阅读顺序整理表格、多栏与复杂排版。 计费：输入 $1.92 / 输出 $1.92（每百万 tokens）。",
+    "description_en": "High-accuracy OCR for images/PDFs. Reads tables, multi-column layouts, and complex pages in reading order. Pricing: $1.92 input / $1.92 output per 1M tokens.",
+    "badge_zh": "按 Token 计费",
+    "badge_en": "Token-based",
+    "suffix_zh": "",
+    "suffix_en": "",
+    "price_key_zh": "",
+    "price_key_en": ""
+  },
+  "Duix-Avatar": {
+    "description": "音频+视频驱动的数字人（异步），生成口型同步与表情互动，适合虚拟角色说话场景。 计费：$0.006849/秒。",
+    "descriptions": {
+      "zhCN": "音频+视频驱动的数字人（异步），生成口型同步与表情互动，适合虚拟角色说话场景。 计费：$0.006849/秒。",
+      "zhTW": "音訊+視訊驅動的數位人（非同步），產生口型同步與表情互動，適合虛擬角色說話場景。 計費：$0.006849/秒。",
+      "en": "Audio+video driven digital human (async). Lip-sync and expression generation for talking avatars. Pricing: $0.006849 / second.",
+      "fr": "Humain digital audio+vidéo (async). Synchronisation labiale et expressions pour avatars parlants. Tarif : $0.006849 / seconde.",
+      "ru": "Цифровой человек по аудио+видео (async): липсинк и мимика для говорящих аватаров. Тариф: $0.006849 / сек.",
+      "ja": "音声+映像駆動のデジタルヒューマン（非同期）。口パク同期と表情生成。 料金：$0.006849/ 秒。",
+      "vi": "Người số điều khiển bởi audio+video (async): đồng bộ miệng và biểu cảm cho avatar nói chuyện. Giá: $0.006849/ giây."
+    },
+    "unit": "second",
+    "badge": {
+      "zhCN": "按秒计费",
+      "zhTW": "按秒計費",
+      "en": "Per Second",
+      "fr": "Par seconde",
+      "ru": "За секунду",
+      "ja": "秒課金",
+      "vi": "Theo giây"
+    },
+    "suffix": {
+      "zhCN": "/秒",
+      "zhTW": "/秒",
+      "en": "/ second",
+      "fr": "/ seconde",
+      "ru": "/ сек",
+      "ja": "/ 秒",
+      "vi": "/ giây"
+    },
+    "price_key": {
+      "zhCN": "每秒",
+      "zhTW": "每秒",
+      "en": "Per second",
+      "fr": "Par seconde",
+      "ru": "За секунду",
+      "ja": "秒ごと",
+      "vi": "Mỗi giây"
+    },
+    "description_zh": "音频+视频驱动的数字人（异步），生成口型同步与表情互动，适合虚拟角色说话场景。 计费：$0.006849/秒。",
+    "description_en": "Audio+video driven digital human (async). Lip-sync and expression generation for talking avatars. Pricing: $0.006849 / second.",
+    "badge_zh": "按秒计费",
+    "badge_en": "Per Second",
+    "suffix_zh": "/秒",
+    "suffix_en": "/ second",
+    "price_key_zh": "每秒",
+    "price_key_en": "Per second"
+  },
+  "InfiniteTalk": {
+    "description": "音频驱动的数字人讲述视频（异步）：图/视频 + 音频生成自然口型与肢体动作，时长跟随音频。 计费：$0.342/次。",
+    "descriptions": {
+      "zhCN": "音频驱动的数字人讲述视频（异步）：图/视频 + 音频生成自然口型与肢体动作，时长跟随音频。 计费：$0.342/次。",
+      "zhTW": "音訊驅動的數位人講述影片（非同步）：圖/影片 + 音訊產生自然口型與肢體動作，時長跟隨音訊。 計費：$0.342/次。",
+      "en": "Audio-driven talking-head video from an image/video (async). Natural lip-sync and body motion; duration follows the input audio. Pricing: $0.342 / request.",
+      "fr": "Vidéo talking-head pilotée par l’audio (async) à partir d’image/vidéo. Sync labiale et mouvements ; durée = audio. Tarif : $0.342 / requête.",
+      "ru": "Видео говорящей головы по аудио (async) из изображения/видео. Липсинк и жесты; длительность = аудио. Тариф: $0.342 / запрос.",
+      "ja": "音声駆動のトーキングヘッド動画（非同期）。画像/動画+音声で自然な口パクと動作。尺は音声に追従。 料金：$0.342/ 回。",
+      "vi": "Video talking-head điều khiển bởi audio (async) từ ảnh/video. Đồng bộ miệng & cử động; thời lượng theo audio. Giá: $0.342/ lần."
+    },
+    "unit": "request",
+    "badge": {
+      "zhCN": "按次计费",
+      "zhTW": "按次計費",
+      "en": "Per Request",
+      "fr": "Par requête",
+      "ru": "За запрос",
+      "ja": "リクエスト課金",
+      "vi": "Theo lần gọi"
+    },
+    "suffix": {
+      "zhCN": "/次",
+      "zhTW": "/次",
+      "en": "/ request",
+      "fr": "/ requête",
+      "ru": "/ запрос",
+      "ja": "/ 回",
+      "vi": "/ lần"
+    },
+    "price_key": {
+      "zhCN": "每次请求",
+      "zhTW": "每次請求",
+      "en": "Per request",
+      "fr": "Par requête",
+      "ru": "За запрос",
+      "ja": "リクエストごと",
+      "vi": "Mỗi lần gọi"
+    },
+    "description_zh": "音频驱动的数字人讲述视频（异步）：图/视频 + 音频生成自然口型与肢体动作，时长跟随音频。 计费：$0.342/次。",
+    "description_en": "Audio-driven talking-head video from an image/video (async). Natural lip-sync and body motion; duration follows the input audio. Pricing: $0.342 / request.",
+    "badge_zh": "按次计费",
+    "badge_en": "Per Request",
+    "suffix_zh": "/次",
+    "suffix_en": "/ request",
+    "price_key_zh": "每次请求",
+    "price_key_en": "Per request"
+  },
+  "MOSS-Audio-8B-Thinking": {
+    "description": "具备语音理解与推理的音频大模型，可转写并分析多人对话，适用于会议与语音交互。 计费：$0.0205/次。",
+    "descriptions": {
+      "zhCN": "具备语音理解与推理的音频大模型，可转写并分析多人对话，适用于会议与语音交互。 计费：$0.0205/次。",
+      "zhTW": "具備語音理解與推理的音訊大模型，可轉寫並分析多人對話，適用於會議與語音互動。 計費：$0.0205/次。",
+      "en": "Audio understanding & reasoning ASR. Transcribes speech and analyzes multi-speaker dialogue for meetings and voice apps. Pricing: $0.0205 / request.",
+      "fr": "ASR avec compréhension et raisonnement audio. Transcrit et analyse les dialogues multi-locuteurs. Tarif : $0.0205 / requête.",
+      "ru": "Аудио‑LLM с пониманием и рассуждением: транскрипция и анализ многоспикерных диалогов. Тариф: $0.0205 / запрос.",
+      "ja": "音声理解・推論 ASR。会議や音声アプリ向けに多話者対話を書き起こし・分析。 料金：$0.0205/ 回。",
+      "vi": "ASR hiểu & suy luận âm thanh: chuyển lời nói và phân tích hội thoại nhiều người. Giá: $0.0205/ lần."
+    },
+    "unit": "request",
+    "badge": {
+      "zhCN": "按次计费",
+      "zhTW": "按次計費",
+      "en": "Per Request",
+      "fr": "Par requête",
+      "ru": "За запрос",
+      "ja": "リクエスト課金",
+      "vi": "Theo lần gọi"
+    },
+    "suffix": {
+      "zhCN": "/次",
+      "zhTW": "/次",
+      "en": "/ request",
+      "fr": "/ requête",
+      "ru": "/ запрос",
+      "ja": "/ 回",
+      "vi": "/ lần"
+    },
+    "price_key": {
+      "zhCN": "每次请求",
+      "zhTW": "每次請求",
+      "en": "Per request",
+      "fr": "Par requête",
+      "ru": "За запрос",
+      "ja": "リクエストごと",
+      "vi": "Mỗi lần gọi"
+    },
+    "description_zh": "具备语音理解与推理的音频大模型，可转写并分析多人对话，适用于会议与语音交互。 计费：$0.0205/次。",
+    "description_en": "Audio understanding & reasoning ASR. Transcribes speech and analyzes multi-speaker dialogue for meetings and voice apps. Pricing: $0.0205 / request.",
+    "badge_zh": "按次计费",
+    "badge_en": "Per Request",
+    "suffix_zh": "/次",
+    "suffix_en": "/ request",
+    "price_key_zh": "每次请求",
+    "price_key_en": "Per request"
+  },
+  "Fun-ASR-Nano-2512": {
+    "description": "轻量多语言语音识别，低延迟，适合实时转写、会议记录与语音交互。 计费：$0.0103/次。",
+    "descriptions": {
+      "zhCN": "轻量多语言语音识别，低延迟，适合实时转写、会议记录与语音交互。 计费：$0.0103/次。",
+      "zhTW": "輕量多語語音辨識，低延遲，適合即時轉寫、會議紀錄與語音互動。 計費：$0.0103/次。",
+      "en": "Lightweight multilingual ASR with low latency. Suited for realtime transcription, meetings, and voice UX. Pricing: $0.0103 / request.",
+      "fr": "ASR multilingue léger à faible latence. Idéal pour transcription temps réel, réunions et UX vocale. Tarif : $0.0103 / requête.",
+      "ru": "Лёгкий многоязычный ASR с низкой задержкой для реалтайм‑транскрипции и встреч. Тариф: $0.0103 / запрос.",
+      "ja": "軽量多言語 ASR。低遅延でリアルタイム書起こし・会議・音声 UX 向け。 料金：$0.0103/ 回。",
+      "vi": "ASR đa ngôn ngữ nhẹ, độ trễ thấp: chuyển lời thời gian thực, họp và UX thoại. Giá: $0.0103/ lần."
+    },
+    "unit": "request",
+    "badge": {
+      "zhCN": "按次计费",
+      "zhTW": "按次計費",
+      "en": "Per Request",
+      "fr": "Par requête",
+      "ru": "За запрос",
+      "ja": "リクエスト課金",
+      "vi": "Theo lần gọi"
+    },
+    "suffix": {
+      "zhCN": "/次",
+      "zhTW": "/次",
+      "en": "/ request",
+      "fr": "/ requête",
+      "ru": "/ запрос",
+      "ja": "/ 回",
+      "vi": "/ lần"
+    },
+    "price_key": {
+      "zhCN": "每次请求",
+      "zhTW": "每次請求",
+      "en": "Per request",
+      "fr": "Par requête",
+      "ru": "За запрос",
+      "ja": "リクエストごと",
+      "vi": "Mỗi lần gọi"
+    },
+    "description_zh": "轻量多语言语音识别，低延迟，适合实时转写、会议记录与语音交互。 计费：$0.0103/次。",
+    "description_en": "Lightweight multilingual ASR with low latency. Suited for realtime transcription, meetings, and voice UX. Pricing: $0.0103 / request.",
+    "badge_zh": "按次计费",
+    "badge_en": "Per Request",
+    "suffix_zh": "/次",
+    "suffix_en": "/ request",
+    "price_key_zh": "每次请求",
+    "price_key_en": "Per request"
+  },
+  "GLM-ASR": {
+    "description": "超轻量中文语音识别，适合端侧/低资源场景的实时转写。 计费：$0.006849/次。",
+    "descriptions": {
+      "zhCN": "超轻量中文语音识别，适合端侧/低资源场景的实时转写。 计费：$0.006849/次。",
+      "zhTW": "超輕量中文語音辨識，適合端側/低資源場景的即時轉寫。 計費：$0.006849/次。",
+      "en": "Compact Chinese ASR for realtime transcription on constrained devices and edge deployments. Pricing: $0.006849 / request.",
+      "fr": "ASR chinois compact pour transcription temps réel sur appareils contraints / edge. Tarif : $0.006849 / requête.",
+      "ru": "Компактный китайский ASR для реалтайм‑транскрипции на слабых/edge устройствах. Тариф: $0.006849 / запрос.",
+      "ja": "超軽量中国語 ASR。低リソース/エッジ向けリアルタイム書起こし。 料金：$0.006849/ 回。",
+      "vi": "ASR tiếng Trung siêu nhẹ cho chuyển lời thời gian thực trên thiết bị hạn chế/edge. Giá: $0.006849/ lần."
+    },
+    "unit": "request",
+    "badge": {
+      "zhCN": "按次计费",
+      "zhTW": "按次計費",
+      "en": "Per Request",
+      "fr": "Par requête",
+      "ru": "За запрос",
+      "ja": "リクエスト課金",
+      "vi": "Theo lần gọi"
+    },
+    "suffix": {
+      "zhCN": "/次",
+      "zhTW": "/次",
+      "en": "/ request",
+      "fr": "/ requête",
+      "ru": "/ запрос",
+      "ja": "/ 回",
+      "vi": "/ lần"
+    },
+    "price_key": {
+      "zhCN": "每次请求",
+      "zhTW": "每次請求",
+      "en": "Per request",
+      "fr": "Par requête",
+      "ru": "За запрос",
+      "ja": "リクエストごと",
+      "vi": "Mỗi lần gọi"
+    },
+    "description_zh": "超轻量中文语音识别，适合端侧/低资源场景的实时转写。 计费：$0.006849/次。",
+    "description_en": "Compact Chinese ASR for realtime transcription on constrained devices and edge deployments. Pricing: $0.006849 / request.",
+    "badge_zh": "按次计费",
+    "badge_en": "Per Request",
+    "suffix_zh": "/次",
+    "suffix_en": "/ request",
+    "price_key_zh": "每次请求",
+    "price_key_en": "Per request"
+  },
+  "whisper-large-v3": {
+    "description": "OpenAI Whisper Large V3 高精度多语种语音转写，适用于转录与语音应用。 计费：$0.0103/次。",
+    "descriptions": {
+      "zhCN": "OpenAI Whisper Large V3 高精度多语种语音转写，适用于转录与语音应用。 计费：$0.0103/次。",
+      "zhTW": "OpenAI Whisper Large V3 高精度多語語音轉寫，適用於轉錄與語音應用。 計費：$0.0103/次。",
+      "en": "OpenAI Whisper Large V3 multilingual speech-to-text for accurate transcription and voice applications. Pricing: $0.0103 / request.",
+      "fr": "OpenAI Whisper Large V3 — speech-to-text multilingue précis pour transcription et apps vocales. Tarif : $0.0103 / requête.",
+      "ru": "OpenAI Whisper Large V3 — точная многоязычная речь→текст для транскрипции и голосовых приложений. Тариф: $0.0103 / запрос.",
+      "ja": "OpenAI Whisper Large V3。高精度多言語音声認識。書起こし・音声アプリ向け。 料金：$0.0103/ 回。",
+      "vi": "OpenAI Whisper Large V3: speech-to-text đa ngôn ngữ chính xác cho chép lời và ứng dụng thoại. Giá: $0.0103/ lần."
+    },
+    "unit": "request",
+    "badge": {
+      "zhCN": "按次计费",
+      "zhTW": "按次計費",
+      "en": "Per Request",
+      "fr": "Par requête",
+      "ru": "За запрос",
+      "ja": "リクエスト課金",
+      "vi": "Theo lần gọi"
+    },
+    "suffix": {
+      "zhCN": "/次",
+      "zhTW": "/次",
+      "en": "/ request",
+      "fr": "/ requête",
+      "ru": "/ запрос",
+      "ja": "/ 回",
+      "vi": "/ lần"
+    },
+    "price_key": {
+      "zhCN": "每次请求",
+      "zhTW": "每次請求",
+      "en": "Per request",
+      "fr": "Par requête",
+      "ru": "За запрос",
+      "ja": "リクエストごと",
+      "vi": "Mỗi lần gọi"
+    },
+    "description_zh": "OpenAI Whisper Large V3 高精度多语种语音转写，适用于转录与语音应用。 计费：$0.0103/次。",
+    "description_en": "OpenAI Whisper Large V3 multilingual speech-to-text for accurate transcription and voice applications. Pricing: $0.0103 / request.",
+    "badge_zh": "按次计费",
+    "badge_en": "Per Request",
+    "suffix_zh": "/次",
+    "suffix_en": "/ request",
+    "price_key_zh": "每次请求",
+    "price_key_en": "Per request"
+  },
+  "whisper-large-v3-turbo": {
+    "description": "Whisper Large V3 Turbo：更快的多语种语音转写，在准确度与延迟之间更均衡。 计费：$0.0103/次。",
+    "descriptions": {
+      "zhCN": "Whisper Large V3 Turbo：更快的多语种语音转写，在准确度与延迟之间更均衡。 计费：$0.0103/次。",
+      "zhTW": "Whisper Large V3 Turbo：更快的多語語音轉寫，在準確度與延遲之間更均衡。 計費：$0.0103/次。",
+      "en": "Faster Whisper Large V3 Turbo speech-to-text. Strong multilingual accuracy with lower latency. Pricing: $0.0103 / request.",
+      "fr": "Whisper Large V3 Turbo plus rapide. Bonne précision multilingue avec latence réduite. Tarif : $0.0103 / requête.",
+      "ru": "Более быстрый Whisper Large V3 Turbo: сильная многоязычная точность при меньшей задержке. Тариф: $0.0103 / запрос.",
+      "ja": "Whisper Large V3 Turbo。より高速な多言語音声認識。精度と遅延のバランスが良い。 料金：$0.0103/ 回。",
+      "vi": "Whisper Large V3 Turbo nhanh hơn: độ chính xác đa ngôn ngữ tốt, độ trễ thấp hơn. Giá: $0.0103/ lần."
+    },
+    "unit": "request",
+    "badge": {
+      "zhCN": "按次计费",
+      "zhTW": "按次計費",
+      "en": "Per Request",
+      "fr": "Par requête",
+      "ru": "За запрос",
+      "ja": "リクエスト課金",
+      "vi": "Theo lần gọi"
+    },
+    "suffix": {
+      "zhCN": "/次",
+      "zhTW": "/次",
+      "en": "/ request",
+      "fr": "/ requête",
+      "ru": "/ запрос",
+      "ja": "/ 回",
+      "vi": "/ lần"
+    },
+    "price_key": {
+      "zhCN": "每次请求",
+      "zhTW": "每次請求",
+      "en": "Per request",
+      "fr": "Par requête",
+      "ru": "За запрос",
+      "ja": "リクエストごと",
+      "vi": "Mỗi lần gọi"
+    },
+    "description_zh": "Whisper Large V3 Turbo：更快的多语种语音转写，在准确度与延迟之间更均衡。 计费：$0.0103/次。",
+    "description_en": "Faster Whisper Large V3 Turbo speech-to-text. Strong multilingual accuracy with lower latency. Pricing: $0.0103 / request.",
+    "badge_zh": "按次计费",
+    "badge_en": "Per Request",
+    "suffix_zh": "/次",
+    "suffix_en": "/ request",
+    "price_key_zh": "每次请求",
+    "price_key_en": "Per request"
+  },
+  "Qwen3-TTS": {
+    "description": "通义 Qwen3 文本转语音（异步），自然多语言合成，支持短样本快速音色克隆。 计费：$0.548/万字符。",
+    "descriptions": {
+      "zhCN": "通义 Qwen3 文本转语音（异步），自然多语言合成，支持短样本快速音色克隆。 计费：$0.548/万字符。",
+      "zhTW": "通義 Qwen3 文字轉語音（非同步），自然多語合成，支援短樣本快速音色克隆。 計費：$0.548/萬字元。",
+      "en": "Qwen3 text-to-speech (async). Natural multilingual synthesis with quick voice cloning from short samples. Pricing: $0.548 / 10K chars.",
+      "fr": "Qwen3 text-to-speech (async). Synthèse multilingue naturelle et clonage de voix rapide. Tarif : $0.548 / 10k car..",
+      "ru": "Qwen3 TTS (async): естественный многоязычный синтез и быстрый клон голоса по короткому сэмплу. Тариф: $0.548 / 10к симв..",
+      "ja": "Qwen3 テキスト音声合成（非同期）。自然な多言語合成と短サンプルの声クローン。 料金：$0.548/ 万文字。",
+      "vi": "Qwen3 text-to-speech (async): tổng hợp đa ngôn ngữ tự nhiên và clone giọng nhanh từ mẫu ngắn. Giá: $0.548/ 10K ký tự."
+    },
+    "unit": "10k_chars",
+    "badge": {
+      "zhCN": "按万字符计费",
+      "zhTW": "按萬字元計費",
+      "en": "Per 10K Characters",
+      "fr": "Par 10k caractères",
+      "ru": "За 10 тыс. символов",
+      "ja": "万文字課金",
+      "vi": "Theo 10K ký tự"
+    },
+    "suffix": {
+      "zhCN": "/万字符",
+      "zhTW": "/萬字元",
+      "en": "/ 10K chars",
+      "fr": "/ 10k car.",
+      "ru": "/ 10к симв.",
+      "ja": "/ 万文字",
+      "vi": "/ 10K ký tự"
+    },
+    "price_key": {
+      "zhCN": "每万字符",
+      "zhTW": "每萬字元",
+      "en": "Per 10K characters",
+      "fr": "Par 10k caractères",
+      "ru": "За 10 тыс. символов",
+      "ja": "万文字ごと",
+      "vi": "Mỗi 10K ký tự"
+    },
+    "description_zh": "通义 Qwen3 文本转语音（异步），自然多语言合成，支持短样本快速音色克隆。 计费：$0.548/万字符。",
+    "description_en": "Qwen3 text-to-speech (async). Natural multilingual synthesis with quick voice cloning from short samples. Pricing: $0.548 / 10K chars.",
+    "badge_zh": "按万字符计费",
+    "badge_en": "Per 10K Characters",
+    "suffix_zh": "/万字符",
+    "suffix_en": "/ 10K chars",
+    "price_key_zh": "每万字符",
+    "price_key_en": "Per 10K characters"
+  },
+  "CosyVoice3": {
+    "description": "CosyVoice 3 多语言零样本 TTS，支持流式、方言及情绪/语速等控制。 计费：$1.37/万字符。",
+    "descriptions": {
+      "zhCN": "CosyVoice 3 多语言零样本 TTS，支持流式、方言及情绪/语速等控制。 计费：$1.37/万字符。",
+      "zhTW": "CosyVoice 3 多語零樣本 TTS，支援串流、方言及情緒/語速等控制。 計費：$1.37/萬字元。",
+      "en": "CosyVoice 3 multilingual zero-shot TTS with streaming, dialects, and controls for emotion/speed. Pricing: $1.37 / 10K chars.",
+      "fr": "CosyVoice 3 TTS zero-shot multilingue avec streaming, dialectes et contrôle émotion/vitesse. Tarif : $1.37 / 10k car..",
+      "ru": "CosyVoice 3 многоязычный zero-shot TTS: стриминг, диалекты, контроль эмоций/темпа. Тариф: $1.37 / 10к симв..",
+      "ja": "CosyVoice 3 多言語ゼロショット TTS。ストリーミング・方言・感情/速度制御。 料金：$1.37/ 万文字。",
+      "vi": "CosyVoice 3 TTS zero-shot đa ngôn ngữ: streaming, phương ngữ, điều khiển cảm xúc/tốc độ. Giá: $1.37/ 10K ký tự."
+    },
+    "unit": "10k_chars",
+    "badge": {
+      "zhCN": "按万字符计费",
+      "zhTW": "按萬字元計費",
+      "en": "Per 10K Characters",
+      "fr": "Par 10k caractères",
+      "ru": "За 10 тыс. символов",
+      "ja": "万文字課金",
+      "vi": "Theo 10K ký tự"
+    },
+    "suffix": {
+      "zhCN": "/万字符",
+      "zhTW": "/萬字元",
+      "en": "/ 10K chars",
+      "fr": "/ 10k car.",
+      "ru": "/ 10к симв.",
+      "ja": "/ 万文字",
+      "vi": "/ 10K ký tự"
+    },
+    "price_key": {
+      "zhCN": "每万字符",
+      "zhTW": "每萬字元",
+      "en": "Per 10K characters",
+      "fr": "Par 10k caractères",
+      "ru": "За 10 тыс. символов",
+      "ja": "万文字ごと",
+      "vi": "Mỗi 10K ký tự"
+    },
+    "description_zh": "CosyVoice 3 多语言零样本 TTS，支持流式、方言及情绪/语速等控制。 计费：$1.37/万字符。",
+    "description_en": "CosyVoice 3 multilingual zero-shot TTS with streaming, dialects, and controls for emotion/speed. Pricing: $1.37 / 10K chars.",
+    "badge_zh": "按万字符计费",
+    "badge_en": "Per 10K Characters",
+    "suffix_zh": "/万字符",
+    "suffix_en": "/ 10K chars",
+    "price_key_zh": "每万字符",
+    "price_key_en": "Per 10K characters"
+  },
+  "GLM-TTS": {
+    "description": "智谱 GLM 文本转语音，支持零样本音色克隆、情感控制与低延迟合成。 计费：$0.0137/次。",
+    "descriptions": {
+      "zhCN": "智谱 GLM 文本转语音，支持零样本音色克隆、情感控制与低延迟合成。 计费：$0.0137/次。",
+      "zhTW": "智譜 GLM 文字轉語音，支援零樣本音色克隆、情感控制與低延遲合成。 計費：$0.0137/次。",
+      "en": "GLM text-to-speech with zero-shot voice clone, emotion control, and low-latency synthesis. Pricing: $0.0137 / request.",
+      "fr": "GLM text-to-speech avec clonage zero-shot, contrôle d’émotion et synthèse faible latence. Tarif : $0.0137 / requête.",
+      "ru": "GLM TTS: zero-shot клон голоса, контроль эмоций и низкая задержка. Тариф: $0.0137 / запрос.",
+      "ja": "GLM テキスト音声合成。ゼロショット声クローン、感情制御、低遅延。 料金：$0.0137/ 回。",
+      "vi": "GLM text-to-speech: clone giọng zero-shot, điều khiển cảm xúc và độ trễ thấp. Giá: $0.0137/ lần."
+    },
+    "unit": "request",
+    "badge": {
+      "zhCN": "按次计费",
+      "zhTW": "按次計費",
+      "en": "Per Request",
+      "fr": "Par requête",
+      "ru": "За запрос",
+      "ja": "リクエスト課金",
+      "vi": "Theo lần gọi"
+    },
+    "suffix": {
+      "zhCN": "/次",
+      "zhTW": "/次",
+      "en": "/ request",
+      "fr": "/ requête",
+      "ru": "/ запрос",
+      "ja": "/ 回",
+      "vi": "/ lần"
+    },
+    "price_key": {
+      "zhCN": "每次请求",
+      "zhTW": "每次請求",
+      "en": "Per request",
+      "fr": "Par requête",
+      "ru": "За запрос",
+      "ja": "リクエストごと",
+      "vi": "Mỗi lần gọi"
+    },
+    "description_zh": "智谱 GLM 文本转语音，支持零样本音色克隆、情感控制与低延迟合成。 计费：$0.0137/次。",
+    "description_en": "GLM text-to-speech with zero-shot voice clone, emotion control, and low-latency synthesis. Pricing: $0.0137 / request.",
+    "badge_zh": "按次计费",
+    "badge_en": "Per Request",
+    "suffix_zh": "/次",
+    "suffix_en": "/ request",
+    "price_key_zh": "每次请求",
+    "price_key_en": "Per request"
+  },
+  "IndexTTS-2": {
+    "description": "IndexTTS 零样本 TTS，可通过音频或文本提示控制音色、情感与语气。 计费：$1.37/万字符。",
+    "descriptions": {
+      "zhCN": "IndexTTS 零样本 TTS，可通过音频或文本提示控制音色、情感与语气。 计费：$1.37/万字符。",
+      "zhTW": "IndexTTS 零樣本 TTS，可透過音訊或文字提示控制音色、情感與語氣。 計費：$1.37/萬字元。",
+      "en": "IndexTTS zero-shot TTS with timbre, emotion, and tone control via audio or text prompts. Pricing: $1.37 / 10K chars.",
+      "fr": "IndexTTS TTS zero-shot avec contrôle timbre/émotion/ton via audio ou texte. Tarif : $1.37 / 10k car..",
+      "ru": "IndexTTS zero-shot TTS: тембр, эмоции и тон через аудио или текстовые подсказки. Тариф: $1.37 / 10к симв..",
+      "ja": "IndexTTS ゼロショット TTS。音声/テキスト指示で音色・感情・口調を制御。 料金：$1.37/ 万文字。",
+      "vi": "IndexTTS TTS zero-shot: điều khiển âm sắc, cảm xúc và giọng điệu qua audio hoặc text. Giá: $1.37/ 10K ký tự."
+    },
+    "unit": "10k_chars",
+    "badge": {
+      "zhCN": "按万字符计费",
+      "zhTW": "按萬字元計費",
+      "en": "Per 10K Characters",
+      "fr": "Par 10k caractères",
+      "ru": "За 10 тыс. символов",
+      "ja": "万文字課金",
+      "vi": "Theo 10K ký tự"
+    },
+    "suffix": {
+      "zhCN": "/万字符",
+      "zhTW": "/萬字元",
+      "en": "/ 10K chars",
+      "fr": "/ 10k car.",
+      "ru": "/ 10к симв.",
+      "ja": "/ 万文字",
+      "vi": "/ 10K ký tự"
+    },
+    "price_key": {
+      "zhCN": "每万字符",
+      "zhTW": "每萬字元",
+      "en": "Per 10K characters",
+      "fr": "Par 10k caractères",
+      "ru": "За 10 тыс. символов",
+      "ja": "万文字ごと",
+      "vi": "Mỗi 10K ký tự"
+    },
+    "description_zh": "IndexTTS 零样本 TTS，可通过音频或文本提示控制音色、情感与语气。 计费：$1.37/万字符。",
+    "description_en": "IndexTTS zero-shot TTS with timbre, emotion, and tone control via audio or text prompts. Pricing: $1.37 / 10K chars.",
+    "badge_zh": "按万字符计费",
+    "badge_en": "Per 10K Characters",
+    "suffix_zh": "/万字符",
+    "suffix_en": "/ 10K chars",
+    "price_key_zh": "每万字符",
+    "price_key_en": "Per 10K characters"
+  },
+  "Step-Audio-TTS-3B": {
+    "description": "Step-Audio TTS 3B 自然语言合成，支持多种语音风格与口音。 计费：$0.0137/次。",
+    "descriptions": {
+      "zhCN": "Step-Audio TTS 3B 自然语言合成，支持多种语音风格与口音。 计费：$0.0137/次。",
+      "zhTW": "Step-Audio TTS 3B 自然語言合成，支援多種語音風格與口音。 計費：$0.0137/次。",
+      "en": "Step-Audio TTS 3B natural speech synthesis with multiple styles and accents. Pricing: $0.0137 / request.",
+      "fr": "Step-Audio TTS 3B — synthèse vocale naturelle avec styles et accents multiples. Tarif : $0.0137 / requête.",
+      "ru": "Step-Audio TTS 3B: естественный синтез речи с разными стилями и акцентами. Тариф: $0.0137 / запрос.",
+      "ja": "Step-Audio TTS 3B。自然な音声合成。多様なスタイルとアクセント。 料金：$0.0137/ 回。",
+      "vi": "Step-Audio TTS 3B: tổng hợp giọng nói tự nhiên với nhiều phong cách và giọng địa phương. Giá: $0.0137/ lần."
+    },
+    "unit": "request",
+    "badge": {
+      "zhCN": "按次计费",
+      "zhTW": "按次計費",
+      "en": "Per Request",
+      "fr": "Par requête",
+      "ru": "За запрос",
+      "ja": "リクエスト課金",
+      "vi": "Theo lần gọi"
+    },
+    "suffix": {
+      "zhCN": "/次",
+      "zhTW": "/次",
+      "en": "/ request",
+      "fr": "/ requête",
+      "ru": "/ запрос",
+      "ja": "/ 回",
+      "vi": "/ lần"
+    },
+    "price_key": {
+      "zhCN": "每次请求",
+      "zhTW": "每次請求",
+      "en": "Per request",
+      "fr": "Par requête",
+      "ru": "За запрос",
+      "ja": "リクエストごと",
+      "vi": "Mỗi lần gọi"
+    },
+    "description_zh": "Step-Audio TTS 3B 自然语言合成，支持多种语音风格与口音。 计费：$0.0137/次。",
+    "description_en": "Step-Audio TTS 3B natural speech synthesis with multiple styles and accents. Pricing: $0.0137 / request.",
+    "badge_zh": "按次计费",
+    "badge_en": "Per Request",
+    "suffix_zh": "/次",
+    "suffix_en": "/ request",
+    "price_key_zh": "每次请求",
+    "price_key_en": "Per request"
+  },
+  "nonescape-v0": {
+    "description": "AI 生成图检测：判断图片是真实拍摄还是模型生成。 计费：$0.006849/次。",
+    "descriptions": {
+      "zhCN": "AI 生成图检测：判断图片是真实拍摄还是模型生成。 计费：$0.006849/次。",
+      "zhTW": "AI 生成圖偵測：判斷圖片是真實拍攝還是模型生成。 計費：$0.006849/次。",
+      "en": "AI-generated image detector. Classifies whether an image is camera-captured or model-generated. Pricing: $0.006849 / request.",
+      "fr": "Détecteur d’images générées par IA. Distingue photo réelle et image synthétique. Tarif : $0.006849 / requête.",
+      "ru": "Детектор AI‑изображений: реальная съёмка или сгенерировано моделью. Тариф: $0.006849 / запрос.",
+      "ja": "AI 生成画像検出。実写かモデル生成かを判定。 料金：$0.006849/ 回。",
+      "vi": "Phát hiện ảnh AI: phân biệt ảnh máy ảnh thật và ảnh do mô hình tạo. Giá: $0.006849/ lần."
+    },
+    "unit": "request",
+    "badge": {
+      "zhCN": "按次计费",
+      "zhTW": "按次計費",
+      "en": "Per Request",
+      "fr": "Par requête",
+      "ru": "За запрос",
+      "ja": "リクエスト課金",
+      "vi": "Theo lần gọi"
+    },
+    "suffix": {
+      "zhCN": "/次",
+      "zhTW": "/次",
+      "en": "/ request",
+      "fr": "/ requête",
+      "ru": "/ запрос",
+      "ja": "/ 回",
+      "vi": "/ lần"
+    },
+    "price_key": {
+      "zhCN": "每次请求",
+      "zhTW": "每次請求",
+      "en": "Per request",
+      "fr": "Par requête",
+      "ru": "За запрос",
+      "ja": "リクエストごと",
+      "vi": "Mỗi lần gọi"
+    },
+    "description_zh": "AI 生成图检测：判断图片是真实拍摄还是模型生成。 计费：$0.006849/次。",
+    "description_en": "AI-generated image detector. Classifies whether an image is camera-captured or model-generated. Pricing: $0.006849 / request.",
+    "badge_zh": "按次计费",
+    "badge_en": "Per Request",
+    "suffix_zh": "/次",
+    "suffix_en": "/ request",
+    "price_key_zh": "每次请求",
+    "price_key_en": "Per request"
+  },
+  "moark-text-moderation": {
+    "description": "文本内容审核：识别色情、暴力、辱骂等风险，适用于社交、评论与即时通讯。 计费：$0.000137/字符。",
+    "descriptions": {
+      "zhCN": "文本内容审核：识别色情、暴力、辱骂等风险，适用于社交、评论与即时通讯。 计费：$0.000137/字符。",
+      "zhTW": "文字內容審核：識別色情、暴力、辱罵等風險，適用於社群、評論與即時通訊。 計費：$0.000137/字元。",
+      "en": "Text content moderation for porn, violence, abuse, and related risks. For social, comments, and IM. Pricing: $0.000137 / character.",
+      "fr": "Modération de texte (porno, violence, insultes…). Pour réseaux sociaux, commentaires et messagerie. Tarif : $0.000137 / caractère.",
+      "ru": "Модерация текста: порно, насилие, оскорбления и др. Для соцсетей, комментариев и IM. Тариф: $0.000137 / символ.",
+      "ja": "テキストモデレーション。ポルノ・暴力・罵倒などを検出。SNS・コメント・IM 向け。 料金：$0.000137/ 文字。",
+      "vi": "Kiểm duyệt văn bản: khiêu dâm, bạo lực, lăng mạ… cho mạng xã hội, bình luận và IM. Giá: $0.000137/ ký tự."
+    },
+    "unit": "character",
+    "badge": {
+      "zhCN": "按字符计费",
+      "zhTW": "按字元計費",
+      "en": "Per Character",
+      "fr": "Par caractère",
+      "ru": "За символ",
+      "ja": "文字課金",
+      "vi": "Theo ký tự"
+    },
+    "suffix": {
+      "zhCN": "/字符",
+      "zhTW": "/字元",
+      "en": "/ character",
+      "fr": "/ caractère",
+      "ru": "/ символ",
+      "ja": "/ 文字",
+      "vi": "/ ký tự"
+    },
+    "price_key": {
+      "zhCN": "每字符",
+      "zhTW": "每字元",
+      "en": "Per character",
+      "fr": "Par caractère",
+      "ru": "За символ",
+      "ja": "文字ごと",
+      "vi": "Mỗi ký tự"
+    },
+    "description_zh": "文本内容审核：识别色情、暴力、辱骂等风险，适用于社交、评论与即时通讯。 计费：$0.000137/字符。",
+    "description_en": "Text content moderation for porn, violence, abuse, and related risks. For social, comments, and IM. Pricing: $0.000137 / character.",
+    "badge_zh": "按字符计费",
+    "badge_en": "Per Character",
+    "suffix_zh": "/字符",
+    "suffix_en": "/ character",
+    "price_key_zh": "每字符",
+    "price_key_en": "Per character"
+  },
+  "Security-semantic-filtering": {
+    "description": "安全语义过滤：在内容触达用户或模型前拦截敏感与合规风险信息。 计费：$0.006849/次。",
+    "descriptions": {
+      "zhCN": "安全语义过滤：在内容触达用户或模型前拦截敏感与合规风险信息。 计费：$0.006849/次。",
+      "zhTW": "安全語意過濾：在內容觸達使用者或模型前攔截敏感與合規風險資訊。 計費：$0.006849/次。",
+      "en": "Semantic security filter for sensitive/compliance-sensitive content before it reaches users or models. Pricing: $0.006849 / request.",
+      "fr": "Filtre sémantique de sécurité pour contenus sensibles / conformité avant utilisateurs ou modèles. Tarif : $0.006849 / requête.",
+      "ru": "Семантический security‑фильтр чувствительного/комплаенс контента до пользователей или моделей. Тариф: $0.006849 / запрос.",
+      "ja": "安全セマンティックフィルタ。ユーザー/モデル到達前にセンシティブ・コンプラ情報を遮断。 料金：$0.006849/ 回。",
+      "vi": "Bộ lọc ngữ nghĩa bảo mật: chặn nội dung nhạy cảm/tuân thủ trước khi tới người dùng hoặc mô hình. Giá: $0.006849/ lần."
+    },
+    "unit": "request",
+    "badge": {
+      "zhCN": "按次计费",
+      "zhTW": "按次計費",
+      "en": "Per Request",
+      "fr": "Par requête",
+      "ru": "За запрос",
+      "ja": "リクエスト課金",
+      "vi": "Theo lần gọi"
+    },
+    "suffix": {
+      "zhCN": "/次",
+      "zhTW": "/次",
+      "en": "/ request",
+      "fr": "/ requête",
+      "ru": "/ запрос",
+      "ja": "/ 回",
+      "vi": "/ lần"
+    },
+    "price_key": {
+      "zhCN": "每次请求",
+      "zhTW": "每次請求",
+      "en": "Per request",
+      "fr": "Par requête",
+      "ru": "За запрос",
+      "ja": "リクエストごと",
+      "vi": "Mỗi lần gọi"
+    },
+    "description_zh": "安全语义过滤：在内容触达用户或模型前拦截敏感与合规风险信息。 计费：$0.006849/次。",
+    "description_en": "Semantic security filter for sensitive/compliance-sensitive content before it reaches users or models. Pricing: $0.006849 / request.",
+    "badge_zh": "按次计费",
+    "badge_en": "Per Request",
+    "suffix_zh": "/次",
+    "suffix_en": "/ request",
+    "price_key_zh": "每次请求",
+    "price_key_en": "Per request"
+  },
+  "nsfw-classifier": {
+    "description": "NSFW 图片分类，实时识别并过滤不适宜公开的敏感视觉内容。 计费：$0.006849/次。",
+    "descriptions": {
+      "zhCN": "NSFW 图片分类，实时识别并过滤不适宜公开的敏感视觉内容。 计费：$0.006849/次。",
+      "zhTW": "NSFW 圖片分類，即時識別並過濾不適宜公開的敏感視覺內容。 計費：$0.006849/次。",
+      "en": "NSFW image classifier for realtime detection and filtering of sensitive visual content. Pricing: $0.006849 / request.",
+      "fr": "Classifieur d’images NSFW pour détecter et filtrer en temps réel les contenus visuels sensibles. Tarif : $0.006849 / requête.",
+      "ru": "NSFW‑классификатор изображений: реалтайм‑детекция и фильтрация чувствительного визуала. Тариф: $0.006849 / запрос.",
+      "ja": "NSFW 画像分類。センシティブな視覚コンテンツをリアルタイム検出・フィルタ。 料金：$0.006849/ 回。",
+      "vi": "Phân loại ảnh NSFW: phát hiện và lọc nội dung hình ảnh nhạy cảm theo thời gian thực. Giá: $0.006849/ lần."
+    },
+    "unit": "request",
+    "badge": {
+      "zhCN": "按次计费",
+      "zhTW": "按次計費",
+      "en": "Per Request",
+      "fr": "Par requête",
+      "ru": "За запрос",
+      "ja": "リクエスト課金",
+      "vi": "Theo lần gọi"
+    },
+    "suffix": {
+      "zhCN": "/次",
+      "zhTW": "/次",
+      "en": "/ request",
+      "fr": "/ requête",
+      "ru": "/ запрос",
+      "ja": "/ 回",
+      "vi": "/ lần"
+    },
+    "price_key": {
+      "zhCN": "每次请求",
+      "zhTW": "每次請求",
+      "en": "Per request",
+      "fr": "Par requête",
+      "ru": "За запрос",
+      "ja": "リクエストごと",
+      "vi": "Mỗi lần gọi"
+    },
+    "description_zh": "NSFW 图片分类，实时识别并过滤不适宜公开的敏感视觉内容。 计费：$0.006849/次。",
+    "description_en": "NSFW image classifier for realtime detection and filtering of sensitive visual content. Pricing: $0.006849 / request.",
+    "badge_zh": "按次计费",
+    "badge_en": "Per Request",
+    "suffix_zh": "/次",
+    "suffix_en": "/ request",
+    "price_key_zh": "每次请求",
+    "price_key_en": "Per request"
+  },
+  "gemma-4-26B-A4B-it": {
+    "description": "Google Gemma 4 26B MoE 指令模型（约激活 4B 参数），擅长推理、编程与多模态对话。 计费：输入 $2.4 / 输出 $2.4（每百万 tokens）。",
+    "descriptions": {
+      "zhCN": "Google Gemma 4 26B MoE 指令模型（约激活 4B 参数），擅长推理、编程与多模态对话。 计费：输入 $2.4 / 输出 $2.4（每百万 tokens）。",
+      "zhTW": "Google Gemma 4 26B MoE 指令模型（約啟動 4B 參數），擅長推理、程式設計與多模態對話。 計費：輸入 $2.4 / 輸出 $2.4（每百萬 tokens）。",
+      "en": "Google Gemma 4 26B MoE instruction model (~4B active). Strong reasoning, coding, and multimodal chat. Pricing: $2.4 input / $2.4 output per 1M tokens.",
+      "fr": "Modèle d’instruction Google Gemma 4 26B MoE (~4B actifs). Raisonnement, code et chat multimodal. Tarif : $2.4 entrée / $2.4 sortie pour 1M tokens.",
+      "ru": "Google Gemma 4 26B MoE instruction (~4B активных): рассуждение, код и мультимодальный чат. Тариф: вход $2.4 / выход $2.4 за 1M токенов.",
+      "ja": "Google Gemma 4 26B MoE 指示モデル（約 4B 活性）。推論・コーディング・マルチモーダル対話に強い。 料金：入力 $2.4 / 出力 $2.4（100万 tokens あたり）。",
+      "vi": "Mô hình instruction Google Gemma 4 26B MoE (~4B active): mạnh suy luận, lập trình và chat đa phương thức. Giá: vào $2.4 / ra $2.4 mỗi 1M tokens."
+    },
+    "unit": "token",
+    "badge": {
+      "zhCN": "按 Token 计费",
+      "zhTW": "按 Token 計費",
+      "en": "Token-based",
+      "fr": "Au token",
+      "ru": "По токенам",
+      "ja": "Token 課金",
+      "vi": "Theo token"
+    },
+    "suffix": {
+      "zhCN": "",
+      "zhTW": "",
+      "en": "",
+      "fr": "",
+      "ru": "",
+      "ja": "",
+      "vi": ""
+    },
+    "price_key": {
+      "zhCN": "",
+      "zhTW": "",
+      "en": "",
+      "fr": "",
+      "ru": "",
+      "ja": "",
+      "vi": ""
+    },
+    "description_zh": "Google Gemma 4 26B MoE 指令模型（约激活 4B 参数），擅长推理、编程与多模态对话。 计费：输入 $2.4 / 输出 $2.4（每百万 tokens）。",
+    "description_en": "Google Gemma 4 26B MoE instruction model (~4B active). Strong reasoning, coding, and multimodal chat. Pricing: $2.4 input / $2.4 output per 1M tokens.",
+    "badge_zh": "按 Token 计费",
+    "badge_en": "Token-based",
+    "suffix_zh": "",
+    "suffix_en": "",
+    "price_key_zh": "",
+    "price_key_en": ""
+  },
+  "gpt-5.6-terra": {
+    "description": "GPT-5.6 主力对话模型，适合日常问答、写作与通用助手场景。",
+    "descriptions": {
+      "zhCN": "GPT-5.6 主力对话模型，适合日常问答、写作与通用助手场景。",
+      "zhTW": "GPT-5.6 主力對話模型，適合日常問答、寫作與通用助手場景。",
+      "en": "GPT-5.6 flagship chat model for everyday Q&A, writing, and general assistants.",
+      "fr": "Modèle de chat phare GPT-5.6 pour Q&R, rédaction et assistants généraux.",
+      "ru": "Флагманский чат‑модель GPT-5.6 для повседневных вопросов, текстов и ассистентов.",
+      "ja": "GPT-5.6 主力チャットモデル。日常の質問・執筆・汎用アシスタント向け。",
+      "vi": "Mô hình chat chủ lực GPT-5.6 cho hỏi đáp, viết và trợ lý đa năng."
+    },
+    "unit": "token",
+    "badge": {
+      "zhCN": "按 Token 计费",
+      "zhTW": "按 Token 計費",
+      "en": "Token-based",
+      "fr": "Au token",
+      "ru": "По токенам",
+      "ja": "Token 課金",
+      "vi": "Theo token"
+    },
+    "suffix": {
+      "zhCN": "",
+      "zhTW": "",
+      "en": "",
+      "fr": "",
+      "ru": "",
+      "ja": "",
+      "vi": ""
+    },
+    "price_key": {
+      "zhCN": "",
+      "zhTW": "",
+      "en": "",
+      "fr": "",
+      "ru": "",
+      "ja": "",
+      "vi": ""
+    },
+    "description_zh": "GPT-5.6 主力对话模型，适合日常问答、写作与通用助手场景。",
+    "description_en": "GPT-5.6 flagship chat model for everyday Q&A, writing, and general assistants.",
+    "badge_zh": "按 Token 计费",
+    "badge_en": "Token-based",
+    "suffix_zh": "",
+    "suffix_en": "",
+    "price_key_zh": "",
+    "price_key_en": ""
+  },
+  "gpt-5.6-sol": {
+    "description": "GPT-5.6 高档对话模型，更强推理与复杂任务表现。",
+    "descriptions": {
+      "zhCN": "GPT-5.6 高档对话模型，更强推理与复杂任务表现。",
+      "zhTW": "GPT-5.6 高檔對話模型，更強推理與複雜任務表現。",
+      "en": "Higher-tier GPT-5.6 chat model with stronger reasoning for complex tasks.",
+      "fr": "GPT-5.6 haut de gamme, raisonnement renforcé pour tâches complexes.",
+      "ru": "Более мощный GPT-5.6 с усиленным рассуждением для сложных задач.",
+      "ja": "GPT-5.6 上位チャットモデル。複雑なタスク向けに推論がより強い。",
+      "vi": "GPT-5.6 hạng cao, suy luận mạnh hơn cho tác vụ phức tạp."
+    },
+    "unit": "token",
+    "badge": {
+      "zhCN": "按 Token 计费",
+      "zhTW": "按 Token 計費",
+      "en": "Token-based",
+      "fr": "Au token",
+      "ru": "По токенам",
+      "ja": "Token 課金",
+      "vi": "Theo token"
+    },
+    "suffix": {
+      "zhCN": "",
+      "zhTW": "",
+      "en": "",
+      "fr": "",
+      "ru": "",
+      "ja": "",
+      "vi": ""
+    },
+    "price_key": {
+      "zhCN": "",
+      "zhTW": "",
+      "en": "",
+      "fr": "",
+      "ru": "",
+      "ja": "",
+      "vi": ""
+    },
+    "description_zh": "GPT-5.6 高档对话模型，更强推理与复杂任务表现。",
+    "description_en": "Higher-tier GPT-5.6 chat model with stronger reasoning for complex tasks.",
+    "badge_zh": "按 Token 计费",
+    "badge_en": "Token-based",
+    "suffix_zh": "",
+    "suffix_en": "",
+    "price_key_zh": "",
+    "price_key_en": ""
+  },
+  "gpt-5.6-luna": {
+    "description": "GPT-5.6 轻量高性价比对话模型，适合高频低成本场景。",
+    "descriptions": {
+      "zhCN": "GPT-5.6 轻量高性价比对话模型，适合高频低成本场景。",
+      "zhTW": "GPT-5.6 輕量高性價比對話模型，適合高頻低成本場景。",
+      "en": "Lightweight cost-efficient GPT-5.6 chat model for high-volume use.",
+      "fr": "GPT-5.6 léger et économique pour usage intensif.",
+      "ru": "Лёгкий экономичный GPT-5.6 для высоконагруженных сценариев.",
+      "ja": "GPT-5.6 軽量・高コスパのチャットモデル。高頻度利用向け。",
+      "vi": "GPT-5.6 nhẹ, tiết kiệm chi phí cho lưu lượng cao."
+    },
+    "unit": "token",
+    "badge": {
+      "zhCN": "按 Token 计费",
+      "zhTW": "按 Token 計費",
+      "en": "Token-based",
+      "fr": "Au token",
+      "ru": "По токенам",
+      "ja": "Token 課金",
+      "vi": "Theo token"
+    },
+    "suffix": {
+      "zhCN": "",
+      "zhTW": "",
+      "en": "",
+      "fr": "",
+      "ru": "",
+      "ja": "",
+      "vi": ""
+    },
+    "price_key": {
+      "zhCN": "",
+      "zhTW": "",
+      "en": "",
+      "fr": "",
+      "ru": "",
+      "ja": "",
+      "vi": ""
+    },
+    "description_zh": "GPT-5.6 轻量高性价比对话模型，适合高频低成本场景。",
+    "description_en": "Lightweight cost-efficient GPT-5.6 chat model for high-volume use.",
+    "badge_zh": "按 Token 计费",
+    "badge_en": "Token-based",
+    "suffix_zh": "",
+    "suffix_en": "",
+    "price_key_zh": "",
+    "price_key_en": ""
+  },
+  "claude-fable-5-1": {
+    "description": "Claude 旗舰 5.1：长周期 Agent、复杂编码与重度知识分析。",
+    "descriptions": {
+      "zhCN": "Claude 旗舰 5.1：长周期 Agent、复杂编码与重度知识分析。",
+      "zhTW": "Claude 旗艦 5.1：長週期 Agent、複雜編碼與重度知識分析。",
+      "en": "Claude flagship 5.1 for long-horizon agents, complex coding, and deep knowledge work.",
+      "fr": "Claude phare 5.1 pour agents longue durée, code complexe et analyse approfondie.",
+      "ru": "Флагман Claude 5.1: длинные агенты, сложный код и глубокий анализ знаний.",
+      "ja": "Claude 旗艦 5.1。長時間 Agent・複雑コーディング・高度な知識分析向け。",
+      "vi": "Claude flagship 5.1: agent dài hạn, coding phức tạp và phân tích tri thức sâu."
+    },
+    "unit": "token",
+    "badge": {
+      "zhCN": "按 Token 计费",
+      "zhTW": "按 Token 計費",
+      "en": "Token-based",
+      "fr": "Au token",
+      "ru": "По токенам",
+      "ja": "Token 課金",
+      "vi": "Theo token"
+    },
+    "suffix": {
+      "zhCN": "",
+      "zhTW": "",
+      "en": "",
+      "fr": "",
+      "ru": "",
+      "ja": "",
+      "vi": ""
+    },
+    "price_key": {
+      "zhCN": "",
+      "zhTW": "",
+      "en": "",
+      "fr": "",
+      "ru": "",
+      "ja": "",
+      "vi": ""
+    },
+    "description_zh": "Claude 旗舰 5.1：长周期 Agent、复杂编码与重度知识分析。",
+    "description_en": "Claude flagship 5.1 for long-horizon agents, complex coding, and deep knowledge work.",
+    "badge_zh": "按 Token 计费",
+    "badge_en": "Token-based",
+    "suffix_zh": "",
+    "suffix_en": "",
+    "price_key_zh": "",
+    "price_key_en": ""
+  },
+  "claude-fable-5": {
+    "description": "Claude Fable 5 旗舰对话与代理模型。",
+    "descriptions": {
+      "zhCN": "Claude Fable 5 旗舰对话与代理模型。",
+      "zhTW": "Claude Fable 5 旗艦對話與代理模型。",
+      "en": "Claude Fable 5 flagship chat and agent model.",
+      "fr": "Claude Fable 5 — modèle phare de chat et d’agent.",
+      "ru": "Флагманский чат/агент Claude Fable 5.",
+      "ja": "Claude Fable 5 旗艦チャット／エージェントモデル。",
+      "vi": "Claude Fable 5 — mô hình chat/agent flagship."
+    },
+    "unit": "token",
+    "badge": {
+      "zhCN": "按 Token 计费",
+      "zhTW": "按 Token 計費",
+      "en": "Token-based",
+      "fr": "Au token",
+      "ru": "По токенам",
+      "ja": "Token 課金",
+      "vi": "Theo token"
+    },
+    "suffix": {
+      "zhCN": "",
+      "zhTW": "",
+      "en": "",
+      "fr": "",
+      "ru": "",
+      "ja": "",
+      "vi": ""
+    },
+    "price_key": {
+      "zhCN": "",
+      "zhTW": "",
+      "en": "",
+      "fr": "",
+      "ru": "",
+      "ja": "",
+      "vi": ""
+    },
+    "description_zh": "Claude Fable 5 旗舰对话与代理模型。",
+    "description_en": "Claude Fable 5 flagship chat and agent model.",
+    "badge_zh": "按 Token 计费",
+    "badge_en": "Token-based",
+    "suffix_zh": "",
+    "suffix_en": "",
+    "price_key_zh": "",
+    "price_key_en": ""
+  },
+  "claude-opus-5": {
+    "description": "Claude Opus 5：强力代理与编程，适合高难度任务。",
+    "descriptions": {
+      "zhCN": "Claude Opus 5：强力代理与编程，适合高难度任务。",
+      "zhTW": "Claude Opus 5：強力代理與編程，適合高難度任務。",
+      "en": "Claude Opus 5 for powerful agents and coding on hard tasks.",
+      "fr": "Claude Opus 5 pour agents puissants et code sur tâches difficiles.",
+      "ru": "Claude Opus 5: мощные агенты и программирование сложных задач.",
+      "ja": "Claude Opus 5。強力なエージェントとコーディング向け。",
+      "vi": "Claude Opus 5: agent mạnh và coding cho tác vụ khó."
+    },
+    "unit": "token",
+    "badge": {
+      "zhCN": "按 Token 计费",
+      "zhTW": "按 Token 計費",
+      "en": "Token-based",
+      "fr": "Au token",
+      "ru": "По токенам",
+      "ja": "Token 課金",
+      "vi": "Theo token"
+    },
+    "suffix": {
+      "zhCN": "",
+      "zhTW": "",
+      "en": "",
+      "fr": "",
+      "ru": "",
+      "ja": "",
+      "vi": ""
+    },
+    "price_key": {
+      "zhCN": "",
+      "zhTW": "",
+      "en": "",
+      "fr": "",
+      "ru": "",
+      "ja": "",
+      "vi": ""
+    },
+    "description_zh": "Claude Opus 5：强力代理与编程，适合高难度任务。",
+    "description_en": "Claude Opus 5 for powerful agents and coding on hard tasks.",
+    "badge_zh": "按 Token 计费",
+    "badge_en": "Token-based",
+    "suffix_zh": "",
+    "suffix_en": "",
+    "price_key_zh": "",
+    "price_key_en": ""
+  },
+  "claude-sonnet-5": {
+    "description": "Claude Sonnet 5：长上下文平衡型模型。",
+    "descriptions": {
+      "zhCN": "Claude Sonnet 5：长上下文平衡型模型。",
+      "zhTW": "Claude Sonnet 5：長上下文平衡型模型。",
+      "en": "Claude Sonnet 5 balanced model with long-context support.",
+      "fr": "Claude Sonnet 5 équilibré avec long contexte.",
+      "ru": "Сбалансированный Claude Sonnet 5 с длинным контекстом.",
+      "ja": "Claude Sonnet 5。長コンテキストのバランス型モデル。",
+      "vi": "Claude Sonnet 5 cân bằng với ngữ cảnh dài."
+    },
+    "unit": "token",
+    "badge": {
+      "zhCN": "按 Token 计费",
+      "zhTW": "按 Token 計費",
+      "en": "Token-based",
+      "fr": "Au token",
+      "ru": "По токенам",
+      "ja": "Token 課金",
+      "vi": "Theo token"
+    },
+    "suffix": {
+      "zhCN": "",
+      "zhTW": "",
+      "en": "",
+      "fr": "",
+      "ru": "",
+      "ja": "",
+      "vi": ""
+    },
+    "price_key": {
+      "zhCN": "",
+      "zhTW": "",
+      "en": "",
+      "fr": "",
+      "ru": "",
+      "ja": "",
+      "vi": ""
+    },
+    "description_zh": "Claude Sonnet 5：长上下文平衡型模型。",
+    "description_en": "Claude Sonnet 5 balanced model with long-context support.",
+    "badge_zh": "按 Token 计费",
+    "badge_en": "Token-based",
+    "suffix_zh": "",
+    "suffix_en": "",
+    "price_key_zh": "",
+    "price_key_en": ""
+  },
+  "gemini-3.8-flash": {
+    "description": "Gemini 3.8 Flash：更快更强的多模态轻量模型。",
+    "descriptions": {
+      "zhCN": "Gemini 3.8 Flash：更快更强的多模态轻量模型。",
+      "zhTW": "Gemini 3.8 Flash：更快更強的多模態輕量模型。",
+      "en": "Gemini 3.8 Flash — faster multimodal lightweight model.",
+      "fr": "Gemini 3.8 Flash — multimodal léger plus rapide.",
+      "ru": "Gemini 3.8 Flash — быстрая мультимодальная лёгкая модель.",
+      "ja": "Gemini 3.8 Flash。より高速なマルチモーダル軽量モデル。",
+      "vi": "Gemini 3.8 Flash — mô hình đa phương thức nhẹ, nhanh hơn."
+    },
+    "unit": "token",
+    "badge": {
+      "zhCN": "按 Token 计费",
+      "zhTW": "按 Token 計費",
+      "en": "Token-based",
+      "fr": "Au token",
+      "ru": "По токенам",
+      "ja": "Token 課金",
+      "vi": "Theo token"
+    },
+    "suffix": {
+      "zhCN": "",
+      "zhTW": "",
+      "en": "",
+      "fr": "",
+      "ru": "",
+      "ja": "",
+      "vi": ""
+    },
+    "price_key": {
+      "zhCN": "",
+      "zhTW": "",
+      "en": "",
+      "fr": "",
+      "ru": "",
+      "ja": "",
+      "vi": ""
+    },
+    "description_zh": "Gemini 3.8 Flash：更快更强的多模态轻量模型。",
+    "description_en": "Gemini 3.8 Flash — faster multimodal lightweight model.",
+    "badge_zh": "按 Token 计费",
+    "badge_en": "Token-based",
+    "suffix_zh": "",
+    "suffix_en": "",
+    "price_key_zh": "",
+    "price_key_en": ""
+  },
+  "gemini-3.7-flash": {
+    "description": "Gemini 3.7 Flash 多模态主力模型。",
+    "descriptions": {
+      "zhCN": "Gemini 3.7 Flash 多模态主力模型。",
+      "zhTW": "Gemini 3.7 Flash 多模態主力模型。",
+      "en": "Gemini 3.7 Flash multimodal workhorse model.",
+      "fr": "Gemini 3.7 Flash — modèle multimodal polyvalent.",
+      "ru": "Мультимодальный рабочий конь Gemini 3.7 Flash.",
+      "ja": "Gemini 3.7 Flash。マルチモーダル主力モデル。",
+      "vi": "Gemini 3.7 Flash — mô hình đa phương thức chủ lực."
+    },
+    "unit": "token",
+    "badge": {
+      "zhCN": "按 Token 计费",
+      "zhTW": "按 Token 計費",
+      "en": "Token-based",
+      "fr": "Au token",
+      "ru": "По токенам",
+      "ja": "Token 課金",
+      "vi": "Theo token"
+    },
+    "suffix": {
+      "zhCN": "",
+      "zhTW": "",
+      "en": "",
+      "fr": "",
+      "ru": "",
+      "ja": "",
+      "vi": ""
+    },
+    "price_key": {
+      "zhCN": "",
+      "zhTW": "",
+      "en": "",
+      "fr": "",
+      "ru": "",
+      "ja": "",
+      "vi": ""
+    },
+    "description_zh": "Gemini 3.7 Flash 多模态主力模型。",
+    "description_en": "Gemini 3.7 Flash multimodal workhorse model.",
+    "badge_zh": "按 Token 计费",
+    "badge_en": "Token-based",
+    "suffix_zh": "",
+    "suffix_en": "",
+    "price_key_zh": "",
+    "price_key_en": ""
+  },
+  "deepseek-v4-pro-0813": {
+    "description": "DeepSeek V4 Pro：高能力推理与编程模型。",
+    "descriptions": {
+      "zhCN": "DeepSeek V4 Pro：高能力推理与编程模型。",
+      "zhTW": "DeepSeek V4 Pro：高能力推理與編程模型。",
+      "en": "DeepSeek V4 Pro for strong reasoning and coding.",
+      "fr": "DeepSeek V4 Pro pour raisonnement et code avancés.",
+      "ru": "DeepSeek V4 Pro: сильное рассуждение и код.",
+      "ja": "DeepSeek V4 Pro。高い推論・コーディング能力。",
+      "vi": "DeepSeek V4 Pro: suy luận và coding mạnh."
+    },
+    "unit": "token",
+    "badge": {
+      "zhCN": "按 Token 计费",
+      "zhTW": "按 Token 計費",
+      "en": "Token-based",
+      "fr": "Au token",
+      "ru": "По токенам",
+      "ja": "Token 課金",
+      "vi": "Theo token"
+    },
+    "suffix": {
+      "zhCN": "",
+      "zhTW": "",
+      "en": "",
+      "fr": "",
+      "ru": "",
+      "ja": "",
+      "vi": ""
+    },
+    "price_key": {
+      "zhCN": "",
+      "zhTW": "",
+      "en": "",
+      "fr": "",
+      "ru": "",
+      "ja": "",
+      "vi": ""
+    },
+    "description_zh": "DeepSeek V4 Pro：高能力推理与编程模型。",
+    "description_en": "DeepSeek V4 Pro for strong reasoning and coding.",
+    "badge_zh": "按 Token 计费",
+    "badge_en": "Token-based",
+    "suffix_zh": "",
+    "suffix_en": "",
+    "price_key_zh": "",
+    "price_key_en": ""
+  },
+  "deepseek-v4-flash": {
+    "description": "DeepSeek V4 Flash：更快更省的对话与代码模型。",
+    "descriptions": {
+      "zhCN": "DeepSeek V4 Flash：更快更省的对话与代码模型。",
+      "zhTW": "DeepSeek V4 Flash：更快更省的對話與程式模型。",
+      "en": "DeepSeek V4 Flash — faster, cheaper chat and coding model.",
+      "fr": "DeepSeek V4 Flash — chat/code plus rapide et économique.",
+      "ru": "DeepSeek V4 Flash — быстрее и дешевле для чата и кода.",
+      "ja": "DeepSeek V4 Flash。より高速・低コストなチャット／コードモデル。",
+      "vi": "DeepSeek V4 Flash — chat/coding nhanh và tiết kiệm hơn."
+    },
+    "unit": "token",
+    "badge": {
+      "zhCN": "按 Token 计费",
+      "zhTW": "按 Token 計費",
+      "en": "Token-based",
+      "fr": "Au token",
+      "ru": "По токенам",
+      "ja": "Token 課金",
+      "vi": "Theo token"
+    },
+    "suffix": {
+      "zhCN": "",
+      "zhTW": "",
+      "en": "",
+      "fr": "",
+      "ru": "",
+      "ja": "",
+      "vi": ""
+    },
+    "price_key": {
+      "zhCN": "",
+      "zhTW": "",
+      "en": "",
+      "fr": "",
+      "ru": "",
+      "ja": "",
+      "vi": ""
+    },
+    "description_zh": "DeepSeek V4 Flash：更快更省的对话与代码模型。",
+    "description_en": "DeepSeek V4 Flash — faster, cheaper chat and coding model.",
+    "badge_zh": "按 Token 计费",
+    "badge_en": "Token-based",
+    "suffix_zh": "",
+    "suffix_en": "",
+    "price_key_zh": "",
+    "price_key_en": ""
+  },
+  "grok-4.6": {
+    "description": "xAI Grok 4.6 对话与推理模型。",
+    "descriptions": {
+      "zhCN": "xAI Grok 4.6 对话与推理模型。",
+      "zhTW": "xAI Grok 4.6 對話與推理模型。",
+      "en": "xAI Grok 4.6 chat and reasoning model.",
+      "fr": "Modèle de chat et raisonnement xAI Grok 4.6.",
+      "ru": "Чат и рассуждение xAI Grok 4.6.",
+      "ja": "xAI Grok 4.6 チャット／推論モデル。",
+      "vi": "Mô hình chat và suy luận xAI Grok 4.6."
+    },
+    "unit": "token",
+    "badge": {
+      "zhCN": "按 Token 计费",
+      "zhTW": "按 Token 計費",
+      "en": "Token-based",
+      "fr": "Au token",
+      "ru": "По токенам",
+      "ja": "Token 課金",
+      "vi": "Theo token"
+    },
+    "suffix": {
+      "zhCN": "",
+      "zhTW": "",
+      "en": "",
+      "fr": "",
+      "ru": "",
+      "ja": "",
+      "vi": ""
+    },
+    "price_key": {
+      "zhCN": "",
+      "zhTW": "",
+      "en": "",
+      "fr": "",
+      "ru": "",
+      "ja": "",
+      "vi": ""
+    },
+    "description_zh": "xAI Grok 4.6 对话与推理模型。",
+    "description_en": "xAI Grok 4.6 chat and reasoning model.",
+    "badge_zh": "按 Token 计费",
+    "badge_en": "Token-based",
+    "suffix_zh": "",
+    "suffix_en": "",
+    "price_key_zh": "",
+    "price_key_en": ""
+  },
+  "kimi-k3": {
+    "description": "Moonshot Kimi K3 长上下文对话模型。",
+    "descriptions": {
+      "zhCN": "Moonshot Kimi K3 长上下文对话模型。",
+      "zhTW": "Moonshot Kimi K3 長上下文對話模型。",
+      "en": "Moonshot Kimi K3 long-context chat model.",
+      "fr": "Kimi K3 (Moonshot) — chat à long contexte.",
+      "ru": "Kimi K3 (Moonshot) — чат с длинным контекстом.",
+      "ja": "Moonshot Kimi K3。長コンテキストチャットモデル。",
+      "vi": "Moonshot Kimi K3 — chat ngữ cảnh dài."
+    },
+    "unit": "token",
+    "badge": {
+      "zhCN": "按 Token 计费",
+      "zhTW": "按 Token 計費",
+      "en": "Token-based",
+      "fr": "Au token",
+      "ru": "По токенам",
+      "ja": "Token 課金",
+      "vi": "Theo token"
+    },
+    "suffix": {
+      "zhCN": "",
+      "zhTW": "",
+      "en": "",
+      "fr": "",
+      "ru": "",
+      "ja": "",
+      "vi": ""
+    },
+    "price_key": {
+      "zhCN": "",
+      "zhTW": "",
+      "en": "",
+      "fr": "",
+      "ru": "",
+      "ja": "",
+      "vi": ""
+    },
+    "description_zh": "Moonshot Kimi K3 长上下文对话模型。",
+    "description_en": "Moonshot Kimi K3 long-context chat model.",
+    "badge_zh": "按 Token 计费",
+    "badge_en": "Token-based",
+    "suffix_zh": "",
+    "suffix_en": "",
+    "price_key_zh": "",
+    "price_key_en": ""
+  },
+  "MiniMax-M3": {
+    "description": "MiniMax M3 通用对话模型。",
+    "descriptions": {
+      "zhCN": "MiniMax M3 通用对话模型。",
+      "zhTW": "MiniMax M3 通用對話模型。",
+      "en": "MiniMax M3 general-purpose chat model.",
+      "fr": "MiniMax M3 — modèle de chat polyvalent.",
+      "ru": "Универсальный чат MiniMax M3.",
+      "ja": "MiniMax M3 汎用チャットモデル。",
+      "vi": "MiniMax M3 — mô hình chat đa năng."
+    },
+    "unit": "token",
+    "badge": {
+      "zhCN": "按 Token 计费",
+      "zhTW": "按 Token 計費",
+      "en": "Token-based",
+      "fr": "Au token",
+      "ru": "По токенам",
+      "ja": "Token 課金",
+      "vi": "Theo token"
+    },
+    "suffix": {
+      "zhCN": "",
+      "zhTW": "",
+      "en": "",
+      "fr": "",
+      "ru": "",
+      "ja": "",
+      "vi": ""
+    },
+    "price_key": {
+      "zhCN": "",
+      "zhTW": "",
+      "en": "",
+      "fr": "",
+      "ru": "",
+      "ja": "",
+      "vi": ""
+    },
+    "description_zh": "MiniMax M3 通用对话模型。",
+    "description_en": "MiniMax M3 general-purpose chat model.",
+    "badge_zh": "按 Token 计费",
+    "badge_en": "Token-based",
+    "suffix_zh": "",
+    "suffix_en": "",
+    "price_key_zh": "",
+    "price_key_en": ""
+  },
+  "glm-5.3": {
+    "description": "智谱 GLM-5.3 对话与推理模型。",
+    "descriptions": {
+      "zhCN": "智谱 GLM-5.3 对话与推理模型。",
+      "zhTW": "智譜 GLM-5.3 對話與推理模型。",
+      "en": "Zhipu GLM-5.3 chat and reasoning model.",
+      "fr": "GLM-5.3 (Zhipu) — chat et raisonnement.",
+      "ru": "Чат и рассуждение Zhipu GLM-5.3.",
+      "ja": "智譜 GLM-5.3 チャット／推論モデル。",
+      "vi": "Zhipu GLM-5.3 — chat và suy luận."
+    },
+    "unit": "token",
+    "badge": {
+      "zhCN": "按 Token 计费",
+      "zhTW": "按 Token 計費",
+      "en": "Token-based",
+      "fr": "Au token",
+      "ru": "По токенам",
+      "ja": "Token 課金",
+      "vi": "Theo token"
+    },
+    "suffix": {
+      "zhCN": "",
+      "zhTW": "",
+      "en": "",
+      "fr": "",
+      "ru": "",
+      "ja": "",
+      "vi": ""
+    },
+    "price_key": {
+      "zhCN": "",
+      "zhTW": "",
+      "en": "",
+      "fr": "",
+      "ru": "",
+      "ja": "",
+      "vi": ""
+    },
+    "description_zh": "智谱 GLM-5.3 对话与推理模型。",
+    "description_en": "Zhipu GLM-5.3 chat and reasoning model.",
+    "badge_zh": "按 Token 计费",
+    "badge_en": "Token-based",
+    "suffix_zh": "",
+    "suffix_en": "",
+    "price_key_zh": "",
+    "price_key_en": ""
+  },
+  "gpt-image-2": {
+    "description": "文生图 / 图生图，约 1K 画质，按张计费。 计费：$0.006849/次。",
+    "descriptions": {
+      "zhCN": "文生图 / 图生图，约 1K 画质，按张计费。 计费：$0.006849/次。",
+      "zhTW": "文生圖 / 圖生圖，約 1K 畫質，按張計費。 計費：$0.006849/次。",
+      "en": "Text-to-image / image-to-image around 1K quality. Billed per image. Pricing: $0.006849 / request.",
+      "fr": "Texte→image / image→image (~1K). Facturé par image. Tarif : $0.006849 / requête.",
+      "ru": "Текст→изображение / изображение→изображение (~1K). Оплата за изображение. Тариф: $0.006849 / запрос.",
+      "ja": "文生図／図生図（約 1K）。画像ごとに課金。 料金：$0.006849/ 回。",
+      "vi": "Text-to-image / image-to-image (~1K). Tính phí theo ảnh. Giá: $0.006849/ lần."
+    },
+    "unit": "request",
+    "badge": {
+      "zhCN": "按次计费",
+      "zhTW": "按次計費",
+      "en": "Per Request",
+      "fr": "Par requête",
+      "ru": "За запрос",
+      "ja": "リクエスト課金",
+      "vi": "Theo lần gọi"
+    },
+    "suffix": {
+      "zhCN": "/次",
+      "zhTW": "/次",
+      "en": "/ request",
+      "fr": "/ requête",
+      "ru": "/ запрос",
+      "ja": "/ 回",
+      "vi": "/ lần"
+    },
+    "price_key": {
+      "zhCN": "每次请求",
+      "zhTW": "每次請求",
+      "en": "Per request",
+      "fr": "Par requête",
+      "ru": "За запрос",
+      "ja": "リクエストごと",
+      "vi": "Mỗi lần gọi"
+    },
+    "description_zh": "文生图 / 图生图，约 1K 画质，按张计费。 计费：$0.006849/次。",
+    "description_en": "Text-to-image / image-to-image around 1K quality. Billed per image. Pricing: $0.006849 / request.",
+    "badge_zh": "按次计费",
+    "badge_en": "Per Request",
+    "suffix_zh": "/次",
+    "suffix_en": "/ request",
+    "price_key_zh": "每次请求",
+    "price_key_en": "Per request"
+  },
+  "gpt-image-2-vip": {
+    "description": "高清画图，支持 1K/2K/4K，按张计费。 计费：$0.0274/次。",
+    "descriptions": {
+      "zhCN": "高清画图，支持 1K/2K/4K，按张计费。 计费：$0.0274/次。",
+      "zhTW": "高清畫圖，支援 1K/2K/4K，按張計費。 計費：$0.0274/次。",
+      "en": "HD image generation with 1K/2K/4K. Billed per image. Pricing: $0.0274 / request.",
+      "fr": "Génération HD 1K/2K/4K. Facturé par image. Tarif : $0.0274 / requête.",
+      "ru": "HD‑генерация 1K/2K/4K. Оплата за изображение. Тариф: $0.0274 / запрос.",
+      "ja": "高精細画像生成（1K/2K/4K）。画像ごとに課金。 料金：$0.0274/ 回。",
+      "vi": "Sinh ảnh HD 1K/2K/4K. Tính phí theo ảnh. Giá: $0.0274/ lần."
+    },
+    "unit": "request",
+    "badge": {
+      "zhCN": "按次计费",
+      "zhTW": "按次計費",
+      "en": "Per Request",
+      "fr": "Par requête",
+      "ru": "За запрос",
+      "ja": "リクエスト課金",
+      "vi": "Theo lần gọi"
+    },
+    "suffix": {
+      "zhCN": "/次",
+      "zhTW": "/次",
+      "en": "/ request",
+      "fr": "/ requête",
+      "ru": "/ запрос",
+      "ja": "/ 回",
+      "vi": "/ lần"
+    },
+    "price_key": {
+      "zhCN": "每次请求",
+      "zhTW": "每次請求",
+      "en": "Per request",
+      "fr": "Par requête",
+      "ru": "За запрос",
+      "ja": "リクエストごと",
+      "vi": "Mỗi lần gọi"
+    },
+    "description_zh": "高清画图，支持 1K/2K/4K，按张计费。 计费：$0.0274/次。",
+    "description_en": "HD image generation with 1K/2K/4K. Billed per image. Pricing: $0.0274 / request.",
+    "badge_zh": "按次计费",
+    "badge_en": "Per Request",
+    "suffix_zh": "/次",
+    "suffix_en": "/ request",
+    "price_key_zh": "每次请求",
+    "price_key_en": "Per request"
+  },
+  "nano-banana-2": {
+    "description": "新一代出图模型，速度快、效果好，按张计费。 计费：$0.0205/次。",
+    "descriptions": {
+      "zhCN": "新一代出图模型，速度快、效果好，按张计费。 计费：$0.0205/次。",
+      "zhTW": "新一代出圖模型，速度快、效果好，按張計費。 計費：$0.0205/次。",
+      "en": "Next-gen image model — fast and high quality. Billed per image. Pricing: $0.0205 / request.",
+      "fr": "Modèle d’image nouvelle génération — rapide et qualitatif. Par image. Tarif : $0.0205 / requête.",
+      "ru": "Новое поколение генерации изображений — быстро и качественно. За изображение. Тариф: $0.0205 / запрос.",
+      "ja": "次世代画像モデル。高速・高品質。画像ごとに課金。 料金：$0.0205/ 回。",
+      "vi": "Mô hình ảnh thế hệ mới — nhanh, chất lượng cao. Theo ảnh. Giá: $0.0205/ lần."
+    },
+    "unit": "request",
+    "badge": {
+      "zhCN": "按次计费",
+      "zhTW": "按次計費",
+      "en": "Per Request",
+      "fr": "Par requête",
+      "ru": "За запрос",
+      "ja": "リクエスト課金",
+      "vi": "Theo lần gọi"
+    },
+    "suffix": {
+      "zhCN": "/次",
+      "zhTW": "/次",
+      "en": "/ request",
+      "fr": "/ requête",
+      "ru": "/ запрос",
+      "ja": "/ 回",
+      "vi": "/ lần"
+    },
+    "price_key": {
+      "zhCN": "每次请求",
+      "zhTW": "每次請求",
+      "en": "Per request",
+      "fr": "Par requête",
+      "ru": "За запрос",
+      "ja": "リクエストごと",
+      "vi": "Mỗi lần gọi"
+    },
+    "description_zh": "新一代出图模型，速度快、效果好，按张计费。 计费：$0.0205/次。",
+    "description_en": "Next-gen image model — fast and high quality. Billed per image. Pricing: $0.0205 / request.",
+    "badge_zh": "按次计费",
+    "badge_en": "Per Request",
+    "suffix_zh": "/次",
+    "suffix_en": "/ request",
+    "price_key_zh": "每次请求",
+    "price_key_en": "Per request"
+  },
+  "nano-banana-pro": {
+    "description": "高质量出图，支持多种比例与分辨率，按张计费。 计费：$0.0274/次。",
+    "descriptions": {
+      "zhCN": "高质量出图，支持多种比例与分辨率，按张计费。 计费：$0.0274/次。",
+      "zhTW": "高質量出圖，支援多種比例與解析度，按張計費。 計費：$0.0274/次。",
+      "en": "High-quality image generation with multiple aspect ratios/resolutions. Billed per image. Pricing: $0.0274 / request.",
+      "fr": "Images haute qualité, ratios/résolutions multiples. Facturé par image. Tarif : $0.0274 / requête.",
+      "ru": "Высококачественная генерация с разными пропорциями/разрешениями. За изображение. Тариф: $0.0274 / запрос.",
+      "ja": "高品質出図。多様な比率・解像度。画像ごとに課金。 料金：$0.0274/ 回。",
+      "vi": "Sinh ảnh chất lượng cao, nhiều tỉ lệ/độ phân giải. Theo ảnh. Giá: $0.0274/ lần."
+    },
+    "unit": "request",
+    "badge": {
+      "zhCN": "按次计费",
+      "zhTW": "按次計費",
+      "en": "Per Request",
+      "fr": "Par requête",
+      "ru": "За запрос",
+      "ja": "リクエスト課金",
+      "vi": "Theo lần gọi"
+    },
+    "suffix": {
+      "zhCN": "/次",
+      "zhTW": "/次",
+      "en": "/ request",
+      "fr": "/ requête",
+      "ru": "/ запрос",
+      "ja": "/ 回",
+      "vi": "/ lần"
+    },
+    "price_key": {
+      "zhCN": "每次请求",
+      "zhTW": "每次請求",
+      "en": "Per request",
+      "fr": "Par requête",
+      "ru": "За запрос",
+      "ja": "リクエストごと",
+      "vi": "Mỗi lần gọi"
+    },
+    "description_zh": "高质量出图，支持多种比例与分辨率，按张计费。 计费：$0.0274/次。",
+    "description_en": "High-quality image generation with multiple aspect ratios/resolutions. Billed per image. Pricing: $0.0274 / request.",
+    "badge_zh": "按次计费",
+    "badge_en": "Per Request",
+    "suffix_zh": "/次",
+    "suffix_en": "/ request",
+    "price_key_zh": "每次请求",
+    "price_key_en": "Per request"
+  },
+  "__tags__": {
+    "大语言模型": {
+      "zhCN": "大语言模型",
+      "zhTW": "大型語言模型",
+      "en": "LLM",
+      "fr": "LLM",
+      "ru": "LLM",
+      "ja": "大規模言語モデル",
+      "vi": "LLM"
+    },
+    "内容风控": {
+      "zhCN": "内容风控",
+      "zhTW": "內容風控",
+      "en": "Moderation",
+      "fr": "Modération",
+      "ru": "Модерация",
+      "ja": "コンテンツ審査",
+      "vi": "Kiểm duyệt"
+    },
+    "数字人": {
+      "zhCN": "数字人",
+      "zhTW": "數位人",
+      "en": "Digital Human",
+      "fr": "Humain digital",
+      "ru": "Цифровой человек",
+      "ja": "デジタルヒューマン",
+      "vi": "Người số"
+    },
+    "图片": {
+      "zhCN": "图片",
+      "zhTW": "圖片",
+      "en": "Image",
+      "fr": "Image",
+      "ru": "Изображение",
+      "ja": "画像",
+      "vi": "Ảnh"
+    },
+    "图像处理": {
+      "zhCN": "图像处理",
+      "zhTW": "影像處理",
+      "en": "Image Processing",
+      "fr": "Traitement d’image",
+      "ru": "Обработка изображений",
+      "ja": "画像処理",
+      "vi": "Xử lý ảnh"
+    },
+    "语音合成": {
+      "zhCN": "语音合成",
+      "zhTW": "語音合成",
+      "en": "TTS",
+      "fr": "Synthèse vocale",
+      "ru": "Синтез речи",
+      "ja": "音声合成",
+      "vi": "Tổng hợp giọng"
+    },
+    "语音识别": {
+      "zhCN": "语音识别",
+      "zhTW": "語音辨識",
+      "en": "ASR",
+      "fr": "Reconnaissance vocale",
+      "ru": "Распознавание речи",
+      "ja": "音声認識",
+      "vi": "Nhận dạng giọng"
+    },
+    "OCR": {
+      "zhCN": "OCR",
+      "zhTW": "OCR",
+      "en": "OCR",
+      "fr": "OCR",
+      "ru": "OCR",
+      "ja": "OCR",
+      "vi": "OCR"
+    }
+  }
+}

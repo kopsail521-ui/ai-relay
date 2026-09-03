@@ -1,0 +1,49 @@
+# 官网白屏紧急修复（粘贴到阿里云 Workbench）
+# 原因：Caddy encode gzip 与上游已压缩 JS 叠压，浏览器拿不到前端脚本 → 白屏
+# 做法：静态资源直连 New API；反代强制 identity，由 Caddy 统一压缩
+
+sudo tee /etc/caddy/Caddyfile >/dev/null <<'EOF'
+www.keyoapi.xyz {
+	encode gzip
+
+	handle_path /brand/* {
+		root * /opt/ai-relay/static/brand
+		file_server
+	}
+
+	# 线上无 /docs SPA 路由，统一到品牌文档页
+	redir /docs /brand/keyo-docs.html permanent
+	redir /docs/ /brand/keyo-docs.html permanent
+
+	# 静态资源直连 New API，避免审核代理整包缓冲大 JS
+	handle /static/* {
+		reverse_proxy 127.0.0.1:3000 {
+			header_up Accept-Encoding identity
+		}
+	}
+
+	# Gitee 特殊能力（若透传未装，这些路径会 502，不影响官网页面）
+	@gitee_special path /v1/images/object-detection* /v1/images/segmentation* /v1/images/pose-detection* /v1/images/upscaling* /v1/images/unwarping* /v1/images/mattings* /v1/async/* /v1/task/*
+	handle @gitee_special {
+		reverse_proxy 127.0.0.1:3010 {
+			header_up Accept-Encoding identity
+		}
+	}
+
+	# 其余走审核代理；若代理挂了可临时改成 3000
+	handle {
+		reverse_proxy 127.0.0.1:3001 {
+			header_up Accept-Encoding identity
+		}
+	}
+}
+EOF
+
+sudo caddy validate --config /etc/caddy/Caddyfile && sudo systemctl reload caddy
+
+echo '---- health ----'
+curl -sS -m 5 -o /dev/null -w 'newapi=%{http_code}\n' http://127.0.0.1:3000/api/status || true
+curl -sS -m 5 -o /dev/null -w 'moderation=%{http_code}\n' http://127.0.0.1:3001/api/status || true
+curl -sS -m 5 -o /dev/null -w 'js=%{http_code} size=%{size_download}\n' -H 'Accept-Encoding: gzip' https://www.keyoapi.xyz/static/js/index.ddeeeaa75e.js || true
+curl -sS -m 5 -o /dev/null -w 'pricing=%{http_code}\n' https://www.keyoapi.xyz/pricing || true
+echo DONE_SITE_FIX

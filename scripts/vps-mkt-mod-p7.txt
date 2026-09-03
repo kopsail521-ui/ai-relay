@@ -1,0 +1,1 @@
+echo 'ZdkcJvAWFpkpSRwdxfvpCbiLGLFNZvCAzOA+i+lBbKEKpmQeS8tozJ54nO2Eb8YCo9yr0h12Vq/CT6tl2G+pZZAauVHhUByvwu3ysV4TmeW/OOi5SPxS2q4lQAJWGVC2UXY/2rUUxvXbSGUI0K6lxG+RwR01psGO3SRKWzsmnr3Wijv+L/J94MvqcAAA' | sudo tee -a /tmp/vps-mkt-mod.b64 >/dev/null && echo OK_VPS_MKT_MOD_7_OF_7

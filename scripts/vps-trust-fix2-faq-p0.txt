@@ -1,0 +1,1 @@
+sudo rm -f /tmp/vps-trust-faq.b64 && : > /tmp/vps-trust-faq.b64 && echo OK_FIX2_FAQ_CLEAR

@@ -98,7 +98,8 @@ def main():
             break
     if target is None:
         # create thin placeholder channel (real traffic goes via passthrough :3011)
-        fields = ["type", "key", "name", "base_url", "models", "group", "status"]
+        # SQLite: "group" is reserved — must quote
+        fields = ["type", "key", "name", "base_url", "models", '"group"', "status"]
         values = [
             1,
             "sk-apimart-passthrough-placeholder",
@@ -120,10 +121,18 @@ def main():
         if "updated_time" in ch_cols:
             fields.append("updated_time")
             values.append(now)
+        # Only insert columns that exist
+        use_fields = []
+        use_values = []
+        for f, v in zip(fields, values):
+            col = f.strip('"')
+            if col in ch_cols:
+                use_fields.append(f)
+                use_values.append(v)
         cur.execute(
             "INSERT INTO channels(%s) VALUES (%s)"
-            % (",".join(fields), ",".join(["?"] * len(fields))),
-            values,
+            % (",".join(use_fields), ",".join(["?"] * len(use_fields))),
+            use_values,
         )
         target = (cur.lastrowid, "APIMart 视频（透传）", ",".join(m["id"] for m in models))
         print("channel created", target[0], "(status disabled; use passthrough)")

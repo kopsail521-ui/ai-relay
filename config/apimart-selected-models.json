@@ -11,9 +11,7 @@
       "id": "gemini-omni-1.1-flash",
       "vendor": "Google",
       "icon": "Gemini.Color",
-      "tag": "视频",
-      "billing": "per_second",
-      "upstream_usd_per_second": 0.088,
+        "tag": "视频·按秒",
       "sell_usd_per_second": 0.1056,
       "model_price_usd": 0.1056,
       "desc_zh": "Gemini Omni 1.1 Flash 视频 · $0.1056/秒"

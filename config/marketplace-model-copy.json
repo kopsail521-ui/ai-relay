@@ -2234,15 +2234,15 @@
     "price_key_en": ""
   },
   "grok-1.5-video": {
-    "description": "xAI Grok 1.5 Video：文生/参考图，1–15 秒，480p/720p/1080p。计费：.60675/次（上游 .2427×2.5）。",
+    "description": "Grok 1.5 视频：文生/参考图，1–15 秒，480p/720p/1080p。计费：.60675/次。",
     "descriptions": {
-      "zhCN": "xAI Grok 1.5 Video：文生/参考图，1–15 秒，480p/720p/1080p。计费：.60675/次（上游 .2427×2.5）。",
-      "zhTW": "xAI Grok 1.5 Video：文生/参考图，1–15 秒，480p/720p/1080p。计费：.60675/次（上游 .2427×2.5）。",
-      "en": "xAI Grok 1.5 Video: text/ref image, 1–15s, 480p/720p/1080p. Pricing: .60675/request (upstream .2427×2.5).",
-      "fr": "xAI Grok 1.5 Video: text/ref image, 1–15s, 480p/720p/1080p. Pricing: .60675/request (upstream .2427×2.5).",
-      "ru": "xAI Grok 1.5 Video: text/ref image, 1–15s, 480p/720p/1080p. Pricing: .60675/request (upstream .2427×2.5).",
-      "ja": "xAI Grok 1.5 Video: text/ref image, 1–15s, 480p/720p/1080p. Pricing: .60675/request (upstream .2427×2.5).",
-      "vi": "xAI Grok 1.5 Video: text/ref image, 1–15s, 480p/720p/1080p. Pricing: .60675/request (upstream .2427×2.5)."
+      "zhCN": "Grok 1.5 视频：文生/参考图，1–15 秒，480p/720p/1080p。计费：.60675/次。",
+      "zhTW": "Grok 1.5 视频：文生/参考图，1–15 秒，480p/720p/1080p。计费：.60675/次。",
+      "en": "Grok 1.5 video: text/ref image, 1–15s, 480p/720p/1080p. Pricing: .60675/request.",
+      "fr": "Grok 1.5 video: text/ref image, 1–15s, 480p/720p/1080p. Pricing: .60675/request.",
+      "ru": "Grok 1.5 video: text/ref image, 1–15s, 480p/720p/1080p. Pricing: .60675/request.",
+      "ja": "Grok 1.5 video: text/ref image, 1–15s, 480p/720p/1080p. Pricing: .60675/request.",
+      "vi": "Grok 1.5 video: text/ref image, 1–15s, 480p/720p/1080p. Pricing: .60675/request."
     },
     "unit": "request",
     "badge": {
@@ -2278,19 +2278,19 @@
     "suffix_en": "/ request",
     "price_key_zh": "每次请求",
     "price_key_en": "Per request",
-    "description_zh": "xAI Grok 1.5 Video：文生/参考图，1–15 秒，480p/720p/1080p。计费：.60675/次（上游 .2427×2.5）。",
-    "description_en": "xAI Grok 1.5 Video: text/ref image, 1–15s, 480p/720p/1080p. Pricing: .60675/request (upstream .2427×2.5)."
+    "description_zh": "Grok 1.5 视频：文生/参考图，1–15 秒，480p/720p/1080p。计费：.60675/次。",
+    "description_en": "Grok 1.5 video: text/ref image, 1–15s, 480p/720p/1080p. Pricing: .60675/request."
   },
   "veo_3_1-components": {
-    "description": "Google Veo 3.1 Components：约 8 秒，支持首帧。计费：.14125/次（上游 .0565×2.5）。",
+    "description": "Veo 3.1 Components：约 8 秒，支持首帧。计费：.14125/次。",
     "descriptions": {
-      "zhCN": "Google Veo 3.1 Components：约 8 秒，支持首帧。计费：.14125/次（上游 .0565×2.5）。",
-      "zhTW": "Google Veo 3.1 Components：约 8 秒，支持首帧。计费：.14125/次（上游 .0565×2.5）。",
-      "en": "Google Veo 3.1 Components: ~8s, first-frame. Pricing: .14125/request (upstream .0565×2.5).",
-      "fr": "Google Veo 3.1 Components: ~8s, first-frame. Pricing: .14125/request (upstream .0565×2.5).",
-      "ru": "Google Veo 3.1 Components: ~8s, first-frame. Pricing: .14125/request (upstream .0565×2.5).",
-      "ja": "Google Veo 3.1 Components: ~8s, first-frame. Pricing: .14125/request (upstream .0565×2.5).",
-      "vi": "Google Veo 3.1 Components: ~8s, first-frame. Pricing: .14125/request (upstream .0565×2.5)."
+      "zhCN": "Veo 3.1 Components：约 8 秒，支持首帧。计费：.14125/次。",
+      "zhTW": "Veo 3.1 Components：约 8 秒，支持首帧。计费：.14125/次。",
+      "en": "Veo 3.1 Components: ~8s, first-frame. Pricing: .14125/request.",
+      "fr": "Veo 3.1 Components: ~8s, first-frame. Pricing: .14125/request.",
+      "ru": "Veo 3.1 Components: ~8s, first-frame. Pricing: .14125/request.",
+      "ja": "Veo 3.1 Components: ~8s, first-frame. Pricing: .14125/request.",
+      "vi": "Veo 3.1 Components: ~8s, first-frame. Pricing: .14125/request."
     },
     "unit": "request",
     "badge": {
@@ -2326,19 +2326,19 @@
     "suffix_en": "/ request",
     "price_key_zh": "每次请求",
     "price_key_en": "Per request",
-    "description_zh": "Google Veo 3.1 Components：约 8 秒，支持首帧。计费：.14125/次（上游 .0565×2.5）。",
-    "description_en": "Google Veo 3.1 Components: ~8s, first-frame. Pricing: .14125/request (upstream .0565×2.5)."
+    "description_zh": "Veo 3.1 Components：约 8 秒，支持首帧。计费：.14125/次。",
+    "description_en": "Veo 3.1 Components: ~8s, first-frame. Pricing: .14125/request."
   },
   "gemini-omni-1.1-flash": {
-    "description": "Gemini Omni 1.1 Flash。计费：.1056/秒（上游 .088/秒 ×1.2）。",
+    "description": "Gemini Omni 1.1 Flash 视频。计费：.1056/秒。",
     "descriptions": {
-      "zhCN": "Gemini Omni 1.1 Flash。计费：.1056/秒（上游 .088/秒 ×1.2）。",
-      "zhTW": "Gemini Omni 1.1 Flash。计费：.1056/秒（上游 .088/秒 ×1.2）。",
-      "en": "Gemini Omni 1.1 Flash. Pricing: .1056/second (upstream .088/s ×1.2).",
-      "fr": "Gemini Omni 1.1 Flash. Pricing: .1056/second (upstream .088/s ×1.2).",
-      "ru": "Gemini Omni 1.1 Flash. Pricing: .1056/second (upstream .088/s ×1.2).",
-      "ja": "Gemini Omni 1.1 Flash. Pricing: .1056/second (upstream .088/s ×1.2).",
-      "vi": "Gemini Omni 1.1 Flash. Pricing: .1056/second (upstream .088/s ×1.2)."
+      "zhCN": "Gemini Omni 1.1 Flash 视频。计费：.1056/秒。",
+      "zhTW": "Gemini Omni 1.1 Flash 视频。计费：.1056/秒。",
+      "en": "Gemini Omni 1.1 Flash video. Pricing: .1056/second.",
+      "fr": "Gemini Omni 1.1 Flash video. Pricing: .1056/second.",
+      "ru": "Gemini Omni 1.1 Flash video. Pricing: .1056/second.",
+      "ja": "Gemini Omni 1.1 Flash video. Pricing: .1056/second.",
+      "vi": "Gemini Omni 1.1 Flash video. Pricing: .1056/second."
     },
     "unit": "second",
     "badge": {
@@ -2374,8 +2374,8 @@
     "suffix_en": "/ second",
     "price_key_zh": "每秒",
     "price_key_en": "Per second",
-    "description_zh": "Gemini Omni 1.1 Flash。计费：.1056/秒（上游 .088/秒 ×1.2）。",
-    "description_en": "Gemini Omni 1.1 Flash. Pricing: .1056/second (upstream .088/s ×1.2)."
+    "description_zh": "Gemini Omni 1.1 Flash 视频。计费：.1056/秒。",
+    "description_en": "Gemini Omni 1.1 Flash video. Pricing: .1056/second."
   },
   "gemini-omni-1.1-flash-ext": {
     "description": "Gemini Omni Ext：标准按档位（如 720P-8s .42）；参考视频按秒（720P/1080P .096/秒）。",
@@ -2666,15 +2666,15 @@
     "description_en": "Wan 3.0 Video per second: 480P .04115, 720P .08228, 1080P .16457/s."
   },
   "grok-imagine-video-1.5-preview": {
-    "description": "xAI Grok Imagine Video 1.5 Preview。计费：.08825/秒(480p)、.1545/秒(720p)；输入图 .011025/张。",
+    "description": "Grok Imagine Video 1.5 Preview。计费：.08825/秒(480p)、.1545/秒(720p)；输入图 .011025/张。",
     "descriptions": {
-      "zhCN": "xAI Grok Imagine Video 1.5 Preview。计费：.08825/秒(480p)、.1545/秒(720p)；输入图 .011025/张。",
-      "zhTW": "xAI Grok Imagine Video 1.5 Preview。计费：.08825/秒(480p)、.1545/秒(720p)；输入图 .011025/张。",
-      "en": "xAI Grok Imagine Video 1.5 Preview. Pricing: .08825/s (480p), .1545/s (720p); input image .011025/image.",
-      "fr": "xAI Grok Imagine Video 1.5 Preview. Pricing: .08825/s (480p), .1545/s (720p); input image .011025/image.",
-      "ru": "xAI Grok Imagine Video 1.5 Preview. Pricing: .08825/s (480p), .1545/s (720p); input image .011025/image.",
-      "ja": "xAI Grok Imagine Video 1.5 Preview. Pricing: .08825/s (480p), .1545/s (720p); input image .011025/image.",
-      "vi": "xAI Grok Imagine Video 1.5 Preview. Pricing: .08825/s (480p), .1545/s (720p); input image .011025/image."
+      "zhCN": "Grok Imagine Video 1.5 Preview。计费：.08825/秒(480p)、.1545/秒(720p)；输入图 .011025/张。",
+      "zhTW": "Grok Imagine Video 1.5 Preview。计费：.08825/秒(480p)、.1545/秒(720p)；输入图 .011025/张。",
+      "en": "Grok Imagine Video 1.5 Preview. Pricing: .08825/s (480p), .1545/s (720p); input image .011025/image.",
+      "fr": "Grok Imagine Video 1.5 Preview. Pricing: .08825/s (480p), .1545/s (720p); input image .011025/image.",
+      "ru": "Grok Imagine Video 1.5 Preview. Pricing: .08825/s (480p), .1545/s (720p); input image .011025/image.",
+      "ja": "Grok Imagine Video 1.5 Preview. Pricing: .08825/s (480p), .1545/s (720p); input image .011025/image.",
+      "vi": "Grok Imagine Video 1.5 Preview. Pricing: .08825/s (480p), .1545/s (720p); input image .011025/image."
     },
     "unit": "second",
     "badge": {
@@ -2710,7 +2710,7 @@
     "suffix_en": "/ second",
     "price_key_zh": "每秒",
     "price_key_en": "Per second",
-    "description_zh": "xAI Grok Imagine Video 1.5 Preview。计费：.08825/秒(480p)、.1545/秒(720p)；输入图 .011025/张。",
-    "description_en": "xAI Grok Imagine Video 1.5 Preview. Pricing: .08825/s (480p), .1545/s (720p); input image .011025/image."
+    "description_zh": "Grok Imagine Video 1.5 Preview。计费：.08825/秒(480p)、.1545/秒(720p)；输入图 .011025/张。",
+    "description_en": "Grok Imagine Video 1.5 Preview. Pricing: .08825/s (480p), .1545/s (720p); input image .011025/image."
   }
 }

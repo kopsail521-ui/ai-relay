@@ -152,7 +152,7 @@ function findChannelId(db) {
   try {
     const row = db
       .prepare(
-        `SELECT id FROM channels WHERE name LIKE '%APIMart%' OR base_url LIKE '%apimart%' LIMIT 1`
+        `SELECT id FROM channels WHERE name LIKE '%Keyo Video%' OR name LIKE '%APIMart%' OR base_url LIKE '%apimart%' LIMIT 1`
       )
       .get();
     return row?.id || 0;

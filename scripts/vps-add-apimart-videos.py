@@ -102,12 +102,12 @@ def main():
         fields = ["type", "key", "name", "base_url", "models", '"group"', "status"]
         values = [
             1,
-            "sk-apimart-passthrough-placeholder",
-            "APIMart 视频（透传）",
+            "sk-keyo-video-gen-placeholder",
+            "Keyo Video Gen",
             "https://api.apimart.ai",
             ",".join(m["id"] for m in models),
             "default",
-            2,  # disabled — do not route New API relay here
+            1,  # enabled so pricing/abilities list models; traffic still via Caddy :3011
         ]
         if "priority" in ch_cols:
             fields.append("priority")
@@ -134,8 +134,8 @@ def main():
             % (",".join(use_fields), ",".join(["?"] * len(use_fields))),
             use_values,
         )
-        target = (cur.lastrowid, "APIMart 视频（透传）", ",".join(m["id"] for m in models))
-        print("channel created", target[0], "(status disabled; use passthrough)")
+        target = (cur.lastrowid, "Keyo Video Gen", ",".join(m["id"] for m in models))
+        print("channel created", target[0], "(Keyo Video Gen; API via :3011)")
     else:
         cid, cname, models_s = target
         parts = [p.strip() for p in models_s.split(",") if p.strip()]
@@ -143,14 +143,30 @@ def main():
             if m["id"] not in parts:
                 parts.append(m["id"])
         merged = ",".join(parts)
-        if "updated_time" in ch_cols:
+        # scrub old supplier-looking channel name
+        new_name = "Keyo Video Gen" if ("apimart" in (cname or "").lower() or "透传" in (cname or "")) else cname
+        if "updated_time" in ch_cols and "status" in ch_cols:
             cur.execute(
-                "UPDATE channels SET models=?, updated_time=? WHERE id=?",
-                (merged, now, cid),
+                "UPDATE channels SET models=?, name=?, status=1, updated_time=? WHERE id=?",
+                (merged, new_name, now, cid),
+            )
+        elif "updated_time" in ch_cols:
+            cur.execute(
+                "UPDATE channels SET models=?, name=?, updated_time=? WHERE id=?",
+                (merged, new_name, now, cid),
+            )
+        elif "status" in ch_cols:
+            cur.execute(
+                "UPDATE channels SET models=?, name=?, status=1 WHERE id=?",
+                (merged, new_name, cid),
             )
         else:
-            cur.execute("UPDATE channels SET models=? WHERE id=?", (merged, cid))
-        print("channel", cid, cname, "models", len(parts))
+            cur.execute(
+                "UPDATE channels SET models=?, name=? WHERE id=?",
+                (merged, new_name, cid),
+            )
+        print("channel", cid, new_name, "models", len(parts))
+        target = (cid, new_name, merged)
 
     def get_opt(key):
         cur.execute("SELECT value FROM options WHERE key=?", (key,))
@@ -209,9 +225,8 @@ def main():
         unit = "/秒" if m.get("billing") in ("per_second", "settle_cost", "pack_or_ref_second") else "/次"
         if m.get("billing") == "pack_or_ref_second":
             unit = "/档或秒"
-        desc = m.get("desc_zh") or (
-            "%s · $%s%s（上游×%.1f，出片按实付结算）" % (mid, sell, unit, markup)
-        )
+        # Public description: no supplier / markup wording
+        desc = m.get("desc_zh") or ("%s · $%s%s" % (mid, sell, unit))
 
         model_sql = "SELECT id FROM models WHERE model_name=?"
         if "deleted_at" in m_cols:
@@ -278,6 +293,18 @@ def main():
             vals.append(mrow[0])
             cur.execute("UPDATE models SET %s WHERE id=?" % ",".join(sets), vals)
             print("marketplace updated", mid, "default_sell", sell)
+
+        # Abilities so model appears online / in pricing for default group
+        ch_id = target[0]
+        try:
+            cur.execute("DELETE FROM abilities WHERE model=?", (mid,))
+            cur.execute(
+                'INSERT OR IGNORE INTO abilities("group", model, channel_id, enabled, priority, weight) VALUES (?,?,?,?,?,?)',
+                ("default", mid, ch_id, 1, 0, 1),
+            )
+            print("abilities", mid, "-> channel", ch_id)
+        except Exception as e:
+            print("abilities skip", mid, e)
 
         out.append({"model": mid, "default_sell_usd": sell})
 

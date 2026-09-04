@@ -250,7 +250,7 @@ async function ensureMarketplace(auth) {
       "claude-fable-5-1": "Claude 旗舰 5.1 · 长周期 Agent / 复杂编码 / 重度知识分析",
       "gemini-3.8-flash": "Gemini 3.8 Flash · 更快更强的多模态轻量模型",
       "grok-imagine-video-1.5-preview": "Grok Imagine Video 1.5 Preview · 按秒 $0.08825(480p)/$0.1545(720p)",
-      "grok-1.5-video": "Grok 1.5 Video · 按次 $0.60675/次（上游 $0.2427×2.5）",
+      "grok-1.5-video": "Grok 1.5 Video · 按次 $0.60675/次",
       "veo_3_1-components": "Google Veo 3.1 Components：约 8 秒 · $0.14125/次",
     };
     const payload = {

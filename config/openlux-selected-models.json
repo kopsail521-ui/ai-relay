@@ -1,9 +1,9 @@
 {
-  "source": "OpenLux pricing screenshots 2026-09-04",
+  "source": "openlux pricing screenshots 2026-09-04",
   "base_url": "https://openlux.apifox.cn",
   "channel_name": "openlux-video",
   "markup": 2.5,
-  "note": "售价 = 上游价 × 2.5。两个 Grok 视频模型都要上：imagine 按秒；grok-1.5-video 按次；veo 按次。",
+  "note": "内部进货价×2.5；对外文案勿写供应商名/倍率。",
   "models": [
     {
       "id": "grok-imagine-video-1.5-preview",
@@ -24,7 +24,7 @@
       },
       "sell_image_usd": 0.011025,
       "model_price_default_usd": 0.08825,
-      "desc_zh": "Grok Imagine Video 1.5 Preview · 按秒：$0.08825/秒(480p)、$0.1545/秒(720p)；输入图 $0.011025/张（上游×2.5）· POST /v1/videos/generations"
+      "desc_zh": "Grok Imagine Video 1.5 Preview · 按秒：$0.08825/秒(480p)、$0.1545/秒(720p)；输入图 $0.011025/张 · POST /v1/videos/generations"
     },
     {
       "id": "grok-1.5-video",
@@ -39,7 +39,7 @@
       "model_price_usd": 0.60675,
       "duration_range": "1-15s",
       "resolutions": ["480p", "720p", "1080p"],
-      "desc_zh": "Grok 1.5 Video · 按次 $0.60675/次（上游 $0.2427 ×2.5）；文生/参考图，1–15 秒，480p/720p/1080p · POST /v1/videos"
+      "desc_zh": "Grok 1.5 Video · 按次 $0.60675/次；文生/参考图，1–15 秒，480p/720p/1080p · POST /v1/videos"
     },
     {
       "id": "veo_3_1-components",
@@ -53,7 +53,7 @@
       "sell_usd": 0.14125,
       "fixed_seconds": 8,
       "model_price_usd": 0.14125,
-      "desc_zh": "Veo 3.1 Components · 按次 $0.14125/次（上游 $0.0565 ×2.5，固定约 8 秒；首帧参考，不支持尾帧）"
+      "desc_zh": "Veo 3.1 Components · 按次 $0.14125/次；约 8 秒，支持首帧"
     }
   ]
 }

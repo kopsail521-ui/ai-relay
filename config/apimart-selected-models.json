@@ -1,9 +1,9 @@
 {
-  "source": "APIMart pricing screenshots 2026-09-04（当前价格）",
+  "source": "video pricing 2026-09-04",
   "base_url": "https://api.apimart.ai",
-  "channel_name": "apimart-video",
+  "channel_name": "keyo-video-gen",
   "markup": 1.2,
-  "note": "售价 = 网站「当前价格」USD × 1.2。凡标注 /秒 的规格，Keyo 也按秒展示与预扣；出片后仍可用上游 cost×1.2 结算。",
+  "note": "内部进货价×1.2；对外文案勿写供应商名/倍率。",
   "endpoint_submit": "POST /v1/videos/generations",
   "endpoint_poll": "GET /v1/tasks/{task_id}",
   "models": [
@@ -16,7 +16,7 @@
       "upstream_usd_per_second": 0.088,
       "sell_usd_per_second": 0.1056,
       "model_price_usd": 0.1056,
-      "desc_zh": "Gemini Omni 1.1 Flash · $0.1056/秒（上游 0.88 Credits≈$0.088/秒 ×1.2）"
+      "desc_zh": "Gemini Omni 1.1 Flash 视频 · $0.1056/秒"
     },
     {
       "id": "gemini-omni-1.1-flash-ext",
@@ -39,7 +39,7 @@
       "upstream_ref_usd_per_second": { "360P": 0.04, "720P": 0.08, "1080P": 0.08, "4K": 0.24 },
       "sell_ref_usd_per_second": { "360P": 0.048, "720P": 0.096, "1080P": 0.096, "4K": 0.288 },
       "model_price_usd": 0.42,
-      "desc_zh": "Omni Ext · 标准生成按档位（如 720P-8s $0.42/次）；参考视频按秒（720P/1080P $0.096/秒）。上游当前价×1.2"
+      "desc_zh": "Gemini Omni Ext · 标准按档（如 720P-8s $0.42）；参考视频按秒（720P/1080P $0.096/秒）"
     },
     {
       "id": "seedance-2.5",
@@ -58,7 +58,7 @@
         "1080P": 0.461856, "1080P-input": 0.275904
       },
       "model_price_usd": 0.115296,
-      "desc_zh": "Seedance 2.5 · 按秒；无参考用输出价，有参考视频用 *-input 价×(参考秒+生成秒)。示例 480P $0.115296/秒"
+      "desc_zh": "Seedance 2.5 · 按秒；480P $0.1153/秒；有参考用 input 档×(参考+生成)秒"
     },
     {
       "id": "seedance-2.0",
@@ -79,7 +79,7 @@
         "4K": 0.8664, "4K-input": 0.533184
       },
       "model_price_usd": 0.0792,
-      "desc_zh": "Seedance 2.0 · 按秒；480P $0.0792/秒，有上传视频用 *-input 价×(参考+生成)秒"
+      "desc_zh": "Seedance 2.0 · 按秒；480P $0.0792/秒；有上传视频用 input 档"
     },
     {
       "id": "flux-3-video",
@@ -98,7 +98,7 @@
         "V2V-HD": 0.3936, "V2V-FHD": 0.5088
       },
       "model_price_usd": 0.1632,
-      "desc_zh": "FLUX.3 Video · 按秒；DRAFT $0.0576、HD $0.1632、FHD $0.2784/秒（当前价×1.2）"
+      "desc_zh": "FLUX.3 Video · 按秒；DRAFT $0.0576、HD $0.1632、FHD $0.2784/秒"
     },
     {
       "id": "MiniMax-H3",
@@ -111,7 +111,7 @@
       "upstream_image_usd": 0.02288,
       "sell_image_usd": 0.027456,
       "model_price_usd": 0.068544,
-      "desc_zh": "MiniMax-H3 · 按秒 768P $0.068544、2K $0.109728；参考图超出 5 张后 $0.027456/张"
+      "desc_zh": "MiniMax-H3 · 按秒 768P $0.068544、2K $0.109728；参考图超 5 张后 $0.027456/张"
     },
     {
       "id": "wan3.0-video",

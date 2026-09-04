@@ -651,13 +651,13 @@
 <tr><td class="model"><button type="button" class="model-btn" data-copy="grok-imagine-video-1.5-preview">grok-imagine-video-1.5-preview</button></td><td class="price">$0.08825 <span data-i18n="perSecond"></span> (480p)</td><td class="note-cell" data-i18n="nGrokImagineVideo"></td></tr>
 <tr><td class="model"><button type="button" class="model-btn" data-copy="grok-1.5-video">grok-1.5-video</button></td><td class="price">$0.60675 <span data-i18n="perVideo"></span></td><td class="note-cell" data-i18n="nGrokVideo"></td></tr>
 <tr><td class="model"><button type="button" class="model-btn" data-copy="veo_3_1-components">veo_3_1-components</button></td><td class="price">$0.14125 <span data-i18n="perVideo"></span></td><td class="note-cell" data-i18n="nVeoComponents"></td></tr>
-<tr><td class="model"><button type="button" class="model-btn" data-copy="gemini-omni-1.1-flash">gemini-omni-1.1-flash</button></td><td class="price">$0.1056 <span data-i18n="perSecond"></span></td><td class="note-cell">APIMart · /v1/videos/generations</td></tr>
-<tr><td class="model"><button type="button" class="model-btn" data-copy="gemini-omni-1.1-flash-ext">gemini-omni-1.1-flash-ext</button></td><td class="price">$0.42 <span data-i18n="perVideo"></span> / $0.096 <span data-i18n="perSecond"></span></td><td class="note-cell">APIMart Ext · pack or ref/s</td></tr>
-<tr><td class="model"><button type="button" class="model-btn" data-copy="seedance-2.5">seedance-2.5</button></td><td class="price">$0.1153+ <span data-i18n="perSecond"></span></td><td class="note-cell">APIMart · by resolution</td></tr>
-<tr><td class="model"><button type="button" class="model-btn" data-copy="seedance-2.0">seedance-2.0</button></td><td class="price">$0.0792+ <span data-i18n="perSecond"></span></td><td class="note-cell">APIMart</td></tr>
-<tr><td class="model"><button type="button" class="model-btn" data-copy="flux-3-video">flux-3-video</button></td><td class="price">$0.0576–$0.5088 <span data-i18n="perSecond"></span></td><td class="note-cell">APIMart FLUX 3</td></tr>
-<tr><td class="model"><button type="button" class="model-btn" data-copy="MiniMax-H3">MiniMax-H3</button></td><td class="price">$0.0685 / $0.1097 <span data-i18n="perSecond"></span></td><td class="note-cell">APIMart · 768P / 2K</td></tr>
-<tr><td class="model"><button type="button" class="model-btn" data-copy="wan3.0-video">wan3.0-video</button></td><td class="price">$0.0412+ <span data-i18n="perSecond"></span></td><td class="note-cell">APIMart Wan 3.0</td></tr>
+<tr><td class="model"><button type="button" class="model-btn" data-copy="gemini-omni-1.1-flash">gemini-omni-1.1-flash</button></td><td class="price">$0.1056 <span data-i18n="perSecond"></span></td><td class="note-cell">POST /v1/videos/generations</td></tr>
+<tr><td class="model"><button type="button" class="model-btn" data-copy="gemini-omni-1.1-flash-ext">gemini-omni-1.1-flash-ext</button></td><td class="price">$0.42 <span data-i18n="perVideo"></span> / $0.096 <span data-i18n="perSecond"></span></td><td class="note-cell">pack or ref /s</td></tr>
+<tr><td class="model"><button type="button" class="model-btn" data-copy="seedance-2.5">seedance-2.5</button></td><td class="price">$0.1153+ <span data-i18n="perSecond"></span></td><td class="note-cell">by resolution</td></tr>
+<tr><td class="model"><button type="button" class="model-btn" data-copy="seedance-2.0">seedance-2.0</button></td><td class="price">$0.0792+ <span data-i18n="perSecond"></span></td><td class="note-cell">by resolution</td></tr>
+<tr><td class="model"><button type="button" class="model-btn" data-copy="flux-3-video">flux-3-video</button></td><td class="price">$0.0576–$0.5088 <span data-i18n="perSecond"></span></td><td class="note-cell">FLUX.3 tiers</td></tr>
+<tr><td class="model"><button type="button" class="model-btn" data-copy="MiniMax-H3">MiniMax-H3</button></td><td class="price">$0.0685 / $0.1097 <span data-i18n="perSecond"></span></td><td class="note-cell">768P / 2K</td></tr>
+<tr><td class="model"><button type="button" class="model-btn" data-copy="wan3.0-video">wan3.0-video</button></td><td class="price">$0.0412+ <span data-i18n="perSecond"></span></td><td class="note-cell">Wan 3.0</td></tr>
 
             </tbody>
           </table>
@@ -991,7 +991,7 @@ const I18N = {
     "perVideo": "/次",
     "perSecond": "/秒",
     "nGrokVideo": "Grok 1.5 · 文生/参考图 · 1–15 秒 · $0.60675/次",
-    "nGrokImagineVideo": "Grok Imagine · 按秒 480p/720p（×2.5）",
+    "nGrokImagineVideo": "Grok Imagine · $0.08825/s 480p · $0.1545/s 720p",
     "nVeoComponents": "Veo 3.1 · 约 8 秒 · $0.14125/次",
     "videoHint": "异步：POST /v1/videos 创建任务，再 GET /v1/videos/{id} 查询。扣费以控制台为准。",
     "tocSpeech": "语音",
@@ -1098,7 +1098,7 @@ const I18N = {
     "perVideo": "/次",
     "perSecond": "/秒",
     "nGrokVideo": "Grok 1.5 · 文生/参考图 · 1–15 秒 · $0.60675/次",
-    "nGrokImagineVideo": "Grok Imagine · 按秒 480p/720p（×2.5）",
+    "nGrokImagineVideo": "Grok Imagine · $0.08825/s 480p · $0.1545/s 720p",
     "nVeoComponents": "Veo 3.1 · 約 8 秒 · $0.14125/次",
     "videoHint": "非同步：POST /v1/videos 建立任務，再 GET /v1/videos/{id} 查詢。扣費以控制台為準。",
     "tocSpeech": "語音",

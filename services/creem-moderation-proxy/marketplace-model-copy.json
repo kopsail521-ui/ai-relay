@@ -1152,15 +1152,15 @@
     "price_key_en": "Per request"
   },
   "gemma-4-26B-A4B-it": {
-    "description": "Google Gemma 4 26B MoE 指令模型（约激活 4B 参数），擅长推理、编程与多模态对话。 计费：输入 $2.4 / 输出 $2.4（每百万 tokens）。",
+    "description": "Google Gemma 4 26B MoE 指令模型（约激活 4B 参数），擅长推理、编程与多模态对话。 计费：输入 $1.2 / 输出 $1.2（每百万 tokens）。",
     "descriptions": {
-      "zhCN": "Google Gemma 4 26B MoE 指令模型（约激活 4B 参数），擅长推理、编程与多模态对话。 计费：输入 $2.4 / 输出 $2.4（每百万 tokens）。",
-      "zhTW": "Google Gemma 4 26B MoE 指令模型（約啟動 4B 參數），擅長推理、程式設計與多模態對話。 計費：輸入 $2.4 / 輸出 $2.4（每百萬 tokens）。",
-      "en": "Google Gemma 4 26B MoE instruction model (~4B active). Strong reasoning, coding, and multimodal chat. Pricing: $2.4 input / $2.4 output per 1M tokens.",
-      "fr": "Modèle d’instruction Google Gemma 4 26B MoE (~4B actifs). Raisonnement, code et chat multimodal. Tarif : $2.4 entrée / $2.4 sortie pour 1M tokens.",
-      "ru": "Google Gemma 4 26B MoE instruction (~4B активных): рассуждение, код и мультимодальный чат. Тариф: вход $2.4 / выход $2.4 за 1M токенов.",
-      "ja": "Google Gemma 4 26B MoE 指示モデル（約 4B 活性）。推論・コーディング・マルチモーダル対話に強い。 料金：入力 $2.4 / 出力 $2.4（100万 tokens あたり）。",
-      "vi": "Mô hình instruction Google Gemma 4 26B MoE (~4B active): mạnh suy luận, lập trình và chat đa phương thức. Giá: vào $2.4 / ra $2.4 mỗi 1M tokens."
+      "zhCN": "Google Gemma 4 26B MoE 指令模型（约激活 4B 参数），擅长推理、编程与多模态对话。 计费：输入 $1.2 / 输出 $1.2（每百万 tokens）。",
+      "zhTW": "Google Gemma 4 26B MoE 指令模型（約啟動 4B 參數），擅長推理、程式設計與多模態對話。 計費：輸入 $1.2 / 輸出 $1.2（每百萬 tokens）。",
+      "en": "Google Gemma 4 26B MoE instruction model (~4B active). Strong reasoning, coding, and multimodal chat. Pricing: $1.2 input / $1.2 output per 1M tokens.",
+      "fr": "Modèle d’instruction Google Gemma 4 26B MoE (~4B actifs). Raisonnement, code et chat multimodal. Tarif : $1.2 entrée / $1.2 sortie pour 1M tokens.",
+      "ru": "Google Gemma 4 26B MoE instruction (~4B активных): рассуждение, код и мультимодальный чат. Тариф: вход $1.2 / выход $1.2 за 1M токенов.",
+      "ja": "Google Gemma 4 26B MoE 指示モデル（約 4B 活性）。推論・コーディング・マルチモーダル対話に強い。 料金：入力 $1.2 / 出力 $1.2（100万 tokens あたり）。",
+      "vi": "Mô hình instruction Google Gemma 4 26B MoE (~4B active): mạnh suy luận, lập trình và chat đa phương thức. Giá: vào $1.2 / ra $1.2 mỗi 1M tokens."
     },
     "unit": "token",
     "badge": {
@@ -1190,8 +1190,8 @@
       "ja": "",
       "vi": ""
     },
-    "description_zh": "Google Gemma 4 26B MoE 指令模型（约激活 4B 参数），擅长推理、编程与多模态对话。 计费：输入 $2.4 / 输出 $2.4（每百万 tokens）。",
-    "description_en": "Google Gemma 4 26B MoE instruction model (~4B active). Strong reasoning, coding, and multimodal chat. Pricing: $2.4 input / $2.4 output per 1M tokens.",
+    "description_zh": "Google Gemma 4 26B MoE 指令模型（约激活 4B 参数），擅长推理、编程与多模态对话。 计费：输入 $1.2 / 输出 $1.2（每百万 tokens）。",
+    "description_en": "Google Gemma 4 26B MoE instruction model (~4B active). Strong reasoning, coding, and multimodal chat. Pricing: $1.2 input / $1.2 output per 1M tokens.",
     "badge_zh": "按 Token 计费",
     "badge_en": "Token-based",
     "suffix_zh": "",

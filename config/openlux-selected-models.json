@@ -120,12 +120,12 @@
         "group_ratio": 0.08824,
         "cost_in_usd": 0.4412,
         "cost_out_usd": 2.206,
-        "sell_x5_in": 2.206,
-        "sell_x5_out": 11.03
+        "sell_x5_in": 1.103,
+        "sell_x5_out": 5.515
       },
-      "sell_in_usd": 2.206,
-      "sell_out_usd": 11.03,
-      "our_model_ratio": 1.103,
+      "sell_in_usd": 1.103,
+      "sell_out_usd": 5.515,
+      "our_model_ratio": 0.5515,
       "our_completion_ratio": 5,
       "channels": [
         {
@@ -384,12 +384,12 @@
         "group_ratio": 0.17647,
         "cost_in_usd": 1.7647,
         "cost_out_usd": 8.8235,
-        "sell_x5_in": 8.8235,
-        "sell_x5_out": 44.1175
+        "sell_x5_in": 4.41175,
+        "sell_x5_out": 22.05875
       },
-      "sell_in_usd": 8.8235,
-      "sell_out_usd": 44.1175,
-      "our_model_ratio": 4.41175,
+      "sell_in_usd": 4.41175,
+      "sell_out_usd": 22.05875,
+      "our_model_ratio": 2.205875,
       "our_completion_ratio": 5,
       "channels": [
         {
@@ -472,12 +472,12 @@
         "group_ratio": 0.29412,
         "cost_in_usd": 2.9412,
         "cost_out_usd": 14.706,
-        "sell_x5_in": 14.706,
-        "sell_x5_out": 73.53
+        "sell_x5_in": 7.353,
+        "sell_x5_out": 36.765
       },
-      "sell_in_usd": 14.706,
-      "sell_out_usd": 73.53,
-      "our_model_ratio": 7.353,
+      "sell_in_usd": 7.353,
+      "sell_out_usd": 36.765,
+      "our_model_ratio": 3.6765,
       "our_completion_ratio": 5,
       "channels": [
         {
@@ -504,12 +504,12 @@
         "group_ratio": 0.08824,
         "cost_in_usd": 0.17648,
         "cost_out_usd": 0.8824,
-        "sell_x5_in": 0.8824,
-        "sell_x5_out": 4.412
+        "sell_x5_in": 0.4412,
+        "sell_x5_out": 2.206
       },
-      "sell_in_usd": 0.8824,
-      "sell_out_usd": 4.412,
-      "our_model_ratio": 0.4412,
+      "sell_in_usd": 0.4412,
+      "sell_out_usd": 2.206,
+      "our_model_ratio": 0.2206,
       "our_completion_ratio": 5,
       "channels": [
         {
@@ -600,12 +600,12 @@
         "group_ratio": 0.5,
         "cost_in_usd": 0.66,
         "cost_out_usd": 1.98,
-        "sell_x5_in": 3.3,
-        "sell_x5_out": 9.9
+        "sell_x5_in": 1.65,
+        "sell_x5_out": 4.95
       },
-      "sell_in_usd": 3.3,
-      "sell_out_usd": 9.9,
-      "our_model_ratio": 1.65,
+      "sell_in_usd": 1.65,
+      "sell_out_usd": 4.95,
+      "our_model_ratio": 0.825,
       "our_completion_ratio": 3,
       "channels": [
         {
@@ -831,12 +831,12 @@
         "group_ratio": 0.5,
         "cost_in_usd": 1.5,
         "cost_out_usd": 7.5,
-        "sell_x5_in": 7.5,
-        "sell_x5_out": 37.5
+        "sell_x5_in": 3.75,
+        "sell_x5_out": 18.75
       },
-      "sell_in_usd": 7.5,
-      "sell_out_usd": 37.5,
-      "our_model_ratio": 3.75,
+      "sell_in_usd": 3.75,
+      "sell_out_usd": 18.75,
+      "our_model_ratio": 1.875,
       "our_completion_ratio": 5,
       "channels": [
         {
@@ -887,12 +887,12 @@
         "group_ratio": 0.5,
         "cost_in_usd": 0.22,
         "cost_out_usd": 0.66,
-        "sell_x5_in": 1.1,
-        "sell_x5_out": 3.3
+        "sell_x5_in": 0.55,
+        "sell_x5_out": 1.65
       },
-      "sell_in_usd": 1.1,
-      "sell_out_usd": 3.3,
-      "our_model_ratio": 0.55,
+      "sell_in_usd": 0.55,
+      "sell_out_usd": 1.65,
+      "our_model_ratio": 0.275,
       "our_completion_ratio": 3,
       "channels": [
         {
@@ -982,12 +982,12 @@
         "group_ratio": 0.5,
         "cost_in_usd": 0.15,
         "cost_out_usd": 0.6,
-        "sell_x5_in": 0.75,
-        "sell_x5_out": 3
+        "sell_x5_in": 0.375,
+        "sell_x5_out": 1.5
       },
-      "sell_in_usd": 0.75,
-      "sell_out_usd": 3,
-      "our_model_ratio": 0.375,
+      "sell_in_usd": 0.375,
+      "sell_out_usd": 1.5,
+      "our_model_ratio": 0.1875,
       "our_completion_ratio": 4,
       "channels": [
         {
@@ -1030,12 +1030,12 @@
         "group_ratio": 0.5,
         "cost_in_usd": 0.7,
         "cost_out_usd": 2.2,
-        "sell_x5_in": 3.5,
-        "sell_x5_out": 11
+        "sell_x5_in": 1.75,
+        "sell_x5_out": 5.5
       },
-      "sell_in_usd": 3.5,
-      "sell_out_usd": 11,
-      "our_model_ratio": 1.75,
+      "sell_in_usd": 1.75,
+      "sell_out_usd": 5.5,
+      "our_model_ratio": 0.875,
       "our_completion_ratio": 3.142857,
       "channels": [
         {

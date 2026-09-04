@@ -982,9 +982,9 @@
         "mode": "token",
         "cost_in_cny_per_m": 3.5,
         "cost_out_cny_per_m": 3.5,
-        "sell_in_cny_per_m": 17.5,
-        "sell_out_cny_per_m": 17.5,
-        "model_ratio": 1.19863,
+        "sell_in_cny_per_m": 8.75,
+        "sell_out_cny_per_m": 8.75,
+        "model_ratio": 0.599315,
         "completion_ratio": 1
       },
       "relay": "newapi_native",

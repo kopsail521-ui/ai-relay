@@ -24,7 +24,7 @@
       },
       "sell_image_usd": 0.011025,
       "model_price_default_usd": 0.08825,
-      "desc_zh": "Grok Imagine Video 1.5 Preview · 按秒：$0.08825/秒(480p)、$0.1545/秒(720p)；输入图 $0.011025/张 · POST /v1/videos/generations"
+      "desc_zh": "Grok Imagine Video 1.5 Preview：图生短视频预览模型，支持首帧参考。"
     },
     {
       "id": "grok-1.5-video",
@@ -43,7 +43,7 @@
         "720p",
         "1080p"
       ],
-      "desc_zh": "Grok 1.5 Video · 按次 $0.60675/次；文生/参考图，1–15 秒，480p/720p/1080p · POST /v1/videos"
+      "desc_zh": "Grok 1.5 Video：文生/参考图视频，1–15 秒，480p/720p/1080p。"
     },
     {
       "id": "veo_3_1-components",
@@ -57,7 +57,7 @@
       "sell_usd": 0.14125,
       "fixed_seconds": 8,
       "model_price_usd": 0.14125,
-      "desc_zh": "Veo 3.1 Components · 按次 $0.14125/次；约 8 秒，支持首帧"
+      "desc_zh": "Veo 3.1 Components：约 8 秒视频，支持首帧参考。"
     }
   ]
 }

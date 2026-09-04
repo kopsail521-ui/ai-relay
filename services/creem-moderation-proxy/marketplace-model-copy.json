@@ -2234,15 +2234,15 @@
     "price_key_en": ""
   },
   "grok-1.5-video": {
-    "description": "Grok 1.5 视频：文生/参考图，1–15 秒，480p/720p/1080p。计费：.60675/次。",
+    "description": "Grok 1.5 Video：文生/参考图视频，1–15 秒，480p/720p/1080p。",
     "descriptions": {
-      "zhCN": "Grok 1.5 视频：文生/参考图，1–15 秒，480p/720p/1080p。计费：.60675/次。",
-      "zhTW": "Grok 1.5 视频：文生/参考图，1–15 秒，480p/720p/1080p。计费：.60675/次。",
-      "en": "Grok 1.5 video: text/ref image, 1–15s, 480p/720p/1080p. Pricing: .60675/request.",
-      "fr": "Grok 1.5 video: text/ref image, 1–15s, 480p/720p/1080p. Pricing: .60675/request.",
-      "ru": "Grok 1.5 video: text/ref image, 1–15s, 480p/720p/1080p. Pricing: .60675/request.",
-      "ja": "Grok 1.5 video: text/ref image, 1–15s, 480p/720p/1080p. Pricing: .60675/request.",
-      "vi": "Grok 1.5 video: text/ref image, 1–15s, 480p/720p/1080p. Pricing: .60675/request."
+      "zhCN": "Grok 1.5 Video：文生/参考图视频，1–15 秒，480p/720p/1080p。",
+      "zhTW": "Grok 1.5 Video：文生/参考图视频，1–15 秒，480p/720p/1080p。",
+      "en": "Grok 1.5 Video: text/ref-image to video, 1–15s, 480p/720p/1080p.",
+      "fr": "Grok 1.5 Video: text/ref-image to video, 1–15s, 480p/720p/1080p.",
+      "ru": "Grok 1.5 Video: text/ref-image to video, 1–15s, 480p/720p/1080p.",
+      "ja": "Grok 1.5 Video: text/ref-image to video, 1–15s, 480p/720p/1080p.",
+      "vi": "Grok 1.5 Video: text/ref-image to video, 1–15s, 480p/720p/1080p."
     },
     "unit": "request",
     "badge": {
@@ -2278,19 +2278,33 @@
     "suffix_en": "/ request",
     "price_key_zh": "每次请求",
     "price_key_en": "Per request",
-    "description_zh": "Grok 1.5 视频：文生/参考图，1–15 秒，480p/720p/1080p。计费：.60675/次。",
-    "description_en": "Grok 1.5 video: text/ref image, 1–15s, 480p/720p/1080p. Pricing: .60675/request."
+    "description_zh": "Grok 1.5 Video：文生/参考图视频，1–15 秒，480p/720p/1080p。",
+    "description_en": "Grok 1.5 Video: text/ref-image to video, 1–15s, 480p/720p/1080p.",
+    "price_table": {
+      "columns": [
+        "规格",
+        "说明",
+        "售价"
+      ],
+      "rows": [
+        [
+          "标准生成",
+          "按次",
+          ".60675 / 次"
+        ]
+      ]
+    }
   },
   "veo_3_1-components": {
-    "description": "Veo 3.1 Components：约 8 秒，支持首帧。计费：.14125/次。",
+    "description": "Veo 3.1 Components：约 8 秒视频，支持首帧参考。",
     "descriptions": {
-      "zhCN": "Veo 3.1 Components：约 8 秒，支持首帧。计费：.14125/次。",
-      "zhTW": "Veo 3.1 Components：约 8 秒，支持首帧。计费：.14125/次。",
-      "en": "Veo 3.1 Components: ~8s, first-frame. Pricing: .14125/request.",
-      "fr": "Veo 3.1 Components: ~8s, first-frame. Pricing: .14125/request.",
-      "ru": "Veo 3.1 Components: ~8s, first-frame. Pricing: .14125/request.",
-      "ja": "Veo 3.1 Components: ~8s, first-frame. Pricing: .14125/request.",
-      "vi": "Veo 3.1 Components: ~8s, first-frame. Pricing: .14125/request."
+      "zhCN": "Veo 3.1 Components：约 8 秒视频，支持首帧参考。",
+      "zhTW": "Veo 3.1 Components：约 8 秒视频，支持首帧参考。",
+      "en": "Veo 3.1 Components: ~8s video with first-frame input.",
+      "fr": "Veo 3.1 Components: ~8s video with first-frame input.",
+      "ru": "Veo 3.1 Components: ~8s video with first-frame input.",
+      "ja": "Veo 3.1 Components: ~8s video with first-frame input.",
+      "vi": "Veo 3.1 Components: ~8s video with first-frame input."
     },
     "unit": "request",
     "badge": {
@@ -2326,19 +2340,33 @@
     "suffix_en": "/ request",
     "price_key_zh": "每次请求",
     "price_key_en": "Per request",
-    "description_zh": "Veo 3.1 Components：约 8 秒，支持首帧。计费：.14125/次。",
-    "description_en": "Veo 3.1 Components: ~8s, first-frame. Pricing: .14125/request."
+    "description_zh": "Veo 3.1 Components：约 8 秒视频，支持首帧参考。",
+    "description_en": "Veo 3.1 Components: ~8s video with first-frame input.",
+    "price_table": {
+      "columns": [
+        "规格",
+        "说明",
+        "售价"
+      ],
+      "rows": [
+        [
+          "标准生成",
+          "约 8 秒 / 次",
+          ".14125 / 次"
+        ]
+      ]
+    }
   },
   "gemini-omni-1.1-flash": {
-    "description": "Gemini Omni 1.1 Flash 视频。计费：.1056/秒。",
+    "description": "Gemini Omni 1.1 Flash：多模态视频生成。",
     "descriptions": {
-      "zhCN": "Gemini Omni 1.1 Flash 视频。计费：.1056/秒。",
-      "zhTW": "Gemini Omni 1.1 Flash 视频。计费：.1056/秒。",
-      "en": "Gemini Omni 1.1 Flash video. Pricing: .1056/second.",
-      "fr": "Gemini Omni 1.1 Flash video. Pricing: .1056/second.",
-      "ru": "Gemini Omni 1.1 Flash video. Pricing: .1056/second.",
-      "ja": "Gemini Omni 1.1 Flash video. Pricing: .1056/second.",
-      "vi": "Gemini Omni 1.1 Flash video. Pricing: .1056/second."
+      "zhCN": "Gemini Omni 1.1 Flash：多模态视频生成。",
+      "zhTW": "Gemini Omni 1.1 Flash：多模态视频生成。",
+      "en": "Gemini Omni 1.1 Flash multimodal video generation.",
+      "fr": "Gemini Omni 1.1 Flash multimodal video generation.",
+      "ru": "Gemini Omni 1.1 Flash multimodal video generation.",
+      "ja": "Gemini Omni 1.1 Flash multimodal video generation.",
+      "vi": "Gemini Omni 1.1 Flash multimodal video generation."
     },
     "unit": "second",
     "badge": {
@@ -2374,19 +2402,33 @@
     "suffix_en": "/ second",
     "price_key_zh": "每秒",
     "price_key_en": "Per second",
-    "description_zh": "Gemini Omni 1.1 Flash 视频。计费：.1056/秒。",
-    "description_en": "Gemini Omni 1.1 Flash video. Pricing: .1056/second."
+    "description_zh": "Gemini Omni 1.1 Flash：多模态视频生成。",
+    "description_en": "Gemini Omni 1.1 Flash multimodal video generation.",
+    "price_table": {
+      "columns": [
+        "规格",
+        "说明",
+        "售价"
+      ],
+      "rows": [
+        [
+          "输出视频",
+          "按秒",
+          ".1056 / 秒"
+        ]
+      ]
+    }
   },
   "gemini-omni-1.1-flash-ext": {
-    "description": "Gemini Omni Ext：标准按档位（如 720P-8s .42）；参考视频按秒（720P/1080P .096/秒）。",
+    "description": "Gemini Omni Ext：标准按分辨率×时长档位；上传参考视频时按秒计费。",
     "descriptions": {
-      "zhCN": "Gemini Omni Ext：标准按档位（如 720P-8s .42）；参考视频按秒（720P/1080P .096/秒）。",
-      "zhTW": "Gemini Omni Ext：标准按档位（如 720P-8s .42）；参考视频按秒（720P/1080P .096/秒）。",
-      "en": "Gemini Omni Ext: packs (e.g. 720P-8s .42) or ref-video per second (720P/1080P .096/s).",
-      "fr": "Gemini Omni Ext: packs (e.g. 720P-8s .42) or ref-video per second (720P/1080P .096/s).",
-      "ru": "Gemini Omni Ext: packs (e.g. 720P-8s .42) or ref-video per second (720P/1080P .096/s).",
-      "ja": "Gemini Omni Ext: packs (e.g. 720P-8s .42) or ref-video per second (720P/1080P .096/s).",
-      "vi": "Gemini Omni Ext: packs (e.g. 720P-8s .42) or ref-video per second (720P/1080P .096/s)."
+      "zhCN": "Gemini Omni Ext：标准按分辨率×时长档位；上传参考视频时按秒计费。",
+      "zhTW": "Gemini Omni Ext：标准按分辨率×时长档位；上传参考视频时按秒计费。",
+      "en": "Gemini Omni Ext: fixed packs by resolution×duration; ref-video billed per second.",
+      "fr": "Gemini Omni Ext: fixed packs by resolution×duration; ref-video billed per second.",
+      "ru": "Gemini Omni Ext: fixed packs by resolution×duration; ref-video billed per second.",
+      "ja": "Gemini Omni Ext: fixed packs by resolution×duration; ref-video billed per second.",
+      "vi": "Gemini Omni Ext: fixed packs by resolution×duration; ref-video billed per second."
     },
     "unit": "second",
     "badge": {
@@ -2422,19 +2464,58 @@
     "suffix_en": "/ second",
     "price_key_zh": "每秒",
     "price_key_en": "Per second",
-    "description_zh": "Gemini Omni Ext：标准按档位（如 720P-8s .42）；参考视频按秒（720P/1080P .096/秒）。",
-    "description_en": "Gemini Omni Ext: packs (e.g. 720P-8s .42) or ref-video per second (720P/1080P .096/s)."
+    "description_zh": "Gemini Omni Ext：标准按分辨率×时长档位；上传参考视频时按秒计费。",
+    "description_en": "Gemini Omni Ext: fixed packs by resolution×duration; ref-video billed per second.",
+    "price_table": {
+      "columns": [
+        "规格",
+        "类型",
+        "售价"
+      ],
+      "rows": [
+        [
+          "360P-4s / 6s / 8s / 10s",
+          "标准档位",
+          ".18 / .21 / .24 / .27"
+        ],
+        [
+          "720P/1080P-4s / 6s / 8s / 10s",
+          "标准档位",
+          ".30 / .36 / .42 / .48"
+        ],
+        [
+          "4K-4s / 6s / 8s / 10s",
+          "标准档位",
+          ".90 / .96 / .02 / .08"
+        ],
+        [
+          "参考视频 360P",
+          "按秒",
+          ".048 / 秒"
+        ],
+        [
+          "参考视频 720P/1080P",
+          "按秒",
+          ".096 / 秒"
+        ],
+        [
+          "参考视频 4K",
+          "按秒",
+          ".288 / 秒"
+        ]
+      ]
+    }
   },
   "seedance-2.5": {
-    "description": "Seedance 2.5 按秒：480P .1153、720P .2592、1080P .4619/秒；有参考用 input 档×(参考+生成)秒。",
+    "description": "Seedance 2.5：高质量视频生成；有参考视频时按时长合计计费。",
     "descriptions": {
-      "zhCN": "Seedance 2.5 按秒：480P .1153、720P .2592、1080P .4619/秒；有参考用 input 档×(参考+生成)秒。",
-      "zhTW": "Seedance 2.5 按秒：480P .1153、720P .2592、1080P .4619/秒；有参考用 input 档×(参考+生成)秒。",
-      "en": "Seedance 2.5 per second: 480P .1153, 720P .2592, 1080P .4619/s; with ref use input rate×(ref+out)s.",
-      "fr": "Seedance 2.5 per second: 480P .1153, 720P .2592, 1080P .4619/s; with ref use input rate×(ref+out)s.",
-      "ru": "Seedance 2.5 per second: 480P .1153, 720P .2592, 1080P .4619/s; with ref use input rate×(ref+out)s.",
-      "ja": "Seedance 2.5 per second: 480P .1153, 720P .2592, 1080P .4619/s; with ref use input rate×(ref+out)s.",
-      "vi": "Seedance 2.5 per second: 480P .1153, 720P .2592, 1080P .4619/s; with ref use input rate×(ref+out)s."
+      "zhCN": "Seedance 2.5：高质量视频生成；有参考视频时按时长合计计费。",
+      "zhTW": "Seedance 2.5：高质量视频生成；有参考视频时按时长合计计费。",
+      "en": "Seedance 2.5 video generation; with reference video, bill (ref + output) seconds.",
+      "fr": "Seedance 2.5 video generation; with reference video, bill (ref + output) seconds.",
+      "ru": "Seedance 2.5 video generation; with reference video, bill (ref + output) seconds.",
+      "ja": "Seedance 2.5 video generation; with reference video, bill (ref + output) seconds.",
+      "vi": "Seedance 2.5 video generation; with reference video, bill (ref + output) seconds."
     },
     "unit": "second",
     "badge": {
@@ -2470,19 +2551,58 @@
     "suffix_en": "/ second",
     "price_key_zh": "每秒",
     "price_key_en": "Per second",
-    "description_zh": "Seedance 2.5 按秒：480P .1153、720P .2592、1080P .4619/秒；有参考用 input 档×(参考+生成)秒。",
-    "description_en": "Seedance 2.5 per second: 480P .1153, 720P .2592, 1080P .4619/s; with ref use input rate×(ref+out)s."
+    "description_zh": "Seedance 2.5：高质量视频生成；有参考视频时按时长合计计费。",
+    "description_en": "Seedance 2.5 video generation; with reference video, bill (ref + output) seconds.",
+    "price_table": {
+      "columns": [
+        "分辨率",
+        "有参考视频",
+        "售价"
+      ],
+      "rows": [
+        [
+          "480P",
+          "否",
+          ".1153 / 秒"
+        ],
+        [
+          "480P",
+          "是（参考+生成）",
+          ".06912 / 秒"
+        ],
+        [
+          "720P",
+          "否",
+          ".2592 / 秒"
+        ],
+        [
+          "720P",
+          "是（参考+生成）",
+          ".15552 / 秒"
+        ],
+        [
+          "1080P",
+          "否",
+          ".4619 / 秒"
+        ],
+        [
+          "1080P",
+          "是（参考+生成）",
+          ".2759 / 秒"
+        ]
+      ]
+    }
   },
   "seedance-2.0": {
-    "description": "Seedance 2.0 按秒：480P .0792、720P .1704、1080P .4253、4K .8664/秒。",
+    "description": "Seedance 2.0：视频生成；有上传参考视频时按时长合计计费。",
     "descriptions": {
-      "zhCN": "Seedance 2.0 按秒：480P .0792、720P .1704、1080P .4253、4K .8664/秒。",
-      "zhTW": "Seedance 2.0 按秒：480P .0792、720P .1704、1080P .4253、4K .8664/秒。",
-      "en": "Seedance 2.0 per second: 480P .0792, 720P .1704, 1080P .4253, 4K .8664/s.",
-      "fr": "Seedance 2.0 per second: 480P .0792, 720P .1704, 1080P .4253, 4K .8664/s.",
-      "ru": "Seedance 2.0 per second: 480P .0792, 720P .1704, 1080P .4253, 4K .8664/s.",
-      "ja": "Seedance 2.0 per second: 480P .0792, 720P .1704, 1080P .4253, 4K .8664/s.",
-      "vi": "Seedance 2.0 per second: 480P .0792, 720P .1704, 1080P .4253, 4K .8664/s."
+      "zhCN": "Seedance 2.0：视频生成；有上传参考视频时按时长合计计费。",
+      "zhTW": "Seedance 2.0：视频生成；有上传参考视频时按时长合计计费。",
+      "en": "Seedance 2.0 video generation; with uploaded reference, bill (ref + output) seconds.",
+      "fr": "Seedance 2.0 video generation; with uploaded reference, bill (ref + output) seconds.",
+      "ru": "Seedance 2.0 video generation; with uploaded reference, bill (ref + output) seconds.",
+      "ja": "Seedance 2.0 video generation; with uploaded reference, bill (ref + output) seconds.",
+      "vi": "Seedance 2.0 video generation; with uploaded reference, bill (ref + output) seconds."
     },
     "unit": "second",
     "badge": {
@@ -2518,19 +2638,68 @@
     "suffix_en": "/ second",
     "price_key_zh": "每秒",
     "price_key_en": "Per second",
-    "description_zh": "Seedance 2.0 按秒：480P .0792、720P .1704、1080P .4253、4K .8664/秒。",
-    "description_en": "Seedance 2.0 per second: 480P .0792, 720P .1704, 1080P .4253, 4K .8664/s."
+    "description_zh": "Seedance 2.0：视频生成；有上传参考视频时按时长合计计费。",
+    "description_en": "Seedance 2.0 video generation; with uploaded reference, bill (ref + output) seconds.",
+    "price_table": {
+      "columns": [
+        "分辨率",
+        "有参考视频",
+        "售价"
+      ],
+      "rows": [
+        [
+          "480P",
+          "否",
+          ".0792 / 秒"
+        ],
+        [
+          "480P",
+          "是（参考+生成）",
+          ".048 / 秒"
+        ],
+        [
+          "720P",
+          "否",
+          ".1704 / 秒"
+        ],
+        [
+          "720P",
+          "是（参考+生成）",
+          ".1030 / 秒"
+        ],
+        [
+          "1080P",
+          "否",
+          ".4253 / 秒"
+        ],
+        [
+          "1080P",
+          "是（参考+生成）",
+          ".2588 / 秒"
+        ],
+        [
+          "4K",
+          "否",
+          ".8664 / 秒"
+        ],
+        [
+          "4K",
+          "是（参考+生成）",
+          ".5332 / 秒"
+        ]
+      ]
+    }
   },
   "flux-3-video": {
-    "description": "FLUX.3 Video 按秒：DRAFT .0576、HD .1632、FHD .2784、V2V-FHD .5088/秒。",
+    "description": "FLUX.3 Video：多档位视频生成（含 V2V）。",
     "descriptions": {
-      "zhCN": "FLUX.3 Video 按秒：DRAFT .0576、HD .1632、FHD .2784、V2V-FHD .5088/秒。",
-      "zhTW": "FLUX.3 Video 按秒：DRAFT .0576、HD .1632、FHD .2784、V2V-FHD .5088/秒。",
-      "en": "FLUX.3 Video per second: DRAFT .0576, HD .1632, FHD .2784, V2V-FHD .5088/s.",
-      "fr": "FLUX.3 Video per second: DRAFT .0576, HD .1632, FHD .2784, V2V-FHD .5088/s.",
-      "ru": "FLUX.3 Video per second: DRAFT .0576, HD .1632, FHD .2784, V2V-FHD .5088/s.",
-      "ja": "FLUX.3 Video per second: DRAFT .0576, HD .1632, FHD .2784, V2V-FHD .5088/s.",
-      "vi": "FLUX.3 Video per second: DRAFT .0576, HD .1632, FHD .2784, V2V-FHD .5088/s."
+      "zhCN": "FLUX.3 Video：多档位视频生成（含 V2V）。",
+      "zhTW": "FLUX.3 Video：多档位视频生成（含 V2V）。",
+      "en": "FLUX.3 Video with DRAFT/HD/FHD and V2V tiers.",
+      "fr": "FLUX.3 Video with DRAFT/HD/FHD and V2V tiers.",
+      "ru": "FLUX.3 Video with DRAFT/HD/FHD and V2V tiers.",
+      "ja": "FLUX.3 Video with DRAFT/HD/FHD and V2V tiers.",
+      "vi": "FLUX.3 Video with DRAFT/HD/FHD and V2V tiers."
     },
     "unit": "second",
     "badge": {
@@ -2566,19 +2735,58 @@
     "suffix_en": "/ second",
     "price_key_zh": "每秒",
     "price_key_en": "Per second",
-    "description_zh": "FLUX.3 Video 按秒：DRAFT .0576、HD .1632、FHD .2784、V2V-FHD .5088/秒。",
-    "description_en": "FLUX.3 Video per second: DRAFT .0576, HD .1632, FHD .2784, V2V-FHD .5088/s."
+    "description_zh": "FLUX.3 Video：多档位视频生成（含 V2V）。",
+    "description_en": "FLUX.3 Video with DRAFT/HD/FHD and V2V tiers.",
+    "price_table": {
+      "columns": [
+        "规格",
+        "说明",
+        "售价"
+      ],
+      "rows": [
+        [
+          "DRAFT",
+          "按秒",
+          ".0576 / 秒"
+        ],
+        [
+          "V2V-DRAFT",
+          "按秒",
+          ".1152 / 秒"
+        ],
+        [
+          "HD",
+          "按秒",
+          ".1632 / 秒"
+        ],
+        [
+          "FHD",
+          "按秒",
+          ".2784 / 秒"
+        ],
+        [
+          "V2V-HD",
+          "按秒",
+          ".3936 / 秒"
+        ],
+        [
+          "V2V-FHD",
+          "按秒",
+          ".5088 / 秒"
+        ]
+      ]
+    }
   },
   "MiniMax-H3": {
-    "description": "MiniMax-H3 按秒：768P .068544、2K .109728；参考图超 5 张后 .027456/张。",
+    "description": "MiniMax-H3：视频生成；参考图超出 5 张后按张计费。",
     "descriptions": {
-      "zhCN": "MiniMax-H3 按秒：768P .068544、2K .109728；参考图超 5 张后 .027456/张。",
-      "zhTW": "MiniMax-H3 按秒：768P .068544、2K .109728；参考图超 5 张后 .027456/张。",
-      "en": "MiniMax-H3 per second: 768P .068544, 2K .109728; extra ref images after 5: .027456/image.",
-      "fr": "MiniMax-H3 per second: 768P .068544, 2K .109728; extra ref images after 5: .027456/image.",
-      "ru": "MiniMax-H3 per second: 768P .068544, 2K .109728; extra ref images after 5: .027456/image.",
-      "ja": "MiniMax-H3 per second: 768P .068544, 2K .109728; extra ref images after 5: .027456/image.",
-      "vi": "MiniMax-H3 per second: 768P .068544, 2K .109728; extra ref images after 5: .027456/image."
+      "zhCN": "MiniMax-H3：视频生成；参考图超出 5 张后按张计费。",
+      "zhTW": "MiniMax-H3：视频生成；参考图超出 5 张后按张计费。",
+      "en": "MiniMax-H3 video; extra reference images billed after the first 5.",
+      "fr": "MiniMax-H3 video; extra reference images billed after the first 5.",
+      "ru": "MiniMax-H3 video; extra reference images billed after the first 5.",
+      "ja": "MiniMax-H3 video; extra reference images billed after the first 5.",
+      "vi": "MiniMax-H3 video; extra reference images billed after the first 5."
     },
     "unit": "second",
     "badge": {
@@ -2614,19 +2822,43 @@
     "suffix_en": "/ second",
     "price_key_zh": "每秒",
     "price_key_en": "Per second",
-    "description_zh": "MiniMax-H3 按秒：768P .068544、2K .109728；参考图超 5 张后 .027456/张。",
-    "description_en": "MiniMax-H3 per second: 768P .068544, 2K .109728; extra ref images after 5: .027456/image."
+    "description_zh": "MiniMax-H3：视频生成；参考图超出 5 张后按张计费。",
+    "description_en": "MiniMax-H3 video; extra reference images billed after the first 5.",
+    "price_table": {
+      "columns": [
+        "规格",
+        "说明",
+        "售价"
+      ],
+      "rows": [
+        [
+          "768P",
+          "输出视频",
+          ".068544 / 秒"
+        ],
+        [
+          "2K",
+          "输出视频",
+          ".109728 / 秒"
+        ],
+        [
+          "参考图",
+          "超出 5 张后",
+          ".027456 / 张"
+        ]
+      ]
+    }
   },
   "wan3.0-video": {
-    "description": "Wan 3.0 Video 按秒：480P .04115、720P .08228、1080P .16457/秒。",
+    "description": "Wan 3.0 Video：按分辨率按秒计费。",
     "descriptions": {
-      "zhCN": "Wan 3.0 Video 按秒：480P .04115、720P .08228、1080P .16457/秒。",
-      "zhTW": "Wan 3.0 Video 按秒：480P .04115、720P .08228、1080P .16457/秒。",
-      "en": "Wan 3.0 Video per second: 480P .04115, 720P .08228, 1080P .16457/s.",
-      "fr": "Wan 3.0 Video per second: 480P .04115, 720P .08228, 1080P .16457/s.",
-      "ru": "Wan 3.0 Video per second: 480P .04115, 720P .08228, 1080P .16457/s.",
-      "ja": "Wan 3.0 Video per second: 480P .04115, 720P .08228, 1080P .16457/s.",
-      "vi": "Wan 3.0 Video per second: 480P .04115, 720P .08228, 1080P .16457/s."
+      "zhCN": "Wan 3.0 Video：按分辨率按秒计费。",
+      "zhTW": "Wan 3.0 Video：按分辨率按秒计费。",
+      "en": "Wan 3.0 Video billed per second by resolution.",
+      "fr": "Wan 3.0 Video billed per second by resolution.",
+      "ru": "Wan 3.0 Video billed per second by resolution.",
+      "ja": "Wan 3.0 Video billed per second by resolution.",
+      "vi": "Wan 3.0 Video billed per second by resolution."
     },
     "unit": "second",
     "badge": {
@@ -2662,19 +2894,43 @@
     "suffix_en": "/ second",
     "price_key_zh": "每秒",
     "price_key_en": "Per second",
-    "description_zh": "Wan 3.0 Video 按秒：480P .04115、720P .08228、1080P .16457/秒。",
-    "description_en": "Wan 3.0 Video per second: 480P .04115, 720P .08228, 1080P .16457/s."
+    "description_zh": "Wan 3.0 Video：按分辨率按秒计费。",
+    "description_en": "Wan 3.0 Video billed per second by resolution.",
+    "price_table": {
+      "columns": [
+        "分辨率",
+        "说明",
+        "售价"
+      ],
+      "rows": [
+        [
+          "480P",
+          "按秒",
+          ".04115 / 秒"
+        ],
+        [
+          "720P",
+          "按秒",
+          ".08228 / 秒"
+        ],
+        [
+          "1080P",
+          "按秒",
+          ".16457 / 秒"
+        ]
+      ]
+    }
   },
   "grok-imagine-video-1.5-preview": {
-    "description": "Grok Imagine Video 1.5 Preview。计费：.08825/秒(480p)、.1545/秒(720p)；输入图 .011025/张。",
+    "description": "Grok Imagine Video 1.5 Preview：图生短视频预览模型，支持首帧参考。",
     "descriptions": {
-      "zhCN": "Grok Imagine Video 1.5 Preview。计费：.08825/秒(480p)、.1545/秒(720p)；输入图 .011025/张。",
-      "zhTW": "Grok Imagine Video 1.5 Preview。计费：.08825/秒(480p)、.1545/秒(720p)；输入图 .011025/张。",
-      "en": "Grok Imagine Video 1.5 Preview. Pricing: .08825/s (480p), .1545/s (720p); input image .011025/image.",
-      "fr": "Grok Imagine Video 1.5 Preview. Pricing: .08825/s (480p), .1545/s (720p); input image .011025/image.",
-      "ru": "Grok Imagine Video 1.5 Preview. Pricing: .08825/s (480p), .1545/s (720p); input image .011025/image.",
-      "ja": "Grok Imagine Video 1.5 Preview. Pricing: .08825/s (480p), .1545/s (720p); input image .011025/image.",
-      "vi": "Grok Imagine Video 1.5 Preview. Pricing: .08825/s (480p), .1545/s (720p); input image .011025/image."
+      "zhCN": "Grok Imagine Video 1.5 Preview：图生短视频预览模型，支持首帧参考。",
+      "zhTW": "Grok Imagine Video 1.5 Preview：图生短视频预览模型，支持首帧参考。",
+      "en": "Grok Imagine Video 1.5 Preview: short video from image prompts, first-frame supported.",
+      "fr": "Grok Imagine Video 1.5 Preview: short video from image prompts, first-frame supported.",
+      "ru": "Grok Imagine Video 1.5 Preview: short video from image prompts, first-frame supported.",
+      "ja": "Grok Imagine Video 1.5 Preview: short video from image prompts, first-frame supported.",
+      "vi": "Grok Imagine Video 1.5 Preview: short video from image prompts, first-frame supported."
     },
     "unit": "second",
     "badge": {
@@ -2710,7 +2966,31 @@
     "suffix_en": "/ second",
     "price_key_zh": "每秒",
     "price_key_en": "Per second",
-    "description_zh": "Grok Imagine Video 1.5 Preview。计费：.08825/秒(480p)、.1545/秒(720p)；输入图 .011025/张。",
-    "description_en": "Grok Imagine Video 1.5 Preview. Pricing: .08825/s (480p), .1545/s (720p); input image .011025/image."
+    "description_zh": "Grok Imagine Video 1.5 Preview：图生短视频预览模型，支持首帧参考。",
+    "description_en": "Grok Imagine Video 1.5 Preview: short video from image prompts, first-frame supported.",
+    "price_table": {
+      "columns": [
+        "规格",
+        "说明",
+        "售价"
+      ],
+      "rows": [
+        [
+          "480p",
+          "输出视频",
+          ".08825 / 秒"
+        ],
+        [
+          "720p",
+          "输出视频",
+          ".1545 / 秒"
+        ],
+        [
+          "输入图片",
+          "每张",
+          ".011025 / 张"
+        ]
+      ]
+    }
   }
 }

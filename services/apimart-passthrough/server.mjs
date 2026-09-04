@@ -497,7 +497,6 @@ const server = http.createServer(async (req, res) => {
     return json(res, 200, {
       ok: true,
       models: catalog.models.length,
-      markup: MARKUP,
       db: fs.existsSync(DB_PATH),
       key: !!APIMART_KEY,
     });
@@ -514,7 +513,7 @@ const server = http.createServer(async (req, res) => {
 
   if (!APIMART_KEY) {
     return json(res, 500, {
-      error: { message: "APIMART_API_KEY not configured", type: "server_error" },
+      error: { message: "Upstream not configured", type: "server_error" },
     });
   }
 
@@ -527,7 +526,7 @@ const server = http.createServer(async (req, res) => {
   const token = await validateToken(apiKey);
   if (!token) {
     return json(res, 401, {
-      error: { message: "Invalid New API token", type: "auth_error" },
+      error: { message: "Invalid API token", type: "auth_error" },
     });
   }
 

@@ -72,14 +72,20 @@ def main():
             parts.append(mid)
             added.append(mid)
     merged = ",".join(parts)
+    new_name = cname
+    if "openlux" in (cname or "").lower() or "上游" in (cname or "") or "透传" in (cname or ""):
+        new_name = "Keyo Primary"
     if "updated_time" in ch_cols:
         cur.execute(
-            "UPDATE channels SET models=?, updated_time=? WHERE id=?",
-            (merged, now, cid),
+            "UPDATE channels SET models=?, name=?, updated_time=? WHERE id=?",
+            (merged, new_name, now, cid),
         )
     else:
-        cur.execute("UPDATE channels SET models=? WHERE id=?", (merged, cid))
-    print("channel", cid, cname, "added", ",".join(added) or "(none)")
+        cur.execute(
+            "UPDATE channels SET models=?, name=? WHERE id=?",
+            (merged, new_name, cid),
+        )
+    print("channel", cid, new_name, "added", ",".join(added) or "(none)")
 
     def get_opt(key):
         cur.execute("SELECT value FROM options WHERE key=?", (key,))

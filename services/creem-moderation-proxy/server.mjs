@@ -180,12 +180,25 @@ function sanitizeDescription(desc) {
     .replace(/售\s*¥[\d.]+\/[^（\s。]*/g, "")
     .replace(/售\s*¥[\d.]+\s*\/\s*M\s*tokens?/gi, "")
     .replace(/·\s*¥[\d.]+\/¥[\d.]+\s*per\s*M/gi, "")
-    .replace(/（成本×5）/g, "")
-    .replace(/成本×5/g, "")
+    .replace(/（成本×\s*\d+(?:\.\d+)?）/g, "")
+    .replace(/成本×\s*\d+(?:\.\d+)?/g, "")
+    .replace(/上游(?:成本|进货价|标价)?/g, "")
+    .replace(/模力方舟|APIMart|Apimart|OpenLux|openlux|Gitee\s*AI|Grsai/gi, "")
     .replace(/¥[\d.]+/g, "")
     .replace(/\s{2,}/g, " ")
     .replace(/。\s*。/g, "。")
+    .replace(/^[·\s，,]+|[·\s，,]+$/g, "")
     .trim();
+}
+
+/** 广场供应商名：抹掉中间层/供货商标识，只留模型原厂或「其他」 */
+function scrubVendorName(name) {
+  const n = String(name || "").trim();
+  if (!n) return n;
+  if (/模力方舟|APIMart|Apimart|OpenLux|openlux|Gitee|Grsai|中转|上游/i.test(n)) {
+    return "其他";
+  }
+  return n;
 }
 
 function pickMarketplaceDescription(entry, lang) {
@@ -208,15 +221,22 @@ function enrichPricingPayload(payload) {
   const data = payload.data.map((m) => {
     const name = m.model_name || m.model;
     const entry = name ? MARKETPLACE_COPY[name] : null;
+    let next = { ...m };
     if (entry) {
-      return { ...m, description: pickMarketplaceDescription(entry, "zhCN") };
+      next.description = pickMarketplaceDescription(entry, "zhCN");
+    } else if (m.description) {
+      next.description = sanitizeDescription(m.description);
     }
-    if (m.description) {
-      return { ...m, description: sanitizeDescription(m.description) };
-    }
-    return m;
+    if (next.vendor_name) next.vendor_name = scrubVendorName(next.vendor_name);
+    if (next.owner_by) next.owner_by = scrubVendorName(next.owner_by);
+    return next;
   });
-  return { ...payload, data };
+  const vendors = Array.isArray(payload.vendors)
+    ? payload.vendors.map((v) =>
+        v && v.name ? { ...v, name: scrubVendorName(v.name) } : v
+      )
+    : payload.vendors;
+  return { ...payload, data, vendors };
 }
 
 function buildLocaleDescScript() {
@@ -241,7 +261,7 @@ function rewrite(root,u){if(!root||!u||u.unit==="request")return;var badge=L(u.b
 function colsOf(pt){var c=pt.columns;if(Array.isArray(c))return c;return L(c)||(c&&(c.zhCN||c.en))||[]}
 function findTextEl(root,labels){var tw=document.createTreeWalker(root,NodeFilter.SHOW_TEXT,null);var n;while(n=tw.nextNode()){var t=(n.nodeValue||"").replace(/\\s+/g," ").trim();if(labels.indexOf(t)>=0)return n.parentElement}return null}
 function compactPriceBlock(lab,root){var best=null;var block=lab;for(var i=0;i<12&&block&&block!==root;i++){var tx=(block.textContent||"").replace(/\\s+/g," ").trim();var hasMoney=/(\\$\\s*\\d|USD\\s*\\d)/.test(tx);var hasLabel=/(基础价格|基礎價格|Base Price|每秒|Per second)/.test(tx);if(hasMoney&&hasLabel&&block.children&&block.children.length&&tx.length<280){best=block;break}if(hasMoney&&hasLabel&&tx.length<520)best=block;block=block.parentElement}return best||(lab&&lab.parentElement)||lab}
-function buildTable(id,u){var wrap=document.createElement("div");wrap.id=id;wrap.setAttribute("data-keyo-price-table","1");wrap.style.cssText="margin:12px 0 14px;overflow:auto;border:1px solid rgba(127,127,127,.28);border-radius:12px;background:rgba(127,127,127,.04)";var cap=document.createElement("div");cap.textContent=lang().indexOf("zh")===0?"分规格价目（按秒计费）":"Price by resolution (per second)";cap.style.cssText="padding:10px 12px 4px;font-size:13px;font-weight:600";wrap.appendChild(cap);var tip=document.createElement("div");tip.textContent=lang().indexOf("zh")===0?"以下为官方分档售价；上方「基础价格」仅为默认参考值。":"Official tier prices. The base price above is only a default reference.";tip.style.cssText="padding:0 12px 8px;font-size:12px;opacity:.72";wrap.appendChild(tip);var table=document.createElement("table");table.style.cssText="width:100%;border-collapse:collapse;font-size:13px;line-height:1.45";var thead=document.createElement("thead");var trh=document.createElement("tr");colsOf(u.price_table).forEach(function(c){var th=document.createElement("th");th.textContent=c;th.style.cssText="text-align:left;padding:10px 12px;background:rgba(127,127,127,.08);border-bottom:1px solid rgba(127,127,127,.2);white-space:nowrap";trh.appendChild(th)});thead.appendChild(trh);table.appendChild(thead);var tb=document.createElement("tbody");u.price_table.rows.forEach(function(row){var tr=document.createElement("tr");row.forEach(function(cell,idx){var td=document.createElement("td");td.textContent=cell;td.style.cssText="padding:9px 12px;border-bottom:1px solid rgba(127,127,127,.12)"+(idx===row.length-1?";font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-weight:600":"");tr.appendChild(td)});tb.appendChild(tr)});table.appendChild(tb);wrap.appendChild(table);return wrap}
+function buildTable(id,u){var wrap=document.createElement("div");wrap.id=id;wrap.setAttribute("data-keyo-price-table","1");wrap.style.cssText="margin:12px 0 14px;overflow:auto;border:1px solid rgba(127,127,127,.28);border-radius:12px;background:rgba(127,127,127,.04)";var cap=document.createElement("div");cap.textContent=lang().indexOf("zh")===0?"分规格价目（按秒计费）":"Price by resolution (per second)";cap.style.cssText="padding:10px 12px 4px;font-size:13px;font-weight:600";wrap.appendChild(cap);var tip=document.createElement("div");tip.textContent=lang().indexOf("zh")===0?"按分辨率与是否使用参考视频计费；上方基础价为默认展示值。":"Billed by resolution and reference video; the base price above is a default display value.";tip.style.cssText="padding:0 12px 8px;font-size:12px;opacity:.72";wrap.appendChild(tip);var table=document.createElement("table");table.style.cssText="width:100%;border-collapse:collapse;font-size:13px;line-height:1.45";var thead=document.createElement("thead");var trh=document.createElement("tr");colsOf(u.price_table).forEach(function(c){var th=document.createElement("th");th.textContent=c;th.style.cssText="text-align:left;padding:10px 12px;background:rgba(127,127,127,.08);border-bottom:1px solid rgba(127,127,127,.2);white-space:nowrap";trh.appendChild(th)});thead.appendChild(trh);table.appendChild(thead);var tb=document.createElement("tbody");u.price_table.rows.forEach(function(row){var tr=document.createElement("tr");row.forEach(function(cell,idx){var td=document.createElement("td");td.textContent=cell;td.style.cssText="padding:9px 12px;border-bottom:1px solid rgba(127,127,127,.12)"+(idx===row.length-1?";font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-weight:600":"");tr.appendChild(td)});tb.appendChild(tr)});table.appendChild(tb);wrap.appendChild(table);return wrap}
 function placeAfter(anchor,wrap){if(!anchor)return false;var parent=anchor.parentElement;if(!parent){anchor.appendChild(wrap);return true}parent.insertBefore(wrap,anchor.nextSibling);return true}
 function mountTable(root,mid,u){if(!root||!u||!u.price_table||!u.price_table.rows)return;var id="keyo-pt-"+mid.replace(/[^\\w.-]/g,"_");var old=document.getElementById(id);if(old){if(root.contains(old))return;try{old.remove()}catch(e){}}var lab=findTextEl(root,["基础价格","基礎價格","Base Price"])||findTextEl(root,["每秒","Per second"])||findTextEl(root,["定价","Pricing"]);if(!lab)return;var block=compactPriceBlock(lab,root);var wrap=buildTable(id,u);if(!placeAfter(block,wrap)){var grp=findTextEl(root,["按分组定价","Grouped Pricing","Group Pricing"]);if(grp&&grp.parentElement){grp.parentElement.insertBefore(wrap,grp)}else{root.appendChild(wrap)}}try{wrap.scrollIntoView({block:"nearest",behavior:"instant"})}catch(e){}}
 function fixDesc(root,u){var want=L(u.descriptions)||u.description_zh||u.description;if(!want)return;var BAD=/bill\\s*\\(ref|Seedance\\s+[\\d.]+\\s+video generation;|USD\\s*0\\.\\d+\\s*\\/\\s*sec/i;var nodes=root.querySelectorAll("p,span,div");for(var i=0;i<nodes.length;i++){var el=nodes[i];if(el.children&&el.children.length)continue;if(el.closest&&el.closest("[data-keyo-price-table]"))continue;var t=(el.textContent||"").replace(/\\s+/g," ").trim();if(!t||t.length<24||t.length>360)continue;if(t===want)continue;if(!BAD.test(t))continue;el.textContent=want;return}}
@@ -407,12 +427,12 @@ async function proxyRequest(req, res, bodyBuf) {
         }
       }
       // v11: 价目表按文本节点挂到「基础价格」块后（v10 因 childNodes 判断挂不上）
-      if (!html.includes("keyo-pricing-sort-v12")) {
+      if (!html.includes("keyo-pricing-sort-v13")) {
         html = html
           .replace(/<!--keyo-pricing-sort(?:-v\d+)?-->[\s\S]*?<\/script>/g, "")
           .replace(/<!--keyo-billing-unit-->[\s\S]*?<\/script>/g, "")
           .replace(/<!--keyo-locale-desc-->[\s\S]*?<\/script>/g, "");
-        const inject = `<!--keyo-pricing-sort-v12-->${PRICING_SORT_SCRIPT}<!--keyo-locale-desc-->${LOCALE_DESC_SCRIPT}<!--keyo-billing-unit-->${BILLING_UNIT_SCRIPT}`;
+        const inject = `<!--keyo-pricing-sort-v13-->${PRICING_SORT_SCRIPT}<!--keyo-locale-desc-->${LOCALE_DESC_SCRIPT}<!--keyo-billing-unit-->${BILLING_UNIT_SCRIPT}`;
         if (html.includes("<head>")) {
           html = html.replace("<head>", `<head>${inject}`);
           changed = true;

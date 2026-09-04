@@ -563,13 +563,16 @@
 <tr><td class="model"><button type="button" class="model-btn" data-copy="claude-sonnet-5">claude-sonnet-5</button></td><td class="price">~$0.88</td><td class="price">~$4.41</td><td class="note-cell" data-i18n="nClaudeBal"></td></tr>
 <tr><td class="model"><button type="button" class="model-btn" data-copy="claude-opus-5">claude-opus-5</button></td><td class="price">~$2.21</td><td class="price">~$11.03</td><td class="note-cell" data-i18n="nClaudeStrong"></td></tr>
 <tr><td class="model"><button type="button" class="model-btn" data-copy="claude-fable-5">claude-fable-5</button></td><td class="price">~$8.82</td><td class="price">~$44.12</td><td class="note-cell" data-i18n="nClaudeFlag"></td></tr>
+<tr><td class="model"><button type="button" class="model-btn" data-copy="claude-fable-5-1">claude-fable-5-1</button></td><td class="price">~$14.71</td><td class="price">~$73.53</td><td class="note-cell" data-i18n="nClaudeFlag51"></td></tr>
 <tr><td class="model"><button type="button" class="model-btn" data-copy="gemini-3.7-flash">gemini-3.7-flash</button></td><td class="price">~$0.28</td><td class="price">~$1.38</td><td class="note-cell" data-i18n="nGemFast"></td></tr>
+<tr><td class="model"><button type="button" class="model-btn" data-copy="gemini-3.8-flash">gemini-3.8-flash</button></td><td class="price">~$0.28</td><td class="price">~$1.38</td><td class="note-cell" data-i18n="nGem38"></td></tr>
 <tr><td class="model"><button type="button" class="model-btn" data-copy="deepseek-v4-flash">deepseek-v4-flash</button></td><td class="price">~$1.10</td><td class="price">~$3.30</td><td class="note-cell" data-i18n="nDsFast"></td></tr>
 <tr><td class="model"><button type="button" class="model-btn" data-copy="deepseek-v4-pro-0813">deepseek-v4-pro-0813</button></td><td class="price">~$3.30</td><td class="price">~$9.90</td><td class="note-cell" data-i18n="nDsStrong"></td></tr>
 <tr><td class="model"><button type="button" class="model-btn" data-copy="kimi-k3">kimi-k3</button></td><td class="price">~$7.50</td><td class="price">~$37.50</td><td class="note-cell" data-i18n="nKimi"></td></tr>
 <tr><td class="model"><button type="button" class="model-btn" data-copy="grok-4.6">grok-4.6</button></td><td class="price">~$0.74</td><td class="price">~$2.21</td><td class="note-cell" data-i18n="nGrok"></td></tr>
 <tr><td class="model"><button type="button" class="model-btn" data-copy="MiniMax-M3">MiniMax-M3</button></td><td class="price">~$0.75</td><td class="price">~$3.00</td><td class="note-cell" data-i18n="nMinimax"></td></tr>
 <tr><td class="model"><button type="button" class="model-btn" data-copy="glm-5.3">glm-5.3</button></td><td class="price">~$3.50</td><td class="price">~$11.00</td><td class="note-cell" data-i18n="nGlm"></td></tr>
+<tr><td class="model"><button type="button" class="model-btn" data-copy="gemma-4-26B-A4B-it">gemma-4-26B-A4B-it</button></td><td class="price">—</td><td class="price">—</td><td class="note-cell" data-i18n="nGemma"></td></tr>
             </tbody>
           </table>
         </div>
@@ -728,13 +731,16 @@
             </thead>
             <tbody>
 <tr><td class="note-cell" data-i18n="capOcr"></td><td class="price">POST /v1/chat/completions</td><td class="model"><button type="button" class="model-btn" data-copy="Unlimited-OCR">Unlimited-OCR</button></td></tr>
-<tr><td class="note-cell" data-i18n="capDoc"></td><td class="price">POST /v1/async/documents/parse</td><td class="model"><button type="button" class="model-btn" data-copy="MinerU2.5-Pro">MinerU2.5-Pro</button></td></tr>
+<tr><td class="note-cell" data-i18n="capDoc"></td><td class="price">POST /v1/async/documents/parse → GET /v1/task/{id}</td><td class="model"><button type="button" class="model-btn" data-copy="MinerU2.5-Pro">MinerU2.5-Pro</button></td></tr>
 <tr><td class="note-cell" data-i18n="capMatting"></td><td class="price">POST /v1/images/mattings</td><td class="model"><button type="button" class="model-btn" data-copy="RMBG-2.0">RMBG-2.0</button></td></tr>
-<tr><td class="note-cell" data-i18n="capUpscale"></td><td class="price">POST /v1/images/upscaling</td><td class="model"><button type="button" class="model-btn" data-copy="Real-ESRGAN">Real-ESRGAN</button></td></tr>
-<tr><td class="note-cell" data-i18n="capDetect"></td><td class="price">POST /v1/images/object-detection</td><td class="model"><button type="button" class="model-btn" data-copy="VajraV1">VajraV1</button></td></tr>
-<tr><td class="note-cell" data-i18n="capSeg"></td><td class="price">POST /v1/images/segmentation</td><td class="model"><button type="button" class="model-btn" data-copy="sam3">sam3</button></td></tr>
-<tr><td class="note-cell" data-i18n="capDigital"></td><td class="price">POST /v1/async/videos/…</td><td class="model"><button type="button" class="model-btn" data-copy="Duix-Avatar">Duix-Avatar</button></td></tr>
-<tr><td class="note-cell" data-i18n="capMod"></td><td class="price">POST /v1/moderations</td><td class="model"><button type="button" class="model-btn" data-copy="nonescape-v0">nonescape-v0</button></td></tr>
+<tr><td class="note-cell" data-i18n="capUpscale"></td><td class="price">POST /v1/images/upscaling</td><td class="model"><button type="button" class="model-btn" data-copy="Real-ESRGAN">Real-ESRGAN</button> · <button type="button" class="model-btn" data-copy="AnimeSharp">AnimeSharp</button></td></tr>
+<tr><td class="note-cell" data-i18n="capUnwarp"></td><td class="price">POST /v1/images/unwarping</td><td class="model"><button type="button" class="model-btn" data-copy="UVDoc">UVDoc</button></td></tr>
+<tr><td class="note-cell" data-i18n="capDetect"></td><td class="price">POST /v1/images/object-detection</td><td class="model"><button type="button" class="model-btn" data-copy="VajraV1">VajraV1</button> · <button type="button" class="model-btn" data-copy="sam3">sam3</button></td></tr>
+<tr><td class="note-cell" data-i18n="capSeg"></td><td class="price">POST /v1/images/segmentation</td><td class="model"><button type="button" class="model-btn" data-copy="VajraV1">VajraV1</button> · <button type="button" class="model-btn" data-copy="sam3">sam3</button></td></tr>
+<tr><td class="note-cell" data-i18n="capPose"></td><td class="price">POST /v1/images/pose-detection</td><td class="model"><button type="button" class="model-btn" data-copy="VajraV1">VajraV1</button></td></tr>
+<tr><td class="note-cell" data-i18n="capDuix"></td><td class="price">POST /v1/async/videos/audio-video-to-video → GET /v1/task/{id}</td><td class="model"><button type="button" class="model-btn" data-copy="Duix-Avatar">Duix-Avatar</button></td></tr>
+<tr><td class="note-cell" data-i18n="capInfinite"></td><td class="price">POST /v1/async/videos/image-to-video → GET /v1/task/{id}</td><td class="model"><button type="button" class="model-btn" data-copy="InfiniteTalk">InfiniteTalk</button></td></tr>
+<tr><td class="note-cell" data-i18n="capMod"></td><td class="price">POST /v1/moderations</td><td class="model"><button type="button" class="model-btn" data-copy="nonescape-v0">nonescape-v0</button> · <button type="button" class="model-btn" data-copy="moark-text-moderation">moark-text-moderation</button> · <button type="button" class="model-btn" data-copy="Security-semantic-filtering">Security-semantic-filtering</button> · <button type="button" class="model-btn" data-copy="nsfw-classifier">nsfw-classifier</button></td></tr>
             </tbody>
           </table>
         </div>
@@ -854,6 +860,9 @@ const I18N = {
     "nGrok": "Grok",
     "nMinimax": "MiniMax",
     "nGlm": "Zhipu GLM",
+    "nClaudeFlag51": "Claude flagship 5.1",
+    "nGem38": "Gemini 3.8 fast",
+    "nGemma": "Multimodal chat — see /pricing",
     "chatHint": "Click a model name to copy. Billed by token usage (console is source of truth). Top up when quota runs out.",
     "imageTitle": "Images",
     "thPrice": "Approx. price",
@@ -887,7 +896,11 @@ const I18N = {
     "capSeg": "Segmentation",
     "capDigital": "Digital human / video (async)",
     "capMod": "Moderation",
-    "moreHint": "Protocol mirrors upstream OpenAPI shapes. Official reference: <a href=\"https://ai.gitee.com/docs/openapi/v1\" target=\"_blank\" rel=\"noopener noreferrer\">ai.gitee.com/docs/openapi/v1</a> — keep using <code>https://www.keyoapi.xyz/v1</code> as Base URL.",
+    "capUnwarp": "Document unwarping",
+    "capPose": "Pose detection",
+    "capDuix": "Digital human (audio+video → video)",
+    "capInfinite": "Talking video (image → video)",
+    "moreHint": "Full catalog and live prices: <a href=\"https://www.keyoapi.xyz/pricing\" target=\"_top\">/pricing</a>. Model names must match exactly. Async jobs: create → poll <code>GET /v1/task/{id}</code>.",
     "clientsTitle": "Clients",
     "clientsDesc": "Chat tools mainly cover text (and sometimes images). For speech / OCR / vision tools, use the curl samples above or an HTTP client.",
     "clientsTools": "ChatBox / Cursor etc.",
@@ -945,6 +958,9 @@ const I18N = {
     "nGrok": "Grok",
     "nMinimax": "MiniMax",
     "nGlm": "智谱",
+    "nClaudeFlag51": "Claude 旗舰 5.1",
+    "nGem38": "Gemini 3.8 快",
+    "nGemma": "多模态对话 · 价格见 /pricing",
     "chatHint": "点击模型名即可复制。计费按 token 用量，以控制台实时扣费为准；额度用完需充值。",
     "imageTitle": "图片生成",
     "thPrice": "约价",
@@ -978,7 +994,11 @@ const I18N = {
     "capSeg": "图像分割",
     "capDigital": "数字人 / 视频（异步）",
     "capMod": "内容风控",
-    "moreHint": "协议形态参考上游 OpenAPI。<a href=\"https://ai.gitee.com/docs/openapi/v1\" target=\"_blank\" rel=\"noopener noreferrer\">ai.gitee.com/docs/openapi/v1</a> — 调用时请把 Base URL 换成 <code>https://www.keyoapi.xyz/v1</code>。",
+    "capUnwarp": "文档展平",
+    "capPose": "人体关键点",
+    "capDuix": "数字人（音视频→视频）",
+    "capInfinite": "说话视频（图→视频）",
+    "moreHint": "完整目录与实时价格见 <a href=\"https://www.keyoapi.xyz/pricing\" target=\"_top\">/pricing</a>。模型名必须完全一致。异步任务：先创建，再轮询 <code>GET /v1/task/{id}</code>。",
     "clientsTitle": "客户端接入",
     "clientsDesc": "聊天类工具主要覆盖文本（部分支持图片）。语音 / OCR / 视觉工具请用上方 curl 或 HTTP 客户端。",
     "clientsTools": "ChatBox / Cursor 等",
@@ -1036,6 +1056,9 @@ const I18N = {
     "nGrok": "Grok",
     "nMinimax": "MiniMax",
     "nGlm": "智譜",
+    "nClaudeFlag51": "Claude 旗艦 5.1",
+    "nGem38": "Gemini 3.8 快",
+    "nGemma": "多模態對話 · 價格見 /pricing",
     "chatHint": "點擊模型名即可複製。計費依 token 用量，以控制台即時扣費為準；額度用完需儲值。",
     "imageTitle": "圖片生成",
     "thPrice": "約價",
@@ -1069,7 +1092,11 @@ const I18N = {
     "capSeg": "影像分割",
     "capDigital": "數位人 / 影片（非同步）",
     "capMod": "內容風控",
-    "moreHint": "協定形態參考上游 OpenAPI。<a href=\"https://ai.gitee.com/docs/openapi/v1\" target=\"_blank\" rel=\"noopener noreferrer\">ai.gitee.com/docs/openapi/v1</a> — 呼叫時請把 Base URL 換成 <code>https://www.keyoapi.xyz/v1</code>。",
+    "capUnwarp": "文件展平",
+    "capPose": "人體關節點",
+    "capDuix": "數位人（音訊視訊→影片）",
+    "capInfinite": "說話影片（圖→影片）",
+    "moreHint": "完整目錄與即時價格見 <a href=\"https://www.keyoapi.xyz/pricing\" target=\"_top\">/pricing</a>。模型名必須完全一致。非同步任務：先建立，再輪詢 <code>GET /v1/task/{id}</code>。",
     "clientsTitle": "客戶端接入",
     "clientsDesc": "聊天類工具主要涵蓋文字（部分支援圖片）。語音 / OCR / 視覺工具請用上方 curl 或 HTTP 客戶端。",
     "clientsTools": "ChatBox / Cursor 等",
@@ -1127,6 +1154,9 @@ const I18N = {
     "nGrok": "Grok",
     "nMinimax": "MiniMax",
     "nGlm": "Zhipu GLM",
+    "nClaudeFlag51": "Claude 旗艦 5.1",
+    "nGem38": "Gemini 3.8 高速",
+    "nGemma": "マルチモーダル · 料金は /pricing",
     "chatHint": "モデル名をクリックでコピー。課金はトークン使用量（コンソールが正）。残高不足時はチャージ。",
     "imageTitle": "画像生成",
     "thPrice": "目安価格",
@@ -1160,7 +1190,11 @@ const I18N = {
     "capSeg": "セグメンテーション",
     "capDigital": "デジタルヒューマン / 動画（非同期）",
     "capMod": "モデレーション",
-    "moreHint": "上流 OpenAPI 形式を参考。<a href=\"https://ai.gitee.com/docs/openapi/v1\" target=\"_blank\" rel=\"noopener noreferrer\">ai.gitee.com/docs/openapi/v1</a> — Base URL は <code>https://www.keyoapi.xyz/v1</code>。",
+    "capUnwarp": "書類歪み補正",
+    "capPose": "姿勢検出",
+    "capDuix": "デジタルヒューマン（音声+映像→動画）",
+    "capInfinite": "トーキング動画（画像→動画）",
+    "moreHint": "全モデルと料金は <a href=\"https://www.keyoapi.xyz/pricing\" target=\"_top\">/pricing</a>。モデル名は完全一致。非同期は作成後 <code>GET /v1/task/{id}</code> をポーリング。",
     "clientsTitle": "クライアント",
     "clientsDesc": "チャットツールは主にテキスト向け。音声 / OCR / ビジョンは上の curl か HTTP クライアントを使用。",
     "clientsTools": "ChatBox / Cursor など",
@@ -1218,6 +1252,9 @@ const I18N = {
     "nGrok": "Grok",
     "nMinimax": "MiniMax",
     "nGlm": "Zhipu GLM",
+    "nClaudeFlag51": "Claude phare 5.1",
+    "nGem38": "Gemini 3.8 rapide",
+    "nGemma": "Chat multimodal — voir /pricing",
     "chatHint": "Cliquez un modèle pour copier. Facturation au token (console = référence). Rechargez si le quota est épuisé.",
     "imageTitle": "Images",
     "thPrice": "Prix approx.",
@@ -1251,7 +1288,11 @@ const I18N = {
     "capSeg": "Segmentation",
     "capDigital": "Humain digital / vidéo (async)",
     "capMod": "Modération",
-    "moreHint": "Forme OpenAPI amont : <a href=\"https://ai.gitee.com/docs/openapi/v1\" target=\"_blank\" rel=\"noopener noreferrer\">ai.gitee.com/docs/openapi/v1</a> — Base URL KeyoAPI : <code>https://www.keyoapi.xyz/v1</code>.",
+    "capUnwarp": "Redressement document",
+    "capPose": "Détection de pose",
+    "capDuix": "Humain digital (audio+vidéo → vidéo)",
+    "capInfinite": "Vidéo parlante (image → vidéo)",
+    "moreHint": "Catalogue et prix : <a href=\"https://www.keyoapi.xyz/pricing\" target=\"_top\">/pricing</a>. Noms de modèles exacts. Async : créer puis interroger <code>GET /v1/task/{id}</code>.",
     "clientsTitle": "Clients",
     "clientsDesc": "Les outils de chat couvrent surtout le texte. Pour parole / OCR / vision, utilisez les curl ci-dessus.",
     "clientsTools": "ChatBox / Cursor etc.",
@@ -1309,6 +1350,9 @@ const I18N = {
     "nGrok": "Grok",
     "nMinimax": "MiniMax",
     "nGlm": "Zhipu GLM",
+    "nClaudeFlag51": "Claude флагман 5.1",
+    "nGem38": "Gemini 3.8 быстрый",
+    "nGemma": "Мультимодальный чат — /pricing",
     "chatHint": "Клик по модели — копировать. Оплата по токенам (консоль источник истины). Пополняйте при нулевом балансе.",
     "imageTitle": "Изображения",
     "thPrice": "Примерно",
@@ -1342,7 +1386,11 @@ const I18N = {
     "capSeg": "Сегментация",
     "capDigital": "Цифровой человек / видео (async)",
     "capMod": "Модерация",
-    "moreHint": "Формат upstream OpenAPI: <a href=\"https://ai.gitee.com/docs/openapi/v1\" target=\"_blank\" rel=\"noopener noreferrer\">ai.gitee.com/docs/openapi/v1</a> — Base URL: <code>https://www.keyoapi.xyz/v1</code>.",
+    "capUnwarp": "Выравнивание документа",
+    "capPose": "Детекция позы",
+    "capDuix": "Цифровой человек (аудио+видео → видео)",
+    "capInfinite": "Говорящее видео (изображение → видео)",
+    "moreHint": "Каталог и цены: <a href=\"https://www.keyoapi.xyz/pricing\" target=\"_top\">/pricing</a>. Имена моделей — точно. Async: создать, затем опросить <code>GET /v1/task/{id}</code>.",
     "clientsTitle": "Клиенты",
     "clientsDesc": "Чат-клиенты в основном для текста. Для речи / OCR / vision используйте curl выше.",
     "clientsTools": "ChatBox / Cursor и др.",
@@ -1400,6 +1448,9 @@ const I18N = {
     "nGrok": "Grok",
     "nMinimax": "MiniMax",
     "nGlm": "Zhipu GLM",
+    "nClaudeFlag51": "Claude flagship 5.1",
+    "nGem38": "Gemini 3.8 nhanh",
+    "nGemma": "Chat đa phương thức — xem /pricing",
     "chatHint": "Bấm tên model để sao chép. Tính theo token (console là chuẩn). Hết hạn mức thì nạp thêm.",
     "imageTitle": "Ảnh",
     "thPrice": "Giá ước tính",
@@ -1433,7 +1484,11 @@ const I18N = {
     "capSeg": "Segmentation",
     "capDigital": "Digital human / video (async)",
     "capMod": "Moderation",
-    "moreHint": "Tham khảo OpenAPI upstream: <a href=\"https://ai.gitee.com/docs/openapi/v1\" target=\"_blank\" rel=\"noopener noreferrer\">ai.gitee.com/docs/openapi/v1</a> — Base URL: <code>https://www.keyoapi.xyz/v1</code>.",
+    "capUnwarp": "Làm phẳng tài liệu",
+    "capPose": "Nhận dạng tư thế",
+    "capDuix": "Người số (audio+video → video)",
+    "capInfinite": "Video nói (ảnh → video)",
+    "moreHint": "Danh mục & giá: <a href=\"https://www.keyoapi.xyz/pricing\" target=\"_top\">/pricing</a>. Tên model phải khớp. Async: tạo rồi poll <code>GET /v1/task/{id}</code>.",
     "clientsTitle": "Client",
     "clientsDesc": "Công cụ chat chủ yếu cho text. Với speech / OCR / vision hãy dùng curl phía trên.",
     "clientsTools": "ChatBox / Cursor v.v.",

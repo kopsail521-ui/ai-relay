@@ -84,7 +84,8 @@ function json(res, status, body) {
 
 function openDb(dbPath, readonly = false) {
   if (!fs.existsSync(dbPath) && readonly) return null;
-  return new DatabaseSync(dbPath, readonly ? { readOnly: true } : undefined);
+  // Node DatabaseSync requires options to be an object (not undefined)
+  return new DatabaseSync(dbPath, readonly ? { readOnly: true } : {});
 }
 
 function initPending() {

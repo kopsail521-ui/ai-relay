@@ -1063,6 +1063,54 @@
           "sell_x5_out": 24.2
         }
       ]
+    },
+    {
+      "model": "qwen3.8-max-0902",
+      "endpoints": [
+        "openai"
+      ],
+      "completion_ratio": 3,
+      "model_ratio": 1,
+      "channel_count": 3,
+      "markup": 2.5,
+      "cheapest": {
+        "group": "Self-Deployed-1",
+        "group_ratio": 0.3,
+        "cost_in_usd": 0.6,
+        "cost_out_usd": 1.8,
+        "sell_x2_5_in": 1.5,
+        "sell_x2_5_out": 4.5
+      },
+      "sell_in_usd": 1.5,
+      "sell_out_usd": 4.5,
+      "our_model_ratio": 0.75,
+      "our_completion_ratio": 3,
+      "channels": [
+        {
+          "group": "Self-Deployed-1",
+          "group_ratio": 0.3,
+          "cost_in_usd": 0.6,
+          "cost_out_usd": 1.8,
+          "sell_x2_5_in": 1.5,
+          "sell_x2_5_out": 4.5
+        },
+        {
+          "group": "Self-Deployed-2",
+          "group_ratio": 0.5,
+          "cost_in_usd": 1,
+          "cost_out_usd": 3,
+          "sell_x2_5_in": 2.5,
+          "sell_x2_5_out": 7.5
+        },
+        {
+          "group": "Alibaba-3",
+          "group_ratio": 1.1,
+          "cost_in_usd": 2.2,
+          "cost_out_usd": 6.6,
+          "sell_x2_5_in": 5.5,
+          "sell_x2_5_out": 16.5
+        }
+      ]
     }
   ]
 }

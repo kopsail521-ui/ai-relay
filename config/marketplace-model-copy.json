@@ -2184,5 +2184,53 @@
       "ja": "OCR",
       "vi": "OCR"
     }
+  },
+  "qwen3.8-max-0902": {
+    "description": "Qwen3.8 Max（0902）旗舰对话与推理模型。 计费：输入 .5 / 输出 .5（每百万 tokens）。",
+    "descriptions": {
+      "zhCN": "Qwen3.8 Max（0902）旗舰对话与推理模型。 计费：输入 .5 / 输出 .5（每百万 tokens）。",
+      "zhTW": "Qwen3.8 Max（0902）旗艦對話與推理模型。 計費：輸入 .5 / 輸出 .5（每百萬 tokens）。",
+      "en": "Qwen3.8 Max (0902) flagship chat and reasoning model. Pricing: .5 input / .5 output per 1M tokens.",
+      "fr": "Qwen3.8 Max (0902) — chat et raisonnement phare. Tarif : .5 entrée / .5 sortie pour 1M tokens.",
+      "ru": "Qwen3.8 Max (0902) — флагманский чат и рассуждение. Тариф: вход .5 / выход .5 за 1M токенов.",
+      "ja": "Qwen3.8 Max（0902）旗艦チャット／推論モデル。 料金：入力 .5 / 出力 .5（100万 tokens あたり）。",
+      "vi": "Qwen3.8 Max (0902) — chat và suy luận flagship. Giá: vào .5 / ra .5 mỗi 1M tokens."
+    },
+    "unit": "token",
+    "badge": {
+      "zhCN": "按 Token 计费",
+      "zhTW": "按 Token 計費",
+      "en": "Token-based",
+      "fr": "Au token",
+      "ru": "По токенам",
+      "ja": "Token 課金",
+      "vi": "Theo token"
+    },
+    "suffix": {
+      "zhCN": "",
+      "zhTW": "",
+      "en": "",
+      "fr": "",
+      "ru": "",
+      "ja": "",
+      "vi": ""
+    },
+    "price_key": {
+      "zhCN": "",
+      "zhTW": "",
+      "en": "",
+      "fr": "",
+      "ru": "",
+      "ja": "",
+      "vi": ""
+    },
+    "description_zh": "Qwen3.8 Max（0902）旗舰对话与推理模型。 计费：输入 .5 / 输出 .5（每百万 tokens）。",
+    "description_en": "Qwen3.8 Max (0902) flagship chat and reasoning model. Pricing: .5 input / .5 output per 1M tokens.",
+    "badge_zh": "按 Token 计费",
+    "badge_en": "Token-based",
+    "suffix_zh": "",
+    "suffix_en": "",
+    "price_key_zh": "",
+    "price_key_en": ""
   }
 }

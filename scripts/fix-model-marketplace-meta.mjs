@@ -114,6 +114,7 @@ const FIXES = {
   "kimi-k3": { vendorName: "Moonshot", icon: "Moonshot", tag: "大语言模型", endpoints: EP.chat },
   "MiniMax-M3": { vendorName: "MiniMax", icon: "Minimax.Color", tag: "大语言模型", endpoints: EP.chat },
   "glm-5.3": { vendorName: "智谱", icon: "Zhipu.Color", tag: "大语言模型", endpoints: EP.chat },
+  "qwen3.8-max-0902": { vendorName: "阿里巴巴", icon: "Qwen.Color", tag: "大语言模型", endpoints: EP.chat },
 };
 
 /** 未在 FIXES 里、但明显是聊天模型的，自动打「大语言模型」 */

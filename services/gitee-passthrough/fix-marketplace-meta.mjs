@@ -42,7 +42,6 @@ export const RULES = {
   "RMBG-2.0": { vendor: "其他", tag: "图像处理", endpoints: EP.imageProcess },
   "MinerU2.5-Pro": { vendor: "其他", tag: "OCR", endpoints: EP.docAsync },
   "Unlimited-OCR": { vendor: "其他", tag: "OCR", endpoints: EP.chat },
-  "DeepSeek-OCR-2": { vendor: "DeepSeek", tag: "OCR", endpoints: EP.chat },
   "Duix-Avatar": { vendor: "其他", tag: "数字人", endpoints: EP.duixAvatar },
   InfiniteTalk: { vendor: "其他", tag: "数字人", endpoints: EP.infiniteTalk },
   "MOSS-Audio-8B-Thinking": { vendor: "其他", tag: "语音识别", endpoints: EP.asr },

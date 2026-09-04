@@ -488,6 +488,8 @@
         <a href="#access" data-i18n="tocAccess"></a>
         <a href="#chat" data-i18n="tocChat"></a>
         <a href="#image" data-i18n="tocImage"></a>
+        <a href="#speech" data-i18n="tocSpeech"></a>
+        <a href="#more" data-i18n="tocMore"></a>
         <a href="#clients" data-i18n="tocClients"></a>
         <a href="#support" data-i18n="tocSupport"></a>
       </nav>
@@ -611,9 +613,144 @@
         </div>
       </section>
 
-      <section id="clients">
+      <section id="speech">
         <div class="sec-head">
           <span class="num">04</span>
+          <h2 data-i18n="speechTitle"></h2>
+        </div>
+        <p class="sec-desc" data-i18n="speechDesc"></p>
+
+        <h3 style="font-size:15px;margin:0 0 10px;letter-spacing:-0.01em;" data-i18n="asrTitle"></h3>
+        <div class="endpoint">
+          <span class="method">POST</span>
+          <span class="path">/v1/audio/transcriptions</span>
+          <button type="button" class="btn-copy" data-copy="https://www.keyoapi.xyz/v1/audio/transcriptions" data-i18n="copyUrl"></button>
+        </div>
+        <div class="code-block">
+          <div class="code-bar">
+            <span class="lang">cURL · ASR</span>
+            <button type="button" class="btn-copy" data-copy-target="curl-asr" data-i18n="copy"></button>
+          </div>
+          <pre id="curl-asr"></pre>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th data-i18n="thModel"></th>
+                <th data-i18n="thNote"></th>
+              </tr>
+            </thead>
+            <tbody>
+<tr><td class="model"><button type="button" class="model-btn" data-copy="whisper-large-v3-turbo">whisper-large-v3-turbo</button></td><td class="note-cell" data-i18n="nWhisperTurbo"></td></tr>
+<tr><td class="model"><button type="button" class="model-btn" data-copy="whisper-large-v3">whisper-large-v3</button></td><td class="note-cell" data-i18n="nWhisper"></td></tr>
+<tr><td class="model"><button type="button" class="model-btn" data-copy="Fun-ASR-Nano-2512">Fun-ASR-Nano-2512</button></td><td class="note-cell" data-i18n="nFunAsr"></td></tr>
+<tr><td class="model"><button type="button" class="model-btn" data-copy="GLM-ASR">GLM-ASR</button></td><td class="note-cell" data-i18n="nGlmAsr"></td></tr>
+<tr><td class="model"><button type="button" class="model-btn" data-copy="MOSS-Audio-8B-Thinking">MOSS-Audio-8B-Thinking</button></td><td class="note-cell" data-i18n="nMossAsr"></td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3 style="font-size:15px;margin:28px 0 10px;letter-spacing:-0.01em;" data-i18n="ttsSyncTitle"></h3>
+        <div class="endpoint">
+          <span class="method">POST</span>
+          <span class="path">/v1/audio/speech</span>
+          <button type="button" class="btn-copy" data-copy="https://www.keyoapi.xyz/v1/audio/speech" data-i18n="copyUrl"></button>
+        </div>
+        <div class="code-block">
+          <div class="code-bar">
+            <span class="lang">cURL · TTS sync</span>
+            <button type="button" class="btn-copy" data-copy-target="curl-tts" data-i18n="copy"></button>
+          </div>
+          <pre id="curl-tts"></pre>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th data-i18n="thModel"></th>
+                <th data-i18n="thNote"></th>
+              </tr>
+            </thead>
+            <tbody>
+<tr><td class="model"><button type="button" class="model-btn" data-copy="GLM-TTS">GLM-TTS</button></td><td class="note-cell" data-i18n="nGlmTts"></td></tr>
+<tr><td class="model"><button type="button" class="model-btn" data-copy="Step-Audio-TTS-3B">Step-Audio-TTS-3B</button></td><td class="note-cell" data-i18n="nStepTts"></td></tr>
+<tr><td class="model"><button type="button" class="model-btn" data-copy="IndexTTS-2">IndexTTS-2</button></td><td class="note-cell" data-i18n="nIndexTts"></td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3 style="font-size:15px;margin:28px 0 10px;letter-spacing:-0.01em;" data-i18n="ttsAsyncTitle"></h3>
+        <div class="endpoint">
+          <span class="method">POST</span>
+          <span class="path">/v1/async/audio/speech</span>
+          <button type="button" class="btn-copy" data-copy="https://www.keyoapi.xyz/v1/async/audio/speech" data-i18n="copyUrl"></button>
+        </div>
+        <p class="sec-desc" data-i18n="ttsAsyncDesc"></p>
+        <div class="code-block">
+          <div class="code-bar">
+            <span class="lang">cURL · TTS async</span>
+            <button type="button" class="btn-copy" data-copy-target="curl-tts-async" data-i18n="copy"></button>
+          </div>
+          <pre id="curl-tts-async"></pre>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th data-i18n="thModel"></th>
+                <th data-i18n="thNote"></th>
+              </tr>
+            </thead>
+            <tbody>
+<tr><td class="model"><button type="button" class="model-btn" data-copy="Qwen3-TTS">Qwen3-TTS</button></td><td class="note-cell" data-i18n="nQwenTts"></td></tr>
+<tr><td class="model"><button type="button" class="model-btn" data-copy="CosyVoice3">CosyVoice3</button></td><td class="note-cell" data-i18n="nCosyTts"></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="hint" data-i18n="speechHint"></p>
+      </section>
+
+      <section id="more">
+        <div class="sec-head">
+          <span class="num">05</span>
+          <h2 data-i18n="moreTitle"></h2>
+        </div>
+        <p class="sec-desc" data-i18n="moreDesc"></p>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th data-i18n="thCapability"></th>
+                <th data-i18n="thPath"></th>
+                <th data-i18n="thModel"></th>
+              </tr>
+            </thead>
+            <tbody>
+<tr><td class="note-cell" data-i18n="capOcr"></td><td class="price">POST /v1/chat/completions</td><td class="model"><button type="button" class="model-btn" data-copy="Unlimited-OCR">Unlimited-OCR</button></td></tr>
+<tr><td class="note-cell" data-i18n="capDoc"></td><td class="price">POST /v1/async/documents/parse</td><td class="model"><button type="button" class="model-btn" data-copy="MinerU2.5-Pro">MinerU2.5-Pro</button></td></tr>
+<tr><td class="note-cell" data-i18n="capMatting"></td><td class="price">POST /v1/images/mattings</td><td class="model"><button type="button" class="model-btn" data-copy="RMBG-2.0">RMBG-2.0</button></td></tr>
+<tr><td class="note-cell" data-i18n="capUpscale"></td><td class="price">POST /v1/images/upscaling</td><td class="model"><button type="button" class="model-btn" data-copy="Real-ESRGAN">Real-ESRGAN</button></td></tr>
+<tr><td class="note-cell" data-i18n="capDetect"></td><td class="price">POST /v1/images/object-detection</td><td class="model"><button type="button" class="model-btn" data-copy="VajraV1">VajraV1</button></td></tr>
+<tr><td class="note-cell" data-i18n="capSeg"></td><td class="price">POST /v1/images/segmentation</td><td class="model"><button type="button" class="model-btn" data-copy="sam3">sam3</button></td></tr>
+<tr><td class="note-cell" data-i18n="capDigital"></td><td class="price">POST /v1/async/videos/…</td><td class="model"><button type="button" class="model-btn" data-copy="Duix-Avatar">Duix-Avatar</button></td></tr>
+<tr><td class="note-cell" data-i18n="capMod"></td><td class="price">POST /v1/moderations</td><td class="model"><button type="button" class="model-btn" data-copy="nonescape-v0">nonescape-v0</button></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="code-block">
+          <div class="code-bar">
+            <span class="lang">cURL · matting</span>
+            <button type="button" class="btn-copy" data-copy-target="curl-matting" data-i18n="copy"></button>
+          </div>
+          <pre id="curl-matting"></pre>
+        </div>
+        <p class="hint" data-i18n-html="moreHint"></p>
+      </section>
+
+      <section id="clients">
+        <div class="sec-head">
+          <span class="num">06</span>
           <h2 data-i18n="clientsTitle"></h2>
         </div>
         <p class="sec-desc" data-i18n="clientsDesc"></p>
@@ -665,7 +802,7 @@
 
       <section id="support">
         <div class="sec-head">
-          <span class="num">05</span>
+          <span class="num">07</span>
           <h2 data-i18n="supportTitle"></h2>
         </div>
         <div class="footer-note" data-i18n-html="supportBody"></div>
@@ -683,10 +820,12 @@ const I18N = {
   "en": {
     "title": "KeyoAPI Docs",
     "docTitle": "KeyoAPI Integration Docs",
-    "heroSub": "One Base URL + one API Key. OpenAI-compatible — works with Cursor, ChatBox, and official SDKs.",
+    "heroSub": "One Base URL + one API Key. OpenAI-compatible chat/images/speech — plus OCR, vision tools and more.",
     "tocAccess": "Connection",
     "tocChat": "Chat",
     "tocImage": "Images",
+    "tocSpeech": "Speech",
+    "tocMore": "More APIs",
     "tocClients": "Clients",
     "tocSupport": "Billing & support",
     "accessTitle": "Connection",
@@ -719,8 +858,38 @@ const I18N = {
     "imageTitle": "Images",
     "thPrice": "Approx. price",
     "perImage": "/ image",
+    "speechTitle": "Speech",
+    "speechDesc": "Speech-to-text (ASR) and text-to-speech (TTS). Same Base URL and API Key.",
+    "asrTitle": "Speech recognition (ASR)",
+    "ttsSyncTitle": "Text-to-speech — sync",
+    "ttsAsyncTitle": "Text-to-speech — async",
+    "ttsAsyncDesc": "Create a task, then poll GET /v1/task/{id} until the audio is ready.",
+    "speechHint": "Click a model name to copy. Prices are on /pricing. Some TTS models only support async.",
+    "nWhisperTurbo": "Faster multilingual Whisper",
+    "nWhisper": "High-accuracy Whisper",
+    "nFunAsr": "Lightweight multilingual ASR",
+    "nGlmAsr": "Lightweight Chinese ASR",
+    "nMossAsr": "Audio understanding / meetings",
+    "nGlmTts": "Sync TTS",
+    "nStepTts": "Sync TTS",
+    "nIndexTts": "Sync or async",
+    "nQwenTts": "Async TTS",
+    "nCosyTts": "Async TTS",
+    "moreTitle": "More APIs",
+    "moreDesc": "These appear on /pricing but are not one-click in ChatBox/Cursor. Call the path below with your KeyoAPI key.",
+    "thCapability": "Capability",
+    "thPath": "Path",
+    "capOcr": "OCR via chat",
+    "capDoc": "Document parse (async)",
+    "capMatting": "Background removal",
+    "capUpscale": "Upscaling",
+    "capDetect": "Object detection",
+    "capSeg": "Segmentation",
+    "capDigital": "Digital human / video (async)",
+    "capMod": "Moderation",
+    "moreHint": "Protocol mirrors upstream OpenAPI shapes. Official reference: <a href=\"https://ai.gitee.com/docs/openapi/v1\" target=\"_blank\" rel=\"noopener noreferrer\">ai.gitee.com/docs/openapi/v1</a> — keep using <code>https://www.keyoapi.xyz/v1</code> as Base URL.",
     "clientsTitle": "Clients",
-    "clientsDesc": "Fill these in common tools. Model names must match the table exactly.",
+    "clientsDesc": "Chat tools mainly cover text (and sometimes images). For speech / OCR / vision tools, use the curl samples above or an HTTP client.",
     "clientsTools": "ChatBox / Cursor etc.",
     "apiAddress": "API base",
     "modelLabel": "Model",
@@ -742,10 +911,12 @@ const I18N = {
   "zhCN": {
     "title": "KeyoAPI 接入文档",
     "docTitle": "KeyoAPI 接入文档",
-    "heroSub": "一个 Base URL + 一把 API Key，兼容 OpenAI 协议。可直接用于 Cursor、ChatBox 与官方 SDK。",
+    "heroSub": "一个 Base URL + 一把 API Key。兼容 OpenAI 协议：对话 / 图片 / 语音，以及 OCR、视觉工具等。",
     "tocAccess": "接入信息",
     "tocChat": "文本对话",
     "tocImage": "图片生成",
+    "tocSpeech": "语音",
+    "tocMore": "扩展能力",
     "tocClients": "客户端接入",
     "tocSupport": "充值与支持",
     "accessTitle": "接入信息",
@@ -778,8 +949,38 @@ const I18N = {
     "imageTitle": "图片生成",
     "thPrice": "约价",
     "perImage": "/ 张",
+    "speechTitle": "语音",
+    "speechDesc": "语音识别（ASR）与语音合成（TTS），仍用同一 Base URL 与 API Key。",
+    "asrTitle": "语音识别（ASR）",
+    "ttsSyncTitle": "语音合成 — 同步",
+    "ttsAsyncTitle": "语音合成 — 异步",
+    "ttsAsyncDesc": "先创建任务，再轮询 GET /v1/task/{id} 取结果。",
+    "speechHint": "点击模型名即可复制。价格见 /pricing。部分 TTS 仅支持异步接口。",
+    "nWhisperTurbo": "更快的多语种 Whisper",
+    "nWhisper": "高精度 Whisper",
+    "nFunAsr": "轻量多语种",
+    "nGlmAsr": "轻量中文",
+    "nMossAsr": "语音理解 / 会议",
+    "nGlmTts": "同步 TTS",
+    "nStepTts": "同步 TTS",
+    "nIndexTts": "同步或异步",
+    "nQwenTts": "异步 TTS",
+    "nCosyTts": "异步 TTS",
+    "moreTitle": "扩展能力",
+    "moreDesc": "这些模型在 /pricing 可见，但不能指望 ChatBox/Cursor 一键调用；请按路径用 HTTP 请求。",
+    "thCapability": "能力",
+    "thPath": "路径",
+    "capOcr": "OCR（对话接口）",
+    "capDoc": "文档解析（异步）",
+    "capMatting": "抠图",
+    "capUpscale": "超分",
+    "capDetect": "目标检测",
+    "capSeg": "图像分割",
+    "capDigital": "数字人 / 视频（异步）",
+    "capMod": "内容风控",
+    "moreHint": "协议形态参考上游 OpenAPI。<a href=\"https://ai.gitee.com/docs/openapi/v1\" target=\"_blank\" rel=\"noopener noreferrer\">ai.gitee.com/docs/openapi/v1</a> — 调用时请把 Base URL 换成 <code>https://www.keyoapi.xyz/v1</code>。",
     "clientsTitle": "客户端接入",
-    "clientsDesc": "在常见工具里这样填；模型名必须与上表完全一致。",
+    "clientsDesc": "聊天类工具主要覆盖文本（部分支持图片）。语音 / OCR / 视觉工具请用上方 curl 或 HTTP 客户端。",
     "clientsTools": "ChatBox / Cursor 等",
     "apiAddress": "API 地址",
     "modelLabel": "模型",
@@ -801,10 +1002,12 @@ const I18N = {
   "zhTW": {
     "title": "KeyoAPI 接入文件",
     "docTitle": "KeyoAPI 接入文件",
-    "heroSub": "一個 Base URL + 一把 API Key，相容 OpenAI 協定。可直接用於 Cursor、ChatBox 與官方 SDK。",
+    "heroSub": "一個 Base URL + 一把 API Key，相容 OpenAI：對話 / 圖片 / 語音，以及 OCR、視覺工具等。",
     "tocAccess": "接入資訊",
     "tocChat": "文字對話",
     "tocImage": "圖片生成",
+    "tocSpeech": "語音",
+    "tocMore": "擴充能力",
     "tocClients": "客戶端接入",
     "tocSupport": "儲值與支援",
     "accessTitle": "接入資訊",
@@ -837,8 +1040,38 @@ const I18N = {
     "imageTitle": "圖片生成",
     "thPrice": "約價",
     "perImage": "/ 張",
+    "speechTitle": "語音",
+    "speechDesc": "語音識別（ASR）與語音合成（TTS），仍用同一 Base URL 與 API Key。",
+    "asrTitle": "語音識別（ASR）",
+    "ttsSyncTitle": "語音合成 — 同步",
+    "ttsAsyncTitle": "語音合成 — 非同步",
+    "ttsAsyncDesc": "先建立任務，再輪詢 GET /v1/task/{id} 取結果。",
+    "speechHint": "點擊模型名即可複製。價格見 /pricing。部分 TTS 僅支援非同步接口。",
+    "nWhisperTurbo": "更快的多語種 Whisper",
+    "nWhisper": "高精度 Whisper",
+    "nFunAsr": "輕量多語種",
+    "nGlmAsr": "輕量中文",
+    "nMossAsr": "語音理解 / 會議",
+    "nGlmTts": "同步 TTS",
+    "nStepTts": "同步 TTS",
+    "nIndexTts": "同步或非同步",
+    "nQwenTts": "非同步 TTS",
+    "nCosyTts": "非同步 TTS",
+    "moreTitle": "擴充能力",
+    "moreDesc": "這些模型在 /pricing 可見，但不能指望 ChatBox/Cursor 一鍵呼叫；請依路徑用 HTTP 請求。",
+    "thCapability": "能力",
+    "thPath": "路徑",
+    "capOcr": "OCR（對話接口）",
+    "capDoc": "文件解析（非同步）",
+    "capMatting": "去背",
+    "capUpscale": "超解析",
+    "capDetect": "目標偵測",
+    "capSeg": "影像分割",
+    "capDigital": "數位人 / 影片（非同步）",
+    "capMod": "內容風控",
+    "moreHint": "協定形態參考上游 OpenAPI。<a href=\"https://ai.gitee.com/docs/openapi/v1\" target=\"_blank\" rel=\"noopener noreferrer\">ai.gitee.com/docs/openapi/v1</a> — 呼叫時請把 Base URL 換成 <code>https://www.keyoapi.xyz/v1</code>。",
     "clientsTitle": "客戶端接入",
-    "clientsDesc": "在常見工具裡這樣填；模型名必須與上表完全一致。",
+    "clientsDesc": "聊天類工具主要涵蓋文字（部分支援圖片）。語音 / OCR / 視覺工具請用上方 curl 或 HTTP 客戶端。",
     "clientsTools": "ChatBox / Cursor 等",
     "apiAddress": "API 位址",
     "modelLabel": "模型",
@@ -860,10 +1093,12 @@ const I18N = {
   "ja": {
     "title": "KeyoAPI ドキュメント",
     "docTitle": "KeyoAPI 連携ドキュメント",
-    "heroSub": "1つの Base URL と 1つの API Key。OpenAI 互換で Cursor / ChatBox / 公式 SDK にそのまま使えます。",
+    "heroSub": "1つの Base URL と 1つの API Key。OpenAI 互換のチャット/画像/音声に加え、OCR やビジョン API も利用可能。",
     "tocAccess": "接続情報",
     "tocChat": "チャット",
     "tocImage": "画像生成",
+    "tocSpeech": "音声",
+    "tocMore": "その他 API",
     "tocClients": "クライアント",
     "tocSupport": "課金とサポート",
     "accessTitle": "接続情報",
@@ -896,8 +1131,38 @@ const I18N = {
     "imageTitle": "画像生成",
     "thPrice": "目安価格",
     "perImage": "/ 枚",
+    "speechTitle": "音声",
+    "speechDesc": "音声認識（ASR）と音声合成（TTS）。同じ Base URL / API Key を使います。",
+    "asrTitle": "音声認識（ASR）",
+    "ttsSyncTitle": "音声合成 — 同期",
+    "ttsAsyncTitle": "音声合成 — 非同期",
+    "ttsAsyncDesc": "タスク作成後、GET /v1/task/{id} をポーリングして結果を取得。",
+    "speechHint": "モデル名クリックでコピー。価格は /pricing。一部 TTS は非同期のみ。",
+    "nWhisperTurbo": "高速多言語 Whisper",
+    "nWhisper": "高精度 Whisper",
+    "nFunAsr": "軽量多言語 ASR",
+    "nGlmAsr": "軽量中国語 ASR",
+    "nMossAsr": "音声理解 / 会議",
+    "nGlmTts": "同期 TTS",
+    "nStepTts": "同期 TTS",
+    "nIndexTts": "同期または非同期",
+    "nQwenTts": "非同期 TTS",
+    "nCosyTts": "非同期 TTS",
+    "moreTitle": "その他 API",
+    "moreDesc": "/pricing に表示されますが ChatBox/Cursor のワンクリック対象外。下のパスで HTTP 呼び出し。",
+    "thCapability": "機能",
+    "thPath": "パス",
+    "capOcr": "OCR（チャット）",
+    "capDoc": "文書解析（非同期）",
+    "capMatting": "背景除去",
+    "capUpscale": "超解像",
+    "capDetect": "物体検出",
+    "capSeg": "セグメンテーション",
+    "capDigital": "デジタルヒューマン / 動画（非同期）",
+    "capMod": "モデレーション",
+    "moreHint": "上流 OpenAPI 形式を参考。<a href=\"https://ai.gitee.com/docs/openapi/v1\" target=\"_blank\" rel=\"noopener noreferrer\">ai.gitee.com/docs/openapi/v1</a> — Base URL は <code>https://www.keyoapi.xyz/v1</code>。",
     "clientsTitle": "クライアント",
-    "clientsDesc": "よく使うツールではこう設定。モデル名は表と完全一致させてください。",
+    "clientsDesc": "チャットツールは主にテキスト向け。音声 / OCR / ビジョンは上の curl か HTTP クライアントを使用。",
     "clientsTools": "ChatBox / Cursor など",
     "apiAddress": "API ベース",
     "modelLabel": "モデル",
@@ -919,10 +1184,12 @@ const I18N = {
   "fr": {
     "title": "Docs KeyoAPI",
     "docTitle": "Documentation d’intégration KeyoAPI",
-    "heroSub": "Une Base URL + une clé API. Compatible OpenAI — Cursor, ChatBox et SDK officiels.",
+    "heroSub": "Une Base URL + une clé API. Chat / images / parole compatibles OpenAI, plus OCR et vision.",
     "tocAccess": "Connexion",
     "tocChat": "Chat",
     "tocImage": "Images",
+    "tocSpeech": "Parole",
+    "tocMore": "Autres API",
     "tocClients": "Clients",
     "tocSupport": "Paiement & support",
     "accessTitle": "Connexion",
@@ -955,8 +1222,38 @@ const I18N = {
     "imageTitle": "Images",
     "thPrice": "Prix approx.",
     "perImage": "/ image",
+    "speechTitle": "Parole",
+    "speechDesc": "Reconnaissance (ASR) et synthèse (TTS). Même Base URL et clé.",
+    "asrTitle": "Reconnaissance vocale (ASR)",
+    "ttsSyncTitle": "Synthèse — synchrone",
+    "ttsAsyncTitle": "Synthèse — asynchrone",
+    "ttsAsyncDesc": "Créer une tâche, puis interroger GET /v1/task/{id}.",
+    "speechHint": "Cliquez un modèle pour copier. Prix sur /pricing. Certains TTS sont async uniquement.",
+    "nWhisperTurbo": "Whisper multilingue rapide",
+    "nWhisper": "Whisper haute précision",
+    "nFunAsr": "ASR léger multilingue",
+    "nGlmAsr": "ASR chinois léger",
+    "nMossAsr": "Compréhension audio / réunions",
+    "nGlmTts": "TTS sync",
+    "nStepTts": "TTS sync",
+    "nIndexTts": "Sync ou async",
+    "nQwenTts": "TTS async",
+    "nCosyTts": "TTS async",
+    "moreTitle": "Autres API",
+    "moreDesc": "Visibles sur /pricing, pas en un clic dans ChatBox/Cursor. Appelez le chemin ci-dessous.",
+    "thCapability": "Capacité",
+    "thPath": "Chemin",
+    "capOcr": "OCR via chat",
+    "capDoc": "Parse document (async)",
+    "capMatting": "Détourage",
+    "capUpscale": "Upscaling",
+    "capDetect": "Détection d’objets",
+    "capSeg": "Segmentation",
+    "capDigital": "Humain digital / vidéo (async)",
+    "capMod": "Modération",
+    "moreHint": "Forme OpenAPI amont : <a href=\"https://ai.gitee.com/docs/openapi/v1\" target=\"_blank\" rel=\"noopener noreferrer\">ai.gitee.com/docs/openapi/v1</a> — Base URL KeyoAPI : <code>https://www.keyoapi.xyz/v1</code>.",
     "clientsTitle": "Clients",
-    "clientsDesc": "Remplissez ainsi dans vos outils. Les noms de modèles doivent correspondre exactement.",
+    "clientsDesc": "Les outils de chat couvrent surtout le texte. Pour parole / OCR / vision, utilisez les curl ci-dessus.",
     "clientsTools": "ChatBox / Cursor etc.",
     "apiAddress": "Base API",
     "modelLabel": "Modèle",
@@ -978,10 +1275,12 @@ const I18N = {
   "ru": {
     "title": "Документация KeyoAPI",
     "docTitle": "Документация по подключению KeyoAPI",
-    "heroSub": "Один Base URL + один API Key. Совместимо с OpenAI — Cursor, ChatBox и официальные SDK.",
+    "heroSub": "Один Base URL + один API Key. Чат / изображения / речь (OpenAI-совместимо), плюс OCR и vision.",
     "tocAccess": "Подключение",
     "tocChat": "Чат",
     "tocImage": "Изображения",
+    "tocSpeech": "Речь",
+    "tocMore": "Другие API",
     "tocClients": "Клиенты",
     "tocSupport": "Оплата и поддержка",
     "accessTitle": "Подключение",
@@ -1014,8 +1313,38 @@ const I18N = {
     "imageTitle": "Изображения",
     "thPrice": "Примерно",
     "perImage": "/ изобр.",
+    "speechTitle": "Речь",
+    "speechDesc": "Распознавание (ASR) и синтез (TTS). Тот же Base URL и ключ.",
+    "asrTitle": "Распознавание речи (ASR)",
+    "ttsSyncTitle": "Синтез — sync",
+    "ttsAsyncTitle": "Синтез — async",
+    "ttsAsyncDesc": "Создайте задачу, затем опрашивайте GET /v1/task/{id}.",
+    "speechHint": "Клик по модели — копировать. Цены на /pricing. Часть TTS только async.",
+    "nWhisperTurbo": "Быстрый Whisper",
+    "nWhisper": "Точный Whisper",
+    "nFunAsr": "Лёгкий ASR",
+    "nGlmAsr": "Китайский ASR",
+    "nMossAsr": "Аудио-понимание / встречи",
+    "nGlmTts": "Sync TTS",
+    "nStepTts": "Sync TTS",
+    "nIndexTts": "Sync или async",
+    "nQwenTts": "Async TTS",
+    "nCosyTts": "Async TTS",
+    "moreTitle": "Другие API",
+    "moreDesc": "Есть на /pricing, но не в один клик в ChatBox/Cursor. Вызывайте путь ниже.",
+    "thCapability": "Возможность",
+    "thPath": "Путь",
+    "capOcr": "OCR через chat",
+    "capDoc": "Разбор документов (async)",
+    "capMatting": "Удаление фона",
+    "capUpscale": "Апскейл",
+    "capDetect": "Детекция объектов",
+    "capSeg": "Сегментация",
+    "capDigital": "Цифровой человек / видео (async)",
+    "capMod": "Модерация",
+    "moreHint": "Формат upstream OpenAPI: <a href=\"https://ai.gitee.com/docs/openapi/v1\" target=\"_blank\" rel=\"noopener noreferrer\">ai.gitee.com/docs/openapi/v1</a> — Base URL: <code>https://www.keyoapi.xyz/v1</code>.",
     "clientsTitle": "Клиенты",
-    "clientsDesc": "Так заполняйте в инструментах. Имена моделей — точно как в таблице.",
+    "clientsDesc": "Чат-клиенты в основном для текста. Для речи / OCR / vision используйте curl выше.",
     "clientsTools": "ChatBox / Cursor и др.",
     "apiAddress": "API base",
     "modelLabel": "Модель",
@@ -1037,10 +1366,12 @@ const I18N = {
   "vi": {
     "title": "Tài liệu KeyoAPI",
     "docTitle": "Tài liệu tích hợp KeyoAPI",
-    "heroSub": "Một Base URL + một API Key. Tương thích OpenAI — dùng với Cursor, ChatBox và SDK chính thức.",
+    "heroSub": "Một Base URL + một API Key. Chat / ảnh / giọng nói tương thích OpenAI, kèm OCR và vision.",
     "tocAccess": "Kết nối",
     "tocChat": "Chat",
     "tocImage": "Ảnh",
+    "tocSpeech": "Giọng nói",
+    "tocMore": "API khác",
     "tocClients": "Client",
     "tocSupport": "Nạp tiền & hỗ trợ",
     "accessTitle": "Kết nối",
@@ -1073,8 +1404,38 @@ const I18N = {
     "imageTitle": "Ảnh",
     "thPrice": "Giá ước tính",
     "perImage": "/ ảnh",
+    "speechTitle": "Giọng nói",
+    "speechDesc": "Nhận dạng (ASR) và tổng hợp (TTS). Cùng Base URL và API Key.",
+    "asrTitle": "Nhận dạng giọng nói (ASR)",
+    "ttsSyncTitle": "TTS — đồng bộ",
+    "ttsAsyncTitle": "TTS — bất đồng bộ",
+    "ttsAsyncDesc": "Tạo task rồi poll GET /v1/task/{id}.",
+    "speechHint": "Bấm tên model để sao chép. Giá trên /pricing. Một số TTS chỉ async.",
+    "nWhisperTurbo": "Whisper đa ngữ nhanh",
+    "nWhisper": "Whisper độ chính xác cao",
+    "nFunAsr": "ASR nhẹ đa ngữ",
+    "nGlmAsr": "ASR tiếng Trung nhẹ",
+    "nMossAsr": "Hiểu audio / họp",
+    "nGlmTts": "TTS sync",
+    "nStepTts": "TTS sync",
+    "nIndexTts": "Sync hoặc async",
+    "nQwenTts": "TTS async",
+    "nCosyTts": "TTS async",
+    "moreTitle": "API khác",
+    "moreDesc": "Có trên /pricing nhưng không one-click trong ChatBox/Cursor. Gọi đúng path bên dưới.",
+    "thCapability": "Khả năng",
+    "thPath": "Path",
+    "capOcr": "OCR qua chat",
+    "capDoc": "Parse tài liệu (async)",
+    "capMatting": "Tách nền",
+    "capUpscale": "Upscale",
+    "capDetect": "Object detection",
+    "capSeg": "Segmentation",
+    "capDigital": "Digital human / video (async)",
+    "capMod": "Moderation",
+    "moreHint": "Tham khảo OpenAPI upstream: <a href=\"https://ai.gitee.com/docs/openapi/v1\" target=\"_blank\" rel=\"noopener noreferrer\">ai.gitee.com/docs/openapi/v1</a> — Base URL: <code>https://www.keyoapi.xyz/v1</code>.",
     "clientsTitle": "Client",
-    "clientsDesc": "Điền như sau trong công cụ. Tên model phải khớp bảng.",
+    "clientsDesc": "Công cụ chat chủ yếu cho text. Với speech / OCR / vision hãy dùng curl phía trên.",
     "clientsTools": "ChatBox / Cursor v.v.",
     "apiAddress": "API base",
     "modelLabel": "Model",
@@ -1131,6 +1492,10 @@ function renderSamples(dict) {
   const hello = dict.hello || 'Hello';
   const chat = document.getElementById('curl-chat');
   const image = document.getElementById('curl-image');
+  const asr = document.getElementById('curl-asr');
+  const tts = document.getElementById('curl-tts');
+  const ttsAsync = document.getElementById('curl-tts-async');
+  const matting = document.getElementById('curl-matting');
   const models = document.getElementById('curl-models');
   const py = document.getElementById('py-sdk');
   if (chat) {
@@ -1144,6 +1509,34 @@ function renderSamples(dict) {
       '  -H <span class="tok-str">"Authorization: Bearer ' + escapeHtml(key) + '"</span> \\\n' +
       '  -H <span class="tok-str">"Content-Type: application/json"</span> \\\n' +
       '  -d <span class="tok-str">\'{\n    "model": "nano-banana-2",\n    "prompt": "a red circle on white background",\n    "size": "1024x1024"\n  }\'</span></code>';
+  }
+  if (asr) {
+    asr.innerHTML = '<code><span class="tok-cmd">curl</span> https://www.keyoapi.xyz/v1/audio/transcriptions \\\n' +
+      '  -H <span class="tok-str">"Authorization: Bearer ' + escapeHtml(key) + '"</span> \\\n' +
+      '  -F <span class="tok-str">model=whisper-large-v3-turbo</span> \\\n' +
+      '  -F <span class="tok-str">language=zh</span> \\\n' +
+      '  -F <span class="tok-str">file=@./sample.wav</span></code>';
+  }
+  if (tts) {
+    tts.innerHTML = '<code><span class="tok-cmd">curl</span> https://www.keyoapi.xyz/v1/audio/speech \\\n' +
+      '  -H <span class="tok-str">"Authorization: Bearer ' + escapeHtml(key) + '"</span> \\\n' +
+      '  -H <span class="tok-str">"Content-Type: application/json"</span> \\\n' +
+      '  -d <span class="tok-str">\'{\n    "model": "GLM-TTS",\n    "input": "' + escapeHtml(hello) + '",\n    "voice": "alloy"\n  }\'</span> \\\n' +
+      '  --output speech.wav</code>';
+  }
+  if (ttsAsync) {
+    ttsAsync.innerHTML = '<code><span class="tok-cmd">curl</span> https://www.keyoapi.xyz/v1/async/audio/speech \\\n' +
+      '  -H <span class="tok-str">"Authorization: Bearer ' + escapeHtml(key) + '"</span> \\\n' +
+      '  -H <span class="tok-str">"Content-Type: application/json"</span> \\\n' +
+      '  -d <span class="tok-str">\'{"model":"Qwen3-TTS","input":"' + escapeHtml(hello) + '"}\'</span>\n\n' +
+      '<span class="tok-cmd">curl</span> https://www.keyoapi.xyz/v1/task/TASK_ID \\\n' +
+      '  -H <span class="tok-str">"Authorization: Bearer ' + escapeHtml(key) + '"</span></code>';
+  }
+  if (matting) {
+    matting.innerHTML = '<code><span class="tok-cmd">curl</span> https://www.keyoapi.xyz/v1/images/mattings \\\n' +
+      '  -H <span class="tok-str">"Authorization: Bearer ' + escapeHtml(key) + '"</span> \\\n' +
+      '  -F <span class="tok-str">model=RMBG-2.0</span> \\\n' +
+      '  -F <span class="tok-str">image=@photo.png</span></code>';
   }
   if (models) {
     models.textContent = 'curl https://www.keyoapi.xyz/v1/models \\\n  -H "Authorization: Bearer ' + key + '"';

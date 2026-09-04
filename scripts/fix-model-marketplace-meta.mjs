@@ -64,7 +64,6 @@ const FIXES = {
   // —— OCR ——
   "MinerU2.5-Pro": { vendorName: "其他", icon: "Custom", tag: "OCR", endpoints: EP.docAsync }, // OpenDataLab，无现成 logo
   "Unlimited-OCR": { vendorName: "百度", icon: "Baidu.Color", tag: "OCR", endpoints: EP.chat },
-  "DeepSeek-OCR-2": { vendorName: "DeepSeek", icon: "DeepSeek.Color", tag: "OCR", endpoints: EP.chat },
 
   // —— 数字人（不进 Video）——
   "Duix-Avatar": { vendorName: "其他", icon: "Custom", tag: "数字人", endpoints: EP.duixAvatar }, // Duix.com，无现成 logo

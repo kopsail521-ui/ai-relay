@@ -383,54 +383,6 @@
     "price_key_zh": "",
     "price_key_en": ""
   },
-  "DeepSeek-OCR-2": {
-    "description": "高精度 OCR，可从图片/PDF 提取文字，并按阅读顺序整理表格、多栏与复杂排版。 计费：输入 $1.92 / 输出 $1.92（每百万 tokens）。",
-    "descriptions": {
-      "zhCN": "高精度 OCR，可从图片/PDF 提取文字，并按阅读顺序整理表格、多栏与复杂排版。 计费：输入 $1.92 / 输出 $1.92（每百万 tokens）。",
-      "zhTW": "高精度 OCR，可從圖片/PDF 提取文字，並按閱讀順序整理表格、多欄與複雜排版。 計費：輸入 $1.92 / 輸出 $1.92（每百萬 tokens）。",
-      "en": "High-accuracy OCR for images/PDFs. Reads tables, multi-column layouts, and complex pages in reading order. Pricing: $1.92 input / $1.92 output per 1M tokens.",
-      "fr": "OCR haute précision pour images/PDF. Lit tableaux, multi-colonnes et pages complexes dans l’ordre de lecture. Tarif : $1.92 entrée / $1.92 sortie pour 1M tokens.",
-      "ru": "Точный OCR для изображений/PDF: таблицы, многоколоночная и сложная вёрстка в порядке чтения. Тариф: вход $1.92 / выход $1.92 за 1M токенов.",
-      "ja": "高精度 OCR。画像/PDF から文字を抽出し、表・段組・複雑レイアウトを読順で整理。 料金：入力 $1.92 / 出力 $1.92（100万 tokens あたり）。",
-      "vi": "OCR độ chính xác cao cho ảnh/PDF: đọc bảng, nhiều cột và trang phức tạp theo thứ tự đọc. Giá: vào $1.92 / ra $1.92 mỗi 1M tokens."
-    },
-    "unit": "token",
-    "badge": {
-      "zhCN": "按 Token 计费",
-      "zhTW": "按 Token 計費",
-      "en": "Token-based",
-      "fr": "Au token",
-      "ru": "По токенам",
-      "ja": "Token 課金",
-      "vi": "Theo token"
-    },
-    "suffix": {
-      "zhCN": "",
-      "zhTW": "",
-      "en": "",
-      "fr": "",
-      "ru": "",
-      "ja": "",
-      "vi": ""
-    },
-    "price_key": {
-      "zhCN": "",
-      "zhTW": "",
-      "en": "",
-      "fr": "",
-      "ru": "",
-      "ja": "",
-      "vi": ""
-    },
-    "description_zh": "高精度 OCR，可从图片/PDF 提取文字，并按阅读顺序整理表格、多栏与复杂排版。 计费：输入 $1.92 / 输出 $1.92（每百万 tokens）。",
-    "description_en": "High-accuracy OCR for images/PDFs. Reads tables, multi-column layouts, and complex pages in reading order. Pricing: $1.92 input / $1.92 output per 1M tokens.",
-    "badge_zh": "按 Token 计费",
-    "badge_en": "Token-based",
-    "suffix_zh": "",
-    "suffix_en": "",
-    "price_key_zh": "",
-    "price_key_en": ""
-  },
   "Duix-Avatar": {
     "description": "音频+视频驱动的数字人（异步），生成口型同步与表情互动，适合虚拟角色说话场景。 计费：$0.006849/秒。",
     "descriptions": {

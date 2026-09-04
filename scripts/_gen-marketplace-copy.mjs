@@ -90,15 +90,6 @@ const DESC = {
     ja: "長文書向け OCR。レイアウト理解と構造化抽出。chat/completions で呼び出し可能。",
     vi: "OCR tài liệu dài với hiểu bố cục và trích xuất có cấu trúc qua chat/completions.",
   },
-  "DeepSeek-OCR-2": {
-    zhCN: "高精度 OCR，可从图片/PDF 提取文字，并按阅读顺序整理表格、多栏与复杂排版。",
-    zhTW: "高精度 OCR，可從圖片/PDF 提取文字，並按閱讀順序整理表格、多欄與複雜排版。",
-    en: "High-accuracy OCR for images/PDFs. Reads tables, multi-column layouts, and complex pages in reading order.",
-    fr: "OCR haute précision pour images/PDF. Lit tableaux, multi-colonnes et pages complexes dans l’ordre de lecture.",
-    ru: "Точный OCR для изображений/PDF: таблицы, многоколоночная и сложная вёрстка в порядке чтения.",
-    ja: "高精度 OCR。画像/PDF から文字を抽出し、表・段組・複雑レイアウトを読順で整理。",
-    vi: "OCR độ chính xác cao cho ảnh/PDF: đọc bảng, nhiều cột và trang phức tạp theo thứ tự đọc.",
-  },
   "Duix-Avatar": {
     zhCN: "音频+视频驱动的数字人（异步），生成口型同步与表情互动，适合虚拟角色说话场景。",
     zhTW: "音訊+視訊驅動的數位人（非同步），產生口型同步與表情互動，適合虛擬角色說話場景。",

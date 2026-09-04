@@ -35,7 +35,6 @@ const RULES = {
   "RMBG-2.0": ["其他", "图像处理", EP.p],
   "MinerU2.5-Pro": ["其他", "OCR", EP.d],
   "Unlimited-OCR": ["其他", "OCR", EP.c],
-  "DeepSeek-OCR-2": ["DeepSeek", "OCR", EP.c],
   "Duix-Avatar": ["其他", "数字人", EP.x],
   InfiniteTalk: ["其他", "数字人", EP.n],
   "MOSS-Audio-8B-Thinking": ["其他", "语音识别", EP.a],

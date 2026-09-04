@@ -81,11 +81,6 @@ const META = {
     category_zh: "文档/OCR",
     description: "OCR/文档解析；支持 chat 与异步解析",
   },
-  "DeepSeek-OCR-2": {
-    category: "document_ocr",
-    category_zh: "文档/OCR",
-    description: "DeepSeek OCR，chat/completions 调用",
-  },
   "Duix-Avatar": {
     category: "digital_human",
     category_zh: "数字人/视频",
@@ -211,8 +206,7 @@ for (const [id, arr] of Object.entries(prices)) {
   const isToken =
     (inM > 0 || outM > 0) &&
     (primary?.path === "v1/chat/completions" ||
-      id === "gemma-4-26B-A4B-it" ||
-      id === "DeepSeek-OCR-2");
+      id === "gemma-4-26B-A4B-it");
 
   let billing;
   if (isToken) {

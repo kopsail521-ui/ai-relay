@@ -9,7 +9,7 @@
 | 多模态对话 | gemma-4-26B-A4B-it |
 | 视觉检测/分割 | VajraV1, sam3 |
 | 图像处理 | AnimeSharp, Real-ESRGAN, UVDoc, RMBG-2.0 |
-| 文档/OCR | MinerU2.5-Pro, Unlimited-OCR, DeepSeek-OCR-2 |
+| 文档/OCR | MinerU2.5-Pro, Unlimited-OCR |
 | 数字人/视频 | Duix-Avatar, InfiniteTalk |
 | 语音识别 ASR | MOSS-Audio-8B-Thinking, Fun-ASR-Nano-2512, GLM-ASR, whisper-large-v3, whisper-large-v3-turbo |
 | 语音合成 TTS | Qwen3-TTS, CosyVoice3, GLM-TTS, IndexTTS-2, Step-Audio-TTS-3B |
@@ -43,7 +43,7 @@ services\gitee-passthrough\start.bat
 
 | 能力 | 路径 | 示例 model |
 |------|------|------------|
-| 对话 / OCR chat | `POST /v1/chat/completions` | gemma-4-26B-A4B-it, DeepSeek-OCR-2, Unlimited-OCR |
+| 对话 / OCR chat | `POST /v1/chat/completions` | gemma-4-26B-A4B-it, Unlimited-OCR |
 | ASR | `POST /v1/audio/transcriptions` | whisper-large-v3-turbo, GLM-ASR … |
 | TTS 同步 | `POST /v1/audio/speech` | GLM-TTS, Step-Audio-TTS-3B, IndexTTS-2 |
 | 风控 | `POST /v1/moderations` | nsfw-classifier, moark-text-moderation … |

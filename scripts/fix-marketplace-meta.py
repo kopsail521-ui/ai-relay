@@ -96,7 +96,6 @@ RULES = {
     "RMBG-2.0": ("BRIA AI", "BriaAI.Color", "图像处理", "p"),
     "MinerU2.5-Pro": ("其他", "Custom", "OCR", "d"),
     "Unlimited-OCR": ("百度", "Baidu.Color", "OCR", "c"),
-    "DeepSeek-OCR-2": ("DeepSeek", "DeepSeek.Color", "OCR", "c"),
     "Duix-Avatar": ("其他", "Custom", "数字人", "x"),
     "InfiniteTalk": ("其他", "Custom", "数字人", "n"),
     "MOSS-Audio-8B-Thinking": ("其他", "Custom", "语音识别", "a"),

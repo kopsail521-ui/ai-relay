@@ -20,8 +20,7 @@
     ],
     "document_ocr": [
       "MinerU2.5-Pro",
-      "Unlimited-OCR",
-      "DeepSeek-OCR-2"
+      "Unlimited-OCR"
     ],
     "digital_human": [
       "Duix-Avatar",
@@ -368,39 +367,6 @@
         "completion_ratio": 1
       },
       "relay": "mixed",
-      "markup": 5
-    },
-    {
-      "id": "DeepSeek-OCR-2",
-      "upstream": "DeepSeek-OCR-2",
-      "category": "document_ocr",
-      "category_zh": "文档/OCR",
-      "description": "高精度 OCR，可从图片/PDF 提取文字，并按阅读顺序整理表格、多栏与复杂排版。",
-      "cover": "https://gitee-ai.su.bcebos.com/v1/uploads/img/id-00z769y98-deepseek.png",
-      "paths": [
-        "v1/chat/completions"
-      ],
-      "operations": [
-        {
-          "name": "文本对话",
-          "type": "text2text",
-          "path": "v1/chat/completions",
-          "price_cny": 0.02,
-          "unit_tag": 0,
-          "in_m": 2.8,
-          "out_m": 2.8
-        }
-      ],
-      "billing": {
-        "mode": "token",
-        "cost_in_cny_per_m": 2.8,
-        "cost_out_cny_per_m": 2.8,
-        "sell_in_cny_per_m": 14,
-        "sell_out_cny_per_m": 14,
-        "model_ratio": 0.958904,
-        "completion_ratio": 1
-      },
-      "relay": "newapi_native",
       "markup": 5
     },
     {

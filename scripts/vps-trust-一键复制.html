@@ -368,7 +368,7 @@ sleep 3
 echo "status=$(curl -sS -o /dev/null -w '%{http_code}' -L --max-redirs 0 http://127.0.0.1:3001/status || true)"
 echo "faq=$(curl -sS -o /dev/null -w '%{http_code}' -L --max-redirs 0 http://127.0.0.1:3001/faq || true)"
 echo "integ=$(curl -sS -o /dev/null -w '%{http_code}' -L --max-redirs 0 http://127.0.0.1:3001/integrations || true)"
-curl -sS http://127.0.0.1:3001/ | grep -oE 'keyo-models-public|support@keyoapi.xyz' | sort -u || true
+curl -sS http://127.0.0.1:3001/ | grep -oE 'keyo-models-public|kopsail521@gmail.com' | sort -u || true
 echo DONE_TRUST_FACADE</textarea>
   <p class="hint">粘到 Workbench 后回车；看到 OK_… / DONE_… 再点下一步</p>
 </section>

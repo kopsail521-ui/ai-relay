@@ -69,8 +69,8 @@ export function StatusPage() {
 
         <p className='text-muted-foreground mt-6 text-sm'>
           For support:{' '}
-          <a href='mailto:support@keyoapi.xyz' className='text-primary'>
-            support@keyoapi.xyz
+          <a href='mailto:kopsail521@gmail.com' className='text-primary'>
+            kopsail521@gmail.com
           </a>
         </p>
       </div>

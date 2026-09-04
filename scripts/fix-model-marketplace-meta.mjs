@@ -49,6 +49,8 @@ const EP = {
   infiniteTalk: {
     openai: { path: "/v1/async/videos/image-to-video", method: "POST" },
   },
+  openaiVideo: { "openai-video": "/v1/videos" },
+  apimartVideo: { "openai-video": "/v1/videos/generations" },
 };
 
 /** 单标签 + 原厂供应商 + 端点（logo 用 @lobehub/icons 里有的；没有就「其他」） */
@@ -115,6 +117,20 @@ const FIXES = {
   "MiniMax-M3": { vendorName: "MiniMax", icon: "Minimax.Color", tag: "大语言模型", endpoints: EP.chat },
   "glm-5.3": { vendorName: "智谱", icon: "Zhipu.Color", tag: "大语言模型", endpoints: EP.chat },
   "qwen3.8-max-0902": { vendorName: "阿里巴巴", icon: "Qwen.Color", tag: "大语言模型", endpoints: EP.chat },
+
+  // —— OpenLux 视频 ——
+  "grok-imagine-video-1.5-preview": { vendorName: "xAI", icon: "XAI", tag: "视频", endpoints: EP.apimartVideo },
+  "grok-1.5-video": { vendorName: "xAI", icon: "XAI", tag: "视频", endpoints: EP.openaiVideo },
+  "veo_3_1-components": { vendorName: "Google", icon: "Gemini.Color", tag: "视频", endpoints: EP.openaiVideo },
+
+  // —— APIMart 视频 ——
+  "gemini-omni-1.1-flash": { vendorName: "Google", icon: "Gemini.Color", tag: "视频", endpoints: EP.apimartVideo },
+  "gemini-omni-1.1-flash-ext": { vendorName: "Google", icon: "Gemini.Color", tag: "视频", endpoints: EP.apimartVideo },
+  "seedance-2.5": { vendorName: "其他", icon: "Custom", tag: "视频", endpoints: EP.apimartVideo },
+  "seedance-2.0": { vendorName: "其他", icon: "Custom", tag: "视频", endpoints: EP.apimartVideo },
+  "flux-3-video": { vendorName: "其他", icon: "Custom", tag: "视频", endpoints: EP.apimartVideo },
+  "MiniMax-H3": { vendorName: "MiniMax", icon: "Minimax.Color", tag: "视频", endpoints: EP.apimartVideo },
+  "wan3.0-video": { vendorName: "阿里巴巴", icon: "Qwen.Color", tag: "视频", endpoints: EP.apimartVideo },
 };
 
 /** 未在 FIXES 里、但明显是聊天模型的，自动打「大语言模型」 */

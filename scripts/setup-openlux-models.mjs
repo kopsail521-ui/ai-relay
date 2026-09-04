@@ -53,7 +53,11 @@ if (!models.length) {
 }
 
 const EP_CHAT = JSON.stringify({ openai: "/v1/chat/completions" });
+const EP_VIDEO = JSON.stringify({ "openai-video": "/v1/videos" });
 
+function isVideoModel(m) {
+  return m.billing === "model_price" || m.our_model_price != null;
+}
 async function login() {
   const res = await fetch(`${NEW_API_BASE}/api/user/login`, {
     method: "POST",
@@ -175,6 +179,18 @@ async function ensurePricing(auth) {
   const modelPrice = JSON.parse(map.ModelPrice || "{}");
 
   for (const m of models) {
+    if (isVideoModel(m)) {
+      modelPrice[m.model] = m.our_model_price;
+      delete modelRatio[m.model];
+      delete completionRatio[m.model];
+      console.log(
+        "定价",
+        m.model,
+        `ModelPrice $${m.our_model_price}`,
+        `(OpenLux $${m.cost_usd || m.openlux_model_price} × ${m.markup || 2.5})`
+      );
+      continue;
+    }
     modelRatio[m.model] = m.our_model_ratio;
     completionRatio[m.model] = m.our_completion_ratio;
     delete modelPrice[m.model];
@@ -229,18 +245,21 @@ async function ensureMarketplace(auth) {
       console.warn("缺少供应商", meta.vendor, "— 仅写 tags/endpoints 若模型已存在");
     }
     const existing = list.find((x) => x.model_name === m.model);
+    const video = isVideoModel(m);
+    const descMap = {
+      "claude-fable-5-1": "Claude 旗舰 5.1 · 长周期 Agent / 复杂编码 / 重度知识分析",
+      "gemini-3.8-flash": "Gemini 3.8 Flash · 更快更强的多模态轻量模型",
+      "grok-imagine-video-1.5-preview": "Grok Imagine Video 1.5 Preview · 按秒 $0.08825(480p)/$0.1545(720p)",
+      "grok-1.5-video": "Grok 1.5 Video · 按次 $0.60675/次（上游 $0.2427×2.5）",
+      "veo_3_1-components": "Google Veo 3.1 Components：约 8 秒 · $0.14125/次",
+    };
     const payload = {
       model_name: m.model,
-      description:
-        m.model === "claude-fable-5-1"
-          ? "Claude 旗舰 5.1 · 长周期 Agent / 复杂编码 / 重度知识分析"
-          : m.model === "gemini-3.8-flash"
-            ? "Gemini 3.8 Flash · 更快更强的多模态轻量模型"
-            : existing?.description || "",
+      description: descMap[m.model] || existing?.description || "",
       icon: meta.icon,
-      tags: "大语言模型",
+      tags: video ? "视频" : "大语言模型",
       vendor_id: vid || existing?.vendor_id || 0,
-      endpoints: EP_CHAT,
+      endpoints: video ? EP_VIDEO : EP_CHAT,
       status: 1,
       sync_official: 0,
     };

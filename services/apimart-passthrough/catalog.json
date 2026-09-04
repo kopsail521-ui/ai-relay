@@ -1,0 +1,197 @@
+{
+  "source": "APIMart pricing screenshots 2026-09-04（当前价格）",
+  "base_url": "https://api.apimart.ai",
+  "markup": 1.2,
+  "note": "售价 = 网站当前价(USD)×1.2。按秒模型按秒展示/预扣；出片后仍可用上游 cost×1.2 结算。",
+  "endpoint_submit": "POST /v1/videos/generations",
+  "endpoint_poll": "GET /v1/tasks/{task_id}",
+  "models": [
+    {
+      "id": "gemini-omni-1.1-flash",
+      "vendor": "Google",
+      "icon": "Gemini.Color",
+      "tag": "视频",
+      "billing": "settle_cost",
+      "display_unit": "second",
+      "estimate": {
+        "mode": "per_second",
+        "default_seconds": 8,
+        "cost_usd_per_second": 0.088,
+        "sell_usd_per_second": 0.1056
+      },
+      "desc_zh": "Gemini Omni 1.1 Flash · $0.1056/秒（上游 $0.088/秒 ×1.2）"
+    },
+    {
+      "id": "gemini-omni-1.1-flash-ext",
+      "vendor": "Google",
+      "icon": "Gemini.Color",
+      "tag": "视频",
+      "billing": "settle_cost",
+      "display_unit": "second",
+      "estimate": {
+        "mode": "ext_pack_or_ref",
+        "default_resolution": "720P",
+        "default_seconds": 8,
+        "pack_cost_usd": {
+          "360P-4s": 0.15, "360P-6s": 0.175, "360P-8s": 0.2, "360P-10s": 0.225,
+          "720P-4s": 0.25, "1080P-4s": 0.25, "720P-6s": 0.3, "1080P-6s": 0.3,
+          "720P-8s": 0.35, "1080P-8s": 0.35, "720P-10s": 0.4, "1080P-10s": 0.4,
+          "4K-4s": 0.75, "4K-6s": 0.8, "4K-8s": 0.85, "4K-10s": 0.9
+        },
+        "pack_sell_usd": {
+          "360P-4s": 0.18, "360P-6s": 0.21, "360P-8s": 0.24, "360P-10s": 0.27,
+          "720P-4s": 0.3, "1080P-4s": 0.3, "720P-6s": 0.36, "1080P-6s": 0.36,
+          "720P-8s": 0.42, "1080P-8s": 0.42, "720P-10s": 0.48, "1080P-10s": 0.48,
+          "4K-4s": 0.9, "4K-6s": 0.96, "4K-8s": 1.02, "4K-10s": 1.08
+        },
+        "ref_video_cost_usd_per_second": {
+          "360P": 0.04, "360p": 0.04,
+          "720P": 0.08, "720p": 0.08,
+          "1080P": 0.08, "1080p": 0.08,
+          "4K": 0.24, "4k": 0.24
+        },
+        "ref_video_sell_usd_per_second": {
+          "360P": 0.048, "720P": 0.096, "1080P": 0.096, "4K": 0.288
+        },
+        "sell_usd_per_second_default": 0.096
+      },
+      "desc_zh": "Gemini Omni Ext · 标准按档（如 720P-8s $0.42）；参考视频按秒（720P $0.096/秒）"
+    },
+    {
+      "id": "seedance-2.5",
+      "vendor": "ByteDance",
+      "icon": "Custom",
+      "tag": "视频",
+      "billing": "settle_cost",
+      "display_unit": "second",
+      "estimate": {
+        "mode": "per_second_resolution_input",
+        "default_seconds": 5,
+        "default_resolution": "480p",
+        "cost_usd_per_second": {
+          "480p": 0.09608, "480P": 0.09608,
+          "720p": 0.216, "720P": 0.216,
+          "1080p": 0.38488, "1080P": 0.38488
+        },
+        "cost_usd_per_second_with_input": {
+          "480p": 0.0576, "480P": 0.0576,
+          "720p": 0.1296, "720P": 0.1296,
+          "1080p": 0.22992, "1080P": 0.22992
+        },
+        "sell_usd_per_second": {
+          "480p": 0.115296, "720p": 0.2592, "1080p": 0.461856
+        },
+        "sell_usd_per_second_with_input": {
+          "480p": 0.06912, "720p": 0.15552, "1080p": 0.275904
+        }
+      },
+      "desc_zh": "Seedance 2.5 · 按秒；480P $0.1153/秒；有参考用 input 档×(参考+生成)秒"
+    },
+    {
+      "id": "seedance-2.0",
+      "vendor": "ByteDance",
+      "icon": "Custom",
+      "tag": "视频",
+      "billing": "settle_cost",
+      "display_unit": "second",
+      "estimate": {
+        "mode": "per_second_resolution_input",
+        "default_seconds": 5,
+        "default_resolution": "480p",
+        "cost_usd_per_second": {
+          "480p": 0.066, "480P": 0.066,
+          "720p": 0.142, "720P": 0.142,
+          "1080p": 0.3544, "1080P": 0.3544,
+          "4k": 0.722, "4K": 0.722
+        },
+        "cost_usd_per_second_with_input": {
+          "480p": 0.04, "480P": 0.04,
+          "720p": 0.08584, "720P": 0.08584,
+          "1080p": 0.21568, "1080P": 0.21568,
+          "4k": 0.44432, "4K": 0.44432
+        },
+        "sell_usd_per_second": {
+          "480p": 0.0792, "720p": 0.1704, "1080p": 0.42528, "4k": 0.8664
+        },
+        "sell_usd_per_second_with_input": {
+          "480p": 0.048, "720p": 0.103008, "1080p": 0.258816, "4k": 0.533184
+        }
+      },
+      "desc_zh": "Seedance 2.0 · 按秒；480P $0.0792/秒；有上传视频用 input 档"
+    },
+    {
+      "id": "flux-3-video",
+      "vendor": "Black Forest Labs",
+      "icon": "Custom",
+      "tag": "视频",
+      "billing": "settle_cost",
+      "display_unit": "second",
+      "estimate": {
+        "mode": "flux_tiers",
+        "default_seconds": 5,
+        "default_tier": "HD",
+        "cost_usd_per_second": {
+          "draft": 0.048, "DRAFT": 0.048,
+          "v2v-draft": 0.096, "V2V-DRAFT": 0.096,
+          "hd": 0.136, "HD": 0.136, "720p": 0.136,
+          "fhd": 0.232, "FHD": 0.232, "1080p": 0.232,
+          "v2v-hd": 0.328, "V2V-HD": 0.328,
+          "v2v-fhd": 0.424, "V2V-FHD": 0.424
+        },
+        "sell_usd_per_second": {
+          "draft": 0.0576, "hd": 0.1632, "fhd": 0.2784,
+          "v2v-draft": 0.1152, "v2v-hd": 0.3936, "v2v-fhd": 0.5088
+        }
+      },
+      "desc_zh": "FLUX.3 Video · 按秒；DRAFT $0.0576、HD $0.1632、FHD $0.2784/秒"
+    },
+    {
+      "id": "MiniMax-H3",
+      "vendor": "MiniMax",
+      "icon": "Minimax.Color",
+      "tag": "视频",
+      "billing": "settle_cost",
+      "display_unit": "second",
+      "estimate": {
+        "mode": "per_second_resolution",
+        "default_seconds": 5,
+        "default_resolution": "768P",
+        "cost_usd_per_second": {
+          "768P": 0.05712, "768p": 0.05712,
+          "2K": 0.09144, "2k": 0.09144
+        },
+        "sell_usd_per_second": {
+          "768P": 0.068544, "768p": 0.068544,
+          "2K": 0.109728, "2k": 0.109728
+        },
+        "extra_image_over_5_usd": 0.02288,
+        "extra_image_over_5_sell_usd": 0.027456
+      },
+      "desc_zh": "MiniMax-H3 · 按秒 768P $0.068544、2K $0.109728；参考图超 5 张后 $0.027456/张"
+    },
+    {
+      "id": "wan3.0-video",
+      "vendor": "阿里巴巴",
+      "icon": "Qwen.Color",
+      "tag": "视频",
+      "billing": "settle_cost",
+      "display_unit": "second",
+      "estimate": {
+        "mode": "per_second_resolution",
+        "default_seconds": 5,
+        "default_resolution": "480P",
+        "cost_usd_per_second": {
+          "480P": 0.034288, "480p": 0.034288,
+          "720P": 0.068568, "720p": 0.068568,
+          "1080P": 0.137144, "1080p": 0.137144
+        },
+        "sell_usd_per_second": {
+          "480P": 0.0411456, "480p": 0.0411456,
+          "720P": 0.0822816, "720p": 0.0822816,
+          "1080P": 0.1645728, "1080p": 0.1645728
+        }
+      },
+      "desc_zh": "Wan 3.0 · 按秒；480P $0.04115、720P $0.08228、1080P $0.16457/秒"
+    }
+  ]
+}

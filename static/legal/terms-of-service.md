@@ -2,7 +2,7 @@
 
 **Last updated:** September 1, 2026  
 **Service:** KeyoAPI (`https://www.keyoapi.xyz`)  
-**Contact:** [support@keyoapi.xyz](mailto:support@keyoapi.xyz)
+**Contact:** [kopsail521@gmail.com](mailto:kopsail521@gmail.com)
 
 These Terms of Service (“Terms”) govern your access to and use of KeyoAPI. By creating an account, purchasing credits, or calling our API, you agree to these Terms and our [Privacy Policy](/privacy-policy).
 
@@ -23,10 +23,10 @@ KeyoAPI is an **independent OpenAI-compatible API gateway**. We provide access t
 
 ## 3. Payments and refunds
 
-- Payments for credits are processed by our Merchant of Record, **Creem**
-- Credits / quota are digital goods. Except where required by law or where Creem / we determine a charge was erroneous, **purchases are generally non-refundable** after credits are delivered
+- Payments for credits are processed by our Merchant of Record, **Waffo**
+- Credits / quota are digital goods. Except where required by law or where Waffo / we determine a charge was erroneous, **purchases are generally non-refundable** after credits are delivered
 - Chargebacks or payment disputes may result in account suspension
-- Support for billing: [support@keyoapi.xyz](mailto:support@keyoapi.xyz)
+- Support for billing: [kopsail521@gmail.com](mailto:kopsail521@gmail.com)
 
 ## 4. Acceptable Use Policy (AUP)
 
@@ -77,6 +77,6 @@ We may update these Terms. Material changes will be reflected by the “Last upd
 
 ## 12. Contact
 
-**Customer support email:** [support@keyoapi.xyz](mailto:support@keyoapi.xyz)  
+**Customer support email:** [kopsail521@gmail.com](mailto:kopsail521@gmail.com)  
 Website: `https://www.keyoapi.xyz`  
 Legal pages: [Privacy Policy](/privacy-policy) · [Terms of Service](/user-agreement)

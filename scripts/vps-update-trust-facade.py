@@ -15,7 +15,7 @@ FOOTER = (
     '<a href="https://www.keyoapi.xyz/privacy-policy">Privacy Policy</a> · '
     '<a href="https://www.keyoapi.xyz/user-agreement">Terms of Service</a> · '
     '<a href="https://www.keyoapi.xyz/brand/aup.html">Acceptable Use</a> · '
-    'Support: <a href="mailto:support@keyoapi.xyz">support@keyoapi.xyz</a>'
+    'Support: <a href="mailto:kopsail521@gmail.com">kopsail521@gmail.com</a>'
     "</div>"
 )
 
@@ -28,7 +28,7 @@ FAQ = [
     {
         "id": 2,
         "question": "How do I top up?",
-        "answer": "Open Wallet after login and pay via Creem (or other enabled gateways). Credits are prepaid and used for API calls.",
+        "answer": "Open Wallet after login and pay via Waffo. Credits are prepaid and used for API calls.",
     },
     {
         "id": 3,
@@ -38,7 +38,7 @@ FAQ = [
     {
         "id": 4,
         "question": "Support contact?",
-        "answer": "Email support@keyoapi.xyz. We aim to reply within 3 business days. Status: /status · FAQ: /faq",
+        "answer": "Email kopsail521@gmail.com. We aim to reply within 3 business days. Status: /status · FAQ: /faq",
     },
 ]
 

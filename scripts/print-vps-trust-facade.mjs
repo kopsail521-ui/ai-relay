@@ -87,7 +87,7 @@ sleep 3
 echo "status=$(curl -sS -o /dev/null -w '%{http_code}' -L --max-redirs 0 http://127.0.0.1:3001/status || true)"
 echo "faq=$(curl -sS -o /dev/null -w '%{http_code}' -L --max-redirs 0 http://127.0.0.1:3001/faq || true)"
 echo "integ=$(curl -sS -o /dev/null -w '%{http_code}' -L --max-redirs 0 http://127.0.0.1:3001/integrations || true)"
-curl -sS http://127.0.0.1:3001/ | grep -oE 'keyo-models-public|support@keyoapi.xyz' | sort -u || true
+curl -sS http://127.0.0.1:3001/ | grep -oE 'keyo-models-public|kopsail521@gmail.com' | sort -u || true
 echo DONE_TRUST_FACADE`
 );
 
@@ -106,9 +106,9 @@ readmeLines.push(
   "验证（无痕窗口）：",
   "- /pricing 可看价",
   "- /status /faq /integrations 不再 404",
-  "- 文档图价为 USD；客服为 support@keyoapi.xyz",
+  "- 文档图价为 USD；客服为 kopsail521@gmail.com",
   "",
-  "注意：请确认 support@keyoapi.xyz 已能收信（域名邮箱或转发）。"
+  "注意：请确认 kopsail521@gmail.com 已能收信（域名邮箱或转发）。"
 );
 writeLf(path.join(__dirname, "vps-trust-readme.txt"), readmeLines.join("\n"));
 

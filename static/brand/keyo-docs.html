@@ -488,6 +488,7 @@
         <a href="#access" data-i18n="tocAccess"></a>
         <a href="#chat" data-i18n="tocChat"></a>
         <a href="#image" data-i18n="tocImage"></a>
+        <a href="#video" data-i18n="tocVideo"></a>
         <a href="#speech" data-i18n="tocSpeech"></a>
         <a href="#more" data-i18n="tocMore"></a>
         <a href="#clients" data-i18n="tocClients"></a>
@@ -617,9 +618,56 @@
         </div>
       </section>
 
-      <section id="speech">
+
+      <section id="video">
         <div class="sec-head">
           <span class="num">04</span>
+          <h2 data-i18n="videoTitle"></h2>
+        </div>
+        <div class="endpoint">
+          <span class="method">POST</span>
+          <span class="path">/v1/videos</span>
+          <button type="button" class="btn-copy" data-copy="https://www.keyoapi.xyz/v1/videos" data-i18n="copyUrl"></button>
+        </div>
+
+        <div class="code-block">
+          <div class="code-bar">
+            <span class="lang">cURL</span>
+            <button type="button" class="btn-copy" data-copy-target="curl-video" data-i18n="copy"></button>
+          </div>
+          <pre id="curl-video"></pre>
+        </div>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th data-i18n="thModel"></th>
+                <th data-i18n="thPrice"></th>
+                <th data-i18n="thNote"></th>
+              </tr>
+            </thead>
+            <tbody>
+<tr><td class="model"><button type="button" class="model-btn" data-copy="grok-imagine-video-1.5-preview">grok-imagine-video-1.5-preview</button></td><td class="price">$0.08825 <span data-i18n="perSecond"></span> (480p)</td><td class="note-cell" data-i18n="nGrokImagineVideo"></td></tr>
+<tr><td class="model"><button type="button" class="model-btn" data-copy="grok-1.5-video">grok-1.5-video</button></td><td class="price">$0.60675 <span data-i18n="perVideo"></span></td><td class="note-cell" data-i18n="nGrokVideo"></td></tr>
+<tr><td class="model"><button type="button" class="model-btn" data-copy="veo_3_1-components">veo_3_1-components</button></td><td class="price">$0.14125 <span data-i18n="perVideo"></span></td><td class="note-cell" data-i18n="nVeoComponents"></td></tr>
+<tr><td class="model"><button type="button" class="model-btn" data-copy="gemini-omni-1.1-flash">gemini-omni-1.1-flash</button></td><td class="price">$0.1056 <span data-i18n="perSecond"></span></td><td class="note-cell">APIMart · /v1/videos/generations</td></tr>
+<tr><td class="model"><button type="button" class="model-btn" data-copy="gemini-omni-1.1-flash-ext">gemini-omni-1.1-flash-ext</button></td><td class="price">$0.42 <span data-i18n="perVideo"></span> / $0.096 <span data-i18n="perSecond"></span></td><td class="note-cell">APIMart Ext · pack or ref/s</td></tr>
+<tr><td class="model"><button type="button" class="model-btn" data-copy="seedance-2.5">seedance-2.5</button></td><td class="price">$0.1153+ <span data-i18n="perSecond"></span></td><td class="note-cell">APIMart · by resolution</td></tr>
+<tr><td class="model"><button type="button" class="model-btn" data-copy="seedance-2.0">seedance-2.0</button></td><td class="price">$0.0792+ <span data-i18n="perSecond"></span></td><td class="note-cell">APIMart</td></tr>
+<tr><td class="model"><button type="button" class="model-btn" data-copy="flux-3-video">flux-3-video</button></td><td class="price">$0.0576–$0.5088 <span data-i18n="perSecond"></span></td><td class="note-cell">APIMart FLUX 3</td></tr>
+<tr><td class="model"><button type="button" class="model-btn" data-copy="MiniMax-H3">MiniMax-H3</button></td><td class="price">$0.0685 / $0.1097 <span data-i18n="perSecond"></span></td><td class="note-cell">APIMart · 768P / 2K</td></tr>
+<tr><td class="model"><button type="button" class="model-btn" data-copy="wan3.0-video">wan3.0-video</button></td><td class="price">$0.0412+ <span data-i18n="perSecond"></span></td><td class="note-cell">APIMart Wan 3.0</td></tr>
+
+            </tbody>
+          </table>
+        </div>
+        <p class="hint" data-i18n="videoHint"></p>
+      </section>
+
+      <section id="speech">
+        <div class="sec-head">
+          <span class="num">05</span>
           <h2 data-i18n="speechTitle"></h2>
         </div>
         <p class="sec-desc" data-i18n="speechDesc"></p>
@@ -717,7 +765,7 @@
 
       <section id="more">
         <div class="sec-head">
-          <span class="num">05</span>
+          <span class="num">06</span>
           <h2 data-i18n="moreTitle"></h2>
         </div>
         <p class="sec-desc" data-i18n="moreDesc"></p>
@@ -757,7 +805,7 @@
 
       <section id="clients">
         <div class="sec-head">
-          <span class="num">06</span>
+          <span class="num">07</span>
           <h2 data-i18n="clientsTitle"></h2>
         </div>
         <p class="sec-desc" data-i18n="clientsDesc"></p>
@@ -809,7 +857,7 @@
 
       <section id="support">
         <div class="sec-head">
-          <span class="num">07</span>
+          <span class="num">08</span>
           <h2 data-i18n="supportTitle"></h2>
         </div>
         <div class="footer-note" data-i18n-html="supportBody"></div>
@@ -831,6 +879,14 @@ const I18N = {
     "tocAccess": "Connection",
     "tocChat": "Chat",
     "tocImage": "Images",
+    "tocVideo": "Video",
+    "videoTitle": "Video generation",
+    "perVideo": "/ request",
+    "perSecond": "/ second",
+    "nGrokVideo": "Grok 1.5 · text/ref · 1–15s · $0.60675/req",
+    "nGrokImagineVideo": "Grok Imagine · $0.08825/s 480p · $0.1545/s 720p",
+    "nVeoComponents": "Veo 3.1 · ~8s · $0.14125/req",
+    "videoHint": "Async: create with POST /v1/videos, then poll GET /v1/videos/{id}. Exact billing follows the console.",
     "tocSpeech": "Speech",
     "tocMore": "More APIs",
     "tocClients": "Clients",
@@ -913,7 +969,7 @@ const I18N = {
     "listModels": "List models",
     "copyCurl": "Copy curl",
     "supportTitle": "Billing & support",
-    "supportBody": "<strong>Console</strong>: <a href=\"https://www.keyoapi.xyz\" target=\"_blank\" rel=\"noopener noreferrer\">https://www.keyoapi.xyz</a> — check usage; keep tokens private.<br /><strong>Top-up</strong>: Wallet → Creem checkout (prepaid credits).<br /><strong>Support</strong>: <a href=\"mailto:support@keyoapi.xyz\">support@keyoapi.xyz</a> (we aim to reply within 3 business days).<br /><strong>Legal</strong>: <a href=\"https://www.keyoapi.xyz/privacy-policy\" target=\"_top\">Privacy Policy</a> · <a href=\"https://www.keyoapi.xyz/user-agreement\" target=\"_top\">Terms</a> · <a href=\"https://www.keyoapi.xyz/brand/aup.html\" target=\"_top\">Acceptable Use</a>.<br /><strong>Common errors</strong>: wrong model name, invalid key, insufficient balance.",
+    "supportBody": "<strong>Console</strong>: <a href=\"https://www.keyoapi.xyz\" target=\"_blank\" rel=\"noopener noreferrer\">https://www.keyoapi.xyz</a> — check usage; keep tokens private.<br /><strong>Top-up</strong>: Wallet → Waffo checkout (prepaid credits).<br /><strong>Support</strong>: <a href=\"mailto:kopsail521@gmail.com\">kopsail521@gmail.com</a> (we aim to reply within 3 business days).<br /><strong>Legal</strong>: <a href=\"https://www.keyoapi.xyz/privacy-policy\" target=\"_top\">Privacy Policy</a> · <a href=\"https://www.keyoapi.xyz/user-agreement\" target=\"_top\">Terms</a> · <a href=\"https://www.keyoapi.xyz/brand/aup.html\" target=\"_top\">Acceptable Use</a>.<br /><strong>Common errors</strong>: wrong model name, invalid key, insufficient balance.",
     "footA": "KeyoAPI · One endpoint, many models",
     "footB": "OpenAI-compatible · usage-based billing",
     "copied": "Copied",
@@ -930,6 +986,14 @@ const I18N = {
     "tocAccess": "接入信息",
     "tocChat": "文本对话",
     "tocImage": "图片生成",
+    "tocVideo": "视频生成",
+    "videoTitle": "视频生成",
+    "perVideo": "/次",
+    "perSecond": "/秒",
+    "nGrokVideo": "Grok 1.5 · 文生/参考图 · 1–15 秒 · $0.60675/次",
+    "nGrokImagineVideo": "Grok Imagine · 按秒 480p/720p（×2.5）",
+    "nVeoComponents": "Veo 3.1 · 约 8 秒 · $0.14125/次",
+    "videoHint": "异步：POST /v1/videos 创建任务，再 GET /v1/videos/{id} 查询。扣费以控制台为准。",
     "tocSpeech": "语音",
     "tocMore": "扩展能力",
     "tocClients": "客户端接入",
@@ -1012,7 +1076,7 @@ const I18N = {
     "listModels": "查可用模型",
     "copyCurl": "复制 curl",
     "supportTitle": "充值与支持",
-    "supportBody": "<strong>控制台</strong>：<a href=\"https://www.keyoapi.xyz\" target=\"_blank\" rel=\"noopener noreferrer\">https://www.keyoapi.xyz</a> · 可查看用量，令牌请自行保管。<br /><strong>充值</strong>：钱包 → Creem 在线支付（预付额度）。<br /><strong>客服</strong>：<a href=\"mailto:support@keyoapi.xyz\">support@keyoapi.xyz</a>（通常 3 个工作日内回复）。<br /><strong>法律</strong>：<a href=\"https://www.keyoapi.xyz/privacy-policy\" target=\"_top\">隐私政策</a> · <a href=\"https://www.keyoapi.xyz/user-agreement\" target=\"_top\">服务条款</a> · <a href=\"https://www.keyoapi.xyz/brand/aup.html\" target=\"_top\">可接受使用政策</a>。<br /><strong>常见报错</strong>：模型名写错、Key 无效、余额不足。",
+    "supportBody": "<strong>控制台</strong>：<a href=\"https://www.keyoapi.xyz\" target=\"_blank\" rel=\"noopener noreferrer\">https://www.keyoapi.xyz</a> · 可查看用量，令牌请自行保管。<br /><strong>充值</strong>：钱包 → Waffo 在线支付（预付额度）。<br /><strong>客服</strong>：<a href=\"mailto:kopsail521@gmail.com\">kopsail521@gmail.com</a>（通常 3 个工作日内回复）。<br /><strong>法律</strong>：<a href=\"https://www.keyoapi.xyz/privacy-policy\" target=\"_top\">隐私政策</a> · <a href=\"https://www.keyoapi.xyz/user-agreement\" target=\"_top\">服务条款</a> · <a href=\"https://www.keyoapi.xyz/brand/aup.html\" target=\"_top\">可接受使用政策</a>。<br /><strong>常见报错</strong>：模型名写错、Key 无效、余额不足。",
     "footA": "KeyoAPI · 一个地址，多模型",
     "footB": "OpenAI 兼容 · 按量计费",
     "copied": "已复制",
@@ -1029,6 +1093,14 @@ const I18N = {
     "tocAccess": "接入資訊",
     "tocChat": "文字對話",
     "tocImage": "圖片生成",
+    "tocVideo": "影片生成",
+    "videoTitle": "影片生成",
+    "perVideo": "/次",
+    "perSecond": "/秒",
+    "nGrokVideo": "Grok 1.5 · 文生/参考图 · 1–15 秒 · $0.60675/次",
+    "nGrokImagineVideo": "Grok Imagine · 按秒 480p/720p（×2.5）",
+    "nVeoComponents": "Veo 3.1 · 約 8 秒 · $0.14125/次",
+    "videoHint": "非同步：POST /v1/videos 建立任務，再 GET /v1/videos/{id} 查詢。扣費以控制台為準。",
     "tocSpeech": "語音",
     "tocMore": "擴充能力",
     "tocClients": "客戶端接入",
@@ -1111,7 +1183,7 @@ const I18N = {
     "listModels": "查可用模型",
     "copyCurl": "複製 curl",
     "supportTitle": "儲值與支援",
-    "supportBody": "<strong>控制台</strong>：<a href=\"https://www.keyoapi.xyz\" target=\"_blank\" rel=\"noopener noreferrer\">https://www.keyoapi.xyz</a> · 可查看用量，令牌請自行保管。<br /><strong>儲值</strong>：錢包 → Creem 線上支付。<br /><strong>客服</strong>：<a href=\"mailto:support@keyoapi.xyz\">support@keyoapi.xyz</a>。<br /><strong>法律</strong>：<a href=\"https://www.keyoapi.xyz/privacy-policy\" target=\"_top\">隱私權政策</a> · <a href=\"https://www.keyoapi.xyz/user-agreement\" target=\"_top\">服務條款</a> · <a href=\"https://www.keyoapi.xyz/brand/aup.html\" target=\"_top\">可接受使用政策</a>。<br /><strong>常見錯誤</strong>：模型名寫錯、Key 無效、餘額不足。",
+    "supportBody": "<strong>控制台</strong>：<a href=\"https://www.keyoapi.xyz\" target=\"_blank\" rel=\"noopener noreferrer\">https://www.keyoapi.xyz</a> · 可查看用量，令牌請自行保管。<br /><strong>儲值</strong>：錢包 → Waffo 線上支付。<br /><strong>客服</strong>：<a href=\"mailto:kopsail521@gmail.com\">kopsail521@gmail.com</a>。<br /><strong>法律</strong>：<a href=\"https://www.keyoapi.xyz/privacy-policy\" target=\"_top\">隱私權政策</a> · <a href=\"https://www.keyoapi.xyz/user-agreement\" target=\"_top\">服務條款</a> · <a href=\"https://www.keyoapi.xyz/brand/aup.html\" target=\"_top\">可接受使用政策</a>。<br /><strong>常見錯誤</strong>：模型名寫錯、Key 無效、餘額不足。",
     "footA": "KeyoAPI · 一個位址，多模型",
     "footB": "OpenAI 相容 · 按量計費",
     "copied": "已複製",
@@ -1128,6 +1200,14 @@ const I18N = {
     "tocAccess": "接続情報",
     "tocChat": "チャット",
     "tocImage": "画像生成",
+    "tocVideo": "動画生成",
+    "videoTitle": "動画生成",
+    "perVideo": "/ 回",
+    "perSecond": "/ 秒",
+    "nGrokVideo": "Grok 1.5 · テキスト/参照 · 1–15秒 · $0.60675/回",
+    "nGrokImagineVideo": "Grok Imagine · 秒課金 480p/720p",
+    "nVeoComponents": "Veo 3.1 · 約8秒 · 先頭フレーム · 音声付き",
+    "videoHint": "非同期：POST /v1/videos で作成し、GET /v1/videos/{id} で確認。課金はコンソール準拠。",
     "tocSpeech": "音声",
     "tocMore": "その他 API",
     "tocClients": "クライアント",
@@ -1210,7 +1290,7 @@ const I18N = {
     "listModels": "利用可能モデル",
     "copyCurl": "curl をコピー",
     "supportTitle": "課金とサポート",
-    "supportBody": "<strong>コンソール</strong>：<a href=\"https://www.keyoapi.xyz\" target=\"_blank\" rel=\"noopener noreferrer\">https://www.keyoapi.xyz</a> — 使用量を確認。トークンは厳重に。<br /><strong>チャージ</strong>：ウォレット → Creem でオンライン前払い。<br /><strong>サポート</strong>：<a href=\"mailto:support@keyoapi.xyz\">support@keyoapi.xyz</a>。<br /><strong>よくあるエラー</strong>：モデル名ミス、無効キー、残高不足。",
+    "supportBody": "<strong>コンソール</strong>：<a href=\"https://www.keyoapi.xyz\" target=\"_blank\" rel=\"noopener noreferrer\">https://www.keyoapi.xyz</a> — 使用量を確認。トークンは厳重に。<br /><strong>チャージ</strong>：ウォレット → Waffo でオンライン前払い。<br /><strong>サポート</strong>：<a href=\"mailto:kopsail521@gmail.com\">kopsail521@gmail.com</a>。<br /><strong>よくあるエラー</strong>：モデル名ミス、無効キー、残高不足。",
     "footA": "KeyoAPI · ひとつのエンドポイントで多モデル",
     "footB": "OpenAI 互換 · 従量課金",
     "copied": "コピー済み",
@@ -1227,6 +1307,14 @@ const I18N = {
     "tocAccess": "Connexion",
     "tocChat": "Chat",
     "tocImage": "Images",
+    "tocVideo": "Vidéo",
+    "videoTitle": "Génération vidéo",
+    "perVideo": "/ requête",
+    "perSecond": "/ seconde",
+    "nGrokVideo": "Grok 1.5 · texte/réf · 1–15s · $0.60675/req",
+    "nGrokImagineVideo": "Grok Imagine · à la seconde",
+    "nVeoComponents": "Veo 3.1 · ~8s · 1re image · audio",
+    "videoHint": "Async : POST /v1/videos puis GET /v1/videos/{id}. Facturation selon la console.",
     "tocSpeech": "Parole",
     "tocMore": "Autres API",
     "tocClients": "Clients",
@@ -1309,7 +1397,7 @@ const I18N = {
     "listModels": "Lister les modèles",
     "copyCurl": "Copier curl",
     "supportTitle": "Paiement & support",
-    "supportBody": "<strong>Console</strong> : <a href=\"https://www.keyoapi.xyz\" target=\"_blank\" rel=\"noopener noreferrer\">https://www.keyoapi.xyz</a> — usage ; gardez les jetons privés.<br /><strong>Recharge</strong> : Wallet → paiement Creem (crédits prépayés).<br /><strong>Support</strong> : <a href=\"mailto:support@keyoapi.xyz\">support@keyoapi.xyz</a>.<br /><strong>Erreurs fréquentes</strong> : mauvais modèle, clé invalide, solde insuffisant.",
+    "supportBody": "<strong>Console</strong> : <a href=\"https://www.keyoapi.xyz\" target=\"_blank\" rel=\"noopener noreferrer\">https://www.keyoapi.xyz</a> — usage ; gardez les jetons privés.<br /><strong>Recharge</strong> : Wallet → paiement Waffo (crédits prépayés).<br /><strong>Support</strong> : <a href=\"mailto:kopsail521@gmail.com\">kopsail521@gmail.com</a>.<br /><strong>Erreurs fréquentes</strong> : mauvais modèle, clé invalide, solde insuffisant.",
     "footA": "KeyoAPI · Un endpoint, plusieurs modèles",
     "footB": "Compatible OpenAI · facturation à l’usage",
     "copied": "Copié",
@@ -1326,6 +1414,14 @@ const I18N = {
     "tocAccess": "Подключение",
     "tocChat": "Чат",
     "tocImage": "Изображения",
+    "tocVideo": "Видео",
+    "videoTitle": "Генерация видео",
+    "perVideo": "/ запрос",
+    "perSecond": "/ сек",
+    "nGrokVideo": "Grok 1.5 · текст/реф · 1–15с · $0.60675/запрос",
+    "nGrokImagineVideo": "Grok Imagine · за секунду",
+    "nVeoComponents": "Veo 3.1 · ~8с · первый кадр · аудио",
+    "videoHint": "Асинхронно: POST /v1/videos, затем GET /v1/videos/{id}. Списание — по консоли.",
     "tocSpeech": "Речь",
     "tocMore": "Другие API",
     "tocClients": "Клиенты",
@@ -1408,7 +1504,7 @@ const I18N = {
     "listModels": "Список моделей",
     "copyCurl": "Копировать curl",
     "supportTitle": "Оплата и поддержка",
-    "supportBody": "<strong>Консоль</strong>: <a href=\"https://www.keyoapi.xyz\" target=\"_blank\" rel=\"noopener noreferrer\">https://www.keyoapi.xyz</a> — расход; храните токены.<br /><strong>Пополнение</strong>: Wallet → онлайн-оплата Creem (предоплата).<br /><strong>Поддержка</strong>: <a href=\"mailto:support@keyoapi.xyz\">support@keyoapi.xyz</a>.<br /><strong>Частые ошибки</strong>: неверная модель, неверный ключ, мало баланса.",
+    "supportBody": "<strong>Консоль</strong>: <a href=\"https://www.keyoapi.xyz\" target=\"_blank\" rel=\"noopener noreferrer\">https://www.keyoapi.xyz</a> — расход; храните токены.<br /><strong>Пополнение</strong>: Wallet → онлайн-оплата Waffo (предоплата).<br /><strong>Поддержка</strong>: <a href=\"mailto:kopsail521@gmail.com\">kopsail521@gmail.com</a>.<br /><strong>Частые ошибки</strong>: неверная модель, неверный ключ, мало баланса.",
     "footA": "KeyoAPI · Один endpoint — много моделей",
     "footB": "Совместимо с OpenAI · оплата по использованию",
     "copied": "Скопировано",
@@ -1425,6 +1521,14 @@ const I18N = {
     "tocAccess": "Kết nối",
     "tocChat": "Chat",
     "tocImage": "Ảnh",
+    "tocVideo": "Video",
+    "videoTitle": "Tạo video",
+    "perVideo": "/ lần",
+    "perSecond": "/ giây",
+    "nGrokVideo": "Grok 1.5 · text/ảnh · 1–15s · $0.60675/lần",
+    "nGrokImagineVideo": "Grok Imagine · theo giây",
+    "nVeoComponents": "Veo 3.1 · ~8s · khung đầu · có audio",
+    "videoHint": "Async: POST /v1/videos rồi GET /v1/videos/{id}. Tính phí theo console.",
     "tocSpeech": "Giọng nói",
     "tocMore": "API khác",
     "tocClients": "Client",
@@ -1507,7 +1611,7 @@ const I18N = {
     "listModels": "Liệt kê model",
     "copyCurl": "Sao chép curl",
     "supportTitle": "Nạp tiền & hỗ trợ",
-    "supportBody": "<strong>Console</strong>: <a href=\"https://www.keyoapi.xyz\" target=\"_blank\" rel=\"noopener noreferrer\">https://www.keyoapi.xyz</a> — xem usage; giữ token riêng.<br /><strong>Nạp tiền</strong>: Wallet → thanh toán Creem (trả trước).<br /><strong>Hỗ trợ</strong>: <a href=\"mailto:support@keyoapi.xyz\">support@keyoapi.xyz</a>.<br /><strong>Lỗi thường gặp</strong>: sai model, key lỗi, hết số dư.",
+    "supportBody": "<strong>Console</strong>: <a href=\"https://www.keyoapi.xyz\" target=\"_blank\" rel=\"noopener noreferrer\">https://www.keyoapi.xyz</a> — xem usage; giữ token riêng.<br /><strong>Nạp tiền</strong>: Wallet → thanh toán Waffo (trả trước).<br /><strong>Hỗ trợ</strong>: <a href=\"mailto:kopsail521@gmail.com\">kopsail521@gmail.com</a>.<br /><strong>Lỗi thường gặp</strong>: sai model, key lỗi, hết số dư.",
     "footA": "KeyoAPI · Một endpoint, nhiều mô hình",
     "footB": "Tương thích OpenAI · tính theo usage",
     "copied": "Đã sao chép",
@@ -1555,6 +1659,7 @@ function renderSamples(dict) {
   const hello = dict.hello || 'Hello';
   const chat = document.getElementById('curl-chat');
   const image = document.getElementById('curl-image');
+  const video = document.getElementById('curl-video');
   const asr = document.getElementById('curl-asr');
   const tts = document.getElementById('curl-tts');
   const ttsAsync = document.getElementById('curl-tts-async');
@@ -1572,6 +1677,12 @@ function renderSamples(dict) {
       '  -H <span class="tok-str">"Authorization: Bearer ' + escapeHtml(key) + '"</span> \\\n' +
       '  -H <span class="tok-str">"Content-Type: application/json"</span> \\\n' +
       '  -d <span class="tok-str">\'{\n    "model": "nano-banana-2",\n    "prompt": "a red circle on white background",\n    "size": "1024x1024"\n  }\'</span></code>';
+  }
+  if (video) {
+    video.innerHTML = '<code><span class="tok-cmd">curl</span> https://www.keyoapi.xyz/v1/videos \\\n' +
+      '  -H <span class="tok-str">"Authorization: Bearer ' + escapeHtml(key) + '"</span> \\\n' +
+      '  -H <span class="tok-str">"Content-Type: application/json"</span> \\\n' +
+      '  -d <span class="tok-str">\'{\n    "model": "veo_3_1-components",\n    "prompt": "A red paper boat floating on calm water at sunset"\n  }\'</span></code>';
   }
   if (asr) {
     asr.innerHTML = '<code><span class="tok-cmd">curl</span> https://www.keyoapi.xyz/v1/audio/transcriptions \\\n' +

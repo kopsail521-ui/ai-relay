@@ -1,0 +1,132 @@
+{
+  "source": "APIMart pricing screenshots 2026-09-04（当前价格）",
+  "base_url": "https://api.apimart.ai",
+  "channel_name": "apimart-video",
+  "markup": 1.2,
+  "note": "售价 = 网站「当前价格」USD × 1.2。凡标注 /秒 的规格，Keyo 也按秒展示与预扣；出片后仍可用上游 cost×1.2 结算。",
+  "endpoint_submit": "POST /v1/videos/generations",
+  "endpoint_poll": "GET /v1/tasks/{task_id}",
+  "models": [
+    {
+      "id": "gemini-omni-1.1-flash",
+      "vendor": "Google",
+      "icon": "Gemini.Color",
+      "tag": "视频",
+      "billing": "per_second",
+      "upstream_usd_per_second": 0.088,
+      "sell_usd_per_second": 0.1056,
+      "model_price_usd": 0.1056,
+      "desc_zh": "Gemini Omni 1.1 Flash · $0.1056/秒（上游 0.88 Credits≈$0.088/秒 ×1.2）"
+    },
+    {
+      "id": "gemini-omni-1.1-flash-ext",
+      "vendor": "Google",
+      "icon": "Gemini.Color",
+      "tag": "视频",
+      "billing": "pack_or_ref_second",
+      "upstream_pack_usd": {
+        "360P-4s": 0.15, "360P-6s": 0.175, "360P-8s": 0.2, "360P-10s": 0.225,
+        "720P-4s": 0.25, "1080P-4s": 0.25, "720P-6s": 0.3, "1080P-6s": 0.3,
+        "720P-8s": 0.35, "1080P-8s": 0.35, "720P-10s": 0.4, "1080P-10s": 0.4,
+        "4K-4s": 0.75, "4K-6s": 0.8, "4K-8s": 0.85, "4K-10s": 0.9
+      },
+      "sell_pack_usd": {
+        "360P-4s": 0.18, "360P-6s": 0.21, "360P-8s": 0.24, "360P-10s": 0.27,
+        "720P-4s": 0.3, "1080P-4s": 0.3, "720P-6s": 0.36, "1080P-6s": 0.36,
+        "720P-8s": 0.42, "1080P-8s": 0.42, "720P-10s": 0.48, "1080P-10s": 0.48,
+        "4K-4s": 0.9, "4K-6s": 0.96, "4K-8s": 1.02, "4K-10s": 1.08
+      },
+      "upstream_ref_usd_per_second": { "360P": 0.04, "720P": 0.08, "1080P": 0.08, "4K": 0.24 },
+      "sell_ref_usd_per_second": { "360P": 0.048, "720P": 0.096, "1080P": 0.096, "4K": 0.288 },
+      "model_price_usd": 0.42,
+      "desc_zh": "Omni Ext · 标准生成按档位（如 720P-8s $0.42/次）；参考视频按秒（720P/1080P $0.096/秒）。上游当前价×1.2"
+    },
+    {
+      "id": "seedance-2.5",
+      "vendor": "ByteDance",
+      "icon": "Doubao.Color",
+      "tag": "视频",
+      "billing": "per_second",
+      "upstream_usd_per_second": {
+        "480P": 0.09608, "480P-input": 0.0576,
+        "720P": 0.216, "720P-input": 0.1296,
+        "1080P": 0.38488, "1080P-input": 0.22992
+      },
+      "sell_usd_per_second": {
+        "480P": 0.115296, "480P-input": 0.06912,
+        "720P": 0.2592, "720P-input": 0.15552,
+        "1080P": 0.461856, "1080P-input": 0.275904
+      },
+      "model_price_usd": 0.115296,
+      "desc_zh": "Seedance 2.5 · 按秒；无参考用输出价，有参考视频用 *-input 价×(参考秒+生成秒)。示例 480P $0.115296/秒"
+    },
+    {
+      "id": "seedance-2.0",
+      "vendor": "ByteDance",
+      "icon": "Doubao.Color",
+      "tag": "视频",
+      "billing": "per_second",
+      "upstream_usd_per_second": {
+        "480P": 0.066, "480P-input": 0.04,
+        "720P": 0.142, "720P-input": 0.08584,
+        "1080P": 0.3544, "1080P-input": 0.21568,
+        "4K": 0.722, "4K-input": 0.44432
+      },
+      "sell_usd_per_second": {
+        "480P": 0.0792, "480P-input": 0.048,
+        "720P": 0.1704, "720P-input": 0.103008,
+        "1080P": 0.42528, "1080P-input": 0.258816,
+        "4K": 0.8664, "4K-input": 0.533184
+      },
+      "model_price_usd": 0.0792,
+      "desc_zh": "Seedance 2.0 · 按秒；480P $0.0792/秒，有上传视频用 *-input 价×(参考+生成)秒"
+    },
+    {
+      "id": "flux-3-video",
+      "vendor": "Black Forest Labs",
+      "icon": "Flux",
+      "tag": "视频",
+      "billing": "per_second",
+      "upstream_usd_per_second": {
+        "DRAFT": 0.048, "V2V-DRAFT": 0.096,
+        "HD": 0.136, "FHD": 0.232,
+        "V2V-HD": 0.328, "V2V-FHD": 0.424
+      },
+      "sell_usd_per_second": {
+        "DRAFT": 0.0576, "V2V-DRAFT": 0.1152,
+        "HD": 0.1632, "FHD": 0.2784,
+        "V2V-HD": 0.3936, "V2V-FHD": 0.5088
+      },
+      "model_price_usd": 0.1632,
+      "desc_zh": "FLUX.3 Video · 按秒；DRAFT $0.0576、HD $0.1632、FHD $0.2784/秒（当前价×1.2）"
+    },
+    {
+      "id": "MiniMax-H3",
+      "vendor": "MiniMax",
+      "icon": "Minimax.Color",
+      "tag": "视频",
+      "billing": "per_second",
+      "upstream_usd_per_second": { "768P": 0.05712, "2K": 0.09144 },
+      "sell_usd_per_second": { "768P": 0.068544, "2K": 0.109728 },
+      "upstream_image_usd": 0.02288,
+      "sell_image_usd": 0.027456,
+      "model_price_usd": 0.068544,
+      "desc_zh": "MiniMax-H3 · 按秒 768P $0.068544、2K $0.109728；参考图超出 5 张后 $0.027456/张"
+    },
+    {
+      "id": "wan3.0-video",
+      "vendor": "Alibaba",
+      "icon": "Qwen.Color",
+      "tag": "视频",
+      "billing": "per_second",
+      "upstream_usd_per_second": {
+        "480P": 0.034288, "720P": 0.068568, "1080P": 0.137144
+      },
+      "sell_usd_per_second": {
+        "480P": 0.0411456, "720P": 0.0822816, "1080P": 0.1645728
+      },
+      "model_price_usd": 0.0411456,
+      "desc_zh": "Wan 3.0 Video · 按秒；480P $0.04115、720P $0.08228、1080P $0.16457/秒"
+    }
+  ]
+}

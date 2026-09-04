@@ -2,7 +2,7 @@
 
 **Last updated:** September 1, 2026  
 **Service:** KeyoAPI (`https://www.keyoapi.xyz`)  
-**Contact:** [support@keyoapi.xyz](mailto:support@keyoapi.xyz)
+**Contact:** [kopsail521@gmail.com](mailto:kopsail521@gmail.com)
 
 This Acceptable Use Policy (“AUP”) is part of our [Terms of Service](/user-agreement). It applies to all KeyoAPI accounts, API keys, and all AI-generated content — including text, images, audio, video, and voice.
 
@@ -37,4 +37,4 @@ We may:
 
 ## Reporting
 
-Report abuse or policy questions: **[support@keyoapi.xyz](mailto:support@keyoapi.xyz)**
+Report abuse or policy questions: **[kopsail521@gmail.com](mailto:kopsail521@gmail.com)**

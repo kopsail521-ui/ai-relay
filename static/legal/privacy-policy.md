@@ -2,7 +2,7 @@
 
 **Last updated:** September 1, 2026  
 **Service:** KeyoAPI (`https://www.keyoapi.xyz`)  
-**Contact:** [support@keyoapi.xyz](mailto:support@keyoapi.xyz)
+**Contact:** [kopsail521@gmail.com](mailto:kopsail521@gmail.com)
 
 This Privacy Policy explains how KeyoAPI (“we”, “us”, or “our”) collects, uses, and protects information when you use our OpenAI-compatible API gateway and related websites.
 
@@ -15,9 +15,9 @@ KeyoAPI provides API access to third-party AI models (chat and image generation)
 We may collect:
 
 - **Account data:** username, email address, and authentication identifiers (including Google OIDC profile data if you sign in with Google)
-- **Billing data:** payment status, order IDs, and top-up history processed by our payment provider (Creem). We do not store full card numbers
+- **Billing data:** payment status, order IDs, and top-up history processed by our payment provider (Waffo). We do not store full card numbers
 - **Usage data:** API requests metadata (timestamps, model names, token/image usage, IP address, API key identifiers) needed for billing, abuse prevention, and support
-- **Support communications:** messages you send to [support@keyoapi.xyz](mailto:support@keyoapi.xyz)
+- **Support communications:** messages you send to [kopsail521@gmail.com](mailto:kopsail521@gmail.com)
 - **Technical logs:** basic server logs for security and reliability
 
 We do **not** intentionally collect sensitive personal data beyond what is needed to operate the service.
@@ -43,7 +43,7 @@ You are responsible for ensuring that prompts and outputs comply with our Terms 
 
 We may share limited data with:
 
-- **Payment processor / Merchant of Record:** Creem (and its payment partners) for checkout, tax, and payouts
+- **Payment processor / Merchant of Record:** Waffo (and its payment partners) for checkout, tax, and payouts
 - **Upstream AI providers:** only as required to fulfill API calls you initiate
 - **Infrastructure providers:** hosting, DNS, and email delivery vendors
 - **Authorities:** when required by law or to protect rights and safety
@@ -68,7 +68,7 @@ Our servers and vendors may process data in multiple countries. By using KeyoAPI
 
 ## 10. Your choices
 
-Depending on applicable law, you may request access, correction, or deletion of personal data associated with your account by emailing [support@keyoapi.xyz](mailto:support@keyoapi.xyz).
+Depending on applicable law, you may request access, correction, or deletion of personal data associated with your account by emailing [kopsail521@gmail.com](mailto:kopsail521@gmail.com).
 
 ## 11. Children’s privacy
 
@@ -80,5 +80,5 @@ We may update this Policy from time to time. The “Last updated” date will ch
 
 ## 13. Contact
 
-Questions about privacy: **[support@keyoapi.xyz](mailto:support@keyoapi.xyz)**  
+Questions about privacy: **[kopsail521@gmail.com](mailto:kopsail521@gmail.com)**  
 Website: `https://www.keyoapi.xyz`

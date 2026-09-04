@@ -9,7 +9,7 @@
       "id": "grok-imagine-video-1.5-preview",
       "vendor": "xAI",
       "icon": "Grok",
-      "tag": "视频",
+      "tag": "视频·按秒",
       "billing": "per_second",
       "group": "Xai-Grok-1",
       "upstream_endpoint": "POST /v1/videos/generations",
@@ -30,7 +30,7 @@
       "id": "grok-1.5-video",
       "vendor": "xAI",
       "icon": "Grok",
-      "tag": "视频",
+      "tag": "视频·按次",
       "billing": "per_request",
       "group": "Cli-Grok-1",
       "upstream_endpoint": "POST /v1/videos",
@@ -38,14 +38,18 @@
       "sell_usd": 0.60675,
       "model_price_usd": 0.60675,
       "duration_range": "1-15s",
-      "resolutions": ["480p", "720p", "1080p"],
+      "resolutions": [
+        "480p",
+        "720p",
+        "1080p"
+      ],
       "desc_zh": "Grok 1.5 Video · 按次 $0.60675/次；文生/参考图，1–15 秒，480p/720p/1080p · POST /v1/videos"
     },
     {
       "id": "veo_3_1-components",
       "vendor": "Google",
       "icon": "Gemini.Color",
-      "tag": "视频",
+      "tag": "视频·按次",
       "billing": "per_request",
       "group": "Discounted-Gemini-1",
       "upstream_endpoint": "POST /v1/videos",

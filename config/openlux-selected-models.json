@@ -24,7 +24,7 @@
       },
       "sell_image_usd": 0.011025,
       "model_price_default_usd": 0.08825,
-      "desc_zh": "Grok Imagine Video 1.5 Preview：图生短视频预览模型，支持首帧参考。"
+      "desc_zh": "xAI Grok Imagine Video 预览版，适合由图片快速生成短视频。"
     },
     {
       "id": "grok-1.5-video",
@@ -43,7 +43,7 @@
         "720p",
         "1080p"
       ],
-      "desc_zh": "Grok 1.5 Video：文生/参考图视频，1–15 秒，480p/720p/1080p。"
+      "desc_zh": "xAI Grok 1.5 视频：文生或参考图生成，时长 1–15 秒，最高 1080p。"
     },
     {
       "id": "veo_3_1-components",
@@ -57,7 +57,7 @@
       "sell_usd": 0.14125,
       "fixed_seconds": 8,
       "model_price_usd": 0.14125,
-      "desc_zh": "Veo 3.1 Components：约 8 秒视频，支持首帧参考。"
+      "desc_zh": "Google Veo 3.1 Components，约 8 秒成片，支持首帧参考。"
     }
   ]
 }

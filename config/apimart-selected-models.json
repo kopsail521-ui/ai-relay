@@ -14,7 +14,7 @@
       "tag": "视频·按秒",
       "sell_usd_per_second": 0.1056,
       "model_price_usd": 0.1056,
-      "desc_zh": "Gemini Omni 1.1 Flash：多模态视频生成。"
+      "desc_zh": "Google Gemini Omni 1.1 Flash，多模态视频生成，适合快速出片。"
     },
     {
       "id": "gemini-omni-1.1-flash-ext",
@@ -71,7 +71,7 @@
         "4K": 0.288
       },
       "model_price_usd": 0.42,
-      "desc_zh": "Gemini Omni Ext：标准按分辨率×时长档位；上传参考视频时按秒计费。"
+      "desc_zh": "Gemini Omni Ext 扩展档，支持更多分辨率与参考视频输入。"
     },
     {
       "id": "seedance-2.5",
@@ -96,7 +96,7 @@
         "1080P-input": 0.275904
       },
       "model_price_usd": 0.115296,
-      "desc_zh": "Seedance 2.5：高质量视频生成；有参考视频时按时长合计计费。"
+      "desc_zh": "字节 Seedance 2.5 视频生成模型，适合高质量短视频创作，支持参考视频引导。"
     },
     {
       "id": "seedance-2.0",
@@ -125,7 +125,7 @@
         "4K-input": 0.533184
       },
       "model_price_usd": 0.0792,
-      "desc_zh": "Seedance 2.0：视频生成；有上传参考视频时按时长合计计费。"
+      "desc_zh": "字节 Seedance 2.0 视频生成模型，支持多分辨率与参考视频。"
     },
     {
       "id": "flux-3-video",
@@ -150,7 +150,7 @@
         "V2V-FHD": 0.5088
       },
       "model_price_usd": 0.1632,
-      "desc_zh": "FLUX.3 Video：多档位视频生成（含 V2V）。"
+      "desc_zh": "FLUX.3 Video，多档位视频生成，含图生与视频到视频。"
     },
     {
       "id": "MiniMax-H3",
@@ -169,7 +169,7 @@
       "upstream_image_usd": 0.02288,
       "sell_image_usd": 0.027456,
       "model_price_usd": 0.068544,
-      "desc_zh": "MiniMax-H3：视频生成；参考图超出 5 张后按张计费。"
+      "desc_zh": "MiniMax-H3 视频模型，支持 768P/2K，可附加参考图。"
     },
     {
       "id": "wan3.0-video",
@@ -188,7 +188,7 @@
         "1080P": 0.1645728
       },
       "model_price_usd": 0.0411456,
-      "desc_zh": "Wan 3.0 Video：按分辨率按秒计费。"
+      "desc_zh": "通义万相 Wan 3.0 视频生成，按分辨率输出。"
     }
   ]
 }

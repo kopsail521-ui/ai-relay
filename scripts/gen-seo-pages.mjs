@@ -392,6 +392,7 @@ Allow: /about
 
 Sitemap: ${site}/sitemap.xml
 
+Disallow: /pricing/
 Disallow: /dashboard
 Disallow: /console
 Disallow: /sign-in

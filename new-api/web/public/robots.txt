@@ -8,6 +8,7 @@ Allow: /about
 
 Sitemap: https://www.keyoapi.xyz/sitemap.xml
 
+Disallow: /pricing/
 Disallow: /dashboard
 Disallow: /console
 Disallow: /sign-in

@@ -1,10 +1,25 @@
 {
   "source": "https://api.openlux.ai/api/pricing_new",
-  "fetched_at": "2026-08-30T14:37:18.845Z",
+  "fetched_at": "2026-09-05T12:33:24.514Z",
   "note": "cost = cheapest enable_group price on OpenLux site; sell = cost * 5",
   "usd_exchange_rate_site": 6.8,
-  "count": 266,
+  "count": 267,
   "models": [
+    {
+      "model": "gpt-6-astra",
+      "endpoints": "openai|openai-response",
+      "group": "Codex-Gpt-1",
+      "cost_in_usd": 0.3677,
+      "cost_out_usd": 1.8385,
+      "sell_in_usd": 1.8385,
+      "sell_out_usd": 9.1925,
+      "sell_in_cny": 12.5018,
+      "sell_out_cny": 62.509,
+      "model_ratio": 5,
+      "completion_ratio": 5,
+      "our_model_ratio": 0.91925,
+      "our_completion_ratio": 5
+    },
     {
       "model": "claude-fable-5",
       "endpoints": "anthropic|openai",

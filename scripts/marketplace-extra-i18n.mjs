@@ -46,7 +46,7 @@ export const EXTRA_MODELS = {
   },
   "gpt-6-astra": {
     mode: "token",
-    ratio: 5,
+    ratio: 0.91925,
     completion: 5,
     desc: {
       zhCN: "GPT-6 Astra 旗舰对话与推理模型，适合复杂任务与长上下文。",

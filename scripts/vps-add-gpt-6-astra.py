@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
-"""Add OpenLux chat model gpt-6-astra into New API sqlite.
+"""Add gpt-6-astra into New API sqlite (channel + pricing + marketplace).
 
-Sell price (USD / 1M tokens): input $10 · output $50
-→ ModelRatio = 10/2 = 5 · CompletionRatio = 50/10 = 5
-(与站内 Claude Fable 同规则：倍率 = 输入美元价÷2)
+Internal cost from cheapest enable group (Codex-Gpt-1): ~$0.3677 / $1.8385 per 1M
+Sell = cost × 5 → $1.8385 / $9.1925 per 1M
+→ ModelRatio = sell_in/2 = 0.91925 · CompletionRatio = 5
+Public copy must NOT mention supplier / cost / markup.
 """
 import json
 import os
@@ -12,10 +13,13 @@ import sys
 import time
 
 MODEL = "gpt-6-astra"
-OUR_MODEL_RATIO = 5.0
+COST_IN = 0.3677
+COST_OUT = 1.8385
+MARKUP = 5.0
+SELL_IN = COST_IN * MARKUP  # 1.8385
+SELL_OUT = COST_OUT * MARKUP  # 9.1925
+OUR_MODEL_RATIO = SELL_IN / 2.0  # 0.91925
 OUR_COMPLETION_RATIO = 5.0
-SELL_IN = 10.0
-SELL_OUT = 50.0
 TAG = "大语言模型"
 VENDOR = "OpenAI"
 ICON = "OpenAI"
@@ -58,12 +62,19 @@ def main():
                 target = (cid, name, models or "")
                 break
     if target is None:
-        raise SystemExit("OpenLux channel not found")
+        raise SystemExit("primary chat channel not found")
 
     cid, cname, models = target
-    # scrub supplier-looking channel name
+    # scrub supplier-looking channel name from admin UI
     new_name = cname
-    if "openlux" in (cname or "").lower() or "上游" in (cname or ""):
+    low = (cname or "").lower()
+    if (
+        "openlux" in low
+        or "上游" in (cname or "")
+        or "透传" in (cname or "")
+        or "gitee" in low
+        or "模力" in (cname or "")
+    ):
         new_name = "Keyo Primary"
     parts = [p.strip() for p in models.split(",") if p.strip()]
     if MODEL not in parts:

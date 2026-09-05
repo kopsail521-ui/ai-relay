@@ -1,7 +1,8 @@
-# 一次上线：OpenLux gpt-6-astra（售价 $10 / $50 每百万 tokens）
+# 一次上线：gpt-6-astra（售价 = 成本 ×5 → 约 $1.84 / $9.19 每百万 tokens）
 cd /opt/ai-relay && sudo git pull && git log -1 --oneline
 
 sudo python3 scripts/vps-add-gpt-6-astra.py /opt/ai-relay/data/new-api/one-api.db
+sudo python3 scripts/vps-scrub-channel-names.py /opt/ai-relay/data/new-api/one-api.db 2>/dev/null || true
 sudo python3 scripts/vps-update-marketplace-copy.py /opt/ai-relay/data/new-api/one-api.db /opt/ai-relay/config/marketplace-model-copy.json 2>/dev/null || true
 
 sudo docker build --no-cache -t keyo-creem-moderation ./services/creem-moderation-proxy
@@ -15,22 +16,18 @@ sudo docker run -d --name ai-relay-creem-moderation --restart always --network h
 
 sleep 2
 curl -sS -m 5 -o /dev/null -w "mod=%{http_code}\n" http://127.0.0.1:3001/ || true
-curl -sS http://127.0.0.1:3001/api/pricing | python3 -c "
-import sys,json
-d=json.load(sys.stdin)
-ms=d.get('data') or d.get('models') or []
-hit=[m for m in ms if (m.get('model_name') or m.get('model') or '')=='gpt-6-astra']
-print('gpt-6-astra', 'FOUND' if hit else 'MISSING', hit[0] if hit else '')
-"
-# New API 热读 options；若广场仍无模型可重启 new-api
 sudo docker restart new-api 2>/dev/null || sudo systemctl restart new-api 2>/dev/null || true
 sleep 3
 curl -sS http://127.0.0.1:3001/api/pricing | python3 -c "
-import sys,json
+import sys,json,re
 d=json.load(sys.stdin)
-# options ratios sometimes under data
-print('keys', list(d.keys())[:8])
-blob=json.dumps(d)
+blob=json.dumps(d,ensure_ascii=False)
 print('in_pricing', 'gpt-6-astra' in blob)
+print('leak', bool(re.search(r'openlux|OpenLux|上游|成本×|模力方舟|APIMart|Gitee', blob, re.I)))
+ms=d.get('data') or []
+hit=next((m for m in ms if (m.get('model_name') or '')=='gpt-6-astra'), None)
+if hit:
+  print('desc', (hit.get('description') or '')[:80])
+  print('vendor_id', hit.get('vendor_id'))
 "
 echo DONE_GPT6_ASTRA

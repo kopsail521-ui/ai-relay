@@ -19,13 +19,17 @@ REPO_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
 REPO_BRAND="$REPO_ROOT/static/brand"
 REPO_SEO="$REPO_ROOT/static/seo"
 
-if [[ -d "$REPO_BRAND" ]]; then
+if [[ -d "$REPO_BRAND" && "$(realpath "$REPO_BRAND")" != "$(realpath "$BRAND_DIR")" ]]; then
   cp -a "$REPO_BRAND/." "$BRAND_DIR/"
   echo "==> Copied brand pages to $BRAND_DIR"
+elif [[ -d "$BRAND_DIR" ]]; then
+  echo "==> Brand already in place at $BRAND_DIR (skip copy)"
 fi
-if [[ -d "$REPO_SEO" && -f "$REPO_SEO/index.html" ]]; then
+if [[ -d "$REPO_SEO" && -f "$REPO_SEO/index.html" && "$(realpath "$REPO_SEO")" != "$(realpath "$SEO_DIR")" ]]; then
   cp -a "$REPO_SEO/." "$SEO_DIR/"
   echo "==> Copied SEO pages to $SEO_DIR"
+elif [[ -f "$SEO_DIR/index.html" ]]; then
+  echo "==> SEO already in place at $SEO_DIR (skip copy)"
 fi
 
 if [[ ! -f "$BRAND_DIR/keyo-home.html" || ! -f "$BRAND_DIR/keyo-docs.html" ]]; then

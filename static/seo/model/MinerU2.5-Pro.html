@@ -63,30 +63,34 @@ ul{margin:0 0 14px;padding-left:1.2em}
 <p class="eyebrow">KEYOAPI</p>
 <h1>MinerU2.5-Pro API — Complex Document Parsing &amp; OCR</h1>
 
-<p class="lead">MinerU2.</p>
+<p class="lead">MinerU2.5-Pro is KeyoAPI’s heavy-duty document parsing OCR API for PDFs and images that break naive OCR.</p>
 <p class="meta">Target keywords: ocr api · document parsing api · pdf ocr api · Price: <span class="ok">$0.0137 / page</span></p>
 <div class="btnrow">
-  <a class="btn btn-primary" href="/pricing/MinerU2.5-Pro">Try on live pricing</a>
+  <a class="btn btn-primary" href="/pricing/MinerU2.5-Pro">Open interactive pricing</a>
   <a class="btn btn-secondary" href="/compare">Compare API prices</a>
   <a class="btn btn-secondary" href="/sign-up">Create account</a>
 </div>
 <h2>Overview</h2>
 <p>MinerU2.5-Pro is KeyoAPI’s heavy-duty document parsing OCR API for PDFs and images that break naive OCR. If you searched ocr api because invoices, papers, and slide decks must become machine-readable, this model is the structured extraction layer before your LLM.</p>
-<p>Complex documents mix columns, tables, formulas, and figures. MinerU2.5-Pro focuses on recovering text plus layout so downstream chat models reason over faithful structure. On KeyoAPI it sits beside Unlimited-OCR and UVDoc so you can build a full document lane on one AI API relay. KeyoAPI is an OpenAI-compatible AI API relay: one base URL, one API key, and dozens of models spanning chat, speech, vision, OCR, and digital humans. Switch models by changing the model string—no new SDKs.</p>
+<p>Complex documents mix columns, tables, formulas, and figures. MinerU2.5-Pro focuses on recovering text plus layout so downstream chat models reason over faithful structure. On KeyoAPI it sits beside Unlimited-OCR and UVDoc so you can build a full document lane on one AI API relay. </p>
 <p>Billing is approximately $0.0137 per page—easy to map onto “pages processed” product metrics. Compare against building and hosting your own GPU parsing stack when volume is spiky.</p>
 <p>Fintech KYC packets, academic PDF ingestion, contract analytics, and enterprise knowledge bases. Feed parsed markdown into claude-sonnet-5 or gpt-5.6-terra for Q&amp;A.</p>
 <p>Follow Keyo docs for the async document endpoints using model MinerU2.5-Pro. Try and top up at /pricing/MinerU2.5-Pro.</p>
-<p>KeyoAPI targets overseas developers who want a cheap llm api and specialized modality APIs without juggling five vendor consoles. The platform is an ai api relay: OpenAI-compatible base URL, unified API keys, prepaid balance, and a catalog that spans GPT-class chat, Claude-class agents, Whisper speech, TTS, OCR, vision, and digital humans. For procurement, start with /compare for an AI API price comparison, then open each model’s /pricing page to generate keys. For SEO and docs hygiene, every static model page links related models so crawlers and humans can discover the full capability graph. Production tip: log model id, latency, and cost per request from day one so you can shift traffic between Terra, Luna, Sonnet, and Opus as eval scores change. Security tip: store keys in server env vars, rotate regularly, and never expose relay keys in mobile binaries without a backend proxy. Support: use /brand/keyo-docs.html for integration notes and /sign-up to create an account. When you are ready to buy capacity, fund the wallet once and route every modality through the same KeyoAPI endpoint for simpler accounting.</p>
+<p>MinerU2.5-Pro is the async PDF/layout parser—submit once, poll /v1/task/{id}, then feed structured text to your LLM. Prefer it over chat-OCR for multi-page packets.</p>
+<p>Document pipelines fail when you treat PDFs like plain text. MinerU2.5-Pro recovers layout so tables and headings survive into your LLM context. Design the job as async: upload, store task id, poll, then write markdown into your vector store. Retry only failed pages. Cache hashes so re-uploads are free. For finance and legal, keep the original PDF URL next to the parsed chunk for citation. Chain UVDoc first when users photograph paper. That OCR API stack on one Keyo key beats stitching three SaaS vendors.</p>
+<p>Version your parse prompts and post-processors. When a template invoice changes, update the extractor without re-OCR of historical files if cached markdown remains valid. That cache discipline keeps OCR API spend flat as volume grows.</p>
+<p>Practical checklist for MinerU2.5-Pro: confirm endpoint POST /v1/async/documents/parse, set model string model=MinerU2.5-Pro, verify listed price $0.0137 / page on /pricing/MinerU2.5-Pro, add related links from this page into your docs, and keep interactive try/buy on /pricing/MinerU2.5-Pro for key creation. Target queries such as ocr api, document parsing api, pdf ocr api should land here with crawlable HTML—not a CSR shell. Re-test curl monthly when upstream request shapes change. Prefer this static guide for SEO and onboarding emails; prefer the console when operators need live balance and logs.</p>
 <h2>Quick start</h2>
 <div class="card">
 <p>Base URL: <code>https://www.keyoapi.xyz/v1</code></p>
-<p>Endpoint: <code>async document / OCR pipeline (see docs)</code></p>
+<p>Endpoint: <code>POST /v1/async/documents/parse</code></p>
 <p>Model: <code>model=MinerU2.5-Pro</code></p>
-<pre><code>curl https://www.keyoapi.xyz/v1/chat/completions \
-  -H "Authorization: Bearer YOUR_API_KEY" \
-  -H "Content-Type: application/json" \
-  -d '{"model":"MinerU2.5-Pro","messages":[{"role":"user","content":"Hello from KeyoAPI"}]}'</code></pre>
-<p>For audio/vision/async models, use the modality-specific paths in <a href="/brand/keyo-docs.html">Keyo docs</a>. The curl above illustrates the shared OpenAI-compatible auth pattern.</p>
+<pre><code>curl https://www.keyoapi.xyz/v1/async/documents/parse \
+  -H &quot;Authorization: Bearer YOUR_API_KEY&quot; \
+  -F model=MinerU2.5-Pro \
+  -F file=@./doc.pdf
+# then: GET /v1/task/{id}</code></pre>
+<p>Auth uses the same Bearer API key as chat. Full notes: <a href="/brand/keyo-docs.html">Keyo docs</a>.</p>
 </div>
 <h2>FAQ</h2>
 <div class="faq"><details><summary>What makes MinerU different from plain OCR?</summary><p>It targets complex layout: tables, reading order, and structure—not just raw character dumps—so LLMs receive cleaner context.</p></details>
@@ -96,12 +100,12 @@ ul{margin:0 0 14px;padding-left:1.2em}
 <div class="grid"><a href="/model/Unlimited-OCR">Unlimited-OCR API</a>
 <a href="/model/UVDoc">UVDoc API</a>
 <a href="/model/claude-sonnet-5">Claude Sonnet 5 API</a></div>
-<p class="meta">Also browse the interactive catalog at <a href="/pricing/MinerU2.5-Pro">/pricing/MinerU2.5-Pro</a>.</p>
+<p class="meta">Static guide for <strong>MinerU2.5-Pro</strong>. Interactive try/buy: <a href="/pricing/MinerU2.5-Pro">/pricing/MinerU2.5-Pro</a>. Catalog: <a href="/pricing">/pricing</a>.</p>
 
 <footer class="footer">
   <a href="/">Home</a>
   <a href="/compare">AI API price comparison</a>
-  <a href="/pricing">Live pricing</a>
+  <a href="/pricing">Pricing list</a>
   <a href="/brand/keyo-docs.html">Docs</a>
   <a href="/brand/faq.html">FAQ</a>
   <a href="/brand/privacy.html">Privacy</a>

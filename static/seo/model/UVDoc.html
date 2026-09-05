@@ -66,27 +66,30 @@ ul{margin:0 0 14px;padding-left:1.2em}
 <p class="lead">UVDoc fixes the physical world problem that kills OCR: curved book pages and skewed phone scans.</p>
 <p class="meta">Target keywords: document unwarping api · ocr api · scan correction api · Price: <span class="ok">$0.0137 / request</span></p>
 <div class="btnrow">
-  <a class="btn btn-primary" href="/pricing/UVDoc">Try on live pricing</a>
+  <a class="btn btn-primary" href="/pricing/UVDoc">Open interactive pricing</a>
   <a class="btn btn-secondary" href="/compare">Compare API prices</a>
   <a class="btn btn-secondary" href="/sign-up">Create account</a>
 </div>
 <h2>Overview</h2>
 <p>UVDoc fixes the physical world problem that kills OCR: curved book pages and skewed phone scans. As part of KeyoAPI’s ocr api toolkit, UVDoc unwarps images so MinerU2.5-Pro and Unlimited-OCR see straighter text lines.</p>
-<p>Unwarping is a specialized CV step—not a full OCR replacement. Products that let users snap receipts or IDs see immediate accuracy lifts after UVDoc. KeyoAPI is an OpenAI-compatible AI API relay: one base URL, one API key, and dozens of models spanning chat, speech, vision, OCR, and digital humans. Switch models by changing the model string—no new SDKs.</p>
+<p>Unwarping is a specialized CV step—not a full OCR replacement. Products that let users snap receipts or IDs see immediate accuracy lifts after UVDoc. </p>
 <p>Per-request pricing around $0.0137 keeps the preprocessing stage accountable in your cost model. Compare against losing conversions when OCR fails on mobile uploads.</p>
 <p>Banking onboarding, expense apps, classroom worksheet capture, and archive digitization. Optional upscale with Real-ESRGAN when resolution is tiny.</p>
 <p>Call UVDoc via Keyo image/unwarping paths documented in the developer docs, then pass output to OCR models. Start at /pricing/UVDoc.</p>
-<p>KeyoAPI targets overseas developers who want a cheap llm api and specialized modality APIs without juggling five vendor consoles. The platform is an ai api relay: OpenAI-compatible base URL, unified API keys, prepaid balance, and a catalog that spans GPT-class chat, Claude-class agents, Whisper speech, TTS, OCR, vision, and digital humans. For procurement, start with /compare for an AI API price comparison, then open each model’s /pricing page to generate keys. For SEO and docs hygiene, every static model page links related models so crawlers and humans can discover the full capability graph. Production tip: log model id, latency, and cost per request from day one so you can shift traffic between Terra, Luna, Sonnet, and Opus as eval scores change. Security tip: store keys in server env vars, rotate regularly, and never expose relay keys in mobile binaries without a backend proxy. Support: use /brand/keyo-docs.html for integration notes and /sign-up to create an account. When you are ready to buy capacity, fund the wallet once and route every modality through the same KeyoAPI endpoint for simpler accounting.</p>
+<p>UVDoc is preprocessing, not OCR: unwarp curved phone scans first, then hand the flattened image to MinerU or Unlimited-OCR for higher text accuracy.</p>
+<p>Phone scans fail OCR because of curvature and perspective, not because the OCR model is weak. UVDoc’s job is geometric cleanup before recognition. Run it only on camera captures; skip it for digital-born PDFs to save latency and cost. Store both the warped original and the unwarped result for audit. After UVDoc, call MinerU or Unlimited-OCR and compare character error rates on a labeled set of receipts or IDs. That A/B is how you justify the extra hop. KeyoAPI keeps unwarp + OCR + LLM on one prepaid balance.</p>
+<p>Gate UVDoc with a curvature heuristic so flat scans skip the hop. Log warp confidence. When confidence is low, ask the user to retake the photo instead of burning OCR tokens on garbage geometry.</p>
+<p>Practical checklist for UVDoc: confirm endpoint POST /v1/images/unwarping, set model string model=UVDoc, verify listed price $0.0137 / request on /pricing/UVDoc, add related links from this page into your docs, and keep interactive try/buy on /pricing/UVDoc for key creation. Target queries such as document unwarping api, ocr api, scan correction api should land here with crawlable HTML—not a CSR shell. Re-test curl monthly when upstream request shapes change. Prefer this static guide for SEO and onboarding emails; prefer the console when operators need live balance and logs.</p>
 <h2>Quick start</h2>
 <div class="card">
 <p>Base URL: <code>https://www.keyoapi.xyz/v1</code></p>
-<p>Endpoint: <code>image unwarping endpoint (see docs)</code></p>
+<p>Endpoint: <code>POST /v1/images/unwarping</code></p>
 <p>Model: <code>model=UVDoc</code></p>
-<pre><code>curl https://www.keyoapi.xyz/v1/chat/completions \
-  -H "Authorization: Bearer YOUR_API_KEY" \
-  -H "Content-Type: application/json" \
-  -d '{"model":"UVDoc","messages":[{"role":"user","content":"Hello from KeyoAPI"}]}'</code></pre>
-<p>For audio/vision/async models, use the modality-specific paths in <a href="/brand/keyo-docs.html">Keyo docs</a>. The curl above illustrates the shared OpenAI-compatible auth pattern.</p>
+<pre><code>curl https://www.keyoapi.xyz/v1/images/unwarping \
+  -H &quot;Authorization: Bearer YOUR_API_KEY&quot; \
+  -F model=UVDoc \
+  -F image=@./scan.png</code></pre>
+<p>Auth uses the same Bearer API key as chat. Full notes: <a href="/brand/keyo-docs.html">Keyo docs</a>.</p>
 </div>
 <h2>FAQ</h2>
 <div class="faq"><details><summary>Do I always need UVDoc before OCR?</summary><p>Use it when pages are curved, skewed, or photographed at an angle. Flat digital PDFs can skip straight to MinerU/Unlimited-OCR.</p></details>
@@ -96,12 +99,12 @@ ul{margin:0 0 14px;padding-left:1.2em}
 <div class="grid"><a href="/model/MinerU2.5-Pro">MinerU2.5-Pro API</a>
 <a href="/model/Unlimited-OCR">Unlimited-OCR API</a>
 <a href="/model/Real-ESRGAN">Real-ESRGAN API</a></div>
-<p class="meta">Also browse the interactive catalog at <a href="/pricing/UVDoc">/pricing/UVDoc</a>.</p>
+<p class="meta">Static guide for <strong>UVDoc</strong>. Interactive try/buy: <a href="/pricing/UVDoc">/pricing/UVDoc</a>. Catalog: <a href="/pricing">/pricing</a>.</p>
 
 <footer class="footer">
   <a href="/">Home</a>
   <a href="/compare">AI API price comparison</a>
-  <a href="/pricing">Live pricing</a>
+  <a href="/pricing">Pricing list</a>
   <a href="/brand/keyo-docs.html">Docs</a>
   <a href="/brand/faq.html">FAQ</a>
   <a href="/brand/privacy.html">Privacy</a>

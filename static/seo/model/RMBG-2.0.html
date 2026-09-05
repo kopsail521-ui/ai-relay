@@ -63,30 +63,33 @@ ul{margin:0 0 14px;padding-left:1.2em}
 <p class="eyebrow">KEYOAPI</p>
 <h1>RMBG-2.0 API — Background Removal for Product &amp; Portraits</h1>
 
-<p class="lead">RMBG-2.</p>
+<p class="lead">RMBG-2.0 (BRIA) is KeyoAPI’s background removal api for product photos, portraits, and design assets that must ship with clean alpha.</p>
 <p class="meta">Target keywords: background removal api · remove background api · image matting api · Price: <span class="ok">$0.0068 / request</span></p>
 <div class="btnrow">
-  <a class="btn btn-primary" href="/pricing/RMBG-2.0">Try on live pricing</a>
+  <a class="btn btn-primary" href="/pricing/RMBG-2.0">Open interactive pricing</a>
   <a class="btn btn-secondary" href="/compare">Compare API prices</a>
   <a class="btn btn-secondary" href="/sign-up">Create account</a>
 </div>
 <h2>Overview</h2>
 <p>RMBG-2.0 (BRIA) is KeyoAPI’s background removal api for product photos, portraits, and design assets that must ship with clean alpha. Unlike consumer “remove background” sites, this is a developer-metered image matting API on an AI API relay.</p>
-<p>E-commerce feeds, creator tools, and print-on-demand flows need reliable cutouts without Photoshop macros. RMBG-2.0 focuses on high-accuracy mattes that survive zoom and marketplace compression. KeyoAPI is an OpenAI-compatible AI API relay: one base URL, one API key, and dozens of models spanning chat, speech, vision, OCR, and digital humans. Switch models by changing the model string—no new SDKs.</p>
+<p>E-commerce feeds, creator tools, and print-on-demand flows need reliable cutouts without Photoshop macros. RMBG-2.0 focuses on high-accuracy mattes that survive zoom and marketplace compression. </p>
 <p>About $0.0068 per request—often cheaper than legacy SaaS background APIs that charge five to twenty cents an image. See /compare for a high-level AI API price comparison row on background removal.</p>
 <p>SKU studio automation, avatar builders, thumbnail pipelines, and design editors. Combine with sam3 when you need open-vocabulary masks beyond simple subject/background.</p>
 <p>Call Keyo matting endpoints with model=RMBG-2.0. Try it from /pricing/RMBG-2.0.</p>
-<p>KeyoAPI targets overseas developers who want a cheap llm api and specialized modality APIs without juggling five vendor consoles. The platform is an ai api relay: OpenAI-compatible base URL, unified API keys, prepaid balance, and a catalog that spans GPT-class chat, Claude-class agents, Whisper speech, TTS, OCR, vision, and digital humans. For procurement, start with /compare for an AI API price comparison, then open each model’s /pricing page to generate keys. For SEO and docs hygiene, every static model page links related models so crawlers and humans can discover the full capability graph. Production tip: log model id, latency, and cost per request from day one so you can shift traffic between Terra, Luna, Sonnet, and Opus as eval scores change. Security tip: store keys in server env vars, rotate regularly, and never expose relay keys in mobile binaries without a backend proxy. Support: use /brand/keyo-docs.html for integration notes and /sign-up to create an account. When you are ready to buy capacity, fund the wallet once and route every modality through the same KeyoAPI endpoint for simpler accounting.</p>
+<p>RMBG-2.0 is a true matting API on /v1/images/mattings (multipart image upload), not a chat toy. Metered near $0.0068/request for catalog and avatar pipelines.</p>
+<p>Background removal in commerce is a reliability problem: hair edges, transparent packaging, and white-on-white SKUs. Build a QA loop that flags mattes with too much leftover background using simple pixel heuristics, then re-run or escalate to sam3 masks. Store alpha PNGs with SKU ids for CDN delivery. Meter per request so you can charge merchants per successful cutout. Do not demo this with chat/completions—use /v1/images/mattings with multipart uploads. That single detail separates a real background removal API from a toy prompt.</p>
+<p>Accept PNG/JPEG, return alpha. Soft-fail on tiny images. Offer a preview URL for merchant QA. Background removal API quality is judged by edge hair and plastic packaging—curate a regression set of fifty SKUs and re-score after every model upgrade.</p>
+<p>Practical checklist for RMBG-2.0: confirm endpoint POST /v1/images/mattings, set model string model=RMBG-2.0, verify listed price $0.0068 / request on /pricing/RMBG-2.0, add related links from this page into your docs, and keep interactive try/buy on /pricing/RMBG-2.0 for key creation. Target queries such as background removal api, remove background api, image matting api should land here with crawlable HTML—not a CSR shell. Re-test curl monthly when upstream request shapes change. Prefer this static guide for SEO and onboarding emails; prefer the console when operators need live balance and logs.</p>
 <h2>Quick start</h2>
 <div class="card">
 <p>Base URL: <code>https://www.keyoapi.xyz/v1</code></p>
-<p>Endpoint: <code>image matting / background removal (see docs)</code></p>
+<p>Endpoint: <code>POST /v1/images/mattings</code></p>
 <p>Model: <code>model=RMBG-2.0</code></p>
-<pre><code>curl https://www.keyoapi.xyz/v1/chat/completions \
-  -H "Authorization: Bearer YOUR_API_KEY" \
-  -H "Content-Type: application/json" \
-  -d '{"model":"RMBG-2.0","messages":[{"role":"user","content":"Hello from KeyoAPI"}]}'</code></pre>
-<p>For audio/vision/async models, use the modality-specific paths in <a href="/brand/keyo-docs.html">Keyo docs</a>. The curl above illustrates the shared OpenAI-compatible auth pattern.</p>
+<pre><code>curl https://www.keyoapi.xyz/v1/images/mattings \
+  -H &quot;Authorization: Bearer YOUR_API_KEY&quot; \
+  -F model=RMBG-2.0 \
+  -F image=@./photo.png</code></pre>
+<p>Auth uses the same Bearer API key as chat. Full notes: <a href="/brand/keyo-docs.html">Keyo docs</a>.</p>
 </div>
 <h2>FAQ</h2>
 <div class="faq"><details><summary>How does this compare to consumer remove-bg tools?</summary><p>Those tools optimize for humans clicking a website. RMBG-2.0 is an API for automated catalogs, DAM pipelines, and apps at ~$0.0068/request.</p></details>
@@ -96,12 +99,12 @@ ul{margin:0 0 14px;padding-left:1.2em}
 <div class="grid"><a href="/model/sam3">SAM 3 API</a>
 <a href="/model/VajraV1">VajraV1 YOLO API</a>
 <a href="/model/Real-ESRGAN">Real-ESRGAN API</a></div>
-<p class="meta">Also browse the interactive catalog at <a href="/pricing/RMBG-2.0">/pricing/RMBG-2.0</a>.</p>
+<p class="meta">Static guide for <strong>RMBG-2.0</strong>. Interactive try/buy: <a href="/pricing/RMBG-2.0">/pricing/RMBG-2.0</a>. Catalog: <a href="/pricing">/pricing</a>.</p>
 
 <footer class="footer">
   <a href="/">Home</a>
   <a href="/compare">AI API price comparison</a>
-  <a href="/pricing">Live pricing</a>
+  <a href="/pricing">Pricing list</a>
   <a href="/brand/keyo-docs.html">Docs</a>
   <a href="/brand/faq.html">FAQ</a>
   <a href="/brand/privacy.html">Privacy</a>

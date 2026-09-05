@@ -28,6 +28,13 @@ function esc(s) {
     .replace(/"/g, "&quot;");
 }
 
+/** First sentence without breaking on decimals like RMBG-2.0 */
+function firstSentence(text) {
+  const t = String(text || "").trim();
+  const m = t.match(/^[\s\S]+?[.!?](?=\s|$)/);
+  return m ? m[0].trim() : t.slice(0, 220).trim();
+}
+
 function css() {
   return `
 :root {
@@ -82,7 +89,7 @@ function footer() {
   return `<footer class="footer">
   <a href="/">Home</a>
   <a href="/compare">AI API price comparison</a>
-  <a href="/pricing">Live pricing</a>
+  <a href="/pricing">Pricing list</a>
   <a href="/brand/keyo-docs.html">Docs</a>
   <a href="/brand/faq.html">FAQ</a>
   <a href="/brand/privacy.html">Privacy</a>
@@ -137,8 +144,23 @@ function relatedLinks(ids) {
   return `<div class="grid">${links}</div>`;
 }
 
+function compareTableRows() {
+  return priceRefs.compare_rows
+    .map(
+      (r) => `<tr>
+  <td>${esc(r.capability)}</td>
+  <td>${esc(r.official)}</td>
+  <td><a href="/model/${encodeURIComponent(r.keyo_model)}">${esc(r.keyo_model)}</a><br/><span class="ok">${esc(r.keyo_price)}</span></td>
+  <td>${esc(r.note)}</td>
+</tr>`
+    )
+    .join("\n");
+}
+
 function renderModel(m) {
   const canonical = `${site}/model/${encodeURIComponent(m.id)}`;
+  const leadSrc = m.sections?.intro || m.body;
+  const lead = firstSentence(leadSrc);
   const paras = m.body
     .split(/\n\n+/)
     .map((p) => `<p>${esc(p)}</p>`)
@@ -149,11 +171,12 @@ function renderModel(m) {
         `<details><summary>${esc(f.q)}</summary><p>${esc(f.a)}</p></details>`
     )
     .join("\n");
+  const curl = m.curlExample || "";
   const bodyHtml = `
-<p class="lead">${esc((m.sections.intro || m.body).split(".")[0])}.</p>
+<p class="lead">${esc(lead)}</p>
 <p class="meta">Target keywords: ${m.targetKeywords.map(esc).join(" · ")} · Price: <span class="ok">${esc(m.priceLabel)}</span></p>
 <div class="btnrow">
-  <a class="btn btn-primary" href="/pricing/${encodeURIComponent(m.id)}">Try on live pricing</a>
+  <a class="btn btn-primary" href="/pricing/${encodeURIComponent(m.id)}">Open interactive pricing</a>
   <a class="btn btn-secondary" href="/compare">Compare API prices</a>
   <a class="btn btn-secondary" href="/sign-up">Create account</a>
 </div>
@@ -164,17 +187,14 @@ ${paras}
 <p>Base URL: <code>https://www.keyoapi.xyz/v1</code></p>
 <p>Endpoint: <code>${esc(m.endpoint)}</code></p>
 <p>Model: <code>${esc(m.codeHint)}</code></p>
-<pre><code>curl https://www.keyoapi.xyz/v1/chat/completions \\
-  -H "Authorization: Bearer YOUR_API_KEY" \\
-  -H "Content-Type: application/json" \\
-  -d '{"model":"${esc(m.id)}","messages":[{"role":"user","content":"Hello from KeyoAPI"}]}'</code></pre>
-<p>For audio/vision/async models, use the modality-specific paths in <a href="/brand/keyo-docs.html">Keyo docs</a>. The curl above illustrates the shared OpenAI-compatible auth pattern.</p>
+<pre><code>${esc(curl)}</code></pre>
+<p>Auth uses the same Bearer API key as chat. Full notes: <a href="/brand/keyo-docs.html">Keyo docs</a>.</p>
 </div>
 <h2>FAQ</h2>
 <div class="faq">${faqs}</div>
 <h2>Related models</h2>
 ${relatedLinks(m.related)}
-<p class="meta">Also browse the interactive catalog at <a href="/pricing/${encodeURIComponent(m.id)}">/pricing/${esc(m.id)}</a>.</p>
+<p class="meta">Static guide for <strong>${esc(m.id)}</strong>. Interactive try/buy: <a href="/pricing/${encodeURIComponent(m.id)}">/pricing/${esc(m.id)}</a>. Catalog: <a href="/pricing">/pricing</a>.</p>
 `;
   return layout({
     title: m.title,
@@ -202,35 +222,43 @@ function renderHome() {
   const modelLinks = pages.models
     .map(
       (m) =>
-        `<li><a href="/model/${encodeURIComponent(m.id)}">${esc(m.id)}</a> - ${esc(m.priceLabel)}</li>`
+        `<li><a href="/model/${encodeURIComponent(m.id)}">${esc(m.id)}</a> — ${esc(m.priceLabel)} · <a href="/model/${encodeURIComponent(m.id)}">guide</a></li>`
     )
     .join("\n");
   const bodyHtml = `
-<p class="lead">KeyoAPI is a <strong>cheap llm api</strong> and multimodal <strong>ai api relay</strong> for overseas developers who want OpenAI-compatible access to chat, Whisper, OCR, vision, TTS, and digital humans - without five vendor bills.</p>
+<p class="lead">KeyoAPI is a <strong>cheap llm api</strong> and multimodal <strong>ai api relay</strong> for overseas developers who want OpenAI-compatible access to chat, Whisper, OCR, vision, TTS, and digital humans — without five vendor bills.</p>
 <div class="btnrow">
   <a class="btn btn-primary" href="/sign-up">Start free</a>
-  <a class="btn btn-secondary" href="/compare">AI API price comparison</a>
-  <a class="btn btn-secondary" href="/pricing">Live model pricing</a>
+  <a class="btn btn-secondary" href="/compare">Full AI API price comparison</a>
+  <a class="btn btn-secondary" href="/pricing">Pricing list</a>
 </div>
+<h2>Headline price anchors</h2>
+<p class="meta">Indicative rates for planning. Confirm live sell prices on <a href="/pricing">/pricing</a>.</p>
+<table>
+<thead><tr><th>Capability</th><th>Typical official list</th><th>KeyoAPI</th><th>Notes</th></tr></thead>
+<tbody>${compareTableRows()}</tbody>
+</table>
+<p><a href="/compare">See the full comparison page →</a></p>
 <h2>Why teams pick this AI API relay</h2>
-<p>Official OpenAI and Anthropic docs dominate generic "speech to text api" queries. KeyoAPI wins on purchase-intent searches: developers typing <strong>cheap llm api</strong>, <strong>ai api relay</strong>, and model-specific "{name} api" when they already have a production bill to cut.</p>
+<p>KeyoAPI wins on purchase-intent searches: <strong>cheap llm api</strong>, <strong>ai api relay</strong>, and model-specific “{name} api” when developers already have a production bill to cut.</p>
 <p>One base URL <code>https://www.keyoapi.xyz/v1</code>, one API key, prepaid balance, and model IDs you can swap in existing OpenAI SDKs for Python, Node.js, and Cursor-compatible clients.</p>
 <h2>Featured capabilities</h2>
 <ul>
-  <li><a href="/model/gpt-5.6-luna">GPT-5.6 Luna</a> - high-volume cheap LLM tier</li>
-  <li><a href="/model/claude-sonnet-5">Claude Sonnet 5</a> - balanced Claude-class chat</li>
-  <li><a href="/model/whisper-large-v3">Whisper Large V3</a> - multilingual speech-to-text</li>
-  <li><a href="/model/Qwen3-TTS">Qwen3-TTS</a> - text to speech + voice clone</li>
-  <li><a href="/model/MinerU2.5-Pro">MinerU2.5-Pro</a> - document parsing OCR</li>
-  <li><a href="/model/RMBG-2.0">RMBG-2.0</a> - background removal API</li>
+  <li><a href="/model/gpt-5.6-luna">GPT-5.6 Luna</a> — high-volume cheap LLM tier</li>
+  <li><a href="/model/claude-sonnet-5">Claude Sonnet 5</a> — balanced Claude-class chat</li>
+  <li><a href="/model/whisper-large-v3">Whisper Large V3</a> — multilingual speech-to-text</li>
+  <li><a href="/model/Qwen3-TTS">Qwen3-TTS</a> — async text to speech + voice clone</li>
+  <li><a href="/model/MinerU2.5-Pro">MinerU2.5-Pro</a> — async document parsing OCR</li>
+  <li><a href="/model/RMBG-2.0">RMBG-2.0</a> — background removal via /v1/images/mattings</li>
 </ul>
 <h2>All SEO model pages (batch 1)</h2>
 <ul>${modelLinks}</ul>
 <h2>Integrate in minutes</h2>
 <pre><code>export OPENAI_BASE_URL=https://www.keyoapi.xyz/v1
 export OPENAI_API_KEY=sk-...
-# then call chat.completions with model=gpt-5.6-terra or claude-sonnet-5</code></pre>
-<p>Read docs at <a href="/brand/keyo-docs.html">/brand/keyo-docs.html</a>, compare rates on <a href="/compare">/compare</a>, and manage keys in the <a href="/sign-in">console</a>.</p>
+# chat: model=gpt-5.6-terra or claude-sonnet-5
+# speech: POST /v1/audio/transcriptions model=whisper-large-v3</code></pre>
+<p>Docs: <a href="/brand/keyo-docs.html">/brand/keyo-docs.html</a> · Compare: <a href="/compare">/compare</a> · Console: <a href="/sign-in">/sign-in</a>.</p>
 `;
   return layout({
     title: "KeyoAPI - Cheap LLM API & AI API Relay for Developers",
@@ -253,21 +281,11 @@ export OPENAI_API_KEY=sk-...
 }
 
 function renderCompare() {
-  const rows = priceRefs.compare_rows
-    .map(
-      (r) => `<tr>
-  <td>${esc(r.capability)}</td>
-  <td>${esc(r.official)}</td>
-  <td><a href="/model/${encodeURIComponent(r.keyo_model)}">${esc(r.keyo_model)}</a><br/><span class="ok">${esc(r.keyo_price)}</span></td>
-  <td>${esc(r.note)}</td>
-</tr>`
-    )
-    .join("\n");
   const llmRows = pages.models
     .filter((m) => m.category === "llm")
     .map(
       (m) =>
-        `<tr><td><a href="/model/${encodeURIComponent(m.id)}">${esc(m.id)}</a></td><td>${esc(m.priceLabel)}</td><td><a href="/pricing/${encodeURIComponent(m.id)}">Live pricing</a></td></tr>`
+        `<tr><td><a href="/model/${encodeURIComponent(m.id)}">${esc(m.id)}</a></td><td>${esc(m.priceLabel)}</td><td><a href="/pricing/${encodeURIComponent(m.id)}">Interactive</a></td></tr>`
     )
     .join("\n");
   const bodyHtml = `
@@ -275,12 +293,12 @@ function renderCompare() {
 <p class="meta">Figures are indicative for planning. Always confirm live sell rates on <a href="/pricing">/pricing</a> before contracting volume.</p>
 <div class="btnrow">
   <a class="btn btn-primary" href="/sign-up">Create KeyoAPI account</a>
-  <a class="btn btn-secondary" href="/pricing">Open pricing catalog</a>
+  <a class="btn btn-secondary" href="/pricing">Open pricing list</a>
 </div>
 <h2>Headline comparisons</h2>
 <table>
 <thead><tr><th>Capability</th><th>Typical official list</th><th>KeyoAPI model</th><th>Notes</th></tr></thead>
-<tbody>${rows}</tbody>
+<tbody>${compareTableRows()}</tbody>
 </table>
 <h2>Keyo LLM token rates (batch)</h2>
 <table>
@@ -288,8 +306,8 @@ function renderCompare() {
 <tbody>${llmRows}</tbody>
 </table>
 <h2>How to use this comparison</h2>
-<p>Searchers for <strong>ai api price comparison</strong> usually need a spreadsheet-ready story for finance: same OpenAI SDK, lower blended token cost, and multimodal add-ons (OCR, TTS, detection) on one invoice. KeyoAPI is built as that <strong>ai api relay</strong>.</p>
-<p>Recommended rollout: put <a href="/model/gpt-5.6-luna">gpt-5.6-luna</a> on high-volume paths, <a href="/model/gpt-5.6-terra">gpt-5.6-terra</a> or <a href="/model/claude-sonnet-5">claude-sonnet-5</a> as default chat, and escalate hard jobs to <a href="/model/claude-opus-5">claude-opus-5</a> / <a href="/model/claude-fable-5">claude-fable-5</a>.</p>
+<p>Searchers for <strong>ai api price comparison</strong> usually need a spreadsheet-ready story: same OpenAI SDK, lower blended token cost, and multimodal add-ons on one invoice. KeyoAPI is built as that <strong>ai api relay</strong>.</p>
+<p>Recommended rollout: <a href="/model/gpt-5.6-luna">gpt-5.6-luna</a> on high-volume paths, <a href="/model/gpt-5.6-terra">gpt-5.6-terra</a> or <a href="/model/claude-sonnet-5">claude-sonnet-5</a> as default chat, escalate to <a href="/model/claude-opus-5">claude-opus-5</a> / <a href="/model/claude-fable-5">claude-fable-5</a>.</p>
 <h2>Modality pages</h2>
 ${relatedLinks(["whisper-large-v3", "Qwen3-TTS", "MinerU2.5-Pro", "RMBG-2.0", "VajraV1", "Duix-Avatar"])}
 `;
@@ -311,13 +329,65 @@ ${relatedLinks(["whisper-large-v3", "Qwen3-TTS", "MinerU2.5-Pro", "RMBG-2.0", "V
   });
 }
 
+function renderPricing() {
+  const rows = pages.models
+    .map(
+      (m) => `<tr>
+  <td><a href="/model/${encodeURIComponent(m.id)}"><code>${esc(m.id)}</code></a></td>
+  <td>${esc(m.category)}</td>
+  <td class="ok">${esc(m.priceLabel)}</td>
+  <td><code>${esc(m.endpoint)}</code></td>
+  <td><a href="/model/${encodeURIComponent(m.id)}">SEO guide</a> · <a href="/pricing/${encodeURIComponent(m.id)}">Try / buy</a></td>
+</tr>`
+    )
+    .join("\n");
+  const bodyHtml = `
+<p class="lead">Static <strong>AI API pricing</strong> list for KeyoAPI — model IDs, indicative USD rates, and real endpoints. Use this page for crawlable gpt api pricing / claude api pricing research; open interactive try/buy links when you are ready to generate keys.</p>
+<p class="meta">Rates below are catalog snapshots for SEO and planning. Wallet top-up and live sell prices are confirmed in the console after <a href="/sign-up">sign-up</a>.</p>
+<div class="btnrow">
+  <a class="btn btn-primary" href="/sign-up">Create account</a>
+  <a class="btn btn-secondary" href="/compare">AI API price comparison</a>
+  <a class="btn btn-secondary" href="/brand/keyo-docs.html">Docs</a>
+</div>
+<h2>Batch 1 model price table</h2>
+<table>
+<thead><tr><th>Model ID</th><th>Category</th><th>Listed price</th><th>Endpoint</th><th>Links</th></tr></thead>
+<tbody>${rows}</tbody>
+</table>
+<h2>Headline vs official list</h2>
+<table>
+<thead><tr><th>Capability</th><th>Typical official</th><th>Keyo</th><th>Notes</th></tr></thead>
+<tbody>${compareTableRows()}</tbody>
+</table>
+<h2>How billing works</h2>
+<p>KeyoAPI is a prepaid <strong>ai api relay</strong>: one balance covers chat, Whisper, OCR, vision, TTS, and digital humans. LLM rows are usually token-metered; many vision/speech models are per-request or async-task metered.</p>
+<p>Interactive per-model pages under <code>/pricing/{modelId}</code> remain available for console try-out after login. Static guides live under <code>/model/{modelId}</code> for search engines.</p>
+`;
+  return layout({
+    title: "AI API Pricing List - KeyoAPI Models & Rates",
+    description:
+      "Crawlable KeyoAPI pricing list: GPT-class, Claude-class, Whisper, OCR, vision, TTS model IDs with indicative USD rates and endpoints.",
+    canonical: `${site}/pricing`,
+    h1: "AI API Pricing List: Models, Rates & Endpoints",
+    bodyHtml,
+    jsonLd: {
+      "@context": "https://schema.org",
+      "@type": "WebPage",
+      name: "KeyoAPI Pricing List",
+      url: `${site}/pricing`,
+      description:
+        "Static pricing table for KeyoAPI cheap LLM API and multimodal models.",
+    },
+  });
+}
+
 function writeRobots() {
   return `User-agent: *
 Allow: /
 Allow: /compare
 Allow: /model/
-Allow: /brand/
 Allow: /pricing
+Allow: /brand/
 Allow: /about
 
 Sitemap: ${site}/sitemap.xml
@@ -336,12 +406,12 @@ function writeSitemap() {
   const urls = [
     { loc: `${site}/`, priority: "1.0", changefreq: "weekly" },
     { loc: `${site}/compare`, priority: "0.95", changefreq: "weekly" },
+    { loc: `${site}/pricing`, priority: "0.9", changefreq: "daily" },
     ...pages.models.map((m) => ({
       loc: `${site}/model/${encodeURIComponent(m.id)}`,
       priority: "0.9",
       changefreq: "weekly",
     })),
-    { loc: `${site}/pricing`, priority: "0.6", changefreq: "daily" },
     {
       loc: `${site}/brand/keyo-docs.html`,
       priority: "0.5",
@@ -371,6 +441,7 @@ ${body}
 fs.mkdirSync(path.join(outDir, "model"), { recursive: true });
 fs.writeFileSync(path.join(outDir, "index.html"), renderHome());
 fs.writeFileSync(path.join(outDir, "compare.html"), renderCompare());
+fs.writeFileSync(path.join(outDir, "pricing.html"), renderPricing());
 for (const m of pages.models) {
   fs.writeFileSync(path.join(outDir, "model", `${m.id}.html`), renderModel(m));
 }
@@ -388,7 +459,7 @@ fs.writeFileSync(
 
 console.log(
   "Generated",
-  2 + pages.models.length,
+  3 + pages.models.length,
   "HTML pages + robots.txt + sitemap.xml ->",
   outDir
 );

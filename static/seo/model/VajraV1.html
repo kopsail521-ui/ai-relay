@@ -66,27 +66,30 @@ ul{margin:0 0 14px;padding-left:1.2em}
 <p class="lead">VajraV1 packs YOLO-based object detection, image segmentation, and pose estimation into KeyoAPI’s vision lane.</p>
 <p class="meta">Target keywords: object detection api · yolo api · pose detection api · Price: <span class="ok">$0.0068 / request</span></p>
 <div class="btnrow">
-  <a class="btn btn-primary" href="/pricing/VajraV1">Try on live pricing</a>
+  <a class="btn btn-primary" href="/pricing/VajraV1">Open interactive pricing</a>
   <a class="btn btn-secondary" href="/compare">Compare API prices</a>
   <a class="btn btn-secondary" href="/sign-up">Create account</a>
 </div>
 <h2>Overview</h2>
 <p>VajraV1 packs YOLO-based object detection, image segmentation, and pose estimation into KeyoAPI’s vision lane. If you need an object detection api without standing up GPU workers, call this model through the same gateway as your LLMs.</p>
-<p>Realtime CV features used to require dedicated inference clusters. An AI API relay collapses that into HTTP calls with prepaid balance. VajraV1 is ideal when class vocabularies are standard YOLO-style objects; use sam3 for open-vocabulary masks. KeyoAPI is an OpenAI-compatible AI API relay: one base URL, one API key, and dozens of models spanning chat, speech, vision, OCR, and digital humans. Switch models by changing the model string—no new SDKs.</p>
+<p>Realtime CV features used to require dedicated inference clusters. An AI API relay collapses that into HTTP calls with prepaid balance. VajraV1 is ideal when class vocabularies are standard YOLO-style objects; use sam3 for open-vocabulary masks. </p>
 <p>Per-call pricing near $0.0068 keeps experiments cheap until you prove ROI on camera streams. Batch still frames rather than every video frame when budgets are tight.</p>
 <p>Shelf monitoring, people counting, workout form checks, and factory defect triage. Feed detections into gpt-5.6-luna for natural-language incident summaries.</p>
 <p>Use Keyo /v1/images/object-detection and related paths with model=VajraV1. Keys: /pricing/VajraV1.</p>
-<p>KeyoAPI targets overseas developers who want a cheap llm api and specialized modality APIs without juggling five vendor consoles. The platform is an ai api relay: OpenAI-compatible base URL, unified API keys, prepaid balance, and a catalog that spans GPT-class chat, Claude-class agents, Whisper speech, TTS, OCR, vision, and digital humans. For procurement, start with /compare for an AI API price comparison, then open each model’s /pricing page to generate keys. For SEO and docs hygiene, every static model page links related models so crawlers and humans can discover the full capability graph. Production tip: log model id, latency, and cost per request from day one so you can shift traffic between Terra, Luna, Sonnet, and Opus as eval scores change. Security tip: store keys in server env vars, rotate regularly, and never expose relay keys in mobile binaries without a backend proxy. Support: use /brand/keyo-docs.html for integration notes and /sign-up to create an account. When you are ready to buy capacity, fund the wallet once and route every modality through the same KeyoAPI endpoint for simpler accounting.</p>
+<p>VajraV1 exposes YOLO-style detection (and related segmentation/pose routes) for retail and industrial CV without standing up your own GPU fleet.</p>
+<p>YOLO-style detection is for closed vocabularies you already understand: people, boxes, vehicles, shelves. Sample frames from video instead of every frame to control cost. Persist boxes with camera id and timestamp for analytics. When you need “find the weird unlabeled object,” escalate to sam3. Feed compact detection JSON into Luna for incident summaries so the LLM never sees raw pixels. Object detection API pricing stays sane when you batch stills and cache identical frames.</p>
+<p>Define class allowlists per camera. Drop detections below confidence thresholds. Aggregate into events before calling an LLM. Object detection API noise will drown your logs if you forward every box raw.</p>
+<p>Practical checklist for VajraV1: confirm endpoint POST /v1/images/object-detection, set model string model=VajraV1, verify listed price $0.0068 / request on /pricing/VajraV1, add related links from this page into your docs, and keep interactive try/buy on /pricing/VajraV1 for key creation. Target queries such as object detection api, yolo api, pose detection api should land here with crawlable HTML—not a CSR shell. Re-test curl monthly when upstream request shapes change. Prefer this static guide for SEO and onboarding emails; prefer the console when operators need live balance and logs.</p>
 <h2>Quick start</h2>
 <div class="card">
 <p>Base URL: <code>https://www.keyoapi.xyz/v1</code></p>
-<p>Endpoint: <code>object-detection / segmentation / pose (see docs)</code></p>
+<p>Endpoint: <code>POST /v1/images/object-detection</code></p>
 <p>Model: <code>model=VajraV1</code></p>
-<pre><code>curl https://www.keyoapi.xyz/v1/chat/completions \
-  -H "Authorization: Bearer YOUR_API_KEY" \
-  -H "Content-Type: application/json" \
-  -d '{"model":"VajraV1","messages":[{"role":"user","content":"Hello from KeyoAPI"}]}'</code></pre>
-<p>For audio/vision/async models, use the modality-specific paths in <a href="/brand/keyo-docs.html">Keyo docs</a>. The curl above illustrates the shared OpenAI-compatible auth pattern.</p>
+<pre><code>curl https://www.keyoapi.xyz/v1/images/object-detection \
+  -H &quot;Authorization: Bearer YOUR_API_KEY&quot; \
+  -F model=VajraV1 \
+  -F image=@./frame.png</code></pre>
+<p>Auth uses the same Bearer API key as chat. Full notes: <a href="/brand/keyo-docs.html">Keyo docs</a>.</p>
 </div>
 <h2>FAQ</h2>
 <div class="faq"><details><summary>Is VajraV1 a YOLO model?</summary><p>Yes—it provides YOLO-style realtime vision for detection, segmentation, and human pose keypoints via KeyoAPI.</p></details>
@@ -96,12 +99,12 @@ ul{margin:0 0 14px;padding-left:1.2em}
 <div class="grid"><a href="/model/sam3">SAM 3 API</a>
 <a href="/model/RMBG-2.0">RMBG-2.0 API</a>
 <a href="/model/Real-ESRGAN">Real-ESRGAN API</a></div>
-<p class="meta">Also browse the interactive catalog at <a href="/pricing/VajraV1">/pricing/VajraV1</a>.</p>
+<p class="meta">Static guide for <strong>VajraV1</strong>. Interactive try/buy: <a href="/pricing/VajraV1">/pricing/VajraV1</a>. Catalog: <a href="/pricing">/pricing</a>.</p>
 
 <footer class="footer">
   <a href="/">Home</a>
   <a href="/compare">AI API price comparison</a>
-  <a href="/pricing">Live pricing</a>
+  <a href="/pricing">Pricing list</a>
   <a href="/brand/keyo-docs.html">Docs</a>
   <a href="/brand/faq.html">FAQ</a>
   <a href="/brand/privacy.html">Privacy</a>

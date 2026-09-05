@@ -63,30 +63,31 @@ ul{margin:0 0 14px;padding-left:1.2em}
 <p class="eyebrow">KEYOAPI</p>
 <h1>Claude Fable 5.1 API — Flagship Agents on a Cheap LLM API</h1>
 
-<p class="lead">Claude Fable 5.</p>
+<p class="lead">Claude Fable 5.1 is KeyoAPI’s flagship Claude-class chat model for developers who need serious agent depth without managing a maze of vendor consoles.</p>
 <p class="meta">Target keywords: claude api · claude api pricing · cheap llm api · Price: <span class="ok">See live token rates on /pricing</span></p>
 <div class="btnrow">
-  <a class="btn btn-primary" href="/pricing/claude-fable-5-1">Try on live pricing</a>
+  <a class="btn btn-primary" href="/pricing/claude-fable-5-1">Open interactive pricing</a>
   <a class="btn btn-secondary" href="/compare">Compare API prices</a>
   <a class="btn btn-secondary" href="/sign-up">Create account</a>
 </div>
 <h2>Overview</h2>
 <p>Claude Fable 5.1 is KeyoAPI’s flagship Claude-class chat model for developers who need serious agent depth without managing a maze of vendor consoles. If you have been comparing claude api pricing across clouds, an AI API relay keeps the OpenAI SDK shape while letting you pick Claude when the task demands it. This landing page targets teams shopping for a cheap llm api that still clears hard coding and research workloads.</p>
-<p>Fable 5.1 is positioned for long-horizon agents, complex repositories, and deep knowledge work where shallower models stall. Use it as the “planner” model in multi-agent graphs, then demote routine steps to gpt-5.6-luna or claude-sonnet-5. KeyoAPI’s relay means the same Bearer token that calls Whisper or RMBG can call Claude—useful for multimodal products that mix files, speech, and chat. KeyoAPI is an OpenAI-compatible AI API relay: one base URL, one API key, and dozens of models spanning chat, speech, vision, OCR, and digital humans. Switch models by changing the model string—no new SDKs.</p>
+<p>Fable 5.1 is positioned for long-horizon agents, complex repositories, and deep knowledge work where shallower models stall. Use it as the “planner” model in multi-agent graphs, then demote routine steps to gpt-5.6-luna or claude-sonnet-5. KeyoAPI’s relay means the same Bearer token that calls Whisper or RMBG can call Claude—useful for multimodal products that mix files, speech, and chat. </p>
 <p>Token pricing for Claude-class models on KeyoAPI is typically far below first-party Anthropic list rates for comparable capability bands—see /compare for the current AI API price comparison tables. Treat published Keyo rates as the source of truth; upstream spot cost can change. For budgeting, measure average input/output tokens per successful agent run rather than per message.</p>
 <p>Software teams run repo-wide refactors, migration plans, and test synthesis. Research assistants compress PDFs (often pre-parsed via MinerU2.5-Pro) into cited briefs. Support copilots escalate only the hardest tickets to Fable 5.1 while cheaper models handle FAQ deflection. Because KeyoAPI is an ai api relay, you can shadow traffic to Sonnet and measure quality before full cutover.</p>
 <p>POST to /v1/chat/completions with model claude-fable-5-1. Keep max_tokens and tool schemas identical to your OpenAI client code paths. Start at /pricing/claude-fable-5-1 to fund an account and issue a key.</p>
-<p>KeyoAPI targets overseas developers who want a cheap llm api and specialized modality APIs without juggling five vendor consoles. The platform is an ai api relay: OpenAI-compatible base URL, unified API keys, prepaid balance, and a catalog that spans GPT-class chat, Claude-class agents, Whisper speech, TTS, OCR, vision, and digital humans. For procurement, start with /compare for an AI API price comparison, then open each model’s /pricing page to generate keys. For SEO and docs hygiene, every static model page links related models so crawlers and humans can discover the full capability graph. Production tip: log model id, latency, and cost per request from day one so you can shift traffic between Terra, Luna, Sonnet, and Opus as eval scores change. Security tip: store keys in server env vars, rotate regularly, and never expose relay keys in mobile binaries without a backend proxy. Support: use /brand/keyo-docs.html for integration notes and /sign-up to create an account. When you are ready to buy capacity, fund the wallet once and route every modality through the same KeyoAPI endpoint for simpler accounting.</p>
+<p>Treat Fable 5.1 as the planner in multi-agent graphs—long-horizon coding and research—then demote routine steps to Sonnet or Luna so token spend stays intentional.</p>
+<p>Operational tip: put Fable 5.1 behind an explicit planner queue with max tool iterations, and demote to Sonnet when the plan stabilizes. Store traces for replay. Review weekly which prompts truly needed 5.1 versus Sonnet so Claude API pricing stays intentional rather than habitual.</p>
 <h2>Quick start</h2>
 <div class="card">
 <p>Base URL: <code>https://www.keyoapi.xyz/v1</code></p>
 <p>Endpoint: <code>POST /v1/chat/completions</code></p>
-<p>Model: <code>model=&quot;claude-fable-5-1&quot;</code></p>
+<p>Model: <code>model=claude-fable-5-1</code></p>
 <pre><code>curl https://www.keyoapi.xyz/v1/chat/completions \
-  -H "Authorization: Bearer YOUR_API_KEY" \
-  -H "Content-Type: application/json" \
-  -d '{"model":"claude-fable-5-1","messages":[{"role":"user","content":"Hello from KeyoAPI"}]}'</code></pre>
-<p>For audio/vision/async models, use the modality-specific paths in <a href="/brand/keyo-docs.html">Keyo docs</a>. The curl above illustrates the shared OpenAI-compatible auth pattern.</p>
+  -H &quot;Authorization: Bearer YOUR_API_KEY&quot; \
+  -H &quot;Content-Type: application/json&quot; \
+  -d '{&quot;model&quot;:&quot;claude-fable-5-1&quot;,&quot;messages&quot;:[{&quot;role&quot;:&quot;user&quot;,&quot;content&quot;:&quot;Hello from KeyoAPI&quot;}]}'</code></pre>
+<p>Auth uses the same Bearer API key as chat. Full notes: <a href="/brand/keyo-docs.html">Keyo docs</a>.</p>
 </div>
 <h2>FAQ</h2>
 <div class="faq"><details><summary>Why call Claude through an AI API relay?</summary><p>Relays like KeyoAPI unify billing and base URL across Claude-class and GPT-class models so you can route by cost or capability without rewriting clients.</p></details>
@@ -96,12 +97,12 @@ ul{margin:0 0 14px;padding-left:1.2em}
 <div class="grid"><a href="/model/claude-fable-5">Claude Fable 5 API</a>
 <a href="/model/claude-opus-5">Claude Opus 5 API</a>
 <a href="/model/claude-sonnet-5">Claude Sonnet 5 API</a></div>
-<p class="meta">Also browse the interactive catalog at <a href="/pricing/claude-fable-5-1">/pricing/claude-fable-5-1</a>.</p>
+<p class="meta">Static guide for <strong>claude-fable-5-1</strong>. Interactive try/buy: <a href="/pricing/claude-fable-5-1">/pricing/claude-fable-5-1</a>. Catalog: <a href="/pricing">/pricing</a>.</p>
 
 <footer class="footer">
   <a href="/">Home</a>
   <a href="/compare">AI API price comparison</a>
-  <a href="/pricing">Live pricing</a>
+  <a href="/pricing">Pricing list</a>
   <a href="/brand/keyo-docs.html">Docs</a>
   <a href="/brand/faq.html">FAQ</a>
   <a href="/brand/privacy.html">Privacy</a>

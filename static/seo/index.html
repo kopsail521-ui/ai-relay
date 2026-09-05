@@ -63,55 +63,92 @@ ul{margin:0 0 14px;padding-left:1.2em}
 <p class="eyebrow">KEYOAPI</p>
 <h1>Cheap LLM API &amp; AI API Relay for Global Developers</h1>
 
-<p class="lead">KeyoAPI is a <strong>cheap llm api</strong> and multimodal <strong>ai api relay</strong> for overseas developers who want OpenAI-compatible access to chat, Whisper, OCR, vision, TTS, and digital humans - without five vendor bills.</p>
+<p class="lead">KeyoAPI is a <strong>cheap llm api</strong> and multimodal <strong>ai api relay</strong> for overseas developers who want OpenAI-compatible access to chat, Whisper, OCR, vision, TTS, and digital humans — without five vendor bills.</p>
 <div class="btnrow">
   <a class="btn btn-primary" href="/sign-up">Start free</a>
-  <a class="btn btn-secondary" href="/compare">AI API price comparison</a>
-  <a class="btn btn-secondary" href="/pricing">Live model pricing</a>
+  <a class="btn btn-secondary" href="/compare">Full AI API price comparison</a>
+  <a class="btn btn-secondary" href="/pricing">Pricing list</a>
 </div>
+<h2>Headline price anchors</h2>
+<p class="meta">Indicative rates for planning. Confirm live sell prices on <a href="/pricing">/pricing</a>.</p>
+<table>
+<thead><tr><th>Capability</th><th>Typical official list</th><th>KeyoAPI</th><th>Notes</th></tr></thead>
+<tbody><tr>
+  <td>Flagship chat (GPT-class)</td>
+  <td>OpenAI GPT-4o ~$2.50 / $10.00 per 1M in/out</td>
+  <td><a href="/model/gpt-5.6-terra">gpt-5.6-terra</a><br/><span class="ok">$0.37 / $2.21 per 1M in/out</span></td>
+  <td>OpenAI-compatible /v1/chat/completions</td>
+</tr>
+<tr>
+  <td>High-volume cheap LLM</td>
+  <td>OpenAI GPT-4o mini ~$0.15 / $0.60 per 1M in/out</td>
+  <td><a href="/model/gpt-5.6-luna">gpt-5.6-luna</a><br/><span class="ok">$0.10 / $0.62 per 1M in/out</span></td>
+  <td>Best Keyo price/perf for batch workloads</td>
+</tr>
+<tr>
+  <td>Claude-class reasoning</td>
+  <td>Anthropic Claude Sonnet 4 ~$3 / $15 per 1M in/out</td>
+  <td><a href="/model/claude-sonnet-5">claude-sonnet-5</a><br/><span class="ok">$0.88 / $4.41 per 1M in/out</span></td>
+  <td>Drop-in chat completions via Keyo relay</td>
+</tr>
+<tr>
+  <td>Speech to text</td>
+  <td>OpenAI Whisper ~$0.006 / minute</td>
+  <td><a href="/model/whisper-large-v3">whisper-large-v3</a><br/><span class="ok">$0.0103 / request</span></td>
+  <td>Per-request billing; strong for short clips</td>
+</tr>
+<tr>
+  <td>Background removal</td>
+  <td>Typical SaaS remove.bg API often $0.05–0.20 / image</td>
+  <td><a href="/model/RMBG-2.0">RMBG-2.0</a><br/><span class="ok">$0.0068 / request</span></td>
+  <td>BRIA RMBG via unified Keyo endpoint</td>
+</tr></tbody>
+</table>
+<p><a href="/compare">See the full comparison page →</a></p>
 <h2>Why teams pick this AI API relay</h2>
-<p>Official OpenAI and Anthropic docs dominate generic "speech to text api" queries. KeyoAPI wins on purchase-intent searches: developers typing <strong>cheap llm api</strong>, <strong>ai api relay</strong>, and model-specific "{name} api" when they already have a production bill to cut.</p>
+<p>KeyoAPI wins on purchase-intent searches: <strong>cheap llm api</strong>, <strong>ai api relay</strong>, and model-specific “{name} api” when developers already have a production bill to cut.</p>
 <p>One base URL <code>https://www.keyoapi.xyz/v1</code>, one API key, prepaid balance, and model IDs you can swap in existing OpenAI SDKs for Python, Node.js, and Cursor-compatible clients.</p>
 <h2>Featured capabilities</h2>
 <ul>
-  <li><a href="/model/gpt-5.6-luna">GPT-5.6 Luna</a> - high-volume cheap LLM tier</li>
-  <li><a href="/model/claude-sonnet-5">Claude Sonnet 5</a> - balanced Claude-class chat</li>
-  <li><a href="/model/whisper-large-v3">Whisper Large V3</a> - multilingual speech-to-text</li>
-  <li><a href="/model/Qwen3-TTS">Qwen3-TTS</a> - text to speech + voice clone</li>
-  <li><a href="/model/MinerU2.5-Pro">MinerU2.5-Pro</a> - document parsing OCR</li>
-  <li><a href="/model/RMBG-2.0">RMBG-2.0</a> - background removal API</li>
+  <li><a href="/model/gpt-5.6-luna">GPT-5.6 Luna</a> — high-volume cheap LLM tier</li>
+  <li><a href="/model/claude-sonnet-5">Claude Sonnet 5</a> — balanced Claude-class chat</li>
+  <li><a href="/model/whisper-large-v3">Whisper Large V3</a> — multilingual speech-to-text</li>
+  <li><a href="/model/Qwen3-TTS">Qwen3-TTS</a> — async text to speech + voice clone</li>
+  <li><a href="/model/MinerU2.5-Pro">MinerU2.5-Pro</a> — async document parsing OCR</li>
+  <li><a href="/model/RMBG-2.0">RMBG-2.0</a> — background removal via /v1/images/mattings</li>
 </ul>
 <h2>All SEO model pages (batch 1)</h2>
-<ul><li><a href="/model/whisper-large-v3">whisper-large-v3</a> - $0.0103 / request</li>
-<li><a href="/model/whisper-large-v3-turbo">whisper-large-v3-turbo</a> - $0.0103 / request</li>
-<li><a href="/model/claude-fable-5-1">claude-fable-5-1</a> - See live token rates on /pricing</li>
-<li><a href="/model/claude-fable-5">claude-fable-5</a> - ~$8.82 / $44.12 per 1M in/out</li>
-<li><a href="/model/claude-opus-5">claude-opus-5</a> - ~$2.21 / $11.03 per 1M in/out</li>
-<li><a href="/model/claude-sonnet-5">claude-sonnet-5</a> - ~$0.88 / $4.41 per 1M in/out</li>
-<li><a href="/model/gpt-5.6-terra">gpt-5.6-terra</a> - ~$0.37 / $2.21 per 1M in/out</li>
-<li><a href="/model/gpt-5.6-sol">gpt-5.6-sol</a> - ~$0.92 / $5.52 per 1M in/out</li>
-<li><a href="/model/gpt-5.6-luna">gpt-5.6-luna</a> - ~$0.10 / $0.62 per 1M in/out</li>
-<li><a href="/model/MinerU2.5-Pro">MinerU2.5-Pro</a> - $0.0137 / page</li>
-<li><a href="/model/Unlimited-OCR">Unlimited-OCR</a> - ~$1.92 / $1.92 per 1M in/out tokens</li>
-<li><a href="/model/UVDoc">UVDoc</a> - $0.0137 / request</li>
-<li><a href="/model/Qwen3-TTS">Qwen3-TTS</a> - $0.548 / 10K characters</li>
-<li><a href="/model/RMBG-2.0">RMBG-2.0</a> - $0.0068 / request</li>
-<li><a href="/model/VajraV1">VajraV1</a> - $0.0068 / request</li>
-<li><a href="/model/sam3">sam3</a> - $0.0137 / request</li>
-<li><a href="/model/Real-ESRGAN">Real-ESRGAN</a> - $0.0068 / request</li>
-<li><a href="/model/AnimeSharp">AnimeSharp</a> - $0.0068 / request</li>
-<li><a href="/model/Duix-Avatar">Duix-Avatar</a> - $0.0068 / second</li>
-<li><a href="/model/InfiniteTalk">InfiniteTalk</a> - $0.342 / request</li></ul>
+<ul><li><a href="/model/whisper-large-v3">whisper-large-v3</a> — $0.0103 / request · <a href="/model/whisper-large-v3">guide</a></li>
+<li><a href="/model/whisper-large-v3-turbo">whisper-large-v3-turbo</a> — $0.0103 / request · <a href="/model/whisper-large-v3-turbo">guide</a></li>
+<li><a href="/model/claude-fable-5-1">claude-fable-5-1</a> — See live token rates on /pricing · <a href="/model/claude-fable-5-1">guide</a></li>
+<li><a href="/model/claude-fable-5">claude-fable-5</a> — ~$8.82 / $44.12 per 1M in/out · <a href="/model/claude-fable-5">guide</a></li>
+<li><a href="/model/claude-opus-5">claude-opus-5</a> — ~$2.21 / $11.03 per 1M in/out · <a href="/model/claude-opus-5">guide</a></li>
+<li><a href="/model/claude-sonnet-5">claude-sonnet-5</a> — ~$0.88 / $4.41 per 1M in/out · <a href="/model/claude-sonnet-5">guide</a></li>
+<li><a href="/model/gpt-5.6-terra">gpt-5.6-terra</a> — ~$0.37 / $2.21 per 1M in/out · <a href="/model/gpt-5.6-terra">guide</a></li>
+<li><a href="/model/gpt-5.6-sol">gpt-5.6-sol</a> — ~$0.92 / $5.52 per 1M in/out · <a href="/model/gpt-5.6-sol">guide</a></li>
+<li><a href="/model/gpt-5.6-luna">gpt-5.6-luna</a> — ~$0.10 / $0.62 per 1M in/out · <a href="/model/gpt-5.6-luna">guide</a></li>
+<li><a href="/model/MinerU2.5-Pro">MinerU2.5-Pro</a> — $0.0137 / page · <a href="/model/MinerU2.5-Pro">guide</a></li>
+<li><a href="/model/Unlimited-OCR">Unlimited-OCR</a> — ~$1.92 / $1.92 per 1M in/out tokens · <a href="/model/Unlimited-OCR">guide</a></li>
+<li><a href="/model/UVDoc">UVDoc</a> — $0.0137 / request · <a href="/model/UVDoc">guide</a></li>
+<li><a href="/model/Qwen3-TTS">Qwen3-TTS</a> — $0.548 / 10K characters · <a href="/model/Qwen3-TTS">guide</a></li>
+<li><a href="/model/RMBG-2.0">RMBG-2.0</a> — $0.0068 / request · <a href="/model/RMBG-2.0">guide</a></li>
+<li><a href="/model/VajraV1">VajraV1</a> — $0.0068 / request · <a href="/model/VajraV1">guide</a></li>
+<li><a href="/model/sam3">sam3</a> — $0.0137 / request · <a href="/model/sam3">guide</a></li>
+<li><a href="/model/Real-ESRGAN">Real-ESRGAN</a> — $0.0068 / request · <a href="/model/Real-ESRGAN">guide</a></li>
+<li><a href="/model/AnimeSharp">AnimeSharp</a> — $0.0068 / request · <a href="/model/AnimeSharp">guide</a></li>
+<li><a href="/model/Duix-Avatar">Duix-Avatar</a> — $0.0068 / second · <a href="/model/Duix-Avatar">guide</a></li>
+<li><a href="/model/InfiniteTalk">InfiniteTalk</a> — $0.342 / request · <a href="/model/InfiniteTalk">guide</a></li></ul>
 <h2>Integrate in minutes</h2>
 <pre><code>export OPENAI_BASE_URL=https://www.keyoapi.xyz/v1
 export OPENAI_API_KEY=sk-...
-# then call chat.completions with model=gpt-5.6-terra or claude-sonnet-5</code></pre>
-<p>Read docs at <a href="/brand/keyo-docs.html">/brand/keyo-docs.html</a>, compare rates on <a href="/compare">/compare</a>, and manage keys in the <a href="/sign-in">console</a>.</p>
+# chat: model=gpt-5.6-terra or claude-sonnet-5
+# speech: POST /v1/audio/transcriptions model=whisper-large-v3</code></pre>
+<p>Docs: <a href="/brand/keyo-docs.html">/brand/keyo-docs.html</a> · Compare: <a href="/compare">/compare</a> · Console: <a href="/sign-in">/sign-in</a>.</p>
 
 <footer class="footer">
   <a href="/">Home</a>
   <a href="/compare">AI API price comparison</a>
-  <a href="/pricing">Live pricing</a>
+  <a href="/pricing">Pricing list</a>
   <a href="/brand/keyo-docs.html">Docs</a>
   <a href="/brand/faq.html">FAQ</a>
   <a href="/brand/privacy.html">Privacy</a>

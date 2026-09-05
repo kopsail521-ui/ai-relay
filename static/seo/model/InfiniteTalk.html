@@ -66,27 +66,32 @@ ul{margin:0 0 14px;padding-left:1.2em}
 <p class="lead">InfiniteTalk generates audio-driven talking-head video from an image or video—ideal when you need a digital human api without a motion-capture stage.</p>
 <p class="meta">Target keywords: talking head api · audio driven avatar api · digital human api · Price: <span class="ok">$0.342 / request</span></p>
 <div class="btnrow">
-  <a class="btn btn-primary" href="/pricing/InfiniteTalk">Try on live pricing</a>
+  <a class="btn btn-primary" href="/pricing/InfiniteTalk">Open interactive pricing</a>
   <a class="btn btn-secondary" href="/compare">Compare API prices</a>
   <a class="btn btn-secondary" href="/sign-up">Create account</a>
 </div>
 <h2>Overview</h2>
 <p>InfiniteTalk generates audio-driven talking-head video from an image or video—ideal when you need a digital human api without a motion-capture stage. Creators generate a voice with Qwen3-TTS, then animate a still spokesperson photo through KeyoAPI.</p>
-<p>Natural lip-sync and body motion make short marketing and education clips feel presentable. Async processing fits batch content calendars better than realtime WebRTC avatars. KeyoAPI is an OpenAI-compatible AI API relay: one base URL, one API key, and dozens of models spanning chat, speech, vision, OCR, and digital humans. Switch models by changing the model string—no new SDKs.</p>
+<p>Natural lip-sync and body motion make short marketing and education clips feel presentable. Async processing fits batch content calendars better than realtime WebRTC avatars. </p>
 <p>Per-request pricing around $0.342 is simple for “one clip = one charge” packaging. For long continuous streams, evaluate Duix-Avatar’s per-second meter instead.</p>
 <p>Localized ads, course intros, newsreader demos, and support explainers. Transcribe source scripts with Whisper, synthesize with TTS, animate with InfiniteTalk.</p>
 <p>Submit async jobs with model=InfiniteTalk via Keyo task APIs. Get started at /pricing/InfiniteTalk.</p>
-<p>KeyoAPI targets overseas developers who want a cheap llm api and specialized modality APIs without juggling five vendor consoles. The platform is an ai api relay: OpenAI-compatible base URL, unified API keys, prepaid balance, and a catalog that spans GPT-class chat, Claude-class agents, Whisper speech, TTS, OCR, vision, and digital humans. For procurement, start with /compare for an AI API price comparison, then open each model’s /pricing page to generate keys. For SEO and docs hygiene, every static model page links related models so crawlers and humans can discover the full capability graph. Production tip: log model id, latency, and cost per request from day one so you can shift traffic between Terra, Luna, Sonnet, and Opus as eval scores change. Security tip: store keys in server env vars, rotate regularly, and never expose relay keys in mobile binaries without a backend proxy. Support: use /brand/keyo-docs.html for integration notes and /sign-up to create an account. When you are ready to buy capacity, fund the wallet once and route every modality through the same KeyoAPI endpoint for simpler accounting.</p>
+<p>InfiniteTalk turns an image into talking-head video via /v1/async/videos/image-to-video—ideal for support avatars and localized explainers.</p>
+<p>Image-to-talking-head is the onboarding-friendly digital human path: one portrait plus one audio track. Enforce portrait resolution minimums and reject group photos. Localize audio with Qwen3-TTS, then animate with InfiniteTalk for multilingual explainers. Store consent flags for likeness rights. For support bots, pre-render common answers; only generate live for long-tail questions. This workflow is hard to assemble across vendors—KeyoAPI packages it as one relay.</p>
+<p>Require single-subject portraits. Reject images with text overlays that break lipsync. Pre-generate FAQs; live-generate only long-tail answers to control async cost.</p>
+<p>Practical checklist for InfiniteTalk: confirm endpoint POST /v1/async/videos/image-to-video, set model string model=InfiniteTalk, verify listed price $0.342 / request on /pricing/InfiniteTalk, add related links from this page into your docs, and keep interactive try/buy on /pricing/InfiniteTalk for key creation. Target queries such as talking head api, audio driven avatar api, digital human api should land here with crawlable HTML—not a CSR shell. Re-test curl monthly when upstream request shapes change. Prefer this static guide for SEO and onboarding emails; prefer the console when operators need live balance and logs.</p>
 <h2>Quick start</h2>
 <div class="card">
 <p>Base URL: <code>https://www.keyoapi.xyz/v1</code></p>
-<p>Endpoint: <code>async talking-head (see docs)</code></p>
+<p>Endpoint: <code>POST /v1/async/videos/image-to-video</code></p>
 <p>Model: <code>model=InfiniteTalk</code></p>
-<pre><code>curl https://www.keyoapi.xyz/v1/chat/completions \
-  -H "Authorization: Bearer YOUR_API_KEY" \
-  -H "Content-Type: application/json" \
-  -d '{"model":"InfiniteTalk","messages":[{"role":"user","content":"Hello from KeyoAPI"}]}'</code></pre>
-<p>For audio/vision/async models, use the modality-specific paths in <a href="/brand/keyo-docs.html">Keyo docs</a>. The curl above illustrates the shared OpenAI-compatible auth pattern.</p>
+<pre><code>curl https://www.keyoapi.xyz/v1/async/videos/image-to-video \
+  -H &quot;Authorization: Bearer YOUR_API_KEY&quot; \
+  -F model=InfiniteTalk \
+  -F image=@./portrait.png \
+  -F audio=@./voice.wav
+# then: GET /v1/task/{id}</code></pre>
+<p>Auth uses the same Bearer API key as chat. Full notes: <a href="/brand/keyo-docs.html">Keyo docs</a>.</p>
 </div>
 <h2>FAQ</h2>
 <div class="faq"><details><summary>What inputs are required?</summary><p>Typically an image or video portrait plus driving audio. Output duration follows the audio length.</p></details>
@@ -96,12 +101,12 @@ ul{margin:0 0 14px;padding-left:1.2em}
 <div class="grid"><a href="/model/Duix-Avatar">Duix-Avatar API</a>
 <a href="/model/Qwen3-TTS">Qwen3-TTS API</a>
 <a href="/model/whisper-large-v3-turbo">Whisper Large V3 Turbo API</a></div>
-<p class="meta">Also browse the interactive catalog at <a href="/pricing/InfiniteTalk">/pricing/InfiniteTalk</a>.</p>
+<p class="meta">Static guide for <strong>InfiniteTalk</strong>. Interactive try/buy: <a href="/pricing/InfiniteTalk">/pricing/InfiniteTalk</a>. Catalog: <a href="/pricing">/pricing</a>.</p>
 
 <footer class="footer">
   <a href="/">Home</a>
   <a href="/compare">AI API price comparison</a>
-  <a href="/pricing">Live pricing</a>
+  <a href="/pricing">Pricing list</a>
   <a href="/brand/keyo-docs.html">Docs</a>
   <a href="/brand/faq.html">FAQ</a>
   <a href="/brand/privacy.html">Privacy</a>

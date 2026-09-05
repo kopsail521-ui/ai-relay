@@ -2,8 +2,8 @@ User-agent: *
 Allow: /
 Allow: /compare
 Allow: /model/
-Allow: /brand/
 Allow: /pricing
+Allow: /brand/
 Allow: /about
 
 Sitemap: https://www.keyoapi.xyz/sitemap.xml

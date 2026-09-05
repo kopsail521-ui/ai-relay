@@ -66,27 +66,29 @@ ul{margin:0 0 14px;padding-left:1.2em}
 <p class="lead">Claude Opus 5 is KeyoAPI’s pick when agents must finish hard coding and reasoning jobs—not just chat politely.</p>
 <p class="meta">Target keywords: claude opus api · claude api pricing · coding agent api · Price: <span class="ok">~$2.21 / $11.03 per 1M in/out</span></p>
 <div class="btnrow">
-  <a class="btn btn-primary" href="/pricing/claude-opus-5">Try on live pricing</a>
+  <a class="btn btn-primary" href="/pricing/claude-opus-5">Open interactive pricing</a>
   <a class="btn btn-secondary" href="/compare">Compare API prices</a>
   <a class="btn btn-secondary" href="/sign-up">Create account</a>
 </div>
 <h2>Overview</h2>
 <p>Claude Opus 5 is KeyoAPI’s pick when agents must finish hard coding and reasoning jobs—not just chat politely. Developers comparing claude api pricing for Opus-class models can buy through this AI API relay and keep OpenAI SDK clients. Below: when to choose Opus, how pricing works, and how to integrate.</p>
-<p>Opus-class models shine on stubborn refactors, subtle bug hunts, and tool-using agents that plan across many steps. KeyoAPI exposes Opus beside cheaper Claude and GPT tiers so you can build a quality ladder instead of a single expensive default. KeyoAPI is an OpenAI-compatible AI API relay: one base URL, one API key, and dozens of models spanning chat, speech, vision, OCR, and digital humans. Switch models by changing the model string—no new SDKs.</p>
+<p>Opus-class models shine on stubborn refactors, subtle bug hunts, and tool-using agents that plan across many steps. KeyoAPI exposes Opus beside cheaper Claude and GPT tiers so you can build a quality ladder instead of a single expensive default. </p>
 <p>Indicative rates ~$2.21 / $11.03 per 1M input/output tokens on KeyoAPI—verify live. That is typically well below first-party Opus list pricing, which is why finance teams approve relays for experimental agent fleets. Track cost per resolved ticket or per merged PR, not only cost per 1K tokens.</p>
 <p>CI bots that propose patches, security review assistants, and data-pipeline repair agents. Internal “ask the codebase” tools with large context windows. Escalate from Sonnet when unit tests keep failing.</p>
 <p>Chat completions with model=claude-opus-5 against https://www.keyoapi.xyz/v1. Prefer structured outputs / tools for agent loops. Start at /pricing/claude-opus-5.</p>
-<p>KeyoAPI targets overseas developers who want a cheap llm api and specialized modality APIs without juggling five vendor consoles. The platform is an ai api relay: OpenAI-compatible base URL, unified API keys, prepaid balance, and a catalog that spans GPT-class chat, Claude-class agents, Whisper speech, TTS, OCR, vision, and digital humans. For procurement, start with /compare for an AI API price comparison, then open each model’s /pricing page to generate keys. For SEO and docs hygiene, every static model page links related models so crawlers and humans can discover the full capability graph. Production tip: log model id, latency, and cost per request from day one so you can shift traffic between Terra, Luna, Sonnet, and Opus as eval scores change. Security tip: store keys in server env vars, rotate regularly, and never expose relay keys in mobile binaries without a backend proxy. Support: use /brand/keyo-docs.html for integration notes and /sign-up to create an account. When you are ready to buy capacity, fund the wallet once and route every modality through the same KeyoAPI endpoint for simpler accounting.</p>
+<p>Reserve Opus 5 for stubborn refactors and tool-heavy agents; keep Sonnet/Luna on the hot path so Claude API pricing does not explode on every request.</p>
+<p>Opus-class models are where teams overspend if every chat window defaults to max intelligence. Put Opus behind an explicit “deep mode” button or an agent router that only escalates after Sonnet fails a rubric. On KeyoAPI you can A/B that router against gpt-5.6-sol without new credentials. Capture failure modes—wrong file edits, invented APIs, incomplete refactors—so you can prove Opus is paying for itself. Document a kill switch to demote traffic to Sonnet during cost spikes. Claude API pricing only stays rational when escalation is intentional.</p>
+<p>Ship Opus only on paths with a human escalation button or an automated failure detector. Keep a canary percentage so costs cannot silently climb overnight. Publish a status page metric for Opus spend per day so engineering and finance share one number.</p>
 <h2>Quick start</h2>
 <div class="card">
 <p>Base URL: <code>https://www.keyoapi.xyz/v1</code></p>
 <p>Endpoint: <code>POST /v1/chat/completions</code></p>
-<p>Model: <code>model=&quot;claude-opus-5&quot;</code></p>
+<p>Model: <code>model=claude-opus-5</code></p>
 <pre><code>curl https://www.keyoapi.xyz/v1/chat/completions \
-  -H "Authorization: Bearer YOUR_API_KEY" \
-  -H "Content-Type: application/json" \
-  -d '{"model":"claude-opus-5","messages":[{"role":"user","content":"Hello from KeyoAPI"}]}'</code></pre>
-<p>For audio/vision/async models, use the modality-specific paths in <a href="/brand/keyo-docs.html">Keyo docs</a>. The curl above illustrates the shared OpenAI-compatible auth pattern.</p>
+  -H &quot;Authorization: Bearer YOUR_API_KEY&quot; \
+  -H &quot;Content-Type: application/json&quot; \
+  -d '{&quot;model&quot;:&quot;claude-opus-5&quot;,&quot;messages&quot;:[{&quot;role&quot;:&quot;user&quot;,&quot;content&quot;:&quot;Hello from KeyoAPI&quot;}]}'</code></pre>
+<p>Auth uses the same Bearer API key as chat. Full notes: <a href="/brand/keyo-docs.html">Keyo docs</a>.</p>
 </div>
 <h2>FAQ</h2>
 <div class="faq"><details><summary>Is Opus 5 only for coding?</summary><p>Coding is a strength, but Opus 5 also handles difficult analytical and multi-step agent tasks where weaker models loop or hallucinate tools.</p></details>
@@ -96,12 +98,12 @@ ul{margin:0 0 14px;padding-left:1.2em}
 <div class="grid"><a href="/model/claude-sonnet-5">Claude Sonnet 5 API</a>
 <a href="/model/claude-fable-5">Claude Fable 5 API</a>
 <a href="/model/gpt-5.6-sol">GPT-5.6 Sol API</a></div>
-<p class="meta">Also browse the interactive catalog at <a href="/pricing/claude-opus-5">/pricing/claude-opus-5</a>.</p>
+<p class="meta">Static guide for <strong>claude-opus-5</strong>. Interactive try/buy: <a href="/pricing/claude-opus-5">/pricing/claude-opus-5</a>. Catalog: <a href="/pricing">/pricing</a>.</p>
 
 <footer class="footer">
   <a href="/">Home</a>
   <a href="/compare">AI API price comparison</a>
-  <a href="/pricing">Live pricing</a>
+  <a href="/pricing">Pricing list</a>
   <a href="/brand/keyo-docs.html">Docs</a>
   <a href="/brand/faq.html">FAQ</a>
   <a href="/brand/privacy.html">Privacy</a>

@@ -66,27 +66,32 @@ ul{margin:0 0 14px;padding-left:1.2em}
 <p class="lead">Duix-Avatar is KeyoAPI’s audio+video driven digital human api for talking avatars with lip-sync and expressions.</p>
 <p class="meta">Target keywords: digital human api · talking avatar api · lip sync api · Price: <span class="ok">$0.0068 / second</span></p>
 <div class="btnrow">
-  <a class="btn btn-primary" href="/pricing/Duix-Avatar">Try on live pricing</a>
+  <a class="btn btn-primary" href="/pricing/Duix-Avatar">Open interactive pricing</a>
   <a class="btn btn-secondary" href="/compare">Compare API prices</a>
   <a class="btn btn-secondary" href="/sign-up">Create account</a>
 </div>
 <h2>Overview</h2>
 <p>Duix-Avatar is KeyoAPI’s audio+video driven digital human api for talking avatars with lip-sync and expressions. Competition is thin on this long-tail keyword, but buyer intent is high for course creators and support avatars.</p>
-<p>Digital humans used to mean custom Unreal pipelines. HTTP async APIs let SaaS teams productize avatars faster. KeyoAPI collocates TTS, STT, and avatar models so you can build the full loop on one ai api relay. KeyoAPI is an OpenAI-compatible AI API relay: one base URL, one API key, and dozens of models spanning chat, speech, vision, OCR, and digital humans. Switch models by changing the model string—no new SDKs.</p>
+<p>Digital humans used to mean custom Unreal pipelines. HTTP async APIs let SaaS teams productize avatars faster. KeyoAPI collocates TTS, STT, and avatar models so you can build the full loop on one ai api relay. </p>
 <p>Per-second pricing (~$0.0068) maps cleanly to video length sold to end users. Cap max duration in your product to control worst-case invoices.</p>
 <p>Training videos, localized spokesperson clips, and in-app guides. Pair with InfiniteTalk when you start from a still image plus audio.</p>
 <p>Async digital-human endpoints with model=Duix-Avatar. Keys: /pricing/Duix-Avatar.</p>
-<p>KeyoAPI targets overseas developers who want a cheap llm api and specialized modality APIs without juggling five vendor consoles. The platform is an ai api relay: OpenAI-compatible base URL, unified API keys, prepaid balance, and a catalog that spans GPT-class chat, Claude-class agents, Whisper speech, TTS, OCR, vision, and digital humans. For procurement, start with /compare for an AI API price comparison, then open each model’s /pricing page to generate keys. For SEO and docs hygiene, every static model page links related models so crawlers and humans can discover the full capability graph. Production tip: log model id, latency, and cost per request from day one so you can shift traffic between Terra, Luna, Sonnet, and Opus as eval scores change. Security tip: store keys in server env vars, rotate regularly, and never expose relay keys in mobile binaries without a backend proxy. Support: use /brand/keyo-docs.html for integration notes and /sign-up to create an account. When you are ready to buy capacity, fund the wallet once and route every modality through the same KeyoAPI endpoint for simpler accounting.</p>
+<p>Duix-Avatar is async audio+video→talking avatar: post to /v1/async/videos/audio-video-to-video and poll /v1/task/{id} for the rendered clip.</p>
+<p>Talking avatars are async media jobs: validate face video and voice sample length before submit, then poll task status. Show progress UI; do not block HTTP workers. Moderate inputs for deepfake abuse. Cache finished MP4s by (face hash, audio hash). Digital human API buyers care about lip sync and queue time—log both. KeyoAPI’s audio-video-to-video route keeps avatar generation on the same key as TTS and STT for full agent personas.</p>
+<p>Validate face frontal angle and audio SNR before queueing. Show ETA based on queue depth. Digital human API abuse prevention matters as much as render quality—log and rate-limit.</p>
+<p>Practical checklist for Duix-Avatar: confirm endpoint POST /v1/async/videos/audio-video-to-video, set model string model=Duix-Avatar, verify listed price $0.0068 / second on /pricing/Duix-Avatar, add related links from this page into your docs, and keep interactive try/buy on /pricing/Duix-Avatar for key creation. Target queries such as digital human api, talking avatar api, lip sync api should land here with crawlable HTML—not a CSR shell. Re-test curl monthly when upstream request shapes change. Prefer this static guide for SEO and onboarding emails; prefer the console when operators need live balance and logs.</p>
 <h2>Quick start</h2>
 <div class="card">
 <p>Base URL: <code>https://www.keyoapi.xyz/v1</code></p>
-<p>Endpoint: <code>async digital human (see docs)</code></p>
+<p>Endpoint: <code>POST /v1/async/videos/audio-video-to-video</code></p>
 <p>Model: <code>model=Duix-Avatar</code></p>
-<pre><code>curl https://www.keyoapi.xyz/v1/chat/completions \
-  -H "Authorization: Bearer YOUR_API_KEY" \
-  -H "Content-Type: application/json" \
-  -d '{"model":"Duix-Avatar","messages":[{"role":"user","content":"Hello from KeyoAPI"}]}'</code></pre>
-<p>For audio/vision/async models, use the modality-specific paths in <a href="/brand/keyo-docs.html">Keyo docs</a>. The curl above illustrates the shared OpenAI-compatible auth pattern.</p>
+<pre><code>curl https://www.keyoapi.xyz/v1/async/videos/audio-video-to-video \
+  -H &quot;Authorization: Bearer YOUR_API_KEY&quot; \
+  -F model=Duix-Avatar \
+  -F audio=@./voice.wav \
+  -F video=@./face.mp4
+# then: GET /v1/task/{id}</code></pre>
+<p>Auth uses the same Bearer API key as chat. Full notes: <a href="/brand/keyo-docs.html">Keyo docs</a>.</p>
 </div>
 <h2>FAQ</h2>
 <div class="faq"><details><summary>Is generation realtime?</summary><p>Duix-Avatar runs as an async job—submit audio/video drivers, then fetch the rendered avatar clip.</p></details>
@@ -96,12 +101,12 @@ ul{margin:0 0 14px;padding-left:1.2em}
 <div class="grid"><a href="/model/InfiniteTalk">InfiniteTalk API</a>
 <a href="/model/Qwen3-TTS">Qwen3-TTS API</a>
 <a href="/model/whisper-large-v3">Whisper Large V3 API</a></div>
-<p class="meta">Also browse the interactive catalog at <a href="/pricing/Duix-Avatar">/pricing/Duix-Avatar</a>.</p>
+<p class="meta">Static guide for <strong>Duix-Avatar</strong>. Interactive try/buy: <a href="/pricing/Duix-Avatar">/pricing/Duix-Avatar</a>. Catalog: <a href="/pricing">/pricing</a>.</p>
 
 <footer class="footer">
   <a href="/">Home</a>
   <a href="/compare">AI API price comparison</a>
-  <a href="/pricing">Live pricing</a>
+  <a href="/pricing">Pricing list</a>
   <a href="/brand/keyo-docs.html">Docs</a>
   <a href="/brand/faq.html">FAQ</a>
   <a href="/brand/privacy.html">Privacy</a>

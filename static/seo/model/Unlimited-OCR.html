@@ -66,27 +66,30 @@ ul{margin:0 0 14px;padding-left:1.2em}
 <p class="lead">Unlimited-OCR brings long-document OCR and layout understanding into the familiar chat completions API—useful when your product already speaks OpenAI multimodal.</p>
 <p class="meta">Target keywords: ocr api · long document ocr · vision ocr api · Price: <span class="ok">~$1.92 / $1.92 per 1M in/out tokens</span></p>
 <div class="btnrow">
-  <a class="btn btn-primary" href="/pricing/Unlimited-OCR">Try on live pricing</a>
+  <a class="btn btn-primary" href="/pricing/Unlimited-OCR">Open interactive pricing</a>
   <a class="btn btn-secondary" href="/compare">Compare API prices</a>
   <a class="btn btn-secondary" href="/sign-up">Create account</a>
 </div>
 <h2>Overview</h2>
 <p>Unlimited-OCR brings long-document OCR and layout understanding into the familiar chat completions API—useful when your product already speaks OpenAI multimodal. KeyoAPI packages it as an ocr api option next to MinerU and UVDoc on one relay bill.</p>
-<p>Instead of only emitting raw text, Unlimited-OCR emphasizes structure so LLMs can cite sections correctly. That reduces “hallucinated table cells” when finance or legal users ask questions about uploads. KeyoAPI is an OpenAI-compatible AI API relay: one base URL, one API key, and dozens of models spanning chat, speech, vision, OCR, and digital humans. Switch models by changing the model string—no new SDKs.</p>
+<p>Instead of only emitting raw text, Unlimited-OCR emphasizes structure so LLMs can cite sections correctly. That reduces “hallucinated table cells” when finance or legal users ask questions about uploads. </p>
 <p>Token-metered at roughly $1.92 / $1.92 per 1M in/out. Great when document sizes vary wildly and per-page billing is a poor fit.</p>
 <p>Chat-with-PDF features, mobile document capture, and agent tools that read screenshots. Pre-unwarp with UVDoc when pages are curved.</p>
 <p>Send multimodal chat messages with model=Unlimited-OCR. Keys and samples: /pricing/Unlimited-OCR.</p>
-<p>KeyoAPI targets overseas developers who want a cheap llm api and specialized modality APIs without juggling five vendor consoles. The platform is an ai api relay: OpenAI-compatible base URL, unified API keys, prepaid balance, and a catalog that spans GPT-class chat, Claude-class agents, Whisper speech, TTS, OCR, vision, and digital humans. For procurement, start with /compare for an AI API price comparison, then open each model’s /pricing page to generate keys. For SEO and docs hygiene, every static model page links related models so crawlers and humans can discover the full capability graph. Production tip: log model id, latency, and cost per request from day one so you can shift traffic between Terra, Luna, Sonnet, and Opus as eval scores change. Security tip: store keys in server env vars, rotate regularly, and never expose relay keys in mobile binaries without a backend proxy. Support: use /brand/keyo-docs.html for integration notes and /sign-up to create an account. When you are ready to buy capacity, fund the wallet once and route every modality through the same KeyoAPI endpoint for simpler accounting.</p>
+<p>Unlimited-OCR stays on chat completions so existing multimodal clients can paste images/PDFs without a second SDK; use MinerU when you need dedicated async parse jobs.</p>
+<p>Unlimited-OCR is for product surfaces that already speak multimodal chat: the user pastes a screenshot and asks a question in one turn. Send an image part plus a text instruction asking for structured JSON or markdown tables. Validate the schema server-side before showing answers. When documents are multi-page PDFs with complex layout, prefer MinerU’s async parse instead of stuffing everything into one chat call. Unlimited-OCR’s token pricing fits variable-length captures; MinerU’s per-page pricing fits batch archives. Document both paths in your internal OCR API guide so engineers pick deliberately.</p>
+<p>Prefer image_url or base64 image parts with a strict extraction instruction. Reject empty OCR with a retry that increases detail level. Unlimited-OCR is ideal inside chat UIs; MinerU remains better for overnight PDF folders.</p>
+<p>Practical checklist for Unlimited-OCR: confirm endpoint POST /v1/chat/completions, set model string model=Unlimited-OCR, verify listed price ~$1.92 / $1.92 per 1M in/out tokens on /pricing/Unlimited-OCR, add related links from this page into your docs, and keep interactive try/buy on /pricing/Unlimited-OCR for key creation. Target queries such as ocr api, long document ocr, vision ocr api should land here with crawlable HTML—not a CSR shell. Re-test curl monthly when upstream request shapes change. Prefer this static guide for SEO and onboarding emails; prefer the console when operators need live balance and logs.</p>
 <h2>Quick start</h2>
 <div class="card">
 <p>Base URL: <code>https://www.keyoapi.xyz/v1</code></p>
 <p>Endpoint: <code>POST /v1/chat/completions</code></p>
-<p>Model: <code>model=&quot;Unlimited-OCR&quot;</code></p>
+<p>Model: <code>model=Unlimited-OCR</code></p>
 <pre><code>curl https://www.keyoapi.xyz/v1/chat/completions \
-  -H "Authorization: Bearer YOUR_API_KEY" \
-  -H "Content-Type: application/json" \
-  -d '{"model":"Unlimited-OCR","messages":[{"role":"user","content":"Hello from KeyoAPI"}]}'</code></pre>
-<p>For audio/vision/async models, use the modality-specific paths in <a href="/brand/keyo-docs.html">Keyo docs</a>. The curl above illustrates the shared OpenAI-compatible auth pattern.</p>
+  -H &quot;Authorization: Bearer YOUR_API_KEY&quot; \
+  -H &quot;Content-Type: application/json&quot; \
+  -d '{&quot;model&quot;:&quot;Unlimited-OCR&quot;,&quot;messages&quot;:[{&quot;role&quot;:&quot;user&quot;,&quot;content&quot;:[{&quot;type&quot;:&quot;text&quot;,&quot;text&quot;:&quot;Extract tables as markdown&quot;},{&quot;type&quot;:&quot;image_url&quot;,&quot;image_url&quot;:{&quot;url&quot;:&quot;https://example.com/scan.png&quot;}}]}]}'</code></pre>
+<p>Auth uses the same Bearer API key as chat. Full notes: <a href="/brand/keyo-docs.html">Keyo docs</a>.</p>
 </div>
 <h2>FAQ</h2>
 <div class="faq"><details><summary>Why is OCR exposed through chat completions?</summary><p>Unlimited-OCR uses a multimodal chat path so you can pass images and receive structured text in one OpenAI-compatible call.</p></details>
@@ -96,12 +99,12 @@ ul{margin:0 0 14px;padding-left:1.2em}
 <div class="grid"><a href="/model/MinerU2.5-Pro">MinerU2.5-Pro API</a>
 <a href="/model/UVDoc">UVDoc API</a>
 <a href="/model/gpt-5.6-terra">GPT-5.6 Terra API</a></div>
-<p class="meta">Also browse the interactive catalog at <a href="/pricing/Unlimited-OCR">/pricing/Unlimited-OCR</a>.</p>
+<p class="meta">Static guide for <strong>Unlimited-OCR</strong>. Interactive try/buy: <a href="/pricing/Unlimited-OCR">/pricing/Unlimited-OCR</a>. Catalog: <a href="/pricing">/pricing</a>.</p>
 
 <footer class="footer">
   <a href="/">Home</a>
   <a href="/compare">AI API price comparison</a>
-  <a href="/pricing">Live pricing</a>
+  <a href="/pricing">Pricing list</a>
   <a href="/brand/keyo-docs.html">Docs</a>
   <a href="/brand/faq.html">FAQ</a>
   <a href="/brand/privacy.html">Privacy</a>

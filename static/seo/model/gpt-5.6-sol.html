@@ -63,30 +63,33 @@ ul{margin:0 0 14px;padding-left:1.2em}
 <p class="eyebrow">KEYOAPI</p>
 <h1>GPT-5.6 Sol API — Stronger Reasoning Tier</h1>
 
-<p class="lead">GPT-5.</p>
+<p class="lead">GPT-5.6 Sol is the higher-tier GPT-5.6 chat model on KeyoAPI for complex tasks that need stronger reasoning.</p>
 <p class="meta">Target keywords: gpt api pricing · reasoning llm api · cheap llm api · Price: <span class="ok">~$0.92 / $5.52 per 1M in/out</span></p>
 <div class="btnrow">
-  <a class="btn btn-primary" href="/pricing/gpt-5.6-sol">Try on live pricing</a>
+  <a class="btn btn-primary" href="/pricing/gpt-5.6-sol">Open interactive pricing</a>
   <a class="btn btn-secondary" href="/compare">Compare API prices</a>
   <a class="btn btn-secondary" href="/sign-up">Create account</a>
 </div>
 <h2>Overview</h2>
 <p>GPT-5.6 Sol is the higher-tier GPT-5.6 chat model on KeyoAPI for complex tasks that need stronger reasoning. Teams tuning gpt api pricing often keep Terra as default and route a percentage of traffic to Sol—easy on an AI API relay.</p>
-<p>Sol targets harder prompts: multi-file reasoning, careful instruction following, and denser analysis. Pair with Luna for pre-filtering so only worthy requests pay Sol rates. KeyoAPI is an OpenAI-compatible AI API relay: one base URL, one API key, and dozens of models spanning chat, speech, vision, OCR, and digital humans. Switch models by changing the model string—no new SDKs.</p>
+<p>Sol targets harder prompts: multi-file reasoning, careful instruction following, and denser analysis. Pair with Luna for pre-filtering so only worthy requests pay Sol rates. </p>
 <p>Indicative ~$0.92 / $5.52 per 1M in/out on KeyoAPI. Still typically cheaper than official flagship GPT bands—check /compare for the narrative board decks need.</p>
 <p>Analytics narratives, policy interpretation, coding assistants, and escalation lanes from Terra. Offline eval jobs that score prompt variants.</p>
 <p>model=gpt-5.6-sol on /v1/chat/completions. Issue keys at /pricing/gpt-5.6-sol.</p>
-<p>KeyoAPI targets overseas developers who want a cheap llm api and specialized modality APIs without juggling five vendor consoles. The platform is an ai api relay: OpenAI-compatible base URL, unified API keys, prepaid balance, and a catalog that spans GPT-class chat, Claude-class agents, Whisper speech, TTS, OCR, vision, and digital humans. For procurement, start with /compare for an AI API price comparison, then open each model’s /pricing page to generate keys. For SEO and docs hygiene, every static model page links related models so crawlers and humans can discover the full capability graph. Production tip: log model id, latency, and cost per request from day one so you can shift traffic between Terra, Luna, Sonnet, and Opus as eval scores change. Security tip: store keys in server env vars, rotate regularly, and never expose relay keys in mobile binaries without a backend proxy. Support: use /brand/keyo-docs.html for integration notes and /sign-up to create an account. When you are ready to buy capacity, fund the wallet once and route every modality through the same KeyoAPI endpoint for simpler accounting.</p>
+<p>Sol is the escalation GPT-5.6 tier: stronger instruction following for dense analysis, while Luna/Terra absorb bulk traffic.</p>
+<p>Sol is the “think harder” GPT-5.6 tier for dense analysis, long briefs, and stubborn instruction following. Do not put Sol on every autocomplete keystroke—route it from a classifier or from user intent like “deep research.” Pair Sol with Luna for summarising tool output so the expensive model only sees compressed context. Track dollars per successful task, not just tokens. That metric sells an AI API relay better than raw GPT API pricing slides. Start experiments on /pricing/gpt-5.6-sol and keep Terra as the safe rollback model string.</p>
+<p>Use Sol for long briefs, multi-file reasoning, and stubborn tool loops. Cap max tokens and enforce timeouts. Compare Sol versus Claude Sonnet on your golden set monthly; keep whichever wins on quality per dollar, not brand loyalty.</p>
+<p>Practical checklist for gpt-5.6-sol: confirm endpoint POST /v1/chat/completions, set model string model=gpt-5.6-sol, verify listed price ~$0.92 / $5.52 per 1M in/out on /pricing/gpt-5.6-sol, add related links from this page into your docs, and keep interactive try/buy on /pricing/gpt-5.6-sol for key creation. Target queries such as gpt api pricing, reasoning llm api, cheap llm api should land here with crawlable HTML—not a CSR shell. Re-test curl monthly when upstream request shapes change. Prefer this static guide for SEO and onboarding emails; prefer the console when operators need live balance and logs.</p>
 <h2>Quick start</h2>
 <div class="card">
 <p>Base URL: <code>https://www.keyoapi.xyz/v1</code></p>
 <p>Endpoint: <code>POST /v1/chat/completions</code></p>
-<p>Model: <code>model=&quot;gpt-5.6-sol&quot;</code></p>
+<p>Model: <code>model=gpt-5.6-sol</code></p>
 <pre><code>curl https://www.keyoapi.xyz/v1/chat/completions \
-  -H "Authorization: Bearer YOUR_API_KEY" \
-  -H "Content-Type: application/json" \
-  -d '{"model":"gpt-5.6-sol","messages":[{"role":"user","content":"Hello from KeyoAPI"}]}'</code></pre>
-<p>For audio/vision/async models, use the modality-specific paths in <a href="/brand/keyo-docs.html">Keyo docs</a>. The curl above illustrates the shared OpenAI-compatible auth pattern.</p>
+  -H &quot;Authorization: Bearer YOUR_API_KEY&quot; \
+  -H &quot;Content-Type: application/json&quot; \
+  -d '{&quot;model&quot;:&quot;gpt-5.6-sol&quot;,&quot;messages&quot;:[{&quot;role&quot;:&quot;user&quot;,&quot;content&quot;:&quot;Hello from KeyoAPI&quot;}]}'</code></pre>
+<p>Auth uses the same Bearer API key as chat. Full notes: <a href="/brand/keyo-docs.html">Keyo docs</a>.</p>
 </div>
 <h2>FAQ</h2>
 <div class="faq"><details><summary>When is Sol worth the uplift over Terra?</summary><p>Use Sol for harder reasoning, multi-constraint planning, and coding tasks where Terra’s error rate hurts UX.</p></details>
@@ -96,12 +99,12 @@ ul{margin:0 0 14px;padding-left:1.2em}
 <div class="grid"><a href="/model/gpt-5.6-terra">GPT-5.6 Terra API</a>
 <a href="/model/claude-opus-5">Claude Opus 5 API</a>
 <a href="/model/gpt-5.6-luna">GPT-5.6 Luna API</a></div>
-<p class="meta">Also browse the interactive catalog at <a href="/pricing/gpt-5.6-sol">/pricing/gpt-5.6-sol</a>.</p>
+<p class="meta">Static guide for <strong>gpt-5.6-sol</strong>. Interactive try/buy: <a href="/pricing/gpt-5.6-sol">/pricing/gpt-5.6-sol</a>. Catalog: <a href="/pricing">/pricing</a>.</p>
 
 <footer class="footer">
   <a href="/">Home</a>
   <a href="/compare">AI API price comparison</a>
-  <a href="/pricing">Live pricing</a>
+  <a href="/pricing">Pricing list</a>
   <a href="/brand/keyo-docs.html">Docs</a>
   <a href="/brand/faq.html">FAQ</a>
   <a href="/brand/privacy.html">Privacy</a>

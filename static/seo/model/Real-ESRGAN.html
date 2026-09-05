@@ -66,27 +66,30 @@ ul{margin:0 0 14px;padding-left:1.2em}
 <p class="lead">Real-ESRGAN is KeyoAPI’s general image upscaling api for photos that need more pixels and cleaner detail.</p>
 <p class="meta">Target keywords: image upscaling api · super resolution api · esrgan api · Price: <span class="ok">$0.0068 / request</span></p>
 <div class="btnrow">
-  <a class="btn btn-primary" href="/pricing/Real-ESRGAN">Try on live pricing</a>
+  <a class="btn btn-primary" href="/pricing/Real-ESRGAN">Open interactive pricing</a>
   <a class="btn btn-secondary" href="/compare">Compare API prices</a>
   <a class="btn btn-secondary" href="/sign-up">Create account</a>
 </div>
 <h2>Overview</h2>
 <p>Real-ESRGAN is KeyoAPI’s general image upscaling api for photos that need more pixels and cleaner detail. Marketplaces, print shops, and UGC apps call this super resolution api instead of maintaining ESRGAN GPUs.</p>
-<p>Real-world photos suffer from compression and blur. Real-ESRGAN restores usable resolution for zoom, crop, and print. On the same AI API relay you can unwarp with UVDoc then upscale before OCR. KeyoAPI is an OpenAI-compatible AI API relay: one base URL, one API key, and dozens of models spanning chat, speech, vision, OCR, and digital humans. Switch models by changing the model string—no new SDKs.</p>
+<p>Real-world photos suffer from compression and blur. Real-ESRGAN restores usable resolution for zoom, crop, and print. On the same AI API relay you can unwarp with UVDoc then upscale before OCR. </p>
 <p>Per-request ~$0.0068—cheap enough to run on every upload or only when users hit “Enhance.” Gate with file-size heuristics to control spend.</p>
 <p>Listing image polish, archival scans, social media quality boosts, and pre-OCR enhancement. Anime content should prefer AnimeSharp.</p>
 <p>Keyo upscaling paths with model=Real-ESRGAN. Keys at /pricing/Real-ESRGAN.</p>
-<p>KeyoAPI targets overseas developers who want a cheap llm api and specialized modality APIs without juggling five vendor consoles. The platform is an ai api relay: OpenAI-compatible base URL, unified API keys, prepaid balance, and a catalog that spans GPT-class chat, Claude-class agents, Whisper speech, TTS, OCR, vision, and digital humans. For procurement, start with /compare for an AI API price comparison, then open each model’s /pricing page to generate keys. For SEO and docs hygiene, every static model page links related models so crawlers and humans can discover the full capability graph. Production tip: log model id, latency, and cost per request from day one so you can shift traffic between Terra, Luna, Sonnet, and Opus as eval scores change. Security tip: store keys in server env vars, rotate regularly, and never expose relay keys in mobile binaries without a backend proxy. Support: use /brand/keyo-docs.html for integration notes and /sign-up to create an account. When you are ready to buy capacity, fund the wallet once and route every modality through the same KeyoAPI endpoint for simpler accounting.</p>
+<p>Real-ESRGAN upscales real photos on /v1/images/upscaling when marketplace or mobile captures need sharper pixels before OCR or publishing.</p>
+<p>Upscaling helps marketplace photos and OCR preprocessors more than it helps already-sharp DSLR shots. Detect low resolution before calling Real-ESRGAN to avoid wasting requests. Compare SSIM or a simple sharpness score pre/post. For text-heavy scans, upscale then OCR; for portraits, upscale then RMBG. Image upscaling API costs add up in user-generated content apps—cache by content hash. Keyo’s /v1/images/upscaling path keeps this step next to other vision tools.</p>
+<p>Skip upscale when the short side already exceeds your publish threshold. Prefer 2x then quality check before 4x. Image upscaling API spend correlates with UGC spikes—rate limit per user.</p>
+<p>Practical checklist for Real-ESRGAN: confirm endpoint POST /v1/images/upscaling, set model string model=Real-ESRGAN, verify listed price $0.0068 / request on /pricing/Real-ESRGAN, add related links from this page into your docs, and keep interactive try/buy on /pricing/Real-ESRGAN for key creation. Target queries such as image upscaling api, super resolution api, esrgan api should land here with crawlable HTML—not a CSR shell. Re-test curl monthly when upstream request shapes change. Prefer this static guide for SEO and onboarding emails; prefer the console when operators need live balance and logs.</p>
 <h2>Quick start</h2>
 <div class="card">
 <p>Base URL: <code>https://www.keyoapi.xyz/v1</code></p>
-<p>Endpoint: <code>image upscaling (see docs)</code></p>
+<p>Endpoint: <code>POST /v1/images/upscaling</code></p>
 <p>Model: <code>model=Real-ESRGAN</code></p>
-<pre><code>curl https://www.keyoapi.xyz/v1/chat/completions \
-  -H "Authorization: Bearer YOUR_API_KEY" \
-  -H "Content-Type: application/json" \
-  -d '{"model":"Real-ESRGAN","messages":[{"role":"user","content":"Hello from KeyoAPI"}]}'</code></pre>
-<p>For audio/vision/async models, use the modality-specific paths in <a href="/brand/keyo-docs.html">Keyo docs</a>. The curl above illustrates the shared OpenAI-compatible auth pattern.</p>
+<pre><code>curl https://www.keyoapi.xyz/v1/images/upscaling \
+  -H &quot;Authorization: Bearer YOUR_API_KEY&quot; \
+  -F model=Real-ESRGAN \
+  -F image=@./photo.png</code></pre>
+<p>Auth uses the same Bearer API key as chat. Full notes: <a href="/brand/keyo-docs.html">Keyo docs</a>.</p>
 </div>
 <h2>FAQ</h2>
 <div class="faq"><details><summary>Photo vs anime upscaling?</summary><p>Use Real-ESRGAN for general photos; switch to AnimeSharp for illustrations and anime line art.</p></details>
@@ -96,12 +99,12 @@ ul{margin:0 0 14px;padding-left:1.2em}
 <div class="grid"><a href="/model/AnimeSharp">AnimeSharp API</a>
 <a href="/model/UVDoc">UVDoc API</a>
 <a href="/model/RMBG-2.0">RMBG-2.0 API</a></div>
-<p class="meta">Also browse the interactive catalog at <a href="/pricing/Real-ESRGAN">/pricing/Real-ESRGAN</a>.</p>
+<p class="meta">Static guide for <strong>Real-ESRGAN</strong>. Interactive try/buy: <a href="/pricing/Real-ESRGAN">/pricing/Real-ESRGAN</a>. Catalog: <a href="/pricing">/pricing</a>.</p>
 
 <footer class="footer">
   <a href="/">Home</a>
   <a href="/compare">AI API price comparison</a>
-  <a href="/pricing">Live pricing</a>
+  <a href="/pricing">Pricing list</a>
   <a href="/brand/keyo-docs.html">Docs</a>
   <a href="/brand/faq.html">FAQ</a>
   <a href="/brand/privacy.html">Privacy</a>

@@ -63,30 +63,33 @@ ul{margin:0 0 14px;padding-left:1.2em}
 <p class="eyebrow">KEYOAPI</p>
 <h1>GPT-5.6 Luna API — High-Volume Cheap LLM</h1>
 
-<p class="lead">GPT-5.</p>
+<p class="lead">GPT-5.6 Luna is the high-volume workhorse for teams whose primary keyword is literally cheap llm api.</p>
 <p class="meta">Target keywords: cheap llm api · gpt api pricing · high volume llm api · Price: <span class="ok">~$0.10 / $0.62 per 1M in/out</span></p>
 <div class="btnrow">
-  <a class="btn btn-primary" href="/pricing/gpt-5.6-luna">Try on live pricing</a>
+  <a class="btn btn-primary" href="/pricing/gpt-5.6-luna">Open interactive pricing</a>
   <a class="btn btn-secondary" href="/compare">Compare API prices</a>
   <a class="btn btn-secondary" href="/sign-up">Create account</a>
 </div>
 <h2>Overview</h2>
 <p>GPT-5.6 Luna is the high-volume workhorse for teams whose primary keyword is literally cheap llm api. On KeyoAPI, Luna keeps OpenAI SDK compatibility while crushing token spend on the paths that run millions of times per day.</p>
-<p>Luna trades some peak intelligence for aggressive unit cost—perfect for embeddings-adjacent text transforms, tagging, routing, and draft generation. Combine with stronger models only on the long tail. KeyoAPI is an OpenAI-compatible AI API relay: one base URL, one API key, and dozens of models spanning chat, speech, vision, OCR, and digital humans. Switch models by changing the model string—no new SDKs.</p>
+<p>Luna trades some peak intelligence for aggressive unit cost—perfect for embeddings-adjacent text transforms, tagging, routing, and draft generation. Combine with stronger models only on the long tail. </p>
 <p>Indicative ~$0.10 / $0.62 per 1M in/out—among the lowest GPT-class rates on the platform. This is the model you put in the spreadsheet when arguing an AI API relay vs paying full OpenAI list.</p>
 <p>Log classification, email triage, SEO rewriting, localization drafts, and agent tool-result summarization. Nightly batch jobs that were previously unaffordable.</p>
 <p>model=gpt-5.6-luna on chat completions. Fund usage at /pricing/gpt-5.6-luna.</p>
-<p>KeyoAPI targets overseas developers who want a cheap llm api and specialized modality APIs without juggling five vendor consoles. The platform is an ai api relay: OpenAI-compatible base URL, unified API keys, prepaid balance, and a catalog that spans GPT-class chat, Claude-class agents, Whisper speech, TTS, OCR, vision, and digital humans. For procurement, start with /compare for an AI API price comparison, then open each model’s /pricing page to generate keys. For SEO and docs hygiene, every static model page links related models so crawlers and humans can discover the full capability graph. Production tip: log model id, latency, and cost per request from day one so you can shift traffic between Terra, Luna, Sonnet, and Opus as eval scores change. Security tip: store keys in server env vars, rotate regularly, and never expose relay keys in mobile binaries without a backend proxy. Support: use /brand/keyo-docs.html for integration notes and /sign-up to create an account. When you are ready to buy capacity, fund the wallet once and route every modality through the same KeyoAPI endpoint for simpler accounting.</p>
+<p>Luna exists for volume: tagging, triage, drafts, and batch transforms where cheap llm api unit economics matter more than peak IQ.</p>
+<p>Luna exists because most tokens in production are boring: labels, rewrites, triage, translations of short strings. Those jobs should never hit flagship rates. Put Luna behind queues for nightly batch, behind routers for inbound email, and behind agent tools that summarise JSON. Measure quality with automated checks (JSON schema, banned phrases) instead of human review for every row. When quality dips, escalate that slice to Terra—not the whole traffic mix. This is how a cheap llm api actually shows up in unit economics.</p>
+<p>Queue Luna jobs, batch when possible, and dedupe identical prompts with a hash cache. Luna is where cheap llm api claims become real COGS. Escalate only the failing fraction to Terra after automated validators reject output.</p>
+<p>Practical checklist for gpt-5.6-luna: confirm endpoint POST /v1/chat/completions, set model string model=gpt-5.6-luna, verify listed price ~$0.10 / $0.62 per 1M in/out on /pricing/gpt-5.6-luna, add related links from this page into your docs, and keep interactive try/buy on /pricing/gpt-5.6-luna for key creation. Target queries such as cheap llm api, gpt api pricing, high volume llm api should land here with crawlable HTML—not a CSR shell. Re-test curl monthly when upstream request shapes change. Prefer this static guide for SEO and onboarding emails; prefer the console when operators need live balance and logs.</p>
 <h2>Quick start</h2>
 <div class="card">
 <p>Base URL: <code>https://www.keyoapi.xyz/v1</code></p>
 <p>Endpoint: <code>POST /v1/chat/completions</code></p>
-<p>Model: <code>model=&quot;gpt-5.6-luna&quot;</code></p>
+<p>Model: <code>model=gpt-5.6-luna</code></p>
 <pre><code>curl https://www.keyoapi.xyz/v1/chat/completions \
-  -H "Authorization: Bearer YOUR_API_KEY" \
-  -H "Content-Type: application/json" \
-  -d '{"model":"gpt-5.6-luna","messages":[{"role":"user","content":"Hello from KeyoAPI"}]}'</code></pre>
-<p>For audio/vision/async models, use the modality-specific paths in <a href="/brand/keyo-docs.html">Keyo docs</a>. The curl above illustrates the shared OpenAI-compatible auth pattern.</p>
+  -H &quot;Authorization: Bearer YOUR_API_KEY&quot; \
+  -H &quot;Content-Type: application/json&quot; \
+  -d '{&quot;model&quot;:&quot;gpt-5.6-luna&quot;,&quot;messages&quot;:[{&quot;role&quot;:&quot;user&quot;,&quot;content&quot;:&quot;Hello from KeyoAPI&quot;}]}'</code></pre>
+<p>Auth uses the same Bearer API key as chat. Full notes: <a href="/brand/keyo-docs.html">Keyo docs</a>.</p>
 </div>
 <h2>FAQ</h2>
 <div class="faq"><details><summary>Is Luna good enough for production?</summary><p>For classification, extraction, short replies, and bulk rewrite—often yes. Escalate to Terra/Sol/Claude when quality gates fail.</p></details>
@@ -96,12 +99,12 @@ ul{margin:0 0 14px;padding-left:1.2em}
 <div class="grid"><a href="/model/gpt-5.6-terra">GPT-5.6 Terra API</a>
 <a href="/model/claude-sonnet-5">Claude Sonnet 5 API</a>
 <a href="/model/whisper-large-v3-turbo">Whisper Large V3 Turbo API</a></div>
-<p class="meta">Also browse the interactive catalog at <a href="/pricing/gpt-5.6-luna">/pricing/gpt-5.6-luna</a>.</p>
+<p class="meta">Static guide for <strong>gpt-5.6-luna</strong>. Interactive try/buy: <a href="/pricing/gpt-5.6-luna">/pricing/gpt-5.6-luna</a>. Catalog: <a href="/pricing">/pricing</a>.</p>
 
 <footer class="footer">
   <a href="/">Home</a>
   <a href="/compare">AI API price comparison</a>
-  <a href="/pricing">Live pricing</a>
+  <a href="/pricing">Pricing list</a>
   <a href="/brand/keyo-docs.html">Docs</a>
   <a href="/brand/faq.html">FAQ</a>
   <a href="/brand/privacy.html">Privacy</a>

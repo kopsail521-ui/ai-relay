@@ -66,27 +66,29 @@ ul{margin:0 0 14px;padding-left:1.2em}
 <p class="lead">Claude Sonnet 5 is the workhorse Claude-class model on KeyoAPI—enough depth for production chat, priced for a cheap llm api budget.</p>
 <p class="meta">Target keywords: claude sonnet api · claude api pricing · cheap llm api · Price: <span class="ok">~$0.88 / $4.41 per 1M in/out</span></p>
 <div class="btnrow">
-  <a class="btn btn-primary" href="/pricing/claude-sonnet-5">Try on live pricing</a>
+  <a class="btn btn-primary" href="/pricing/claude-sonnet-5">Open interactive pricing</a>
   <a class="btn btn-secondary" href="/compare">Compare API prices</a>
   <a class="btn btn-secondary" href="/sign-up">Create account</a>
 </div>
 <h2>Overview</h2>
 <p>Claude Sonnet 5 is the workhorse Claude-class model on KeyoAPI—enough depth for production chat, priced for a cheap llm api budget. Searchers evaluating claude api pricing usually land on Sonnet-class tiers first; this page shows how to buy that capability through an AI API relay.</p>
-<p>Sonnet balances quality and cost for customer support, writing aids, light coding, and RAG answers. Long-context support helps when users paste tickets, policies, or specs into the thread. KeyoAPI is an OpenAI-compatible AI API relay: one base URL, one API key, and dozens of models spanning chat, speech, vision, OCR, and digital humans. Switch models by changing the model string—no new SDKs.</p>
+<p>Sonnet balances quality and cost for customer support, writing aids, light coding, and RAG answers. Long-context support helps when users paste tickets, policies, or specs into the thread. </p>
 <p>Indicative Keyo pricing ~$0.88 input / $4.41 output per 1M tokens. Against official Claude Sonnet list bands near $3 / $15, the relay savings are the core sales story—validate on /compare. Blended architectures (Sonnet + Luna) often beat “always flagship” designs on margin.</p>
 <p>Default bot for B2B help centers, CRM side panels, and docs Q&amp;A. Content drafting with human edit loops. First-pass code suggestions before Opus escalation.</p>
 <p>Set model=claude-sonnet-5 on /v1/chat/completions. Reuse existing tool-calling code. Get a key at /pricing/claude-sonnet-5.</p>
-<p>KeyoAPI targets overseas developers who want a cheap llm api and specialized modality APIs without juggling five vendor consoles. The platform is an ai api relay: OpenAI-compatible base URL, unified API keys, prepaid balance, and a catalog that spans GPT-class chat, Claude-class agents, Whisper speech, TTS, OCR, vision, and digital humans. For procurement, start with /compare for an AI API price comparison, then open each model’s /pricing page to generate keys. For SEO and docs hygiene, every static model page links related models so crawlers and humans can discover the full capability graph. Production tip: log model id, latency, and cost per request from day one so you can shift traffic between Terra, Luna, Sonnet, and Opus as eval scores change. Security tip: store keys in server env vars, rotate regularly, and never expose relay keys in mobile binaries without a backend proxy. Support: use /brand/keyo-docs.html for integration notes and /sign-up to create an account. When you are ready to buy capacity, fund the wallet once and route every modality through the same KeyoAPI endpoint for simpler accounting.</p>
+<p>Sonnet 5 is the production Claude workhorse for support, RAG, and light coding—strong enough daily, cheap enough to leave as the default model string.</p>
+<p>Sonnet 5 is the model you should leave as the default string in most production configs. It covers support macros, RAG answers, light coding, and structured extraction without the Opus bill. Build golden-set evals for your top twenty prompts and only escalate outliers. Because KeyoAPI shares keys with Whisper and OCR, you can attach documents or transcripts in the same product session without a second vendor. Publish an internal runbook: Sonnet first, Fable/Opus on call, Luna for batch. That runbook is what keeps Claude API pricing predictable as usage scales.</p>
+<p>Add structured output schemas for support macros and reject free-form answers when JSON is required. Cache frequent RAG answers at the edge. Sonnet should feel boring and reliable—that reliability is what makes Claude API pricing forecastable in SaaS margins.</p>
 <h2>Quick start</h2>
 <div class="card">
 <p>Base URL: <code>https://www.keyoapi.xyz/v1</code></p>
 <p>Endpoint: <code>POST /v1/chat/completions</code></p>
-<p>Model: <code>model=&quot;claude-sonnet-5&quot;</code></p>
+<p>Model: <code>model=claude-sonnet-5</code></p>
 <pre><code>curl https://www.keyoapi.xyz/v1/chat/completions \
-  -H "Authorization: Bearer YOUR_API_KEY" \
-  -H "Content-Type: application/json" \
-  -d '{"model":"claude-sonnet-5","messages":[{"role":"user","content":"Hello from KeyoAPI"}]}'</code></pre>
-<p>For audio/vision/async models, use the modality-specific paths in <a href="/brand/keyo-docs.html">Keyo docs</a>. The curl above illustrates the shared OpenAI-compatible auth pattern.</p>
+  -H &quot;Authorization: Bearer YOUR_API_KEY&quot; \
+  -H &quot;Content-Type: application/json&quot; \
+  -d '{&quot;model&quot;:&quot;claude-sonnet-5&quot;,&quot;messages&quot;:[{&quot;role&quot;:&quot;user&quot;,&quot;content&quot;:&quot;Hello from KeyoAPI&quot;}]}'</code></pre>
+<p>Auth uses the same Bearer API key as chat. Full notes: <a href="/brand/keyo-docs.html">Keyo docs</a>.</p>
 </div>
 <h2>FAQ</h2>
 <div class="faq"><details><summary>Is Sonnet 5 good as a default production model?</summary><p>Yes for many SaaS assistants. Escalate to Opus/Fable for the hardest tasks and use Luna for bulk classification.</p></details>
@@ -96,12 +98,12 @@ ul{margin:0 0 14px;padding-left:1.2em}
 <div class="grid"><a href="/model/claude-opus-5">Claude Opus 5 API</a>
 <a href="/model/gpt-5.6-terra">GPT-5.6 Terra API</a>
 <a href="/model/claude-fable-5">Claude Fable 5 API</a></div>
-<p class="meta">Also browse the interactive catalog at <a href="/pricing/claude-sonnet-5">/pricing/claude-sonnet-5</a>.</p>
+<p class="meta">Static guide for <strong>claude-sonnet-5</strong>. Interactive try/buy: <a href="/pricing/claude-sonnet-5">/pricing/claude-sonnet-5</a>. Catalog: <a href="/pricing">/pricing</a>.</p>
 
 <footer class="footer">
   <a href="/">Home</a>
   <a href="/compare">AI API price comparison</a>
-  <a href="/pricing">Live pricing</a>
+  <a href="/pricing">Pricing list</a>
   <a href="/brand/keyo-docs.html">Docs</a>
   <a href="/brand/faq.html">FAQ</a>
   <a href="/brand/privacy.html">Privacy</a>

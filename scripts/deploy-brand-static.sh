@@ -61,6 +61,11 @@ ${DOMAIN} {
 		rewrite * /compare.html
 		file_server
 	}
+	handle /pricing {
+		root * ${ROOT}/static/seo
+		rewrite * /pricing.html
+		file_server
+	}
 	@seo_model path /model /model/*
 	handle @seo_model {
 		root * ${ROOT}/static/seo

@@ -17,6 +17,11 @@
 		rewrite * /compare.html
 		file_server
 	}
+	handle /pricing {
+		root * /opt/ai-relay/static/seo
+		rewrite * /pricing.html
+		file_server
+	}
 	@seo_model path /model /model/*
 	handle @seo_model {
 		root * /opt/ai-relay/static/seo

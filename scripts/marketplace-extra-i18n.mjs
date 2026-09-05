@@ -44,6 +44,20 @@ export const EXTRA_MODELS = {
       vi: "GPT-5.6 nhẹ, tiết kiệm chi phí cho lưu lượng cao.",
     },
   },
+  "gpt-6-astra": {
+    mode: "token",
+    ratio: 5,
+    completion: 5,
+    desc: {
+      zhCN: "GPT-6 Astra 旗舰对话与推理模型，适合复杂任务与长上下文。",
+      zhTW: "GPT-6 Astra 旗艦對話與推理模型，適合複雜任務與長上下文。",
+      en: "GPT-6 Astra flagship chat and reasoning model for complex tasks and long context.",
+      fr: "GPT-6 Astra — modèle phare de chat et de raisonnement pour tâches complexes et long contexte.",
+      ru: "Флагманский чат/рассуждение GPT-6 Astra для сложных задач и длинного контекста.",
+      ja: "GPT-6 Astra 旗艦チャット／推論モデル。複雑タスクと長コンテキスト向け。",
+      vi: "GPT-6 Astra — mô hình chat/suy luận flagship cho tác vụ phức tạp và ngữ cảnh dài.",
+    },
+  },
   "claude-fable-5-1": {
     mode: "token",
     ratio: 7.353,

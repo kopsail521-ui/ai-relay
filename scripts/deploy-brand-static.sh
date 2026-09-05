@@ -1,45 +1,87 @@
 #!/bin/bash
-# 把多语言品牌页部署到 VPS，并让 Caddy 提供 /brand/*
-# 在服务器上执行：
+# Deploy brand + SEO static files and install durable Caddyfile (SEO before SPA).
+# On VPS:
 #   sudo bash scripts/deploy-brand-static.sh
-# 或本机：
-#   scp -r static/brand root@YOUR_VPS:/opt/ai-relay/static/
-#   ssh root@YOUR_VPS 'bash -s' < scripts/deploy-brand-static.sh
+# Prefer SEO deploy for SEO-only updates:
+#   node scripts/print-vps-seo-caddy.mjs  → paste one-liner on Workbench
 
 set -euo pipefail
 
 ROOT="${ROOT:-/opt/ai-relay}"
 BRAND_DIR="${ROOT}/static/brand"
+SEO_DIR="${ROOT}/static/seo"
 DOMAIN="${DOMAIN:-www.keyoapi.xyz}"
 
-mkdir -p "$BRAND_DIR"
+mkdir -p "$BRAND_DIR" "$SEO_DIR"
 
-# If script is run from repo, copy local files
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-REPO_BRAND="$(cd "$SCRIPT_DIR/.." && pwd)/static/brand"
+REPO_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
+REPO_BRAND="$REPO_ROOT/static/brand"
+REPO_SEO="$REPO_ROOT/static/seo"
+
 if [[ -d "$REPO_BRAND" ]]; then
   cp -a "$REPO_BRAND/." "$BRAND_DIR/"
   echo "==> Copied brand pages to $BRAND_DIR"
 fi
+if [[ -d "$REPO_SEO" && -f "$REPO_SEO/index.html" ]]; then
+  cp -a "$REPO_SEO/." "$SEO_DIR/"
+  echo "==> Copied SEO pages to $SEO_DIR"
+fi
 
 if [[ ! -f "$BRAND_DIR/keyo-home.html" || ! -f "$BRAND_DIR/keyo-docs.html" ]]; then
   echo "Missing $BRAND_DIR/keyo-home.html or keyo-docs.html"
-  echo "Copy static/brand/* there first."
   exit 1
 fi
 
-echo "==> Update Caddyfile for $DOMAIN"
+echo "==> Update Caddyfile for $DOMAIN (keeps SEO handles)"
 cat >/etc/caddy/Caddyfile <<EOF
 ${DOMAIN} {
 	encode gzip
 
+	handle /robots.txt {
+		root * ${ROOT}/static/seo
+		header Content-Type text/plain
+		file_server
+	}
+	handle /sitemap.xml {
+		root * ${ROOT}/static/seo
+		file_server
+	}
+	handle / {
+		root * ${ROOT}/static/seo
+		rewrite * /index.html
+		file_server
+	}
+	handle /compare {
+		root * ${ROOT}/static/seo
+		rewrite * /compare.html
+		file_server
+	}
+	@seo_model path /model /model/*
+	handle @seo_model {
+		root * ${ROOT}/static/seo
+		try_files {path}.html {path}/index.html {path}
+		file_server
+	}
 	handle_path /brand/* {
 		root * ${ROOT}/static/brand
 		file_server
 	}
-
+	handle /static/* {
+		reverse_proxy 127.0.0.1:3000 {
+			header_up Accept-Encoding identity
+		}
+	}
+	@gitee_special path /v1/images/object-detection* /v1/images/segmentation* /v1/images/pose-detection* /v1/images/upscaling* /v1/images/unwarping* /v1/images/mattings* /v1/async/* /v1/task/*
+	handle @gitee_special {
+		reverse_proxy 127.0.0.1:3010 {
+			header_up Accept-Encoding identity
+		}
+	}
 	handle {
-		reverse_proxy 127.0.0.1:3000
+		reverse_proxy 127.0.0.1:3001 {
+			header_up Accept-Encoding identity
+		}
 	}
 }
 EOF
@@ -48,13 +90,8 @@ caddy validate --config /etc/caddy/Caddyfile
 systemctl reload caddy
 
 echo "==> Check"
-curl -sI "https://${DOMAIN}/brand/keyo-home.html" | head -n 5
+curl -sI "https://${DOMAIN}/robots.txt" | head -n 5
+curl -sI "https://${DOMAIN}/" | head -n 5
 curl -sI "https://${DOMAIN}/brand/keyo-docs.html" | head -n 5
-curl -sI "https://${DOMAIN}/brand/aup.html" | head -n 5
-curl -sI "https://${DOMAIN}/privacy-policy" | head -n 5
-curl -sI "https://${DOMAIN}/user-agreement" | head -n 5
 
-echo ""
-echo "Next: from your PC run"
-echo "  node scripts/apply-creem-compliance.mjs"
-echo "  node scripts/apply-site-branding.mjs"
+echo "DONE_BRAND_SEO_DEPLOY"

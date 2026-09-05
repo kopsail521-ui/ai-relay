@@ -1,11 +1,37 @@
 # 官网白屏紧急修复（粘贴到阿里云 Workbench）
 # 原因：Caddy encode gzip 与上游已压缩 JS 叠压，浏览器拿不到前端脚本 → 白屏
-# 做法：静态资源直连 New API；反代强制 identity，由 Caddy 统一压缩
+# 做法：静态 SEO 优先；静态资源直连 New API；反代强制 identity，由 Caddy 统一压缩
+# 注意：本文件必须保留 /robots.txt /sitemap.xml / /compare /model/* 静态命中，禁止再 tee 无 SEO 的 Caddyfile
 
 sudo tee /etc/caddy/Caddyfile >/dev/null <<'EOF'
 www.keyoapi.xyz {
 	encode gzip
 
+	handle /robots.txt {
+		root * /opt/ai-relay/static/seo
+		header Content-Type text/plain
+		file_server
+	}
+	handle /sitemap.xml {
+		root * /opt/ai-relay/static/seo
+		file_server
+	}
+	handle / {
+		root * /opt/ai-relay/static/seo
+		rewrite * /index.html
+		file_server
+	}
+	handle /compare {
+		root * /opt/ai-relay/static/seo
+		rewrite * /compare.html
+		file_server
+	}
+	@seo_model path /model /model/*
+	handle @seo_model {
+		root * /opt/ai-relay/static/seo
+		try_files {path}.html {path}/index.html {path}
+		file_server
+	}
 	handle_path /brand/* {
 		root * /opt/ai-relay/static/brand
 		file_server
@@ -44,6 +70,7 @@ sudo caddy validate --config /etc/caddy/Caddyfile && sudo systemctl reload caddy
 echo '---- health ----'
 curl -sS -m 5 -o /dev/null -w 'newapi=%{http_code}\n' http://127.0.0.1:3000/api/status || true
 curl -sS -m 5 -o /dev/null -w 'moderation=%{http_code}\n' http://127.0.0.1:3001/api/status || true
-curl -sS -m 5 -o /dev/null -w 'js=%{http_code} size=%{size_download}\n' -H 'Accept-Encoding: gzip' https://www.keyoapi.xyz/static/js/index.ddeeeaa75e.js || true
+curl -sS -m 5 -o /dev/null -w 'robots=%{http_code}\n' https://www.keyoapi.xyz/robots.txt || true
+curl -sS -m 5 -o /dev/null -w 'home=%{http_code}\n' https://www.keyoapi.xyz/ || true
 curl -sS -m 5 -o /dev/null -w 'pricing=%{http_code}\n' https://www.keyoapi.xyz/pricing || true
 echo DONE_SITE_FIX

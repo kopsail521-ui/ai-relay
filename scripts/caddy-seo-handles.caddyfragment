@@ -1,0 +1,29 @@
+	handle /robots.txt {
+		root * /opt/ai-relay/static/seo
+		header Content-Type text/plain
+		file_server
+	}
+	handle /sitemap.xml {
+		root * /opt/ai-relay/static/seo
+		file_server
+	}
+	handle / {
+		root * /opt/ai-relay/static/seo
+		rewrite * /index.html
+		file_server
+	}
+	handle /compare {
+		root * /opt/ai-relay/static/seo
+		rewrite * /compare.html
+		file_server
+	}
+	@seo_model path /model /model/*
+	handle @seo_model {
+		root * /opt/ai-relay/static/seo
+		try_files {path}.html {path}/index.html {path}
+		file_server
+	}
+	handle_path /brand/* {
+		root * /opt/ai-relay/static/brand
+		file_server
+	}

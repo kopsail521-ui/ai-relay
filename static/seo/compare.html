@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>AI API Price Comparison - KeyoAPI vs Official Rates</title>
+<meta name="description" content="AI API price comparison for cheap LLM API and multimodal relay pricing on KeyoAPI versus typical OpenAI and Anthropic list rates." />
+<link rel="canonical" href="https://www.keyoapi.xyz/compare" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://www.keyoapi.xyz/compare" />
+<meta property="og:title" content="AI API Price Comparison - KeyoAPI vs Official Rates" />
+<meta property="og:description" content="AI API price comparison for cheap LLM API and multimodal relay pricing on KeyoAPI versus typical OpenAI and Anthropic list rates." />
+<meta property="og:image" content="https://www.keyoapi.xyz/logo.png" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="AI API Price Comparison - KeyoAPI vs Official Rates" />
+<meta name="twitter:description" content="AI API price comparison for cheap LLM API and multimodal relay pricing on KeyoAPI versus typical OpenAI and Anthropic list rates." />
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebPage","name":"AI API Price Comparison","url":"https://www.keyoapi.xyz/compare","description":"Compare KeyoAPI relay prices with official OpenAI and Anthropic list rates."}</script>
+<style>:root {
+  --bg0:#f7fafc; --bg1:#eef6ff; --ink:#0f172a; --muted:#475569;
+  --line:#cbd5e1; --accent:#2563eb; --card:#fff; --ok:#047857;
+}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;background:linear-gradient(180deg,var(--bg0),var(--bg1));color:var(--ink);line-height:1.65}
+a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
+.wrap{max-width:880px;margin:0 auto;padding:32px 20px 64px}
+.nav,.footer{display:flex;flex-wrap:wrap;gap:10px 16px;font-size:14px;color:var(--muted)}
+.nav{padding-bottom:20px;border-bottom:1px solid var(--line);margin-bottom:28px}
+.footer{padding-top:28px;border-top:1px solid var(--line);margin-top:40px}
+.eyebrow{font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);font-weight:700;margin:0 0 10px}
+h1{font-size:clamp(1.75rem,4vw,2.4rem);line-height:1.2;margin:0 0 14px}
+h2{font-size:1.25rem;margin:28px 0 10px}
+p{margin:0 0 14px;color:var(--ink)}
+.lead{font-size:1.1rem;color:var(--muted)}
+.meta{font-size:14px;color:var(--muted);margin:0 0 18px}
+.btnrow{display:flex;flex-wrap:wrap;gap:10px;margin:18px 0 28px}
+.btn{display:inline-block;padding:10px 16px;border-radius:10px;font-weight:600;font-size:14px;text-decoration:none}
+.btn-primary{background:var(--accent);color:#fff}
+.btn-secondary{background:#fff;color:var(--ink);border:1px solid var(--line)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin:16px 0}
+pre,code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+pre{background:#0f172a;color:#e2e8f0;padding:14px 16px;border-radius:10px;overflow:auto;font-size:13px}
+table{width:100%;border-collapse:collapse;font-size:14px;background:var(--card)}
+th,td{border:1px solid var(--line);padding:10px 12px;text-align:left;vertical-align:top}
+th{background:#f1f5f9}
+.ok{color:var(--ok);font-weight:600}
+.grid{display:grid;gap:10px;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));margin:16px 0}
+.grid a{display:block;padding:12px;border:1px solid var(--line);border-radius:10px;background:#fff;color:var(--ink);text-decoration:none}
+.grid a:hover{border-color:var(--accent)}
+ul{margin:0 0 14px;padding-left:1.2em}
+.faq details{border:1px solid var(--line);border-radius:10px;padding:12px 14px;margin:0 0 10px;background:#fff}
+.faq summary{cursor:pointer;font-weight:600}</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="nav" aria-label="Primary">
+  <a href="/">Home</a>
+  <a href="/compare">Compare</a>
+  <a href="/pricing">Pricing</a>
+  <a href="/brand/keyo-docs.html">Docs</a>
+  <a href="/sign-in">Sign in</a>
+  <a href="/sign-up">Sign up</a>
+</nav>
+<p class="eyebrow">KEYOAPI</p>
+<h1>AI API Price Comparison: KeyoAPI vs Official List Rates</h1>
+
+<p class="lead">This <strong>AI API price comparison</strong> page shows how KeyoAPI relay pricing stacks up against common official list rates for GPT-class, Claude-class, Whisper, and vision APIs.</p>
+<p class="meta">Figures are indicative for planning. Always confirm live sell rates on <a href="/pricing">/pricing</a> before contracting volume.</p>
+<div class="btnrow">
+  <a class="btn btn-primary" href="/sign-up">Create KeyoAPI account</a>
+  <a class="btn btn-secondary" href="/pricing">Open pricing catalog</a>
+</div>
+<h2>Headline comparisons</h2>
+<table>
+<thead><tr><th>Capability</th><th>Typical official list</th><th>KeyoAPI model</th><th>Notes</th></tr></thead>
+<tbody><tr>
+  <td>Flagship chat (GPT-class)</td>
+  <td>OpenAI GPT-4o ~$2.50 / $10.00 per 1M in/out</td>
+  <td><a href="/model/gpt-5.6-terra">gpt-5.6-terra</a><br/><span class="ok">$0.37 / $2.21 per 1M in/out</span></td>
+  <td>OpenAI-compatible /v1/chat/completions</td>
+</tr>
+<tr>
+  <td>High-volume cheap LLM</td>
+  <td>OpenAI GPT-4o mini ~$0.15 / $0.60 per 1M in/out</td>
+  <td><a href="/model/gpt-5.6-luna">gpt-5.6-luna</a><br/><span class="ok">$0.10 / $0.62 per 1M in/out</span></td>
+  <td>Best Keyo price/perf for batch workloads</td>
+</tr>
+<tr>
+  <td>Claude-class reasoning</td>
+  <td>Anthropic Claude Sonnet 4 ~$3 / $15 per 1M in/out</td>
+  <td><a href="/model/claude-sonnet-5">claude-sonnet-5</a><br/><span class="ok">$0.88 / $4.41 per 1M in/out</span></td>
+  <td>Drop-in chat completions via Keyo relay</td>
+</tr>
+<tr>
+  <td>Speech to text</td>
+  <td>OpenAI Whisper ~$0.006 / minute</td>
+  <td><a href="/model/whisper-large-v3">whisper-large-v3</a><br/><span class="ok">$0.0103 / request</span></td>
+  <td>Per-request billing; strong for short clips</td>
+</tr>
+<tr>
+  <td>Background removal</td>
+  <td>Typical SaaS remove.bg API often $0.05–0.20 / image</td>
+  <td><a href="/model/RMBG-2.0">RMBG-2.0</a><br/><span class="ok">$0.0068 / request</span></td>
+  <td>BRIA RMBG via unified Keyo endpoint</td>
+</tr></tbody>
+</table>
+<h2>Keyo LLM token rates (batch)</h2>
+<table>
+<thead><tr><th>Model</th><th>Listed Keyo price</th><th>Interactive page</th></tr></thead>
+<tbody><tr><td><a href="/model/claude-fable-5-1">claude-fable-5-1</a></td><td>See live token rates on /pricing</td><td><a href="/pricing/claude-fable-5-1">Live pricing</a></td></tr>
+<tr><td><a href="/model/claude-fable-5">claude-fable-5</a></td><td>~$8.82 / $44.12 per 1M in/out</td><td><a href="/pricing/claude-fable-5">Live pricing</a></td></tr>
+<tr><td><a href="/model/claude-opus-5">claude-opus-5</a></td><td>~$2.21 / $11.03 per 1M in/out</td><td><a href="/pricing/claude-opus-5">Live pricing</a></td></tr>
+<tr><td><a href="/model/claude-sonnet-5">claude-sonnet-5</a></td><td>~$0.88 / $4.41 per 1M in/out</td><td><a href="/pricing/claude-sonnet-5">Live pricing</a></td></tr>
+<tr><td><a href="/model/gpt-5.6-terra">gpt-5.6-terra</a></td><td>~$0.37 / $2.21 per 1M in/out</td><td><a href="/pricing/gpt-5.6-terra">Live pricing</a></td></tr>
+<tr><td><a href="/model/gpt-5.6-sol">gpt-5.6-sol</a></td><td>~$0.92 / $5.52 per 1M in/out</td><td><a href="/pricing/gpt-5.6-sol">Live pricing</a></td></tr>
+<tr><td><a href="/model/gpt-5.6-luna">gpt-5.6-luna</a></td><td>~$0.10 / $0.62 per 1M in/out</td><td><a href="/pricing/gpt-5.6-luna">Live pricing</a></td></tr></tbody>
+</table>
+<h2>How to use this comparison</h2>
+<p>Searchers for <strong>ai api price comparison</strong> usually need a spreadsheet-ready story for finance: same OpenAI SDK, lower blended token cost, and multimodal add-ons (OCR, TTS, detection) on one invoice. KeyoAPI is built as that <strong>ai api relay</strong>.</p>
+<p>Recommended rollout: put <a href="/model/gpt-5.6-luna">gpt-5.6-luna</a> on high-volume paths, <a href="/model/gpt-5.6-terra">gpt-5.6-terra</a> or <a href="/model/claude-sonnet-5">claude-sonnet-5</a> as default chat, and escalate hard jobs to <a href="/model/claude-opus-5">claude-opus-5</a> / <a href="/model/claude-fable-5">claude-fable-5</a>.</p>
+<h2>Modality pages</h2>
+<div class="grid"><a href="/model/whisper-large-v3">Whisper Large V3 API</a>
+<a href="/model/Qwen3-TTS">Qwen3-TTS API</a>
+<a href="/model/MinerU2.5-Pro">MinerU2.5-Pro API</a>
+<a href="/model/RMBG-2.0">RMBG-2.0 API</a>
+<a href="/model/VajraV1">VajraV1 YOLO API</a>
+<a href="/model/Duix-Avatar">Duix-Avatar API</a></div>
+
+<footer class="footer">
+  <a href="/">Home</a>
+  <a href="/compare">AI API price comparison</a>
+  <a href="/pricing">Live pricing</a>
+  <a href="/brand/keyo-docs.html">Docs</a>
+  <a href="/brand/faq.html">FAQ</a>
+  <a href="/brand/privacy.html">Privacy</a>
+  <a href="/brand/terms.html">Terms</a>
+  <a href="/sign-in">Console login</a>
+</footer>
+</div>
+</body>
+</html>

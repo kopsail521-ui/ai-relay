@@ -1,0 +1,49 @@
+{
+  "_note": "Public list prices for AI API price comparison pages. Update when vendors change pricing. Amounts are USD per 1M tokens unless unit says otherwise.",
+  "openai": {
+    "gpt-4o": { "input": 2.5, "output": 10, "unit": "per_1m_tokens", "label": "OpenAI GPT-4o" },
+    "gpt-4o-mini": { "input": 0.15, "output": 0.6, "unit": "per_1m_tokens", "label": "OpenAI GPT-4o mini" },
+    "whisper": { "price": 0.006, "unit": "per_minute", "label": "OpenAI Whisper API" }
+  },
+  "anthropic": {
+    "claude-sonnet-4": { "input": 3, "output": 15, "unit": "per_1m_tokens", "label": "Anthropic Claude Sonnet 4" },
+    "claude-opus-4": { "input": 15, "output": 75, "unit": "per_1m_tokens", "label": "Anthropic Claude Opus 4" }
+  },
+  "compare_rows": [
+    {
+      "capability": "Flagship chat (GPT-class)",
+      "official": "OpenAI GPT-4o ~$2.50 / $10.00 per 1M in/out",
+      "keyo_model": "gpt-5.6-terra",
+      "keyo_price": "$0.37 / $2.21 per 1M in/out",
+      "note": "OpenAI-compatible /v1/chat/completions"
+    },
+    {
+      "capability": "High-volume cheap LLM",
+      "official": "OpenAI GPT-4o mini ~$0.15 / $0.60 per 1M in/out",
+      "keyo_model": "gpt-5.6-luna",
+      "keyo_price": "$0.10 / $0.62 per 1M in/out",
+      "note": "Best Keyo price/perf for batch workloads"
+    },
+    {
+      "capability": "Claude-class reasoning",
+      "official": "Anthropic Claude Sonnet 4 ~$3 / $15 per 1M in/out",
+      "keyo_model": "claude-sonnet-5",
+      "keyo_price": "$0.88 / $4.41 per 1M in/out",
+      "note": "Drop-in chat completions via Keyo relay"
+    },
+    {
+      "capability": "Speech to text",
+      "official": "OpenAI Whisper ~$0.006 / minute",
+      "keyo_model": "whisper-large-v3",
+      "keyo_price": "$0.0103 / request",
+      "note": "Per-request billing; strong for short clips"
+    },
+    {
+      "capability": "Background removal",
+      "official": "Typical SaaS remove.bg API often $0.05–0.20 / image",
+      "keyo_model": "RMBG-2.0",
+      "keyo_price": "$0.0068 / request",
+      "note": "BRIA RMBG via unified Keyo endpoint"
+    }
+  ]
+}

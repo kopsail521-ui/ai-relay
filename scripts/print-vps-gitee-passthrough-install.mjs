@@ -9,6 +9,7 @@
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
+import { caddyFullSite } from "./caddy-seo-shared.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.join(__dirname, "..");
@@ -79,32 +80,7 @@ sudo docker run -d --name ai-relay-gitee-passthrough --restart always --network 
   -e CATALOG=/app/catalog.json \\
   keyo-gitee-passthrough
 sudo tee /etc/caddy/Caddyfile >/dev/null <<'EOF'
-www.keyoapi.xyz {
-	encode gzip
-	handle_path /brand/* {
-		root * /opt/ai-relay/static/brand
-		file_server
-	}
-	# 静态资源直连 New API，避免 gzip 叠压导致官网白屏
-	handle /static/* {
-		reverse_proxy 127.0.0.1:3000 {
-			header_up Accept-Encoding identity
-		}
-	}
-	# Gitee 特殊能力：检测/分割/超分/抠图/异步文档视频语音
-	@gitee_special path /v1/images/object-detection* /v1/images/segmentation* /v1/images/pose-detection* /v1/images/upscaling* /v1/images/unwarping* /v1/images/mattings* /v1/async/* /v1/task/*
-	handle @gitee_special {
-		reverse_proxy 127.0.0.1:3010 {
-			header_up Accept-Encoding identity
-		}
-	}
-	handle {
-		reverse_proxy 127.0.0.1:3001 {
-			header_up Accept-Encoding identity
-		}
-	}
-}
-EOF
+${caddyFullSite({ gitee: true })}EOF
 sudo caddy validate --config /etc/caddy/Caddyfile && sudo systemctl reload caddy
 sleep 2
 curl -sS http://127.0.0.1:3010/healthz || true

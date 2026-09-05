@@ -30,26 +30,13 @@ DOMAIN="\${DOMAIN:-www.keyoapi.xyz}"
 mkdir -p /opt/ai-relay/static/brand
 echo "${docsB64}" | base64 -d > /opt/ai-relay/static/brand/keyo-docs.html
 echo "${homeB64}" | base64 -d > /opt/ai-relay/static/brand/keyo-home.html
-cat >/etc/caddy/Caddyfile <<EOF
-\${DOMAIN} {
-	encode gzip
-
-	handle_path /brand/* {
-		root * /opt/ai-relay/static/brand
-		file_server
-	}
-
-	handle {
-		reverse_proxy 127.0.0.1:3000
-	}
-}
-EOF
-caddy validate --config /etc/caddy/Caddyfile
-systemctl reload caddy
+# Do NOT rewrite Caddyfile here — SEO handles live in durable deploy
+# (node scripts/print-vps-seo-caddy.mjs). Only refresh brand HTML.
 echo "==> file sizes"
 wc -c /opt/ai-relay/static/brand/keyo-*.html
 echo "==> probe"
 curl -sI "https://\${DOMAIN}/brand/keyo-docs.html" | head -n 12
+curl -sI "https://\${DOMAIN}/robots.txt" | head -n 5 || true
 echo DONE
 `;
 
@@ -180,19 +167,7 @@ async function applyBranding() {
 
 const tmpUrl = await tryUpload();
 if (tmpUrl) {
-  const oneLiner = `sudo bash -c 'mkdir -p /opt/ai-relay/static/brand && curl -fsSL "${tmpUrl}" -o /opt/ai-relay/static/brand/keyo-docs.html && echo "${homeB64}" | base64 -d > /opt/ai-relay/static/brand/keyo-home.html && cat >/etc/caddy/Caddyfile <<EOF
-www.keyoapi.xyz {
-  encode gzip
-  handle_path /brand/* {
-    root * /opt/ai-relay/static/brand
-    file_server
-  }
-  handle {
-    reverse_proxy 127.0.0.1:3000
-  }
-}
-EOF
-caddy validate --config /etc/caddy/Caddyfile && systemctl reload caddy && curl -sI https://www.keyoapi.xyz/brand/keyo-docs.html | head -n 12'`;
+  const oneLiner = `sudo bash -c 'mkdir -p /opt/ai-relay/static/brand && curl -fsSL "${tmpUrl}" -o /opt/ai-relay/static/brand/keyo-docs.html && echo "${homeB64}" | base64 -d > /opt/ai-relay/static/brand/keyo-home.html && curl -sI https://www.keyoapi.xyz/brand/keyo-docs.html | head -n 12 && echo NOTE: Caddyfile unchanged. For SEO routes run node scripts/print-vps-seo-caddy.mjs'`;
   fs.writeFileSync(path.join(root, "scripts", "vps-one-liner.txt"), oneLiner);
   console.log("Wrote scripts/vps-one-liner.txt");
 }

@@ -1,0 +1,886 @@
+{
+  "site": "https://www.keyoapi.xyz",
+  "generatedFor": "static SEO model landing pages",
+  "models": [
+    {
+      "id": "whisper-large-v3",
+      "category": "speech",
+      "targetKeywords": [
+        "whisper api",
+        "openai whisper api",
+        "speech to text api"
+      ],
+      "h1": "Whisper Large V3 API — Accurate Multilingual Speech to Text",
+      "title": "Whisper Large V3 API | Cheap Speech-to-Text on KeyoAPI",
+      "metaDescription": "Call OpenAI Whisper Large V3 via KeyoAPI for multilingual speech-to-text. Per-request pricing from $0.0103. OpenAI-compatible endpoint for apps and agents.",
+      "priceLabel": "$0.0103 / request",
+      "priceUnit": "per_call",
+      "related": [
+        "whisper-large-v3-turbo",
+        "Qwen3-TTS",
+        "Unlimited-OCR"
+      ],
+      "endpoint": "POST /v1/audio/transcriptions",
+      "codeHint": "model=whisper-large-v3",
+      "faqs": [
+        {
+          "q": "Is this the same Whisper Large V3 as OpenAI?",
+          "a": "Yes—KeyoAPI relays Whisper Large V3 through an OpenAI-compatible API so you can keep your existing SDK code and point the base URL to https://www.keyoapi.xyz/v1."
+        },
+        {
+          "q": "How is billing different from OpenAI Whisper?",
+          "a": "OpenAI typically bills Whisper by audio minute. KeyoAPI bills this model per request at $0.0103, which is often simpler for short clips, batch jobs, and predictable unit economics."
+        },
+        {
+          "q": "What languages does Whisper Large V3 support?",
+          "a": "Whisper Large V3 covers a wide multilingual set for transcription and translation-oriented workloads. Use it for global support tickets, podcasts, meetings, and user-generated voice notes."
+        }
+      ],
+      "sections": {
+        "intro": "Looking for a production Whisper API without locking every audio minute to a single vendor bill? KeyoAPI exposes whisper-large-v3 as a cheap speech-to-text API behind one OpenAI-compatible gateway. Developers searching for openai whisper api alternatives usually want three things: accuracy on noisy audio, multilingual coverage, and predictable pricing they can ship in SaaS margins. This page explains how to call Whisper Large V3 on KeyoAPI, when per-request pricing wins, and how it fits next to TTS and document pipelines on the same key.",
+        "about": "Whisper Large V3 is OpenAI’s high-accuracy multilingual speech recognition model. It is widely used for call-center transcripts, meeting notes, subtitle generation, voice agents, and compliance archives. On KeyoAPI you keep the familiar audio transcription request shape while routing through an AI API relay that also hosts vision, OCR, and chat models. That matters when your product is more than STT: one vendor relationship, one top-up balance, and one observability surface instead of five separate accounts. KeyoAPI is an OpenAI-compatible AI API relay: one base URL, one API key, and dozens of models spanning chat, speech, vision, OCR, and digital humans. Switch models by changing the model string—no new SDKs.",
+        "pricing": "KeyoAPI lists whisper-large-v3 at approximately $0.0103 per request. Compare that with official OpenAI Whisper pricing, which is commonly quoted around $0.006 per minute—great for long files, but harder to forecast when most uploads are 10–40 second clips. If your average clip is short, per-request billing can reduce surprise overage and simplify packaging (for example, “N transcriptions included per plan”). Always verify live rates on /pricing/whisper-large-v3 before locking a quote; catalog prices can move with upstream cost.",
+        "useCases": "Product teams ship Whisper into mobile voice search, CRM call logging, accessibility captions, and multilingual community moderation. Agent builders use transcription as the first stage of a tool loop: speech → text → LLM plan → action. Media startups batch overnight podcasts; education apps turn lecture audio into searchable notes. Because KeyoAPI is a unified AI API relay, the same application key can then call Qwen3-TTS for replies or MinerU2.5-Pro when users upload slides alongside audio.",
+        "integrate": "Point your OpenAI SDK baseURL to https://www.keyoapi.xyz/v1, set Authorization: Bearer YOUR_KEY, and send multipart audio with model=whisper-large-v3. Most clients that already call OpenAI Whisper need only two line changes: base URL and model name. For async pipelines, store the returned text, run PII redaction if required, then forward to your chat model of choice—gpt-5.6-luna for cost, claude-sonnet-5 for denser reasoning. See live try-out and account top-up at /pricing/whisper-large-v3."
+      },
+      "bodyWordCount": 590,
+      "body": "Looking for a production Whisper API without locking every audio minute to a single vendor bill? KeyoAPI exposes whisper-large-v3 as a cheap speech-to-text API behind one OpenAI-compatible gateway. Developers searching for openai whisper api alternatives usually want three things: accuracy on noisy audio, multilingual coverage, and predictable pricing they can ship in SaaS margins. This page explains how to call Whisper Large V3 on KeyoAPI, when per-request pricing wins, and how it fits next to TTS and document pipelines on the same key.\n\nWhisper Large V3 is OpenAI’s high-accuracy multilingual speech recognition model. It is widely used for call-center transcripts, meeting notes, subtitle generation, voice agents, and compliance archives. On KeyoAPI you keep the familiar audio transcription request shape while routing through an AI API relay that also hosts vision, OCR, and chat models. That matters when your product is more than STT: one vendor relationship, one top-up balance, and one observability surface instead of five separate accounts. KeyoAPI is an OpenAI-compatible AI API relay: one base URL, one API key, and dozens of models spanning chat, speech, vision, OCR, and digital humans. Switch models by changing the model string—no new SDKs.\n\nKeyoAPI lists whisper-large-v3 at approximately $0.0103 per request. Compare that with official OpenAI Whisper pricing, which is commonly quoted around $0.006 per minute—great for long files, but harder to forecast when most uploads are 10–40 second clips. If your average clip is short, per-request billing can reduce surprise overage and simplify packaging (for example, “N transcriptions included per plan”). Always verify live rates on /pricing/whisper-large-v3 before locking a quote; catalog prices can move with upstream cost.\n\nProduct teams ship Whisper into mobile voice search, CRM call logging, accessibility captions, and multilingual community moderation. Agent builders use transcription as the first stage of a tool loop: speech → text → LLM plan → action. Media startups batch overnight podcasts; education apps turn lecture audio into searchable notes. Because KeyoAPI is a unified AI API relay, the same application key can then call Qwen3-TTS for replies or MinerU2.5-Pro when users upload slides alongside audio.\n\nPoint your OpenAI SDK baseURL to https://www.keyoapi.xyz/v1, set Authorization: Bearer YOUR_KEY, and send multipart audio with model=whisper-large-v3. Most clients that already call OpenAI Whisper need only two line changes: base URL and model name. For async pipelines, store the returned text, run PII redaction if required, then forward to your chat model of choice—gpt-5.6-luna for cost, claude-sonnet-5 for denser reasoning. See live try-out and account top-up at /pricing/whisper-large-v3.\n\nKeyoAPI targets overseas developers who want a cheap llm api and specialized modality APIs without juggling five vendor consoles. The platform is an ai api relay: OpenAI-compatible base URL, unified API keys, prepaid balance, and a catalog that spans GPT-class chat, Claude-class agents, Whisper speech, TTS, OCR, vision, and digital humans. For procurement, start with /compare for an AI API price comparison, then open each model’s /pricing page to generate keys. For SEO and docs hygiene, every static model page links related models so crawlers and humans can discover the full capability graph. Production tip: log model id, latency, and cost per request from day one so you can shift traffic between Terra, Luna, Sonnet, and Opus as eval scores change. Security tip: store keys in server env vars, rotate regularly, and never expose relay keys in mobile binaries without a backend proxy. Support: use /brand/keyo-docs.html for integration notes and /sign-up to create an account. When you are ready to buy capacity, fund the wallet once and route every modality through the same KeyoAPI endpoint for simpler accounting."
+    },
+    {
+      "id": "whisper-large-v3-turbo",
+      "category": "speech",
+      "targetKeywords": [
+        "whisper api",
+        "whisper turbo api",
+        "fast speech to text api"
+      ],
+      "h1": "Whisper Large V3 Turbo API — Faster Speech-to-Text",
+      "title": "Whisper Large V3 Turbo API | Low-Latency STT on KeyoAPI",
+      "metaDescription": "Whisper Large V3 Turbo on KeyoAPI for faster multilingual transcription. ~$0.0103 per request via an OpenAI-compatible speech-to-text API.",
+      "priceLabel": "$0.0103 / request",
+      "priceUnit": "per_call",
+      "related": [
+        "whisper-large-v3",
+        "Qwen3-TTS",
+        "gpt-5.6-luna"
+      ],
+      "endpoint": "POST /v1/audio/transcriptions",
+      "codeHint": "model=whisper-large-v3-turbo",
+      "faqs": [
+        {
+          "q": "When should I pick Turbo over Large V3?",
+          "a": "Choose Turbo when latency and throughput matter more than squeezing the last bit of accuracy—interactive voice UIs, live coaching, and high-QPS back-office jobs."
+        },
+        {
+          "q": "Is the price the same as whisper-large-v3?",
+          "a": "On KeyoAPI both are listed around $0.0103 per request. Confirm the live catalog page before committing volume contracts."
+        },
+        {
+          "q": "Can I A/B test both models with one key?",
+          "a": "Yes. Keep the same base URL and API key; only change the model field between whisper-large-v3 and whisper-large-v3-turbo."
+        }
+      ],
+      "sections": {
+        "intro": "Whisper Large V3 Turbo is the latency-oriented sibling of Whisper Large V3—ideal when your product feels sluggish if transcription takes too long. KeyoAPI offers this Whisper API option through the same OpenAI-compatible gateway used for chat and vision, so teams searching for a fast speech to text api do not need a second vendor. This page covers Turbo’s role in interactive apps, how pricing works on KeyoAPI, and how to roll out with feature flags.",
+        "about": "Turbo keeps the multilingual Whisper family behavior while optimizing for speed. That trade-off is popular in customer-support copilots, in-car voice, kiosk systems, and real-time note capture where users stare at a spinner. As an AI API relay, KeyoAPI lets you start on Turbo for UX, then fall back to whisper-large-v3 for archival jobs that prioritize fidelity. KeyoAPI is an OpenAI-compatible AI API relay: one base URL, one API key, and dozens of models spanning chat, speech, vision, OCR, and digital humans. Switch models by changing the model string—no new SDKs.",
+        "pricing": "Listed pricing is about $0.0103 per request—simple unit economics for product managers packaging “transcriptions per month.” Compare against minute-based official Whisper bills when your traffic mix is bursty or clip lengths vary widely. Use /compare to see how speech pricing sits next to LLM and vision costs on the same wallet.",
+        "useCases": "Interactive tutoring apps stream short student answers and need sub-second feel. Ops tools watch warehouse radios or drive-thru audio where delay equals abandoned tickets. Content moderation queues prefer Turbo for first-pass triage, then escalate unclear audio to Large V3. Pair Turbo transcripts with gpt-5.6-luna for cheap summarization or claude-fable-5 when the next step is a long agent plan.",
+        "integrate": "Use the OpenAI audio transcriptions endpoint with model=whisper-large-v3-turbo against https://www.keyoapi.xyz/v1. Instrument latency histograms in your backend so you can prove Turbo’s win in production. CTA: open /pricing/whisper-large-v3-turbo to create a key and run a sample file."
+      },
+      "bodyWordCount": 488,
+      "body": "Whisper Large V3 Turbo is the latency-oriented sibling of Whisper Large V3—ideal when your product feels sluggish if transcription takes too long. KeyoAPI offers this Whisper API option through the same OpenAI-compatible gateway used for chat and vision, so teams searching for a fast speech to text api do not need a second vendor. This page covers Turbo’s role in interactive apps, how pricing works on KeyoAPI, and how to roll out with feature flags.\n\nTurbo keeps the multilingual Whisper family behavior while optimizing for speed. That trade-off is popular in customer-support copilots, in-car voice, kiosk systems, and real-time note capture where users stare at a spinner. As an AI API relay, KeyoAPI lets you start on Turbo for UX, then fall back to whisper-large-v3 for archival jobs that prioritize fidelity. KeyoAPI is an OpenAI-compatible AI API relay: one base URL, one API key, and dozens of models spanning chat, speech, vision, OCR, and digital humans. Switch models by changing the model string—no new SDKs.\n\nListed pricing is about $0.0103 per request—simple unit economics for product managers packaging “transcriptions per month.” Compare against minute-based official Whisper bills when your traffic mix is bursty or clip lengths vary widely. Use /compare to see how speech pricing sits next to LLM and vision costs on the same wallet.\n\nInteractive tutoring apps stream short student answers and need sub-second feel. Ops tools watch warehouse radios or drive-thru audio where delay equals abandoned tickets. Content moderation queues prefer Turbo for first-pass triage, then escalate unclear audio to Large V3. Pair Turbo transcripts with gpt-5.6-luna for cheap summarization or claude-fable-5 when the next step is a long agent plan.\n\nUse the OpenAI audio transcriptions endpoint with model=whisper-large-v3-turbo against https://www.keyoapi.xyz/v1. Instrument latency histograms in your backend so you can prove Turbo’s win in production. CTA: open /pricing/whisper-large-v3-turbo to create a key and run a sample file.\n\nKeyoAPI targets overseas developers who want a cheap llm api and specialized modality APIs without juggling five vendor consoles. The platform is an ai api relay: OpenAI-compatible base URL, unified API keys, prepaid balance, and a catalog that spans GPT-class chat, Claude-class agents, Whisper speech, TTS, OCR, vision, and digital humans. For procurement, start with /compare for an AI API price comparison, then open each model’s /pricing page to generate keys. For SEO and docs hygiene, every static model page links related models so crawlers and humans can discover the full capability graph. Production tip: log model id, latency, and cost per request from day one so you can shift traffic between Terra, Luna, Sonnet, and Opus as eval scores change. Security tip: store keys in server env vars, rotate regularly, and never expose relay keys in mobile binaries without a backend proxy. Support: use /brand/keyo-docs.html for integration notes and /sign-up to create an account. When you are ready to buy capacity, fund the wallet once and route every modality through the same KeyoAPI endpoint for simpler accounting."
+    },
+    {
+      "id": "claude-fable-5-1",
+      "category": "llm",
+      "targetKeywords": [
+        "claude api",
+        "claude api pricing",
+        "cheap llm api"
+      ],
+      "h1": "Claude Fable 5.1 API — Flagship Agents on a Cheap LLM API",
+      "title": "Claude Fable 5.1 API Pricing & Access | KeyoAPI Relay",
+      "metaDescription": "Access Claude Fable 5.1 through KeyoAPI’s OpenAI-compatible cheap LLM API. Ideal for long-horizon agents, coding, and knowledge work.",
+      "priceLabel": "See live token rates on /pricing",
+      "priceUnit": "per_1m_tokens",
+      "related": [
+        "claude-fable-5",
+        "claude-opus-5",
+        "claude-sonnet-5"
+      ],
+      "endpoint": "POST /v1/chat/completions",
+      "codeHint": "model=\"claude-fable-5-1\"",
+      "faqs": [
+        {
+          "q": "Why call Claude through an AI API relay?",
+          "a": "Relays like KeyoAPI unify billing and base URL across Claude-class and GPT-class models so you can route by cost or capability without rewriting clients."
+        },
+        {
+          "q": "Is Claude Fable 5.1 good for coding agents?",
+          "a": "Yes—flagship Claude-class models excel at long-horizon coding, tool use, and dense knowledge tasks. Use Sonnet variants when you need a cheaper balanced tier."
+        },
+        {
+          "q": "Where do I see exact Claude API pricing on Keyo?",
+          "a": "Open /pricing/claude-fable-5-1 for live input/output token rates. Also review /compare for an AI API price comparison against official list prices."
+        }
+      ],
+      "sections": {
+        "intro": "Claude Fable 5.1 is KeyoAPI’s flagship Claude-class chat model for developers who need serious agent depth without managing a maze of vendor consoles. If you have been comparing claude api pricing across clouds, an AI API relay keeps the OpenAI SDK shape while letting you pick Claude when the task demands it. This landing page targets teams shopping for a cheap llm api that still clears hard coding and research workloads.",
+        "about": "Fable 5.1 is positioned for long-horizon agents, complex repositories, and deep knowledge work where shallower models stall. Use it as the “planner” model in multi-agent graphs, then demote routine steps to gpt-5.6-luna or claude-sonnet-5. KeyoAPI’s relay means the same Bearer token that calls Whisper or RMBG can call Claude—useful for multimodal products that mix files, speech, and chat. KeyoAPI is an OpenAI-compatible AI API relay: one base URL, one API key, and dozens of models spanning chat, speech, vision, OCR, and digital humans. Switch models by changing the model string—no new SDKs.",
+        "pricing": "Token pricing for Claude-class models on KeyoAPI is typically far below first-party Anthropic list rates for comparable capability bands—see /compare for the current AI API price comparison tables. Treat published Keyo rates as the source of truth; upstream spot cost can change. For budgeting, measure average input/output tokens per successful agent run rather than per message.",
+        "useCases": "Software teams run repo-wide refactors, migration plans, and test synthesis. Research assistants compress PDFs (often pre-parsed via MinerU2.5-Pro) into cited briefs. Support copilots escalate only the hardest tickets to Fable 5.1 while cheaper models handle FAQ deflection. Because KeyoAPI is an ai api relay, you can shadow traffic to Sonnet and measure quality before full cutover.",
+        "integrate": "POST to /v1/chat/completions with model claude-fable-5-1. Keep max_tokens and tool schemas identical to your OpenAI client code paths. Start at /pricing/claude-fable-5-1 to fund an account and issue a key."
+      },
+      "bodyWordCount": 482,
+      "body": "Claude Fable 5.1 is KeyoAPI’s flagship Claude-class chat model for developers who need serious agent depth without managing a maze of vendor consoles. If you have been comparing claude api pricing across clouds, an AI API relay keeps the OpenAI SDK shape while letting you pick Claude when the task demands it. This landing page targets teams shopping for a cheap llm api that still clears hard coding and research workloads.\n\nFable 5.1 is positioned for long-horizon agents, complex repositories, and deep knowledge work where shallower models stall. Use it as the “planner” model in multi-agent graphs, then demote routine steps to gpt-5.6-luna or claude-sonnet-5. KeyoAPI’s relay means the same Bearer token that calls Whisper or RMBG can call Claude—useful for multimodal products that mix files, speech, and chat. KeyoAPI is an OpenAI-compatible AI API relay: one base URL, one API key, and dozens of models spanning chat, speech, vision, OCR, and digital humans. Switch models by changing the model string—no new SDKs.\n\nToken pricing for Claude-class models on KeyoAPI is typically far below first-party Anthropic list rates for comparable capability bands—see /compare for the current AI API price comparison tables. Treat published Keyo rates as the source of truth; upstream spot cost can change. For budgeting, measure average input/output tokens per successful agent run rather than per message.\n\nSoftware teams run repo-wide refactors, migration plans, and test synthesis. Research assistants compress PDFs (often pre-parsed via MinerU2.5-Pro) into cited briefs. Support copilots escalate only the hardest tickets to Fable 5.1 while cheaper models handle FAQ deflection. Because KeyoAPI is an ai api relay, you can shadow traffic to Sonnet and measure quality before full cutover.\n\nPOST to /v1/chat/completions with model claude-fable-5-1. Keep max_tokens and tool schemas identical to your OpenAI client code paths. Start at /pricing/claude-fable-5-1 to fund an account and issue a key.\n\nKeyoAPI targets overseas developers who want a cheap llm api and specialized modality APIs without juggling five vendor consoles. The platform is an ai api relay: OpenAI-compatible base URL, unified API keys, prepaid balance, and a catalog that spans GPT-class chat, Claude-class agents, Whisper speech, TTS, OCR, vision, and digital humans. For procurement, start with /compare for an AI API price comparison, then open each model’s /pricing page to generate keys. For SEO and docs hygiene, every static model page links related models so crawlers and humans can discover the full capability graph. Production tip: log model id, latency, and cost per request from day one so you can shift traffic between Terra, Luna, Sonnet, and Opus as eval scores change. Security tip: store keys in server env vars, rotate regularly, and never expose relay keys in mobile binaries without a backend proxy. Support: use /brand/keyo-docs.html for integration notes and /sign-up to create an account. When you are ready to buy capacity, fund the wallet once and route every modality through the same KeyoAPI endpoint for simpler accounting."
+    },
+    {
+      "id": "claude-fable-5",
+      "category": "llm",
+      "targetKeywords": [
+        "claude api pricing",
+        "claude fable api",
+        "cheap llm api"
+      ],
+      "h1": "Claude Fable 5 API — Flagship Chat & Agents",
+      "title": "Claude Fable 5 API | KeyoAPI Cheap LLM Relay",
+      "metaDescription": "Claude Fable 5 on KeyoAPI: flagship chat and agent model via OpenAI-compatible API. Check live Claude API pricing and compare vs official rates.",
+      "priceLabel": "~$8.82 / $44.12 per 1M in/out",
+      "priceUnit": "per_1m_tokens",
+      "related": [
+        "claude-fable-5-1",
+        "claude-opus-5",
+        "gpt-5.6-sol"
+      ],
+      "endpoint": "POST /v1/chat/completions",
+      "codeHint": "model=\"claude-fable-5\"",
+      "faqs": [
+        {
+          "q": "How does Keyo Claude pricing compare to Anthropic?",
+          "a": "KeyoAPI aims to undercut official list pricing for comparable Claude-class tiers. Use /compare for side-by-side AI API price comparison numbers."
+        },
+        {
+          "q": "Can I keep my OpenAI SDK?",
+          "a": "Yes. Change baseURL to https://www.keyoapi.xyz/v1 and set model to claude-fable-5."
+        },
+        {
+          "q": "Fable 5 vs Opus 5 vs Sonnet 5?",
+          "a": "Fable targets flagship chat/agents; Opus emphasizes hard agent/coding; Sonnet balances cost and quality for everyday production traffic."
+        }
+      ],
+      "sections": {
+        "intro": "Claude Fable 5 is a flagship chat and agent model available through KeyoAPI’s cheap llm api gateway. Teams evaluating claude api pricing often need a single place to buy capacity for Claude-class and GPT-class models—exactly what an AI API relay provides. Use this page to understand positioning, pricing shape, and integration steps.",
+        "about": "Fable 5 suits product assistants, coding copilots, and knowledge agents that outgrow lightweight models. On KeyoAPI it shares authentication and metering with vision and speech endpoints, reducing procurement friction for startups. KeyoAPI is an OpenAI-compatible AI API relay: one base URL, one API key, and dozens of models spanning chat, speech, vision, OCR, and digital humans. Switch models by changing the model string—no new SDKs.",
+        "pricing": "Indicative Keyo sell rates are about $8.82 input and $44.12 output per 1M tokens—confirm on /pricing/claude-fable-5. Official Anthropic flagship bands are often higher on list price; /compare shows the savings narrative for finance stakeholders. Combine with gpt-5.6-luna for bulk classification to keep blended cost down.",
+        "useCases": "B2B SaaS embeds Fable 5 for complex workflow automation. Agencies run client research agents overnight. Platform companies expose “bring your own prompt” features while metering on Keyo. Pair with Unlimited-OCR when users paste screenshots into chat.",
+        "integrate": "OpenAI-compatible chat completions with model=claude-fable-5. Enable streaming if your UI expects tokens ASAP. Create a key at /pricing/claude-fable-5."
+      },
+      "bodyWordCount": 394,
+      "body": "Claude Fable 5 is a flagship chat and agent model available through KeyoAPI’s cheap llm api gateway. Teams evaluating claude api pricing often need a single place to buy capacity for Claude-class and GPT-class models—exactly what an AI API relay provides. Use this page to understand positioning, pricing shape, and integration steps.\n\nFable 5 suits product assistants, coding copilots, and knowledge agents that outgrow lightweight models. On KeyoAPI it shares authentication and metering with vision and speech endpoints, reducing procurement friction for startups. KeyoAPI is an OpenAI-compatible AI API relay: one base URL, one API key, and dozens of models spanning chat, speech, vision, OCR, and digital humans. Switch models by changing the model string—no new SDKs.\n\nIndicative Keyo sell rates are about $8.82 input and $44.12 output per 1M tokens—confirm on /pricing/claude-fable-5. Official Anthropic flagship bands are often higher on list price; /compare shows the savings narrative for finance stakeholders. Combine with gpt-5.6-luna for bulk classification to keep blended cost down.\n\nB2B SaaS embeds Fable 5 for complex workflow automation. Agencies run client research agents overnight. Platform companies expose “bring your own prompt” features while metering on Keyo. Pair with Unlimited-OCR when users paste screenshots into chat.\n\nOpenAI-compatible chat completions with model=claude-fable-5. Enable streaming if your UI expects tokens ASAP. Create a key at /pricing/claude-fable-5.\n\nKeyoAPI targets overseas developers who want a cheap llm api and specialized modality APIs without juggling five vendor consoles. The platform is an ai api relay: OpenAI-compatible base URL, unified API keys, prepaid balance, and a catalog that spans GPT-class chat, Claude-class agents, Whisper speech, TTS, OCR, vision, and digital humans. For procurement, start with /compare for an AI API price comparison, then open each model’s /pricing page to generate keys. For SEO and docs hygiene, every static model page links related models so crawlers and humans can discover the full capability graph. Production tip: log model id, latency, and cost per request from day one so you can shift traffic between Terra, Luna, Sonnet, and Opus as eval scores change. Security tip: store keys in server env vars, rotate regularly, and never expose relay keys in mobile binaries without a backend proxy. Support: use /brand/keyo-docs.html for integration notes and /sign-up to create an account. When you are ready to buy capacity, fund the wallet once and route every modality through the same KeyoAPI endpoint for simpler accounting."
+    },
+    {
+      "id": "claude-opus-5",
+      "category": "llm",
+      "targetKeywords": [
+        "claude opus api",
+        "claude api pricing",
+        "coding agent api"
+      ],
+      "h1": "Claude Opus 5 API — Hard Agents & Coding",
+      "title": "Claude Opus 5 API Pricing | KeyoAPI",
+      "metaDescription": "Claude Opus 5 via KeyoAPI for powerful agents and coding on hard tasks. OpenAI-compatible access with competitive Claude API pricing.",
+      "priceLabel": "~$2.21 / $11.03 per 1M in/out",
+      "priceUnit": "per_1m_tokens",
+      "related": [
+        "claude-sonnet-5",
+        "claude-fable-5",
+        "gpt-5.6-sol"
+      ],
+      "endpoint": "POST /v1/chat/completions",
+      "codeHint": "model=\"claude-opus-5\"",
+      "faqs": [
+        {
+          "q": "Is Opus 5 only for coding?",
+          "a": "Coding is a strength, but Opus 5 also handles difficult analytical and multi-step agent tasks where weaker models loop or hallucinate tools."
+        },
+        {
+          "q": "How do I control spend?",
+          "a": "Route easy traffic to claude-sonnet-5 or gpt-5.6-luna; reserve Opus for escalations. KeyoAPI makes that switch a model string change."
+        },
+        {
+          "q": "Where is live pricing?",
+          "a": "See /pricing/claude-opus-5 and the /compare AI API price comparison page."
+        }
+      ],
+      "sections": {
+        "intro": "Claude Opus 5 is KeyoAPI’s pick when agents must finish hard coding and reasoning jobs—not just chat politely. Developers comparing claude api pricing for Opus-class models can buy through this AI API relay and keep OpenAI SDK clients. Below: when to choose Opus, how pricing works, and how to integrate.",
+        "about": "Opus-class models shine on stubborn refactors, subtle bug hunts, and tool-using agents that plan across many steps. KeyoAPI exposes Opus beside cheaper Claude and GPT tiers so you can build a quality ladder instead of a single expensive default. KeyoAPI is an OpenAI-compatible AI API relay: one base URL, one API key, and dozens of models spanning chat, speech, vision, OCR, and digital humans. Switch models by changing the model string—no new SDKs.",
+        "pricing": "Indicative rates ~$2.21 / $11.03 per 1M input/output tokens on KeyoAPI—verify live. That is typically well below first-party Opus list pricing, which is why finance teams approve relays for experimental agent fleets. Track cost per resolved ticket or per merged PR, not only cost per 1K tokens.",
+        "useCases": "CI bots that propose patches, security review assistants, and data-pipeline repair agents. Internal “ask the codebase” tools with large context windows. Escalate from Sonnet when unit tests keep failing.",
+        "integrate": "Chat completions with model=claude-opus-5 against https://www.keyoapi.xyz/v1. Prefer structured outputs / tools for agent loops. Start at /pricing/claude-opus-5."
+      },
+      "bodyWordCount": 394,
+      "body": "Claude Opus 5 is KeyoAPI’s pick when agents must finish hard coding and reasoning jobs—not just chat politely. Developers comparing claude api pricing for Opus-class models can buy through this AI API relay and keep OpenAI SDK clients. Below: when to choose Opus, how pricing works, and how to integrate.\n\nOpus-class models shine on stubborn refactors, subtle bug hunts, and tool-using agents that plan across many steps. KeyoAPI exposes Opus beside cheaper Claude and GPT tiers so you can build a quality ladder instead of a single expensive default. KeyoAPI is an OpenAI-compatible AI API relay: one base URL, one API key, and dozens of models spanning chat, speech, vision, OCR, and digital humans. Switch models by changing the model string—no new SDKs.\n\nIndicative rates ~$2.21 / $11.03 per 1M input/output tokens on KeyoAPI—verify live. That is typically well below first-party Opus list pricing, which is why finance teams approve relays for experimental agent fleets. Track cost per resolved ticket or per merged PR, not only cost per 1K tokens.\n\nCI bots that propose patches, security review assistants, and data-pipeline repair agents. Internal “ask the codebase” tools with large context windows. Escalate from Sonnet when unit tests keep failing.\n\nChat completions with model=claude-opus-5 against https://www.keyoapi.xyz/v1. Prefer structured outputs / tools for agent loops. Start at /pricing/claude-opus-5.\n\nKeyoAPI targets overseas developers who want a cheap llm api and specialized modality APIs without juggling five vendor consoles. The platform is an ai api relay: OpenAI-compatible base URL, unified API keys, prepaid balance, and a catalog that spans GPT-class chat, Claude-class agents, Whisper speech, TTS, OCR, vision, and digital humans. For procurement, start with /compare for an AI API price comparison, then open each model’s /pricing page to generate keys. For SEO and docs hygiene, every static model page links related models so crawlers and humans can discover the full capability graph. Production tip: log model id, latency, and cost per request from day one so you can shift traffic between Terra, Luna, Sonnet, and Opus as eval scores change. Security tip: store keys in server env vars, rotate regularly, and never expose relay keys in mobile binaries without a backend proxy. Support: use /brand/keyo-docs.html for integration notes and /sign-up to create an account. When you are ready to buy capacity, fund the wallet once and route every modality through the same KeyoAPI endpoint for simpler accounting."
+    },
+    {
+      "id": "claude-sonnet-5",
+      "category": "llm",
+      "targetKeywords": [
+        "claude sonnet api",
+        "claude api pricing",
+        "cheap llm api"
+      ],
+      "h1": "Claude Sonnet 5 API — Balanced Quality & Cost",
+      "title": "Claude Sonnet 5 API | Affordable Claude on KeyoAPI",
+      "metaDescription": "Claude Sonnet 5 on KeyoAPI: balanced long-context chat with competitive Claude API pricing via an OpenAI-compatible cheap LLM API.",
+      "priceLabel": "~$0.88 / $4.41 per 1M in/out",
+      "priceUnit": "per_1m_tokens",
+      "related": [
+        "claude-opus-5",
+        "gpt-5.6-terra",
+        "claude-fable-5"
+      ],
+      "endpoint": "POST /v1/chat/completions",
+      "codeHint": "model=\"claude-sonnet-5\"",
+      "faqs": [
+        {
+          "q": "Is Sonnet 5 good as a default production model?",
+          "a": "Yes for many SaaS assistants. Escalate to Opus/Fable for the hardest tasks and use Luna for bulk classification."
+        },
+        {
+          "q": "Does it support long context?",
+          "a": "Sonnet 5 is positioned with strong long-context support for documents and multi-turn product sessions."
+        },
+        {
+          "q": "How do I compare vs official Anthropic pricing?",
+          "a": "Use /compare for an AI API price comparison, then confirm Keyo live rates on /pricing/claude-sonnet-5."
+        }
+      ],
+      "sections": {
+        "intro": "Claude Sonnet 5 is the workhorse Claude-class model on KeyoAPI—enough depth for production chat, priced for a cheap llm api budget. Searchers evaluating claude api pricing usually land on Sonnet-class tiers first; this page shows how to buy that capability through an AI API relay.",
+        "about": "Sonnet balances quality and cost for customer support, writing aids, light coding, and RAG answers. Long-context support helps when users paste tickets, policies, or specs into the thread. KeyoAPI is an OpenAI-compatible AI API relay: one base URL, one API key, and dozens of models spanning chat, speech, vision, OCR, and digital humans. Switch models by changing the model string—no new SDKs.",
+        "pricing": "Indicative Keyo pricing ~$0.88 input / $4.41 output per 1M tokens. Against official Claude Sonnet list bands near $3 / $15, the relay savings are the core sales story—validate on /compare. Blended architectures (Sonnet + Luna) often beat “always flagship” designs on margin.",
+        "useCases": "Default bot for B2B help centers, CRM side panels, and docs Q&A. Content drafting with human edit loops. First-pass code suggestions before Opus escalation.",
+        "integrate": "Set model=claude-sonnet-5 on /v1/chat/completions. Reuse existing tool-calling code. Get a key at /pricing/claude-sonnet-5."
+      },
+      "bodyWordCount": 365,
+      "body": "Claude Sonnet 5 is the workhorse Claude-class model on KeyoAPI—enough depth for production chat, priced for a cheap llm api budget. Searchers evaluating claude api pricing usually land on Sonnet-class tiers first; this page shows how to buy that capability through an AI API relay.\n\nSonnet balances quality and cost for customer support, writing aids, light coding, and RAG answers. Long-context support helps when users paste tickets, policies, or specs into the thread. KeyoAPI is an OpenAI-compatible AI API relay: one base URL, one API key, and dozens of models spanning chat, speech, vision, OCR, and digital humans. Switch models by changing the model string—no new SDKs.\n\nIndicative Keyo pricing ~$0.88 input / $4.41 output per 1M tokens. Against official Claude Sonnet list bands near $3 / $15, the relay savings are the core sales story—validate on /compare. Blended architectures (Sonnet + Luna) often beat “always flagship” designs on margin.\n\nDefault bot for B2B help centers, CRM side panels, and docs Q&A. Content drafting with human edit loops. First-pass code suggestions before Opus escalation.\n\nSet model=claude-sonnet-5 on /v1/chat/completions. Reuse existing tool-calling code. Get a key at /pricing/claude-sonnet-5.\n\nKeyoAPI targets overseas developers who want a cheap llm api and specialized modality APIs without juggling five vendor consoles. The platform is an ai api relay: OpenAI-compatible base URL, unified API keys, prepaid balance, and a catalog that spans GPT-class chat, Claude-class agents, Whisper speech, TTS, OCR, vision, and digital humans. For procurement, start with /compare for an AI API price comparison, then open each model’s /pricing page to generate keys. For SEO and docs hygiene, every static model page links related models so crawlers and humans can discover the full capability graph. Production tip: log model id, latency, and cost per request from day one so you can shift traffic between Terra, Luna, Sonnet, and Opus as eval scores change. Security tip: store keys in server env vars, rotate regularly, and never expose relay keys in mobile binaries without a backend proxy. Support: use /brand/keyo-docs.html for integration notes and /sign-up to create an account. When you are ready to buy capacity, fund the wallet once and route every modality through the same KeyoAPI endpoint for simpler accounting."
+    },
+    {
+      "id": "gpt-5.6-terra",
+      "category": "llm",
+      "targetKeywords": [
+        "gpt api pricing",
+        "cheap llm api",
+        "openai compatible api"
+      ],
+      "h1": "GPT-5.6 Terra API — Everyday Flagship Chat",
+      "title": "GPT-5.6 Terra API Pricing | KeyoAPI Cheap LLM",
+      "metaDescription": "GPT-5.6 Terra on KeyoAPI for everyday Q&A and assistants. OpenAI-compatible cheap LLM API with competitive GPT API pricing.",
+      "priceLabel": "~$0.37 / $2.21 per 1M in/out",
+      "priceUnit": "per_1m_tokens",
+      "related": [
+        "gpt-5.6-sol",
+        "gpt-5.6-luna",
+        "claude-sonnet-5"
+      ],
+      "endpoint": "POST /v1/chat/completions",
+      "codeHint": "model=\"gpt-5.6-terra\"",
+      "faqs": [
+        {
+          "q": "Is Terra a drop-in for GPT-4o-style apps?",
+          "a": "It is designed as a flagship everyday chat model on an OpenAI-compatible API. Point your SDK at KeyoAPI and set model=gpt-5.6-terra."
+        },
+        {
+          "q": "How does GPT API pricing compare?",
+          "a": "See /compare for AI API price comparison versus OpenAI list rates, and /pricing/gpt-5.6-terra for live Keyo numbers."
+        },
+        {
+          "q": "Terra vs Sol vs Luna?",
+          "a": "Terra is the everyday flagship; Sol is stronger reasoning; Luna is the high-volume cheap tier."
+        }
+      ],
+      "sections": {
+        "intro": "GPT-5.6 Terra is KeyoAPI’s everyday flagship chat model for Q&A, writing, and general assistants. If you are optimizing gpt api pricing without rewriting clients, an OpenAI-compatible cheap llm api like KeyoAPI is the shortest path.",
+        "about": "Terra covers the broad middle of product traffic: onboarding help, content drafts, light analysis, and tool-calling assistants. Because KeyoAPI is an ai api relay, you can keep Terra as default and still call Claude or Whisper on the same key. KeyoAPI is an OpenAI-compatible AI API relay: one base URL, one API key, and dozens of models spanning chat, speech, vision, OCR, and digital humans. Switch models by changing the model string—no new SDKs.",
+        "pricing": "Indicative rates ~$0.37 / $2.21 per 1M in/out—often dramatically below OpenAI GPT-4o list pricing. Finance teams use /compare to justify migration; engineers use /pricing for live confirmation.",
+        "useCases": "Consumer chat features, internal knowledge bots, marketing copy helpers, and CRUD app copilots. Batch rewrite jobs that are too expensive on first-party flagship rates.",
+        "integrate": "Chat completions with model=gpt-5.6-terra. Base URL https://www.keyoapi.xyz/v1. Start at /pricing/gpt-5.6-terra."
+      },
+      "bodyWordCount": 348,
+      "body": "GPT-5.6 Terra is KeyoAPI’s everyday flagship chat model for Q&A, writing, and general assistants. If you are optimizing gpt api pricing without rewriting clients, an OpenAI-compatible cheap llm api like KeyoAPI is the shortest path.\n\nTerra covers the broad middle of product traffic: onboarding help, content drafts, light analysis, and tool-calling assistants. Because KeyoAPI is an ai api relay, you can keep Terra as default and still call Claude or Whisper on the same key. KeyoAPI is an OpenAI-compatible AI API relay: one base URL, one API key, and dozens of models spanning chat, speech, vision, OCR, and digital humans. Switch models by changing the model string—no new SDKs.\n\nIndicative rates ~$0.37 / $2.21 per 1M in/out—often dramatically below OpenAI GPT-4o list pricing. Finance teams use /compare to justify migration; engineers use /pricing for live confirmation.\n\nConsumer chat features, internal knowledge bots, marketing copy helpers, and CRUD app copilots. Batch rewrite jobs that are too expensive on first-party flagship rates.\n\nChat completions with model=gpt-5.6-terra. Base URL https://www.keyoapi.xyz/v1. Start at /pricing/gpt-5.6-terra.\n\nKeyoAPI targets overseas developers who want a cheap llm api and specialized modality APIs without juggling five vendor consoles. The platform is an ai api relay: OpenAI-compatible base URL, unified API keys, prepaid balance, and a catalog that spans GPT-class chat, Claude-class agents, Whisper speech, TTS, OCR, vision, and digital humans. For procurement, start with /compare for an AI API price comparison, then open each model’s /pricing page to generate keys. For SEO and docs hygiene, every static model page links related models so crawlers and humans can discover the full capability graph. Production tip: log model id, latency, and cost per request from day one so you can shift traffic between Terra, Luna, Sonnet, and Opus as eval scores change. Security tip: store keys in server env vars, rotate regularly, and never expose relay keys in mobile binaries without a backend proxy. Support: use /brand/keyo-docs.html for integration notes and /sign-up to create an account. When you are ready to buy capacity, fund the wallet once and route every modality through the same KeyoAPI endpoint for simpler accounting."
+    },
+    {
+      "id": "gpt-5.6-sol",
+      "category": "llm",
+      "targetKeywords": [
+        "gpt api pricing",
+        "reasoning llm api",
+        "cheap llm api"
+      ],
+      "h1": "GPT-5.6 Sol API — Stronger Reasoning Tier",
+      "title": "GPT-5.6 Sol API | Higher-Tier Chat on KeyoAPI",
+      "metaDescription": "GPT-5.6 Sol on KeyoAPI for complex reasoning tasks. OpenAI-compatible access with transparent GPT API pricing.",
+      "priceLabel": "~$0.92 / $5.52 per 1M in/out",
+      "priceUnit": "per_1m_tokens",
+      "related": [
+        "gpt-5.6-terra",
+        "claude-opus-5",
+        "gpt-5.6-luna"
+      ],
+      "endpoint": "POST /v1/chat/completions",
+      "codeHint": "model=\"gpt-5.6-sol\"",
+      "faqs": [
+        {
+          "q": "When is Sol worth the uplift over Terra?",
+          "a": "Use Sol for harder reasoning, multi-constraint planning, and coding tasks where Terra’s error rate hurts UX."
+        },
+        {
+          "q": "Can I shadow Sol vs Claude Opus?",
+          "a": "Yes—same KeyoAPI key, different model strings. Compare quality and cost in your eval harness."
+        },
+        {
+          "q": "Where is pricing?",
+          "a": "/pricing/gpt-5.6-sol and /compare."
+        }
+      ],
+      "sections": {
+        "intro": "GPT-5.6 Sol is the higher-tier GPT-5.6 chat model on KeyoAPI for complex tasks that need stronger reasoning. Teams tuning gpt api pricing often keep Terra as default and route a percentage of traffic to Sol—easy on an AI API relay.",
+        "about": "Sol targets harder prompts: multi-file reasoning, careful instruction following, and denser analysis. Pair with Luna for pre-filtering so only worthy requests pay Sol rates. KeyoAPI is an OpenAI-compatible AI API relay: one base URL, one API key, and dozens of models spanning chat, speech, vision, OCR, and digital humans. Switch models by changing the model string—no new SDKs.",
+        "pricing": "Indicative ~$0.92 / $5.52 per 1M in/out on KeyoAPI. Still typically cheaper than official flagship GPT bands—check /compare for the narrative board decks need.",
+        "useCases": "Analytics narratives, policy interpretation, coding assistants, and escalation lanes from Terra. Offline eval jobs that score prompt variants.",
+        "integrate": "model=gpt-5.6-sol on /v1/chat/completions. Issue keys at /pricing/gpt-5.6-sol."
+      },
+      "bodyWordCount": 325,
+      "body": "GPT-5.6 Sol is the higher-tier GPT-5.6 chat model on KeyoAPI for complex tasks that need stronger reasoning. Teams tuning gpt api pricing often keep Terra as default and route a percentage of traffic to Sol—easy on an AI API relay.\n\nSol targets harder prompts: multi-file reasoning, careful instruction following, and denser analysis. Pair with Luna for pre-filtering so only worthy requests pay Sol rates. KeyoAPI is an OpenAI-compatible AI API relay: one base URL, one API key, and dozens of models spanning chat, speech, vision, OCR, and digital humans. Switch models by changing the model string—no new SDKs.\n\nIndicative ~$0.92 / $5.52 per 1M in/out on KeyoAPI. Still typically cheaper than official flagship GPT bands—check /compare for the narrative board decks need.\n\nAnalytics narratives, policy interpretation, coding assistants, and escalation lanes from Terra. Offline eval jobs that score prompt variants.\n\nmodel=gpt-5.6-sol on /v1/chat/completions. Issue keys at /pricing/gpt-5.6-sol.\n\nKeyoAPI targets overseas developers who want a cheap llm api and specialized modality APIs without juggling five vendor consoles. The platform is an ai api relay: OpenAI-compatible base URL, unified API keys, prepaid balance, and a catalog that spans GPT-class chat, Claude-class agents, Whisper speech, TTS, OCR, vision, and digital humans. For procurement, start with /compare for an AI API price comparison, then open each model’s /pricing page to generate keys. For SEO and docs hygiene, every static model page links related models so crawlers and humans can discover the full capability graph. Production tip: log model id, latency, and cost per request from day one so you can shift traffic between Terra, Luna, Sonnet, and Opus as eval scores change. Security tip: store keys in server env vars, rotate regularly, and never expose relay keys in mobile binaries without a backend proxy. Support: use /brand/keyo-docs.html for integration notes and /sign-up to create an account. When you are ready to buy capacity, fund the wallet once and route every modality through the same KeyoAPI endpoint for simpler accounting."
+    },
+    {
+      "id": "gpt-5.6-luna",
+      "category": "llm",
+      "targetKeywords": [
+        "cheap llm api",
+        "gpt api pricing",
+        "high volume llm api"
+      ],
+      "h1": "GPT-5.6 Luna API — High-Volume Cheap LLM",
+      "title": "GPT-5.6 Luna API | Cheapest GPT Tier on KeyoAPI",
+      "metaDescription": "GPT-5.6 Luna: lightweight cost-efficient chat for high-volume workloads. A cheap LLM API on KeyoAPI with OpenAI-compatible access.",
+      "priceLabel": "~$0.10 / $0.62 per 1M in/out",
+      "priceUnit": "per_1m_tokens",
+      "related": [
+        "gpt-5.6-terra",
+        "claude-sonnet-5",
+        "whisper-large-v3-turbo"
+      ],
+      "endpoint": "POST /v1/chat/completions",
+      "codeHint": "model=\"gpt-5.6-luna\"",
+      "faqs": [
+        {
+          "q": "Is Luna good enough for production?",
+          "a": "For classification, extraction, short replies, and bulk rewrite—often yes. Escalate to Terra/Sol/Claude when quality gates fail."
+        },
+        {
+          "q": "Why is this the cheap llm api hero model?",
+          "a": "It is KeyoAPI’s most cost-efficient GPT-5.6 tier, aimed at high-volume paths that dominate token spend."
+        },
+        {
+          "q": "How do I estimate monthly cost?",
+          "a": "Multiply expected tokens by live /pricing/gpt-5.6-luna rates; use /compare to contrast with OpenAI mini-class list prices."
+        }
+      ],
+      "sections": {
+        "intro": "GPT-5.6 Luna is the high-volume workhorse for teams whose primary keyword is literally cheap llm api. On KeyoAPI, Luna keeps OpenAI SDK compatibility while crushing token spend on the paths that run millions of times per day.",
+        "about": "Luna trades some peak intelligence for aggressive unit cost—perfect for embeddings-adjacent text transforms, tagging, routing, and draft generation. Combine with stronger models only on the long tail. KeyoAPI is an OpenAI-compatible AI API relay: one base URL, one API key, and dozens of models spanning chat, speech, vision, OCR, and digital humans. Switch models by changing the model string—no new SDKs.",
+        "pricing": "Indicative ~$0.10 / $0.62 per 1M in/out—among the lowest GPT-class rates on the platform. This is the model you put in the spreadsheet when arguing an AI API relay vs paying full OpenAI list.",
+        "useCases": "Log classification, email triage, SEO rewriting, localization drafts, and agent tool-result summarization. Nightly batch jobs that were previously unaffordable.",
+        "integrate": "model=gpt-5.6-luna on chat completions. Fund usage at /pricing/gpt-5.6-luna."
+      },
+      "bodyWordCount": 337,
+      "body": "GPT-5.6 Luna is the high-volume workhorse for teams whose primary keyword is literally cheap llm api. On KeyoAPI, Luna keeps OpenAI SDK compatibility while crushing token spend on the paths that run millions of times per day.\n\nLuna trades some peak intelligence for aggressive unit cost—perfect for embeddings-adjacent text transforms, tagging, routing, and draft generation. Combine with stronger models only on the long tail. KeyoAPI is an OpenAI-compatible AI API relay: one base URL, one API key, and dozens of models spanning chat, speech, vision, OCR, and digital humans. Switch models by changing the model string—no new SDKs.\n\nIndicative ~$0.10 / $0.62 per 1M in/out—among the lowest GPT-class rates on the platform. This is the model you put in the spreadsheet when arguing an AI API relay vs paying full OpenAI list.\n\nLog classification, email triage, SEO rewriting, localization drafts, and agent tool-result summarization. Nightly batch jobs that were previously unaffordable.\n\nmodel=gpt-5.6-luna on chat completions. Fund usage at /pricing/gpt-5.6-luna.\n\nKeyoAPI targets overseas developers who want a cheap llm api and specialized modality APIs without juggling five vendor consoles. The platform is an ai api relay: OpenAI-compatible base URL, unified API keys, prepaid balance, and a catalog that spans GPT-class chat, Claude-class agents, Whisper speech, TTS, OCR, vision, and digital humans. For procurement, start with /compare for an AI API price comparison, then open each model’s /pricing page to generate keys. For SEO and docs hygiene, every static model page links related models so crawlers and humans can discover the full capability graph. Production tip: log model id, latency, and cost per request from day one so you can shift traffic between Terra, Luna, Sonnet, and Opus as eval scores change. Security tip: store keys in server env vars, rotate regularly, and never expose relay keys in mobile binaries without a backend proxy. Support: use /brand/keyo-docs.html for integration notes and /sign-up to create an account. When you are ready to buy capacity, fund the wallet once and route every modality through the same KeyoAPI endpoint for simpler accounting."
+    },
+    {
+      "id": "MinerU2.5-Pro",
+      "category": "ocr",
+      "targetKeywords": [
+        "ocr api",
+        "document parsing api",
+        "pdf ocr api"
+      ],
+      "h1": "MinerU2.5-Pro API — Complex Document Parsing & OCR",
+      "title": "MinerU2.5-Pro OCR API | PDF & Layout Parsing on KeyoAPI",
+      "metaDescription": "MinerU2.5-Pro document parsing OCR API on KeyoAPI. Extract text, tables, and layout from PDFs/images from ~$0.0137 per page.",
+      "priceLabel": "$0.0137 / page",
+      "priceUnit": "per_page",
+      "related": [
+        "Unlimited-OCR",
+        "UVDoc",
+        "claude-sonnet-5"
+      ],
+      "endpoint": "async document / OCR pipeline (see docs)",
+      "codeHint": "model=MinerU2.5-Pro",
+      "faqs": [
+        {
+          "q": "What makes MinerU different from plain OCR?",
+          "a": "It targets complex layout: tables, reading order, and structure—not just raw character dumps—so LLMs receive cleaner context."
+        },
+        {
+          "q": "How should I combine UVDoc + MinerU?",
+          "a": "Unwarp skewed scans with UVDoc first, then parse with MinerU2.5-Pro for higher OCR accuracy on curved pages."
+        },
+        {
+          "q": "Per-page pricing details?",
+          "a": "About $0.0137 per page on KeyoAPI—confirm on /pricing/MinerU2.5-Pro."
+        }
+      ],
+      "sections": {
+        "intro": "MinerU2.5-Pro is KeyoAPI’s heavy-duty document parsing OCR API for PDFs and images that break naive OCR. If you searched ocr api because invoices, papers, and slide decks must become machine-readable, this model is the structured extraction layer before your LLM.",
+        "about": "Complex documents mix columns, tables, formulas, and figures. MinerU2.5-Pro focuses on recovering text plus layout so downstream chat models reason over faithful structure. On KeyoAPI it sits beside Unlimited-OCR and UVDoc so you can build a full document lane on one AI API relay. KeyoAPI is an OpenAI-compatible AI API relay: one base URL, one API key, and dozens of models spanning chat, speech, vision, OCR, and digital humans. Switch models by changing the model string—no new SDKs.",
+        "pricing": "Billing is approximately $0.0137 per page—easy to map onto “pages processed” product metrics. Compare against building and hosting your own GPU parsing stack when volume is spiky.",
+        "useCases": "Fintech KYC packets, academic PDF ingestion, contract analytics, and enterprise knowledge bases. Feed parsed markdown into claude-sonnet-5 or gpt-5.6-terra for Q&A.",
+        "integrate": "Follow Keyo docs for the async document endpoints using model MinerU2.5-Pro. Try and top up at /pricing/MinerU2.5-Pro."
+      },
+      "bodyWordCount": 361,
+      "body": "MinerU2.5-Pro is KeyoAPI’s heavy-duty document parsing OCR API for PDFs and images that break naive OCR. If you searched ocr api because invoices, papers, and slide decks must become machine-readable, this model is the structured extraction layer before your LLM.\n\nComplex documents mix columns, tables, formulas, and figures. MinerU2.5-Pro focuses on recovering text plus layout so downstream chat models reason over faithful structure. On KeyoAPI it sits beside Unlimited-OCR and UVDoc so you can build a full document lane on one AI API relay. KeyoAPI is an OpenAI-compatible AI API relay: one base URL, one API key, and dozens of models spanning chat, speech, vision, OCR, and digital humans. Switch models by changing the model string—no new SDKs.\n\nBilling is approximately $0.0137 per page—easy to map onto “pages processed” product metrics. Compare against building and hosting your own GPU parsing stack when volume is spiky.\n\nFintech KYC packets, academic PDF ingestion, contract analytics, and enterprise knowledge bases. Feed parsed markdown into claude-sonnet-5 or gpt-5.6-terra for Q&A.\n\nFollow Keyo docs for the async document endpoints using model MinerU2.5-Pro. Try and top up at /pricing/MinerU2.5-Pro.\n\nKeyoAPI targets overseas developers who want a cheap llm api and specialized modality APIs without juggling five vendor consoles. The platform is an ai api relay: OpenAI-compatible base URL, unified API keys, prepaid balance, and a catalog that spans GPT-class chat, Claude-class agents, Whisper speech, TTS, OCR, vision, and digital humans. For procurement, start with /compare for an AI API price comparison, then open each model’s /pricing page to generate keys. For SEO and docs hygiene, every static model page links related models so crawlers and humans can discover the full capability graph. Production tip: log model id, latency, and cost per request from day one so you can shift traffic between Terra, Luna, Sonnet, and Opus as eval scores change. Security tip: store keys in server env vars, rotate regularly, and never expose relay keys in mobile binaries without a backend proxy. Support: use /brand/keyo-docs.html for integration notes and /sign-up to create an account. When you are ready to buy capacity, fund the wallet once and route every modality through the same KeyoAPI endpoint for simpler accounting."
+    },
+    {
+      "id": "Unlimited-OCR",
+      "category": "ocr",
+      "targetKeywords": [
+        "ocr api",
+        "long document ocr",
+        "vision ocr api"
+      ],
+      "h1": "Unlimited-OCR API — Long-Document OCR via Chat Completions",
+      "title": "Unlimited-OCR API | Structured OCR on KeyoAPI",
+      "metaDescription": "Unlimited-OCR on KeyoAPI: long-document OCR with layout understanding via chat/completions. Token-based OCR API pricing.",
+      "priceLabel": "~$1.92 / $1.92 per 1M in/out tokens",
+      "priceUnit": "per_1m_tokens",
+      "related": [
+        "MinerU2.5-Pro",
+        "UVDoc",
+        "gpt-5.6-terra"
+      ],
+      "endpoint": "POST /v1/chat/completions",
+      "codeHint": "model=\"Unlimited-OCR\"",
+      "faqs": [
+        {
+          "q": "Why is OCR exposed through chat completions?",
+          "a": "Unlimited-OCR uses a multimodal chat path so you can pass images and receive structured text in one OpenAI-compatible call."
+        },
+        {
+          "q": "MinerU vs Unlimited-OCR?",
+          "a": "MinerU is strong for paginated PDF pipelines; Unlimited-OCR shines for flexible long-document multimodal extraction in chat-style apps."
+        },
+        {
+          "q": "Token pricing?",
+          "a": "About $1.92 per 1M input and output tokens—see /pricing/Unlimited-OCR."
+        }
+      ],
+      "sections": {
+        "intro": "Unlimited-OCR brings long-document OCR and layout understanding into the familiar chat completions API—useful when your product already speaks OpenAI multimodal. KeyoAPI packages it as an ocr api option next to MinerU and UVDoc on one relay bill.",
+        "about": "Instead of only emitting raw text, Unlimited-OCR emphasizes structure so LLMs can cite sections correctly. That reduces “hallucinated table cells” when finance or legal users ask questions about uploads. KeyoAPI is an OpenAI-compatible AI API relay: one base URL, one API key, and dozens of models spanning chat, speech, vision, OCR, and digital humans. Switch models by changing the model string—no new SDKs.",
+        "pricing": "Token-metered at roughly $1.92 / $1.92 per 1M in/out. Great when document sizes vary wildly and per-page billing is a poor fit.",
+        "useCases": "Chat-with-PDF features, mobile document capture, and agent tools that read screenshots. Pre-unwarp with UVDoc when pages are curved.",
+        "integrate": "Send multimodal chat messages with model=Unlimited-OCR. Keys and samples: /pricing/Unlimited-OCR."
+      },
+      "bodyWordCount": 328,
+      "body": "Unlimited-OCR brings long-document OCR and layout understanding into the familiar chat completions API—useful when your product already speaks OpenAI multimodal. KeyoAPI packages it as an ocr api option next to MinerU and UVDoc on one relay bill.\n\nInstead of only emitting raw text, Unlimited-OCR emphasizes structure so LLMs can cite sections correctly. That reduces “hallucinated table cells” when finance or legal users ask questions about uploads. KeyoAPI is an OpenAI-compatible AI API relay: one base URL, one API key, and dozens of models spanning chat, speech, vision, OCR, and digital humans. Switch models by changing the model string—no new SDKs.\n\nToken-metered at roughly $1.92 / $1.92 per 1M in/out. Great when document sizes vary wildly and per-page billing is a poor fit.\n\nChat-with-PDF features, mobile document capture, and agent tools that read screenshots. Pre-unwarp with UVDoc when pages are curved.\n\nSend multimodal chat messages with model=Unlimited-OCR. Keys and samples: /pricing/Unlimited-OCR.\n\nKeyoAPI targets overseas developers who want a cheap llm api and specialized modality APIs without juggling five vendor consoles. The platform is an ai api relay: OpenAI-compatible base URL, unified API keys, prepaid balance, and a catalog that spans GPT-class chat, Claude-class agents, Whisper speech, TTS, OCR, vision, and digital humans. For procurement, start with /compare for an AI API price comparison, then open each model’s /pricing page to generate keys. For SEO and docs hygiene, every static model page links related models so crawlers and humans can discover the full capability graph. Production tip: log model id, latency, and cost per request from day one so you can shift traffic between Terra, Luna, Sonnet, and Opus as eval scores change. Security tip: store keys in server env vars, rotate regularly, and never expose relay keys in mobile binaries without a backend proxy. Support: use /brand/keyo-docs.html for integration notes and /sign-up to create an account. When you are ready to buy capacity, fund the wallet once and route every modality through the same KeyoAPI endpoint for simpler accounting."
+    },
+    {
+      "id": "UVDoc",
+      "category": "ocr",
+      "targetKeywords": [
+        "document unwarping api",
+        "ocr api",
+        "scan correction api"
+      ],
+      "h1": "UVDoc API — Document Unwarping for Better OCR",
+      "title": "UVDoc API | Flatten Skewed Scans on KeyoAPI",
+      "metaDescription": "UVDoc document image unwarping API on KeyoAPI. Flatten curved scans to boost OCR accuracy from ~$0.0137 per request.",
+      "priceLabel": "$0.0137 / request",
+      "priceUnit": "per_call",
+      "related": [
+        "MinerU2.5-Pro",
+        "Unlimited-OCR",
+        "Real-ESRGAN"
+      ],
+      "endpoint": "image unwarping endpoint (see docs)",
+      "codeHint": "model=UVDoc",
+      "faqs": [
+        {
+          "q": "Do I always need UVDoc before OCR?",
+          "a": "Use it when pages are curved, skewed, or photographed at an angle. Flat digital PDFs can skip straight to MinerU/Unlimited-OCR."
+        },
+        {
+          "q": "Can I chain UVDoc → MinerU on KeyoAPI?",
+          "a": "Yes—that combo is a recommended “correct then parse” pipeline for phone-captured documents."
+        },
+        {
+          "q": "Pricing?",
+          "a": "About $0.0137 per request on /pricing/UVDoc."
+        }
+      ],
+      "sections": {
+        "intro": "UVDoc fixes the physical world problem that kills OCR: curved book pages and skewed phone scans. As part of KeyoAPI’s ocr api toolkit, UVDoc unwarps images so MinerU2.5-Pro and Unlimited-OCR see straighter text lines.",
+        "about": "Unwarping is a specialized CV step—not a full OCR replacement. Products that let users snap receipts or IDs see immediate accuracy lifts after UVDoc. KeyoAPI is an OpenAI-compatible AI API relay: one base URL, one API key, and dozens of models spanning chat, speech, vision, OCR, and digital humans. Switch models by changing the model string—no new SDKs.",
+        "pricing": "Per-request pricing around $0.0137 keeps the preprocessing stage accountable in your cost model. Compare against losing conversions when OCR fails on mobile uploads.",
+        "useCases": "Banking onboarding, expense apps, classroom worksheet capture, and archive digitization. Optional upscale with Real-ESRGAN when resolution is tiny.",
+        "integrate": "Call UVDoc via Keyo image/unwarping paths documented in the developer docs, then pass output to OCR models. Start at /pricing/UVDoc."
+      },
+      "bodyWordCount": 331,
+      "body": "UVDoc fixes the physical world problem that kills OCR: curved book pages and skewed phone scans. As part of KeyoAPI’s ocr api toolkit, UVDoc unwarps images so MinerU2.5-Pro and Unlimited-OCR see straighter text lines.\n\nUnwarping is a specialized CV step—not a full OCR replacement. Products that let users snap receipts or IDs see immediate accuracy lifts after UVDoc. KeyoAPI is an OpenAI-compatible AI API relay: one base URL, one API key, and dozens of models spanning chat, speech, vision, OCR, and digital humans. Switch models by changing the model string—no new SDKs.\n\nPer-request pricing around $0.0137 keeps the preprocessing stage accountable in your cost model. Compare against losing conversions when OCR fails on mobile uploads.\n\nBanking onboarding, expense apps, classroom worksheet capture, and archive digitization. Optional upscale with Real-ESRGAN when resolution is tiny.\n\nCall UVDoc via Keyo image/unwarping paths documented in the developer docs, then pass output to OCR models. Start at /pricing/UVDoc.\n\nKeyoAPI targets overseas developers who want a cheap llm api and specialized modality APIs without juggling five vendor consoles. The platform is an ai api relay: OpenAI-compatible base URL, unified API keys, prepaid balance, and a catalog that spans GPT-class chat, Claude-class agents, Whisper speech, TTS, OCR, vision, and digital humans. For procurement, start with /compare for an AI API price comparison, then open each model’s /pricing page to generate keys. For SEO and docs hygiene, every static model page links related models so crawlers and humans can discover the full capability graph. Production tip: log model id, latency, and cost per request from day one so you can shift traffic between Terra, Luna, Sonnet, and Opus as eval scores change. Security tip: store keys in server env vars, rotate regularly, and never expose relay keys in mobile binaries without a backend proxy. Support: use /brand/keyo-docs.html for integration notes and /sign-up to create an account. When you are ready to buy capacity, fund the wallet once and route every modality through the same KeyoAPI endpoint for simpler accounting."
+    },
+    {
+      "id": "Qwen3-TTS",
+      "category": "speech",
+      "targetKeywords": [
+        "text to speech api",
+        "tts api",
+        "voice cloning api"
+      ],
+      "h1": "Qwen3-TTS API — Multilingual Text to Speech",
+      "title": "Qwen3-TTS API | Text to Speech & Voice Clone on KeyoAPI",
+      "metaDescription": "Qwen3-TTS async text to speech API on KeyoAPI with multilingual synthesis and quick voice cloning. From ~$0.548 / 10K characters.",
+      "priceLabel": "$0.548 / 10K characters",
+      "priceUnit": "per_10k_chars",
+      "related": [
+        "whisper-large-v3",
+        "Duix-Avatar",
+        "InfiniteTalk"
+      ],
+      "endpoint": "async TTS (see docs)",
+      "codeHint": "model=Qwen3-TTS",
+      "faqs": [
+        {
+          "q": "Is Qwen3-TTS synchronous?",
+          "a": "It is exposed as an async TTS workflow on KeyoAPI—poll or webhook according to the docs for long generations."
+        },
+        {
+          "q": "Does it support voice cloning?",
+          "a": "Yes—quick cloning from short samples is a core differentiator versus basic TTS endpoints."
+        },
+        {
+          "q": "How does text to speech api pricing work?",
+          "a": "Billed per 10K characters at about $0.548—see /pricing/Qwen3-TTS."
+        }
+      ],
+      "sections": {
+        "intro": "Qwen3-TTS is KeyoAPI’s flagship text to speech api for natural multilingual audio and rapid voice cloning. Demand for TTS APIs is rising with agents that talk back; KeyoAPI keeps STT (Whisper) and TTS on one relay balance.",
+        "about": "Async generation suits podcasts, IVR prompts, course narration, and avatar pipelines that already wait on video renderers. Clone a brand voice once, then synthesize at scale without studio sessions. KeyoAPI is an OpenAI-compatible AI API relay: one base URL, one API key, and dozens of models spanning chat, speech, vision, OCR, and digital humans. Switch models by changing the model string—no new SDKs.",
+        "pricing": "About $0.548 per 10,000 characters—map directly to script length in your CMS. Combine with Whisper for round-trip voice apps while metering both on Keyo.",
+        "useCases": "Product voiceovers, accessibility read-aloud, game NPCs, and digital humans (pair with Duix-Avatar or InfiniteTalk). Customer support bots that answer in the user’s language.",
+        "integrate": "Use Keyo async TTS APIs with model=Qwen3-TTS. Create a key at /pricing/Qwen3-TTS."
+      },
+      "bodyWordCount": 337,
+      "body": "Qwen3-TTS is KeyoAPI’s flagship text to speech api for natural multilingual audio and rapid voice cloning. Demand for TTS APIs is rising with agents that talk back; KeyoAPI keeps STT (Whisper) and TTS on one relay balance.\n\nAsync generation suits podcasts, IVR prompts, course narration, and avatar pipelines that already wait on video renderers. Clone a brand voice once, then synthesize at scale without studio sessions. KeyoAPI is an OpenAI-compatible AI API relay: one base URL, one API key, and dozens of models spanning chat, speech, vision, OCR, and digital humans. Switch models by changing the model string—no new SDKs.\n\nAbout $0.548 per 10,000 characters—map directly to script length in your CMS. Combine with Whisper for round-trip voice apps while metering both on Keyo.\n\nProduct voiceovers, accessibility read-aloud, game NPCs, and digital humans (pair with Duix-Avatar or InfiniteTalk). Customer support bots that answer in the user’s language.\n\nUse Keyo async TTS APIs with model=Qwen3-TTS. Create a key at /pricing/Qwen3-TTS.\n\nKeyoAPI targets overseas developers who want a cheap llm api and specialized modality APIs without juggling five vendor consoles. The platform is an ai api relay: OpenAI-compatible base URL, unified API keys, prepaid balance, and a catalog that spans GPT-class chat, Claude-class agents, Whisper speech, TTS, OCR, vision, and digital humans. For procurement, start with /compare for an AI API price comparison, then open each model’s /pricing page to generate keys. For SEO and docs hygiene, every static model page links related models so crawlers and humans can discover the full capability graph. Production tip: log model id, latency, and cost per request from day one so you can shift traffic between Terra, Luna, Sonnet, and Opus as eval scores change. Security tip: store keys in server env vars, rotate regularly, and never expose relay keys in mobile binaries without a backend proxy. Support: use /brand/keyo-docs.html for integration notes and /sign-up to create an account. When you are ready to buy capacity, fund the wallet once and route every modality through the same KeyoAPI endpoint for simpler accounting."
+    },
+    {
+      "id": "RMBG-2.0",
+      "category": "vision",
+      "targetKeywords": [
+        "background removal api",
+        "remove background api",
+        "image matting api"
+      ],
+      "h1": "RMBG-2.0 API — Background Removal for Product & Portraits",
+      "title": "RMBG-2.0 Background Removal API | KeyoAPI",
+      "metaDescription": "BRIA RMBG-2.0 background removal API on KeyoAPI. High-accuracy cutouts from ~$0.0068 per request via a unified vision API.",
+      "priceLabel": "$0.0068 / request",
+      "priceUnit": "per_call",
+      "related": [
+        "sam3",
+        "VajraV1",
+        "Real-ESRGAN"
+      ],
+      "endpoint": "image matting / background removal (see docs)",
+      "codeHint": "model=RMBG-2.0",
+      "faqs": [
+        {
+          "q": "How does this compare to consumer remove-bg tools?",
+          "a": "Those tools optimize for humans clicking a website. RMBG-2.0 is an API for automated catalogs, DAM pipelines, and apps at ~$0.0068/request."
+        },
+        {
+          "q": "Can I upscale after cutout?",
+          "a": "Yes—pipe the alpha cutout through Real-ESRGAN or AnimeSharp depending on content type."
+        },
+        {
+          "q": "Authentication?",
+          "a": "Same KeyoAPI Bearer token as chat models; see /pricing/RMBG-2.0."
+        }
+      ],
+      "sections": {
+        "intro": "RMBG-2.0 (BRIA) is KeyoAPI’s background removal api for product photos, portraits, and design assets that must ship with clean alpha. Unlike consumer “remove background” sites, this is a developer-metered image matting API on an AI API relay.",
+        "about": "E-commerce feeds, creator tools, and print-on-demand flows need reliable cutouts without Photoshop macros. RMBG-2.0 focuses on high-accuracy mattes that survive zoom and marketplace compression. KeyoAPI is an OpenAI-compatible AI API relay: one base URL, one API key, and dozens of models spanning chat, speech, vision, OCR, and digital humans. Switch models by changing the model string—no new SDKs.",
+        "pricing": "About $0.0068 per request—often cheaper than legacy SaaS background APIs that charge five to twenty cents an image. See /compare for a high-level AI API price comparison row on background removal.",
+        "useCases": "SKU studio automation, avatar builders, thumbnail pipelines, and design editors. Combine with sam3 when you need open-vocabulary masks beyond simple subject/background.",
+        "integrate": "Call Keyo matting endpoints with model=RMBG-2.0. Try it from /pricing/RMBG-2.0."
+      },
+      "bodyWordCount": 335,
+      "body": "RMBG-2.0 (BRIA) is KeyoAPI’s background removal api for product photos, portraits, and design assets that must ship with clean alpha. Unlike consumer “remove background” sites, this is a developer-metered image matting API on an AI API relay.\n\nE-commerce feeds, creator tools, and print-on-demand flows need reliable cutouts without Photoshop macros. RMBG-2.0 focuses on high-accuracy mattes that survive zoom and marketplace compression. KeyoAPI is an OpenAI-compatible AI API relay: one base URL, one API key, and dozens of models spanning chat, speech, vision, OCR, and digital humans. Switch models by changing the model string—no new SDKs.\n\nAbout $0.0068 per request—often cheaper than legacy SaaS background APIs that charge five to twenty cents an image. See /compare for a high-level AI API price comparison row on background removal.\n\nSKU studio automation, avatar builders, thumbnail pipelines, and design editors. Combine with sam3 when you need open-vocabulary masks beyond simple subject/background.\n\nCall Keyo matting endpoints with model=RMBG-2.0. Try it from /pricing/RMBG-2.0.\n\nKeyoAPI targets overseas developers who want a cheap llm api and specialized modality APIs without juggling five vendor consoles. The platform is an ai api relay: OpenAI-compatible base URL, unified API keys, prepaid balance, and a catalog that spans GPT-class chat, Claude-class agents, Whisper speech, TTS, OCR, vision, and digital humans. For procurement, start with /compare for an AI API price comparison, then open each model’s /pricing page to generate keys. For SEO and docs hygiene, every static model page links related models so crawlers and humans can discover the full capability graph. Production tip: log model id, latency, and cost per request from day one so you can shift traffic between Terra, Luna, Sonnet, and Opus as eval scores change. Security tip: store keys in server env vars, rotate regularly, and never expose relay keys in mobile binaries without a backend proxy. Support: use /brand/keyo-docs.html for integration notes and /sign-up to create an account. When you are ready to buy capacity, fund the wallet once and route every modality through the same KeyoAPI endpoint for simpler accounting."
+    },
+    {
+      "id": "VajraV1",
+      "category": "vision",
+      "targetKeywords": [
+        "object detection api",
+        "yolo api",
+        "pose detection api"
+      ],
+      "h1": "VajraV1 YOLO API — Detection, Segmentation & Pose",
+      "title": "VajraV1 Object Detection API | YOLO Vision on KeyoAPI",
+      "metaDescription": "VajraV1 YOLO-based object detection, segmentation, and pose API on KeyoAPI from ~$0.0068 per request.",
+      "priceLabel": "$0.0068 / request",
+      "priceUnit": "per_call",
+      "related": [
+        "sam3",
+        "RMBG-2.0",
+        "Real-ESRGAN"
+      ],
+      "endpoint": "object-detection / segmentation / pose (see docs)",
+      "codeHint": "model=VajraV1",
+      "faqs": [
+        {
+          "q": "Is VajraV1 a YOLO model?",
+          "a": "Yes—it provides YOLO-style realtime vision for detection, segmentation, and human pose keypoints via KeyoAPI."
+        },
+        {
+          "q": "What industries use it?",
+          "a": "Retail analytics, industrial CV, sports, safety monitoring, and robotics prototypes."
+        },
+        {
+          "q": "Pricing?",
+          "a": "About $0.0068 per request—live on /pricing/VajraV1."
+        }
+      ],
+      "sections": {
+        "intro": "VajraV1 packs YOLO-based object detection, image segmentation, and pose estimation into KeyoAPI’s vision lane. If you need an object detection api without standing up GPU workers, call this model through the same gateway as your LLMs.",
+        "about": "Realtime CV features used to require dedicated inference clusters. An AI API relay collapses that into HTTP calls with prepaid balance. VajraV1 is ideal when class vocabularies are standard YOLO-style objects; use sam3 for open-vocabulary masks. KeyoAPI is an OpenAI-compatible AI API relay: one base URL, one API key, and dozens of models spanning chat, speech, vision, OCR, and digital humans. Switch models by changing the model string—no new SDKs.",
+        "pricing": "Per-call pricing near $0.0068 keeps experiments cheap until you prove ROI on camera streams. Batch still frames rather than every video frame when budgets are tight.",
+        "useCases": "Shelf monitoring, people counting, workout form checks, and factory defect triage. Feed detections into gpt-5.6-luna for natural-language incident summaries.",
+        "integrate": "Use Keyo /v1/images/object-detection and related paths with model=VajraV1. Keys: /pricing/VajraV1."
+      },
+      "bodyWordCount": 339,
+      "body": "VajraV1 packs YOLO-based object detection, image segmentation, and pose estimation into KeyoAPI’s vision lane. If you need an object detection api without standing up GPU workers, call this model through the same gateway as your LLMs.\n\nRealtime CV features used to require dedicated inference clusters. An AI API relay collapses that into HTTP calls with prepaid balance. VajraV1 is ideal when class vocabularies are standard YOLO-style objects; use sam3 for open-vocabulary masks. KeyoAPI is an OpenAI-compatible AI API relay: one base URL, one API key, and dozens of models spanning chat, speech, vision, OCR, and digital humans. Switch models by changing the model string—no new SDKs.\n\nPer-call pricing near $0.0068 keeps experiments cheap until you prove ROI on camera streams. Batch still frames rather than every video frame when budgets are tight.\n\nShelf monitoring, people counting, workout form checks, and factory defect triage. Feed detections into gpt-5.6-luna for natural-language incident summaries.\n\nUse Keyo /v1/images/object-detection and related paths with model=VajraV1. Keys: /pricing/VajraV1.\n\nKeyoAPI targets overseas developers who want a cheap llm api and specialized modality APIs without juggling five vendor consoles. The platform is an ai api relay: OpenAI-compatible base URL, unified API keys, prepaid balance, and a catalog that spans GPT-class chat, Claude-class agents, Whisper speech, TTS, OCR, vision, and digital humans. For procurement, start with /compare for an AI API price comparison, then open each model’s /pricing page to generate keys. For SEO and docs hygiene, every static model page links related models so crawlers and humans can discover the full capability graph. Production tip: log model id, latency, and cost per request from day one so you can shift traffic between Terra, Luna, Sonnet, and Opus as eval scores change. Security tip: store keys in server env vars, rotate regularly, and never expose relay keys in mobile binaries without a backend proxy. Support: use /brand/keyo-docs.html for integration notes and /sign-up to create an account. When you are ready to buy capacity, fund the wallet once and route every modality through the same KeyoAPI endpoint for simpler accounting."
+    },
+    {
+      "id": "sam3",
+      "category": "vision",
+      "targetKeywords": [
+        "image segmentation api",
+        "sam api",
+        "open vocabulary segmentation"
+      ],
+      "h1": "SAM 3 API — Open-Vocabulary Image Segmentation",
+      "title": "SAM 3 Segmentation API | KeyoAPI",
+      "metaDescription": "Meta SAM 3 open-vocabulary image segmentation API on KeyoAPI. Pixel-level masks from ~$0.0137 per request.",
+      "priceLabel": "$0.0137 / request",
+      "priceUnit": "per_call",
+      "related": [
+        "VajraV1",
+        "RMBG-2.0",
+        "AnimeSharp"
+      ],
+      "endpoint": "image segmentation (see docs)",
+      "codeHint": "model=sam3",
+      "faqs": [
+        {
+          "q": "SAM 3 vs RMBG?",
+          "a": "RMBG is specialized background removal. SAM 3 produces open-vocabulary masks for arbitrary objects without a fixed class list."
+        },
+        {
+          "q": "Do I need prompts?",
+          "a": "Open-vocabulary segmentation typically accepts points/boxes/text cues depending on the operation—see Keyo docs for the exact schema."
+        },
+        {
+          "q": "Price?",
+          "a": "About $0.0137 per request on /pricing/sam3."
+        }
+      ],
+      "sections": {
+        "intro": "sam3 brings Meta SAM 3 open-vocabulary segmentation to KeyoAPI—an image segmentation api for pixel-level masks when YOLO classes are not enough. Creative tools and robotics stacks use SAM when users can point at “any object.”",
+        "about": "Open-vocabulary masks unlock long-tail objects that never appeared in detection taxonomies. KeyoAPI hosts SAM beside RMBG and Vajra so you can escalate from cheap detection to precise masks. KeyoAPI is an OpenAI-compatible AI API relay: one base URL, one API key, and dozens of models spanning chat, speech, vision, OCR, and digital humans. Switch models by changing the model string—no new SDKs.",
+        "pricing": "Around $0.0137 per request—budget for interactive editors where each user click may trigger a mask. Cache masks when users revisit the same asset.",
+        "useCases": "Photo editors, dataset labeling, AR try-on prep, and scientific imaging. Export masks to RMBG-like compositing workflows.",
+        "integrate": "Call Keyo segmentation endpoints with model=sam3. Start at /pricing/sam3."
+      },
+      "bodyWordCount": 323,
+      "body": "sam3 brings Meta SAM 3 open-vocabulary segmentation to KeyoAPI—an image segmentation api for pixel-level masks when YOLO classes are not enough. Creative tools and robotics stacks use SAM when users can point at “any object.”\n\nOpen-vocabulary masks unlock long-tail objects that never appeared in detection taxonomies. KeyoAPI hosts SAM beside RMBG and Vajra so you can escalate from cheap detection to precise masks. KeyoAPI is an OpenAI-compatible AI API relay: one base URL, one API key, and dozens of models spanning chat, speech, vision, OCR, and digital humans. Switch models by changing the model string—no new SDKs.\n\nAround $0.0137 per request—budget for interactive editors where each user click may trigger a mask. Cache masks when users revisit the same asset.\n\nPhoto editors, dataset labeling, AR try-on prep, and scientific imaging. Export masks to RMBG-like compositing workflows.\n\nCall Keyo segmentation endpoints with model=sam3. Start at /pricing/sam3.\n\nKeyoAPI targets overseas developers who want a cheap llm api and specialized modality APIs without juggling five vendor consoles. The platform is an ai api relay: OpenAI-compatible base URL, unified API keys, prepaid balance, and a catalog that spans GPT-class chat, Claude-class agents, Whisper speech, TTS, OCR, vision, and digital humans. For procurement, start with /compare for an AI API price comparison, then open each model’s /pricing page to generate keys. For SEO and docs hygiene, every static model page links related models so crawlers and humans can discover the full capability graph. Production tip: log model id, latency, and cost per request from day one so you can shift traffic between Terra, Luna, Sonnet, and Opus as eval scores change. Security tip: store keys in server env vars, rotate regularly, and never expose relay keys in mobile binaries without a backend proxy. Support: use /brand/keyo-docs.html for integration notes and /sign-up to create an account. When you are ready to buy capacity, fund the wallet once and route every modality through the same KeyoAPI endpoint for simpler accounting."
+    },
+    {
+      "id": "Real-ESRGAN",
+      "category": "vision",
+      "targetKeywords": [
+        "image upscaling api",
+        "super resolution api",
+        "esrgan api"
+      ],
+      "h1": "Real-ESRGAN API — Real-World Image Super-Resolution",
+      "title": "Real-ESRGAN Upscaling API | KeyoAPI",
+      "metaDescription": "Real-ESRGAN image upscaling API on KeyoAPI. Restore detail on photos from ~$0.0068 per request.",
+      "priceLabel": "$0.0068 / request",
+      "priceUnit": "per_call",
+      "related": [
+        "AnimeSharp",
+        "UVDoc",
+        "RMBG-2.0"
+      ],
+      "endpoint": "image upscaling (see docs)",
+      "codeHint": "model=Real-ESRGAN",
+      "faqs": [
+        {
+          "q": "Photo vs anime upscaling?",
+          "a": "Use Real-ESRGAN for general photos; switch to AnimeSharp for illustrations and anime line art."
+        },
+        {
+          "q": "Will it invent faces?",
+          "a": "Super-resolution can hallucinate detail—review outputs for identity-sensitive apps and keep originals."
+        },
+        {
+          "q": "Pricing?",
+          "a": "About $0.0068 per request on /pricing/Real-ESRGAN."
+        }
+      ],
+      "sections": {
+        "intro": "Real-ESRGAN is KeyoAPI’s general image upscaling api for photos that need more pixels and cleaner detail. Marketplaces, print shops, and UGC apps call this super resolution api instead of maintaining ESRGAN GPUs.",
+        "about": "Real-world photos suffer from compression and blur. Real-ESRGAN restores usable resolution for zoom, crop, and print. On the same AI API relay you can unwarp with UVDoc then upscale before OCR. KeyoAPI is an OpenAI-compatible AI API relay: one base URL, one API key, and dozens of models spanning chat, speech, vision, OCR, and digital humans. Switch models by changing the model string—no new SDKs.",
+        "pricing": "Per-request ~$0.0068—cheap enough to run on every upload or only when users hit “Enhance.” Gate with file-size heuristics to control spend.",
+        "useCases": "Listing image polish, archival scans, social media quality boosts, and pre-OCR enhancement. Anime content should prefer AnimeSharp.",
+        "integrate": "Keyo upscaling paths with model=Real-ESRGAN. Keys at /pricing/Real-ESRGAN."
+      },
+      "bodyWordCount": 321,
+      "body": "Real-ESRGAN is KeyoAPI’s general image upscaling api for photos that need more pixels and cleaner detail. Marketplaces, print shops, and UGC apps call this super resolution api instead of maintaining ESRGAN GPUs.\n\nReal-world photos suffer from compression and blur. Real-ESRGAN restores usable resolution for zoom, crop, and print. On the same AI API relay you can unwarp with UVDoc then upscale before OCR. KeyoAPI is an OpenAI-compatible AI API relay: one base URL, one API key, and dozens of models spanning chat, speech, vision, OCR, and digital humans. Switch models by changing the model string—no new SDKs.\n\nPer-request ~$0.0068—cheap enough to run on every upload or only when users hit “Enhance.” Gate with file-size heuristics to control spend.\n\nListing image polish, archival scans, social media quality boosts, and pre-OCR enhancement. Anime content should prefer AnimeSharp.\n\nKeyo upscaling paths with model=Real-ESRGAN. Keys at /pricing/Real-ESRGAN.\n\nKeyoAPI targets overseas developers who want a cheap llm api and specialized modality APIs without juggling five vendor consoles. The platform is an ai api relay: OpenAI-compatible base URL, unified API keys, prepaid balance, and a catalog that spans GPT-class chat, Claude-class agents, Whisper speech, TTS, OCR, vision, and digital humans. For procurement, start with /compare for an AI API price comparison, then open each model’s /pricing page to generate keys. For SEO and docs hygiene, every static model page links related models so crawlers and humans can discover the full capability graph. Production tip: log model id, latency, and cost per request from day one so you can shift traffic between Terra, Luna, Sonnet, and Opus as eval scores change. Security tip: store keys in server env vars, rotate regularly, and never expose relay keys in mobile binaries without a backend proxy. Support: use /brand/keyo-docs.html for integration notes and /sign-up to create an account. When you are ready to buy capacity, fund the wallet once and route every modality through the same KeyoAPI endpoint for simpler accounting."
+    },
+    {
+      "id": "AnimeSharp",
+      "category": "vision",
+      "targetKeywords": [
+        "anime upscaler api",
+        "image upscaling api",
+        "illustration super resolution"
+      ],
+      "h1": "AnimeSharp API — Anime & Illustration Upscaling",
+      "title": "AnimeSharp 4x Upscale API | KeyoAPI",
+      "metaDescription": "AnimeSharp illustration super-resolution API on KeyoAPI. Upscale anime-style art from ~$0.0068 per request.",
+      "priceLabel": "$0.0068 / request",
+      "priceUnit": "per_call",
+      "related": [
+        "Real-ESRGAN",
+        "RMBG-2.0",
+        "sam3"
+      ],
+      "endpoint": "image upscaling (see docs)",
+      "codeHint": "model=AnimeSharp",
+      "faqs": [
+        {
+          "q": "Why not always use Real-ESRGAN?",
+          "a": "Anime/illustration edges differ from photographic textures. AnimeSharp preserves line art better for that domain."
+        },
+        {
+          "q": "4x only?",
+          "a": "The model family is known for strong 4x anime sharpening; check docs for available scale options on KeyoAPI."
+        },
+        {
+          "q": "Price?",
+          "a": "~$0.0068 per request—/pricing/AnimeSharp."
+        }
+      ],
+      "sections": {
+        "intro": "AnimeSharp specializes in anime and illustration super-resolution—an image upscaling api tuned for line art rather than camera noise. Creator platforms and game pipelines use it to ship crisp assets without desktop ESRGAN installs.",
+        "about": "Generic photo upscalers smear cel shading. AnimeSharp keeps edges sharp for characters, UI art, and manga panels. Combine with RMBG-2.0 when you need transparent stickers from upscaled art. KeyoAPI is an OpenAI-compatible AI API relay: one base URL, one API key, and dozens of models spanning chat, speech, vision, OCR, and digital humans. Switch models by changing the model string—no new SDKs.",
+        "pricing": "About $0.0068 per request—enable as a paid “HD export” feature in consumer apps. Batch overnight for catalog migrations.",
+        "useCases": "Fan art marketplaces, VTuber asset prep, mobile drawing apps, and print posters. Optional SAM masks for layered PSD-like exports.",
+        "integrate": "Upscaling endpoint with model=AnimeSharp. Start at /pricing/AnimeSharp."
+      },
+      "bodyWordCount": 317,
+      "body": "AnimeSharp specializes in anime and illustration super-resolution—an image upscaling api tuned for line art rather than camera noise. Creator platforms and game pipelines use it to ship crisp assets without desktop ESRGAN installs.\n\nGeneric photo upscalers smear cel shading. AnimeSharp keeps edges sharp for characters, UI art, and manga panels. Combine with RMBG-2.0 when you need transparent stickers from upscaled art. KeyoAPI is an OpenAI-compatible AI API relay: one base URL, one API key, and dozens of models spanning chat, speech, vision, OCR, and digital humans. Switch models by changing the model string—no new SDKs.\n\nAbout $0.0068 per request—enable as a paid “HD export” feature in consumer apps. Batch overnight for catalog migrations.\n\nFan art marketplaces, VTuber asset prep, mobile drawing apps, and print posters. Optional SAM masks for layered PSD-like exports.\n\nUpscaling endpoint with model=AnimeSharp. Start at /pricing/AnimeSharp.\n\nKeyoAPI targets overseas developers who want a cheap llm api and specialized modality APIs without juggling five vendor consoles. The platform is an ai api relay: OpenAI-compatible base URL, unified API keys, prepaid balance, and a catalog that spans GPT-class chat, Claude-class agents, Whisper speech, TTS, OCR, vision, and digital humans. For procurement, start with /compare for an AI API price comparison, then open each model’s /pricing page to generate keys. For SEO and docs hygiene, every static model page links related models so crawlers and humans can discover the full capability graph. Production tip: log model id, latency, and cost per request from day one so you can shift traffic between Terra, Luna, Sonnet, and Opus as eval scores change. Security tip: store keys in server env vars, rotate regularly, and never expose relay keys in mobile binaries without a backend proxy. Support: use /brand/keyo-docs.html for integration notes and /sign-up to create an account. When you are ready to buy capacity, fund the wallet once and route every modality through the same KeyoAPI endpoint for simpler accounting."
+    },
+    {
+      "id": "Duix-Avatar",
+      "category": "digital-human",
+      "targetKeywords": [
+        "digital human api",
+        "talking avatar api",
+        "lip sync api"
+      ],
+      "h1": "Duix-Avatar API — Audio+Video Driven Digital Human",
+      "title": "Duix-Avatar Digital Human API | KeyoAPI",
+      "metaDescription": "Duix-Avatar async digital human API on KeyoAPI. Lip-sync and expression generation from ~$0.0068 per second.",
+      "priceLabel": "$0.0068 / second",
+      "priceUnit": "per_second",
+      "related": [
+        "InfiniteTalk",
+        "Qwen3-TTS",
+        "whisper-large-v3"
+      ],
+      "endpoint": "async digital human (see docs)",
+      "codeHint": "model=Duix-Avatar",
+      "faqs": [
+        {
+          "q": "Is generation realtime?",
+          "a": "Duix-Avatar runs as an async job—submit audio/video drivers, then fetch the rendered avatar clip."
+        },
+        {
+          "q": "How do I supply voice?",
+          "a": "Generate speech with Qwen3-TTS (or upload audio), then drive Duix-Avatar for lip-sync and expressions."
+        },
+        {
+          "q": "Billing unit?",
+          "a": "About $0.0068 per second of output—see /pricing/Duix-Avatar."
+        }
+      ],
+      "sections": {
+        "intro": "Duix-Avatar is KeyoAPI’s audio+video driven digital human api for talking avatars with lip-sync and expressions. Competition is thin on this long-tail keyword, but buyer intent is high for course creators and support avatars.",
+        "about": "Digital humans used to mean custom Unreal pipelines. HTTP async APIs let SaaS teams productize avatars faster. KeyoAPI collocates TTS, STT, and avatar models so you can build the full loop on one ai api relay. KeyoAPI is an OpenAI-compatible AI API relay: one base URL, one API key, and dozens of models spanning chat, speech, vision, OCR, and digital humans. Switch models by changing the model string—no new SDKs.",
+        "pricing": "Per-second pricing (~$0.0068) maps cleanly to video length sold to end users. Cap max duration in your product to control worst-case invoices.",
+        "useCases": "Training videos, localized spokesperson clips, and in-app guides. Pair with InfiniteTalk when you start from a still image plus audio.",
+        "integrate": "Async digital-human endpoints with model=Duix-Avatar. Keys: /pricing/Duix-Avatar."
+      },
+      "bodyWordCount": 330,
+      "body": "Duix-Avatar is KeyoAPI’s audio+video driven digital human api for talking avatars with lip-sync and expressions. Competition is thin on this long-tail keyword, but buyer intent is high for course creators and support avatars.\n\nDigital humans used to mean custom Unreal pipelines. HTTP async APIs let SaaS teams productize avatars faster. KeyoAPI collocates TTS, STT, and avatar models so you can build the full loop on one ai api relay. KeyoAPI is an OpenAI-compatible AI API relay: one base URL, one API key, and dozens of models spanning chat, speech, vision, OCR, and digital humans. Switch models by changing the model string—no new SDKs.\n\nPer-second pricing (~$0.0068) maps cleanly to video length sold to end users. Cap max duration in your product to control worst-case invoices.\n\nTraining videos, localized spokesperson clips, and in-app guides. Pair with InfiniteTalk when you start from a still image plus audio.\n\nAsync digital-human endpoints with model=Duix-Avatar. Keys: /pricing/Duix-Avatar.\n\nKeyoAPI targets overseas developers who want a cheap llm api and specialized modality APIs without juggling five vendor consoles. The platform is an ai api relay: OpenAI-compatible base URL, unified API keys, prepaid balance, and a catalog that spans GPT-class chat, Claude-class agents, Whisper speech, TTS, OCR, vision, and digital humans. For procurement, start with /compare for an AI API price comparison, then open each model’s /pricing page to generate keys. For SEO and docs hygiene, every static model page links related models so crawlers and humans can discover the full capability graph. Production tip: log model id, latency, and cost per request from day one so you can shift traffic between Terra, Luna, Sonnet, and Opus as eval scores change. Security tip: store keys in server env vars, rotate regularly, and never expose relay keys in mobile binaries without a backend proxy. Support: use /brand/keyo-docs.html for integration notes and /sign-up to create an account. When you are ready to buy capacity, fund the wallet once and route every modality through the same KeyoAPI endpoint for simpler accounting."
+    },
+    {
+      "id": "InfiniteTalk",
+      "category": "digital-human",
+      "targetKeywords": [
+        "talking head api",
+        "audio driven avatar api",
+        "digital human api"
+      ],
+      "h1": "InfiniteTalk API — Audio-Driven Talking Head Video",
+      "title": "InfiniteTalk Talking-Head API | KeyoAPI",
+      "metaDescription": "InfiniteTalk audio-driven talking-head API on KeyoAPI. Natural lip-sync from image/video + audio at ~$0.342 per request.",
+      "priceLabel": "$0.342 / request",
+      "priceUnit": "per_call",
+      "related": [
+        "Duix-Avatar",
+        "Qwen3-TTS",
+        "whisper-large-v3-turbo"
+      ],
+      "endpoint": "async talking-head (see docs)",
+      "codeHint": "model=InfiniteTalk",
+      "faqs": [
+        {
+          "q": "What inputs are required?",
+          "a": "Typically an image or video portrait plus driving audio. Output duration follows the audio length."
+        },
+        {
+          "q": "InfiniteTalk vs Duix-Avatar?",
+          "a": "Both target digital humans; pick based on input modality and pricing unit (per request vs per second). Prototype both on KeyoAPI."
+        },
+        {
+          "q": "Price?",
+          "a": "About $0.342 per request—confirm on /pricing/InfiniteTalk."
+        }
+      ],
+      "sections": {
+        "intro": "InfiniteTalk generates audio-driven talking-head video from an image or video—ideal when you need a digital human api without a motion-capture stage. Creators generate a voice with Qwen3-TTS, then animate a still spokesperson photo through KeyoAPI.",
+        "about": "Natural lip-sync and body motion make short marketing and education clips feel presentable. Async processing fits batch content calendars better than realtime WebRTC avatars. KeyoAPI is an OpenAI-compatible AI API relay: one base URL, one API key, and dozens of models spanning chat, speech, vision, OCR, and digital humans. Switch models by changing the model string—no new SDKs.",
+        "pricing": "Per-request pricing around $0.342 is simple for “one clip = one charge” packaging. For long continuous streams, evaluate Duix-Avatar’s per-second meter instead.",
+        "useCases": "Localized ads, course intros, newsreader demos, and support explainers. Transcribe source scripts with Whisper, synthesize with TTS, animate with InfiniteTalk.",
+        "integrate": "Submit async jobs with model=InfiniteTalk via Keyo task APIs. Get started at /pricing/InfiniteTalk."
+      },
+      "bodyWordCount": 326,
+      "body": "InfiniteTalk generates audio-driven talking-head video from an image or video—ideal when you need a digital human api without a motion-capture stage. Creators generate a voice with Qwen3-TTS, then animate a still spokesperson photo through KeyoAPI.\n\nNatural lip-sync and body motion make short marketing and education clips feel presentable. Async processing fits batch content calendars better than realtime WebRTC avatars. KeyoAPI is an OpenAI-compatible AI API relay: one base URL, one API key, and dozens of models spanning chat, speech, vision, OCR, and digital humans. Switch models by changing the model string—no new SDKs.\n\nPer-request pricing around $0.342 is simple for “one clip = one charge” packaging. For long continuous streams, evaluate Duix-Avatar’s per-second meter instead.\n\nLocalized ads, course intros, newsreader demos, and support explainers. Transcribe source scripts with Whisper, synthesize with TTS, animate with InfiniteTalk.\n\nSubmit async jobs with model=InfiniteTalk via Keyo task APIs. Get started at /pricing/InfiniteTalk.\n\nKeyoAPI targets overseas developers who want a cheap llm api and specialized modality APIs without juggling five vendor consoles. The platform is an ai api relay: OpenAI-compatible base URL, unified API keys, prepaid balance, and a catalog that spans GPT-class chat, Claude-class agents, Whisper speech, TTS, OCR, vision, and digital humans. For procurement, start with /compare for an AI API price comparison, then open each model’s /pricing page to generate keys. For SEO and docs hygiene, every static model page links related models so crawlers and humans can discover the full capability graph. Production tip: log model id, latency, and cost per request from day one so you can shift traffic between Terra, Luna, Sonnet, and Opus as eval scores change. Security tip: store keys in server env vars, rotate regularly, and never expose relay keys in mobile binaries without a backend proxy. Support: use /brand/keyo-docs.html for integration notes and /sign-up to create an account. When you are ready to buy capacity, fund the wallet once and route every modality through the same KeyoAPI endpoint for simpler accounting."
+    }
+  ]
+}

@@ -2183,6 +2183,96 @@
       "ru": "OCR",
       "ja": "OCR",
       "vi": "OCR"
+    },
+    "视频": {
+      "zhCN": "视频",
+      "zhTW": "影片",
+      "en": "Video",
+      "fr": "Vidéo",
+      "ru": "Видео",
+      "ja": "動画",
+      "vi": "Video"
+    },
+    "视频·按秒": {
+      "zhCN": "视频·按秒",
+      "zhTW": "影片·按秒",
+      "en": "Video · per second",
+      "fr": "Vidéo · /s",
+      "ru": "Видео · /с",
+      "ja": "動画·秒課金",
+      "vi": "Video · /giây"
+    },
+    "视频·按次": {
+      "zhCN": "视频·按次",
+      "zhTW": "影片·按次",
+      "en": "Video · per request",
+      "fr": "Vidéo · /req",
+      "ru": "Видео · /запрос",
+      "ja": "動画·回課金",
+      "vi": "Video · /lần"
+    },
+    "asr": {
+      "zhCN": "语音识别",
+      "zhTW": "語音辨識",
+      "en": "ASR",
+      "fr": "ASR",
+      "ru": "ASR",
+      "ja": "音声認識",
+      "vi": "ASR"
+    },
+    "llm": {
+      "zhCN": "大语言模型",
+      "zhTW": "大型語言模型",
+      "en": "LLM",
+      "fr": "LLM",
+      "ru": "LLM",
+      "ja": "大規模言語モデル",
+      "vi": "LLM"
+    },
+    "image": {
+      "zhCN": "图片",
+      "zhTW": "圖片",
+      "en": "Image",
+      "fr": "Image",
+      "ru": "Image",
+      "ja": "画像",
+      "vi": "Ảnh"
+    },
+    "digital": {
+      "zhCN": "数字人",
+      "zhTW": "數位人",
+      "en": "Digital Human",
+      "fr": "Digital Human",
+      "ru": "Digital Human",
+      "ja": "デジタルヒューマン",
+      "vi": "Digital Human"
+    },
+    "human": {
+      "zhCN": "数字人",
+      "zhTW": "數位人",
+      "en": "Digital Human",
+      "fr": "Digital Human",
+      "ru": "Digital Human",
+      "ja": "デジタルヒューマン",
+      "vi": "Digital Human"
+    },
+    "tts": {
+      "zhCN": "语音合成",
+      "zhTW": "語音合成",
+      "en": "TTS",
+      "fr": "TTS",
+      "ru": "TTS",
+      "ja": "音声合成",
+      "vi": "TTS"
+    },
+    "video": {
+      "zhCN": "视频",
+      "zhTW": "影片",
+      "en": "Video",
+      "fr": "Video",
+      "ru": "Video",
+      "ja": "動画",
+      "vi": "Video"
     }
   },
   "qwen3.8-max-0902": {
@@ -3034,6 +3124,233 @@
           "$0.011025 / image"
         ]
       ]
+    }
+  },
+  "__vendors__": {
+    "OpenAI": {
+      "zhCN": "OpenAI",
+      "zhTW": "OpenAI",
+      "en": "OpenAI",
+      "fr": "OpenAI",
+      "ru": "OpenAI",
+      "ja": "OpenAI",
+      "vi": "OpenAI"
+    },
+    "Anthropic": {
+      "zhCN": "Anthropic",
+      "zhTW": "Anthropic",
+      "en": "Anthropic",
+      "fr": "Anthropic",
+      "ru": "Anthropic",
+      "ja": "Anthropic",
+      "vi": "Anthropic"
+    },
+    "Google": {
+      "zhCN": "Google",
+      "zhTW": "Google",
+      "en": "Google",
+      "fr": "Google",
+      "ru": "Google",
+      "ja": "Google",
+      "vi": "Google"
+    },
+    "DeepSeek": {
+      "zhCN": "DeepSeek",
+      "zhTW": "DeepSeek",
+      "en": "DeepSeek",
+      "fr": "DeepSeek",
+      "ru": "DeepSeek",
+      "ja": "DeepSeek",
+      "vi": "DeepSeek"
+    },
+    "xAI": {
+      "zhCN": "xAI",
+      "zhTW": "xAI",
+      "en": "xAI",
+      "fr": "xAI",
+      "ru": "xAI",
+      "ja": "xAI",
+      "vi": "xAI"
+    },
+    "Grok": {
+      "zhCN": "xAI",
+      "zhTW": "xAI",
+      "en": "xAI",
+      "fr": "xAI",
+      "ru": "xAI",
+      "ja": "xAI",
+      "vi": "xAI"
+    },
+    "Moonshot": {
+      "zhCN": "Moonshot",
+      "zhTW": "Moonshot",
+      "en": "Moonshot",
+      "fr": "Moonshot",
+      "ru": "Moonshot",
+      "ja": "Moonshot",
+      "vi": "Moonshot"
+    },
+    "MiniMax": {
+      "zhCN": "MiniMax",
+      "zhTW": "MiniMax",
+      "en": "MiniMax",
+      "fr": "MiniMax",
+      "ru": "MiniMax",
+      "ja": "MiniMax",
+      "vi": "MiniMax"
+    },
+    "Minimax": {
+      "zhCN": "MiniMax",
+      "zhTW": "MiniMax",
+      "en": "MiniMax",
+      "fr": "MiniMax",
+      "ru": "MiniMax",
+      "ja": "MiniMax",
+      "vi": "MiniMax"
+    },
+    "Meta": {
+      "zhCN": "Meta",
+      "zhTW": "Meta",
+      "en": "Meta",
+      "fr": "Meta",
+      "ru": "Meta",
+      "ja": "Meta",
+      "vi": "Meta"
+    },
+    "BRIA AI": {
+      "zhCN": "BRIA AI",
+      "zhTW": "BRIA AI",
+      "en": "BRIA AI",
+      "fr": "BRIA AI",
+      "ru": "BRIA AI",
+      "ja": "BRIA AI",
+      "vi": "BRIA AI"
+    },
+    "Black Forest Labs": {
+      "zhCN": "Black Forest Labs",
+      "zhTW": "Black Forest Labs",
+      "en": "Black Forest Labs",
+      "fr": "Black Forest Labs",
+      "ru": "Black Forest Labs",
+      "ja": "Black Forest Labs",
+      "vi": "Black Forest Labs"
+    },
+    "ByteDance": {
+      "zhCN": "ByteDance",
+      "zhTW": "ByteDance",
+      "en": "ByteDance",
+      "fr": "ByteDance",
+      "ru": "ByteDance",
+      "ja": "ByteDance",
+      "vi": "ByteDance"
+    },
+    "字节跳动": {
+      "zhCN": "ByteDance",
+      "zhTW": "ByteDance",
+      "en": "ByteDance",
+      "fr": "ByteDance",
+      "ru": "ByteDance",
+      "ja": "ByteDance",
+      "vi": "ByteDance"
+    },
+    "阿里巴巴": {
+      "zhCN": "阿里巴巴",
+      "zhTW": "阿里巴巴",
+      "en": "Alibaba",
+      "fr": "Alibaba",
+      "ru": "Alibaba",
+      "ja": "Alibaba",
+      "vi": "Alibaba"
+    },
+    "Alibaba": {
+      "zhCN": "阿里巴巴",
+      "zhTW": "阿里巴巴",
+      "en": "Alibaba",
+      "fr": "Alibaba",
+      "ru": "Alibaba",
+      "ja": "Alibaba",
+      "vi": "Alibaba"
+    },
+    "Qwen": {
+      "zhCN": "阿里巴巴",
+      "zhTW": "阿里巴巴",
+      "en": "Alibaba",
+      "fr": "Alibaba",
+      "ru": "Alibaba",
+      "ja": "Alibaba",
+      "vi": "Alibaba"
+    },
+    "智谱": {
+      "zhCN": "智谱",
+      "zhTW": "智譜",
+      "en": "Zhipu",
+      "fr": "Zhipu",
+      "ru": "Zhipu",
+      "ja": "Zhipu",
+      "vi": "Zhipu"
+    },
+    "ChatGLM": {
+      "zhCN": "智谱",
+      "zhTW": "智譜",
+      "en": "Zhipu",
+      "fr": "Zhipu",
+      "ru": "Zhipu",
+      "ja": "Zhipu",
+      "vi": "Zhipu"
+    },
+    "百度": {
+      "zhCN": "百度",
+      "zhTW": "百度",
+      "en": "Baidu",
+      "fr": "Baidu",
+      "ru": "Baidu",
+      "ja": "Baidu",
+      "vi": "Baidu"
+    },
+    "腾讯": {
+      "zhCN": "腾讯",
+      "zhTW": "騰訊",
+      "en": "Tencent",
+      "fr": "Tencent",
+      "ru": "Tencent",
+      "ja": "Tencent",
+      "vi": "Tencent"
+    },
+    "哔哩哔哩": {
+      "zhCN": "哔哩哔哩",
+      "zhTW": "嗶哩嗶哩",
+      "en": "Bilibili",
+      "fr": "Bilibili",
+      "ru": "Bilibili",
+      "ja": "Bilibili",
+      "vi": "Bilibili"
+    },
+    "阶跃星辰": {
+      "zhCN": "阶跃星辰",
+      "zhTW": "階躍星辰",
+      "en": "StepFun",
+      "fr": "StepFun",
+      "ru": "StepFun",
+      "ja": "StepFun",
+      "vi": "StepFun"
+    },
+    "其他": {
+      "zhCN": "其他",
+      "zhTW": "其他",
+      "en": "Other",
+      "fr": "Autre",
+      "ru": "Другое",
+      "ja": "その他",
+      "vi": "Khác"
+    },
+    "Other": {
+      "zhCN": "其他",
+      "zhTW": "其他",
+      "en": "Other",
+      "fr": "Autre",
+      "ru": "Другое",
+      "ja": "その他",
+      "vi": "Khác"
     }
   }
 }

@@ -173,7 +173,7 @@
     },
     {
       "id": "wan3.0-video",
-      "vendor": "Alibaba",
+      "vendor": "阿里巴巴",
       "icon": "Qwen.Color",
       "tag": "视频·按秒",
       "billing": "per_second",

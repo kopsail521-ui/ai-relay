@@ -188,6 +188,14 @@ def main():
     v_cols = cols(cur, "vendors")
 
     def ensure_vendor(name, icon):
+        alias = {
+            "Alibaba": "阿里巴巴",
+            "Qwen": "阿里巴巴",
+            "通义": "阿里巴巴",
+            "Other": "其他",
+            "Minimax": "MiniMax",
+        }
+        name = alias.get(name, name) or "其他"
         cur.execute("SELECT id FROM vendors WHERE name=?", (name,))
         row = cur.fetchone()
         if row:

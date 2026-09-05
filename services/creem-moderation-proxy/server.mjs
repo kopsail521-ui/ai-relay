@@ -78,8 +78,11 @@ const VENDOR_ALIAS = {
   Grok: "xAI",
   文心: "Wenxin",
   讯飞: "Spark",
-  智谱: "ChatGLM",
-  阿里巴巴: "Qwen",
+  ChatGLM: "智谱",
+  Alibaba: "阿里巴巴",
+  Qwen: "阿里巴巴",
+  通义: "阿里巴巴",
+  Other: "其他",
 };
 
 function canonVendor(name) {
@@ -232,9 +235,24 @@ function enrichPricingPayload(payload) {
     return next;
   });
   const vendors = Array.isArray(payload.vendors)
-    ? payload.vendors.map((v) =>
-        v && v.name ? { ...v, name: scrubVendorName(v.name) } : v
-      )
+    ? (() => {
+        const seen = new Set();
+        const out = [];
+        for (const v of payload.vendors) {
+          if (!v) continue;
+          const raw = String(v.name || "").trim();
+          const key =
+            raw === "Alibaba" || raw === "Qwen" || raw === "通义"
+              ? "阿里巴巴"
+              : raw === "Other"
+                ? "其他"
+                : scrubVendorName(raw);
+          if (seen.has(key)) continue;
+          seen.add(key);
+          out.push({ ...v, name: key });
+        }
+        return out;
+      })()
     : payload.vendors;
   return { ...payload, data, vendors };
 }
@@ -242,9 +260,9 @@ function enrichPricingPayload(payload) {
 function buildLocaleDescScript() {
   const map = JSON.stringify(MARKETPLACE_COPY);
   const js =
-    "(function(){if(window.__keyoLocaleDesc)return;window.__keyoLocaleDesc=1;window.__KEYO_MKT_COPY=" +
+    "(function(){if(window.__keyoLocaleDescV2)return;window.__keyoLocaleDescV2=1;window.__KEYO_MKT_COPY=" +
     map +
-    ';var MAP=window.__KEYO_MKT_COPY;var LANGS=["zhCN","zhTW","en","fr","ru","ja","vi"];function langCode(){try{var v=(localStorage.getItem("i18nextLng")||"").trim();if(!v&&document.documentElement)v=String(document.documentElement.lang||"");v=v.replace(/_/g,"-");var raw=v;var l=v.toLowerCase();if(LANGS.indexOf(raw)>=0)return raw;if(l==="zhcn"||l==="zh-cn"||l==="zh-hans"||l==="zh"||l.indexOf("zh")===0)return "zhCN";if(l==="zhtw"||l==="zh-tw"||l==="zh-hk"||l==="zh-mo"||l.indexOf("zh-hant")===0)return "zhTW";if(l.indexOf("ja")===0)return "ja";if(l.indexOf("fr")===0)return "fr";if(l.indexOf("ru")===0)return "ru";if(l.indexOf("vi")===0)return "vi";if(l.indexOf("en")===0)return "en";return "zhCN"}catch(e){return "zhCN"}}function pickDesc(e){if(!e)return"";var code=langCode();var d=e.descriptions||{};return d[code]||d.zhCN||e.description_zh||e.description||d.en||e.description_en||""}function pickTag(tag){if(!tag)return tag;var code=langCode();var TAGS=MAP.__tags__||{};var bag=TAGS[tag];if(!bag)return tag;return bag[code]||bag.zhCN||tag}function applyPricing(d){try{if(!d||!Array.isArray(d.data))return d;for(var i=0;i<d.data.length;i++){var m=d.data[i];var n=m&&(m.model_name||m.model||m.key);var e=n&&MAP[n];if(e){var t=pickDesc(e);if(t)m.description=t}if(m.tags)m.tags=pickTag(m.tags)}}catch(err){}return d}var oparse=JSON.parse;JSON.parse=function(text){var v=oparse.apply(this,arguments);try{if(v&&Array.isArray(v.data)&&v.data[0]&&(v.data[0].model_name||v.data[0].model)&&(v.vendors||v.auto_groups||v.group_ratio!=null))applyPricing(v)}catch(e){}return v};try{var desc=Object.getOwnPropertyDescriptor(XMLHttpRequest.prototype,"responseText");if(desc&&desc.get){Object.defineProperty(XMLHttpRequest.prototype,"responseText",{configurable:true,enumerable:true,get:function(){var t=desc.get.call(this);try{if(this.readyState===4&&this.__keyoUrl&&String(this.__keyoUrl).indexOf("/api/pricing")>=0&&!this.__keyoLocaleCap){this.__keyoLocaleCap=1;var j=oparse(t);applyPricing(j);t=JSON.stringify(j)}}catch(e){}return t}})}}catch(e){}var XO=XMLHttpRequest.prototype.open;XMLHttpRequest.prototype.open=function(m,u){this.__keyoUrl=u;this.__keyoLocaleCap=0;return XO.apply(this,arguments)};var ofetch=window.fetch;window.fetch=function(){var args=arguments;return ofetch.apply(this,args).then(function(res){try{var u="";if(typeof args[0]==="string")u=args[0];else if(args[0]&&args[0].url)u=args[0].url;if(u&&u.indexOf("/api/pricing")>=0){return res.clone().json().then(function(d){applyPricing(d);return new Response(JSON.stringify(d),{status:res.status,statusText:res.statusText,headers:res.headers})}).catch(function(){return res})}}catch(e){}return res})};var last=null;try{last=localStorage.getItem("i18nextLng")}catch(e){}setInterval(function(){try{var cur=localStorage.getItem("i18nextLng");if(cur!==last){last=cur;location.reload()}}catch(e){}},500)})();';
+    ';var MAP=window.__KEYO_MKT_COPY;var LANGS=["zhCN","zhTW","en","fr","ru","ja","vi"];function langCode(){try{var v=(localStorage.getItem("i18nextLng")||"").trim();if(!v&&document.documentElement)v=String(document.documentElement.lang||"");v=v.replace(/_/g,"-");var raw=v;var l=v.toLowerCase();if(LANGS.indexOf(raw)>=0)return raw;if(l==="zhcn"||l==="zh-cn"||l==="zh-hans"||l==="zh"||l.indexOf("zh")===0)return "zhCN";if(l==="zhtw"||l==="zh-tw"||l==="zh-hk"||l==="zh-mo"||l.indexOf("zh-hant")===0)return "zhTW";if(l.indexOf("ja")===0)return "ja";if(l.indexOf("fr")===0)return "fr";if(l.indexOf("ru")===0)return "ru";if(l.indexOf("vi")===0)return "vi";if(l.indexOf("en")===0)return "en";return "zhCN"}catch(e){return "zhCN"}}function bagPick(bag){if(!bag)return"";if(typeof bag==="string")return bag;var c=langCode();return bag[c]||bag.zhCN||bag.en||""}function pickDesc(e){if(!e)return"";var d=e.descriptions||{};var c=langCode();return d[c]||d.zhCN||e.description_zh||e.description||d.en||e.description_en||""}function canonTag(tag){if(!tag)return tag;var t=String(tag).trim();var TAGS=MAP.__tags__||{};if(TAGS[t])return t;var low=t.toLowerCase();if(TAGS[low])return low;var rev={"llm":"大语言模型","moderation":"内容风控","digital human":"数字人","digital":"数字人","human":"数字人","image":"图片","image processing":"图像处理","tts":"语音合成","asr":"语音识别","video":"视频","video · per second":"视频·按秒","video · per request":"视频·按次","ocr":"OCR"};if(rev[low])return rev[low];for(var k in TAGS){var b=TAGS[k];if(!b||typeof b!=="object")continue;for(var lang in b){if(String(b[lang]).toLowerCase()===low)return k}}return t}function pickTag(tag){if(!tag)return tag;var key=canonTag(tag);var bag=(MAP.__tags__||{})[key];return bagPick(bag)||tag}function canonVendor(name){if(!name)return name;var n=String(name).trim();var V=MAP.__vendors__||{};if(V[n])return n;var alias={Alibaba:"阿里巴巴",Qwen:"阿里巴巴","通义":"阿里巴巴",Other:"其他",Minimax:"MiniMax",Grok:"xAI",ChatGLM:"智谱","字节跳动":"ByteDance"};if(alias[n])return alias[n];return n}function pickVendor(name){if(!name)return name;var key=canonVendor(name);var bag=(MAP.__vendors__||{})[key];return bagPick(bag)||name}function applyPricing(d){try{if(!d||!Array.isArray(d.data))return d;for(var i=0;i<d.data.length;i++){var m=d.data[i];var n=m&&(m.model_name||m.model||m.key);var e=n&&MAP[n];if(e){var t=pickDesc(e);if(t)m.description=t}if(m.tags){if(Array.isArray(m.tags))m.tags=m.tags.map(pickTag);else m.tags=pickTag(m.tags)}if(m.vendor_name)m.vendor_name=pickVendor(m.vendor_name)}if(Array.isArray(d.vendors)){var seen={};var out=[];for(var j=0;j<d.vendors.length;j++){var v=d.vendors[j];if(!v)continue;var raw=v.name||"";var key=canonVendor(raw);var label=pickVendor(raw);if(seen[key])continue;seen[key]=1;out.push(Object.assign({},v,{name:label,__keyo_vendor_key:key}))}d.vendors=out}}catch(err){}return d}function noTranslate(){try{document.documentElement.setAttribute("translate","yes");var root=document.getElementById("root")||document.body;if(!root)return;root.querySelectorAll("button,a,span,div,h1,h2,h3,label").forEach(function(el){var t=(el.textContent||"").replace(/\\s+/g," ").trim();if(!t||t.length>48)return;if(/OpenAI|Anthropic|Google|DeepSeek|MiniMax|Moonshot|ByteDance|Alibaba|阿里巴巴|智谱|百度|腾讯|哔哩|阶跃|BRIA|Black Forest|xAI|Meta|其他|Other|LLM|ASR|TTS|OCR|视频/.test(t)){el.setAttribute("translate","no");el.classList.add("notranslate")}})}catch(e){}}var oparse=JSON.parse;JSON.parse=function(text){var v=oparse.apply(this,arguments);try{if(v&&Array.isArray(v.data)&&v.data[0]&&(v.data[0].model_name||v.data[0].model)&&(v.vendors||v.auto_groups||v.group_ratio!=null))applyPricing(v)}catch(e){}return v};try{var desc=Object.getOwnPropertyDescriptor(XMLHttpRequest.prototype,"responseText");if(desc&&desc.get){Object.defineProperty(XMLHttpRequest.prototype,"responseText",{configurable:true,enumerable:true,get:function(){var t=desc.get.call(this);try{if(this.readyState===4&&this.__keyoUrl&&String(this.__keyoUrl).indexOf("/api/pricing")>=0&&!this.__keyoLocaleCap){this.__keyoLocaleCap=1;var j=oparse(t);applyPricing(j);t=JSON.stringify(j)}}catch(e){}return t}})}}catch(e){}var XO=XMLHttpRequest.prototype.open;XMLHttpRequest.prototype.open=function(m,u){this.__keyoUrl=u;this.__keyoLocaleCap=0;return XO.apply(this,arguments)};var ofetch=window.fetch;window.fetch=function(){var args=arguments;return ofetch.apply(this,args).then(function(res){try{var u="";if(typeof args[0]==="string")u=args[0];else if(args[0]&&args[0].url)u=args[0].url;if(u&&u.indexOf("/api/pricing")>=0){return res.clone().json().then(function(d){applyPricing(d);return new Response(JSON.stringify(d),{status:res.status,statusText:res.statusText,headers:res.headers})}).catch(function(){return res})}}catch(e){}return res})};var last=null;try{last=localStorage.getItem("i18nextLng")}catch(e){}setInterval(function(){try{var cur=localStorage.getItem("i18nextLng");if(cur!==last){last=cur;location.reload()}noTranslate()}catch(e){}},500);try{new MutationObserver(function(){noTranslate()}).observe(document.documentElement,{childList:true,subtree:true})}catch(e){}document.addEventListener("DOMContentLoaded",noTranslate);setTimeout(noTranslate,800)})();';
   return "<script>" + js + "</script>";
 }
 
@@ -427,12 +445,12 @@ async function proxyRequest(req, res, bodyBuf) {
         }
       }
       // v11: 价目表按文本节点挂到「基础价格」块后（v10 因 childNodes 判断挂不上）
-      if (!html.includes("keyo-pricing-sort-v13")) {
+      if (!html.includes("keyo-pricing-sort-v14")) {
         html = html
           .replace(/<!--keyo-pricing-sort(?:-v\d+)?-->[\s\S]*?<\/script>/g, "")
           .replace(/<!--keyo-billing-unit-->[\s\S]*?<\/script>/g, "")
           .replace(/<!--keyo-locale-desc-->[\s\S]*?<\/script>/g, "");
-        const inject = `<!--keyo-pricing-sort-v13-->${PRICING_SORT_SCRIPT}<!--keyo-locale-desc-->${LOCALE_DESC_SCRIPT}<!--keyo-billing-unit-->${BILLING_UNIT_SCRIPT}`;
+        const inject = `<!--keyo-pricing-sort-v14-->${PRICING_SORT_SCRIPT}<!--keyo-locale-desc-->${LOCALE_DESC_SCRIPT}<!--keyo-billing-unit-->${BILLING_UNIT_SCRIPT}`;
         if (html.includes("<head>")) {
           html = html.replace("<head>", `<head>${inject}`);
           changed = true;

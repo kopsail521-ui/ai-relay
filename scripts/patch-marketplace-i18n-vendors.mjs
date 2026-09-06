@@ -88,6 +88,8 @@ const TAGS = {
   视频: LANG("视频", "影片", "Video", "Vidéo", "Видео", "動画", "Video"),
   "视频·按秒": LANG("视频·按秒", "影片·按秒", "Video · per second", "Vidéo · /s", "Видео · /с", "動画·秒課金", "Video · /giây"),
   "视频·按次": LANG("视频·按次", "影片·按次", "Video · per request", "Vidéo · /req", "Видео · /запрос", "動画·回課金", "Video · /lần"),
+  免费: LANG("免费", "免費", "Free", "Gratuit", "Бесплатно", "無料", "Miễn phí"),
+  Free: LANG("免费", "免費", "Free", "Gratuit", "Бесплатно", "無料", "Miễn phí"),
   // aliases seen on English sidebar when DB tags leaked as English fragments
   asr: LANG("语音识别", "語音辨識", "ASR", "ASR", "ASR", "音声認識", "ASR"),
   llm: LANG("大语言模型", "大型語言模型", "LLM", "LLM", "LLM", "大規模言語モデル", "LLM"),

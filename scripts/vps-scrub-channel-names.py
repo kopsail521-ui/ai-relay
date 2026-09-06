@@ -21,6 +21,8 @@ for cid, name, base in cur.fetchall():
         new = "Keyo Video Gen"
     elif "openlux" in blob or "上游" in (name or ""):
         new = "Keyo Primary"
+    elif "sensenova" in blob or "商汤" in (name or ""):
+        new = "Keyo Free"
     elif "gitee" in blob or "模力" in (name or ""):
         new = "Keyo Media"
     elif "grsai" in blob:

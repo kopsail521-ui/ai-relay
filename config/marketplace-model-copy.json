@@ -1680,25 +1680,35 @@
     "price_key_en": ""
   },
   "deepseek-v4-flash": {
-    "description": "DeepSeek V4 Flash：更快更省的对话与代码模型。",
+    "description": "DeepSeek V4 Flash 高速对话模型（免费额度）。",
     "descriptions": {
-      "zhCN": "DeepSeek V4 Flash：更快更省的对话与代码模型。",
-      "zhTW": "DeepSeek V4 Flash：更快更省的對話與程式模型。",
-      "en": "DeepSeek V4 Flash — faster, cheaper chat and coding model.",
-      "fr": "DeepSeek V4 Flash — chat/code plus rapide et économique.",
-      "ru": "DeepSeek V4 Flash — быстрее и дешевле для чата и кода.",
-      "ja": "DeepSeek V4 Flash。より高速・低コストなチャット／コードモデル。",
-      "vi": "DeepSeek V4 Flash — chat/coding nhanh và tiết kiệm hơn."
+      "zhCN": "DeepSeek V4 Flash 高速对话模型（免费额度）。",
+      "zhTW": "DeepSeek V4 Flash 高速對話模型（免費額度）。",
+      "en": "DeepSeek V4 Flash high-speed chat model (free tier).",
+      "fr": "DeepSeek V4 Flash — chat rapide (gratuit).",
+      "ru": "Быстрый чат DeepSeek V4 Flash (бесплатно).",
+      "ja": "DeepSeek V4 Flash 高速チャットモデル（無料枠）。",
+      "vi": "DeepSeek V4 Flash — chat tốc độ cao (miễn phí)."
     },
+    "display_names": {
+      "zhCN": "deepseek-v4-flash（免费）",
+      "zhTW": "deepseek-v4-flash（免費）",
+      "en": "deepseek-v4-flash (Free)",
+      "fr": "deepseek-v4-flash (Gratuit)",
+      "ru": "deepseek-v4-flash (Бесплатно)",
+      "ja": "deepseek-v4-flash（無料）",
+      "vi": "deepseek-v4-flash (Miễn phí)"
+    },
+    "free": true,
     "unit": "token",
     "badge": {
-      "zhCN": "按 Token 计费",
-      "zhTW": "按 Token 計費",
-      "en": "Token-based",
-      "fr": "Au token",
-      "ru": "По токенам",
-      "ja": "Token 課金",
-      "vi": "Theo token"
+      "zhCN": "免费",
+      "zhTW": "免費",
+      "en": "Free",
+      "fr": "Gratuit",
+      "ru": "Бесплатно",
+      "ja": "無料",
+      "vi": "Miễn phí"
     },
     "suffix": {
       "zhCN": "",
@@ -1718,14 +1728,14 @@
       "ja": "",
       "vi": ""
     },
-    "description_zh": "DeepSeek V4 Flash：更快更省的对话与代码模型。",
-    "description_en": "DeepSeek V4 Flash — faster, cheaper chat and coding model.",
-    "badge_zh": "按 Token 计费",
-    "badge_en": "Token-based",
+    "badge_zh": "免费",
+    "badge_en": "Free",
     "suffix_zh": "",
     "suffix_en": "",
     "price_key_zh": "",
-    "price_key_en": ""
+    "price_key_en": "",
+    "description_zh": "DeepSeek V4 Flash 高速对话模型（免费额度）。",
+    "description_en": "DeepSeek V4 Flash high-speed chat model (free tier)."
   },
   "grok-4.6": {
     "description": "xAI Grok 4.6 对话与推理模型。",
@@ -1776,25 +1786,35 @@
     "price_key_en": ""
   },
   "kimi-k3": {
-    "description": "Moonshot Kimi K3 长上下文对话模型。",
+    "description": "Kimi K3 长上下文对话模型（免费额度）。",
     "descriptions": {
-      "zhCN": "Moonshot Kimi K3 长上下文对话模型。",
-      "zhTW": "Moonshot Kimi K3 長上下文對話模型。",
-      "en": "Moonshot Kimi K3 long-context chat model.",
-      "fr": "Kimi K3 (Moonshot) — chat à long contexte.",
-      "ru": "Kimi K3 (Moonshot) — чат с длинным контекстом.",
-      "ja": "Moonshot Kimi K3。長コンテキストチャットモデル。",
-      "vi": "Moonshot Kimi K3 — chat ngữ cảnh dài."
+      "zhCN": "Kimi K3 长上下文对话模型（免费额度）。",
+      "zhTW": "Kimi K3 長上下文對話模型（免費額度）。",
+      "en": "Kimi K3 long-context chat model (free tier).",
+      "fr": "Kimi K3 — chat à long contexte (gratuit).",
+      "ru": "Чат Kimi K3 с длинным контекстом (бесплатно).",
+      "ja": "Kimi K3 長コンテキストチャットモデル（無料枠）。",
+      "vi": "Kimi K3 — chat ngữ cảnh dài (miễn phí)."
     },
+    "display_names": {
+      "zhCN": "kimi-k3（免费）",
+      "zhTW": "kimi-k3（免費）",
+      "en": "kimi-k3 (Free)",
+      "fr": "kimi-k3 (Gratuit)",
+      "ru": "kimi-k3 (Бесплатно)",
+      "ja": "kimi-k3（無料）",
+      "vi": "kimi-k3 (Miễn phí)"
+    },
+    "free": true,
     "unit": "token",
     "badge": {
-      "zhCN": "按 Token 计费",
-      "zhTW": "按 Token 計費",
-      "en": "Token-based",
-      "fr": "Au token",
-      "ru": "По токенам",
-      "ja": "Token 課金",
-      "vi": "Theo token"
+      "zhCN": "免费",
+      "zhTW": "免費",
+      "en": "Free",
+      "fr": "Gratuit",
+      "ru": "Бесплатно",
+      "ja": "無料",
+      "vi": "Miễn phí"
     },
     "suffix": {
       "zhCN": "",
@@ -1814,14 +1834,14 @@
       "ja": "",
       "vi": ""
     },
-    "description_zh": "Moonshot Kimi K3 长上下文对话模型。",
-    "description_en": "Moonshot Kimi K3 long-context chat model.",
-    "badge_zh": "按 Token 计费",
-    "badge_en": "Token-based",
+    "badge_zh": "免费",
+    "badge_en": "Free",
     "suffix_zh": "",
     "suffix_en": "",
     "price_key_zh": "",
-    "price_key_en": ""
+    "price_key_en": "",
+    "description_zh": "Kimi K3 长上下文对话模型（免费额度）。",
+    "description_en": "Kimi K3 long-context chat model (free tier)."
   },
   "MiniMax-M3": {
     "description": "MiniMax M3 通用对话模型。",
@@ -2273,6 +2293,24 @@
       "ru": "Video",
       "ja": "動画",
       "vi": "Video"
+    },
+    "免费": {
+      "zhCN": "免费",
+      "zhTW": "免費",
+      "en": "Free",
+      "fr": "Gratuit",
+      "ru": "Бесплатно",
+      "ja": "無料",
+      "vi": "Miễn phí"
+    },
+    "Free": {
+      "zhCN": "免费",
+      "zhTW": "免費",
+      "en": "Free",
+      "fr": "Gratuit",
+      "ru": "Бесплатно",
+      "ja": "無料",
+      "vi": "Miễn phí"
     }
   },
   "qwen3.8-max-0902": {
@@ -3400,5 +3438,130 @@
     "price_key_en": "",
     "description_zh": "GPT-6 Astra 旗舰对话与推理模型，适合复杂任务与长上下文。",
     "description_en": "GPT-6 Astra flagship chat and reasoning model for complex tasks and long context."
+  },
+  "deepseek-v4-pro": {
+    "description": "DeepSeek V4 Pro 旗舰对话与推理模型（免费额度）。",
+    "descriptions": {
+      "zhCN": "DeepSeek V4 Pro 旗舰对话与推理模型（免费额度）。",
+      "zhTW": "DeepSeek V4 Pro 旗艦對話與推理模型（免費額度）。",
+      "en": "DeepSeek V4 Pro flagship chat and reasoning model (free tier).",
+      "fr": "DeepSeek V4 Pro — modèle phare de chat et de raisonnement (gratuit).",
+      "ru": "Флагманский чат/рассуждение DeepSeek V4 Pro (бесплатно).",
+      "ja": "DeepSeek V4 Pro 旗艦チャット／推論モデル（無料枠）。",
+      "vi": "DeepSeek V4 Pro — mô hình chat/suy luận flagship (miễn phí)."
+    },
+    "display_names": {
+      "zhCN": "deepseek-v4-pro（免费）",
+      "zhTW": "deepseek-v4-pro（免費）",
+      "en": "deepseek-v4-pro (Free)",
+      "fr": "deepseek-v4-pro (Gratuit)",
+      "ru": "deepseek-v4-pro (Бесплатно)",
+      "ja": "deepseek-v4-pro（無料）",
+      "vi": "deepseek-v4-pro (Miễn phí)"
+    },
+    "free": true,
+    "unit": "token",
+    "badge": {
+      "zhCN": "免费",
+      "zhTW": "免費",
+      "en": "Free",
+      "fr": "Gratuit",
+      "ru": "Бесплатно",
+      "ja": "無料",
+      "vi": "Miễn phí"
+    },
+    "suffix": {
+      "zhCN": "",
+      "zhTW": "",
+      "en": "",
+      "fr": "",
+      "ru": "",
+      "ja": "",
+      "vi": ""
+    },
+    "price_key": {
+      "zhCN": "",
+      "zhTW": "",
+      "en": "",
+      "fr": "",
+      "ru": "",
+      "ja": "",
+      "vi": ""
+    },
+    "badge_zh": "免费",
+    "badge_en": "Free",
+    "suffix_zh": "",
+    "suffix_en": "",
+    "price_key_zh": "",
+    "price_key_en": "",
+    "description_zh": "DeepSeek V4 Pro 旗舰对话与推理模型（免费额度）。",
+    "description_en": "DeepSeek V4 Pro flagship chat and reasoning model (free tier)."
+  },
+  "glm-5.2": {
+    "description": "GLM 5.2 旗舰对话与编码模型（免费额度）。",
+    "descriptions": {
+      "zhCN": "GLM 5.2 旗舰对话与编码模型（免费额度）。",
+      "zhTW": "GLM 5.2 旗艦對話與編碼模型（免費額度）。",
+      "en": "GLM 5.2 flagship chat and coding model (free tier).",
+      "fr": "GLM 5.2 — chat et code phare (gratuit).",
+      "ru": "Флагманский чат/код GLM 5.2 (бесплатно).",
+      "ja": "GLM 5.2 旗艦チャット／コーディングモデル（無料枠）。",
+      "vi": "GLM 5.2 — chat/coding flagship (miễn phí)."
+    },
+    "display_names": {
+      "zhCN": "glm-5.2（免费）",
+      "zhTW": "glm-5.2（免費）",
+      "en": "glm-5.2 (Free)",
+      "fr": "glm-5.2 (Gratuit)",
+      "ru": "glm-5.2 (Бесплатно)",
+      "ja": "glm-5.2（無料）",
+      "vi": "glm-5.2 (Miễn phí)"
+    },
+    "free": true,
+    "unit": "token",
+    "badge": {
+      "zhCN": "免费",
+      "zhTW": "免費",
+      "en": "Free",
+      "fr": "Gratuit",
+      "ru": "Бесплатно",
+      "ja": "無料",
+      "vi": "Miễn phí"
+    },
+    "suffix": {
+      "zhCN": "",
+      "zhTW": "",
+      "en": "",
+      "fr": "",
+      "ru": "",
+      "ja": "",
+      "vi": ""
+    },
+    "price_key": {
+      "zhCN": "",
+      "zhTW": "",
+      "en": "",
+      "fr": "",
+      "ru": "",
+      "ja": "",
+      "vi": ""
+    },
+    "badge_zh": "免费",
+    "badge_en": "Free",
+    "suffix_zh": "",
+    "suffix_en": "",
+    "price_key_zh": "",
+    "price_key_en": "",
+    "description_zh": "GLM 5.2 旗舰对话与编码模型（免费额度）。",
+    "description_en": "GLM 5.2 flagship chat and coding model (free tier)."
+  },
+  "__free_suffix__": {
+    "zhCN": "（免费）",
+    "zhTW": "（免費）",
+    "en": " (Free)",
+    "fr": " (Gratuit)",
+    "ru": " (Бесплатно)",
+    "ja": "（無料）",
+    "vi": " (Miễn phí)"
   }
 }

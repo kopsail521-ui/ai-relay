@@ -1,0 +1,44 @@
+# 一次上线：免费模型 deepseek-v4-pro / deepseek-v4-flash / glm-5.2 / kimi-k3
+# 展示名带（免费）随语言切换；标签「免费」；API 调用仍用无后缀 model id
+# 先 export SENSENOVA_API_KEY=...（勿把真实 Key 写进 git）
+cd /opt/ai-relay && sudo git pull && git log -1 --oneline
+
+: "${SENSENOVA_API_KEY:?set SENSENOVA_API_KEY first}"
+grep -q '^SENSENOVA_API_KEY=' /opt/ai-relay/.env 2>/dev/null \
+  && sudo sed -i "s|^SENSENOVA_API_KEY=.*|SENSENOVA_API_KEY=${SENSENOVA_API_KEY}|" /opt/ai-relay/.env \
+  || echo "SENSENOVA_API_KEY=${SENSENOVA_API_KEY}" | sudo tee -a /opt/ai-relay/.env >/dev/null
+grep -q '^SENSENOVA_BASE_URL=' /opt/ai-relay/.env 2>/dev/null \
+  || echo 'SENSENOVA_BASE_URL=https://token.sensenova.cn' | sudo tee -a /opt/ai-relay/.env >/dev/null
+
+sudo -E python3 scripts/vps-add-sensenova-free.py /opt/ai-relay/data/new-api/one-api.db
+sudo python3 scripts/vps-scrub-channel-names.py /opt/ai-relay/data/new-api/one-api.db 2>/dev/null || true
+sudo python3 scripts/vps-update-marketplace-copy.py /opt/ai-relay/data/new-api/one-api.db /opt/ai-relay/config/marketplace-model-copy.json 2>/dev/null || true
+
+sudo docker build --no-cache -t keyo-creem-moderation ./services/creem-moderation-proxy
+sudo docker rm -f ai-relay-creem-moderation 2>/dev/null || true
+sudo docker run -d --name ai-relay-creem-moderation --restart always --network host \
+  --env-file /opt/ai-relay/.env.moderation \
+  -e UPSTREAM_URL=http://127.0.0.1:3000 \
+  -e LISTEN_HOST=127.0.0.1 \
+  -e PORT=3001 \
+  keyo-creem-moderation
+
+sleep 2
+curl -sS -m 5 -o /dev/null -w "mod=%{http_code}\n" http://127.0.0.1:3001/ || true
+curl -sS http://127.0.0.1:3001/ | grep -oE '__keyoLocaleDescV3' | sort -u
+sudo docker restart new-api 2>/dev/null || sudo systemctl restart new-api 2>/dev/null || true
+sleep 3
+curl -sS http://127.0.0.1:3001/api/pricing | python3 -c "
+import sys,json,re
+d=json.load(sys.stdin)
+blob=json.dumps(d,ensure_ascii=False)
+need=['deepseek-v4-pro','deepseek-v4-flash','glm-5.2','kimi-k3']
+print('models', {k: (k in blob) for k in need})
+print('leak', bool(re.search(r'sensenova|SenseNova|商汤|上游|成本×|OpenLux|模力方舟|APIMart', blob, re.I)))
+ms=d.get('data') or []
+for m in ms:
+  n=m.get('model_name') or ''
+  if n in need:
+    print(n, 'price', m.get('model_price'), 'tags', m.get('tags'))
+"
+echo DONE_SENSENOVA_FREE

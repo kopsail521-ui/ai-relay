@@ -1,0 +1,39 @@
+{
+  "note": "内部渠道；对外勿写 SenseNova/商汤。客户模型 ID 保持无后缀，广场展示名走 display_names 多语言。",
+  "base_url": "https://token.sensenova.cn",
+  "channel_name": "Keyo Free",
+  "models": [
+    {
+      "id": "deepseek-v4-pro",
+      "vendor": "DeepSeek",
+      "icon": "DeepSeek",
+      "tags": "大语言模型,免费",
+      "desc_zh": "DeepSeek V4 Pro 旗舰对话与推理模型（免费额度）。",
+      "desc_en": "DeepSeek V4 Pro flagship chat and reasoning model (free tier)."
+    },
+    {
+      "id": "deepseek-v4-flash",
+      "vendor": "DeepSeek",
+      "icon": "DeepSeek",
+      "tags": "大语言模型,免费",
+      "desc_zh": "DeepSeek V4 Flash 高速对话模型（免费额度）。",
+      "desc_en": "DeepSeek V4 Flash high-speed chat model (free tier)."
+    },
+    {
+      "id": "glm-5.2",
+      "vendor": "智谱",
+      "icon": "ChatGLM.Color",
+      "tags": "大语言模型,免费",
+      "desc_zh": "GLM 5.2 旗舰对话与编码模型（免费额度）。",
+      "desc_en": "GLM 5.2 flagship chat and coding model (free tier)."
+    },
+    {
+      "id": "kimi-k3",
+      "vendor": "Moonshot",
+      "icon": "Moonshot",
+      "tags": "大语言模型,免费",
+      "desc_zh": "Kimi K3 长上下文对话模型（免费额度）。",
+      "desc_en": "Kimi K3 long-context chat model (free tier)."
+    }
+  ]
+}

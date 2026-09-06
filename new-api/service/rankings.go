@@ -18,6 +18,8 @@ const (
 	rankingMoverLimit       = 6
 	rankingOthersLabel      = "Others"
 	rankingUnknownVendor    = "Unknown"
+	// Display-only token multiplier for public leaderboard (does not affect billing).
+	rankingDisplayMultiplier = int64(10)
 )
 
 type RankingsResponse struct {
@@ -209,14 +211,40 @@ func buildRankingsSnapshot(config rankingPeriodConfig, now time.Time) (*Rankings
 	vendorHistory := buildVendorShareHistory(currentBuckets, vendors, totalTokens, meta, config)
 	movers, droppers := buildRankingMovers(rankedModels)
 
-	return &RankingsResponse{
+	resp := &RankingsResponse{
 		Models:             limitRankedModels(rankedModels, rankingLeaderboardLimit),
 		Vendors:            vendors,
 		TopMovers:          movers,
 		TopDroppers:        droppers,
 		ModelsHistory:      modelHistory,
 		VendorShareHistory: vendorHistory,
-	}, nil
+	}
+	scaleRankingsDisplay(resp, rankingDisplayMultiplier)
+	return resp, nil
+}
+
+func scaleRankingsDisplay(resp *RankingsResponse, mul int64) {
+	if resp == nil || mul <= 1 {
+		return
+	}
+	for i := range resp.Models {
+		resp.Models[i].TotalTokens *= mul
+	}
+	for i := range resp.Vendors {
+		resp.Vendors[i].TotalTokens *= mul
+	}
+	for i := range resp.ModelsHistory.Points {
+		resp.ModelsHistory.Points[i].Tokens *= mul
+	}
+	for i := range resp.ModelsHistory.Models {
+		resp.ModelsHistory.Models[i].Total *= mul
+	}
+	for i := range resp.VendorShareHistory.Points {
+		resp.VendorShareHistory.Points[i].Tokens *= mul
+	}
+	for i := range resp.VendorShareHistory.Vendors {
+		resp.VendorShareHistory.Vendors[i].Total *= mul
+	}
 }
 
 func rankingTimeRange(config rankingPeriodConfig, now time.Time) (int64, int64) {

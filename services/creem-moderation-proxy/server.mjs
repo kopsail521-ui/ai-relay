@@ -315,6 +315,39 @@ function enrichPricingPayload(payload) {
   return { ...payload, data, vendors };
 }
 
+/** 排行榜展示倍率：只放大 token 展示量，不改库、不影响扣费。份额/增速不变。 */
+const RANKINGS_DISPLAY_MULTIPLIER = Math.max(
+  1,
+  Number(process.env.RANKINGS_DISPLAY_MULTIPLIER || 10) || 10
+);
+
+function scaleRankingsPayload(payload, mul = RANKINGS_DISPLAY_MULTIPLIER) {
+  if (!payload || mul === 1) return payload;
+  const data = payload.data && typeof payload.data === "object" ? payload.data : payload;
+  if (!data || typeof data !== "object") return payload;
+
+  const scaleArr = (arr, key) => {
+    if (!Array.isArray(arr)) return;
+    for (const row of arr) {
+      if (!row || typeof row !== "object") continue;
+      if (typeof row[key] === "number") row[key] = Math.round(row[key] * mul);
+    }
+  };
+
+  scaleArr(data.models, "total_tokens");
+  scaleArr(data.vendors, "total_tokens");
+  if (data.models_history) {
+    scaleArr(data.models_history.points, "tokens");
+    scaleArr(data.models_history.models, "total");
+  }
+  if (data.vendor_share_history) {
+    scaleArr(data.vendor_share_history.points, "tokens");
+    scaleArr(data.vendor_share_history.vendors, "total");
+  }
+  data.__keyo_rankings_mul = mul;
+  return payload.data ? { ...payload, data } : data;
+}
+
 function buildLocaleDescScript() {
   const map = JSON.stringify(MARKETPLACE_COPY);
   const js =
@@ -471,6 +504,31 @@ async function proxyRequest(req, res, bodyBuf) {
       outHeaders["content-type"] = "application/json; charset=utf-8";
     } catch (e) {
       console.error("[pricing-reorder]", e.message || e);
+    }
+  }
+
+  // 排行榜：token 展示 ×N（默认 10），不改库内真实用量
+  if (
+    req.method === "GET" &&
+    pathOnly === "/api/rankings" &&
+    ctype.includes("application/json") &&
+    buf.length > 0
+  ) {
+    try {
+      const enc = upstreamRes.headers.get("content-encoding") || "";
+      let raw = await decodeBody(buf, enc);
+      const parsed = JSON.parse(raw.toString("utf8"));
+      if (!(parsed && parsed.success === false)) {
+        scaleRankingsPayload(parsed, RANKINGS_DISPLAY_MULTIPLIER);
+      }
+      buf = Buffer.from(JSON.stringify(parsed), "utf8");
+      delete outHeaders["content-encoding"];
+      delete outHeaders["Content-Encoding"];
+      outHeaders["content-length"] = String(buf.length);
+      outHeaders["Content-Length"] = String(buf.length);
+      outHeaders["content-type"] = "application/json; charset=utf-8";
+    } catch (e) {
+      console.error("[rankings-scale]", e.message || e);
     }
   }
 
@@ -651,6 +709,6 @@ const server = http.createServer(async (req, res) => {
 
 server.listen(PORT, HOST, () => {
   console.log(
-    `creem-moderation-proxy on http://${HOST}:${PORT} -> ${UPSTREAM} (creem ${TEST_MODE ? "test" : "live"})`
+    `creem-moderation-proxy on http://${HOST}:${PORT} -> ${UPSTREAM} (creem ${TEST_MODE ? "test" : "live"}; rankings×${RANKINGS_DISPLAY_MULTIPLIER})`
   );
 });

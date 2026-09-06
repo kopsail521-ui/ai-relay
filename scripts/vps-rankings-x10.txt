@@ -1,0 +1,23 @@
+# 排行榜展示 ×10（不改真实用量库）
+cd /opt/ai-relay && sudo git pull && git log -1 --oneline
+
+sudo docker build --no-cache -t keyo-creem-moderation ./services/creem-moderation-proxy
+sudo docker rm -f ai-relay-creem-moderation 2>/dev/null || true
+sudo docker run -d --name ai-relay-creem-moderation --restart always --network host \
+  --env-file /opt/ai-relay/.env.moderation \
+  -e UPSTREAM_URL=http://127.0.0.1:3000 \
+  -e LISTEN_HOST=127.0.0.1 \
+  -e PORT=3001 \
+  -e RANKINGS_DISPLAY_MULTIPLIER=10 \
+  keyo-creem-moderation
+
+sleep 2
+curl -sS "http://127.0.0.1:3001/api/rankings?period=week" | python3 -c "
+import sys,json
+d=json.load(sys.stdin)
+data=d.get('data') or d
+print('mul', data.get('__keyo_rankings_mul'))
+ms=data.get('models') or []
+print('top3', [(m.get('model_name'), m.get('total_tokens')) for m in ms[:3]])
+"
+echo DONE_RANKINGS_X10

@@ -4,6 +4,10 @@
 # 注意：本文件必须保留 /robots.txt /sitemap.xml / /compare /model/* 静态命中，禁止再 tee 无 SEO 的 Caddyfile
 
 sudo tee /etc/caddy/Caddyfile >/dev/null <<'EOF'
+keyoapi.xyz {
+	redir https://www.keyoapi.xyz{uri} permanent
+}
+
 www.keyoapi.xyz {
 	encode gzip
 
@@ -24,6 +28,11 @@ www.keyoapi.xyz {
 	handle /compare {
 		root * /opt/ai-relay/static/seo
 		rewrite * /compare.html
+		file_server
+	}
+	handle /pricing {
+		root * /opt/ai-relay/static/seo
+		rewrite * /pricing.html
 		file_server
 	}
 	@seo_model path /model /model/*
@@ -73,4 +82,5 @@ curl -sS -m 5 -o /dev/null -w 'moderation=%{http_code}\n' http://127.0.0.1:3001/
 curl -sS -m 5 -o /dev/null -w 'robots=%{http_code}\n' https://www.keyoapi.xyz/robots.txt || true
 curl -sS -m 5 -o /dev/null -w 'home=%{http_code}\n' https://www.keyoapi.xyz/ || true
 curl -sS -m 5 -o /dev/null -w 'pricing=%{http_code}\n' https://www.keyoapi.xyz/pricing || true
+curl -sSI -m 8 https://keyoapi.xyz/sitemap.xml | head -n 8 || true
 echo DONE_SITE_FIX

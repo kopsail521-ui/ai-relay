@@ -54,7 +54,12 @@ export function caddyFullSite(opts = {}) {
 	}`
     : "";
 
-  return `www.keyoapi.xyz {
+  // Apex must 301 → www so GSC domain property can follow redirects to sitemap.
+  return `keyoapi.xyz {
+	redir https://www.keyoapi.xyz{uri} permanent
+}
+
+www.keyoapi.xyz {
 	encode gzip
 ${caddySeoHandles()}
 	handle /static/* {

@@ -37,8 +37,13 @@ if [[ ! -f "$BRAND_DIR/keyo-home.html" || ! -f "$BRAND_DIR/keyo-docs.html" ]]; t
   exit 1
 fi
 
-echo "==> Update Caddyfile for $DOMAIN (keeps SEO handles)"
+echo "==> Update Caddyfile for $DOMAIN (keeps SEO handles + apex→www redirect)"
+APEX_DOMAIN="${DOMAIN#www.}"
 cat >/etc/caddy/Caddyfile <<EOF
+${APEX_DOMAIN} {
+	redir https://${DOMAIN}{uri} permanent
+}
+
 ${DOMAIN} {
 	encode gzip
 
@@ -102,5 +107,6 @@ echo "==> Check"
 curl -sI "https://${DOMAIN}/robots.txt" | head -n 5
 curl -sI "https://${DOMAIN}/" | head -n 5
 curl -sI "https://${DOMAIN}/brand/keyo-docs.html" | head -n 5
+curl -sI "https://${APEX_DOMAIN}/sitemap.xml" | head -n 8 || true
 
 echo "DONE_BRAND_SEO_DEPLOY"

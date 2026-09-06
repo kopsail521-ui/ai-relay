@@ -204,6 +204,63 @@ function scrubVendorName(name) {
   return n;
 }
 
+/** New API sidebar splits tags on spaces / · — keep single tokens only. */
+function normalizeTagToken(tag) {
+  let t = String(tag || "").trim();
+  if (!t || /^[·.•\-—_/|]+$/.test(t)) return "";
+  const map = {
+    "视频·按秒": "视频按秒",
+    "视频·按次": "视频按次",
+    "影片·按秒": "视频按秒",
+    "影片·按次": "视频按次",
+    "Video · per second": "视频按秒",
+    "Video · per request": "视频按次",
+    VideoSec: "视频按秒",
+    VideoReq: "视频按次",
+    DigitalHuman: "数字人",
+    ImageProc: "图像处理",
+    Free: "免费",
+    free: "免费",
+    per: "视频按秒",
+    second: "视频按秒",
+    request: "视频按次",
+    processing: "图像处理",
+    digital: "数字人",
+    human: "数字人",
+    llm: "大语言模型",
+    asr: "语音识别",
+    tts: "语音合成",
+    video: "视频",
+    image: "图片",
+    moderation: "内容风控",
+    ocr: "OCR",
+  };
+  if (map[t]) return map[t];
+  if (t.includes("·")) {
+    const flat = t.replace(/·/g, "");
+    if (flat === "视频按秒" || flat === "影片按秒") return "视频按秒";
+    if (flat === "视频按次" || flat === "影片按次") return "视频按次";
+    t = flat;
+  }
+  return t;
+}
+
+function normalizeModelTags(tags) {
+  if (tags == null) return tags;
+  const parts = Array.isArray(tags)
+    ? tags.map((x) => String(x))
+    : String(tags).split(/[,，]/);
+  const out = [];
+  const seen = new Set();
+  for (const p of parts) {
+    const n = normalizeTagToken(p.trim());
+    if (!n || seen.has(n)) continue;
+    seen.add(n);
+    out.push(n);
+  }
+  return Array.isArray(tags) ? out : out.join(",");
+}
+
 function pickMarketplaceDescription(entry, lang) {
   if (!entry) return "";
   const d = entry.descriptions || {};
@@ -232,6 +289,7 @@ function enrichPricingPayload(payload) {
     }
     if (next.vendor_name) next.vendor_name = scrubVendorName(next.vendor_name);
     if (next.owner_by) next.owner_by = scrubVendorName(next.owner_by);
+    if (next.tags != null) next.tags = normalizeModelTags(next.tags);
     return next;
   });
   const vendors = Array.isArray(payload.vendors)
@@ -260,9 +318,9 @@ function enrichPricingPayload(payload) {
 function buildLocaleDescScript() {
   const map = JSON.stringify(MARKETPLACE_COPY);
   const js =
-    "(function(){if(window.__keyoLocaleDescV3)return;window.__keyoLocaleDescV3=1;window.__KEYO_MKT_COPY=" +
+    "(function(){if(window.__keyoLocaleDescV4)return;window.__keyoLocaleDescV4=1;window.__KEYO_MKT_COPY=" +
     map +
-    ';var MAP=window.__KEYO_MKT_COPY;var LANGS=["zhCN","zhTW","en","fr","ru","ja","vi"];function langCode(){try{var v=(localStorage.getItem("i18nextLng")||"").trim();if(!v&&document.documentElement)v=String(document.documentElement.lang||"");v=v.replace(/_/g,"-");var raw=v;var l=v.toLowerCase();if(LANGS.indexOf(raw)>=0)return raw;if(l==="zhcn"||l==="zh-cn"||l==="zh-hans"||l==="zh"||l.indexOf("zh")===0)return "zhCN";if(l==="zhtw"||l==="zh-tw"||l==="zh-hk"||l==="zh-mo"||l.indexOf("zh-hant")===0)return "zhTW";if(l.indexOf("ja")===0)return "ja";if(l.indexOf("fr")===0)return "fr";if(l.indexOf("ru")===0)return "ru";if(l.indexOf("vi")===0)return "vi";if(l.indexOf("en")===0)return "en";return "zhCN"}catch(e){return "zhCN"}}function bagPick(bag){if(!bag)return"";if(typeof bag==="string")return bag;var c=langCode();return bag[c]||bag.zhCN||bag.en||""}function pickDesc(e){if(!e)return"";var d=e.descriptions||{};var c=langCode();return d[c]||d.zhCN||e.description_zh||e.description||d.en||e.description_en||""}function pickTitle(id,e){if(e&&e.display_names){var t=bagPick(e.display_names);if(t)return t}if(e&&e.free){var suf=bagPick(MAP.__free_suffix__)||"（免费）";return String(id)+suf}return ""}function canonTag(tag){if(!tag)return tag;var t=String(tag).trim();var TAGS=MAP.__tags__||{};if(TAGS[t])return t;var low=t.toLowerCase();if(TAGS[low])return low;var rev={"llm":"大语言模型","moderation":"内容风控","digital human":"数字人","digital":"数字人","human":"数字人","image":"图片","image processing":"图像处理","tts":"语音合成","asr":"语音识别","video":"视频","video · per second":"视频·按秒","video · per request":"视频·按次","ocr":"OCR","free":"免费","gratuit":"免费"};if(rev[low])return rev[low];for(var k in TAGS){var b=TAGS[k];if(!b||typeof b!=="object")continue;for(var lang in b){if(String(b[lang]).toLowerCase()===low)return k}}return t}function pickTag(tag){if(!tag)return tag;var key=canonTag(tag);var bag=(MAP.__tags__||{})[key];return bagPick(bag)||tag}function mapTags(tags){if(tags==null)return tags;if(Array.isArray(tags))return tags.map(function(x){return pickTag(String(x).trim())}).filter(Boolean);return String(tags).split(/[,，]/).map(function(x){return pickTag(x.trim())}).filter(Boolean).join(",")}function canonVendor(name){if(!name)return name;var n=String(name).trim();var V=MAP.__vendors__||{};if(V[n])return n;var alias={Alibaba:"阿里巴巴",Qwen:"阿里巴巴","通义":"阿里巴巴",Other:"其他",Minimax:"MiniMax",Grok:"xAI",ChatGLM:"智谱","字节跳动":"ByteDance"};if(alias[n])return alias[n];return n}function pickVendor(name){if(!name)return name;var key=canonVendor(name);var bag=(MAP.__vendors__||{})[key];return bagPick(bag)||name}function applyPricing(d){try{if(!d||!Array.isArray(d.data))return d;for(var i=0;i<d.data.length;i++){var m=d.data[i];var n=m&&(m.model_name||m.model||m.key);var e=n&&MAP[n];if(e){var t=pickDesc(e);if(t)m.description=t;var title=pickTitle(n,e);if(title){m.display_name=title;m.__keyo_title=title}}if(m.tags)m.tags=mapTags(m.tags);if(m.vendor_name)m.vendor_name=pickVendor(m.vendor_name)}if(Array.isArray(d.vendors)){var seen={};var out=[];for(var j=0;j<d.vendors.length;j++){var v=d.vendors[j];if(!v)continue;var raw=v.name||"";var key=canonVendor(raw);var label=pickVendor(raw);if(seen[key])continue;seen[key]=1;out.push(Object.assign({},v,{name:label,__keyo_vendor_key:key}))}d.vendors=out}}catch(err){}return d}function titleMap(){var out={};try{for(var k in MAP){if(!k||k.indexOf("__")===0)continue;var e=MAP[k];if(!e)continue;var t=pickTitle(k,e);if(t&&t!==k)out[k]=t}}catch(e){}return out}function rewriteNames(root){try{var map=titleMap();var keys=Object.keys(map);if(!keys.length)return;var tw=document.createTreeWalker(root||document.body,NodeFilter.SHOW_TEXT,null);var n;while(n=tw.nextNode()){var p=n.parentElement;if(!p)continue;var tag=(p.tagName||"").toLowerCase();if(tag==="script"||tag==="style"||tag==="code"||tag==="pre"||tag==="textarea"||tag==="input")continue;if(p.closest&&p.closest("code,pre,textarea,input,[contenteditable=true]"))continue;var raw=n.nodeValue||"";var t=raw.replace(/^\\s+|\\s+$/g,"");if(!t||!map[t])continue;var lead=raw.match(/^\\s*/)[0]||"";var trail=raw.match(/\\s*$/)[0]||"";n.nodeValue=lead+map[t]+trail;p.setAttribute("translate","no");p.classList.add("notranslate")}}catch(e){}}function noTranslate(){try{document.documentElement.setAttribute("translate","yes");var root=document.getElementById("root")||document.body;if(!root)return;root.querySelectorAll("button,a,span,div,h1,h2,h3,label").forEach(function(el){var t=(el.textContent||"").replace(/\\s+/g," ").trim();if(!t||t.length>48)return;if(/OpenAI|Anthropic|Google|DeepSeek|MiniMax|Moonshot|ByteDance|Alibaba|阿里巴巴|智谱|百度|腾讯|哔哩|阶跃|BRIA|Black Forest|xAI|Meta|其他|Other|LLM|ASR|TTS|OCR|视频|免费|Free|無料/.test(t)){el.setAttribute("translate","no");el.classList.add("notranslate")}})}catch(e){}}var oparse=JSON.parse;JSON.parse=function(text){var v=oparse.apply(this,arguments);try{if(v&&Array.isArray(v.data)&&v.data[0]&&(v.data[0].model_name||v.data[0].model)&&(v.vendors||v.auto_groups||v.group_ratio!=null))applyPricing(v)}catch(e){}return v};try{var desc=Object.getOwnPropertyDescriptor(XMLHttpRequest.prototype,"responseText");if(desc&&desc.get){Object.defineProperty(XMLHttpRequest.prototype,"responseText",{configurable:true,enumerable:true,get:function(){var t=desc.get.call(this);try{if(this.readyState===4&&this.__keyoUrl&&String(this.__keyoUrl).indexOf("/api/pricing")>=0&&!this.__keyoLocaleCap){this.__keyoLocaleCap=1;var j=oparse(t);applyPricing(j);t=JSON.stringify(j)}}catch(e){}return t}})}}catch(e){}var XO=XMLHttpRequest.prototype.open;XMLHttpRequest.prototype.open=function(m,u){this.__keyoUrl=u;this.__keyoLocaleCap=0;return XO.apply(this,arguments)};var ofetch=window.fetch;window.fetch=function(){var args=arguments;return ofetch.apply(this,args).then(function(res){try{var u="";if(typeof args[0]==="string")u=args[0];else if(args[0]&&args[0].url)u=args[0].url;if(u&&u.indexOf("/api/pricing")>=0){return res.clone().json().then(function(d){applyPricing(d);return new Response(JSON.stringify(d),{status:res.status,statusText:res.statusText,headers:res.headers})}).catch(function(){return res})}}catch(e){}return res})};var last=null;try{last=localStorage.getItem("i18nextLng")}catch(e){}function tickUI(){try{noTranslate();rewriteNames(document.body)}catch(e){}}setInterval(function(){try{var cur=localStorage.getItem("i18nextLng");if(cur!==last){last=cur;location.reload()}tickUI()}catch(e){}},500);try{new MutationObserver(function(){tickUI()}).observe(document.documentElement,{childList:true,subtree:true})}catch(e){}document.addEventListener("DOMContentLoaded",tickUI);setTimeout(tickUI,800)})();';
+    ';var MAP=window.__KEYO_MKT_COPY;var LANGS=["zhCN","zhTW","en","fr","ru","ja","vi"];function langCode(){try{var v=(localStorage.getItem("i18nextLng")||"").trim();if(!v&&document.documentElement)v=String(document.documentElement.lang||"");v=v.replace(/_/g,"-");var raw=v;var l=v.toLowerCase();if(LANGS.indexOf(raw)>=0)return raw;if(l==="zhcn"||l==="zh-cn"||l==="zh-hans"||l==="zh"||l.indexOf("zh")===0)return "zhCN";if(l==="zhtw"||l==="zh-tw"||l==="zh-hk"||l==="zh-mo"||l.indexOf("zh-hant")===0)return "zhTW";if(l.indexOf("ja")===0)return "ja";if(l.indexOf("fr")===0)return "fr";if(l.indexOf("ru")===0)return "ru";if(l.indexOf("vi")===0)return "vi";if(l.indexOf("en")===0)return "en";return "zhCN"}catch(e){return "zhCN"}}function bagPick(bag){if(!bag)return"";if(typeof bag==="string")return bag;var c=langCode();return bag[c]||bag.zhCN||bag.en||""}function pickDesc(e){if(!e)return"";var d=e.descriptions||{};var c=langCode();return d[c]||d.zhCN||e.description_zh||e.description||d.en||e.description_en||""}function pickTitle(id,e){if(e&&e.display_names){var t=bagPick(e.display_names);if(t)return t}if(e&&e.free){var suf=bagPick(MAP.__free_suffix__)||"（免费）";return String(id)+suf}return ""}function canonTag(tag){if(!tag)return"";var t=String(tag).trim();if(!t||/^[·.•\\-—_/|]+$/.test(t))return"";var TAGS=MAP.__tags__||{};if(TAGS[t])return t;var low=t.toLowerCase();if(TAGS[low])return low;var rev={"llm":"大语言模型","moderation":"内容风控","digital human":"数字人","digitalhuman":"数字人","digital":"数字人","human":"数字人","image":"图片","image processing":"图像处理","imageproc":"图像处理","tts":"语音合成","asr":"语音识别","video":"视频","video · per second":"视频按秒","videosecond":"视频按秒","videosec":"视频按秒","video · per request":"视频按次","videoreq":"视频按次","ocr":"OCR","free":"免费","gratuit":"免费","per":"视频按秒","second":"视频按秒","request":"视频按次","processing":"图像处理","视频·按秒":"视频按秒","视频·按次":"视频按次"};if(rev[low])return rev[low];if(rev[t])return rev[t];if(t.indexOf("·")>=0){var flat=t.replace(/·/g,"");if(flat==="视频按秒"||flat==="影片按秒")return"视频按秒";if(flat==="视频按次"||flat==="影片按次")return"视频按次";t=flat}for(var k in TAGS){var b=TAGS[k];if(!b||typeof b!=="object")continue;for(var lang in b){if(String(b[lang]).toLowerCase()===low)return k}}return t}function pickTag(tag){var key=canonTag(tag);if(!key)return"";var bag=(MAP.__tags__||{})[key];var label=bagPick(bag)||key;return String(label).replace(/[·\\s]+/g,"")}function mapTags(tags){if(tags==null)return tags;var parts=Array.isArray(tags)?tags:String(tags).split(/[,，]/);var out=[];var seen={};for(var i=0;i<parts.length;i++){var p=pickTag(String(parts[i]).trim());if(!p||seen[p])continue;seen[p]=1;out.push(p)}return Array.isArray(tags)?out:out.join(",")}function canonVendor(name){if(!name)return name;var n=String(name).trim();var V=MAP.__vendors__||{};if(V[n])return n;var alias={Alibaba:"阿里巴巴",Qwen:"阿里巴巴","通义":"阿里巴巴",Other:"其他",Minimax:"MiniMax",Grok:"xAI",ChatGLM:"智谱","字节跳动":"ByteDance"};if(alias[n])return alias[n];return n}function pickVendor(name){if(!name)return name;var key=canonVendor(name);var bag=(MAP.__vendors__||{})[key];return bagPick(bag)||name}function applyPricing(d){try{if(!d||!Array.isArray(d.data))return d;for(var i=0;i<d.data.length;i++){var m=d.data[i];var n=m&&(m.model_name||m.model||m.key);var e=n&&MAP[n];if(e){var t=pickDesc(e);if(t)m.description=t;var title=pickTitle(n,e);if(title){m.display_name=title;m.__keyo_title=title}}if(m.tags)m.tags=mapTags(m.tags);if(m.vendor_name)m.vendor_name=pickVendor(m.vendor_name)}if(Array.isArray(d.vendors)){var seen={};var out=[];for(var j=0;j<d.vendors.length;j++){var v=d.vendors[j];if(!v)continue;var raw=v.name||"";var key=canonVendor(raw);var label=pickVendor(raw);if(seen[key])continue;seen[key]=1;out.push(Object.assign({},v,{name:label,__keyo_vendor_key:key}))}d.vendors=out}}catch(err){}return d}function titleMap(){var out={};try{for(var k in MAP){if(!k||k.indexOf("__")===0)continue;var e=MAP[k];if(!e)continue;var t=pickTitle(k,e);if(t&&t!==k)out[k]=t}}catch(e){}return out}function rewriteNames(root){try{var map=titleMap();var keys=Object.keys(map);if(!keys.length)return;var tw=document.createTreeWalker(root||document.body,NodeFilter.SHOW_TEXT,null);var n;while(n=tw.nextNode()){var p=n.parentElement;if(!p)continue;var tag=(p.tagName||"").toLowerCase();if(tag==="script"||tag==="style"||tag==="code"||tag==="pre"||tag==="textarea"||tag==="input")continue;if(p.closest&&p.closest("code,pre,textarea,input,[contenteditable=true]"))continue;var raw=n.nodeValue||"";var t=raw.replace(/^\\s+|\\s+$/g,"");if(!t||!map[t])continue;var lead=raw.match(/^\\s*/)[0]||"";var trail=raw.match(/\\s*$/)[0]||"";n.nodeValue=lead+map[t]+trail;p.setAttribute("translate","no");p.classList.add("notranslate")}}catch(e){}}function noTranslate(){try{document.documentElement.setAttribute("translate","yes");var root=document.getElementById("root")||document.body;if(!root)return;root.querySelectorAll("button,a,span,div,h1,h2,h3,label").forEach(function(el){var t=(el.textContent||"").replace(/\\s+/g," ").trim();if(!t||t.length>48)return;if(/OpenAI|Anthropic|Google|DeepSeek|MiniMax|Moonshot|ByteDance|Alibaba|阿里巴巴|智谱|百度|腾讯|哔哩|阶跃|BRIA|Black Forest|xAI|Meta|其他|Other|LLM|ASR|TTS|OCR|视频|免费|Free|無料|VideoSec|VideoReq/.test(t)){el.setAttribute("translate","no");el.classList.add("notranslate")}})}catch(e){}}var oparse=JSON.parse;JSON.parse=function(text){var v=oparse.apply(this,arguments);try{if(v&&Array.isArray(v.data)&&v.data[0]&&(v.data[0].model_name||v.data[0].model)&&(v.vendors||v.auto_groups||v.group_ratio!=null))applyPricing(v)}catch(e){}return v};try{var desc=Object.getOwnPropertyDescriptor(XMLHttpRequest.prototype,"responseText");if(desc&&desc.get){Object.defineProperty(XMLHttpRequest.prototype,"responseText",{configurable:true,enumerable:true,get:function(){var t=desc.get.call(this);try{if(this.readyState===4&&this.__keyoUrl&&String(this.__keyoUrl).indexOf("/api/pricing")>=0&&!this.__keyoLocaleCap){this.__keyoLocaleCap=1;var j=oparse(t);applyPricing(j);t=JSON.stringify(j)}}catch(e){}return t}})}}catch(e){}var XO=XMLHttpRequest.prototype.open;XMLHttpRequest.prototype.open=function(m,u){this.__keyoUrl=u;this.__keyoLocaleCap=0;return XO.apply(this,arguments)};var ofetch=window.fetch;window.fetch=function(){var args=arguments;return ofetch.apply(this,args).then(function(res){try{var u="";if(typeof args[0]==="string")u=args[0];else if(args[0]&&args[0].url)u=args[0].url;if(u&&u.indexOf("/api/pricing")>=0){return res.clone().json().then(function(d){applyPricing(d);return new Response(JSON.stringify(d),{status:res.status,statusText:res.statusText,headers:res.headers})}).catch(function(){return res})}}catch(e){}return res})};var last=null;try{last=localStorage.getItem("i18nextLng")}catch(e){}function tickUI(){try{noTranslate();rewriteNames(document.body)}catch(e){}}setInterval(function(){try{var cur=localStorage.getItem("i18nextLng");if(cur!==last){last=cur;location.reload()}tickUI()}catch(e){}},500);try{new MutationObserver(function(){tickUI()}).observe(document.documentElement,{childList:true,subtree:true})}catch(e){}document.addEventListener("DOMContentLoaded",tickUI);setTimeout(tickUI,800)})();';
   return "<script>" + js + "</script>";
 }
 

@@ -2145,55 +2145,55 @@
       "zhCN": "内容风控",
       "zhTW": "內容風控",
       "en": "Moderation",
-      "fr": "Modération",
-      "ru": "Модерация",
+      "fr": "Moderation",
+      "ru": "Moderation",
       "ja": "コンテンツ審査",
-      "vi": "Kiểm duyệt"
+      "vi": "Moderation"
     },
     "数字人": {
       "zhCN": "数字人",
       "zhTW": "數位人",
-      "en": "Digital Human",
-      "fr": "Humain digital",
-      "ru": "Цифровой человек",
+      "en": "DigitalHuman",
+      "fr": "DigitalHuman",
+      "ru": "DigitalHuman",
       "ja": "デジタルヒューマン",
-      "vi": "Người số"
+      "vi": "DigitalHuman"
     },
     "图片": {
       "zhCN": "图片",
       "zhTW": "圖片",
       "en": "Image",
       "fr": "Image",
-      "ru": "Изображение",
+      "ru": "Image",
       "ja": "画像",
-      "vi": "Ảnh"
+      "vi": "Image"
     },
     "图像处理": {
       "zhCN": "图像处理",
       "zhTW": "影像處理",
-      "en": "Image Processing",
-      "fr": "Traitement d’image",
-      "ru": "Обработка изображений",
+      "en": "ImageProc",
+      "fr": "ImageProc",
+      "ru": "ImageProc",
       "ja": "画像処理",
-      "vi": "Xử lý ảnh"
+      "vi": "ImageProc"
     },
     "语音合成": {
       "zhCN": "语音合成",
       "zhTW": "語音合成",
       "en": "TTS",
-      "fr": "Synthèse vocale",
-      "ru": "Синтез речи",
+      "fr": "TTS",
+      "ru": "TTS",
       "ja": "音声合成",
-      "vi": "Tổng hợp giọng"
+      "vi": "TTS"
     },
     "语音识别": {
       "zhCN": "语音识别",
       "zhTW": "語音辨識",
       "en": "ASR",
-      "fr": "Reconnaissance vocale",
-      "ru": "Распознавание речи",
+      "fr": "ASR",
+      "ru": "ASR",
       "ja": "音声認識",
-      "vi": "Nhận dạng giọng"
+      "vi": "ASR"
     },
     "OCR": {
       "zhCN": "OCR",
@@ -2208,28 +2208,28 @@
       "zhCN": "视频",
       "zhTW": "影片",
       "en": "Video",
-      "fr": "Vidéo",
-      "ru": "Видео",
+      "fr": "Video",
+      "ru": "Video",
       "ja": "動画",
       "vi": "Video"
     },
     "视频·按秒": {
-      "zhCN": "视频·按秒",
-      "zhTW": "影片·按秒",
-      "en": "Video · per second",
-      "fr": "Vidéo · /s",
-      "ru": "Видео · /с",
-      "ja": "動画·秒課金",
-      "vi": "Video · /giây"
+      "zhCN": "视频按秒",
+      "zhTW": "影片按秒",
+      "en": "VideoSec",
+      "fr": "VideoSec",
+      "ru": "VideoSec",
+      "ja": "動画秒課金",
+      "vi": "VideoSec"
     },
     "视频·按次": {
-      "zhCN": "视频·按次",
-      "zhTW": "影片·按次",
-      "en": "Video · per request",
-      "fr": "Vidéo · /req",
-      "ru": "Видео · /запрос",
-      "ja": "動画·回課金",
-      "vi": "Video · /lần"
+      "zhCN": "视频按次",
+      "zhTW": "影片按次",
+      "en": "VideoReq",
+      "fr": "VideoReq",
+      "ru": "VideoReq",
+      "ja": "動画回課金",
+      "vi": "VideoReq"
     },
     "asr": {
       "zhCN": "语音识别",
@@ -2256,25 +2256,25 @@
       "fr": "Image",
       "ru": "Image",
       "ja": "画像",
-      "vi": "Ảnh"
+      "vi": "Image"
     },
     "digital": {
       "zhCN": "数字人",
       "zhTW": "數位人",
-      "en": "Digital Human",
-      "fr": "Digital Human",
-      "ru": "Digital Human",
+      "en": "DigitalHuman",
+      "fr": "DigitalHuman",
+      "ru": "DigitalHuman",
       "ja": "デジタルヒューマン",
-      "vi": "Digital Human"
+      "vi": "DigitalHuman"
     },
     "human": {
       "zhCN": "数字人",
       "zhTW": "數位人",
-      "en": "Digital Human",
-      "fr": "Digital Human",
-      "ru": "Digital Human",
+      "en": "DigitalHuman",
+      "fr": "DigitalHuman",
+      "ru": "DigitalHuman",
       "ja": "デジタルヒューマン",
-      "vi": "Digital Human"
+      "vi": "DigitalHuman"
     },
     "tts": {
       "zhCN": "语音合成",
@@ -2298,19 +2298,136 @@
       "zhCN": "免费",
       "zhTW": "免費",
       "en": "Free",
-      "fr": "Gratuit",
-      "ru": "Бесплатно",
+      "fr": "Free",
+      "ru": "Free",
       "ja": "無料",
-      "vi": "Miễn phí"
+      "vi": "Free"
     },
     "Free": {
       "zhCN": "免费",
       "zhTW": "免費",
       "en": "Free",
-      "fr": "Gratuit",
-      "ru": "Бесплатно",
+      "fr": "Free",
+      "ru": "Free",
       "ja": "無料",
-      "vi": "Miễn phí"
+      "vi": "Free"
+    },
+    "视频按秒": {
+      "zhCN": "视频按秒",
+      "zhTW": "影片按秒",
+      "en": "VideoSec",
+      "fr": "VideoSec",
+      "ru": "VideoSec",
+      "ja": "動画秒課金",
+      "vi": "VideoSec"
+    },
+    "视频按次": {
+      "zhCN": "视频按次",
+      "zhTW": "影片按次",
+      "en": "VideoReq",
+      "fr": "VideoReq",
+      "ru": "VideoReq",
+      "ja": "動画回課金",
+      "vi": "VideoReq"
+    },
+    "free": {
+      "zhCN": "免费",
+      "zhTW": "免費",
+      "en": "Free",
+      "fr": "Free",
+      "ru": "Free",
+      "ja": "無料",
+      "vi": "Free"
+    },
+    "moderation": {
+      "zhCN": "内容风控",
+      "zhTW": "內容風控",
+      "en": "Moderation",
+      "fr": "Moderation",
+      "ru": "Moderation",
+      "ja": "コンテンツ審査",
+      "vi": "Moderation"
+    },
+    "ocr": {
+      "zhCN": "OCR",
+      "zhTW": "OCR",
+      "en": "OCR",
+      "fr": "OCR",
+      "ru": "OCR",
+      "ja": "OCR",
+      "vi": "OCR"
+    },
+    "processing": {
+      "zhCN": "图像处理",
+      "zhTW": "影像處理",
+      "en": "ImageProc",
+      "fr": "ImageProc",
+      "ru": "ImageProc",
+      "ja": "画像処理",
+      "vi": "ImageProc"
+    },
+    "per": {
+      "zhCN": "视频按秒",
+      "zhTW": "影片按秒",
+      "en": "VideoSec",
+      "fr": "VideoSec",
+      "ru": "VideoSec",
+      "ja": "動画秒課金",
+      "vi": "VideoSec"
+    },
+    "second": {
+      "zhCN": "视频按秒",
+      "zhTW": "影片按秒",
+      "en": "VideoSec",
+      "fr": "VideoSec",
+      "ru": "VideoSec",
+      "ja": "動画秒課金",
+      "vi": "VideoSec"
+    },
+    "request": {
+      "zhCN": "视频按次",
+      "zhTW": "影片按次",
+      "en": "VideoReq",
+      "fr": "VideoReq",
+      "ru": "VideoReq",
+      "ja": "動画回課金",
+      "vi": "VideoReq"
+    },
+    "VideoSec": {
+      "zhCN": "视频按秒",
+      "zhTW": "影片按秒",
+      "en": "VideoSec",
+      "fr": "VideoSec",
+      "ru": "VideoSec",
+      "ja": "動画秒課金",
+      "vi": "VideoSec"
+    },
+    "VideoReq": {
+      "zhCN": "视频按次",
+      "zhTW": "影片按次",
+      "en": "VideoReq",
+      "fr": "VideoReq",
+      "ru": "VideoReq",
+      "ja": "動画回課金",
+      "vi": "VideoReq"
+    },
+    "DigitalHuman": {
+      "zhCN": "数字人",
+      "zhTW": "數位人",
+      "en": "DigitalHuman",
+      "fr": "DigitalHuman",
+      "ru": "DigitalHuman",
+      "ja": "デジタルヒューマン",
+      "vi": "DigitalHuman"
+    },
+    "ImageProc": {
+      "zhCN": "图像处理",
+      "zhTW": "影像處理",
+      "en": "ImageProc",
+      "fr": "ImageProc",
+      "ru": "ImageProc",
+      "ja": "画像処理",
+      "vi": "ImageProc"
     }
   },
   "qwen3.8-max-0902": {

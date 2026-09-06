@@ -1,0 +1,33 @@
+# 修侧栏「·」碎标签 + 再 scrub 供应商痕迹
+cd /opt/ai-relay && sudo git pull && git log -1 --oneline
+
+sudo python3 scripts/vps-fix-marketplace-tags.py /opt/ai-relay/data/new-api/one-api.db
+sudo python3 scripts/vps-scrub-channel-names.py /opt/ai-relay/data/new-api/one-api.db 2>/dev/null || true
+
+sudo docker build --no-cache -t keyo-creem-moderation ./services/creem-moderation-proxy
+sudo docker rm -f ai-relay-creem-moderation 2>/dev/null || true
+sudo docker run -d --name ai-relay-creem-moderation --restart always --network host \
+  --env-file /opt/ai-relay/.env.moderation \
+  -e UPSTREAM_URL=http://127.0.0.1:3000 \
+  -e LISTEN_HOST=127.0.0.1 \
+  -e PORT=3001 \
+  keyo-creem-moderation
+
+sleep 2
+curl -sS http://127.0.0.1:3001/ | grep -oE '__keyoLocaleDescV4' | sort -u
+curl -sS http://127.0.0.1:3001/api/pricing | python3 -c "
+import sys,json,re,collections
+d=json.load(sys.stdin)
+blob=json.dumps(d,ensure_ascii=False)
+print('leak', bool(re.search(r'sensenova|SenseNova|商汤|上游|成本×|OpenLux|模力方舟|APIMart|Gitee', blob, re.I)))
+tags=collections.Counter()
+for m in d.get('data') or []:
+  t=m.get('tags')
+  parts=t if isinstance(t,list) else str(t or '').split(',')
+  for p in parts:
+    p=str(p).strip()
+    if p: tags[p]+=1
+print('bad_dot', tags.get('·',0), tags.get('.',0))
+print('sample', tags.most_common(20))
+"
+echo DONE_FIX_TAGS_UI

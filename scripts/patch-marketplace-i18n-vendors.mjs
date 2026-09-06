@@ -1,6 +1,9 @@
 /**
  * Patch marketplace-model-copy.json: __vendors__ + expanded __tags__
  * Brand names stay brand-safe (no machine-translation junk).
+ *
+ * IMPORTANT: New API sidebar splits tags on spaces / 「·」.
+ * Every localized tag label MUST be a single token (no spaces, no middle-dot).
  */
 import fs from "fs";
 import path from "path";
@@ -60,44 +63,57 @@ const VENDORS = {
   Other: LANG("其他", "其他", "Other", "Autre", "Другое", "その他", "Khác"),
 };
 
+/** Single-token labels only — New API sidebar splits on spaces / · */
+const TAG_LLM = LANG("大语言模型", "大型語言模型", "LLM", "LLM", "LLM", "大規模言語モデル", "LLM");
+const TAG_MOD = LANG("内容风控", "內容風控", "Moderation", "Moderation", "Moderation", "コンテンツ審査", "Moderation");
+const TAG_HUMAN = LANG("数字人", "數位人", "DigitalHuman", "DigitalHuman", "DigitalHuman", "デジタルヒューマン", "DigitalHuman");
+const TAG_IMAGE = LANG("图片", "圖片", "Image", "Image", "Image", "画像", "Image");
+const TAG_IMGPROC = LANG("图像处理", "影像處理", "ImageProc", "ImageProc", "ImageProc", "画像処理", "ImageProc");
+const TAG_TTS = LANG("语音合成", "語音合成", "TTS", "TTS", "TTS", "音声合成", "TTS");
+const TAG_ASR = LANG("语音识别", "語音辨識", "ASR", "ASR", "ASR", "音声認識", "ASR");
+const TAG_OCR = LANG("OCR", "OCR", "OCR", "OCR", "OCR", "OCR", "OCR");
+const TAG_VIDEO = LANG("视频", "影片", "Video", "Video", "Video", "動画", "Video");
+const TAG_VIDEO_SEC = LANG("视频按秒", "影片按秒", "VideoSec", "VideoSec", "VideoSec", "動画秒課金", "VideoSec");
+const TAG_VIDEO_REQ = LANG("视频按次", "影片按次", "VideoReq", "VideoReq", "VideoReq", "動画回課金", "VideoReq");
+const TAG_FREE = LANG("免费", "免費", "Free", "Free", "Free", "無料", "Free");
+
 const TAGS = {
-  大语言模型: LANG("大语言模型", "大型語言模型", "LLM", "LLM", "LLM", "大規模言語モデル", "LLM"),
-  内容风控: LANG("内容风控", "內容風控", "Moderation", "Modération", "Модерация", "コンテンツ審査", "Kiểm duyệt"),
-  数字人: LANG("数字人", "數位人", "Digital Human", "Humain digital", "Цифровой человек", "デジタルヒューマン", "Người số"),
-  图片: LANG("图片", "圖片", "Image", "Image", "Изображение", "画像", "Ảnh"),
-  图像处理: LANG(
-    "图像处理",
-    "影像處理",
-    "Image Processing",
-    "Traitement d’image",
-    "Обработка изображений",
-    "画像処理",
-    "Xử lý ảnh"
-  ),
-  语音合成: LANG("语音合成", "語音合成", "TTS", "Synthèse vocale", "Синтез речи", "音声合成", "Tổng hợp giọng"),
-  语音识别: LANG(
-    "语音识别",
-    "語音辨識",
-    "ASR",
-    "Reconnaissance vocale",
-    "Распознавание речи",
-    "音声認識",
-    "Nhận dạng giọng"
-  ),
-  OCR: LANG("OCR", "OCR", "OCR", "OCR", "OCR", "OCR", "OCR"),
-  视频: LANG("视频", "影片", "Video", "Vidéo", "Видео", "動画", "Video"),
-  "视频·按秒": LANG("视频·按秒", "影片·按秒", "Video · per second", "Vidéo · /s", "Видео · /с", "動画·秒課金", "Video · /giây"),
-  "视频·按次": LANG("视频·按次", "影片·按次", "Video · per request", "Vidéo · /req", "Видео · /запрос", "動画·回課金", "Video · /lần"),
-  免费: LANG("免费", "免費", "Free", "Gratuit", "Бесплатно", "無料", "Miễn phí"),
-  Free: LANG("免费", "免費", "Free", "Gratuit", "Бесплатно", "無料", "Miễn phí"),
-  // aliases seen on English sidebar when DB tags leaked as English fragments
-  asr: LANG("语音识别", "語音辨識", "ASR", "ASR", "ASR", "音声認識", "ASR"),
-  llm: LANG("大语言模型", "大型語言模型", "LLM", "LLM", "LLM", "大規模言語モデル", "LLM"),
-  image: LANG("图片", "圖片", "Image", "Image", "Image", "画像", "Ảnh"),
-  digital: LANG("数字人", "數位人", "Digital Human", "Digital Human", "Digital Human", "デジタルヒューマン", "Digital Human"),
-  human: LANG("数字人", "數位人", "Digital Human", "Digital Human", "Digital Human", "デジタルヒューマン", "Digital Human"),
-  tts: LANG("语音合成", "語音合成", "TTS", "TTS", "TTS", "音声合成", "TTS"),
-  video: LANG("视频", "影片", "Video", "Video", "Video", "動画", "Video"),
+  大语言模型: TAG_LLM,
+  内容风控: TAG_MOD,
+  数字人: TAG_HUMAN,
+  图片: TAG_IMAGE,
+  图像处理: TAG_IMGPROC,
+  语音合成: TAG_TTS,
+  语音识别: TAG_ASR,
+  OCR: TAG_OCR,
+  视频: TAG_VIDEO,
+  // canonical (no middle-dot)
+  视频按秒: TAG_VIDEO_SEC,
+  视频按次: TAG_VIDEO_REQ,
+  // legacy DB keys with ·
+  "视频·按秒": TAG_VIDEO_SEC,
+  "视频·按次": TAG_VIDEO_REQ,
+  免费: TAG_FREE,
+  Free: TAG_FREE,
+  // fragment aliases from broken English sidebar splits
+  asr: TAG_ASR,
+  llm: TAG_LLM,
+  image: TAG_IMAGE,
+  digital: TAG_HUMAN,
+  human: TAG_HUMAN,
+  tts: TAG_TTS,
+  video: TAG_VIDEO,
+  free: TAG_FREE,
+  moderation: TAG_MOD,
+  ocr: TAG_OCR,
+  processing: TAG_IMGPROC,
+  per: TAG_VIDEO_SEC,
+  second: TAG_VIDEO_SEC,
+  request: TAG_VIDEO_REQ,
+  VideoSec: TAG_VIDEO_SEC,
+  VideoReq: TAG_VIDEO_REQ,
+  DigitalHuman: TAG_HUMAN,
+  ImageProc: TAG_IMGPROC,
 };
 
 for (const f of files) {

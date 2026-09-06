@@ -1,0 +1,27 @@
+# 缺图标模型：静态 PNG + creem 注入替换头像；seedance/flux 改回 lobehub 键
+cd /opt/ai-relay && sudo git pull && git log -1 --oneline
+
+sudo mkdir -p /opt/ai-relay/static/brand/model-icons
+sudo cp -f /opt/ai-relay/static/brand/model-icons/*.png /opt/ai-relay/static/brand/model-icons/ 2>/dev/null || true
+# git pull 已带上 static/brand/model-icons
+ls -la /opt/ai-relay/static/brand/model-icons | head
+
+sudo python3 scripts/vps-fix-lobehub-icons.py /opt/ai-relay/data/new-api/one-api.db
+
+sudo docker build --no-cache -t keyo-creem-moderation ./services/creem-moderation-proxy
+sudo docker rm -f ai-relay-creem-moderation 2>/dev/null || true
+sudo docker run -d --name ai-relay-creem-moderation --restart always --network host \
+  --env-file /opt/ai-relay/.env.moderation \
+  -e UPSTREAM_URL=http://127.0.0.1:3000 \
+  -e LISTEN_HOST=127.0.0.1 \
+  -e PORT=3001 \
+  -e RANKINGS_DISPLAY_MULTIPLIER=10 \
+  keyo-creem-moderation
+
+sleep 2
+curl -sS -m 5 -o /dev/null -w "icon=%{http_code}\n" http://127.0.0.1:3001/ || true
+# brand 静态由 Caddy 提供；本机可测文件是否存在
+test -f /opt/ai-relay/static/brand/model-icons/vajrav1.png && echo png_ok || echo png_missing
+curl -sS http://127.0.0.1:3001/ | grep -oE 'keyo-model-icons-v1|__keyoModelIconsV1' | sort -u
+sudo docker restart new-api 2>/dev/null || true
+echo DONE_MODEL_ICONS

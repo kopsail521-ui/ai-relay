@@ -1,0 +1,21 @@
+{
+  "note": "Custom PNG icons for models without lobehub logos. Served at /brand/model-icons/* (Caddy static/brand).",
+  "icons": {
+    "VajraV1": "/brand/model-icons/vajrav1.png",
+    "AnimeSharp": "/brand/model-icons/animesharp.png",
+    "UVDoc": "/brand/model-icons/uvdoc.png",
+    "MinerU2.5-Pro": "/brand/model-icons/mineru25-pro.png",
+    "Duix-Avatar": "/brand/model-icons/duix-avatar.png",
+    "InfiniteTalk": "/brand/model-icons/infinitetalk.png",
+    "MOSS-Audio-8B-Thinking": "/brand/model-icons/moss-audio.png",
+    "nonescape-v0": "/brand/model-icons/nonescape.png",
+    "moark-text-moderation": "/brand/model-icons/moark-moderation.png",
+    "Security-semantic-filtering": "/brand/model-icons/security-semantic.png",
+    "nsfw-classifier": "/brand/model-icons/nsfw-classifier.png"
+  },
+  "lobehub_fixes": {
+    "seedance-2.5": "Doubao.Color",
+    "seedance-2.0": "Doubao.Color",
+    "flux-3-video": "Flux"
+  }
+}

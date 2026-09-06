@@ -126,9 +126,9 @@ const FIXES = {
   // —— APIMart 视频 ——
   "gemini-omni-1.1-flash": { vendorName: "Google", icon: "Gemini.Color", tag: "视频", endpoints: EP.apimartVideo },
   "gemini-omni-1.1-flash-ext": { vendorName: "Google", icon: "Gemini.Color", tag: "视频", endpoints: EP.apimartVideo },
-  "seedance-2.5": { vendorName: "其他", icon: "Custom", tag: "视频", endpoints: EP.apimartVideo },
-  "seedance-2.0": { vendorName: "其他", icon: "Custom", tag: "视频", endpoints: EP.apimartVideo },
-  "flux-3-video": { vendorName: "其他", icon: "Custom", tag: "视频", endpoints: EP.apimartVideo },
+  "seedance-2.5": { vendorName: "字节跳动", icon: "Doubao.Color", tag: "视频", endpoints: EP.apimartVideo },
+  "seedance-2.0": { vendorName: "字节跳动", icon: "Doubao.Color", tag: "视频", endpoints: EP.apimartVideo },
+  "flux-3-video": { vendorName: "Black Forest Labs", icon: "Flux", tag: "视频", endpoints: EP.apimartVideo },
   "MiniMax-H3": { vendorName: "MiniMax", icon: "Minimax.Color", tag: "视频", endpoints: EP.apimartVideo },
   "wan3.0-video": { vendorName: "阿里巴巴", icon: "Qwen.Color", tag: "视频", endpoints: EP.apimartVideo },
 };

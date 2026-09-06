@@ -1,39 +1,43 @@
 {
-  "note": "内部渠道；对外勿写 SenseNova/商汤。客户模型 ID 保持无后缀，广场展示名走 display_names 多语言。",
+  "note": "免费线对外 ID 带 -free；渠道 model_mapping 映射到上游裸名。收费线用裸名走 OpenLux。对外勿写 SenseNova。",
   "base_url": "https://token.sensenova.cn",
   "channel_name": "Keyo Free",
   "models": [
     {
-      "id": "deepseek-v4-pro",
+      "id": "deepseek-v4-pro-free",
+      "upstream": "deepseek-v4-pro",
       "vendor": "DeepSeek",
       "icon": "DeepSeek",
       "tags": "大语言模型,免费",
-      "desc_zh": "DeepSeek V4 Pro 旗舰对话与推理模型（免费额度）。",
-      "desc_en": "DeepSeek V4 Pro flagship chat and reasoning model (free tier)."
+      "desc_zh": "DeepSeek V4 Pro 免费额度（与收费版 deepseek-v4-pro 区分）。",
+      "desc_en": "DeepSeek V4 Pro free tier (distinct from paid deepseek-v4-pro)."
     },
     {
-      "id": "deepseek-v4-flash",
+      "id": "deepseek-v4-flash-free",
+      "upstream": "deepseek-v4-flash",
       "vendor": "DeepSeek",
       "icon": "DeepSeek",
       "tags": "大语言模型,免费",
-      "desc_zh": "DeepSeek V4 Flash 高速对话模型（免费额度）。",
-      "desc_en": "DeepSeek V4 Flash high-speed chat model (free tier)."
+      "desc_zh": "DeepSeek V4 Flash 免费额度（与收费版 deepseek-v4-flash 区分）。",
+      "desc_en": "DeepSeek V4 Flash free tier (distinct from paid deepseek-v4-flash)."
     },
     {
-      "id": "glm-5.2",
+      "id": "glm-5.2-free",
+      "upstream": "glm-5.2",
       "vendor": "智谱",
       "icon": "ChatGLM.Color",
       "tags": "大语言模型,免费",
-      "desc_zh": "GLM 5.2 旗舰对话与编码模型（免费额度）。",
-      "desc_en": "GLM 5.2 flagship chat and coding model (free tier)."
+      "desc_zh": "GLM 5.2 免费额度（与收费版 glm-5.2 区分）。",
+      "desc_en": "GLM 5.2 free tier (distinct from paid glm-5.2)."
     },
     {
-      "id": "kimi-k3",
+      "id": "kimi-k3-free",
+      "upstream": "kimi-k3",
       "vendor": "Moonshot",
       "icon": "Moonshot",
       "tags": "大语言模型,免费",
-      "desc_zh": "Kimi K3 长上下文对话模型（免费额度）。",
-      "desc_en": "Kimi K3 long-context chat model (free tier)."
+      "desc_zh": "Kimi K3 免费额度（与收费版 kimi-k3 区分）。",
+      "desc_en": "Kimi K3 free tier (distinct from paid kimi-k3)."
     }
   ]
 }

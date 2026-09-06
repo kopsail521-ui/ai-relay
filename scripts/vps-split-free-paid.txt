@@ -1,0 +1,39 @@
+# 免费/收费拆分：*-free 免费；裸名收费（OpenLux ×5）
+# 客户免费请用 model=deepseek-v4-pro-free 等；收费用 deepseek-v4-pro 等
+cd /opt/ai-relay && sudo git pull && git log -1 --oneline
+
+: "${SENSENOVA_API_KEY:=$(grep -E '^SENSENOVA_API_KEY=' /opt/ai-relay/.env 2>/dev/null | cut -d= -f2-)}"
+: "${SENSENOVA_API_KEY:?set SENSENOVA_API_KEY in env or .env}"
+export SENSENOVA_API_KEY
+
+sudo -E python3 scripts/vps-split-free-paid-models.py /opt/ai-relay/data/new-api/one-api.db
+sudo python3 scripts/vps-scrub-channel-names.py /opt/ai-relay/data/new-api/one-api.db 2>/dev/null || true
+sudo python3 scripts/vps-update-marketplace-copy.py /opt/ai-relay/data/new-api/one-api.db /opt/ai-relay/config/marketplace-model-copy.json 2>/dev/null || true
+
+sudo docker build --no-cache -t keyo-creem-moderation ./services/creem-moderation-proxy
+sudo docker rm -f ai-relay-creem-moderation 2>/dev/null || true
+sudo docker run -d --name ai-relay-creem-moderation --restart always --network host \
+  --env-file /opt/ai-relay/.env.moderation \
+  -e UPSTREAM_URL=http://127.0.0.1:3000 \
+  -e LISTEN_HOST=127.0.0.1 \
+  -e PORT=3001 \
+  keyo-creem-moderation
+
+sleep 2
+sudo docker restart new-api 2>/dev/null || sudo systemctl restart new-api 2>/dev/null || true
+sleep 3
+curl -sS http://127.0.0.1:3001/api/pricing | python3 -c "
+import sys,json
+d=json.load(sys.stdin)
+blob=json.dumps(d,ensure_ascii=False)
+free=['deepseek-v4-pro-free','deepseek-v4-flash-free','glm-5.2-free','kimi-k3-free']
+paid=['deepseek-v4-pro','deepseek-v4-flash','glm-5.2','kimi-k3']
+print('free', {k:(k in blob) for k in free})
+print('paid', {k:(k in blob) for k in paid})
+ms={ (m.get('model_name') or ''): m for m in (d.get('data') or []) }
+for k in free+paid:
+  m=ms.get(k)
+  if not m: continue
+  print(k, 'price', m.get('model_price'), 'ratio', m.get('model_ratio'), 'tags', m.get('tags'))
+"
+echo DONE_SPLIT_FREE_PAID

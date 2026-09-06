@@ -20,6 +20,10 @@ www.keyoapi.xyz {
 		root * /opt/ai-relay/static/seo
 		file_server
 	}
+	handle /sitemap-live.xml {
+		root * /opt/ai-relay/static/seo
+		file_server
+	}
 	handle / {
 		root * /opt/ai-relay/static/seo
 		rewrite * /index.html

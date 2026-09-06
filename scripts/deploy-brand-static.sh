@@ -52,7 +52,8 @@ ${DOMAIN} {
 		header Content-Type text/plain
 		file_server
 	}
-	handle /sitemap.xml {
+	@sitemaps path /sitemap.xml /sitemap-live.xml
+	handle @sitemaps {
 		root * ${ROOT}/static/seo
 		file_server
 	}

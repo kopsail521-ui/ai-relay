@@ -8,7 +8,8 @@ export function caddySeoHandles() {
 		header Content-Type text/plain
 		file_server
 	}
-	handle /sitemap.xml {
+	@sitemaps path /sitemap.xml /sitemap-live.xml
+	handle @sitemaps {
 		root * /opt/ai-relay/static/seo
 		file_server
 	}

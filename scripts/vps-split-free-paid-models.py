@@ -305,12 +305,12 @@ def main():
 
     for m in free_models:
         fid, up = m["id"], m["upstream"]
-        # free pricing
+        # free pricing — fixed $0; must NOT keep ModelRatio
         mr.pop(fid, None)
         cr.pop(fid, None)
         mp[fid] = 0
-        # clear legacy free price on bare if we are converting bare to paid
-        # (paid ratios set below)
+        # paid twin: clear any leftover ModelPrice=0 from legacy free deploy
+        mp.pop(up, None)
         vid = ensure_vendor(cur, v_cols, m["vendor"], now)
         upsert_marketplace(
             cur,
@@ -334,6 +334,15 @@ def main():
             cost_in = float(cat.get("cost_in_usd") or 0)
             our_mr = (cost_in * 5 / 2) if cost_in else 1.0
             our_cr = float(cat.get("completion_ratio") or 1)
+        # hard defaults if catalog missing on VPS
+        defaults = {
+            "deepseek-v4-pro": (1.65, 3.0),
+            "deepseek-v4-flash": (0.55, 3.0),
+            "glm-5.2": (1.75, 3.142857),
+            "kimi-k3": (3.75, 5.0),
+        }
+        if our_mr <= 0 and up in defaults:
+            our_mr, our_cr = defaults[up]
         mr[up] = our_mr
         cr[up] = our_cr
         mp.pop(up, None)

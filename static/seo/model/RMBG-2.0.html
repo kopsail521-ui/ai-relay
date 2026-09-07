@@ -57,6 +57,8 @@ ul{margin:0 0 14px;padding-left:1.2em}
   <a href="/compare">Compare</a>
   <a href="/pricing">Pricing</a>
   <a href="/free-models">Free models</a>
+  <a href="/gemini-api-pricing">Gemini pricing</a>
+  <a href="/deepseek-api-pricing">DeepSeek pricing</a>
   <a href="/brand/keyo-docs.html">Docs</a>
   <a href="/sign-in">Sign in</a>
   <a href="/sign-up">Sign up</a>
@@ -81,6 +83,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
 <p>Background removal in commerce is a reliability problem: hair edges, transparent packaging, and white-on-white SKUs. Build a QA loop that flags mattes with too much leftover background using simple pixel heuristics, then re-run or escalate to sam3 masks. Store alpha PNGs with SKU ids for CDN delivery. Meter per request so you can charge merchants per successful cutout. Do not demo this with chat/completions—use /v1/images/mattings with multipart uploads. That single detail separates a real background removal API from a toy prompt.</p>
 <p>Accept PNG/JPEG, return alpha. Soft-fail on tiny images. Offer a preview URL for merchant QA. Background removal API quality is judged by edge hair and plastic packaging—curate a regression set of fifty SKUs and re-score after every model upgrade.</p>
 <p>Practical checklist for RMBG-2.0: confirm endpoint POST /v1/images/mattings, set model string model=RMBG-2.0, verify listed price $0.0068 / request on /pricing/RMBG-2.0, add related links from this page into your docs, and keep interactive try/buy on /pricing/RMBG-2.0 for key creation. Target queries such as background removal api, remove background api, image matting api should land here with crawlable HTML—not a CSR shell. Re-test curl monthly when upstream request shapes change. Prefer this static guide for SEO and onboarding emails; prefer the console when operators need live balance and logs.</p>
+
 <h2>Quick start</h2>
 <div class="card">
 <p>Base URL: <code>https://www.keyoapi.xyz/v1</code></p>
@@ -107,6 +110,8 @@ ul{margin:0 0 14px;padding-left:1.2em}
   <a href="/compare">AI API price comparison</a>
   <a href="/pricing">Pricing list</a>
   <a href="/free-models">Free AI API</a>
+  <a href="/gemini-api-pricing">Gemini API pricing</a>
+  <a href="/deepseek-api-pricing">DeepSeek API pricing</a>
   <a href="/brand/keyo-docs.html">Docs</a>
   <a href="/brand/faq.html">FAQ</a>
   <a href="/brand/privacy.html">Privacy</a>

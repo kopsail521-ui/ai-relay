@@ -57,6 +57,8 @@ ul{margin:0 0 14px;padding-left:1.2em}
   <a href="/compare">Compare</a>
   <a href="/pricing">Pricing</a>
   <a href="/free-models">Free models</a>
+  <a href="/gemini-api-pricing">Gemini pricing</a>
+  <a href="/deepseek-api-pricing">DeepSeek pricing</a>
   <a href="/brand/keyo-docs.html">Docs</a>
   <a href="/sign-in">Sign in</a>
   <a href="/sign-up">Sign up</a>
@@ -81,6 +83,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
 <p>Talking avatars are async media jobs: validate face video and voice sample length before submit, then poll task status. Show progress UI; do not block HTTP workers. Moderate inputs for deepfake abuse. Cache finished MP4s by (face hash, audio hash). Digital human API buyers care about lip sync and queue time—log both. KeyoAPI’s audio-video-to-video route keeps avatar generation on the same key as TTS and STT for full agent personas.</p>
 <p>Validate face frontal angle and audio SNR before queueing. Show ETA based on queue depth. Digital human API abuse prevention matters as much as render quality—log and rate-limit.</p>
 <p>Practical checklist for Duix-Avatar: confirm endpoint POST /v1/async/videos/audio-video-to-video, set model string model=Duix-Avatar, verify listed price $0.0068 / second on /pricing/Duix-Avatar, add related links from this page into your docs, and keep interactive try/buy on /pricing/Duix-Avatar for key creation. Target queries such as digital human api, talking avatar api, lip sync api should land here with crawlable HTML—not a CSR shell. Re-test curl monthly when upstream request shapes change. Prefer this static guide for SEO and onboarding emails; prefer the console when operators need live balance and logs.</p>
+
 <h2>Quick start</h2>
 <div class="card">
 <p>Base URL: <code>https://www.keyoapi.xyz/v1</code></p>
@@ -109,6 +112,8 @@ ul{margin:0 0 14px;padding-left:1.2em}
   <a href="/compare">AI API price comparison</a>
   <a href="/pricing">Pricing list</a>
   <a href="/free-models">Free AI API</a>
+  <a href="/gemini-api-pricing">Gemini API pricing</a>
+  <a href="/deepseek-api-pricing">DeepSeek API pricing</a>
   <a href="/brand/keyo-docs.html">Docs</a>
   <a href="/brand/faq.html">FAQ</a>
   <a href="/brand/privacy.html">Privacy</a>

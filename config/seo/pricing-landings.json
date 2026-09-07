@@ -1,0 +1,127 @@
+{
+  "_note": "Purchase-intent pricing landings. Official list figures are indicative public references — always point to /pricing for live Keyo sell rates.",
+  "pages": [
+    {
+      "slug": "gemini-api-pricing",
+      "h1": "Gemini API Pricing — KeyoAPI vs Typical Google List Rates",
+      "title": "Gemini API Pricing Comparison | Cheap Gemini on KeyoAPI",
+      "metaDescription": "Gemini API pricing on KeyoAPI: compare Google-class list rates with Keyo sell prices for Flash/Pro twins, plus $0 free LLM alternatives on the same key.",
+      "targetKeywords": [
+        "gemini api pricing",
+        "gemini api price",
+        "cheap gemini api"
+      ],
+      "lead": "Looking up Gemini API pricing usually means you already want Google-class models but need clearer unit economics — or a relay that also hosts DeepSeek free tiers and Whisper under one balance. This page compares indicative Keyo sell rates with typical public Google list figures and shows how to call Gemini-class IDs on an OpenAI-compatible gateway.",
+      "rows": [
+        {
+          "model": "gemini-2.5-flash",
+          "official": "Google Gemini 2.5 Flash list often cited near ~$0.30 / $2.50 per 1M in/out (varies by tier/context)",
+          "keyo": "~$0.11 / $0.92 per 1M in/out",
+          "note": "High-volume Flash lane"
+        },
+        {
+          "model": "gemini-2.5-pro",
+          "official": "Google Gemini 2.5 Pro list commonly higher than Flash (check AI Studio)",
+          "keyo": "~$0.46 / $3.68 per 1M in/out",
+          "note": "Stronger Pro twin"
+        },
+        {
+          "model": "gemini-3-flash-preview",
+          "official": "Preview list pricing moves quickly — verify on Google",
+          "keyo": "~$0.18 / $1.10 per 1M in/out",
+          "note": "Newer Flash preview"
+        },
+        {
+          "model": "gemini-3-pro-preview",
+          "official": "Preview Pro list — verify on Google AI Studio",
+          "keyo": "~$0.74 / $4.41 per 1M in/out",
+          "note": "Newer Pro preview"
+        },
+        {
+          "model": "gemini-3.5-flash",
+          "official": "Google 3.5 Flash public list (confirm current)",
+          "keyo": "~$0.55 / $3.31 per 1M in/out",
+          "note": "3.5 Flash on Keyo"
+        }
+      ],
+      "freeKiller": {
+        "title": "The $0 row competitors cannot match",
+        "body": "Google Gemini free tiers are usually quota- or trial-shaped. On the same Keyo key you can also call permanent $0 IDs such as deepseek-v4-flash-free, deepseek-v4-pro-free, glm-5.2-free, and kimi-k3-free — fair-use limited, but ModelPrice stays $0. Use them to prototype while you meter Gemini-class paid traffic."
+      },
+      "body": [
+        "Gemini API pricing searches are purchase-intent: engineers are comparing dollars per million tokens before they wire production. Official Google surfaces win on brand trust; KeyoAPI wins when you want one prepaid balance across Gemini-class IDs plus DeepSeek, GLM, Whisper, OCR, and TTS — without five invoices.",
+        "Keyo rates above are indicative sell prices from the OpenLux-derived catalog (×5 style planning numbers). Always confirm live interactive pricing pages under /pricing/{modelId} before contracting volume. Preview model IDs can change naming as Google ships stables.",
+        "How to call: set OPENAI_BASE_URL=https://www.keyoapi.xyz/v1, use your Keyo API key, and pass the Gemini model string (for example gemini-2.5-flash) to POST /v1/chat/completions. Many Google-native features remain Google-console only; Keyo focuses on OpenAI-compatible chat relay access for overseas developer stacks.",
+        "When Gemini list prices spike your margin, keep Gemini for multimodal strengths and shift plain text volume to deepseek-v4-flash or gpt-5.6-luna on the same key. For pure free prototyping, start on /free-models, then promote to Gemini paid IDs when quality gates pass."
+      ],
+      "faqs": [
+        {
+          "q": "Is Keyo cheaper than Google Gemini API pricing?",
+          "a": "Often on the Flash/Pro rows we list — but Google’s public list, context tiers, and batch discounts change. Treat this table as a planning snapshot and verify both sides before you commit."
+        },
+        {
+          "q": "Do you offer a free Gemini model?",
+          "a": "Keyo’s permanent $0 IDs are DeepSeek/GLM/Kimi free twins today, not Gemini-branded free models. They sit on the same API key so you can prototype cheaply beside paid Gemini traffic."
+        }
+      ]
+    },
+    {
+      "slug": "deepseek-api-pricing",
+      "h1": "DeepSeek API Pricing — KeyoAPI Rates, Free Tier & Official Context",
+      "title": "DeepSeek API Pricing Comparison | Free + Paid on KeyoAPI",
+      "metaDescription": "DeepSeek API pricing on KeyoAPI: V4 Flash ~$1.10/$3.30, V4 Pro ~$3.30/$9.90 per 1M, plus permanent $0 *-free IDs. Compare with typical official DeepSeek list rates.",
+      "targetKeywords": [
+        "deepseek api pricing",
+        "deepseek api price",
+        "cheap deepseek api"
+      ],
+      "lead": "DeepSeek API pricing is one of the clearest purchase-intent queries in the open-model lane. This page puts KeyoAPI sell rates for DeepSeek V4 Flash and Pro next to typical official list context — and highlights permanent $0 free IDs that most pure comparison sites cannot honestly show.",
+      "rows": [
+        {
+          "model": "deepseek-v4-flash-free",
+          "official": "N/A — Keyo permanent free twin",
+          "keyo": "$0 (fair-use)",
+          "note": "model=deepseek-v4-flash-free"
+        },
+        {
+          "model": "deepseek-v4-flash",
+          "official": "Official DeepSeek list for Flash-class models — verify on platform.deepseek.com",
+          "keyo": "~$1.10 / $3.30 per 1M in/out",
+          "note": "Paid high-volume twin"
+        },
+        {
+          "model": "deepseek-v4-pro-free",
+          "official": "N/A — Keyo permanent free twin",
+          "keyo": "$0 (fair-use)",
+          "note": "model=deepseek-v4-pro-free"
+        },
+        {
+          "model": "deepseek-v4-pro",
+          "official": "Official DeepSeek list for Pro-class models — verify on platform.deepseek.com",
+          "keyo": "~$3.30 / $9.90 per 1M in/out",
+          "note": "Paid flagship twin"
+        }
+      ],
+      "freeKiller": {
+        "title": "Why $0 rows beat “10% cheaper” tables",
+        "body": "Most deepseek api pricing articles only shuffle paid token rates. Keyo lists deepseek-v4-flash-free and deepseek-v4-pro-free at permanent $0 with fair-use limits — the strongest prototype story you can put in a comparison table without being clickbait, as long as you disclose rate limits."
+      },
+      "body": [
+        "Engineers comparing deepseek api pricing usually already trust the model family and are shopping hosts: official platform, aggregators, or a multi-model relay. KeyoAPI is the third option — OpenAI-compatible base URL, prepaid balance, and Gemini/Whisper/OCR on the same key when DeepSeek is only part of the stack.",
+        "Indicative Keyo sell rates above come from the OpenLux-derived catalog. Confirm /pricing/deepseek-v4-flash and /pricing/deepseek-v4-pro before volume contracts. Free IDs keep ModelPrice at $0; they are not unlimited production SLAs.",
+        "How to call: POST https://www.keyoapi.xyz/v1/chat/completions with Authorization: Bearer YOUR_KEY and model set to a Flash/Pro free or paid ID. See dedicated guides at /model/deepseek-v4-flash and /model/deepseek-v4-pro for longer how-tos.",
+        "If your search was really about Gemini dollars, jump to /gemini-api-pricing. For the full free catalog, open /free-models."
+      ],
+      "faqs": [
+        {
+          "q": "Is Keyo’s DeepSeek API pricing cheaper than official?",
+          "a": "It depends on official promotions, cache discounts, and currency. Use this table for planning, then verify both Keyo live rates and DeepSeek’s current public list."
+        },
+        {
+          "q": "What’s the catch on $0 DeepSeek?",
+          "a": "Fair-use rate and concurrency limits on the Keyo Free channel. Disclose that in any public post — silent rate limits feel like bait-and-switch."
+        }
+      ]
+    }
+  ]
+}

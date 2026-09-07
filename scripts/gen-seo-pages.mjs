@@ -16,8 +16,15 @@ const site = "https://www.keyoapi.xyz";
 const pages = JSON.parse(
   fs.readFileSync(path.join(root, "config/seo/model-pages.json"), "utf8")
 );
+const batch2 = JSON.parse(
+  fs.readFileSync(path.join(root, "config/seo/batch2-models.json"), "utf8")
+);
+pages.models = [...pages.models, ...batch2.models];
 const priceRefs = JSON.parse(
   fs.readFileSync(path.join(root, "config/seo/official-price-refs.json"), "utf8")
+);
+const pricingLandings = JSON.parse(
+  fs.readFileSync(path.join(root, "config/seo/pricing-landings.json"), "utf8")
 );
 const freeCfg = JSON.parse(
   fs.readFileSync(path.join(root, "config/sensenova-free-models.json"), "utf8")
@@ -83,6 +90,8 @@ function nav() {
   <a href="/compare">Compare</a>
   <a href="/pricing">Pricing</a>
   <a href="/free-models">Free models</a>
+  <a href="/gemini-api-pricing">Gemini pricing</a>
+  <a href="/deepseek-api-pricing">DeepSeek pricing</a>
   <a href="/brand/keyo-docs.html">Docs</a>
   <a href="/sign-in">Sign in</a>
   <a href="/sign-up">Sign up</a>
@@ -95,6 +104,8 @@ function footer() {
   <a href="/compare">AI API price comparison</a>
   <a href="/pricing">Pricing list</a>
   <a href="/free-models">Free AI API</a>
+  <a href="/gemini-api-pricing">Gemini API pricing</a>
+  <a href="/deepseek-api-pricing">DeepSeek API pricing</a>
   <a href="/brand/keyo-docs.html">Docs</a>
   <a href="/brand/faq.html">FAQ</a>
   <a href="/brand/privacy.html">Privacy</a>
@@ -162,6 +173,31 @@ function compareTableRows() {
     .join("\n");
 }
 
+function freeTierBlock(m) {
+  const ft = m.freeTier;
+  if (!ft?.id) return "";
+  const paid = m.id;
+  const freeId = ft.id;
+  const channel = ft.channel || "Keyo Free";
+  return `
+<h2>Free tier available</h2>
+<div class="card">
+<p>Same model family on KeyoAPI: use <code>${esc(freeId)}</code> for permanent <span class="ok">$0</span> fair-use calls (${esc(channel)} channel), or <code>${esc(paid)}</code> for token-metered production traffic.</p>
+<p>Rules: free = <code>*-free</code> suffix; paid = bare ID. Fair-use rate/concurrency limits apply on free — see <a href="/free-models">/free-models</a>.</p>
+<p><strong>Free curl</strong></p>
+<pre><code>curl https://www.keyoapi.xyz/v1/chat/completions \\
+  -H "Authorization: Bearer YOUR_API_KEY" \\
+  -H "Content-Type: application/json" \\
+  -d '{"model":"${esc(freeId)}","messages":[{"role":"user","content":"Hello"}]}'</code></pre>
+<p><strong>Paid curl</strong></p>
+<pre><code>curl https://www.keyoapi.xyz/v1/chat/completions \\
+  -H "Authorization: Bearer YOUR_API_KEY" \\
+  -H "Content-Type: application/json" \\
+  -d '{"model":"${esc(paid)}","messages":[{"role":"user","content":"Hello"}]}'</code></pre>
+</div>
+`;
+}
+
 function renderModel(m) {
   const canonical = `${site}/model/${encodeURIComponent(m.id)}`;
   const leadSrc = m.sections?.intro || m.body;
@@ -187,6 +223,7 @@ function renderModel(m) {
 </div>
 <h2>Overview</h2>
 ${paras}
+${freeTierBlock(m)}
 <h2>Quick start</h2>
 <div class="card">
 <p>Base URL: <code>https://www.keyoapi.xyz/v1</code></p>
@@ -235,6 +272,8 @@ function renderHome() {
 <div class="btnrow">
   <a class="btn btn-primary" href="/sign-up">Start free</a>
   <a class="btn btn-secondary" href="/free-models">Free AI API</a>
+  <a class="btn btn-secondary" href="/gemini-api-pricing">Gemini API pricing</a>
+  <a class="btn btn-secondary" href="/deepseek-api-pricing">DeepSeek API pricing</a>
   <a class="btn btn-secondary" href="/compare">Full AI API price comparison</a>
   <a class="btn btn-secondary" href="/pricing">Pricing list</a>
 </div>
@@ -251,13 +290,13 @@ function renderHome() {
 <h2>Featured capabilities</h2>
 <ul>
   <li><a href="/model/gpt-5.6-luna">GPT-5.6 Luna</a> — high-volume cheap LLM tier</li>
+  <li><a href="/model/glm-5.2">GLM 5.2</a> — glm 5.2 api + free twin</li>
+  <li><a href="/model/deepseek-v4-flash">DeepSeek V4 Flash</a> — fast DeepSeek lane</li>
   <li><a href="/model/claude-sonnet-5">Claude Sonnet 5</a> — balanced Claude-class chat</li>
   <li><a href="/model/whisper-large-v3">Whisper Large V3</a> — multilingual speech-to-text</li>
-  <li><a href="/model/Qwen3-TTS">Qwen3-TTS</a> — async text to speech + voice clone</li>
-  <li><a href="/model/MinerU2.5-Pro">MinerU2.5-Pro</a> — async document parsing OCR</li>
-  <li><a href="/model/RMBG-2.0">RMBG-2.0</a> — background removal via /v1/images/mattings</li>
+  <li><a href="/gemini-api-pricing">Gemini API pricing</a> — purchase-intent comparison</li>
 </ul>
-<h2>All SEO model pages (batch 1)</h2>
+<h2>All SEO model pages</h2>
 <ul>${modelLinks}</ul>
 <h2>Integrate in minutes</h2>
 <pre><code>export OPENAI_BASE_URL=https://www.keyoapi.xyz/v1
@@ -393,7 +432,7 @@ function renderFreeModels() {
       const paid = m.upstream || String(m.id).replace(/-free$/, "");
       return `<tr>
   <td><code>${esc(m.id)}</code></td>
-  <td><code>${esc(paid)}</code></td>
+  <td><a href="/model/${encodeURIComponent(paid)}"><code>${esc(paid)}</code></a></td>
   <td class="ok">$0</td>
   <td>${esc(m.vendor || "—")}</td>
   <td>${esc(freeCfg.channel_name || "Keyo Free")}</td>
@@ -488,6 +527,69 @@ ${rows}
   });
 }
 
+function renderPricingLanding(p) {
+  const canonical = `${site}/${p.slug}`;
+  const rows = p.rows
+    .map(
+      (r) => `<tr>
+  <td><code>${esc(r.model)}</code></td>
+  <td>${esc(r.official)}</td>
+  <td class="ok">${esc(r.keyo)}</td>
+  <td>${esc(r.note)}</td>
+</tr>`
+    )
+    .join("\n");
+  const bodyParas = p.body.map((t) => `<p>${esc(t)}</p>`).join("\n");
+  const faqs = p.faqs
+    .map(
+      (f) =>
+        `<details><summary>${esc(f.q)}</summary><p>${esc(f.a)}</p></details>`
+    )
+    .join("\n");
+  const bodyHtml = `
+<p class="lead">${esc(p.lead)}</p>
+<p class="meta">Target keywords: ${p.targetKeywords.map(esc).join(" · ")}</p>
+<div class="btnrow">
+  <a class="btn btn-primary" href="/sign-up">Get API key</a>
+  <a class="btn btn-secondary" href="/pricing">Full pricing list</a>
+  <a class="btn btn-secondary" href="/free-models">Free models</a>
+</div>
+<h2>Price comparison table</h2>
+<p class="meta">Indicative figures for planning. Confirm live Keyo sell rates on interactive <a href="/pricing">/pricing</a> pages.</p>
+<table>
+<thead><tr><th>Model ID</th><th>Typical official / context</th><th>KeyoAPI</th><th>Notes</th></tr></thead>
+<tbody>
+${rows}
+</tbody>
+</table>
+<h2>${esc(p.freeKiller.title)}</h2>
+<p>${esc(p.freeKiller.body)}</p>
+<h2>How to think about this pricing page</h2>
+${bodyParas}
+<pre>curl https://www.keyoapi.xyz/v1/chat/completions \\
+  -H "Authorization: Bearer $KEYO_API_KEY" \\
+  -H "Content-Type: application/json" \\
+  -d '{"model":"${esc(p.rows.find((r) => !String(r.model).endsWith("-free"))?.model || p.rows[0].model)}","messages":[{"role":"user","content":"Hello"}]}'</pre>
+<h2>FAQ</h2>
+<div class="faq">${faqs}</div>
+<p class="meta">Also see <a href="/compare">/compare</a>, <a href="/free-models">/free-models</a>, and model guides under <code>/model/</code>.</p>
+`;
+  return layout({
+    title: p.title,
+    description: p.metaDescription,
+    canonical,
+    h1: p.h1,
+    bodyHtml,
+    jsonLd: {
+      "@context": "https://schema.org",
+      "@type": "WebPage",
+      name: p.title,
+      url: canonical,
+      description: p.metaDescription,
+    },
+  });
+}
+
 function writeRobots() {
   return `User-agent: *
 Allow: /
@@ -495,6 +597,8 @@ Allow: /compare
 Allow: /model/
 Allow: /pricing
 Allow: /free-models
+Allow: /gemini-api-pricing
+Allow: /deepseek-api-pricing
 Allow: /brand/
 Allow: /about
 
@@ -517,6 +621,16 @@ function writeSitemap() {
     { loc: `${site}/compare`, priority: "0.95", changefreq: "weekly" },
     { loc: `${site}/pricing`, priority: "0.9", changefreq: "daily" },
     { loc: `${site}/free-models`, priority: "0.95", changefreq: "weekly" },
+    {
+      loc: `${site}/gemini-api-pricing`,
+      priority: "0.95",
+      changefreq: "weekly",
+    },
+    {
+      loc: `${site}/deepseek-api-pricing`,
+      priority: "0.95",
+      changefreq: "weekly",
+    },
     ...pages.models.map((m) => ({
       loc: `${site}/model/${encodeURIComponent(m.id)}`,
       priority: "0.9",
@@ -553,6 +667,9 @@ fs.writeFileSync(path.join(outDir, "index.html"), renderHome());
 fs.writeFileSync(path.join(outDir, "compare.html"), renderCompare());
 fs.writeFileSync(path.join(outDir, "pricing.html"), renderPricing());
 fs.writeFileSync(path.join(outDir, "free-models.html"), renderFreeModels());
+for (const p of pricingLandings.pages) {
+  fs.writeFileSync(path.join(outDir, `${p.slug}.html`), renderPricingLanding(p));
+}
 for (const m of pages.models) {
   fs.writeFileSync(path.join(outDir, "model", `${m.id}.html`), renderModel(m));
 }
@@ -571,7 +688,7 @@ fs.writeFileSync(
 
 console.log(
   "Generated",
-  4 + pages.models.length,
+  4 + pricingLandings.pages.length + pages.models.length,
   "HTML pages + robots.txt + sitemap.xml ->",
   outDir
 );

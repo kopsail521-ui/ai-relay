@@ -1,0 +1,177 @@
+{
+  "_note": "Batch-2 model SEO pages. freeTier embeds Free block + dual curl. Do not invent SenseNova publicly.",
+  "models": [
+    {
+      "id": "glm-5.2",
+      "category": "llm",
+      "batch": 2,
+      "targetKeywords": [
+        "glm 5.2 api",
+        "glm api",
+        "glm-5.2"
+      ],
+      "h1": "GLM 5.2 API — Call Zhipu GLM on KeyoAPI (OpenAI-Compatible)",
+      "title": "GLM 5.2 API Pricing & Free Tier | KeyoAPI",
+      "metaDescription": "Use GLM 5.2 API via KeyoAPI: OpenAI-compatible chat, paid twin ~$3.50/$11 per 1M, plus permanent $0 glm-5.2-free. One key for glm api workloads.",
+      "priceLabel": "~$3.50 / $11.00 per 1M in/out",
+      "priceUnit": "per_1m_tokens",
+      "related": [
+        "deepseek-v4-flash",
+        "kimi-k3",
+        "gpt-5.6-luna"
+      ],
+      "endpoint": "POST /v1/chat/completions",
+      "codeHint": "model=glm-5.2",
+      "freeTier": {
+        "id": "glm-5.2-free",
+        "channel": "Keyo Free"
+      },
+      "faqs": [
+        {
+          "q": "What is the GLM 5.2 API model ID on KeyoAPI?",
+          "a": "Use model=glm-5.2 for the paid, token-metered twin. For the permanent $0 fair-use tier, use model=glm-5.2-free. Both speak OpenAI-compatible chat completions at https://www.keyoapi.xyz/v1."
+        },
+        {
+          "q": "How does KeyoAPI GLM API pricing compare to official Zhipu?",
+          "a": "Keyo lists glm-5.2 around $3.50 input / $11.00 output per 1M tokens (indicative). Always confirm live sell rates on /pricing/glm-5.2. The free ID is fixed at $0 with fair-use limits."
+        },
+        {
+          "q": "Can I migrate an existing OpenAI SDK client to glm-5.2?",
+          "a": "Yes. Set baseURL to https://www.keyoapi.xyz/v1, keep Authorization: Bearer YOUR_KEY, and change the model string to glm-5.2 or glm-5.2-free. No custom Gemini/Anthropic SDK required for chat."
+        },
+        {
+          "q": "Is glm-5.2-free really permanent?",
+          "a": "Yes — ModelPrice is $0 for the free ID. Fair-use rate and concurrency limits apply on the Keyo Free channel. Production QPS should use the paid bare ID."
+        }
+      ],
+      "body": "Developers searching for a GLM 5.2 API usually want two things at once: a current Zhipu-class model and an OpenAI-shaped client they already trust. KeyoAPI exposes glm-5.2 as a paid twin and glm-5.2-free as a permanent $0 fair-use twin on the same gateway. That combination matters for teams evaluating glm api options after a new release window: you can prototype tonight on free, then flip one string to the token-metered ID when traffic hardens.\n\nGLM 5.2 sits in the general-purpose chat and reasoning lane — product copilots, bilingual support replies, structured extraction, and agent tool loops that already speak /v1/chat/completions. On KeyoAPI you do not juggle a separate Zhipu console for every environment. One prepaid balance covers glm-5.2 next to DeepSeek, Kimi, GPT-class, Whisper, and vision models. That is the practical meaning of an AI API relay for overseas developers who already standardized on OpenAI SDKs in Python, Node, or Cursor-compatible clients.\n\nIndicative Keyo sell rates for glm-5.2 are about $3.50 per 1M input tokens and $11.00 per 1M output tokens. Treat catalog numbers as planning anchors and confirm live rates on the interactive /pricing/glm-5.2 page before you sign a volume quote. Unlike trial coupons that expire into a paid plan, glm-5.2-free keeps ModelPrice at $0; the trade-off is fair-use rate limiting and lower priority on the Keyo Free channel. If your SLA needs stable concurrency, keep paid glm-5.2 in production and reserve free for CI smoke tests, demos, and eval harnesses.\n\nWhy this page targets glm 5.2 api and the broader glm api cluster: model-release windows create short-lived search spikes when engineers compare vendors, paste curl snippets, and look for a key they can mint in minutes. Hugging Face threads and official docs will own brand-heavy discussion. Keyo’s job is different — show the exact model ID, the dual free/paid path, a honest fair-use caveat, and how pricing stacks against staying on a single-vendor bill. That is enough for long-tail conversion even when you are not chasing position one on the naked model name.\n\nCommon shipping patterns: (1) bilingual SaaS support where Chinese and English tickets share one agent stack; (2) document-to-JSON pipelines that pair OCR on Keyo with glm-5.2 for field filling; (3) overnight batch jobs that start on free IDs during dry runs, then switch to paid for the full corpus. Because the base URL stays https://www.keyoapi.xyz/v1, environment promotion is a config change, not a rewrite.\n\nIntegration is intentionally boring. Export OPENAI_BASE_URL=https://www.keyoapi.xyz/v1 and OPENAI_API_KEY, then call chat completions with model=glm-5.2. Streaming, tools, and JSON modes follow the same shapes your OpenAI client already expects. When you need a cheaper high-volume lane, compare gpt-5.6-luna on the same key; when you want another Chinese-capable family, try deepseek-v4-flash or kimi-k3. See also /free-models for the full $0 catalog and /deepseek-api-pricing if you are shopping across families before you lock a default model.\n\nBottom line: KeyoAPI’s GLM 5.2 API path is built for developers who want glm api access without a second billing island — permanent free for tryout, transparent token rates for scale, and one relay for the rest of the multimodal stack.",
+      "curlExample": "curl https://www.keyoapi.xyz/v1/chat/completions \\\n  -H \"Authorization: Bearer YOUR_API_KEY\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\"model\":\"glm-5.2\",\"messages\":[{\"role\":\"user\",\"content\":\"Summarize GLM 5.2 API pricing on KeyoAPI\"}]}'",
+      "uniqueBlurb": "glm-5.2 is the batch-2 priority page: real glm 5.2 api demand plus a permanent $0 twin — rare among mid-KD model keywords."
+    },
+    {
+      "id": "deepseek-v4-pro",
+      "category": "llm",
+      "batch": 2,
+      "targetKeywords": [
+        "deepseek v4 pro",
+        "deepseek-v4-pro",
+        "deepseek api"
+      ],
+      "h1": "DeepSeek V4 Pro on KeyoAPI — How to Call, Price & Free Tier",
+      "title": "DeepSeek V4 Pro API Guide & Pricing | KeyoAPI",
+      "metaDescription": "DeepSeek V4 Pro via KeyoAPI: OpenAI-compatible chat, ~$3.30/$9.90 per 1M, plus deepseek-v4-pro-free at $0. Compare usage tips vs Flash and official hosts.",
+      "priceLabel": "~$3.30 / $9.90 per 1M in/out",
+      "priceUnit": "per_1m_tokens",
+      "related": [
+        "deepseek-v4-flash",
+        "glm-5.2",
+        "gpt-5.6-terra"
+      ],
+      "endpoint": "POST /v1/chat/completions",
+      "codeHint": "model=deepseek-v4-pro",
+      "freeTier": {
+        "id": "deepseek-v4-pro-free",
+        "channel": "Keyo Free"
+      },
+      "faqs": [
+        {
+          "q": "What model string should I use for DeepSeek V4 Pro?",
+          "a": "Paid: deepseek-v4-pro. Free fair-use: deepseek-v4-pro-free. Both hit POST /v1/chat/completions on https://www.keyoapi.xyz/v1."
+        },
+        {
+          "q": "Pro vs Flash — which should I ship?",
+          "a": "Pro is the stronger reasoning/chat twin at higher token rates. Flash is cheaper and faster for high-volume or latency-sensitive paths. Many teams run Flash in the hot path and Pro for harder tickets."
+        },
+        {
+          "q": "Will this page rank #1 for “deepseek v4 pro”?",
+          "a": "Unlikely for a new DR0 site against Hugging Face, official docs, and Reddit. This guide exists so engineers who already want DeepSeek on a relay can copy IDs, compare free vs paid, and link into Keyo pricing."
+        }
+      ],
+      "body": "DeepSeek V4 Pro is the flagship twin in KeyoAPI’s DeepSeek family: stronger chat and reasoning than Flash, billed by token on the paid bare ID. If you landed here from a deepseek v4 pro discussion thread, you probably already know the model story. What you need next is operational clarity — the exact model ID, what $0 means on this relay, and how Keyo pricing compares when you refuse to open a second vendor wallet.\n\nOn KeyoAPI, deepseek-v4-pro is OpenAI-compatible. Point baseURL to https://www.keyoapi.xyz/v1, authenticate with a Bearer key, and send chat completions like any other GPT-class client. Indicative sell rates are about $3.30 per 1M input and $9.90 per 1M output. Confirm live numbers on /pricing/deepseek-v4-pro. The permanent free twin deepseek-v4-pro-free keeps ModelPrice at $0 with fair-use limits on the Keyo Free channel — ideal for demos and evals, not as a silent production SLA.\n\nSearch reality check: bare queries like deepseek v4 pro attract huge discussion volume, but SERPs are crowded with official docs, Hugging Face spaces, and community reviews. A relay site should not pretend to outrank those on brand intent alone. Instead this page answers the conversion questions those threads skip: How do I call it from an existing OpenAI SDK? What is the free ID? When do I pay? Where is the family pricing table? For purchase-intent pricing queries, see /deepseek-api-pricing — that page is built to compete on deepseek api pricing rather than model-name chatter.\n\nProduct teams use Pro for denser coding agents, bilingual research assistants, and tickets that previously needed a heavier Claude-class model. Cost-sensitive services keep Flash as the default and escalate to Pro when quality gates fail. Because both IDs share one Keyo balance with Whisper, OCR, and Gemini-class models, you can A/B without provisioning five upstream accounts.\n\nIntegration checklist: create an account, mint a key, try deepseek-v4-pro-free with a five-line curl, measure latency and quality on your eval set, then switch to deepseek-v4-pro for production. Pair with /free-models for the full $0 list and /model/deepseek-v4-flash for the cheaper sibling. Keep monitoring /pricing for catalog moves — relay sell rates track upstream cost and can change.\n\nIn short: DeepSeek V4 Pro on KeyoAPI is a practical how-to and pricing bridge for developers who already chose the model and now need a single OpenAI-compatible key — with an honest free tier and a clear paid twin.",
+      "curlExample": "curl https://www.keyoapi.xyz/v1/chat/completions \\\n  -H \"Authorization: Bearer YOUR_API_KEY\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\"model\":\"deepseek-v4-pro\",\"messages\":[{\"role\":\"user\",\"content\":\"Explain DeepSeek V4 Pro vs Flash\"}]}'",
+      "uniqueBlurb": "Pro page prioritizes how-to + free/paid dual path over chasing #1 on the naked deepseek v4 pro SERP."
+    },
+    {
+      "id": "deepseek-v4-flash",
+      "category": "llm",
+      "batch": 2,
+      "targetKeywords": [
+        "deepseek v4 flash",
+        "deepseek-v4-flash",
+        "deepseek api"
+      ],
+      "h1": "DeepSeek V4 Flash on KeyoAPI — Fast Tier, Price & Free ID",
+      "title": "DeepSeek V4 Flash API Guide & Free Tier | KeyoAPI",
+      "metaDescription": "DeepSeek V4 Flash via KeyoAPI: ~$1.10/$3.30 per 1M, deepseek-v4-flash-free at $0, OpenAI-compatible chat. Compare vs Pro and deepseek api pricing.",
+      "priceLabel": "~$1.10 / $3.30 per 1M in/out",
+      "priceUnit": "per_1m_tokens",
+      "related": [
+        "deepseek-v4-pro",
+        "glm-5.2",
+        "gpt-5.6-luna"
+      ],
+      "endpoint": "POST /v1/chat/completions",
+      "codeHint": "model=deepseek-v4-flash",
+      "freeTier": {
+        "id": "deepseek-v4-flash-free",
+        "channel": "Keyo Free"
+      },
+      "faqs": [
+        {
+          "q": "What is the free model ID for DeepSeek V4 Flash?",
+          "a": "Use deepseek-v4-flash-free for permanent $0 fair-use calls. Paid traffic uses deepseek-v4-flash."
+        },
+        {
+          "q": "Why is Flash cheaper than Pro?",
+          "a": "Flash is the high-throughput twin in the V4 family. Keyo lists it around $1.10 / $3.30 per 1M in/out versus Pro at about $3.30 / $9.90. Confirm live rates on /pricing."
+        },
+        {
+          "q": "Is “deepseek v4 flash api” a useful keyword?",
+          "a": "US search volume for that exact phrase is effectively empty. This page targets the bare deepseek v4 flash discussion query plus practical relay how-to — not a thin api-suffix orphan page."
+        }
+      ],
+      "body": "DeepSeek V4 Flash is KeyoAPI’s cost and latency lean twin in the V4 family. If you are comparing deepseek v4 flash notes across forums, this page translates that model into callable IDs: deepseek-v4-flash for token billing and deepseek-v4-flash-free for permanent $0 fair-use prototyping.\n\nIndicative Keyo rates sit near $1.10 per 1M input and $3.30 per 1M output — materially below Pro — which makes Flash the default for chat widgets, classification, light agents, and batch rewrite jobs. Always verify /pricing/deepseek-v4-flash before locking a quote. The free ID is not a disappearing trial; ModelPrice stays $0, with fair-use rate limits on the Keyo Free channel. When your product needs predictable QPS, promote to the paid bare name without changing base URL or auth.\n\nSERP honesty: bare deepseek v4 flash queries are hot but dominated by official and community review destinations. Keyo does not invent fake “#1 ranking” claims. We win when a developer already decided on DeepSeek and needs a relay that also hosts Gemini-class, Whisper, and OCR under one balance. For purchase-intent pricing searches, route readers to /deepseek-api-pricing where Flash, Pro, and $0 free rows sit in one comparison table.\n\nShipping patterns that fit Flash: customer-support drafts, SEO content assist, embedding-adjacent summarization, and CI that hits free IDs on every PR. Escalate hard reasoning tickets to deepseek-v4-pro or a Claude-class Keyo model without splitting vendors. OpenAI SDK migration is two lines — base URL and model — then you are live.\n\nQuick start: sign up, mint a key, curl deepseek-v4-flash-free, run your eval suite, then flip to deepseek-v4-flash. Cross-link /model/deepseek-v4-pro, /free-models, and /gemini-api-pricing if you are still shopping families. Keep an eye on catalog prices; relay sell rates move with upstream cost.\n\nDeepSeek V4 Flash on KeyoAPI is the practical fast lane: clear IDs, honest free tier, and a path into the broader deepseek api pricing conversation without thin orphan pages for phrases nobody searches.",
+      "curlExample": "curl https://www.keyoapi.xyz/v1/chat/completions \\\n  -H \"Authorization: Bearer YOUR_API_KEY\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\"model\":\"deepseek-v4-flash\",\"messages\":[{\"role\":\"user\",\"content\":\"Hello from DeepSeek V4 Flash\"}]}'",
+      "uniqueBlurb": "Flash page is the high-volume DeepSeek twin with the cheapest paid rates and a permanent free ID."
+    },
+    {
+      "id": "kimi-k3",
+      "category": "llm",
+      "batch": 2,
+      "targetKeywords": [
+        "kimi-k3",
+        "kimi k3",
+        "moonshot kimi api"
+      ],
+      "h1": "Kimi K3 API on KeyoAPI — Paid Twin + Free Tier",
+      "title": "Kimi K3 API | Free & Paid on KeyoAPI",
+      "metaDescription": "Call kimi-k3 on KeyoAPI (~$7.50/$37.50 per 1M) or kimi-k3-free at $0. OpenAI-compatible chat for Moonshot Kimi workloads.",
+      "priceLabel": "~$7.50 / $37.50 per 1M in/out",
+      "priceUnit": "per_1m_tokens",
+      "related": [
+        "glm-5.2",
+        "deepseek-v4-pro",
+        "gpt-5.6-terra"
+      ],
+      "endpoint": "POST /v1/chat/completions",
+      "codeHint": "model=kimi-k3",
+      "freeTier": {
+        "id": "kimi-k3-free",
+        "channel": "Keyo Free"
+      },
+      "faqs": [
+        {
+          "q": "Does anyone search for kimi k3 api?",
+          "a": "US volume for that exact phrase is effectively empty today. This short page exists for catalog completeness, free-tier discovery, and internal linking — not as a traffic bet."
+        },
+        {
+          "q": "How do I call the free Kimi tier?",
+          "a": "Use model=kimi-k3-free against https://www.keyoapi.xyz/v1/chat/completions. Paid traffic uses kimi-k3."
+        }
+      ],
+      "body": "Kimi K3 on KeyoAPI is the Moonshot-family chat model exposed as kimi-k3 (token-metered) and kimi-k3-free (permanent $0 fair-use). Indicative paid rates are about $7.50 / $37.50 per 1M in/out — confirm live on /pricing/kimi-k3.\n\nThis page is intentionally short. Search demand for kimi k3 api is near zero, so we prioritize accurate IDs, a Free tier block, and links into /free-models plus stronger family pages like /model/glm-5.2 and /deepseek-api-pricing. Use the OpenAI-compatible base URL https://www.keyoapi.xyz/v1, set Authorization: Bearer YOUR_KEY, and pick the free or paid model string.\n\nFair-use limits apply on free. For production QPS, prefer paid kimi-k3 or another Keyo chat model that fits your latency budget.",
+      "curlExample": "curl https://www.keyoapi.xyz/v1/chat/completions \\\n  -H \"Authorization: Bearer YOUR_API_KEY\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\"model\":\"kimi-k3\",\"messages\":[{\"role\":\"user\",\"content\":\"Hello from Kimi K3\"}]}'",
+      "uniqueBlurb": "Short catalog page: free + paid IDs only — no fake keyword chasing."
+    }
+  ]
+}

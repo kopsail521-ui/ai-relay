@@ -77,6 +77,16 @@ ${DOMAIN} {
 		rewrite * /free-models.html
 		file_server
 	}
+	handle /gemini-api-pricing {
+		root * ${ROOT}/static/seo
+		rewrite * /gemini-api-pricing.html
+		file_server
+	}
+	handle /deepseek-api-pricing {
+		root * ${ROOT}/static/seo
+		rewrite * /deepseek-api-pricing.html
+		file_server
+	}
 	redir /free /free-models permanent
 	redir /free/ /free-models permanent
 	@seo_model path /model /model/*

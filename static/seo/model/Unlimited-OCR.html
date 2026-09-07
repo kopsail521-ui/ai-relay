@@ -57,6 +57,8 @@ ul{margin:0 0 14px;padding-left:1.2em}
   <a href="/compare">Compare</a>
   <a href="/pricing">Pricing</a>
   <a href="/free-models">Free models</a>
+  <a href="/gemini-api-pricing">Gemini pricing</a>
+  <a href="/deepseek-api-pricing">DeepSeek pricing</a>
   <a href="/brand/keyo-docs.html">Docs</a>
   <a href="/sign-in">Sign in</a>
   <a href="/sign-up">Sign up</a>
@@ -81,6 +83,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
 <p>Unlimited-OCR is for product surfaces that already speak multimodal chat: the user pastes a screenshot and asks a question in one turn. Send an image part plus a text instruction asking for structured JSON or markdown tables. Validate the schema server-side before showing answers. When documents are multi-page PDFs with complex layout, prefer MinerU’s async parse instead of stuffing everything into one chat call. Unlimited-OCR’s token pricing fits variable-length captures; MinerU’s per-page pricing fits batch archives. Document both paths in your internal OCR API guide so engineers pick deliberately.</p>
 <p>Prefer image_url or base64 image parts with a strict extraction instruction. Reject empty OCR with a retry that increases detail level. Unlimited-OCR is ideal inside chat UIs; MinerU remains better for overnight PDF folders.</p>
 <p>Practical checklist for Unlimited-OCR: confirm endpoint POST /v1/chat/completions, set model string model=Unlimited-OCR, verify listed price ~$1.92 / $1.92 per 1M in/out tokens on /pricing/Unlimited-OCR, add related links from this page into your docs, and keep interactive try/buy on /pricing/Unlimited-OCR for key creation. Target queries such as ocr api, long document ocr, vision ocr api should land here with crawlable HTML—not a CSR shell. Re-test curl monthly when upstream request shapes change. Prefer this static guide for SEO and onboarding emails; prefer the console when operators need live balance and logs.</p>
+
 <h2>Quick start</h2>
 <div class="card">
 <p>Base URL: <code>https://www.keyoapi.xyz/v1</code></p>
@@ -107,6 +110,8 @@ ul{margin:0 0 14px;padding-left:1.2em}
   <a href="/compare">AI API price comparison</a>
   <a href="/pricing">Pricing list</a>
   <a href="/free-models">Free AI API</a>
+  <a href="/gemini-api-pricing">Gemini API pricing</a>
+  <a href="/deepseek-api-pricing">DeepSeek API pricing</a>
   <a href="/brand/keyo-docs.html">Docs</a>
   <a href="/brand/faq.html">FAQ</a>
   <a href="/brand/privacy.html">Privacy</a>

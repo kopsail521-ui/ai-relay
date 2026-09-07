@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>DeepSeek V4 Pro API Guide &amp; Pricing | KeyoAPI</title>
+<meta name="description" content="DeepSeek V4 Pro via KeyoAPI: OpenAI-compatible chat, ~$3.30/$9.90 per 1M, plus deepseek-v4-pro-free at $0. Compare usage tips vs Flash and official hosts." />
+<link rel="canonical" href="https://www.keyoapi.xyz/model/deepseek-v4-pro" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://www.keyoapi.xyz/model/deepseek-v4-pro" />
+<meta property="og:title" content="DeepSeek V4 Pro API Guide &amp; Pricing | KeyoAPI" />
+<meta property="og:description" content="DeepSeek V4 Pro via KeyoAPI: OpenAI-compatible chat, ~$3.30/$9.90 per 1M, plus deepseek-v4-pro-free at $0. Compare usage tips vs Flash and official hosts." />
+<meta property="og:image" content="https://www.keyoapi.xyz/logo.png" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="DeepSeek V4 Pro API Guide &amp; Pricing | KeyoAPI" />
+<meta name="twitter:description" content="DeepSeek V4 Pro via KeyoAPI: OpenAI-compatible chat, ~$3.30/$9.90 per 1M, plus deepseek-v4-pro-free at $0. Compare usage tips vs Flash and official hosts." />
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"SoftwareApplication","name":"KeyoAPI deepseek-v4-pro","applicationCategory":"DeveloperApplication","url":"https://www.keyoapi.xyz/model/deepseek-v4-pro","description":"DeepSeek V4 Pro via KeyoAPI: OpenAI-compatible chat, ~$3.30/$9.90 per 1M, plus deepseek-v4-pro-free at $0. Compare usage tips vs Flash and official hosts.","offers":{"@type":"Offer","priceCurrency":"USD","description":"~$3.30 / $9.90 per 1M in/out"}}</script>
+<style>:root {
+  --bg0:#f7fafc; --bg1:#eef6ff; --ink:#0f172a; --muted:#475569;
+  --line:#cbd5e1; --accent:#2563eb; --card:#fff; --ok:#047857;
+}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;background:linear-gradient(180deg,var(--bg0),var(--bg1));color:var(--ink);line-height:1.65}
+a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
+.wrap{max-width:880px;margin:0 auto;padding:32px 20px 64px}
+.nav,.footer{display:flex;flex-wrap:wrap;gap:10px 16px;font-size:14px;color:var(--muted)}
+.nav{padding-bottom:20px;border-bottom:1px solid var(--line);margin-bottom:28px}
+.footer{padding-top:28px;border-top:1px solid var(--line);margin-top:40px}
+.eyebrow{font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);font-weight:700;margin:0 0 10px}
+h1{font-size:clamp(1.75rem,4vw,2.4rem);line-height:1.2;margin:0 0 14px}
+h2{font-size:1.25rem;margin:28px 0 10px}
+p{margin:0 0 14px;color:var(--ink)}
+.lead{font-size:1.1rem;color:var(--muted)}
+.meta{font-size:14px;color:var(--muted);margin:0 0 18px}
+.btnrow{display:flex;flex-wrap:wrap;gap:10px;margin:18px 0 28px}
+.btn{display:inline-block;padding:10px 16px;border-radius:10px;font-weight:600;font-size:14px;text-decoration:none}
+.btn-primary{background:var(--accent);color:#fff}
+.btn-secondary{background:#fff;color:var(--ink);border:1px solid var(--line)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin:16px 0}
+pre,code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+pre{background:#0f172a;color:#e2e8f0;padding:14px 16px;border-radius:10px;overflow:auto;font-size:13px}
+table{width:100%;border-collapse:collapse;font-size:14px;background:var(--card)}
+th,td{border:1px solid var(--line);padding:10px 12px;text-align:left;vertical-align:top}
+th{background:#f1f5f9}
+.ok{color:var(--ok);font-weight:600}
+.grid{display:grid;gap:10px;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));margin:16px 0}
+.grid a{display:block;padding:12px;border:1px solid var(--line);border-radius:10px;background:#fff;color:var(--ink);text-decoration:none}
+.grid a:hover{border-color:var(--accent)}
+ul{margin:0 0 14px;padding-left:1.2em}
+.faq details{border:1px solid var(--line);border-radius:10px;padding:12px 14px;margin:0 0 10px;background:#fff}
+.faq summary{cursor:pointer;font-weight:600}</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="nav" aria-label="Primary">
+  <a href="/">Home</a>
+  <a href="/compare">Compare</a>
+  <a href="/pricing">Pricing</a>
+  <a href="/free-models">Free models</a>
+  <a href="/gemini-api-pricing">Gemini pricing</a>
+  <a href="/deepseek-api-pricing">DeepSeek pricing</a>
+  <a href="/brand/keyo-docs.html">Docs</a>
+  <a href="/sign-in">Sign in</a>
+  <a href="/sign-up">Sign up</a>
+</nav>
+<p class="eyebrow">KEYOAPI</p>
+<h1>DeepSeek V4 Pro on KeyoAPI — How to Call, Price &amp; Free Tier</h1>
+
+<p class="lead">DeepSeek V4 Pro is the flagship twin in KeyoAPI’s DeepSeek family: stronger chat and reasoning than Flash, billed by token on the paid bare ID.</p>
+<p class="meta">Target keywords: deepseek v4 pro · deepseek-v4-pro · deepseek api · Price: <span class="ok">~$3.30 / $9.90 per 1M in/out</span></p>
+<div class="btnrow">
+  <a class="btn btn-primary" href="/pricing/deepseek-v4-pro">Open interactive pricing</a>
+  <a class="btn btn-secondary" href="/compare">Compare API prices</a>
+  <a class="btn btn-secondary" href="/sign-up">Create account</a>
+</div>
+<h2>Overview</h2>
+<p>DeepSeek V4 Pro is the flagship twin in KeyoAPI’s DeepSeek family: stronger chat and reasoning than Flash, billed by token on the paid bare ID. If you landed here from a deepseek v4 pro discussion thread, you probably already know the model story. What you need next is operational clarity — the exact model ID, what $0 means on this relay, and how Keyo pricing compares when you refuse to open a second vendor wallet.</p>
+<p>On KeyoAPI, deepseek-v4-pro is OpenAI-compatible. Point baseURL to https://www.keyoapi.xyz/v1, authenticate with a Bearer key, and send chat completions like any other GPT-class client. Indicative sell rates are about $3.30 per 1M input and $9.90 per 1M output. Confirm live numbers on /pricing/deepseek-v4-pro. The permanent free twin deepseek-v4-pro-free keeps ModelPrice at $0 with fair-use limits on the Keyo Free channel — ideal for demos and evals, not as a silent production SLA.</p>
+<p>Search reality check: bare queries like deepseek v4 pro attract huge discussion volume, but SERPs are crowded with official docs, Hugging Face spaces, and community reviews. A relay site should not pretend to outrank those on brand intent alone. Instead this page answers the conversion questions those threads skip: How do I call it from an existing OpenAI SDK? What is the free ID? When do I pay? Where is the family pricing table? For purchase-intent pricing queries, see /deepseek-api-pricing — that page is built to compete on deepseek api pricing rather than model-name chatter.</p>
+<p>Product teams use Pro for denser coding agents, bilingual research assistants, and tickets that previously needed a heavier Claude-class model. Cost-sensitive services keep Flash as the default and escalate to Pro when quality gates fail. Because both IDs share one Keyo balance with Whisper, OCR, and Gemini-class models, you can A/B without provisioning five upstream accounts.</p>
+<p>Integration checklist: create an account, mint a key, try deepseek-v4-pro-free with a five-line curl, measure latency and quality on your eval set, then switch to deepseek-v4-pro for production. Pair with /free-models for the full $0 list and /model/deepseek-v4-flash for the cheaper sibling. Keep monitoring /pricing for catalog moves — relay sell rates track upstream cost and can change.</p>
+<p>In short: DeepSeek V4 Pro on KeyoAPI is a practical how-to and pricing bridge for developers who already chose the model and now need a single OpenAI-compatible key — with an honest free tier and a clear paid twin.</p>
+
+<h2>Free tier available</h2>
+<div class="card">
+<p>Same model family on KeyoAPI: use <code>deepseek-v4-pro-free</code> for permanent <span class="ok">$0</span> fair-use calls (Keyo Free channel), or <code>deepseek-v4-pro</code> for token-metered production traffic.</p>
+<p>Rules: free = <code>*-free</code> suffix; paid = bare ID. Fair-use rate/concurrency limits apply on free — see <a href="/free-models">/free-models</a>.</p>
+<p><strong>Free curl</strong></p>
+<pre><code>curl https://www.keyoapi.xyz/v1/chat/completions \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"model":"deepseek-v4-pro-free","messages":[{"role":"user","content":"Hello"}]}'</code></pre>
+<p><strong>Paid curl</strong></p>
+<pre><code>curl https://www.keyoapi.xyz/v1/chat/completions \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"model":"deepseek-v4-pro","messages":[{"role":"user","content":"Hello"}]}'</code></pre>
+</div>
+
+<h2>Quick start</h2>
+<div class="card">
+<p>Base URL: <code>https://www.keyoapi.xyz/v1</code></p>
+<p>Endpoint: <code>POST /v1/chat/completions</code></p>
+<p>Model: <code>model=deepseek-v4-pro</code></p>
+<pre><code>curl https://www.keyoapi.xyz/v1/chat/completions \
+  -H &quot;Authorization: Bearer YOUR_API_KEY&quot; \
+  -H &quot;Content-Type: application/json&quot; \
+  -d '{&quot;model&quot;:&quot;deepseek-v4-pro&quot;,&quot;messages&quot;:[{&quot;role&quot;:&quot;user&quot;,&quot;content&quot;:&quot;Explain DeepSeek V4 Pro vs Flash&quot;}]}'</code></pre>
+<p>Auth uses the same Bearer API key as chat. Full notes: <a href="/brand/keyo-docs.html">Keyo docs</a>.</p>
+</div>
+<h2>FAQ</h2>
+<div class="faq"><details><summary>What model string should I use for DeepSeek V4 Pro?</summary><p>Paid: deepseek-v4-pro. Free fair-use: deepseek-v4-pro-free. Both hit POST /v1/chat/completions on https://www.keyoapi.xyz/v1.</p></details>
+<details><summary>Pro vs Flash — which should I ship?</summary><p>Pro is the stronger reasoning/chat twin at higher token rates. Flash is cheaper and faster for high-volume or latency-sensitive paths. Many teams run Flash in the hot path and Pro for harder tickets.</p></details>
+<details><summary>Will this page rank #1 for “deepseek v4 pro”?</summary><p>Unlikely for a new DR0 site against Hugging Face, official docs, and Reddit. This guide exists so engineers who already want DeepSeek on a relay can copy IDs, compare free vs paid, and link into Keyo pricing.</p></details></div>
+<h2>Related models</h2>
+<div class="grid"><a href="/model/deepseek-v4-flash">DeepSeek V4 Flash on KeyoAPI</a>
+<a href="/model/glm-5.2">GLM 5.2 API</a>
+<a href="/model/gpt-5.6-terra">GPT-5.6 Terra API</a></div>
+<p class="meta">Static guide for <strong>deepseek-v4-pro</strong>. Interactive try/buy: <a href="/pricing/deepseek-v4-pro">/pricing/deepseek-v4-pro</a>. Catalog: <a href="/pricing">/pricing</a>.</p>
+
+<footer class="footer">
+  <a href="/">Home</a>
+  <a href="/compare">AI API price comparison</a>
+  <a href="/pricing">Pricing list</a>
+  <a href="/free-models">Free AI API</a>
+  <a href="/gemini-api-pricing">Gemini API pricing</a>
+  <a href="/deepseek-api-pricing">DeepSeek API pricing</a>
+  <a href="/brand/keyo-docs.html">Docs</a>
+  <a href="/brand/faq.html">FAQ</a>
+  <a href="/brand/privacy.html">Privacy</a>
+  <a href="/brand/terms.html">Terms</a>
+  <a href="/sign-in">Console login</a>
+</footer>
+</div>
+</body>
+</html>

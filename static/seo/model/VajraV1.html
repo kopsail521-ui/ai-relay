@@ -57,6 +57,8 @@ ul{margin:0 0 14px;padding-left:1.2em}
   <a href="/compare">Compare</a>
   <a href="/pricing">Pricing</a>
   <a href="/free-models">Free models</a>
+  <a href="/gemini-api-pricing">Gemini pricing</a>
+  <a href="/deepseek-api-pricing">DeepSeek pricing</a>
   <a href="/brand/keyo-docs.html">Docs</a>
   <a href="/sign-in">Sign in</a>
   <a href="/sign-up">Sign up</a>
@@ -81,6 +83,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
 <p>YOLO-style detection is for closed vocabularies you already understand: people, boxes, vehicles, shelves. Sample frames from video instead of every frame to control cost. Persist boxes with camera id and timestamp for analytics. When you need “find the weird unlabeled object,” escalate to sam3. Feed compact detection JSON into Luna for incident summaries so the LLM never sees raw pixels. Object detection API pricing stays sane when you batch stills and cache identical frames.</p>
 <p>Define class allowlists per camera. Drop detections below confidence thresholds. Aggregate into events before calling an LLM. Object detection API noise will drown your logs if you forward every box raw.</p>
 <p>Practical checklist for VajraV1: confirm endpoint POST /v1/images/object-detection, set model string model=VajraV1, verify listed price $0.0068 / request on /pricing/VajraV1, add related links from this page into your docs, and keep interactive try/buy on /pricing/VajraV1 for key creation. Target queries such as object detection api, yolo api, pose detection api should land here with crawlable HTML—not a CSR shell. Re-test curl monthly when upstream request shapes change. Prefer this static guide for SEO and onboarding emails; prefer the console when operators need live balance and logs.</p>
+
 <h2>Quick start</h2>
 <div class="card">
 <p>Base URL: <code>https://www.keyoapi.xyz/v1</code></p>
@@ -107,6 +110,8 @@ ul{margin:0 0 14px;padding-left:1.2em}
   <a href="/compare">AI API price comparison</a>
   <a href="/pricing">Pricing list</a>
   <a href="/free-models">Free AI API</a>
+  <a href="/gemini-api-pricing">Gemini API pricing</a>
+  <a href="/deepseek-api-pricing">DeepSeek API pricing</a>
   <a href="/brand/keyo-docs.html">Docs</a>
   <a href="/brand/faq.html">FAQ</a>
   <a href="/brand/privacy.html">Privacy</a>

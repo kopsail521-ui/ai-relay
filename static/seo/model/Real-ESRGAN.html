@@ -57,6 +57,8 @@ ul{margin:0 0 14px;padding-left:1.2em}
   <a href="/compare">Compare</a>
   <a href="/pricing">Pricing</a>
   <a href="/free-models">Free models</a>
+  <a href="/gemini-api-pricing">Gemini pricing</a>
+  <a href="/deepseek-api-pricing">DeepSeek pricing</a>
   <a href="/brand/keyo-docs.html">Docs</a>
   <a href="/sign-in">Sign in</a>
   <a href="/sign-up">Sign up</a>
@@ -81,6 +83,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
 <p>Upscaling helps marketplace photos and OCR preprocessors more than it helps already-sharp DSLR shots. Detect low resolution before calling Real-ESRGAN to avoid wasting requests. Compare SSIM or a simple sharpness score pre/post. For text-heavy scans, upscale then OCR; for portraits, upscale then RMBG. Image upscaling API costs add up in user-generated content apps—cache by content hash. Keyo’s /v1/images/upscaling path keeps this step next to other vision tools.</p>
 <p>Skip upscale when the short side already exceeds your publish threshold. Prefer 2x then quality check before 4x. Image upscaling API spend correlates with UGC spikes—rate limit per user.</p>
 <p>Practical checklist for Real-ESRGAN: confirm endpoint POST /v1/images/upscaling, set model string model=Real-ESRGAN, verify listed price $0.0068 / request on /pricing/Real-ESRGAN, add related links from this page into your docs, and keep interactive try/buy on /pricing/Real-ESRGAN for key creation. Target queries such as image upscaling api, super resolution api, esrgan api should land here with crawlable HTML—not a CSR shell. Re-test curl monthly when upstream request shapes change. Prefer this static guide for SEO and onboarding emails; prefer the console when operators need live balance and logs.</p>
+
 <h2>Quick start</h2>
 <div class="card">
 <p>Base URL: <code>https://www.keyoapi.xyz/v1</code></p>
@@ -107,6 +110,8 @@ ul{margin:0 0 14px;padding-left:1.2em}
   <a href="/compare">AI API price comparison</a>
   <a href="/pricing">Pricing list</a>
   <a href="/free-models">Free AI API</a>
+  <a href="/gemini-api-pricing">Gemini API pricing</a>
+  <a href="/deepseek-api-pricing">DeepSeek API pricing</a>
   <a href="/brand/keyo-docs.html">Docs</a>
   <a href="/brand/faq.html">FAQ</a>
   <a href="/brand/privacy.html">Privacy</a>

@@ -19,6 +19,9 @@ const pages = JSON.parse(
 const priceRefs = JSON.parse(
   fs.readFileSync(path.join(root, "config/seo/official-price-refs.json"), "utf8")
 );
+const freeCfg = JSON.parse(
+  fs.readFileSync(path.join(root, "config/sensenova-free-models.json"), "utf8")
+);
 
 function esc(s) {
   return String(s)
@@ -79,6 +82,7 @@ function nav() {
   <a href="/">Home</a>
   <a href="/compare">Compare</a>
   <a href="/pricing">Pricing</a>
+  <a href="/free-models">Free models</a>
   <a href="/brand/keyo-docs.html">Docs</a>
   <a href="/sign-in">Sign in</a>
   <a href="/sign-up">Sign up</a>
@@ -90,6 +94,7 @@ function footer() {
   <a href="/">Home</a>
   <a href="/compare">AI API price comparison</a>
   <a href="/pricing">Pricing list</a>
+  <a href="/free-models">Free AI API</a>
   <a href="/brand/keyo-docs.html">Docs</a>
   <a href="/brand/faq.html">FAQ</a>
   <a href="/brand/privacy.html">Privacy</a>
@@ -229,6 +234,7 @@ function renderHome() {
 <p class="lead">KeyoAPI is a <strong>cheap llm api</strong> and multimodal <strong>ai api relay</strong> for overseas developers who want OpenAI-compatible access to chat, Whisper, OCR, vision, TTS, and digital humans — without five vendor bills.</p>
 <div class="btnrow">
   <a class="btn btn-primary" href="/sign-up">Start free</a>
+  <a class="btn btn-secondary" href="/free-models">Free AI API</a>
   <a class="btn btn-secondary" href="/compare">Full AI API price comparison</a>
   <a class="btn btn-secondary" href="/pricing">Pricing list</a>
 </div>
@@ -381,12 +387,114 @@ function renderPricing() {
   });
 }
 
+function renderFreeModels() {
+  const rows = freeCfg.models
+    .map((m) => {
+      const paid = m.upstream || String(m.id).replace(/-free$/, "");
+      return `<tr>
+  <td><code>${esc(m.id)}</code></td>
+  <td><code>${esc(paid)}</code></td>
+  <td class="ok">$0</td>
+  <td>${esc(m.vendor || "—")}</td>
+  <td>${esc(freeCfg.channel_name || "Keyo Free")}</td>
+</tr>`;
+    })
+    .join("\n");
+  const exampleFree =
+    freeCfg.models.find((m) => m.id.includes("flash"))?.id ||
+    freeCfg.models[0]?.id ||
+    "deepseek-v4-flash-free";
+  const examplePaid = String(exampleFree).replace(/-free$/, "");
+  const bodyHtml = `
+<p class="lead">KeyoAPI offers a permanent <strong>free AI API</strong> tier — four LLM model IDs at <strong>$0</strong>, no credit card, not a time-boxed trial. Register a key and call with the <code>-free</code> suffix. Same capability family as the paid bare IDs; paid IDs are token-metered with higher priority.</p>
+<p class="meta">Target use: prototype and eval traffic for developers searching <strong>free llm api</strong> / <strong>free api key</strong>. Production workloads should prefer paid bare model IDs.</p>
+<div class="btnrow">
+  <a class="btn btn-primary" href="/sign-up">Get a free API key</a>
+  <a class="btn btn-secondary" href="/pricing">Full pricing list</a>
+  <a class="btn btn-secondary" href="/brand/keyo-docs.html">Docs</a>
+</div>
+<h2>Free models (permanently $0)</h2>
+<table>
+<thead><tr><th>Free model ID</th><th>Paid twin (token-billed)</th><th>Price</th><th>Family</th><th>Channel</th></tr></thead>
+<tbody>
+${rows}
+</tbody>
+</table>
+<p>Call the free ID exactly as listed (include <code>-free</code>). The paid twin uses the bare name and bills per token on the paid relay channel.</p>
+<h2>Quick start (curl)</h2>
+<p>Base URL is the OpenAI-compatible Chat Completions endpoint on KeyoAPI:</p>
+<pre>curl https://www.keyoapi.xyz/v1/chat/completions \\
+  -H "Authorization: Bearer $KEYO_API_KEY" \\
+  -H "Content-Type: application/json" \\
+  -d '{
+    "model": "${esc(exampleFree)}",
+    "messages": [{"role":"user","content":"Hello"}]
+  }'</pre>
+<p>Paid twin (same family, token-metered):</p>
+<pre>curl https://www.keyoapi.xyz/v1/chat/completions \\
+  -H "Authorization: Bearer $KEYO_API_KEY" \\
+  -H "Content-Type: application/json" \\
+  -d '{
+    "model": "${esc(examplePaid)}",
+    "messages": [{"role":"user","content":"Hello"}]
+  }'</pre>
+<h2>Free rules (read before you ship)</h2>
+<ul>
+  <li><strong>Price:</strong> ModelPrice is fixed at <strong>$0</strong> for <code>*-free</code> IDs — not a signup coupon that expires into a paid plan.</li>
+  <li><strong>ID naming:</strong> free = <code>{name}-free</code>; full capability paid = bare <code>{name}</code>.</li>
+  <li><strong>Fair use:</strong> Free traffic rides a dedicated free channel with <strong>fair-use rate / concurrency limits</strong>. Limits exist to keep the tier sustainable; they can be tightened under abuse. Do not treat free IDs as an unlimited production SLA.</li>
+  <li><strong>Catch (honest):</strong> You get real model capability at $0; you do <em>not</em> get paid-tier priority or guaranteed throughput. If you need stable production QPS, use the paid twin.</li>
+</ul>
+<div class="faq">
+<h2>FAQ</h2>
+<details open>
+  <summary>Is it really free?</summary>
+  <p>Yes for the four <code>*-free</code> IDs listed above: permanently $0, no credit card required to start. Create an account, mint an API key, and set <code>model</code> to a free ID.</p>
+</details>
+<details>
+  <summary>What's the catch?</summary>
+  <p>Fair-use rate limiting and lower priority on the free channel. We publish this page so you are not surprised after signup. Exact RPM/concurrency can change; if you need predictable limits, use paid bare IDs.</p>
+</details>
+<details>
+  <summary>Free vs paid?</summary>
+  <p>Same model family / capability class. Free IDs are $0 with fair-use limits. Paid bare IDs are token-billed with higher priority — preferred for production.</p>
+</details>
+<details>
+  <summary>Can I use it in production?</summary>
+  <p>You can. For anything user-facing or latency-sensitive, we recommend the paid twin. Free is ideal for prototypes, demos, CI smoke tests, and eval harnesses.</p>
+</details>
+<details>
+  <summary>Why no separate pages for each free ID?</summary>
+  <p>Search demand clusters on generic queries like <strong>free ai api</strong> / <strong>free llm api</strong>. This hub covers those intents; paid model guides will embed a Free tier block when those pages ship.</p>
+</details>
+</div>
+<p class="meta">Also see the interactive catalog on <a href="/pricing">/pricing</a> (filter Free) and the OpenAI-compatible docs.</p>
+`;
+  return layout({
+    title: "Free AI API — 4 Permanent $0 LLM Models | KeyoAPI",
+    description:
+      "Free AI API / free LLM API on KeyoAPI: four permanent $0 model IDs (deepseek-v4-pro-free, deepseek-v4-flash-free, kimi-k3-free, glm-5.2-free). No credit card. Fair-use limits apply.",
+    canonical: `${site}/free-models`,
+    h1: "Free AI API — 4 Models, Permanently $0, No Credit Card",
+    bodyHtml,
+    jsonLd: {
+      "@context": "https://schema.org",
+      "@type": "WebPage",
+      name: "Free AI API — KeyoAPI",
+      url: `${site}/free-models`,
+      description:
+        "Permanent $0 free LLM API models on KeyoAPI with OpenAI-compatible chat completions.",
+    },
+  });
+}
+
 function writeRobots() {
   return `User-agent: *
 Allow: /
 Allow: /compare
 Allow: /model/
 Allow: /pricing
+Allow: /free-models
 Allow: /brand/
 Allow: /about
 
@@ -408,6 +516,7 @@ function writeSitemap() {
     { loc: `${site}/`, priority: "1.0", changefreq: "weekly" },
     { loc: `${site}/compare`, priority: "0.95", changefreq: "weekly" },
     { loc: `${site}/pricing`, priority: "0.9", changefreq: "daily" },
+    { loc: `${site}/free-models`, priority: "0.95", changefreq: "weekly" },
     ...pages.models.map((m) => ({
       loc: `${site}/model/${encodeURIComponent(m.id)}`,
       priority: "0.9",
@@ -443,6 +552,7 @@ fs.mkdirSync(path.join(outDir, "model"), { recursive: true });
 fs.writeFileSync(path.join(outDir, "index.html"), renderHome());
 fs.writeFileSync(path.join(outDir, "compare.html"), renderCompare());
 fs.writeFileSync(path.join(outDir, "pricing.html"), renderPricing());
+fs.writeFileSync(path.join(outDir, "free-models.html"), renderFreeModels());
 for (const m of pages.models) {
   fs.writeFileSync(path.join(outDir, "model", `${m.id}.html`), renderModel(m));
 }
@@ -461,7 +571,7 @@ fs.writeFileSync(
 
 console.log(
   "Generated",
-  3 + pages.models.length,
+  4 + pages.models.length,
   "HTML pages + robots.txt + sitemap.xml ->",
   outDir
 );

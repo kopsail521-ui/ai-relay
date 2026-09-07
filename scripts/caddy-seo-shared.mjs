@@ -28,6 +28,13 @@ export function caddySeoHandles() {
 		rewrite * /pricing.html
 		file_server
 	}
+	handle /free-models {
+		root * /opt/ai-relay/static/seo
+		rewrite * /free-models.html
+		file_server
+	}
+	redir /free /free-models permanent
+	redir /free/ /free-models permanent
 	@seo_model path /model /model/*
 	handle @seo_model {
 		root * /opt/ai-relay/static/seo

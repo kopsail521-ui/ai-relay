@@ -3,6 +3,7 @@ Allow: /
 Allow: /compare
 Allow: /model/
 Allow: /pricing
+Allow: /free-models
 Allow: /brand/
 Allow: /about
 

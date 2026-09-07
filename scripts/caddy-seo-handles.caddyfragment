@@ -3,7 +3,8 @@
 		header Content-Type text/plain
 		file_server
 	}
-	handle /sitemap.xml {
+	@sitemaps path /sitemap.xml /sitemap-live.xml
+	handle @sitemaps {
 		root * /opt/ai-relay/static/seo
 		file_server
 	}
@@ -22,6 +23,13 @@
 		rewrite * /pricing.html
 		file_server
 	}
+	handle /free-models {
+		root * /opt/ai-relay/static/seo
+		rewrite * /free-models.html
+		file_server
+	}
+	redir /free /free-models permanent
+	redir /free/ /free-models permanent
 	@seo_model path /model /model/*
 	handle @seo_model {
 		root * /opt/ai-relay/static/seo

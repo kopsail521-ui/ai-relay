@@ -18,6 +18,11 @@ export function caddySeoHandles() {
 		rewrite * /index.html
 		file_server
 	}
+	handle /models {
+		root * /opt/ai-relay/static/seo
+		rewrite * /models.html
+		file_server
+	}
 	handle /compare {
 		root * /opt/ai-relay/static/seo
 		rewrite * /compare.html

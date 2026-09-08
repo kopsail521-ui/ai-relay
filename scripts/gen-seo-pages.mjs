@@ -87,25 +87,24 @@ ul{margin:0 0 14px;padding-left:1.2em}
 function nav() {
   return `<nav class="nav" aria-label="Primary">
   <a href="/">Home</a>
-  <a href="/compare">Compare</a>
-  <a href="/pricing">Pricing</a>
-  <a href="/free-models">Free models</a>
-  <a href="/gemini-api-pricing">Gemini pricing</a>
-  <a href="/deepseek-api-pricing">DeepSeek pricing</a>
+  <a href="/console">Console</a>
+  <a href="/pricing">Model Square</a>
+  <a href="/rankings">Rankings</a>
   <a href="/brand/keyo-docs.html">Docs</a>
-  <a href="/sign-in">Sign in</a>
-  <a href="/sign-up">Sign up</a>
+  <a href="/about">About</a>
+  <a href="/sign-up">Get Started</a>
 </nav>`;
 }
 
 function footer() {
   return `<footer class="footer">
   <a href="/">Home</a>
-  <a href="/compare">AI API price comparison</a>
-  <a href="/pricing">Pricing list</a>
+  <a href="/pricing">Model Square</a>
+  <a href="/models">Model guides</a>
+  <a href="/compare">Price comparison</a>
   <a href="/free-models">Free AI API</a>
-  <a href="/gemini-api-pricing">Gemini API pricing</a>
-  <a href="/deepseek-api-pricing">DeepSeek API pricing</a>
+  <a href="/gemini-api-pricing">Gemini pricing</a>
+  <a href="/deepseek-api-pricing">DeepSeek pricing</a>
   <a href="/brand/keyo-docs.html">Docs</a>
   <a href="/brand/faq.html">FAQ</a>
   <a href="/brand/privacy.html">Privacy</a>
@@ -261,66 +260,150 @@ ${relatedLinks(m.related)}
 }
 
 function renderHome() {
-  const modelLinks = pages.models
+  // Product conversion homepage (matches static/brand/keyo-home.html).
+  // H1/sub/CTA are in HTML source so crawlers see them without JS.
+  const title = "KeyoAPI - Cheap LLM API & AI API Relay";
+  const description =
+    "One OpenAI-compatible API for multiple AI models. Cheap LLM API and AI API relay with one key, unified billing, and familiar SDKs.";
+  const canonical = `${site}/`;
+  return `<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>${esc(title)}</title>
+<meta name="description" content="${esc(description)}" />
+<link rel="canonical" href="${esc(canonical)}" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="${esc(canonical)}" />
+<meta property="og:title" content="${esc(title)}" />
+<meta property="og:description" content="${esc(description)}" />
+<meta property="og:image" content="${site}/logo.png" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="${esc(title)}" />
+<meta name="twitter:description" content="${esc(description)}" />
+<script type="application/ld+json">${JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    name: "KeyoAPI",
+    url: site,
+    description,
+    applicationCategory: "DeveloperApplication",
+    offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
+  })}</script>
+<style>
+:root{--bg0:#f7fafc;--bg1:#eef6ff;--ink:#0f172a;--muted:#475569;--line:#cbd5e1;--accent:#2563eb;--card:#0f172a;--card-ink:#e2e8f0;--card-muted:#94a3b8}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;background:linear-gradient(180deg,var(--bg0),var(--bg1));color:var(--ink)}
+a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
+.topnav{max-width:960px;margin:0 auto;padding:18px 20px 0;display:flex;flex-wrap:wrap;gap:10px 16px;font-size:14px;color:var(--muted)}
+.wrap{min-height:70vh;display:flex;align-items:center;justify-content:center;padding:32px 20px 48px}
+.inner{max-width:760px;text-align:center}
+.eyebrow{font-size:14px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);font-weight:700;margin-bottom:14px}
+h1{font-size:clamp(2rem,5vw,3.2rem);line-height:1.15;margin:0 0 16px}
+.sub{font-size:1.125rem;color:var(--muted);margin:0 auto 28px;max-width:560px;line-height:1.6}
+.actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-bottom:36px}
+.btn{padding:12px 22px;border-radius:10px;text-decoration:none;font-weight:600;font-size:14px;display:inline-block}
+.btn-primary{background:var(--accent);color:#fff}
+.btn-secondary{background:#fff;color:var(--ink);border:1px solid var(--line)}
+.btn-link{background:transparent;color:var(--accent)}
+.panel{background:var(--card);color:var(--card-ink);border-radius:12px;padding:16px 18px;text-align:left;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;overflow:auto}
+.panel .label{color:var(--card-muted);margin-bottom:6px}
+.panel .label+.label{margin-top:14px}
+.below{max-width:760px;margin:0 auto;padding:0 20px 48px;color:var(--muted);font-size:14px;line-height:1.65;text-align:center}
+.below a{margin:0 6px}
+.foot{max-width:960px;margin:0 auto;padding:20px;border-top:1px solid var(--line);display:flex;flex-wrap:wrap;gap:10px 14px;font-size:13px;color:var(--muted)}
+</style>
+</head>
+<body>
+<nav class="topnav" aria-label="Primary">
+  <a href="/">Home</a>
+  <a href="/console">Console</a>
+  <a href="/pricing">Model Square</a>
+  <a href="/rankings">Rankings</a>
+  <a href="/brand/keyo-docs.html">Docs</a>
+  <a href="/about">About</a>
+</nav>
+<div class="wrap">
+  <div class="inner">
+    <div class="eyebrow">KEYOAPI</div>
+    <h1>One API for Multiple AI Models</h1>
+    <p class="sub">Connect to multiple text, image and speech models through one OpenAI-compatible endpoint. One API key, unified billing and familiar SDKs.</p>
+    <div class="actions">
+      <a class="btn btn-primary" href="/sign-up">Get Started</a>
+      <a class="btn btn-secondary" href="/brand/keyo-docs.html">Docs</a>
+      <a class="btn btn-link" href="/pricing">Browse Models</a>
+    </div>
+    <div class="panel">
+      <div class="label">Base URL</div>
+      <div>https://www.keyoapi.xyz/v1</div>
+      <div class="label">Example</div>
+      <div>POST /v1/chat/completions &nbsp;·&nbsp; model=gpt-5.6-luna</div>
+      <div class="label">What you get</div>
+      <div>OpenAI-compatible chat, image &amp; speech APIs · one API key · unified billing · model catalog at /pricing</div>
+    </div>
+  </div>
+</div>
+<p class="below">KeyoAPI is a <strong>cheap LLM API</strong> and <strong>AI API relay</strong> for developers who want one prepaid balance across GPT-class, Claude-class, DeepSeek, Gemini, Whisper, OCR, and more.
+  <a href="/models">Model guides</a> ·
+  <a href="/compare">Price comparison</a> ·
+  <a href="/free-models">Free models</a>
+</p>
+<footer class="foot">
+  <a href="/pricing">Model Square</a>
+  <a href="/models">All model guides</a>
+  <a href="/compare">Compare</a>
+  <a href="/free-models">Free AI API</a>
+  <a href="/gemini-api-pricing">Gemini pricing</a>
+  <a href="/deepseek-api-pricing">DeepSeek pricing</a>
+  <a href="/brand/faq.html">FAQ</a>
+  <a href="/brand/privacy.html">Privacy</a>
+  <a href="/brand/terms.html">Terms</a>
+  <a href="/sign-in">Sign in</a>
+</footer>
+</body>
+</html>
+`;
+}
+
+function renderModelsIndex() {
+  const rows = pages.models
     .map(
       (m) =>
-        `<li><a href="/model/${encodeURIComponent(m.id)}">${esc(m.id)}</a> — ${esc(m.priceLabel)} · <a href="/model/${encodeURIComponent(m.id)}">guide</a></li>`
+        `<tr><td><a href="/model/${encodeURIComponent(m.id)}"><code>${esc(m.id)}</code></a></td><td>${esc(m.category || "")}</td><td class="ok">${esc(m.priceLabel)}</td><td><a href="/model/${encodeURIComponent(m.id)}">Guide</a> · <a href="/pricing/${encodeURIComponent(m.id)}">Try</a></td></tr>`
     )
     .join("\n");
   const bodyHtml = `
-<p class="lead">KeyoAPI is a <strong>cheap llm api</strong> and multimodal <strong>ai api relay</strong> for overseas developers who want OpenAI-compatible access to chat, Whisper, OCR, vision, TTS, and digital humans — without five vendor bills.</p>
+<p class="lead">Crawlable index of KeyoAPI model guides — chat, speech, vision, OCR, TTS, and digital humans. For the interactive catalog use <a href="/pricing">Model Square</a>.</p>
 <div class="btnrow">
-  <a class="btn btn-primary" href="/sign-up">Start free</a>
-  <a class="btn btn-secondary" href="/free-models">Free AI API</a>
-  <a class="btn btn-secondary" href="/gemini-api-pricing">Gemini API pricing</a>
-  <a class="btn btn-secondary" href="/deepseek-api-pricing">DeepSeek API pricing</a>
-  <a class="btn btn-secondary" href="/compare">Full AI API price comparison</a>
-  <a class="btn btn-secondary" href="/pricing">Pricing list</a>
+  <a class="btn btn-primary" href="/pricing">Browse Models</a>
+  <a class="btn btn-secondary" href="/compare">Price comparison</a>
+  <a class="btn btn-secondary" href="/free-models">Free models</a>
 </div>
 <h2>Headline price anchors</h2>
-<p class="meta">Indicative rates for planning. Confirm live sell prices on <a href="/pricing">/pricing</a>.</p>
 <table>
 <thead><tr><th>Capability</th><th>Typical official list</th><th>KeyoAPI</th><th>Notes</th></tr></thead>
 <tbody>${compareTableRows()}</tbody>
 </table>
-<p><a href="/compare">See the full comparison page →</a></p>
-<h2>Why teams pick this AI API relay</h2>
-<p>KeyoAPI wins on purchase-intent searches: <strong>cheap llm api</strong>, <strong>ai api relay</strong>, and model-specific “{name} api” when developers already have a production bill to cut.</p>
-<p>One base URL <code>https://www.keyoapi.xyz/v1</code>, one API key, prepaid balance, and model IDs you can swap in existing OpenAI SDKs for Python, Node.js, and Cursor-compatible clients.</p>
-<h2>Featured capabilities</h2>
-<ul>
-  <li><a href="/model/gpt-5.6-luna">GPT-5.6 Luna</a> — high-volume cheap LLM tier</li>
-  <li><a href="/model/glm-5.2">GLM 5.2</a> — glm 5.2 api + free twin</li>
-  <li><a href="/model/deepseek-v4-flash">DeepSeek V4 Flash</a> — fast DeepSeek lane</li>
-  <li><a href="/model/claude-sonnet-5">Claude Sonnet 5</a> — balanced Claude-class chat</li>
-  <li><a href="/model/whisper-large-v3">Whisper Large V3</a> — multilingual speech-to-text</li>
-  <li><a href="/gemini-api-pricing">Gemini API pricing</a> — purchase-intent comparison</li>
-</ul>
-<h2>All SEO model pages</h2>
-<ul>${modelLinks}</ul>
-<h2>Integrate in minutes</h2>
-<pre><code>export OPENAI_BASE_URL=https://www.keyoapi.xyz/v1
-export OPENAI_API_KEY=sk-...
-# chat: model=gpt-5.6-terra or claude-sonnet-5
-# speech: POST /v1/audio/transcriptions model=whisper-large-v3</code></pre>
-<p>Docs: <a href="/brand/keyo-docs.html">/brand/keyo-docs.html</a> · Compare: <a href="/compare">/compare</a> · Console: <a href="/sign-in">/sign-in</a>.</p>
+<h2>All model guides</h2>
+<table>
+<thead><tr><th>Model ID</th><th>Category</th><th>Listed price</th><th>Links</th></tr></thead>
+<tbody>${rows}</tbody>
+</table>
+<p class="meta">Also: <a href="/gemini-api-pricing">Gemini API pricing</a> · <a href="/deepseek-api-pricing">DeepSeek API pricing</a>.</p>
 `;
   return layout({
-    title: "KeyoAPI - Cheap LLM API & AI API Relay for Developers",
+    title: "AI Model Guides Index | KeyoAPI",
     description:
-      "KeyoAPI is a cheap LLM API and AI API relay: OpenAI-compatible access to GPT-class, Claude-class, Whisper, OCR, vision, TTS, and digital humans.",
-    canonical: `${site}/`,
-    h1: "Cheap LLM API & AI API Relay for Global Developers",
+      "Index of KeyoAPI SEO model guides: GPT-class, Claude, DeepSeek, GLM, Whisper, OCR, vision, TTS — with links to pricing and free tiers.",
+    canonical: `${site}/models`,
+    h1: "AI Model Guides on KeyoAPI",
     bodyHtml,
     jsonLd: {
       "@context": "https://schema.org",
-      "@type": "WebApplication",
-      name: "KeyoAPI",
-      url: site,
-      description:
-        "Cheap LLM API and multimodal AI API relay with OpenAI-compatible endpoints.",
-      applicationCategory: "DeveloperApplication",
-      offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
+      "@type": "CollectionPage",
+      name: "KeyoAPI Model Guides",
+      url: `${site}/models`,
     },
   });
 }
@@ -597,6 +680,7 @@ Allow: /compare
 Allow: /model/
 Allow: /pricing
 Allow: /free-models
+Allow: /models
 Allow: /gemini-api-pricing
 Allow: /deepseek-api-pricing
 Allow: /brand/
@@ -621,6 +705,7 @@ function writeSitemap() {
     { loc: `${site}/compare`, priority: "0.95", changefreq: "weekly" },
     { loc: `${site}/pricing`, priority: "0.9", changefreq: "daily" },
     { loc: `${site}/free-models`, priority: "0.95", changefreq: "weekly" },
+    { loc: `${site}/models`, priority: "0.85", changefreq: "weekly" },
     {
       loc: `${site}/gemini-api-pricing`,
       priority: "0.95",
@@ -664,6 +749,7 @@ ${body}
 
 fs.mkdirSync(path.join(outDir, "model"), { recursive: true });
 fs.writeFileSync(path.join(outDir, "index.html"), renderHome());
+fs.writeFileSync(path.join(outDir, "models.html"), renderModelsIndex());
 fs.writeFileSync(path.join(outDir, "compare.html"), renderCompare());
 fs.writeFileSync(path.join(outDir, "pricing.html"), renderPricing());
 fs.writeFileSync(path.join(outDir, "free-models.html"), renderFreeModels());
@@ -688,7 +774,7 @@ fs.writeFileSync(
 
 console.log(
   "Generated",
-  4 + pricingLandings.pages.length + pages.models.length,
+  5 + pricingLandings.pages.length + pages.models.length,
   "HTML pages + robots.txt + sitemap.xml ->",
   outDir
 );

@@ -62,6 +62,11 @@ ${DOMAIN} {
 		rewrite * /index.html
 		file_server
 	}
+	handle /models {
+		root * ${ROOT}/static/seo
+		rewrite * /models.html
+		file_server
+	}
 	handle /compare {
 		root * ${ROOT}/static/seo
 		rewrite * /compare.html

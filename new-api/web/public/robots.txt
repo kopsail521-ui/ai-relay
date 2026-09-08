@@ -4,6 +4,7 @@ Allow: /compare
 Allow: /model/
 Allow: /pricing
 Allow: /free-models
+Allow: /models
 Allow: /gemini-api-pricing
 Allow: /deepseek-api-pricing
 Allow: /brand/

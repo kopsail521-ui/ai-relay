@@ -3,171 +3,87 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>KeyoAPI - Cheap LLM API &amp; AI API Relay for Developers</title>
-<meta name="description" content="KeyoAPI is a cheap LLM API and AI API relay: OpenAI-compatible access to GPT-class, Claude-class, Whisper, OCR, vision, TTS, and digital humans." />
+<title>KeyoAPI - Cheap LLM API &amp; AI API Relay</title>
+<meta name="description" content="One OpenAI-compatible API for multiple AI models. Cheap LLM API and AI API relay with one key, unified billing, and familiar SDKs." />
 <link rel="canonical" href="https://www.keyoapi.xyz/" />
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://www.keyoapi.xyz/" />
-<meta property="og:title" content="KeyoAPI - Cheap LLM API &amp; AI API Relay for Developers" />
-<meta property="og:description" content="KeyoAPI is a cheap LLM API and AI API relay: OpenAI-compatible access to GPT-class, Claude-class, Whisper, OCR, vision, TTS, and digital humans." />
+<meta property="og:title" content="KeyoAPI - Cheap LLM API &amp; AI API Relay" />
+<meta property="og:description" content="One OpenAI-compatible API for multiple AI models. Cheap LLM API and AI API relay with one key, unified billing, and familiar SDKs." />
 <meta property="og:image" content="https://www.keyoapi.xyz/logo.png" />
 <meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:title" content="KeyoAPI - Cheap LLM API &amp; AI API Relay for Developers" />
-<meta name="twitter:description" content="KeyoAPI is a cheap LLM API and AI API relay: OpenAI-compatible access to GPT-class, Claude-class, Whisper, OCR, vision, TTS, and digital humans." />
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"KeyoAPI","url":"https://www.keyoapi.xyz","description":"Cheap LLM API and multimodal AI API relay with OpenAI-compatible endpoints.","applicationCategory":"DeveloperApplication","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}</script>
-<style>:root {
-  --bg0:#f7fafc; --bg1:#eef6ff; --ink:#0f172a; --muted:#475569;
-  --line:#cbd5e1; --accent:#2563eb; --card:#fff; --ok:#047857;
-}
+<meta name="twitter:title" content="KeyoAPI - Cheap LLM API &amp; AI API Relay" />
+<meta name="twitter:description" content="One OpenAI-compatible API for multiple AI models. Cheap LLM API and AI API relay with one key, unified billing, and familiar SDKs." />
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"KeyoAPI","url":"https://www.keyoapi.xyz","description":"One OpenAI-compatible API for multiple AI models. Cheap LLM API and AI API relay with one key, unified billing, and familiar SDKs.","applicationCategory":"DeveloperApplication","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}</script>
+<style>
+:root{--bg0:#f7fafc;--bg1:#eef6ff;--ink:#0f172a;--muted:#475569;--line:#cbd5e1;--accent:#2563eb;--card:#0f172a;--card-ink:#e2e8f0;--card-muted:#94a3b8}
 *{box-sizing:border-box}
-html,body{margin:0;min-height:100%;font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;background:linear-gradient(180deg,var(--bg0),var(--bg1));color:var(--ink);line-height:1.65}
+html,body{margin:0;min-height:100%;font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;background:linear-gradient(180deg,var(--bg0),var(--bg1));color:var(--ink)}
 a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
-.wrap{max-width:880px;margin:0 auto;padding:32px 20px 64px}
-.nav,.footer{display:flex;flex-wrap:wrap;gap:10px 16px;font-size:14px;color:var(--muted)}
-.nav{padding-bottom:20px;border-bottom:1px solid var(--line);margin-bottom:28px}
-.footer{padding-top:28px;border-top:1px solid var(--line);margin-top:40px}
-.eyebrow{font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);font-weight:700;margin:0 0 10px}
-h1{font-size:clamp(1.75rem,4vw,2.4rem);line-height:1.2;margin:0 0 14px}
-h2{font-size:1.25rem;margin:28px 0 10px}
-p{margin:0 0 14px;color:var(--ink)}
-.lead{font-size:1.1rem;color:var(--muted)}
-.meta{font-size:14px;color:var(--muted);margin:0 0 18px}
-.btnrow{display:flex;flex-wrap:wrap;gap:10px;margin:18px 0 28px}
-.btn{display:inline-block;padding:10px 16px;border-radius:10px;font-weight:600;font-size:14px;text-decoration:none}
+.topnav{max-width:960px;margin:0 auto;padding:18px 20px 0;display:flex;flex-wrap:wrap;gap:10px 16px;font-size:14px;color:var(--muted)}
+.wrap{min-height:70vh;display:flex;align-items:center;justify-content:center;padding:32px 20px 48px}
+.inner{max-width:760px;text-align:center}
+.eyebrow{font-size:14px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);font-weight:700;margin-bottom:14px}
+h1{font-size:clamp(2rem,5vw,3.2rem);line-height:1.15;margin:0 0 16px}
+.sub{font-size:1.125rem;color:var(--muted);margin:0 auto 28px;max-width:560px;line-height:1.6}
+.actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-bottom:36px}
+.btn{padding:12px 22px;border-radius:10px;text-decoration:none;font-weight:600;font-size:14px;display:inline-block}
 .btn-primary{background:var(--accent);color:#fff}
 .btn-secondary{background:#fff;color:var(--ink);border:1px solid var(--line)}
-.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin:16px 0}
-pre,code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
-pre{background:#0f172a;color:#e2e8f0;padding:14px 16px;border-radius:10px;overflow:auto;font-size:13px}
-table{width:100%;border-collapse:collapse;font-size:14px;background:var(--card)}
-th,td{border:1px solid var(--line);padding:10px 12px;text-align:left;vertical-align:top}
-th{background:#f1f5f9}
-.ok{color:var(--ok);font-weight:600}
-.grid{display:grid;gap:10px;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));margin:16px 0}
-.grid a{display:block;padding:12px;border:1px solid var(--line);border-radius:10px;background:#fff;color:var(--ink);text-decoration:none}
-.grid a:hover{border-color:var(--accent)}
-ul{margin:0 0 14px;padding-left:1.2em}
-.faq details{border:1px solid var(--line);border-radius:10px;padding:12px 14px;margin:0 0 10px;background:#fff}
-.faq summary{cursor:pointer;font-weight:600}</style>
+.btn-link{background:transparent;color:var(--accent)}
+.panel{background:var(--card);color:var(--card-ink);border-radius:12px;padding:16px 18px;text-align:left;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;overflow:auto}
+.panel .label{color:var(--card-muted);margin-bottom:6px}
+.panel .label+.label{margin-top:14px}
+.below{max-width:760px;margin:0 auto;padding:0 20px 48px;color:var(--muted);font-size:14px;line-height:1.65;text-align:center}
+.below a{margin:0 6px}
+.foot{max-width:960px;margin:0 auto;padding:20px;border-top:1px solid var(--line);display:flex;flex-wrap:wrap;gap:10px 14px;font-size:13px;color:var(--muted)}
+</style>
 </head>
 <body>
-<div class="wrap">
-<nav class="nav" aria-label="Primary">
+<nav class="topnav" aria-label="Primary">
   <a href="/">Home</a>
-  <a href="/compare">Compare</a>
-  <a href="/pricing">Pricing</a>
+  <a href="/console">Console</a>
+  <a href="/pricing">Model Square</a>
+  <a href="/rankings">Rankings</a>
+  <a href="/brand/keyo-docs.html">Docs</a>
+  <a href="/about">About</a>
+</nav>
+<div class="wrap">
+  <div class="inner">
+    <div class="eyebrow">KEYOAPI</div>
+    <h1>One API for Multiple AI Models</h1>
+    <p class="sub">Connect to multiple text, image and speech models through one OpenAI-compatible endpoint. One API key, unified billing and familiar SDKs.</p>
+    <div class="actions">
+      <a class="btn btn-primary" href="/sign-up">Get Started</a>
+      <a class="btn btn-secondary" href="/brand/keyo-docs.html">Docs</a>
+      <a class="btn btn-link" href="/pricing">Browse Models</a>
+    </div>
+    <div class="panel">
+      <div class="label">Base URL</div>
+      <div>https://www.keyoapi.xyz/v1</div>
+      <div class="label">Example</div>
+      <div>POST /v1/chat/completions &nbsp;·&nbsp; model=gpt-5.6-luna</div>
+      <div class="label">What you get</div>
+      <div>OpenAI-compatible chat, image &amp; speech APIs · one API key · unified billing · model catalog at /pricing</div>
+    </div>
+  </div>
+</div>
+<p class="below">KeyoAPI is a <strong>cheap LLM API</strong> and <strong>AI API relay</strong> for developers who want one prepaid balance across GPT-class, Claude-class, DeepSeek, Gemini, Whisper, OCR, and more.
+  <a href="/models">Model guides</a> ·
+  <a href="/compare">Price comparison</a> ·
   <a href="/free-models">Free models</a>
+</p>
+<footer class="foot">
+  <a href="/pricing">Model Square</a>
+  <a href="/models">All model guides</a>
+  <a href="/compare">Compare</a>
+  <a href="/free-models">Free AI API</a>
   <a href="/gemini-api-pricing">Gemini pricing</a>
   <a href="/deepseek-api-pricing">DeepSeek pricing</a>
-  <a href="/brand/keyo-docs.html">Docs</a>
-  <a href="/sign-in">Sign in</a>
-  <a href="/sign-up">Sign up</a>
-</nav>
-<p class="eyebrow">KEYOAPI</p>
-<h1>Cheap LLM API &amp; AI API Relay for Global Developers</h1>
-
-<p class="lead">KeyoAPI is a <strong>cheap llm api</strong> and multimodal <strong>ai api relay</strong> for overseas developers who want OpenAI-compatible access to chat, Whisper, OCR, vision, TTS, and digital humans — without five vendor bills.</p>
-<div class="btnrow">
-  <a class="btn btn-primary" href="/sign-up">Start free</a>
-  <a class="btn btn-secondary" href="/free-models">Free AI API</a>
-  <a class="btn btn-secondary" href="/gemini-api-pricing">Gemini API pricing</a>
-  <a class="btn btn-secondary" href="/deepseek-api-pricing">DeepSeek API pricing</a>
-  <a class="btn btn-secondary" href="/compare">Full AI API price comparison</a>
-  <a class="btn btn-secondary" href="/pricing">Pricing list</a>
-</div>
-<h2>Headline price anchors</h2>
-<p class="meta">Indicative rates for planning. Confirm live sell prices on <a href="/pricing">/pricing</a>.</p>
-<table>
-<thead><tr><th>Capability</th><th>Typical official list</th><th>KeyoAPI</th><th>Notes</th></tr></thead>
-<tbody><tr>
-  <td>Flagship chat (GPT-class)</td>
-  <td>OpenAI GPT-4o ~$2.50 / $10.00 per 1M in/out</td>
-  <td><a href="/model/gpt-5.6-terra">gpt-5.6-terra</a><br/><span class="ok">$0.37 / $2.21 per 1M in/out</span></td>
-  <td>OpenAI-compatible /v1/chat/completions</td>
-</tr>
-<tr>
-  <td>High-volume cheap LLM</td>
-  <td>OpenAI GPT-4o mini ~$0.15 / $0.60 per 1M in/out</td>
-  <td><a href="/model/gpt-5.6-luna">gpt-5.6-luna</a><br/><span class="ok">$0.10 / $0.62 per 1M in/out</span></td>
-  <td>Best Keyo price/perf for batch workloads</td>
-</tr>
-<tr>
-  <td>Claude-class reasoning</td>
-  <td>Anthropic Claude Sonnet 4 ~$3 / $15 per 1M in/out</td>
-  <td><a href="/model/claude-sonnet-5">claude-sonnet-5</a><br/><span class="ok">$0.88 / $4.41 per 1M in/out</span></td>
-  <td>Drop-in chat completions via Keyo relay</td>
-</tr>
-<tr>
-  <td>Speech to text</td>
-  <td>OpenAI Whisper ~$0.006 / minute</td>
-  <td><a href="/model/whisper-large-v3">whisper-large-v3</a><br/><span class="ok">$0.0103 / request</span></td>
-  <td>Per-request billing; strong for short clips</td>
-</tr>
-<tr>
-  <td>Background removal</td>
-  <td>Typical SaaS remove.bg API often $0.05–0.20 / image</td>
-  <td><a href="/model/RMBG-2.0">RMBG-2.0</a><br/><span class="ok">$0.0068 / request</span></td>
-  <td>BRIA RMBG via unified Keyo endpoint</td>
-</tr></tbody>
-</table>
-<p><a href="/compare">See the full comparison page →</a></p>
-<h2>Why teams pick this AI API relay</h2>
-<p>KeyoAPI wins on purchase-intent searches: <strong>cheap llm api</strong>, <strong>ai api relay</strong>, and model-specific “{name} api” when developers already have a production bill to cut.</p>
-<p>One base URL <code>https://www.keyoapi.xyz/v1</code>, one API key, prepaid balance, and model IDs you can swap in existing OpenAI SDKs for Python, Node.js, and Cursor-compatible clients.</p>
-<h2>Featured capabilities</h2>
-<ul>
-  <li><a href="/model/gpt-5.6-luna">GPT-5.6 Luna</a> — high-volume cheap LLM tier</li>
-  <li><a href="/model/glm-5.2">GLM 5.2</a> — glm 5.2 api + free twin</li>
-  <li><a href="/model/deepseek-v4-flash">DeepSeek V4 Flash</a> — fast DeepSeek lane</li>
-  <li><a href="/model/claude-sonnet-5">Claude Sonnet 5</a> — balanced Claude-class chat</li>
-  <li><a href="/model/whisper-large-v3">Whisper Large V3</a> — multilingual speech-to-text</li>
-  <li><a href="/gemini-api-pricing">Gemini API pricing</a> — purchase-intent comparison</li>
-</ul>
-<h2>All SEO model pages</h2>
-<ul><li><a href="/model/whisper-large-v3">whisper-large-v3</a> — $0.0103 / request · <a href="/model/whisper-large-v3">guide</a></li>
-<li><a href="/model/whisper-large-v3-turbo">whisper-large-v3-turbo</a> — $0.0103 / request · <a href="/model/whisper-large-v3-turbo">guide</a></li>
-<li><a href="/model/claude-fable-5-1">claude-fable-5-1</a> — ~$7.35 / $36.77 per 1M in/out · <a href="/model/claude-fable-5-1">guide</a></li>
-<li><a href="/model/claude-fable-5">claude-fable-5</a> — ~$8.82 / $44.12 per 1M in/out · <a href="/model/claude-fable-5">guide</a></li>
-<li><a href="/model/claude-opus-5">claude-opus-5</a> — ~$2.21 / $11.03 per 1M in/out · <a href="/model/claude-opus-5">guide</a></li>
-<li><a href="/model/claude-sonnet-5">claude-sonnet-5</a> — ~$0.88 / $4.41 per 1M in/out · <a href="/model/claude-sonnet-5">guide</a></li>
-<li><a href="/model/gpt-5.6-terra">gpt-5.6-terra</a> — ~$0.37 / $2.21 per 1M in/out · <a href="/model/gpt-5.6-terra">guide</a></li>
-<li><a href="/model/gpt-5.6-sol">gpt-5.6-sol</a> — ~$0.92 / $5.52 per 1M in/out · <a href="/model/gpt-5.6-sol">guide</a></li>
-<li><a href="/model/gpt-5.6-luna">gpt-5.6-luna</a> — ~$0.10 / $0.62 per 1M in/out · <a href="/model/gpt-5.6-luna">guide</a></li>
-<li><a href="/model/MinerU2.5-Pro">MinerU2.5-Pro</a> — $0.0137 / page · <a href="/model/MinerU2.5-Pro">guide</a></li>
-<li><a href="/model/Unlimited-OCR">Unlimited-OCR</a> — ~$1.92 / $1.92 per 1M in/out tokens · <a href="/model/Unlimited-OCR">guide</a></li>
-<li><a href="/model/UVDoc">UVDoc</a> — $0.0137 / request · <a href="/model/UVDoc">guide</a></li>
-<li><a href="/model/Qwen3-TTS">Qwen3-TTS</a> — $0.548 / 10K characters · <a href="/model/Qwen3-TTS">guide</a></li>
-<li><a href="/model/RMBG-2.0">RMBG-2.0</a> — $0.0068 / request · <a href="/model/RMBG-2.0">guide</a></li>
-<li><a href="/model/VajraV1">VajraV1</a> — $0.0068 / request · <a href="/model/VajraV1">guide</a></li>
-<li><a href="/model/sam3">sam3</a> — $0.0137 / request · <a href="/model/sam3">guide</a></li>
-<li><a href="/model/Real-ESRGAN">Real-ESRGAN</a> — $0.0068 / request · <a href="/model/Real-ESRGAN">guide</a></li>
-<li><a href="/model/AnimeSharp">AnimeSharp</a> — $0.0068 / request · <a href="/model/AnimeSharp">guide</a></li>
-<li><a href="/model/Duix-Avatar">Duix-Avatar</a> — $0.0068 / second · <a href="/model/Duix-Avatar">guide</a></li>
-<li><a href="/model/InfiniteTalk">InfiniteTalk</a> — $0.342 / request · <a href="/model/InfiniteTalk">guide</a></li>
-<li><a href="/model/glm-5.2">glm-5.2</a> — ~$3.50 / $11.00 per 1M in/out · <a href="/model/glm-5.2">guide</a></li>
-<li><a href="/model/deepseek-v4-pro">deepseek-v4-pro</a> — ~$3.30 / $9.90 per 1M in/out · <a href="/model/deepseek-v4-pro">guide</a></li>
-<li><a href="/model/deepseek-v4-flash">deepseek-v4-flash</a> — ~$1.10 / $3.30 per 1M in/out · <a href="/model/deepseek-v4-flash">guide</a></li>
-<li><a href="/model/kimi-k3">kimi-k3</a> — ~$7.50 / $37.50 per 1M in/out · <a href="/model/kimi-k3">guide</a></li></ul>
-<h2>Integrate in minutes</h2>
-<pre><code>export OPENAI_BASE_URL=https://www.keyoapi.xyz/v1
-export OPENAI_API_KEY=sk-...
-# chat: model=gpt-5.6-terra or claude-sonnet-5
-# speech: POST /v1/audio/transcriptions model=whisper-large-v3</code></pre>
-<p>Docs: <a href="/brand/keyo-docs.html">/brand/keyo-docs.html</a> · Compare: <a href="/compare">/compare</a> · Console: <a href="/sign-in">/sign-in</a>.</p>
-
-<footer class="footer">
-  <a href="/">Home</a>
-  <a href="/compare">AI API price comparison</a>
-  <a href="/pricing">Pricing list</a>
-  <a href="/free-models">Free AI API</a>
-  <a href="/gemini-api-pricing">Gemini API pricing</a>
-  <a href="/deepseek-api-pricing">DeepSeek API pricing</a>
-  <a href="/brand/keyo-docs.html">Docs</a>
   <a href="/brand/faq.html">FAQ</a>
   <a href="/brand/privacy.html">Privacy</a>
   <a href="/brand/terms.html">Terms</a>
-  <a href="/sign-in">Console login</a>
+  <a href="/sign-in">Sign in</a>
 </footer>
-</div>
 </body>
 </html>

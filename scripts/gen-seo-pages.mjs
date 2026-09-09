@@ -215,7 +215,7 @@ function renderModel(m) {
   const curl = m.curlExample || "";
   const bodyHtml = `
 <p class="lead">${esc(lead)}</p>
-<p class="meta">Target keywords: ${m.targetKeywords.map(esc).join(" · ")} · Price: <span class="ok">${esc(m.priceLabel)}</span></p>
+<p class="meta">Listed price: <span class="ok">${esc(m.priceLabel)}</span> · Confirm live rates on <a href="/pricing/${encodeURIComponent(m.id)}">interactive pricing</a>.</p>
 <div class="btnrow">
   <a class="btn btn-primary" href="/pricing/${encodeURIComponent(m.id)}">Open interactive pricing</a>
   <a class="btn btn-secondary" href="/compare">Compare API prices</a>
@@ -236,7 +236,7 @@ ${freeTierBlock(m)}
 <div class="faq">${faqs}</div>
 <h2>Related models</h2>
 ${relatedLinks(m.related)}
-<p class="meta">Static guide for <strong>${esc(m.id)}</strong>. Interactive try/buy: <a href="/pricing/${encodeURIComponent(m.id)}">/pricing/${esc(m.id)}</a>. Catalog: <a href="/pricing">/pricing</a>.</p>
+<p class="meta">Guide for <strong>${esc(m.id)}</strong>. Try/buy: <a href="/pricing/${encodeURIComponent(m.id)}">/pricing/${esc(m.id)}</a> · Catalog: <a href="/pricing">/pricing</a>.</p>
 `;
   return layout({
     title: m.title,
@@ -793,7 +793,7 @@ function renderPricingLanding(p) {
     .join("\n");
   const bodyHtml = `
 <p class="lead">${esc(p.lead)}</p>
-<p class="meta">Target keywords: ${p.targetKeywords.map(esc).join(" · ")}</p>
+<p class="meta">Indicative comparison for planning. Confirm live Keyo rates on <a href="/pricing">/pricing</a>.</p>
 <div class="btnrow">
   <a class="btn btn-primary" href="/sign-up">Get API key</a>
   <a class="btn btn-secondary" href="/pricing">Full pricing list</a>

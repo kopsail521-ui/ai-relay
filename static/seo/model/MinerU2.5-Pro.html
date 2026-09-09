@@ -65,22 +65,14 @@ ul{margin:0 0 14px;padding-left:1.2em}
 <h1>MinerU2.5-Pro API — Complex Document Parsing &amp; OCR</h1>
 
 <p class="lead">MinerU2.5-Pro is KeyoAPI’s heavy-duty document parsing OCR API for PDFs and images that break naive OCR.</p>
-<p class="meta">Target keywords: ocr api · document parsing api · pdf ocr api · Price: <span class="ok">$0.0137 / page</span></p>
+<p class="meta">Listed price: <span class="ok">$0.0137 / page</span> · Confirm live rates on <a href="/pricing/MinerU2.5-Pro">interactive pricing</a>.</p>
 <div class="btnrow">
   <a class="btn btn-primary" href="/pricing/MinerU2.5-Pro">Open interactive pricing</a>
   <a class="btn btn-secondary" href="/compare">Compare API prices</a>
   <a class="btn btn-secondary" href="/sign-up">Create account</a>
 </div>
 <h2>Overview</h2>
-<p>MinerU2.5-Pro is KeyoAPI’s heavy-duty document parsing OCR API for PDFs and images that break naive OCR. If you searched ocr api because invoices, papers, and slide decks must become machine-readable, this model is the structured extraction layer before your LLM.</p>
-<p>Complex documents mix columns, tables, formulas, and figures. MinerU2.5-Pro focuses on recovering text plus layout so downstream chat models reason over faithful structure. On KeyoAPI it sits beside Unlimited-OCR and UVDoc so you can build a full document lane on one AI API relay. </p>
-<p>Billing is approximately $0.0137 per page—easy to map onto “pages processed” product metrics. Compare against building and hosting your own GPU parsing stack when volume is spiky.</p>
-<p>Fintech KYC packets, academic PDF ingestion, contract analytics, and enterprise knowledge bases. Feed parsed markdown into claude-sonnet-5 or gpt-5.6-terra for Q&amp;A.</p>
-<p>Follow Keyo docs for the async document endpoints using model MinerU2.5-Pro. Try and top up at /pricing/MinerU2.5-Pro.</p>
-<p>MinerU2.5-Pro is the async PDF/layout parser—submit once, poll /v1/task/{id}, then feed structured text to your LLM. Prefer it over chat-OCR for multi-page packets.</p>
-<p>Document pipelines fail when you treat PDFs like plain text. MinerU2.5-Pro recovers layout so tables and headings survive into your LLM context. Design the job as async: upload, store task id, poll, then write markdown into your vector store. Retry only failed pages. Cache hashes so re-uploads are free. For finance and legal, keep the original PDF URL next to the parsed chunk for citation. Chain UVDoc first when users photograph paper. That OCR API stack on one Keyo key beats stitching three SaaS vendors.</p>
-<p>Version your parse prompts and post-processors. When a template invoice changes, update the extractor without re-OCR of historical files if cached markdown remains valid. That cache discipline keeps OCR API spend flat as volume grows.</p>
-<p>Practical checklist for MinerU2.5-Pro: confirm endpoint POST /v1/async/documents/parse, set model string model=MinerU2.5-Pro, verify listed price $0.0137 / page on /pricing/MinerU2.5-Pro, add related links from this page into your docs, and keep interactive try/buy on /pricing/MinerU2.5-Pro for key creation. Target queries such as ocr api, document parsing api, pdf ocr api should land here with crawlable HTML—not a CSR shell. Re-test curl monthly when upstream request shapes change. Prefer this static guide for SEO and onboarding emails; prefer the console when operators need live balance and logs.</p>
+<p>MinerU2.5-Pro is KeyoAPI’s heavy-duty document parsing OCR API for PDFs and images that break naive OCR. If you searched ocr api because invoices, papers, and slide decks must become machine-readable, this model is the structured extraction layer before your LLM. Complex documents mix columns, tables, formulas, and figures. MinerU2.5-Pro focuses on recovering text plus layout so downstream chat models reason over faithful structure. On KeyoAPI it sits beside Unlimited-OCR and UVDoc so you can build a full document lane on one AI API relay. Billing is approximately $0.0137 per page—easy to map onto “pages processed” product metrics. Compare against building and hosting your own GPU parsing stack when volume is spiky. Fintech KYC packets, academic PDF ingestion, contract analytics, and enterprise knowledge bases. Feed parsed markdown into claude-sonnet-5 or gpt-5.6-terra for Q&amp;A. Follow Keyo docs for the async document endpoints using model MinerU2.5-Pro. Try and top up at /pricing/MinerU2.5-Pro. MinerU2.5-Pro is the async PDF/layout parser—submit once, poll /v1/task/{id}, then feed structured text to your LLM. Prefer it over chat-OCR for multi-page packets. Document pipelines fail when you treat PDFs like plain text. MinerU2.5-Pro recovers layout so tables and headings survive into your LLM context. Design the job as async: upload, store task id, poll, then write markdown into your vector store. Retry only failed pages. Cache hashes so re-uploads are free. For finance and legal, keep the original PDF URL next to the parsed chunk for citation. Chain UVDoc first when users photograph paper. That OCR API stack on one Keyo key beats stitching three SaaS vendors. Version your parse prompts and post-processors. When a template invoice changes, update the extractor without re-OCR of historical files if cached markdown remains valid. That cache discipline keeps OCR API spend flat as volume grows.</p>
 
 <h2>Quick start</h2>
 <div class="card">
@@ -102,7 +94,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
 <div class="grid"><a href="/model/Unlimited-OCR">Unlimited-OCR API</a>
 <a href="/model/UVDoc">UVDoc API</a>
 <a href="/model/claude-sonnet-5">Claude Sonnet 5 API</a></div>
-<p class="meta">Static guide for <strong>MinerU2.5-Pro</strong>. Interactive try/buy: <a href="/pricing/MinerU2.5-Pro">/pricing/MinerU2.5-Pro</a>. Catalog: <a href="/pricing">/pricing</a>.</p>
+<p class="meta">Guide for <strong>MinerU2.5-Pro</strong>. Try/buy: <a href="/pricing/MinerU2.5-Pro">/pricing/MinerU2.5-Pro</a> · Catalog: <a href="/pricing">/pricing</a>.</p>
 
 <footer class="footer">
   <a href="/">Home</a>

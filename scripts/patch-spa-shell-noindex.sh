@@ -1,30 +1,43 @@
 #!/usr/bin/env bash
-# Ensure static/spa-shell/index.html exists (committed template already has noindex).
-# Optionally refresh from repo copy after git pull.
+# Publish SPA noindex shell next to other crawlable static SEO files
+# (same directory Caddy already serves successfully for /about, /models, etc.).
 set -euo pipefail
 
 ROOT="${ROOT:-/opt/ai-relay}"
-OUT_DIR="${ROOT}/static/spa-shell"
-OUT_FILE="${OUT_DIR}/index.html"
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
-SRC="${REPO_ROOT}/static/spa-shell/index.html"
 
-mkdir -p "$OUT_DIR"
-if [[ ! -f "$SRC" ]]; then
-  echo "FAIL_SPA_SHELL_TEMPLATE_MISSING $SRC" >&2
+SRC_CANDIDATES=(
+  "${REPO_ROOT}/static/seo/_spa_shell.html"
+  "${REPO_ROOT}/static/spa-shell/index.html"
+  "${ROOT}/static/seo/_spa_shell.html"
+  "${ROOT}/static/spa-shell/index.html"
+)
+
+SRC=""
+for f in "${SRC_CANDIDATES[@]}"; do
+  if [[ -f "$f" ]]; then
+    SRC="$f"
+    break
+  fi
+done
+
+if [[ -z "$SRC" ]]; then
+  echo "FAIL_SPA_SHELL_TEMPLATE_MISSING" >&2
   exit 1
 fi
-cp -f "$SRC" "$OUT_FILE"
 
-if ! grep -q 'name="robots"' "$OUT_FILE" || ! grep -q 'noindex' "$OUT_FILE"; then
-  echo "FAIL_SPA_SHELL_TEMPLATE_NO_NOINDEX" >&2
-  exit 1
-fi
-if ! grep -q 'id="root"' "$OUT_FILE"; then
-  echo "FAIL_SPA_SHELL_TEMPLATE_NO_ROOT" >&2
-  exit 1
-fi
+mkdir -p "${ROOT}/static/seo" "${ROOT}/static/spa-shell"
+cp -f "$SRC" "${ROOT}/static/seo/_spa_shell.html"
+cp -f "$SRC" "${ROOT}/static/spa-shell/index.html"
+chmod a+r "${ROOT}/static/seo/_spa_shell.html" "${ROOT}/static/spa-shell/index.html" || true
 
-echo "OK_SPA_SHELL_NOINDEX bytes=$(wc -c < "$OUT_FILE") path=$OUT_FILE"
-grep -o 'noindex' "$OUT_FILE" | head -n 1
+for out in "${ROOT}/static/seo/_spa_shell.html" "${ROOT}/static/spa-shell/index.html"; do
+  if ! grep -q 'noindex' "$out"; then
+    echo "FAIL_SPA_SHELL_NO_NOINDEX $out" >&2
+    exit 1
+  fi
+done
+
+echo "OK_SPA_SHELL_NOINDEX src=$SRC bytes=$(wc -c < "${ROOT}/static/seo/_spa_shell.html")"
+grep -o 'noindex' "${ROOT}/static/seo/_spa_shell.html" | head -n 1

@@ -106,8 +106,8 @@ ${caddySeoHandles()}
 	handle @spa_noindex {
 		header X-Robots-Tag "noindex, nofollow"
 		header Content-Type "text/html; charset=utf-8"
-		root * /opt/ai-relay/static/spa-shell
-		rewrite * /index.html
+		root * /opt/ai-relay/static/seo
+		rewrite * /_spa_shell.html
 		file_server
 	}
 	handle {

@@ -39,9 +39,9 @@ fi
 
 echo "==> Build SPA shell with HTML noindex BEFORE Caddy reload (new-api embeds dist)"
 bash "${REPO_ROOT}/scripts/patch-spa-shell-noindex.sh"
-# Hard proof on disk before reload
-grep -q noindex "${ROOT}/static/spa-shell/index.html"
-echo "==> spa-shell on disk OK ($(wc -c < "${ROOT}/static/spa-shell/index.html") bytes)"
+# Hard proof on disk before reload (file lives beside working SEO pages)
+grep -q noindex "${ROOT}/static/seo/_spa_shell.html"
+echo "==> spa-shell on disk OK ($(wc -c < "${ROOT}/static/seo/_spa_shell.html") bytes -> static/seo/_spa_shell.html)"
 
 echo "==> Update Caddyfile for $DOMAIN (keeps SEO handles + apex→www redirect)"
 APEX_DOMAIN="${DOMAIN#www.}"
@@ -138,8 +138,8 @@ ${DOMAIN} {
 	handle @spa_noindex {
 		header X-Robots-Tag "noindex, nofollow"
 		header Content-Type "text/html; charset=utf-8"
-		root * ${ROOT}/static/spa-shell
-		rewrite * /index.html
+		root * ${ROOT}/static/seo
+		rewrite * /_spa_shell.html
 		file_server
 	}
 	handle {
@@ -158,7 +158,11 @@ curl -sI "https://${DOMAIN}/robots.txt" | head -n 5
 curl -sI "https://${DOMAIN}/" | head -n 5
 curl -sI "https://${DOMAIN}/about" | head -n 5
 curl -sI "https://${DOMAIN}/sign-in" | head -n 8
+echo -n "sign-in_body_noindex="
 curl -s "https://${DOMAIN}/sign-in" | grep -o noindex | head -n 1 || echo "FAIL_SIGNIN_NOINDEX_BODY"
+echo -n "sign-in_bytes="
+curl -s "https://${DOMAIN}/sign-in" | wc -c
+echo -n "rankings_body_noindex="
 curl -s "https://${DOMAIN}/rankings" | grep -o noindex | head -n 1 || echo "FAIL_RANKINGS_NOINDEX_BODY"
 echo -n "home_noindex_count="
 curl -s "https://${DOMAIN}/" | grep -c noindex || true

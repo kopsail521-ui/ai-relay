@@ -260,12 +260,51 @@ ${relatedLinks(m.related)}
 }
 
 function renderHome() {
-  // Product conversion homepage (matches static/brand/keyo-home.html).
-  // H1/sub/CTA are in HTML source so crawlers see them without JS.
-  const title = "KeyoAPI - Cheap LLM API & AI API Relay";
+  // Conversion-first hero (matches keyo-home) + below-fold anchors.
+  // Title/description keep cheap llm api / ai api relay; H1 is product claim.
+  const title = "KeyoAPI - Cheap LLM API & AI API Relay for Developers";
   const description =
-    "One OpenAI-compatible API for multiple AI models. Cheap LLM API and AI API relay with one key, unified billing, and familiar SDKs.";
+    "KeyoAPI is a cheap LLM API and AI API relay: OpenAI-compatible access to GPT-class, Claude-class, DeepSeek, GLM, Kimi, Whisper, OCR, vision, TTS, and digital humans — one key, unified billing, permanent $0 free tier.";
   const canonical = `${site}/`;
+  const headlineRows = priceRefs.compare_rows
+    .slice(0, 4)
+    .map(
+      (r) => `<tr>
+  <td>${esc(r.capability)}</td>
+  <td>${esc(r.official)}</td>
+  <td><a href="/model/${encodeURIComponent(r.keyo_model)}">${esc(r.keyo_model)}</a><br/><span class="ok">${esc(r.keyo_price)}</span></td>
+  <td>${esc(r.note)}</td>
+</tr>`
+    )
+    .join("\n");
+  const featured = [
+    ["gpt-5.6-terra", "GPT-5.6 Terra — flagship chat"],
+    ["gpt-5.6-luna", "GPT-5.6 Luna — high-volume cheap LLM"],
+    ["claude-sonnet-5", "Claude Sonnet 5 — reasoning"],
+    ["deepseek-v4-flash", "DeepSeek V4 Flash — fast lane"],
+    ["deepseek-v4-pro", "DeepSeek V4 Pro — flagship open-model"],
+    ["glm-5.2", "GLM 5.2 — glm api lane"],
+    ["kimi-k3", "Kimi K3 — Moonshot lane"],
+    ["whisper-large-v3", "Whisper Large V3 — speech-to-text"],
+  ]
+    .filter(([id]) => pages.models.some((m) => m.id === id))
+    .map(
+      ([id, label]) =>
+        `<a href="/model/${encodeURIComponent(id)}">${esc(label)}</a>`
+    )
+    .join("\n");
+  const freeCards = freeCfg.models
+    .map((m) => {
+      const paid = m.upstream || String(m.id).replace(/-free$/, "");
+      return `<a href="/model/${encodeURIComponent(paid)}"><code>${esc(m.id)}</code> — $0</a>`;
+    })
+    .join("\n");
+  const modelFoot = pages.models
+    .map(
+      (m) =>
+        `<a href="/model/${encodeURIComponent(m.id)}">${esc(m.id)}</a>`
+    )
+    .join("\n");
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -277,42 +316,53 @@ function renderHome() {
 <meta property="og:type" content="website" />
 <meta property="og:url" content="${esc(canonical)}" />
 <meta property="og:title" content="${esc(title)}" />
-<meta property="og:description" content="${esc(description)}" />
+<meta property="og:description" content="Call GPT-class, Claude-class, DeepSeek, GLM, Kimi, Whisper, OCR, vision, and TTS through one OpenAI-compatible endpoint." />
 <meta property="og:image" content="${site}/logo.png" />
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content="${esc(title)}" />
-<meta name="twitter:description" content="${esc(description)}" />
+<meta name="twitter:description" content="One OpenAI-compatible endpoint for many AI models. Cheap, unified billing, $0 free tier." />
 <script type="application/ld+json">${JSON.stringify({
     "@context": "https://schema.org",
     "@type": "WebApplication",
     name: "KeyoAPI",
     url: site,
-    description,
+    description:
+      "Cheap LLM API and multimodal AI API relay with OpenAI-compatible endpoints.",
     applicationCategory: "DeveloperApplication",
     offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
   })}</script>
 <style>
-:root{--bg0:#f7fafc;--bg1:#eef6ff;--ink:#0f172a;--muted:#475569;--line:#cbd5e1;--accent:#2563eb;--card:#0f172a;--card-ink:#e2e8f0;--card-muted:#94a3b8}
+:root{--bg0:#f7fafc;--bg1:#eef6ff;--ink:#0f172a;--muted:#475569;--line:#cbd5e1;--accent:#2563eb;--card:#fff;--ok:#047857;--panel:#0f172a;--panel-ink:#e2e8f0;--panel-muted:#94a3b8}
 *{box-sizing:border-box}
-html,body{margin:0;min-height:100%;font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;background:linear-gradient(180deg,var(--bg0),var(--bg1));color:var(--ink)}
+html,body{margin:0;min-height:100%;font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;background:linear-gradient(180deg,var(--bg0),var(--bg1));color:var(--ink);line-height:1.65}
 a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
 .topnav{max-width:960px;margin:0 auto;padding:18px 20px 0;display:flex;flex-wrap:wrap;gap:10px 16px;font-size:14px;color:var(--muted)}
-.wrap{min-height:70vh;display:flex;align-items:center;justify-content:center;padding:32px 20px 48px}
+.hero{min-height:58vh;display:flex;align-items:center;justify-content:center;padding:32px 20px 24px}
 .inner{max-width:760px;text-align:center}
 .eyebrow{font-size:14px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);font-weight:700;margin-bottom:14px}
 h1{font-size:clamp(2rem,5vw,3.2rem);line-height:1.15;margin:0 0 16px}
 .sub{font-size:1.125rem;color:var(--muted);margin:0 auto 28px;max-width:560px;line-height:1.6}
-.actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-bottom:36px}
+.actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-bottom:28px}
 .btn{padding:12px 22px;border-radius:10px;text-decoration:none;font-weight:600;font-size:14px;display:inline-block}
 .btn-primary{background:var(--accent);color:#fff}
 .btn-secondary{background:#fff;color:var(--ink);border:1px solid var(--line)}
 .btn-link{background:transparent;color:var(--accent)}
-.panel{background:var(--card);color:var(--card-ink);border-radius:12px;padding:16px 18px;text-align:left;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;overflow:auto}
-.panel .label{color:var(--card-muted);margin-bottom:6px}
+.panel{background:var(--panel);color:var(--panel-ink);border-radius:12px;padding:16px 18px;text-align:left;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;overflow:auto}
+.panel .label{color:var(--panel-muted);margin-bottom:6px}
 .panel .label+.label{margin-top:14px}
-.below{max-width:760px;margin:0 auto;padding:0 20px 48px;color:var(--muted);font-size:14px;line-height:1.65;text-align:center}
-.below a{margin:0 6px}
-.foot{max-width:960px;margin:0 auto;padding:20px;border-top:1px solid var(--line);display:flex;flex-wrap:wrap;gap:10px 14px;font-size:13px;color:var(--muted)}
+.content{max-width:880px;margin:0 auto;padding:8px 20px 48px}
+h2{font-size:1.25rem;margin:28px 0 10px}
+.meta{font-size:14px;color:var(--muted);margin:0 0 14px}
+.ok{color:var(--ok);font-weight:600}
+table{width:100%;border-collapse:collapse;font-size:14px;background:var(--card)}
+th,td{border:1px solid var(--line);padding:10px 12px;text-align:left;vertical-align:top}
+th{background:#f1f5f9}
+.grid{display:grid;gap:10px;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));margin:16px 0}
+.grid a{display:block;padding:12px;border:1px solid var(--line);border-radius:10px;background:#fff;color:var(--ink);text-decoration:none}
+.grid a:hover{border-color:var(--accent)}
+pre{background:#0f172a;color:#e2e8f0;padding:14px 16px;border-radius:10px;overflow:auto;font-size:13px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+.foot{max-width:960px;margin:0 auto;padding:24px 20px 40px;border-top:1px solid var(--line);font-size:13px;color:var(--muted)}
+.frow{display:flex;flex-wrap:wrap;gap:10px 14px;margin-bottom:12px}
 </style>
 </head>
 <body>
@@ -323,14 +373,15 @@ h1{font-size:clamp(2rem,5vw,3.2rem);line-height:1.15;margin:0 0 16px}
   <a href="/rankings">Rankings</a>
   <a href="/brand/keyo-docs.html">Docs</a>
   <a href="/about">About</a>
+  <a href="/sign-up">Get started</a>
 </nav>
-<div class="wrap">
+<section class="hero">
   <div class="inner">
-    <div class="eyebrow">KEYOAPI</div>
+    <div class="eyebrow">KEYOAPI · ONE KEY, MANY MODELS</div>
     <h1>One API for Multiple AI Models</h1>
-    <p class="sub">Connect to multiple text, image and speech models through one OpenAI-compatible endpoint. One API key, unified billing and familiar SDKs.</p>
+    <p class="sub">Connect to multiple text, image and speech models through one OpenAI-compatible endpoint. One API key, unified billing and familiar SDKs — a <strong>cheap LLM API</strong> and <strong>AI API relay</strong> without five vendor bills.</p>
     <div class="actions">
-      <a class="btn btn-primary" href="/sign-up">Get Started</a>
+      <a class="btn btn-primary" href="/sign-up">Start free — get API key</a>
       <a class="btn btn-secondary" href="/brand/keyo-docs.html">Docs</a>
       <a class="btn btn-link" href="/pricing">Browse Models</a>
     </div>
@@ -343,23 +394,49 @@ h1{font-size:clamp(2rem,5vw,3.2rem);line-height:1.15;margin:0 0 16px}
       <div>OpenAI-compatible chat, image &amp; speech APIs · one API key · unified billing · model catalog at /pricing</div>
     </div>
   </div>
+</section>
+<div class="content">
+<h2>Headline prices</h2>
+<p class="meta">Indicative KeyoAPI sell rates for planning. Full table on <a href="/compare">/compare</a> · live list on <a href="/pricing">/pricing</a>.</p>
+<table>
+<thead><tr><th>Capability</th><th>Typical official list</th><th>KeyoAPI</th><th>Notes</th></tr></thead>
+<tbody>
+${headlineRows}
+</tbody>
+</table>
+<p><a href="/compare">See the full comparison page →</a></p>
+<h2>Free models — permanently $0</h2>
+<p class="meta">Prototype on permanent free IDs, then flip to the token-metered twin. Rules: <a href="/free-models">/free-models</a>.</p>
+<div class="grid">
+${freeCards}
 </div>
-<p class="below">KeyoAPI is a <strong>cheap LLM API</strong> and <strong>AI API relay</strong> for developers who want one prepaid balance across GPT-class, Claude-class, DeepSeek, Gemini, Whisper, OCR, and more.
-  <a href="/models">Model guides</a> ·
-  <a href="/compare">Price comparison</a> ·
-  <a href="/free-models">Free models</a>
-</p>
+<h2>Featured models</h2>
+<div class="grid">
+${featured}
+</div>
+<p class="meta">Compare in depth: <a href="/gemini-api-pricing">Gemini API pricing</a> · <a href="/deepseek-api-pricing">DeepSeek API pricing</a> · <a href="/models">all model guides</a></p>
+<h2>Integrate in minutes</h2>
+<pre><code>export OPENAI_BASE_URL=https://www.keyoapi.xyz/v1
+export OPENAI_API_KEY=sk-...
+# chat: model=gpt-5.6-terra or claude-sonnet-5 or glm-5.2-free
+# speech: POST /v1/audio/transcriptions model=whisper-large-v3</code></pre>
+</div>
 <footer class="foot">
-  <a href="/pricing">Model Square</a>
-  <a href="/models">All model guides</a>
-  <a href="/compare">Compare</a>
-  <a href="/free-models">Free AI API</a>
-  <a href="/gemini-api-pricing">Gemini pricing</a>
-  <a href="/deepseek-api-pricing">DeepSeek pricing</a>
-  <a href="/brand/faq.html">FAQ</a>
-  <a href="/brand/privacy.html">Privacy</a>
-  <a href="/brand/terms.html">Terms</a>
-  <a href="/sign-in">Sign in</a>
+  <div class="frow">
+    <a href="/pricing">Model Square</a>
+    <a href="/models">All model guides</a>
+    <a href="/compare">Compare</a>
+    <a href="/free-models">Free AI API</a>
+    <a href="/gemini-api-pricing">Gemini pricing</a>
+    <a href="/deepseek-api-pricing">DeepSeek pricing</a>
+    <a href="/brand/faq.html">FAQ</a>
+    <a href="/brand/privacy.html">Privacy</a>
+    <a href="/brand/terms.html">Terms</a>
+    <a href="/sign-in">Sign in</a>
+  </div>
+  <div class="frow" aria-label="Popular model guides">
+${modelFoot}
+  </div>
 </footer>
 </body>
 </html>

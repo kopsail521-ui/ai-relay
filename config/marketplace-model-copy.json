@@ -3872,5 +3872,101 @@
     "price_key_en": "",
     "description_zh": "Kimi K3 长上下文对话（按量付费）。",
     "description_en": "Kimi K3 long-context chat (paid)."
+  },
+  "gpt-image-2.5-flare": {
+    "description": "GPT Image 2.5 Flare：低延迟通用文生图 / 图生图，适合批量快速出图。",
+    "descriptions": {
+      "zhCN": "GPT Image 2.5 Flare：低延迟通用文生图 / 图生图，适合批量快速出图。",
+      "zhTW": "GPT Image 2.5 Flare：低延遲通用文生圖 / 圖生圖，適合批量快速出圖。",
+      "en": "GPT Image 2.5 Flare: low-latency image generation for fast batch output.",
+      "fr": "GPT Image 2.5 Flare : génération d'images à faible latence pour lots rapides.",
+      "ru": "GPT Image 2.5 Flare: низкая задержка, быстрая пакетная генерация изображений.",
+      "ja": "GPT Image 2.5 Flare：低遅延の汎用画像生成。バッチ向け。",
+      "vi": "GPT Image 2.5 Flare: sinh ảnh độ trễ thấp, phù hợp xuất hàng loạt."
+    },
+    "unit": "token",
+    "badge": {
+      "zhCN": "按 Token 计费",
+      "zhTW": "按 Token 計費",
+      "en": "Token-based",
+      "fr": "Au token",
+      "ru": "По токенам",
+      "ja": "Token 課金",
+      "vi": "Theo token"
+    },
+    "suffix": {
+      "zhCN": "",
+      "zhTW": "",
+      "en": "",
+      "fr": "",
+      "ru": "",
+      "ja": "",
+      "vi": ""
+    },
+    "price_key": {
+      "zhCN": "",
+      "zhTW": "",
+      "en": "",
+      "fr": "",
+      "ru": "",
+      "ja": "",
+      "vi": ""
+    },
+    "badge_zh": "按 Token 计费",
+    "badge_en": "Token-based",
+    "suffix_zh": "",
+    "suffix_en": "",
+    "price_key_zh": "",
+    "price_key_en": "",
+    "description_zh": "GPT Image 2.5 Flare：低延迟通用文生图 / 图生图，适合批量快速出图。",
+    "description_en": "GPT Image 2.5 Flare: low-latency image generation for fast batch output."
+  },
+  "gpt-image-2.5-sunburst": {
+    "description": "GPT Image 2.5 Sunburst：高精度文生图 / 精细编辑，适合精品商业出图。",
+    "descriptions": {
+      "zhCN": "GPT Image 2.5 Sunburst：高精度文生图 / 精细编辑，适合精品商业出图。",
+      "zhTW": "GPT Image 2.5 Sunburst：高精度文生圖 / 精細編輯，適合精品商業出圖。",
+      "en": "GPT Image 2.5 Sunburst: high-precision generation and editing for premium creative work.",
+      "fr": "GPT Image 2.5 Sunburst : génération/édition haute précision pour créatifs premium.",
+      "ru": "GPT Image 2.5 Sunburst: высокая точность генерации и редактирования.",
+      "ja": "GPT Image 2.5 Sunburst：高精度の生成・編集。商業クリエイティブ向け。",
+      "vi": "GPT Image 2.5 Sunburst: tạo/sửa ảnh độ chính xác cao cho sáng tạo thương mại."
+    },
+    "unit": "token",
+    "badge": {
+      "zhCN": "按 Token 计费",
+      "zhTW": "按 Token 計費",
+      "en": "Token-based",
+      "fr": "Au token",
+      "ru": "По токенам",
+      "ja": "Token 課金",
+      "vi": "Theo token"
+    },
+    "suffix": {
+      "zhCN": "",
+      "zhTW": "",
+      "en": "",
+      "fr": "",
+      "ru": "",
+      "ja": "",
+      "vi": ""
+    },
+    "price_key": {
+      "zhCN": "",
+      "zhTW": "",
+      "en": "",
+      "fr": "",
+      "ru": "",
+      "ja": "",
+      "vi": ""
+    },
+    "badge_zh": "按 Token 计费",
+    "badge_en": "Token-based",
+    "suffix_zh": "",
+    "suffix_en": "",
+    "price_key_zh": "",
+    "price_key_en": "",
+    "description_zh": "GPT Image 2.5 Sunburst：高精度文生图 / 精细编辑，适合精品商业出图。",
+    "description_en": "GPT Image 2.5 Sunburst: high-precision generation and editing for premium creative work."
   }
 }

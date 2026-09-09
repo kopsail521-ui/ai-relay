@@ -65,11 +65,11 @@ export function applyPageMeta(meta: PageMeta = {}) {
   upsertMeta('twitter:description', description, 'name')
   upsertLink('canonical', canonical)
 
-  if (meta.noIndex) {
-    upsertMeta('robots', 'noindex, nofollow', 'name')
+  if (meta.noIndex === false) {
+    // Explicit opt-in only — public SEO lives on static Caddy pages, not SPA.
+    document.querySelector<HTMLMetaElement>('meta[name="robots"]')?.remove()
   } else {
-    const robots = document.querySelector<HTMLMetaElement>('meta[name="robots"]')
-    robots?.remove()
+    upsertMeta('robots', 'noindex, nofollow', 'name')
   }
 }
 

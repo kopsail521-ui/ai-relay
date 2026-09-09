@@ -99,6 +99,7 @@ function nav() {
 function footer() {
   return `<footer class="footer">
   <a href="/">Home</a>
+  <a href="/about">About</a>
   <a href="/pricing">Model Square</a>
   <a href="/models">Model guides</a>
   <a href="/compare">Price comparison</a>
@@ -485,6 +486,90 @@ function renderModelsIndex() {
   });
 }
 
+function renderAbout() {
+  const priceSample = priceRefs.compare_rows
+    .slice(0, 3)
+    .map(
+      (r) => `<tr>
+  <td>${esc(r.capability)}</td>
+  <td>${esc(r.official)}</td>
+  <td><span class="ok">${esc(r.keyo_price)}</span></td>
+</tr>`
+    )
+    .join("\n");
+  const freeCards = freeCfg.models
+    .map((m) => {
+      const paid = m.upstream || String(m.id).replace(/-free$/, "");
+      return `<a href="/model/${encodeURIComponent(paid)}"><code>${esc(m.id)}</code> · $0</a>`;
+    })
+    .join("\n");
+  const bodyHtml = `
+<p class="lead">KeyoAPI is a developer-first <strong>AI API relay</strong>: one OpenAI-compatible endpoint that connects your code to GPT-class, Claude-class, DeepSeek, GLM, Kimi, Whisper, OCR, vision, TTS, video and digital-human models. One API key, one prepaid balance, unified billing — no five vendor dashboards, no five invoices.</p>
+<div class="btnrow">
+  <a class="btn btn-primary" href="/sign-up">Start free — get API key</a>
+  <a class="btn btn-secondary" href="/brand/keyo-docs.html">Docs</a>
+  <a class="btn btn-secondary" href="/pricing">Browse Models</a>
+</div>
+<h2>What we do</h2>
+<p>We aggregate many model providers behind a single API surface. You keep your favorite SDK (the OpenAI SDK works as-is), swap <code>model=</code> names to switch vendors, and pay one bill. Because we buy capacity across providers and route by price and reliability, our listed rates undercut most official list prices.</p>
+<ul>
+  <li><strong>OpenAI-compatible:</strong> point your <code>OPENAI_BASE_URL</code> at <code>https://www.keyoapi.xyz/v1</code> and existing code runs.</li>
+  <li><strong>One key, one balance:</strong> no per-vendor accounts or credits to manage.</li>
+  <li><strong>Broad model coverage:</strong> text chat, reasoning, speech-to-text, OCR, image, video, TTS and digital humans.</li>
+  <li><strong>A permanently free tier:</strong> four models at $0 for prototyping (fair-use limits apply).</li>
+</ul>
+<h2>Pricing philosophy</h2>
+<p>We publish rates openly, model by model. Sample indicative Keyo sell rates:</p>
+<table>
+<thead><tr><th>Capability</th><th>Typical official list</th><th>KeyoAPI</th></tr></thead>
+<tbody>
+${priceSample}
+</tbody>
+</table>
+<p>Full list: <a href="/compare">/compare</a> · <a href="/pricing">/pricing</a> · deep dives: <a href="/gemini-api-pricing">Gemini</a> · <a href="/deepseek-api-pricing">DeepSeek</a></p>
+<h2>Four models, permanently free</h2>
+<p>No trial clock — these four run at <strong>$0</strong> when you call the <code>*-free</code> model ID. Paid twins (bare names) are token-metered for production. Rules: <a href="/free-models">/free-models</a></p>
+<div class="grid">
+${freeCards}
+</div>
+<h2>Model categories</h2>
+<div class="grid">
+  <a href="/model/gpt-5.6-terra">GPT-class chat</a>
+  <a href="/model/claude-sonnet-5">Claude-class reasoning</a>
+  <a href="/model/deepseek-v4-pro">DeepSeek open models</a>
+  <a href="/model/glm-5.2">GLM</a>
+  <a href="/model/kimi-k3">Kimi</a>
+  <a href="/model/whisper-large-v3">Speech-to-text</a>
+  <a href="/model/MinerU2.5-Pro">Document &amp; OCR</a>
+  <a href="/model/Qwen3-TTS">TTS &amp; audio</a>
+</div>
+<h2>Support</h2>
+<p>For product docs see <a href="/brand/keyo-docs.html">Docs</a>. Account and billing questions: use the <a href="/sign-in">console</a> after signup, or read <a href="/brand/faq.html">FAQ</a>, <a href="/brand/privacy.html">Privacy</a>, and <a href="/brand/terms.html">Terms</a>.</p>
+<h2>Start building</h2>
+<p>Grab a key and make your first request in minutes — free models included.</p>
+<div class="btnrow">
+  <a class="btn btn-primary" href="/sign-up">Start free — get API key</a>
+  <a class="btn btn-secondary" href="/models">All model guides</a>
+</div>
+`;
+  return layout({
+    title: "About KeyoAPI - One API for Multiple AI Models | Cheap LLM API Relay",
+    description:
+      "KeyoAPI is an AI API relay that gives developers one OpenAI-compatible endpoint for GPT-class, Claude-class, DeepSeek, GLM, Kimi, Whisper, OCR, vision and TTS — unified billing, low prices, and 4 permanently free models.",
+    canonical: `${site}/about`,
+    h1: "One API for Multiple AI Models",
+    bodyHtml,
+    jsonLd: {
+      "@context": "https://schema.org",
+      "@type": "AboutPage",
+      name: "About KeyoAPI",
+      url: `${site}/about`,
+      description:
+        "About KeyoAPI — cheap LLM API and multimodal AI API relay.",
+    },
+  });
+}
+
 function renderCompare() {
   const llmRows = pages.models
     .filter((m) => m.category === "llm")
@@ -768,6 +853,7 @@ Sitemap: ${site}/sitemap.xml
 Disallow: /pricing/
 Disallow: /dashboard
 Disallow: /console
+Disallow: /rankings
 Disallow: /sign-in
 Disallow: /sign-up
 Disallow: /setup
@@ -793,6 +879,7 @@ function writeSitemap() {
       priority: "0.95",
       changefreq: "weekly",
     },
+    { loc: `${site}/about`, priority: "0.7", changefreq: "monthly" },
     ...pages.models.map((m) => ({
       loc: `${site}/model/${encodeURIComponent(m.id)}`,
       priority: "0.9",
@@ -827,6 +914,7 @@ ${body}
 fs.mkdirSync(path.join(outDir, "model"), { recursive: true });
 fs.writeFileSync(path.join(outDir, "index.html"), renderHome());
 fs.writeFileSync(path.join(outDir, "models.html"), renderModelsIndex());
+fs.writeFileSync(path.join(outDir, "about.html"), renderAbout());
 fs.writeFileSync(path.join(outDir, "compare.html"), renderCompare());
 fs.writeFileSync(path.join(outDir, "pricing.html"), renderPricing());
 fs.writeFileSync(path.join(outDir, "free-models.html"), renderFreeModels());

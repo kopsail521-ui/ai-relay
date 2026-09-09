@@ -5,6 +5,9 @@
     <link rel="icon" type="image/png" href="/logo.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="google" content="notranslate" />
+    <!-- SPA shell routes (console/auth/rankings/etc.) must not be indexed.
+         Crawlable marketing pages are served as static HTML by Caddy, not this file. -->
+    <meta name="robots" content="noindex, nofollow" />
 
     <!-- Primary Meta Tags -->
     <title>KeyoAPI - OpenAI-Compatible API Gateway for Multiple AI Models</title>

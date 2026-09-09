@@ -15,6 +15,7 @@ Sitemap: https://www.keyoapi.xyz/sitemap.xml
 Disallow: /pricing/
 Disallow: /dashboard
 Disallow: /console
+Disallow: /rankings
 Disallow: /sign-in
 Disallow: /sign-up
 Disallow: /setup

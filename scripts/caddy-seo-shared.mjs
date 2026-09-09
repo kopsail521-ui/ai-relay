@@ -48,6 +48,11 @@ export function caddySeoHandles() {
 		rewrite * /deepseek-api-pricing.html
 		file_server
 	}
+	handle /about {
+		root * /opt/ai-relay/static/seo
+		rewrite * /about.html
+		file_server
+	}
 	redir /free /free-models permanent
 	redir /free/ /free-models permanent
 	@seo_model path /model /model/*
@@ -90,6 +95,13 @@ ${caddySeoHandles()}
 			header_up Accept-Encoding identity
 		}
 	}${giteeBlock}
+	@spa_noindex path /sign-in /sign-in/* /sign-up /sign-up/* /console /console/* /rankings /rankings/* /dashboard /dashboard/* /admin /admin/* /setup /setup/*
+	handle @spa_noindex {
+		header X-Robots-Tag "noindex, nofollow"
+		reverse_proxy 127.0.0.1:3001 {
+			header_up Accept-Encoding identity
+		}
+	}
 	handle {
 		reverse_proxy 127.0.0.1:3001 {
 			header_up Accept-Encoding identity

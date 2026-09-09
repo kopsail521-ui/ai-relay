@@ -92,6 +92,11 @@ ${DOMAIN} {
 		rewrite * /deepseek-api-pricing.html
 		file_server
 	}
+	handle /about {
+		root * ${ROOT}/static/seo
+		rewrite * /about.html
+		file_server
+	}
 	redir /free /free-models permanent
 	redir /free/ /free-models permanent
 	@seo_model path /model /model/*
@@ -115,6 +120,13 @@ ${DOMAIN} {
 			header_up Accept-Encoding identity
 		}
 	}
+	@spa_noindex path /sign-in /sign-in/* /sign-up /sign-up/* /console /console/* /rankings /rankings/* /dashboard /dashboard/* /admin /admin/* /setup /setup/*
+	handle @spa_noindex {
+		header X-Robots-Tag "noindex, nofollow"
+		reverse_proxy 127.0.0.1:3001 {
+			header_up Accept-Encoding identity
+		}
+	}
 	handle {
 		reverse_proxy 127.0.0.1:3001 {
 			header_up Accept-Encoding identity
@@ -126,9 +138,24 @@ EOF
 caddy validate --config /etc/caddy/Caddyfile
 systemctl reload caddy
 
+echo "==> Patch SPA shell noindex inside running new-api container (if present)"
+if docker ps --format '{{.Names}}' 2>/dev/null | grep -qx ai-relay-new-api; then
+  docker exec ai-relay-new-api sh -c '
+    f=/app/web/dist/index.html
+    if [ ! -f "$f" ]; then echo "no_dist_index"; exit 0; fi
+    if grep -q "name=\"robots\"" "$f"; then echo "robots_meta_present"; exit 0; fi
+    sed -i "s#</head>#  <meta name=\"robots\" content=\"noindex, nofollow\" />\n  </head>#" "$f"
+    echo "robots_meta_patched"
+  ' || echo "spa_patch_skipped"
+else
+  echo "container_not_running_skip_spa_patch"
+fi
+
 echo "==> Check"
 curl -sI "https://${DOMAIN}/robots.txt" | head -n 5
 curl -sI "https://${DOMAIN}/" | head -n 5
+curl -sI "https://${DOMAIN}/about" | head -n 5
+curl -sI "https://${DOMAIN}/sign-in" | head -n 8
 curl -sI "https://${DOMAIN}/brand/keyo-docs.html" | head -n 5
 curl -sI "https://${APEX_DOMAIN}/sitemap.xml" | head -n 8 || true
 

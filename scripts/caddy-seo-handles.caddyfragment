@@ -43,6 +43,11 @@
 		rewrite * /deepseek-api-pricing.html
 		file_server
 	}
+	handle /about {
+		root * /opt/ai-relay/static/seo
+		rewrite * /about.html
+		file_server
+	}
 	redir /free /free-models permanent
 	redir /free/ /free-models permanent
 	@seo_model path /model /model/*

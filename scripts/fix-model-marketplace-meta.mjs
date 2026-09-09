@@ -87,7 +87,7 @@ const FIXES = {
 
   // —— 内容风控 ——
   "nonescape-v0": { vendorName: "其他", icon: "Custom", tag: "内容风控", endpoints: EP.moderation }, // e3ntity，无公司 logo
-  "moark-text-moderation": { vendorName: "其他", icon: "Custom", tag: "内容风控", endpoints: EP.moderation }, // 不挂上游平台名
+  "keyo-text-moderation": { vendorName: "其他", icon: "Custom", tag: "内容风控", endpoints: EP.moderation },
   "Security-semantic-filtering": { vendorName: "其他", icon: "Custom", tag: "内容风控", endpoints: EP.moderation },
   "nsfw-classifier": { vendorName: "其他", icon: "Custom", tag: "内容风控", endpoints: EP.moderation }, // 无法唯一归属
 

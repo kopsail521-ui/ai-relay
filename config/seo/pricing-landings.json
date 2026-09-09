@@ -50,8 +50,8 @@
       },
       "body": [
         "Gemini API pricing searches are purchase-intent: engineers are comparing dollars per million tokens before they wire production. Official Google surfaces win on brand trust; KeyoAPI wins when you want one prepaid balance across Gemini-class IDs plus DeepSeek, GLM, Whisper, OCR, and TTS — without five invoices.",
-        "Keyo rates above are indicative sell prices from the OpenLux-derived catalog (×5 style planning numbers). Always confirm live interactive pricing pages under /pricing/{modelId} before contracting volume. Preview model IDs can change naming as Google ships stables.",
-        "How to call: set OPENAI_BASE_URL=https://www.keyoapi.xyz/v1, use your Keyo API key, and pass the Gemini model string (for example gemini-2.5-flash) to POST /v1/chat/completions. Many Google-native features remain Google-console only; Keyo focuses on OpenAI-compatible chat relay access for overseas developer stacks.",
+        "Keyo rates above are indicative sell prices from the live Keyo catalog. Always confirm interactive pricing pages under /pricing/{modelId} before contracting volume. Preview model IDs can change naming as Google ships stables.",
+        "How to call: set OPENAI_BASE_URL=https://www.keyoapi.xyz/v1, use your Keyo API key, and pass the Gemini model string (for example gemini-2.5-flash) to POST /v1/chat/completions. Many Google-native features remain Google-console only; Keyo focuses on OpenAI-compatible chat access for overseas developer stacks.",
         "When Gemini list prices spike your margin, keep Gemini for multimodal strengths and shift plain text volume to deepseek-v4-flash or gpt-5.6-luna on the same key. For pure free prototyping, start on /free-models, then promote to Gemini paid IDs when quality gates pass."
       ],
       "faqs": [
@@ -107,8 +107,8 @@
         "body": "Most deepseek api pricing articles only shuffle paid token rates. Keyo lists deepseek-v4-flash-free and deepseek-v4-pro-free at permanent $0 with fair-use limits — the strongest prototype story you can put in a comparison table without being clickbait, as long as you disclose rate limits."
       },
       "body": [
-        "Engineers comparing deepseek api pricing usually already trust the model family and are shopping hosts: official platform, aggregators, or a multi-model relay. KeyoAPI is the third option — OpenAI-compatible base URL, prepaid balance, and Gemini/Whisper/OCR on the same key when DeepSeek is only part of the stack.",
-        "Indicative Keyo sell rates above come from the OpenLux-derived catalog. Confirm /pricing/deepseek-v4-flash and /pricing/deepseek-v4-pro before volume contracts. Free IDs keep ModelPrice at $0; they are not unlimited production SLAs.",
+        "Engineers comparing deepseek api pricing usually already trust the model family and are shopping hosts: official platforms, aggregators, or a multi-model API. KeyoAPI is the third option — OpenAI-compatible base URL, prepaid balance, and Gemini/Whisper/OCR on the same key when DeepSeek is only part of the stack.",
+        "Indicative Keyo sell rates above come from the live Keyo catalog. Confirm /pricing/deepseek-v4-flash and /pricing/deepseek-v4-pro before volume contracts. Free IDs keep ModelPrice at $0; they are not unlimited production SLAs.",
         "How to call: POST https://www.keyoapi.xyz/v1/chat/completions with Authorization: Bearer YOUR_KEY and model set to a Flash/Pro free or paid ID. See dedicated guides at /model/deepseek-v4-flash and /model/deepseek-v4-pro for longer how-tos.",
         "If your search was really about Gemini dollars, jump to /gemini-api-pricing. For the full free catalog, open /free-models."
       ],

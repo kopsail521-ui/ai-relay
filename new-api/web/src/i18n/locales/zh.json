@@ -2872,7 +2872,7 @@
     "Network proxy for this channel (supports HTTP, HTTPS, SOCKS5, and SOCKS5H)": "此渠道的网络代理（支持 HTTP、HTTPS、SOCKS5 和 SOCKS5H）",
     "Never": "永不",
     "Never expires": "永不过期",
-    "Never used an API Gateway?": "从未使用过 API 网关/中转 API？",
+    "Never used an API Gateway?": "从未使用过 API 网关？",
     "NEW": "新",
     "New API": "New API",
     "New API &lt;noreply@example.com&gt;": "New API &lt;noreply@example.com&gt;",

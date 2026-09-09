@@ -92,7 +92,7 @@ function canonVendor(name) {
 
 function vendorRank(name) {
   if (!name) return 9000;
-  if (name === "其他" || name === "模力方舟") return 9500;
+  if (name === "其他") return 9500;
   const n = canonVendor(name);
   for (let i = 0; i < VENDOR_ORDER.length; i++) {
     const v = canonVendor(VENDOR_ORDER[i]);
@@ -211,9 +211,16 @@ function sanitizeDescription(desc) {
     .replace(/售\s*¥[\d.]+\s*\/\s*M\s*tokens?/gi, "")
     .replace(/·\s*¥[\d.]+\/¥[\d.]+\s*per\s*M/gi, "")
     .replace(/（成本×\s*\d+(?:\.\d+)?）/g, "")
-    .replace(/成本×\s*\d+(?:\.\d+)?/g, "")
-    .replace(/上游(?:成本|进货价|标价)?/g, "")
-    .replace(/模力方舟|APIMart|Apimart|OpenLux|openlux|Gitee\s*AI|Grsai|SenseNova|sensenova|商汤|SenseTime/gi, "")
+    .replace(/成本[×xX]\s*\d+(?:\.\d+)?/g, "")
+    .replace(/cost\s*[×xX]\s*\d+(?:\.\d+)?/gi, "")
+    .replace(/markup\s*[×xX:=]?\s*\d+(?:\.\d+)?/gi, "")
+    .replace(/[×xX]\s*2\.5|[×xX]\s*5(?:\.\d+)?/g, "")
+    .replace(/上游(?:成本|进货价|标价|渠道|供应商)?/g, "")
+    .replace(/透传|二道贩子?|中转站|转卖/g, "")
+    .replace(
+      /模力方舟|MoArk|moark|APIMart|Apimart|apimart|OpenLux|openlux|Gitee(?:\s*AI)?|gitee|Grsai|grsai|SenseNova|sensenova|商汤|SenseTime|Sorux|soruxgpt/gi,
+      ""
+    )
     .replace(/¥[\d.]+/g, "")
     .replace(/\s{2,}/g, " ")
     .replace(/。\s*。/g, "。")
@@ -225,7 +232,11 @@ function sanitizeDescription(desc) {
 function scrubVendorName(name) {
   const n = String(name || "").trim();
   if (!n) return n;
-  if (/模力方舟|APIMart|Apimart|OpenLux|openlux|Gitee|Grsai|SenseNova|sensenova|商汤|SenseTime|中转|上游/i.test(n)) {
+  if (
+    /模力方舟|MoArk|moark|APIMart|Apimart|apimart|OpenLux|openlux|Gitee|gitee|Grsai|grsai|SenseNova|sensenova|商汤|SenseTime|Sorux|中转|上游|透传/i.test(
+      n
+    )
+  ) {
     return "其他";
   }
   return n;

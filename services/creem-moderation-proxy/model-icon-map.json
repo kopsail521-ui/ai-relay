@@ -9,9 +9,9 @@
     "InfiniteTalk": "/brand/model-icons/infinitetalk.png",
     "MOSS-Audio-8B-Thinking": "/brand/model-icons/moss-audio.png",
     "nonescape-v0": "/brand/model-icons/nonescape.png",
-    "moark-text-moderation": "/brand/model-icons/moark-moderation.png",
     "Security-semantic-filtering": "/brand/model-icons/security-semantic.png",
-    "nsfw-classifier": "/brand/model-icons/nsfw-classifier.png"
+    "nsfw-classifier": "/brand/model-icons/nsfw-classifier.png",
+    "keyo-text-moderation": "/brand/model-icons/keyo-moderation.png"
   },
   "lobehub_fixes": {
     "seedance-2.5": "Doubao.Color",

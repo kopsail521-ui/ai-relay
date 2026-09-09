@@ -1,0 +1,37 @@
+# 上游痕迹清理：SEO + creem 清洗加强 + moark 改名 keyo-text-moderation
+cd /opt/ai-relay && sudo git pull && git log -1 --oneline
+
+# 1) 审核模型公开 ID 改名（渠道 mapping 仍指向上游裸名，仅运维可见）
+sudo python3 scripts/vps-rename-moark-moderation.py /opt/ai-relay/data/new-api/one-api.db
+sudo python3 scripts/vps-update-marketplace-copy.py /opt/ai-relay/data/new-api/one-api.db /opt/ai-relay/config/marketplace-model-copy.json 2>/dev/null || true
+sudo python3 scripts/vps-scrub-channel-names.py /opt/ai-relay/data/new-api/one-api.db 2>/dev/null || true
+
+# 2) 重建 creem（更强 sanitize）
+sudo docker build --no-cache -t keyo-creem-moderation ./services/creem-moderation-proxy
+sudo docker rm -f ai-relay-creem-moderation 2>/dev/null || true
+sudo docker run -d --name ai-relay-creem-moderation --restart always --network host \
+  --env-file /opt/ai-relay/.env.moderation \
+  -e UPSTREAM_URL=http://127.0.0.1:3000 \
+  -e LISTEN_HOST=127.0.0.1 \
+  -e PORT=3001 \
+  -e RANKINGS_DISPLAY_MULTIPLIER=10 \
+  keyo-creem-moderation
+
+# 3) passthrough 若在跑：重建以去掉 Upstream 字样（可选）
+if sudo docker ps -a --format '{{.Names}}' | grep -q 'gitee-passthrough\|apimart-passthrough'; then
+  echo "rebuild_passthrough_optional"
+fi
+
+sleep 2
+curl -sS -m 5 -o /dev/null -w "mod=%{http_code}\n" http://127.0.0.1:3001/ || true
+curl -sS https://www.keyoapi.xyz/gemini-api-pricing | grep -iE 'openlux|×5|成本' || echo seo_gemini_clean
+curl -sS https://www.keyoapi.xyz/deepseek-api-pricing | grep -iE 'openlux|成本' || echo seo_deepseek_clean
+curl -sS http://127.0.0.1:3001/api/pricing | python3 -c "
+import sys,json,re
+blob=json.dumps(json.load(sys.stdin),ensure_ascii=False)
+print('moark_public', 'moark-text-moderation' in blob)
+print('keyo_mod', 'keyo-text-moderation' in blob)
+print('leak', bool(re.search(r'openlux|OpenLux|Grsai|模力方舟|APIMart|SenseNova|sensenova|上游|中转站|成本×|Gitee', blob, re.I)))
+"
+sudo docker restart new-api 2>/dev/null || true
+echo DONE_SCRUB_UPSTREAM

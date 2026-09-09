@@ -513,7 +513,7 @@ const server = http.createServer(async (req, res) => {
 
   if (!APIMART_KEY) {
     return json(res, 500, {
-      error: { message: "Upstream not configured", type: "server_error" },
+      error: { message: "Service temporarily unavailable", type: "server_error" },
     });
   }
 
@@ -628,7 +628,7 @@ const server = http.createServer(async (req, res) => {
     res.end(up.buf);
   } catch (e) {
     json(res, 502, {
-      error: { message: String(e.message || e), type: "upstream_error" },
+      error: { message: String(e.message || e), type: "server_error" },
     });
   }
 });

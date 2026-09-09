@@ -1007,54 +1007,6 @@
     "price_key_zh": "每次请求",
     "price_key_en": "Per request"
   },
-  "moark-text-moderation": {
-    "description": "文本内容审核：识别色情、暴力、辱骂等风险，适用于社交、评论与即时通讯。 计费：$0.000137/字符。",
-    "descriptions": {
-      "zhCN": "文本内容审核：识别色情、暴力、辱骂等风险，适用于社交、评论与即时通讯。 计费：$0.000137/字符。",
-      "zhTW": "文字內容審核：識別色情、暴力、辱罵等風險，適用於社群、評論與即時通訊。 計費：$0.000137/字元。",
-      "en": "Text content moderation for porn, violence, abuse, and related risks. For social, comments, and IM. Pricing: $0.000137 / character.",
-      "fr": "Modération de texte (porno, violence, insultes…). Pour réseaux sociaux, commentaires et messagerie. Tarif : $0.000137 / caractère.",
-      "ru": "Модерация текста: порно, насилие, оскорбления и др. Для соцсетей, комментариев и IM. Тариф: $0.000137 / символ.",
-      "ja": "テキストモデレーション。ポルノ・暴力・罵倒などを検出。SNS・コメント・IM 向け。 料金：$0.000137/ 文字。",
-      "vi": "Kiểm duyệt văn bản: khiêu dâm, bạo lực, lăng mạ… cho mạng xã hội, bình luận và IM. Giá: $0.000137/ ký tự."
-    },
-    "unit": "character",
-    "badge": {
-      "zhCN": "按字符计费",
-      "zhTW": "按字元計費",
-      "en": "Per Character",
-      "fr": "Par caractère",
-      "ru": "За символ",
-      "ja": "文字課金",
-      "vi": "Theo ký tự"
-    },
-    "suffix": {
-      "zhCN": "/字符",
-      "zhTW": "/字元",
-      "en": "/ character",
-      "fr": "/ caractère",
-      "ru": "/ символ",
-      "ja": "/ 文字",
-      "vi": "/ ký tự"
-    },
-    "price_key": {
-      "zhCN": "每字符",
-      "zhTW": "每字元",
-      "en": "Per character",
-      "fr": "Par caractère",
-      "ru": "За символ",
-      "ja": "文字ごと",
-      "vi": "Mỗi ký tự"
-    },
-    "description_zh": "文本内容审核：识别色情、暴力、辱骂等风险，适用于社交、评论与即时通讯。 计费：$0.000137/字符。",
-    "description_en": "Text content moderation for porn, violence, abuse, and related risks. For social, comments, and IM. Pricing: $0.000137 / character.",
-    "badge_zh": "按字符计费",
-    "badge_en": "Per Character",
-    "suffix_zh": "/字符",
-    "suffix_en": "/ character",
-    "price_key_zh": "每字符",
-    "price_key_en": "Per character"
-  },
   "Security-semantic-filtering": {
     "description": "安全语义过滤：在内容触达用户或模型前拦截敏感与合规风险信息。 计费：$0.006849/次。",
     "descriptions": {
@@ -3968,5 +3920,53 @@
     "price_key_en": "",
     "description_zh": "GPT Image 2.5 Sunburst：高精度文生图 / 精细编辑，适合精品商业出图。",
     "description_en": "GPT Image 2.5 Sunburst: high-precision generation and editing for premium creative work."
+  },
+  "keyo-text-moderation": {
+    "description": "文本内容审核：识别色情、暴力、辱骂等风险，适用于社交、评论与即时通讯。 计费：$0.000137/字符。",
+    "descriptions": {
+      "zhCN": "文本内容审核：识别色情、暴力、辱骂等风险，适用于社交、评论与即时通讯。 计费：$0.000137/字符。",
+      "zhTW": "文字內容審核：識別色情、暴力、辱罵等風險，適用於社群、評論與即時通訊。 計費：$0.000137/字元。",
+      "en": "Text content moderation for porn, violence, abuse, and related risks. For social, comments, and IM. Pricing: $0.000137 / character.",
+      "fr": "Modération de texte (porno, violence, insultes…). Pour réseaux sociaux, commentaires et messagerie. Tarif : $0.000137 / caractère.",
+      "ru": "Модерация текста: порно, насилие, оскорбления и др. Для соцсетей, комментариев и IM. Тариф: $0.000137 / символ.",
+      "ja": "テキストモデレーション。ポルノ・暴力・罵倒などを検出。SNS・コメント・IM 向け。 料金：$0.000137/ 文字。",
+      "vi": "Kiểm duyệt văn bản: khiêu dâm, bạo lực, lăng mạ… cho mạng xã hội, bình luận và IM. Giá: $0.000137/ ký tự."
+    },
+    "unit": "character",
+    "badge": {
+      "zhCN": "按字符计费",
+      "zhTW": "按字元計費",
+      "en": "Per Character",
+      "fr": "Par caractère",
+      "ru": "За символ",
+      "ja": "文字課金",
+      "vi": "Theo ký tự"
+    },
+    "suffix": {
+      "zhCN": "/字符",
+      "zhTW": "/字元",
+      "en": "/ character",
+      "fr": "/ caractère",
+      "ru": "/ символ",
+      "ja": "/ 文字",
+      "vi": "/ ký tự"
+    },
+    "price_key": {
+      "zhCN": "每字符",
+      "zhTW": "每字元",
+      "en": "Per character",
+      "fr": "Par caractère",
+      "ru": "За символ",
+      "ja": "文字ごと",
+      "vi": "Mỗi ký tự"
+    },
+    "description_zh": "文本内容审核：识别色情、暴力、辱骂等风险，适用于社交、评论与即时通讯。 计费：$0.000137/字符。",
+    "description_en": "Text content moderation for porn, violence, abuse, and related risks. For social, comments, and IM. Pricing: $0.000137 / character.",
+    "badge_zh": "按字符计费",
+    "badge_en": "Per Character",
+    "suffix_zh": "/字符",
+    "suffix_en": "/ character",
+    "price_key_zh": "每字符",
+    "price_key_en": "Per character"
   }
 }

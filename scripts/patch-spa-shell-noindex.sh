@@ -26,14 +26,25 @@ if [[ -z "$SRC" ]]; then
 fi
 
 mkdir -p "${ROOT}/static/seo" "${ROOT}/static/spa-shell"
-cp -f "$SRC" "${ROOT}/static/seo/spa-shell.html"
-cp -f "$SRC" "${ROOT}/static/spa-shell/index.html"
-chmod a+r "${ROOT}/static/seo/spa-shell.html" || true
+DST_SEO="${ROOT}/static/seo/spa-shell.html"
+DST_IDX="${ROOT}/static/spa-shell/index.html"
 
-if ! grep -q 'noindex' "${ROOT}/static/seo/spa-shell.html"; then
+copy_if_different() {
+  local src="$1" dst="$2"
+  if [[ -f "$dst" ]] && [[ "$(realpath "$src")" == "$(realpath "$dst")" ]]; then
+    return 0
+  fi
+  cp -f "$src" "$dst"
+}
+
+copy_if_different "$SRC" "$DST_SEO"
+copy_if_different "$DST_SEO" "$DST_IDX"
+chmod a+r "$DST_SEO" "$DST_IDX" 2>/dev/null || true
+
+if ! grep -q 'noindex' "$DST_SEO"; then
   echo "FAIL_SPA_SHELL_NO_NOINDEX" >&2
   exit 1
 fi
 
-echo "OK_SPA_SHELL_NOINDEX src=$SRC bytes=$(wc -c < "${ROOT}/static/seo/spa-shell.html")"
-grep -o 'noindex' "${ROOT}/static/seo/spa-shell.html" | head -n 1
+echo "OK_SPA_SHELL_NOINDEX src=$SRC bytes=$(wc -c < "$DST_SEO")"
+grep -o 'noindex' "$DST_SEO" | head -n 1

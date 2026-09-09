@@ -1,0 +1,127 @@
+{
+  "keys": [
+    "auto_groups",
+    "data",
+    "group_model_ratio",
+    "group_ratio",
+    "success",
+    "supported_endpoint",
+    "usable_group",
+    "vendors"
+  ],
+  "dataType": "object",
+  "dataKeys": [
+    "0",
+    "1",
+    "2",
+    "3",
+    "4",
+    "5",
+    "6",
+    "7",
+    "8",
+    "9",
+    "10",
+    "11",
+    "12",
+    "13",
+    "14",
+    "15",
+    "16",
+    "17",
+    "18",
+    "19",
+    "20",
+    "21",
+    "22",
+    "23",
+    "24",
+    "25",
+    "26",
+    "27",
+    "28",
+    "29"
+  ],
+  "sample0": {
+    "model_name": "claude-opus-5",
+    "description": "Claude Opus 5, the default model for Claude Max and the most powerful model for Claude Pro, is a thoughtful, proactive, cost-efficient agentic model that delivers nearly the cutting-edge intelligence of flagship Claude Fable 5 at half the cost and sets new state-of-the-art standards for coding and professional knowledge work.",
+    "tags": "对话,工具,识图",
+    "model_type": "对话",
+    "vendor_id": 55,
+    "quota_type": 0,
+    "model_ratio": 2.5,
+    "model_price": 0,
+    "owner_by": "",
+    "completion_ratio": 5,
+    "cache_ratio": 0.1,
+    "cache_creation_5m_ratio": 1.25,
+    "cache_creation_1h_ratio": 2,
+    "enable_groups": [
+      "Anthropic-Claude-1",
+      "AWS-Bedrock-1",
+      "Claude-Code-2",
+      "AWS-Claude-1",
+      "AWS-Claude-2",
+      "Kiro-Claude-1",
+      "AWS-Claude-3",
+      "Claude-Code-1"
+    ],
+    "supported_endpoint_types": [
+      "anthropic",
+      "openai"
+    ],
+    "sort_order": 524,
+    "usage_count": 24514304887,
+    "translations": {
+      "es": {
+        "model_type": "Diálogo",
+        "工具": "Herramientas",
+        "识图": "Reconocimiento de imágenes",
+        "description": "Claude Opus 5, el modelo predeterminado para Claude Max y el modelo más potente para Claude Pro, es un modelo agente reflexivo, proactivo y rentable que ofrece casi la inteligencia de vanguardia del modelo insignia Claude Fable 5 a la mitad del costo y establece nuevos estándares de vanguardia para la codificación y el trabajo profesional del conocimiento.",
+        "对话": "Diálogo"
+      },
+      "ru": {
+        "model_type": "Диалог",
+        "识图": "Распознавание изображений",
+        "description": "Claude Opus 5, стандартная модель для Claude Max и самая мощная модель для Claude Pro, является продуманной, проактивной, экономически эффективной агентной моделью, которая предоставляет почти передовой интеллект флагманского Claude Fable 5 за половину стоимости и устанавливает новые современные стандарты для программирования и профессиональной интеллектуальной работы.",
+        "对话": "Диалог",
+        "工具": "Инструменты"
+      },
+      "zh": {
+        "工具": "工具",
+        "识图": "识图",
+        "model_type": "对话",
+        "对话": "对话",
+        "description": "Claude Opus 5 是 Claude Max 的默认模型，也是 Claude Pro 最强大的模型，它是一个深思熟虑、积极主动、具有成本效益的代理模型，提供几乎与旗舰 Claude Fable 5 相媲美的前沿智能，成本仅为其一半，并为编码和专业知识工作设定了新的行业标准。"
+      },
+      "en": {
+        "对话": "Conversation",
+        "model_type": "Conversation",
+        "工具": "Tools",
+        "识图": "Image Recognition",
+        "description": "Claude Opus 5, the default model for Claude Max and the most powerful model for Claude Pro, is a thoughtful, proactive, cost-efficient agentic model that delivers nearly the cutting-edge intelligence of flagship Claude Fable 5 at half the cost and sets new state-of-the-art standards for coding and professional knowledge work."
+      },
+      "ja": {
+        "model_type": "対話",
+        "对话": "対話",
+        "工具": "ツール",
+        "识图": "画像認識",
+        "description": "Claude Opus 5は、Claude Maxのデフォルトモデルであり、Claude Proの最も強力なモデルです。これは、コスト効率の良い、思慮深く、積極的なエージェントモデルであり、フラッグシップのClaude Fable 5の最先端の知能を半分のコストで提供し、コーディングや専門的な知識作業の新しい最先端基準を設定します。"
+      },
+      "de": {
+        "model_type": "Gespräch",
+        "识图": "Bildverarbeitung",
+        "description": "Claude Opus 5, das Standardmodell für Claude Max und das leistungsstärkste Modell für Claude Pro, ist ein durchdachtes, proaktives, kosteneffizientes agentisches Modell, das nahezu die Spitzentechnologie der Flaggschiff Claude Fable 5 zu einem halben Preis bietet und neue Maßstäbe für Programmierung und professionelle Wissensarbeit setzt.",
+        "对话": "Gespräch",
+        "工具": "Werkzeuge"
+      },
+      "ko": {
+        "对话": "对话",
+        "工具": "工具",
+        "model_type": "대화",
+        "识图": "识图",
+        "description": "클로드 오퍼스 5는 클로드 맥의 기본 모델이자 클로드 프로를 위한 가장 강력한 모델로, 최첨단 클로드 페이블 5의 지능을 절반의 비용으로 제공하는 사려 깊고, 능동적이며, 비용 효율적인 에이전트 모델입니다. 이 모델은 코딩 및 전문 지식 작업을 위한 새로운 최첨단 기준을 설정합니다."
+      }
+    }
+  }
+}

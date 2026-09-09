@@ -60,7 +60,7 @@ const UNIQUE = {
   "gpt-5.6-sol":
     "Sol is the escalation GPT-5.6 tier: stronger instruction following for dense analysis, while Luna/Terra absorb bulk traffic.",
   "gpt-5.6-luna":
-    "Luna exists for volume: tagging, triage, drafts, and batch transforms where cheap llm api unit economics matter more than peak IQ.",
+    "Luna exists for volume: tagging, triage, drafts, and batch transforms where low per-token cost matters more than peak IQ.",
   "MinerU2.5-Pro":
     "MinerU2.5-Pro is the async PDF/layout parser—submit once, poll /v1/task/{id}, then feed structured text to your LLM. Prefer it over chat-OCR for multi-page packets.",
   "Unlimited-OCR":

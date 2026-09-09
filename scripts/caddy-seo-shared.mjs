@@ -98,9 +98,9 @@ ${caddySeoHandles()}
 	@spa_noindex path /sign-in /sign-in/* /sign-up /sign-up/* /console /console/* /rankings /rankings/* /dashboard /dashboard/* /admin /admin/* /setup /setup/*
 	handle @spa_noindex {
 		header X-Robots-Tag "noindex, nofollow"
-		reverse_proxy 127.0.0.1:3001 {
-			header_up Accept-Encoding identity
-		}
+		root * /opt/ai-relay/static/spa-shell
+		rewrite * /index.html
+		file_server
 	}
 	handle {
 		reverse_proxy 127.0.0.1:3001 {

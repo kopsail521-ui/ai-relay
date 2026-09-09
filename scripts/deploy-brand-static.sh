@@ -32,140 +32,138 @@ else
   echo "WARN: missing SEO pages at $SEO_DIR" >&2
 fi
 
-echo "==> Build SPA shell with HTML noindex BEFORE Caddy reload"
+echo "==> Publish spa-shell.html (noindex HTML for auth/console routes)"
 bash "${REPO_ROOT}/scripts/patch-spa-shell-noindex.sh"
 SPA_SHELL="${ROOT}/static/seo/spa-shell.html"
+test -f "$SPA_SHELL"
 grep -q noindex "$SPA_SHELL"
-echo "==> spa-shell on disk OK ($(wc -c < "$SPA_SHELL") bytes -> $SPA_SHELL)"
+chmod a+r "$SPA_SHELL" || true
+# Make sure Caddy can traverse parents (common 403 cause)
+chmod a+x "${ROOT}" "${ROOT}/static" "${ROOT}/static/seo" 2>/dev/null || true
+echo "==> spa-shell on disk OK ($(wc -c < "$SPA_SHELL") bytes)"
 
-echo "==> Update Caddyfile for $DOMAIN (keeps SEO handles + apex→www redirect)"
+echo "==> Update Caddyfile for $DOMAIN"
 APEX_DOMAIN="${DOMAIN#www.}"
+cat >/etc/caddy/Caddyfile <<EOF
+${APEX_DOMAIN} {
+	redir https://${DOMAIN}{uri} permanent
+}
 
-# Generate Caddyfile with respond-bodied SPA shell (avoids file_server 403 on hidden paths).
-python3 - "$ROOT" "$DOMAIN" "$APEX_DOMAIN" "$SPA_SHELL" <<'PY'
-import sys
-from pathlib import Path
-
-root, domain, apex, spa_path = sys.argv[1:5]
-html = Path(spa_path).read_text(encoding="utf-8")
-if "noindex" not in html:
-    raise SystemExit("spa shell missing noindex")
-if "SPAEOF" in html:
-    raise SystemExit("spa shell unexpectedly contains SPAEOF delimiter")
-
-cfg = f"""{apex} {{
-	redir https://{domain}{{uri}} permanent
-}}
-
-{domain} {{
+${DOMAIN} {
 	encode gzip
 
-	handle /robots.txt {{
-		root * {root}/static/seo
+	handle /robots.txt {
+		root * ${ROOT}/static/seo
 		header Content-Type text/plain
 		file_server
-	}}
+	}
 	@sitemaps path /sitemap.xml /sitemap-live.xml
-	handle @sitemaps {{
-		root * {root}/static/seo
+	handle @sitemaps {
+		root * ${ROOT}/static/seo
 		file_server
-	}}
-	handle / {{
-		root * {root}/static/seo
+	}
+	handle / {
+		root * ${ROOT}/static/seo
 		rewrite * /index.html
 		file_server
-	}}
-	handle /models {{
-		root * {root}/static/seo
+	}
+	handle /models {
+		root * ${ROOT}/static/seo
 		rewrite * /models.html
 		file_server
-	}}
-	handle /compare {{
-		root * {root}/static/seo
+	}
+	handle /compare {
+		root * ${ROOT}/static/seo
 		rewrite * /compare.html
 		file_server
-	}}
-	handle /pricing {{
-		root * {root}/static/seo
+	}
+	handle /pricing {
+		root * ${ROOT}/static/seo
 		rewrite * /pricing.html
 		file_server
-	}}
-	handle /free-models {{
-		root * {root}/static/seo
+	}
+	handle /free-models {
+		root * ${ROOT}/static/seo
 		rewrite * /free-models.html
 		file_server
-	}}
-	handle /gemini-api-pricing {{
-		root * {root}/static/seo
+	}
+	handle /gemini-api-pricing {
+		root * ${ROOT}/static/seo
 		rewrite * /gemini-api-pricing.html
 		file_server
-	}}
-	handle /deepseek-api-pricing {{
-		root * {root}/static/seo
+	}
+	handle /deepseek-api-pricing {
+		root * ${ROOT}/static/seo
 		rewrite * /deepseek-api-pricing.html
 		file_server
-	}}
-	handle /about {{
-		root * {root}/static/seo
+	}
+	handle /about {
+		root * ${ROOT}/static/seo
 		rewrite * /about.html
 		file_server
-	}}
+	}
+	# Direct URL also works for debugging (has noindex in HTML).
+	handle /spa-shell.html {
+		header X-Robots-Tag "noindex, nofollow"
+		root * ${ROOT}/static/seo
+		file_server
+	}
 	redir /free /free-models permanent
 	redir /free/ /free-models permanent
 	@seo_model path /model /model/*
-	handle @seo_model {{
-		root * {root}/static/seo
-		try_files {{path}}.html {{path}}/index.html {{path}}
+	handle @seo_model {
+		root * ${ROOT}/static/seo
+		try_files {path}.html {path}/index.html {path}
 		file_server
-	}}
-	handle_path /brand/* {{
-		root * {root}/static/brand
+	}
+	handle_path /brand/* {
+		root * ${ROOT}/static/brand
 		file_server
-	}}
-	handle /static/* {{
-		reverse_proxy 127.0.0.1:3000 {{
+	}
+	handle /static/* {
+		reverse_proxy 127.0.0.1:3000 {
 			header_up Accept-Encoding identity
-		}}
-	}}
+		}
+	}
 	@gitee_special path /v1/images/object-detection* /v1/images/segmentation* /v1/images/pose-detection* /v1/images/upscaling* /v1/images/unwarping* /v1/images/mattings* /v1/async/* /v1/task/*
-	handle @gitee_special {{
-		reverse_proxy 127.0.0.1:3010 {{
+	handle @gitee_special {
+		reverse_proxy 127.0.0.1:3010 {
 			header_up Accept-Encoding identity
-		}}
-	}}
-	handle /__spa_raw {{
+		}
+	}
+	handle /__spa_raw {
 		header X-Robots-Tag "noindex, nofollow"
 		rewrite * /
-		reverse_proxy 127.0.0.1:3000 {{
+		reverse_proxy 127.0.0.1:3000 {
 			header_up Accept-Encoding identity
-		}}
-	}}
+		}
+	}
 	@spa_noindex path /sign-in /sign-in/* /sign-up /sign-up/* /console /console/* /rankings /rankings/* /dashboard /dashboard/* /admin /admin/* /setup /setup/*
-	handle @spa_noindex {{
+	handle @spa_noindex {
 		header X-Robots-Tag "noindex, nofollow"
 		header Content-Type "text/html; charset=utf-8"
-		respond <<'SPAEOF'
-{html.rstrip()}
-SPAEOF 200
-	}}
-	handle {{
-		reverse_proxy 127.0.0.1:3001 {{
+		root * ${ROOT}/static/seo
+		rewrite * /spa-shell.html
+		file_server {
+			hide .git .gitignore
+		}
+	}
+	handle {
+		reverse_proxy 127.0.0.1:3001 {
 			header_up Accept-Encoding identity
-		}}
-	}}
-}}
-"""
-Path("/etc/caddy/Caddyfile").write_text(cfg, encoding="utf-8")
-print("OK_CADDYFILE_WRITTEN", Path("/etc/caddy/Caddyfile").stat().st_size)
-PY
+		}
+	}
+}
+EOF
 
 caddy validate --config /etc/caddy/Caddyfile
 systemctl reload caddy
 
 echo "==> Check"
-curl -sI "https://${DOMAIN}/robots.txt" | head -n 5
-curl -sI "https://${DOMAIN}/" | head -n 5
-curl -sI "https://${DOMAIN}/about" | head -n 5
+echo -n "direct_spa_shell_bytes="
+curl -s "https://${DOMAIN}/spa-shell.html" | wc -c
+echo -n "direct_spa_shell_noindex="
+curl -s "https://${DOMAIN}/spa-shell.html" | grep -o noindex | head -n 1 || echo FAIL
 curl -sI "https://${DOMAIN}/sign-in" | head -n 8
 echo -n "sign-in_body_noindex="
 curl -s "https://${DOMAIN}/sign-in" | grep -o noindex | head -n 1 || echo "FAIL_SIGNIN_NOINDEX_BODY"
@@ -175,7 +173,5 @@ echo -n "rankings_body_noindex="
 curl -s "https://${DOMAIN}/rankings" | grep -o noindex | head -n 1 || echo "FAIL_RANKINGS_NOINDEX_BODY"
 echo -n "home_noindex_count="
 curl -s "https://${DOMAIN}/" | grep -c noindex || true
-curl -sI "https://${DOMAIN}/brand/keyo-docs.html" | head -n 5
-curl -sI "https://${APEX_DOMAIN}/sitemap.xml" | head -n 8 || true
 
 echo "DONE_BRAND_SEO_DEPLOY"

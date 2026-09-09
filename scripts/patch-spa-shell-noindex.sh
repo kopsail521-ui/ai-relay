@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Publish SPA noindex shell HTML used by Caddy `respond` (and a file copy for debugging).
+# Publish static/seo/spa-shell.html (noindex) for Caddy auth/console routes.
 set -euo pipefail
 
 ROOT="${ROOT:-/opt/ai-relay}"
@@ -9,9 +9,7 @@ REPO_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
 SRC_CANDIDATES=(
   "${REPO_ROOT}/static/seo/spa-shell.html"
   "${REPO_ROOT}/static/spa-shell/index.html"
-  "${REPO_ROOT}/static/seo/_spa_shell.html"
   "${ROOT}/static/seo/spa-shell.html"
-  "${ROOT}/static/spa-shell/index.html"
 )
 
 SRC=""
@@ -30,9 +28,7 @@ fi
 mkdir -p "${ROOT}/static/seo" "${ROOT}/static/spa-shell"
 cp -f "$SRC" "${ROOT}/static/seo/spa-shell.html"
 cp -f "$SRC" "${ROOT}/static/spa-shell/index.html"
-# keep old name as alias during transition
-cp -f "$SRC" "${ROOT}/static/seo/_spa_shell.html" 2>/dev/null || true
-chmod a+r "${ROOT}/static/seo/spa-shell.html" "${ROOT}/static/spa-shell/index.html" || true
+chmod a+r "${ROOT}/static/seo/spa-shell.html" || true
 
 if ! grep -q 'noindex' "${ROOT}/static/seo/spa-shell.html"; then
   echo "FAIL_SPA_SHELL_NO_NOINDEX" >&2

@@ -106,9 +106,11 @@ ${caddySeoHandles()}
 	handle @spa_noindex {
 		header X-Robots-Tag "noindex, nofollow"
 		header Content-Type "text/html; charset=utf-8"
-		root * /opt/ai-relay/static/seo
-		rewrite * /_spa_shell.html
-		file_server
+		respond <<'SPAEOF'
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8" /><meta name="robots" content="noindex, nofollow" /><title>KeyoAPI</title></head>
+<body><div id="root"></div><p>Use deploy-brand-static.sh to embed full spa-shell.</p></body></html>
+SPAEOF 200
 	}
 	handle {
 		reverse_proxy 127.0.0.1:3001 {

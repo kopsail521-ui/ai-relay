@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Required for crawlers: auth/console/rankings are SPA shells and must not be indexed. -->
+    <meta name="robots" content="noindex, nofollow" />
+    <meta name="google" content="notranslate" />
+    <link rel="icon" type="image/png" href="/logo.png" />
+    <title>KeyoAPI</title>
+  </head>
+  <body>
+    <div id="root" translate="no" class="notranslate"></div>
+    <script>
+      (async function bootSpa() {
+        try {
+          var res = await fetch("/__spa_raw", { credentials: "same-origin" });
+          if (!res.ok) throw new Error("spa_raw " + res.status);
+          var html = await res.text();
+          var doc = new DOMParser().parseFromString(html, "text/html");
+          doc.querySelectorAll('link[rel="stylesheet"]').forEach(function (n) {
+            var l = document.createElement("link");
+            l.rel = "stylesheet";
+            l.href = n.getAttribute("href");
+            document.head.appendChild(l);
+          });
+          var scripts = Array.prototype.slice.call(doc.querySelectorAll("script"));
+          for (var i = 0; i < scripts.length; i++) {
+            var n = scripts[i];
+            var s = document.createElement("script");
+            Array.prototype.forEach.call(n.attributes, function (a) {
+              s.setAttribute(a.name, a.value);
+            });
+            if (n.textContent) s.textContent = n.textContent;
+            document.body.appendChild(s);
+            if (s.src) {
+              await new Promise(function (resolve, reject) {
+                s.onload = resolve;
+                s.onerror = reject;
+              });
+            }
+          }
+        } catch (e) {
+          console.error("spa boot failed", e);
+          var el = document.getElementById("root");
+          if (el) el.textContent = "Loading failed. Please refresh.";
+        }
+      })();
+    </script>
+  </body>
+</html>

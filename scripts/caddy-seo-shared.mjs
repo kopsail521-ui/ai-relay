@@ -95,9 +95,17 @@ ${caddySeoHandles()}
 			header_up Accept-Encoding identity
 		}
 	}${giteeBlock}
+	handle /__spa_raw {
+		header X-Robots-Tag "noindex, nofollow"
+		rewrite * /
+		reverse_proxy 127.0.0.1:3000 {
+			header_up Accept-Encoding identity
+		}
+	}
 	@spa_noindex path /sign-in /sign-in/* /sign-up /sign-up/* /console /console/* /rankings /rankings/* /dashboard /dashboard/* /admin /admin/* /setup /setup/*
 	handle @spa_noindex {
 		header X-Robots-Tag "noindex, nofollow"
+		header Content-Type "text/html; charset=utf-8"
 		root * /opt/ai-relay/static/spa-shell
 		rewrite * /index.html
 		file_server

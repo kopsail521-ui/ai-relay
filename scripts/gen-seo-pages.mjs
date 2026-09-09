@@ -859,6 +859,7 @@ Disallow: /sign-up
 Disallow: /setup
 Disallow: /admin
 Disallow: /api/
+Disallow: /__spa_raw
 `;
 }
 

@@ -3968,5 +3968,101 @@
     "suffix_en": "/ character",
     "price_key_zh": "每字符",
     "price_key_en": "Per character"
+  },
+  "gpt-image-2.5-flare-c": {
+    "description": "GPT Image 2.5 Flare（按次）：低延迟通用文生图 / 图生图，适合批量快速出图。计费：$0.0141/次。",
+    "descriptions": {
+      "zhCN": "GPT Image 2.5 Flare（按次）：低延迟通用文生图 / 图生图，适合批量快速出图。计费：$0.0141/次。",
+      "zhTW": "GPT Image 2.5 Flare（按次）：低延遲通用文生圖 / 圖生圖，適合批量快速出圖。計費：$0.0141/次。",
+      "en": "GPT Image 2.5 Flare (per request): low-latency image generation for fast batch output. Pricing: $0.0141 / request.",
+      "fr": "GPT Image 2.5 Flare (par requête): génération rapide. Tarif : $0.0141 / requête.",
+      "ru": "GPT Image 2.5 Flare (за запрос): быстрая генерация. Тариф: $0.0141 / запрос.",
+      "ja": "GPT Image 2.5 Flare（リクエスト課金）：低遅延の汎用画像生成。料金：$0.0141/ 回。",
+      "vi": "GPT Image 2.5 Flare (theo lần): sinh ảnh độ trễ thấp. Giá: $0.0141/ lần."
+    },
+    "unit": "request",
+    "badge": {
+      "zhCN": "按次计费",
+      "zhTW": "按次計費",
+      "en": "Per Request",
+      "fr": "Par requête",
+      "ru": "За запрос",
+      "ja": "リクエスト課金",
+      "vi": "Theo lần gọi"
+    },
+    "suffix": {
+      "zhCN": "/次",
+      "zhTW": "/次",
+      "en": "/ request",
+      "fr": "/ requête",
+      "ru": "/ запрос",
+      "ja": "/ 回",
+      "vi": "/ lần"
+    },
+    "price_key": {
+      "zhCN": "每次请求",
+      "zhTW": "每次請求",
+      "en": "Per request",
+      "fr": "Par requête",
+      "ru": "За запрос",
+      "ja": "リクエストごと",
+      "vi": "Mỗi lần gọi"
+    },
+    "badge_zh": "按次计费",
+    "badge_en": "Per Request",
+    "suffix_zh": "/次",
+    "suffix_en": "/ request",
+    "price_key_zh": "每次请求",
+    "price_key_en": "Per request",
+    "description_zh": "GPT Image 2.5 Flare（按次）：低延迟通用文生图 / 图生图，适合批量快速出图。计费：$0.0141/次。",
+    "description_en": "GPT Image 2.5 Flare (per request): low-latency image generation for fast batch output. Pricing: $0.0141 / request."
+  },
+  "gpt-image-2.5-sunburst-c": {
+    "description": "GPT Image 2.5 Sunburst（按次）：高精度文生图 / 精细编辑，适合精品商业出图。计费：$0.0141/次。",
+    "descriptions": {
+      "zhCN": "GPT Image 2.5 Sunburst（按次）：高精度文生图 / 精细编辑，适合精品商业出图。计费：$0.0141/次。",
+      "zhTW": "GPT Image 2.5 Sunburst（按次）：高精度文生圖 / 精細編輯，適合精品商業出圖。計費：$0.0141/次。",
+      "en": "GPT Image 2.5 Sunburst (per request): high-precision generation and editing. Pricing: $0.0141 / request.",
+      "fr": "GPT Image 2.5 Sunburst (par requête): haute précision. Tarif : $0.0141 / requête.",
+      "ru": "GPT Image 2.5 Sunburst (за запрос): высокая точность. Тариф: $0.0141 / запрос.",
+      "ja": "GPT Image 2.5 Sunburst（リクエスト課金）：高精度の生成・編集。料金：$0.0141/ 回。",
+      "vi": "GPT Image 2.5 Sunburst (theo lần): tạo/sửa ảnh độ chính xác cao. Giá: $0.0141/ lần."
+    },
+    "unit": "request",
+    "badge": {
+      "zhCN": "按次计费",
+      "zhTW": "按次計費",
+      "en": "Per Request",
+      "fr": "Par requête",
+      "ru": "За запрос",
+      "ja": "リクエスト課金",
+      "vi": "Theo lần gọi"
+    },
+    "suffix": {
+      "zhCN": "/次",
+      "zhTW": "/次",
+      "en": "/ request",
+      "fr": "/ requête",
+      "ru": "/ запрос",
+      "ja": "/ 回",
+      "vi": "/ lần"
+    },
+    "price_key": {
+      "zhCN": "每次请求",
+      "zhTW": "每次請求",
+      "en": "Per request",
+      "fr": "Par requête",
+      "ru": "За запрос",
+      "ja": "リクエストごと",
+      "vi": "Mỗi lần gọi"
+    },
+    "badge_zh": "按次计费",
+    "badge_en": "Per Request",
+    "suffix_zh": "/次",
+    "suffix_en": "/ request",
+    "price_key_zh": "每次请求",
+    "price_key_en": "Per request",
+    "description_zh": "GPT Image 2.5 Sunburst（按次）：高精度文生图 / 精细编辑，适合精品商业出图。计费：$0.0141/次。",
+    "description_en": "GPT Image 2.5 Sunburst (per request): high-precision generation and editing. Pricing: $0.0141 / request."
   }
 }

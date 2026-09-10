@@ -99,6 +99,10 @@ const FIXES = {
   "gpt-image-2-vip": { vendorName: "OpenAI", icon: "OpenAI", tag: "图片", endpoints: EP.image },
   "gpt-image-2.5-flare": { vendorName: "OpenAI", icon: "OpenAI", tag: "图片", endpoints: EP.image },
   "gpt-image-2.5-sunburst": { vendorName: "OpenAI", icon: "OpenAI", tag: "图片", endpoints: EP.image },
+  "gpt-image-2.5-flare-c": { vendorName: "OpenAI", icon: "OpenAI", tag: "图片", endpoints: EP.image },
+  "gpt-image-2.5-sunburst-c": { vendorName: "OpenAI", icon: "OpenAI", tag: "图片", endpoints: EP.image },
+  "gpt-image-2.5-flare-c": { vendorName: "OpenAI", icon: "OpenAI", tag: "图片", endpoints: EP.image },
+  "gpt-image-2.5-sunburst-c": { vendorName: "OpenAI", icon: "OpenAI", tag: "图片", endpoints: EP.image },
   "nano-banana-pro": { vendorName: "Google", icon: "Gemini.Color", tag: "图片", endpoints: EP.image },
   "nano-banana-2": { vendorName: "Google", icon: "Gemini.Color", tag: "图片", endpoints: EP.image },
 

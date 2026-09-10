@@ -23,7 +23,7 @@
 		rewrite * /compare.html
 		file_server
 	}
-	handle /pricing {
+	handle /pricing-list {
 		root * /opt/ai-relay/static/seo
 		rewrite * /pricing.html
 		file_server

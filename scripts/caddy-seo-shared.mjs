@@ -28,7 +28,7 @@ export function caddySeoHandles() {
 		rewrite * /compare.html
 		file_server
 	}
-	handle /pricing {
+	handle /pricing-list {
 		root * /opt/ai-relay/static/seo
 		rewrite * /pricing.html
 		file_server
@@ -102,7 +102,7 @@ ${caddySeoHandles()}
 			header_up Accept-Encoding identity
 		}
 	}
-	@spa_noindex path /sign-in /sign-in/* /sign-up /sign-up/* /console /console/* /rankings /rankings/* /dashboard /dashboard/* /admin /admin/* /setup /setup/*
+	@spa_noindex path /pricing /sign-in /sign-in/* /sign-up /sign-up/* /console /console/* /rankings /rankings/* /dashboard /dashboard/* /admin /admin/* /setup /setup/*
 	handle @spa_noindex {
 		header X-Robots-Tag "noindex, nofollow"
 		header Content-Type "text/html; charset=utf-8"

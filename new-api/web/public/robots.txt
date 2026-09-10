@@ -2,7 +2,7 @@ User-agent: *
 Allow: /
 Allow: /compare
 Allow: /model/
-Allow: /pricing
+Allow: /pricing-list
 Allow: /free-models
 Allow: /models
 Allow: /gemini-api-pricing
@@ -12,6 +12,7 @@ Allow: /about
 
 Sitemap: https://www.keyoapi.xyz/sitemap.xml
 
+# Exact /pricing is Model Square SPA (served with noindex). /pricing/{id} stay blocked.
 Disallow: /pricing/
 Disallow: /dashboard
 Disallow: /console

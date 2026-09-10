@@ -89,6 +89,7 @@ function nav() {
   <a href="/">Home</a>
   <a href="/console">Console</a>
   <a href="/pricing">Model Square</a>
+  <a href="/pricing-list">Pricing list</a>
   <a href="/rankings">Rankings</a>
   <a href="/brand/keyo-docs.html">Docs</a>
   <a href="/about">About</a>
@@ -101,6 +102,7 @@ function footer() {
   <a href="/">Home</a>
   <a href="/about">About</a>
   <a href="/pricing">Model Square</a>
+  <a href="/pricing-list">Pricing list</a>
   <a href="/models">Model guides</a>
   <a href="/compare">Price comparison</a>
   <a href="/free-models">Free AI API</a>
@@ -371,6 +373,7 @@ pre{background:#0f172a;color:#e2e8f0;padding:14px 16px;border-radius:10px;overfl
   <a href="/">Home</a>
   <a href="/console">Console</a>
   <a href="/pricing">Model Square</a>
+  <a href="/pricing-list">Pricing list</a>
   <a href="/rankings">Rankings</a>
   <a href="/brand/keyo-docs.html">Docs</a>
   <a href="/about">About</a>
@@ -398,7 +401,7 @@ pre{background:#0f172a;color:#e2e8f0;padding:14px 16px;border-radius:10px;overfl
 </section>
 <div class="content">
 <h2>Headline prices</h2>
-<p class="meta">Indicative KeyoAPI sell rates for planning. Full table on <a href="/compare">/compare</a> · live list on <a href="/pricing">/pricing</a>.</p>
+<p class="meta">Indicative KeyoAPI sell rates for planning. Full table on <a href="/compare">/compare</a> · live list on <a href="/pricing-list">/pricing-list</a>.</p>
 <table>
 <thead><tr><th>Capability</th><th>Typical official list</th><th>KeyoAPI</th><th>Notes</th></tr></thead>
 <tbody>
@@ -425,6 +428,7 @@ export OPENAI_API_KEY=sk-...
 <footer class="foot">
   <div class="frow">
     <a href="/pricing">Model Square</a>
+    <a href="/pricing-list">Pricing list</a>
     <a href="/models">All model guides</a>
     <a href="/compare">Compare</a>
     <a href="/free-models">Free AI API</a>
@@ -526,7 +530,7 @@ function renderAbout() {
 ${priceSample}
 </tbody>
 </table>
-<p>Full list: <a href="/compare">/compare</a> · <a href="/pricing">/pricing</a> · deep dives: <a href="/gemini-api-pricing">Gemini</a> · <a href="/deepseek-api-pricing">DeepSeek</a></p>
+<p>Full list: <a href="/compare">/compare</a> · <a href="/pricing-list">/pricing-list</a> · deep dives: <a href="/gemini-api-pricing">Gemini</a> · <a href="/deepseek-api-pricing">DeepSeek</a></p>
 <h2>Four models, permanently free</h2>
 <p>No trial clock — these four run at <strong>$0</strong> when you call the <code>*-free</code> model ID. Paid twins (bare names) are token-metered for production. Rules: <a href="/free-models">/free-models</a></p>
 <div class="grid">
@@ -580,10 +584,10 @@ function renderCompare() {
     .join("\n");
   const bodyHtml = `
 <p class="lead">This <strong>AI API price comparison</strong> page shows how KeyoAPI relay pricing stacks up against common official list rates for GPT-class, Claude-class, Whisper, and vision APIs.</p>
-<p class="meta">Figures are indicative for planning. Always confirm live sell rates on <a href="/pricing">/pricing</a> before contracting volume.</p>
+<p class="meta">Figures are indicative for planning. Always confirm live sell rates in <a href="/pricing">Model Square</a> or the static <a href="/pricing-list">pricing list</a> before contracting volume.</p>
 <div class="btnrow">
   <a class="btn btn-primary" href="/sign-up">Create KeyoAPI account</a>
-  <a class="btn btn-secondary" href="/pricing">Open pricing list</a>
+  <a class="btn btn-secondary" href="/pricing-list">Open pricing list</a>
 </div>
 <h2>Headline comparisons</h2>
 <table>
@@ -636,6 +640,7 @@ function renderPricing() {
 <p class="meta">Rates below are catalog snapshots for SEO and planning. Wallet top-up and live sell prices are confirmed in the console after <a href="/sign-up">sign-up</a>.</p>
 <div class="btnrow">
   <a class="btn btn-primary" href="/sign-up">Create account</a>
+  <a class="btn btn-secondary" href="/pricing">Open Model Square</a>
   <a class="btn btn-secondary" href="/compare">AI API price comparison</a>
   <a class="btn btn-secondary" href="/brand/keyo-docs.html">Docs</a>
 </div>
@@ -657,14 +662,14 @@ function renderPricing() {
     title: "AI API Pricing List - KeyoAPI Models & Rates",
     description:
       "Crawlable KeyoAPI pricing list: GPT-class, Claude-class, Whisper, OCR, vision, TTS model IDs with indicative USD rates and endpoints.",
-    canonical: `${site}/pricing`,
+    canonical: `${site}/pricing-list`,
     h1: "AI API Pricing List: Models, Rates & Endpoints",
     bodyHtml,
     jsonLd: {
       "@context": "https://schema.org",
       "@type": "WebPage",
       name: "KeyoAPI Pricing List",
-      url: `${site}/pricing`,
+      url: `${site}/pricing-list`,
       description:
         "Static pricing table for KeyoAPI cheap LLM API and multimodal models.",
     },
@@ -694,7 +699,7 @@ function renderFreeModels() {
 <p class="meta">Target use: prototype and eval traffic for developers searching <strong>free llm api</strong> / <strong>free api key</strong>. Production workloads should prefer paid bare model IDs.</p>
 <div class="btnrow">
   <a class="btn btn-primary" href="/sign-up">Get a free API key</a>
-  <a class="btn btn-secondary" href="/pricing">Full pricing list</a>
+  <a class="btn btn-secondary" href="/pricing-list">Full pricing list</a>
   <a class="btn btn-secondary" href="/brand/keyo-docs.html">Docs</a>
 </div>
 <h2>Free models (permanently $0)</h2>
@@ -793,14 +798,14 @@ function renderPricingLanding(p) {
     .join("\n");
   const bodyHtml = `
 <p class="lead">${esc(p.lead)}</p>
-<p class="meta">Indicative comparison for planning. Confirm live Keyo rates on <a href="/pricing">/pricing</a>.</p>
+<p class="meta">Indicative comparison for planning. Confirm live Keyo rates in <a href="/pricing">Model Square</a> or the static <a href="/pricing-list">pricing list</a>.</p>
 <div class="btnrow">
   <a class="btn btn-primary" href="/sign-up">Get API key</a>
-  <a class="btn btn-secondary" href="/pricing">Full pricing list</a>
+  <a class="btn btn-secondary" href="/pricing-list">Full pricing list</a>
   <a class="btn btn-secondary" href="/free-models">Free models</a>
 </div>
 <h2>Price comparison table</h2>
-<p class="meta">Indicative figures for planning. Confirm live Keyo sell rates on interactive <a href="/pricing">/pricing</a> pages.</p>
+<p class="meta">Indicative figures for planning. Confirm live Keyo sell rates on interactive <a href="/pricing">Model Square</a> pages.</p>
 <table>
 <thead><tr><th>Model ID</th><th>Typical official / context</th><th>KeyoAPI</th><th>Notes</th></tr></thead>
 <tbody>
@@ -840,7 +845,7 @@ function writeRobots() {
 Allow: /
 Allow: /compare
 Allow: /model/
-Allow: /pricing
+Allow: /pricing-list
 Allow: /free-models
 Allow: /models
 Allow: /gemini-api-pricing
@@ -850,6 +855,7 @@ Allow: /about
 
 Sitemap: ${site}/sitemap.xml
 
+# Exact /pricing is Model Square SPA (served with noindex). /pricing/{id} stay blocked.
 Disallow: /pricing/
 Disallow: /dashboard
 Disallow: /console
@@ -867,7 +873,7 @@ function writeSitemap() {
   const urls = [
     { loc: `${site}/`, priority: "1.0", changefreq: "weekly" },
     { loc: `${site}/compare`, priority: "0.95", changefreq: "weekly" },
-    { loc: `${site}/pricing`, priority: "0.9", changefreq: "daily" },
+    { loc: `${site}/pricing-list`, priority: "0.9", changefreq: "daily" },
     { loc: `${site}/free-models`, priority: "0.95", changefreq: "weekly" },
     { loc: `${site}/models`, priority: "0.85", changefreq: "weekly" },
     {

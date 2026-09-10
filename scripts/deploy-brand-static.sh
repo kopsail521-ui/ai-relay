@@ -131,14 +131,23 @@ ${DOMAIN} {
 			header_up Accept-Encoding identity
 		}
 	}
-	handle /__spa_raw {
+	# Exact /pricing = Model Square SPA via moderation proxy (vendor order + icon injects).
+	# Must NOT use spa-shell→:3000 or keyo-model-icons / pricing-sort injects are skipped.
+	handle /pricing {
 		header X-Robots-Tag "noindex, nofollow"
-		rewrite * /
-		reverse_proxy 127.0.0.1:3000 {
+		reverse_proxy 127.0.0.1:3001 {
 			header_up Accept-Encoding identity
 		}
 	}
-	@spa_noindex path /pricing /sign-in /sign-in/* /sign-up /sign-up/* /console /console/* /rankings /rankings/* /dashboard /dashboard/* /admin /admin/* /setup /setup/*
+	# Fetch raw SPA HTML through :3001 so injected scripts (icons/sort) still apply.
+	handle /__spa_raw {
+		header X-Robots-Tag "noindex, nofollow"
+		rewrite * /
+		reverse_proxy 127.0.0.1:3001 {
+			header_up Accept-Encoding identity
+		}
+	}
+	@spa_noindex path /sign-in /sign-in/* /sign-up /sign-up/* /console /console/* /rankings /rankings/* /dashboard /dashboard/* /admin /admin/* /setup /setup/*
 	handle @spa_noindex {
 		header X-Robots-Tag "noindex, nofollow"
 		header Content-Type "text/html; charset=utf-8"

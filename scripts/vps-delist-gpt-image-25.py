@@ -1,8 +1,12 @@
 #!/usr/bin/env python3
-"""Delist all gpt-image-2.5 variants from New API.
+"""Delist OpenLux gpt-image-2.5 *-c variants from New API.
 
-Removes: channel models, abilities, ModelPrice/ModelRatio/CompletionRatio/ImageRatio,
-and soft-disables marketplace rows (status=0).
+Only removes:
+  gpt-image-2.5-flare-c
+  gpt-image-2.5-sunburst-c
+
+Keeps Grsai-listed:
+  gpt-image-2.5 / gpt-image-2.5-flare / gpt-image-2.5-sunburst
 """
 import json
 import os
@@ -11,8 +15,6 @@ import sys
 import time
 
 MODELS = [
-    "gpt-image-2.5-flare",
-    "gpt-image-2.5-sunburst",
     "gpt-image-2.5-flare-c",
     "gpt-image-2.5-sunburst-c",
 ]
@@ -121,7 +123,7 @@ def main():
 
     conn.commit()
     conn.close()
-    print("DONE_DELIST_GPT_IMAGE_25")
+    print("DONE_DELIST_GPT_IMAGE_25_C")
 
 
 if __name__ == "__main__":

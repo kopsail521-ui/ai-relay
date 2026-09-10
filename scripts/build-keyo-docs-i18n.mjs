@@ -488,10 +488,13 @@ const chatModels = [
 ];
 
 const imageModels = [
-  ["gpt-image-2", "¥0.05"],
-  ["gpt-image-2-vip", "¥0.20"],
-  ["nano-banana-2", "¥0.15"],
-  ["nano-banana-pro", "¥0.20"],
+  ["gpt-image-2.5", "~$0.0062"],
+  ["gpt-image-2.5-flare", "~$0.0205"],
+  ["gpt-image-2.5-sunburst", "~$0.0247"],
+  ["gpt-image-2", "~$0.0068"],
+  ["gpt-image-2-vip", "~$0.0274"],
+  ["nano-banana-2", "~$0.0205"],
+  ["nano-banana-pro", "~$0.0274"],
 ];
 
 const chatRows = chatModels

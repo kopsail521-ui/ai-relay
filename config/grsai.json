@@ -24,6 +24,27 @@
       "nativePath": "/v1/api/generate"
     },
     {
+      "id": "gpt-image-2.5",
+      "kind": "image",
+      "upstream": "gpt-image-2.5",
+      "clientPath": "/v1/images/generations",
+      "nativePath": "/v1/api/generate"
+    },
+    {
+      "id": "gpt-image-2.5-flare",
+      "kind": "image",
+      "upstream": "gpt-image-2.5-flare",
+      "clientPath": "/v1/images/generations",
+      "nativePath": "/v1/api/generate"
+    },
+    {
+      "id": "gpt-image-2.5-sunburst",
+      "kind": "image",
+      "upstream": "gpt-image-2.5-sunburst",
+      "clientPath": "/v1/images/generations",
+      "nativePath": "/v1/api/generate"
+    },
+    {
       "id": "nano-banana-pro",
       "kind": "image",
       "upstream": "nano-banana-pro",

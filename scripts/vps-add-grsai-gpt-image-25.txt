@@ -1,0 +1,29 @@
+# 上架 Grsai：gpt-image-2.5 / flare / sunburst（售价=成本×1.5，按张）
+cd /opt/ai-relay && sudo git pull && git log -1 --oneline
+
+sudo python3 scripts/vps-add-grsai-gpt-image-25.py /opt/ai-relay/data/new-api/one-api.db
+sudo python3 scripts/vps-scrub-channel-names.py /opt/ai-relay/data/new-api/one-api.db 2>/dev/null || true
+sudo python3 scripts/vps-update-marketplace-copy.py /opt/ai-relay/data/new-api/one-api.db /opt/ai-relay/config/marketplace-model-copy.json 2>/dev/null || true
+
+sudo docker build --no-cache -t keyo-creem-moderation ./services/creem-moderation-proxy
+sudo docker rm -f ai-relay-creem-moderation 2>/dev/null || true
+sudo docker run -d --name ai-relay-creem-moderation --restart always --network host \
+  --env-file /opt/ai-relay/.env.moderation \
+  -e UPSTREAM_URL=http://127.0.0.1:3000 \
+  -e LISTEN_HOST=127.0.0.1 \
+  -e PORT=3001 \
+  -e RANKINGS_DISPLAY_MULTIPLIER=10 \
+  keyo-creem-moderation
+
+sleep 2
+curl -sS -m 5 -o /dev/null -w "mod=%{http_code}\n" http://127.0.0.1:3001/ || true
+sudo docker restart new-api 2>/dev/null || true
+sleep 3
+curl -sS http://127.0.0.1:3001/api/pricing | python3 -c "
+import sys,json,re
+blob=json.dumps(json.load(sys.stdin),ensure_ascii=False)
+for mid in ['gpt-image-2.5','gpt-image-2.5-flare','gpt-image-2.5-sunburst']:
+  print('in_pricing', mid, mid in blob)
+print('leak', bool(re.search(r'grsai|Grsai|openlux|OpenLux|上游|成本×|模力方舟|APIMart|Gitee', blob, re.I)))
+"
+echo DONE_GRSAI_GPT_IMAGE_25

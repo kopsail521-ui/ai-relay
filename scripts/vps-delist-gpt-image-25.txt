@@ -1,0 +1,25 @@
+# 下架 4 个 gpt-image-2.5：flare / sunburst / flare-c / sunburst-c
+cd /opt/ai-relay && sudo git pull && git log -1 --oneline
+
+sudo python3 scripts/vps-delist-gpt-image-25.py /opt/ai-relay/data/new-api/one-api.db
+
+sudo docker build --no-cache -t keyo-creem-moderation ./services/creem-moderation-proxy
+sudo docker rm -f ai-relay-creem-moderation 2>/dev/null || true
+sudo docker run -d --name ai-relay-creem-moderation --restart always --network host \
+  --env-file /opt/ai-relay/.env.moderation \
+  -e UPSTREAM_URL=http://127.0.0.1:3000 \
+  -e LISTEN_HOST=127.0.0.1 \
+  -e PORT=3001 \
+  -e RANKINGS_DISPLAY_MULTIPLIER=10 \
+  keyo-creem-moderation
+
+sleep 2
+sudo docker restart new-api 2>/dev/null || true
+sleep 3
+curl -sS http://127.0.0.1:3001/api/pricing | python3 -c "
+import sys,json
+blob=json.dumps(json.load(sys.stdin),ensure_ascii=False)
+for mid in ['gpt-image-2.5-flare','gpt-image-2.5-sunburst','gpt-image-2.5-flare-c','gpt-image-2.5-sunburst-c']:
+  print('still_in_pricing', mid, mid in blob)
+"
+echo DONE_DELIST_GPT_IMAGE_25

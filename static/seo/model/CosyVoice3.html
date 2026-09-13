@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>CosyVoice3 API — Hosted TTS on KeyoAPI</title>
+<meta name="description" content="CosyVoice3 API on KeyoAPI: async multilingual zero-shot TTS via POST /v1/async/audio/speech. About $1.37 / 10K characters — no self-host GPU." />
+<link rel="canonical" href="https://www.keyoapi.xyz/model/CosyVoice3" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://www.keyoapi.xyz/model/CosyVoice3" />
+<meta property="og:title" content="CosyVoice3 API — Hosted TTS on KeyoAPI" />
+<meta property="og:description" content="CosyVoice3 API on KeyoAPI: async multilingual zero-shot TTS via POST /v1/async/audio/speech. About $1.37 / 10K characters — no self-host GPU." />
+<meta property="og:image" content="https://www.keyoapi.xyz/logo.png" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="CosyVoice3 API — Hosted TTS on KeyoAPI" />
+<meta name="twitter:description" content="CosyVoice3 API on KeyoAPI: async multilingual zero-shot TTS via POST /v1/async/audio/speech. About $1.37 / 10K characters — no self-host GPU." />
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"SoftwareApplication","name":"KeyoAPI CosyVoice3","applicationCategory":"DeveloperApplication","url":"https://www.keyoapi.xyz/model/CosyVoice3","description":"CosyVoice3 API on KeyoAPI: async multilingual zero-shot TTS via POST /v1/async/audio/speech. About $1.37 / 10K characters — no self-host GPU.","offers":{"@type":"Offer","priceCurrency":"USD","description":"$1.37 / 10K characters"}}</script>
+<style>:root {
+  --bg0:#f7fafc; --bg1:#eef6ff; --ink:#0f172a; --muted:#475569;
+  --line:#cbd5e1; --accent:#2563eb; --card:#fff; --ok:#047857;
+}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;background:linear-gradient(180deg,var(--bg0),var(--bg1));color:var(--ink);line-height:1.65}
+a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
+.wrap{max-width:880px;margin:0 auto;padding:32px 20px 64px}
+.nav,.footer{display:flex;flex-wrap:wrap;gap:10px 16px;font-size:14px;color:var(--muted)}
+.nav{padding-bottom:20px;border-bottom:1px solid var(--line);margin-bottom:28px}
+.footer{padding-top:28px;border-top:1px solid var(--line);margin-top:40px}
+.eyebrow{font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);font-weight:700;margin:0 0 10px}
+h1{font-size:clamp(1.75rem,4vw,2.4rem);line-height:1.2;margin:0 0 14px}
+h2{font-size:1.25rem;margin:28px 0 10px}
+p{margin:0 0 14px;color:var(--ink)}
+.lead{font-size:1.1rem;color:var(--muted)}
+.meta{font-size:14px;color:var(--muted);margin:0 0 18px}
+.btnrow{display:flex;flex-wrap:wrap;gap:10px;margin:18px 0 28px}
+.btn{display:inline-block;padding:10px 16px;border-radius:10px;font-weight:600;font-size:14px;text-decoration:none}
+.btn-primary{background:var(--accent);color:#fff}
+.btn-secondary{background:#fff;color:var(--ink);border:1px solid var(--line)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin:16px 0}
+pre,code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+pre{background:#0f172a;color:#e2e8f0;padding:14px 16px;border-radius:10px;overflow:auto;font-size:13px}
+table{width:100%;border-collapse:collapse;font-size:14px;background:var(--card)}
+th,td{border:1px solid var(--line);padding:10px 12px;text-align:left;vertical-align:top}
+th{background:#f1f5f9}
+.ok{color:var(--ok);font-weight:600}
+.grid{display:grid;gap:10px;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));margin:16px 0}
+.grid a{display:block;padding:12px;border:1px solid var(--line);border-radius:10px;background:#fff;color:var(--ink);text-decoration:none}
+.grid a:hover{border-color:var(--accent)}
+ul{margin:0 0 14px;padding-left:1.2em}
+.faq details{border:1px solid var(--line);border-radius:10px;padding:12px 14px;margin:0 0 10px;background:#fff}
+.faq summary{cursor:pointer;font-weight:600}</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="nav" aria-label="Primary">
+  <a href="/">Home</a>
+  <a href="/console">Console</a>
+  <a href="/pricing">Model Square</a>
+  <a href="/pricing-list">Pricing list</a>
+  <a href="/rankings">Rankings</a>
+  <a href="/brand/keyo-docs.html">Docs</a>
+  <a href="/about">About</a>
+  <a href="/sign-up">Get Started</a>
+</nav>
+<p class="eyebrow">KEYOAPI</p>
+<h1>CosyVoice3 API — Multilingual Zero-Shot TTS</h1>
+
+<p class="lead">CosyVoice3 is KeyoAPI’s async CosyVoice 3 TTS: multilingual zero-shot speech without cloning a repo or renting a GPU.</p>
+<p class="meta">Listed price: <span class="ok">$1.37 / 10K characters</span> · Confirm live rates on <a href="/pricing/CosyVoice3">interactive pricing</a>.</p>
+<div class="btnrow">
+  <a class="btn btn-primary" href="/pricing/CosyVoice3">Open interactive pricing</a>
+  <a class="btn btn-secondary" href="/compare">Compare API prices</a>
+  <a class="btn btn-secondary" href="/sign-up">Create account</a>
+</div>
+<h2>Overview</h2>
+<p>CosyVoice3 is KeyoAPI’s async CosyVoice 3 TTS: multilingual zero-shot speech without cloning a repo or renting a GPU. Call it with the same OpenAI-style key you use for Whisper and chat models. Async generation fits podcasts, course narration, IVR, and avatar pipelines that already wait on renderers. Prefer IndexTTS-2 when you need audio back inside a single HTTP round trip. About $1.37 per 10,000 characters. Map CMS script length to spend; confirm live rates on /pricing/CosyVoice3. Product voiceovers, localized support replies, game NPCs, and digital humans (pair with Duix-Avatar or InfiniteTalk). Customer bots that answer in the user’s language. POST /v1/async/audio/speech with model=CosyVoice3, then poll /v1/task/{id}. Docs: /brand/keyo-docs.html. Searches for cosyvoice or cosyvoice 3 often want hosted inference, not a research install—KeyoAPI is that hosted path. Create speech jobs, poll until ready, then CDN-cache the audio URL. Offer clone samples only after consent. Fallback to a default voice when clone confidence is low. Measure time-to-first-byte of finished audio, not just API accept latency. Normalize text before synthesis. Store voice ids per locale. Fail closed on celebrity likeness without rights. Interactive try lives on /pricing/CosyVoice3; this page stays a crawlable API guide without a second product UI.</p>
+
+<h2>Quick start</h2>
+<div class="card">
+<p>Base URL: <code>https://www.keyoapi.xyz/v1</code></p>
+<p>Endpoint: <code>POST /v1/async/audio/speech</code></p>
+<p>Model: <code>model=CosyVoice3</code></p>
+<pre><code>curl https://www.keyoapi.xyz/v1/async/audio/speech \
+  -H &quot;Authorization: Bearer YOUR_API_KEY&quot; \
+  -H &quot;Content-Type: application/json&quot; \
+  -d '{&quot;model&quot;:&quot;CosyVoice3&quot;,&quot;input&quot;:&quot;Hello from KeyoAPI TTS.&quot;}'
+# then: GET /v1/task/{id}</code></pre>
+<p>Auth uses the same Bearer API key as chat. Full notes: <a href="/brand/keyo-docs.html">Keyo docs</a>.</p>
+</div>
+<h2>FAQ</h2>
+<div class="faq"><details><summary>Is CosyVoice3 synchronous?</summary><p>No. On KeyoAPI it uses POST /v1/async/audio/speech — create a task, then poll GET /v1/task/{id}. For a sync round trip, use IndexTTS-2 on /v1/audio/speech.</p></details>
+<details><summary>What is CosyVoice3 good for?</summary><p>Multilingual zero-shot TTS with streaming-friendly async jobs, dialect and emotion/speed controls where the API schema exposes them.</p></details>
+<details><summary>How do I try it?</summary><p>Open /pricing/CosyVoice3 after /sign-up. No separate upload playground — try from interactive pricing.</p></details>
+<details><summary>Price?</summary><p>About $1.37 per 10,000 characters — confirm on /pricing/CosyVoice3.</p></details></div>
+<h2>Related models</h2>
+<div class="grid"><a href="/model/IndexTTS-2">IndexTTS-2 API</a>
+<a href="/model/Qwen3-TTS">Qwen3-TTS API</a>
+<a href="/model/whisper-large-v3">Whisper Large V3 API</a>
+<a href="/model/Duix-Avatar">Duix-Avatar API</a></div>
+<p class="meta">Guide for <strong>CosyVoice3</strong>. Try/buy: <a href="/pricing/CosyVoice3">/pricing/CosyVoice3</a> · Catalog: <a href="/pricing">/pricing</a>.</p>
+
+<footer class="footer">
+  <a href="/">Home</a>
+  <a href="/about">About</a>
+  <a href="/pricing">Model Square</a>
+  <a href="/pricing-list">Pricing list</a>
+  <a href="/models">Model guides</a>
+  <a href="/compare">Price comparison</a>
+  <a href="/free-models">Free AI API</a>
+  <a href="/gemini-api-pricing">Gemini pricing</a>
+  <a href="/deepseek-api-pricing">DeepSeek pricing</a>
+  <a href="/brand/keyo-docs.html">Docs</a>
+  <a href="/brand/faq.html">FAQ</a>
+  <a href="/brand/privacy.html">Privacy</a>
+  <a href="/brand/terms.html">Terms</a>
+  <a href="/sign-in">Console login</a>
+</footer>
+</div>
+</body>
+</html>

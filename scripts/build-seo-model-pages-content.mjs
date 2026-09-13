@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Validate config/seo/model-pages.json word counts (>=300 each).
  * Content source of truth is the JSON file (edit there, then gen-seo-pages.mjs).
  * Usage: node scripts/build-seo-model-pages-content.mjs

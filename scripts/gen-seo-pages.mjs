@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Generate static SEO pages into static/seo/
  * Source: config/seo/model-pages.json (+ official-price-refs.json)
  * Usage: node scripts/gen-seo-pages.mjs

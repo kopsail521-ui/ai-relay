@@ -3,18 +3,18 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>SAM 3 Segmentation API | KeyoAPI</title>
-<meta name="description" content="Meta SAM 3 open-vocabulary image segmentation API on KeyoAPI. Pixel-level masks from ~$0.0137 per request." />
+<title>SAM 3 API (sam3) — Hosted Segmentation | KeyoAPI</title>
+<meta name="description" content="Call Meta SAM 3 (sam3) on KeyoAPI for open-vocabulary masks via POST /v1/images/segmentation. About $0.0137 per request — no self-hosted GPU." />
 <link rel="canonical" href="https://www.keyoapi.xyz/model/sam3" />
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://www.keyoapi.xyz/model/sam3" />
-<meta property="og:title" content="SAM 3 Segmentation API | KeyoAPI" />
-<meta property="og:description" content="Meta SAM 3 open-vocabulary image segmentation API on KeyoAPI. Pixel-level masks from ~$0.0137 per request." />
+<meta property="og:title" content="SAM 3 API (sam3) — Hosted Segmentation | KeyoAPI" />
+<meta property="og:description" content="Call Meta SAM 3 (sam3) on KeyoAPI for open-vocabulary masks via POST /v1/images/segmentation. About $0.0137 per request — no self-hosted GPU." />
 <meta property="og:image" content="https://www.keyoapi.xyz/logo.png" />
 <meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:title" content="SAM 3 Segmentation API | KeyoAPI" />
-<meta name="twitter:description" content="Meta SAM 3 open-vocabulary image segmentation API on KeyoAPI. Pixel-level masks from ~$0.0137 per request." />
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"SoftwareApplication","name":"KeyoAPI sam3","applicationCategory":"DeveloperApplication","url":"https://www.keyoapi.xyz/model/sam3","description":"Meta SAM 3 open-vocabulary image segmentation API on KeyoAPI. Pixel-level masks from ~$0.0137 per request.","offers":{"@type":"Offer","priceCurrency":"USD","description":"$0.0137 / request"}}</script>
+<meta name="twitter:title" content="SAM 3 API (sam3) — Hosted Segmentation | KeyoAPI" />
+<meta name="twitter:description" content="Call Meta SAM 3 (sam3) on KeyoAPI for open-vocabulary masks via POST /v1/images/segmentation. About $0.0137 per request — no self-hosted GPU." />
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"SoftwareApplication","name":"KeyoAPI sam3","applicationCategory":"DeveloperApplication","url":"https://www.keyoapi.xyz/model/sam3","description":"Call Meta SAM 3 (sam3) on KeyoAPI for open-vocabulary masks via POST /v1/images/segmentation. About $0.0137 per request — no self-hosted GPU.","offers":{"@type":"Offer","priceCurrency":"USD","description":"$0.0137 / request"}}</script>
 <style>:root {
   --bg0:#f7fafc; --bg1:#eef6ff; --ink:#0f172a; --muted:#475569;
   --line:#cbd5e1; --accent:#2563eb; --card:#fff; --ok:#047857;
@@ -63,9 +63,9 @@ ul{margin:0 0 14px;padding-left:1.2em}
   <a href="/sign-up">Get Started</a>
 </nav>
 <p class="eyebrow">KEYOAPI</p>
-<h1>SAM 3 API — Open-Vocabulary Image Segmentation</h1>
+<h1>SAM 3 API — Open-Vocabulary Image Segmentation on KeyoAPI</h1>
 
-<p class="lead">sam3 brings Meta SAM 3 open-vocabulary segmentation to KeyoAPI—an image segmentation api for pixel-level masks when YOLO classes are not enough.</p>
+<p class="lead">sam3 brings Meta SAM 3 open-vocabulary segmentation to KeyoAPI as a hosted API: send an image, get pixel-level masks when closed YOLO class lists are not enough.</p>
 <p class="meta">Listed price: <span class="ok">$0.0137 / request</span> · Confirm live rates on <a href="/pricing/sam3">interactive pricing</a>.</p>
 <div class="btnrow">
   <a class="btn btn-primary" href="/pricing/sam3">Open interactive pricing</a>
@@ -73,7 +73,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
   <a class="btn btn-secondary" href="/sign-up">Create account</a>
 </div>
 <h2>Overview</h2>
-<p>sam3 brings Meta SAM 3 open-vocabulary segmentation to KeyoAPI—an image segmentation api for pixel-level masks when YOLO classes are not enough. Creative tools and robotics stacks use SAM when users can point at “any object.” Open-vocabulary masks unlock long-tail objects that never appeared in detection taxonomies. KeyoAPI hosts SAM beside RMBG and Vajra so you can escalate from cheap detection to precise masks. Around $0.0137 per request—budget for interactive editors where each user click may trigger a mask. Cache masks when users revisit the same asset. Photo editors, dataset labeling, AR try-on prep, and scientific imaging. Export masks to RMBG-like compositing workflows. Call Keyo segmentation endpoints with model=sam3. Start at /pricing/sam3. sam3 delivers open-vocabulary masks on /v1/images/segmentation—prompt arbitrary objects without a closed class list, then pipe masks into editors or analytics. Open-vocabulary segmentation shines when class lists fail—medical tools, rare SKUs, custom props. Prompt with short noun phrases and keep a human-in-the-loop for first-week taxonomy discovery. Export masks as PNGs or RLE depending on your editor. Combine with RMBG when you only need subject/background, and keep sam3 for multi-object scenes. Image segmentation API traffic should be rate-limited per tenant; masks are heavier than classification tokens. KeyoAPI hosts sam3 beside detection so you can escalate inside one gateway. Keep prompt dictionaries per tenant. Soft-delete bad prompts that produce empty masks. Image segmentation API UX improves when users can click a region and refine the noun phrase interactively.</p>
+<p>sam3 brings Meta SAM 3 open-vocabulary segmentation to KeyoAPI as a hosted API: send an image, get pixel-level masks when closed YOLO class lists are not enough. Creative tools and robotics stacks use it when users can point at “any object.” Open-vocabulary masks unlock long-tail objects that never appeared in detection taxonomies. KeyoAPI hosts SAM beside RMBG and Vajra so you can escalate from cheap detection to precise masks without a second vendor. Around $0.0137 per request—budget for interactive editors where each user click may trigger a mask. Cache masks when users revisit the same asset. Photo editors, dataset labeling, AR try-on prep, and scientific imaging. Export masks into compositing workflows, or fall back to RMBG when you only need subject/background. Call POST /v1/images/segmentation with model=sam3. Start at /pricing/sam3 for live rates and try/buy. If you searched for sam3 online or a SAM3 demo, KeyoAPI is the try-via-API path: no GitHub clone, no local weights—authenticate, post a frame, and receive masks. Open-vocabulary segmentation shines when class lists fail—medical tools, rare SKUs, custom props. Prompt with short noun phrases and keep a human-in-the-loop for first-week taxonomy discovery. Export masks as PNGs or RLE depending on your editor. Rate-limit per tenant; masks are heavier than classification tokens. Keep prompt dictionaries per tenant and soft-delete prompts that produce empty masks. UX improves when users can click a region and refine the noun phrase interactively. This page targets API and try-it intent—not github/download searches.</p>
 
 <h2>Quick start</h2>
 <div class="card">
@@ -87,7 +87,8 @@ ul{margin:0 0 14px;padding-left:1.2em}
 <p>Auth uses the same Bearer API key as chat. Full notes: <a href="/brand/keyo-docs.html">Keyo docs</a>.</p>
 </div>
 <h2>FAQ</h2>
-<div class="faq"><details><summary>SAM 3 vs RMBG?</summary><p>RMBG is specialized background removal. SAM 3 produces open-vocabulary masks for arbitrary objects without a fixed class list.</p></details>
+<div class="faq"><details><summary>Can I try sam3 without deploying it?</summary><p>Yes. KeyoAPI hosts model=sam3 behind POST /v1/images/segmentation. Open /pricing/sam3 to place a test call with your API key — no local GPU or Hugging Face download.</p></details>
+<details><summary>SAM 3 vs RMBG?</summary><p>RMBG is specialized background removal. SAM 3 produces open-vocabulary masks for arbitrary objects without a fixed class list.</p></details>
 <details><summary>Do I need prompts?</summary><p>Open-vocabulary segmentation typically accepts points/boxes/text cues depending on the operation—see Keyo docs for the exact schema.</p></details>
 <details><summary>Price?</summary><p>About $0.0137 per request on /pricing/sam3.</p></details></div>
 <h2>Related models</h2>

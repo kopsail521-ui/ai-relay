@@ -569,8 +569,9 @@
       "priceUnit": "per_10k_chars",
       "related": [
         "whisper-large-v3",
-        "Duix-Avatar",
-        "InfiniteTalk"
+        "IndexTTS-2",
+        "CosyVoice3",
+        "Duix-Avatar"
       ],
       "endpoint": "POST /v1/async/audio/speech",
       "codeHint": "model=Qwen3-TTS",
@@ -696,13 +697,14 @@
       "id": "sam3",
       "category": "vision",
       "targetKeywords": [
-        "image segmentation api",
-        "sam api",
-        "open vocabulary segmentation"
+        "sam3",
+        "sam3 api",
+        "sam3 online",
+        "sam3 use cases"
       ],
-      "h1": "SAM 3 API — Open-Vocabulary Image Segmentation",
-      "title": "SAM 3 Segmentation API | KeyoAPI",
-      "metaDescription": "Meta SAM 3 open-vocabulary image segmentation API on KeyoAPI. Pixel-level masks from ~$0.0137 per request.",
+      "h1": "SAM 3 API — Open-Vocabulary Image Segmentation on KeyoAPI",
+      "title": "SAM 3 API (sam3) — Hosted Segmentation | KeyoAPI",
+      "metaDescription": "Call Meta SAM 3 (sam3) on KeyoAPI for open-vocabulary masks via POST /v1/images/segmentation. About $0.0137 per request — no self-hosted GPU.",
       "priceLabel": "$0.0137 / request",
       "priceUnit": "per_call",
       "related": [
@@ -713,6 +715,10 @@
       "endpoint": "POST /v1/images/segmentation",
       "codeHint": "model=sam3",
       "faqs": [
+        {
+          "q": "Can I try sam3 without deploying it?",
+          "a": "Yes. KeyoAPI hosts model=sam3 behind POST /v1/images/segmentation. Open /pricing/sam3 to place a test call with your API key — no local GPU or Hugging Face download."
+        },
         {
           "q": "SAM 3 vs RMBG?",
           "a": "RMBG is specialized background removal. SAM 3 produces open-vocabulary masks for arbitrary objects without a fixed class list."
@@ -727,16 +733,16 @@
         }
       ],
       "sections": {
-        "intro": "sam3 brings Meta SAM 3 open-vocabulary segmentation to KeyoAPI—an image segmentation api for pixel-level masks when YOLO classes are not enough. Creative tools and robotics stacks use SAM when users can point at “any object.”",
-        "about": "Open-vocabulary masks unlock long-tail objects that never appeared in detection taxonomies. KeyoAPI hosts SAM beside RMBG and Vajra so you can escalate from cheap detection to precise masks.",
+        "intro": "sam3 brings Meta SAM 3 open-vocabulary segmentation to KeyoAPI as a hosted API: send an image, get pixel-level masks when closed YOLO class lists are not enough. Creative tools and robotics stacks use it when users can point at “any object.”",
+        "about": "Open-vocabulary masks unlock long-tail objects that never appeared in detection taxonomies. KeyoAPI hosts SAM beside RMBG and Vajra so you can escalate from cheap detection to precise masks without a second vendor.",
         "pricing": "Around $0.0137 per request—budget for interactive editors where each user click may trigger a mask. Cache masks when users revisit the same asset.",
-        "useCases": "Photo editors, dataset labeling, AR try-on prep, and scientific imaging. Export masks to RMBG-like compositing workflows.",
-        "integrate": "Call Keyo segmentation endpoints with model=sam3. Start at /pricing/sam3."
+        "useCases": "Photo editors, dataset labeling, AR try-on prep, and scientific imaging. Export masks into compositing workflows, or fall back to RMBG when you only need subject/background.",
+        "integrate": "Call POST /v1/images/segmentation with model=sam3. Start at /pricing/sam3 for live rates and try/buy."
       },
-      "bodyWordCount": 322,
-      "body": "sam3 brings Meta SAM 3 open-vocabulary segmentation to KeyoAPI—an image segmentation api for pixel-level masks when YOLO classes are not enough. Creative tools and robotics stacks use SAM when users can point at “any object.” Open-vocabulary masks unlock long-tail objects that never appeared in detection taxonomies. KeyoAPI hosts SAM beside RMBG and Vajra so you can escalate from cheap detection to precise masks. Around $0.0137 per request—budget for interactive editors where each user click may trigger a mask. Cache masks when users revisit the same asset. Photo editors, dataset labeling, AR try-on prep, and scientific imaging. Export masks to RMBG-like compositing workflows. Call Keyo segmentation endpoints with model=sam3. Start at /pricing/sam3. sam3 delivers open-vocabulary masks on /v1/images/segmentation—prompt arbitrary objects without a closed class list, then pipe masks into editors or analytics. Open-vocabulary segmentation shines when class lists fail—medical tools, rare SKUs, custom props. Prompt with short noun phrases and keep a human-in-the-loop for first-week taxonomy discovery. Export masks as PNGs or RLE depending on your editor. Combine with RMBG when you only need subject/background, and keep sam3 for multi-object scenes. Image segmentation API traffic should be rate-limited per tenant; masks are heavier than classification tokens. KeyoAPI hosts sam3 beside detection so you can escalate inside one gateway. Keep prompt dictionaries per tenant. Soft-delete bad prompts that produce empty masks. Image segmentation API UX improves when users can click a region and refine the noun phrase interactively.",
+      "bodyWordCount": 340,
+      "body": "sam3 brings Meta SAM 3 open-vocabulary segmentation to KeyoAPI as a hosted API: send an image, get pixel-level masks when closed YOLO class lists are not enough. Creative tools and robotics stacks use it when users can point at “any object.” Open-vocabulary masks unlock long-tail objects that never appeared in detection taxonomies. KeyoAPI hosts SAM beside RMBG and Vajra so you can escalate from cheap detection to precise masks without a second vendor. Around $0.0137 per request—budget for interactive editors where each user click may trigger a mask. Cache masks when users revisit the same asset. Photo editors, dataset labeling, AR try-on prep, and scientific imaging. Export masks into compositing workflows, or fall back to RMBG when you only need subject/background. Call POST /v1/images/segmentation with model=sam3. Start at /pricing/sam3 for live rates and try/buy. If you searched for sam3 online or a SAM3 demo, KeyoAPI is the try-via-API path: no GitHub clone, no local weights—authenticate, post a frame, and receive masks. Open-vocabulary segmentation shines when class lists fail—medical tools, rare SKUs, custom props. Prompt with short noun phrases and keep a human-in-the-loop for first-week taxonomy discovery. Export masks as PNGs or RLE depending on your editor. Rate-limit per tenant; masks are heavier than classification tokens. Keep prompt dictionaries per tenant and soft-delete prompts that produce empty masks. UX improves when users can click a region and refine the noun phrase interactively. This page targets API and try-it intent—not github/download searches.",
       "curlExample": "curl https://www.keyoapi.xyz/v1/images/segmentation \\\n  -H \"Authorization: Bearer YOUR_API_KEY\" \\\n  -F model=sam3 \\\n  -F image=@./frame.png",
-      "uniqueBlurb": "sam3 delivers open-vocabulary masks on /v1/images/segmentation—prompt arbitrary objects without a closed class list, then pipe masks into editors or analytics."
+      "uniqueBlurb": "Hosted sam3 on /v1/images/segmentation—open-vocabulary masks without a closed class list, then pipe into editors or analytics."
     },
     {
       "id": "Real-ESRGAN",
@@ -845,8 +851,9 @@
       "priceUnit": "per_second",
       "related": [
         "InfiniteTalk",
-        "Qwen3-TTS",
-        "whisper-large-v3"
+        "IndexTTS-2",
+        "CosyVoice3",
+        "Qwen3-TTS"
       ],
       "endpoint": "POST /v1/async/videos/audio-video-to-video",
       "codeHint": "model=Duix-Avatar",
@@ -857,7 +864,7 @@
         },
         {
           "q": "How do I supply voice?",
-          "a": "Generate speech with Qwen3-TTS (or upload audio), then drive Duix-Avatar for lip-sync and expressions."
+          "a": "Generate speech with IndexTTS-2, CosyVoice3, or Qwen3-TTS (or upload audio), then drive Duix-Avatar for lip-sync and expressions."
         },
         {
           "q": "Billing unit?",
@@ -865,14 +872,14 @@
         }
       ],
       "sections": {
-        "intro": "Duix-Avatar is KeyoAPI’s audio+video driven digital human api for talking avatars with lip-sync and expressions. Competition is thin on this long-tail keyword, but buyer intent is high for course creators and support avatars.",
-        "about": "Digital humans used to mean custom Unreal pipelines. HTTP async APIs let SaaS teams productize avatars faster. KeyoAPI collocates TTS, STT, and avatar models so you can build the full loop on one ai api relay.",
+        "intro": "Duix-Avatar is KeyoAPI’s audio+video driven talking-avatar API: feed a face video plus driving audio, get lip-sync and expressions back as an async render job. Built for course creators, support explainers, and product demos that need a speaking face without a custom Unreal pipeline.",
+        "about": "Digital humans used to mean custom game engines. HTTP async APIs let SaaS teams productize avatars faster. KeyoAPI collocates TTS, STT, and avatar models so you can build the full loop on one relay key.",
         "pricing": "Per-second pricing (~$0.0068) maps cleanly to video length sold to end users. Cap max duration in your product to control worst-case invoices.",
         "useCases": "Training videos, localized spokesperson clips, and in-app guides. Pair with InfiniteTalk when you start from a still image plus audio.",
-        "integrate": "Async digital-human endpoints with model=Duix-Avatar. Keys: /pricing/Duix-Avatar."
+        "integrate": "Async endpoint POST /v1/async/videos/audio-video-to-video with model=Duix-Avatar. Keys: /pricing/Duix-Avatar."
       },
-      "bodyWordCount": 318,
-      "body": "Duix-Avatar is KeyoAPI’s audio+video driven digital human api for talking avatars with lip-sync and expressions. Competition is thin on this long-tail keyword, but buyer intent is high for course creators and support avatars. Digital humans used to mean custom Unreal pipelines. HTTP async APIs let SaaS teams productize avatars faster. KeyoAPI collocates TTS, STT, and avatar models so you can build the full loop on one ai api relay. Per-second pricing (~$0.0068) maps cleanly to video length sold to end users. Cap max duration in your product to control worst-case invoices. Training videos, localized spokesperson clips, and in-app guides. Pair with InfiniteTalk when you start from a still image plus audio. Async digital-human endpoints with model=Duix-Avatar. Keys: /pricing/Duix-Avatar. Duix-Avatar is async audio+video→talking avatar: post to /v1/async/videos/audio-video-to-video and poll /v1/task/{id} for the rendered clip. Talking avatars are async media jobs: validate face video and voice sample length before submit, then poll task status. Show progress UI; do not block HTTP workers. Moderate inputs for deepfake abuse. Cache finished MP4s by (face hash, audio hash). Digital human API buyers care about lip sync and queue time—log both. KeyoAPI’s audio-video-to-video route keeps avatar generation on the same key as TTS and STT for full agent personas. Validate face frontal angle and audio SNR before queueing. Show ETA based on queue depth. Digital human API abuse prevention matters as much as render quality—log and rate-limit.",
+      "bodyWordCount": 320,
+      "body": "Duix-Avatar is KeyoAPI’s audio+video driven talking-avatar API: feed a face video plus driving audio, get lip-sync and expressions back as an async render job. Built for course creators, support explainers, and product demos that need a speaking face without a custom Unreal pipeline. Digital humans used to mean custom game engines. HTTP async APIs let SaaS teams productize avatars faster. KeyoAPI collocates TTS, STT, and avatar models so you can build the full loop on one relay key. Per-second pricing (~$0.0068) maps cleanly to video length sold to end users. Cap max duration in your product to control worst-case invoices. Training videos, localized spokesperson clips, and in-app guides. Pair with InfiniteTalk when you start from a still image plus audio. Async endpoint POST /v1/async/videos/audio-video-to-video with model=Duix-Avatar. Keys: /pricing/Duix-Avatar. Submit the job, then poll /v1/task/{id} for the rendered clip. Validate face video and voice sample length before submit; show progress UI and do not block HTTP workers. Moderate inputs for deepfake abuse. Cache finished MP4s by (face hash, audio hash). Buyers care about lip-sync quality and queue time—log both. Validate face frontal angle and audio SNR before queueing; show ETA from queue depth. Abuse prevention matters as much as render quality—rate-limit and log. Generate speech with IndexTTS-2, CosyVoice3, or Qwen3-TTS, then drive Duix-Avatar on the same key.",
       "curlExample": "curl https://www.keyoapi.xyz/v1/async/videos/audio-video-to-video \\\n  -H \"Authorization: Bearer YOUR_API_KEY\" \\\n  -F model=Duix-Avatar \\\n  -F audio=@./voice.wav \\\n  -F video=@./face.mp4\n# then: GET /v1/task/{id}",
       "uniqueBlurb": "Duix-Avatar is async audio+video→talking avatar: post to /v1/async/videos/audio-video-to-video and poll /v1/task/{id} for the rendered clip."
     },
@@ -921,6 +928,110 @@
       "body": "InfiniteTalk generates audio-driven talking-head video from an image or video—ideal when you need a digital human api without a motion-capture stage. Creators generate a voice with Qwen3-TTS, then animate a still spokesperson photo through KeyoAPI. Natural lip-sync and body motion make short marketing and education clips feel presentable. Async processing fits batch content calendars better than realtime WebRTC avatars. Per-request pricing around $0.342 is simple for “one clip = one charge” packaging. For long continuous streams, evaluate Duix-Avatar’s per-second meter instead. Localized ads, course intros, newsreader demos, and support explainers. Transcribe source scripts with Whisper, synthesize with TTS, animate with InfiniteTalk. Submit async jobs with model=InfiniteTalk via Keyo task APIs. Get started at /pricing/InfiniteTalk. InfiniteTalk turns an image into talking-head video via /v1/async/videos/image-to-video—ideal for support avatars and localized explainers. Image-to-talking-head is the onboarding-friendly digital human path: one portrait plus one audio track. Enforce portrait resolution minimums and reject group photos. Localize audio with Qwen3-TTS, then animate with InfiniteTalk for multilingual explainers. Store consent flags for likeness rights. For support bots, pre-render common answers; only generate live for long-tail questions. This workflow is hard to assemble across vendors—KeyoAPI packages it as one relay. Require single-subject portraits. Reject images with text overlays that break lipsync. Pre-generate FAQs; live-generate only long-tail answers to control async cost.",
       "curlExample": "curl https://www.keyoapi.xyz/v1/async/videos/image-to-video \\\n  -H \"Authorization: Bearer YOUR_API_KEY\" \\\n  -F model=InfiniteTalk \\\n  -F image=@./portrait.png \\\n  -F audio=@./voice.wav\n# then: GET /v1/task/{id}",
       "uniqueBlurb": "InfiniteTalk turns an image into talking-head video via /v1/async/videos/image-to-video—ideal for support avatars and localized explainers."
+    },
+    {
+      "id": "IndexTTS-2",
+      "category": "speech",
+      "targetKeywords": [
+        "indextts2",
+        "indextts",
+        "indextts online",
+        "voice cloning api"
+      ],
+      "h1": "IndexTTS-2 API — Text to Speech and Voice Cloning",
+      "title": "IndexTTS-2 API — TTS & Voice Cloning | KeyoAPI",
+      "metaDescription": "Hosted IndexTTS-2 API on KeyoAPI: sync text-to-speech via POST /v1/audio/speech. About $1.37 / 10K characters — no GPU, one API key.",
+      "priceLabel": "$1.37 / 10K characters",
+      "priceUnit": "per_10k_chars",
+      "related": [
+        "CosyVoice3",
+        "Qwen3-TTS",
+        "whisper-large-v3",
+        "InfiniteTalk"
+      ],
+      "endpoint": "POST /v1/audio/speech",
+      "codeHint": "model=IndexTTS-2",
+      "faqs": [
+        {
+          "q": "Is there a hosted IndexTTS-2 API?",
+          "a": "Yes. KeyoAPI serves IndexTTS-2 over POST /v1/audio/speech. You call it with an API key and pay per use — no self-hosting."
+        },
+        {
+          "q": "Sync or async?",
+          "a": "IndexTTS-2 uses the synchronous speech endpoint: one request returns audio. For long-form or batch jobs, prefer CosyVoice3 or Qwen3-TTS on the async path."
+        },
+        {
+          "q": "How do I try it?",
+          "a": "Create a key at /sign-up, then open /pricing/IndexTTS-2 for interactive try/buy. Free LLM IDs (separate from TTS) are listed at /free-models."
+        },
+        {
+          "q": "Price?",
+          "a": "About $1.37 per 10,000 characters — confirm live rates on /pricing/IndexTTS-2."
+        }
+      ],
+      "sections": {
+        "intro": "IndexTTS-2 is available on KeyoAPI as a hosted text-to-speech API: one REST call turns text into audio, with no model deployment and no separate vendor account. If you need an IndexTTS-2 endpoint you can call from code today, this is the shortest path.",
+        "about": "It runs on the synchronous speech endpoint, so a request returns audio in one round trip. That makes it the simpler of KeyoAPI’s TTS paths. For long narration or batch queues, CosyVoice3 and Qwen3-TTS (async) are usually a better fit.",
+        "pricing": "About $1.37 per 10,000 characters—map script length to cost in your CMS. Confirm live rates on /pricing/IndexTTS-2 before locking a quote.",
+        "useCases": "Product voiceovers, IVR prompts, agent spoken replies, and digital-human pipelines (pair with InfiniteTalk or Duix-Avatar). Clone-friendly control of timbre and tone via audio or text prompts where the API schema allows.",
+        "integrate": "POST /v1/audio/speech with model=IndexTTS-2. Docs: /brand/keyo-docs.html. Try/buy: /pricing/IndexTTS-2."
+      },
+      "bodyWordCount": 330,
+      "body": "IndexTTS-2 is available on KeyoAPI as a hosted text-to-speech API: one REST call turns text into audio, with no model deployment and no separate vendor account. If you need an IndexTTS-2 endpoint you can call from code today, this is the shortest path. It runs on the synchronous speech endpoint, so a request returns audio in one round trip. That makes it the simpler of KeyoAPI’s TTS paths. For long narration or batch queues, CosyVoice3 and Qwen3-TTS (async) are usually a better fit. About $1.37 per 10,000 characters—map script length to cost in your CMS. Confirm live rates on /pricing/IndexTTS-2 before locking a quote. Product voiceovers, IVR prompts, agent spoken replies, and digital-human pipelines (pair with InfiniteTalk or Duix-Avatar). Clone-friendly control of timbre and tone via audio or text prompts where the API schema allows. POST /v1/audio/speech with model=IndexTTS-2. Docs: /brand/keyo-docs.html. Try/buy: /pricing/IndexTTS-2. Searches for indextts2 or indextts online often want “can I call this without deploying weights”—yes: authenticate, send input text, write the audio bytes to disk or a CDN. Keep TTS next to Whisper on the same key for full duplex voice agents. Normalize numbers and abbreviations before synthesis. Cache identical scripts by content hash. Fail closed on celebrity likeness without rights. Measure listener completion, not only HTTP 200. This page is the API guide; interactive try lives on /pricing/IndexTTS-2 — we do not ship a separate upload playground.",
+      "curlExample": "curl https://www.keyoapi.xyz/v1/audio/speech \\\n  -H \"Authorization: Bearer YOUR_API_KEY\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\"model\":\"IndexTTS-2\",\"input\":\"Hello from KeyoAPI TTS.\"}' \\\n  --output out.mp3",
+      "uniqueBlurb": "IndexTTS-2 is sync TTS on /v1/audio/speech—one round trip returns audio; use CosyVoice3/Qwen3-TTS when you need async batch jobs."
+    },
+    {
+      "id": "CosyVoice3",
+      "category": "speech",
+      "targetKeywords": [
+        "cosyvoice",
+        "cosyvoice 3",
+        "cosyvoice api",
+        "text to speech api"
+      ],
+      "h1": "CosyVoice3 API — Multilingual Zero-Shot TTS",
+      "title": "CosyVoice3 API — Hosted TTS on KeyoAPI",
+      "metaDescription": "CosyVoice3 API on KeyoAPI: async multilingual zero-shot TTS via POST /v1/async/audio/speech. About $1.37 / 10K characters — no self-host GPU.",
+      "priceLabel": "$1.37 / 10K characters",
+      "priceUnit": "per_10k_chars",
+      "related": [
+        "IndexTTS-2",
+        "Qwen3-TTS",
+        "whisper-large-v3",
+        "Duix-Avatar"
+      ],
+      "endpoint": "POST /v1/async/audio/speech",
+      "codeHint": "model=CosyVoice3",
+      "faqs": [
+        {
+          "q": "Is CosyVoice3 synchronous?",
+          "a": "No. On KeyoAPI it uses POST /v1/async/audio/speech — create a task, then poll GET /v1/task/{id}. For a sync round trip, use IndexTTS-2 on /v1/audio/speech."
+        },
+        {
+          "q": "What is CosyVoice3 good for?",
+          "a": "Multilingual zero-shot TTS with streaming-friendly async jobs, dialect and emotion/speed controls where the API schema exposes them."
+        },
+        {
+          "q": "How do I try it?",
+          "a": "Open /pricing/CosyVoice3 after /sign-up. No separate upload playground — try from interactive pricing."
+        },
+        {
+          "q": "Price?",
+          "a": "About $1.37 per 10,000 characters — confirm on /pricing/CosyVoice3."
+        }
+      ],
+      "sections": {
+        "intro": "CosyVoice3 is KeyoAPI’s async CosyVoice 3 TTS: multilingual zero-shot speech without cloning a repo or renting a GPU. Call it with the same OpenAI-style key you use for Whisper and chat models.",
+        "about": "Async generation fits podcasts, course narration, IVR, and avatar pipelines that already wait on renderers. Prefer IndexTTS-2 when you need audio back inside a single HTTP round trip.",
+        "pricing": "About $1.37 per 10,000 characters. Map CMS script length to spend; confirm live rates on /pricing/CosyVoice3.",
+        "useCases": "Product voiceovers, localized support replies, game NPCs, and digital humans (pair with Duix-Avatar or InfiniteTalk). Customer bots that answer in the user’s language.",
+        "integrate": "POST /v1/async/audio/speech with model=CosyVoice3, then poll /v1/task/{id}. Docs: /brand/keyo-docs.html."
+      },
+      "bodyWordCount": 325,
+      "body": "CosyVoice3 is KeyoAPI’s async CosyVoice 3 TTS: multilingual zero-shot speech without cloning a repo or renting a GPU. Call it with the same OpenAI-style key you use for Whisper and chat models. Async generation fits podcasts, course narration, IVR, and avatar pipelines that already wait on renderers. Prefer IndexTTS-2 when you need audio back inside a single HTTP round trip. About $1.37 per 10,000 characters. Map CMS script length to spend; confirm live rates on /pricing/CosyVoice3. Product voiceovers, localized support replies, game NPCs, and digital humans (pair with Duix-Avatar or InfiniteTalk). Customer bots that answer in the user’s language. POST /v1/async/audio/speech with model=CosyVoice3, then poll /v1/task/{id}. Docs: /brand/keyo-docs.html. Searches for cosyvoice or cosyvoice 3 often want hosted inference, not a research install—KeyoAPI is that hosted path. Create speech jobs, poll until ready, then CDN-cache the audio URL. Offer clone samples only after consent. Fallback to a default voice when clone confidence is low. Measure time-to-first-byte of finished audio, not just API accept latency. Normalize text before synthesis. Store voice ids per locale. Fail closed on celebrity likeness without rights. Interactive try lives on /pricing/CosyVoice3; this page stays a crawlable API guide without a second product UI.",
+      "curlExample": "curl https://www.keyoapi.xyz/v1/async/audio/speech \\\n  -H \"Authorization: Bearer YOUR_API_KEY\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\"model\":\"CosyVoice3\",\"input\":\"Hello from KeyoAPI TTS.\"}'\n# then: GET /v1/task/{id}",
+      "uniqueBlurb": "CosyVoice3 is async TTS on /v1/async/audio/speech—poll the task for audio; use IndexTTS-2 when you want sync /v1/audio/speech."
     }
   ]
 }

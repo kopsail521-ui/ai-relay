@@ -486,6 +486,22 @@
       "our_completion_ratio": 3
     },
     {
+      "model": "deepseek-v4.1-flash",
+      "endpoints": "openai|anthropic",
+      "group": "Self-Deployed-2",
+      "cost_in_usd": 0.15,
+      "cost_out_usd": 0.6,
+      "sell_in_usd": 0.45,
+      "sell_out_usd": 1.8,
+      "sell_in_cny": 3.06,
+      "sell_out_cny": 12.24,
+      "model_ratio": 0.15,
+      "completion_ratio": 4,
+      "our_model_ratio": 0.225,
+      "our_completion_ratio": 4,
+      "markup": 3
+    },
+    {
       "model": "deepseek-v4-pro",
       "endpoints": "anthropic|openai",
       "group": "Self-Deployed-2",

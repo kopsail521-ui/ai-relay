@@ -79,6 +79,7 @@ export const RULES = {
   "gemini-3.8-flash": { vendor: "Google", tag: "大语言模型", endpoints: EP.chat },
   "deepseek-v4-pro-0813": { vendor: "DeepSeek", tag: "大语言模型", endpoints: EP.chat },
   "deepseek-v4-flash": { vendor: "DeepSeek", tag: "大语言模型", endpoints: EP.chat },
+  "deepseek-v4.1-flash": { vendor: "DeepSeek", tag: "大语言模型", endpoints: EP.chat },
   "grok-4.6": { vendor: "xAI", tag: "大语言模型", endpoints: EP.chat },
   "kimi-k3": { vendor: "Moonshot", tag: "大语言模型", endpoints: EP.chat },
   "MiniMax-M3": { vendor: "MiniMax", tag: "大语言模型", endpoints: EP.chat },

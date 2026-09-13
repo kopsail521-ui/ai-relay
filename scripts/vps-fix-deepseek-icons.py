@@ -17,6 +17,7 @@ PAID = (
     "deepseek-v4-flash",
     "deepseek-v4-pro-0813",
     "deepseek-v4-flash-0731",
+    "deepseek-v4.1-flash",
 )
 
 

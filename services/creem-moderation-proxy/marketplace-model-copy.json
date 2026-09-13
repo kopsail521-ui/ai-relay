@@ -4112,5 +4112,53 @@
     "suffix_en": "/ request",
     "price_key_zh": "每次请求",
     "price_key_en": "Per request"
+  },
+  "deepseek-v4.1-flash": {
+    "description": "DeepSeek V4.1 Flash：更快更省的对话与代码模型。约 $0.45 / $1.80 每百万 tokens。",
+    "descriptions": {
+      "zhCN": "DeepSeek V4.1 Flash：更快更省的对话与代码模型。约 $0.45 / $1.80 每百万 tokens。",
+      "zhTW": "DeepSeek V4.1 Flash：更快更省的對話與程式模型。約 $0.45 / $1.80 每百萬 tokens。",
+      "en": "DeepSeek V4.1 Flash — faster, cheaper chat and coding. About $0.45 / $1.80 per 1M tokens.",
+      "fr": "DeepSeek V4.1 Flash — chat/code plus rapide et économique. Environ $0.45 / $1.80 / 1M tokens.",
+      "ru": "DeepSeek V4.1 Flash — быстрее и дешевле для чата и кода. Около $0.45 / $1.80 за 1M токенов.",
+      "ja": "DeepSeek V4.1 Flash。より高速・低コストなチャット／コード。約 $0.45 / $1.80 / 100万 tokens。",
+      "vi": "DeepSeek V4.1 Flash — chat/coding nhanh và tiết kiệm hơn. Khoảng $0.45 / $1.80 / 1M tokens."
+    },
+    "unit": "token",
+    "badge": {
+      "zhCN": "按 Token 计费",
+      "zhTW": "按 Token 計費",
+      "en": "Token-based",
+      "fr": "Token-based",
+      "ru": "Token-based",
+      "ja": "Token 課金",
+      "vi": "Token-based"
+    },
+    "suffix": {
+      "zhCN": "",
+      "zhTW": "",
+      "en": "",
+      "fr": "",
+      "ru": "",
+      "ja": "",
+      "vi": ""
+    },
+    "price_key": {
+      "zhCN": "",
+      "zhTW": "",
+      "en": "",
+      "fr": "",
+      "ru": "",
+      "ja": "",
+      "vi": ""
+    },
+    "description_zh": "DeepSeek V4.1 Flash：更快更省的对话与代码模型。约 $0.45 / $1.80 每百万 tokens。",
+    "description_en": "DeepSeek V4.1 Flash — faster, cheaper chat and coding. About $0.45 / $1.80 per 1M tokens.",
+    "badge_zh": "按 Token 计费",
+    "badge_en": "Token-based",
+    "suffix_zh": "",
+    "suffix_en": "",
+    "price_key_zh": "",
+    "price_key_en": ""
   }
 }

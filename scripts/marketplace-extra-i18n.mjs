@@ -116,6 +116,20 @@ export const EXTRA_MODELS = {
       vi: "DeepSeek V4 Flash tốc độ cao (trả phí).",
     },
   },
+  "deepseek-v4.1-flash": {
+    mode: "token",
+    ratio: 0.225,
+    completion: 4,
+    desc: {
+      zhCN: "DeepSeek V4.1 Flash：更快更省的对话与代码模型。",
+      zhTW: "DeepSeek V4.1 Flash：更快更省的對話與程式模型。",
+      en: "DeepSeek V4.1 Flash — faster, cheaper chat and coding.",
+      fr: "DeepSeek V4.1 Flash — chat/code plus rapide et économique.",
+      ru: "DeepSeek V4.1 Flash — быстрее и дешевле для чата и кода.",
+      ja: "DeepSeek V4.1 Flash。より高速・低コストなチャット／コード。",
+      vi: "DeepSeek V4.1 Flash — chat/coding nhanh và tiết kiệm hơn.",
+    },
+  },
   "glm-5.2-free": {
     mode: "token",
     ratio: 0,

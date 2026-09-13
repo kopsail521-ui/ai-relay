@@ -99,6 +99,15 @@ export const EXTRA_DESC = {
     ja: "DeepSeek V4 Flash。より速く安い DeepSeek チャットモデル。",
     vi: "DeepSeek V4 Flash — chat DeepSeek nhanh hơn, rẻ hơn.",
   },
+  "deepseek-v4.1-flash": {
+    zhCN: "DeepSeek V4.1 Flash：更快更省的对话与代码模型。",
+    zhTW: "DeepSeek V4.1 Flash：更快更省的對話與程式模型。",
+    en: "DeepSeek V4.1 Flash — faster, cheaper chat and coding.",
+    fr: "DeepSeek V4.1 Flash — chat/code plus rapide et économique.",
+    ru: "DeepSeek V4.1 Flash — быстрее и дешевле для чата и кода.",
+    ja: "DeepSeek V4.1 Flash。より高速・低コストなチャット／コード。",
+    vi: "DeepSeek V4.1 Flash — chat/coding nhanh và tiết kiệm hơn.",
+  },
   "grok-4.6": {
     zhCN: "xAI Grok 4.6 对话模型，擅长实时信息与开放式问答。",
     zhTW: "xAI Grok 4.6 對話模型，擅長即時資訊與開放式問答。",

@@ -115,6 +115,7 @@ const FIXES = {
   "gemini-3.8-flash": { vendorName: "Google", icon: "Gemini.Color", tag: "大语言模型", endpoints: EP.chat },
   "deepseek-v4-pro-0813": { vendorName: "DeepSeek", icon: "DeepSeek.Color", tag: "大语言模型", endpoints: EP.chat },
   "deepseek-v4-flash": { vendorName: "DeepSeek", icon: "DeepSeek.Color", tag: "大语言模型", endpoints: EP.chat },
+  "deepseek-v4.1-flash": { vendorName: "DeepSeek", icon: "DeepSeek.Color", tag: "大语言模型", endpoints: EP.chat },
   "grok-4.6": { vendorName: "xAI", icon: "XAI", tag: "大语言模型", endpoints: EP.chat },
   "kimi-k3": { vendorName: "Moonshot", icon: "Moonshot", tag: "大语言模型", endpoints: EP.chat },
   "MiniMax-M3": { vendorName: "MiniMax", icon: "Minimax.Color", tag: "大语言模型", endpoints: EP.chat },

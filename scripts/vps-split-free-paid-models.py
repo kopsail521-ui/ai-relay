@@ -296,9 +296,18 @@ def main():
     cr = json.loads(get_opt(cur, "CompletionRatio") or "{}")
     mp = json.loads(get_opt(cur, "ModelPrice") or "{}")
 
+    # DeepSeek: free = monochrome "DeepSeek"; paid = blue "DeepSeek.Color"
     meta = {
-        "deepseek-v4-pro": ("DeepSeek", "DeepSeek", "DeepSeek V4 Pro 旗舰对话与推理（按量付费）。"),
-        "deepseek-v4-flash": ("DeepSeek", "DeepSeek", "DeepSeek V4 Flash 高速对话（按量付费）。"),
+        "deepseek-v4-pro": (
+            "DeepSeek",
+            "DeepSeek.Color",
+            "DeepSeek V4 Pro 旗舰对话与推理（按量付费）。",
+        ),
+        "deepseek-v4-flash": (
+            "DeepSeek",
+            "DeepSeek.Color",
+            "DeepSeek V4 Flash 高速对话（按量付费）。",
+        ),
         "glm-5.2": ("智谱", "ChatGLM.Color", "GLM 5.2 旗舰对话与编码（按量付费）。"),
         "kimi-k3": ("Moonshot", "Moonshot", "Kimi K3 长上下文对话（按量付费）。"),
     }

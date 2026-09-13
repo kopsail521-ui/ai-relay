@@ -1,0 +1,6 @@
+# DeepSeek 图标：免费黑 / 收费蓝
+cd /opt/ai-relay && sudo git pull && git log -1 --oneline
+sudo python3 scripts/vps-fix-deepseek-icons.py /opt/ai-relay/data/new-api/one-api.db
+sudo docker restart new-api 2>/dev/null || true
+sleep 2
+echo DONE_DEEPSEEK_ICONS

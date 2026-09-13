@@ -18,18 +18,44 @@ sudo docker run -d --name ai-relay-creem-moderation --restart always --network h
 
 sleep 2
 curl -sS -m 5 -o /dev/null -w "mod=%{http_code}\n" http://127.0.0.1:3001/ || true
-sudo docker restart new-api 2>/dev/null || true
-sleep 3
-curl -sS http://127.0.0.1:3001/api/pricing | python3 -c "
-import sys,json,re
-j=json.load(sys.stdin)
-blob=json.dumps(j,ensure_ascii=False)
-print('in_pricing', 'deepseek-v4.1-flash' in blob)
-# find ratio if present
-for row in (j.get('data') or j if isinstance(j,list) else []):
-  if isinstance(row,dict) and row.get('model_name')=='deepseek-v4.1-flash':
-    print('row', {k:row.get(k) for k in ('model_name','model_ratio','completion_ratio','model_price','quota_type')})
-    break
-print('leak', bool(re.search(r'openlux|OpenLux|上游|成本×|grsai|模力方舟|APIMart', blob, re.I)))
-"
+# New API 容器名因部署而异；必须重启成功才能加载 ModelRatio（否则默认 37.5/1）
+sudo docker restart ai-relay-new-api 2>/dev/null || sudo docker restart new-api 2>/dev/null || true
+sleep 4
+python3 - <<'PY'
+import json,sqlite3,re,urllib.request
+db="/opt/ai-relay/data/new-api/one-api.db"
+con=sqlite3.connect(db); cur=con.cursor()
+def opt(k):
+  cur.execute("SELECT value FROM options WHERE key=?",(k,)); r=cur.fetchone(); return r[0] if r else "{}"
+mr=json.loads(opt("ModelRatio") or "{}")
+cr=json.loads(opt("CompletionRatio") or "{}")
+mid="deepseek-v4.1-flash"
+print("db_ratio", mr.get(mid), "db_comp", cr.get(mid))
+# force rewrite if missing/wrong
+need=False
+if abs(float(mr.get(mid) or 0)-0.225)>1e-9:
+  mr[mid]=0.225; need=True
+if abs(float(cr.get(mid) or 0)-4)>1e-9:
+  cr[mid]=4; need=True
+if need:
+  for k,v in (("ModelRatio",mr),("CompletionRatio",cr)):
+    cur.execute("SELECT key FROM options WHERE key=?",(k,))
+    s=json.dumps(v,ensure_ascii=False,separators=(",",":"))
+    if cur.fetchone() is None: cur.execute("INSERT INTO options(key,value) VALUES(?,?)",(k,s))
+    else: cur.execute("UPDATE options SET value=? WHERE key=?",(s,k))
+  con.commit()
+  print("db_rewrote", True)
+  import subprocess
+  subprocess.call("sudo docker restart ai-relay-new-api 2>/dev/null || sudo docker restart new-api 2>/dev/null || true", shell=True)
+  import time; time.sleep(4)
+else:
+  print("db_rewrote", False)
+con.close()
+blob=urllib.request.urlopen("http://127.0.0.1:3001/api/pricing", timeout=15).read().decode()
+j=json.loads(blob)
+row=next((x for x in (j.get("data") or []) if x.get("model_name")==mid), None)
+print("api_row", {k:row.get(k) for k in ("model_name","model_ratio","completion_ratio","model_price","quota_type")} if row else None)
+print("ok_price", bool(row and abs(float(row.get("model_ratio") or 0)-0.225)<1e-6 and abs(float(row.get("completion_ratio") or 0)-4)<1e-6))
+print("leak", bool(re.search(r"openlux|OpenLux|上游|成本×|grsai|模力方舟|APIMart", blob, re.I)))
+PY
 echo DONE_DEEPSEEK_V41_FLASH

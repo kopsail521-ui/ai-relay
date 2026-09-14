@@ -1,15 +1,18 @@
 /**
  * APIMart 视频透传（KeyoAPI）
  *
- * 客户：POST /v1/videos/generations + GET /v1/tasks/{id}
- * 鉴权：New API 令牌；上游：APIMart Key
- * 扣费：预扣估算价；出片后按 upstream cost(USD) × MARKUP 多退少补
+ * 客户：POST /v1/videos/generations（也接受 POST /v1/videos）
+ *       GET /v1/tasks/{id}（也接受 GET /v1/videos/{id}）
+ * 鉴权：New API 令牌；上游：APIMart Key；grok-imagine → OpenLux
+ * 扣费：预扣估算价；出片后按 upstream cost(USD) × markup 多退少补
  *
  * Env:
  *   PORT=3011
  *   LISTEN_HOST=127.0.0.1
  *   APIMART_API_KEY=sk-...
  *   APIMART_BASE_URL=https://api.apimart.ai
+ *   OPENLUX_API_KEY=sk-...
+ *   OPENLUX_BASE_URL=https://api.openlux.ai
  *   NEW_API_BASE=http://127.0.0.1:3000
  *   NEW_API_DB=/data/one-api.db
  *   CATALOG=/app/catalog.json
@@ -50,6 +53,10 @@ const HOST = process.env.LISTEN_HOST || "127.0.0.1";
 const APIMART_KEY = process.env.APIMART_API_KEY || "";
 const APIMART_ORIGIN = (
   process.env.APIMART_BASE_URL || "https://api.apimart.ai"
+).replace(/\/v1\/?$/, "");
+const OPENLUX_KEY = process.env.OPENLUX_API_KEY || "";
+const OPENLUX_ORIGIN = (
+  process.env.OPENLUX_BASE_URL || "https://api.openlux.ai"
 ).replace(/\/v1\/?$/, "");
 const NEW_API_BASE = (process.env.NEW_API_BASE || "http://127.0.0.1:3000").replace(
   /\/$/,
@@ -296,8 +303,9 @@ function estimateCostUsd(modelMeta, body) {
   return 0;
 }
 
-function sellUsd(costUsd) {
-  return Number((Math.max(0, costUsd) * MARKUP).toFixed(6));
+function sellUsd(costUsd, meta) {
+  const m = Number(meta?.markup || MARKUP);
+  return Number((Math.max(0, costUsd) * m).toFixed(6));
 }
 
 function adjustQuota(userId, tokenId, modelId, deltaUsd, note) {
@@ -410,7 +418,7 @@ function settleTask(taskId, upstreamCostUsd, status) {
   if (status === "failed" || status === "cancelled") {
     finalSell = 0;
   } else if (upstreamCostUsd != null && Number.isFinite(Number(upstreamCostUsd))) {
-    finalSell = sellUsd(Number(upstreamCostUsd));
+    finalSell = sellUsd(Number(upstreamCostUsd), modelMap[row.model]);
   } else {
     // keep precharge
     const pdb = openDb(PENDING_PATH, false);
@@ -443,23 +451,53 @@ function settleTask(taskId, upstreamCostUsd, status) {
 }
 
 function isSubmitPath(p) {
-  return p === "/v1/videos/generations";
+  return p === "/v1/videos/generations" || p === "/v1/videos";
 }
 
 function isPollPath(p) {
+  if (p === "/v1/videos" || p === "/v1/videos/generations") return false;
   return (
     /^\/v1\/tasks\/[^/]+$/.test(p) ||
-    /^\/v1\/videos\/generations\/[^/]+$/.test(p)
+    /^\/v1\/videos\/generations\/[^/]+$/.test(p) ||
+    /^\/v1\/videos\/[^/]+$/.test(p)
   );
 }
 
-async function proxyApimart(req, bodyBuf, rewritePath) {
+function qsOf(url) {
+  const s = String(url || "");
+  const i = s.indexOf("?");
+  return i >= 0 ? s.slice(i) : "";
+}
+
+function pollId(p) {
+  const parts = String(p || "").split("/").filter(Boolean);
+  return parts[parts.length - 1] || "";
+}
+
+function isOpenluxMeta(meta) {
+  return String(meta?.upstream || "").toLowerCase() === "openlux";
+}
+
+function getPending(taskId) {
+  if (!taskId || !fs.existsSync(PENDING_PATH)) return null;
+  const db = openDb(PENDING_PATH, true);
+  if (!db) return null;
+  try {
+    return db.prepare(`SELECT * FROM pending WHERE task_id=?`).get(taskId) || null;
+  } catch {
+    return null;
+  } finally {
+    db.close();
+  }
+}
+
+async function proxyOrigin(origin, key, req, bodyBuf, rewritePath) {
   const urlPath = rewritePath || req.url;
-  const target = `${APIMART_ORIGIN}${urlPath}`;
+  const target = `${origin}${urlPath}`;
   const headers = { ...req.headers };
   delete headers.host;
   delete headers["content-length"];
-  headers.authorization = `Bearer ${APIMART_KEY}`;
+  headers.authorization = `Bearer ${key}`;
   const upstream = await fetch(target, {
     method: req.method,
     headers,
@@ -470,6 +508,16 @@ async function proxyApimart(req, bodyBuf, rewritePath) {
   return { status: upstream.status, buf, ct };
 }
 
+function looksLikeMiss(up) {
+  if (!up) return true;
+  if (up.status === 401 || up.status === 403) return false;
+  if (up.status === 404 || up.status === 405) return true;
+  const t = up.buf.toString("utf8");
+  const low = t.toLowerCase();
+  if (low.includes("invalid url") || low.includes("not found")) return true;
+  return false;
+}
+
 function extractTaskId(payload) {
   try {
     const j = JSON.parse(payload);
@@ -477,6 +525,7 @@ function extractTaskId(payload) {
     if (j.data?.task_id) return j.data.task_id;
     if (j.data?.id) return j.data.id;
     if (j.task_id) return j.task_id;
+    if (j.id) return j.id;
   } catch {}
   return "";
 }
@@ -499,21 +548,17 @@ const server = http.createServer(async (req, res) => {
       models: catalog.models.length,
       db: fs.existsSync(DB_PATH),
       key: !!APIMART_KEY,
+      openlux: !!OPENLUX_KEY,
     });
   }
 
   if (!isSubmitPath(urlPath) && !isPollPath(urlPath)) {
     return json(res, 404, {
       error: {
-        message: "Use POST /v1/videos/generations or GET /v1/tasks/{id}",
+        message:
+          "Use POST /v1/videos or /v1/videos/generations, then GET /v1/videos/{id} or /v1/tasks/{id}",
         type: "invalid_request_error",
       },
-    });
-  }
-
-  if (!APIMART_KEY) {
-    return json(res, 500, {
-      error: { message: "Service temporarily unavailable", type: "server_error" },
     });
   }
 
@@ -536,23 +581,49 @@ const server = http.createServer(async (req, res) => {
 
   try {
     if (isPollPath(urlPath)) {
-      // normalize generations/{id} → tasks/{id} for upstream if needed
-      let upstreamPath = req.url;
-      const m = /^\/v1\/videos\/generations\/([^/?]+)/.exec(urlPath);
-      if (m) upstreamPath = `/v1/tasks/${m[1]}${(req.url || "").includes("?") ? "?" + (req.url || "").split("?")[1] : ""}`;
+      const tid = pollId(urlPath);
+      const pending = getPending(tid);
+      const pendingMeta = pending ? modelMap[pending.model] : null;
+      let useOpenlux = isOpenluxMeta(pendingMeta);
 
-      const up = await proxyApimart(req, bodyBuf, upstreamPath);
+      const tryPoll = async (openlux) => {
+        const key = openlux ? OPENLUX_KEY : APIMART_KEY;
+        const origin = openlux ? OPENLUX_ORIGIN : APIMART_ORIGIN;
+        if (!key) return null;
+        const path = openlux
+          ? `/v1/videos/${tid}${qsOf(req.url)}`
+          : `/v1/tasks/${tid}${qsOf(req.url)}`;
+        return proxyOrigin(origin, key, req, bodyBuf, path);
+      };
+
+      let up = await tryPoll(useOpenlux);
+      if (!pending && looksLikeMiss(up)) {
+        const other = await tryPoll(!useOpenlux);
+        if (other && !looksLikeMiss(other)) {
+          up = other;
+          useOpenlux = !useOpenlux;
+        }
+      }
+      if (!up) {
+        return json(res, 500, {
+          error: { message: "Service temporarily unavailable", type: "server_error" },
+        });
+      }
       const text = up.buf.toString("utf8");
       try {
         const j = JSON.parse(text);
         const st = String(j.data?.status || j.status || "").toLowerCase();
         const cost = j.data?.cost ?? j.cost;
-        const tid =
-          j.data?.id ||
-          j.data?.task_id ||
-          (m ? m[1] : urlPath.split("/").pop());
-        if (tid && (st === "completed" || st === "failed" || st === "cancelled" || st === "success")) {
-          settleTask(tid, cost, st === "success" ? "completed" : st);
+        const done = [
+          "completed",
+          "failed",
+          "cancelled",
+          "success",
+          "succeeded",
+          "done",
+        ].includes(st);
+        if (tid && done) {
+          settleTask(tid, cost, st === "success" || st === "succeeded" || st === "done" ? "completed" : st);
         }
       } catch {}
       res.writeHead(up.status, {
@@ -582,8 +653,17 @@ const server = http.createServer(async (req, res) => {
       });
     }
 
+    const useOpenlux = isOpenluxMeta(meta);
+    const upKey = useOpenlux ? OPENLUX_KEY : APIMART_KEY;
+    const upOrigin = useOpenlux ? OPENLUX_ORIGIN : APIMART_ORIGIN;
+    if (!upKey) {
+      return json(res, 500, {
+        error: { message: "Service temporarily unavailable", type: "server_error" },
+      });
+    }
+
     const costEst = estimateCostUsd(meta, body);
-    const preSell = sellUsd(costEst);
+    const preSell = sellUsd(costEst, meta);
     if (!token.skipBill) {
       const bill = adjustQuota(
         token.userId,
@@ -603,7 +683,8 @@ const server = http.createServer(async (req, res) => {
       }
     }
 
-    const up = await proxyApimart(req, bodyBuf, req.url);
+    const submitPath = `/v1/videos/generations${qsOf(req.url)}`;
+    const up = await proxyOrigin(upOrigin, upKey, req, bodyBuf, submitPath);
     const text = up.buf.toString("utf8");
     if (up.status >= 200 && up.status < 300) {
       const tid = extractTaskId(text);
@@ -637,7 +718,8 @@ server.listen(PORT, HOST, () => {
   console.log(`APIMart passthrough on http://${HOST}:${PORT}`);
   console.log(`  models: ${catalog.models.map((m) => m.id).join(", ")}`);
   console.log(`  markup: ×${MARKUP}`);
-  console.log(`  apimart: ${APIMART_ORIGIN}`);
+  console.log(`  apimart: ${APIMART_ORIGIN} key=${!!APIMART_KEY}`);
+  console.log(`  openlux: ${OPENLUX_ORIGIN} key=${!!OPENLUX_KEY}`);
   console.log(`  new-api: ${NEW_API_BASE}`);
   console.log(`  db: ${DB_PATH}`);
 });

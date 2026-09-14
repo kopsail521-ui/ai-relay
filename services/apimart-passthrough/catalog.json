@@ -269,6 +269,30 @@
         }
       },
       "desc_zh": "Wan 3.0 · 按秒；480P $0.04115、720P $0.08228、1080P $0.16457/秒"
+    },
+    {
+      "id": "grok-imagine-video-1.5-preview",
+      "vendor": "xAI",
+      "icon": "Grok",
+      "tag": "视频",
+      "upstream": "openlux",
+      "markup": 2.5,
+      "billing": "settle_cost",
+      "display_unit": "second",
+      "estimate": {
+        "mode": "per_second_resolution",
+        "default_seconds": 5,
+        "default_resolution": "480p",
+        "cost_usd_per_second": {
+          "480p": 0.0353,
+          "720p": 0.0618
+        },
+        "sell_usd_per_second": {
+          "480p": 0.08825,
+          "720p": 0.1545
+        }
+      },
+      "desc_zh": "Grok Imagine Video · 按秒 480p $0.08825、720p $0.1545"
     }
   ]
 }

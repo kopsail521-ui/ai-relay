@@ -36,6 +36,77 @@ const IMAGE_PATHS = new Set([
   "/v1/images/variations",
 ]);
 
+/** wan / Seedance / grok-imagine 等：POST /v1/videos 自动转到 :3011 */
+const VIDEO_GEN = (process.env.VIDEO_GEN_URL || "http://127.0.0.1:3011").replace(
+  /\/$/,
+  ""
+);
+const VIDEO_GEN_MODELS = new Set([
+  "gemini-omni-1.1-flash",
+  "gemini-omni-1.1-flash-ext",
+  "seedance-2.5",
+  "seedance-2.0",
+  "flux-3-video",
+  "MiniMax-H3",
+  "wan3.0-video",
+  "grok-imagine-video-1.5-preview",
+]);
+
+function qsOf(url) {
+  const s = String(url || "");
+  const i = s.indexOf("?");
+  return i >= 0 ? s.slice(i) : "";
+}
+
+async function proxyRaw(targetUrl, req, bodyBuf) {
+  const target = new URL(targetUrl);
+  const headers = { ...req.headers, host: target.host };
+  delete headers["content-length"];
+  headers["accept-encoding"] = "identity";
+  const upstreamRes = await fetch(target, {
+    method: req.method,
+    headers,
+    body: ["GET", "HEAD"].includes(req.method || "") ? undefined : bodyBuf,
+    redirect: "manual",
+  });
+  const outHeaders = {};
+  upstreamRes.headers.forEach((v, k) => {
+    if (k.toLowerCase() === "transfer-encoding") return;
+    outHeaders[k] = v;
+  });
+  const buf = Buffer.from(await upstreamRes.arrayBuffer());
+  return { status: upstreamRes.status, buf, outHeaders };
+}
+
+function writeProxy(res, packed) {
+  const headers = { ...packed.outHeaders };
+  headers["content-length"] = String(packed.buf.length);
+  headers["Content-Length"] = String(packed.buf.length);
+  res.writeHead(packed.status, headers);
+  res.end(packed.buf);
+}
+
+function looksLikeMissingVideo(status, buf) {
+  if (status === 401 || status === 403) return false;
+  if (status === 404 || status === 405) return true;
+  const t = buf.toString("utf8");
+  const low = t.toLowerCase();
+  if (low.includes("invalid url")) return true;
+  if (status < 400) return false;
+  try {
+    const j = JSON.parse(t);
+    const msg = String(j.error?.message || j.message || "").toLowerCase();
+    return (
+      msg.includes("invalid url") ||
+      msg.includes("not found") ||
+      msg.includes("no route") ||
+      msg.includes("does not exist")
+    );
+  } catch {
+    return false;
+  }
+}
+
 /** 模型广场供应商展示顺序（越前越靠上）；「其他」永远最后 */
 const VENDOR_ORDER = [
   "OpenAI",
@@ -744,6 +815,49 @@ const server = http.createServer(async (req, res) => {
           },
         });
       }
+    }
+
+    if (req.method === "POST" && pathOnly === "/v1/videos") {
+      try {
+        const payload = JSON.parse(bodyBuf.toString("utf8") || "{}");
+        if (VIDEO_GEN_MODELS.has(String(payload.model || ""))) {
+          writeProxy(
+            res,
+            await proxyRaw(
+              `${VIDEO_GEN}/v1/videos/generations${qsOf(req.url)}`,
+              req,
+              bodyBuf
+            )
+          );
+          return;
+        }
+      } catch {
+        /* invalid JSON → New API */
+      }
+    }
+
+    const pollM = /^\/v1\/videos\/([^/]+)$/.exec(pathOnly);
+    if (req.method === "GET" && pollM && pollM[1] !== "generations") {
+      const primary = await proxyRaw(`${UPSTREAM}${req.url}`, req, bodyBuf);
+      if (!looksLikeMissingVideo(primary.status, primary.buf)) {
+        writeProxy(res, primary);
+        return;
+      }
+      try {
+        const alt = await proxyRaw(
+          `${VIDEO_GEN}/v1/tasks/${pollM[1]}${qsOf(req.url)}`,
+          req,
+          bodyBuf
+        );
+        if (!looksLikeMissingVideo(alt.status, alt.buf) || alt.status < 400) {
+          writeProxy(res, alt);
+          return;
+        }
+      } catch (e) {
+        console.error("[video-gen-poll]", e.message || e);
+      }
+      writeProxy(res, primary);
+      return;
     }
 
     await proxyRequest(req, res, bodyBuf);

@@ -1,0 +1,68 @@
+# 视频按模型自动转发：POST /v1/videos 也能打 wan / Seedance / grok-imagine
+cd /opt/ai-relay && sudo git pull && git log -1 --oneline
+
+# OpenLux Key 写入 .env.apimart（不覆盖已有；不打印密钥）
+sudo touch /opt/ai-relay/.env.apimart
+if ! sudo grep -q '^OPENLUX_API_KEY=' /opt/ai-relay/.env.apimart 2>/dev/null; then
+  sudo grep -E '^OPENLUX_(API_KEY|BASE_URL)=' /opt/ai-relay/.env 2>/dev/null | sudo tee -a /opt/ai-relay/.env.apimart >/dev/null || true
+fi
+if ! sudo grep -q '^OPENLUX_BASE_URL=' /opt/ai-relay/.env.apimart 2>/dev/null; then
+  echo 'OPENLUX_BASE_URL=https://api.openlux.ai' | sudo tee -a /opt/ai-relay/.env.apimart >/dev/null
+fi
+echo "openlux_key_in_apimart=$(sudo grep -c '^OPENLUX_API_KEY=.' /opt/ai-relay/.env.apimart || true)"
+echo "apimart_key=$(sudo grep -c '^APIMART_API_KEY=.' /opt/ai-relay/.env.apimart || true)"
+
+# 重建两个网关
+cd /opt/ai-relay
+sudo docker build -t keyo-creem-moderation ./services/creem-moderation-proxy
+sudo docker rm -f ai-relay-creem-moderation 2>/dev/null || true
+sudo docker run -d --name ai-relay-creem-moderation --restart always --network host \
+  --env-file /opt/ai-relay/.env.moderation \
+  -e UPSTREAM_URL=http://127.0.0.1:3000 \
+  -e LISTEN_HOST=127.0.0.1 \
+  -e PORT=3001 \
+  -e RANKINGS_DISPLAY_MULTIPLIER=10 \
+  -e VIDEO_GEN_URL=http://127.0.0.1:3011 \
+  keyo-creem-moderation
+
+sudo docker build -t keyo-apimart-passthrough ./services/apimart-passthrough
+sudo docker rm -f ai-relay-apimart-passthrough 2>/dev/null || true
+sudo docker run -d --name ai-relay-apimart-passthrough --restart always --network host \
+  --env-file /opt/ai-relay/.env.apimart \
+  -v /opt/ai-relay/data:/data \
+  -v /opt/ai-relay/.env:/opt/ai-relay/.env:ro \
+  -e NEW_API_DB=/data/new-api/one-api.db \
+  -e CATALOG=/app/catalog.json \
+  keyo-apimart-passthrough
+
+sleep 2
+echo "--- health ---"
+curl -sS -m 5 http://127.0.0.1:3011/healthz || echo WARN_3011_DOWN
+echo
+curl -sS -m 5 -o /dev/null -w "mod=%{http_code}\n" http://127.0.0.1:3001/ || true
+grep -n "videos/generations\|apimart_video\|3011" /etc/caddy/Caddyfile || echo WARN_CADDY_MISSING_APIMART
+
+# 无 Key：两条 POST 都应 401（说明进了 3011，而不是 New API Invalid URL）
+echo "--- probe wan on /v1/videos ---"
+curl -sS -m 8 -o /tmp/v_a.json -w "http=%{http_code}\n" \
+  -X POST https://www.keyoapi.xyz/v1/videos \
+  -H "Content-Type: application/json" \
+  -d '{"model":"wan3.0-video","prompt":"test","duration":5}' || true
+head -c 280 /tmp/v_a.json; echo
+
+echo "--- probe wan on /v1/videos/generations ---"
+curl -sS -m 8 -o /tmp/v_b.json -w "http=%{http_code}\n" \
+  -X POST https://www.keyoapi.xyz/v1/videos/generations \
+  -H "Content-Type: application/json" \
+  -d '{"model":"wan3.0-video","prompt":"test","duration":5}' || true
+head -c 280 /tmp/v_b.json; echo
+
+python3 - <<'PY'
+from pathlib import Path
+for name in ("v_a","v_b"):
+  t=Path(f"/tmp/{name}.json").read_text(encoding="utf-8",errors="replace")
+  print(name, "invalid_url", "Invalid URL" in t, "missing_auth", "Missing Authorization" in t or "Bearer" in t)
+PY
+
+sudo docker logs --tail 15 ai-relay-apimart-passthrough
+echo DONE_UNIFY_VIDEO_ROUTES

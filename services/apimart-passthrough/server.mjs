@@ -92,7 +92,12 @@ function json(res, status, body) {
 function openDb(dbPath, readonly = false) {
   if (!fs.existsSync(dbPath) && readonly) return null;
   // Node DatabaseSync requires options to be an object (not undefined)
-  return new DatabaseSync(dbPath, readonly ? { readOnly: true } : {});
+  try {
+    return new DatabaseSync(dbPath, readonly ? { readOnly: true } : {});
+  } catch (e) {
+    console.error("[apimart] openDb failed:", e.message || e);
+    return null;
+  }
 }
 
 function initPending() {
@@ -136,13 +141,30 @@ async function validateToken(apiKey) {
   const db = openDb(DB_PATH, true);
   if (!db) return { userId: 0, tokenId: 0, skipBill: true };
   try {
-    const row = db
-      .prepare(
-        `SELECT id, user_id, name, status, remain_quota, unlimited_quota
-         FROM tokens WHERE key = ? AND deleted_at IS NULL LIMIT 1`
-      )
-      .get(apiKey);
-    if (!row || row.status !== 1) return null;
+    // New API stores tokens.key without the "sk-" prefix (and may append -channelId).
+    const bare = String(apiKey).replace(/^sk-/, "").trim();
+    const keyCandidates = [bare, apiKey, bare.split("-")[0]].filter(
+      (v, i, a) => v && a.indexOf(v) === i
+    );
+    const queries = [
+      `SELECT id, user_id, name, status, remain_quota, unlimited_quota
+       FROM tokens WHERE key = ? AND deleted_at IS NULL LIMIT 1`,
+      `SELECT id, user_id, name, status, remain_quota, unlimited_quota
+       FROM tokens WHERE key = ? LIMIT 1`,
+    ];
+    let row = null;
+    for (const sql of queries) {
+      try {
+        for (const k of keyCandidates) {
+          row = db.prepare(sql).get(k);
+          if (row) break;
+        }
+        if (row) break;
+      } catch (e) {
+        console.warn("[apimart] token lookup:", e.message || e);
+      }
+    }
+    if (!row || Number(row.status) !== 1) return null;
     return {
       userId: row.user_id,
       tokenId: row.id,

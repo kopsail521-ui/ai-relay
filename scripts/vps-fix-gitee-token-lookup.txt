@@ -1,0 +1,31 @@
+# 修复 RMBG/mattings 等特殊路径 401（透传令牌对账）
+cd /opt/ai-relay && sudo git pull && git log -1 --oneline
+
+# 确认 DB 挂载与文件存在
+ls -la /opt/ai-relay/data/new-api/one-api.db || echo WARN_NO_DB
+sudo docker inspect ai-relay-gitee-passthrough --format '{{json .Mounts}}' 2>/dev/null | head -c 500; echo
+sudo docker inspect ai-relay-gitee-passthrough --format '{{range .Config.Env}}{{println .}}{{end}}' 2>/dev/null | grep -E 'NEW_API|GITEE|DB' || true
+
+sudo docker build -t keyo-gitee-passthrough ./services/gitee-passthrough
+sudo docker rm -f ai-relay-gitee-passthrough 2>/dev/null || true
+sudo docker run -d --name ai-relay-gitee-passthrough --restart always --network host \
+  --env-file /opt/ai-relay/.env.gitee \
+  -v /opt/ai-relay/data/new-api:/data:rw \
+  -e NEW_API_DB=/data/one-api.db \
+  -e NEW_API_BASE=http://127.0.0.1:3000 \
+  -e CATALOG=/app/catalog.json \
+  keyo-gitee-passthrough
+
+sleep 2
+curl -sS http://127.0.0.1:3010/healthz; echo
+sudo docker logs --tail 20 ai-relay-gitee-passthrough
+
+# 无真实 Key 时仍应 401 missing/lookup；有 Key 时应用你的 sk- 测：
+# curl -sS -o /tmp/rmbg.out -w "http=%{http_code}\n" \
+#   -X POST https://www.keyoapi.xyz/v1/images/mattings \
+#   -H "Authorization: Bearer sk-你的密钥" \
+#   -F model=RMBG-2.0 \
+#   -F image=@/path/to/photo.png
+# head -c 200 /tmp/rmbg.out; echo
+
+echo DONE_FIX_GITEE_TOKEN_LOOKUP

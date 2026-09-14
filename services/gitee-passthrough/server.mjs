@@ -107,20 +107,51 @@ function extractBearer(req) {
 
 function openDb(readonly = false) {
   if (!fs.existsSync(DB_PATH)) return null;
-  return new DatabaseSync(DB_PATH, readonly ? { readOnly: true } : undefined);
+  try {
+    // DatabaseSync requires options object (not undefined)
+    return new DatabaseSync(DB_PATH, readonly ? { readOnly: true } : {});
+  } catch (e) {
+    console.error("[gitee-passthrough] openDb failed:", e.message || e);
+    return null;
+  }
 }
 
 function findGiteeChannelId(db) {
   try {
     const row = db
       .prepare(
-        `SELECT id FROM channels WHERE name LIKE '%Gitee%' OR base_url LIKE '%gitee%' LIMIT 1`
+        `SELECT id FROM channels WHERE name LIKE '%Keyo Media%' OR name LIKE '%Gitee%' OR base_url LIKE '%gitee%' LIMIT 1`
       )
       .get();
     return row?.id || 0;
   } catch {
     return 0;
   }
+}
+
+function lookupTokenRow(db, apiKey) {
+  const bare = String(apiKey).replace(/^sk-/, "").trim();
+  const keyCandidates = [bare, apiKey, bare.split("-")[0]].filter(
+    (v, i, a) => v && a.indexOf(v) === i
+  );
+  const queries = [
+    `SELECT id, user_id, name, status, remain_quota, unlimited_quota
+     FROM tokens WHERE key = ? AND deleted_at IS NULL LIMIT 1`,
+    `SELECT id, user_id, name, status, remain_quota, unlimited_quota
+     FROM tokens WHERE key = ? LIMIT 1`,
+  ];
+  for (const sql of queries) {
+    try {
+      for (const k of keyCandidates) {
+        const row = db.prepare(sql).get(k);
+        if (row) return row;
+      }
+    } catch (e) {
+      // older schema may lack deleted_at — try next query
+      console.warn("[gitee-passthrough] token lookup:", e.message || e);
+    }
+  }
+  return null;
 }
 
 /** Validate New API token */
@@ -130,22 +161,27 @@ async function validateToken(apiKey) {
       headers: { Authorization: `Bearer ${apiKey}` },
     });
     if (!r.ok) return null;
-  } catch {
+  } catch (e) {
+    console.warn("[gitee-passthrough] models probe failed:", e.message || e);
     return null;
   }
 
   const db = openDb(true);
   if (!db) {
+    // Auth OK via New API, but local DB missing — do not pretend Invalid token
+    console.warn("[gitee-passthrough] DB missing at", DB_PATH);
     return { userId: 0, tokenId: 0, name: "unknown", skipBill: true };
   }
   try {
-    const row = db
-      .prepare(
-        `SELECT id, user_id, name, status, remain_quota, unlimited_quota
-         FROM tokens WHERE key = ? AND deleted_at IS NULL LIMIT 1`
-      )
-      .get(apiKey);
-    if (!row || row.status !== 1) return null;
+    const row = lookupTokenRow(db, apiKey);
+    if (!row) {
+      console.warn(
+        "[gitee-passthrough] token not in DB after models OK; db=",
+        DB_PATH
+      );
+      return null;
+    }
+    if (Number(row.status) !== 1) return null;
     return {
       userId: row.user_id,
       tokenId: row.id,
@@ -355,7 +391,12 @@ const server = http.createServer(async (req, res) => {
   const token = await validateToken(apiKey);
   if (!token) {
     return json(res, 401, {
-      error: { message: "Invalid New API token", type: "auth_error" },
+      error: {
+        message:
+          "Token rejected by special-path gateway (models OK but billing lookup failed). Check NEW_API_DB mount.",
+        type: "auth_error",
+        code: "passthrough_token_lookup_failed",
+      },
     });
   }
 

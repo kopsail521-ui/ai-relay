@@ -82,19 +82,25 @@ sleep 2
 curl -sS http://127.0.0.1:3010/healthz; echo
 
 echo "=== 6) 再测 mattings ==="
-python3 - <<'PY'
+# /tmp 里可能被 root 占住旧文件，改写到仓库可写目录
+mkdir -p /opt/ai-relay/tmp
+PNG=/opt/ai-relay/tmp/rmbg-test.png
+OUT=/opt/ai-relay/tmp/rmbg.out
+sudo rm -f /tmp/rmbg-test.png "$PNG" "$OUT" 2>/dev/null || true
+python3 - <<PY
 import struct,zlib,pathlib
 def chunk(t,d):
   return struct.pack('>I',len(d))+t+d+struct.pack('>I',zlib.crc32(t+d)&0xffffffff)
 raw=b'\x00'+b'\x00\x00\x00'
 png=b'\x89PNG\r\n\x1a\n'+chunk(b'IHDR',struct.pack('>IIBBBBB',1,1,8,2,0,0,0))+chunk(b'IDAT',zlib.compress(raw))+chunk(b'IEND',b'')
-pathlib.Path('/tmp/rmbg-test.png').write_bytes(png)
+pathlib.Path("$PNG").write_bytes(png)
+print("png_ok", "$PNG")
 PY
-curl -sS -o /tmp/rmbg.out -w "http=%{http_code}\n" \
+curl -sS -o "$OUT" -w "http=%{http_code}\n" \
   -X POST https://www.keyoapi.xyz/v1/images/mattings \
   -H "Authorization: Bearer $KEY" \
   -F model=RMBG-2.0 \
-  -F image=@/tmp/rmbg-test.png
-head -c 500 /tmp/rmbg.out; echo
+  -F image=@"$PNG"
+head -c 500 "$OUT"; echo
 sudo docker logs --tail 25 ai-relay-gitee-passthrough
 echo DONE_DIAG_GITEE_TOKEN

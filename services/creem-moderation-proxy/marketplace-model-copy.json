@@ -2264,6 +2264,24 @@
       "ru": "ImageProc",
       "ja": "画像処理",
       "vi": "ImageProc"
+    },
+    "rag": {
+      "zhCN": "RAG",
+      "zhTW": "RAG",
+      "en": "RAG",
+      "fr": "RAG",
+      "ru": "RAG",
+      "ja": "RAG",
+      "vi": "RAG"
+    },
+    "RAG": {
+      "zhCN": "RAG",
+      "zhTW": "RAG",
+      "en": "RAG",
+      "fr": "RAG",
+      "ru": "RAG",
+      "ja": "RAG",
+      "vi": "RAG"
     }
   },
   "qwen3.8-max-0902": {
@@ -4154,6 +4172,390 @@
     },
     "description_zh": "DeepSeek V4.1 Flash：更快更省的对话与代码模型。约 $0.45 / $1.80 每百万 tokens。",
     "description_en": "DeepSeek V4.1 Flash — faster, cheaper chat and coding. About $0.45 / $1.80 per 1M tokens.",
+    "badge_zh": "按 Token 计费",
+    "badge_en": "Token-based",
+    "suffix_zh": "",
+    "suffix_en": "",
+    "price_key_zh": "",
+    "price_key_en": ""
+  },
+  "Atria-dawn-v2": {
+    "description": "Atria Dawn V2：科研向智能体对话模型（免费额度）。 计费：$0/次。",
+    "descriptions": {
+      "zhCN": "Atria Dawn V2：科研向智能体对话模型（免费额度）。 计费：$0/次。",
+      "zhTW": "Atria Dawn V2：科研向智能體對話模型（免費額度）。 計費：$0/次。",
+      "en": "Atria Dawn V2 research agent chat (free tier). Pricing: $0 / request.",
+      "fr": "Atria Dawn V2 — chat agentic recherche (gratuit). Tarif : $0 / requête.",
+      "ru": "Atria Dawn V2 — исследовательский агентный чат (бесплатно). Тариф: $0 / запрос.",
+      "ja": "Atria Dawn V2：研究向けエージェント対話（無料）。 料金：$0/ 回。",
+      "vi": "Atria Dawn V2 — chat agent nghiên cứu (miễn phí). Giá: $0/ lần."
+    },
+    "unit": "request",
+    "badge": {
+      "zhCN": "按次计费",
+      "zhTW": "按次計費",
+      "en": "Per Request",
+      "fr": "Par requête",
+      "ru": "За запрос",
+      "ja": "リクエスト課金",
+      "vi": "Theo lần gọi"
+    },
+    "suffix": {
+      "zhCN": "/次",
+      "zhTW": "/次",
+      "en": "/ request",
+      "fr": "/ requête",
+      "ru": "/ запрос",
+      "ja": "/ 回",
+      "vi": "/ lần"
+    },
+    "price_key": {
+      "zhCN": "每次请求",
+      "zhTW": "每次請求",
+      "en": "Per request",
+      "fr": "Par requête",
+      "ru": "За запрос",
+      "ja": "リクエストごと",
+      "vi": "Mỗi lần gọi"
+    },
+    "description_zh": "Atria Dawn V2：科研向智能体对话模型（免费额度）。 计费：$0/次。",
+    "description_en": "Atria Dawn V2 research agent chat (free tier). Pricing: $0 / request.",
+    "badge_zh": "按次计费",
+    "badge_en": "Per Request",
+    "suffix_zh": "/次",
+    "suffix_en": "/ request",
+    "price_key_zh": "每次请求",
+    "price_key_en": "Per request"
+  },
+  "DeepSeek-Prover-V2-7B": {
+    "description": "DeepSeek Prover V2 7B：Lean 4 形式化定理证明（免费额度）。 计费：$0/次。",
+    "descriptions": {
+      "zhCN": "DeepSeek Prover V2 7B：Lean 4 形式化定理证明（免费额度）。 计费：$0/次。",
+      "zhTW": "DeepSeek Prover V2 7B：Lean 4 形式化定理證明（免費額度）。 計費：$0/次。",
+      "en": "DeepSeek Prover V2 7B formal theorem proving for Lean 4 (free tier). Pricing: $0 / request.",
+      "fr": "DeepSeek Prover V2 7B — preuve formelle Lean 4 (gratuit). Tarif : $0 / requête.",
+      "ru": "DeepSeek Prover V2 7B — формальные доказательства Lean 4 (бесплатно). Тариф: $0 / запрос.",
+      "ja": "DeepSeek Prover V2 7B：Lean 4 形式証明（無料）。 料金：$0/ 回。",
+      "vi": "DeepSeek Prover V2 7B — chứng minh Lean 4 (miễn phí). Giá: $0/ lần."
+    },
+    "unit": "request",
+    "badge": {
+      "zhCN": "按次计费",
+      "zhTW": "按次計費",
+      "en": "Per Request",
+      "fr": "Par requête",
+      "ru": "За запрос",
+      "ja": "リクエスト課金",
+      "vi": "Theo lần gọi"
+    },
+    "suffix": {
+      "zhCN": "/次",
+      "zhTW": "/次",
+      "en": "/ request",
+      "fr": "/ requête",
+      "ru": "/ запрос",
+      "ja": "/ 回",
+      "vi": "/ lần"
+    },
+    "price_key": {
+      "zhCN": "每次请求",
+      "zhTW": "每次請求",
+      "en": "Per request",
+      "fr": "Par requête",
+      "ru": "За запрос",
+      "ja": "リクエストごと",
+      "vi": "Mỗi lần gọi"
+    },
+    "description_zh": "DeepSeek Prover V2 7B：Lean 4 形式化定理证明（免费额度）。 计费：$0/次。",
+    "description_en": "DeepSeek Prover V2 7B formal theorem proving for Lean 4 (free tier). Pricing: $0 / request.",
+    "badge_zh": "按次计费",
+    "badge_en": "Per Request",
+    "suffix_zh": "/次",
+    "suffix_en": "/ request",
+    "price_key_zh": "每次请求",
+    "price_key_en": "Per request"
+  },
+  "WeMM-Embedding-9B": {
+    "description": "WeMM Embedding 9B：多模态向量化，适用于跨模态检索与 RAG。 约 $0.6164 / 百万 tokens。",
+    "descriptions": {
+      "zhCN": "WeMM Embedding 9B：多模态向量化，适用于跨模态检索与 RAG。 约 $0.6164 / 百万 tokens。",
+      "zhTW": "WeMM Embedding 9B：多模態向量化，適用於跨模態檢索與 RAG。 約 $0.6164 / 百萬 tokens。",
+      "en": "WeMM Embedding 9B multimodal vectors for retrieval and RAG. About $0.6164 per 1M tokens.",
+      "fr": "WeMM Embedding 9B — vecteurs multimodaux pour RAG. Environ $0.6164 / 1M tokens.",
+      "ru": "WeMM Embedding 9B — мультимодальные эмбеддинги для RAG. Около $0.6164 / 1M токенов.",
+      "ja": "WeMM Embedding 9B：マルチモーダル埋め込み（RAG向け）。 約 $0.6164 / 100万 tokens。",
+      "vi": "WeMM Embedding 9B — embedding đa phương thức cho RAG. Khoảng $0.6164 / 1M tokens."
+    },
+    "unit": "token",
+    "badge": {
+      "zhCN": "按 Token 计费",
+      "zhTW": "按 Token 計費",
+      "en": "Token-based",
+      "fr": "Token-based",
+      "ru": "Token-based",
+      "ja": "Token 課金",
+      "vi": "Token-based"
+    },
+    "suffix": {
+      "zhCN": "",
+      "zhTW": "",
+      "en": "",
+      "fr": "",
+      "ru": "",
+      "ja": "",
+      "vi": ""
+    },
+    "price_key": {
+      "zhCN": "",
+      "zhTW": "",
+      "en": "",
+      "fr": "",
+      "ru": "",
+      "ja": "",
+      "vi": ""
+    },
+    "description_zh": "WeMM Embedding 9B：多模态向量化，适用于跨模态检索与 RAG。 约 $0.6164 / 百万 tokens。",
+    "description_en": "WeMM Embedding 9B multimodal vectors for retrieval and RAG. About $0.6164 per 1M tokens.",
+    "badge_zh": "按 Token 计费",
+    "badge_en": "Token-based",
+    "suffix_zh": "",
+    "suffix_en": "",
+    "price_key_zh": "",
+    "price_key_en": ""
+  },
+  "WeMM-Embedding-4B": {
+    "description": "WeMM Embedding 4B：多模态向量化，适用于跨模态检索与 RAG。 约 $0.5479 / 百万 tokens。",
+    "descriptions": {
+      "zhCN": "WeMM Embedding 4B：多模态向量化，适用于跨模态检索与 RAG。 约 $0.5479 / 百万 tokens。",
+      "zhTW": "WeMM Embedding 4B：多模態向量化，適用於跨模態檢索與 RAG。 約 $0.5479 / 百萬 tokens。",
+      "en": "WeMM Embedding 4B multimodal vectors for retrieval and RAG. About $0.5479 per 1M tokens.",
+      "fr": "WeMM Embedding 4B — vecteurs multimodaux pour RAG. Environ $0.5479 / 1M tokens.",
+      "ru": "WeMM Embedding 4B — мультимодальные эмбеддинги для RAG. Около $0.5479 / 1M токенов.",
+      "ja": "WeMM Embedding 4B：マルチモーダル埋め込み（RAG向け）。 約 $0.5479 / 100万 tokens。",
+      "vi": "WeMM Embedding 4B — embedding đa phương thức cho RAG. Khoảng $0.5479 / 1M tokens."
+    },
+    "unit": "token",
+    "badge": {
+      "zhCN": "按 Token 计费",
+      "zhTW": "按 Token 計費",
+      "en": "Token-based",
+      "fr": "Token-based",
+      "ru": "Token-based",
+      "ja": "Token 課金",
+      "vi": "Token-based"
+    },
+    "suffix": {
+      "zhCN": "",
+      "zhTW": "",
+      "en": "",
+      "fr": "",
+      "ru": "",
+      "ja": "",
+      "vi": ""
+    },
+    "price_key": {
+      "zhCN": "",
+      "zhTW": "",
+      "en": "",
+      "fr": "",
+      "ru": "",
+      "ja": "",
+      "vi": ""
+    },
+    "description_zh": "WeMM Embedding 4B：多模态向量化，适用于跨模态检索与 RAG。 约 $0.5479 / 百万 tokens。",
+    "description_en": "WeMM Embedding 4B multimodal vectors for retrieval and RAG. About $0.5479 per 1M tokens.",
+    "badge_zh": "按 Token 计费",
+    "badge_en": "Token-based",
+    "suffix_zh": "",
+    "suffix_en": "",
+    "price_key_zh": "",
+    "price_key_en": ""
+  },
+  "WeMM-Embedding-2B": {
+    "description": "WeMM Embedding 2B：轻量多模态向量化，适用于检索与 RAG。 约 $0.4795 / 百万 tokens。",
+    "descriptions": {
+      "zhCN": "WeMM Embedding 2B：轻量多模态向量化，适用于检索与 RAG。 约 $0.4795 / 百万 tokens。",
+      "zhTW": "WeMM Embedding 2B：輕量多模態向量化，適用於檢索與 RAG。 約 $0.4795 / 百萬 tokens。",
+      "en": "WeMM Embedding 2B lightweight multimodal vectors for RAG. About $0.4795 per 1M tokens.",
+      "fr": "WeMM Embedding 2B — vecteurs légers pour RAG. Environ $0.4795 / 1M tokens.",
+      "ru": "WeMM Embedding 2B — лёгкие эмбеддинги для RAG. Около $0.4795 / 1M токенов.",
+      "ja": "WeMM Embedding 2B：軽量マルチモーダル埋め込み。 約 $0.4795 / 100万 tokens。",
+      "vi": "WeMM Embedding 2B — embedding nhẹ cho RAG. Khoảng $0.4795 / 1M tokens."
+    },
+    "unit": "token",
+    "badge": {
+      "zhCN": "按 Token 计费",
+      "zhTW": "按 Token 計費",
+      "en": "Token-based",
+      "fr": "Token-based",
+      "ru": "Token-based",
+      "ja": "Token 課金",
+      "vi": "Token-based"
+    },
+    "suffix": {
+      "zhCN": "",
+      "zhTW": "",
+      "en": "",
+      "fr": "",
+      "ru": "",
+      "ja": "",
+      "vi": ""
+    },
+    "price_key": {
+      "zhCN": "",
+      "zhTW": "",
+      "en": "",
+      "fr": "",
+      "ru": "",
+      "ja": "",
+      "vi": ""
+    },
+    "description_zh": "WeMM Embedding 2B：轻量多模态向量化，适用于检索与 RAG。 约 $0.4795 / 百万 tokens。",
+    "description_en": "WeMM Embedding 2B lightweight multimodal vectors for RAG. About $0.4795 per 1M tokens.",
+    "badge_zh": "按 Token 计费",
+    "badge_en": "Token-based",
+    "suffix_zh": "",
+    "suffix_en": "",
+    "price_key_zh": "",
+    "price_key_en": ""
+  },
+  "Qwen3-VL-Reranker-2B": {
+    "description": "Qwen3-VL Reranker 2B：多模态重排序，提升检索相关性。 约 $0.0616 / 百万 tokens。",
+    "descriptions": {
+      "zhCN": "Qwen3-VL Reranker 2B：多模态重排序，提升检索相关性。 约 $0.0616 / 百万 tokens。",
+      "zhTW": "Qwen3-VL Reranker 2B：多模態重排序，提升檢索相關性。 約 $0.0616 / 百萬 tokens。",
+      "en": "Qwen3-VL Reranker 2B multimodal reranking for better retrieval. About $0.0616 per 1M tokens.",
+      "fr": "Qwen3-VL Reranker 2B — rerank multimodal. Environ $0.0616 / 1M tokens.",
+      "ru": "Qwen3-VL Reranker 2B — мультимодальный rerank. Около $0.0616 / 1M токенов.",
+      "ja": "Qwen3-VL Reranker 2B：マルチモーダル再ランキング。 約 $0.0616 / 100万 tokens。",
+      "vi": "Qwen3-VL Reranker 2B — rerank đa phương thức. Khoảng $0.0616 / 1M tokens."
+    },
+    "unit": "token",
+    "badge": {
+      "zhCN": "按 Token 计费",
+      "zhTW": "按 Token 計費",
+      "en": "Token-based",
+      "fr": "Token-based",
+      "ru": "Token-based",
+      "ja": "Token 課金",
+      "vi": "Token-based"
+    },
+    "suffix": {
+      "zhCN": "",
+      "zhTW": "",
+      "en": "",
+      "fr": "",
+      "ru": "",
+      "ja": "",
+      "vi": ""
+    },
+    "price_key": {
+      "zhCN": "",
+      "zhTW": "",
+      "en": "",
+      "fr": "",
+      "ru": "",
+      "ja": "",
+      "vi": ""
+    },
+    "description_zh": "Qwen3-VL Reranker 2B：多模态重排序，提升检索相关性。 约 $0.0616 / 百万 tokens。",
+    "description_en": "Qwen3-VL Reranker 2B multimodal reranking for better retrieval. About $0.0616 per 1M tokens.",
+    "badge_zh": "按 Token 计费",
+    "badge_en": "Token-based",
+    "suffix_zh": "",
+    "suffix_en": "",
+    "price_key_zh": "",
+    "price_key_en": ""
+  },
+  "Qwen3-VL-Reranker-8B": {
+    "description": "Qwen3-VL Reranker 8B：高精度多模态重排序。 约 $0.2397 / 百万 tokens。",
+    "descriptions": {
+      "zhCN": "Qwen3-VL Reranker 8B：高精度多模态重排序。 约 $0.2397 / 百万 tokens。",
+      "zhTW": "Qwen3-VL Reranker 8B：高精度多模態重排序。 約 $0.2397 / 百萬 tokens。",
+      "en": "Qwen3-VL Reranker 8B high-precision multimodal reranking. About $0.2397 per 1M tokens.",
+      "fr": "Qwen3-VL Reranker 8B — rerank précis. Environ $0.2397 / 1M tokens.",
+      "ru": "Qwen3-VL Reranker 8B — точный multimodal rerank. Около $0.2397 / 1M токенов.",
+      "ja": "Qwen3-VL Reranker 8B：高精度再ランキング。 約 $0.2397 / 100万 tokens。",
+      "vi": "Qwen3-VL Reranker 8B — rerank độ chính xác cao. Khoảng $0.2397 / 1M tokens."
+    },
+    "unit": "token",
+    "badge": {
+      "zhCN": "按 Token 计费",
+      "zhTW": "按 Token 計費",
+      "en": "Token-based",
+      "fr": "Token-based",
+      "ru": "Token-based",
+      "ja": "Token 課金",
+      "vi": "Token-based"
+    },
+    "suffix": {
+      "zhCN": "",
+      "zhTW": "",
+      "en": "",
+      "fr": "",
+      "ru": "",
+      "ja": "",
+      "vi": ""
+    },
+    "price_key": {
+      "zhCN": "",
+      "zhTW": "",
+      "en": "",
+      "fr": "",
+      "ru": "",
+      "ja": "",
+      "vi": ""
+    },
+    "description_zh": "Qwen3-VL Reranker 8B：高精度多模态重排序。 约 $0.2397 / 百万 tokens。",
+    "description_en": "Qwen3-VL Reranker 8B high-precision multimodal reranking. About $0.2397 per 1M tokens.",
+    "badge_zh": "按 Token 计费",
+    "badge_en": "Token-based",
+    "suffix_zh": "",
+    "suffix_en": "",
+    "price_key_zh": "",
+    "price_key_en": ""
+  },
+  "Qwen3-VL-Embedding-8B": {
+    "description": "Qwen3-VL Embedding 8B：多模态向量化，适用于跨模态检索与 RAG。 约 $0.0068 / 百万 tokens。",
+    "descriptions": {
+      "zhCN": "Qwen3-VL Embedding 8B：多模态向量化，适用于跨模态检索与 RAG。 约 $0.0068 / 百万 tokens。",
+      "zhTW": "Qwen3-VL Embedding 8B：多模態向量化，適用於跨模態檢索與 RAG。 約 $0.0068 / 百萬 tokens。",
+      "en": "Qwen3-VL Embedding 8B multimodal vectors for retrieval and RAG. About $0.0068 per 1M tokens.",
+      "fr": "Qwen3-VL Embedding 8B — vecteurs multimodaux pour RAG. Environ $0.0068 / 1M tokens.",
+      "ru": "Qwen3-VL Embedding 8B — эмбеддинги для RAG. Около $0.0068 / 1M токенов.",
+      "ja": "Qwen3-VL Embedding 8B：マルチモーダル埋め込み。 約 $0.0068 / 100万 tokens。",
+      "vi": "Qwen3-VL Embedding 8B — embedding đa phương thức cho RAG. Khoảng $0.0068 / 1M tokens."
+    },
+    "unit": "token",
+    "badge": {
+      "zhCN": "按 Token 计费",
+      "zhTW": "按 Token 計費",
+      "en": "Token-based",
+      "fr": "Token-based",
+      "ru": "Token-based",
+      "ja": "Token 課金",
+      "vi": "Token-based"
+    },
+    "suffix": {
+      "zhCN": "",
+      "zhTW": "",
+      "en": "",
+      "fr": "",
+      "ru": "",
+      "ja": "",
+      "vi": ""
+    },
+    "price_key": {
+      "zhCN": "",
+      "zhTW": "",
+      "en": "",
+      "fr": "",
+      "ru": "",
+      "ja": "",
+      "vi": ""
+    },
+    "description_zh": "Qwen3-VL Embedding 8B：多模态向量化，适用于跨模态检索与 RAG。 约 $0.0068 / 百万 tokens。",
+    "description_en": "Qwen3-VL Embedding 8B multimodal vectors for retrieval and RAG. About $0.0068 per 1M tokens.",
     "badge_zh": "按 Token 计费",
     "badge_en": "Token-based",
     "suffix_zh": "",

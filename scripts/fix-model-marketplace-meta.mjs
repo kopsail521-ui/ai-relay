@@ -51,6 +51,8 @@ const EP = {
   },
   openaiVideo: { "openai-video": "/v1/videos" },
   apimartVideo: { "openai-video": "/v1/videos/generations" },
+  embed: { openai: "/v1/embeddings" },
+  rerank: { openai: "/v1/rerank" },
 };
 
 /** 单标签 + 原厂供应商 + 端点（logo 用 @lobehub/icons 里有的；没有就「其他」） */
@@ -93,6 +95,16 @@ const FIXES = {
 
   // —— 大语言模型 ——
   "gemma-4-26B-A4B-it": { vendorName: "Google", icon: "Gemini.Color", tag: "大语言模型", endpoints: EP.chat },
+  "Atria-dawn-v2": { vendorName: "其他", icon: "Custom", tag: "大语言模型,免费", endpoints: EP.chat },
+  "DeepSeek-Prover-V2-7B": { vendorName: "DeepSeek", icon: "DeepSeek", tag: "大语言模型,免费", endpoints: EP.chat },
+
+  // —— RAG（向量化 / 重排）——
+  "WeMM-Embedding-9B": { vendorName: "腾讯", icon: "Tencent.Color", tag: "rag", endpoints: EP.embed },
+  "WeMM-Embedding-4B": { vendorName: "腾讯", icon: "Tencent.Color", tag: "rag", endpoints: EP.embed },
+  "WeMM-Embedding-2B": { vendorName: "腾讯", icon: "Tencent.Color", tag: "rag", endpoints: EP.embed },
+  "Qwen3-VL-Reranker-2B": { vendorName: "阿里巴巴", icon: "Qwen.Color", tag: "rag", endpoints: EP.rerank },
+  "Qwen3-VL-Reranker-8B": { vendorName: "阿里巴巴", icon: "Qwen.Color", tag: "rag", endpoints: EP.rerank },
+  "Qwen3-VL-Embedding-8B": { vendorName: "阿里巴巴", icon: "Qwen.Color", tag: "rag", endpoints: EP.embed },
 
   // —— Grsai 出图 ——
   "gpt-image-2": { vendorName: "OpenAI", icon: "OpenAI", tag: "图片", endpoints: EP.image },

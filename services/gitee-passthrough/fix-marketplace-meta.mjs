@@ -7,6 +7,8 @@ import { DatabaseSync } from "node:sqlite";
 export const EP = {
   chat: JSON.stringify({ openai: "/v1/chat/completions" }),
   image: JSON.stringify({ "image-generation": "/v1/images/generations" }),
+  embed: JSON.stringify({ openai: "/v1/embeddings" }),
+  rerank: JSON.stringify({ openai: "/v1/rerank" }),
   imageProcess: JSON.stringify({
     "image-generation": { path: "/v1/images/upscaling", method: "POST" },
   }),
@@ -64,6 +66,19 @@ export const RULES = {
     endpoints: EP.chat,
     icon: "Gemini.Color",
   },
+  "Atria-dawn-v2": { vendor: "其他", tag: "大语言模型,免费", endpoints: EP.chat, icon: "Custom" },
+  "DeepSeek-Prover-V2-7B": {
+    vendor: "DeepSeek",
+    tag: "大语言模型,免费",
+    endpoints: EP.chat,
+    icon: "DeepSeek",
+  },
+  "WeMM-Embedding-9B": { vendor: "腾讯", tag: "rag", endpoints: EP.embed, icon: "Tencent.Color" },
+  "WeMM-Embedding-4B": { vendor: "腾讯", tag: "rag", endpoints: EP.embed, icon: "Tencent.Color" },
+  "WeMM-Embedding-2B": { vendor: "腾讯", tag: "rag", endpoints: EP.embed, icon: "Tencent.Color" },
+  "Qwen3-VL-Reranker-2B": { vendor: "阿里巴巴", tag: "rag", endpoints: EP.rerank, icon: "Qwen.Color" },
+  "Qwen3-VL-Reranker-8B": { vendor: "阿里巴巴", tag: "rag", endpoints: EP.rerank, icon: "Qwen.Color" },
+  "Qwen3-VL-Embedding-8B": { vendor: "阿里巴巴", tag: "rag", endpoints: EP.embed, icon: "Qwen.Color" },
   "gpt-image-2": { vendor: "OpenAI", tag: "图片", endpoints: EP.image },
   "gpt-image-2-vip": { vendor: "OpenAI", tag: "图片", endpoints: EP.image },
   "nano-banana-pro": { vendor: "Google", tag: "图片", endpoints: EP.image },

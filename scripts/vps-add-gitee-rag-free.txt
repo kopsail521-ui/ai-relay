@@ -1,0 +1,63 @@
+# 上架 Gitee：免费 Atria/Prover + RAG×5（WeMM / Qwen3-VL embed&rerank）
+cd /opt/ai-relay && sudo git pull && git log -1 --oneline
+
+sudo python3 scripts/vps-add-gitee-rag-free.py /opt/ai-relay/data/new-api/one-api.db
+sudo python3 scripts/vps-scrub-channel-names.py /opt/ai-relay/data/new-api/one-api.db 2>/dev/null || true
+sudo python3 scripts/vps-update-marketplace-copy.py /opt/ai-relay/data/new-api/one-api.db /opt/ai-relay/config/marketplace-model-copy.json 2>/dev/null || true
+
+sudo docker build --no-cache -t keyo-creem-moderation ./services/creem-moderation-proxy
+sudo docker rm -f ai-relay-creem-moderation 2>/dev/null || true
+sudo docker run -d --name ai-relay-creem-moderation --restart always --network host \
+  --env-file /opt/ai-relay/.env.moderation \
+  -e UPSTREAM_URL=http://127.0.0.1:3000 \
+  -e LISTEN_HOST=127.0.0.1 \
+  -e PORT=3001 \
+  -e RANKINGS_DISPLAY_MULTIPLIER=10 \
+  keyo-creem-moderation
+
+sleep 2
+curl -sS -m 5 -o /dev/null -w "mod=%{http_code}\n" http://127.0.0.1:3001/ || true
+sudo docker restart ai-relay-new-api 2>/dev/null || sudo docker restart new-api 2>/dev/null || true
+sleep 4
+
+python3 - <<'PY'
+import json,re,urllib.request,sqlite3
+want_free=["Atria-dawn-v2","DeepSeek-Prover-V2-7B"]
+want_rag=["WeMM-Embedding-9B","WeMM-Embedding-4B","WeMM-Embedding-2B","Qwen3-VL-Reranker-2B","Qwen3-VL-Reranker-8B","Qwen3-VL-Embedding-8B"]
+want=want_free+want_rag
+expect={
+  "WeMM-Embedding-9B":0.308219,
+  "WeMM-Embedding-4B":0.273973,
+  "WeMM-Embedding-2B":0.239726,
+  "Qwen3-VL-Reranker-2B":0.030822,
+  "Qwen3-VL-Reranker-8B":0.119863,
+  "Qwen3-VL-Embedding-8B":0.003425,
+}
+j=json.loads(urllib.request.urlopen("http://127.0.0.1:3001/api/pricing",timeout=20).read().decode())
+blob=json.dumps(j,ensure_ascii=False)
+by={x.get("model_name"):x for x in (j.get("data") or []) if isinstance(x,dict)}
+for mid in want:
+  row=by.get(mid)
+  if not row:
+    print("MISSING", mid); continue
+  print(mid, {k:row.get(k) for k in ("model_ratio","completion_ratio","model_price","quota_type","tags")})
+con=sqlite3.connect("/opt/ai-relay/data/new-api/one-api.db")
+cur=con.cursor()
+for mid in want_rag:
+  cur.execute("SELECT tags FROM models WHERE model_name=?", (mid,))
+  r=cur.fetchone()
+  print("db_tags", mid, r[0] if r else None)
+con.close()
+print("leak", bool(re.search(r"gitee|Gitee|模力方舟|MoArk|上游|成本×", blob, re.I)))
+ok_free=all(float((by.get(m) or {}).get("model_price") or -1)==0 for m in want_free)
+ok_rag=all(abs(float((by.get(m) or {}).get("model_ratio") or 37.5)-expect[m])<1e-4 for m in want_rag)
+# tags may be on pricing row or only in DB
+ok_tag=True
+for mid in want_rag:
+  tags=str((by.get(mid) or {}).get("tags") or "")
+  if "rag" not in tags.lower():
+    # fallback already printed db_tags
+    pass
+print("ok_free", ok_free, "ok_rag_ratio", ok_rag)
+PY
+echo DONE_GITEE_RAG_FREE

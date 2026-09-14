@@ -166,6 +166,46 @@ const META = {
     category_zh: "多模态对话",
     description: "Gemma 4 26B 视觉语言模型，OpenAI chat 兼容",
   },
+  "Atria-dawn-v2": {
+    category: "chat_free",
+    category_zh: "免费对话",
+    description: "Atria Dawn V2：科研向智能体对话模型（免费额度）",
+  },
+  "DeepSeek-Prover-V2-7B": {
+    category: "chat_free",
+    category_zh: "免费对话",
+    description: "DeepSeek Prover V2 7B：Lean 4 形式化定理证明（免费额度）",
+  },
+  "WeMM-Embedding-9B": {
+    category: "rag",
+    category_zh: "RAG",
+    description: "WeMM Embedding 9B：多模态向量化",
+  },
+  "WeMM-Embedding-4B": {
+    category: "rag",
+    category_zh: "RAG",
+    description: "WeMM Embedding 4B：多模态向量化",
+  },
+  "WeMM-Embedding-2B": {
+    category: "rag",
+    category_zh: "RAG",
+    description: "WeMM Embedding 2B：轻量多模态向量化",
+  },
+  "Qwen3-VL-Reranker-2B": {
+    category: "rag",
+    category_zh: "RAG",
+    description: "Qwen3-VL Reranker 2B：多模态重排序",
+  },
+  "Qwen3-VL-Reranker-8B": {
+    category: "rag",
+    category_zh: "RAG",
+    description: "Qwen3-VL Reranker 8B：高精度多模态重排序",
+  },
+  "Qwen3-VL-Embedding-8B": {
+    category: "rag",
+    category_zh: "RAG",
+    description: "Qwen3-VL Embedding 8B：多模态向量化",
+  },
 };
 
 const OPENAI_NATIVE = new Set([
@@ -173,6 +213,8 @@ const OPENAI_NATIVE = new Set([
   "v1/audio/transcriptions",
   "v1/audio/speech",
   "v1/moderations",
+  "v1/embeddings",
+  "v1/rerank",
 ]);
 
 function uniqOps(ops) {
@@ -206,7 +248,10 @@ for (const [id, arr] of Object.entries(prices)) {
   const isToken =
     (inM > 0 || outM > 0) &&
     (primary?.path === "v1/chat/completions" ||
-      id === "gemma-4-26B-A4B-it");
+      primary?.path === "v1/embeddings" ||
+      primary?.path === "v1/rerank" ||
+      id === "gemma-4-26B-A4B-it" ||
+      /^WeMM-Embedding|^Qwen3-VL-(Embedding|Reranker)/.test(id));
 
   let billing;
   if (isToken) {

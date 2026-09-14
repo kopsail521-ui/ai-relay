@@ -48,6 +48,18 @@
     ],
     "chat_vlm": [
       "gemma-4-26B-A4B-it"
+    ],
+    "chat_free": [
+      "Atria-dawn-v2",
+      "DeepSeek-Prover-V2-7B"
+    ],
+    "rag": [
+      "WeMM-Embedding-9B",
+      "WeMM-Embedding-4B",
+      "WeMM-Embedding-2B",
+      "Qwen3-VL-Reranker-2B",
+      "Qwen3-VL-Reranker-8B",
+      "Qwen3-VL-Embedding-8B"
     ]
   },
   "models": [
@@ -986,6 +998,179 @@
         "sell_out_cny_per_m": 8.75,
         "model_ratio": 0.599315,
         "completion_ratio": 1
+      },
+      "relay": "newapi_native",
+      "markup": 5
+    },
+    {
+      "id": "Atria-dawn-v2",
+      "upstream": "Atria-dawn-v2",
+      "category": "chat_free",
+      "category_zh": "免费对话",
+      "description": "Atria Dawn V2：科研向智能体对话模型（免费额度）。",
+      "paths": [
+        "v1/chat/completions"
+      ],
+      "billing": {
+        "mode": "unit",
+        "unit": "per_call",
+        "unit_label": "次",
+        "unit_note": "免费",
+        "unit_tag": 0,
+        "cost_cny": 0,
+        "sell_cny": 0,
+        "model_price_usd": 0,
+        "free_upstream": true
+      },
+      "relay": "newapi_native",
+      "markup": 5
+    },
+    {
+      "id": "DeepSeek-Prover-V2-7B",
+      "upstream": "DeepSeek-Prover-V2-7B",
+      "category": "chat_free",
+      "category_zh": "免费对话",
+      "description": "DeepSeek Prover V2 7B：Lean 4 形式化定理证明（免费额度）。",
+      "paths": [
+        "v1/chat/completions"
+      ],
+      "billing": {
+        "mode": "unit",
+        "unit": "per_call",
+        "unit_label": "次",
+        "unit_note": "免费",
+        "unit_tag": 0,
+        "cost_cny": 0,
+        "sell_cny": 0,
+        "model_price_usd": 0,
+        "free_upstream": true
+      },
+      "relay": "newapi_native",
+      "markup": 5
+    },
+    {
+      "id": "WeMM-Embedding-9B",
+      "upstream": "WeMM-Embedding-9B",
+      "category": "rag",
+      "category_zh": "RAG",
+      "description": "WeMM Embedding 9B：多模态向量化。",
+      "paths": [
+        "v1/embeddings"
+      ],
+      "billing": {
+        "mode": "token",
+        "cost_in_cny_per_m": 0.9,
+        "cost_out_cny_per_m": 0.9,
+        "sell_in_cny_per_m": 4.5,
+        "sell_out_cny_per_m": 4.5,
+        "model_ratio": 0.308219,
+        "completion_ratio": 1.0
+      },
+      "relay": "newapi_native",
+      "markup": 5
+    },
+    {
+      "id": "WeMM-Embedding-4B",
+      "upstream": "WeMM-Embedding-4B",
+      "category": "rag",
+      "category_zh": "RAG",
+      "description": "WeMM Embedding 4B：多模态向量化。",
+      "paths": [
+        "v1/embeddings"
+      ],
+      "billing": {
+        "mode": "token",
+        "cost_in_cny_per_m": 0.8,
+        "cost_out_cny_per_m": 0.8,
+        "sell_in_cny_per_m": 4.0,
+        "sell_out_cny_per_m": 4.0,
+        "model_ratio": 0.273973,
+        "completion_ratio": 1.0
+      },
+      "relay": "newapi_native",
+      "markup": 5
+    },
+    {
+      "id": "WeMM-Embedding-2B",
+      "upstream": "WeMM-Embedding-2B",
+      "category": "rag",
+      "category_zh": "RAG",
+      "description": "WeMM Embedding 2B：轻量多模态向量化。",
+      "paths": [
+        "v1/embeddings"
+      ],
+      "billing": {
+        "mode": "token",
+        "cost_in_cny_per_m": 0.7,
+        "cost_out_cny_per_m": 0.7,
+        "sell_in_cny_per_m": 3.5,
+        "sell_out_cny_per_m": 3.5,
+        "model_ratio": 0.239726,
+        "completion_ratio": 1.0
+      },
+      "relay": "newapi_native",
+      "markup": 5
+    },
+    {
+      "id": "Qwen3-VL-Reranker-2B",
+      "upstream": "Qwen3-VL-Reranker-2B",
+      "category": "rag",
+      "category_zh": "RAG",
+      "description": "Qwen3-VL Reranker 2B：多模态重排序。",
+      "paths": [
+        "v1/rerank"
+      ],
+      "billing": {
+        "mode": "token",
+        "cost_in_cny_per_m": 0.09,
+        "cost_out_cny_per_m": 0.09,
+        "sell_in_cny_per_m": 0.44999999999999996,
+        "sell_out_cny_per_m": 0.44999999999999996,
+        "model_ratio": 0.030822,
+        "completion_ratio": 1.0
+      },
+      "relay": "newapi_native",
+      "markup": 5
+    },
+    {
+      "id": "Qwen3-VL-Reranker-8B",
+      "upstream": "Qwen3-VL-Reranker-8B",
+      "category": "rag",
+      "category_zh": "RAG",
+      "description": "Qwen3-VL Reranker 8B：高精度多模态重排序。",
+      "paths": [
+        "v1/rerank"
+      ],
+      "billing": {
+        "mode": "token",
+        "cost_in_cny_per_m": 0.35,
+        "cost_out_cny_per_m": 0.35,
+        "sell_in_cny_per_m": 1.75,
+        "sell_out_cny_per_m": 1.75,
+        "model_ratio": 0.119863,
+        "completion_ratio": 1.0
+      },
+      "relay": "newapi_native",
+      "markup": 5
+    },
+    {
+      "id": "Qwen3-VL-Embedding-8B",
+      "upstream": "Qwen3-VL-Embedding-8B",
+      "category": "rag",
+      "category_zh": "RAG",
+      "description": "Qwen3-VL Embedding 8B：多模态向量化（上游免费底价）。",
+      "paths": [
+        "v1/embeddings"
+      ],
+      "billing": {
+        "mode": "token",
+        "cost_in_cny_per_m": 0.01,
+        "cost_out_cny_per_m": 0.01,
+        "sell_in_cny_per_m": 0.05,
+        "sell_out_cny_per_m": 0.05,
+        "model_ratio": 0.003425,
+        "completion_ratio": 1.0,
+        "free_upstream": true
       },
       "relay": "newapi_native",
       "markup": 5

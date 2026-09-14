@@ -259,6 +259,8 @@ function normalizeTagToken(tag) {
     ImageProc: "图像处理",
     Free: "免费",
     free: "免费",
+    rag: "rag",
+    RAG: "rag",
     per: "视频按秒",
     second: "视频按秒",
     request: "视频按次",

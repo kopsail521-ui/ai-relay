@@ -2,6 +2,7 @@
 cd /opt/ai-relay && sudo git pull && git log -1 --oneline
 
 ls /opt/ai-relay/static/brand/model-icons | wc -l
+test -f /opt/ai-relay/static/brand/model-icons/rmbg-20.svg && echo svg_ok || echo svg_missing
 sudo python3 scripts/vps-fix-lobehub-icons.py /opt/ai-relay/data/new-api/one-api.db
 
 sudo docker build --no-cache -t keyo-creem-moderation ./services/creem-moderation-proxy

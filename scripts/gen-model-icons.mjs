@@ -54,6 +54,16 @@ const PROMPTS = {
     "App icon, rounded square, flat minimal vector, dark navy background #0f172a, steel blue lock and filter funnel security symbol, no text, no letters, clean edges",
   "nsfw-classifier":
     "App icon, rounded square, flat minimal vector, dark navy background #0f172a, violet shield with eye slash for NSFW filter, no text, no letters, clean edges",
+  "RMBG-2.0":
+    "App icon, rounded square, flat minimal vector, dark navy background #0f172a, cyan subject cutout silhouette with dashed background layer for background removal, no text, no letters, clean edges",
+  "IndexTTS-2":
+    "App icon, rounded square, flat minimal vector, dark navy background #0f172a, coral audio equalizer bars for text to speech, no text, no letters, clean edges",
+  "Atria-dawn-v2":
+    "App icon, rounded square, flat minimal vector, dark navy background #0f172a, amber rising sun over horizon for research chat agent, no text, no letters, clean edges",
+  "Unlimited-OCR":
+    "App icon, rounded square, flat minimal vector, dark navy background #0f172a, amber document with scan lines for OCR, no text, no letters, clean edges",
+  "Real-ESRGAN":
+    "App icon, rounded square, flat minimal vector, dark navy background #0f172a, cyan small square expanding to larger square for super resolution, no text, no letters, clean edges",
 };
 
 async function getToken() {

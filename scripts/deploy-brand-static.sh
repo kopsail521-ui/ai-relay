@@ -131,6 +131,13 @@ ${DOMAIN} {
 			header_up Accept-Encoding identity
 		}
 	}
+	# APIMart video lane (must stay ahead of catch-all → :3001)
+	@apimart_video path /v1/videos/generations* /v1/tasks*
+	handle @apimart_video {
+		reverse_proxy 127.0.0.1:3011 {
+			header_up Accept-Encoding identity
+		}
+	}
 	# Exact /pricing = Model Square SPA via moderation proxy (vendor order + icon injects).
 	# Must NOT use spa-shell→:3000 or keyo-model-icons / pricing-sort injects are skipped.
 	handle /pricing {

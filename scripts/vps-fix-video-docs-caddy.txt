@@ -1,0 +1,33 @@
+# 修复视频文档 + 确认 / 补上 generations→3011（APIMart）
+cd /opt/ai-relay && sudo git pull && git log -1 --oneline
+
+# 1) 文档已在 static/brand/keyo-docs.html；同步品牌静态（会重写 Caddyfile，已含 apimart 规则）
+sudo bash scripts/deploy-brand-static.sh
+
+# 2) 确认透传进程与 Caddy 路由
+curl -sS -m 3 http://127.0.0.1:3011/healthz || echo "WARN_APIMART_DOWN"
+echo
+grep -n "videos/generations\|apimart_video\|3011" /etc/caddy/Caddyfile || echo "WARN_CADDY_MISSING_APIMART"
+echo
+
+# 3) 公网路径探活（应进 3011，而不是 New API 的 Invalid URL）
+# 无 Key 时通常 401；若仍是 Invalid URL (POST /v1/videos/generations) 说明 Caddy 没指到 3011
+curl -sS -m 8 -o /tmp/vg.json -w "http=%{http_code}\n" \
+  -X POST https://www.keyoapi.xyz/v1/videos/generations \
+  -H "Content-Type: application/json" \
+  -d '{"model":"wan3.0-video","prompt":"test"}' || true
+head -c 400 /tmp/vg.json; echo
+
+python3 - <<'PY'
+import json
+p="/tmp/vg.json"
+try:
+  t=open(p,encoding="utf-8",errors="replace").read()
+except Exception as e:
+  print("read_fail", e); raise SystemExit
+print("has_invalid_url", "Invalid URL" in t)
+print("looks_auth_or_ok", any(x in t for x in ("401","unauthorized","Unauthorized","api key","API key","success","task","id")) or t.strip().startswith("{"))
+print("snippet", t[:240].replace("\n"," "))
+PY
+
+echo DONE_VIDEO_DOCS_CADDY

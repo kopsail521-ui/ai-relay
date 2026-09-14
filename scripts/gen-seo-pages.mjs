@@ -636,7 +636,7 @@ function renderPricing() {
     )
     .join("\n");
   const bodyHtml = `
-<p class="lead">Static <strong>AI API pricing</strong> list for KeyoAPI — model IDs, indicative USD rates, and real endpoints. Use this page for crawlable gpt api pricing / claude api pricing research; open interactive try/buy links when you are ready to generate keys.</p>
+<p class="lead">Static <strong>AI API pricing</strong> list for KeyoAPI — model IDs, indicative USD rates, and real endpoints. Use this page to compare rates; open interactive try/buy links when you are ready to generate keys.</p>
 <p class="meta">Rates below are catalog snapshots for SEO and planning. Wallet top-up and live sell prices are confirmed in the console after <a href="/sign-up">sign-up</a>.</p>
 <div class="btnrow">
   <a class="btn btn-primary" href="/sign-up">Create account</a>
@@ -696,7 +696,7 @@ function renderFreeModels() {
   const examplePaid = String(exampleFree).replace(/-free$/, "");
   const bodyHtml = `
 <p class="lead">KeyoAPI offers a permanent <strong>free AI API</strong> tier — four LLM model IDs at <strong>$0</strong>, no credit card, not a time-boxed trial. Register a key and call with the <code>-free</code> suffix. Same capability family as the paid bare IDs; paid IDs are token-metered with higher priority.</p>
-<p class="meta">Target use: prototype and eval traffic for developers searching <strong>free llm api</strong> / <strong>free api key</strong>. Production workloads should prefer paid bare model IDs.</p>
+<p class="meta">Built for prototypes, demos, CI smoke tests, and eval harnesses. Production workloads should prefer paid bare model IDs.</p>
 <div class="btnrow">
   <a class="btn btn-primary" href="/sign-up">Get a free API key</a>
   <a class="btn btn-secondary" href="/pricing-list">Full pricing list</a>
@@ -753,8 +753,8 @@ ${rows}
   <p>You can. For anything user-facing or latency-sensitive, we recommend the paid twin. Free is ideal for prototypes, demos, CI smoke tests, and eval harnesses.</p>
 </details>
 <details>
-  <summary>Why no separate pages for each free ID?</summary>
-  <p>Search demand clusters on generic queries like <strong>free ai api</strong> / <strong>free llm api</strong>. This hub covers those intents; paid model guides will embed a Free tier block when those pages ship.</p>
+  <summary>Why one page for all four?</summary>
+  <p>Four near-identical pages would repeat the same curl example and drift out of sync; one hub keeps the IDs, limits, and examples accurate. Paid model guides embed a Free tier block where relevant.</p>
 </details>
 </div>
 <p class="meta">Also see the interactive catalog on <a href="/pricing">/pricing</a> (filter Free) and the OpenAI-compatible docs.</p>

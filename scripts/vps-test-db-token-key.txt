@@ -1,0 +1,54 @@
+# 对比脚本 Key vs 库 id=2，并用库里真 Key 测 mattings
+set -e
+cd /opt/ai-relay
+KEY_SCRIPT='sk-EllutBxwL8EL62e300Vrv2yBXI9NhcdPMQ2csfdyjog76c9t'
+
+echo "=== 1) 库里 id=2 ==="
+python3 - <<'PY'
+import sqlite3
+con=sqlite3.connect("/opt/ai-relay/data/new-api/one-api.db")
+row=con.execute("SELECT id,user_id,name,status,key FROM tokens WHERE id=2").fetchone()
+if not row:
+  print("NO_ID_2"); raise SystemExit(1)
+tid,uid,name,status,k=row
+script="EllutBxwL8EL62e300Vrv2yBXI9NhcdPMQ2csfdyjog76c9t"
+print("id",tid,"user",uid,"name",name,"status",status,"len",len(k))
+print("script_eq", k==script, "nocase_eq", k.lower()==script.lower())
+mism=[i for i,(a,b) in enumerate(zip(k,script)) if a!=b]
+print("mismatch_count", len(mism)+abs(len(k)-len(script)), "first_idxs", mism[:15])
+print("DB_KEY=sk-"+k if not str(k).startswith("sk-") else "DB_KEY="+k)
+con.close()
+PY
+
+DB_KEY=$(python3 - <<'PY'
+import sqlite3
+k=sqlite3.connect("/opt/ai-relay/data/new-api/one-api.db").execute("SELECT key FROM tokens WHERE id=2").fetchone()[0]
+print(k if str(k).startswith("sk-") else "sk-"+k)
+PY
+)
+
+echo "=== 2) usage：脚本 Key vs 库 Key ==="
+curl -sS -o /tmp/u1.out -w "script_usage=%{http_code}\n" http://127.0.0.1:3000/api/usage/token/ -H "Authorization: Bearer $KEY_SCRIPT" || true
+head -c 160 /tmp/u1.out; echo
+curl -sS -o /tmp/u2.out -w "db_usage=%{http_code}\n" http://127.0.0.1:3000/api/usage/token/ -H "Authorization: Bearer $DB_KEY" || true
+head -c 160 /tmp/u2.out; echo
+
+echo "=== 3) mattings 用库里真 Key ==="
+mkdir -p /opt/ai-relay/tmp
+python3 - <<'PY'
+import struct,zlib,pathlib
+def chunk(t,d):
+  return struct.pack('>I',len(d))+t+d+struct.pack('>I',zlib.crc32(t+d)&0xffffffff)
+raw=b'\x00'+b'\x00\x00\x00'
+png=b'\x89PNG\r\n\x1a\n'+chunk(b'IHDR',struct.pack('>IIBBBBB',1,1,8,2,0,0,0))+chunk(b'IDAT',zlib.compress(raw))+chunk(b'IEND',b'')
+pathlib.Path('/opt/ai-relay/tmp/rmbg-test.png').write_bytes(png)
+print('png_ok')
+PY
+curl -sS -o /opt/ai-relay/tmp/rmbg.out -w "http=%{http_code}\n" \
+  -X POST https://www.keyoapi.xyz/v1/images/mattings \
+  -H "Authorization: Bearer $DB_KEY" \
+  -F model=RMBG-2.0 \
+  -F image=@/opt/ai-relay/tmp/rmbg-test.png
+head -c 500 /opt/ai-relay/tmp/rmbg.out; echo
+sudo docker logs --tail 15 ai-relay-gitee-passthrough
+echo DONE_TEST_DB_KEY

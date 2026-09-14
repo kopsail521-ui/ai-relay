@@ -48,6 +48,16 @@ export function caddySeoHandles() {
 		rewrite * /deepseek-api-pricing.html
 		file_server
 	}
+	handle /claude-api-pricing {
+		root * /opt/ai-relay/static/seo
+		rewrite * /claude-api-pricing.html
+		file_server
+	}
+	handle /openai-api-pricing {
+		root * /opt/ai-relay/static/seo
+		rewrite * /openai-api-pricing.html
+		file_server
+	}
 	handle /about {
 		root * /opt/ai-relay/static/seo
 		rewrite * /about.html

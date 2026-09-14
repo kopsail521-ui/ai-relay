@@ -113,6 +113,8 @@ function footer() {
   <a href="/free-models">Free AI API</a>
   <a href="/gemini-api-pricing">Gemini pricing</a>
   <a href="/deepseek-api-pricing">DeepSeek pricing</a>
+  <a href="/claude-api-pricing">Claude pricing</a>
+  <a href="/openai-api-pricing">OpenAI pricing</a>
   <a href="/brand/keyo-docs.html">Docs</a>
   <a href="/brand/faq.html">FAQ</a>
   <a href="/brand/privacy.html">Privacy</a>
@@ -423,7 +425,7 @@ ${freeCards}
 <div class="grid">
 ${featured}
 </div>
-<p class="meta">Compare in depth: <a href="/gemini-api-pricing">Gemini API pricing</a> · <a href="/deepseek-api-pricing">DeepSeek API pricing</a> · <a href="/models">all model guides</a></p>
+<p class="meta">Compare in depth: <a href="/gemini-api-pricing">Gemini API pricing</a> · <a href="/deepseek-api-pricing">DeepSeek API pricing</a> · <a href="/claude-api-pricing">Claude API pricing</a> · <a href="/openai-api-pricing">OpenAI API pricing</a> · <a href="/models">all model guides</a></p>
 <h2>Integrate in minutes</h2>
 <pre><code>export OPENAI_BASE_URL=https://www.keyoapi.xyz/v1
 export OPENAI_API_KEY=sk-...
@@ -439,6 +441,8 @@ export OPENAI_API_KEY=sk-...
     <a href="/free-models">Free AI API</a>
     <a href="/gemini-api-pricing">Gemini pricing</a>
     <a href="/deepseek-api-pricing">DeepSeek pricing</a>
+    <a href="/claude-api-pricing">Claude pricing</a>
+    <a href="/openai-api-pricing">OpenAI pricing</a>
     <a href="/brand/faq.html">FAQ</a>
     <a href="/brand/privacy.html">Privacy</a>
     <a href="/brand/terms.html">Terms</a>
@@ -477,7 +481,7 @@ function renderModelsIndex() {
 <thead><tr><th>Model ID</th><th>Category</th><th>Listed price</th><th>Links</th></tr></thead>
 <tbody>${rows}</tbody>
 </table>
-<p class="meta">Also: <a href="/gemini-api-pricing">Gemini API pricing</a> · <a href="/deepseek-api-pricing">DeepSeek API pricing</a>.</p>
+<p class="meta">Also: <a href="/gemini-api-pricing">Gemini API pricing</a> · <a href="/deepseek-api-pricing">DeepSeek API pricing</a> · <a href="/claude-api-pricing">Claude API pricing</a> · <a href="/openai-api-pricing">OpenAI API pricing</a>.</p>
 `;
   return layout({
     title: "AI Model Guides Index | KeyoAPI",
@@ -535,7 +539,7 @@ function renderAbout() {
 ${priceSample}
 </tbody>
 </table>
-<p>Full list: <a href="/compare">/compare</a> · <a href="/pricing-list">/pricing-list</a> · deep dives: <a href="/gemini-api-pricing">Gemini</a> · <a href="/deepseek-api-pricing">DeepSeek</a></p>
+<p>Full list: <a href="/compare">/compare</a> · <a href="/pricing-list">/pricing-list</a> · deep dives: <a href="/gemini-api-pricing">Gemini</a> · <a href="/deepseek-api-pricing">DeepSeek</a> · <a href="/claude-api-pricing">Claude</a> · <a href="/openai-api-pricing">OpenAI</a></p>
 <h2>Four models, permanently free</h2>
 <p>No trial clock — these four run at <strong>$0</strong> when you call the <code>*-free</code> model ID. Paid twins (bare names) are token-metered for production. Rules: <a href="/free-models">/free-models</a></p>
 <div class="grid">
@@ -806,6 +810,7 @@ function renderPricingLanding(p) {
 <p class="meta">Indicative comparison for planning. Confirm live Keyo rates in <a href="/pricing">Model Square</a> or the static <a href="/pricing-list">pricing list</a>.</p>
 <div class="btnrow">
   <a class="btn btn-primary" href="/sign-up">Get API key</a>
+  <a class="btn btn-secondary" href="/pricing">Open Model Square</a>
   <a class="btn btn-secondary" href="/pricing-list">Full pricing list</a>
   <a class="btn btn-secondary" href="/free-models">Free models</a>
 </div>
@@ -855,6 +860,8 @@ Allow: /free-models
 Allow: /models
 Allow: /gemini-api-pricing
 Allow: /deepseek-api-pricing
+Allow: /claude-api-pricing
+Allow: /openai-api-pricing
 Allow: /brand/
 Allow: /about
 
@@ -888,6 +895,16 @@ function writeSitemap() {
     },
     {
       loc: `${site}/deepseek-api-pricing`,
+      priority: "0.95",
+      changefreq: "weekly",
+    },
+    {
+      loc: `${site}/claude-api-pricing`,
+      priority: "0.95",
+      changefreq: "weekly",
+    },
+    {
+      loc: `${site}/openai-api-pricing`,
       priority: "0.95",
       changefreq: "weekly",
     },

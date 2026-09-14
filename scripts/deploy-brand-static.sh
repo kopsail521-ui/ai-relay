@@ -97,6 +97,16 @@ ${DOMAIN} {
 		rewrite * /deepseek-api-pricing.html
 		file_server
 	}
+	handle /claude-api-pricing {
+		root * ${ROOT}/static/seo
+		rewrite * /claude-api-pricing.html
+		file_server
+	}
+	handle /openai-api-pricing {
+		root * ${ROOT}/static/seo
+		rewrite * /openai-api-pricing.html
+		file_server
+	}
 	handle /about {
 		root * ${ROOT}/static/seo
 		rewrite * /about.html

@@ -7,6 +7,8 @@ Allow: /free-models
 Allow: /models
 Allow: /gemini-api-pricing
 Allow: /deepseek-api-pricing
+Allow: /claude-api-pricing
+Allow: /openai-api-pricing
 Allow: /brand/
 Allow: /about
 

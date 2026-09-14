@@ -122,6 +122,129 @@
           "a": "Fair-use rate and concurrency limits on the Keyo Free channel. Disclose that in any public post — silent rate limits feel like bait-and-switch."
         }
       ]
+    },
+    {
+      "slug": "claude-api-pricing",
+      "h1": "Claude API Pricing — KeyoAPI vs Typical Anthropic List Rates",
+      "title": "Claude API Pricing Comparison | Cheap Claude on KeyoAPI",
+      "metaDescription": "Claude API pricing on KeyoAPI: Sonnet ~$0.88/$4.41, Opus ~$2.21/$11, Fable flagship tiers — compare with typical Anthropic list rates. One OpenAI-compatible key.",
+      "targetKeywords": [
+        "claude api pricing",
+        "claude api price",
+        "cheap claude api"
+      ],
+      "lead": "Looking up Claude API pricing usually means you already want Anthropic-class chat or agents, but need clearer unit economics — or one prepaid balance that also covers GPT-class, DeepSeek, Whisper, and vision. This page compares indicative Keyo sell rates with typical public Anthropic list figures and shows how to call Claude-class IDs on an OpenAI-compatible gateway.",
+      "rows": [
+        {
+          "model": "claude-sonnet-5",
+          "official": "Anthropic Claude Sonnet 4 list commonly cited near ~$3 / $15 per 1M in/out (confirm current Sonnet band)",
+          "keyo": "~$0.88 / $4.41 per 1M in/out",
+          "note": "Everyday Claude production lane"
+        },
+        {
+          "model": "claude-opus-5",
+          "official": "Anthropic Claude Opus 4 list commonly cited near ~$15 / $75 per 1M in/out (confirm current Opus band)",
+          "keyo": "~$2.21 / $11.03 per 1M in/out",
+          "note": "Hard agent / coding escalations"
+        },
+        {
+          "model": "claude-fable-5",
+          "official": "Anthropic flagship Claude list bands are typically far higher than Sonnet — verify on Anthropic pricing",
+          "keyo": "~$8.82 / $44.12 per 1M in/out",
+          "note": "Flagship chat / agent twin"
+        },
+        {
+          "model": "claude-fable-5-1",
+          "official": "Newer flagship Claude list — verify on Anthropic console",
+          "keyo": "~$7.35 / $36.77 per 1M in/out",
+          "note": "Planner-tier Fable 5.1"
+        }
+      ],
+      "freeKiller": {
+        "title": "Prototype free, then promote to Claude",
+        "body": "Keyo does not ship Anthropic-branded free Claude IDs. For $0 prototyping on the same API key, use permanent free twins such as deepseek-v4-flash-free, deepseek-v4-pro-free, glm-5.2-free, and kimi-k3-free (fair-use limits). When quality gates pass, switch model= to claude-sonnet-5 or another Claude ID without changing base URL or auth."
+      },
+      "body": [
+        "Claude API pricing searches are purchase-intent: teams are comparing dollars per million tokens before wiring agents, coding copilots, or support bots. Official Anthropic surfaces win on brand trust; KeyoAPI wins when you want one prepaid balance across Claude-class IDs plus GPT-class, DeepSeek, Whisper, OCR, and TTS — without five invoices.",
+        "Keyo rates above are indicative sell prices from the live Keyo catalog. Always confirm interactive pages under /pricing/claude-sonnet-5, /pricing/claude-opus-5, /pricing/claude-fable-5, and /pricing/claude-fable-5-1 before contracting volume. Anthropic list bands and context tiers change — treat official figures as planning context.",
+        "How to call: set OPENAI_BASE_URL=https://www.keyoapi.xyz/v1, use your Keyo API key, and pass a Claude model string (for example claude-sonnet-5) to POST /v1/chat/completions. Longer guides live at /model/claude-sonnet-5, /model/claude-opus-5, and the Fable pages.",
+        "When Claude list prices spike your margin, keep Claude for hard reasoning and shift bulk classification or drafts to gpt-5.6-luna or deepseek-v4-flash on the same key. For OpenAI / GPT dollars see /openai-api-pricing; for Gemini dollars see /gemini-api-pricing; for DeepSeek see /deepseek-api-pricing; for free prototyping see /free-models."
+      ],
+      "faqs": [
+        {
+          "q": "Is Keyo cheaper than Anthropic Claude API pricing?",
+          "a": "Often on the Sonnet/Opus rows we list — but Anthropic’s public list, prompt caching, and batch discounts change. Treat this table as a planning snapshot and verify both sides before you commit."
+        },
+        {
+          "q": "Do you offer a free Claude model?",
+          "a": "Not as an Anthropic-branded free ID. Use Keyo’s permanent $0 DeepSeek/GLM/Kimi free twins to prototype on the same key, then promote to paid Claude IDs when you need that quality band."
+        },
+        {
+          "q": "How do I try Claude on Keyo?",
+          "a": "Create a key at /sign-up, then open /pricing/claude-sonnet-5 (or another Claude ID) for interactive try/buy. There is no separate upload playground — Model Square is the try path."
+        }
+      ]
+    },
+    {
+      "slug": "openai-api-pricing",
+      "h1": "OpenAI API Pricing — KeyoAPI GPT-Class Rates vs Typical List",
+      "title": "OpenAI API Pricing Comparison | Cheap GPT on KeyoAPI",
+      "metaDescription": "OpenAI API pricing context on KeyoAPI: GPT-5.6 Luna ~$0.10/$0.62, Terra ~$0.37/$2.21, Sol ~$0.92/$5.52 per 1M — compare with typical OpenAI list rates. One OpenAI-compatible key.",
+      "targetKeywords": [
+        "openai api pricing",
+        "openai api price",
+        "cheap openai api",
+        "gpt api pricing"
+      ],
+      "lead": "Looking up OpenAI API pricing usually means you already want GPT-class chat in an OpenAI SDK, but need clearer unit economics — or one prepaid balance that also covers Claude, DeepSeek, Whisper, and vision. This page compares indicative Keyo sell rates for GPT-5.6 Luna / Terra / Sol with typical public OpenAI list figures and shows how to call them on the same OpenAI-compatible gateway.",
+      "rows": [
+        {
+          "model": "gpt-5.6-luna",
+          "official": "OpenAI GPT-4o mini list commonly cited near ~$0.15 / $0.60 per 1M in/out (confirm current mini band)",
+          "keyo": "~$0.10 / $0.62 per 1M in/out",
+          "note": "High-volume / batch workhorse"
+        },
+        {
+          "model": "gpt-5.6-terra",
+          "official": "OpenAI GPT-4o list commonly cited near ~$2.50 / $10.00 per 1M in/out (confirm current flagship chat band)",
+          "keyo": "~$0.37 / $2.21 per 1M in/out",
+          "note": "Everyday GPT-class default"
+        },
+        {
+          "model": "gpt-5.6-sol",
+          "official": "OpenAI flagship / stronger GPT list bands are typically higher than GPT-4o — verify on platform.openai.com",
+          "keyo": "~$0.92 / $5.52 per 1M in/out",
+          "note": "Escalation / denser reasoning"
+        }
+      ],
+      "freeKiller": {
+        "title": "Prototype free, then promote to GPT-class",
+        "body": "Keyo does not ship OpenAI-branded free GPT IDs. For $0 prototyping on the same API key, use permanent free twins such as deepseek-v4-flash-free, deepseek-v4-pro-free, glm-5.2-free, and kimi-k3-free (fair-use limits). When quality gates pass, switch model= to gpt-5.6-luna, gpt-5.6-terra, or gpt-5.6-sol without changing base URL or auth."
+      },
+      "body": [
+        "OpenAI API pricing searches are purchase-intent: teams are comparing dollars per million tokens before wiring chat, agents, or batch transforms. Official OpenAI surfaces win on brand trust and first-party features; KeyoAPI wins when you want one prepaid balance across GPT-class IDs plus Claude, DeepSeek, Whisper, OCR, and TTS — without five invoices.",
+        "Keyo rates above are indicative sell prices from the live Keyo catalog. Always confirm interactive pages under /pricing/gpt-5.6-luna, /pricing/gpt-5.6-terra, and /pricing/gpt-5.6-sol before contracting volume. OpenAI list bands, cached-input discounts, and model renames change — treat official figures as planning context. Keyo GPT-5.6 IDs are GPT-class twins on an OpenAI-compatible API, not a claim that they are OpenAI’s first-party model names.",
+        "How to call: set OPENAI_BASE_URL=https://www.keyoapi.xyz/v1, use your Keyo API key, and pass a GPT-5.6 model string (for example gpt-5.6-terra) to POST /v1/chat/completions. Longer guides live at /model/gpt-5.6-luna, /model/gpt-5.6-terra, and /model/gpt-5.6-sol.",
+        "When OpenAI list prices spike your margin, keep GPT-class for product chat defaults and shift bulk classification to gpt-5.6-luna or deepseek-v4-flash on the same key. For Claude dollars see /claude-api-pricing; for Gemini see /gemini-api-pricing; for DeepSeek see /deepseek-api-pricing; for free prototyping see /free-models."
+      ],
+      "faqs": [
+        {
+          "q": "Is Keyo cheaper than OpenAI API pricing?",
+          "a": "Often on the Luna/Terra/Sol rows we list versus typical GPT-4o / mini list bands — but OpenAI’s public list, prompt caching, and batch discounts change. Treat this table as a planning snapshot and verify both sides before you commit."
+        },
+        {
+          "q": "Are gpt-5.6-* the same as OpenAI GPT-5?",
+          "a": "No. They are Keyo GPT-class model IDs on an OpenAI-compatible gateway. Use them when you want OpenAI SDK shape and Keyo unit economics; confirm live rates on /pricing/{id}."
+        },
+        {
+          "q": "Do you offer a free OpenAI / GPT model?",
+          "a": "Not as an OpenAI-branded free ID. Use Keyo’s permanent $0 DeepSeek/GLM/Kimi free twins to prototype on the same key, then promote to paid GPT-5.6 IDs when you need that quality band."
+        },
+        {
+          "q": "How do I try GPT-class models on Keyo?",
+          "a": "Create a key at /sign-up, then open /pricing/gpt-5.6-terra (or Luna/Sol) for interactive try/buy. There is no separate upload playground — Model Square is the try path."
+        }
+      ]
     }
   ]
 }

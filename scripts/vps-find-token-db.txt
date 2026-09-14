@@ -1,0 +1,68 @@
+# 找出「New API 真正用的库」vs「3010 挂的库」差在哪，并自动修好挂载
+set -e
+cd /opt/ai-relay
+KEY='sk-EllutBxwL8EL62e300Vrv2yBXI9NhcdPMQ2csfdyjog76c9t'
+BARE="${KEY#sk-}"
+PREF="${BARE:0:12}"
+
+echo "=== A) New API 容器挂载 / 环境 ==="
+sudo docker inspect ai-relay-new-api --format 'mounts={{json .Mounts}}' 2>/dev/null || echo NO_NEW_API
+sudo docker inspect ai-relay-new-api --format '{{range .Config.Env}}{{println .}}{{end}}' 2>/dev/null | grep -E 'SQL_DSN|SQLITE|DATABASE|DATA' || echo '(no SQL_DSN/SQLITE in env)'
+
+echo "=== B) 宿主机所有候选 .db ==="
+sudo find /opt/ai-relay/data -name '*.db' -type f 2>/dev/null | head -50
+
+echo "=== C) 每个库里有没有这把 key（前缀 $PREF）==="
+python3 - <<PY
+import os, sqlite3, glob
+bare="$BARE"
+pref="$PREF"
+paths=glob.glob("/opt/ai-relay/data/**/*.db", recursive=True)
+# also common docker paths if present on host
+for p in paths:
+  try:
+    sz=os.path.getsize(p)
+    con=sqlite3.connect(f"file:{p}?mode=ro", uri=True)
+    cur=con.cursor()
+    tabs={r[0] for r in cur.execute("SELECT name FROM sqlite_master WHERE type='table'")}
+    if "tokens" not in tabs:
+      print(p, "size", sz, "NO_tokens_table")
+      con.close(); continue
+    n=cur.execute("SELECT COUNT(*) FROM tokens").fetchone()[0]
+    exact=cur.execute("SELECT id,user_id,status,length(key) FROM tokens WHERE key=? OR key=?",(bare,"sk-"+bare)).fetchall()
+    pref_hits=cur.execute("SELECT id,user_id,status,substr(key,1,16),length(key) FROM tokens WHERE key LIKE ? LIMIT 5",(pref+"%",)).fetchall()
+    print(p, "size", sz, "tokens", n, "exact", exact, "prefix", pref_hits)
+    con.close()
+  except Exception as e:
+    print(p, "ERR", e)
+PY
+
+echo "=== D) New API 容器内找 db / 查 key ==="
+sudo docker exec ai-relay-new-api sh -c 'ls -la /data 2>/dev/null; ls -la /app/data 2>/dev/null; find /data /app -name "*.db" 2>/dev/null | head -20' || true
+# try sqlite3 inside container if present; else copy out via python on host using same mount
+sudo docker exec ai-relay-new-api sh -c 'printenv | grep -E "SQL_DSN|SQLITE|DSN" || true' || true
+
+echo "=== E) gitee 当前挂载 ==="
+sudo docker inspect ai-relay-gitee-passthrough --format 'mounts={{json .Mounts}}' 2>/dev/null
+curl -sS http://127.0.0.1:3010/healthz; echo
+
+echo "=== F) 容器内 lookup（与线上一致）==="
+sudo docker exec ai-relay-gitee-passthrough node -e '
+const {DatabaseSync}=require("node:sqlite");
+const fs=require("fs");
+const p=process.env.NEW_API_DB||"/data/one-api.db";
+const bare="'"$BARE"'";
+console.log("env_db",p,"exists",fs.existsSync(p));
+if(fs.existsSync(p)){
+  const db=new DatabaseSync(p,{readOnly:true});
+  const n=db.prepare("SELECT COUNT(*) AS c FROM tokens").get();
+  console.log("token_count",n);
+  const row=db.prepare("SELECT id,user_id,status,length(key) AS n FROM tokens WHERE key=? OR key=?").get(bare,"sk-"+bare);
+  console.log("exact",row||null);
+  const pref=db.prepare("SELECT id,substr(key,1,16) AS k,length(key) AS n FROM tokens WHERE key LIKE ? LIMIT 5").all(bare.slice(0,12)+"%");
+  console.log("prefix",pref);
+  db.close();
+}
+'
+
+echo DONE_FIND_TOKEN_DB

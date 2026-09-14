@@ -1,0 +1,100 @@
+# 诊断并修复 gitee 透传「models OK 但查不到令牌」
+set -e
+cd /opt/ai-relay
+
+KEY='sk-EllutBxwL8EL62e300Vrv2yBXI9NhcdPMQ2csfdyjog76c9t'
+BARE="${KEY#sk-}"
+DB_HOST=/opt/ai-relay/data/new-api/one-api.db
+
+echo "=== 1) 宿主机 DB 是否有这把 key ==="
+ls -la "$DB_HOST" || { echo "NO_DB_FILE"; exit 1; }
+python3 - <<PY
+import sqlite3
+db="$DB_HOST"
+bare="$BARE"
+key="$KEY"
+con=sqlite3.connect(db)
+cur=con.cursor()
+cols={r[1] for r in cur.execute("PRAGMA table_info(tokens)")}
+print("token_cols_has_deleted_at", "deleted_at" in cols)
+print("token_count", cur.execute("SELECT COUNT(*) FROM tokens").fetchone()[0])
+cands=[bare,key,bare.split("-")[0]]
+for k in cands:
+  rows=cur.execute("SELECT id,user_id,status,substr(key,1,8),length(key) FROM tokens WHERE key=?",(k,)).fetchall()
+  print("exact", k[:12]+"…", "hits", len(rows), rows[:3])
+# prefix search
+rows=cur.execute("SELECT id,user_id,status,substr(key,1,12),length(key) FROM tokens WHERE key LIKE ? LIMIT 5",(bare[:12]+"%",)).fetchall()
+print("prefix_hits", rows)
+# also check if any key equals bare ignoring case
+rows=cur.execute("SELECT id,status,substr(key,1,12) FROM tokens WHERE lower(key)=lower(?) LIMIT 3",(bare,)).fetchall()
+print("ci_hits", rows)
+con.close()
+PY
+
+echo "=== 2) /v1/models 是否通 ==="
+curl -sS -m 10 -o /tmp/models.json -w "models_http=%{http_code}\n" \
+  https://www.keyoapi.xyz/v1/models -H "Authorization: Bearer $KEY" || true
+python3 - <<'PY'
+import json
+try:
+  j=json.load(open("/tmp/models.json",encoding="utf-8"))
+  n=len((j.get("data") or j.get("data") or [])) if isinstance(j,dict) else 0
+  if isinstance(j,dict) and isinstance(j.get("data"),list):
+    n=len(j["data"])
+  print("models_ok", n>0, "n", n)
+except Exception as e:
+  print("models_parse_fail", e)
+PY
+
+echo "=== 3) 容器挂载 / 环境 ==="
+sudo docker inspect ai-relay-gitee-passthrough --format 'mounts={{json .Mounts}}' 2>/dev/null || echo NO_CONTAINER
+sudo docker inspect ai-relay-gitee-passthrough --format '{{range .Config.Env}}{{println .}}{{end}}' 2>/dev/null | grep -E 'NEW_API|LISTEN|PORT|GITEE_BASE' || true
+curl -sS http://127.0.0.1:3010/healthz; echo
+
+echo "=== 4) 容器内能否打开 DB 并查到 key ==="
+sudo docker exec ai-relay-gitee-passthrough node -e '
+const {DatabaseSync}=require("node:sqlite");
+const fs=require("fs");
+const p=process.env.NEW_API_DB||"/data/one-api.db";
+const bare="'"$BARE"'";
+console.log("env_db", p, "exists", fs.existsSync(p));
+if(!fs.existsSync(p)) process.exit(2);
+const db=new DatabaseSync(p,{readOnly:true});
+const row=db.prepare("SELECT id,user_id,status,length(key) AS n FROM tokens WHERE key=? LIMIT 1").get(bare)
+  || db.prepare("SELECT id,user_id,status,length(key) AS n FROM tokens WHERE key=? LIMIT 1").get("sk-"+bare);
+console.log("lookup", row||null);
+db.close();
+' || echo WARN_EXEC_FAIL
+
+echo "=== 5) 强制用正确挂载重建 ==="
+sudo docker build -t keyo-gitee-passthrough ./services/gitee-passthrough
+sudo docker rm -f ai-relay-gitee-passthrough 2>/dev/null || true
+sudo docker run -d --name ai-relay-gitee-passthrough --restart always --network host \
+  --env-file /opt/ai-relay/.env.gitee \
+  -v /opt/ai-relay/data/new-api:/data:rw \
+  -e NEW_API_DB=/data/one-api.db \
+  -e NEW_API_BASE=http://127.0.0.1:3000 \
+  -e CATALOG=/app/catalog.json \
+  -e LISTEN_HOST=127.0.0.1 \
+  -e PORT=3010 \
+  keyo-gitee-passthrough
+sleep 2
+curl -sS http://127.0.0.1:3010/healthz; echo
+
+echo "=== 6) 再测 mattings ==="
+python3 - <<'PY'
+import struct,zlib,pathlib
+def chunk(t,d):
+  return struct.pack('>I',len(d))+t+d+struct.pack('>I',zlib.crc32(t+d)&0xffffffff)
+raw=b'\x00'+b'\x00\x00\x00'
+png=b'\x89PNG\r\n\x1a\n'+chunk(b'IHDR',struct.pack('>IIBBBBB',1,1,8,2,0,0,0))+chunk(b'IDAT',zlib.compress(raw))+chunk(b'IEND',b'')
+pathlib.Path('/tmp/rmbg-test.png').write_bytes(png)
+PY
+curl -sS -o /tmp/rmbg.out -w "http=%{http_code}\n" \
+  -X POST https://www.keyoapi.xyz/v1/images/mattings \
+  -H "Authorization: Bearer $KEY" \
+  -F model=RMBG-2.0 \
+  -F image=@/tmp/rmbg-test.png
+head -c 500 /tmp/rmbg.out; echo
+sudo docker logs --tail 25 ai-relay-gitee-passthrough
+echo DONE_DIAG_GITEE_TOKEN

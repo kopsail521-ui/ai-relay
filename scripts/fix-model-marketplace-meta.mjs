@@ -63,11 +63,11 @@ const FIXES = {
   AnimeSharp: { vendorName: "其他", icon: "Custom", tag: "图像处理", endpoints: EP.imageProcess }, // Kim2091 个人，无公司 logo
   "Real-ESRGAN": { vendorName: "腾讯", icon: "Tencent.Color", tag: "图像处理", endpoints: EP.imageProcess },
   UVDoc: { vendorName: "其他", icon: "Custom", tag: "图像处理", endpoints: EP.imageProcess }, // ETH Zurich 学术项目
-  "RMBG-2.0": { vendorName: "BRIA AI", icon: "BriaAI.Color", tag: "图像处理", endpoints: EP.imageProcess },
+  "RMBG-2.0": { vendorName: "BRIA AI", icon: "Custom", tag: "图像处理", endpoints: EP.imageProcess }, // no BriaAI in lobehub — PNG/SVG inject
 
   // —— OCR ——
   "MinerU2.5-Pro": { vendorName: "其他", icon: "Custom", tag: "OCR", endpoints: EP.docAsync }, // OpenDataLab，无现成 logo
-  "Unlimited-OCR": { vendorName: "百度", icon: "Baidu.Color", tag: "OCR", endpoints: EP.chat },
+  "Unlimited-OCR": { vendorName: "百度", icon: "Wenxin.Color", tag: "OCR", endpoints: EP.chat },
 
   // —— 数字人（不进 Video）——
   "Duix-Avatar": { vendorName: "其他", icon: "Custom", tag: "数字人", endpoints: EP.duixAvatar }, // Duix.com，无现成 logo

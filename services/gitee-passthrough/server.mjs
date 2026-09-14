@@ -344,8 +344,11 @@ const server = http.createServer(async (req, res) => {
   if (urlPath === "/healthz") {
     return json(res, 200, {
       ok: true,
+      key: !!GITEE_KEY,
       models: catalog.models.length,
       db: fs.existsSync(DB_PATH),
+      db_path: DB_PATH,
+      new_api: NEW_API_BASE,
     });
   }
 

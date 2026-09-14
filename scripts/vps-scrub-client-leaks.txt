@@ -1,0 +1,37 @@
+# 抹掉客户可见的视频日志 / 错误体里的上游痕迹
+cd /opt/ai-relay && sudo git pull && git log -1 --oneline
+
+# 重建 3011（日志中性化 + 错误体 scrub）
+sudo docker build -t keyo-apimart-passthrough ./services/apimart-passthrough
+sudo docker rm -f ai-relay-apimart-passthrough 2>/dev/null || true
+sudo docker run -d --name ai-relay-apimart-passthrough --restart always --network host \
+  --env-file /opt/ai-relay/.env.apimart \
+  -v /opt/ai-relay/data:/data \
+  -v /opt/ai-relay/.env:/opt/ai-relay/.env:ro \
+  -e NEW_API_DB=/data/new-api/one-api.db \
+  -e CATALOG=/app/catalog.json \
+  keyo-apimart-passthrough
+
+# 重建 3010（错误体 scrub；成功媒体 URL 不动）
+if [ -d /opt/ai-relay/services/gitee-passthrough ]; then
+  sudo docker build -t keyo-gitee-passthrough ./services/gitee-passthrough
+  sudo docker rm -f ai-relay-gitee-passthrough 2>/dev/null || true
+  # 尽量沿用现有 run 参数；若失败请手工用原安装命令
+  if [ -f /opt/ai-relay/.env.gitee ]; then
+    sudo docker run -d --name ai-relay-gitee-passthrough --restart always --network host \
+      --env-file /opt/ai-relay/.env.gitee \
+      -v /opt/ai-relay/data:/data \
+      -e NEW_API_DB=/data/new-api/one-api.db \
+      keyo-gitee-passthrough || echo WARN_GITEE_RUN_MANUAL
+  fi
+fi
+
+# 文档静态（去掉「上游」用词）
+sudo mkdir -p /opt/ai-relay/static/brand
+sudo cp -f /opt/ai-relay/static/brand/keyo-docs.html /opt/ai-relay/static/brand/keyo-docs.html.bak.scrub.$(date +%s) 2>/dev/null || true
+# git pull 已更新文件；确认 Caddy 指到该目录即可
+
+sleep 2
+curl -sS http://127.0.0.1:3011/healthz; echo
+grep -n "video precharge\|source: \"relay\"\|scrubClientErrorBuf" /opt/ai-relay/services/apimart-passthrough/server.mjs | head
+echo DONE_SCRUB_CLIENT_LEAKS

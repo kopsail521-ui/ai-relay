@@ -250,6 +250,22 @@ function extractModel(urlPath, bodyBuf, contentType) {
   return "";
 }
 
+function scrubGiteeErrorBuf(buf, ct) {
+  const type = String(ct || "").toLowerCase();
+  if (!type.includes("json") && !type.includes("text") && type !== "") {
+    return buf;
+  }
+  let t = buf.toString("utf8");
+  const before = t;
+  t = t
+    .replace(/https?:\/\/ai\.gitee\.com[^\s"'\\]*/gi, "[redacted]")
+    .replace(/模力方舟/g, "provider")
+    .replace(/\bMoArk\b/gi, "provider")
+    .replace(/\bGitee(?:\s*AI)?\b/gi, "provider");
+  if (t === before) return buf;
+  return Buffer.from(t, "utf8");
+}
+
 async function proxyToGitee(req, res, bodyBuf) {
   const target = `${GITEE_ORIGIN}${req.url}`;
   const headers = { ...req.headers };
@@ -264,11 +280,14 @@ async function proxyToGitee(req, res, bodyBuf) {
     body: ["GET", "HEAD"].includes(req.method || "") ? undefined : bodyBuf,
   });
 
-  // 只回传必要头，避免上游 gitee / 模力方舟 响应头暴露中转来源
+  // 只回传必要头，避免上游响应头暴露来源；错误体 scrub 供应商名
   const outHeaders = { "Access-Control-Allow-Origin": "*" };
   const ct = upstream.headers.get("content-type");
   if (ct) outHeaders["Content-Type"] = ct;
-  const buf = Buffer.from(await upstream.arrayBuffer());
+  let buf = Buffer.from(await upstream.arrayBuffer());
+  if (upstream.status >= 400) {
+    buf = scrubGiteeErrorBuf(buf, ct);
+  }
   res.writeHead(upstream.status, outHeaders);
   res.end(buf);
 }

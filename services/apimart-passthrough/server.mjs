@@ -360,13 +360,13 @@ function adjustQuota(userId, tokenId, modelId, deltaUsd, note) {
       ).run(
         userId,
         now,
-        note || `apimart model=${modelId} delta_usd=${deltaUsd}`,
+        note || `video model=${modelId} delta_usd=${deltaUsd}`,
         modelId,
         Math.abs(quota),
         channelId,
         tokenId,
-        `apimart_${now}_${Math.random().toString(36).slice(2, 10)}`,
-        JSON.stringify({ source: "apimart", delta_usd: deltaUsd, markup: MARKUP })
+        `video_${now}_${Math.random().toString(36).slice(2, 10)}`,
+        JSON.stringify({ source: "relay", delta_usd: deltaUsd })
       );
     } catch (e) {
       console.warn("log insert skipped:", e.message);
@@ -436,7 +436,7 @@ function settleTask(taskId, upstreamCostUsd, status) {
     row.token_id,
     row.model,
     delta,
-    `apimart settle task=${taskId} final_sell=${finalSell} pre=${row.precharge_usd} up_cost=${upstreamCostUsd}`
+    `video settle task=${taskId}`
   );
   if (!bill.ok && delta > 0) {
     console.warn("settle charge failed", taskId, bill.error);
@@ -489,6 +489,35 @@ function getPending(taskId) {
   } finally {
     db.close();
   }
+}
+
+function scrubClientErrorBuf(buf, ct) {
+  const type = String(ct || "").toLowerCase();
+  if (!type.includes("json") && !type.includes("text") && type !== "") {
+    return buf;
+  }
+  let t = buf.toString("utf8");
+  const before = t;
+  t = t
+    .replace(/https?:\/\/(?:[\w.-]+\.)?apimart\.ai[^\s"'\\]*/gi, "[redacted]")
+    .replace(/https?:\/\/(?:[\w.-]+\.)?openlux\.ai[^\s"'\\]*/gi, "[redacted]")
+    .replace(/https?:\/\/(?:[\w.-]+\.)?openlux\.apifox\.cn[^\s"'\\]*/gi, "[redacted]")
+    .replace(/https?:\/\/ai\.gitee\.com[^\s"'\\]*/gi, "[redacted]")
+    .replace(/\bAPIMart\b/gi, "provider")
+    .replace(/\bOpenLux\b/gi, "provider")
+    .replace(/模力方舟/g, "provider")
+    .replace(/\bMoArk\b/gi, "provider")
+    .replace(/\bGitee(?:\s*AI)?\b/gi, "provider")
+    .replace(/\bGrsai\b/gi, "provider")
+    .replace(/\bSenseNova\b/gi, "provider")
+    .replace(/\bSorux\b/gi, "provider");
+  if (t === before) return buf;
+  return Buffer.from(t, "utf8");
+}
+
+function clientUp(up) {
+  if (!up || up.status < 400) return up;
+  return { ...up, buf: scrubClientErrorBuf(up.buf, up.ct) };
 }
 
 async function proxyOrigin(origin, key, req, bodyBuf, rewritePath) {
@@ -626,11 +655,12 @@ const server = http.createServer(async (req, res) => {
           settleTask(tid, cost, st === "success" || st === "succeeded" || st === "done" ? "completed" : st);
         }
       } catch {}
-      res.writeHead(up.status, {
-        "Content-Type": up.ct,
+      const out = clientUp(up);
+      res.writeHead(out.status, {
+        "Content-Type": out.ct,
         "Access-Control-Allow-Origin": "*",
       });
-      return res.end(up.buf);
+      return res.end(out.buf);
     }
 
     // submit
@@ -670,7 +700,7 @@ const server = http.createServer(async (req, res) => {
         token.tokenId,
         modelId,
         preSell,
-        `apimart precharge model=${modelId} est_cost=${costEst} sell=${preSell}`
+        `video precharge model=${modelId}`
       );
       if (!bill.ok) {
         return json(res, 403, {
@@ -698,15 +728,16 @@ const server = http.createServer(async (req, res) => {
         token.tokenId,
         modelId,
         -preSell,
-        `apimart refund precharge model=${modelId} upstream_status=${up.status}`
+        `video refund model=${modelId}`
       );
     }
 
-    res.writeHead(up.status, {
-      "Content-Type": up.ct,
+    const out = clientUp(up);
+    res.writeHead(out.status, {
+      "Content-Type": out.ct,
       "Access-Control-Allow-Origin": "*",
     });
-    res.end(up.buf);
+    res.end(out.buf);
   } catch (e) {
     json(res, 502, {
       error: { message: String(e.message || e), type: "server_error" },

@@ -1,0 +1,75 @@
+# 部署令牌查库加固 + 对比「你手里的 Key」和「库里 id=2 那把」差在哪
+set -e
+cd /opt/ai-relay
+sudo git pull
+
+KEY='sk-EllutBxwL8EL62e300Vrv2yBXI9NhcdPMQ2csfdyjog76c9t'
+BARE="${KEY#sk-}"
+
+echo "=== 1) Key 差异（只打 hex，不打全文）==="
+python3 - <<PY
+import sqlite3
+bare="$BARE"
+con=sqlite3.connect("/opt/ai-relay/data/new-api/one-api.db")
+exact=con.execute("SELECT id,status,length(key) FROM tokens WHERE key=?",(bare,)).fetchone()
+nocase=con.execute("SELECT id,status,length(key) FROM tokens WHERE key=? COLLATE NOCASE",(bare,)).fetchone()
+pref=con.execute("SELECT id,status,key FROM tokens WHERE key LIKE ? LIMIT 1",(bare[:12]+'%',)).fetchone()
+print("usage_will_need_newapi")
+print("exact", exact)
+print("nocase", nocase)
+if pref:
+  k=pref[2]
+  print("prefix_id", pref[0], "status", pref[1], "len", len(k))
+  print("prov_head", bare[:16].encode().hex())
+  print("db___head", k[:16].encode().hex())
+  print("prov_tail", bare[-8:].encode().hex())
+  print("db___tail", k[-8:].encode().hex())
+  print("equal", k==bare, "nocase_eq", k.lower()==bare.lower())
+  mism=[i for i,(a,b) in enumerate(zip(k,bare)) if a!=b]
+  print("mismatch_count", len(mism)+abs(len(k)-len(bare)), "first_idxs", mism[:10])
+else:
+  print("NO_PREFIX")
+con.close()
+PY
+
+echo "=== 2) New API 真鉴权 /api/usage/token/ ==="
+curl -sS -o /tmp/usage.out -w "usage_http=%{http_code}\n" \
+  http://127.0.0.1:3000/api/usage/token/ -H "Authorization: Bearer $KEY" || true
+head -c 240 /tmp/usage.out; echo
+
+echo "=== 3) 重建 gitee 透传 ==="
+sudo docker build -t keyo-gitee-passthrough ./services/gitee-passthrough
+sudo docker rm -f ai-relay-gitee-passthrough 2>/dev/null || true
+sudo docker run -d --name ai-relay-gitee-passthrough --restart always --network host \
+  --env-file /opt/ai-relay/.env.gitee \
+  -v /opt/ai-relay/data/new-api:/data:rw \
+  -e NEW_API_DB=/data/one-api.db \
+  -e NEW_API_BASE=http://127.0.0.1:3000 \
+  -e CATALOG=/app/catalog.json \
+  -e LISTEN_HOST=127.0.0.1 \
+  -e PORT=3010 \
+  keyo-gitee-passthrough
+sleep 2
+curl -sS http://127.0.0.1:3010/healthz; echo
+
+echo "=== 4) 再测 mattings ==="
+mkdir -p /opt/ai-relay/tmp
+PNG=/opt/ai-relay/tmp/rmbg-test.png
+OUT=/opt/ai-relay/tmp/rmbg.out
+python3 - <<PY
+import struct,zlib,pathlib
+def chunk(t,d):
+  return struct.pack('>I',len(d))+t+d+struct.pack('>I',zlib.crc32(t+d)&0xffffffff)
+raw=b'\x00'+b'\x00\x00\x00'
+png=b'\x89PNG\r\n\x1a\n'+chunk(b'IHDR',struct.pack('>IIBBBBB',1,1,8,2,0,0,0))+chunk(b'IDAT',zlib.compress(raw))+chunk(b'IEND',b'')
+pathlib.Path("$PNG").write_bytes(png)
+print("png_ok")
+PY
+curl -sS -o "$OUT" -w "http=%{http_code}\n" \
+  -X POST https://www.keyoapi.xyz/v1/images/mattings \
+  -H "Authorization: Bearer $KEY" \
+  -F model=RMBG-2.0 \
+  -F image=@"$PNG"
+head -c 500 "$OUT"; echo
+sudo docker logs --tail 20 ai-relay-gitee-passthrough
+echo DONE_FIX_TOKEN_NOCASE

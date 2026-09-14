@@ -129,41 +129,62 @@ async function readBody(req) {
   return Buffer.concat(chunks);
 }
 
-async function validateToken(apiKey) {
-  try {
-    const r = await fetch(`${NEW_API_BASE}/v1/models`, {
-      headers: { Authorization: `Bearer ${apiKey}` },
-    });
-    if (!r.ok) return null;
-  } catch {
-    return null;
+function tokenKeyCandidates(apiKey) {
+  const raw = String(apiKey || "").trim();
+  const bare = raw.replace(/^sk-/i, "").trim();
+  const base = bare.split("-")[0];
+  return [bare, raw, base, `sk-${bare}`].filter(
+    (v, i, a) => v && a.indexOf(v) === i
+  );
+}
+
+function lookupTokenRow(db, apiKey) {
+  const keyCandidates = tokenKeyCandidates(apiKey);
+  const select =
+    "SELECT id, user_id, name, status, remain_quota, unlimited_quota FROM tokens";
+  const queries = [
+    `${select} WHERE key = ? AND deleted_at IS NULL LIMIT 1`,
+    `${select} WHERE key = ? LIMIT 1`,
+    `${select} WHERE key = ? COLLATE NOCASE AND deleted_at IS NULL LIMIT 1`,
+    `${select} WHERE key = ? COLLATE NOCASE LIMIT 1`,
+    `${select} WHERE lower(trim(key)) = lower(trim(?)) AND deleted_at IS NULL LIMIT 1`,
+    `${select} WHERE lower(trim(key)) = lower(trim(?)) LIMIT 1`,
+  ];
+  for (const sql of queries) {
+    try {
+      for (const k of keyCandidates) {
+        const row = db.prepare(sql).get(k);
+        if (row) return row;
+      }
+    } catch (e) {
+      console.warn("[apimart] token lookup:", e.message || e);
+    }
   }
+  return null;
+}
+
+async function probeNewApiToken(apiKey) {
+  const headers = { Authorization: `Bearer ${apiKey}` };
+  try {
+    const usage = await fetch(`${NEW_API_BASE}/api/usage/token/`, { headers });
+    if (usage.status !== 404 && usage.status !== 405) return usage.ok;
+  } catch {
+    /* fall through */
+  }
+  try {
+    const r = await fetch(`${NEW_API_BASE}/v1/models`, { headers });
+    return r.ok;
+  } catch {
+    return false;
+  }
+}
+
+async function validateToken(apiKey) {
+  if (!(await probeNewApiToken(apiKey))) return null;
   const db = openDb(DB_PATH, true);
   if (!db) return { userId: 0, tokenId: 0, skipBill: true };
   try {
-    // New API stores tokens.key without the "sk-" prefix (and may append -channelId).
-    const bare = String(apiKey).replace(/^sk-/, "").trim();
-    const keyCandidates = [bare, apiKey, bare.split("-")[0]].filter(
-      (v, i, a) => v && a.indexOf(v) === i
-    );
-    const queries = [
-      `SELECT id, user_id, name, status, remain_quota, unlimited_quota
-       FROM tokens WHERE key = ? AND deleted_at IS NULL LIMIT 1`,
-      `SELECT id, user_id, name, status, remain_quota, unlimited_quota
-       FROM tokens WHERE key = ? LIMIT 1`,
-    ];
-    let row = null;
-    for (const sql of queries) {
-      try {
-        for (const k of keyCandidates) {
-          row = db.prepare(sql).get(k);
-          if (row) break;
-        }
-        if (row) break;
-      } catch (e) {
-        console.warn("[apimart] token lookup:", e.message || e);
-      }
-    }
+    const row = lookupTokenRow(db, apiKey);
     if (!row || Number(row.status) !== 1) return null;
     return {
       userId: row.user_id,

@@ -129,16 +129,26 @@ function findGiteeChannelId(db) {
   }
 }
 
-function lookupTokenRow(db, apiKey) {
-  const bare = String(apiKey).replace(/^sk-/, "").trim();
-  const keyCandidates = [bare, apiKey, bare.split("-")[0]].filter(
+function tokenKeyCandidates(apiKey) {
+  const raw = String(apiKey || "").trim();
+  const bare = raw.replace(/^sk-/i, "").trim();
+  const base = bare.split("-")[0];
+  return [bare, raw, base, `sk-${bare}`].filter(
     (v, i, a) => v && a.indexOf(v) === i
   );
+}
+
+function lookupTokenRow(db, apiKey) {
+  const keyCandidates = tokenKeyCandidates(apiKey);
+  const select =
+    "SELECT id, user_id, name, status, remain_quota, unlimited_quota FROM tokens";
   const queries = [
-    `SELECT id, user_id, name, status, remain_quota, unlimited_quota
-     FROM tokens WHERE key = ? AND deleted_at IS NULL LIMIT 1`,
-    `SELECT id, user_id, name, status, remain_quota, unlimited_quota
-     FROM tokens WHERE key = ? LIMIT 1`,
+    `${select} WHERE key = ? AND deleted_at IS NULL LIMIT 1`,
+    `${select} WHERE key = ? LIMIT 1`,
+    `${select} WHERE key = ? COLLATE NOCASE AND deleted_at IS NULL LIMIT 1`,
+    `${select} WHERE key = ? COLLATE NOCASE LIMIT 1`,
+    `${select} WHERE lower(trim(key)) = lower(trim(?)) AND deleted_at IS NULL LIMIT 1`,
+    `${select} WHERE lower(trim(key)) = lower(trim(?)) LIMIT 1`,
   ];
   for (const sql of queries) {
     try {
@@ -147,24 +157,37 @@ function lookupTokenRow(db, apiKey) {
         if (row) return row;
       }
     } catch (e) {
-      // older schema may lack deleted_at — try next query
+      // older schema may lack deleted_at / COLLATE — try next query
       console.warn("[gitee-passthrough] token lookup:", e.message || e);
     }
   }
   return null;
 }
 
-/** Validate New API token */
-async function validateToken(apiKey) {
+/** True auth probe — /v1/models may be public and is not proof of a valid key. */
+async function probeNewApiToken(apiKey) {
+  const headers = { Authorization: `Bearer ${apiKey}` };
   try {
-    const r = await fetch(`${NEW_API_BASE}/v1/models`, {
-      headers: { Authorization: `Bearer ${apiKey}` },
-    });
-    if (!r.ok) return null;
+    const usage = await fetch(`${NEW_API_BASE}/api/usage/token/`, { headers });
+    if (usage.status !== 404 && usage.status !== 405) {
+      return usage.ok;
+    }
+  } catch (e) {
+    console.warn("[gitee-passthrough] usage probe failed:", e.message || e);
+  }
+  try {
+    const r = await fetch(`${NEW_API_BASE}/v1/models`, { headers });
+    return r.ok;
   } catch (e) {
     console.warn("[gitee-passthrough] models probe failed:", e.message || e);
-    return null;
+    return false;
   }
+}
+
+/** Validate New API token */
+async function validateToken(apiKey) {
+  const authed = await probeNewApiToken(apiKey);
+  if (!authed) return null;
 
   const db = openDb(true);
   if (!db) {
@@ -176,12 +199,22 @@ async function validateToken(apiKey) {
     const row = lookupTokenRow(db, apiKey);
     if (!row) {
       console.warn(
-        "[gitee-passthrough] token not in DB after models OK; db=",
-        DB_PATH
+        "[gitee-passthrough] token not in DB after auth OK; db=",
+        DB_PATH,
+        "bare_prefix=",
+        String(apiKey).replace(/^sk-/i, "").trim().slice(0, 12)
       );
       return null;
     }
-    if (Number(row.status) !== 1) return null;
+    if (Number(row.status) !== 1) {
+      console.warn(
+        "[gitee-passthrough] token disabled status=",
+        row.status,
+        "id=",
+        row.id
+      );
+      return null;
+    }
     return {
       userId: row.user_id,
       tokenId: row.id,

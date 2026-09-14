@@ -20,8 +20,9 @@ if [ -d /opt/ai-relay/services/gitee-passthrough ]; then
   if [ -f /opt/ai-relay/.env.gitee ]; then
     sudo docker run -d --name ai-relay-gitee-passthrough --restart always --network host \
       --env-file /opt/ai-relay/.env.gitee \
-      -v /opt/ai-relay/data:/data \
-      -e NEW_API_DB=/data/new-api/one-api.db \
+      -v /opt/ai-relay/data/new-api:/data:rw \
+      -e NEW_API_DB=/data/one-api.db \
+      -e CATALOG=/app/catalog.json \
       keyo-gitee-passthrough || echo WARN_GITEE_RUN_MANUAL
   fi
 fi

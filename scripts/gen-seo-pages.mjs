@@ -2,6 +2,11 @@
  * Generate static SEO pages into static/seo/
  * Source: config/seo/model-pages.json (+ official-price-refs.json)
  * Usage: node scripts/gen-seo-pages.mjs
+ *
+ * User-facing copy: do not use meta-talk such as "crawlable", "for SEO",
+ * "search engines", "this page targets", "search demand". Keep product CTAs
+ * to /pricing/{id}. Do not globally strip the word "SEO" from use cases
+ * (e.g. "SEO rewriting").
  */
 import fs from "fs";
 import path from "path";
@@ -456,7 +461,7 @@ function renderModelsIndex() {
     )
     .join("\n");
   const bodyHtml = `
-<p class="lead">Crawlable index of KeyoAPI model guides — chat, speech, vision, OCR, TTS, and digital humans. For the interactive catalog use <a href="/pricing">Model Square</a>.</p>
+<p class="lead">Index of KeyoAPI model guides — chat, speech, vision, OCR, TTS, and digital humans. For the interactive catalog use <a href="/pricing">Model Square</a>.</p>
 <div class="btnrow">
   <a class="btn btn-primary" href="/pricing">Browse Models</a>
   <a class="btn btn-secondary" href="/compare">Price comparison</a>
@@ -477,7 +482,7 @@ function renderModelsIndex() {
   return layout({
     title: "AI Model Guides Index | KeyoAPI",
     description:
-      "Index of KeyoAPI SEO model guides: GPT-class, Claude, DeepSeek, GLM, Whisper, OCR, vision, TTS — with links to pricing and free tiers.",
+      "Index of KeyoAPI model guides — GPT-class, Claude, DeepSeek, GLM, Whisper, OCR, vision, TTS — with links to pricing and free tiers.",
     canonical: `${site}/models`,
     h1: "AI Model Guides on KeyoAPI",
     bodyHtml,
@@ -631,13 +636,13 @@ function renderPricing() {
   <td>${esc(m.category)}</td>
   <td class="ok">${esc(m.priceLabel)}</td>
   <td><code>${esc(m.endpoint)}</code></td>
-  <td><a href="/model/${encodeURIComponent(m.id)}">SEO guide</a> · <a href="/pricing/${encodeURIComponent(m.id)}">Try / buy</a></td>
+  <td><a href="/model/${encodeURIComponent(m.id)}">Guide</a> · <a href="/pricing/${encodeURIComponent(m.id)}">Try / buy</a></td>
 </tr>`
     )
     .join("\n");
   const bodyHtml = `
 <p class="lead">Static <strong>AI API pricing</strong> list for KeyoAPI — model IDs, indicative USD rates, and real endpoints. Use this page to compare rates; open interactive try/buy links when you are ready to generate keys.</p>
-<p class="meta">Rates below are catalog snapshots for SEO and planning. Wallet top-up and live sell prices are confirmed in the console after <a href="/sign-up">sign-up</a>.</p>
+<p class="meta">Rates below are catalog snapshots for planning. Wallet top-up and live sell prices are confirmed in the console after <a href="/sign-up">sign-up</a>.</p>
 <div class="btnrow">
   <a class="btn btn-primary" href="/sign-up">Create account</a>
   <a class="btn btn-secondary" href="/pricing">Open Model Square</a>
@@ -656,12 +661,12 @@ function renderPricing() {
 </table>
 <h2>How billing works</h2>
 <p>KeyoAPI is a prepaid <strong>ai api relay</strong>: one balance covers chat, Whisper, OCR, vision, TTS, and digital humans. LLM rows are usually token-metered; many vision/speech models are per-request or async-task metered.</p>
-<p>Interactive per-model pages under <code>/pricing/{modelId}</code> remain available for console try-out after login. Static guides live under <code>/model/{modelId}</code> for search engines.</p>
+<p>Try or buy from <code>/pricing/{modelId}</code> after login. Model explainers are at <code>/model/{modelId}</code>.</p>
 `;
   return layout({
     title: "AI API Pricing List - KeyoAPI Models & Rates",
     description:
-      "Crawlable KeyoAPI pricing list: GPT-class, Claude-class, Whisper, OCR, vision, TTS model IDs with indicative USD rates and endpoints.",
+      "KeyoAPI pricing list: GPT-class, Claude-class, Whisper, OCR, vision, TTS model IDs with indicative USD rates and endpoints.",
     canonical: `${site}/pricing-list`,
     h1: "AI API Pricing List: Models, Rates & Endpoints",
     bodyHtml,

@@ -1,0 +1,76 @@
+# Duix 快速格式探测（小文件、短超时）
+set -e
+cd /opt/ai-relay/tmp
+KEY=$(python3 - <<'PY'
+import sqlite3
+k=sqlite3.connect("/opt/ai-relay/data/new-api/one-api.db").execute(
+  "SELECT key FROM tokens WHERE id=2 AND status=1"
+).fetchone()[0]
+print(k if str(k).startswith("sk-") else "sk-"+k)
+PY
+)
+GITEE_KEY=$(python3 - <<'PY'
+import sqlite3
+print(sqlite3.connect("/opt/ai-relay/data/new-api/one-api.db").execute("SELECT key FROM channels WHERE id=3").fetchone()[0])
+PY
+)
+
+# 极小 wav
+python3 - <<'PY'
+import struct,wave
+with wave.open('t.wav','w') as w:
+  w.setnchannels(1); w.setsampwidth(2); w.setframerate(8000)
+  w.writeframes(b'\x00\x00'*8000)  # 1s silence
+print('wav_ok')
+PY
+# 极小“假” mp4 不够用则跳过文件测；用 URL 文本字段为主
+AU=https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3
+VU=https://samplelib.com/lib/preview/mp4/sample-5s.mp4
+
+probe() {
+  local tag="$1"; shift
+  code=$(curl -sS -o "/tmp/duix-$tag.json" -w "%{http_code}" -m 25 "$@" || echo 000)
+  echo "$code $tag $(python3 -c "print(open('/tmp/duix-$tag.json',encoding='utf-8',errors='replace').read()[:220].replace(chr(10),' '))" 2>/dev/null)"
+}
+
+echo "=== A Keyo JSON variants ==="
+probe json-str -X POST https://www.keyoapi.xyz/v1/async/videos/audio-video-to-video \
+  -H "Authorization: Bearer $KEY" -H "Content-Type: application/json" \
+  -d "{\"model\":\"Duix-Avatar\",\"ref_audio\":\"$AU\",\"ref_video\":\"$VU\"}"
+
+probe json-obj -X POST https://www.keyoapi.xyz/v1/async/videos/audio-video-to-video \
+  -H "Authorization: Bearer $KEY" -H "Content-Type: application/json" \
+  -d "{\"model\":\"Duix-Avatar\",\"ref_audio\":{\"url\":\"$AU\"},\"ref_video\":{\"url\":\"$VU\"}}"
+
+probe json-arr -X POST https://www.keyoapi.xyz/v1/async/videos/audio-video-to-video \
+  -H "Authorization: Bearer $KEY" -H "Content-Type: application/json" \
+  -d "{\"model\":\"Duix-Avatar\",\"ref_audio\":[\"$AU\"],\"ref_video\":[\"$VU\"]}"
+
+echo "=== B Keyo multipart URL 文本（无上传）==="
+probe mp-url -X POST https://www.keyoapi.xyz/v1/async/videos/audio-video-to-video \
+  -H "Authorization: Bearer $KEY" \
+  -F model=Duix-Avatar -F "ref_audio=$AU" -F "ref_video=$VU"
+
+probe mp-url2 -X POST https://www.keyoapi.xyz/v1/async/videos/audio-video-to-video \
+  -H "Authorization: Bearer $KEY" \
+  -F model=Duix-Avatar -F "audio_url=$AU" -F "video_url=$VU" -F "ref_audio=$AU" -F "ref_video=$VU"
+
+echo "=== C Keyo multipart 小 wav + 跳过视频? ==="
+probe mp-wav -X POST https://www.keyoapi.xyz/v1/async/videos/audio-video-to-video \
+  -H "Authorization: Bearer $KEY" \
+  -F model=Duix-Avatar -F ref_audio=@t.wav -F "ref_video=$VU"
+
+echo "=== D 直打 Gitee（JSON / multipart URL）25s ==="
+probe g-json -X POST https://ai.gitee.com/v1/async/videos/audio-video-to-video \
+  -H "Authorization: Bearer $GITEE_KEY" -H "Content-Type: application/json" \
+  -d "{\"model\":\"Duix-Avatar\",\"ref_audio\":\"$AU\",\"ref_video\":\"$VU\"}"
+
+probe g-mp -X POST https://ai.gitee.com/v1/async/videos/audio-video-to-video \
+  -H "Authorization: Bearer $GITEE_KEY" \
+  -F model=Duix-Avatar -F "ref_audio=$AU" -F "ref_video=$VU"
+
+probe g-wav -X POST https://ai.gitee.com/v1/async/videos/audio-video-to-video \
+  -H "Authorization: Bearer $GITEE_KEY" \
+  -F model=Duix-Avatar -F ref_audio=@t.wav -F "ref_video=$VU"
+
+echo DONE_PROBE_DUIX_FAST

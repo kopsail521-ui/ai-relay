@@ -232,7 +232,7 @@ async function probeOne(id) {
           model: id,
           prompt: "a cat walks",
           ...(id.includes("grok-imagine")
-            ? { aspect_ratio: "16:9", resolution: "720p" }
+            ? { aspect_ratio: "16:9", resolution: "720p", duration: 5 }
             : {}),
         });
         break;

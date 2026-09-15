@@ -4,31 +4,32 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>KeyoAPI Docs</title>
+<link rel="stylesheet" href="/brand/keyo-theme.css" />
 <!--
   Multilingual brand docs (en / zhCN / zhTW / ja / fr / ru / vi).
   Syncs with New API shell via postMessage { lang } when embedded.
 -->
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Source+Sans+3:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Noto+Sans+SC:wght@400;500;600;700&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Noto+Sans+SC:wght@400;500;600;700&display=swap');
 
   :root {
-    --bg: #f6f7f9;
-    --surface: #ffffff;
-    --ink: #0f172a;
-    --ink-2: #334155;
-    --muted: #64748b;
-    --line: #e2e8f0;
-    --line-strong: #cbd5e1;
-    --accent: #2563eb;
-    --accent-soft: #eff6ff;
-    --accent-ink: #1d4ed8;
-    --code-bg: #0f172a;
-    --code-ink: #e2e8f0;
-    --code-muted: #94a3b8;
-    --ok: #059669;
-    --radius: 10px;
-    --shadow: 0 1px 2px rgba(15, 23, 42, 0.04), 0 8px 24px rgba(15, 23, 42, 0.04);
-    --font: 'Source Sans 3', 'Noto Sans SC', system-ui, sans-serif;
+    --bg: #f6f5f1;
+    --surface: #fffcf7;
+    --ink: #1c1c19;
+    --ink-2: #3f3f38;
+    --muted: #6b6b63;
+    --line: #ddd9d0;
+    --line-strong: #c9c4b8;
+    --accent: #1c1c19;
+    --accent-soft: #eceae4;
+    --accent-ink: #21564b;
+    --code-bg: #161614;
+    --code-ink: #eceae4;
+    --code-muted: #9a978c;
+    --ok: #21564b;
+    --radius: 3px;
+    --shadow: none;
+    --font: 'IBM Plex Sans', 'Noto Sans SC', system-ui, sans-serif;
     --mono: 'IBM Plex Mono', ui-monospace, monospace;
   }
 
@@ -38,10 +39,7 @@
     margin: 0;
     font-family: var(--font);
     color: var(--ink);
-    background:
-      radial-gradient(1200px 500px at 10% -10%, #dbeafe 0%, transparent 55%),
-      radial-gradient(900px 400px at 100% 0%, #f1f5f9 0%, transparent 50%),
-      var(--bg);
+    background: var(--bg);
     line-height: 1.6;
     text-wrap: pretty;
   }
@@ -450,7 +448,7 @@
       font-size: 12.5px;
       padding: 5px 10px;
     }
-    .toc a.active { border-color: #bfdbfe; }
+    .toc a.active { border-color: var(--line-strong); }
     .cred {
       grid-template-columns: 1fr auto;
       grid-template-rows: auto auto;
@@ -481,6 +479,16 @@
   <div class="lang-bar" id="langBar">
     <select id="langSelect" aria-label="Language"></select>
   </div>
+  <header class="k-nav">
+    <a class="k-wordmark" href="/" target="_top">KeyoAPI</a>
+    <nav aria-label="Primary">
+      <a href="/pricing" target="_top">Pricing</a>
+      <a href="/brand/keyo-docs.html" target="_top">Docs</a>
+      <a href="/faq" target="_top">FAQ</a>
+      <a href="/sign-in" target="_top">Sign in</a>
+      <a class="k-nav-cta" href="/sign-up" target="_top">Get started</a>
+    </nav>
+  </header>
   <div class="wrap">
     <aside class="toc">
       <div class="brand">Keyo<span>API</span></div>
@@ -932,7 +940,7 @@ const I18N = {
     "videoIntroB": "Recommended path for wan / Seedance / FLUX / MiniMax / Gemini Omni / grok-imagine. POST /v1/videos also works (auto-forward).",
     "videoHint": "Async: POST /v1/videos, then poll GET /v1/videos/{id}. Billing follows the console.",
     "videoHintGen": "Async: POST /v1/videos/generations, then poll GET /v1/tasks/{task_id} (or GET /v1/videos/{id}). Billing follows the console.",
-    "videoImagineNote": "grok-imagine-video-1.5-preview: send aspect_ratio + resolution (e.g. \"16:9\", \"720p\"). Defaults 16:9 / 480p if omitted.",
+    "videoImagineNote": "grok-imagine-video-1.5-preview needs aspect_ratio, resolution, and duration. Missing fields default to 16:9 / 480p / 5s.",
     "nGrokVideo": "text/ref · 1–15s · per request",
     "nVeoComponents": "(delisted)",
     "nWanVideo": "480P/720P/1080P · per second",
@@ -944,7 +952,7 @@ const I18N = {
     "nGemOmniExt": "pack or ref /s",
     "perVideo": "/ request",
     "perSecond": "/ second",
-    "nGrokImagineVideo": "Grok Imagine · aspect_ratio+resolution · $0.08825/s 480p · $0.1545/s 720p",
+    "nGrokImagineVideo": "Grok Imagine · defaults 16:9 / 480p / 5s · $0.08825/s 480p · $0.1545/s 720p",
     "tocSpeech": "Speech",
     "tocMore": "More APIs",
     "tocClients": "Clients",
@@ -1058,7 +1066,7 @@ const I18N = {
     "videoIntroB": "wan / Seedance / FLUX / MiniMax / Gemini Omni / grok-imagine 推荐本路径。POST /v1/videos 也会自动转发。",
     "videoHint": "异步：POST /v1/videos 创建，再 GET /v1/videos/{id} 查询。扣费以控制台为准。",
     "videoHintGen": "异步：POST /v1/videos/generations 创建，再 GET /v1/tasks/{task_id}（或 GET /v1/videos/{id}）查询。扣费以控制台为准。",
-    "videoImagineNote": "grok-imagine-video-1.5-preview：建议传 aspect_ratio + resolution（如 \"16:9\"、\"720p\"）；省略则默认 16:9 / 480p。",
+    "videoImagineNote": "grok-imagine-video-1.5-preview 必须带 aspect_ratio、resolution、duration。缺省自动补 16:9 / 480p / 5 秒。",
     "nGrokVideo": "文生/参考图 · 1–15 秒 · 按次",
     "nVeoComponents": "（已下架）",
     "nWanVideo": "480P/720P/1080P · 按秒",
@@ -1070,7 +1078,7 @@ const I18N = {
     "nGemOmniExt": "档位或参考按秒",
     "perVideo": "/次",
     "perSecond": "/秒",
-    "nGrokImagineVideo": "Grok Imagine · aspect_ratio+resolution · $0.08825/s 480p · $0.1545/s 720p",
+    "nGrokImagineVideo": "Grok Imagine · defaults 16:9 / 480p / 5s · $0.08825/s 480p · $0.1545/s 720p",
     "tocSpeech": "语音",
     "tocMore": "扩展能力",
     "tocClients": "客户端接入",
@@ -1184,7 +1192,7 @@ const I18N = {
     "videoIntroB": "wan / Seedance / FLUX / MiniMax / Gemini Omni / grok-imagine 建議本路徑。POST /v1/videos 也會自動轉發。",
     "videoHint": "非同步：POST /v1/videos 建立，再 GET /v1/videos/{id} 查詢。扣費以控制台為準。",
     "videoHintGen": "非同步：POST /v1/videos/generations 建立，再 GET /v1/tasks/{task_id}（或 GET /v1/videos/{id}）查詢。扣費以控制台為準。",
-    "videoImagineNote": "grok-imagine-video-1.5-preview：建議傳 aspect_ratio + resolution（如 \"16:9\"、\"720p\"）；省略則預設 16:9 / 480p。",
+    "videoImagineNote": "grok-imagine-video-1.5-preview 必須帶 aspect_ratio、resolution、duration。缺省自動補 16:9 / 480p / 5 秒。",
     "nGrokVideo": "文生/參考圖 · 1–15 秒 · 按次",
     "nVeoComponents": "（已下架）",
     "nWanVideo": "480P/720P/1080P · 按秒",
@@ -1196,7 +1204,7 @@ const I18N = {
     "nGemOmniExt": "檔位或參考按秒",
     "perVideo": "/次",
     "perSecond": "/秒",
-    "nGrokImagineVideo": "Grok Imagine · aspect_ratio+resolution · $0.08825/s 480p · $0.1545/s 720p",
+    "nGrokImagineVideo": "Grok Imagine · defaults 16:9 / 480p / 5s · $0.08825/s 480p · $0.1545/s 720p",
     "tocSpeech": "語音",
     "tocMore": "擴充能力",
     "tocClients": "客戶端接入",
@@ -1310,7 +1318,7 @@ const I18N = {
     "videoIntroB": "wan / Seedance / FLUX / MiniMax / Gemini Omni / grok-imagine 推奨パス。POST /v1/videos でも自動転送。",
     "videoHint": "非同期：POST /v1/videos → GET /v1/videos/{id}。課金はコンソール準拠。",
     "videoHintGen": "非同期：POST /v1/videos/generations → GET /v1/tasks/{task_id}（または GET /v1/videos/{id}）。課金はコンソール準拠。",
-    "videoImagineNote": "grok-imagine-video-1.5-preview：aspect_ratio + resolution 推奨（例 \"16:9\", \"720p\"）。省略時は 16:9 / 480p。",
+    "videoImagineNote": "grok-imagine-video-1.5-preview は aspect_ratio（例 \"16:9\"）と resolution（\"480p\" / \"720p\"）が必要。未指定時は 16:9 / 480p を補完。",
     "nGrokVideo": "テキスト/参照 · 1–15秒 · リクエスト課金",
     "nVeoComponents": "約8秒 · リクエスト · 供給は在庫次第",
     "nWanVideo": "480P/720P/1080P · 秒課金",
@@ -1436,7 +1444,7 @@ const I18N = {
     "videoIntroB": "Chemin recommandé pour wan / Seedance / FLUX / MiniMax / Gemini Omni / grok-imagine. POST /v1/videos est aussi redirigé.",
     "videoHint": "Async : POST /v1/videos puis GET /v1/videos/{id}. Facturation = console.",
     "videoHintGen": "Async : POST /v1/videos/generations puis GET /v1/tasks/{task_id} (ou GET /v1/videos/{id}). Facturation = console.",
-    "videoImagineNote": "grok-imagine-video-1.5-preview: aspect_ratio + resolution (ex. \"16:9\", \"720p\"). Défaut 16:9 / 480p.",
+    "videoImagineNote": "grok-imagine-video-1.5-preview exige aspect_ratio (ex. \"16:9\") et resolution (\"480p\" / \"720p\"). Défauts : 16:9 / 480p.",
     "nGrokVideo": "texte/réf · 1–15s · par requête",
     "nVeoComponents": "~8s · par requête · stock variable",
     "nWanVideo": "480P/720P/1080P · par seconde",
@@ -1562,7 +1570,7 @@ const I18N = {
     "videoIntroB": "Рекомендуемый путь для wan / Seedance / FLUX / MiniMax / Gemini Omni / grok-imagine. POST /v1/videos тоже перенаправляется.",
     "videoHint": "Асинхронно: POST /v1/videos, затем GET /v1/videos/{id}. Списание — по консоли.",
     "videoHintGen": "Асинхронно: POST /v1/videos/generations, затем GET /v1/tasks/{task_id} (или GET /v1/videos/{id}). Списание — по консоли.",
-    "videoImagineNote": "grok-imagine-video-1.5-preview: aspect_ratio + resolution (напр. \"16:9\", \"720p\"). По умолчанию 16:9 / 480p.",
+    "videoImagineNote": "grok-imagine-video-1.5-preview требует aspect_ratio (напр. \"16:9\") и resolution (\"480p\" / \"720p\"). По умолчанию: 16:9 / 480p.",
     "nGrokVideo": "текст/реф · 1–15с · за запрос",
     "nVeoComponents": "~8с · за запрос · наличие может меняться",
     "nWanVideo": "480P/720P/1080P · за секунду",
@@ -1688,7 +1696,7 @@ const I18N = {
     "videoIntroB": "Path khuyến nghị cho wan / Seedance / FLUX / MiniMax / Gemini Omni / grok-imagine. POST /v1/videos cũng được chuyển tự động.",
     "videoHint": "Async: POST /v1/videos rồi GET /v1/videos/{id}. Tính phí theo console.",
     "videoHintGen": "Async: POST /v1/videos/generations rồi GET /v1/tasks/{task_id} (hoặc GET /v1/videos/{id}). Tính phí theo console.",
-    "videoImagineNote": "grok-imagine-video-1.5-preview: gửi aspect_ratio + resolution (vd \"16:9\", \"720p\"). Mặc định 16:9 / 480p.",
+    "videoImagineNote": "grok-imagine-video-1.5-preview bắt buộc aspect_ratio (vd \"16:9\") và resolution (\"480p\" / \"720p\"). Mặc định: 16:9 / 480p.",
     "nGrokVideo": "text/ref · 1–15s · theo lần",
     "nVeoComponents": "~8s · theo lần · nguồn có thể thay đổi",
     "nWanVideo": "480P/720P/1080P · theo giây",

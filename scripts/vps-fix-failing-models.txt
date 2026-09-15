@@ -1,0 +1,123 @@
+# 1) 部署 grok-imagine duration 默认
+# 2) 下架上游不可用：veo / Rerank×2 / gemma(冷启超时且无备用)
+# 3) 复测 Prover / Embedding / ASR / grok
+set -e
+cd /opt/ai-relay
+sudo git pull
+
+# 视频透传：优先挂载源码目录的容器名
+for c in ai-relay-apimart-passthrough apimart-passthrough keyo-video; do
+  if sudo docker ps -a --format '{{.Names}}' | grep -qx "$c"; then
+    sudo docker restart "$c"
+    echo restarted "$c"
+  fi
+done
+sleep 2
+
+KEY=$(python3 - <<'PY'
+import sqlite3
+k=sqlite3.connect("/opt/ai-relay/data/new-api/one-api.db").execute(
+  "SELECT key FROM tokens WHERE id=2 AND status=1"
+).fetchone()[0]
+print(k if str(k).startswith("sk-") else "sk-"+k)
+PY
+)
+
+echo "=== A) grok-imagine（缺参应自动补）==="
+curl -sS -o /tmp/gi.json -w "gi=%{http_code}\n" -m 90 \
+  -X POST https://www.keyoapi.xyz/v1/videos/generations \
+  -H "Authorization: Bearer $KEY" -H "Content-Type: application/json" \
+  -d '{"model":"grok-imagine-video-1.5-preview","prompt":"a cat walks"}'
+head -c 280 /tmp/gi.json; echo
+
+echo "=== B) 下架不可用模型 ==="
+DB=/opt/ai-relay/data/new-api/one-api.db
+sudo python3 - <<'PY'
+import sqlite3, time
+db="/opt/ai-relay/data/new-api/one-api.db"
+# Rerank: Gitee 返回「暂不支持该接口」
+# gemma: 直打 ai.gitee.com 超时无响应
+# veo: supply_unavailable
+mids=[
+  "veo_3_1-components",
+  "Qwen3-VL-Reranker-2B",
+  "Qwen3-VL-Reranker-8B",
+  "gemma-4-26B-A4B-it",
+]
+con=sqlite3.connect(db)
+cur=con.cursor()
+cols={r[1] for r in cur.execute("PRAGMA table_info(models)")}
+tabs={r[0] for r in cur.execute("SELECT name FROM sqlite_master WHERE type='table'")}
+now=int(time.time())
+for mid in mids:
+  if "deleted_at" in cols:
+    cur.execute("UPDATE models SET deleted_at=? WHERE model_name=? AND (deleted_at IS NULL OR deleted_at=0)", (now, mid))
+    print(mid, "soft_delete", cur.rowcount)
+  if "status" in cols:
+    cur.execute("UPDATE models SET status=0 WHERE model_name=?", (mid,))
+    print(mid, "status0", cur.rowcount)
+  if "abilities" in tabs:
+    cur.execute("DELETE FROM abilities WHERE model=?", (mid,))
+    print(mid, "abilities_del", cur.rowcount)
+  for cid, models in cur.execute("SELECT id, models FROM channels").fetchall():
+    if not models or mid not in models: continue
+    parts=[p.strip() for p in models.replace("\n",",").split(",") if p.strip() and p.strip()!=mid]
+    cur.execute("UPDATE channels SET models=? WHERE id=?", (",".join(parts), cid))
+    print(mid, "channel_strip", cid)
+con.commit()
+print("DONE_DELIST_DB")
+con.close()
+PY
+
+sudo docker restart ai-relay-new-api 2>/dev/null || true
+sleep 4
+
+echo "=== C) Gitee 直打 ASR（库存 key）==="
+GITEE_KEY=$(python3 - <<'PY'
+import sqlite3
+print(sqlite3.connect("/opt/ai-relay/data/new-api/one-api.db").execute("SELECT key FROM channels WHERE id=3").fetchone()[0])
+PY
+)
+python3 - <<'PY'
+import struct
+hdr=bytearray(44)
+hdr[0:4]=b'RIFF'; struct.pack_into('<I',hdr,4,36); hdr[8:12]=b'WAVE'; hdr[12:16]=b'fmt '
+struct.pack_into('<IHHIIHH',hdr,16,16,1,1,8000,8000,1,8); hdr[36:40]=b'data'; struct.pack_into('<I',hdr,40,0)
+open('/tmp/t.wav','wb').write(hdr)
+print('wav_ok')
+PY
+for m in whisper-large-v3 whisper-large-v3-turbo Fun-ASR-Nano-2512; do
+  code=$(curl -sS -o /tmp/asr.json -w "%{http_code}" -m 45 \
+    -X POST "https://ai.gitee.com/v1/audio/transcriptions" \
+    -H "Authorization: Bearer $GITEE_KEY" \
+    -F model="$m" -F file=@/tmp/t.wav || echo 000)
+  echo "$code $m $(head -c 160 /tmp/asr.json 2>/dev/null | tr '\n' ' ')"
+done
+
+echo "=== D) 经 Keyo 复测仍保留模型 ==="
+for body in \
+  '{"model":"DeepSeek-Prover-V2-7B","messages":[{"role":"user","content":"hi"}],"max_tokens":4}' \
+  '{"model":"Qwen3-VL-Embedding-8B","input":"hello"}'
+do
+  mid=$(python3 -c "import json,sys; print(json.loads(sys.argv[1])['model'])" "$body")
+  path=/v1/chat/completions
+  echo "$body" | grep -q Embedding && path=/v1/embeddings
+  code=$(curl -sS -o /tmp/k.json -w "%{http_code}" -m 60 \
+    -X POST "https://www.keyoapi.xyz$path" \
+    -H "Authorization: Bearer $KEY" -H "Content-Type: application/json" \
+    -d "$body" || echo 000)
+  echo "$code $mid $(head -c 180 /tmp/k.json | tr '\n' ' ')"
+done
+
+echo "=== E) pricing 是否仍列出已下架 ==="
+curl -sS https://www.keyoapi.xyz/api/pricing | python3 - <<'PY'
+import sys,json
+d=json.load(sys.stdin)
+arr=d.get("data") or d
+names=[(m.get("model_name") or m.get("id") or "") for m in (arr if isinstance(arr,list) else [])]
+for mid in ["veo_3_1-components","Qwen3-VL-Reranker-2B","Qwen3-VL-Reranker-8B","gemma-4-26B-A4B-it","DeepSeek-Prover-V2-7B","grok-imagine-video-1.5-preview"]:
+  print(mid, "listed" if mid in names else "gone")
+print("total", len(names))
+PY
+
+echo DONE_FIX_FAILING_MODELS

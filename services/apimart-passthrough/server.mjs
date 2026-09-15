@@ -756,12 +756,15 @@ const server = http.createServer(async (req, res) => {
       });
     }
 
-    // OpenLux grok-imagine rejects without aspect_ratio + resolution; fill catalog defaults.
+    // OpenLux grok-imagine rejects without aspect_ratio / resolution / duration.
     if (modelId.includes("grok-imagine")) {
       const est = meta.estimate || {};
       if (!body.aspect_ratio) body.aspect_ratio = "16:9";
       if (!body.resolution) {
         body.resolution = String(est.default_resolution || "480p");
+      }
+      if (body.duration == null && body.seconds == null) {
+        body.duration = Number(est.default_seconds || 5);
       }
       bodyBuf = Buffer.from(JSON.stringify(body), "utf8");
     }

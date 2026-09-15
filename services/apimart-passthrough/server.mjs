@@ -756,7 +756,7 @@ const server = http.createServer(async (req, res) => {
       });
     }
 
-    // OpenLux grok-imagine rejects without aspect_ratio / resolution / duration.
+    // OpenLux grok-imagine: image-to-video only; need image:{url} + aspect/resolution/duration.
     if (modelId.includes("grok-imagine")) {
       const est = meta.estimate || {};
       if (!body.aspect_ratio) body.aspect_ratio = "16:9";
@@ -766,6 +766,39 @@ const server = http.createServer(async (req, res) => {
       if (body.duration == null && body.seconds == null) {
         body.duration = Number(est.default_seconds || 5);
       }
+      // Normalize common aliases → OpenLux shape: { image: { url } }
+      const imgObj = body.image;
+      let url = "";
+      if (imgObj && typeof imgObj === "object" && imgObj.url) {
+        url = String(imgObj.url);
+      } else if (typeof imgObj === "string" && imgObj) {
+        url = imgObj;
+      } else if (typeof body.image_url === "string" && body.image_url) {
+        url = body.image_url;
+      } else if (Array.isArray(body.image_urls) && body.image_urls[0]) {
+        const first = body.image_urls[0];
+        url = typeof first === "string" ? first : String(first?.url || "");
+      } else if (Array.isArray(body.images) && body.images[0]) {
+        const first = body.images[0];
+        url = typeof first === "string" ? first : String(first?.url || "");
+      } else if (typeof body.input_reference === "string" && body.input_reference) {
+        url = body.input_reference;
+      }
+      if (!url || !/^https?:\/\//i.test(url)) {
+        return json(res, 400, {
+          error: {
+            message:
+              'grok-imagine-video-1.5-preview is image-to-video only. Pass image:{"url":"https://..."} (aliases: image_url, image_urls[0]).',
+            type: "invalid_request_error",
+            param: "image",
+          },
+        });
+      }
+      body.image = { url };
+      delete body.image_url;
+      delete body.image_urls;
+      delete body.images;
+      delete body.input_reference;
       bodyBuf = Buffer.from(JSON.stringify(body), "utf8");
     }
 

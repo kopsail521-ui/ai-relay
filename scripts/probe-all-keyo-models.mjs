@@ -232,7 +232,14 @@ async function probeOne(id) {
           model: id,
           prompt: "a cat walks",
           ...(id.includes("grok-imagine")
-            ? { aspect_ratio: "16:9", resolution: "720p", duration: 5 }
+            ? {
+                aspect_ratio: "16:9",
+                resolution: "720p",
+                duration: 5,
+                image: {
+                  url: "https://picsum.photos/seed/keyo-grok/768/768",
+                },
+              }
             : {}),
         });
         break;

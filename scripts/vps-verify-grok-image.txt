@@ -1,0 +1,51 @@
+# 重建 3011 + 验证 grok-imagine image:{url}
+set -e
+cd /opt/ai-relay
+sudo git pull
+
+sudo docker build -t keyo-apimart-passthrough ./services/apimart-passthrough
+sudo docker rm -f ai-relay-apimart-passthrough 2>/dev/null || true
+sudo docker run -d --name ai-relay-apimart-passthrough --restart always --network host \
+  --env-file /opt/ai-relay/.env.apimart \
+  -v /opt/ai-relay/data:/data:rw \
+  -e NEW_API_DB=/data/new-api/one-api.db \
+  -e NEW_API_BASE=http://127.0.0.1:3000 \
+  -e CATALOG=/app/catalog.json \
+  -e LISTEN_HOST=127.0.0.1 \
+  -e PORT=3011 \
+  keyo-apimart-passthrough
+sleep 2
+curl -sS http://127.0.0.1:3011/healthz; echo
+
+KEY=$(python3 - <<'PY'
+import sqlite3
+k=sqlite3.connect("/opt/ai-relay/data/new-api/one-api.db").execute(
+  "SELECT key FROM tokens WHERE id=2 AND status=1"
+).fetchone()[0]
+print(k if str(k).startswith("sk-") else "sk-"+k)
+PY
+)
+IMG=https://picsum.photos/seed/keyo-grok/768/768
+
+echo "=== 1) 正确字段 image:{url} ==="
+curl -sS -o /tmp/gi1.json -w "gi1=%{http_code}\n" -m 90 \
+  -X POST https://www.keyoapi.xyz/v1/videos/generations \
+  -H "Authorization: Bearer $KEY" -H "Content-Type: application/json" \
+  -d "{\"model\":\"grok-imagine-video-1.5-preview\",\"prompt\":\"gentle camera push in\",\"image\":{\"url\":\"$IMG\"}}"
+head -c 280 /tmp/gi1.json; echo
+
+echo "=== 2) 别名 image_urls[0] 应被归一化 ==="
+curl -sS -o /tmp/gi2.json -w "gi2=%{http_code}\n" -m 90 \
+  -X POST https://www.keyoapi.xyz/v1/videos/generations \
+  -H "Authorization: Bearer $KEY" -H "Content-Type: application/json" \
+  -d "{\"model\":\"grok-imagine-video-1.5-preview\",\"prompt\":\"gentle camera push in\",\"image_urls\":[\"$IMG\"]}"
+head -c 280 /tmp/gi2.json; echo
+
+echo "=== 3) 缺图应 400 明确提示 ==="
+curl -sS -o /tmp/gi3.json -w "gi3=%{http_code}\n" -m 30 \
+  -X POST https://www.keyoapi.xyz/v1/videos/generations \
+  -H "Authorization: Bearer $KEY" -H "Content-Type: application/json" \
+  -d '{"model":"grok-imagine-video-1.5-preview","prompt":"a cat walks"}'
+head -c 280 /tmp/gi3.json; echo
+
+echo DONE_VERIFY_GROK_IMAGE

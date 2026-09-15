@@ -1,0 +1,78 @@
+# 继续查：Gitee 渠道 502 / 超时；并确认 grok-imagine 必填字段
+set -e
+cd /opt/ai-relay
+sudo git pull || true
+
+KEY=$(python3 - <<'PY'
+import sqlite3
+k=sqlite3.connect("/opt/ai-relay/data/new-api/one-api.db").execute(
+  "SELECT key FROM tokens WHERE id=2 AND status=1"
+).fetchone()[0]
+print(k if str(k).startswith("sk-") else "sk-"+k)
+PY
+)
+
+echo "=== A) grok-imagine 完整必填 ==="
+curl -sS -o /tmp/gi.json -w "gi=%{http_code}\n" -m 60 \
+  -X POST https://www.keyoapi.xyz/v1/videos/generations \
+  -H "Authorization: Bearer $KEY" -H "Content-Type: application/json" \
+  -d '{"model":"grok-imagine-video-1.5-preview","prompt":"a cat walks","aspect_ratio":"16:9","resolution":"720p"}'
+head -c 260 /tmp/gi.json; echo
+
+echo "=== B) Keyo Media 渠道元数据（脱敏）==="
+python3 - <<'PY'
+import sqlite3
+con=sqlite3.connect("/opt/ai-relay/data/new-api/one-api.db")
+row=con.execute("SELECT id,name,status,type,base_url,length(key),substr(key,1,6),models FROM channels WHERE id=3").fetchone()
+print({
+  "id":row[0],"name":row[1],"status":row[2],"type":row[3],
+  "base":row[4],"key_len":row[5],"key_prefix":row[6]+"…",
+  "model_count":len([p for p in (row[7] or "").replace("\\n",",").split(",") if p.strip()])
+})
+# export key to file for docker-only use
+open("/tmp/keyo-media.key","w").write(row and con.execute("SELECT key FROM channels WHERE id=3").fetchone()[0] or "")
+print("key_file_written", True)
+PY
+
+GITEE_KEY=$(cat /tmp/keyo-media.key)
+# base may be https://ai.gitee.com or .../v1
+BASE=$(python3 - <<'PY'
+import sqlite3
+b=sqlite3.connect("/opt/ai-relay/data/new-api/one-api.db").execute("SELECT base_url FROM channels WHERE id=3").fetchone()[0] or ""
+b=b.rstrip("/")
+if b.endswith("/v1"): b=b[:-3]
+print(b or "https://ai.gitee.com")
+PY
+)
+
+echo "gitee_origin=$BASE"
+
+echo "=== C) 直打库存 chat（5s 超时）==="
+for m in gemma-4-26B-A4B-it DeepSeek-Prover-V2-7B; do
+  code=$(curl -sS -o /tmp/g.json -w "%{http_code}" -m 8 \
+    -X POST "$BASE/v1/chat/completions" \
+    -H "Authorization: Bearer $GITEE_KEY" -H "Content-Type: application/json" \
+    -d "{\"model\":\"$m\",\"messages\":[{\"role\":\"user\",\"content\":\"hi\"}],\"max_tokens\":4}" || echo "000")
+  echo "$code $m $(head -c 180 /tmp/g.json 2>/dev/null | tr '\n' ' ')"
+done
+
+echo "=== D) 直打库存 embeddings / rerank（8s）==="
+code=$(curl -sS -o /tmp/e.json -w "%{http_code}" -m 8 \
+  -X POST "$BASE/v1/embeddings" \
+  -H "Authorization: Bearer $GITEE_KEY" -H "Content-Type: application/json" \
+  -d '{"model":"Qwen3-VL-Embedding-8B","input":"hello"}' || echo 000)
+echo "$code embed $(head -c 160 /tmp/e.json 2>/dev/null | tr '\n' ' ')"
+
+for m in Qwen3-VL-Reranker-2B Qwen3-VL-Reranker-8B; do
+  code=$(curl -sS -o /tmp/r.json -w "%{http_code}" -m 8 \
+    -X POST "$BASE/v1/rerank" \
+    -H "Authorization: Bearer $GITEE_KEY" -H "Content-Type: application/json" \
+    -d "{\"model\":\"$m\",\"query\":\"hi\",\"documents\":[\"a\",\"b\"]}" || echo 000)
+  echo "$code $m $(head -c 160 /tmp/r.json 2>/dev/null | tr '\n' ' ')"
+done
+
+echo "=== E) New API 日志尾 ==="
+sudo docker logs --tail 40 ai-relay-new-api 2>&1 | tail -n 40
+
+rm -f /tmp/keyo-media.key
+echo DONE_DIAG_GITEE_UPSTREAM

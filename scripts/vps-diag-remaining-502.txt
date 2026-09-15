@@ -1,0 +1,88 @@
+# 诊断剩余 502：gemma / Prover / Fun-ASR / whisper-turbo / Rerank；并复测 grok-imagine
+set -e
+cd /opt/ai-relay
+KEY=$(python3 - <<'PY'
+import sqlite3
+k=sqlite3.connect("/opt/ai-relay/data/new-api/one-api.db").execute(
+  "SELECT key FROM tokens WHERE id=2 AND status=1"
+).fetchone()[0]
+print(k if str(k).startswith("sk-") else "sk-"+k)
+PY
+)
+
+echo "=== 1) grok-imagine 带 aspect_ratio ==="
+curl -sS -o /tmp/gi.json -w "gi=%{http_code}\n" -m 60 \
+  -X POST https://www.keyoapi.xyz/v1/videos/generations \
+  -H "Authorization: Bearer $KEY" -H "Content-Type: application/json" \
+  -d '{"model":"grok-imagine-video-1.5-preview","prompt":"a cat walks","aspect_ratio":"16:9"}'
+head -c 220 /tmp/gi.json; echo
+
+echo "=== 2) New API 渠道命中失败模型 ==="
+python3 - <<'PY'
+import sqlite3
+con=sqlite3.connect("/opt/ai-relay/data/new-api/one-api.db")
+need=["gemma-4-26B-A4B-it","DeepSeek-Prover-V2-7B","Fun-ASR-Nano-2512","whisper-large-v3-turbo",
+      "Qwen3-VL-Reranker-2B","Qwen3-VL-Reranker-8B","whisper-large-v3","Qwen3-VL-Embedding-8B"]
+rows=list(con.execute("SELECT id,name,status,type,models,base_url FROM channels WHERE status=1"))
+print("enabled_channels", len(rows))
+for mid in need:
+  hits=[]
+  for cid,name,status,typ,models,base in rows:
+    ms=(models or "")
+    # models often comma-separated
+    parts=set(p.strip() for p in ms.replace("\n",",").split(",") if p.strip())
+    if mid in parts or mid in ms:
+      hits.append((cid,name,typ,(base or "")[:60]))
+  print(mid, "hits", len(hits), hits[:3])
+# abilities table if exists
+tabs={r[0] for r in con.execute("SELECT name FROM sqlite_master WHERE type='table'")}
+if "abilities" in tabs:
+  for mid in need:
+    n=con.execute("SELECT COUNT(*) FROM abilities WHERE model=? AND enabled=1", (mid,)).fetchone()[0]
+    print("ability", mid, n)
+PY
+
+echo "=== 3) 直打 New API :3000（看原始错误）==="
+for spec in \
+  'chat|gemma-4-26B-A4B-it|{"model":"gemma-4-26B-A4B-it","messages":[{"role":"user","content":"hi"}],"max_tokens":4}' \
+  'chat|DeepSeek-Prover-V2-7B|{"model":"DeepSeek-Prover-V2-7B","messages":[{"role":"user","content":"hi"}],"max_tokens":4}' \
+  'rerank|Qwen3-VL-Reranker-2B|{"model":"Qwen3-VL-Reranker-2B","query":"hi","documents":["a","b"]}' \
+  'rerank|Qwen3-VL-Reranker-8B|{"model":"Qwen3-VL-Reranker-8B","query":"hi","documents":["a","b"]}'
+do
+  kind=${spec%%|*}; rest=${spec#*|}; mid=${rest%%|*}; body=${rest#*|}
+  path=/v1/chat/completions
+  [ "$kind" = rerank ] && path=/v1/rerank
+  code=$(curl -sS -o /tmp/na.json -w "%{http_code}" -m 45 \
+    -X POST "http://127.0.0.1:3000$path" \
+    -H "Authorization: Bearer $KEY" -H "Content-Type: application/json" \
+    -d "$body")
+  echo "$code $mid $(head -c 200 /tmp/na.json | tr '\n' ' ')"
+done
+
+echo "=== 4) ASR multipart 直打 :3000 ==="
+python3 - <<'PY'
+import struct,zlib,pathlib,subprocess,os
+# tiny wav
+hdr=bytearray(44)
+hdr[0:4]=b'RIFF'; struct.pack_into('<I',hdr,4,36); hdr[8:12]=b'WAVE'; hdr[12:16]=b'fmt '
+struct.pack_into('<IHHIIHH',hdr,16,16,1,1,8000,8000,1,8); hdr[36:40]=b'data'; struct.pack_into('<I',hdr,40,0)
+path='/tmp/t.wav'; open(path,'wb').write(hdr)
+print('wav_ok')
+PY
+KEY_ESC="$KEY"
+for m in whisper-large-v3 whisper-large-v3-turbo Fun-ASR-Nano-2512; do
+  code=$(curl -sS -o /tmp/asr.json -w "%{http_code}" -m 60 \
+    -X POST http://127.0.0.1:3000/v1/audio/transcriptions \
+    -H "Authorization: Bearer $KEY" \
+    -F model="$m" -F file=@/tmp/t.wav)
+  echo "$code $m $(head -c 200 /tmp/asr.json | tr '\n' ' ')"
+done
+
+echo "=== 5) veo 再测 ==="
+curl -sS -o /tmp/veo.json -w "veo=%{http_code}\n" -m 60 \
+  -X POST https://www.keyoapi.xyz/v1/videos \
+  -H "Authorization: Bearer $KEY" -H "Content-Type: application/json" \
+  -d '{"model":"veo_3_1-components","prompt":"a cat"}'
+head -c 240 /tmp/veo.json; echo
+
+echo DONE_DIAG_REMAINING_502

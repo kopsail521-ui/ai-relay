@@ -233,6 +233,7 @@ async function probeOne(id) {
         res = await callJson("/v1/videos/generations", {
           model: id,
           prompt: "a cat walks",
+          ...(id.includes("grok-imagine") ? { aspect_ratio: "16:9" } : {}),
         });
         break;
       case "asr": {

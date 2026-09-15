@@ -45,10 +45,8 @@ const VIDEO_GEN = new Set([
   "gemini-omni-1.1-flash-ext",
   "grok-imagine-video-1.5-preview",
   "grok-1.5-video",
-  "veo_3_1-components",
 ]);
-
-const VIDEO_NATIVE = new Set(["grok-1.5-video", "veo_3_1-components"]);
+const VIDEO_NATIVE = new Set(["grok-1.5-video"]);
 
 const ASR = new Set([
   "whisper-large-v3",

@@ -1,0 +1,48 @@
+# 下架 veo_3_1-components（模型广场 + 渠道能力）
+set -e
+cd /opt/ai-relay
+sudo git pull || true
+DB=/opt/ai-relay/data/new-api/one-api.db
+MID=veo_3_1-components
+
+sudo python3 - <<PY
+import sqlite3, time
+db="$DB"
+mid="$MID"
+con=sqlite3.connect(db)
+cur=con.cursor()
+cols={r[1] for r in cur.execute("PRAGMA table_info(models)")}
+now=int(time.time())
+# soft-delete / disable
+if "deleted_at" in cols:
+  cur.execute("UPDATE models SET deleted_at=? WHERE model_name=? AND deleted_at IS NULL", (now, mid))
+  print("models_soft_delete", cur.rowcount)
+if "status" in cols:
+  cur.execute("UPDATE models SET status=0 WHERE model_name=?", (mid,))
+  print("models_status0", cur.rowcount)
+# abilities
+tabs={r[0] for r in cur.execute("SELECT name FROM sqlite_master WHERE type='table'")}
+if "abilities" in tabs:
+  cur.execute("DELETE FROM abilities WHERE model=?", (mid,))
+  print("abilities_deleted", cur.rowcount)
+# strip from channel model lists
+for cid, models in cur.execute("SELECT id, models FROM channels").fetchall():
+  if not models or mid not in models:
+    continue
+  parts=[p.strip() for p in models.replace("\\n", ",").split(",") if p.strip() and p.strip()!=mid]
+  new=",".join(parts)
+  cur.execute("UPDATE channels SET models=? WHERE id=?", (new, cid))
+  print("channel_stripped", cid)
+con.commit()
+# verify
+left=cur.execute("SELECT id,status,deleted_at FROM models WHERE model_name=?", (mid,)).fetchall()
+print("remaining_rows", left)
+print("DONE_DB")
+con.close()
+PY
+
+# 刷新 New API 缓存
+sudo docker restart ai-relay-new-api 2>/dev/null || true
+sleep 3
+curl -sS https://www.keyoapi.xyz/api/pricing | python3 -c "import sys,json; d=json.load(sys.stdin); arr=d.get('data') or d; names=[(m.get('model_name') or m.get('id')) for m in (arr if isinstance(arr,list) else [])]; print('veo_still_listed', 'veo_3_1-components' in names); print('total', len(names))"
+echo DONE_DELIST_VEO

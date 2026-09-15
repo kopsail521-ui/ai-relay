@@ -1,0 +1,33 @@
+---
+description: KeyoAPI product context for X/Twitter ops and brand copy
+alwaysApply: true
+---
+
+# KeyoAPI — company context (X Operator)
+
+## Product
+- **Name**: KeyoAPI
+- **Site**: https://www.keyoapi.xyz/
+- **Docs / console**: same domain; Base URL `https://www.keyoapi.xyz/v1`
+- **One-liner**: Cheap LLM / AI API relay — one OpenAI-compatible endpoint for multiple text, image, speech (and video) models; one API key, unified billing.
+
+## Offer (facts only)
+- OpenAI-compatible: chat completions, images, speech; swap `base_url` + key.
+- Headline positioning: lower sell rates vs typical official list prices; live catalog on `/pricing` / `/pricing-list`, compare on `/compare`.
+- Permanent free model IDs for prototyping (`/free-models`); then switch to metered twins.
+- Prepaid credits (wallet / Waffo). Support: kopsail521@gmail.com.
+
+## Audience
+- Developers / indie makers integrating LLM APIs (Cursor, ChatBox, SDKs), cost-sensitive teams needing multi-model without juggling vendor bills.
+
+## X account ops (owner-confirmed)
+- **Language**: English only
+- **Primary goal**: paid usage — drive top-up / prepaid credit conversion (not vanity engagement)
+- **Approval**: owner approves every post before publish; drafts only until explicit OK
+- **Cadence**: owner specifies daily topic/angle; operator drafts from that brief — do not invent a full calendar unless asked
+
+## Brand / claims rules for X
+- Do **not** invent metrics, partnerships, uptime SLAs, or unverified price comparisons.
+- Price/model names must match live `/pricing` or user-supplied evidence.
+- Prefer concrete: endpoint, model id, swap-2-lines OpenAI SDK story, clear CTA to https://www.keyoapi.xyz/ (wallet / top-up / pricing when relevant).
+- Soft-sell free tier as on-ramp to paid metered models; never claim free = production-ready SLA.

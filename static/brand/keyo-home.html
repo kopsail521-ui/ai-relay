@@ -177,73 +177,73 @@
 const I18N = {
   en: {
     title: 'One API for Multiple AI Models',
-    sub: 'Connect to multiple text, image and speech models through one OpenAI-compatible endpoint. One API key, unified billing and familiar SDKs.',
+    sub: 'Chat, image generation, and speech use an OpenAI-compatible /v1 (swap base URL + key). Matting, detection, async video/docs, and similar tools use dedicated paths in the docs—not drop-in OpenAI SDK calls. One prepaid key, unified billing.',
     ctaStart: 'Get Started',
     ctaDocs: 'Docs',
     ctaPricing: 'Browse Models',
     exampleLabel: 'Example',
     whatLabel: 'What you get',
-    whatBody: 'OpenAI-compatible chat, image & speech APIs · one API key · unified billing · model catalog at /pricing'
+    whatBody: 'OpenAI-compatible chat / image / speech where supported · dedicated HTTP paths for CV & async · one API key · /pricing'
   },
   zhCN: {
     title: '一个地址，调用多模型',
-    sub: 'KeyoAPI 提供 OpenAI 兼容的预付费 API 额度：文本对话与文生图（GPT / Claude / Gemini / DeepSeek 等）。统一 API 网关，与模型厂商无隶属关系。注册 → 充值 → 创建 Key → 调用 /v1。',
+    sub: '对话、文生图、语音等走 OpenAI 兼容的 /v1（改 base_url + Key 即可）。抠图、检测、异步视频/文档等按文档里的专用路径调用，不能直接套 OpenAI SDK。一个预付费 Key，统一计费；与模型厂商无隶属关系。',
     ctaStart: '开始使用',
     ctaDocs: '接入文档',
     ctaPricing: '查看模型',
     exampleLabel: '示例',
     whatLabel: '你得到什么',
-    whatBody: 'OpenAI 兼容对话 + 图片 + 语音 API · 统一 API Key · /pricing 模型广场'
+    whatBody: '兼容路径：对话 / 文生图 / 语音 · 专用路径：抠图、检测、异步任务等 · 统一 API Key · /pricing'
   },
   zhTW: {
     title: '一個地址，呼叫多模型',
-    sub: 'KeyoAPI 提供 OpenAI 相容的預付費 API 額度：文字對話與文生圖。獨立閘道，與模型廠商無隸屬關係。註冊 → 儲值 → 建立 Key → 呼叫 /v1。',
+    sub: '對話、文生圖、語音等走 OpenAI 相容 /v1；抠圖、偵測、非同步影片/文件等請依文件專用路徑呼叫，不能直接套 OpenAI SDK。一個預付費 Key，統一計費。',
     ctaStart: '開始使用',
     ctaDocs: '接入文件',
     ctaPricing: '查看定價',
     exampleLabel: '範例',
     whatLabel: '你會得到',
-    whatBody: '對話 + 圖片 API · 錢包預付額度 · /pricing 公開定價 · kopsail521@gmail.com'
+    whatBody: '相容路徑：對話 / 文生圖 / 語音 · 專用路徑：CV 與非同步任務 · 統一 Key · /pricing'
   },
   ja: {
     title: 'ひとつのエンドポイントで多モデル',
-    sub: 'KeyoAPI は OpenAI 互換の前払い API クレジットを提供します。独立ゲートウェイ。登録→チャージ→キー作成→/v1 を呼び出し。',
+    sub: 'チャット・画像生成・音声は OpenAI 互換の /v1。切り抜き・検出・非同期動画/文書などはドキュメントの専用パス（SDK のままでは不可）。キーは1つ、前払い課金。',
     ctaStart: 'はじめる',
     ctaDocs: 'ドキュメント',
     ctaPricing: '料金を見る',
     exampleLabel: '例',
     whatLabel: '提供内容',
-    whatBody: 'チャット＋画像 API · 前払いクレジット · /pricing · kopsail521@gmail.com'
+    whatBody: '互換：チャット/画像/音声 · 専用パス：CV・非同期 · 1つの API キー · /pricing'
   },
   fr: {
     title: 'Un endpoint, plusieurs modèles',
-    sub: 'KeyoAPI vend des crédits API prépayés compatibles OpenAI (chat & image). Passerelle indépendante. Inscription → recharge → clé → /v1.',
+    sub: 'Chat, image et speech via /v1 compatible OpenAI. Matting, détection, vidéo/docs async : chemins dédiés (pas un drop-in SDK). Une clé prépayée, facturation unifiée.',
     ctaStart: 'Commencer',
     ctaDocs: 'Docs',
     ctaPricing: 'Tarifs',
     exampleLabel: 'Exemple',
     whatLabel: 'Ce que vous obtenez',
-    whatBody: 'APIs chat + image · crédits prépayés · /pricing · kopsail521@gmail.com'
+    whatBody: 'Compatibles : chat / image / speech · chemins dédiés CV & async · une clé · /pricing'
   },
   ru: {
     title: 'Один endpoint — много моделей',
-    sub: 'KeyoAPI — предоплаченные OpenAI-совместимые API-кредиты (чат и изображения). Независимый шлюз. Регистрация → пополнение → ключ → /v1.',
+    sub: 'Чат, генерация изображений и речь — OpenAI-совместимый /v1. Маттинг, детекция, async видео/документы — отдельные пути в документации, не drop-in SDK. Один предоплаченный ключ.',
     ctaStart: 'Начать',
     ctaDocs: 'Документация',
     ctaPricing: 'Цены',
     exampleLabel: 'Пример',
     whatLabel: 'Что вы получаете',
-    whatBody: 'Chat + image API · предоплата · /pricing · kopsail521@gmail.com'
+    whatBody: 'Совместимо: chat / image / speech · отдельные пути для CV и async · один ключ · /pricing'
   },
   vi: {
     title: 'Một endpoint, nhiều mô hình',
-    sub: 'KeyoAPI bán tín dụng API trả trước tương thích OpenAI (chat & ảnh). Cổng độc lập. Đăng ký → nạp tiền → tạo key → gọi /v1.',
+    sub: 'Chat, tạo ảnh, speech dùng /v1 tương thích OpenAI. Matting, detection, video/docs async theo đường dẫn riêng trong docs—không phải drop-in SDK. Một key trả trước, billing thống nhất.',
     ctaStart: 'Bắt đầu',
     ctaDocs: 'Tài liệu',
     ctaPricing: 'Xem giá',
     exampleLabel: 'Ví dụ',
     whatLabel: 'Bạn nhận được',
-    whatBody: 'API chat + ảnh · ví trả trước · /pricing · kopsail521@gmail.com'
+    whatBody: 'Tương thích: chat / ảnh / speech · path riêng cho CV & async · một API key · /pricing'
   }
 };
 

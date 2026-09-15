@@ -1,15 +1,9 @@
-# Build New API using a prebuilt web/dist (for low-RAM VPS).
-# Expectation: web/dist already exists on the build context (copied from CI/laptop).
+# Build New API using a prebuilt frontend (for low-RAM VPS).
+# Put unpacked files in ./prebuilt-web-dist/ (NOT web/dist — that path is dockerignored).
 #
-#   # laptop:
-#   cd new-api/web && bun install && bun run build
-#   tar -C dist -czf /tmp/keyo-web-dist.tgz .
-#   scp /tmp/keyo-web-dist.tgz root@VPS:/tmp/
-#
-#   # VPS:
-#   mkdir -p /opt/ai-relay/new-api/web/dist
-#   tar -C /opt/ai-relay/new-api/web/dist -xzf /tmp/keyo-web-dist.tgz
-#   cd /opt/ai-relay/new-api && docker build -f Dockerfile.prebuilt -t keyo-new-api:local .
+#   mkdir -p prebuilt-web-dist
+#   tar -C prebuilt-web-dist -xzf /tmp/keyo-web-dist.tgz
+#   docker build -f Dockerfile.prebuilt -t keyo-new-api:local .
 
 FROM golang:1.26.1-alpine@sha256:2389ebfa5b7f43eeafbd6be0c3700cc46690ef842ad962f6c5bd6be49ed82039 AS builder2
 ENV GO111MODULE=on CGO_ENABLED=0 GOWORK=off
@@ -26,7 +20,7 @@ ADD relaykit/go.mod ./relaykit/go.mod
 RUN go mod download
 
 COPY . .
-# web/dist must already be present (no bun stage).
+COPY prebuilt-web-dist/ ./web/dist/
 RUN test -f web/dist/index.html
 RUN go build -ldflags "-s -w -X 'github.com/QuantumNous/new-api/common.Version=$(cat VERSION)'" -o new-api
 

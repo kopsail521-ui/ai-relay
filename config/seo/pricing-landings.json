@@ -50,7 +50,7 @@
         "body": "Google Gemini free tiers are usually quota- or trial-shaped. On the same Keyo key you can also call permanent $0 IDs such as deepseek-v4-flash-free, deepseek-v4-pro-free, glm-5.2-free, and kimi-k3-free — fair-use limited, but ModelPrice stays $0. Use them to prototype while you meter Gemini-class paid traffic."
       },
       "body": [
-        "Gemini API pricing searches are purchase-intent: engineers are comparing dollars per million tokens before they wire production. Official Google surfaces win on brand trust; KeyoAPI wins when you want one prepaid balance across Gemini-class IDs plus DeepSeek, GLM, Whisper, OCR, and TTS — without five invoices.",
+        "Engineers comparing Gemini API pricing usually already want Google-class models with clearer unit economics — or one prepaid balance across Gemini-class IDs plus DeepSeek, GLM, Whisper, OCR, and TTS. Official Google surfaces win on brand trust; KeyoAPI wins when you want that stack without five invoices.",
         "Keyo rates above are indicative sell prices from the live Keyo catalog. Always confirm interactive pricing pages under /pricing/{modelId} before contracting volume. Preview model IDs can change naming as Google ships stables.",
         "How to call: set OPENAI_BASE_URL=https://www.keyoapi.xyz/v1, use your Keyo API key, and pass the Gemini model string (for example gemini-2.5-flash) to POST /v1/chat/completions. Many Google-native features remain Google-console only; Keyo focuses on OpenAI-compatible chat access for overseas developer stacks.",
         "When Gemini list prices spike your margin, keep Gemini for multimodal strengths and shift plain text volume to deepseek-v4-flash or gpt-5.6-luna on the same key. For pure free prototyping, start on /free-models, then promote to Gemini paid IDs when quality gates pass."
@@ -168,7 +168,7 @@
         "body": "Keyo does not ship Anthropic-branded free Claude IDs. For $0 prototyping on the same API key, use permanent free twins such as deepseek-v4-flash-free, deepseek-v4-pro-free, glm-5.2-free, and kimi-k3-free (fair-use limits). When quality gates pass, switch model= to claude-sonnet-5 or another Claude ID without changing base URL or auth."
       },
       "body": [
-        "Claude API pricing searches are purchase-intent: teams are comparing dollars per million tokens before wiring agents, coding copilots, or support bots. Official Anthropic surfaces win on brand trust; KeyoAPI wins when you want one prepaid balance across Claude-class IDs plus GPT-class, DeepSeek, Whisper, OCR, and TTS — without five invoices.",
+        "Teams comparing Claude API pricing usually already want Anthropic-class chat or agents with clearer unit economics — or one prepaid balance across Claude-class IDs plus GPT-class, DeepSeek, Whisper, OCR, and TTS. Official Anthropic surfaces win on brand trust; KeyoAPI wins when you want that stack without five invoices.",
         "Keyo rates above are indicative sell prices from the live Keyo catalog. Always confirm interactive pages under /pricing/claude-sonnet-5, /pricing/claude-opus-5, /pricing/claude-fable-5, and /pricing/claude-fable-5-1 before contracting volume. Anthropic list bands and context tiers change — treat official figures as planning context.",
         "How to call: set OPENAI_BASE_URL=https://www.keyoapi.xyz/v1, use your Keyo API key, and pass a Claude model string (for example claude-sonnet-5) to POST /v1/chat/completions. Longer guides live at /model/claude-sonnet-5, /model/claude-opus-5, and the Fable pages.",
         "When Claude list prices spike your margin, keep Claude for hard reasoning and shift bulk classification or drafts to gpt-5.6-luna or deepseek-v4-flash on the same key. For OpenAI / GPT dollars see /openai-api-pricing; for Gemini dollars see /gemini-api-pricing; for DeepSeek see /deepseek-api-pricing; for free prototyping see /free-models."
@@ -226,7 +226,7 @@
         "body": "Keyo does not ship OpenAI-branded free GPT IDs. For $0 prototyping on the same API key, use permanent free twins such as deepseek-v4-flash-free, deepseek-v4-pro-free, glm-5.2-free, and kimi-k3-free (fair-use limits). When quality gates pass, switch model= to gpt-5.6-luna, gpt-5.6-terra, or gpt-5.6-sol without changing base URL or auth."
       },
       "body": [
-        "OpenAI API pricing searches are purchase-intent: teams are comparing dollars per million tokens before wiring chat, agents, or batch transforms. Official OpenAI surfaces win on brand trust and first-party features; KeyoAPI wins when you want one prepaid balance across GPT-class IDs plus Claude, DeepSeek, Whisper, OCR, and TTS — without five invoices.",
+        "Teams comparing OpenAI API pricing usually already want GPT-class chat in an OpenAI SDK with clearer unit economics — or one prepaid balance across GPT-class IDs plus Claude, DeepSeek, Whisper, OCR, and TTS. Official OpenAI surfaces win on brand trust and first-party features; KeyoAPI wins when you want that stack without five invoices.",
         "Keyo rates above are indicative sell prices from the live Keyo catalog. Always confirm interactive pages under /pricing/gpt-5.6-luna, /pricing/gpt-5.6-terra, and /pricing/gpt-5.6-sol before contracting volume. OpenAI list bands, cached-input discounts, and model renames change — treat official figures as planning context. Keyo GPT-5.6 IDs are GPT-class twins on an OpenAI-compatible API, not a claim that they are OpenAI’s first-party model names.",
         "How to call: set OPENAI_BASE_URL=https://www.keyoapi.xyz/v1, use your Keyo API key, and pass a GPT-5.6 model string (for example gpt-5.6-terra) to POST /v1/chat/completions. Longer guides live at /model/gpt-5.6-luna, /model/gpt-5.6-terra, and /model/gpt-5.6-sol.",
         "When OpenAI list prices spike your margin, keep GPT-class for product chat defaults and shift bulk classification to gpt-5.6-luna or deepseek-v4-flash on the same key. For Claude dollars see /claude-api-pricing; for Gemini see /gemini-api-pricing; for DeepSeek see /deepseek-api-pricing; for free prototyping see /free-models."
@@ -263,6 +263,7 @@
       ],
       "tableHeading": "Migration options at a glance",
       "colOfficial": "Context",
+      "bodyHeading": "Migration details",
       "lead": "If you integrated remove.bg’s self-serve API and need a prepaid matting endpoint that stays under your control after Dec 1, 2026, KeyoAPI exposes BRIA RMBG-2.0 on POST /v1/images/mattings — same Keyo key you already use for chat, Whisper, and TTS. This page is for developers migrating API traffic, not a free browser cutout tool.",
       "rows": [
         {
@@ -279,7 +280,7 @@
         }
       ],
       "freeKiller": {
-        "title": "What this page is not",
+        "title": "Independent API option",
         "body": "KeyoAPI is not Canva, not Leonardo.Ai, and not a claim to be remove.bg’s official successor. Consumer click-to-cutout traffic is pointed at Canva by remove.bg itself. Keyo’s lane is developer-metered matting on a multi-model relay: authenticate, upload, get alpha — then continue to OCR, TTS, or chat on the same balance."
       },
       "body": [
@@ -317,6 +318,7 @@
       ],
       "tableHeading": "TTS models on Keyo",
       "colOfficial": "Shape",
+      "bodyHeading": "Rates and endpoints",
       "lead": "Looking for a TTS API you can call from the same OpenAI-style key as Whisper and chat? KeyoAPI hosts sync IndexTTS-2 plus async CosyVoice3 and Qwen3-TTS — pick latency vs batch, then drive Duix-Avatar or InfiniteTalk when you need a talking face.",
       "rows": [
         {
@@ -343,7 +345,7 @@
         "body": "Permanent $0 chat twins (deepseek-v4-flash-free, glm-5.2-free, kimi-k3-free, …) sit on the same key for script drafting. TTS rows above are metered — confirm live rates on Model Square before volume. There is no separate upload playground; try from /pricing/{modelId}."
       },
       "body": [
-        "TTS API searches are usually product intent: IVR, agents that talk back, course narration, or avatar pipelines. Keyo keeps STT (Whisper) and TTS on one prepaid balance so you are not juggling three vendor consoles.",
+        "Teams call a TTS API for IVR, voice agents, course narration, and avatar pipelines. Keyo keeps STT (Whisper) and TTS on one prepaid balance so you are not juggling three vendor consoles.",
         "Indicative rates above come from the live Keyo catalog — always confirm /pricing/IndexTTS-2, /pricing/CosyVoice3, and /pricing/Qwen3-TTS. Prefer IndexTTS-2 when the product needs audio inside one request; prefer CosyVoice3 or Qwen3-TTS when jobs are already async.",
         "How to call: set base URL https://www.keyoapi.xyz/v1, authenticate with your Keyo key, pass the model id. Guides: /model/IndexTTS-2, /model/CosyVoice3, /model/Qwen3-TTS. Voice clone angle: /voice-cloning-api. Talking video: /ai-avatar-video-generator.",
         "Create a key at /sign-up, then open the model’s /pricing/{id} page for interactive try/buy."
@@ -377,6 +379,7 @@
       ],
       "tableHeading": "Clone-friendly speech models",
       "colOfficial": "Fit",
+      "bodyHeading": "Rates and endpoints",
       "lead": "Need a voice cloning API without standing up a research stack? KeyoAPI exposes clone-friendly async TTS (CosyVoice3, Qwen3-TTS) behind one prepaid key — draft scripts with free chat twins, synthesize, then optionally animate with Duix or InfiniteTalk.",
       "rows": [
         {
@@ -403,7 +406,7 @@
         "body": "Clone samples only with rights clearance. Rate-limit tenant clones, reject celebrity likeness without licenses, and keep a default voice fallback. Keyo provides the inference API — your product owns consent UX and policy."
       },
       "body": [
-        "Voice cloning API buyers usually want brand consistency across IVR, support bots, and avatar video — not a desktop demo. Keyo collocates clone-friendly TTS with Whisper STT and talking-avatar models so the full loop shares one balance.",
+        "Use it for brand-consistent voices across IVR, support bots, and avatar video. Keyo collocates clone-friendly TTS with Whisper STT and talking-avatar models so the full loop shares one balance.",
         "Indicative rates above are catalog snapshots — confirm /pricing/Qwen3-TTS and /pricing/CosyVoice3. There is no separate upload playground: after /sign-up, try from the interactive pricing page for each model id.",
         "How to call: async create via POST /v1/async/audio/speech with model=Qwen3-TTS or CosyVoice3, then poll /v1/task/{id}. Broader TTS map: /tts-api. Avatar handoff: /ai-avatar-video-generator.",
         "For sync-only demos without a clone workflow, IndexTTS-2 on /v1/audio/speech is often enough."
@@ -437,6 +440,7 @@
       ],
       "tableHeading": "Digital human models",
       "colOfficial": "Input → output",
+      "bodyHeading": "Rates and pipeline",
       "lead": "Building an AI avatar video generator? KeyoAPI hosts Duix-Avatar (audio+video → talking face) and InfiniteTalk (image/audio → talking head) as async jobs — generate speech with IndexTTS-2 / CosyVoice3 / Qwen3-TTS on the same key, then render.",
       "rows": [
         {
@@ -463,7 +467,7 @@
         "body": "Typical product loop: draft script → TTS (optionally cloned) → avatar render → CDN cache. Cap max duration, show queue ETA, and moderate deepfake abuse. Try/buy each model from its /pricing/{id} page after /sign-up — no separate upload playground."
       },
       "body": [
-        "“AI avatar video generator” searches mix consumer apps and developer APIs. Keyo’s offer is the API path: prepaid metering, OpenAI-style auth for adjacent chat/STT/TTS, and async task polling for renders.",
+        "This is the API path, not a consumer app: prepaid metering, OpenAI-style auth for adjacent chat and speech, async task polling for renders.",
         "Indicative rates: Duix-Avatar ~$0.0068 per second of output; InfiniteTalk ~$0.342 per request. Confirm /pricing/Duix-Avatar and /pricing/InfiniteTalk before volume. Pick Duix when you have driving video; pick InfiniteTalk when you start from a still spokesperson photo.",
         "How to call: async video endpoints with model=Duix-Avatar or InfiniteTalk, then GET /v1/task/{id}. Speech side: /tts-api and /voice-cloning-api. Model guides under /model/Duix-Avatar and /model/InfiniteTalk.",
         "Likeness rights and abuse prevention are your product’s responsibility — rate-limit, log, and require consent flags before queueing."

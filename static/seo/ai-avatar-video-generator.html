@@ -66,7 +66,6 @@ ul{margin:0 0 14px;padding-left:1.2em}
 <h1>AI Avatar Video Generator API — Duix-Avatar &amp; InfiniteTalk</h1>
 
 <p class="lead">Building an AI avatar video generator? KeyoAPI hosts Duix-Avatar (audio+video → talking face) and InfiniteTalk (image/audio → talking head) as async jobs — generate speech with IndexTTS-2 / CosyVoice3 / Qwen3-TTS on the same key, then render.</p>
-<p class="meta">Indicative comparison for planning. Confirm live Keyo rates in <a href="/pricing">Model Square</a> or the static <a href="/pricing-list">pricing list</a>.</p>
 <div class="btnrow">
   <a class="btn btn-primary" href="/sign-up">Get API key</a>
   <a class="btn btn-secondary" href="/pricing">Open Model Square</a>
@@ -74,7 +73,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
   <a class="btn btn-secondary" href="/free-models">Free models</a>
 </div>
 <h2>Digital human models</h2>
-<p class="meta">Indicative figures for planning. Confirm live Keyo sell rates on interactive <a href="/pricing">Model Square</a> pages.</p>
+<p class="meta">Indicative figures for planning. Confirm live Keyo sell rates on interactive <a href="/pricing">Model Square</a> or the static <a href="/pricing-list">pricing list</a>.</p>
 <table>
 <thead><tr><th>Model ID</th><th>Input → output</th><th>KeyoAPI</th><th>Notes</th></tr></thead>
 <tbody>
@@ -100,8 +99,8 @@ ul{margin:0 0 14px;padding-left:1.2em}
 </table>
 <h2>Productize the loop, not a single model</h2>
 <p>Typical product loop: draft script → TTS (optionally cloned) → avatar render → CDN cache. Cap max duration, show queue ETA, and moderate deepfake abuse. Try/buy each model from its /pricing/{id} page after /sign-up — no separate upload playground.</p>
-<h2>How to think about this page</h2>
-<p>“AI avatar video generator” searches mix consumer apps and developer APIs. Keyo’s offer is the API path: prepaid metering, OpenAI-style auth for adjacent chat/STT/TTS, and async task polling for renders.</p>
+<h2>Rates and pipeline</h2>
+<p>This is the API path, not a consumer app: prepaid metering, OpenAI-style auth for adjacent chat and speech, async task polling for renders.</p>
 <p>Indicative rates: Duix-Avatar ~$0.0068 per second of output; InfiniteTalk ~$0.342 per request. Confirm /pricing/Duix-Avatar and /pricing/InfiniteTalk before volume. Pick Duix when you have driving video; pick InfiniteTalk when you start from a still spokesperson photo.</p>
 <p>How to call: async video endpoints with model=Duix-Avatar or InfiniteTalk, then GET /v1/task/{id}. Speech side: /tts-api and /voice-cloning-api. Model guides under /model/Duix-Avatar and /model/InfiniteTalk.</p>
 <p>Likeness rights and abuse prevention are your product’s responsibility — rate-limit, log, and require consent flags before queueing.</p>

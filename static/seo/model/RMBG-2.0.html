@@ -65,7 +65,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
 <p class="eyebrow">KEYOAPI</p>
 <h1>RMBG-2.0 API — Background Removal for Product &amp; Portraits</h1>
 
-<p class="lead">RMBG-2.0 (BRIA) is KeyoAPI’s background removal api for product photos, portraits, and design assets that must ship with clean alpha.</p>
+<p class="lead">RMBG-2.0 (BRIA) is KeyoAPI’s background-removal API for product photos, portraits, and design assets that must ship with clean alpha.</p>
 <p class="meta">Listed price: <span class="ok">$0.0068 / request</span> · Confirm live rates on <a href="/pricing/RMBG-2.0">interactive pricing</a>.</p>
 <div class="btnrow">
   <a class="btn btn-primary" href="/pricing/RMBG-2.0">Open interactive pricing</a>
@@ -73,7 +73,10 @@ ul{margin:0 0 14px;padding-left:1.2em}
   <a class="btn btn-secondary" href="/sign-up">Create account</a>
 </div>
 <h2>Overview</h2>
-<p>RMBG-2.0 (BRIA) is KeyoAPI’s background removal api for product photos, portraits, and design assets that must ship with clean alpha. Unlike consumer “remove background” sites, this is a developer-metered image matting API on an AI API relay. E-commerce feeds, creator tools, and print-on-demand flows need reliable cutouts without Photoshop macros. RMBG-2.0 focuses on high-accuracy mattes that survive zoom and marketplace compression. About $0.0068 per request—often cheaper than legacy SaaS background APIs that charge five to twenty cents an image. See /compare for a high-level AI API price comparison row on background removal. SKU studio automation, avatar builders, thumbnail pipelines, and design editors. Combine with sam3 when you need open-vocabulary masks beyond simple subject/background. Call Keyo matting endpoints with model=RMBG-2.0. Try it from /pricing/RMBG-2.0. RMBG-2.0 is a true matting API on /v1/images/mattings (multipart image upload), not a chat toy. Metered near $0.0068/request for catalog and avatar pipelines. Background removal in commerce is a reliability problem: hair edges, transparent packaging, and white-on-white SKUs. Build a QA loop that flags mattes with too much leftover background using simple pixel heuristics, then re-run or escalate to sam3 masks. Store alpha PNGs with SKU ids for CDN delivery. Meter per request so you can charge merchants per successful cutout. Do not demo this with chat/completions—use /v1/images/mattings with multipart uploads. That single detail separates a real background removal API from a toy prompt. Accept PNG/JPEG, return alpha. Soft-fail on tiny images. Offer a preview URL for merchant QA. Background removal API quality is judged by edge hair and plastic packaging—curate a regression set of fifty SKUs and re-score after every model upgrade.</p>
+<p>RMBG-2.0 (BRIA) is KeyoAPI’s background-removal API for product photos, portraits, and design assets that must ship with clean alpha. Unlike consumer remove-background websites, this is a developer-metered image matting API on an AI API relay.</p>
+<p>E-commerce feeds, creator tools, and print-on-demand flows need reliable cutouts without Photoshop macros. RMBG-2.0 focuses on high-accuracy mattes that survive zoom and marketplace compression. About $0.0068 per request—often cheaper than legacy SaaS background APIs that charge five to twenty cents an image. See /compare for a high-level price comparison row. Teams use it for SKU studio automation, avatar builders, thumbnail pipelines, and design editors; combine with sam3 when you need open-vocabulary masks beyond subject/background.</p>
+<p>Call Keyo matting endpoints with model=RMBG-2.0 on POST /v1/images/mattings (multipart image upload), not chat completions. Try it from /pricing/RMBG-2.0. Accept PNG/JPEG, return alpha, soft-fail on tiny images, and offer a preview URL for merchant QA.</p>
+<p>Cutout quality in commerce is a reliability problem: hair edges, transparent packaging, and white-on-white SKUs. Build a QA loop that flags leftover background, re-run or escalate to sam3 masks, store alpha PNGs with SKU ids, and curate a regression set of fifty SKUs after every model upgrade.</p>
 
 <h2>Quick start</h2>
 <div class="card">

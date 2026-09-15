@@ -66,7 +66,6 @@ ul{margin:0 0 14px;padding-left:1.2em}
 <h1>Claude API Pricing — KeyoAPI vs Typical Anthropic List Rates</h1>
 
 <p class="lead">Looking up Claude API pricing usually means you already want Anthropic-class chat or agents, but need clearer unit economics — or one prepaid balance that also covers GPT-class, DeepSeek, Whisper, and vision. This page compares indicative Keyo sell rates with typical public Anthropic list figures and shows how to call Claude-class IDs on an OpenAI-compatible gateway.</p>
-<p class="meta">Indicative comparison for planning. Confirm live Keyo rates in <a href="/pricing">Model Square</a> or the static <a href="/pricing-list">pricing list</a>.</p>
 <div class="btnrow">
   <a class="btn btn-primary" href="/sign-up">Get API key</a>
   <a class="btn btn-secondary" href="/pricing">Open Model Square</a>
@@ -74,7 +73,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
   <a class="btn btn-secondary" href="/free-models">Free models</a>
 </div>
 <h2>Price comparison table</h2>
-<p class="meta">Indicative figures for planning. Confirm live Keyo sell rates on interactive <a href="/pricing">Model Square</a> pages.</p>
+<p class="meta">Indicative figures for planning. Confirm live Keyo sell rates on interactive <a href="/pricing">Model Square</a> or the static <a href="/pricing-list">pricing list</a>.</p>
 <table>
 <thead><tr><th>Model ID</th><th>Typical official / context</th><th>KeyoAPI</th><th>Notes</th></tr></thead>
 <tbody>
@@ -106,8 +105,8 @@ ul{margin:0 0 14px;padding-left:1.2em}
 </table>
 <h2>Prototype free, then promote to Claude</h2>
 <p>Keyo does not ship Anthropic-branded free Claude IDs. For $0 prototyping on the same API key, use permanent free twins such as deepseek-v4-flash-free, deepseek-v4-pro-free, glm-5.2-free, and kimi-k3-free (fair-use limits). When quality gates pass, switch model= to claude-sonnet-5 or another Claude ID without changing base URL or auth.</p>
-<h2>How to think about this page</h2>
-<p>Claude API pricing searches are purchase-intent: teams are comparing dollars per million tokens before wiring agents, coding copilots, or support bots. Official Anthropic surfaces win on brand trust; KeyoAPI wins when you want one prepaid balance across Claude-class IDs plus GPT-class, DeepSeek, Whisper, OCR, and TTS — without five invoices.</p>
+<h2>Rates and how to call</h2>
+<p>Teams comparing Claude API pricing usually already want Anthropic-class chat or agents with clearer unit economics — or one prepaid balance across Claude-class IDs plus GPT-class, DeepSeek, Whisper, OCR, and TTS. Official Anthropic surfaces win on brand trust; KeyoAPI wins when you want that stack without five invoices.</p>
 <p>Keyo rates above are indicative sell prices from the live Keyo catalog. Always confirm interactive pages under /pricing/claude-sonnet-5, /pricing/claude-opus-5, /pricing/claude-fable-5, and /pricing/claude-fable-5-1 before contracting volume. Anthropic list bands and context tiers change — treat official figures as planning context.</p>
 <p>How to call: set OPENAI_BASE_URL=https://www.keyoapi.xyz/v1, use your Keyo API key, and pass a Claude model string (for example claude-sonnet-5) to POST /v1/chat/completions. Longer guides live at /model/claude-sonnet-5, /model/claude-opus-5, and the Fable pages.</p>
 <p>When Claude list prices spike your margin, keep Claude for hard reasoning and shift bulk classification or drafts to gpt-5.6-luna or deepseek-v4-flash on the same key. For OpenAI / GPT dollars see /openai-api-pricing; for Gemini dollars see /gemini-api-pricing; for DeepSeek see /deepseek-api-pricing; for free prototyping see /free-models.</p>

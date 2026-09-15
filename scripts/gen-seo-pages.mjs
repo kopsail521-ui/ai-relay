@@ -4,9 +4,10 @@
  * Usage: node scripts/gen-seo-pages.mjs
  *
  * User-facing copy: do not use meta-talk such as "crawlable", "for SEO",
- * "search engines", "this page targets", "search demand". Keep product CTAs
- * to /pricing/{id}. Do not globally strip the word "SEO" from use cases
- * (e.g. "SEO rewriting").
+ * "search engines", "this page targets", "search demand", "searches are",
+ * "buyers usually want", "How to think about this page", "What this page is not".
+ * Keep product CTAs to /pricing/{id}. Do not globally strip the word "SEO" from
+ * use cases (e.g. "SEO rewriting").
  */
 import fs from "fs";
 import path from "path";
@@ -811,6 +812,7 @@ function renderPricingLanding(p) {
   const canonical = `${site}/${p.slug}`;
   const tableHeading = p.tableHeading || "Price comparison table";
   const colOfficial = p.colOfficial || "Typical official / context";
+  const bodyHeading = p.bodyHeading || "Rates and how to call";
   const rows = p.rows
     .map(
       (r) => `<tr>
@@ -839,7 +841,6 @@ function renderPricingLanding(p) {
   -d '{"model":"${esc(defaultModel)}","messages":[{"role":"user","content":"Hello"}]}'</pre>`;
   const bodyHtml = `
 <p class="lead">${esc(p.lead)}</p>
-<p class="meta">Indicative comparison for planning. Confirm live Keyo rates in <a href="/pricing">Model Square</a> or the static <a href="/pricing-list">pricing list</a>.</p>
 <div class="btnrow">
   <a class="btn btn-primary" href="/sign-up">Get API key</a>
   <a class="btn btn-secondary" href="/pricing">Open Model Square</a>
@@ -847,7 +848,7 @@ function renderPricingLanding(p) {
   <a class="btn btn-secondary" href="/free-models">Free models</a>
 </div>
 <h2>${esc(tableHeading)}</h2>
-<p class="meta">Indicative figures for planning. Confirm live Keyo sell rates on interactive <a href="/pricing">Model Square</a> pages.</p>
+<p class="meta">Indicative figures for planning. Confirm live Keyo sell rates on interactive <a href="/pricing">Model Square</a> or the static <a href="/pricing-list">pricing list</a>.</p>
 <table>
 <thead><tr><th>Model ID</th><th>${esc(colOfficial)}</th><th>KeyoAPI</th><th>Notes</th></tr></thead>
 <tbody>
@@ -856,7 +857,7 @@ ${rows}
 </table>
 <h2>${esc(p.freeKiller.title)}</h2>
 <p>${esc(p.freeKiller.body)}</p>
-<h2>How to think about this page</h2>
+<h2>${esc(bodyHeading)}</h2>
 ${bodyParas}
 ${curlBlock}
 <h2>FAQ</h2>

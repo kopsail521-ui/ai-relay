@@ -180,12 +180,31 @@ async function probeNewApiToken(apiKey) {
 }
 
 async function validateToken(apiKey) {
-  if (!(await probeNewApiToken(apiKey))) return null;
+  const authed = await probeNewApiToken(apiKey);
+  if (!authed) {
+    console.warn("[apimart] token probe failed (usage/models)");
+    return null;
+  }
   const db = openDb(DB_PATH, true);
-  if (!db) return { userId: 0, tokenId: 0, skipBill: true };
+  if (!db) {
+    console.warn("[apimart] DB missing at", DB_PATH, "— skipBill");
+    return { userId: 0, tokenId: 0, skipBill: true };
+  }
   try {
     const row = lookupTokenRow(db, apiKey);
-    if (!row || Number(row.status) !== 1) return null;
+    if (!row) {
+      console.warn(
+        "[apimart] token not in DB; db=",
+        DB_PATH,
+        "prefix=",
+        String(apiKey).replace(/^sk-/i, "").trim().slice(0, 12)
+      );
+      return null;
+    }
+    if (Number(row.status) !== 1) {
+      console.warn("[apimart] token disabled status=", row.status, "id=", row.id);
+      return null;
+    }
     return {
       userId: row.user_id,
       tokenId: row.id,
@@ -619,8 +638,10 @@ const server = http.createServer(async (req, res) => {
       ok: true,
       models: catalog.models.length,
       db: fs.existsSync(DB_PATH),
+      db_path: DB_PATH,
       key: !!APIMART_KEY,
       openlux: !!OPENLUX_KEY,
+      new_api: NEW_API_BASE,
     });
   }
 
@@ -756,7 +777,10 @@ const server = http.createServer(async (req, res) => {
       }
     }
 
-    const submitPath = `/v1/videos/generations${qsOf(req.url)}`;
+    const submitPath =
+      (meta.upstream_submit_path
+        ? String(meta.upstream_submit_path)
+        : "/v1/videos/generations") + qsOf(req.url);
     const up = await proxyOrigin(upOrigin, upKey, req, bodyBuf, submitPath);
     const text = up.buf.toString("utf8");
     if (up.status >= 200 && up.status < 300) {

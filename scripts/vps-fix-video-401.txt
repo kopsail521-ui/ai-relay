@@ -1,0 +1,61 @@
+# 修复视频 401：重建 3011，强制正确挂载 NEW_API_DB，并重测失败视频模型
+set -e
+cd /opt/ai-relay
+sudo git pull
+
+KEY=$(python3 - <<'PY'
+import sqlite3
+k=sqlite3.connect("/opt/ai-relay/data/new-api/one-api.db").execute(
+  "SELECT key FROM tokens WHERE id=2 AND status=1"
+).fetchone()[0]
+print(k if str(k).startswith("sk-") else "sk-"+k)
+PY
+)
+
+echo "=== 重建 apimart-passthrough ==="
+sudo docker build -t keyo-apimart-passthrough ./services/apimart-passthrough
+sudo docker rm -f ai-relay-apimart-passthrough 2>/dev/null || true
+sudo docker run -d --name ai-relay-apimart-passthrough --restart always --network host \
+  --env-file /opt/ai-relay/.env.apimart \
+  -v /opt/ai-relay/data:/data:rw \
+  -e NEW_API_DB=/data/new-api/one-api.db \
+  -e NEW_API_BASE=http://127.0.0.1:3000 \
+  -e CATALOG=/app/catalog.json \
+  -e LISTEN_HOST=127.0.0.1 \
+  -e PORT=3011 \
+  keyo-apimart-passthrough
+sleep 2
+curl -sS http://127.0.0.1:3011/healthz; echo
+
+echo "=== 容器内 lookup ==="
+sudo docker exec ai-relay-apimart-passthrough node -e '
+const {DatabaseSync}=require("node:sqlite");
+const fs=require("fs");
+const p=process.env.NEW_API_DB;
+const bare="'"${KEY#sk-}"'";
+console.log({p, exists:fs.existsSync(p)});
+const db=new DatabaseSync(p,{readOnly:true});
+const row=db.prepare("SELECT id,status,length(key) n FROM tokens WHERE key=? OR key=?").get(bare,"sk-"+bare)
+  || db.prepare("SELECT id,status,length(key) n FROM tokens WHERE key=? COLLATE NOCASE").get(bare);
+console.log("lookup", row||null);
+db.close();
+'
+
+echo "=== 重测视频失败项 ==="
+for m in wan3.0-video seedance-2.5 seedance-2.0 flux-3-video MiniMax-H3 gemini-omni-1.1-flash gemini-omni-1.1-flash-ext grok-imagine-video-1.5-preview; do
+  code=$(curl -sS -o /tmp/vtest.json -w "%{http_code}" -m 60 \
+    -X POST https://www.keyoapi.xyz/v1/videos/generations \
+    -H "Authorization: Bearer $KEY" -H "Content-Type: application/json" \
+    -d "{\"model\":\"$m\",\"prompt\":\"a cat walks\"}")
+  echo "$code $m $(head -c 160 /tmp/vtest.json | tr '\n' ' ')"
+done
+
+echo "=== 重测 sunburst ==="
+curl -sS -o /tmp/sun.json -w "sunburst=%{http_code}\n" -m 90 \
+  -X POST https://www.keyoapi.xyz/v1/images/generations \
+  -H "Authorization: Bearer $KEY" -H "Content-Type: application/json" \
+  -d '{"model":"gpt-image-2.5-sunburst","prompt":"red pixel","n":1,"size":"1024x1024"}'
+head -c 180 /tmp/sun.json; echo
+
+sudo docker logs --tail 30 ai-relay-apimart-passthrough
+echo DONE_FIX_VIDEO_401

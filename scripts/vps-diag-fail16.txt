@@ -1,0 +1,71 @@
+# 诊断失败模型：视频 401 / Gitee 502 / rerank
+set -e
+cd /opt/ai-relay
+KEY=$(python3 - <<'PY'
+import sqlite3
+k=sqlite3.connect("/opt/ai-relay/data/new-api/one-api.db").execute(
+  "SELECT key FROM tokens WHERE id=2 AND status=1"
+).fetchone()[0]
+print(k if str(k).startswith("sk-") else "sk-"+k)
+PY
+)
+
+echo "=== A) 3011 / 3010 healthz ==="
+curl -sS http://127.0.0.1:3011/healthz; echo
+curl -sS http://127.0.0.1:3010/healthz; echo
+
+echo "=== B) 3011 直接打 videos/generations（绕过 Caddy）==="
+curl -sS -o /tmp/v3011.json -w "direct3011=%{http_code}\n" \
+  -X POST http://127.0.0.1:3011/v1/videos/generations \
+  -H "Authorization: Bearer $KEY" -H "Content-Type: application/json" \
+  -d '{"model":"wan3.0-video","prompt":"a cat"}'
+head -c 300 /tmp/v3011.json; echo
+
+echo "=== C) 公网同路径 ==="
+curl -sS -o /tmp/vpub.json -w "public=%{http_code}\n" \
+  -X POST https://www.keyoapi.xyz/v1/videos/generations \
+  -H "Authorization: Bearer $KEY" -H "Content-Type: application/json" \
+  -d '{"model":"wan3.0-video","prompt":"a cat"}'
+head -c 300 /tmp/vpub.json; echo
+
+echo "=== D) 3011 容器 lookup ==="
+sudo docker exec ai-relay-apimart-passthrough node -e '
+const {DatabaseSync}=require("node:sqlite");
+const fs=require("fs");
+const p=process.env.NEW_API_DB||"/data/one-api.db";
+const bare="'"${KEY#sk-}"'";
+console.log("db",p,"exists",fs.existsSync(p));
+if(fs.existsSync(p)){
+  const db=new DatabaseSync(p,{readOnly:true});
+  const row=db.prepare("SELECT id,status,length(key) n FROM tokens WHERE key=? COLLATE NOCASE OR key=?").get(bare,"sk-"+bare);
+  console.log("lookup",row||null);
+  db.close();
+}
+' 2>&1 || echo NO_APIMART_CONTAINER
+
+echo "=== E) apimart 环境（脱敏）==="
+sudo docker inspect ai-relay-apimart-passthrough --format '{{range .Config.Env}}{{println .}}{{end}}' 2>/dev/null \
+  | grep -E 'NEW_API|APIMART|OPENLUX|LISTEN|PORT' | sed -E 's/(KEY|TOKEN|SECRET)=.*/\1=***/'
+
+echo "=== F) New API 渠道：video / gitee / whisper / rerank ==="
+python3 - <<'PY'
+import sqlite3,json
+con=sqlite3.connect("/opt/ai-relay/data/new-api/one-api.db")
+cols=[r[1] for r in con.execute("PRAGMA table_info(channels)")]
+print("cols",cols)
+# print enabled channels touching keywords
+for row in con.execute("SELECT id,name,status,type,substr(models,1,120),substr(base_url,1,80) FROM channels"):
+  cid,name,status,typ,models,base=row
+  blob=(name or "")+" "+(models or "")+" "+(base or "")
+  if any(k.lower() in blob.lower() for k in ["wan","seedance","grok","veo","whisper","gemma","Prover","Rerank","Fun-ASR","gitee","Keyo","Video","apimart","openlux"]):
+    print(f"id={cid} status={status} type={typ} name={name!r} base={base!r} models={models!r}")
+PY
+
+echo "=== G) 重试 sunburst + whisper-turbo 直打 ==="
+curl -sS -o /tmp/sun.json -w "sunburst=%{http_code}\n" -m 90 \
+  -X POST https://www.keyoapi.xyz/v1/images/generations \
+  -H "Authorization: Bearer $KEY" -H "Content-Type: application/json" \
+  -d '{"model":"gpt-image-2.5-sunburst","prompt":"red pixel","n":1,"size":"1024x1024"}'
+head -c 200 /tmp/sun.json; echo
+
+echo DONE_DIAG_FAIL16

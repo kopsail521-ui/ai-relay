@@ -186,48 +186,51 @@ async function probeNewApiToken(apiKey) {
   }
 }
 
-/** Validate New API token */
+/** Validate New API token — DB hit is authoritative for billing; New API probe is fallback. */
 async function validateToken(apiKey) {
+  const db = openDb(true);
+  if (db) {
+    try {
+      const row = lookupTokenRow(db, apiKey);
+      if (row && Number(row.status) === 1) {
+        return {
+          userId: row.user_id,
+          tokenId: row.id,
+          name: row.name,
+          remainQuota: row.remain_quota,
+          unlimited: !!row.unlimited_quota,
+          skipBill: false,
+        };
+      }
+      if (row && Number(row.status) !== 1) {
+        console.warn(
+          "[gitee-passthrough] token disabled status=",
+          row.status,
+          "id=",
+          row.id
+        );
+        return null;
+      }
+    } finally {
+      db.close();
+    }
+  } else {
+    console.warn("[gitee-passthrough] DB missing at", DB_PATH);
+  }
+
+  // No local row: allow through only if New API accepts the key (skip local bill).
   const authed = await probeNewApiToken(apiKey);
   if (!authed) return null;
-
-  const db = openDb(true);
-  if (!db) {
-    // Auth OK via New API, but local DB missing — do not pretend Invalid token
-    console.warn("[gitee-passthrough] DB missing at", DB_PATH);
+  if (!fs.existsSync(DB_PATH)) {
     return { userId: 0, tokenId: 0, name: "unknown", skipBill: true };
   }
-  try {
-    const row = lookupTokenRow(db, apiKey);
-    if (!row) {
-      console.warn(
-        "[gitee-passthrough] token not in DB after auth OK; db=",
-        DB_PATH,
-        "bare_prefix=",
-        String(apiKey).replace(/^sk-/i, "").trim().slice(0, 12)
-      );
-      return null;
-    }
-    if (Number(row.status) !== 1) {
-      console.warn(
-        "[gitee-passthrough] token disabled status=",
-        row.status,
-        "id=",
-        row.id
-      );
-      return null;
-    }
-    return {
-      userId: row.user_id,
-      tokenId: row.id,
-      name: row.name,
-      remainQuota: row.remain_quota,
-      unlimited: !!row.unlimited_quota,
-      skipBill: false,
-    };
-  } finally {
-    db.close();
-  }
+  console.warn(
+    "[gitee-passthrough] token not in DB after auth OK; db=",
+    DB_PATH,
+    "bare_prefix=",
+    String(apiKey).replace(/^sk-/i, "").trim().slice(0, 12)
+  );
+  return null;
 }
 
 function priceUsdForModel(modelId) {

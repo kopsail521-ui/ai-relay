@@ -1,0 +1,60 @@
+# 重建 3010（DB-first 鉴权）并复测 Duix / AnimeSharp / RMBG
+set -e
+cd /opt/ai-relay
+sudo git pull
+
+KEY=$(python3 - <<'PY'
+import sqlite3
+k=sqlite3.connect("/opt/ai-relay/data/new-api/one-api.db").execute(
+  "SELECT key FROM tokens WHERE id=2 AND status=1"
+).fetchone()[0]
+print(k if str(k).startswith("sk-") else "sk-"+k)
+PY
+)
+
+sudo docker build -t keyo-gitee-passthrough ./services/gitee-passthrough
+sudo docker rm -f ai-relay-gitee-passthrough 2>/dev/null || true
+sudo docker run -d --name ai-relay-gitee-passthrough --restart always --network host \
+  --env-file /opt/ai-relay/.env.gitee \
+  -v /opt/ai-relay/data/new-api:/data:rw \
+  -e NEW_API_DB=/data/one-api.db \
+  -e NEW_API_BASE=http://127.0.0.1:3000 \
+  -e CATALOG=/app/catalog.json \
+  -e LISTEN_HOST=127.0.0.1 \
+  -e PORT=3010 \
+  keyo-gitee-passthrough
+sleep 2
+curl -sS http://127.0.0.1:3010/healthz; echo
+sudo docker exec ai-relay-gitee-passthrough grep -n "DB hit is authoritative\|No local row" /app/server.mjs | head
+
+python3 - <<'PY'
+import struct,zlib
+w=h=256
+raw=b"".join(b"\x00"+bytes([0,128,255])*w for _ in range(h))
+def chunk(t,d):
+  return struct.pack(">I",len(d))+t+d+struct.pack(">I",zlib.crc32(t+d)&0xffffffff)
+png=b"\x89PNG\r\n\x1a\n"+chunk(b"IHDR",struct.pack(">IIBBBBB",w,h,8,2,0,0,0))+chunk(b"IDAT",zlib.compress(raw,9))+chunk(b"IEND",b"")
+open("/tmp/t256.png","wb").write(png)
+print("png_ok")
+PY
+
+echo "=== AnimeSharp ==="
+curl -sS -o /tmp/as.json -w "anime=%{http_code}\n" -m 90 \
+  -X POST https://www.keyoapi.xyz/v1/images/upscaling \
+  -H "Authorization: Bearer $KEY" -F model=AnimeSharp -F image=@/tmp/t256.png
+head -c 120 /tmp/as.json; echo
+
+echo "=== Duix (save full body) ==="
+curl -sS -o /tmp/duix.json -w "duix=%{http_code}\n" -m 90 \
+  -X POST https://www.keyoapi.xyz/v1/async/videos/audio-video-to-video \
+  -H "Authorization: Bearer $KEY" -H "Content-Type: application/json" \
+  -d '{"model":"Duix-Avatar","prompt":"speak","audio_url":"https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3","video_url":"https://samplelib.com/lib/preview/mp4/sample-5s.mp4"}'
+python3 -c "print(open('/tmp/duix.json',encoding='utf-8',errors='replace').read()[:500])"
+
+echo "=== RMBG ==="
+curl -sS -o /tmp/rmbg.json -w "rmbg=%{http_code}\n" -m 60 \
+  -X POST https://www.keyoapi.xyz/v1/images/mattings \
+  -H "Authorization: Bearer $KEY" -F model=RMBG-2.0 -F image=@/tmp/t256.png
+head -c 120 /tmp/rmbg.json; echo
+
+echo DONE_FIX_GITEE_DB_FIRST

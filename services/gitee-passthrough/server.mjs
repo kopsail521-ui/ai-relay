@@ -449,7 +449,26 @@ const server = http.createServer(async (req, res) => {
     return proxyToGitee(req, res, bodyBuf);
   }
 
-  const modelId = extractModel(req.url || "", bodyBuf, req.headers["content-type"]);
+  let forwardBuf = bodyBuf;
+  // Duix-Avatar upstream requires ref_audio / ref_video (normalize common aliases).
+  if (
+    urlPath.includes("/async/videos/audio-video-to-video") &&
+    bodyBuf.length &&
+    String(req.headers["content-type"] || "").includes("json")
+  ) {
+    try {
+      const body = JSON.parse(bodyBuf.toString("utf8") || "{}");
+      if (!body.ref_audio && (body.audio_url || body.audio)) {
+        body.ref_audio = body.audio_url || body.audio;
+      }
+      if (!body.ref_video && (body.video_url || body.video)) {
+        body.ref_video = body.video_url || body.video;
+      }
+      forwardBuf = Buffer.from(JSON.stringify(body), "utf8");
+    } catch {}
+  }
+
+  const modelId = extractModel(req.url || "", forwardBuf, req.headers["content-type"]);
   if (!modelId || !modelMap[modelId]) {
     return json(res, 400, {
       error: {
@@ -483,7 +502,7 @@ const server = http.createServer(async (req, res) => {
   }
 
   try {
-    await proxyToGitee(req, res, bodyBuf);
+    await proxyToGitee(req, res, forwardBuf);
   } catch (e) {
     json(res, 502, {
       error: { message: String(e.message || e), type: "server_error" },

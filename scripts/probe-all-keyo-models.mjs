@@ -323,11 +323,10 @@ async function probeOne(id) {
       case "avatar":
         res = await callJson("/v1/async/videos/audio-video-to-video", {
           model: id,
-          prompt: "test",
-          // Duix needs media; public samples prove route + billing without full pipeline
-          audio_url:
+          prompt: "speak",
+          ref_audio:
             "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
-          video_url:
+          ref_video:
             "https://samplelib.com/lib/preview/mp4/sample-5s.mp4",
         });
         break;

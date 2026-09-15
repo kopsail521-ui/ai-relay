@@ -1,0 +1,12 @@
+# 上线主页/About 兼容边界文案（SEO 静态页 + 品牌主页）
+set -e
+cd /opt/ai-relay
+sudo git config --global --add safe.directory /opt/ai-relay 2>/dev/null || true
+sudo git pull
+# Caddy 直接读 static/seo 与 static/brand 时，pull 即生效
+# 若 New API 容器里还有旧 brand 副本，同步一次：
+sudo docker cp /opt/ai-relay/static/brand/keyo-home.html ai-relay-new-api:/app/web/dist/brand/keyo-home.html 2>/dev/null || true
+sudo docker cp /opt/ai-relay/static/brand/keyo-home.html ai-relay-new-api:/app/web/public/brand/keyo-home.html 2>/dev/null || true
+curl -sS https://www.keyoapi.xyz/ | grep -o 'OpenAI-compatible on chat[^<]*' | head -n 1 || true
+curl -sS https://www.keyoapi.xyz/about | grep -o 'dedicated REST[^<]*' | head -n 1 || true
+echo DONE_HOME_COMPAT_COPY

@@ -3,18 +3,18 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>About KeyoAPI - One API for Multiple AI Models | Cheap LLM API Relay</title>
-<meta name="description" content="KeyoAPI is an AI API relay that gives developers one OpenAI-compatible endpoint for GPT-class, Claude-class, DeepSeek, GLM, Kimi, Whisper, OCR, vision and TTS — unified billing, low prices, and 4 permanently free models." />
+<title>About KeyoAPI - One API Key for Chat, Speech, OCR &amp; Vision | Cheap LLM API</title>
+<meta name="description" content="KeyoAPI is an AI API relay: chat, image and speech are OpenAI-compatible; OCR, vision, TTS-async and digital-human models use dedicated REST paths — same key, same prepaid balance, 4 permanently free models." />
 <link rel="canonical" href="https://www.keyoapi.xyz/about" />
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://www.keyoapi.xyz/about" />
-<meta property="og:title" content="About KeyoAPI - One API for Multiple AI Models | Cheap LLM API Relay" />
-<meta property="og:description" content="KeyoAPI is an AI API relay that gives developers one OpenAI-compatible endpoint for GPT-class, Claude-class, DeepSeek, GLM, Kimi, Whisper, OCR, vision and TTS — unified billing, low prices, and 4 permanently free models." />
+<meta property="og:title" content="About KeyoAPI - One API Key for Chat, Speech, OCR &amp; Vision | Cheap LLM API" />
+<meta property="og:description" content="KeyoAPI is an AI API relay: chat, image and speech are OpenAI-compatible; OCR, vision, TTS-async and digital-human models use dedicated REST paths — same key, same prepaid balance, 4 permanently free models." />
 <meta property="og:image" content="https://www.keyoapi.xyz/logo.png" />
 <meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:title" content="About KeyoAPI - One API for Multiple AI Models | Cheap LLM API Relay" />
-<meta name="twitter:description" content="KeyoAPI is an AI API relay that gives developers one OpenAI-compatible endpoint for GPT-class, Claude-class, DeepSeek, GLM, Kimi, Whisper, OCR, vision and TTS — unified billing, low prices, and 4 permanently free models." />
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"AboutPage","name":"About KeyoAPI","url":"https://www.keyoapi.xyz/about","description":"About KeyoAPI — cheap LLM API and multimodal AI API relay."}</script>
+<meta name="twitter:title" content="About KeyoAPI - One API Key for Chat, Speech, OCR &amp; Vision | Cheap LLM API" />
+<meta name="twitter:description" content="KeyoAPI is an AI API relay: chat, image and speech are OpenAI-compatible; OCR, vision, TTS-async and digital-human models use dedicated REST paths — same key, same prepaid balance, 4 permanently free models." />
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"AboutPage","name":"About KeyoAPI","url":"https://www.keyoapi.xyz/about","description":"About KeyoAPI — cheap LLM API relay with OpenAI-compatible chat/image/speech and dedicated REST for OCR, vision and avatars."}</script>
 <style>:root {
   --bg0:#f7fafc; --bg1:#eef6ff; --ink:#0f172a; --muted:#475569;
   --line:#cbd5e1; --accent:#2563eb; --card:#fff; --ok:#047857;
@@ -65,18 +65,18 @@ ul{margin:0 0 14px;padding-left:1.2em}
 <p class="eyebrow">KEYOAPI</p>
 <h1>One API for Multiple AI Models</h1>
 
-<p class="lead">KeyoAPI is a developer-first <strong>AI API relay</strong>: one OpenAI-compatible endpoint that connects your code to GPT-class, Claude-class, DeepSeek, GLM, Kimi, Whisper, OCR, vision, TTS, video and digital-human models. One API key, one prepaid balance, unified billing — no five vendor dashboards, no five invoices.</p>
+<p class="lead">KeyoAPI is a developer-first <strong>AI API relay</strong>: chat, image and speech are OpenAI-compatible, while OCR, vision tools, async video/docs and digital-human models run on dedicated REST paths — <strong>same key, same prepaid balance</strong>. No five vendor dashboards, no five invoices.</p>
 <div class="btnrow">
   <a class="btn btn-primary" href="/sign-up">Start free — get API key</a>
   <a class="btn btn-secondary" href="/brand/keyo-docs.html">Docs</a>
   <a class="btn btn-secondary" href="/pricing">Browse Models</a>
 </div>
 <h2>What we do</h2>
-<p>We aggregate many model providers behind a single API surface. You keep your favorite SDK (the OpenAI SDK works as-is), swap <code>model=</code> names to switch vendors, and pay one bill. Because we buy capacity across providers and route by price and reliability, our listed rates undercut most official list prices.</p>
+<p>We aggregate many model providers behind one prepaid account. For chat (and supported image/speech paths), keep the OpenAI SDK: set <code>OPENAI_BASE_URL=https://www.keyoapi.xyz/v1</code> and swap <code>model=</code>. For OCR, matting, detection, async video and avatars, call the documented dedicated paths with the same key.</p>
 <ul>
-  <li><strong>OpenAI-compatible:</strong> point your <code>OPENAI_BASE_URL</code> at <code>https://www.keyoapi.xyz/v1</code> and existing code runs.</li>
+  <li><strong>OpenAI-compatible paths:</strong> <code>/v1/chat/completions</code>, <code>/v1/images/generations</code>, <code>/v1/audio/transcriptions</code>, <code>/v1/audio/speech</code>.</li>
+  <li><strong>Dedicated REST:</strong> OCR, CV tools, async TTS/video, digital humans — billed per page / request / second / characters.</li>
   <li><strong>One key, one balance:</strong> no per-vendor accounts or credits to manage.</li>
-  <li><strong>Broad model coverage:</strong> text chat, reasoning, speech-to-text, OCR, image, video, TTS and digital humans.</li>
   <li><strong>A permanently free tier:</strong> four models at $0 for prototyping (fair-use limits apply).</li>
 </ul>
 <h2>Pricing philosophy</h2>

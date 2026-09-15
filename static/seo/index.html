@@ -3,18 +3,18 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>KeyoAPI - Cheap LLM API &amp; AI API Relay for Developers</title>
-<meta name="description" content="KeyoAPI is a cheap LLM API and AI API relay: OpenAI-compatible access to GPT-class, Claude-class, DeepSeek, GLM, Kimi, Whisper, OCR, vision, TTS, and digital humans — one key, unified billing, permanent $0 free tier." />
+<title>KeyoAPI - One API Key for Chat, Speech, OCR &amp; Vision | Cheap LLM API</title>
+<meta name="description" content="One key, one balance for GPT-class, Claude, DeepSeek, Whisper, OCR, vision, TTS and avatar models. Chat, image and speech paths are OpenAI-compatible; OCR, CV and digital-human use dedicated REST paths. Cheap LLM API with prepaid credits." />
 <link rel="canonical" href="https://www.keyoapi.xyz/" />
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://www.keyoapi.xyz/" />
-<meta property="og:title" content="KeyoAPI - Cheap LLM API &amp; AI API Relay for Developers" />
-<meta property="og:description" content="Call GPT-class, Claude-class, DeepSeek, GLM, Kimi, Whisper, OCR, vision, and TTS through one OpenAI-compatible endpoint." />
+<meta property="og:title" content="KeyoAPI - One API Key for Chat, Speech, OCR &amp; Vision | Cheap LLM API" />
+<meta property="og:description" content="One API key for chat, image, speech, OCR, vision and avatars — OpenAI-compatible on chat/image/speech paths; dedicated REST for the rest." />
 <meta property="og:image" content="https://www.keyoapi.xyz/logo.png" />
 <meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:title" content="KeyoAPI - Cheap LLM API &amp; AI API Relay for Developers" />
-<meta name="twitter:description" content="One OpenAI-compatible endpoint for many AI models. Cheap, unified billing, $0 free tier." />
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"KeyoAPI","url":"https://www.keyoapi.xyz","description":"Cheap LLM API and multimodal AI API relay with OpenAI-compatible endpoints.","applicationCategory":"DeveloperApplication","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}</script>
+<meta name="twitter:title" content="KeyoAPI - One API Key for Chat, Speech, OCR &amp; Vision | Cheap LLM API" />
+<meta name="twitter:description" content="One API key for chat, image, speech, OCR, vision and avatars — OpenAI-compatible on chat/image/speech paths; dedicated REST for the rest." />
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"KeyoAPI","url":"https://www.keyoapi.xyz","description":"Cheap LLM API relay: OpenAI-compatible chat/image/speech paths plus dedicated REST for OCR, vision and avatars — one prepaid key.","applicationCategory":"DeveloperApplication","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}</script>
 <style>
 :root{--bg0:#f7fafc;--bg1:#eef6ff;--ink:#0f172a;--muted:#475569;--line:#cbd5e1;--accent:#2563eb;--card:#fff;--ok:#047857;--panel:#0f172a;--panel-ink:#e2e8f0;--panel-muted:#94a3b8}
 *{box-sizing:border-box}
@@ -34,6 +34,11 @@ h1{font-size:clamp(2rem,5vw,3.2rem);line-height:1.15;margin:0 0 16px}
 .panel{background:var(--panel);color:var(--panel-ink);border-radius:12px;padding:16px 18px;text-align:left;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;overflow:auto}
 .panel .label{color:var(--panel-muted);margin-bottom:6px}
 .panel .label+.label{margin-top:14px}
+.surfaces{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));margin:16px 0 8px;text-align:left}
+.surf{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px;font-size:14px}
+.surf h3{font-size:15px;margin:0 0 8px}
+.surf ul{margin:0;padding-left:1.15em;color:var(--muted)}
+.surf code{font-size:12px;color:var(--ink)}
 .content{max-width:880px;margin:0 auto;padding:8px 20px 48px}
 h2{font-size:1.25rem;margin:28px 0 10px}
 .meta{font-size:14px;color:var(--muted);margin:0 0 14px}
@@ -64,7 +69,7 @@ pre{background:#0f172a;color:#e2e8f0;padding:14px 16px;border-radius:10px;overfl
   <div class="inner">
     <div class="eyebrow">KEYOAPI · ONE KEY, MANY MODELS</div>
     <h1>One API for Multiple AI Models</h1>
-    <p class="sub">Connect to multiple text, image and speech models through one OpenAI-compatible endpoint. One API key, unified billing and familiar SDKs — a <strong>cheap LLM API</strong> and <strong>AI API relay</strong> without five vendor bills.</p>
+    <p class="sub"><strong>One API key for chat, image, speech, OCR, vision and avatars</strong> — OpenAI-compatible on chat/image/speech paths; dedicated REST for the rest. A <strong>cheap LLM API</strong> with one prepaid balance — without five vendor bills.</p>
     <div class="actions">
       <a class="btn btn-primary" href="/sign-up">Start free — get API key</a>
       <a class="btn btn-secondary" href="/brand/keyo-docs.html">Docs</a>
@@ -73,14 +78,35 @@ pre{background:#0f172a;color:#e2e8f0;padding:14px 16px;border-radius:10px;overfl
     <div class="panel">
       <div class="label">Base URL</div>
       <div>https://www.keyoapi.xyz/v1</div>
-      <div class="label">Example</div>
+      <div class="label">Example (OpenAI-compatible chat)</div>
       <div>POST /v1/chat/completions &nbsp;·&nbsp; model=gpt-5.6-luna</div>
       <div class="label">What you get</div>
-      <div>OpenAI-compatible chat, image &amp; speech APIs · one API key · unified billing · model catalog at /pricing</div>
+      <div>Compatible: chat / image / speech · Dedicated REST: OCR, CV, async video/docs, digital human · one key · /pricing</div>
     </div>
   </div>
 </section>
 <div class="content">
+<h2>API surfaces (same key, same balance)</h2>
+<p class="meta">Billing unit is a quick compatibility signal: token or OpenAI path ≈ SDK drop-in; page / request / second / characters ≈ dedicated docs path.</p>
+<div class="surfaces">
+  <div class="surf">
+    <h3>OpenAI-compatible</h3>
+    <ul>
+      <li><code>/v1/chat/completions</code> — GPT-class, Claude, DeepSeek, GLM, Kimi</li>
+      <li><code>/v1/images/generations</code> — text-to-image</li>
+      <li><code>/v1/audio/transcriptions</code> — Whisper</li>
+      <li><code>/v1/audio/speech</code> — sync TTS</li>
+    </ul>
+  </div>
+  <div class="surf">
+    <h3>Dedicated REST (see docs)</h3>
+    <ul>
+      <li>OCR / docs — often per page</li>
+      <li>Vision tools (matting, detect, upscale) — per request</li>
+      <li>Async TTS / video / digital human — per chars / request / second</li>
+    </ul>
+  </div>
+</div>
 <h2>Headline prices</h2>
 <p class="meta">Indicative KeyoAPI sell rates for planning. Full table on <a href="/compare">/compare</a> · live list on <a href="/pricing-list">/pricing-list</a>.</p>
 <table>
@@ -136,8 +162,9 @@ pre{background:#0f172a;color:#e2e8f0;padding:14px 16px;border-radius:10px;overfl
 <h2>Integrate in minutes</h2>
 <pre><code>export OPENAI_BASE_URL=https://www.keyoapi.xyz/v1
 export OPENAI_API_KEY=sk-...
-# chat: model=gpt-5.6-terra or claude-sonnet-5 or glm-5.2-free
-# speech: POST /v1/audio/transcriptions model=whisper-large-v3</code></pre>
+# chat (OpenAI SDK): model=gpt-5.6-terra | claude-sonnet-5 | glm-5.2-free
+# speech: POST /v1/audio/transcriptions model=whisper-large-v3
+# OCR / matting / avatars: use dedicated paths in Docs — not drop-in chat SDK</code></pre>
 </div>
 <footer class="foot">
   <div class="frow">

@@ -291,11 +291,14 @@ ${relatedLinks(m.related)}
 
 function renderHome() {
   // Conversion-first hero (matches keyo-home) + below-fold anchors.
-  // Title/description keep cheap llm api / ai api relay; H1 is product claim.
-  const title = "KeyoAPI - Cheap LLM API & AI API Relay for Developers";
+  // OpenAI-compatible is a path fact, not a whole-catalog claim.
+  const title = "KeyoAPI - One API Key for Chat, Speech, OCR & Vision | Cheap LLM API";
   const description =
-    "KeyoAPI is a cheap LLM API and AI API relay: OpenAI-compatible access to GPT-class, Claude-class, DeepSeek, GLM, Kimi, Whisper, OCR, vision, TTS, and digital humans — one key, unified billing, permanent $0 free tier.";
+    "One key, one balance for GPT-class, Claude, DeepSeek, Whisper, OCR, vision, TTS and avatar models. Chat, image and speech paths are OpenAI-compatible; OCR, CV and digital-human use dedicated REST paths. Cheap LLM API with prepaid credits.";
   const canonical = `${site}/`;
+  const ogDescription =
+    "One API key for chat, image, speech, OCR, vision and avatars — OpenAI-compatible on chat/image/speech paths; dedicated REST for the rest.";
+  const twitterDescription = ogDescription;
   const headlineRows = priceRefs.compare_rows
     .slice(0, 4)
     .map(
@@ -346,18 +349,18 @@ function renderHome() {
 <meta property="og:type" content="website" />
 <meta property="og:url" content="${esc(canonical)}" />
 <meta property="og:title" content="${esc(title)}" />
-<meta property="og:description" content="Call GPT-class, Claude-class, DeepSeek, GLM, Kimi, Whisper, OCR, vision, and TTS through one OpenAI-compatible endpoint." />
+<meta property="og:description" content="${esc(ogDescription)}" />
 <meta property="og:image" content="${site}/logo.png" />
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content="${esc(title)}" />
-<meta name="twitter:description" content="One OpenAI-compatible endpoint for many AI models. Cheap, unified billing, $0 free tier." />
+<meta name="twitter:description" content="${esc(twitterDescription)}" />
 <script type="application/ld+json">${JSON.stringify({
     "@context": "https://schema.org",
     "@type": "WebApplication",
     name: "KeyoAPI",
     url: site,
     description:
-      "Cheap LLM API and multimodal AI API relay with OpenAI-compatible endpoints.",
+      "Cheap LLM API relay: OpenAI-compatible chat/image/speech paths plus dedicated REST for OCR, vision and avatars — one prepaid key.",
     applicationCategory: "DeveloperApplication",
     offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
   })}</script>
@@ -380,6 +383,11 @@ h1{font-size:clamp(2rem,5vw,3.2rem);line-height:1.15;margin:0 0 16px}
 .panel{background:var(--panel);color:var(--panel-ink);border-radius:12px;padding:16px 18px;text-align:left;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;overflow:auto}
 .panel .label{color:var(--panel-muted);margin-bottom:6px}
 .panel .label+.label{margin-top:14px}
+.surfaces{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));margin:16px 0 8px;text-align:left}
+.surf{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px;font-size:14px}
+.surf h3{font-size:15px;margin:0 0 8px}
+.surf ul{margin:0;padding-left:1.15em;color:var(--muted)}
+.surf code{font-size:12px;color:var(--ink)}
 .content{max-width:880px;margin:0 auto;padding:8px 20px 48px}
 h2{font-size:1.25rem;margin:28px 0 10px}
 .meta{font-size:14px;color:var(--muted);margin:0 0 14px}
@@ -410,7 +418,7 @@ pre{background:#0f172a;color:#e2e8f0;padding:14px 16px;border-radius:10px;overfl
   <div class="inner">
     <div class="eyebrow">KEYOAPI · ONE KEY, MANY MODELS</div>
     <h1>One API for Multiple AI Models</h1>
-    <p class="sub">Connect to multiple text, image and speech models through one OpenAI-compatible endpoint. One API key, unified billing and familiar SDKs — a <strong>cheap LLM API</strong> and <strong>AI API relay</strong> without five vendor bills.</p>
+    <p class="sub"><strong>One API key for chat, image, speech, OCR, vision and avatars</strong> — OpenAI-compatible on chat/image/speech paths; dedicated REST for the rest. A <strong>cheap LLM API</strong> with one prepaid balance — without five vendor bills.</p>
     <div class="actions">
       <a class="btn btn-primary" href="/sign-up">Start free — get API key</a>
       <a class="btn btn-secondary" href="/brand/keyo-docs.html">Docs</a>
@@ -419,14 +427,35 @@ pre{background:#0f172a;color:#e2e8f0;padding:14px 16px;border-radius:10px;overfl
     <div class="panel">
       <div class="label">Base URL</div>
       <div>https://www.keyoapi.xyz/v1</div>
-      <div class="label">Example</div>
+      <div class="label">Example (OpenAI-compatible chat)</div>
       <div>POST /v1/chat/completions &nbsp;·&nbsp; model=gpt-5.6-luna</div>
       <div class="label">What you get</div>
-      <div>OpenAI-compatible chat, image &amp; speech APIs · one API key · unified billing · model catalog at /pricing</div>
+      <div>Compatible: chat / image / speech · Dedicated REST: OCR, CV, async video/docs, digital human · one key · /pricing</div>
     </div>
   </div>
 </section>
 <div class="content">
+<h2>API surfaces (same key, same balance)</h2>
+<p class="meta">Billing unit is a quick compatibility signal: token or OpenAI path ≈ SDK drop-in; page / request / second / characters ≈ dedicated docs path.</p>
+<div class="surfaces">
+  <div class="surf">
+    <h3>OpenAI-compatible</h3>
+    <ul>
+      <li><code>/v1/chat/completions</code> — GPT-class, Claude, DeepSeek, GLM, Kimi</li>
+      <li><code>/v1/images/generations</code> — text-to-image</li>
+      <li><code>/v1/audio/transcriptions</code> — Whisper</li>
+      <li><code>/v1/audio/speech</code> — sync TTS</li>
+    </ul>
+  </div>
+  <div class="surf">
+    <h3>Dedicated REST (see docs)</h3>
+    <ul>
+      <li>OCR / docs — often per page</li>
+      <li>Vision tools (matting, detect, upscale) — per request</li>
+      <li>Async TTS / video / digital human — per chars / request / second</li>
+    </ul>
+  </div>
+</div>
 <h2>Headline prices</h2>
 <p class="meta">Indicative KeyoAPI sell rates for planning. Full table on <a href="/compare">/compare</a> · live list on <a href="/pricing-list">/pricing-list</a>.</p>
 <table>
@@ -449,8 +478,9 @@ ${featured}
 <h2>Integrate in minutes</h2>
 <pre><code>export OPENAI_BASE_URL=https://www.keyoapi.xyz/v1
 export OPENAI_API_KEY=sk-...
-# chat: model=gpt-5.6-terra or claude-sonnet-5 or glm-5.2-free
-# speech: POST /v1/audio/transcriptions model=whisper-large-v3</code></pre>
+# chat (OpenAI SDK): model=gpt-5.6-terra | claude-sonnet-5 | glm-5.2-free
+# speech: POST /v1/audio/transcriptions model=whisper-large-v3
+# OCR / matting / avatars: use dedicated paths in Docs — not drop-in chat SDK</code></pre>
 </div>
 <footer class="foot">
   <div class="frow">
@@ -539,18 +569,18 @@ function renderAbout() {
     })
     .join("\n");
   const bodyHtml = `
-<p class="lead">KeyoAPI is a developer-first <strong>AI API relay</strong>: one OpenAI-compatible endpoint that connects your code to GPT-class, Claude-class, DeepSeek, GLM, Kimi, Whisper, OCR, vision, TTS, video and digital-human models. One API key, one prepaid balance, unified billing — no five vendor dashboards, no five invoices.</p>
+<p class="lead">KeyoAPI is a developer-first <strong>AI API relay</strong>: chat, image and speech are OpenAI-compatible, while OCR, vision tools, async video/docs and digital-human models run on dedicated REST paths — <strong>same key, same prepaid balance</strong>. No five vendor dashboards, no five invoices.</p>
 <div class="btnrow">
   <a class="btn btn-primary" href="/sign-up">Start free — get API key</a>
   <a class="btn btn-secondary" href="/brand/keyo-docs.html">Docs</a>
   <a class="btn btn-secondary" href="/pricing">Browse Models</a>
 </div>
 <h2>What we do</h2>
-<p>We aggregate many model providers behind a single API surface. You keep your favorite SDK (the OpenAI SDK works as-is), swap <code>model=</code> names to switch vendors, and pay one bill. Because we buy capacity across providers and route by price and reliability, our listed rates undercut most official list prices.</p>
+<p>We aggregate many model providers behind one prepaid account. For chat (and supported image/speech paths), keep the OpenAI SDK: set <code>OPENAI_BASE_URL=https://www.keyoapi.xyz/v1</code> and swap <code>model=</code>. For OCR, matting, detection, async video and avatars, call the documented dedicated paths with the same key.</p>
 <ul>
-  <li><strong>OpenAI-compatible:</strong> point your <code>OPENAI_BASE_URL</code> at <code>https://www.keyoapi.xyz/v1</code> and existing code runs.</li>
+  <li><strong>OpenAI-compatible paths:</strong> <code>/v1/chat/completions</code>, <code>/v1/images/generations</code>, <code>/v1/audio/transcriptions</code>, <code>/v1/audio/speech</code>.</li>
+  <li><strong>Dedicated REST:</strong> OCR, CV tools, async TTS/video, digital humans — billed per page / request / second / characters.</li>
   <li><strong>One key, one balance:</strong> no per-vendor accounts or credits to manage.</li>
-  <li><strong>Broad model coverage:</strong> text chat, reasoning, speech-to-text, OCR, image, video, TTS and digital humans.</li>
   <li><strong>A permanently free tier:</strong> four models at $0 for prototyping (fair-use limits apply).</li>
 </ul>
 <h2>Pricing philosophy</h2>
@@ -588,9 +618,9 @@ ${freeCards}
 </div>
 `;
   return layout({
-    title: "About KeyoAPI - One API for Multiple AI Models | Cheap LLM API Relay",
+    title: "About KeyoAPI - One API Key for Chat, Speech, OCR & Vision | Cheap LLM API",
     description:
-      "KeyoAPI is an AI API relay that gives developers one OpenAI-compatible endpoint for GPT-class, Claude-class, DeepSeek, GLM, Kimi, Whisper, OCR, vision and TTS — unified billing, low prices, and 4 permanently free models.",
+      "KeyoAPI is an AI API relay: chat, image and speech are OpenAI-compatible; OCR, vision, TTS-async and digital-human models use dedicated REST paths — same key, same prepaid balance, 4 permanently free models.",
     canonical: `${site}/about`,
     h1: "One API for Multiple AI Models",
     bodyHtml,
@@ -600,7 +630,7 @@ ${freeCards}
       name: "About KeyoAPI",
       url: `${site}/about`,
       description:
-        "About KeyoAPI — cheap LLM API and multimodal AI API relay.",
+        "About KeyoAPI — cheap LLM API relay with OpenAI-compatible chat/image/speech and dedicated REST for OCR, vision and avatars.",
     },
   });
 }

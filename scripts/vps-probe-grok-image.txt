@@ -1,0 +1,45 @@
+# 探 OpenLux grok-imagine 图生视频字段名
+set -e
+cd /opt/ai-relay
+KEY=$(python3 - <<'PY'
+import sqlite3
+k=sqlite3.connect("/opt/ai-relay/data/new-api/one-api.db").execute(
+  "SELECT key FROM tokens WHERE id=2 AND status=1"
+).fetchone()[0]
+print(k if str(k).startswith("sk-") else "sk-"+k)
+PY
+)
+IMG="https://picsum.photos/seed/keyo/768/768"
+
+echo "=== try field variants ==="
+python3 - <<PY
+import json,urllib.request
+key="$KEY"
+img="$IMG"
+base="https://www.keyoapi.xyz/v1/videos/generations"
+variants=[
+  {"image_urls":[img]},
+  {"image_url":img},
+  {"image":img},
+  {"image":{"url":img}},
+  {"images":[img]},
+  {"input_reference":img},
+]
+common={"model":"grok-imagine-video-1.5-preview","prompt":"gentle camera push in","aspect_ratio":"16:9","resolution":"480p","duration":5}
+for v in variants:
+  body={**common,**v}
+  req=urllib.request.Request(base,data=json.dumps(body).encode(),headers={
+    "Authorization":"Bearer "+key,"Content-Type":"application/json"},method="POST")
+  try:
+    with urllib.request.urlopen(req,timeout=60) as r:
+      t=r.read()[:220].decode("utf-8","replace")
+      print(r.status, list(v.keys())[0], t)
+  except Exception as e:
+    body_txt=""
+    if hasattr(e,"read"):
+      try: body_txt=e.read()[:220].decode("utf-8","replace")
+      except: pass
+    code=getattr(e,"code",None)
+    print(code, list(v.keys())[0], body_txt or str(e)[:120])
+PY
+echo DONE_PROBE_GROK_IMAGE

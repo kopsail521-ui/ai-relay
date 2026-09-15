@@ -11,7 +11,7 @@
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
-import { caddySeoHandles } from "./caddy-seo-shared.mjs";
+import { caddySeoHandles, caddyLandingHandlesTemplate } from "./caddy-seo-shared.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.join(__dirname, "..");
@@ -979,6 +979,10 @@ fs.writeFileSync(
 fs.writeFileSync(
   path.join(root, "scripts/caddy-seo-handles.caddyfragment"),
   caddySeoHandles() + "\n"
+);
+fs.writeFileSync(
+  path.join(root, "scripts/caddy-landing-handles.caddyfragment"),
+  caddyLandingHandlesTemplate() + "\n"
 );
 
 console.log(

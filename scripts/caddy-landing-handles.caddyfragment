@@ -1,0 +1,40 @@
+	handle /gemini-api-pricing {
+		root * __AI_RELAY_ROOT__/static/seo
+		rewrite * /gemini-api-pricing.html
+		file_server
+	}
+	handle /deepseek-api-pricing {
+		root * __AI_RELAY_ROOT__/static/seo
+		rewrite * /deepseek-api-pricing.html
+		file_server
+	}
+	handle /claude-api-pricing {
+		root * __AI_RELAY_ROOT__/static/seo
+		rewrite * /claude-api-pricing.html
+		file_server
+	}
+	handle /openai-api-pricing {
+		root * __AI_RELAY_ROOT__/static/seo
+		rewrite * /openai-api-pricing.html
+		file_server
+	}
+	handle /remove-bg-api-alternative {
+		root * __AI_RELAY_ROOT__/static/seo
+		rewrite * /remove-bg-api-alternative.html
+		file_server
+	}
+	handle /tts-api {
+		root * __AI_RELAY_ROOT__/static/seo
+		rewrite * /tts-api.html
+		file_server
+	}
+	handle /voice-cloning-api {
+		root * __AI_RELAY_ROOT__/static/seo
+		rewrite * /voice-cloning-api.html
+		file_server
+	}
+	handle /ai-avatar-video-generator {
+		root * __AI_RELAY_ROOT__/static/seo
+		rewrite * /ai-avatar-video-generator.html
+		file_server
+	}

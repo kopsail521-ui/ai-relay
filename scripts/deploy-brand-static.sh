@@ -44,6 +44,18 @@ echo "==> spa-shell on disk OK ($(wc -c < "$SPA_SHELL") bytes)"
 
 echo "==> Update Caddyfile for $DOMAIN"
 APEX_DOMAIN="${DOMAIN#www.}"
+LANDING_FRAGMENT="${REPO_ROOT}/scripts/caddy-landing-handles.caddyfragment"
+if [[ ! -f "$LANDING_FRAGMENT" ]]; then
+  echo "ERROR: missing $LANDING_FRAGMENT — run: node scripts/gen-seo-pages.mjs" >&2
+  exit 1
+fi
+LANDING_HANDLES="$(sed "s|__AI_RELAY_ROOT__|${ROOT}|g" "$LANDING_FRAGMENT")"
+if [[ -z "${LANDING_HANDLES//[[:space:]]/}" ]]; then
+  echo "ERROR: landing handles fragment is empty" >&2
+  exit 1
+fi
+echo "==> Pricing landing handles: $(grep -c 'handle /' <<<"$LANDING_HANDLES" || true)"
+
 cat >/etc/caddy/Caddyfile <<EOF
 ${APEX_DOMAIN} {
 	redir https://${DOMAIN}{uri} permanent
@@ -87,18 +99,7 @@ ${DOMAIN} {
 		rewrite * /free-models.html
 		file_server
 	}
-$(ROOT="$ROOT" node -e '
-const fs = require("fs");
-const root = process.env.ROOT || "/opt/ai-relay";
-const pages = JSON.parse(fs.readFileSync(process.argv[1], "utf8")).pages || [];
-process.stdout.write(pages.map((p) => [
-  "\thandle /" + p.slug + " {",
-  "\t\troot * " + root + "/static/seo",
-  "\t\trewrite * /" + p.slug + ".html",
-  "\t\tfile_server",
-  "\t}"
-].join("\n")).join("\n"));
-' "${REPO_ROOT}/config/seo/pricing-landings.json")
+${LANDING_HANDLES}
 	handle /about {
 		root * ${ROOT}/static/seo
 		rewrite * /about.html
@@ -191,5 +192,10 @@ echo -n "rankings_body_noindex="
 curl -s "https://${DOMAIN}/rankings" | grep -o noindex | head -n 1 || echo "FAIL_RANKINGS_NOINDEX_BODY"
 echo -n "home_noindex_count="
 curl -s "https://${DOMAIN}/" | grep -c noindex || true
-
+echo -n "landing_tts_title="
+curl -s "https://${DOMAIN}/tts-api" | grep -oE '<title>[^<]+' | head -n 1 || echo FAIL_TTS
+echo -n "landing_tts_bytes="
+curl -s "https://${DOMAIN}/tts-api" | wc -c
+echo -n "landing_gemini_XNewApi="
+curl -sI "https://${DOMAIN}/gemini-api-pricing" | grep -ci 'x-new-api-version' || true
 echo "DONE_BRAND_SEO_DEPLOY"

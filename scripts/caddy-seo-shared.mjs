@@ -18,10 +18,10 @@ function pricingLandingSlugs() {
   }
 }
 
-/** @param {string} [seoRoot] absolute path used in Caddy root directives */
-export function caddySeoHandles(seoRoot = "/opt/ai-relay") {
+/** Landing-only handles for deploy-brand-static.sh (no runtime node). */
+export function caddyLandingHandles(seoRoot = "/opt/ai-relay") {
   const root = `${seoRoot}/static/seo`;
-  const landingBlocks = pricingLandingSlugs()
+  return pricingLandingSlugs()
     .map(
       (slug) => `	handle /${slug} {
 		root * ${root}
@@ -30,6 +30,17 @@ export function caddySeoHandles(seoRoot = "/opt/ai-relay") {
 	}`
     )
     .join("\n");
+}
+
+/** Placeholder form so deploy can sed ROOT without calling node under sudo. */
+export function caddyLandingHandlesTemplate() {
+  return caddyLandingHandles("__AI_RELAY_ROOT__");
+}
+
+/** @param {string} [seoRoot] absolute path used in Caddy root directives */
+export function caddySeoHandles(seoRoot = "/opt/ai-relay") {
+  const root = `${seoRoot}/static/seo`;
+  const landingBlocks = caddyLandingHandles(seoRoot);
 
   return `	handle /robots.txt {
 		root * ${root}

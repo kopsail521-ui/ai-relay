@@ -813,11 +813,10 @@ const server = http.createServer(async (req, res) => {
 });
 
 server.listen(PORT, HOST, () => {
-  console.log(`APIMart passthrough on http://${HOST}:${PORT}`);
+  console.log(`video passthrough on http://${HOST}:${PORT}`);
   console.log(`  models: ${catalog.models.map((m) => m.id).join(", ")}`);
-  console.log(`  markup: ×${MARKUP}`);
-  console.log(`  apimart: ${APIMART_ORIGIN} key=${!!APIMART_KEY}`);
-  console.log(`  openlux: ${OPENLUX_ORIGIN} key=${!!OPENLUX_KEY}`);
+  console.log(`  inventory_a: key=${!!APIMART_KEY}`);
+  console.log(`  inventory_b: key=${!!OPENLUX_KEY}`);
   console.log(`  new-api: ${NEW_API_BASE}`);
   console.log(`  db: ${DB_PATH}`);
 });

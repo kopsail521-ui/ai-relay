@@ -1,5 +1,5 @@
 {
-  "note": "Custom PNG icons for models without lobehub logos. Served at /brand/model-icons/* (Caddy static/brand).",
+  "note": "Custom PNG/SVG icons for models without reliable lobehub logos (or when DB icon drifts to Custom). Served at /brand/model-icons/* via Caddy static/brand. Injected on /pricing by creem-moderation-proxy.",
   "icons": {
     "VajraV1": "/brand/model-icons/vajrav1.png",
     "AnimeSharp": "/brand/model-icons/animesharp.png",
@@ -13,7 +13,12 @@
     "nsfw-classifier": "/brand/model-icons/nsfw-classifier.png",
     "keyo-text-moderation": "/brand/model-icons/keyo-moderation.png",
     "RMBG-2.0": "/brand/model-icons/rmbg-20.svg",
-    "Atria-dawn-v2": "/brand/model-icons/atria-dawn-v2.svg"
+    "Atria-dawn-v2": "/brand/model-icons/atria-dawn-v2.svg",
+    "sam3": "/brand/model-icons/sam3.svg",
+    "Step-Audio-TTS-3B": "/brand/model-icons/step-audio-tts.svg",
+    "IndexTTS-2": "/brand/model-icons/indextts-2.svg",
+    "Unlimited-OCR": "/brand/model-icons/unlimited-ocr.svg",
+    "Real-ESRGAN": "/brand/model-icons/real-esrgan.svg"
   },
   "lobehub_fixes": {
     "seedance-2.5": "Doubao.Color",

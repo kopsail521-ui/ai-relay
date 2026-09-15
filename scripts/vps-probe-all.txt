@@ -1,0 +1,45 @@
+# 全量探针（绕过 sudo 找不到 node）
+set -e
+cd /opt/ai-relay
+sudo git pull || true
+mkdir -p /opt/ai-relay/tmp
+
+KEY=$(python3 - <<'PY'
+import sqlite3
+k=sqlite3.connect("/opt/ai-relay/data/new-api/one-api.db").execute(
+  "SELECT key FROM tokens WHERE id=2 AND status=1"
+).fetchone()[0]
+print(k if str(k).startswith("sk-") else "sk-"+k)
+PY
+)
+
+NODE=$(command -v node || true)
+if [ -z "$NODE" ]; then
+  for p in /usr/local/bin/node /usr/bin/node; do
+    [ -x "$p" ] && NODE=$p && break
+  done
+fi
+
+if [ -n "$NODE" ]; then
+  echo "using $NODE"
+  KEYO_API_KEY="$KEY" BASE=https://www.keyoapi.xyz OUT=/opt/ai-relay/tmp/probe-all-keyo-results.json \
+    "$NODE" scripts/probe-all-keyo-models.mjs
+else
+  echo "host node missing → docker node:22-alpine"
+  sudo docker run --rm --network host \
+    -v /opt/ai-relay:/work -w /work \
+    -e KEYO_API_KEY="$KEY" \
+    -e BASE=https://www.keyoapi.xyz \
+    -e OUT=/work/tmp/probe-all-keyo-results.json \
+    node:22-alpine node scripts/probe-all-keyo-models.mjs
+fi
+
+echo "---- summary ----"
+python3 - <<'PY'
+import json
+d=json.load(open("/opt/ai-relay/tmp/probe-all-keyo-results.json"))
+print("total", d.get("total"), "pass", d.get("pass"), "fail", d.get("fail"))
+for r in d.get("failed") or []:
+  print("FAIL", r.get("id"), r.get("kind"), r.get("status"), r.get("reason"), (r.get("snippet") or "")[:140])
+PY
+echo DONE_PROBE_ALL

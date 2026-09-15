@@ -110,6 +110,18 @@ function tinyPng() {
   );
 }
 
+/** AnimeSharp requires 256–1024px; fetch a real sample when possible. */
+async function png256() {
+  try {
+    const r = await fetch("https://picsum.photos/256/256", {
+      redirect: "follow",
+      signal: AbortSignal.timeout(15000),
+    });
+    if (r.ok) return Buffer.from(await r.arrayBuffer());
+  } catch {}
+  return tinyPng();
+}
+
 function tinyWav() {
   // minimal WAV header + silence
   const hdr = Buffer.alloc(44);
@@ -273,15 +285,17 @@ async function probeOne(id) {
           },
         });
         break;
-      case "upscaling":
+      case "upscaling": {
+        const img = await png256();
         res = await callForm("/v1/images/upscaling", {
           model: id,
           image: {
-            blob: new Blob([tinyPng()], { type: "image/png" }),
+            blob: new Blob([img], { type: "image/png" }),
             name: "t.png",
           },
         });
         break;
+      }
       case "unwarping":
         res = await callForm("/v1/images/unwarping", {
           model: id,
@@ -310,6 +324,11 @@ async function probeOne(id) {
         res = await callJson("/v1/async/videos/audio-video-to-video", {
           model: id,
           prompt: "test",
+          // Duix needs media; public samples prove route + billing without full pipeline
+          audio_url:
+            "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
+          video_url:
+            "https://samplelib.com/lib/preview/mp4/sample-5s.mp4",
         });
         break;
       case "talk":

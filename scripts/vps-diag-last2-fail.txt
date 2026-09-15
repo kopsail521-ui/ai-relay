@@ -1,0 +1,60 @@
+# 复测仅剩的 2 个 FAIL：AnimeSharp / Duix-Avatar
+set -e
+cd /opt/ai-relay
+KEY=$(python3 - <<'PY'
+import sqlite3
+k=sqlite3.connect("/opt/ai-relay/data/new-api/one-api.db").execute(
+  "SELECT key FROM tokens WHERE id=2 AND status=1"
+).fetchone()[0]
+print(k if str(k).startswith("sk-") else "sk-"+k)
+PY
+)
+
+echo "=== healthz 3010 ==="
+curl -sS http://127.0.0.1:3010/healthz; echo
+sudo docker logs --tail 15 ai-relay-gitee-passthrough 2>&1 | tail -n 15
+
+# tiny png
+python3 - <<'PY'
+import base64
+open('/tmp/t.png','wb').write(base64.b64decode(
+'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg=='))
+print('png_ok')
+PY
+
+echo "=== AnimeSharp upscaling (对照 Real-ESRGAN) ==="
+for m in Real-ESRGAN AnimeSharp; do
+  code=$(curl -sS -o /tmp/up.json -w "%{http_code}" -m 60 \
+    -X POST https://www.keyoapi.xyz/v1/images/upscaling \
+    -H "Authorization: Bearer $KEY" \
+    -F model="$m" -F image=@/tmp/t.png)
+  echo "$code $m $(head -c 260 /tmp/up.json | tr '\n' ' ')"
+done
+
+echo "=== Duix-Avatar（对照 InfiniteTalk 路径可达）==="
+code=$(curl -sS -o /tmp/duix.json -w "%{http_code}" -m 60 \
+  -X POST https://www.keyoapi.xyz/v1/async/videos/audio-video-to-video \
+  -H "Authorization: Bearer $KEY" -H "Content-Type: application/json" \
+  -d '{"model":"Duix-Avatar","prompt":"test"}')
+echo "$code Duix-Avatar $(head -c 300 /tmp/duix.json | tr '\n' ' ')"
+
+code=$(curl -sS -o /tmp/talk.json -w "%{http_code}" -m 60 \
+  -X POST https://www.keyoapi.xyz/v1/async/videos/image-to-video \
+  -H "Authorization: Bearer $KEY" -H "Content-Type: application/json" \
+  -d '{"model":"InfiniteTalk","prompt":"test"}')
+echo "$code InfiniteTalk $(head -c 300 /tmp/talk.json | tr '\n' ' ')"
+
+echo "=== 直打 3010（绕过 Caddy）==="
+code=$(curl -sS -o /tmp/d3010.json -w "%{http_code}" -m 60 \
+  -X POST http://127.0.0.1:3010/v1/images/upscaling \
+  -H "Authorization: Bearer $KEY" \
+  -F model=AnimeSharp -F image=@/tmp/t.png)
+echo "$code direct3010-AnimeSharp $(head -c 260 /tmp/d3010.json | tr '\n' ' ')"
+
+code=$(curl -sS -o /tmp/d3010b.json -w "%{http_code}" -m 60 \
+  -X POST http://127.0.0.1:3010/v1/async/videos/audio-video-to-video \
+  -H "Authorization: Bearer $KEY" -H "Content-Type: application/json" \
+  -d '{"model":"Duix-Avatar","prompt":"test"}')
+echo "$code direct3010-Duix $(head -c 300 /tmp/d3010b.json | tr '\n' ' ')"
+
+echo DONE_DIAG_LAST2

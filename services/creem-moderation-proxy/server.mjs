@@ -50,6 +50,7 @@ const VIDEO_GEN_MODELS = new Set([
   "MiniMax-H3",
   "wan3.0-video",
   "grok-imagine-video-1.5-preview",
+  "grok-1.5-video",
 ]);
 
 function qsOf(url) {

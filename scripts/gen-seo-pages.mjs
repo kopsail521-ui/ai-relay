@@ -53,54 +53,62 @@ function firstSentence(text) {
 
 function css() {
   return `
-:root {
-  --bg0:#f7fafc; --bg1:#eef6ff; --ink:#0f172a; --muted:#475569;
-  --line:#cbd5e1; --accent:#2563eb; --card:#fff; --ok:#047857;
-}
-*{box-sizing:border-box}
-html,body{margin:0;min-height:100%;font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;background:linear-gradient(180deg,var(--bg0),var(--bg1));color:var(--ink);line-height:1.65}
-a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
-.wrap{max-width:880px;margin:0 auto;padding:32px 20px 64px}
-.nav,.footer{display:flex;flex-wrap:wrap;gap:10px 16px;font-size:14px;color:var(--muted)}
-.nav{padding-bottom:20px;border-bottom:1px solid var(--line);margin-bottom:28px}
-.footer{padding-top:28px;border-top:1px solid var(--line);margin-top:40px}
-.eyebrow{font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);font-weight:700;margin:0 0 10px}
-h1{font-size:clamp(1.75rem,4vw,2.4rem);line-height:1.2;margin:0 0 14px}
-h2{font-size:1.25rem;margin:28px 0 10px}
+.wrap{max-width:880px;margin:0 auto;padding:28px 24px 48px}
+.footer{display:flex;flex-wrap:wrap;gap:10px 16px;max-width:1080px;margin:0 auto;padding:24px 24px 40px;border-top:1px solid var(--line);font-size:13px;color:var(--muted)}
+.footer a{color:var(--ink-2);text-decoration:none}
+.footer a:hover{color:var(--ink)}
+h1{font-size:clamp(1.7rem,3.1vw,2.35rem);line-height:1.18;letter-spacing:-.035em;margin:0 0 14px;font-weight:600;text-wrap:balance}
+h2{font-size:1.15rem;margin:28px 0 10px;letter-spacing:-.02em}
 p{margin:0 0 14px;color:var(--ink)}
-.lead{font-size:1.1rem;color:var(--muted)}
+.lead{font-size:1.02rem;color:var(--ink-2);line-height:1.55;text-wrap:pretty}
 .meta{font-size:14px;color:var(--muted);margin:0 0 18px}
 .btnrow{display:flex;flex-wrap:wrap;gap:10px;margin:18px 0 28px}
-.btn{display:inline-block;padding:10px 16px;border-radius:10px;font-weight:600;font-size:14px;text-decoration:none}
-.btn-primary{background:var(--accent);color:#fff}
-.btn-secondary{background:#fff;color:var(--ink);border:1px solid var(--line)}
-.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin:16px 0}
-pre,code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
-pre{background:#0f172a;color:#e2e8f0;padding:14px 16px;border-radius:10px;overflow:auto;font-size:13px}
-table{width:100%;border-collapse:collapse;font-size:14px;background:var(--card)}
+.btn,.k-btn{display:inline-block;padding:10px 16px;border-radius:var(--radius);font-weight:600;font-size:14px;text-decoration:none;line-height:1.2}
+.btn-primary,.k-btn-primary{background:var(--ink);color:#f6f5f1}
+.btn-primary:hover,.k-btn-primary:hover{background:#000;color:#f6f5f1;text-decoration:none}
+.btn-secondary,.k-btn-secondary{background:transparent;color:var(--ink);border:1px solid var(--line-strong,#c9c4b8)}
+.btn-secondary:hover,.k-btn-secondary:hover{border-color:var(--ink);text-decoration:none}
+.btn-link,.k-btn-link{background:transparent;color:var(--link);padding-inline:8px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:16px 18px;margin:16px 0}
+pre,code{font-family:var(--mono)}
+pre{background:var(--panel);color:var(--panel-ink);padding:14px 16px;border-radius:var(--radius);overflow:auto;font-size:13px}
+pre code{background:transparent;padding:0;color:inherit;font-size:inherit;border-radius:0}
+table{width:100%;border-collapse:collapse;font-size:14px;background:var(--surface)}
 th,td{border:1px solid var(--line);padding:10px 12px;text-align:left;vertical-align:top}
-th{background:#f1f5f9}
+th{background:color-mix(in srgb,var(--line) 40%,var(--surface));font-weight:600}
 .ok{color:var(--ok);font-weight:600}
-.grid{display:grid;gap:10px;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));margin:16px 0}
-.grid a{display:block;padding:12px;border:1px solid var(--line);border-radius:10px;background:#fff;color:var(--ink);text-decoration:none}
-.grid a:hover{border-color:var(--accent)}
+.grid{display:grid;gap:10px;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));margin:16px 0}
+.grid a{display:flex;flex-direction:column;justify-content:center;gap:4px;min-height:4.5rem;padding:12px 14px;border:1px solid var(--line);border-radius:var(--radius);background:var(--surface);color:var(--ink);text-decoration:none;font-weight:500;line-height:1.35}
+.grid a:hover{border-color:var(--ink)}
+.grid a .grid-title{font-weight:600;overflow-wrap:anywhere}
+.grid a .grid-meta{color:var(--muted);font-size:13px;font-weight:500}
+.grid a code{font-size:12.5px;background:transparent;padding:0}
 ul{margin:0 0 14px;padding-left:1.2em}
-.faq details{border:1px solid var(--line);border-radius:10px;padding:12px 14px;margin:0 0 10px;background:#fff}
+.faq details{border:1px solid var(--line);border-radius:var(--radius);padding:12px 14px;margin:0 0 10px;background:var(--surface)}
 .faq summary{cursor:pointer;font-weight:600}
+.surfaces{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));margin:16px 0 8px}
+.surf{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:14px 16px;font-size:14px}
+.surf h3{font-size:15px;margin:0 0 8px}
+.surf ul{margin:0;padding-left:1.15em;color:var(--muted)}
+.panel{background:var(--panel);color:var(--panel-ink);border-radius:var(--radius);padding:18px;text-align:left;font-family:var(--mono);font-size:12.5px;overflow:auto;border:1px solid #2a2924}
+.panel .label{color:#b9b6ab;margin-bottom:5px;font-size:11px;letter-spacing:.06em;text-transform:uppercase}
+.panel .label+.label{margin-top:14px}
 `.trim();
 }
 
 function nav() {
-  return `<nav class="nav" aria-label="Primary">
-  <a href="/">Home</a>
-  <a href="/console">Console</a>
-  <a href="/pricing">Model Square</a>
-  <a href="/pricing-list">Pricing list</a>
-  <a href="/rankings">Rankings</a>
-  <a href="/brand/keyo-docs.html">Docs</a>
-  <a href="/about">About</a>
-  <a href="/sign-up">Get Started</a>
-</nav>`;
+  return `<header class="k-nav">
+  <a class="k-wordmark" href="/"><img src="/brand/logo.svg" alt="" width="22" height="22" />KeyoAPI</a>
+  <nav aria-label="Primary">
+    <a href="/pricing">Pricing</a>
+    <a href="/pricing-list">Pricing list</a>
+    <a href="/brand/keyo-docs.html">Docs</a>
+    <a href="/faq">FAQ</a>
+    <a href="/console">Console</a>
+    <a href="/sign-in">Sign in</a>
+    <a class="k-nav-cta" href="/sign-up">Get started</a>
+  </nav>
+</header>`;
 }
 
 function landingNavLabel(p) {
@@ -128,18 +136,17 @@ function footer() {
     .join("\n");
   return `<footer class="footer">
   <a href="/">Home</a>
-  <a href="/about">About</a>
-  <a href="/pricing">Model Square</a>
+  <a href="/pricing">Pricing</a>
   <a href="/pricing-list">Pricing list</a>
   <a href="/models">Model guides</a>
-  <a href="/compare">Price comparison</a>
-  <a href="/free-models">Free AI API</a>
+  <a href="/compare">Compare</a>
+  <a href="/free-models">Free models</a>
 ${landingLinks}
   <a href="/brand/keyo-docs.html">Docs</a>
-  <a href="/brand/faq.html">FAQ</a>
+  <a href="/faq">FAQ</a>
   <a href="/brand/privacy.html">Privacy</a>
   <a href="/brand/terms.html">Terms</a>
-  <a href="/sign-in">Console login</a>
+  <a href="/sign-in">Sign in</a>
 </footer>`;
 }
 
@@ -156,7 +163,9 @@ function layout({ title, description, canonical, h1, bodyHtml, jsonLd }) {
 <meta property="og:url" content="${esc(canonical)}" />
 <meta property="og:title" content="${esc(title)}" />
 <meta property="og:description" content="${esc(description)}" />
-<meta property="og:image" content="${site}/logo.png" />
+<meta property="og:image" content="${site}/brand/logo.svg" />
+<link rel="icon" href="/brand/logo.svg" type="image/svg+xml" />
+<link rel="stylesheet" href="/brand/keyo-theme.css" />
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content="${esc(title)}" />
 <meta name="twitter:description" content="${esc(description)}" />
@@ -164,13 +173,12 @@ function layout({ title, description, canonical, h1, bodyHtml, jsonLd }) {
 <style>${css()}</style>
 </head>
 <body>
-<div class="wrap">
 ${nav()}
-<p class="eyebrow">KEYOAPI</p>
+<main class="wrap">
 <h1>${esc(h1)}</h1>
 ${bodyHtml}
+</main>
 ${footer()}
-</div>
 </body>
 </html>
 `;
@@ -311,25 +319,25 @@ function renderHome() {
     )
     .join("\n");
   const featured = [
-    ["gpt-5.6-terra", "GPT-5.6 Terra — flagship chat"],
-    ["gpt-5.6-luna", "GPT-5.6 Luna — high-volume cheap LLM"],
-    ["claude-sonnet-5", "Claude Sonnet 5 — reasoning"],
-    ["deepseek-v4-flash", "DeepSeek V4 Flash — fast lane"],
-    ["deepseek-v4-pro", "DeepSeek V4 Pro — flagship open-model"],
-    ["glm-5.2", "GLM 5.2 — glm api lane"],
-    ["kimi-k3", "Kimi K3 — Moonshot lane"],
-    ["whisper-large-v3", "Whisper Large V3 — speech-to-text"],
+    ["gpt-5.6-terra", "GPT-5.6 Terra", "flagship chat"],
+    ["gpt-5.6-luna", "GPT-5.6 Luna", "high-volume cheap LLM"],
+    ["claude-sonnet-5", "Claude Sonnet 5", "reasoning"],
+    ["deepseek-v4-flash", "DeepSeek V4 Flash", "fast lane"],
+    ["deepseek-v4-pro", "DeepSeek V4 Pro", "flagship open-model"],
+    ["glm-5.2", "GLM 5.2", "glm api lane"],
+    ["kimi-k3", "Kimi K3", "Moonshot lane"],
+    ["whisper-large-v3", "Whisper Large V3", "speech-to-text"],
   ]
     .filter(([id]) => pages.models.some((m) => m.id === id))
     .map(
-      ([id, label]) =>
-        `<a href="/model/${encodeURIComponent(id)}">${esc(label)}</a>`
+      ([id, name, blurb]) =>
+        `<a href="/model/${encodeURIComponent(id)}"><span class="grid-title">${esc(name)}</span><span class="grid-meta">${esc(blurb)}</span></a>`
     )
     .join("\n");
   const freeCards = freeCfg.models
     .map((m) => {
       const paid = m.upstream || String(m.id).replace(/-free$/, "");
-      return `<a href="/model/${encodeURIComponent(paid)}"><code>${esc(m.id)}</code> — $0</a>`;
+      return `<a href="/model/${encodeURIComponent(paid)}"><span class="grid-title"><code>${esc(m.id)}</code></span><span class="grid-meta">$0</span></a>`;
     })
     .join("\n");
   const modelFoot = pages.models
@@ -350,7 +358,9 @@ function renderHome() {
 <meta property="og:url" content="${esc(canonical)}" />
 <meta property="og:title" content="${esc(title)}" />
 <meta property="og:description" content="${esc(ogDescription)}" />
-<meta property="og:image" content="${site}/logo.png" />
+<meta property="og:image" content="${site}/brand/logo.svg" />
+<link rel="icon" href="/brand/logo.svg" type="image/svg+xml" />
+<link rel="stylesheet" href="/brand/keyo-theme.css" />
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content="${esc(title)}" />
 <meta name="twitter:description" content="${esc(twitterDescription)}" />
@@ -364,65 +374,42 @@ function renderHome() {
     applicationCategory: "DeveloperApplication",
     offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
   })}</script>
-<style>
-:root{--bg0:#f7fafc;--bg1:#eef6ff;--ink:#0f172a;--muted:#475569;--line:#cbd5e1;--accent:#2563eb;--card:#fff;--ok:#047857;--panel:#0f172a;--panel-ink:#e2e8f0;--panel-muted:#94a3b8}
-*{box-sizing:border-box}
-html,body{margin:0;min-height:100%;font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;background:linear-gradient(180deg,var(--bg0),var(--bg1));color:var(--ink);line-height:1.65}
-a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
-.topnav{max-width:960px;margin:0 auto;padding:18px 20px 0;display:flex;flex-wrap:wrap;gap:10px 16px;font-size:14px;color:var(--muted)}
-.hero{min-height:58vh;display:flex;align-items:center;justify-content:center;padding:32px 20px 24px}
-.inner{max-width:760px;text-align:center}
-.eyebrow{font-size:14px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);font-weight:700;margin-bottom:14px}
-h1{font-size:clamp(2rem,5vw,3.2rem);line-height:1.15;margin:0 0 16px}
-.sub{font-size:1.125rem;color:var(--muted);margin:0 auto 28px;max-width:560px;line-height:1.6}
-.actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-bottom:28px}
-.btn{padding:12px 22px;border-radius:10px;text-decoration:none;font-weight:600;font-size:14px;display:inline-block}
-.btn-primary{background:var(--accent);color:#fff}
-.btn-secondary{background:#fff;color:var(--ink);border:1px solid var(--line)}
-.btn-link{background:transparent;color:var(--accent)}
-.panel{background:var(--panel);color:var(--panel-ink);border-radius:12px;padding:16px 18px;text-align:left;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;overflow:auto}
-.panel .label{color:var(--panel-muted);margin-bottom:6px}
-.panel .label+.label{margin-top:14px}
-.surfaces{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));margin:16px 0 8px;text-align:left}
-.surf{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px;font-size:14px}
-.surf h3{font-size:15px;margin:0 0 8px}
-.surf ul{margin:0;padding-left:1.15em;color:var(--muted)}
-.surf code{font-size:12px;color:var(--ink)}
-.content{max-width:880px;margin:0 auto;padding:8px 20px 48px}
-h2{font-size:1.25rem;margin:28px 0 10px}
-.meta{font-size:14px;color:var(--muted);margin:0 0 14px}
-.ok{color:var(--ok);font-weight:600}
-table{width:100%;border-collapse:collapse;font-size:14px;background:var(--card)}
-th,td{border:1px solid var(--line);padding:10px 12px;text-align:left;vertical-align:top}
-th{background:#f1f5f9}
-.grid{display:grid;gap:10px;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));margin:16px 0}
-.grid a{display:block;padding:12px;border:1px solid var(--line);border-radius:10px;background:#fff;color:var(--ink);text-decoration:none}
-.grid a:hover{border-color:var(--accent)}
-pre{background:#0f172a;color:#e2e8f0;padding:14px 16px;border-radius:10px;overflow:auto;font-size:13px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
-.foot{max-width:960px;margin:0 auto;padding:24px 20px 40px;border-top:1px solid var(--line);font-size:13px;color:var(--muted)}
+<style>${css()}
+.hero{max-width:1080px;margin:0 auto;padding:48px 24px 8px}
+.inner{display:grid;grid-template-columns:minmax(0,1.28fr) minmax(280px,.78fr);gap:36px 40px;align-items:stretch;max-width:none;width:100%}
+.inner>div:first-child{display:flex;flex-direction:column;justify-content:center;min-width:0}
+.hero h1{font-size:clamp(1.7rem,3.1vw,2.35rem);line-height:1.18;letter-spacing:-.035em;margin:0 0 12px;font-weight:600;text-align:left;text-wrap:balance}
+.hero .sub{font-size:clamp(.95rem,1.35vw,1.02rem);color:var(--ink-2);margin:0 0 22px;max-width:none;line-height:1.55;text-align:left;text-wrap:pretty}
+.actions{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:0}
+.btn{border-radius:var(--radius)}
+.btn-secondary{background:transparent}
+.panel{font-family:var(--mono);border-radius:var(--radius);border:1px solid #2a2924;margin:0}
+.surfaces{margin-top:8px}
+.surfaces .surf{background:var(--surface)}
+.surf code{font-family:var(--mono)}
+.content{max-width:1080px;margin:0 auto;padding:36px 24px 56px}
+.content > h2:first-child{margin-top:0}
+.grid a{border-radius:var(--radius);background:var(--surface)}
+.grid a:hover{border-color:var(--ink)}
+pre{background:var(--panel);color:var(--panel-ink);border-radius:var(--radius);font-family:var(--mono)}
+.foot{max-width:1080px;margin:0 auto;padding:24px 24px 40px;border-top:1px solid var(--line);font-size:13px;color:var(--muted)}
 .frow{display:flex;flex-wrap:wrap;gap:10px 14px;margin-bottom:12px}
+.compare-jump{margin:8px 0 28px}
+@media (max-width:820px){.inner{grid-template-columns:1fr;gap:28px}.hero{padding:28px 20px 8px}.content{padding:24px 20px 48px}}
 </style>
 </head>
 <body>
-<nav class="topnav" aria-label="Primary">
-  <a href="/">Home</a>
-  <a href="/console">Console</a>
-  <a href="/pricing">Model Square</a>
-  <a href="/pricing-list">Pricing list</a>
-  <a href="/rankings">Rankings</a>
-  <a href="/brand/keyo-docs.html">Docs</a>
-  <a href="/about">About</a>
-  <a href="/sign-up">Get started</a>
-</nav>
+${nav()}
 <section class="hero">
   <div class="inner">
-    <div class="eyebrow">KEYOAPI · ONE KEY, MANY MODELS</div>
-    <h1>One API for Multiple AI Models</h1>
-    <p class="sub"><strong>One API key for chat, image, speech, OCR, vision and avatars</strong> — OpenAI-compatible on chat/image/speech paths; dedicated REST for the rest. A <strong>cheap LLM API</strong> with one prepaid balance — without five vendor bills.</p>
-    <div class="actions">
-      <a class="btn btn-primary" href="/sign-up">Start free — get API key</a>
-      <a class="btn btn-secondary" href="/brand/keyo-docs.html">Docs</a>
-      <a class="btn btn-link" href="/pricing">Browse Models</a>
+    <div>
+      <h1>One API for Multiple AI Models</h1>
+      <p class="sub">One prepaid key for chat, speech, OCR &amp; vision. Lower rates — one balance.</p>
+      <div class="actions">
+        <a class="btn btn-primary" href="/sign-up">Start free — get API key</a>
+        <a class="btn btn-secondary" href="/brand/keyo-docs.html">Docs</a>
+        <a class="btn btn-secondary" href="/pricing">Browse Models</a>
+      </div>
     </div>
     <div class="panel">
       <div class="label">Base URL</div>
@@ -464,7 +451,7 @@ pre{background:#0f172a;color:#e2e8f0;padding:14px 16px;border-radius:10px;overfl
 ${headlineRows}
 </tbody>
 </table>
-<p><a href="/compare">See the full comparison page →</a></p>
+<p class="compare-jump"><a href="/compare">See the full comparison page →</a></p>
 <h2>Free models — permanently $0</h2>
 <p class="meta">Prototype on permanent free IDs, then flip to the token-metered twin. Rules: <a href="/free-models">/free-models</a>.</p>
 <div class="grid">
@@ -565,7 +552,7 @@ function renderAbout() {
   const freeCards = freeCfg.models
     .map((m) => {
       const paid = m.upstream || String(m.id).replace(/-free$/, "");
-      return `<a href="/model/${encodeURIComponent(paid)}"><code>${esc(m.id)}</code> · $0</a>`;
+      return `<a href="/model/${encodeURIComponent(paid)}"><span class="grid-title"><code>${esc(m.id)}</code></span><span class="grid-meta">$0</span></a>`;
     })
     .join("\n");
   const bodyHtml = `

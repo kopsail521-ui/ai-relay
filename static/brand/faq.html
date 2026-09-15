@@ -1,68 +1,307 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>KeyoAPI FAQ</title>
 <meta name="description" content="KeyoAPI frequently asked questions — top-up, API keys, models, billing." />
 <link rel="canonical" href="https://www.keyoapi.xyz/faq" />
-<style>
-  :root { --bg:#f7fafc; --ink:#0f172a; --muted:#64748b; --line:#e2e8f0; --accent:#2563eb; }
-  body { margin:0; font-family: ui-sans-serif, system-ui, "Segoe UI", sans-serif; background:linear-gradient(180deg,#f7fafc,#eef6ff); color:var(--ink); }
-  .wrap { max-width:720px; margin:0 auto; padding:48px 20px 72px; }
-  h1 { font-size:1.75rem; margin:0 0 8px; }
-  .sub { color:var(--muted); margin:0 0 28px; }
-  details { background:#fff; border:1px solid var(--line); border-radius:12px; padding:14px 16px; margin:0 0 10px; }
-  summary { cursor:pointer; font-weight:600; }
-  details p { margin:10px 0 0; color:#334155; line-height:1.65; font-size:15px; }
-  a { color:var(--accent); }
-  .foot { margin-top:28px; color:var(--muted); font-size:14px; line-height:1.7; }
-</style>
+<link rel="icon" href="/brand/logo.svg" type="image/svg+xml" />
+<link rel="stylesheet" href="/brand/keyo-theme.css" />
 </head>
 <body>
-  <div class="wrap">
-    <h1>FAQ</h1>
-    <p class="sub">KeyoAPI 常见问题 · Frequently asked questions</p>
+  <div class="lang-bar" id="langBar">
+    <select id="langSelect" aria-label="Language"></select>
+  </div>
+  <header class="k-nav">
+    <a class="k-wordmark" href="/" target="_top">
+      <img src="/brand/logo.svg" alt="" width="22" height="22" />
+      KeyoAPI
+    </a>
+    <nav aria-label="Primary">
+      <a href="/pricing" target="_top" data-i18n="navPricing"></a>
+      <a href="/brand/keyo-docs.html" target="_top" data-i18n="navDocs"></a>
+      <a href="/faq" target="_top" data-i18n="navFaq"></a>
+      <a href="/sign-in" target="_top" data-i18n="navSignIn"></a>
+      <a class="k-nav-cta" href="/sign-up" target="_top" data-i18n="navCta"></a>
+    </nav>
+  </header>
+  <div class="k-page">
+    <h1 data-i18n="title"></h1>
+    <p class="sub" data-i18n="sub"></p>
 
     <details open>
-      <summary>如何开始使用？</summary>
-      <p>注册 / 登录 → 钱包充值 → 创建 API Key → 将 Base URL 设为 <code>https://www.keyoapi.xyz/v1</code>。公开价目见 <a href="/pricing">/pricing</a>。</p>
+      <summary data-i18n="q1"></summary>
+      <p data-i18n-html="a1"></p>
     </details>
     <details>
-      <summary>如何充值？</summary>
-      <p>登录后打开<strong>钱包 / Wallet</strong>，通过 Waffo 在线支付预付额度。额度即时到账用于 API 调用。</p>
+      <summary data-i18n="q2"></summary>
+      <p data-i18n-html="a2"></p>
     </details>
     <details>
-      <summary>价格单位是什么？</summary>
-      <p>控制台与模型广场以 <strong>USD</strong> 展示。文本模型多为按百万 tokens；图片等按次计费。以控制台实时扣费为准。</p>
+      <summary data-i18n="q3"></summary>
+      <p data-i18n-html="a3"></p>
     </details>
     <details>
-      <summary>未登录能看价格吗？</summary>
-      <p>可以。访问 <a href="/pricing">/pricing</a>（模型广场）。旧链接 <code>/models</code> 会自动跳转到公开价目页。</p>
+      <summary data-i18n="q4"></summary>
+      <p data-i18n-html="a4"></p>
     </details>
     <details>
-      <summary>有免费模型吗？</summary>
-      <p>有。模型名带 <code>-free</code> 后缀，例如 <code>deepseek-v4-flash-free</code>、<code>deepseek-v4-pro-free</code>、<code>glm-5.2-free</code>、<code>kimi-k3-free</code>（$0，与不带后缀的收费版不是同一个 model）。完整列表见 <a href="/pricing">/pricing</a> 与 <a href="/brand/keyo-docs.html">接入文档</a>。</p>
+      <summary data-i18n="q5"></summary>
+      <p data-i18n-html="a5"></p>
     </details>
     <details>
-      <summary>支持哪些客户端？</summary>
-      <p>任何 OpenAI 兼容客户端：Cursor、ChatBox、OpenAI Python/Node SDK 等。接入说明见 <a href="/brand/keyo-docs.html">文档</a>。</p>
+      <summary data-i18n="q6"></summary>
+      <p data-i18n-html="a6"></p>
     </details>
     <details>
-      <summary>常见报错？</summary>
-      <p>模型名写错、API Key 无效、余额不足。请核对模型名与 <a href="/pricing">/pricing</a> 完全一致，并确认钱包有余额。</p>
+      <summary data-i18n="q7"></summary>
+      <p data-i18n-html="a7"></p>
     </details>
     <details>
-      <summary>如何联系客服？</summary>
-      <p>发邮件至 <a href="mailto:kopsail521@gmail.com">kopsail521@gmail.com</a>，通常 3 个工作日内回复。服务状态：<a href="/status">/status</a>。</p>
+      <summary data-i18n="q8"></summary>
+      <p data-i18n-html="a8"></p>
     </details>
 
-    <p class="foot">
-      Legal:
-      <a href="/brand/privacy.html">Privacy</a> ·
-      <a href="/brand/terms.html">Terms</a> ·
-      <a href="/brand/aup.html">Acceptable Use</a>
+    <p class="k-foot">
+      <span data-i18n="legalLabel"></span>
+      <a href="/brand/privacy.html" target="_top" data-i18n="legalPrivacy"></a> ·
+      <a href="/brand/terms.html" target="_top" data-i18n="legalTerms"></a> ·
+      <a href="/brand/aup.html" target="_top" data-i18n="legalAup"></a>
     </p>
   </div>
+<script>
+const I18N = {
+  en: {
+    navPricing: 'Pricing', navDocs: 'Docs', navFaq: 'FAQ', navSignIn: 'Sign in', navCta: 'Get started',
+    title: 'FAQ',
+    sub: 'KeyoAPI frequently asked questions',
+    q1: 'How do I get started?',
+    a1: 'Sign up / sign in → top up Wallet → create an API Key → set Base URL to <code>https://www.keyoapi.xyz/v1</code>. Public prices: <a href="/pricing">/pricing</a>.',
+    q2: 'How do I top up?',
+    a2: 'After login, open <strong>Wallet</strong> and pay prepaid credits online via Waffo. Credits are available immediately for API calls.',
+    q3: 'What are the price units?',
+    a3: 'Console and Model Square show <strong>USD</strong>. Text models are usually per million tokens; images and similar tools are often per request. Live console billing is authoritative.',
+    q4: 'Can I see prices without signing in?',
+    a4: 'Yes. Open <a href="/pricing">/pricing</a> (Model Square). The old <code>/models</code> link redirects to the public pricing page.',
+    q5: 'Are there free models?',
+    a5: 'Yes. Model IDs with a <code>-free</code> suffix, e.g. <code>deepseek-v4-flash-free</code>, <code>deepseek-v4-pro-free</code>, <code>glm-5.2-free</code>, <code>kimi-k3-free</code> ($0; not the same model as the paid twin without the suffix). Full list: <a href="/pricing">/pricing</a> and <a href="/brand/keyo-docs.html">Docs</a>.',
+    q6: 'Which clients are supported?',
+    a6: 'Any OpenAI-compatible client: Cursor, ChatBox, OpenAI Python/Node SDK, and more. Setup notes: <a href="/brand/keyo-docs.html">Docs</a>.',
+    q7: 'Common errors?',
+    a7: 'Wrong model name, invalid API key, or insufficient balance. Match the model ID exactly to <a href="/pricing">/pricing</a> and confirm Wallet has credits.',
+    q8: 'How do I contact support?',
+    a8: 'Email <a href="mailto:kopsail521@gmail.com">kopsail521@gmail.com</a> — usually within 3 business days. Status: <a href="/status">/status</a>.',
+    legalLabel: 'Legal:', legalPrivacy: 'Privacy', legalTerms: 'Terms', legalAup: 'Acceptable Use'
+  },
+  zhCN: {
+    navPricing: '定价', navDocs: '文档', navFaq: 'FAQ', navSignIn: '登录', navCta: '开始使用',
+    title: 'FAQ',
+    sub: 'KeyoAPI 常见问题',
+    q1: '如何开始使用？',
+    a1: '注册 / 登录 → 钱包充值 → 创建 API Key → 将 Base URL 设为 <code>https://www.keyoapi.xyz/v1</code>。公开价目见 <a href="/pricing">/pricing</a>。',
+    q2: '如何充值？',
+    a2: '登录后打开<strong>钱包 / Wallet</strong>，通过 Waffo 在线支付预付额度。额度即时到账用于 API 调用。',
+    q3: '价格单位是什么？',
+    a3: '控制台与模型广场以 <strong>USD</strong> 展示。文本模型多为按百万 tokens；图片等按次计费。以控制台实时扣费为准。',
+    q4: '未登录能看价格吗？',
+    a4: '可以。访问 <a href="/pricing">/pricing</a>（模型广场）。旧链接 <code>/models</code> 会自动跳转到公开价目页。',
+    q5: '有免费模型吗？',
+    a5: '有。模型名带 <code>-free</code> 后缀，例如 <code>deepseek-v4-flash-free</code>、<code>deepseek-v4-pro-free</code>、<code>glm-5.2-free</code>、<code>kimi-k3-free</code>（$0，与不带后缀的收费版不是同一个 model）。完整列表见 <a href="/pricing">/pricing</a> 与 <a href="/brand/keyo-docs.html">接入文档</a>。',
+    q6: '支持哪些客户端？',
+    a6: '任何 OpenAI 兼容客户端：Cursor、ChatBox、OpenAI Python/Node SDK 等。接入说明见 <a href="/brand/keyo-docs.html">文档</a>。',
+    q7: '常见报错？',
+    a7: '模型名写错、API Key 无效、余额不足。请核对模型名与 <a href="/pricing">/pricing</a> 完全一致，并确认钱包有余额。',
+    q8: '如何联系客服？',
+    a8: '发邮件至 <a href="mailto:kopsail521@gmail.com">kopsail521@gmail.com</a>，通常 3 个工作日内回复。服务状态：<a href="/status">/status</a>。',
+    legalLabel: '法律信息：', legalPrivacy: '隐私政策', legalTerms: '服务条款', legalAup: '可接受使用政策'
+  },
+  zhTW: {
+    navPricing: '定價', navDocs: '文件', navFaq: 'FAQ', navSignIn: '登入', navCta: '開始使用',
+    title: 'FAQ',
+    sub: 'KeyoAPI 常見問題',
+    q1: '如何開始使用？',
+    a1: '註冊 / 登入 → 錢包儲值 → 建立 API Key → 將 Base URL 設為 <code>https://www.keyoapi.xyz/v1</code>。公開價目見 <a href="/pricing">/pricing</a>。',
+    q2: '如何儲值？',
+    a2: '登入後開啟<strong>錢包 / Wallet</strong>，透過 Waffo 線上支付預付額度。額度即時到帳可用於 API 呼叫。',
+    q3: '價格單位是什麼？',
+    a3: '控制台與模型廣場以 <strong>USD</strong> 顯示。文字模型多為每百萬 tokens；圖片等常按次計費。以控制台即時扣費為準。',
+    q4: '未登入能看價格嗎？',
+    a4: '可以。開啟 <a href="/pricing">/pricing</a>（模型廣場）。舊連結 <code>/models</code> 會自動導向公開價目頁。',
+    q5: '有免費模型嗎？',
+    a5: '有。模型名帶 <code>-free</code> 後綴，例如 <code>deepseek-v4-flash-free</code>、<code>deepseek-v4-pro-free</code>、<code>glm-5.2-free</code>、<code>kimi-k3-free</code>（$0；與不帶後綴的收費版不是同一個 model）。完整列表見 <a href="/pricing">/pricing</a> 與 <a href="/brand/keyo-docs.html">接入文件</a>。',
+    q6: '支援哪些客戶端？',
+    a6: '任何 OpenAI 相容客戶端：Cursor、ChatBox、OpenAI Python/Node SDK 等。說明見 <a href="/brand/keyo-docs.html">文件</a>。',
+    q7: '常見錯誤？',
+    a7: '模型名寫錯、API Key 無效、餘額不足。請核對模型名與 <a href="/pricing">/pricing</a> 完全一致，並確認錢包有餘額。',
+    q8: '如何聯絡客服？',
+    a8: '寄信至 <a href="mailto:kopsail521@gmail.com">kopsail521@gmail.com</a>，通常 3 個工作天內回覆。服務狀態：<a href="/status">/status</a>。',
+    legalLabel: '法律資訊：', legalPrivacy: '隱私政策', legalTerms: '服務條款', legalAup: '可接受使用政策'
+  },
+  ja: {
+    navPricing: '料金', navDocs: 'ドキュメント', navFaq: 'FAQ', navSignIn: 'ログイン', navCta: 'はじめる',
+    title: 'FAQ',
+    sub: 'KeyoAPI よくある質問',
+    q1: '始め方は？',
+    a1: '登録 / ログイン → Wallet 入金 → API Key 作成 → Base URL を <code>https://www.keyoapi.xyz/v1</code> に設定。公開料金は <a href="/pricing">/pricing</a>。',
+    q2: '入金方法は？',
+    a2: 'ログイン後 <strong>Wallet</strong> を開き、Waffo で前払いクレジットを購入。入金は API 呼び出しに即利用できます。',
+    q3: '料金単位は？',
+    a3: 'コンソールと Model Square は <strong>USD</strong> 表示。テキストは主に 100 万 tokens 単位、画像などは多くの場合リクエスト単位。最終はコンソールの課金が正です。',
+    q4: '未ログインでも料金は見られますか？',
+    a4: 'はい。<a href="/pricing">/pricing</a>（Model Square）を開いてください。旧リンク <code>/models</code> は公開料金ページへリダイレクトします。',
+    q5: '無料モデルはありますか？',
+    a5: 'あります。<code>-free</code> 付き ID（例: <code>deepseek-v4-flash-free</code>、<code>deepseek-v4-pro-free</code>、<code>glm-5.2-free</code>、<code>kimi-k3-free</code>）が $0（接尾辞なしの有料版とは別モデル）。一覧は <a href="/pricing">/pricing</a> と <a href="/brand/keyo-docs.html">ドキュメント</a>。',
+    q6: '対応クライアントは？',
+    a6: 'OpenAI 互換なら可：Cursor、ChatBox、OpenAI Python/Node SDK など。手順は <a href="/brand/keyo-docs.html">ドキュメント</a>。',
+    q7: 'よくあるエラーは？',
+    a7: 'モデル名の誤り、無効な API Key、残高不足。<a href="/pricing">/pricing</a> と完全一致のモデル名か、Wallet 残高を確認してください。',
+    q8: 'サポート連絡先は？',
+    a8: '<a href="mailto:kopsail521@gmail.com">kopsail521@gmail.com</a> へメール（通常 3 営業日以内）。ステータス: <a href="/status">/status</a>。',
+    legalLabel: '法務:', legalPrivacy: 'Privacy', legalTerms: 'Terms', legalAup: 'Acceptable Use'
+  },
+  fr: {
+    navPricing: 'Tarifs', navDocs: 'Docs', navFaq: 'FAQ', navSignIn: 'Connexion', navCta: 'Commencer',
+    title: 'FAQ',
+    sub: 'Questions fréquentes KeyoAPI',
+    q1: 'Comment démarrer ?',
+    a1: 'Inscription / connexion → recharger le Wallet → créer une clé API → Base URL = <code>https://www.keyoapi.xyz/v1</code>. Tarifs publics : <a href="/pricing">/pricing</a>.',
+    q2: 'Comment recharger ?',
+    a2: 'Après connexion, ouvrez <strong>Wallet</strong> et payez des crédits prépayés via Waffo. Les crédits sont utilisables immédiatement.',
+    q3: 'Quelles sont les unités de prix ?',
+    a3: 'La console et Model Square affichent des <strong>USD</strong>. Texte souvent par million de tokens ; images souvent à la requête. La facturation console fait foi.',
+    q4: 'Puis-je voir les prix sans compte ?',
+    a4: 'Oui. Ouvrez <a href="/pricing">/pricing</a>. L’ancien lien <code>/models</code> redirige vers la page publique.',
+    q5: 'Y a-t-il des modèles gratuits ?',
+    a5: 'Oui. IDs avec suffixe <code>-free</code>, ex. <code>deepseek-v4-flash-free</code>, <code>deepseek-v4-pro-free</code>, <code>glm-5.2-free</code>, <code>kimi-k3-free</code> ($0 ; différent du jumeau payant). Liste : <a href="/pricing">/pricing</a> et <a href="/brand/keyo-docs.html">Docs</a>.',
+    q6: 'Quels clients sont supportés ?',
+    a6: 'Tout client compatible OpenAI : Cursor, ChatBox, SDK Python/Node, etc. Voir <a href="/brand/keyo-docs.html">Docs</a>.',
+    q7: 'Erreurs courantes ?',
+    a7: 'Nom de modèle incorrect, clé invalide, solde insuffisant. Vérifiez l’ID sur <a href="/pricing">/pricing</a> et le solde Wallet.',
+    q8: 'Comment contacter le support ?',
+    a8: 'Écrivez à <a href="mailto:kopsail521@gmail.com">kopsail521@gmail.com</a> (souvent sous 3 jours ouvrés). Statut : <a href="/status">/status</a>.',
+    legalLabel: 'Légal :', legalPrivacy: 'Privacy', legalTerms: 'Terms', legalAup: 'Acceptable Use'
+  },
+  ru: {
+    navPricing: 'Цены', navDocs: 'Документация', navFaq: 'FAQ', navSignIn: 'Вход', navCta: 'Начать',
+    title: 'FAQ',
+    sub: 'Частые вопросы KeyoAPI',
+    q1: 'Как начать?',
+    a1: 'Регистрация / вход → пополнение Wallet → создать API Key → Base URL <code>https://www.keyoapi.xyz/v1</code>. Цены: <a href="/pricing">/pricing</a>.',
+    q2: 'Как пополнить?',
+    a2: 'После входа откройте <strong>Wallet</strong> и оплатите предоплату через Waffo. Кредиты сразу доступны для API.',
+    q3: 'В каких единицах цены?',
+    a3: 'Консоль и Model Square показывают <strong>USD</strong>. Текст обычно за миллион tokens; изображения часто за запрос. Итог — по консоли.',
+    q4: 'Можно ли смотреть цены без входа?',
+    a4: 'Да. Откройте <a href="/pricing">/pricing</a>. Старый <code>/models</code> редиректит на публичные цены.',
+    q5: 'Есть бесплатные модели?',
+    a5: 'Да. ID с суффиксом <code>-free</code>, например <code>deepseek-v4-flash-free</code>, <code>deepseek-v4-pro-free</code>, <code>glm-5.2-free</code>, <code>kimi-k3-free</code> ($0; это не тот же model, что платный без суффикса). Список: <a href="/pricing">/pricing</a> и <a href="/brand/keyo-docs.html">Docs</a>.',
+    q6: 'Какие клиенты поддерживаются?',
+    a6: 'Любой OpenAI-совместимый клиент: Cursor, ChatBox, OpenAI Python/Node SDK и др. См. <a href="/brand/keyo-docs.html">Docs</a>.',
+    q7: 'Типичные ошибки?',
+    a7: 'Неверное имя модели, неверный ключ, недостаточно баланса. Сверьте ID с <a href="/pricing">/pricing</a> и баланс Wallet.',
+    q8: 'Как связаться с поддержкой?',
+    a8: 'Пишите на <a href="mailto:kopsail521@gmail.com">kopsail521@gmail.com</a> — обычно в течение 3 рабочих дней. Статус: <a href="/status">/status</a>.',
+    legalLabel: 'Legal:', legalPrivacy: 'Privacy', legalTerms: 'Terms', legalAup: 'Acceptable Use'
+  },
+  vi: {
+    navPricing: 'Giá', navDocs: 'Tài liệu', navFaq: 'FAQ', navSignIn: 'Đăng nhập', navCta: 'Bắt đầu',
+    title: 'FAQ',
+    sub: 'Câu hỏi thường gặp KeyoAPI',
+    q1: 'Bắt đầu thế nào?',
+    a1: 'Đăng ký / đăng nhập → nạp Wallet → tạo API Key → đặt Base URL <code>https://www.keyoapi.xyz/v1</code>. Giá công khai: <a href="/pricing">/pricing</a>.',
+    q2: 'Nạp tiền thế nào?',
+    a2: 'Sau khi đăng nhập, mở <strong>Wallet</strong> và thanh toán tín dụng trả trước qua Waffo. Tín dụng dùng ngay cho API.',
+    q3: 'Đơn vị giá là gì?',
+    a3: 'Console và Model Square hiển thị <strong>USD</strong>. Text thường theo triệu tokens; ảnh thường theo request. Lấy billing console làm chuẩn.',
+    q4: 'Chưa đăng nhập có xem giá được không?',
+    a4: 'Có. Mở <a href="/pricing">/pricing</a>. Link cũ <code>/models</code> sẽ chuyển tới trang giá công khai.',
+    q5: 'Có model miễn phí không?',
+    a5: 'Có. ID có hậu tố <code>-free</code>, ví dụ <code>deepseek-v4-flash-free</code>, <code>deepseek-v4-pro-free</code>, <code>glm-5.2-free</code>, <code>kimi-k3-free</code> ($0; khác bản trả phí không hậu tố). Danh sách: <a href="/pricing">/pricing</a> và <a href="/brand/keyo-docs.html">Docs</a>.',
+    q6: 'Hỗ trợ client nào?',
+    a6: 'Mọi client tương thích OpenAI: Cursor, ChatBox, OpenAI Python/Node SDK… Xem <a href="/brand/keyo-docs.html">Docs</a>.',
+    q7: 'Lỗi thường gặp?',
+    a7: 'Sai tên model, API key không hợp lệ, hoặc thiếu số dư. Khớp đúng ID trên <a href="/pricing">/pricing</a> và kiểm tra Wallet.',
+    q8: 'Liên hệ hỗ trợ thế nào?',
+    a8: 'Email <a href="mailto:kopsail521@gmail.com">kopsail521@gmail.com</a> — thường trong 3 ngày làm việc. Trạng thái: <a href="/status">/status</a>.',
+    legalLabel: 'Pháp lý:', legalPrivacy: 'Privacy', legalTerms: 'Terms', legalAup: 'Acceptable Use'
+  }
+};
+
+function normalizeLang(raw) {
+  if (!raw) return 'en';
+  const v = String(raw).trim().replace(/_/g, '-');
+  if (v === 'zhCN' || /^zh(-cn|-hans)?$/i.test(v)) return 'zhCN';
+  if (v === 'zhTW' || /^zh-(tw|hk|mo|hant)/i.test(v)) return 'zhTW';
+  const short = v.split('-')[0].toLowerCase();
+  if (['en', 'ja', 'fr', 'ru', 'vi'].includes(short)) return short;
+  return 'en';
+}
+
+const LANG_LABELS = {
+  en: 'English',
+  zhCN: '简体中文',
+  zhTW: '繁體中文',
+  ja: '日本語',
+  fr: 'Français',
+  ru: 'Русский',
+  vi: 'Tiếng Việt'
+};
+
+let current = 'en';
+const embedded = window.parent !== window;
+if (embedded) document.documentElement.classList.add('is-embed');
+
+function applyLang(raw) {
+  const code = normalizeLang(raw);
+  current = code;
+  const dict = I18N[code] || I18N.en;
+  document.documentElement.lang = code === 'zhCN' ? 'zh-CN' : code === 'zhTW' ? 'zh-TW' : code;
+  document.querySelectorAll('[data-i18n]').forEach((el) => {
+    const key = el.getAttribute('data-i18n');
+    if (dict[key] != null) el.textContent = dict[key];
+  });
+  document.querySelectorAll('[data-i18n-html]').forEach((el) => {
+    const key = el.getAttribute('data-i18n-html');
+    if (dict[key] != null) el.innerHTML = dict[key];
+  });
+  const sel = document.getElementById('langSelect');
+  if (sel && sel.value !== code) sel.value = code;
+}
+
+function readStoredLang() {
+  try { return localStorage.getItem('i18nextLng') || ''; } catch { return ''; }
+}
+function readQueryLang() {
+  try { return new URLSearchParams(location.search).get('lang') || ''; } catch { return ''; }
+}
+
+const langBar = document.getElementById('langBar');
+const langSelect = document.getElementById('langSelect');
+if (embedded) langBar.classList.add('embedded');
+Object.entries(LANG_LABELS).forEach(([code, label]) => {
+  const opt = document.createElement('option');
+  opt.value = code;
+  opt.textContent = label;
+  langSelect.appendChild(opt);
+});
+langSelect.addEventListener('change', () => {
+  applyLang(langSelect.value);
+  try { localStorage.setItem('i18nextLng', langSelect.value); } catch {}
+});
+window.addEventListener('message', (event) => {
+  const data = event.data;
+  if (!data || typeof data !== 'object') return;
+  if (data.lang) applyLang(data.lang);
+});
+window.addEventListener('storage', (event) => {
+  if (event.key === 'i18nextLng') applyLang(event.newValue || 'en');
+});
+
+const initialLang = embedded
+  ? (readQueryLang() || 'en')
+  : (readQueryLang() || readStoredLang() || navigator.language || 'en');
+applyLang(initialLang);
+</script>
 </body>
 </html>

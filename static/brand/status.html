@@ -6,38 +6,45 @@
 <title>KeyoAPI Status</title>
 <meta name="description" content="KeyoAPI service status — OpenAI-compatible API gateway uptime check." />
 <link rel="canonical" href="https://www.keyoapi.xyz/status" />
+<link rel="icon" href="/brand/logo.svg" type="image/svg+xml" />
+<link rel="stylesheet" href="/brand/keyo-theme.css" />
 <style>
-  :root { --bg:#f7fafc; --ink:#0f172a; --muted:#64748b; --ok:#059669; --bad:#dc2626; --line:#e2e8f0; --accent:#2563eb; }
-  body { margin:0; font-family: ui-sans-serif, system-ui, sans-serif; background:linear-gradient(180deg,#f7fafc,#eef6ff); color:var(--ink); }
-  .wrap { max-width:640px; margin:0 auto; padding:48px 20px 64px; }
-  h1 { font-size:1.75rem; margin:0 0 8px; }
-  .sub { color:var(--muted); margin:0 0 28px; }
-  .card { background:#fff; border:1px solid var(--line); border-radius:12px; padding:22px; }
-  .row { display:flex; align-items:center; gap:10px; margin-bottom:16px; }
-  .dot { width:12px; height:12px; border-radius:50%; background:var(--muted); }
+  .dot { width:10px; height:10px; border-radius:50%; background:var(--muted); display:inline-block; }
   .dot.ok { background:var(--ok); }
-  .dot.bad { background:var(--bad); }
-  dl { margin:0; display:grid; gap:10px; font-size:14px; }
-  dt { color:var(--muted); }
-  dd { margin:0; font-family:ui-monospace, SFMono-Regular, Menlo, monospace; font-size:13px; word-break:break-all; }
-  .pair { display:flex; justify-content:space-between; gap:16px; border-top:1px solid var(--line); padding-top:10px; }
+  .dot.bad { background:#9b2c2c; }
+  .row { display:flex; align-items:center; gap:10px; margin-bottom:16px; }
+  dl { margin:0; }
+  .pair { display:flex; justify-content:space-between; gap:16px; border-top:1px solid var(--line); padding-top:10px; font-size:14px; }
   .pair:first-of-type { border-top:0; padding-top:0; }
-  a { color:var(--accent); }
-  .foot { margin-top:24px; color:var(--muted); font-size:14px; line-height:1.7; }
+  dt { color:var(--muted); }
+  dd { margin:0; font-family:var(--mono); font-size:13px; word-break:break-all; }
 </style>
 </head>
 <body>
-  <div class="wrap">
+  <header class="k-nav">
+  <a class="k-wordmark" href="/">
+    <img src="/brand/logo.svg" alt="" width="22" height="22" />
+    KeyoAPI
+  </a>
+  <nav aria-label="Primary">
+    <a href="/pricing">Pricing</a>
+    <a href="/brand/keyo-docs.html">Docs</a>
+    <a href="/faq">FAQ</a>
+    <a href="/sign-in">Sign in</a>
+    <a class="k-nav-cta" href="/sign-up">Get started</a>
+  </nav>
+</header>
+  <div class="k-page">
     <h1>Service Status</h1>
     <p class="sub">KeyoAPI — OpenAI-compatible API gateway</p>
-    <div class="card">
+    <div class="k-card">
       <div class="row">
         <span class="dot" id="dot"></span>
         <strong id="headline">Checking…</strong>
       </div>
       <dl id="meta"></dl>
     </div>
-    <p class="foot">
+    <p class="k-foot">
       Support: <a href="mailto:kopsail521@gmail.com">kopsail521@gmail.com</a><br />
       Docs: <a href="/brand/keyo-docs.html">/brand/keyo-docs.html</a> ·
       FAQ: <a href="/faq">/faq</a> ·

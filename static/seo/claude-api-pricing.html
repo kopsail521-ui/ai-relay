@@ -10,59 +10,68 @@
 <meta property="og:url" content="https://www.keyoapi.xyz/claude-api-pricing" />
 <meta property="og:title" content="Claude API Pricing Comparison | Cheap Claude on KeyoAPI" />
 <meta property="og:description" content="Claude API pricing on KeyoAPI: Sonnet ~$0.88/$4.41, Opus ~$2.21/$11, Fable flagship tiers — compare with typical Anthropic list rates. One OpenAI-compatible key." />
-<meta property="og:image" content="https://www.keyoapi.xyz/logo.png" />
+<meta property="og:image" content="https://www.keyoapi.xyz/brand/logo.svg" />
+<link rel="icon" href="/brand/logo.svg" type="image/svg+xml" />
+<link rel="stylesheet" href="/brand/keyo-theme.css" />
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content="Claude API Pricing Comparison | Cheap Claude on KeyoAPI" />
 <meta name="twitter:description" content="Claude API pricing on KeyoAPI: Sonnet ~$0.88/$4.41, Opus ~$2.21/$11, Fable flagship tiers — compare with typical Anthropic list rates. One OpenAI-compatible key." />
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebPage","name":"Claude API Pricing Comparison | Cheap Claude on KeyoAPI","url":"https://www.keyoapi.xyz/claude-api-pricing","description":"Claude API pricing on KeyoAPI: Sonnet ~$0.88/$4.41, Opus ~$2.21/$11, Fable flagship tiers — compare with typical Anthropic list rates. One OpenAI-compatible key."}</script>
-<style>:root {
-  --bg0:#f7fafc; --bg1:#eef6ff; --ink:#0f172a; --muted:#475569;
-  --line:#cbd5e1; --accent:#2563eb; --card:#fff; --ok:#047857;
-}
-*{box-sizing:border-box}
-html,body{margin:0;min-height:100%;font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;background:linear-gradient(180deg,var(--bg0),var(--bg1));color:var(--ink);line-height:1.65}
-a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
-.wrap{max-width:880px;margin:0 auto;padding:32px 20px 64px}
-.nav,.footer{display:flex;flex-wrap:wrap;gap:10px 16px;font-size:14px;color:var(--muted)}
-.nav{padding-bottom:20px;border-bottom:1px solid var(--line);margin-bottom:28px}
-.footer{padding-top:28px;border-top:1px solid var(--line);margin-top:40px}
-.eyebrow{font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);font-weight:700;margin:0 0 10px}
-h1{font-size:clamp(1.75rem,4vw,2.4rem);line-height:1.2;margin:0 0 14px}
-h2{font-size:1.25rem;margin:28px 0 10px}
+<style>.wrap{max-width:880px;margin:0 auto;padding:28px 24px 48px}
+.footer{display:flex;flex-wrap:wrap;gap:10px 16px;max-width:1080px;margin:0 auto;padding:24px 24px 40px;border-top:1px solid var(--line);font-size:13px;color:var(--muted)}
+.footer a{color:var(--ink-2);text-decoration:none}
+.footer a:hover{color:var(--ink)}
+h1{font-size:clamp(1.7rem,3.1vw,2.35rem);line-height:1.18;letter-spacing:-.035em;margin:0 0 14px;font-weight:600;text-wrap:balance}
+h2{font-size:1.15rem;margin:28px 0 10px;letter-spacing:-.02em}
 p{margin:0 0 14px;color:var(--ink)}
-.lead{font-size:1.1rem;color:var(--muted)}
+.lead{font-size:1.02rem;color:var(--ink-2);line-height:1.55;text-wrap:pretty}
 .meta{font-size:14px;color:var(--muted);margin:0 0 18px}
 .btnrow{display:flex;flex-wrap:wrap;gap:10px;margin:18px 0 28px}
-.btn{display:inline-block;padding:10px 16px;border-radius:10px;font-weight:600;font-size:14px;text-decoration:none}
-.btn-primary{background:var(--accent);color:#fff}
-.btn-secondary{background:#fff;color:var(--ink);border:1px solid var(--line)}
-.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin:16px 0}
-pre,code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
-pre{background:#0f172a;color:#e2e8f0;padding:14px 16px;border-radius:10px;overflow:auto;font-size:13px}
-table{width:100%;border-collapse:collapse;font-size:14px;background:var(--card)}
+.btn,.k-btn{display:inline-block;padding:10px 16px;border-radius:var(--radius);font-weight:600;font-size:14px;text-decoration:none;line-height:1.2}
+.btn-primary,.k-btn-primary{background:var(--ink);color:#f6f5f1}
+.btn-primary:hover,.k-btn-primary:hover{background:#000;color:#f6f5f1;text-decoration:none}
+.btn-secondary,.k-btn-secondary{background:transparent;color:var(--ink);border:1px solid var(--line-strong,#c9c4b8)}
+.btn-secondary:hover,.k-btn-secondary:hover{border-color:var(--ink);text-decoration:none}
+.btn-link,.k-btn-link{background:transparent;color:var(--link);padding-inline:8px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:16px 18px;margin:16px 0}
+pre,code{font-family:var(--mono)}
+pre{background:var(--panel);color:var(--panel-ink);padding:14px 16px;border-radius:var(--radius);overflow:auto;font-size:13px}
+pre code{background:transparent;padding:0;color:inherit;font-size:inherit;border-radius:0}
+table{width:100%;border-collapse:collapse;font-size:14px;background:var(--surface)}
 th,td{border:1px solid var(--line);padding:10px 12px;text-align:left;vertical-align:top}
-th{background:#f1f5f9}
+th{background:color-mix(in srgb,var(--line) 40%,var(--surface));font-weight:600}
 .ok{color:var(--ok);font-weight:600}
-.grid{display:grid;gap:10px;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));margin:16px 0}
-.grid a{display:block;padding:12px;border:1px solid var(--line);border-radius:10px;background:#fff;color:var(--ink);text-decoration:none}
-.grid a:hover{border-color:var(--accent)}
+.grid{display:grid;gap:10px;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));margin:16px 0}
+.grid a{display:flex;flex-direction:column;justify-content:center;gap:4px;min-height:4.5rem;padding:12px 14px;border:1px solid var(--line);border-radius:var(--radius);background:var(--surface);color:var(--ink);text-decoration:none;font-weight:500;line-height:1.35}
+.grid a:hover{border-color:var(--ink)}
+.grid a .grid-title{font-weight:600;overflow-wrap:anywhere}
+.grid a .grid-meta{color:var(--muted);font-size:13px;font-weight:500}
+.grid a code{font-size:12.5px;background:transparent;padding:0}
 ul{margin:0 0 14px;padding-left:1.2em}
-.faq details{border:1px solid var(--line);border-radius:10px;padding:12px 14px;margin:0 0 10px;background:#fff}
-.faq summary{cursor:pointer;font-weight:600}</style>
+.faq details{border:1px solid var(--line);border-radius:var(--radius);padding:12px 14px;margin:0 0 10px;background:var(--surface)}
+.faq summary{cursor:pointer;font-weight:600}
+.surfaces{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));margin:16px 0 8px}
+.surf{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:14px 16px;font-size:14px}
+.surf h3{font-size:15px;margin:0 0 8px}
+.surf ul{margin:0;padding-left:1.15em;color:var(--muted)}
+.panel{background:var(--panel);color:var(--panel-ink);border-radius:var(--radius);padding:18px;text-align:left;font-family:var(--mono);font-size:12.5px;overflow:auto;border:1px solid #2a2924}
+.panel .label{color:#b9b6ab;margin-bottom:5px;font-size:11px;letter-spacing:.06em;text-transform:uppercase}
+.panel .label+.label{margin-top:14px}</style>
 </head>
 <body>
-<div class="wrap">
-<nav class="nav" aria-label="Primary">
-  <a href="/">Home</a>
-  <a href="/console">Console</a>
-  <a href="/pricing">Model Square</a>
-  <a href="/pricing-list">Pricing list</a>
-  <a href="/rankings">Rankings</a>
-  <a href="/brand/keyo-docs.html">Docs</a>
-  <a href="/about">About</a>
-  <a href="/sign-up">Get Started</a>
-</nav>
-<p class="eyebrow">KEYOAPI</p>
+<header class="k-nav">
+  <a class="k-wordmark" href="/"><img src="/brand/logo.svg" alt="" width="22" height="22" />KeyoAPI</a>
+  <nav aria-label="Primary">
+    <a href="/pricing">Pricing</a>
+    <a href="/pricing-list">Pricing list</a>
+    <a href="/brand/keyo-docs.html">Docs</a>
+    <a href="/faq">FAQ</a>
+    <a href="/console">Console</a>
+    <a href="/sign-in">Sign in</a>
+    <a class="k-nav-cta" href="/sign-up">Get started</a>
+  </nav>
+</header>
+<main class="wrap">
 <h1>Claude API Pricing — KeyoAPI vs Typical Anthropic List Rates</h1>
 
 <p class="lead">Looking up Claude API pricing usually means you already want Anthropic-class chat or agents, but need clearer unit economics — or one prepaid balance that also covers GPT-class, DeepSeek, Whisper, and vision. This page compares indicative Keyo sell rates with typical public Anthropic list figures and shows how to call Claude-class IDs on an OpenAI-compatible gateway.</p>
@@ -120,14 +129,14 @@ ul{margin:0 0 14px;padding-left:1.2em}
 <details><summary>How do I try Claude on Keyo?</summary><p>Create a key at /sign-up, then open /pricing/claude-sonnet-5 (or another Claude ID) for interactive try/buy. There is no separate upload playground — Model Square is the try path.</p></details></div>
 <p class="meta">Also see <a href="/compare">/compare</a>, <a href="/free-models">/free-models</a>, and model guides under <code>/model/</code>.</p>
 
+</main>
 <footer class="footer">
   <a href="/">Home</a>
-  <a href="/about">About</a>
-  <a href="/pricing">Model Square</a>
+  <a href="/pricing">Pricing</a>
   <a href="/pricing-list">Pricing list</a>
   <a href="/models">Model guides</a>
-  <a href="/compare">Price comparison</a>
-  <a href="/free-models">Free AI API</a>
+  <a href="/compare">Compare</a>
+  <a href="/free-models">Free models</a>
   <a href="/gemini-api-pricing">Gemini pricing</a>
   <a href="/deepseek-api-pricing">DeepSeek pricing</a>
   <a href="/claude-api-pricing">Claude pricing</a>
@@ -137,11 +146,10 @@ ul{margin:0 0 14px;padding-left:1.2em}
   <a href="/voice-cloning-api">Voice clone API</a>
   <a href="/ai-avatar-video-generator">Avatar video API</a>
   <a href="/brand/keyo-docs.html">Docs</a>
-  <a href="/brand/faq.html">FAQ</a>
+  <a href="/faq">FAQ</a>
   <a href="/brand/privacy.html">Privacy</a>
   <a href="/brand/terms.html">Terms</a>
-  <a href="/sign-in">Console login</a>
+  <a href="/sign-in">Sign in</a>
 </footer>
-</div>
 </body>
 </html>

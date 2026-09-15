@@ -293,6 +293,22 @@
         }
       },
       "desc_zh": "Grok Imagine Video · 按秒 480p $0.08825、720p $0.1545"
+    },
+    {
+      "id": "grok-1.5-video",
+      "vendor": "xAI",
+      "icon": "Grok",
+      "tag": "视频",
+      "upstream": "openlux",
+      "upstream_submit_path": "/v1/videos",
+      "markup": 2.5,
+      "billing": "settle_cost",
+      "display_unit": "request",
+      "estimate": {
+        "mode": "fixed",
+        "cost_usd": 0.2427
+      },
+      "desc_zh": "Grok 1.5 Video · 按次"
     }
   ]
 }

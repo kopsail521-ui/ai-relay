@@ -26,129 +26,37 @@
   "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
 }
 </script>
-<style>
-  :root {
-    --bg0: #f7fafc;
-    --bg1: #eef6ff;
-    --ink: #0f172a;
-    --muted: #475569;
-    --line: #cbd5e1;
-    --accent: #2563eb;
-    --card: #0f172a;
-    --card-ink: #e2e8e8;
-    --card-muted: #94a3b8;
-  }
-  html, body {
-    margin: 0;
-    min-height: 100%;
-    font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
-    background: linear-gradient(180deg, var(--bg0) 0%, var(--bg1) 100%);
-    color: var(--ink);
-  }
-  .wrap {
-    min-height: 70vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 48px 20px;
-  }
-  .inner { max-width: 760px; text-align: center; }
-  .eyebrow {
-    font-size: 14px;
-    letter-spacing: .12em;
-    text-transform: uppercase;
-    color: var(--accent);
-    font-weight: 700;
-    margin-bottom: 14px;
-  }
-  h1 {
-    font-size: clamp(2rem, 5vw, 3.2rem);
-    line-height: 1.15;
-    margin: 0 0 16px;
-  }
-  .sub {
-    font-size: 1.125rem;
-    color: var(--muted);
-    margin: 0 auto 28px;
-    max-width: 560px;
-    line-height: 1.6;
-  }
-  .actions {
-    display: flex;
-    gap: 12px;
-    justify-content: center;
-    flex-wrap: wrap;
-    margin-bottom: 36px;
-  }
-  .btn {
-    padding: 12px 22px;
-    border-radius: 10px;
-    text-decoration: none;
-    font-weight: 600;
-    font-size: 14px;
-  }
-  .btn-primary { background: var(--accent); color: #fff; }
-  .btn-secondary {
-    background: #fff;
-    color: var(--ink);
-    border: 1px solid var(--line);
-  }
-  .btn-link { background: transparent; color: var(--accent); }
-  .panel {
-    background: var(--card);
-    color: var(--card-ink);
-    border-radius: 12px;
-    padding: 16px 18px;
-    text-align: left;
-    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-    font-size: 13px;
-    overflow: auto;
-  }
-  .panel .label { color: var(--card-muted); margin-bottom: 6px; }
-  .panel .label + .label { margin-top: 14px; }
-  .lang-bar {
-    position: fixed;
-    top: 12px;
-    right: 12px;
-    z-index: 10;
-  }
-  .lang-bar.embedded { display: none; }
-  .lang-bar select {
-    border: 1px solid var(--line);
-    background: #fff;
-    border-radius: 8px;
-    padding: 6px 10px;
-    font-size: 12px;
-    color: var(--ink);
-  }
-  .legal-links {
-    margin: 22px 0 0;
-    font-size: 13px;
-    color: var(--muted);
-    line-height: 1.7;
-  }
-  .legal-links a {
-    color: var(--accent);
-    text-decoration: none;
-  }
-  .legal-links a:hover { text-decoration: underline; }
-</style>
+<link rel="stylesheet" href="/brand/keyo-theme.css" />
 </head>
-<body>
+<body class="k-home">
   <div class="lang-bar" id="langBar">
     <select id="langSelect" aria-label="Language"></select>
   </div>
-  <div class="wrap">
-    <div class="inner">
-      <div class="eyebrow">KEYOAPI</div>
+  <header class="k-nav">
+    <a class="k-wordmark" href="/" target="_top">
+      <img src="/brand/logo.svg" alt="" width="22" height="22" />
+      KeyoAPI
+    </a>
+    <nav aria-label="Primary">
+      <a href="/pricing" target="_top">Pricing</a>
+      <a href="/brand/keyo-docs.html" target="_top">Docs</a>
+      <a href="/faq" target="_top">FAQ</a>
+      <a href="/sign-in" target="_top">Sign in</a>
+      <a class="k-nav-cta" href="/sign-up" target="_top">Get started</a>
+    </nav>
+  </header>
+  <div class="k-home-shell">
+    <div class="k-hero">
+      <div>
       <h1 data-i18n="title"></h1>
       <p class="sub" data-i18n="sub"></p>
       <div class="actions">
-        <a class="btn btn-primary" href="/sign-up" target="_top" data-i18n="ctaStart"></a>
-        <a class="btn btn-secondary" href="/brand/keyo-docs.html" target="_top" data-i18n="ctaDocs"></a>
-        <a class="btn btn-link" href="/pricing" target="_top" data-i18n="ctaPricing"></a>
+        <a class="k-btn k-btn-primary" href="/sign-up" target="_top" data-i18n="ctaStart"></a>
+        <a class="k-btn k-btn-secondary" href="/brand/keyo-docs.html" target="_top" data-i18n="ctaDocs"></a>
+        <a class="k-btn k-btn-secondary" href="/pricing" target="_top" data-i18n="ctaPricing"></a>
       </div>
-      <div class="panel">
+      </div>
+      <div class="k-panel">
         <div class="label">Base URL</div>
         <div>https://www.keyoapi.xyz/v1</div>
         <div class="label" data-i18n="exampleLabel"></div>
@@ -177,7 +85,7 @@
 const I18N = {
   en: {
     title: 'One API for Multiple AI Models',
-    sub: 'Chat, image generation, and speech use an OpenAI-compatible /v1 (swap base URL + key). Matting, detection, async video/docs, and similar tools use dedicated paths in the docs—not drop-in OpenAI SDK calls. One prepaid key, unified billing.',
+    sub: 'One prepaid key for chat, speech, OCR & vision. Lower rates — one balance.',
     ctaStart: 'Get Started',
     ctaDocs: 'Docs',
     ctaPricing: 'Browse Models',
@@ -187,7 +95,7 @@ const I18N = {
   },
   zhCN: {
     title: '一个地址，调用多模型',
-    sub: '对话、文生图、语音等走 OpenAI 兼容的 /v1（改 base_url + Key 即可）。抠图、检测、异步视频/文档等按文档里的专用路径调用，不能直接套 OpenAI SDK。一个预付费 Key，统一计费；与模型厂商无隶属关系。',
+    sub: '一个预付费 Key，覆盖对话、语音、OCR 与视觉。更低价，统一余额。',
     ctaStart: '开始使用',
     ctaDocs: '接入文档',
     ctaPricing: '查看模型',
@@ -197,7 +105,7 @@ const I18N = {
   },
   zhTW: {
     title: '一個地址，呼叫多模型',
-    sub: '對話、文生圖、語音等走 OpenAI 相容 /v1；抠圖、偵測、非同步影片/文件等請依文件專用路徑呼叫，不能直接套 OpenAI SDK。一個預付費 Key，統一計費。',
+    sub: '一個預付費 Key，覆蓋對話、語音、OCR 與視覺。更低價，統一餘額。',
     ctaStart: '開始使用',
     ctaDocs: '接入文件',
     ctaPricing: '查看定價',
@@ -207,7 +115,7 @@ const I18N = {
   },
   ja: {
     title: 'ひとつのエンドポイントで多モデル',
-    sub: 'チャット・画像生成・音声は OpenAI 互換の /v1。切り抜き・検出・非同期動画/文書などはドキュメントの専用パス（SDK のままでは不可）。キーは1つ、前払い課金。',
+    sub: 'チャット・音声・OCR・ビジョンを一つの前払いキーで。低料金、残高はひとつ。',
     ctaStart: 'はじめる',
     ctaDocs: 'ドキュメント',
     ctaPricing: '料金を見る',
@@ -217,7 +125,7 @@ const I18N = {
   },
   fr: {
     title: 'Un endpoint, plusieurs modèles',
-    sub: 'Chat, image et speech via /v1 compatible OpenAI. Matting, détection, vidéo/docs async : chemins dédiés (pas un drop-in SDK). Une clé prépayée, facturation unifiée.',
+    sub: 'Une clé prépayée pour chat, speech, OCR et vision. Tarifs bas — un seul solde.',
     ctaStart: 'Commencer',
     ctaDocs: 'Docs',
     ctaPricing: 'Tarifs',
@@ -227,7 +135,7 @@ const I18N = {
   },
   ru: {
     title: 'Один endpoint — много моделей',
-    sub: 'Чат, генерация изображений и речь — OpenAI-совместимый /v1. Маттинг, детекция, async видео/документы — отдельные пути в документации, не drop-in SDK. Один предоплаченный ключ.',
+    sub: 'Один предоплаченный ключ: чат, речь, OCR и vision. Ниже цены — один баланс.',
     ctaStart: 'Начать',
     ctaDocs: 'Документация',
     ctaPricing: 'Цены',
@@ -237,7 +145,7 @@ const I18N = {
   },
   vi: {
     title: 'Một endpoint, nhiều mô hình',
-    sub: 'Chat, tạo ảnh, speech dùng /v1 tương thích OpenAI. Matting, detection, video/docs async theo đường dẫn riêng trong docs—không phải drop-in SDK. Một key trả trước, billing thống nhất.',
+    sub: 'Một key trả trước cho chat, speech, OCR & vision. Giá thấp — một số dư.',
     ctaStart: 'Bắt đầu',
     ctaDocs: 'Tài liệu',
     ctaPricing: 'Xem giá',
@@ -269,6 +177,7 @@ const LANG_LABELS = {
 
 let current = 'en';
 const embedded = window.parent !== window;
+if (embedded) document.documentElement.classList.add('is-embed');
 
 function applyLang(raw) {
   const code = normalizeLang(raw);

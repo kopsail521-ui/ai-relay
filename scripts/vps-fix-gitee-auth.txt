@@ -1,0 +1,90 @@
+# 修复 gitee 透传 401：重建 3010 + 鉴权回退；复测 AnimeSharp / Duix
+set -e
+cd /opt/ai-relay
+sudo git pull || true
+
+KEY=$(python3 - <<'PY'
+import sqlite3
+k=sqlite3.connect("/opt/ai-relay/data/new-api/one-api.db").execute(
+  "SELECT key FROM tokens WHERE id=2 AND status=1"
+).fetchone()[0]
+print(k if str(k).startswith("sk-") else "sk-"+k)
+PY
+)
+BARE="${KEY#sk-}"
+
+echo "=== A) 宿主机查 key ==="
+python3 - <<PY
+import sqlite3
+con=sqlite3.connect("/opt/ai-relay/data/new-api/one-api.db")
+bare="$BARE"
+rows=con.execute("SELECT id,status,length(key) FROM tokens WHERE key=? OR key=?",(bare,"sk-"+bare)).fetchall()
+print("host_hits", rows)
+print("usage_probe", end=" ")
+PY
+curl -sS -o /tmp/usage.json -w "usage=%{http_code}\n" -m 10 \
+  http://127.0.0.1:3000/api/usage/token/ -H "Authorization: Bearer $KEY" || true
+curl -sS -o /tmp/models.json -w "models=%{http_code}\n" -m 10 \
+  http://127.0.0.1:3000/v1/models -H "Authorization: Bearer $KEY" || true
+
+echo "=== B) 重建 3010 ==="
+sudo docker build -t keyo-gitee-passthrough ./services/gitee-passthrough
+sudo docker rm -f ai-relay-gitee-passthrough 2>/dev/null || true
+sudo docker run -d --name ai-relay-gitee-passthrough --restart always --network host \
+  --env-file /opt/ai-relay/.env.gitee \
+  -v /opt/ai-relay/data/new-api:/data:rw \
+  -e NEW_API_DB=/data/one-api.db \
+  -e NEW_API_BASE=http://127.0.0.1:3000 \
+  -e CATALOG=/app/catalog.json \
+  -e LISTEN_HOST=127.0.0.1 \
+  -e PORT=3010 \
+  keyo-gitee-passthrough
+sleep 2
+curl -sS http://127.0.0.1:3010/healthz; echo
+
+echo "=== C) 容器内 lookup ==="
+sudo docker exec ai-relay-gitee-passthrough node -e '
+const {DatabaseSync}=require("node:sqlite");
+const fs=require("fs");
+const p=process.env.NEW_API_DB;
+const bare="'"$BARE"'";
+console.log({p, exists:fs.existsSync(p)});
+const db=new DatabaseSync(p,{readOnly:true});
+const row=db.prepare("SELECT id,status,length(key) n FROM tokens WHERE key=? OR key=?").get(bare,"sk-"+bare);
+console.log("lookup", row||null);
+db.close();
+'
+
+python3 - <<'PY'
+import base64,struct,zlib
+# 256x256 solid PNG
+w=h=256
+raw=b"".join(b"\x00"+bytes([0,128,255])*w for _ in range(h))
+def chunk(t,d):
+  return struct.pack(">I",len(d))+t+d+struct.pack(">I",zlib.crc32(t+d)&0xffffffff)
+png=b"\x89PNG\r\n\x1a\n"+chunk(b"IHDR",struct.pack(">IIBBBBB",w,h,8,2,0,0,0))+chunk(b"IDAT",zlib.compress(raw,9))+chunk(b"IEND",b"")
+open("/tmp/t256.png","wb").write(png)
+print("png256", len(png))
+PY
+
+echo "=== D) AnimeSharp ==="
+curl -sS -o /tmp/as.json -w "anime=%{http_code}\n" -m 90 \
+  -X POST https://www.keyoapi.xyz/v1/images/upscaling \
+  -H "Authorization: Bearer $KEY" -F model=AnimeSharp -F image=@/tmp/t256.png
+head -c 200 /tmp/as.json; echo
+
+echo "=== E) Duix-Avatar ==="
+curl -sS -o /tmp/duix.json -w "duix=%{http_code}\n" -m 90 \
+  -X POST https://www.keyoapi.xyz/v1/async/videos/audio-video-to-video \
+  -H "Authorization: Bearer $KEY" -H "Content-Type: application/json" \
+  -d '{"model":"Duix-Avatar","prompt":"speak","audio_url":"https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3","video_url":"https://samplelib.com/lib/preview/mp4/sample-5s.mp4"}'
+head -c 300 /tmp/duix.json; echo
+
+echo "=== F) RMBG 对照 ==="
+curl -sS -o /tmp/rmbg.json -w "rmbg=%{http_code}\n" -m 60 \
+  -X POST https://www.keyoapi.xyz/v1/images/mattings \
+  -H "Authorization: Bearer $KEY" -F model=RMBG-2.0 -F image=@/tmp/t256.png
+head -c 160 /tmp/rmbg.json; echo
+
+sudo docker logs --tail 20 ai-relay-gitee-passthrough
+echo DONE_FIX_GITEE_AUTH

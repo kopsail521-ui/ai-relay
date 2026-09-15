@@ -32,7 +32,7 @@
       "icon": "Grok",
       "tag": "视频按次",
       "billing": "per_request",
-      "group": "Cli-Grok-1",
+        "group": "Cli-Grok-1",
       "upstream_endpoint": "POST /v1/videos",
       "upstream_usd": 0.2427,
       "sell_usd": 0.60675,
@@ -44,20 +44,6 @@
         "1080p"
       ],
       "desc_zh": "xAI Grok 1.5 视频：文生或参考图生成，时长 1–15 秒，最高 1080p。"
-    },
-    {
-      "id": "veo_3_1-components",
-      "vendor": "Google",
-      "icon": "Gemini.Color",
-      "tag": "视频按次",
-      "billing": "per_request",
-      "group": "Discounted-Gemini-1",
-      "upstream_endpoint": "POST /v1/videos",
-      "upstream_usd": 0.0565,
-      "sell_usd": 0.14125,
-      "fixed_seconds": 8,
-      "model_price_usd": 0.14125,
-      "desc_zh": "Google Veo 3.1 Components，约 8 秒成片，支持首帧参考。"
     }
   ]
 }

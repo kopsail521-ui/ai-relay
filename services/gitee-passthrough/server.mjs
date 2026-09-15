@@ -164,10 +164,31 @@ function lookupTokenRow(db, apiKey) {
   return null;
 }
 
+/** True auth probe — prefer usage; fall back to /v1/models (may be weak). */
+async function probeNewApiToken(apiKey) {
+  const headers = { Authorization: `Bearer ${apiKey}` };
+  try {
+    const usage = await fetch(`${NEW_API_BASE}/api/usage/token/`, { headers });
+    if (usage.ok) return true;
+    // 404/405 = endpoint missing; 401/403 = this path may not accept sk- tokens — try models
+    if (![401, 403, 404, 405].includes(usage.status) && usage.status < 500) {
+      return false;
+    }
+  } catch (e) {
+    console.warn("[gitee-passthrough] usage probe failed:", e.message || e);
+  }
+  try {
+    const r = await fetch(`${NEW_API_BASE}/v1/models`, { headers });
+    return r.ok;
+  } catch (e) {
+    console.warn("[gitee-passthrough] models probe failed:", e.message || e);
+    return false;
+  }
+}
+
 /** Validate New API token */
 async function validateToken(apiKey) {
-  const usageOk = await probeUsageOnly(apiKey);
-  const authed = usageOk || (await probeModelsFallback(apiKey));
+  const authed = await probeNewApiToken(apiKey);
   if (!authed) return null;
 
   const db = openDb(true);
@@ -183,14 +204,8 @@ async function validateToken(apiKey) {
         "[gitee-passthrough] token not in DB after auth OK; db=",
         DB_PATH,
         "bare_prefix=",
-        String(apiKey).replace(/^sk-/i, "").trim().slice(0, 12),
-        "usageOk=",
-        usageOk
+        String(apiKey).replace(/^sk-/i, "").trim().slice(0, 12)
       );
-      // Usage-proven tokens should not hard-fail the gateway if SQLite key shape drifts.
-      if (usageOk) {
-        return { userId: 0, tokenId: 0, name: "usage-ok", skipBill: true };
-      }
       return null;
     }
     if (Number(row.status) !== 1) {
@@ -213,38 +228,6 @@ async function validateToken(apiKey) {
   } finally {
     db.close();
   }
-}
-
-async function probeUsageOnly(apiKey) {
-  try {
-    const usage = await fetch(`${NEW_API_BASE}/api/usage/token/`, {
-      headers: { Authorization: `Bearer ${apiKey}` },
-    });
-    if (usage.status === 404 || usage.status === 405) return false;
-    return usage.ok;
-  } catch (e) {
-    console.warn("[gitee-passthrough] usage probe failed:", e.message || e);
-    return false;
-  }
-}
-
-async function probeModelsFallback(apiKey) {
-  try {
-    const r = await fetch(`${NEW_API_BASE}/v1/models`, {
-      headers: { Authorization: `Bearer ${apiKey}` },
-    });
-    return r.ok;
-  } catch (e) {
-    console.warn("[gitee-passthrough] models probe failed:", e.message || e);
-    return false;
-  }
-}
-
-/** @deprecated use probeUsageOnly + probeModelsFallback */
-async function probeNewApiToken(apiKey) {
-  const usageOk = await probeUsageOnly(apiKey);
-  if (usageOk) return true;
-  return probeModelsFallback(apiKey);
 }
 
 function priceUsdForModel(modelId) {

@@ -1,0 +1,85 @@
+# 必须 docker build：3011 镜像 COPY 源码，restart 不生效
+set -e
+cd /opt/ai-relay
+sudo git pull
+
+echo "=== 重建 3011（含 grok-imagine 默认补参）==="
+sudo docker build -t keyo-apimart-passthrough ./services/apimart-passthrough
+sudo docker rm -f ai-relay-apimart-passthrough 2>/dev/null || true
+sudo docker run -d --name ai-relay-apimart-passthrough --restart always --network host \
+  --env-file /opt/ai-relay/.env.apimart \
+  -v /opt/ai-relay/data:/data:rw \
+  -e NEW_API_DB=/data/new-api/one-api.db \
+  -e NEW_API_BASE=http://127.0.0.1:3000 \
+  -e CATALOG=/app/catalog.json \
+  -e LISTEN_HOST=127.0.0.1 \
+  -e PORT=3011 \
+  keyo-apimart-passthrough
+sleep 2
+curl -sS http://127.0.0.1:3011/healthz; echo
+sudo docker exec ai-relay-apimart-passthrough grep -n "duration\|aspect_ratio\|grok-imagine" /app/server.mjs | head -n 20
+
+KEY=$(python3 - <<'PY'
+import sqlite3
+k=sqlite3.connect("/opt/ai-relay/data/new-api/one-api.db").execute(
+  "SELECT key FROM tokens WHERE id=2 AND status=1"
+).fetchone()[0]
+print(k if str(k).startswith("sk-") else "sk-"+k)
+PY
+)
+
+echo "=== A) grok 缺参（应自动补 aspect/resolution/duration）==="
+curl -sS -o /tmp/gi.json -w "gi=%{http_code}\n" -m 90 \
+  -X POST https://www.keyoapi.xyz/v1/videos/generations \
+  -H "Authorization: Bearer $KEY" -H "Content-Type: application/json" \
+  -d '{"model":"grok-imagine-video-1.5-preview","prompt":"a cat walks"}'
+head -c 320 /tmp/gi.json; echo
+
+echo "=== B) 下架 Fun-ASR（上游 500）==="
+sudo python3 - <<'PY'
+import sqlite3, time
+mid="Fun-ASR-Nano-2512"
+con=sqlite3.connect("/opt/ai-relay/data/new-api/one-api.db")
+cur=con.cursor()
+cols={r[1] for r in cur.execute("PRAGMA table_info(models)")}
+tabs={r[0] for r in cur.execute("SELECT name FROM sqlite_master WHERE type='table'")}
+now=int(time.time())
+if "deleted_at" in cols:
+  cur.execute("UPDATE models SET deleted_at=? WHERE model_name=? AND (deleted_at IS NULL OR deleted_at=0)", (now, mid))
+  print("soft_delete", cur.rowcount)
+if "status" in cols:
+  cur.execute("UPDATE models SET status=0 WHERE model_name=?", (mid,))
+  print("status0", cur.rowcount)
+if "abilities" in tabs:
+  cur.execute("DELETE FROM abilities WHERE model=?", (mid,))
+  print("abilities_del", cur.rowcount)
+for cid, models in cur.execute("SELECT id, models FROM channels").fetchall():
+  if not models or mid not in models: continue
+  parts=[p.strip() for p in models.replace("\n",",").split(",") if p.strip() and p.strip()!=mid]
+  cur.execute("UPDATE channels SET models=? WHERE id=?", (",".join(parts), cid))
+  print("channel_strip", cid)
+con.commit(); print("DONE_DELIST_FUNASR"); con.close()
+PY
+sudo docker restart ai-relay-new-api >/dev/null
+sleep 4
+
+echo "=== C) pricing 抽查 ==="
+curl -sS -o /tmp/pricing.json -w "pricing=%{http_code}\n" https://www.keyoapi.xyz/api/pricing
+python3 - <<'PY'
+import json
+d=json.load(open("/tmp/pricing.json"))
+arr=d.get("data") or d
+names=[(m.get("model_name") or m.get("id") or "") for m in (arr if isinstance(arr,list) else [])]
+for mid in ["veo_3_1-components","Qwen3-VL-Reranker-2B","Qwen3-VL-Reranker-8B","gemma-4-26B-A4B-it","Fun-ASR-Nano-2512","DeepSeek-Prover-V2-7B","grok-imagine-video-1.5-preview","whisper-large-v3-turbo"]:
+  print(mid, "listed" if mid in names else "gone")
+print("total", len(names))
+PY
+
+echo "=== D) 保留模型快测 ==="
+curl -sS -o /tmp/p.json -w "prover=%{http_code}\n" -m 60 \
+  -X POST https://www.keyoapi.xyz/v1/chat/completions \
+  -H "Authorization: Bearer $KEY" -H "Content-Type: application/json" \
+  -d '{"model":"DeepSeek-Prover-V2-7B","messages":[{"role":"user","content":"hi"}],"max_tokens":4}'
+head -c 160 /tmp/p.json; echo
+
+echo DONE_REBUILD_VIDEO_GROK

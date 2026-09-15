@@ -1,18 +1,25 @@
-# 1) 部署 grok-imagine duration 默认
-# 2) 下架上游不可用：veo / Rerank×2 / gemma(冷启超时且无备用)
+# 1) 重建 3011 镜像（COPY 源码，restart 不够）
+# 2) 下架上游不可用：veo / Rerank×2 / gemma / Fun-ASR
 # 3) 复测 Prover / Embedding / ASR / grok
 set -e
 cd /opt/ai-relay
 sudo git pull
 
-# 视频透传：优先挂载源码目录的容器名
-for c in ai-relay-apimart-passthrough apimart-passthrough keyo-video; do
-  if sudo docker ps -a --format '{{.Names}}' | grep -qx "$c"; then
-    sudo docker restart "$c"
-    echo restarted "$c"
-  fi
-done
+echo "=== 重建 3011 ==="
+sudo docker build -t keyo-apimart-passthrough ./services/apimart-passthrough
+sudo docker rm -f ai-relay-apimart-passthrough 2>/dev/null || true
+sudo docker run -d --name ai-relay-apimart-passthrough --restart always --network host \
+  --env-file /opt/ai-relay/.env.apimart \
+  -v /opt/ai-relay/data:/data:rw \
+  -e NEW_API_DB=/data/new-api/one-api.db \
+  -e NEW_API_BASE=http://127.0.0.1:3000 \
+  -e CATALOG=/app/catalog.json \
+  -e LISTEN_HOST=127.0.0.1 \
+  -e PORT=3011 \
+  keyo-apimart-passthrough
 sleep 2
+curl -sS http://127.0.0.1:3011/healthz; echo
+sudo docker exec ai-relay-apimart-passthrough grep -n "body.duration\|aspect_ratio is\|grok-imagine rejects" /app/server.mjs | head -n 10 || true
 
 KEY=$(python3 - <<'PY'
 import sqlite3
@@ -31,18 +38,15 @@ curl -sS -o /tmp/gi.json -w "gi=%{http_code}\n" -m 90 \
 head -c 280 /tmp/gi.json; echo
 
 echo "=== B) 下架不可用模型 ==="
-DB=/opt/ai-relay/data/new-api/one-api.db
 sudo python3 - <<'PY'
 import sqlite3, time
 db="/opt/ai-relay/data/new-api/one-api.db"
-# Rerank: Gitee 返回「暂不支持该接口」
-# gemma: 直打 ai.gitee.com 超时无响应
-# veo: supply_unavailable
 mids=[
   "veo_3_1-components",
   "Qwen3-VL-Reranker-2B",
   "Qwen3-VL-Reranker-8B",
   "gemma-4-26B-A4B-it",
+  "Fun-ASR-Nano-2512",
 ]
 con=sqlite3.connect(db)
 cur=con.cursor()
@@ -86,7 +90,7 @@ struct.pack_into('<IHHIIHH',hdr,16,16,1,1,8000,8000,1,8); hdr[36:40]=b'data'; st
 open('/tmp/t.wav','wb').write(hdr)
 print('wav_ok')
 PY
-for m in whisper-large-v3 whisper-large-v3-turbo Fun-ASR-Nano-2512; do
+for m in whisper-large-v3 whisper-large-v3-turbo; do
   code=$(curl -sS -o /tmp/asr.json -w "%{http_code}" -m 45 \
     -X POST "https://ai.gitee.com/v1/audio/transcriptions" \
     -H "Authorization: Bearer $GITEE_KEY" \
@@ -110,12 +114,13 @@ do
 done
 
 echo "=== E) pricing 是否仍列出已下架 ==="
-curl -sS https://www.keyoapi.xyz/api/pricing | python3 - <<'PY'
-import sys,json
-d=json.load(sys.stdin)
+curl -sS -o /tmp/pricing.json -w "pricing=%{http_code}\n" https://www.keyoapi.xyz/api/pricing
+python3 - <<'PY'
+import json
+d=json.load(open("/tmp/pricing.json"))
 arr=d.get("data") or d
 names=[(m.get("model_name") or m.get("id") or "") for m in (arr if isinstance(arr,list) else [])]
-for mid in ["veo_3_1-components","Qwen3-VL-Reranker-2B","Qwen3-VL-Reranker-8B","gemma-4-26B-A4B-it","DeepSeek-Prover-V2-7B","grok-imagine-video-1.5-preview"]:
+for mid in ["veo_3_1-components","Qwen3-VL-Reranker-2B","Qwen3-VL-Reranker-8B","gemma-4-26B-A4B-it","Fun-ASR-Nano-2512","DeepSeek-Prover-V2-7B","grok-imagine-video-1.5-preview"]:
   print(mid, "listed" if mid in names else "gone")
 print("total", len(names))
 PY

@@ -3,18 +3,18 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>DeepSeek API Pricing Comparison | Free + Paid on KeyoAPI</title>
-<meta name="description" content="DeepSeek API pricing on KeyoAPI: V4 Flash ~$1.10/$3.30, V4 Pro ~$3.30/$9.90 per 1M, plus permanent $0 *-free IDs. Compare with typical official DeepSeek list rates." />
-<link rel="canonical" href="https://www.keyoapi.xyz/deepseek-api-pricing" />
+<title>TTS API | Text to Speech Models on KeyoAPI</title>
+<meta name="description" content="TTS API on KeyoAPI: IndexTTS-2 (sync), CosyVoice3 &amp; Qwen3-TTS (async). From ~$0.548–$1.37 / 10K characters. One key with Whisper and avatars." />
+<link rel="canonical" href="https://www.keyoapi.xyz/tts-api" />
 <meta property="og:type" content="website" />
-<meta property="og:url" content="https://www.keyoapi.xyz/deepseek-api-pricing" />
-<meta property="og:title" content="DeepSeek API Pricing Comparison | Free + Paid on KeyoAPI" />
-<meta property="og:description" content="DeepSeek API pricing on KeyoAPI: V4 Flash ~$1.10/$3.30, V4 Pro ~$3.30/$9.90 per 1M, plus permanent $0 *-free IDs. Compare with typical official DeepSeek list rates." />
+<meta property="og:url" content="https://www.keyoapi.xyz/tts-api" />
+<meta property="og:title" content="TTS API | Text to Speech Models on KeyoAPI" />
+<meta property="og:description" content="TTS API on KeyoAPI: IndexTTS-2 (sync), CosyVoice3 &amp; Qwen3-TTS (async). From ~$0.548–$1.37 / 10K characters. One key with Whisper and avatars." />
 <meta property="og:image" content="https://www.keyoapi.xyz/logo.png" />
 <meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:title" content="DeepSeek API Pricing Comparison | Free + Paid on KeyoAPI" />
-<meta name="twitter:description" content="DeepSeek API pricing on KeyoAPI: V4 Flash ~$1.10/$3.30, V4 Pro ~$3.30/$9.90 per 1M, plus permanent $0 *-free IDs. Compare with typical official DeepSeek list rates." />
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebPage","name":"DeepSeek API Pricing Comparison | Free + Paid on KeyoAPI","url":"https://www.keyoapi.xyz/deepseek-api-pricing","description":"DeepSeek API pricing on KeyoAPI: V4 Flash ~$1.10/$3.30, V4 Pro ~$3.30/$9.90 per 1M, plus permanent $0 *-free IDs. Compare with typical official DeepSeek list rates."}</script>
+<meta name="twitter:title" content="TTS API | Text to Speech Models on KeyoAPI" />
+<meta name="twitter:description" content="TTS API on KeyoAPI: IndexTTS-2 (sync), CosyVoice3 &amp; Qwen3-TTS (async). From ~$0.548–$1.37 / 10K characters. One key with Whisper and avatars." />
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebPage","name":"TTS API | Text to Speech Models on KeyoAPI","url":"https://www.keyoapi.xyz/tts-api","description":"TTS API on KeyoAPI: IndexTTS-2 (sync), CosyVoice3 & Qwen3-TTS (async). From ~$0.548–$1.37 / 10K characters. One key with Whisper and avatars."}</script>
 <style>:root {
   --bg0:#f7fafc; --bg1:#eef6ff; --ink:#0f172a; --muted:#475569;
   --line:#cbd5e1; --accent:#2563eb; --card:#fff; --ok:#047857;
@@ -63,9 +63,9 @@ ul{margin:0 0 14px;padding-left:1.2em}
   <a href="/sign-up">Get Started</a>
 </nav>
 <p class="eyebrow">KEYOAPI</p>
-<h1>DeepSeek API Pricing — KeyoAPI Rates, Free Tier &amp; Official Context</h1>
+<h1>TTS API on KeyoAPI — IndexTTS-2, CosyVoice3 &amp; Qwen3-TTS</h1>
 
-<p class="lead">DeepSeek API pricing is one of the clearest purchase-intent queries in the open-model lane. This page puts KeyoAPI sell rates for DeepSeek V4 Flash and Pro next to typical official list context — and highlights permanent $0 free IDs that most pure comparison sites cannot honestly show.</p>
+<p class="lead">Looking for a TTS API you can call from the same OpenAI-style key as Whisper and chat? KeyoAPI hosts sync IndexTTS-2 plus async CosyVoice3 and Qwen3-TTS — pick latency vs batch, then drive Duix-Avatar or InfiniteTalk when you need a talking face.</p>
 <p class="meta">Indicative comparison for planning. Confirm live Keyo rates in <a href="/pricing">Model Square</a> or the static <a href="/pricing-list">pricing list</a>.</p>
 <div class="btnrow">
   <a class="btn btn-primary" href="/sign-up">Get API key</a>
@@ -73,51 +73,46 @@ ul{margin:0 0 14px;padding-left:1.2em}
   <a class="btn btn-secondary" href="/pricing-list">Full pricing list</a>
   <a class="btn btn-secondary" href="/free-models">Free models</a>
 </div>
-<h2>Price comparison table</h2>
+<h2>TTS models on Keyo</h2>
 <p class="meta">Indicative figures for planning. Confirm live Keyo sell rates on interactive <a href="/pricing">Model Square</a> pages.</p>
 <table>
-<thead><tr><th>Model ID</th><th>Typical official / context</th><th>KeyoAPI</th><th>Notes</th></tr></thead>
+<thead><tr><th>Model ID</th><th>Shape</th><th>KeyoAPI</th><th>Notes</th></tr></thead>
 <tbody>
 <tr>
-  <td><code>deepseek-v4-flash-free</code></td>
-  <td>N/A — Keyo permanent free twin</td>
-  <td class="ok">$0 (fair-use)</td>
-  <td>model=deepseek-v4-flash-free</td>
+  <td><code>IndexTTS-2</code></td>
+  <td>Synchronous speech — audio in one HTTP round trip</td>
+  <td class="ok">~$1.37 / 10K characters</td>
+  <td>POST /v1/audio/speech · /pricing/IndexTTS-2</td>
 </tr>
 <tr>
-  <td><code>deepseek-v4-flash</code></td>
-  <td>Official DeepSeek list for Flash-class models — verify on platform.deepseek.com</td>
-  <td class="ok">~$1.10 / $3.30 per 1M in/out</td>
-  <td>Paid high-volume twin</td>
+  <td><code>CosyVoice3</code></td>
+  <td>Async multilingual / zero-shot TTS for longer scripts</td>
+  <td class="ok">~$1.37 / 10K characters</td>
+  <td>POST /v1/async/audio/speech · /pricing/CosyVoice3</td>
 </tr>
 <tr>
-  <td><code>deepseek-v4-pro-free</code></td>
-  <td>N/A — Keyo permanent free twin</td>
-  <td class="ok">$0 (fair-use)</td>
-  <td>model=deepseek-v4-pro-free</td>
-</tr>
-<tr>
-  <td><code>deepseek-v4-pro</code></td>
-  <td>Official DeepSeek list for Pro-class models — verify on platform.deepseek.com</td>
-  <td class="ok">~$3.30 / $9.90 per 1M in/out</td>
-  <td>Paid flagship twin</td>
+  <td><code>Qwen3-TTS</code></td>
+  <td>Async flagship TTS with clone-friendly voices</td>
+  <td class="ok">~$0.548 / 10K characters</td>
+  <td>POST /v1/async/audio/speech · /pricing/Qwen3-TTS</td>
 </tr>
 </tbody>
 </table>
-<h2>Why $0 rows beat “10% cheaper” tables</h2>
-<p>Most deepseek api pricing articles only shuffle paid token rates. Keyo lists deepseek-v4-flash-free and deepseek-v4-pro-free at permanent $0 with fair-use limits — the strongest prototype story you can put in a comparison table without being clickbait, as long as you disclose rate limits.</p>
+<h2>Prototype chat free, then meter TTS</h2>
+<p>Permanent $0 chat twins (deepseek-v4-flash-free, glm-5.2-free, kimi-k3-free, …) sit on the same key for script drafting. TTS rows above are metered — confirm live rates on Model Square before volume. There is no separate upload playground; try from /pricing/{modelId}.</p>
 <h2>How to think about this page</h2>
-<p>Engineers comparing deepseek api pricing usually already trust the model family and are shopping hosts: official platforms, aggregators, or a multi-model API. KeyoAPI is the third option — OpenAI-compatible base URL, prepaid balance, and Gemini/Whisper/OCR on the same key when DeepSeek is only part of the stack.</p>
-<p>Indicative Keyo sell rates above come from the live Keyo catalog. Confirm /pricing/deepseek-v4-flash and /pricing/deepseek-v4-pro before volume contracts. Free IDs keep ModelPrice at $0; they are not unlimited production SLAs.</p>
-<p>How to call: POST https://www.keyoapi.xyz/v1/chat/completions with Authorization: Bearer YOUR_KEY and model set to a Flash/Pro free or paid ID. See dedicated guides at /model/deepseek-v4-flash and /model/deepseek-v4-pro for longer how-tos.</p>
-<p>If your search was really about Gemini dollars, jump to /gemini-api-pricing. For the full free catalog, open /free-models.</p>
-<pre>curl https://www.keyoapi.xyz/v1/chat/completions \
-  -H "Authorization: Bearer $KEYO_API_KEY" \
-  -H "Content-Type: application/json" \
-  -d '{"model":"deepseek-v4-flash","messages":[{"role":"user","content":"Hello"}]}'</pre>
+<p>TTS API searches are usually product intent: IVR, agents that talk back, course narration, or avatar pipelines. Keyo keeps STT (Whisper) and TTS on one prepaid balance so you are not juggling three vendor consoles.</p>
+<p>Indicative rates above come from the live Keyo catalog — always confirm /pricing/IndexTTS-2, /pricing/CosyVoice3, and /pricing/Qwen3-TTS. Prefer IndexTTS-2 when the product needs audio inside one request; prefer CosyVoice3 or Qwen3-TTS when jobs are already async.</p>
+<p>How to call: set base URL https://www.keyoapi.xyz/v1, authenticate with your Keyo key, pass the model id. Guides: /model/IndexTTS-2, /model/CosyVoice3, /model/Qwen3-TTS. Voice clone angle: /voice-cloning-api. Talking video: /ai-avatar-video-generator.</p>
+<p>Create a key at /sign-up, then open the model’s /pricing/{id} page for interactive try/buy.</p>
+<pre>curl https://www.keyoapi.xyz/v1/audio/speech \
+  -H &quot;Authorization: Bearer $KEYO_API_KEY&quot; \
+  -H &quot;Content-Type: application/json&quot; \
+  -d '{&quot;model&quot;:&quot;IndexTTS-2&quot;,&quot;input&quot;:&quot;Hello from KeyoAPI TTS.&quot;}'</pre>
 <h2>FAQ</h2>
-<div class="faq"><details><summary>Is Keyo’s DeepSeek API pricing cheaper than official?</summary><p>It depends on official promotions, cache discounts, and currency. Use this table for planning, then verify both Keyo live rates and DeepSeek’s current public list.</p></details>
-<details><summary>What’s the catch on $0 DeepSeek?</summary><p>Fair-use rate and concurrency limits on the Keyo Free channel. Disclose that in any public post — silent rate limits feel like bait-and-switch.</p></details></div>
+<div class="faq"><details><summary>Which TTS model should I start with?</summary><p>Start with IndexTTS-2 for sync demos; move to CosyVoice3 or Qwen3-TTS for batch/async and clone-heavy workloads. Compare live rates on each /pricing page.</p></details>
+<details><summary>Is there a free TTS model?</summary><p>Not as a permanent $0 TTS ID today. Use free chat twins to draft scripts, then meter TTS. See /free-models.</p></details>
+<details><summary>Can I pair TTS with avatars?</summary><p>Yes — generate audio, then drive Duix-Avatar or InfiniteTalk on the same key. See /ai-avatar-video-generator.</p></details></div>
 <p class="meta">Also see <a href="/compare">/compare</a>, <a href="/free-models">/free-models</a>, and model guides under <code>/model/</code>.</p>
 
 <footer class="footer">

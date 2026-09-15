@@ -2,64 +2,73 @@
  * Shared Caddy handles for KeyoAPI static SEO.
  * Import via: import { caddySeoHandles, caddyFullSite } from "./caddy-seo-shared.mjs"
  */
-export function caddySeoHandles() {
+import fs from "fs";
+import path from "path";
+import { fileURLToPath } from "url";
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const landingsPath = path.join(__dirname, "../config/seo/pricing-landings.json");
+
+function pricingLandingSlugs() {
+  try {
+    const data = JSON.parse(fs.readFileSync(landingsPath, "utf8"));
+    return (data.pages || []).map((p) => p.slug).filter(Boolean);
+  } catch {
+    return [];
+  }
+}
+
+/** @param {string} [seoRoot] absolute path used in Caddy root directives */
+export function caddySeoHandles(seoRoot = "/opt/ai-relay") {
+  const root = `${seoRoot}/static/seo`;
+  const landingBlocks = pricingLandingSlugs()
+    .map(
+      (slug) => `	handle /${slug} {
+		root * ${root}
+		rewrite * /${slug}.html
+		file_server
+	}`
+    )
+    .join("\n");
+
   return `	handle /robots.txt {
-		root * /opt/ai-relay/static/seo
+		root * ${root}
 		header Content-Type text/plain
 		file_server
 	}
 	@sitemaps path /sitemap.xml /sitemap-live.xml
 	handle @sitemaps {
-		root * /opt/ai-relay/static/seo
+		root * ${root}
 		file_server
 	}
 	handle / {
-		root * /opt/ai-relay/static/seo
+		root * ${root}
 		rewrite * /index.html
 		file_server
 	}
 	handle /models {
-		root * /opt/ai-relay/static/seo
+		root * ${root}
 		rewrite * /models.html
 		file_server
 	}
 	handle /compare {
-		root * /opt/ai-relay/static/seo
+		root * ${root}
 		rewrite * /compare.html
 		file_server
 	}
 	handle /pricing-list {
-		root * /opt/ai-relay/static/seo
+		root * ${root}
 		rewrite * /pricing.html
 		file_server
 	}
 	handle /free-models {
-		root * /opt/ai-relay/static/seo
+		root * ${root}
 		rewrite * /free-models.html
 		file_server
 	}
-	handle /gemini-api-pricing {
-		root * /opt/ai-relay/static/seo
-		rewrite * /gemini-api-pricing.html
-		file_server
-	}
-	handle /deepseek-api-pricing {
-		root * /opt/ai-relay/static/seo
-		rewrite * /deepseek-api-pricing.html
-		file_server
-	}
-	handle /claude-api-pricing {
-		root * /opt/ai-relay/static/seo
-		rewrite * /claude-api-pricing.html
-		file_server
-	}
-	handle /openai-api-pricing {
-		root * /opt/ai-relay/static/seo
-		rewrite * /openai-api-pricing.html
-		file_server
-	}
+${landingBlocks}
 	handle /about {
-		root * /opt/ai-relay/static/seo
+		root * ${root}
 		rewrite * /about.html
 		file_server
 	}
@@ -67,12 +76,12 @@ export function caddySeoHandles() {
 	redir /free/ /free-models permanent
 	@seo_model path /model /model/*
 	handle @seo_model {
-		root * /opt/ai-relay/static/seo
+		root * ${root}
 		try_files {path}.html {path}/index.html {path}
 		file_server
 	}
 	handle_path /brand/* {
-		root * /opt/ai-relay/static/brand
+		root * ${seoRoot}/static/brand
 		file_server
 	}`;
 }

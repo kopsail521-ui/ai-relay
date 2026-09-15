@@ -102,7 +102,29 @@ function nav() {
 </nav>`;
 }
 
+function landingNavLabel(p) {
+  return (
+    p.navLabel ||
+    p.slug.replace(/-api-pricing$/, " pricing").replace(/-/g, " ")
+  );
+}
+
+function landingDeepDiveHtml(separator = " · ") {
+  return (pricingLandings.pages || [])
+    .map(
+      (p) =>
+        `<a href="/${esc(p.slug)}">${esc(landingNavLabel(p))}</a>`
+    )
+    .join(separator);
+}
+
 function footer() {
+  const landingLinks = (pricingLandings.pages || [])
+    .map(
+      (p) =>
+        `  <a href="/${esc(p.slug)}">${esc(landingNavLabel(p))}</a>`
+    )
+    .join("\n");
   return `<footer class="footer">
   <a href="/">Home</a>
   <a href="/about">About</a>
@@ -111,10 +133,7 @@ function footer() {
   <a href="/models">Model guides</a>
   <a href="/compare">Price comparison</a>
   <a href="/free-models">Free AI API</a>
-  <a href="/gemini-api-pricing">Gemini pricing</a>
-  <a href="/deepseek-api-pricing">DeepSeek pricing</a>
-  <a href="/claude-api-pricing">Claude pricing</a>
-  <a href="/openai-api-pricing">OpenAI pricing</a>
+${landingLinks}
   <a href="/brand/keyo-docs.html">Docs</a>
   <a href="/brand/faq.html">FAQ</a>
   <a href="/brand/privacy.html">Privacy</a>
@@ -425,7 +444,7 @@ ${freeCards}
 <div class="grid">
 ${featured}
 </div>
-<p class="meta">Compare in depth: <a href="/gemini-api-pricing">Gemini API pricing</a> · <a href="/deepseek-api-pricing">DeepSeek API pricing</a> · <a href="/claude-api-pricing">Claude API pricing</a> · <a href="/openai-api-pricing">OpenAI API pricing</a> · <a href="/models">all model guides</a></p>
+<p class="meta">Compare in depth: ${landingDeepDiveHtml()} · <a href="/models">all model guides</a></p>
 <h2>Integrate in minutes</h2>
 <pre><code>export OPENAI_BASE_URL=https://www.keyoapi.xyz/v1
 export OPENAI_API_KEY=sk-...
@@ -439,10 +458,12 @@ export OPENAI_API_KEY=sk-...
     <a href="/models">All model guides</a>
     <a href="/compare">Compare</a>
     <a href="/free-models">Free AI API</a>
-    <a href="/gemini-api-pricing">Gemini pricing</a>
-    <a href="/deepseek-api-pricing">DeepSeek pricing</a>
-    <a href="/claude-api-pricing">Claude pricing</a>
-    <a href="/openai-api-pricing">OpenAI pricing</a>
+${(pricingLandings.pages || [])
+  .map(
+    (p) =>
+      `    <a href="/${esc(p.slug)}">${esc(landingNavLabel(p))}</a>`
+  )
+  .join("\n")}
     <a href="/brand/faq.html">FAQ</a>
     <a href="/brand/privacy.html">Privacy</a>
     <a href="/brand/terms.html">Terms</a>
@@ -481,7 +502,7 @@ function renderModelsIndex() {
 <thead><tr><th>Model ID</th><th>Category</th><th>Listed price</th><th>Links</th></tr></thead>
 <tbody>${rows}</tbody>
 </table>
-<p class="meta">Also: <a href="/gemini-api-pricing">Gemini API pricing</a> · <a href="/deepseek-api-pricing">DeepSeek API pricing</a> · <a href="/claude-api-pricing">Claude API pricing</a> · <a href="/openai-api-pricing">OpenAI API pricing</a>.</p>
+<p class="meta">Also: ${landingDeepDiveHtml()}.</p>
 `;
   return layout({
     title: "AI Model Guides Index | KeyoAPI",
@@ -539,7 +560,7 @@ function renderAbout() {
 ${priceSample}
 </tbody>
 </table>
-<p>Full list: <a href="/compare">/compare</a> · <a href="/pricing-list">/pricing-list</a> · deep dives: <a href="/gemini-api-pricing">Gemini</a> · <a href="/deepseek-api-pricing">DeepSeek</a> · <a href="/claude-api-pricing">Claude</a> · <a href="/openai-api-pricing">OpenAI</a></p>
+<p>Full list: <a href="/compare">/compare</a> · <a href="/pricing-list">/pricing-list</a> · deep dives: ${landingDeepDiveHtml()}</p>
 <h2>Four models, permanently free</h2>
 <p>No trial clock — these four run at <strong>$0</strong> when you call the <code>*-free</code> model ID. Paid twins (bare names) are token-metered for production. Rules: <a href="/free-models">/free-models</a></p>
 <div class="grid">
@@ -788,6 +809,8 @@ ${rows}
 
 function renderPricingLanding(p) {
   const canonical = `${site}/${p.slug}`;
+  const tableHeading = p.tableHeading || "Price comparison table";
+  const colOfficial = p.colOfficial || "Typical official / context";
   const rows = p.rows
     .map(
       (r) => `<tr>
@@ -805,6 +828,15 @@ function renderPricingLanding(p) {
         `<details><summary>${esc(f.q)}</summary><p>${esc(f.a)}</p></details>`
     )
     .join("\n");
+  const defaultModel =
+    p.rows.find((r) => !String(r.model).endsWith("-free"))?.model ||
+    p.rows[0].model;
+  const curlBlock = p.curlExample
+    ? `<pre>${esc(p.curlExample)}</pre>`
+    : `<pre>curl https://www.keyoapi.xyz/v1/chat/completions \\
+  -H "Authorization: Bearer $KEYO_API_KEY" \\
+  -H "Content-Type: application/json" \\
+  -d '{"model":"${esc(defaultModel)}","messages":[{"role":"user","content":"Hello"}]}'</pre>`;
   const bodyHtml = `
 <p class="lead">${esc(p.lead)}</p>
 <p class="meta">Indicative comparison for planning. Confirm live Keyo rates in <a href="/pricing">Model Square</a> or the static <a href="/pricing-list">pricing list</a>.</p>
@@ -814,22 +846,19 @@ function renderPricingLanding(p) {
   <a class="btn btn-secondary" href="/pricing-list">Full pricing list</a>
   <a class="btn btn-secondary" href="/free-models">Free models</a>
 </div>
-<h2>Price comparison table</h2>
+<h2>${esc(tableHeading)}</h2>
 <p class="meta">Indicative figures for planning. Confirm live Keyo sell rates on interactive <a href="/pricing">Model Square</a> pages.</p>
 <table>
-<thead><tr><th>Model ID</th><th>Typical official / context</th><th>KeyoAPI</th><th>Notes</th></tr></thead>
+<thead><tr><th>Model ID</th><th>${esc(colOfficial)}</th><th>KeyoAPI</th><th>Notes</th></tr></thead>
 <tbody>
 ${rows}
 </tbody>
 </table>
 <h2>${esc(p.freeKiller.title)}</h2>
 <p>${esc(p.freeKiller.body)}</p>
-<h2>How to think about this pricing page</h2>
+<h2>How to think about this page</h2>
 ${bodyParas}
-<pre>curl https://www.keyoapi.xyz/v1/chat/completions \\
-  -H "Authorization: Bearer $KEYO_API_KEY" \\
-  -H "Content-Type: application/json" \\
-  -d '{"model":"${esc(p.rows.find((r) => !String(r.model).endsWith("-free"))?.model || p.rows[0].model)}","messages":[{"role":"user","content":"Hello"}]}'</pre>
+${curlBlock}
 <h2>FAQ</h2>
 <div class="faq">${faqs}</div>
 <p class="meta">Also see <a href="/compare">/compare</a>, <a href="/free-models">/free-models</a>, and model guides under <code>/model/</code>.</p>
@@ -851,6 +880,9 @@ ${bodyParas}
 }
 
 function writeRobots() {
+  const landingAllows = (pricingLandings.pages || [])
+    .map((p) => `Allow: /${p.slug}`)
+    .join("\n");
   return `User-agent: *
 Allow: /
 Allow: /compare
@@ -858,10 +890,7 @@ Allow: /model/
 Allow: /pricing-list
 Allow: /free-models
 Allow: /models
-Allow: /gemini-api-pricing
-Allow: /deepseek-api-pricing
-Allow: /claude-api-pricing
-Allow: /openai-api-pricing
+${landingAllows}
 Allow: /brand/
 Allow: /about
 
@@ -882,32 +911,18 @@ Disallow: /__spa_raw
 }
 
 function writeSitemap() {
+  const landingUrls = (pricingLandings.pages || []).map((p) => ({
+    loc: `${site}/${p.slug}`,
+    priority: "0.95",
+    changefreq: "weekly",
+  }));
   const urls = [
     { loc: `${site}/`, priority: "1.0", changefreq: "weekly" },
     { loc: `${site}/compare`, priority: "0.95", changefreq: "weekly" },
     { loc: `${site}/pricing-list`, priority: "0.9", changefreq: "daily" },
     { loc: `${site}/free-models`, priority: "0.95", changefreq: "weekly" },
     { loc: `${site}/models`, priority: "0.85", changefreq: "weekly" },
-    {
-      loc: `${site}/gemini-api-pricing`,
-      priority: "0.95",
-      changefreq: "weekly",
-    },
-    {
-      loc: `${site}/deepseek-api-pricing`,
-      priority: "0.95",
-      changefreq: "weekly",
-    },
-    {
-      loc: `${site}/claude-api-pricing`,
-      priority: "0.95",
-      changefreq: "weekly",
-    },
-    {
-      loc: `${site}/openai-api-pricing`,
-      priority: "0.95",
-      changefreq: "weekly",
-    },
+    ...landingUrls,
     { loc: `${site}/about`, priority: "0.7", changefreq: "monthly" },
     ...pages.models.map((m) => ({
       loc: `${site}/model/${encodeURIComponent(m.id)}`,

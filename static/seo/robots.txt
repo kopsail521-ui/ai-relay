@@ -9,6 +9,10 @@ Allow: /gemini-api-pricing
 Allow: /deepseek-api-pricing
 Allow: /claude-api-pricing
 Allow: /openai-api-pricing
+Allow: /remove-bg-api-alternative
+Allow: /tts-api
+Allow: /voice-cloning-api
+Allow: /ai-avatar-video-generator
 Allow: /brand/
 Allow: /about
 

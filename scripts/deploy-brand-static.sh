@@ -87,26 +87,18 @@ ${DOMAIN} {
 		rewrite * /free-models.html
 		file_server
 	}
-	handle /gemini-api-pricing {
-		root * ${ROOT}/static/seo
-		rewrite * /gemini-api-pricing.html
-		file_server
-	}
-	handle /deepseek-api-pricing {
-		root * ${ROOT}/static/seo
-		rewrite * /deepseek-api-pricing.html
-		file_server
-	}
-	handle /claude-api-pricing {
-		root * ${ROOT}/static/seo
-		rewrite * /claude-api-pricing.html
-		file_server
-	}
-	handle /openai-api-pricing {
-		root * ${ROOT}/static/seo
-		rewrite * /openai-api-pricing.html
-		file_server
-	}
+$(ROOT="$ROOT" node -e '
+const fs = require("fs");
+const root = process.env.ROOT || "/opt/ai-relay";
+const pages = JSON.parse(fs.readFileSync(process.argv[1], "utf8")).pages || [];
+process.stdout.write(pages.map((p) => [
+  "\thandle /" + p.slug + " {",
+  "\t\troot * " + root + "/static/seo",
+  "\t\trewrite * /" + p.slug + ".html",
+  "\t\tfile_server",
+  "\t}"
+].join("\n")).join("\n"));
+' "${REPO_ROOT}/config/seo/pricing-landings.json")
 	handle /about {
 		root * ${ROOT}/static/seo
 		rewrite * /about.html

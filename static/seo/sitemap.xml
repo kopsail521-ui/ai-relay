@@ -9,6 +9,10 @@
   <url><loc>https://www.keyoapi.xyz/deepseek-api-pricing</loc><changefreq>weekly</changefreq><priority>0.95</priority></url>
   <url><loc>https://www.keyoapi.xyz/claude-api-pricing</loc><changefreq>weekly</changefreq><priority>0.95</priority></url>
   <url><loc>https://www.keyoapi.xyz/openai-api-pricing</loc><changefreq>weekly</changefreq><priority>0.95</priority></url>
+  <url><loc>https://www.keyoapi.xyz/remove-bg-api-alternative</loc><changefreq>weekly</changefreq><priority>0.95</priority></url>
+  <url><loc>https://www.keyoapi.xyz/tts-api</loc><changefreq>weekly</changefreq><priority>0.95</priority></url>
+  <url><loc>https://www.keyoapi.xyz/voice-cloning-api</loc><changefreq>weekly</changefreq><priority>0.95</priority></url>
+  <url><loc>https://www.keyoapi.xyz/ai-avatar-video-generator</loc><changefreq>weekly</changefreq><priority>0.95</priority></url>
   <url><loc>https://www.keyoapi.xyz/about</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
   <url><loc>https://www.keyoapi.xyz/model/whisper-large-v3</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>
   <url><loc>https://www.keyoapi.xyz/model/whisper-large-v3-turbo</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>

@@ -53,6 +53,26 @@
 		rewrite * /openai-api-pricing.html
 		file_server
 	}
+	handle /remove-bg-api-alternative {
+		root * /opt/ai-relay/static/seo
+		rewrite * /remove-bg-api-alternative.html
+		file_server
+	}
+	handle /tts-api {
+		root * /opt/ai-relay/static/seo
+		rewrite * /tts-api.html
+		file_server
+	}
+	handle /voice-cloning-api {
+		root * /opt/ai-relay/static/seo
+		rewrite * /voice-cloning-api.html
+		file_server
+	}
+	handle /ai-avatar-video-generator {
+		root * /opt/ai-relay/static/seo
+		rewrite * /ai-avatar-video-generator.html
+		file_server
+	}
 	handle /about {
 		root * /opt/ai-relay/static/seo
 		rewrite * /about.html

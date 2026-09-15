@@ -1,0 +1,38 @@
+# 全量模型冒烟：用库里 id=2 令牌测每一个 /api/pricing 模型
+set -e
+cd /opt/ai-relay
+sudo git pull || true
+
+KEY=$(python3 - <<'PY'
+import sqlite3
+k=sqlite3.connect("/opt/ai-relay/data/new-api/one-api.db").execute(
+  "SELECT key FROM tokens WHERE id=2 AND status=1"
+).fetchone()
+if not k: raise SystemExit("NO_TOKEN_ID_2")
+print(k[0] if str(k[0]).startswith("sk-") else "sk-"+k[0])
+PY
+)
+
+echo "key_ok len=${#KEY}"
+# 确保探针脚本在
+test -f scripts/probe-all-keyo-models.mjs
+
+# 容器外可能无 node:sqlite；用 docker node 跑
+sudo docker run --rm --network host \
+  -v /opt/ai-relay:/work -w /work \
+  -e KEYO_API_KEY="$KEY" \
+  -e BASE=https://www.keyoapi.xyz \
+  -e OUT=/work/tmp/probe-all-keyo-results.json \
+  node:22-alpine node scripts/probe-all-keyo-models.mjs \
+  | tee /opt/ai-relay/tmp/probe-all-keyo.log
+
+echo "==== FAIL LIST ===="
+python3 - <<'PY'
+import json
+p="/opt/ai-relay/tmp/probe-all-keyo-results.json"
+j=json.load(open(p,encoding="utf-8"))
+print("pass",j["pass"],"fail",j["fail"],"total",j["total"])
+for r in j.get("failed") or []:
+  print(f"{r['id']}\t{r['kind']}\t{r['status']}\t{r['reason']}\t{r['snippet'][:120]}")
+PY
+echo DONE_PROBE_ALL_KEYO

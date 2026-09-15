@@ -1,0 +1,48 @@
+# 复测 Real-ESRGAN 502（对照 AnimeSharp）
+set -e
+cd /opt/ai-relay
+KEY=$(python3 - <<'PY'
+import sqlite3
+k=sqlite3.connect("/opt/ai-relay/data/new-api/one-api.db").execute(
+  "SELECT key FROM tokens WHERE id=2 AND status=1"
+).fetchone()[0]
+print(k if str(k).startswith("sk-") else "sk-"+k)
+PY
+)
+GITEE_KEY=$(python3 - <<'PY'
+import sqlite3
+print(sqlite3.connect("/opt/ai-relay/data/new-api/one-api.db").execute("SELECT key FROM channels WHERE id=3").fetchone()[0])
+PY
+)
+
+python3 - <<'PY'
+import struct,zlib
+w=h=256
+raw=b"".join(b"\x00"+bytes([40,120,200])*w for _ in range(h))
+def chunk(t,d):
+  return struct.pack(">I",len(d))+t+d+struct.pack(">I",zlib.crc32(t+d)&0xffffffff)
+open("/tmp/t256.png","wb").write(b"\x89PNG\r\n\x1a\n"+chunk(b"IHDR",struct.pack(">IIBBBBB",w,h,8,2,0,0,0))+chunk(b"IDAT",zlib.compress(raw,9))+chunk(b"IEND",b""))
+print("png_ok")
+PY
+
+for m in AnimeSharp Real-ESRGAN; do
+  code=$(curl -sS -o /tmp/up-$m.json -w "%{http_code}" -m 90 \
+    -X POST https://www.keyoapi.xyz/v1/images/upscaling \
+    -H "Authorization: Bearer $KEY" -F model="$m" -F image=@/tmp/t256.png || echo 000)
+  echo "keyo $code $m $(python3 -c "print(open('/tmp/up-$m.json',encoding='utf-8',errors='replace').read()[:240].replace(chr(10),' '))" 2>/dev/null)"
+done
+
+echo "=== direct 3010 ==="
+code=$(curl -sS -o /tmp/d3010.json -w "%{http_code}" -m 90 \
+  -X POST http://127.0.0.1:3010/v1/images/upscaling \
+  -H "Authorization: Bearer $KEY" -F model=Real-ESRGAN -F image=@/tmp/t256.png || echo 000)
+echo "d3010 $code $(python3 -c "print(open('/tmp/d3010.json',encoding='utf-8',errors='replace').read()[:300].replace(chr(10),' '))" 2>/dev/null)"
+
+echo "=== gitee upstream ==="
+code=$(curl -sS -o /tmp/gup.json -w "%{http_code}" -m 90 \
+  -X POST https://ai.gitee.com/v1/images/upscaling \
+  -H "Authorization: Bearer $GITEE_KEY" -F model=Real-ESRGAN -F image=@/tmp/t256.png || echo 000)
+echo "gitee $code $(python3 -c "print(open('/tmp/gup.json',encoding='utf-8',errors='replace').read()[:300].replace(chr(10),' '))" 2>/dev/null)"
+
+sudo docker logs --tail 25 ai-relay-gitee-passthrough
+echo DONE_DIAG_REALESRGAN

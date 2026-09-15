@@ -1,0 +1,46 @@
+# 下架 Duix-Avatar（multipart 必填但上游长时间无响应；JSON URL 不被接受）
+set -e
+cd /opt/ai-relay
+sudo git pull || true
+DB=/opt/ai-relay/data/new-api/one-api.db
+MID=Duix-Avatar
+
+sudo python3 - <<PY
+import sqlite3, time
+db="$DB"
+mid="$MID"
+con=sqlite3.connect(db)
+cur=con.cursor()
+cols={r[1] for r in cur.execute("PRAGMA table_info(models)")}
+tabs={r[0] for r in cur.execute("SELECT name FROM sqlite_master WHERE type='table'")}
+now=int(time.time())
+if "deleted_at" in cols:
+  cur.execute("UPDATE models SET deleted_at=? WHERE model_name=? AND (deleted_at IS NULL OR deleted_at=0)", (now, mid))
+  print("soft_delete", cur.rowcount)
+if "status" in cols:
+  cur.execute("UPDATE models SET status=0 WHERE model_name=?", (mid,))
+  print("status0", cur.rowcount)
+if "abilities" in tabs:
+  cur.execute("DELETE FROM abilities WHERE model=?", (mid,))
+  print("abilities_del", cur.rowcount)
+for cid, models in cur.execute("SELECT id, models FROM channels").fetchall():
+  if not models or mid not in models: continue
+  parts=[p.strip() for p in models.replace("\n",",").split(",") if p.strip() and p.strip()!=mid]
+  cur.execute("UPDATE channels SET models=? WHERE id=?", (",".join(parts), cid))
+  print("channel_strip", cid)
+con.commit()
+print("DONE_DB")
+con.close()
+PY
+
+sudo docker restart ai-relay-new-api >/dev/null 2>&1 || true
+sleep 4
+curl -sS -o /tmp/pricing.json -w "pricing=%{http_code}\n" https://www.keyoapi.xyz/api/pricing
+python3 - <<'PY'
+import json
+d=json.load(open("/tmp/pricing.json"))
+arr=d.get("data") or d
+names=[(m.get("model_name") or m.get("id") or "") for m in (arr if isinstance(arr,list) else [])]
+print("Duix_listed", "Duix-Avatar" in names, "total", len(names))
+PY
+echo DONE_DELIST_DUIX

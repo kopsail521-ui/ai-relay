@@ -1,0 +1,66 @@
+# Duix：双文件 multipart（库存已证明单文件能识别字段）
+set -e
+cd /opt/ai-relay/tmp
+
+KEY=$(python3 - <<'PY'
+import sqlite3
+k=sqlite3.connect("/opt/ai-relay/data/new-api/one-api.db").execute(
+  "SELECT key FROM tokens WHERE id=2 AND status=1"
+).fetchone()[0]
+print(k if str(k).startswith("sk-") else "sk-"+k)
+PY
+)
+GITEE_KEY=$(python3 - <<'PY'
+import sqlite3
+print(sqlite3.connect("/opt/ai-relay/data/new-api/one-api.db").execute("SELECT key FROM channels WHERE id=3").fetchone()[0])
+PY
+)
+
+python3 - <<'PY'
+import wave, struct, zlib, pathlib
+# 1s wav
+with wave.open('t.wav','w') as w:
+  w.setnchannels(1); w.setsampwidth(2); w.setframerate(8000)
+  w.writeframes(b'\x00\x00'*8000)
+# minimal ftyp+mdat mp4 (often accepted as container)
+# 使用极小公开样例：若本机有 ffmpeg 更好
+pathlib.Path('t.mp4').write_bytes(bytes.fromhex(
+  '00000018667479706d703432000000006d7034326d703431'
+  '000000086d646174'
+))
+print('files_ok', pathlib.Path('t.wav').stat().st_size, pathlib.Path('t.mp4').stat().st_size)
+PY
+
+# 优先 ffmpeg 生成 1s 黑场
+if command -v ffmpeg >/dev/null 2>&1; then
+  ffmpeg -y -f lavfi -i color=c=black:s=256x256:d=1 -f lavfi -i anullsrc=r=8000:cl=mono -t 1 -c:v libx264 -pix_fmt yuv420p -c:a aac -shortest t-real.mp4 2>/dev/null \
+    && cp -f t-real.mp4 t.mp4 && echo ffmpeg_mp4_ok || true
+fi
+
+# 若极小假 mp4 不行，拉一个小样例（限 2MB）
+if [ ! -s t-real.mp4 ]; then
+  curl -fsSL -m 30 --max-filesize 2000000 -o t-dl.mp4 \
+    "https://samplelib.com/lib/preview/mp4/sample-5s.mp4" && cp -f t-dl.mp4 t.mp4 && echo dl_mp4_ok || echo WARN_no_mp4
+fi
+
+ls -la t.wav t.mp4
+
+echo "=== Keyo both files ==="
+curl -sS -o /tmp/duix-both.json -w "keyo=%{http_code}\n" -m 90 \
+  -X POST https://www.keyoapi.xyz/v1/async/videos/audio-video-to-video \
+  -H "Authorization: Bearer $KEY" \
+  -F model=Duix-Avatar \
+  -F ref_audio=@t.wav \
+  -F ref_video=@t.mp4
+python3 -c "print(open('/tmp/duix-both.json',encoding='utf-8',errors='replace').read()[:500])"
+
+echo "=== Gitee both files ==="
+curl -sS -o /tmp/duix-g.json -w "gitee=%{http_code}\n" -m 90 \
+  -X POST https://ai.gitee.com/v1/async/videos/audio-video-to-video \
+  -H "Authorization: Bearer $GITEE_KEY" \
+  -F model=Duix-Avatar \
+  -F ref_audio=@t.wav \
+  -F ref_video=@t.mp4
+python3 -c "print(open('/tmp/duix-g.json',encoding='utf-8',errors='replace').read()[:500])"
+
+echo DONE_PROBE_DUIX_BOTH_FILES

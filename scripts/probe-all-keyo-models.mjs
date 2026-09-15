@@ -320,16 +320,27 @@ async function probeOne(id) {
           file: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
         });
         break;
-      case "avatar":
-        res = await callJson("/v1/async/videos/audio-video-to-video", {
-          model: id,
-          prompt: "speak",
-          ref_audio:
-            "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
-          ref_video:
-            "https://samplelib.com/lib/preview/mp4/sample-5s.mp4",
+      case "avatar": {
+        // Duix requires multipart file fields ref_audio + ref_video (URLs are rejected).
+        const wav = tinyWav();
+        // minimal placeholder mp4 bytes; upstream may still 4xx on content — proves field accepted
+        const mp4 = Buffer.from(
+          "00000018667479706d703432000000006d7034326d703431000000086d646174",
+          "hex"
+        );
+        const fd = new FormData();
+        fd.set("model", id);
+        fd.set("ref_audio", new Blob([wav], { type: "audio/wav" }), "t.wav");
+        fd.set("ref_video", new Blob([mp4], { type: "video/mp4" }), "t.mp4");
+        const r = await fetch(`${BASE}/v1/async/videos/audio-video-to-video`, {
+          method: "POST",
+          headers: { Authorization: `Bearer ${KEY}` },
+          body: fd,
+          signal: AbortSignal.timeout(90000),
         });
+        res = { status: r.status, body: await r.text() };
         break;
+      }
       case "talk":
         res = await callJson("/v1/async/videos/image-to-video", {
           model: id,

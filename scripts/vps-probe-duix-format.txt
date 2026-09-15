@@ -1,0 +1,66 @@
+# Duix：JSON 已带 ref_audio 仍报缺参 → 试 multipart / 直打库存
+set -e
+cd /opt/ai-relay
+KEY=$(python3 - <<'PY'
+import sqlite3
+k=sqlite3.connect("/opt/ai-relay/data/new-api/one-api.db").execute(
+  "SELECT key FROM tokens WHERE id=2 AND status=1"
+).fetchone()[0]
+print(k if str(k).startswith("sk-") else "sk-"+k)
+PY
+)
+GITEE_KEY=$(python3 - <<'PY'
+import sqlite3
+print(sqlite3.connect("/opt/ai-relay/data/new-api/one-api.db").execute("SELECT key FROM channels WHERE id=3").fetchone()[0])
+PY
+)
+
+# tiny wav + tiny mp4-ish won't work; download samples
+mkdir -p /opt/ai-relay/tmp
+cd /opt/ai-relay/tmp
+curl -fsSL -o sample.mp3 "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" || true
+curl -fsSL -o sample.mp4 "https://samplelib.com/lib/preview/mp4/sample-5s.mp4" || true
+ls -la sample.mp3 sample.mp4
+
+echo "=== 1) Keyo JSON ref_audio（复现）==="
+curl -sS -o duix1.json -w "json=%{http_code}\n" -m 60 \
+  -X POST https://www.keyoapi.xyz/v1/async/videos/audio-video-to-video \
+  -H "Authorization: Bearer $KEY" -H "Content-Type: application/json" \
+  -d '{"model":"Duix-Avatar","ref_audio":"https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3","ref_video":"https://samplelib.com/lib/preview/mp4/sample-5s.mp4"}'
+python3 -c "print(open('duix1.json',encoding='utf-8',errors='replace').read()[:300])"
+
+echo "=== 2) Keyo multipart 文件字段 ==="
+curl -sS -o duix2.json -w "mp=%{http_code}\n" -m 120 \
+  -X POST https://www.keyoapi.xyz/v1/async/videos/audio-video-to-video \
+  -H "Authorization: Bearer $KEY" \
+  -F model=Duix-Avatar \
+  -F ref_audio=@sample.mp3 \
+  -F ref_video=@sample.mp4
+python3 -c "print(open('duix2.json',encoding='utf-8',errors='replace').read()[:400])"
+
+echo "=== 3) Keyo multipart URL 当文本字段 ==="
+curl -sS -o duix3.json -w "mpurl=%{http_code}\n" -m 60 \
+  -X POST https://www.keyoapi.xyz/v1/async/videos/audio-video-to-video \
+  -H "Authorization: Bearer $KEY" \
+  -F model=Duix-Avatar \
+  -F ref_audio=https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3 \
+  -F ref_video=https://samplelib.com/lib/preview/mp4/sample-5s.mp4
+python3 -c "print(open('duix3.json',encoding='utf-8',errors='replace').read()[:400])"
+
+echo "=== 4) 直打 Gitee multipart 文件 ==="
+curl -sS -o duix4.json -w "gitee=%{http_code}\n" -m 120 \
+  -X POST https://ai.gitee.com/v1/async/videos/audio-video-to-video \
+  -H "Authorization: Bearer $GITEE_KEY" \
+  -F model=Duix-Avatar \
+  -F ref_audio=@sample.mp3 \
+  -F ref_video=@sample.mp4
+python3 -c "print(open('duix4.json',encoding='utf-8',errors='replace').read()[:400])"
+
+echo "=== 5) 直打 Gitee JSON ==="
+curl -sS -o duix5.json -w "giteejson=%{http_code}\n" -m 60 \
+  -X POST https://ai.gitee.com/v1/async/videos/audio-video-to-video \
+  -H "Authorization: Bearer $GITEE_KEY" -H "Content-Type: application/json" \
+  -d '{"model":"Duix-Avatar","ref_audio":"https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3","ref_video":"https://samplelib.com/lib/preview/mp4/sample-5s.mp4"}'
+python3 -c "print(open('duix5.json',encoding='utf-8',errors='replace').read()[:400])"
+
+echo DONE_PROBE_DUIX_FORMAT

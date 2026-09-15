@@ -338,8 +338,8 @@ export function DataTablePage<TData>(props: DataTablePageProps<TData>) {
       <div
         className={cn(
           props.fixedHeight !== false
-            ? 'flex h-full min-h-0 flex-col gap-2.5 sm:gap-3'
-            : 'space-y-2.5 sm:space-y-3',
+            ? 'flex h-full min-h-0 flex-col gap-3 sm:gap-3.5'
+            : 'space-y-3 sm:space-y-3.5',
           props.className
         )}
       >

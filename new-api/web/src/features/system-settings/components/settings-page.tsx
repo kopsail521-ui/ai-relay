@@ -83,7 +83,7 @@ function SettingsPageFrame(props: SettingsPageFrameProps) {
           />
         </SectionPageLayout.Actions>
         <SectionPageLayout.Content>
-          <div className='flex h-full min-h-0 w-full flex-col gap-4'>
+          <div className='flex h-full min-h-0 w-full flex-col gap-5 sm:gap-6'>
             {props.children}
           </div>
         </SectionPageLayout.Content>

@@ -94,6 +94,7 @@ if (useUrl) {
 }
 
 await put(h, "SystemName", "KeyoAPI");
+await put(h, "Logo", `${publicBase}/brand/logo.svg`);
 await put(h, "ServerAddress", publicBase);
 await put(h, "SelfUseModeEnabled", "false");
 await put(h, "RegisterEnabled", "true");

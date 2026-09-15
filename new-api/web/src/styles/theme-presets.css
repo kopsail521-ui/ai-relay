@@ -32,6 +32,29 @@ For commercial licensing, please contact support@quantumnous.com
  *   blocks so an explicit user choice overrides the preset's default radius.
  */
 
+/* ── Default (Keyo paper) ─────────────────────────────────────────────── */
+/* Keeps the built-in preset on the Keyo paper tokens from theme.css so
+ * switching away from a named palette and back does not restore a blue SaaS
+ * look or large radii. */
+[data-theme-preset='default'] {
+  --radius: 0.25rem;
+  --primary: oklch(0.38 0.055 175);
+  --primary-foreground: oklch(0.97 0.005 95);
+  --ring: oklch(0.38 0.055 175);
+  --sidebar-primary: oklch(0.28 0.012 100);
+  --sidebar-primary-foreground: oklch(0.97 0.005 95);
+  --sidebar-ring: oklch(0.38 0.055 175);
+}
+
+.dark [data-theme-preset='default'] {
+  --primary: oklch(0.62 0.07 170);
+  --primary-foreground: oklch(0.18 0.02 100);
+  --ring: oklch(0.62 0.07 170);
+  --sidebar-primary: oklch(0.62 0.07 170);
+  --sidebar-primary-foreground: oklch(0.18 0.02 100);
+  --sidebar-ring: oklch(0.62 0.07 170);
+}
+
 /* ── Underground ──────────────────────────────────────────────────────── */
 [data-theme-preset='underground'] {
   --primary: oklch(0.5315 0.0694 156.19);

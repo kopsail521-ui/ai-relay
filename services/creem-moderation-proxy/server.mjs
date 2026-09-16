@@ -270,7 +270,7 @@ const MODEL_ICON_MAP = loadModelIconMap();
 
 function buildModelIconScript() {
   const map = JSON.stringify(MODEL_ICON_MAP);
-  const js = `(function(){if(window.__keyoModelIconsV2)return;window.__keyoModelIconsV2=1;var MAP=${map};function apply(){try{var names=Object.keys(MAP);if(!names.length)return;var nodes=document.querySelectorAll("h3,h2,h1,span,div,a,td,button");for(var i=0;i<nodes.length;i++){var el=nodes[i];if(el.children&&el.children.length>2)continue;var t=(el.textContent||"").replace(/\\s+/g," ").trim();if(!t||!MAP[t])continue;if(t.length>64)continue;var slot=null;var p=el.parentElement;for(var d=0;d<6&&p;d++){var cand=p.querySelector('[class*="bg-muted/40"],[class*="bg-muted\\\\/40"],.size-9,.size-10,[class*="size-9"],[class*="size-10"]');if(cand){slot=cand;break}var prev=p.firstElementChild;if(prev&&prev!==el&&/bg-muted|size-9|size-10|rounded/.test(prev.className||"")){slot=prev;break}p=p.parentElement}if(!slot)continue;if(slot.getAttribute("data-keyo-icon")==="1")continue;var img=document.createElement("img");img.src=MAP[t];img.alt=t;img.width=28;img.height=28;img.decoding="async";img.loading="lazy";img.setAttribute("translate","no");img.className="notranslate";img.style.cssText="width:28px;height:28px;border-radius:10px;object-fit:cover;display:block";slot.innerHTML="";slot.appendChild(img);slot.setAttribute("data-keyo-icon","1");slot.setAttribute("translate","no")}}catch(e){}}setInterval(apply,600);try{new MutationObserver(function(){apply()}).observe(document.documentElement,{childList:true,subtree:true})}catch(e){}document.addEventListener("DOMContentLoaded",apply);setTimeout(apply,400)})();`;
+  const js = `(function(){if(window.__keyoModelIconsV3)return;window.__keyoModelIconsV3=1;var MAP=${map};function apply(){try{var names=Object.keys(MAP);if(!names.length)return;var nodes=document.querySelectorAll("h3,h2,h1,span,div,a,td,button");for(var i=0;i<nodes.length;i++){var el=nodes[i];if(el.children&&el.children.length>2)continue;var t=(el.textContent||"").replace(/\\s+/g," ").trim();if(!t||!MAP[t])continue;if(t.length>64)continue;var slot=null;var p=el.parentElement;for(var d=0;d<6&&p;d++){var cand=p.querySelector('[class*="bg-muted/40"],[class*="bg-muted\\\\/40"],.size-9,.size-10,[class*="size-9"],[class*="size-10"]');if(cand){slot=cand;break}var prev=p.firstElementChild;if(prev&&prev!==el&&/bg-muted|size-9|size-10|rounded/.test(prev.className||"")){slot=prev;break}p=p.parentElement}if(!slot)continue;if(slot.getAttribute("data-keyo-icon")==="1")continue;var img=document.createElement("img");img.src=MAP[t];img.alt=t;img.width=28;img.height=28;img.decoding="async";img.loading="lazy";img.setAttribute("translate","no");img.className="notranslate";img.style.cssText="width:28px;height:28px;border-radius:10px;object-fit:cover;display:block";slot.innerHTML="";slot.appendChild(img);slot.setAttribute("data-keyo-icon","1");slot.setAttribute("translate","no")}}catch(e){}}setInterval(apply,600);try{new MutationObserver(function(){apply()}).observe(document.documentElement,{childList:true,subtree:true})}catch(e){}document.addEventListener("DOMContentLoaded",apply);setTimeout(apply,400)})();`;
   return "<script>" + js + "</script>";
 }
 
@@ -687,8 +687,8 @@ async function proxyRequest(req, res, bodyBuf) {
           changed = true;
         }
       }
-      if (!html.includes("keyo-model-icons-v2") && Object.keys(MODEL_ICON_MAP).length) {
-        const ic = `<!--keyo-model-icons-v2-->${MODEL_ICON_SCRIPT}`;
+      if (!html.includes("keyo-model-icons-v3") && Object.keys(MODEL_ICON_MAP).length) {
+        const ic = `<!--keyo-model-icons-v3-->${MODEL_ICON_SCRIPT}`;
         if (html.includes("<head>")) {
           html = html.replace("<head>", `<head>${ic}`);
           changed = true;

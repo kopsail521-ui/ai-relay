@@ -1,0 +1,57 @@
+# 修正 sam3=Meta、Step-Audio-TTS-3B=阶跃星辰 图标（短命令）
+set -e
+cd /opt/ai-relay
+sudo git checkout -- config/model-icon-map.json services/creem-moderation-proxy/model-icon-map.json services/creem-moderation-proxy/server.mjs || true
+sudo git pull
+
+sudo python3 - <<'PY'
+import sqlite3, time
+DB="/opt/ai-relay/data/new-api/one-api.db"
+con=sqlite3.connect(DB)
+cur=con.cursor()
+now=int(time.time())
+
+def vendor_id(name, icon):
+    row=cur.execute("SELECT id FROM vendors WHERE name=?", (name,)).fetchone()
+    if row: return row[0]
+    cols={r[1] for r in cur.execute("PRAGMA table_info(vendors)")}
+    fields=["name","icon"]
+    vals=[name, icon]
+    if "created_at" in cols: fields.append("created_at"); vals.append(now)
+    if "updated_at" in cols: fields.append("updated_at"); vals.append(now)
+    cur.execute("INSERT INTO vendors(%s) VALUES (%s)" % (",".join(fields), ",".join(["?"]*len(fields))), vals)
+    return cur.lastrowid
+
+meta=vendor_id("Meta","Meta.Color")
+step=vendor_id("阶跃星辰","Stepfun.Color")
+
+fixes={
+  "sam3": (meta, "Meta.Color"),
+  "Step-Audio-TTS-3B": (step, "Stepfun.Color"),
+}
+mcols={r[1] for r in cur.execute("PRAGMA table_info(models)")}
+for mid,(vid,icon) in fixes.items():
+    sets=["icon=?","vendor_id=?"]
+    args=[icon,vid]
+    if "updated_time" in mcols: sets.append("updated_time=?"); args.append(now)
+    if "updated_at" in mcols: sets.append("updated_at=?"); args.append(now)
+    args.append(mid)
+    cur.execute("UPDATE models SET %s WHERE model_name=?" % (",".join(sets)), args)
+    print("OK", mid, "vendor", vid, "icon", icon, "rows", cur.rowcount)
+
+con.commit(); con.close()
+print("DONE_FIX_ICONS_DB")
+PY
+
+sudo docker build -t keyo-creem-moderation ./services/creem-moderation-proxy
+sudo docker rm -f ai-relay-creem-moderation 2>/dev/null || true
+sudo docker run -d --name ai-relay-creem-moderation --restart always --network host \
+  --env-file /opt/ai-relay/.env.moderation \
+  -e UPSTREAM_URL=http://127.0.0.1:3000 \
+  -e LISTEN_HOST=127.0.0.1 \
+  -e PORT=3001 \
+  keyo-creem-moderation
+sudo docker restart ai-relay-new-api >/dev/null || true
+sleep 2
+curl -sS -o /dev/null -w "mod=%{http_code}\n" http://127.0.0.1:3001/api/status || true
+echo DONE_FIX_SAM3_STEP_ICONS

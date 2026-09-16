@@ -1,8 +1,13 @@
 # Build New API using a prebuilt frontend (for low-RAM VPS).
-# Put unpacked files in ./prebuilt-web-dist/ (NOT web/dist — that path is dockerignored).
 #
-#   mkdir -p prebuilt-web-dist
-#   tar -C prebuilt-web-dist -xzf /tmp/keyo-web-dist.tgz
+# IMPORTANT: /web/dist is listed in .dockerignore. Before build, either:
+#   sed -i.bak '/^\/web\/dist$/d' .dockerignore
+# and unpack the tarball into web/dist/, OR unpack into prebuilt-web-dist/
+# and keep the COPY prebuilt-web-dist line below.
+#
+# Recommended (simple):
+#   sed -i.bak '/^\/web\/dist$/d' .dockerignore
+#   mkdir -p web/dist && tar -C web/dist -xzf /tmp/keyo-web-dist.tgz
 #   docker build -f Dockerfile.prebuilt -t keyo-new-api:local .
 
 FROM golang:1.26.1-alpine@sha256:2389ebfa5b7f43eeafbd6be0c3700cc46690ef842ad962f6c5bd6be49ed82039 AS builder2
@@ -20,7 +25,15 @@ ADD relaykit/go.mod ./relaykit/go.mod
 RUN go mod download
 
 COPY . .
-COPY prebuilt-web-dist/ ./web/dist/
+# Prefer web/dist after temporarily removing it from .dockerignore.
+# Fallback: prebuilt-web-dist/ if present.
+RUN if [ -f web/dist/index.html ]; then \
+      echo "using web/dist"; \
+    elif [ -f prebuilt-web-dist/index.html ]; then \
+      rm -rf web/dist && cp -a prebuilt-web-dist web/dist; \
+    else \
+      echo "missing web/dist and prebuilt-web-dist" >&2; exit 1; \
+    fi
 RUN test -f web/dist/index.html
 RUN go build -ldflags "-s -w -X 'github.com/QuantumNous/new-api/common.Version=$(cat VERSION)'" -o new-api
 

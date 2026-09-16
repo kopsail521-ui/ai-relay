@@ -65,7 +65,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
     <a href="/pricing">Pricing</a>
     <a href="/pricing-list">Pricing list</a>
     <a href="/brand/keyo-docs.html">Docs</a>
-    <a href="/faq">FAQ</a>
+    <a href="/brand/faq.html">FAQ</a>
     <a href="/console">Console</a>
     <a href="/sign-in">Sign in</a>
     <a class="k-nav-cta" href="/sign-up">Get started</a>
@@ -90,19 +90,19 @@ ul{margin:0 0 14px;padding-left:1.2em}
   <td><code>IndexTTS-2</code></td>
   <td>Synchronous speech — audio in one HTTP round trip</td>
   <td class="ok">~$1.37 / 10K characters</td>
-  <td>POST /v1/audio/speech · /pricing/IndexTTS-2</td>
+  <td>POST /v1/audio/speech · <a href="/pricing/IndexTTS-2">/pricing/IndexTTS-2</a></td>
 </tr>
 <tr>
   <td><code>CosyVoice3</code></td>
   <td>Async multilingual / zero-shot TTS for longer scripts</td>
   <td class="ok">~$1.37 / 10K characters</td>
-  <td>POST /v1/async/audio/speech · /pricing/CosyVoice3</td>
+  <td>POST /v1/async/audio/speech · <a href="/pricing/CosyVoice3">/pricing/CosyVoice3</a></td>
 </tr>
 <tr>
   <td><code>Qwen3-TTS</code></td>
   <td>Async flagship TTS with clone-friendly voices</td>
   <td class="ok">~$0.548 / 10K characters</td>
-  <td>POST /v1/async/audio/speech · /pricing/Qwen3-TTS</td>
+  <td>POST /v1/async/audio/speech · <a href="/pricing/Qwen3-TTS">/pricing/Qwen3-TTS</a></td>
 </tr>
 </tbody>
 </table>
@@ -110,17 +110,17 @@ ul{margin:0 0 14px;padding-left:1.2em}
 <p>Permanent $0 chat twins (deepseek-v4-flash-free, glm-5.2-free, kimi-k3-free, …) sit on the same key for script drafting. TTS rows above are metered — confirm live rates on Model Square before volume. There is no separate upload playground; try from /pricing/{modelId}.</p>
 <h2>Rates and endpoints</h2>
 <p>Teams call a TTS API for IVR, voice agents, course narration, and avatar pipelines. Keyo keeps STT (Whisper) and TTS on one prepaid balance so you are not juggling three vendor consoles.</p>
-<p>Indicative rates above come from the live Keyo catalog — always confirm /pricing/IndexTTS-2, /pricing/CosyVoice3, and /pricing/Qwen3-TTS. Prefer IndexTTS-2 when the product needs audio inside one request; prefer CosyVoice3 or Qwen3-TTS when jobs are already async.</p>
-<p>How to call: set base URL https://www.keyoapi.xyz/v1, authenticate with your Keyo key, pass the model id. Guides: /model/IndexTTS-2, /model/CosyVoice3, /model/Qwen3-TTS. Voice clone angle: /voice-cloning-api. Talking video: /ai-avatar-video-generator.</p>
-<p>Create a key at /sign-up, then open the model’s /pricing/{id} page for interactive try/buy.</p>
+<p>Indicative rates above come from the live Keyo catalog — always confirm <a href="/pricing/IndexTTS-2">/pricing/IndexTTS-2</a>, <a href="/pricing/CosyVoice3">/pricing/CosyVoice3</a>, and <a href="/pricing/Qwen3-TTS">/pricing/Qwen3-TTS</a>. Prefer IndexTTS-2 when the product needs audio inside one request; prefer CosyVoice3 or Qwen3-TTS when jobs are already async.</p>
+<p>How to call: set base URL https://www.keyoapi.xyz/v1, authenticate with your Keyo key, pass the model id. Guides: <a href="/model/IndexTTS-2">/model/IndexTTS-2</a>, <a href="/model/CosyVoice3">/model/CosyVoice3</a>, <a href="/model/Qwen3-TTS">/model/Qwen3-TTS</a>. Voice clone angle: <a href="/voice-cloning-api">/voice-cloning-api</a>. Talking video: <a href="/ai-avatar-video-generator">/ai-avatar-video-generator</a>.</p>
+<p>Create a key at <a href="/sign-up">/sign-up</a>, then open the model’s /pricing/{id} page for interactive try/buy.</p>
 <pre>curl https://www.keyoapi.xyz/v1/audio/speech \
   -H &quot;Authorization: Bearer $KEYO_API_KEY&quot; \
   -H &quot;Content-Type: application/json&quot; \
   -d '{&quot;model&quot;:&quot;IndexTTS-2&quot;,&quot;input&quot;:&quot;Hello from KeyoAPI TTS.&quot;}'</pre>
 <h2>FAQ</h2>
-<div class="faq"><details><summary>Which TTS model should I start with?</summary><p>Start with IndexTTS-2 for sync demos; move to CosyVoice3 or Qwen3-TTS for batch/async and clone-heavy workloads. Compare live rates on each /pricing page.</p></details>
-<details><summary>Is there a free TTS model?</summary><p>Not as a permanent $0 TTS ID today. Use free chat twins to draft scripts, then meter TTS. See /free-models.</p></details>
-<details><summary>Can I pair TTS with avatars?</summary><p>Yes — generate audio, then drive Duix-Avatar or InfiniteTalk on the same key. See /ai-avatar-video-generator.</p></details></div>
+<div class="faq"><details><summary>Which TTS model should I start with?</summary><p>Start with IndexTTS-2 for sync demos; move to CosyVoice3 or Qwen3-TTS for batch/async and clone-heavy workloads. Compare live rates on each <a href="/pricing">/pricing</a> page.</p></details>
+<details><summary>Is there a free TTS model?</summary><p>Not as a permanent $0 TTS ID today. Use free chat twins to draft scripts, then meter TTS. See <a href="/free-models">/free-models</a>.</p></details>
+<details><summary>Can I pair TTS with avatars?</summary><p>Yes — generate audio, then drive Duix-Avatar or InfiniteTalk on the same key. See <a href="/ai-avatar-video-generator">/ai-avatar-video-generator</a>.</p></details></div>
 <p class="meta">Also see <a href="/compare">/compare</a>, <a href="/free-models">/free-models</a>, and model guides under <code>/model/</code>.</p>
 
 </main>
@@ -140,7 +140,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
   <a href="/voice-cloning-api">Voice clone API</a>
   <a href="/ai-avatar-video-generator">Avatar video API</a>
   <a href="/brand/keyo-docs.html">Docs</a>
-  <a href="/faq">FAQ</a>
+  <a href="/brand/faq.html">FAQ</a>
   <a href="/brand/privacy.html">Privacy</a>
   <a href="/brand/terms.html">Terms</a>
   <a href="/sign-in">Sign in</a>

@@ -65,7 +65,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
     <a href="/pricing">Pricing</a>
     <a href="/pricing-list">Pricing list</a>
     <a href="/brand/keyo-docs.html">Docs</a>
-    <a href="/faq">FAQ</a>
+    <a href="/brand/faq.html">FAQ</a>
     <a href="/console">Console</a>
     <a href="/sign-in">Sign in</a>
     <a class="k-nav-cta" href="/sign-up">Get started</a>
@@ -90,7 +90,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
   <td><code>RMBG-2.0</code></td>
   <td>remove.bg self-serve API → Leonardo.Ai from Dec 1, 2026 (per remove.bg API page); consumer web → Canva</td>
   <td class="ok">~$0.0068 / request</td>
-  <td>POST /v1/images/mattings · try /pricing/RMBG-2.0</td>
+  <td>POST /v1/images/mattings · try <a href="/pricing/RMBG-2.0">/pricing/RMBG-2.0</a></td>
 </tr>
 <tr>
   <td><code>sam3</code></td>
@@ -104,16 +104,16 @@ ul{margin:0 0 14px;padding-left:1.2em}
 <p>KeyoAPI is not Canva, not Leonardo.Ai, and not a claim to be remove.bg’s official successor. Consumer click-to-cutout traffic is pointed at Canva by remove.bg itself. Keyo’s lane is developer-metered matting on a multi-model relay: authenticate, upload, get alpha — then continue to OCR, TTS, or chat on the same balance.</p>
 <h2>Migration details</h2>
 <p>Published transition (verify on remove.bg FAQ / API pages): standalone remove.bg website unavailable from 1 December 2026, 9:00am CET; self-serve API background removal moves to Leonardo.Ai; existing Enterprise API contracts are described as unaffected. Unused PAYG credits expire at that cutoff — treat vendor pages as source of truth if wording changes.</p>
-<p>Keyo sell rate for RMBG-2.0 is about $0.0068 per request (indicative). Confirm live at /pricing/RMBG-2.0. Typical legacy SaaS remove-bg APIs often sit near $0.05–$0.20 per image on public marketing pages; use that only as planning context, not a contractual quote.</p>
-<p>How to call: create a key at /sign-up, open /pricing/RMBG-2.0 for interactive try/buy (no separate upload playground), then POST multipart to https://www.keyoapi.xyz/v1/images/mattings with model=RMBG-2.0. Longer guide: /model/RMBG-2.0. Need masks beyond background? Use /model/sam3.</p>
-<p>Also see /compare for the background-removal price row, and /tts-api or /ai-avatar-video-generator if your pipeline continues into speech or talking avatars on the same key.</p>
+<p>Keyo sell rate for RMBG-2.0 is about $0.0068 per request (indicative). Confirm live at <a href="/pricing/RMBG-2.0">/pricing/RMBG-2.0</a>. Typical legacy SaaS remove-bg APIs often sit near $0.05–$0.20 per image on public marketing pages; use that only as planning context, not a contractual quote.</p>
+<p>How to call: create a key at <a href="/sign-up">/sign-up</a>, open <a href="/pricing/RMBG-2.0">/pricing/RMBG-2.0</a> for interactive try/buy (no separate upload playground), then POST multipart to https://www.keyoapi.xyz/v1/images/mattings with model=RMBG-2.0. Longer guide: <a href="/model/RMBG-2.0">/model/RMBG-2.0</a>. Need masks beyond background? Use <a href="/model/sam3">/model/sam3</a>.</p>
+<p>Also see <a href="/compare">/compare</a> for the background-removal price row, and <a href="/tts-api">/tts-api</a> or <a href="/ai-avatar-video-generator">/ai-avatar-video-generator</a> if your pipeline continues into speech or talking avatars on the same key.</p>
 <pre>curl https://www.keyoapi.xyz/v1/images/mattings \
   -H &quot;Authorization: Bearer $KEYO_API_KEY&quot; \
   -F model=RMBG-2.0 \
   -F image=@./photo.png</pre>
 <h2>FAQ</h2>
 <div class="faq"><details><summary>Is Keyo the official remove.bg replacement?</summary><p>No. remove.bg directs self-serve API users to Leonardo.Ai and consumers to Canva. KeyoAPI is an independent AI API relay with RMBG-2.0 matting if you want a prepaid multi-model stack.</p></details>
-<details><summary>Do you offer a free remove-background website?</summary><p>No consumer free cutout site. Keyo sells metered API access; try/buy is on /pricing/RMBG-2.0 after /sign-up.</p></details>
+<details><summary>Do you offer a free remove-background website?</summary><p>No consumer free cutout site. Keyo sells metered API access; try/buy is on <a href="/pricing/RMBG-2.0">/pricing/RMBG-2.0</a> after <a href="/sign-up">/sign-up</a>.</p></details>
 <details><summary>When is the remove.bg cutoff?</summary><p>Vendor-published date is 1 December 2026, 9:00am CET for the standalone site / self-serve API transition — re-check remove.bg FAQ before you lock a migration plan.</p></details></div>
 <p class="meta">Also see <a href="/compare">/compare</a>, <a href="/free-models">/free-models</a>, and model guides under <code>/model/</code>.</p>
 
@@ -134,7 +134,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
   <a href="/voice-cloning-api">Voice clone API</a>
   <a href="/ai-avatar-video-generator">Avatar video API</a>
   <a href="/brand/keyo-docs.html">Docs</a>
-  <a href="/faq">FAQ</a>
+  <a href="/brand/faq.html">FAQ</a>
   <a href="/brand/privacy.html">Privacy</a>
   <a href="/brand/terms.html">Terms</a>
   <a href="/sign-in">Sign in</a>

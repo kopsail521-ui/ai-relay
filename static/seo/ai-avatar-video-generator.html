@@ -65,7 +65,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
     <a href="/pricing">Pricing</a>
     <a href="/pricing-list">Pricing list</a>
     <a href="/brand/keyo-docs.html">Docs</a>
-    <a href="/faq">FAQ</a>
+    <a href="/brand/faq.html">FAQ</a>
     <a href="/console">Console</a>
     <a href="/sign-in">Sign in</a>
     <a class="k-nav-cta" href="/sign-up">Get started</a>
@@ -90,13 +90,13 @@ ul{margin:0 0 14px;padding-left:1.2em}
   <td><code>Duix-Avatar</code></td>
   <td>Audio + face video → lip-sync / expression render (async)</td>
   <td class="ok">~$0.0068 / second</td>
-  <td>/pricing/Duix-Avatar · /model/Duix-Avatar</td>
+  <td><a href="/pricing/Duix-Avatar">/pricing/Duix-Avatar</a> · <a href="/model/Duix-Avatar">/model/Duix-Avatar</a></td>
 </tr>
 <tr>
   <td><code>InfiniteTalk</code></td>
   <td>Portrait image (or video) + audio → talking-head clip (async)</td>
   <td class="ok">~$0.342 / request</td>
-  <td>/pricing/InfiniteTalk · /model/InfiniteTalk</td>
+  <td><a href="/pricing/InfiniteTalk">/pricing/InfiniteTalk</a> · <a href="/model/InfiniteTalk">/model/InfiniteTalk</a></td>
 </tr>
 <tr>
   <td><code>Qwen3-TTS</code></td>
@@ -107,11 +107,11 @@ ul{margin:0 0 14px;padding-left:1.2em}
 </tbody>
 </table>
 <h2>Productize the loop, not a single model</h2>
-<p>Typical product loop: draft script → TTS (optionally cloned) → avatar render → CDN cache. Cap max duration, show queue ETA, and moderate deepfake abuse. Try/buy each model from its /pricing/{id} page after /sign-up — no separate upload playground.</p>
+<p>Typical product loop: draft script → TTS (optionally cloned) → avatar render → CDN cache. Cap max duration, show queue ETA, and moderate deepfake abuse. Try/buy each model from its /pricing/{id} page after <a href="/sign-up">/sign-up</a> — no separate upload playground.</p>
 <h2>Rates and pipeline</h2>
 <p>This is the API path, not a consumer app: prepaid metering, OpenAI-style auth for adjacent chat and speech, async task polling for renders.</p>
-<p>Indicative rates: Duix-Avatar ~$0.0068 per second of output; InfiniteTalk ~$0.342 per request. Confirm /pricing/Duix-Avatar and /pricing/InfiniteTalk before volume. Pick Duix when you have driving video; pick InfiniteTalk when you start from a still spokesperson photo.</p>
-<p>How to call: async video endpoints with model=Duix-Avatar or InfiniteTalk, then GET /v1/task/{id}. Speech side: /tts-api and /voice-cloning-api. Model guides under /model/Duix-Avatar and /model/InfiniteTalk.</p>
+<p>Indicative rates: Duix-Avatar ~$0.0068 per second of output; InfiniteTalk ~$0.342 per request. Confirm <a href="/pricing/Duix-Avatar">/pricing/Duix-Avatar</a> and <a href="/pricing/InfiniteTalk">/pricing/InfiniteTalk</a> before volume. Pick Duix when you have driving video; pick InfiniteTalk when you start from a still spokesperson photo.</p>
+<p>How to call: async video endpoints with model=Duix-Avatar or InfiniteTalk, then GET /v1/task/{id}. Speech side: <a href="/tts-api">/tts-api</a> and <a href="/voice-cloning-api">/voice-cloning-api</a>. Model guides under <a href="/model/Duix-Avatar">/model/Duix-Avatar</a> and <a href="/model/InfiniteTalk">/model/InfiniteTalk</a>.</p>
 <p>Likeness rights and abuse prevention are your product’s responsibility — rate-limit, log, and require consent flags before queueing.</p>
 <pre>curl https://www.keyoapi.xyz/v1/async/videos/image-to-video \
   -H &quot;Authorization: Bearer $KEYO_API_KEY&quot; \
@@ -122,7 +122,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
 <h2>FAQ</h2>
 <div class="faq"><details><summary>Realtime avatar streaming?</summary><p>These models are async render jobs, not WebRTC realtime avatars. Design UX around queue + progress.</p></details>
 <details><summary>Duix vs InfiniteTalk?</summary><p>Different input modalities and billing units (per second vs per request). Prototype both on Keyo; see each model guide.</p></details>
-<details><summary>How do I try?</summary><p>Create a key at /sign-up, then open /pricing/Duix-Avatar or /pricing/InfiniteTalk for interactive try/buy.</p></details></div>
+<details><summary>How do I try?</summary><p>Create a key at <a href="/sign-up">/sign-up</a>, then open <a href="/pricing/Duix-Avatar">/pricing/Duix-Avatar</a> or <a href="/pricing/InfiniteTalk">/pricing/InfiniteTalk</a> for interactive try/buy.</p></details></div>
 <p class="meta">Also see <a href="/compare">/compare</a>, <a href="/free-models">/free-models</a>, and model guides under <code>/model/</code>.</p>
 
 </main>
@@ -142,7 +142,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
   <a href="/voice-cloning-api">Voice clone API</a>
   <a href="/ai-avatar-video-generator">Avatar video API</a>
   <a href="/brand/keyo-docs.html">Docs</a>
-  <a href="/faq">FAQ</a>
+  <a href="/brand/faq.html">FAQ</a>
   <a href="/brand/privacy.html">Privacy</a>
   <a href="/brand/terms.html">Terms</a>
   <a href="/sign-in">Sign in</a>

@@ -65,7 +65,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
     <a href="/pricing">Pricing</a>
     <a href="/pricing-list">Pricing list</a>
     <a href="/brand/keyo-docs.html">Docs</a>
-    <a href="/faq">FAQ</a>
+    <a href="/brand/faq.html">FAQ</a>
     <a href="/console">Console</a>
     <a href="/sign-in">Sign in</a>
     <a class="k-nav-cta" href="/sign-up">Get started</a>
@@ -82,7 +82,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
   <a class="btn btn-secondary" href="/sign-up">Create account</a>
 </div>
 <h2>Overview</h2>
-<p>Qwen3-TTS is KeyoAPI’s flagship text-to-speech model for natural multilingual audio and rapid voice cloning. KeyoAPI keeps STT (Whisper) and TTS on one relay balance for agents that talk back. Async generation suits podcasts, IVR prompts, course narration, and avatar pipelines that already wait on video renderers. Clone a brand voice once, then synthesize at scale without studio sessions. About $0.548 per 10,000 characters—map directly to script length in your CMS. Combine with Whisper for round-trip voice apps while metering both on Keyo. Product voiceovers, accessibility read-aloud, game NPCs, and digital humans (pair with Duix-Avatar or InfiniteTalk). Customer support bots that answer in the user’s language. Use Keyo async TTS APIs with model=Qwen3-TTS. Create a key at /pricing/Qwen3-TTS. Qwen3-TTS is async speech with clone-friendly voices—create via /v1/async/audio/speech, poll the task, then play the audio URL in your product. TTS product quality is about voice consistency and async UX, not just a synchronous HTTP beep. Create speech jobs, poll until ready, then CDN-cache the audio URL. Offer clone samples only after consent and PII review. Fallback to a default voice when clone confidence is low. Measure time-to-first-byte of finished audio, not just API accept latency. Track multilingual coverage and cost per minute of finished media. KeyoAPI’s async speech endpoint keeps TTS next to Whisper for full duplex voice agents. Normalize text (numbers, abbreviations) before TTS. Store voice ids per locale. Fail closed if clone samples look like celebrity likeness without rights. Measure listener completion rate, not only synthesis success.</p>
+<p>Qwen3-TTS is KeyoAPI’s flagship text-to-speech model for natural multilingual audio and rapid voice cloning. KeyoAPI keeps STT (Whisper) and TTS on one relay balance for agents that talk back. Async generation suits podcasts, IVR prompts, course narration, and avatar pipelines that already wait on video renderers. Clone a brand voice once, then synthesize at scale without studio sessions. About $0.548 per 10,000 characters—map directly to script length in your CMS. Combine with Whisper for round-trip voice apps while metering both on Keyo. Product voiceovers, accessibility read-aloud, game NPCs, and digital humans (pair with Duix-Avatar or InfiniteTalk). Customer support bots that answer in the user’s language. Use Keyo async TTS APIs with model=Qwen3-TTS. Create a key at <a href="/pricing/Qwen3-TTS">/pricing/Qwen3-TTS</a>. Qwen3-TTS is async speech with clone-friendly voices—create via /v1/async/audio/speech, poll the task, then play the audio URL in your product. TTS product quality is about voice consistency and async UX, not just a synchronous HTTP beep. Create speech jobs, poll until ready, then CDN-cache the audio URL. Offer clone samples only after consent and PII review. Fallback to a default voice when clone confidence is low. Measure time-to-first-byte of finished audio, not just API accept latency. Track multilingual coverage and cost per minute of finished media. KeyoAPI’s async speech endpoint keeps TTS next to Whisper for full duplex voice agents. Normalize text (numbers, abbreviations) before TTS. Store voice ids per locale. Fail closed if clone samples look like celebrity likeness without rights. Measure listener completion rate, not only synthesis success.</p>
 
 <h2>Quick start</h2>
 <div class="card">
@@ -99,7 +99,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
 <h2>FAQ</h2>
 <div class="faq"><details><summary>Is Qwen3-TTS synchronous?</summary><p>It is exposed as an async TTS workflow on KeyoAPI—poll or webhook according to the docs for long generations.</p></details>
 <details><summary>Does it support voice cloning?</summary><p>Yes—quick cloning from short samples is a core differentiator versus basic TTS endpoints.</p></details>
-<details><summary>How is Qwen3-TTS billed?</summary><p>Billed per 10K characters at about $0.548—see /pricing/Qwen3-TTS.</p></details></div>
+<details><summary>How is Qwen3-TTS billed?</summary><p>Billed per 10K characters at about $0.548—see <a href="/pricing/Qwen3-TTS">/pricing/Qwen3-TTS</a>.</p></details></div>
 <h2>Related models</h2>
 <div class="grid"><a href="/model/whisper-large-v3">Whisper Large V3 API</a>
 <a href="/model/IndexTTS-2">IndexTTS-2 API</a>
@@ -124,7 +124,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
   <a href="/voice-cloning-api">Voice clone API</a>
   <a href="/ai-avatar-video-generator">Avatar video API</a>
   <a href="/brand/keyo-docs.html">Docs</a>
-  <a href="/faq">FAQ</a>
+  <a href="/brand/faq.html">FAQ</a>
   <a href="/brand/privacy.html">Privacy</a>
   <a href="/brand/terms.html">Terms</a>
   <a href="/sign-in">Sign in</a>

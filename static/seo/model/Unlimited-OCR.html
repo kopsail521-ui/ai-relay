@@ -65,7 +65,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
     <a href="/pricing">Pricing</a>
     <a href="/pricing-list">Pricing list</a>
     <a href="/brand/keyo-docs.html">Docs</a>
-    <a href="/faq">FAQ</a>
+    <a href="/brand/faq.html">FAQ</a>
     <a href="/console">Console</a>
     <a href="/sign-in">Sign in</a>
     <a class="k-nav-cta" href="/sign-up">Get started</a>
@@ -82,7 +82,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
   <a class="btn btn-secondary" href="/sign-up">Create account</a>
 </div>
 <h2>Overview</h2>
-<p>Unlimited-OCR brings long-document OCR and layout understanding into the familiar chat completions API—useful when your product already speaks OpenAI multimodal. KeyoAPI packages it as an ocr api option next to MinerU and UVDoc on one relay bill. Instead of only emitting raw text, Unlimited-OCR emphasizes structure so LLMs can cite sections correctly. That reduces “hallucinated table cells” when finance or legal users ask questions about uploads. Token-metered at roughly $1.92 / $1.92 per 1M in/out. Great when document sizes vary wildly and per-page billing is a poor fit. Chat-with-PDF features, mobile document capture, and agent tools that read screenshots. Pre-unwarp with UVDoc when pages are curved. Send multimodal chat messages with model=Unlimited-OCR. Keys and samples: /pricing/Unlimited-OCR. Unlimited-OCR stays on chat completions so existing multimodal clients can paste images/PDFs without a second SDK; use MinerU when you need dedicated async parse jobs. Unlimited-OCR is for product surfaces that already speak multimodal chat: the user pastes a screenshot and asks a question in one turn. Send an image part plus a text instruction asking for structured JSON or markdown tables. Validate the schema server-side before showing answers. When documents are multi-page PDFs with complex layout, prefer MinerU’s async parse instead of stuffing everything into one chat call. Unlimited-OCR’s token pricing fits variable-length captures; MinerU’s per-page pricing fits batch archives. Document both paths in your internal OCR API guide so engineers pick deliberately. Prefer image_url or base64 image parts with a strict extraction instruction. Reject empty OCR with a retry that increases detail level. Unlimited-OCR is ideal inside chat UIs; MinerU remains better for overnight PDF folders.</p>
+<p>Unlimited-OCR brings long-document OCR and layout understanding into the familiar chat completions API—useful when your product already speaks OpenAI multimodal. KeyoAPI packages it as an ocr api option next to MinerU and UVDoc on one relay bill. Instead of only emitting raw text, Unlimited-OCR emphasizes structure so LLMs can cite sections correctly. That reduces “hallucinated table cells” when finance or legal users ask questions about uploads. Token-metered at roughly $1.92 / $1.92 per 1M in/out. Great when document sizes vary wildly and per-page billing is a poor fit. Chat-with-PDF features, mobile document capture, and agent tools that read screenshots. Pre-unwarp with UVDoc when pages are curved. Send multimodal chat messages with model=Unlimited-OCR. Keys and samples: <a href="/pricing/Unlimited-OCR">/pricing/Unlimited-OCR</a>. Unlimited-OCR stays on chat completions so existing multimodal clients can paste images/PDFs without a second SDK; use MinerU when you need dedicated async parse jobs. Unlimited-OCR is for product surfaces that already speak multimodal chat: the user pastes a screenshot and asks a question in one turn. Send an image part plus a text instruction asking for structured JSON or markdown tables. Validate the schema server-side before showing answers. When documents are multi-page PDFs with complex layout, prefer MinerU’s async parse instead of stuffing everything into one chat call. Unlimited-OCR’s token pricing fits variable-length captures; MinerU’s per-page pricing fits batch archives. Document both paths in your internal OCR API guide so engineers pick deliberately. Prefer image_url or base64 image parts with a strict extraction instruction. Reject empty OCR with a retry that increases detail level. Unlimited-OCR is ideal inside chat UIs; MinerU remains better for overnight PDF folders.</p>
 
 <h2>Quick start</h2>
 <div class="card">
@@ -98,7 +98,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
 <h2>FAQ</h2>
 <div class="faq"><details><summary>Why is OCR exposed through chat completions?</summary><p>Unlimited-OCR uses a multimodal chat path so you can pass images and receive structured text in one OpenAI-compatible call.</p></details>
 <details><summary>MinerU vs Unlimited-OCR?</summary><p>MinerU is strong for paginated PDF pipelines; Unlimited-OCR shines for flexible long-document multimodal extraction in chat-style apps.</p></details>
-<details><summary>Token pricing?</summary><p>About $1.92 per 1M input and output tokens—see /pricing/Unlimited-OCR.</p></details></div>
+<details><summary>Token pricing?</summary><p>About $1.92 per 1M input and output tokens—see <a href="/pricing/Unlimited-OCR">/pricing/Unlimited-OCR</a>.</p></details></div>
 <h2>Related models</h2>
 <div class="grid"><a href="/model/MinerU2.5-Pro">MinerU2.5-Pro API</a>
 <a href="/model/UVDoc">UVDoc API</a>
@@ -122,7 +122,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
   <a href="/voice-cloning-api">Voice clone API</a>
   <a href="/ai-avatar-video-generator">Avatar video API</a>
   <a href="/brand/keyo-docs.html">Docs</a>
-  <a href="/faq">FAQ</a>
+  <a href="/brand/faq.html">FAQ</a>
   <a href="/brand/privacy.html">Privacy</a>
   <a href="/brand/terms.html">Terms</a>
   <a href="/sign-in">Sign in</a>

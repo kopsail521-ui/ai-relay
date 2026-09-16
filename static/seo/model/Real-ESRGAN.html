@@ -65,7 +65,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
     <a href="/pricing">Pricing</a>
     <a href="/pricing-list">Pricing list</a>
     <a href="/brand/keyo-docs.html">Docs</a>
-    <a href="/faq">FAQ</a>
+    <a href="/brand/faq.html">FAQ</a>
     <a href="/console">Console</a>
     <a href="/sign-in">Sign in</a>
     <a class="k-nav-cta" href="/sign-up">Get started</a>
@@ -82,7 +82,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
   <a class="btn btn-secondary" href="/sign-up">Create account</a>
 </div>
 <h2>Overview</h2>
-<p>Real-ESRGAN is KeyoAPI’s general image upscaling api for photos that need more pixels and cleaner detail. Marketplaces, print shops, and UGC apps call this super resolution api instead of maintaining ESRGAN GPUs. Real-world photos suffer from compression and blur. Real-ESRGAN restores usable resolution for zoom, crop, and print. On the same AI API relay you can unwarp with UVDoc then upscale before OCR. Per-request ~$0.0068—cheap enough to run on every upload or only when users hit “Enhance.” Gate with file-size heuristics to control spend. Listing image polish, archival scans, social media quality boosts, and pre-OCR enhancement. Anime content should prefer AnimeSharp. Keyo upscaling paths with model=Real-ESRGAN. Keys at /pricing/Real-ESRGAN. Real-ESRGAN upscales real photos on /v1/images/upscaling when marketplace or mobile captures need sharper pixels before OCR or publishing. Upscaling helps marketplace photos and OCR preprocessors more than it helps already-sharp DSLR shots. Detect low resolution before calling Real-ESRGAN to avoid wasting requests. Compare SSIM or a simple sharpness score pre/post. For text-heavy scans, upscale then OCR; for portraits, upscale then RMBG. Image upscaling API costs add up in user-generated content apps—cache by content hash. Keyo’s /v1/images/upscaling path keeps this step next to other vision tools. Skip upscale when the short side already exceeds your publish threshold. Prefer 2x then quality check before 4x. Image upscaling API spend correlates with UGC spikes—rate limit per user.</p>
+<p>Real-ESRGAN is KeyoAPI’s general image upscaling api for photos that need more pixels and cleaner detail. Marketplaces, print shops, and UGC apps call this super resolution api instead of maintaining ESRGAN GPUs. Real-world photos suffer from compression and blur. Real-ESRGAN restores usable resolution for zoom, crop, and print. On the same AI API relay you can unwarp with UVDoc then upscale before OCR. Per-request ~$0.0068—cheap enough to run on every upload or only when users hit “Enhance.” Gate with file-size heuristics to control spend. Listing image polish, archival scans, social media quality boosts, and pre-OCR enhancement. Anime content should prefer AnimeSharp. Keyo upscaling paths with model=Real-ESRGAN. Keys at <a href="/pricing/Real-ESRGAN">/pricing/Real-ESRGAN</a>. Real-ESRGAN upscales real photos on /v1/images/upscaling when marketplace or mobile captures need sharper pixels before OCR or publishing. Upscaling helps marketplace photos and OCR preprocessors more than it helps already-sharp DSLR shots. Detect low resolution before calling Real-ESRGAN to avoid wasting requests. Compare SSIM or a simple sharpness score pre/post. For text-heavy scans, upscale then OCR; for portraits, upscale then RMBG. Image upscaling API costs add up in user-generated content apps—cache by content hash. Keyo’s /v1/images/upscaling path keeps this step next to other vision tools. Skip upscale when the short side already exceeds your publish threshold. Prefer 2x then quality check before 4x. Image upscaling API spend correlates with UGC spikes—rate limit per user.</p>
 
 <h2>Quick start</h2>
 <div class="card">
@@ -98,7 +98,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
 <h2>FAQ</h2>
 <div class="faq"><details><summary>Photo vs anime upscaling?</summary><p>Use Real-ESRGAN for general photos; switch to AnimeSharp for illustrations and anime line art.</p></details>
 <details><summary>Will it invent faces?</summary><p>Super-resolution can hallucinate detail—review outputs for identity-sensitive apps and keep originals.</p></details>
-<details><summary>Pricing?</summary><p>About $0.0068 per request on /pricing/Real-ESRGAN.</p></details></div>
+<details><summary>Pricing?</summary><p>About $0.0068 per request on <a href="/pricing/Real-ESRGAN">/pricing/Real-ESRGAN</a>.</p></details></div>
 <h2>Related models</h2>
 <div class="grid"><a href="/model/AnimeSharp">AnimeSharp API</a>
 <a href="/model/UVDoc">UVDoc API</a>
@@ -122,7 +122,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
   <a href="/voice-cloning-api">Voice clone API</a>
   <a href="/ai-avatar-video-generator">Avatar video API</a>
   <a href="/brand/keyo-docs.html">Docs</a>
-  <a href="/faq">FAQ</a>
+  <a href="/brand/faq.html">FAQ</a>
   <a href="/brand/privacy.html">Privacy</a>
   <a href="/brand/terms.html">Terms</a>
   <a href="/sign-in">Sign in</a>

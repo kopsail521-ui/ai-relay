@@ -65,7 +65,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
     <a href="/pricing">Pricing</a>
     <a href="/pricing-list">Pricing list</a>
     <a href="/brand/keyo-docs.html">Docs</a>
-    <a href="/faq">FAQ</a>
+    <a href="/brand/faq.html">FAQ</a>
     <a href="/console">Console</a>
     <a href="/sign-in">Sign in</a>
     <a class="k-nav-cta" href="/sign-up">Get started</a>
@@ -82,7 +82,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
   <a class="btn btn-secondary" href="/sign-up">Create account</a>
 </div>
 <h2>Overview</h2>
-<p>UVDoc fixes the physical world problem that kills OCR: curved book pages and skewed phone scans. As part of KeyoAPI’s ocr api toolkit, UVDoc unwarps images so MinerU2.5-Pro and Unlimited-OCR see straighter text lines. Unwarping is a specialized CV step—not a full OCR replacement. Products that let users snap receipts or IDs see immediate accuracy lifts after UVDoc. Per-request pricing around $0.0137 keeps the preprocessing stage accountable in your cost model. Compare against losing conversions when OCR fails on mobile uploads. Banking onboarding, expense apps, classroom worksheet capture, and archive digitization. Optional upscale with Real-ESRGAN when resolution is tiny. Call UVDoc via Keyo image/unwarping paths documented in the developer docs, then pass output to OCR models. Start at /pricing/UVDoc. UVDoc is preprocessing, not OCR: unwarp curved phone scans first, then hand the flattened image to MinerU or Unlimited-OCR for higher text accuracy. Phone scans fail OCR because of curvature and perspective, not because the OCR model is weak. UVDoc’s job is geometric cleanup before recognition. Run it only on camera captures; skip it for digital-born PDFs to save latency and cost. Store both the warped original and the unwarped result for audit. After UVDoc, call MinerU or Unlimited-OCR and compare character error rates on a labeled set of receipts or IDs. That A/B is how you justify the extra hop. KeyoAPI keeps unwarp + OCR + LLM on one prepaid balance. Gate UVDoc with a curvature heuristic so flat scans skip the hop. Log warp confidence. When confidence is low, ask the user to retake the photo instead of burning OCR tokens on garbage geometry.</p>
+<p>UVDoc fixes the physical world problem that kills OCR: curved book pages and skewed phone scans. As part of KeyoAPI’s ocr api toolkit, UVDoc unwarps images so MinerU2.5-Pro and Unlimited-OCR see straighter text lines. Unwarping is a specialized CV step—not a full OCR replacement. Products that let users snap receipts or IDs see immediate accuracy lifts after UVDoc. Per-request pricing around $0.0137 keeps the preprocessing stage accountable in your cost model. Compare against losing conversions when OCR fails on mobile uploads. Banking onboarding, expense apps, classroom worksheet capture, and archive digitization. Optional upscale with Real-ESRGAN when resolution is tiny. Call UVDoc via Keyo image/unwarping paths documented in the developer docs, then pass output to OCR models. Start at <a href="/pricing/UVDoc">/pricing/UVDoc</a>. UVDoc is preprocessing, not OCR: unwarp curved phone scans first, then hand the flattened image to MinerU or Unlimited-OCR for higher text accuracy. Phone scans fail OCR because of curvature and perspective, not because the OCR model is weak. UVDoc’s job is geometric cleanup before recognition. Run it only on camera captures; skip it for digital-born PDFs to save latency and cost. Store both the warped original and the unwarped result for audit. After UVDoc, call MinerU or Unlimited-OCR and compare character error rates on a labeled set of receipts or IDs. That A/B is how you justify the extra hop. KeyoAPI keeps unwarp + OCR + LLM on one prepaid balance. Gate UVDoc with a curvature heuristic so flat scans skip the hop. Log warp confidence. When confidence is low, ask the user to retake the photo instead of burning OCR tokens on garbage geometry.</p>
 
 <h2>Quick start</h2>
 <div class="card">
@@ -98,7 +98,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
 <h2>FAQ</h2>
 <div class="faq"><details><summary>Do I always need UVDoc before OCR?</summary><p>Use it when pages are curved, skewed, or photographed at an angle. Flat digital PDFs can skip straight to MinerU/Unlimited-OCR.</p></details>
 <details><summary>Can I chain UVDoc → MinerU on KeyoAPI?</summary><p>Yes—that combo is a recommended “correct then parse” pipeline for phone-captured documents.</p></details>
-<details><summary>Pricing?</summary><p>About $0.0137 per request on /pricing/UVDoc.</p></details></div>
+<details><summary>Pricing?</summary><p>About $0.0137 per request on <a href="/pricing/UVDoc">/pricing/UVDoc</a>.</p></details></div>
 <h2>Related models</h2>
 <div class="grid"><a href="/model/MinerU2.5-Pro">MinerU2.5-Pro API</a>
 <a href="/model/Unlimited-OCR">Unlimited-OCR API</a>
@@ -122,7 +122,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
   <a href="/voice-cloning-api">Voice clone API</a>
   <a href="/ai-avatar-video-generator">Avatar video API</a>
   <a href="/brand/keyo-docs.html">Docs</a>
-  <a href="/faq">FAQ</a>
+  <a href="/brand/faq.html">FAQ</a>
   <a href="/brand/privacy.html">Privacy</a>
   <a href="/brand/terms.html">Terms</a>
   <a href="/sign-in">Sign in</a>

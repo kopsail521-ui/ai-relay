@@ -44,6 +44,29 @@ function esc(s) {
     .replace(/"/g, "&quot;");
 }
 
+/** Escape then turn site paths into <a href> for crawlable internal links. */
+function linkifySitePaths(raw) {
+  let s = esc(raw);
+  const literals = (pricingLandings.pages || [])
+    .map((p) => `/${p.slug}`)
+    .concat([
+      "/pricing-list",
+      "/free-models",
+      "/sign-up",
+      "/sign-in",
+      "/compare",
+      "/models",
+      "/about",
+    ])
+    .sort((a, b) => b.length - a.length)
+    .map((p) => p.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"));
+  const re = new RegExp(
+    `(\\/(?:pricing|model)\\/[A-Za-z0-9](?:[A-Za-z0-9._-]*[A-Za-z0-9_-])?|${literals.join("|")}|\\/pricing)(?![A-Za-z0-9_/-])`,
+    "g"
+  );
+  return s.replace(re, (m) => `<a href="${m}">${m}</a>`);
+}
+
 /** First sentence without breaking on decimals like RMBG-2.0 */
 function firstSentence(text) {
   const t = String(text || "").trim();
@@ -103,7 +126,7 @@ function nav() {
     <a href="/pricing">Pricing</a>
     <a href="/pricing-list">Pricing list</a>
     <a href="/brand/keyo-docs.html">Docs</a>
-    <a href="/faq">FAQ</a>
+    <a href="/brand/faq.html">FAQ</a>
     <a href="/console">Console</a>
     <a href="/sign-in">Sign in</a>
     <a class="k-nav-cta" href="/sign-up">Get started</a>
@@ -143,7 +166,7 @@ function footer() {
   <a href="/free-models">Free models</a>
 ${landingLinks}
   <a href="/brand/keyo-docs.html">Docs</a>
-  <a href="/faq">FAQ</a>
+  <a href="/brand/faq.html">FAQ</a>
   <a href="/brand/privacy.html">Privacy</a>
   <a href="/brand/terms.html">Terms</a>
   <a href="/sign-in">Sign in</a>
@@ -241,17 +264,17 @@ function renderModel(m) {
   const lead = firstSentence(leadSrc);
   const paras = m.body
     .split(/\n\n+/)
-    .map((p) => `<p>${esc(p)}</p>`)
+    .map((p) => `<p>${linkifySitePaths(p)}</p>`)
     .join("\n");
   const faqs = m.faqs
     .map(
       (f) =>
-        `<details><summary>${esc(f.q)}</summary><p>${esc(f.a)}</p></details>`
+        `<details><summary>${esc(f.q)}</summary><p>${linkifySitePaths(f.a)}</p></details>`
     )
     .join("\n");
   const curl = m.curlExample || "";
   const bodyHtml = `
-<p class="lead">${esc(lead)}</p>
+<p class="lead">${linkifySitePaths(lead)}</p>
 <p class="meta">Listed price: <span class="ok">${esc(m.priceLabel)}</span> · Confirm live rates on <a href="/pricing/${encodeURIComponent(m.id)}">interactive pricing</a>.</p>
 <div class="btnrow">
   <a class="btn btn-primary" href="/pricing/${encodeURIComponent(m.id)}">Open interactive pricing</a>
@@ -834,17 +857,19 @@ function renderPricingLanding(p) {
     .map(
       (r) => `<tr>
   <td><code>${esc(r.model)}</code></td>
-  <td>${esc(r.official)}</td>
+  <td>${linkifySitePaths(r.official)}</td>
   <td class="ok">${esc(r.keyo)}</td>
-  <td>${esc(r.note)}</td>
+  <td>${linkifySitePaths(r.note)}</td>
 </tr>`
     )
     .join("\n");
-  const bodyParas = p.body.map((t) => `<p>${esc(t)}</p>`).join("\n");
+  const bodyParas = p.body
+    .map((t) => `<p>${linkifySitePaths(t)}</p>`)
+    .join("\n");
   const faqs = p.faqs
     .map(
       (f) =>
-        `<details><summary>${esc(f.q)}</summary><p>${esc(f.a)}</p></details>`
+        `<details><summary>${esc(f.q)}</summary><p>${linkifySitePaths(f.a)}</p></details>`
     )
     .join("\n");
   const defaultModel =
@@ -857,7 +882,7 @@ function renderPricingLanding(p) {
   -H "Content-Type: application/json" \\
   -d '{"model":"${esc(defaultModel)}","messages":[{"role":"user","content":"Hello"}]}'</pre>`;
   const bodyHtml = `
-<p class="lead">${esc(p.lead)}</p>
+<p class="lead">${linkifySitePaths(p.lead)}</p>
 <div class="btnrow">
   <a class="btn btn-primary" href="/sign-up">Get API key</a>
   <a class="btn btn-secondary" href="/pricing">Open Model Square</a>
@@ -873,7 +898,7 @@ ${rows}
 </tbody>
 </table>
 <h2>${esc(p.freeKiller.title)}</h2>
-<p>${esc(p.freeKiller.body)}</p>
+<p>${linkifySitePaths(p.freeKiller.body)}</p>
 <h2>${esc(bodyHeading)}</h2>
 ${bodyParas}
 ${curlBlock}

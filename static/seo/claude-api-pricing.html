@@ -65,7 +65,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
     <a href="/pricing">Pricing</a>
     <a href="/pricing-list">Pricing list</a>
     <a href="/brand/keyo-docs.html">Docs</a>
-    <a href="/faq">FAQ</a>
+    <a href="/brand/faq.html">FAQ</a>
     <a href="/console">Console</a>
     <a href="/sign-in">Sign in</a>
     <a class="k-nav-cta" href="/sign-up">Get started</a>
@@ -116,9 +116,9 @@ ul{margin:0 0 14px;padding-left:1.2em}
 <p>Keyo does not ship Anthropic-branded free Claude IDs. For $0 prototyping on the same API key, use permanent free twins such as deepseek-v4-flash-free, deepseek-v4-pro-free, glm-5.2-free, and kimi-k3-free (fair-use limits). When quality gates pass, switch model= to claude-sonnet-5 or another Claude ID without changing base URL or auth.</p>
 <h2>Rates and how to call</h2>
 <p>Teams comparing Claude API pricing usually already want Anthropic-class chat or agents with clearer unit economics — or one prepaid balance across Claude-class IDs plus GPT-class, DeepSeek, Whisper, OCR, and TTS. Official Anthropic surfaces win on brand trust; KeyoAPI wins when you want that stack without five invoices.</p>
-<p>Keyo rates above are indicative sell prices from the live Keyo catalog. Always confirm interactive pages under /pricing/claude-sonnet-5, /pricing/claude-opus-5, /pricing/claude-fable-5, and /pricing/claude-fable-5-1 before contracting volume. Anthropic list bands and context tiers change — treat official figures as planning context.</p>
-<p>How to call: set OPENAI_BASE_URL=https://www.keyoapi.xyz/v1, use your Keyo API key, and pass a Claude model string (for example claude-sonnet-5) to POST /v1/chat/completions. Longer guides live at /model/claude-sonnet-5, /model/claude-opus-5, and the Fable pages.</p>
-<p>When Claude list prices spike your margin, keep Claude for hard reasoning and shift bulk classification or drafts to gpt-5.6-luna or deepseek-v4-flash on the same key. For OpenAI / GPT dollars see /openai-api-pricing; for Gemini dollars see /gemini-api-pricing; for DeepSeek see /deepseek-api-pricing; for free prototyping see /free-models.</p>
+<p>Keyo rates above are indicative sell prices from the live Keyo catalog. Always confirm interactive pages under <a href="/pricing/claude-sonnet-5">/pricing/claude-sonnet-5</a>, <a href="/pricing/claude-opus-5">/pricing/claude-opus-5</a>, <a href="/pricing/claude-fable-5">/pricing/claude-fable-5</a>, and <a href="/pricing/claude-fable-5-1">/pricing/claude-fable-5-1</a> before contracting volume. Anthropic list bands and context tiers change — treat official figures as planning context.</p>
+<p>How to call: set OPENAI_BASE_URL=https://www.keyoapi.xyz/v1, use your Keyo API key, and pass a Claude model string (for example claude-sonnet-5) to POST /v1/chat/completions. Longer guides live at <a href="/model/claude-sonnet-5">/model/claude-sonnet-5</a>, <a href="/model/claude-opus-5">/model/claude-opus-5</a>, and the Fable pages.</p>
+<p>When Claude list prices spike your margin, keep Claude for hard reasoning and shift bulk classification or drafts to gpt-5.6-luna or deepseek-v4-flash on the same key. For OpenAI / GPT dollars see <a href="/openai-api-pricing">/openai-api-pricing</a>; for Gemini dollars see <a href="/gemini-api-pricing">/gemini-api-pricing</a>; for DeepSeek see <a href="/deepseek-api-pricing">/deepseek-api-pricing</a>; for free prototyping see <a href="/free-models">/free-models</a>.</p>
 <pre>curl https://www.keyoapi.xyz/v1/chat/completions \
   -H "Authorization: Bearer $KEYO_API_KEY" \
   -H "Content-Type: application/json" \
@@ -126,7 +126,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
 <h2>FAQ</h2>
 <div class="faq"><details><summary>Is Keyo cheaper than Anthropic Claude API pricing?</summary><p>Often on the Sonnet/Opus rows we list — but Anthropic’s public list, prompt caching, and batch discounts change. Treat this table as a planning snapshot and verify both sides before you commit.</p></details>
 <details><summary>Do you offer a free Claude model?</summary><p>Not as an Anthropic-branded free ID. Use Keyo’s permanent $0 DeepSeek/GLM/Kimi free twins to prototype on the same key, then promote to paid Claude IDs when you need that quality band.</p></details>
-<details><summary>How do I try Claude on Keyo?</summary><p>Create a key at /sign-up, then open /pricing/claude-sonnet-5 (or another Claude ID) for interactive try/buy. There is no separate upload playground — Model Square is the try path.</p></details></div>
+<details><summary>How do I try Claude on Keyo?</summary><p>Create a key at <a href="/sign-up">/sign-up</a>, then open <a href="/pricing/claude-sonnet-5">/pricing/claude-sonnet-5</a> (or another Claude ID) for interactive try/buy. There is no separate upload playground — Model Square is the try path.</p></details></div>
 <p class="meta">Also see <a href="/compare">/compare</a>, <a href="/free-models">/free-models</a>, and model guides under <code>/model/</code>.</p>
 
 </main>
@@ -146,7 +146,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
   <a href="/voice-cloning-api">Voice clone API</a>
   <a href="/ai-avatar-video-generator">Avatar video API</a>
   <a href="/brand/keyo-docs.html">Docs</a>
-  <a href="/faq">FAQ</a>
+  <a href="/brand/faq.html">FAQ</a>
   <a href="/brand/privacy.html">Privacy</a>
   <a href="/brand/terms.html">Terms</a>
   <a href="/sign-in">Sign in</a>

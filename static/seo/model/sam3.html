@@ -65,7 +65,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
     <a href="/pricing">Pricing</a>
     <a href="/pricing-list">Pricing list</a>
     <a href="/brand/keyo-docs.html">Docs</a>
-    <a href="/faq">FAQ</a>
+    <a href="/brand/faq.html">FAQ</a>
     <a href="/console">Console</a>
     <a href="/sign-in">Sign in</a>
     <a class="k-nav-cta" href="/sign-up">Get started</a>
@@ -82,7 +82,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
   <a class="btn btn-secondary" href="/sign-up">Create account</a>
 </div>
 <h2>Overview</h2>
-<p>sam3 brings Meta SAM 3 open-vocabulary segmentation to KeyoAPI as a hosted API: send an image, get pixel-level masks when closed YOLO class lists are not enough. Creative tools and robotics stacks use it when users can point at “any object.” Open-vocabulary masks unlock long-tail objects that never appeared in detection taxonomies. KeyoAPI hosts SAM beside RMBG and Vajra so you can escalate from cheap detection to precise masks without a second vendor. Around $0.0137 per request—budget for interactive editors where each user click may trigger a mask. Cache masks when users revisit the same asset. Photo editors, dataset labeling, AR try-on prep, and scientific imaging. Export masks into compositing workflows, or fall back to RMBG when you only need subject/background. Call POST /v1/images/segmentation with model=sam3. Start at /pricing/sam3 for live rates and try/buy. To try SAM 3 without cloning the repo, call model=sam3 — no local weights: authenticate, post a frame, and receive masks. Open-vocabulary segmentation shines when class lists fail—medical tools, rare SKUs, custom props. Prompt with short noun phrases and keep a human-in-the-loop for first-week taxonomy discovery. Export masks as PNGs or RLE depending on your editor. Rate-limit per tenant; masks are heavier than classification tokens. Keep prompt dictionaries per tenant and soft-delete prompts that produce empty masks. UX improves when users can click a region and refine the noun phrase interactively.</p>
+<p>sam3 brings Meta SAM 3 open-vocabulary segmentation to KeyoAPI as a hosted API: send an image, get pixel-level masks when closed YOLO class lists are not enough. Creative tools and robotics stacks use it when users can point at “any object.” Open-vocabulary masks unlock long-tail objects that never appeared in detection taxonomies. KeyoAPI hosts SAM beside RMBG and Vajra so you can escalate from cheap detection to precise masks without a second vendor. Around $0.0137 per request—budget for interactive editors where each user click may trigger a mask. Cache masks when users revisit the same asset. Photo editors, dataset labeling, AR try-on prep, and scientific imaging. Export masks into compositing workflows, or fall back to RMBG when you only need subject/background. Call POST /v1/images/segmentation with model=sam3. Start at <a href="/pricing/sam3">/pricing/sam3</a> for live rates and try/buy. To try SAM 3 without cloning the repo, call model=sam3 — no local weights: authenticate, post a frame, and receive masks. Open-vocabulary segmentation shines when class lists fail—medical tools, rare SKUs, custom props. Prompt with short noun phrases and keep a human-in-the-loop for first-week taxonomy discovery. Export masks as PNGs or RLE depending on your editor. Rate-limit per tenant; masks are heavier than classification tokens. Keep prompt dictionaries per tenant and soft-delete prompts that produce empty masks. UX improves when users can click a region and refine the noun phrase interactively.</p>
 
 <h2>Quick start</h2>
 <div class="card">
@@ -96,10 +96,10 @@ ul{margin:0 0 14px;padding-left:1.2em}
 <p>Auth uses the same Bearer API key as chat. Full notes: <a href="/brand/keyo-docs.html">Keyo docs</a>.</p>
 </div>
 <h2>FAQ</h2>
-<div class="faq"><details><summary>Can I try sam3 without deploying it?</summary><p>Yes. KeyoAPI hosts model=sam3 behind POST /v1/images/segmentation. Open /pricing/sam3 to place a test call with your API key — no local GPU or Hugging Face download.</p></details>
+<div class="faq"><details><summary>Can I try sam3 without deploying it?</summary><p>Yes. KeyoAPI hosts model=sam3 behind POST /v1/images/segmentation. Open <a href="/pricing/sam3">/pricing/sam3</a> to place a test call with your API key — no local GPU or Hugging Face download.</p></details>
 <details><summary>SAM 3 vs RMBG?</summary><p>RMBG is specialized background removal. SAM 3 produces open-vocabulary masks for arbitrary objects without a fixed class list.</p></details>
 <details><summary>Do I need prompts?</summary><p>Open-vocabulary segmentation typically accepts points/boxes/text cues depending on the operation—see Keyo docs for the exact schema.</p></details>
-<details><summary>Price?</summary><p>About $0.0137 per request on /pricing/sam3.</p></details></div>
+<details><summary>Price?</summary><p>About $0.0137 per request on <a href="/pricing/sam3">/pricing/sam3</a>.</p></details></div>
 <h2>Related models</h2>
 <div class="grid"><a href="/model/VajraV1">VajraV1 YOLO API</a>
 <a href="/model/RMBG-2.0">RMBG-2.0 API</a>
@@ -123,7 +123,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
   <a href="/voice-cloning-api">Voice clone API</a>
   <a href="/ai-avatar-video-generator">Avatar video API</a>
   <a href="/brand/keyo-docs.html">Docs</a>
-  <a href="/faq">FAQ</a>
+  <a href="/brand/faq.html">FAQ</a>
   <a href="/brand/privacy.html">Privacy</a>
   <a href="/brand/terms.html">Terms</a>
   <a href="/sign-in">Sign in</a>

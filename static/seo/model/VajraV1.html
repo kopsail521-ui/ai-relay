@@ -65,7 +65,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
     <a href="/pricing">Pricing</a>
     <a href="/pricing-list">Pricing list</a>
     <a href="/brand/keyo-docs.html">Docs</a>
-    <a href="/faq">FAQ</a>
+    <a href="/brand/faq.html">FAQ</a>
     <a href="/console">Console</a>
     <a href="/sign-in">Sign in</a>
     <a class="k-nav-cta" href="/sign-up">Get started</a>
@@ -82,7 +82,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
   <a class="btn btn-secondary" href="/sign-up">Create account</a>
 </div>
 <h2>Overview</h2>
-<p>VajraV1 packs YOLO-based object detection, image segmentation, and pose estimation into KeyoAPI’s vision lane. If you need an object detection api without standing up GPU workers, call this model through the same gateway as your LLMs. Realtime CV features used to require dedicated inference clusters. An AI API relay collapses that into HTTP calls with prepaid balance. VajraV1 is ideal when class vocabularies are standard YOLO-style objects; use sam3 for open-vocabulary masks. Per-call pricing near $0.0068 keeps experiments cheap until you prove ROI on camera streams. Batch still frames rather than every video frame when budgets are tight. Shelf monitoring, people counting, workout form checks, and factory defect triage. Feed detections into gpt-5.6-luna for natural-language incident summaries. Use Keyo /v1/images/object-detection and related paths with model=VajraV1. Keys: /pricing/VajraV1. VajraV1 exposes YOLO-style detection (and related segmentation/pose routes) for retail and industrial CV without standing up your own GPU fleet. YOLO-style detection is for closed vocabularies you already understand: people, boxes, vehicles, shelves. Sample frames from video instead of every frame to control cost. Persist boxes with camera id and timestamp for analytics. When you need “find the weird unlabeled object,” escalate to sam3. Feed compact detection JSON into Luna for incident summaries so the LLM never sees raw pixels. Object detection API pricing stays sane when you batch stills and cache identical frames. Define class allowlists per camera. Drop detections below confidence thresholds. Aggregate into events before calling an LLM. Object detection API noise will drown your logs if you forward every box raw.</p>
+<p>VajraV1 packs YOLO-based object detection, image segmentation, and pose estimation into KeyoAPI’s vision lane. If you need an object detection api without standing up GPU workers, call this model through the same gateway as your LLMs. Realtime CV features used to require dedicated inference clusters. An AI API relay collapses that into HTTP calls with prepaid balance. VajraV1 is ideal when class vocabularies are standard YOLO-style objects; use sam3 for open-vocabulary masks. Per-call pricing near $0.0068 keeps experiments cheap until you prove ROI on camera streams. Batch still frames rather than every video frame when budgets are tight. Shelf monitoring, people counting, workout form checks, and factory defect triage. Feed detections into gpt-5.6-luna for natural-language incident summaries. Use Keyo /v1/images/object-detection and related paths with model=VajraV1. Keys: <a href="/pricing/VajraV1">/pricing/VajraV1</a>. VajraV1 exposes YOLO-style detection (and related segmentation/pose routes) for retail and industrial CV without standing up your own GPU fleet. YOLO-style detection is for closed vocabularies you already understand: people, boxes, vehicles, shelves. Sample frames from video instead of every frame to control cost. Persist boxes with camera id and timestamp for analytics. When you need “find the weird unlabeled object,” escalate to sam3. Feed compact detection JSON into Luna for incident summaries so the LLM never sees raw pixels. Object detection API pricing stays sane when you batch stills and cache identical frames. Define class allowlists per camera. Drop detections below confidence thresholds. Aggregate into events before calling an LLM. Object detection API noise will drown your logs if you forward every box raw.</p>
 
 <h2>Quick start</h2>
 <div class="card">
@@ -98,7 +98,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
 <h2>FAQ</h2>
 <div class="faq"><details><summary>Is VajraV1 a YOLO model?</summary><p>Yes—it provides YOLO-style realtime vision for detection, segmentation, and human pose keypoints via KeyoAPI.</p></details>
 <details><summary>What industries use it?</summary><p>Retail analytics, industrial CV, sports, safety monitoring, and robotics prototypes.</p></details>
-<details><summary>Pricing?</summary><p>About $0.0068 per request—live on /pricing/VajraV1.</p></details></div>
+<details><summary>Pricing?</summary><p>About $0.0068 per request—live on <a href="/pricing/VajraV1">/pricing/VajraV1</a>.</p></details></div>
 <h2>Related models</h2>
 <div class="grid"><a href="/model/sam3">SAM 3 API</a>
 <a href="/model/RMBG-2.0">RMBG-2.0 API</a>
@@ -122,7 +122,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
   <a href="/voice-cloning-api">Voice clone API</a>
   <a href="/ai-avatar-video-generator">Avatar video API</a>
   <a href="/brand/keyo-docs.html">Docs</a>
-  <a href="/faq">FAQ</a>
+  <a href="/brand/faq.html">FAQ</a>
   <a href="/brand/privacy.html">Privacy</a>
   <a href="/brand/terms.html">Terms</a>
   <a href="/sign-in">Sign in</a>

@@ -65,7 +65,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
     <a href="/pricing">Pricing</a>
     <a href="/pricing-list">Pricing list</a>
     <a href="/brand/keyo-docs.html">Docs</a>
-    <a href="/faq">FAQ</a>
+    <a href="/brand/faq.html">FAQ</a>
     <a href="/console">Console</a>
     <a href="/sign-in">Sign in</a>
     <a class="k-nav-cta" href="/sign-up">Get started</a>
@@ -90,19 +90,19 @@ ul{margin:0 0 14px;padding-left:1.2em}
   <td><code>Qwen3-TTS</code></td>
   <td>Async TTS with rapid voice cloning for brand / locale voices</td>
   <td class="ok">~$0.548 / 10K characters</td>
-  <td>/pricing/Qwen3-TTS · guide /model/Qwen3-TTS</td>
+  <td><a href="/pricing/Qwen3-TTS">/pricing/Qwen3-TTS</a> · guide <a href="/model/Qwen3-TTS">/model/Qwen3-TTS</a></td>
 </tr>
 <tr>
   <td><code>CosyVoice3</code></td>
   <td>Async multilingual zero-shot speech; strong for longer narration</td>
   <td class="ok">~$1.37 / 10K characters</td>
-  <td>/pricing/CosyVoice3 · guide /model/CosyVoice3</td>
+  <td><a href="/pricing/CosyVoice3">/pricing/CosyVoice3</a> · guide <a href="/model/CosyVoice3">/model/CosyVoice3</a></td>
 </tr>
 <tr>
   <td><code>IndexTTS-2</code></td>
   <td>Sync TTS when you need audio in one round trip (clone where schema allows)</td>
   <td class="ok">~$1.37 / 10K characters</td>
-  <td>/pricing/IndexTTS-2 · guide /model/IndexTTS-2</td>
+  <td><a href="/pricing/IndexTTS-2">/pricing/IndexTTS-2</a> · guide <a href="/model/IndexTTS-2">/model/IndexTTS-2</a></td>
 </tr>
 </tbody>
 </table>
@@ -110,8 +110,8 @@ ul{margin:0 0 14px;padding-left:1.2em}
 <p>Clone samples only with rights clearance. Rate-limit tenant clones, reject celebrity likeness without licenses, and keep a default voice fallback. Keyo provides the inference API — your product owns consent UX and policy.</p>
 <h2>Rates and endpoints</h2>
 <p>Use it for brand-consistent voices across IVR, support bots, and avatar video. Keyo collocates clone-friendly TTS with Whisper STT and talking-avatar models so the full loop shares one balance.</p>
-<p>Indicative rates above are catalog snapshots — confirm /pricing/Qwen3-TTS and /pricing/CosyVoice3. There is no separate upload playground: after /sign-up, try from the interactive pricing page for each model id.</p>
-<p>How to call: async create via POST /v1/async/audio/speech with model=Qwen3-TTS or CosyVoice3, then poll /v1/task/{id}. Broader TTS map: /tts-api. Avatar handoff: /ai-avatar-video-generator.</p>
+<p>Indicative rates above are catalog snapshots — confirm <a href="/pricing/Qwen3-TTS">/pricing/Qwen3-TTS</a> and <a href="/pricing/CosyVoice3">/pricing/CosyVoice3</a>. There is no separate upload playground: after <a href="/sign-up">/sign-up</a>, try from the interactive pricing page for each model id.</p>
+<p>How to call: async create via POST /v1/async/audio/speech with model=Qwen3-TTS or CosyVoice3, then poll /v1/task/{id}. Broader TTS map: <a href="/tts-api">/tts-api</a>. Avatar handoff: <a href="/ai-avatar-video-generator">/ai-avatar-video-generator</a>.</p>
 <p>For sync-only demos without a clone workflow, IndexTTS-2 on /v1/audio/speech is often enough.</p>
 <pre>curl https://www.keyoapi.xyz/v1/async/audio/speech \
   -H &quot;Authorization: Bearer $KEYO_API_KEY&quot; \
@@ -121,7 +121,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
 <h2>FAQ</h2>
 <div class="faq"><details><summary>Do you store my clone samples?</summary><p>Follow Keyo docs and your own retention policy. Treat clone audio as sensitive PII; minimize retention in your app layer.</p></details>
 <details><summary>Voice cloning vs plain TTS?</summary><p>Plain TTS uses stock voices; cloning targets a specific speaker sample. Prefer Qwen3-TTS or CosyVoice3 for clone workflows; see each model guide for schema details.</p></details>
-<details><summary>How do I try it?</summary><p>Create a key at /sign-up, then open /pricing/Qwen3-TTS or /pricing/CosyVoice3. No second playground.</p></details></div>
+<details><summary>How do I try it?</summary><p>Create a key at <a href="/sign-up">/sign-up</a>, then open <a href="/pricing/Qwen3-TTS">/pricing/Qwen3-TTS</a> or <a href="/pricing/CosyVoice3">/pricing/CosyVoice3</a>. No second playground.</p></details></div>
 <p class="meta">Also see <a href="/compare">/compare</a>, <a href="/free-models">/free-models</a>, and model guides under <code>/model/</code>.</p>
 
 </main>
@@ -141,7 +141,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
   <a href="/voice-cloning-api">Voice clone API</a>
   <a href="/ai-avatar-video-generator">Avatar video API</a>
   <a href="/brand/keyo-docs.html">Docs</a>
-  <a href="/faq">FAQ</a>
+  <a href="/brand/faq.html">FAQ</a>
   <a href="/brand/privacy.html">Privacy</a>
   <a href="/brand/terms.html">Terms</a>
   <a href="/sign-in">Sign in</a>

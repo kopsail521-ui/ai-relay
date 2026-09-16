@@ -65,7 +65,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
     <a href="/pricing">Pricing</a>
     <a href="/pricing-list">Pricing list</a>
     <a href="/brand/keyo-docs.html">Docs</a>
-    <a href="/faq">FAQ</a>
+    <a href="/brand/faq.html">FAQ</a>
     <a href="/console">Console</a>
     <a href="/sign-in">Sign in</a>
     <a class="k-nav-cta" href="/sign-up">Get started</a>
@@ -82,7 +82,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
   <a class="btn btn-secondary" href="/sign-up">Create account</a>
 </div>
 <h2>Overview</h2>
-<p>CosyVoice3 is KeyoAPI’s async CosyVoice 3 TTS: multilingual zero-shot speech without cloning a repo or renting a GPU. Call it with the same OpenAI-style key you use for Whisper and chat models. Async generation fits podcasts, course narration, IVR, and avatar pipelines that already wait on renderers. Prefer IndexTTS-2 when you need audio back inside a single HTTP round trip. About $1.37 per 10,000 characters. Map CMS script length to spend; confirm live rates on /pricing/CosyVoice3. Product voiceovers, localized support replies, game NPCs, and digital humans (pair with Duix-Avatar or InfiniteTalk). Customer bots that answer in the user’s language. POST /v1/async/audio/speech with model=CosyVoice3, then poll /v1/task/{id}. Docs: /brand/keyo-docs.html. If you want hosted inference instead of a research install, KeyoAPI is that path. Create speech jobs, poll until ready, then CDN-cache the audio URL. Offer clone samples only after consent. Fallback to a default voice when clone confidence is low. Measure time-to-first-byte of finished audio, not just API accept latency. Normalize text before synthesis. Store voice ids per locale. Fail closed on celebrity likeness without rights. Try it from /pricing/CosyVoice3. There is no separate upload playground.</p>
+<p>CosyVoice3 is KeyoAPI’s async CosyVoice 3 TTS: multilingual zero-shot speech without cloning a repo or renting a GPU. Call it with the same OpenAI-style key you use for Whisper and chat models. Async generation fits podcasts, course narration, IVR, and avatar pipelines that already wait on renderers. Prefer IndexTTS-2 when you need audio back inside a single HTTP round trip. About $1.37 per 10,000 characters. Map CMS script length to spend; confirm live rates on <a href="/pricing/CosyVoice3">/pricing/CosyVoice3</a>. Product voiceovers, localized support replies, game NPCs, and digital humans (pair with Duix-Avatar or InfiniteTalk). Customer bots that answer in the user’s language. POST /v1/async/audio/speech with model=CosyVoice3, then poll /v1/task/{id}. Docs: /brand/keyo-docs.html. If you want hosted inference instead of a research install, KeyoAPI is that path. Create speech jobs, poll until ready, then CDN-cache the audio URL. Offer clone samples only after consent. Fallback to a default voice when clone confidence is low. Measure time-to-first-byte of finished audio, not just API accept latency. Normalize text before synthesis. Store voice ids per locale. Fail closed on celebrity likeness without rights. Try it from <a href="/pricing/CosyVoice3">/pricing/CosyVoice3</a>. There is no separate upload playground.</p>
 
 <h2>Quick start</h2>
 <div class="card">
@@ -99,8 +99,8 @@ ul{margin:0 0 14px;padding-left:1.2em}
 <h2>FAQ</h2>
 <div class="faq"><details><summary>Is CosyVoice3 synchronous?</summary><p>No. On KeyoAPI it uses POST /v1/async/audio/speech — create a task, then poll GET /v1/task/{id}. For a sync round trip, use IndexTTS-2 on /v1/audio/speech.</p></details>
 <details><summary>What is CosyVoice3 good for?</summary><p>Multilingual zero-shot TTS with streaming-friendly async jobs, dialect and emotion/speed controls where the API schema exposes them.</p></details>
-<details><summary>How do I try it?</summary><p>Open /pricing/CosyVoice3 after /sign-up. No separate upload playground — try from interactive pricing.</p></details>
-<details><summary>Price?</summary><p>About $1.37 per 10,000 characters — confirm on /pricing/CosyVoice3.</p></details></div>
+<details><summary>How do I try it?</summary><p>Open <a href="/pricing/CosyVoice3">/pricing/CosyVoice3</a> after <a href="/sign-up">/sign-up</a>. No separate upload playground — try from interactive pricing.</p></details>
+<details><summary>Price?</summary><p>About $1.37 per 10,000 characters — confirm on <a href="/pricing/CosyVoice3">/pricing/CosyVoice3</a>.</p></details></div>
 <h2>Related models</h2>
 <div class="grid"><a href="/model/IndexTTS-2">IndexTTS-2 API</a>
 <a href="/model/Qwen3-TTS">Qwen3-TTS API</a>
@@ -125,7 +125,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
   <a href="/voice-cloning-api">Voice clone API</a>
   <a href="/ai-avatar-video-generator">Avatar video API</a>
   <a href="/brand/keyo-docs.html">Docs</a>
-  <a href="/faq">FAQ</a>
+  <a href="/brand/faq.html">FAQ</a>
   <a href="/brand/privacy.html">Privacy</a>
   <a href="/brand/terms.html">Terms</a>
   <a href="/sign-in">Sign in</a>

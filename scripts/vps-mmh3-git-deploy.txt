@@ -1,0 +1,70 @@
+# MiniMax-H3：Git 发版后 VPS 执行（整段粘贴）
+set -e
+cd /opt/ai-relay
+sudo git pull
+
+# 把 inventory-C 密钥写入视频容器环境（从根 .env 拷，不打印）
+sudo touch /opt/ai-relay/.env.apimart
+if ! sudo grep -q '^GRSAI_API_KEY=.' /opt/ai-relay/.env.apimart 2>/dev/null; then
+  sudo grep -E '^GRSAI_(API_KEY|BASE_URL)=' /opt/ai-relay/.env 2>/dev/null | sudo tee -a /opt/ai-relay/.env.apimart >/dev/null || true
+fi
+if ! sudo grep -q '^GRSAI_BASE_URL=' /opt/ai-relay/.env.apimart 2>/dev/null; then
+  echo 'GRSAI_BASE_URL=https://grsaiapi.com' | sudo tee -a /opt/ai-relay/.env.apimart >/dev/null
+fi
+echo "inventory_c_key=$(sudo grep -c '^GRSAI_API_KEY=.' /opt/ai-relay/.env.apimart || true)"
+
+# 重建 3011（镜像 COPY 源码，必须 build）
+sudo docker build -t keyo-apimart-passthrough ./services/apimart-passthrough
+sudo docker rm -f ai-relay-apimart-passthrough 2>/dev/null || true
+sudo docker run -d --name ai-relay-apimart-passthrough --restart always --network host \
+  --env-file /opt/ai-relay/.env.apimart \
+  -v /opt/ai-relay/data:/data:rw \
+  -e NEW_API_DB=/data/new-api/one-api.db \
+  -e NEW_API_BASE=http://127.0.0.1:3000 \
+  -e CATALOG=/app/catalog.json \
+  -e LISTEN_HOST=127.0.0.1 \
+  -e PORT=3011 \
+  keyo-apimart-passthrough
+sleep 2
+curl -sS http://127.0.0.1:3011/healthz; echo
+
+# 更新 ModelPrice / 广场
+sudo python3 /opt/ai-relay/scripts/vps-add-apimart-videos.py /opt/ai-relay/data/new-api/one-api.db
+
+# 同步广场文案到 moderation（若容器在跑）
+if sudo docker ps --format '{{.Names}}' | grep -q '^ai-relay-creem-moderation$'; then
+  sudo docker cp /opt/ai-relay/services/creem-moderation-proxy/marketplace-model-copy.json \
+    ai-relay-creem-moderation:/app/marketplace-model-copy.json 2>/dev/null || true
+  sudo docker restart ai-relay-creem-moderation >/dev/null || true
+fi
+sudo docker restart ai-relay-new-api >/dev/null || true
+sleep 3
+
+KEY=$(python3 - <<'PY'
+import sqlite3
+k=sqlite3.connect("/opt/ai-relay/data/new-api/one-api.db").execute(
+  "SELECT key FROM tokens WHERE id=2 AND status=1"
+).fetchone()[0]
+print(k if str(k).startswith("sk-") else "sk-"+k)
+PY
+)
+
+echo "=== smoke MiniMax-H3 ==="
+curl -sS -o /tmp/mmh3.json -w "mmh3=%{http_code}\n" -m 90 \
+  -X POST https://www.keyoapi.xyz/v1/videos/generations \
+  -H "Authorization: Bearer $KEY" -H "Content-Type: application/json" \
+  -d '{"model":"MiniMax-H3","prompt":"a red balloon floating in blue sky, cinematic","duration":5,"resolution":"768p","aspect_ratio":"16:9"}'
+python3 - <<'PY'
+import re
+t=open("/tmp/mmh3.json","r",encoding="utf-8",errors="ignore").read()
+t=re.sub(r"(?i)grsai|dakka|apimart|openlux|gitee|moark","provider",t)
+print(t[:400])
+PY
+python3 - <<'PY'
+import json,sqlite3
+con=sqlite3.connect("/opt/ai-relay/data/new-api/one-api.db")
+mp=json.loads(con.execute("SELECT value FROM options WHERE key='ModelPrice'").fetchone()[0] or "{}")
+print("MiniMax-H3 ModelPrice", mp.get("MiniMax-H3"))
+con.close()
+PY
+echo DONE_SWITCH_MINIMAX_H3

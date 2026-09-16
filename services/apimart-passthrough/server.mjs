@@ -58,6 +58,10 @@ const OPENLUX_KEY = process.env.OPENLUX_API_KEY || "";
 const OPENLUX_ORIGIN = (
   process.env.OPENLUX_BASE_URL || "https://api.openlux.ai"
 ).replace(/\/v1\/?$/, "");
+const GRSAI_KEY = process.env.GRSAI_API_KEY || "";
+const GRSAI_ORIGIN = (
+  process.env.GRSAI_BASE_URL || "https://grsaiapi.com"
+).replace(/\/$/, "");
 const NEW_API_BASE = (process.env.NEW_API_BASE || "http://127.0.0.1:3000").replace(
   /\/$/,
   ""
@@ -540,6 +544,143 @@ function isOpenluxMeta(meta) {
   return String(meta?.upstream || "").toLowerCase() === "openlux";
 }
 
+function isGrsaiMeta(meta) {
+  return String(meta?.upstream || "").toLowerCase() === "grsai";
+}
+
+function mapAspectToGrsai(v) {
+  const s = String(v || "").trim().toLowerCase();
+  if (!s) return "landscape";
+  if (s === "16:9" || s === "landscape" || s === "horizontal") return "landscape";
+  if (s === "9:16" || s === "portrait" || s === "vertical") return "portrait";
+  if (s === "1:1" || s === "square") return "square";
+  return "landscape";
+}
+
+function buildGrsaiVideoBody(meta, body) {
+  const est = meta.estimate || {};
+  const duration = Number(body.duration ?? body.seconds ?? est.default_seconds ?? 5);
+  let resolution = String(
+    body.resolution || body.size || est.default_resolution || "768p"
+  ).toLowerCase();
+  if (resolution === "2k") resolution = "1080p";
+  const out = {
+    model: String(meta.upstream_model || "minimax-h3"),
+    prompt: String(body.prompt || body.text || ""),
+    duration: Number.isFinite(duration) && duration > 0 ? duration : 5,
+    resolution,
+    aspectRatio: mapAspectToGrsai(
+      body.aspectRatio || body.aspect_ratio || body.ratio
+    ),
+    webHook: "-1",
+    shutProgress: true,
+  };
+  // optional reference images
+  const urls = [];
+  if (Array.isArray(body.image_urls)) {
+    for (const u of body.image_urls) {
+      if (typeof u === "string" && u) urls.push(u);
+      else if (u && typeof u === "object" && u.url) urls.push(String(u.url));
+    }
+  }
+  if (typeof body.image_url === "string" && body.image_url) urls.push(body.image_url);
+  if (urls.length) out.urls = urls.slice(0, 9);
+  return out;
+}
+
+function grsaiCostUsd(j) {
+  if (!j || typeof j !== "object") return null;
+  if (j.price_cny != null && Number.isFinite(Number(j.price_cny))) {
+    return Number(j.price_cny) / FX;
+  }
+  if (j.data?.price_cny != null && Number.isFinite(Number(j.data.price_cny))) {
+    return Number(j.data.price_cny) / FX;
+  }
+  if (j.credits != null && Number.isFinite(Number(j.credits))) {
+    // 1 CNY ≈ 20000 credits on this inventory
+    return Number(j.credits) / 20000 / FX;
+  }
+  const raw = j.cost ?? j.data?.cost;
+  if (raw != null && Number.isFinite(Number(raw))) {
+    // This inventory reports cost in CNY
+    return Number(raw) / FX;
+  }
+  return null;
+}
+
+function normalizeGrsaiSubmitJson(raw) {
+  let j = {};
+  try {
+    j = JSON.parse(raw || "{}");
+  } catch {
+    return raw;
+  }
+  const id =
+    j.id ||
+    j.task_id ||
+    j.data?.id ||
+    j.data?.task_id ||
+    (Array.isArray(j.data) && j.data[0]?.task_id) ||
+    "";
+  const errMsg =
+    j.error?.message ||
+    j.message ||
+    j.msg ||
+    (typeof j.error === "string" ? j.error : "");
+  if (!id) {
+    return JSON.stringify({
+      error: {
+        message: errMsg || "video submit failed",
+        type: "server_error",
+      },
+    });
+  }
+  return JSON.stringify({
+    code: 200,
+    data: [{ task_id: String(id), status: "submitted" }],
+  });
+}
+
+function normalizeGrsaiPollJson(raw, taskId) {
+  let j = {};
+  try {
+    j = JSON.parse(raw || "{}");
+  } catch {
+    return raw;
+  }
+  const st = String(j.status || j.data?.status || "").toLowerCase();
+  const mapped =
+    st === "succeeded" || st === "success" || st === "completed" || st === "done"
+      ? "completed"
+      : st === "failed" || st === "error" || st === "cancelled"
+        ? "failed"
+        : st === "pending" || st === "queued" || st === "running" || st === "processing"
+          ? "processing"
+          : st || "processing";
+  const url =
+    j.url ||
+    j.video_url ||
+    j.data?.url ||
+    j.data?.video_url ||
+    (Array.isArray(j.results) && j.results[0]?.url) ||
+    (Array.isArray(j.data?.results) && j.data.results[0]?.url) ||
+    "";
+  const out = {
+    code: 200,
+    data: {
+      id: taskId,
+      task_id: taskId,
+      status: mapped,
+      progress:
+        j.progress ?? j.data?.progress ?? (mapped === "completed" ? 100 : 0),
+      result: url
+        ? { videos: [{ url: [url] }] }
+        : j.data?.result || j.result || null,
+    },
+  };
+  return JSON.stringify(out);
+}
+
 function getPending(taskId) {
   if (!taskId || !fs.existsSync(PENDING_PATH)) return null;
   const db = openDb(PENDING_PATH, true);
@@ -565,12 +706,17 @@ function scrubClientErrorBuf(buf, ct) {
     .replace(/https?:\/\/(?:[\w.-]+\.)?openlux\.ai[^\s"'\\]*/gi, "[redacted]")
     .replace(/https?:\/\/(?:[\w.-]+\.)?openlux\.apifox\.cn[^\s"'\\]*/gi, "[redacted]")
     .replace(/https?:\/\/ai\.gitee\.com[^\s"'\\]*/gi, "[redacted]")
+    .replace(/https?:\/\/(?:[\w.-]+\.)?grsai(?:api)?\.(?:com|ai|dakka\.com\.cn)[^\s"'\\]*/gi, "[redacted]")
+    .replace(/https?:\/\/(?:[\w.-]+\.)?dakka\.com\.cn[^\s"'\\]*/gi, "[redacted]")
     .replace(/\bAPIMart\b/gi, "provider")
     .replace(/\bOpenLux\b/gi, "provider")
     .replace(/模力方舟/g, "provider")
     .replace(/\bMoArk\b/gi, "provider")
     .replace(/\bGitee(?:\s*AI)?\b/gi, "provider")
     .replace(/\bGrsai\b/gi, "provider")
+    .replace(/\bgrsaiapi\b/gi, "provider")
+    .replace(/\bgrsai\b/gi, "provider")
+    .replace(/\bdakka\b/gi, "provider")
     .replace(/\bSenseNova\b/gi, "provider")
     .replace(/\bSorux\b/gi, "provider");
   if (t === before) return buf;
@@ -639,8 +785,9 @@ const server = http.createServer(async (req, res) => {
       models: catalog.models.length,
       db: fs.existsSync(DB_PATH),
       db_path: DB_PATH,
-      key: !!APIMART_KEY,
-      openlux: !!OPENLUX_KEY,
+      inventory_a: !!APIMART_KEY,
+      inventory_b: !!OPENLUX_KEY,
+      inventory_c: !!GRSAI_KEY,
       new_api: NEW_API_BASE,
     });
   }
@@ -677,6 +824,64 @@ const server = http.createServer(async (req, res) => {
       const tid = pollId(urlPath);
       const pending = getPending(tid);
       const pendingMeta = pending ? modelMap[pending.model] : null;
+
+      // Inventory-C video poll → POST /v1/api/result {id}
+      if (isGrsaiMeta(pendingMeta)) {
+        if (!GRSAI_KEY) {
+          return json(res, 500, {
+            error: { message: "Service temporarily unavailable", type: "server_error" },
+          });
+        }
+        const pollBody = Buffer.from(JSON.stringify({ id: tid }), "utf8");
+        const up = await proxyOrigin(
+          GRSAI_ORIGIN,
+          GRSAI_KEY,
+          {
+            ...req,
+            method: "POST",
+            headers: { ...req.headers, "content-type": "application/json" },
+          },
+          pollBody,
+          "/v1/api/result"
+        );
+        const text = up.buf.toString("utf8");
+        try {
+          const j = JSON.parse(text);
+          const st = String(j.status || j.data?.status || "").toLowerCase();
+          const costUsd = grsaiCostUsd(j);
+          const done = [
+            "completed",
+            "failed",
+            "cancelled",
+            "success",
+            "succeeded",
+            "done",
+          ].includes(st);
+          if (tid && done) {
+            settleTask(
+              tid,
+              costUsd,
+              st === "failed" || st === "cancelled" || st === "error"
+                ? st === "error"
+                  ? "failed"
+                  : st
+                : "completed"
+            );
+          }
+        } catch {}
+        const normalized = Buffer.from(normalizeGrsaiPollJson(text, tid), "utf8");
+        const out = clientUp({
+          status: up.status,
+          buf: normalized,
+          ct: "application/json",
+        });
+        res.writeHead(out.status >= 200 && out.status < 600 ? out.status : 200, {
+          "Content-Type": "application/json; charset=utf-8",
+          "Access-Control-Allow-Origin": "*",
+        });
+        return res.end(out.buf);
+      }
+
       let useOpenlux = isOpenluxMeta(pendingMeta);
 
       const tryPoll = async (openlux) => {
@@ -747,13 +952,33 @@ const server = http.createServer(async (req, res) => {
       });
     }
 
+    const useGrsai = isGrsaiMeta(meta);
     const useOpenlux = isOpenluxMeta(meta);
-    const upKey = useOpenlux ? OPENLUX_KEY : APIMART_KEY;
-    const upOrigin = useOpenlux ? OPENLUX_ORIGIN : APIMART_ORIGIN;
+    const upKey = useGrsai ? GRSAI_KEY : useOpenlux ? OPENLUX_KEY : APIMART_KEY;
+    const upOrigin = useGrsai
+      ? GRSAI_ORIGIN
+      : useOpenlux
+        ? OPENLUX_ORIGIN
+        : APIMART_ORIGIN;
     if (!upKey) {
       return json(res, 500, {
         error: { message: "Service temporarily unavailable", type: "server_error" },
       });
+    }
+
+    // Inventory-C: rewrite client body → generate shape (never forward public model id)
+    if (useGrsai) {
+      const gBody = buildGrsaiVideoBody(meta, body);
+      if (!gBody.prompt) {
+        return json(res, 400, {
+          error: {
+            message: "prompt is required",
+            type: "invalid_request_error",
+            param: "prompt",
+          },
+        });
+      }
+      bodyBuf = Buffer.from(JSON.stringify(gBody), "utf8");
     }
 
     // OpenLux grok-imagine: image-to-video only; need image:{url} + aspect/resolution/duration.
@@ -826,10 +1051,36 @@ const server = http.createServer(async (req, res) => {
     const submitPath =
       (meta.upstream_submit_path
         ? String(meta.upstream_submit_path)
-        : "/v1/videos/generations") + qsOf(req.url);
-    const up = await proxyOrigin(upOrigin, upKey, req, bodyBuf, submitPath);
-    const text = up.buf.toString("utf8");
-    if (up.status >= 200 && up.status < 300) {
+        : useGrsai
+          ? "/v1/api/generate"
+          : "/v1/videos/generations") + (useGrsai ? "" : qsOf(req.url));
+    const submitReq = useGrsai
+      ? {
+          ...req,
+          method: "POST",
+          headers: { ...req.headers, "content-type": "application/json" },
+        }
+      : req;
+    const up = await proxyOrigin(upOrigin, upKey, submitReq, bodyBuf, submitPath);
+    let text = up.buf.toString("utf8");
+    let outBuf = up.buf;
+    let outCt = up.ct;
+    let outStatus = up.status;
+
+    if (useGrsai) {
+      const normalized = normalizeGrsaiSubmitJson(text);
+      outBuf = Buffer.from(normalized, "utf8");
+      outCt = "application/json";
+      // Treat successful id extraction as 200 even if vendor status is quirky
+      if (extractTaskId(normalized) && outStatus >= 200 && outStatus < 500) {
+        outStatus = 200;
+      } else if (!extractTaskId(normalized) && outStatus >= 200 && outStatus < 300) {
+        outStatus = 502;
+      }
+      text = normalized;
+    }
+
+    if (outStatus >= 200 && outStatus < 300) {
       const tid = extractTaskId(text);
       if (tid && !token.skipBill) {
         savePending(tid, token.userId, token.tokenId, modelId, preSell);
@@ -845,7 +1096,7 @@ const server = http.createServer(async (req, res) => {
       );
     }
 
-    const out = clientUp(up);
+    const out = clientUp({ status: outStatus, buf: outBuf, ct: outCt });
     res.writeHead(out.status, {
       "Content-Type": out.ct,
       "Access-Control-Allow-Origin": "*",
@@ -863,6 +1114,7 @@ server.listen(PORT, HOST, () => {
   console.log(`  models: ${catalog.models.map((m) => m.id).join(", ")}`);
   console.log(`  inventory_a: key=${!!APIMART_KEY}`);
   console.log(`  inventory_b: key=${!!OPENLUX_KEY}`);
+  console.log(`  inventory_c: key=${!!GRSAI_KEY}`);
   console.log(`  new-api: ${NEW_API_BASE}`);
   console.log(`  db: ${DB_PATH}`);
 });

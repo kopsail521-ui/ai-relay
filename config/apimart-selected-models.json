@@ -159,17 +159,17 @@
       "tag": "视频按秒",
       "billing": "per_second",
       "upstream_usd_per_second": {
-        "768P": 0.05712,
-        "2K": 0.09144
+        "480p": 0.006849,
+        "768p": 0.009589,
+        "1080p": 0.013699
       },
       "sell_usd_per_second": {
-        "768P": 0.068544,
-        "2K": 0.109728
+        "480p": 0.020548,
+        "768p": 0.028767,
+        "1080p": 0.041096
       },
-      "upstream_image_usd": 0.02288,
-      "sell_image_usd": 0.027456,
-      "model_price_usd": 0.068544,
-      "desc_zh": "MiniMax-H3 视频模型，支持 768P/2K，可附加参考图。"
+      "model_price_usd": 0.028767,
+      "desc_zh": "MiniMax-H3 视频生成，支持 480p / 768p / 1080p，可附参考图。"
     },
     {
       "id": "wan3.0-video",

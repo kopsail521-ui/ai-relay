@@ -2909,15 +2909,15 @@
     }
   },
   "MiniMax-H3": {
-    "description": "MiniMax-H3 视频模型，支持 768P/2K，可附加参考图。",
+    "description": "MiniMax-H3 视频生成，支持 480p / 768p / 1080p，可附参考图。",
     "descriptions": {
-      "zhCN": "MiniMax-H3 视频模型，支持 768P/2K，可附加参考图。",
-      "zhTW": "MiniMax-H3 影片模型，支援 768P/2K，可附加參考圖。",
-      "en": "MiniMax-H3 video at 768P/2K with optional reference images.",
-      "fr": "MiniMax-H3 en 768P/2K avec images de référence optionnelles.",
-      "ru": "MiniMax-H3 768P/2K с опциональными референс-изображениями.",
-      "ja": "MiniMax-H3。768P/2K。参照画像対応。",
-      "vi": "MiniMax-H3 768P/2K, hỗ trợ ảnh tham chiếu."
+      "zhCN": "MiniMax-H3 视频生成，支持 480p / 768p / 1080p，可附参考图。",
+      "zhTW": "MiniMax-H3 影片生成，支援 480p / 768p / 1080p，可附參考圖。",
+      "en": "MiniMax-H3 video at 480p / 768p / 1080p with optional reference images.",
+      "fr": "MiniMax-H3 en 480p / 768p / 1080p avec images de référence optionnelles.",
+      "ru": "MiniMax-H3 480p / 768p / 1080p с опциональными референс-изображениями.",
+      "ja": "MiniMax-H3。480p / 768p / 1080p。参照画像対応。",
+      "vi": "MiniMax-H3 480p / 768p / 1080p, hỗ trợ ảnh tham chiếu."
     },
     "unit": "second",
     "badge": {
@@ -2953,8 +2953,8 @@
     "suffix_en": "/ second",
     "price_key_zh": "每秒",
     "price_key_en": "Per second",
-    "description_zh": "MiniMax-H3 视频模型，支持 768P/2K，可附加参考图。",
-    "description_en": "MiniMax-H3 video at 768P/2K with optional reference images.",
+    "description_zh": "MiniMax-H3 视频生成，支持 480p / 768p / 1080p，可附参考图。",
+    "description_en": "MiniMax-H3 video at 480p / 768p / 1080p with optional reference images.",
     "price_table": {
       "columns": {
         "zhCN": [
@@ -2970,19 +2970,19 @@
       },
       "rows": [
         [
-          "768P",
+          "480p",
           "输出视频",
-          "$0.068544 / sec"
+          "$0.02055 / sec"
         ],
         [
-          "2K",
+          "768p",
           "输出视频",
-          "$0.109728 / sec"
+          "$0.02877 / sec"
         ],
         [
-          "参考图",
-          "超出 5 张后",
-          "$0.027456 / image"
+          "1080p",
+          "输出视频",
+          "$0.04110 / sec"
         ]
       ]
     }

@@ -65,7 +65,10 @@ export function useCopyToClipboard(options?: UseCopyToClipboardOptions) {
       if (success) {
         setCopiedText(text)
         if (notify) {
-          toast.success(resolvedSuccessMessage)
+          toast.success(resolvedSuccessMessage, {
+            id: 'copied-to-clipboard',
+            duration: 2000,
+          })
         }
 
         // Clear previous timeout
@@ -83,7 +86,7 @@ export function useCopyToClipboard(options?: UseCopyToClipboardOptions) {
         // eslint-disable-next-line no-console
         console.warn('All copy methods failed')
         if (notify) {
-          toast.error(resolvedErrorMessage)
+          toast.error(resolvedErrorMessage, { duration: 4000 })
         }
         setCopiedText(null)
         return false

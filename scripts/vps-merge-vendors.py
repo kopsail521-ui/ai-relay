@@ -7,6 +7,7 @@ DB = sys.argv[1] if len(sys.argv) > 1 else "/opt/ai-relay/data/new-api/one-api.d
 # keep → absorb
 MERGES = [
     ("阿里巴巴", ["Alibaba", "Qwen", "通义"]),
+    ("字节跳动", ["ByteDance", "Doubao", "Seedance", "豆包"]),
     ("其他", ["Other", "模力方舟"]),
 ]
 

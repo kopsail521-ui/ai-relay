@@ -591,6 +591,7 @@
         <a href="#video" data-i18n="tocVideo"></a>
         <a href="#video-gen" data-i18n="tocVideoGen"></a>
         <a href="#video-api" data-i18n="tocVideoApi"></a>
+        <a href="#pitfalls" data-i18n="tocPitfalls"></a>
         <a href="#speech" data-i18n="tocSpeech"></a>
         <a href="#more" data-i18n="tocMore"></a>
         <a href="#clients" data-i18n="tocClients"></a>
@@ -603,6 +604,7 @@
         <div class="eyebrow">Documentation</div>
         <h1 data-i18n="docTitle"></h1>
         <p data-i18n="heroSub"></p>
+        <p class="hint" style="margin-top:12px"><a href="/brand/keyo-api-ref.md" data-i18n="aiRefLink"></a></p>
       </header>
 
       <section id="access">
@@ -846,6 +848,11 @@
           <a href="#api-gemini-omni">gemini-omni</a>
           <a href="#api-grok-imagine">grok-imagine</a>
         </div>
+        <ul class="doc-rules" style="margin-top:16px">
+          <li data-i18n="pitPollVideo"></li>
+          <li data-i18n="pitMedia"></li>
+          <li data-i18n="pitMix"></li>
+        </ul>
 
         <div class="api-ref">
           <article class="model-api" id="api-minimax-h3">
@@ -922,6 +929,25 @@
               </table>
             </div>
             <div class="code-block" style="margin-top:12px">
+              <div class="code-bar"><span class="lang">JSON · 文生</span><button type="button" class="btn-copy" data-copy-target="ex-sd-t2v" data-i18n="copy"></button></div>
+              <pre id="ex-sd-t2v"><code>{
+  "model": "seedance-2.0",
+  "prompt": "A cat walking in the rain",
+  "resolution": "480p",
+  "duration": 5
+}</code></pre>
+            </div>
+            <div class="code-block">
+              <div class="code-bar"><span class="lang">JSON · 图生</span><button type="button" class="btn-copy" data-copy-target="ex-sd-i2v" data-i18n="copy"></button></div>
+              <pre id="ex-sd-i2v"><code>{
+  "model": "seedance-2.0",
+  "prompt": "Animate this scene",
+  "resolution": "480p",
+  "duration": 5,
+  "image_urls": ["https://example.com/still.jpg"]
+}</code></pre>
+            </div>
+            <div class="code-block">
               <div class="code-bar"><span class="lang">JSON · 首尾帧</span><button type="button" class="btn-copy" data-copy-target="ex-sd-fl" data-i18n="copy"></button></div>
               <pre id="ex-sd-fl"><code>{
   "model": "seedance-2.0",
@@ -973,6 +999,31 @@
   "duration": 5
 }</code></pre>
             </div>
+            <div class="code-block">
+              <div class="code-bar"><span class="lang">JSON · 首尾帧</span><button type="button" class="btn-copy" data-copy-target="ex-wan-fl" data-i18n="copy"></button></div>
+              <pre id="ex-wan-fl"><code>{
+  "model": "wan3.0-video",
+  "prompt": "Morph between the two frames",
+  "resolution": "720P",
+  "duration": 5,
+  "image_with_roles": [
+    {"url": "https://example.com/a.jpg", "role": "first_frame"},
+    {"url": "https://example.com/b.jpg", "role": "last_frame"}
+  ]
+}</code></pre>
+            </div>
+            <div class="code-block">
+              <div class="code-bar"><span class="lang">JSON · 参考生</span><button type="button" class="btn-copy" data-copy-target="ex-wan-ref" data-i18n="copy"></button></div>
+              <pre id="ex-wan-ref"><code>{
+  "model": "wan3.0-video",
+  "prompt": "Keep identity of the reference subject",
+  "resolution": "720P",
+  "duration": 5,
+  "generation_type": "reference",
+  "image_urls": ["https://example.com/subject.jpg"],
+  "video_urls": ["https://example.com/motion.mp4"]
+}</code></pre>
+            </div>
           </article>
 
           <article class="model-api" id="api-flux">
@@ -992,6 +1043,38 @@
                   <tr><td>draft / draft_from_task_id</td><td>bool / string</td><td>草稿与成片</td></tr>
                 </tbody>
               </table>
+            </div>
+            <div class="code-block" style="margin-top:12px">
+              <div class="code-bar"><span class="lang">JSON · 文生</span><button type="button" class="btn-copy" data-copy-target="ex-flux-t2v" data-i18n="copy"></button></div>
+              <pre id="ex-flux-t2v"><code>{
+  "model": "flux-3-video",
+  "prompt": "Slow push-in as a flower opens",
+  "duration": 5,
+  "resolution": "hd"
+}</code></pre>
+            </div>
+            <div class="code-block">
+              <div class="code-bar"><span class="lang">JSON · 关键帧</span><button type="button" class="btn-copy" data-copy-target="ex-flux-kf" data-i18n="copy"></button></div>
+              <pre id="ex-flux-kf"><code>{
+  "model": "flux-3-video",
+  "prompt": "Slow push-in as a flower opens",
+  "image_urls": [
+    "https://example.com/bud.jpg",
+    "https://example.com/bloom.jpg"
+  ],
+  "duration": 5,
+  "resolution": "hd"
+}</code></pre>
+            </div>
+            <div class="code-block">
+              <div class="code-bar"><span class="lang">JSON · 续写</span><button type="button" class="btn-copy" data-copy-target="ex-flux-v2v" data-i18n="copy"></button></div>
+              <pre id="ex-flux-v2v"><code>{
+  "model": "flux-3-video",
+  "prompt": "Continue the motion",
+  "video_url": "https://example.com/clip.mp4",
+  "duration": 5,
+  "resolution": "hd"
+}</code></pre>
             </div>
           </article>
 
@@ -1014,6 +1097,25 @@
               </table>
             </div>
             <p class="hint">本模型<strong>无 duration</strong> 字段。</p>
+            <div class="code-block" style="margin-top:12px">
+              <div class="code-bar"><span class="lang">JSON · 文生</span><button type="button" class="btn-copy" data-copy-target="ex-omni-t2v" data-i18n="copy"></button></div>
+              <pre id="ex-omni-t2v"><code>{
+  "model": "gemini-omni-1.1-flash",
+  "prompt": "A calm ocean at sunrise",
+  "resolution": "720p",
+  "aspect_ratio": "16:9"
+}</code></pre>
+            </div>
+            <div class="code-block">
+              <div class="code-bar"><span class="lang">JSON · 首尾帧</span><button type="button" class="btn-copy" data-copy-target="ex-omni-fl" data-i18n="copy"></button></div>
+              <pre id="ex-omni-fl"><code>{
+  "model": "gemini-omni-1.1-flash",
+  "prompt": "smooth transition, camera slowly pushes in",
+  "first_frame_image": "https://example.com/start.jpg",
+  "last_frame_image": "https://example.com/end.jpg",
+  "resolution": "720p"
+}</code></pre>
+            </div>
           </article>
 
           <article class="model-api" id="api-grok-imagine">
@@ -1048,14 +1150,35 @@
         </div>
       </section>
 
+      <section id="pitfalls">
+        <div class="sec-head">
+          <span class="num">04d</span>
+          <h2 data-i18n="pitfallsTitle"></h2>
+        </div>
+        <p class="sec-desc" data-i18n="pitfallsIntro"></p>
+        <ul class="doc-rules">
+          <li data-i18n="pit1"></li>
+          <li data-i18n="pit2"></li>
+          <li data-i18n="pit3"></li>
+          <li data-i18n="pit4"></li>
+          <li data-i18n="pit5"></li>
+          <li data-i18n="pit6"></li>
+        </ul>
+        <p class="hint"><a href="/brand/keyo-api-ref.md" data-i18n="aiRefLink"></a></p>
+      </section>
+
       <section id="speech">
         <div class="sec-head">
           <span class="num">05</span>
           <h2 data-i18n="speechTitle"></h2>
         </div>
         <p class="sec-desc" data-i18n="speechDesc"></p>
+        <ul class="doc-rules">
+          <li data-i18n="speechRuleSync"></li>
+          <li data-i18n="speechRuleAsync"></li>
+        </ul>
 
-        <h3 style="font-size:15px;margin:0 0 10px;letter-spacing:-0.01em;" data-i18n="asrTitle"></h3>
+        <h3 style="font-size:15px;margin:18px 0 10px;letter-spacing:-0.01em;" data-i18n="asrTitle"></h3>
         <div class="endpoint">
           <span class="method">POST</span>
           <span class="path">/v1/audio/transcriptions</span>
@@ -1170,18 +1293,49 @@
 <tr><td class="note-cell" data-i18n="capDetect"></td><td class="price">POST /v1/images/object-detection</td><td class="model"><button type="button" class="model-btn" data-copy="VajraV1">VajraV1</button> · <button type="button" class="model-btn" data-copy="sam3">sam3</button></td></tr>
 <tr><td class="note-cell" data-i18n="capSeg"></td><td class="price">POST /v1/images/segmentation</td><td class="model"><button type="button" class="model-btn" data-copy="VajraV1">VajraV1</button> · <button type="button" class="model-btn" data-copy="sam3">sam3</button></td></tr>
 <tr><td class="note-cell" data-i18n="capPose"></td><td class="price">POST /v1/images/pose-detection</td><td class="model"><button type="button" class="model-btn" data-copy="VajraV1">VajraV1</button></td></tr>
-<tr><td class="note-cell" data-i18n="capDuix"></td><td class="price">POST /v1/async/videos/audio-video-to-video → GET /v1/task/{id}</td><td class="model"><button type="button" class="model-btn" data-copy="Duix-Avatar">Duix-Avatar</button></td></tr>
 <tr><td class="note-cell" data-i18n="capInfinite"></td><td class="price">POST /v1/async/videos/image-to-video → GET /v1/task/{id}</td><td class="model"><button type="button" class="model-btn" data-copy="InfiniteTalk">InfiniteTalk</button></td></tr>
 <tr><td class="note-cell" data-i18n="capMod"></td><td class="price">POST /v1/moderations</td><td class="model"><button type="button" class="model-btn" data-copy="nonescape-v0">nonescape-v0</button> · <button type="button" class="model-btn" data-copy="keyo-text-moderation">keyo-text-moderation</button> · <button type="button" class="model-btn" data-copy="Security-semantic-filtering">Security-semantic-filtering</button> · <button type="button" class="model-btn" data-copy="nsfw-classifier">nsfw-classifier</button></td></tr>
             </tbody>
           </table>
         </div>
+        <ul class="doc-rules">
+          <li data-i18n="moreRulePoll"></li>
+          <li data-i18n="moreRuleMp"></li>
+        </ul>
         <div class="code-block">
           <div class="code-bar">
             <span class="lang">cURL · matting</span>
             <button type="button" class="btn-copy" data-copy-target="curl-matting" data-i18n="copy"></button>
           </div>
           <pre id="curl-matting"></pre>
+        </div>
+        <div class="code-block">
+          <div class="code-bar">
+            <span class="lang">cURL · upscale</span>
+            <button type="button" class="btn-copy" data-copy-target="curl-upscale" data-i18n="copy"></button>
+          </div>
+          <pre id="curl-upscale"></pre>
+        </div>
+        <div class="code-block">
+          <div class="code-bar">
+            <span class="lang">cURL · InfiniteTalk</span>
+            <button type="button" class="btn-copy" data-copy-target="curl-infinite" data-i18n="copy"></button>
+          </div>
+          <pre id="curl-infinite"></pre>
+        </div>
+        <div class="code-block">
+          <div class="code-bar">
+            <span class="lang">cURL · MinerU</span>
+            <button type="button" class="btn-copy" data-copy-target="curl-mineru" data-i18n="copy"></button>
+          </div>
+          <pre id="curl-mineru"></pre>
+        </div>
+        <div class="code-block">
+          <div class="code-bar">
+            <span class="lang">cURL · Unlimited-OCR</span>
+            <button type="button" class="btn-copy" data-copy-target="curl-ocr" data-i18n="copy"></button>
+          </div>
+          <pre id="curl-ocr"></pre>
         </div>
         <p class="hint" data-i18n-html="moreHint"></p>
       </section>
@@ -1265,6 +1419,23 @@ const I18N = {
     "tocVideo": "Video A",
     "tocVideoGen": "Video B",
     "tocVideoApi": "Video params",
+    "tocPitfalls": "Avoid errors",
+    "aiRefLink": "AI-ready full reference (Markdown) → /brand/keyo-api-ref.md",
+    "pitfallsTitle": "Avoid these request errors",
+    "pitfallsIntro": "Most 4xx on video/speech come from wrong fields or wrong poll path.",
+    "pitPollVideo": "Video Path B poll: GET /v1/tasks/{id} (plural). TTS/docs/InfiniteTalk: GET /v1/task/{id} (singular).",
+    "pitMedia": "Video JSON media must be public https URLs — not local paths, not data:base64.",
+    "pitMix": "Do not reuse another model's field names (especially MiniMax vs Seedance/Wan).",
+    "pit1": "MiniMax-H3: use aspectRatio + images[]/audios[] — not image_with_roles / first_frame_image.",
+    "pit2": "grok-imagine-video-1.5-preview: image:{\"url\":\"https://...\"} is required (prompt-only fails).",
+    "pit3": "seedance: first/last frames and video_urls/audio_urls are mutually exclusive.",
+    "pit4": "gemini-omni: do not send duration.",
+    "pit5": "Poll path: /v1/tasks (video generations) vs /v1/task (TTS async / docs / InfiniteTalk).",
+    "pit6": "No local file paths or data:base64 in video JSON bodies.",
+    "speechRuleSync": "TTS sync → POST /v1/audio/speech (returns audio). Models: GLM-TTS, Step-Audio-TTS-3B, IndexTTS-2.",
+    "speechRuleAsync": "TTS async → POST /v1/async/audio/speech then GET /v1/task/{id} (singular). Models: Qwen3-TTS, CosyVoice3.",
+    "moreRulePoll": "Async vision/docs: poll GET /v1/task/{id} (singular) — not /v1/tasks.",
+    "moreRuleMp": "Matting/upscale/InfiniteTalk/MinerU: multipart form fields, not JSON (except Unlimited-OCR chat).",
     "videoTitle": "Video — /v1/videos",
     "videoTitleGen": "Video — /v1/videos/generations",
     "videoApiTitle": "Video model parameters",
@@ -1412,6 +1583,23 @@ const I18N = {
     "tocVideo": "视频 A",
     "tocVideoGen": "视频 B",
     "tocVideoApi": "视频参数",
+    "tocPitfalls": "易错点",
+    "aiRefLink": "给 AI 用的完整参数手册（Markdown）→ /brand/keyo-api-ref.md",
+    "pitfallsTitle": "易错点（先看这里）",
+    "pitfallsIntro": "视频/语音 4xx 多数是字段抄错或轮询路径写错。",
+    "pitPollVideo": "视频 Path B 轮询：GET /v1/tasks/{id}（复数 tasks）。TTS/文档/InfiniteTalk：GET /v1/task/{id}（单数 task）。",
+    "pitMedia": "视频 JSON 媒体必须是公网 https，不要本机路径，不要 data:base64。",
+    "pitMix": "不要套用其它模型的字段名（尤其 MiniMax 与 Seedance/Wan）。",
+    "pit1": "MiniMax-H3：用 aspectRatio + images[]/audios[]，不要用 image_with_roles / first_frame_image。",
+    "pit2": "grok-imagine：必须 image:{\"url\":\"https://...\"}，只传 prompt 会失败。",
+    "pit3": "seedance：首尾帧与 video_urls/audio_urls 互斥。",
+    "pit4": "gemini-omni：不要传 duration。",
+    "pit5": "轮询：/v1/tasks（视频 generations）vs /v1/task（TTS 异步 / 文档 / InfiniteTalk）。",
+    "pit6": "视频 JSON 禁止本机路径与 data:base64。",
+    "speechRuleSync": "TTS 同步 → POST /v1/audio/speech（直接返回音频）。模型：GLM-TTS、Step-Audio-TTS-3B、IndexTTS-2。",
+    "speechRuleAsync": "TTS 异步 → POST /v1/async/audio/speech，再 GET /v1/task/{id}（单数）。模型：Qwen3-TTS、CosyVoice3。",
+    "moreRulePoll": "扩展异步接口轮询：GET /v1/task/{id}（单数），不是 /v1/tasks。",
+    "moreRuleMp": "抠图/超分/InfiniteTalk/MinerU：multipart 表单，不是 JSON（Unlimited-OCR 除外，走 chat）。",
     "videoTitle": "视频 — /v1/videos",
     "videoTitleGen": "视频 — /v1/videos/generations",
     "videoApiTitle": "视频模型参数（按模型）",
@@ -2293,6 +2481,37 @@ function renderSamples(dict) {
       '  -H <span class="tok-str">"Authorization: Bearer ' + escapeHtml(key) + '"</span> \\\n' +
       '  -F <span class="tok-str">model=RMBG-2.0</span> \\\n' +
       '  -F <span class="tok-str">image=@photo.png</span></code>';
+  }
+  const upscale = document.getElementById('curl-upscale');
+  if (upscale) {
+    upscale.innerHTML = '<code><span class="tok-cmd">curl</span> https://www.keyoapi.xyz/v1/images/upscaling \\\n' +
+      '  -H <span class="tok-str">"Authorization: Bearer ' + escapeHtml(key) + '"</span> \\\n' +
+      '  -F <span class="tok-str">model=Real-ESRGAN</span> \\\n' +
+      '  -F <span class="tok-str">image=@photo.png</span></code>';
+  }
+  const infinite = document.getElementById('curl-infinite');
+  if (infinite) {
+    infinite.innerHTML = '<code><span class="tok-cmd">curl</span> https://www.keyoapi.xyz/v1/async/videos/image-to-video \\\n' +
+      '  -H <span class="tok-str">"Authorization: Bearer ' + escapeHtml(key) + '"</span> \\\n' +
+      '  -F <span class="tok-str">model=InfiniteTalk</span> \\\n' +
+      '  -F <span class="tok-str">image=@face.png</span> \\\n' +
+      '  -F <span class="tok-str">audio=@speech.wav</span>\n\n' +
+      '<span class="tok-cmd">curl</span> https://www.keyoapi.xyz/v1/task/TASK_ID \\\n' +
+      '  -H <span class="tok-str">"Authorization: Bearer ' + escapeHtml(key) + '"</span></code>';
+  }
+  const mineru = document.getElementById('curl-mineru');
+  if (mineru) {
+    mineru.innerHTML = '<code><span class="tok-cmd">curl</span> https://www.keyoapi.xyz/v1/async/documents/parse \\\n' +
+      '  -H <span class="tok-str">"Authorization: Bearer ' + escapeHtml(key) + '"</span> \\\n' +
+      '  -F <span class="tok-str">model=MinerU2.5-Pro</span> \\\n' +
+      '  -F <span class="tok-str">file=@doc.pdf</span></code>';
+  }
+  const ocr = document.getElementById('curl-ocr');
+  if (ocr) {
+    ocr.innerHTML = '<code><span class="tok-cmd">curl</span> https://www.keyoapi.xyz/v1/chat/completions \\\n' +
+      '  -H <span class="tok-str">"Authorization: Bearer ' + escapeHtml(key) + '"</span> \\\n' +
+      '  -H <span class="tok-str">"Content-Type: application/json"</span> \\\n' +
+      '  -d <span class="tok-str">\'{\n    "model": "Unlimited-OCR",\n    "messages": [{"role":"user","content":[{"type":"text","text":"Extract text"},{"type":"image_url","image_url":{"url":"https://example.com/page.png"}}]}]\n  }\'</span></code>';
   }
   if (models) {
     models.textContent = 'curl https://www.keyoapi.xyz/v1/models \\\n  -H "Authorization: Bearer ' + key + '"';

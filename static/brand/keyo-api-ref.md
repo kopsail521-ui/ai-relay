@@ -506,4 +506,4 @@ curl https://www.keyoapi.xyz/v1/models \
 
 ---
 
-价格与余额：控制台 https://www.keyoapi.xyz/pricing · HTML 说明 https://www.keyoapi.xyz/brand/keyo-docs.html
+价格与余额：控制台 https://www.keyoapi.xyz/pricing · 手册页（可复制）https://www.keyoapi.xyz/brand/keyo-api-ref.html · HTML 说明 https://www.keyoapi.xyz/brand/keyo-docs.html

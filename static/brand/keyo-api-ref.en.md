@@ -1,0 +1,509 @@
+# KeyoAPI — Full call handbook (copy this to your AI)
+
+> **For users:** Copy this **entire page** to your AI, then add:  
+> 1) Your API Key (`sk-...`)  
+> 2) The model name (from “All models” below)  
+> 3) What you want (e.g. MiniMax-H3, 5s landscape video, prompt is …)  
+> The AI will pick the right path and fields. You do not need to understand the tech.
+>
+> **For the AI:** You are a KeyoAPI calling assistant. Follow paths, fields, and poll rules exactly.  
+> - Base URL: `https://www.keyoapi.xyz/v1`  
+> - Header: `Authorization: Bearer <user key>`  
+> - Find the capability family for the model, then apply that template. Video models must use their own section — never mix fields.  
+> - For async jobs, poll until a terminal status, then return the result URL/text.  
+> - Video JSON media must be public `http(s)` URLs — no local paths, no `data:base64`.  
+> - Model list in this handbook is authoritative; you may also `GET /v1/models`.
+
+---
+
+## 0. Poll paths (do not mix)
+
+| Case | Poll |
+|------|------|
+| Video Path B (`/v1/videos/generations`) | `GET /v1/tasks/{id}` (**plural tasks**) |
+| Video Path A (`/v1/videos`) | `GET /v1/videos/{id}` |
+| TTS async / docs / InfiniteTalk | `GET /v1/task/{id}` (**singular task**) |
+
+---
+
+## 1. All models (by capability)
+
+### 1.1 Chat → `POST /v1/chat/completions`
+
+Free: `deepseek-v4-flash-free` · `deepseek-v4-pro-free` · `glm-5.2-free` · `kimi-k3-free`  
+
+Paid: `gpt-5.6-luna` · `gpt-5.6-terra` · `gpt-5.6-sol` · `claude-sonnet-5` · `claude-opus-5` · `claude-fable-5` · `claude-fable-5-1` · `gemini-3.7-flash` · `gemini-3.8-flash` · `deepseek-v4.1-flash` · `deepseek-v4-flash` · `deepseek-v4-pro-0813` · `kimi-k3` · `grok-4.6` · `MiniMax-M3` · `glm-5.3` · `gemma-4-26B-A4B-it` · `qwen3.8-max-0902`
+
+### 1.2 Images → `POST /v1/images/generations`
+
+`gpt-image-2.5` · `gpt-image-2.5-flare` · `gpt-image-2.5-sunburst` · `gpt-image-2` · `gpt-image-2-vip` · `nano-banana-2` · `nano-banana-pro`
+
+### 1.3 Video Path A → `POST /v1/videos` → poll `GET /v1/videos/{id}`
+
+`grok-1.5-video`
+
+### 1.4 Video Path B → `POST /v1/videos/generations` → poll `GET /v1/tasks/{id}`
+
+`wan3.0-video` · `seedance-2.0` · `seedance-2.5` · `flux-3-video` · `MiniMax-H3` · `gemini-omni-1.1-flash` · `gemini-omni-1.1-flash-ext` · `grok-imagine-video-1.5-preview`
+
+(Fields differ by model — see §5.)
+
+### 1.5 ASR → `POST /v1/audio/transcriptions` (multipart)
+
+`whisper-large-v3-turbo` · `whisper-large-v3` · `Fun-ASR-Nano-2512` · `GLM-ASR` · `MOSS-Audio-8B-Thinking`
+
+### 1.6 TTS sync → `POST /v1/audio/speech` (audio bytes)
+
+`GLM-TTS` · `Step-Audio-TTS-3B` · `IndexTTS-2`
+
+### 1.7 TTS async → `POST /v1/async/audio/speech` → poll `GET /v1/task/{id}`
+
+`Qwen3-TTS` · `CosyVoice3` (`IndexTTS-2` may also use async)
+
+### 1.8 OCR → `POST /v1/chat/completions` (multimodal messages)
+
+`Unlimited-OCR`
+
+### 1.9 Document parse → `POST /v1/async/documents/parse` → `GET /v1/task/{id}`
+
+`MinerU2.5-Pro`
+
+### 1.10 Vision tools (multipart)
+
+| Capability | Path | Models |
+|------------|------|--------|
+| Matting | `POST /v1/images/mattings` | `RMBG-2.0` |
+| Upscale | `POST /v1/images/upscaling` | `Real-ESRGAN` · `AnimeSharp` |
+| Unwarp | `POST /v1/images/unwarping` | `UVDoc` |
+| Detect | `POST /v1/images/object-detection` | `VajraV1` · `sam3` |
+| Seg | `POST /v1/images/segmentation` | `VajraV1` · `sam3` |
+| Pose | `POST /v1/images/pose-detection` | `VajraV1` |
+
+### 1.11 Talking-head → `POST /v1/async/videos/image-to-video` → `GET /v1/task/{id}`
+
+`InfiniteTalk` (multipart: `model` + `image` + `audio`)
+
+### 1.12 Moderations → `POST /v1/moderations`
+
+`nonescape-v0` · `keyo-text-moderation` · `Security-semantic-filtering` · `nsfw-classifier`
+
+---
+
+## 2. Chat (shared template)
+
+`POST https://www.keyoapi.xyz/v1/chat/completions`  
+`Content-Type: application/json`
+
+Replace `model` with the user’s chat model id.
+
+```json
+{
+  "model": "gpt-5.6-luna",
+  "messages": [{"role": "user", "content": "Hello"}]
+}
+```
+
+Streaming: add `"stream": true` if needed.
+
+---
+
+## 3. Image generation (shared template)
+
+`POST https://www.keyoapi.xyz/v1/images/generations`
+
+```json
+{
+  "model": "nano-banana-2",
+  "prompt": "an orange cat on a sunny windowsill",
+  "size": "1024x1024"
+}
+```
+
+Pick model from §1.2.
+
+---
+
+## 4. Video Path A
+
+`POST https://www.keyoapi.xyz/v1/videos` → `GET /v1/videos/{id}`
+
+Only: `grok-1.5-video`
+
+```json
+{
+  "model": "grok-1.5-video",
+  "prompt": "A red paper boat floating on calm water at sunset"
+}
+```
+
+---
+
+## 5. Video Path B (per model)
+
+Shared: `POST https://www.keyoapi.xyz/v1/videos/generations`  
+Shared poll: `GET https://www.keyoapi.xyz/v1/tasks/{task_id}`  
+Media: public https URLs only.
+
+### 5.1 MiniMax-H3
+
+Required: `model` `prompt` `aspectRatio` `resolution` `duration`  
+`aspectRatio`: `landscape` | `portrait` | `square` (aliases `16:9` / `9:16` / `1:1`)  
+`resolution`: `480p` | `768p` | `1080p` (1080p max 10s)  
+`duration`: 1–15  
+Optional: `images` (≤9), `audios` (≤3), `seed`  
+**Do not** use as primary: `image_with_roles`, `first_frame_image` (unlike Seedance/Wan)
+
+Text-to-video:
+```json
+{
+  "model": "MiniMax-H3",
+  "prompt": "a red balloon rising slowly in a blue sky, cinematic light",
+  "aspectRatio": "landscape",
+  "resolution": "480p",
+  "duration": 5
+}
+```
+
+Reference image + audio:
+```json
+{
+  "model": "MiniMax-H3",
+  "prompt": "character speaks with the reference voice, slow push-in",
+  "aspectRatio": "portrait",
+  "resolution": "768p",
+  "duration": 8,
+  "images": ["https://example.com/char.png"],
+  "audios": ["https://example.com/voice.mp3"]
+}
+```
+
+### 5.2 seedance-2.0 / seedance-2.5
+
+First/last frames are **mutex** with `video_urls`/`audio_urls`.
+
+Text-to-video:
+```json
+{
+  "model": "seedance-2.0",
+  "prompt": "a cat walking in the rain",
+  "resolution": "480p",
+  "duration": 5
+}
+```
+
+Image-to-video:
+```json
+{
+  "model": "seedance-2.0",
+  "prompt": "animate this scene",
+  "resolution": "480p",
+  "duration": 5,
+  "image_urls": ["https://example.com/still.jpg"]
+}
+```
+
+First/last frames:
+```json
+{
+  "model": "seedance-2.0",
+  "prompt": "Transition from day to night",
+  "resolution": "480p",
+  "duration": 5,
+  "image_with_roles": [
+    {"url": "https://example.com/day.jpg", "role": "first_frame"},
+    {"url": "https://example.com/night.jpg", "role": "last_frame"}
+  ]
+}
+```
+
+Reference video:
+```json
+{
+  "model": "seedance-2.0",
+  "prompt": "Follow the motion of the reference clip",
+  "resolution": "480p",
+  "duration": 5,
+  "video_urls": ["https://example.com/ref.mp4"]
+}
+```
+
+### 5.3 wan3.0-video
+
+Text-to-video:
+```json
+{
+  "model": "wan3.0-video",
+  "prompt": "A kitten running on a moonlit rooftop",
+  "resolution": "720P",
+  "duration": 5
+}
+```
+
+First/last frames:
+```json
+{
+  "model": "wan3.0-video",
+  "prompt": "Morph between the two frames",
+  "resolution": "720P",
+  "duration": 5,
+  "image_with_roles": [
+    {"url": "https://example.com/a.jpg", "role": "first_frame"},
+    {"url": "https://example.com/b.jpg", "role": "last_frame"}
+  ]
+}
+```
+
+Reference mode:
+```json
+{
+  "model": "wan3.0-video",
+  "prompt": "Keep identity of the reference subject",
+  "resolution": "720P",
+  "duration": 5,
+  "generation_type": "reference",
+  "image_urls": ["https://example.com/subject.jpg"],
+  "video_urls": ["https://example.com/motion.mp4"]
+}
+```
+
+### 5.4 flux-3-video
+
+Text-to-video:
+```json
+{
+  "model": "flux-3-video",
+  "prompt": "Slow push-in as a flower opens",
+  "duration": 5,
+  "resolution": "hd"
+}
+```
+
+Keyframes (2 = first+last):
+```json
+{
+  "model": "flux-3-video",
+  "prompt": "Slow push-in as a flower opens",
+  "image_urls": [
+    "https://example.com/bud.jpg",
+    "https://example.com/bloom.jpg"
+  ],
+  "duration": 5,
+  "resolution": "hd"
+}
+```
+
+Continue:
+```json
+{
+  "model": "flux-3-video",
+  "prompt": "Continue the motion",
+  "video_url": "https://example.com/clip.mp4",
+  "duration": 5,
+  "resolution": "hd"
+}
+```
+
+### 5.5 gemini-omni-1.1-flash / gemini-omni-1.1-flash-ext
+
+**Do not send `duration`.**
+
+Text-to-video:
+```json
+{
+  "model": "gemini-omni-1.1-flash",
+  "prompt": "A calm ocean at sunrise",
+  "resolution": "720p",
+  "aspect_ratio": "16:9"
+}
+```
+
+First/last frames:
+```json
+{
+  "model": "gemini-omni-1.1-flash",
+  "prompt": "smooth transition, camera slowly pushes in",
+  "first_frame_image": "https://example.com/start.jpg",
+  "last_frame_image": "https://example.com/end.jpg",
+  "resolution": "720p"
+}
+```
+
+### 5.6 grok-imagine-video-1.5-preview
+
+**Image-to-video only.** `image.url` required (public https). Prompt-only fails.
+
+```json
+{
+  "model": "grok-imagine-video-1.5-preview",
+  "prompt": "gentle camera push in",
+  "image": {"url": "https://example.com/still.jpg"},
+  "aspect_ratio": "16:9",
+  "resolution": "480p",
+  "duration": 5
+}
+```
+
+---
+
+## 6. ASR
+
+`POST https://www.keyoapi.xyz/v1/audio/transcriptions`  
+`multipart/form-data`: `model` + `file` (+ optional `language`)
+
+```bash
+curl https://www.keyoapi.xyz/v1/audio/transcriptions \
+  -H "Authorization: Bearer sk-..." \
+  -F model=whisper-large-v3-turbo \
+  -F language=zh \
+  -F file=@./sample.wav
+```
+
+Pick model from §1.5.
+
+---
+
+## 7. TTS sync
+
+`POST https://www.keyoapi.xyz/v1/audio/speech`  
+Models: `GLM-TTS` · `Step-Audio-TTS-3B` · `IndexTTS-2`
+
+```json
+{
+  "model": "GLM-TTS",
+  "input": "Hello, welcome to KeyoAPI",
+  "voice": "alloy"
+}
+```
+
+Response is audio bytes — save to a file.
+
+---
+
+## 8. TTS async
+
+`POST https://www.keyoapi.xyz/v1/async/audio/speech`  
+Poll: `GET /v1/task/{id}` (singular)  
+Models: `Qwen3-TTS` · `CosyVoice3`
+
+```json
+{
+  "model": "Qwen3-TTS",
+  "input": "Hello, welcome to KeyoAPI"
+}
+```
+
+---
+
+## 9. OCR (Unlimited-OCR)
+
+`POST /v1/chat/completions`
+
+```json
+{
+  "model": "Unlimited-OCR",
+  "messages": [{
+    "role": "user",
+    "content": [
+      {"type": "text", "text": "Extract all text in the image"},
+      {"type": "image_url", "image_url": {"url": "https://example.com/page.png"}}
+    ]
+  }]
+}
+```
+
+---
+
+## 10. Document parse (MinerU)
+
+`POST /v1/async/documents/parse` → `GET /v1/task/{id}`
+
+```bash
+curl https://www.keyoapi.xyz/v1/async/documents/parse \
+  -H "Authorization: Bearer sk-..." \
+  -F model=MinerU2.5-Pro \
+  -F file=@doc.pdf
+```
+
+---
+
+## 11. Vision multipart (matting / upscale / unwarp / detect / seg / pose)
+
+Shared: `-F model=...` + `-F image=@file`  
+Paths/models: §1.10.
+
+Matting example:
+```bash
+curl https://www.keyoapi.xyz/v1/images/mattings \
+  -H "Authorization: Bearer sk-..." \
+  -F model=RMBG-2.0 \
+  -F image=@photo.png
+```
+
+Upscale: use `/v1/images/upscaling` with `Real-ESRGAN` or `AnimeSharp`.
+
+---
+
+## 12. InfiniteTalk (image + audio → talking video)
+
+`POST /v1/async/videos/image-to-video` → `GET /v1/task/{id}`
+
+```bash
+curl https://www.keyoapi.xyz/v1/async/videos/image-to-video \
+  -H "Authorization: Bearer sk-..." \
+  -F model=InfiniteTalk \
+  -F image=@face.png \
+  -F audio=@speech.wav
+```
+
+---
+
+## 13. Moderations
+
+`POST /v1/moderations`
+
+```json
+{
+  "model": "keyo-text-moderation",
+  "input": "text to moderate"
+}
+```
+
+Pick model from §1.12.
+
+---
+
+## 14. List models (optional)
+
+```bash
+curl https://www.keyoapi.xyz/v1/models \
+  -H "Authorization: Bearer sk-..."
+```
+
+---
+
+## 15. AI checklist (before every call)
+
+1. Is the model name in §1? If not, `GET /v1/models` or ask the user.  
+2. Pick the correct path (chat / image / video A / video B / ASR / TTS sync|async / vision).  
+3. If Video Path B: open the matching §5 subsection — do not reuse another model’s fields.  
+4. Async: use correct `tasks` vs `task`; poll to a terminal status.  
+5. Return results simply to the user.  
+6. Do not invent field names not in this handbook.
+
+---
+
+## 16. Common failures → fix
+
+| Mistake | Fix |
+|---------|-----|
+| MiniMax with `image_with_roles` / `first_frame_image` | Use `images` / `audios` / `aspectRatio` |
+| grok-imagine prompt only | Add `image:{"url":"https://..."}` |
+| Local path or base64 in video JSON | Upload first; use public https URL |
+| Video poll `/v1/task/` | Path B uses `/v1/tasks/` |
+| TTS async poll `/v1/tasks/` | Use `/v1/task/` |
+| gemini-omni with `duration` | Remove `duration` |
+| seedance first/last + `video_urls` together | Keep only one mode |
+
+---
+
+Pricing: https://www.keyoapi.xyz/pricing · Handbook (copy UI): https://www.keyoapi.xyz/brand/keyo-api-ref.html · HTML docs: https://www.keyoapi.xyz/brand/keyo-docs.html

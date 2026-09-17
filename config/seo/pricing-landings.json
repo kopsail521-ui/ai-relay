@@ -200,25 +200,25 @@
         "cheap openai api",
         "gpt api pricing"
       ],
-      "lead": "Looking up OpenAI API pricing usually means you already want GPT-class chat in an OpenAI SDK, but need clearer unit economics — or one prepaid balance that also covers Claude, DeepSeek, Whisper, and vision. This page compares indicative Keyo sell rates for GPT-5.6 Luna / Terra / Sol with typical public OpenAI list figures and shows how to call them on the same OpenAI-compatible gateway.",
+      "lead": "This page compares indicative KeyoAPI sell rates for GPT-5.6 Luna, Terra, and Sol with typical public OpenAI list bands, then shows how to call them on one OpenAI-compatible base URL and prepaid wallet.",
       "rows": [
         {
           "model": "gpt-5.6-luna",
           "official": "OpenAI GPT-4o mini list commonly cited near ~$0.15 / $0.60 per 1M in/out (confirm current mini band)",
           "keyo": "~$0.10 / $0.62 per 1M in/out",
-          "note": "High-volume / batch workhorse"
+          "note": "High-volume / batch · /pricing/gpt-5.6-luna · /model/gpt-5.6-luna"
         },
         {
           "model": "gpt-5.6-terra",
           "official": "OpenAI GPT-4o list commonly cited near ~$2.50 / $10.00 per 1M in/out (confirm current flagship chat band)",
           "keyo": "~$0.37 / $2.21 per 1M in/out",
-          "note": "Everyday GPT-class default"
+          "note": "Everyday default · /pricing/gpt-5.6-terra · /model/gpt-5.6-terra"
         },
         {
           "model": "gpt-5.6-sol",
           "official": "OpenAI flagship / stronger GPT list bands are typically higher than GPT-4o — verify on platform.openai.com",
           "keyo": "~$0.92 / $5.52 per 1M in/out",
-          "note": "Escalation / denser reasoning"
+          "note": "Escalation · /pricing/gpt-5.6-sol · /model/gpt-5.6-sol"
         }
       ],
       "freeKiller": {
@@ -226,10 +226,12 @@
         "body": "Keyo does not ship OpenAI-branded free GPT IDs. For $0 prototyping on the same API key, use permanent free twins such as deepseek-v4-flash-free, deepseek-v4-pro-free, glm-5.2-free, and kimi-k3-free (fair-use limits). When quality gates pass, switch model= to gpt-5.6-luna, gpt-5.6-terra, or gpt-5.6-sol without changing base URL or auth."
       },
       "body": [
-        "Teams comparing OpenAI API pricing usually already want GPT-class chat in an OpenAI SDK with clearer unit economics — or one prepaid balance across GPT-class IDs plus Claude, DeepSeek, Whisper, OCR, and TTS. Official OpenAI surfaces win on brand trust and first-party features; KeyoAPI wins when you want that stack without five invoices.",
-        "Keyo rates above are indicative sell prices from the live Keyo catalog. Always confirm interactive pages under /pricing/gpt-5.6-luna, /pricing/gpt-5.6-terra, and /pricing/gpt-5.6-sol before contracting volume. OpenAI list bands, cached-input discounts, and model renames change — treat official figures as planning context. Keyo GPT-5.6 IDs are GPT-class twins on an OpenAI-compatible API, not a claim that they are OpenAI’s first-party model names.",
-        "How to call: set OPENAI_BASE_URL=https://www.keyoapi.xyz/v1, use your Keyo API key, and pass a GPT-5.6 model string (for example gpt-5.6-terra) to POST /v1/chat/completions. Longer guides live at /model/gpt-5.6-luna, /model/gpt-5.6-terra, and /model/gpt-5.6-sol.",
-        "When OpenAI list prices spike your margin, keep GPT-class for product chat defaults and shift bulk classification to gpt-5.6-luna or deepseek-v4-flash on the same key. For Claude dollars see /claude-api-pricing; for Gemini see /gemini-api-pricing; for DeepSeek see /deepseek-api-pricing; for free prototyping see /free-models."
+        "Teams that search OpenAI API pricing usually need GPT-class chat inside an OpenAI SDK with clearer unit economics — or one prepaid balance that also covers Claude, DeepSeek, Whisper, OCR, and TTS. Official OpenAI surfaces win on brand trust and first-party features. KeyoAPI is for when you want that stack without five invoices and without rewriting clients when you swap models.",
+        "Keyo rates in the table are indicative sell prices from the live Keyo catalog. Always confirm interactive pages under /pricing/gpt-5.6-luna, /pricing/gpt-5.6-terra, and /pricing/gpt-5.6-sol before contracting volume. OpenAI list bands, cached-input discounts, and model renames change — treat official figures as planning context only. Keyo GPT-5.6 IDs are GPT-class twins on an OpenAI-compatible API, not a claim that they are OpenAI first-party model names.",
+        "Worked planning example (indicative only): suppose a batch path burns 50M input tokens and 10M output tokens per month. At Luna ~$0.10 / $0.62 per 1M in/out that is roughly $5 input + $6.20 output ≈ $11.20 before retries and overhead. At Terra ~$0.37 / $2.21 the same mix is roughly $18.50 + $22.10 ≈ $40.60. Put high-volume classification on Luna and keep product chat on Terra so the expensive model only sees the traffic that needs it. Re-run the math on live /pricing pages before you budget.",
+        "Integration steps: (1) create an account at /sign-up and top up Wallet; (2) create an API key in console; (3) set base URL https://www.keyoapi.xyz/v1 (OPENAI_BASE_URL or sdk base_url); (4) call POST /v1/chat/completions with model gpt-5.6-luna, gpt-5.6-terra, or gpt-5.6-sol; (5) try/buy interactively from /pricing/{modelId} — there is no separate upload playground. Longer guides: /model/gpt-5.6-luna, /model/gpt-5.6-terra, /model/gpt-5.6-sol.",
+        "Routing tip: keep GPT-class for product chat defaults; shift bulk classification, tagging, and draft rewrites to gpt-5.6-luna or deepseek-v4-flash on the same key. Escalate only failing slices to Terra or Sol after automated validators reject output. For Claude dollars see /claude-api-pricing; for Gemini see /gemini-api-pricing; for DeepSeek see /deepseek-api-pricing; for free prototyping see /free-models; for a side-by-side catalog see /compare.",
+        "Cost hygiene that actually moves the bill: truncate unused chat history, prefer structured short outputs for batch jobs, cache identical prompts by hash, and measure tokens from the response usage object rather than guessing. Confirm live Keyo sell rates on Model Square after every catalog change."
       ],
       "faqs": [
         {
@@ -247,8 +249,17 @@
         {
           "q": "How do I try GPT-class models on Keyo?",
           "a": "Create a key at /sign-up, then open /pricing/gpt-5.6-terra (or Luna/Sol) for interactive try/buy. There is no separate upload playground — Model Square is the try path."
+        },
+        {
+          "q": "How do I estimate monthly GPT-class cost on Keyo?",
+          "a": "Multiply expected input/output millions of tokens by the live /pricing/gpt-5.6-luna (or Terra/Sol) rates. Add retry overhead. Use /compare when you want a side-by-side planning table."
+        },
+        {
+          "q": "Can I keep my OpenAI Python/Node SDK?",
+          "a": "Yes. Change base_url to https://www.keyoapi.xyz/v1 and the API key to your Keyo key, then pass a Keyo model id such as gpt-5.6-terra."
         }
-      ]
+      ],
+      "curlExample": "# cURL — GPT-5.6 Luna chat\ncurl https://www.keyoapi.xyz/v1/chat/completions \\\n  -H \"Authorization: Bearer $KEYO_API_KEY\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\"model\":\"gpt-5.6-luna\",\"messages\":[{\"role\":\"user\",\"content\":\"Classify this ticket: refund for order 42\"}]}'\n\n# Python — OpenAI SDK pointed at Keyo\nfrom openai import OpenAI\nclient = OpenAI(base_url=\"https://www.keyoapi.xyz/v1\", api_key=\"YOUR_KEYO_API_KEY\")\nr = client.chat.completions.create(\n    model=\"gpt-5.6-terra\",\n    messages=[{\"role\": \"user\", \"content\": \"Summarize this log line in one sentence.\"}],\n)\nprint(r.choices[0].message.content)"
     },
     {
       "slug": "remove-bg-api-alternative",
@@ -285,11 +296,13 @@
       },
       "body": [
         "Published transition (verify on remove.bg FAQ / API pages): standalone remove.bg website unavailable from 1 December 2026, 9:00am CET; self-serve API background removal moves to Leonardo.Ai; existing Enterprise API contracts are described as unaffected. Unused PAYG credits expire at that cutoff — treat vendor pages as source of truth if wording changes.",
-        "Keyo sell rate for RMBG-2.0 is about $0.0068 per request (indicative). Confirm live at /pricing/RMBG-2.0. Typical legacy SaaS remove-bg APIs often sit near $0.05–$0.20 per image on public marketing pages; use that only as planning context, not a contractual quote.",
-        "How to call: create a key at /sign-up, open /pricing/RMBG-2.0 for interactive try/buy (no separate upload playground), then POST multipart to https://www.keyoapi.xyz/v1/images/mattings with model=RMBG-2.0. Longer guide: /model/RMBG-2.0. Need masks beyond background? Use /model/sam3.",
-        "Also see /compare for the background-removal price row, and /tts-api or /ai-avatar-video-generator if your pipeline continues into speech or talking avatars on the same key."
+        "Keyo sell rate for RMBG-2.0 is about $0.0068 per request (indicative). Confirm live at /pricing/RMBG-2.0. Typical legacy SaaS remove-bg APIs often sit near $0.05–$0.20 per image on public marketing pages; use that only as planning context, not a contractual quote. Worked example: 10,000 product photos / month at ~$0.0068 ≈ $68 indicative on Keyo RMBG — recompute with your live rate and retry policy.",
+        "Migration checklist for API traffic: (1) inventory every remove.bg call site and note image size / QPS; (2) create a Keyo key at /sign-up and top up Wallet; (3) open /pricing/RMBG-2.0 for interactive try/buy (no separate upload playground); (4) switch clients to POST multipart https://www.keyoapi.xyz/v1/images/mattings with model=RMBG-2.0 and field image=@file; (5) compare alpha quality on a golden set of SKUs before cutting over; (6) keep a feature flag so you can roll back during the Dec 2026 window.",
+        "When plain subject/background cutouts are not enough — for example open-vocabulary masks, multi-object labels, or promptable regions — escalate to sam3 via POST /v1/images/segmentation. Guides: /model/RMBG-2.0 and /model/sam3. Price row also appears on /compare.",
+        "Pipeline tip: many shops matte first, then run OCR (/model/Unlimited-OCR or /model/MinerU2.5-Pro), then chat or TTS on the same prepaid key. If the next step is speech or talking video, continue to /tts-api or /ai-avatar-video-generator without opening a second vendor wallet.",
+        "Operational notes: send reasonable image sizes (downscale huge originals before upload), log HTTP status and Keyo request ids for support, and treat matting as a metered request — empty or corrupt files still consume budget when accepted. Confirm live rates after every catalog change on Model Square."
       ],
-      "curlExample": "curl https://www.keyoapi.xyz/v1/images/mattings \\\n  -H \"Authorization: Bearer $KEYO_API_KEY\" \\\n  -F model=RMBG-2.0 \\\n  -F image=@./photo.png",
+      "curlExample": "# cURL — RMBG-2.0 matting (multipart)\ncurl https://www.keyoapi.xyz/v1/images/mattings \\\n  -H \"Authorization: Bearer $KEYO_API_KEY\" \\\n  -F model=RMBG-2.0 \\\n  -F image=@./product.png \\\n  -o ./product-alpha.png\n\n# Python — requests multipart\nimport requests\nurl = \"https://www.keyoapi.xyz/v1/images/mattings\"\nheaders = {\"Authorization\": \"Bearer YOUR_KEYO_API_KEY\"}\nfiles = {\"image\": open(\"product.png\", \"rb\")}\ndata = {\"model\": \"RMBG-2.0\"}\nr = requests.post(url, headers=headers, files=files, data=data, timeout=120)\nr.raise_for_status()\nopen(\"product-alpha.png\", \"wb\").write(r.content)",
       "faqs": [
         {
           "q": "Is Keyo the official remove.bg replacement?",
@@ -302,6 +315,14 @@
         {
           "q": "When is the remove.bg cutoff?",
           "a": "Vendor-published date is 1 December 2026, 9:00am CET for the standalone site / self-serve API transition — re-check remove.bg FAQ before you lock a migration plan."
+        },
+        {
+          "q": "What HTTP shape replaces remove.bg self-serve calls?",
+          "a": "On Keyo use POST multipart to /v1/images/mattings with model=RMBG-2.0 and an image file field. Try/buy from /pricing/RMBG-2.0 after /sign-up."
+        },
+        {
+          "q": "When should I use sam3 instead of RMBG-2.0?",
+          "a": "Use RMBG for classic background removal. Use sam3 (/model/sam3) when you need open-vocabulary or multi-region masks beyond a single subject cutout."
         }
       ]
     },

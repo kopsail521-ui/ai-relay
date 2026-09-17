@@ -74,7 +74,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
 <main class="wrap">
 <h1>OpenAI API Pricing — KeyoAPI GPT-Class Rates vs Typical List</h1>
 
-<p class="lead">Looking up OpenAI API pricing usually means you already want GPT-class chat in an OpenAI SDK, but need clearer unit economics — or one prepaid balance that also covers Claude, DeepSeek, Whisper, and vision. This page compares indicative Keyo sell rates for GPT-5.6 Luna / Terra / Sol with typical public OpenAI list figures and shows how to call them on the same OpenAI-compatible gateway.</p>
+<p class="lead">This page compares indicative KeyoAPI sell rates for GPT-5.6 Luna, Terra, and Sol with typical public OpenAI list bands, then shows how to call them on one OpenAI-compatible base URL and prepaid wallet.</p>
 <div class="btnrow">
   <a class="btn btn-primary" href="/sign-up">Get API key</a>
   <a class="btn btn-secondary" href="/pricing">Open Model Square</a>
@@ -90,38 +90,52 @@ ul{margin:0 0 14px;padding-left:1.2em}
   <td><code>gpt-5.6-luna</code></td>
   <td>OpenAI GPT-4o mini list commonly cited near ~$0.15 / $0.60 per 1M in/out (confirm current mini band)</td>
   <td class="ok">~$0.10 / $0.62 per 1M in/out</td>
-  <td>High-volume / batch workhorse</td>
+  <td>High-volume / batch · <a href="/pricing/gpt-5.6-luna">/pricing/gpt-5.6-luna</a> · <a href="/model/gpt-5.6-luna">/model/gpt-5.6-luna</a></td>
 </tr>
 <tr>
   <td><code>gpt-5.6-terra</code></td>
   <td>OpenAI GPT-4o list commonly cited near ~$2.50 / $10.00 per 1M in/out (confirm current flagship chat band)</td>
   <td class="ok">~$0.37 / $2.21 per 1M in/out</td>
-  <td>Everyday GPT-class default</td>
+  <td>Everyday default · <a href="/pricing/gpt-5.6-terra">/pricing/gpt-5.6-terra</a> · <a href="/model/gpt-5.6-terra">/model/gpt-5.6-terra</a></td>
 </tr>
 <tr>
   <td><code>gpt-5.6-sol</code></td>
   <td>OpenAI flagship / stronger GPT list bands are typically higher than GPT-4o — verify on platform.openai.com</td>
   <td class="ok">~$0.92 / $5.52 per 1M in/out</td>
-  <td>Escalation / denser reasoning</td>
+  <td>Escalation · <a href="/pricing/gpt-5.6-sol">/pricing/gpt-5.6-sol</a> · <a href="/model/gpt-5.6-sol">/model/gpt-5.6-sol</a></td>
 </tr>
 </tbody>
 </table>
 <h2>Prototype free, then promote to GPT-class</h2>
 <p>Keyo does not ship OpenAI-branded free GPT IDs. For $0 prototyping on the same API key, use permanent free twins such as deepseek-v4-flash-free, deepseek-v4-pro-free, glm-5.2-free, and kimi-k3-free (fair-use limits). When quality gates pass, switch model= to gpt-5.6-luna, gpt-5.6-terra, or gpt-5.6-sol without changing base URL or auth.</p>
 <h2>Rates and how to call</h2>
-<p>Teams comparing OpenAI API pricing usually already want GPT-class chat in an OpenAI SDK with clearer unit economics — or one prepaid balance across GPT-class IDs plus Claude, DeepSeek, Whisper, OCR, and TTS. Official OpenAI surfaces win on brand trust and first-party features; KeyoAPI wins when you want that stack without five invoices.</p>
-<p>Keyo rates above are indicative sell prices from the live Keyo catalog. Always confirm interactive pages under <a href="/pricing/gpt-5.6-luna">/pricing/gpt-5.6-luna</a>, <a href="/pricing/gpt-5.6-terra">/pricing/gpt-5.6-terra</a>, and <a href="/pricing/gpt-5.6-sol">/pricing/gpt-5.6-sol</a> before contracting volume. OpenAI list bands, cached-input discounts, and model renames change — treat official figures as planning context. Keyo GPT-5.6 IDs are GPT-class twins on an OpenAI-compatible API, not a claim that they are OpenAI’s first-party model names.</p>
-<p>How to call: set OPENAI_BASE_URL=https://www.keyoapi.xyz/v1, use your Keyo API key, and pass a GPT-5.6 model string (for example gpt-5.6-terra) to POST /v1/chat/completions. Longer guides live at <a href="/model/gpt-5.6-luna">/model/gpt-5.6-luna</a>, <a href="/model/gpt-5.6-terra">/model/gpt-5.6-terra</a>, and <a href="/model/gpt-5.6-sol">/model/gpt-5.6-sol</a>.</p>
-<p>When OpenAI list prices spike your margin, keep GPT-class for product chat defaults and shift bulk classification to gpt-5.6-luna or deepseek-v4-flash on the same key. For Claude dollars see <a href="/claude-api-pricing">/claude-api-pricing</a>; for Gemini see <a href="/gemini-api-pricing">/gemini-api-pricing</a>; for DeepSeek see <a href="/deepseek-api-pricing">/deepseek-api-pricing</a>; for free prototyping see <a href="/free-models">/free-models</a>.</p>
-<pre>curl https://www.keyoapi.xyz/v1/chat/completions \
-  -H "Authorization: Bearer $KEYO_API_KEY" \
-  -H "Content-Type: application/json" \
-  -d '{"model":"gpt-5.6-luna","messages":[{"role":"user","content":"Hello"}]}'</pre>
+<p>Teams that search OpenAI API pricing usually need GPT-class chat inside an OpenAI SDK with clearer unit economics — or one prepaid balance that also covers Claude, DeepSeek, Whisper, OCR, and TTS. Official OpenAI surfaces win on brand trust and first-party features. KeyoAPI is for when you want that stack without five invoices and without rewriting clients when you swap models.</p>
+<p>Keyo rates in the table are indicative sell prices from the live Keyo catalog. Always confirm interactive pages under <a href="/pricing/gpt-5.6-luna">/pricing/gpt-5.6-luna</a>, <a href="/pricing/gpt-5.6-terra">/pricing/gpt-5.6-terra</a>, and <a href="/pricing/gpt-5.6-sol">/pricing/gpt-5.6-sol</a> before contracting volume. OpenAI list bands, cached-input discounts, and model renames change — treat official figures as planning context only. Keyo GPT-5.6 IDs are GPT-class twins on an OpenAI-compatible API, not a claim that they are OpenAI first-party model names.</p>
+<p>Worked planning example (indicative only): suppose a batch path burns 50M input tokens and 10M output tokens per month. At Luna ~$0.10 / $0.62 per 1M in/out that is roughly $5 input + $6.20 output ≈ $11.20 before retries and overhead. At Terra ~$0.37 / $2.21 the same mix is roughly $18.50 + $22.10 ≈ $40.60. Put high-volume classification on Luna and keep product chat on Terra so the expensive model only sees the traffic that needs it. Re-run the math on live <a href="/pricing">/pricing</a> pages before you budget.</p>
+<p>Integration steps: (1) create an account at <a href="/sign-up">/sign-up</a> and top up Wallet; (2) create an API key in console; (3) set base URL https://www.keyoapi.xyz/v1 (OPENAI_BASE_URL or sdk base_url); (4) call POST /v1/chat/completions with model gpt-5.6-luna, gpt-5.6-terra, or gpt-5.6-sol; (5) try/buy interactively from /pricing/{modelId} — there is no separate upload playground. Longer guides: <a href="/model/gpt-5.6-luna">/model/gpt-5.6-luna</a>, <a href="/model/gpt-5.6-terra">/model/gpt-5.6-terra</a>, <a href="/model/gpt-5.6-sol">/model/gpt-5.6-sol</a>.</p>
+<p>Routing tip: keep GPT-class for product chat defaults; shift bulk classification, tagging, and draft rewrites to gpt-5.6-luna or deepseek-v4-flash on the same key. Escalate only failing slices to Terra or Sol after automated validators reject output. For Claude dollars see <a href="/claude-api-pricing">/claude-api-pricing</a>; for Gemini see <a href="/gemini-api-pricing">/gemini-api-pricing</a>; for DeepSeek see <a href="/deepseek-api-pricing">/deepseek-api-pricing</a>; for free prototyping see <a href="/free-models">/free-models</a>; for a side-by-side catalog see <a href="/compare">/compare</a>.</p>
+<p>Cost hygiene that actually moves the bill: truncate unused chat history, prefer structured short outputs for batch jobs, cache identical prompts by hash, and measure tokens from the response usage object rather than guessing. Confirm live Keyo sell rates on Model Square after every catalog change.</p>
+<pre># cURL — GPT-5.6 Luna chat
+curl https://www.keyoapi.xyz/v1/chat/completions \
+  -H &quot;Authorization: Bearer $KEYO_API_KEY&quot; \
+  -H &quot;Content-Type: application/json&quot; \
+  -d '{&quot;model&quot;:&quot;gpt-5.6-luna&quot;,&quot;messages&quot;:[{&quot;role&quot;:&quot;user&quot;,&quot;content&quot;:&quot;Classify this ticket: refund for order 42&quot;}]}'
+
+# Python — OpenAI SDK pointed at Keyo
+from openai import OpenAI
+client = OpenAI(base_url=&quot;https://www.keyoapi.xyz/v1&quot;, api_key=&quot;YOUR_KEYO_API_KEY&quot;)
+r = client.chat.completions.create(
+    model=&quot;gpt-5.6-terra&quot;,
+    messages=[{&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;Summarize this log line in one sentence.&quot;}],
+)
+print(r.choices[0].message.content)</pre>
 <h2>FAQ</h2>
 <div class="faq"><details><summary>Is Keyo cheaper than OpenAI API pricing?</summary><p>Often on the Luna/Terra/Sol rows we list versus typical GPT-4o / mini list bands — but OpenAI’s public list, prompt caching, and batch discounts change. Treat this table as a planning snapshot and verify both sides before you commit.</p></details>
 <details><summary>Are gpt-5.6-* the same as OpenAI GPT-5?</summary><p>No. They are Keyo GPT-class model IDs on an OpenAI-compatible gateway. Use them when you want OpenAI SDK shape and Keyo unit economics; confirm live rates on /pricing/{id}.</p></details>
 <details><summary>Do you offer a free OpenAI / GPT model?</summary><p>Not as an OpenAI-branded free ID. Use Keyo’s permanent $0 DeepSeek/GLM/Kimi free twins to prototype on the same key, then promote to paid GPT-5.6 IDs when you need that quality band.</p></details>
-<details><summary>How do I try GPT-class models on Keyo?</summary><p>Create a key at <a href="/sign-up">/sign-up</a>, then open <a href="/pricing/gpt-5.6-terra">/pricing/gpt-5.6-terra</a> (or Luna/Sol) for interactive try/buy. There is no separate upload playground — Model Square is the try path.</p></details></div>
+<details><summary>How do I try GPT-class models on Keyo?</summary><p>Create a key at <a href="/sign-up">/sign-up</a>, then open <a href="/pricing/gpt-5.6-terra">/pricing/gpt-5.6-terra</a> (or Luna/Sol) for interactive try/buy. There is no separate upload playground — Model Square is the try path.</p></details>
+<details><summary>How do I estimate monthly GPT-class cost on Keyo?</summary><p>Multiply expected input/output millions of tokens by the live <a href="/pricing/gpt-5.6-luna">/pricing/gpt-5.6-luna</a> (or Terra/Sol) rates. Add retry overhead. Use <a href="/compare">/compare</a> when you want a side-by-side planning table.</p></details>
+<details><summary>Can I keep my OpenAI Python/Node SDK?</summary><p>Yes. Change base_url to https://www.keyoapi.xyz/v1 and the API key to your Keyo key, then pass a Keyo model id such as gpt-5.6-terra.</p></details></div>
 <p class="meta">Also see <a href="/compare">/compare</a>, <a href="/free-models">/free-models</a>, and model guides under <code>/model/</code>.</p>
 
 </main>

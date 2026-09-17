@@ -104,17 +104,33 @@ ul{margin:0 0 14px;padding-left:1.2em}
 <p>KeyoAPI is not Canva, not Leonardo.Ai, and not a claim to be remove.bg’s official successor. Consumer click-to-cutout traffic is pointed at Canva by remove.bg itself. Keyo’s lane is developer-metered matting on a multi-model relay: authenticate, upload, get alpha — then continue to OCR, TTS, or chat on the same balance.</p>
 <h2>Migration details</h2>
 <p>Published transition (verify on remove.bg FAQ / API pages): standalone remove.bg website unavailable from 1 December 2026, 9:00am CET; self-serve API background removal moves to Leonardo.Ai; existing Enterprise API contracts are described as unaffected. Unused PAYG credits expire at that cutoff — treat vendor pages as source of truth if wording changes.</p>
-<p>Keyo sell rate for RMBG-2.0 is about $0.0068 per request (indicative). Confirm live at <a href="/pricing/RMBG-2.0">/pricing/RMBG-2.0</a>. Typical legacy SaaS remove-bg APIs often sit near $0.05–$0.20 per image on public marketing pages; use that only as planning context, not a contractual quote.</p>
-<p>How to call: create a key at <a href="/sign-up">/sign-up</a>, open <a href="/pricing/RMBG-2.0">/pricing/RMBG-2.0</a> for interactive try/buy (no separate upload playground), then POST multipart to https://www.keyoapi.xyz/v1/images/mattings with model=RMBG-2.0. Longer guide: <a href="/model/RMBG-2.0">/model/RMBG-2.0</a>. Need masks beyond background? Use <a href="/model/sam3">/model/sam3</a>.</p>
-<p>Also see <a href="/compare">/compare</a> for the background-removal price row, and <a href="/tts-api">/tts-api</a> or <a href="/ai-avatar-video-generator">/ai-avatar-video-generator</a> if your pipeline continues into speech or talking avatars on the same key.</p>
-<pre>curl https://www.keyoapi.xyz/v1/images/mattings \
+<p>Keyo sell rate for RMBG-2.0 is about $0.0068 per request (indicative). Confirm live at <a href="/pricing/RMBG-2.0">/pricing/RMBG-2.0</a>. Typical legacy SaaS remove-bg APIs often sit near $0.05–$0.20 per image on public marketing pages; use that only as planning context, not a contractual quote. Worked example: 10,000 product photos / month at ~$0.0068 ≈ $68 indicative on Keyo RMBG — recompute with your live rate and retry policy.</p>
+<p>Migration checklist for API traffic: (1) inventory every remove.bg call site and note image size / QPS; (2) create a Keyo key at <a href="/sign-up">/sign-up</a> and top up Wallet; (3) open <a href="/pricing/RMBG-2.0">/pricing/RMBG-2.0</a> for interactive try/buy (no separate upload playground); (4) switch clients to POST multipart https://www.keyoapi.xyz/v1/images/mattings with model=RMBG-2.0 and field image=@file; (5) compare alpha quality on a golden set of SKUs before cutting over; (6) keep a feature flag so you can roll back during the Dec 2026 window.</p>
+<p>When plain subject/background cutouts are not enough — for example open-vocabulary masks, multi-object labels, or promptable regions — escalate to sam3 via POST /v1/images/segmentation. Guides: <a href="/model/RMBG-2.0">/model/RMBG-2.0</a> and <a href="/model/sam3">/model/sam3</a>. Price row also appears on <a href="/compare">/compare</a>.</p>
+<p>Pipeline tip: many shops matte first, then run OCR (<a href="/model/Unlimited-OCR">/model/Unlimited-OCR</a> or <a href="/model/MinerU2.5-Pro">/model/MinerU2.5-Pro</a>), then chat or TTS on the same prepaid key. If the next step is speech or talking video, continue to <a href="/tts-api">/tts-api</a> or <a href="/ai-avatar-video-generator">/ai-avatar-video-generator</a> without opening a second vendor wallet.</p>
+<p>Operational notes: send reasonable image sizes (downscale huge originals before upload), log HTTP status and Keyo request ids for support, and treat matting as a metered request — empty or corrupt files still consume budget when accepted. Confirm live rates after every catalog change on Model Square.</p>
+<pre># cURL — RMBG-2.0 matting (multipart)
+curl https://www.keyoapi.xyz/v1/images/mattings \
   -H &quot;Authorization: Bearer $KEYO_API_KEY&quot; \
   -F model=RMBG-2.0 \
-  -F image=@./photo.png</pre>
+  -F image=@./product.png \
+  -o ./product-alpha.png
+
+# Python — requests multipart
+import requests
+url = &quot;https://www.keyoapi.xyz/v1/images/mattings&quot;
+headers = {&quot;Authorization&quot;: &quot;Bearer YOUR_KEYO_API_KEY&quot;}
+files = {&quot;image&quot;: open(&quot;product.png&quot;, &quot;rb&quot;)}
+data = {&quot;model&quot;: &quot;RMBG-2.0&quot;}
+r = requests.post(url, headers=headers, files=files, data=data, timeout=120)
+r.raise_for_status()
+open(&quot;product-alpha.png&quot;, &quot;wb&quot;).write(r.content)</pre>
 <h2>FAQ</h2>
 <div class="faq"><details><summary>Is Keyo the official remove.bg replacement?</summary><p>No. remove.bg directs self-serve API users to Leonardo.Ai and consumers to Canva. KeyoAPI is an independent AI API relay with RMBG-2.0 matting if you want a prepaid multi-model stack.</p></details>
 <details><summary>Do you offer a free remove-background website?</summary><p>No consumer free cutout site. Keyo sells metered API access; try/buy is on <a href="/pricing/RMBG-2.0">/pricing/RMBG-2.0</a> after <a href="/sign-up">/sign-up</a>.</p></details>
-<details><summary>When is the remove.bg cutoff?</summary><p>Vendor-published date is 1 December 2026, 9:00am CET for the standalone site / self-serve API transition — re-check remove.bg FAQ before you lock a migration plan.</p></details></div>
+<details><summary>When is the remove.bg cutoff?</summary><p>Vendor-published date is 1 December 2026, 9:00am CET for the standalone site / self-serve API transition — re-check remove.bg FAQ before you lock a migration plan.</p></details>
+<details><summary>What HTTP shape replaces remove.bg self-serve calls?</summary><p>On Keyo use POST multipart to /v1/images/mattings with model=RMBG-2.0 and an image file field. Try/buy from <a href="/pricing/RMBG-2.0">/pricing/RMBG-2.0</a> after <a href="/sign-up">/sign-up</a>.</p></details>
+<details><summary>When should I use sam3 instead of RMBG-2.0?</summary><p>Use RMBG for classic background removal. Use sam3 (<a href="/model/sam3">/model/sam3</a>) when you need open-vocabulary or multi-region masks beyond a single subject cutout.</p></details></div>
 <p class="meta">Also see <a href="/compare">/compare</a>, <a href="/free-models">/free-models</a>, and model guides under <code>/model/</code>.</p>
 
 </main>

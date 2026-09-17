@@ -808,9 +808,9 @@
           </table>
         </div>
         <ul class="doc-rules">
-          <li data-i18n="videoRuleAsync"></li>
-          <li data-i18n="videoRuleMedia"></li>
-          <li data-i18n="videoRuleParams"></li>
+          <li data-i18n="videoRuleAsync">异步：POST /v1/videos/generations 创建 → GET /v1/tasks/{task_id} 轮询。</li>
+          <li data-i18n="videoRuleMedia">媒体：只要 JSON；图/视频/音频须公网 http(s)。本机路径与 data:base64 拒绝。</li>
+          <li data-i18n="videoRuleParams">各模型字段不同（文生 / 图生 / 首尾帧 / 参考）。点表格备注或下方芯片进入对应小节，不要套用其它模型的 body。</li>
         </ul>
         <div class="model-jump">
           <a href="#api-minimax-h3">MiniMax-H3</a>
@@ -1288,7 +1288,10 @@ const I18N = {
     "videoHint": "Async: POST /v1/videos, then poll GET /v1/videos/{id}. Billing follows the console.",
     "videoHintGen": "Async: POST /v1/videos/generations, then poll GET /v1/tasks/{task_id} (or GET /v1/videos/{id}). Billing follows the console.",
     "videoMediaNote": "Media rule: JSON body only. Images/videos/audio must be public http(s) URLs (asset:// where supported). Local file paths and data: base64 are rejected.",
-    "videoImagineNote": "Modes differ by model. seedance/wan: image_urls + image_with_roles(first/last) + video_urls/audio_urls. MiniMax-H3 uses different fields: aspectRatio (landscape/portrait/square), images[], audios[] — not image_urls/first_frame. flux-3: image_urls keyframes or video_url. gemini-omni: no duration; first_frame_image+last_frame_image. grok-imagine: image:{\"url\":\"https://...\"} only. Per-model field tables → Video params (#video-api).",
+    "videoRuleAsync": "Async: POST /v1/videos/generations → poll GET /v1/tasks/{task_id}.",
+    "videoRuleMedia": "Media: JSON only; public http(s) URLs. No local paths / data:base64.",
+    "videoRuleParams": "Each model has different fields (t2v / i2v / frames / refs). Use the links below — do not reuse another model's body.",
+    "videoImagineNote": "Per-model field tables → Video params (#video-api).",
     "nGrokVideo": "text/ref · 1–15s · per request",
     "nVeoComponents": "(delisted)",
     "nWanVideo": "t2v / first·last / multimodal ref · /s",
@@ -1432,7 +1435,10 @@ const I18N = {
     "videoHint": "异步：POST /v1/videos 创建，再 GET /v1/videos/{id} 查询。扣费以控制台为准。",
     "videoHintGen": "异步：POST /v1/videos/generations 创建，再 GET /v1/tasks/{task_id}（或 GET /v1/videos/{id}）查询。扣费以控制台为准。",
     "videoMediaNote": "媒体硬规则：只要 JSON。图/视频/音频必须是公网 http(s)（或支持的 asset://）。本机路径、data:base64 一律拒绝。",
-    "videoImagineNote": "各模型写法不同。seedance/wan：image_urls、image_with_roles(首尾帧)、video_urls/audio_urls。MiniMax-H3 字段不同：aspectRatio(landscape/portrait/square)、images[]、audios[]，不要用 image_urls/first_frame。flux-3：image_urls 关键帧或 video_url。gemini-omni：无 duration。grok-imagine：仅 image:{\"url\":\"https://...\"}。各模型字段表与示例 → 见「视频参数」(#video-api)。",
+    "videoRuleAsync": "异步：POST /v1/videos/generations 创建 → GET /v1/tasks/{task_id} 轮询。",
+    "videoRuleMedia": "媒体：只要 JSON；图/视频/音频须公网 http(s)。本机路径与 data:base64 拒绝。",
+    "videoRuleParams": "各模型字段不同（文生 / 图生 / 首尾帧 / 参考）。点表格备注或下方芯片进入对应小节，不要套用其它模型的 body。",
+    "videoImagineNote": "各模型字段表与示例 → 见「视频参数」。",
     "nGrokVideo": "文生/参考图 · 1–15 秒 · 按次",
     "nVeoComponents": "（已下架）",
     "nWanVideo": "文生/首尾帧/多模态参考 · 按秒",

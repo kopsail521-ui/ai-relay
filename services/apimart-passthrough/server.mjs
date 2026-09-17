@@ -575,16 +575,38 @@ function buildGrsaiVideoBody(meta, body) {
     webHook: "-1",
     shutProgress: true,
   };
-  // optional reference images
+  // Collect public image URLs (https only semantics enforced upstream)
   const urls = [];
+  const pushUrl = (u) => {
+    if (typeof u === "string" && u) urls.push(u);
+    else if (u && typeof u === "object" && u.url) urls.push(String(u.url));
+  };
+  if (typeof body.first_frame_image === "string") pushUrl(body.first_frame_image);
+  if (typeof body.last_frame_image === "string") pushUrl(body.last_frame_image);
   if (Array.isArray(body.image_urls)) {
-    for (const u of body.image_urls) {
-      if (typeof u === "string" && u) urls.push(u);
-      else if (u && typeof u === "object" && u.url) urls.push(String(u.url));
-    }
+    for (const u of body.image_urls) pushUrl(u);
   }
-  if (typeof body.image_url === "string" && body.image_url) urls.push(body.image_url);
+  if (typeof body.image_url === "string") pushUrl(body.image_url);
+  if (Array.isArray(body.image_with_roles)) {
+    for (const it of body.image_with_roles) pushUrl(it);
+  }
   if (urls.length) out.urls = urls.slice(0, 9);
+  // Forward multimodal refs when present (inventory may accept or ignore)
+  if (Array.isArray(body.video_urls) && body.video_urls.length) {
+    out.video_urls = body.video_urls.slice(0, 3);
+  }
+  if (Array.isArray(body.audio_urls) && body.audio_urls.length) {
+    out.audio_urls = body.audio_urls.slice(0, 3);
+  }
+  if (typeof body.first_frame_image === "string" && body.first_frame_image) {
+    out.first_frame_image = body.first_frame_image;
+  }
+  if (typeof body.last_frame_image === "string" && body.last_frame_image) {
+    out.last_frame_image = body.last_frame_image;
+  }
+  if (Array.isArray(body.image_with_roles) && body.image_with_roles.length) {
+    out.image_with_roles = body.image_with_roles;
+  }
   return out;
 }
 

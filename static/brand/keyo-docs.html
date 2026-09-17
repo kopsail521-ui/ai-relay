@@ -714,7 +714,7 @@
 <tr><td class="model"><button type="button" class="model-btn" data-copy="seedance-2.5">seedance-2.5</button></td><td class="price">$0.1153+ <span data-i18n="perSecond"></span></td><td class="note-cell" data-i18n="nSeedance25"></td></tr>
 <tr><td class="model"><button type="button" class="model-btn" data-copy="seedance-2.0">seedance-2.0</button></td><td class="price">$0.0792+ <span data-i18n="perSecond"></span></td><td class="note-cell" data-i18n="nSeedance20"></td></tr>
 <tr><td class="model"><button type="button" class="model-btn" data-copy="flux-3-video">flux-3-video</button></td><td class="price">$0.0576–$0.5088 <span data-i18n="perSecond"></span></td><td class="note-cell" data-i18n="nFluxVideo"></td></tr>
-<tr><td class="model"><button type="button" class="model-btn" data-copy="MiniMax-H3">MiniMax-H3</button></td><td class="price">$0.0685 / $0.1097 <span data-i18n="perSecond"></span></td><td class="note-cell" data-i18n="nMinimaxVideo"></td></tr>
+<tr><td class="model"><button type="button" class="model-btn" data-copy="MiniMax-H3">MiniMax-H3</button></td><td class="price">$0.02055 / $0.02877 / $0.04110 <span data-i18n="perSecond"></span></td><td class="note-cell" data-i18n="nMinimaxVideo"></td></tr>
 <tr><td class="model"><button type="button" class="model-btn" data-copy="gemini-omni-1.1-flash">gemini-omni-1.1-flash</button></td><td class="price">$0.1056 <span data-i18n="perSecond"></span></td><td class="note-cell" data-i18n="nGemOmni"></td></tr>
 <tr><td class="model"><button type="button" class="model-btn" data-copy="gemini-omni-1.1-flash-ext">gemini-omni-1.1-flash-ext</button></td><td class="price">$0.42 <span data-i18n="perVideo"></span> / $0.096 <span data-i18n="perSecond"></span></td><td class="note-cell" data-i18n="nGemOmniExt"></td></tr>
 <tr><td class="model"><button type="button" class="model-btn" data-copy="grok-imagine-video-1.5-preview">grok-imagine-video-1.5-preview</button></td><td class="price">$0.08825 / $0.1545 <span data-i18n="perSecond"></span></td><td class="note-cell" data-i18n="nGrokImagineVideo"></td></tr>
@@ -722,6 +722,7 @@
           </table>
         </div>
         <p class="hint" data-i18n="videoHintGen"></p>
+        <p class="hint" data-i18n="videoMediaNote"></p>
         <p class="hint" data-i18n="videoImagineNote"></p>
       </section>
 
@@ -947,19 +948,20 @@ const I18N = {
     "videoIntroB": "Recommended path for wan / Seedance / FLUX / MiniMax / Gemini Omni / grok-imagine. POST /v1/videos also works (auto-forward).",
     "videoHint": "Async: POST /v1/videos, then poll GET /v1/videos/{id}. Billing follows the console.",
     "videoHintGen": "Async: POST /v1/videos/generations, then poll GET /v1/tasks/{task_id} (or GET /v1/videos/{id}). Billing follows the console.",
-    "videoImagineNote": "grok-imagine-video-1.5-preview is image-to-video only. Required: image:{\"url\":\"https://...\"}. Optional defaults: aspect_ratio 16:9, resolution 480p, duration 5s. Aliases image_url / image_urls[0] are accepted.",
+    "videoMediaNote": "Media rule: JSON body only. Images/videos/audio must be public http(s) URLs (asset:// where supported). Local file paths and data: base64 are rejected.",
+    "videoImagineNote": "Modes differ by model. wan3.0: 1×image_urls=first frame, 2×=first+last, or image_with_roles; reference = generation_type=reference + image_urls/video_urls/audio_urls. seedance: image_urls vs image_with_roles(first/last) vs video_urls/audio_urls (first/last exclusive with refs). flux-3: image_urls keyframes or video_url continuation. MiniMax-H3: first_frame_image/last_frame_image or image_with_roles; multimodal image_urls/video_urls/audio_urls (exclusive with first/last). gemini-omni: no duration; first_frame_image+last_frame_image or image_urls. grok-imagine: image-to-video only — image:{\"url\":\"https://...\"}.",
     "nGrokVideo": "text/ref · 1–15s · per request",
     "nVeoComponents": "(delisted)",
-    "nWanVideo": "480P/720P/1080P · per second",
-    "nSeedance25": "by resolution · per second",
-    "nSeedance20": "by resolution · per second",
-    "nFluxVideo": "DRAFT/HD/FHD · per second",
-    "nMinimaxVideo": "768P / 2K · per second",
-    "nGemOmni": "per second",
-    "nGemOmniExt": "pack or ref /s",
+    "nWanVideo": "t2v / first·last / multimodal ref · /s",
+    "nSeedance25": "t2v / frames / video+audio refs · /s",
+    "nSeedance20": "t2v / frames / video+audio refs · /s",
+    "nFluxVideo": "t2v / keyframes / v2v / draft · /s",
+    "nMinimaxVideo": "480p/768p/1080p · t2v / frames / multimodal",
+    "nGemOmni": "t2v / refs / first·last · no duration",
+    "nGemOmniExt": "packs + ref video · /s",
     "perVideo": "/ request",
     "perSecond": "/ second",
-    "nGrokImagineVideo": "Grok Imagine · image-to-video · image.url required · $0.08825/s 480p · $0.1545/s 720p",
+    "nGrokImagineVideo": "image→video only · image:{url} · 480p/720p",
     "tocSpeech": "Speech",
     "tocMore": "More APIs",
     "tocClients": "Clients",
@@ -1073,19 +1075,20 @@ const I18N = {
     "videoIntroB": "wan / Seedance / FLUX / MiniMax / Gemini Omni / grok-imagine 推荐本路径。POST /v1/videos 也会自动转发。",
     "videoHint": "异步：POST /v1/videos 创建，再 GET /v1/videos/{id} 查询。扣费以控制台为准。",
     "videoHintGen": "异步：POST /v1/videos/generations 创建，再 GET /v1/tasks/{task_id}（或 GET /v1/videos/{id}）查询。扣费以控制台为准。",
-    "videoImagineNote": "grok-imagine-video-1.5-preview 仅支持图生视频。必填 image:{\"url\":\"https://...\"}。可省略时默认 aspect_ratio 16:9、resolution 480p、duration 5。也接受 image_url / image_urls[0]。",
+    "videoMediaNote": "媒体硬规则：只要 JSON。图/视频/音频必须是公网 http(s)（或支持的 asset://）。本机路径、data:base64 一律拒绝。",
+    "videoImagineNote": "各模型写法不同。wan3.0：1 张 image_urls=首帧，2 张=首尾帧，或 image_with_roles；参考生用 generation_type=reference + image_urls/video_urls/audio_urls。seedance：image_urls 与 image_with_roles(首尾帧) 与 video_urls/audio_urls（首尾帧与参考互斥）。flux-3：image_urls 关键帧或 video_url 续写。MiniMax-H3：first_frame_image/last_frame_image 或 image_with_roles；多模态 image_urls/video_urls/audio_urls（与首尾帧互斥）。gemini-omni：无 duration；首尾帧字段或 image_urls。grok-imagine：仅图生，必填 image:{\"url\":\"https://...\"}。完整示例见客户接入一页纸 §4.2。",
     "nGrokVideo": "文生/参考图 · 1–15 秒 · 按次",
     "nVeoComponents": "（已下架）",
-    "nWanVideo": "480P/720P/1080P · 按秒",
-    "nSeedance25": "按分辨率 · 按秒",
-    "nSeedance20": "按分辨率 · 按秒",
-    "nFluxVideo": "DRAFT/HD/FHD · 按秒",
-    "nMinimaxVideo": "768P / 2K · 按秒",
-    "nGemOmni": "按秒",
-    "nGemOmniExt": "档位或参考按秒",
+    "nWanVideo": "文生/首尾帧/多模态参考 · 按秒",
+    "nSeedance25": "文生/首尾帧/视频音频参考 · 按秒",
+    "nSeedance20": "文生/首尾帧/视频音频参考 · 按秒",
+    "nFluxVideo": "文生/关键帧/续写/草稿 · 按秒",
+    "nMinimaxVideo": "480p/768p/1080p · 文生/首尾帧/多模态",
+    "nGemOmni": "文生/参考/首尾帧 · 无 duration",
+    "nGemOmniExt": "档位包 + 参考视频 · 按秒",
     "perVideo": "/次",
     "perSecond": "/秒",
-    "nGrokImagineVideo": "Grok Imagine · image-to-video · image.url required · $0.08825/s 480p · $0.1545/s 720p",
+    "nGrokImagineVideo": "仅图生 · image:{url} · 480p/720p",
     "tocSpeech": "语音",
     "tocMore": "扩展能力",
     "tocClients": "客户端接入",
@@ -1199,6 +1202,7 @@ const I18N = {
     "videoIntroB": "wan / Seedance / FLUX / MiniMax / Gemini Omni / grok-imagine 建議本路徑。POST /v1/videos 也會自動轉發。",
     "videoHint": "非同步：POST /v1/videos 建立，再 GET /v1/videos/{id} 查詢。扣費以控制台為準。",
     "videoHintGen": "非同步：POST /v1/videos/generations 建立，再 GET /v1/tasks/{task_id}（或 GET /v1/videos/{id}）查詢。扣費以控制台為準。",
+    "videoMediaNote": "媒體硬規則：只要 JSON。圖/影/音須為公網 http(s)。本機路徑與 data:base64 會被拒。",
     "videoImagineNote": "grok-imagine-video-1.5-preview 僅支援圖生影片。必填 image:{\"url\":\"https://...\"}。預設 aspect_ratio 16:9、resolution 480p、duration 5。也接受 image_url / image_urls[0]。",
     "nGrokVideo": "文生/參考圖 · 1–15 秒 · 按次",
     "nVeoComponents": "（已下架）",
@@ -1325,6 +1329,7 @@ const I18N = {
     "videoIntroB": "wan / Seedance / FLUX / MiniMax / Gemini Omni / grok-imagine 推奨パス。POST /v1/videos でも自動転送。",
     "videoHint": "非同期：POST /v1/videos → GET /v1/videos/{id}。課金はコンソール準拠。",
     "videoHintGen": "非同期：POST /v1/videos/generations → GET /v1/tasks/{task_id}（または GET /v1/videos/{id}）。課金はコンソール準拠。",
+    "videoMediaNote": "Media: JSON only. Public http(s) URLs required. No local paths / data:base64.",
     "videoImagineNote": "grok-imagine-video-1.5-preview は画像→動画のみ。必須: image:{\"url\":\"https://...\"}。省略時 16:9 / 480p / 5s。image_url / image_urls[0] も可。",
     "nGrokVideo": "テキスト/参照 · 1–15秒 · リクエスト課金",
     "nVeoComponents": "約8秒 · リクエスト · 供給は在庫次第",
@@ -1451,6 +1456,7 @@ const I18N = {
     "videoIntroB": "Chemin recommandé pour wan / Seedance / FLUX / MiniMax / Gemini Omni / grok-imagine. POST /v1/videos est aussi redirigé.",
     "videoHint": "Async : POST /v1/videos puis GET /v1/videos/{id}. Facturation = console.",
     "videoHintGen": "Async : POST /v1/videos/generations puis GET /v1/tasks/{task_id} (ou GET /v1/videos/{id}). Facturation = console.",
+    "videoMediaNote": "Media: JSON only. Public http(s) URLs required. No local paths / data:base64.",
     "videoImagineNote": "grok-imagine-video-1.5-preview = image→vidéo uniquement. Requis: image:{\"url\":\"https://...\"}. Défauts 16:9 / 480p / 5s. Alias image_url / image_urls[0].",
     "nGrokVideo": "texte/réf · 1–15s · par requête",
     "nVeoComponents": "~8s · par requête · stock variable",
@@ -1577,6 +1583,7 @@ const I18N = {
     "videoIntroB": "Рекомендуемый путь для wan / Seedance / FLUX / MiniMax / Gemini Omni / grok-imagine. POST /v1/videos тоже перенаправляется.",
     "videoHint": "Асинхронно: POST /v1/videos, затем GET /v1/videos/{id}. Списание — по консоли.",
     "videoHintGen": "Асинхронно: POST /v1/videos/generations, затем GET /v1/tasks/{task_id} (или GET /v1/videos/{id}). Списание — по консоли.",
+    "videoMediaNote": "Media: JSON only. Public http(s) URLs required. No local paths / data:base64.",
     "videoImagineNote": "grok-imagine-video-1.5-preview только image→video. Нужно: image:{\"url\":\"https://...\"}. По умолчанию 16:9 / 480p / 5с. Также image_url / image_urls[0].",
     "nGrokVideo": "текст/реф · 1–15с · за запрос",
     "nVeoComponents": "~8с · за запрос · наличие может меняться",
@@ -1703,6 +1710,7 @@ const I18N = {
     "videoIntroB": "Path khuyến nghị cho wan / Seedance / FLUX / MiniMax / Gemini Omni / grok-imagine. POST /v1/videos cũng được chuyển tự động.",
     "videoHint": "Async: POST /v1/videos rồi GET /v1/videos/{id}. Tính phí theo console.",
     "videoHintGen": "Async: POST /v1/videos/generations rồi GET /v1/tasks/{task_id} (hoặc GET /v1/videos/{id}). Tính phí theo console.",
+    "videoMediaNote": "Media: JSON only. Public http(s) URLs required. No local paths / data:base64.",
     "videoImagineNote": "grok-imagine-video-1.5-preview chỉ image→video. Bắt buộc: image:{\"url\":\"https://...\"}. Mặc định 16:9 / 480p / 5s. Cũng nhận image_url / image_urls[0].",
     "nGrokVideo": "text/ref · 1–15s · theo lần",
     "nVeoComponents": "~8s · theo lần · nguồn có thể thay đổi",

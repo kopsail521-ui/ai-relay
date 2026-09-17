@@ -1,5 +1,5 @@
 {
-  "note": "Custom PNG/SVG icons for models without reliable lobehub logos (or when DB icon drifts to Custom). Served at /brand/model-icons/* via Caddy static/brand. Injected on /pricing by creem-moderation-proxy.",
+  "note": "Custom PNG/SVG only when lobehub has no vendor logo. Models with a real vendor use lobehub keys in DB (Wenxin/Bilibili/Tencent/Doubao/…). Injected on SPA by creem-moderation-proxy.",
   "icons": {
     "VajraV1": "/brand/model-icons/vajrav1.png",
     "AnimeSharp": "/brand/model-icons/animesharp.png",
@@ -13,14 +13,23 @@
     "nsfw-classifier": "/brand/model-icons/nsfw-classifier.png",
     "keyo-text-moderation": "/brand/model-icons/keyo-moderation.png",
     "RMBG-2.0": "/brand/model-icons/rmbg-20.svg",
-    "Atria-dawn-v2": "/brand/model-icons/atria-dawn-v2.svg",
-    "IndexTTS-2": "/brand/model-icons/indextts-2.svg",
-    "Unlimited-OCR": "/brand/model-icons/unlimited-ocr.svg",
-    "Real-ESRGAN": "/brand/model-icons/real-esrgan.svg"
+    "Atria-dawn-v2": "/brand/model-icons/atria-dawn-v2.svg"
   },
   "lobehub_fixes": {
     "seedance-2.5": "Doubao.Color",
     "seedance-2.0": "Doubao.Color",
-    "flux-3-video": "Flux"
+    "flux-3-video": "Flux",
+    "Unlimited-OCR": "Wenxin.Color",
+    "IndexTTS-2": "Bilibili.Color",
+    "Real-ESRGAN": "Tencent.Color",
+    "Fun-ASR-Nano-2512": "Qwen.Color",
+    "Qwen3-TTS": "Qwen.Color",
+    "CosyVoice3": "Qwen.Color",
+    "wan3.0-video": "Qwen.Color",
+    "MiniMax-H3": "Minimax.Color",
+    "sam3": "Meta.Color",
+    "GLM-ASR": "Zhipu.Color",
+    "GLM-TTS": "Zhipu.Color",
+    "Step-Audio-TTS-3B": "Stepfun.Color"
   }
 }

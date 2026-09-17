@@ -48,8 +48,9 @@ const VENDORS = {
     "Black Forest Labs",
     "Black Forest Labs"
   ),
-  ByteDance: LANG("ByteDance", "ByteDance", "ByteDance", "ByteDance", "ByteDance", "ByteDance", "ByteDance"),
-  字节跳动: LANG("ByteDance", "ByteDance", "ByteDance", "ByteDance", "ByteDance", "ByteDance", "ByteDance"),
+  // zh shows 字节跳动; Latin locales keep ByteDance. Seedance models hang under this vendor.
+  ByteDance: LANG("字节跳动", "字節跳動", "ByteDance", "ByteDance", "ByteDance", "ByteDance", "ByteDance"),
+  字节跳动: LANG("字节跳动", "字節跳動", "ByteDance", "ByteDance", "ByteDance", "ByteDance", "ByteDance"),
   阿里巴巴: LANG("阿里巴巴", "阿里巴巴", "Alibaba", "Alibaba", "Alibaba", "Alibaba", "Alibaba"),
   Alibaba: LANG("阿里巴巴", "阿里巴巴", "Alibaba", "Alibaba", "Alibaba", "Alibaba", "Alibaba"),
   Qwen: LANG("阿里巴巴", "阿里巴巴", "Alibaba", "Alibaba", "Alibaba", "Alibaba", "Alibaba"),

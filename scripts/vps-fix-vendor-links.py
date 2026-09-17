@@ -136,17 +136,10 @@ def main():
     for model, (vname, icon) in MODEL_VENDOR.items():
         vid = ensure_vendor(vname, icon)
         cur.execute(
-            "UPDATE models SET vendor_id=?, icon=COALESCE(NULLIF(icon,''), ?) WHERE model_name=?",
+            "UPDATE models SET vendor_id=?, icon=? WHERE model_name=?",
             (vid, icon, model),
         )
-        if cur.rowcount:
-            print("OK", model, "->", vname, "id", vid)
-        else:
-            # try without icon coalesce if column missing behavior
-            cur.execute(
-                "UPDATE models SET vendor_id=? WHERE model_name=?", (vid, model)
-            )
-            print(("OK" if cur.rowcount else "MISS"), model, "->", vname)
+        print(("OK" if cur.rowcount else "MISS"), model, "->", vname, "icon", icon)
 
     conn.commit()
 
@@ -160,7 +153,9 @@ def main():
         names,
     )
     for name, vid in cur.fetchall():
-        print(name, "=>", vmap.get(vid), "vid", vid)
+        cur.execute("SELECT icon FROM models WHERE model_name=?", (name,))
+        icon = (cur.fetchone() or [""])[0]
+        print(name, "=>", vmap.get(vid), "vid", vid, "icon", icon)
     print("DONE_FIX_VENDOR_LINKS")
 
 

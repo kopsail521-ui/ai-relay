@@ -359,11 +359,109 @@ async function proxyToGitee(req, res, bodyBuf) {
   const ct = upstream.headers.get("content-type");
   if (ct) outHeaders["Content-Type"] = ct;
   let buf = Buffer.from(await upstream.arrayBuffer());
+  const pathOnly = (req.url || "/").split("?")[0];
   if (upstream.status >= 400) {
     buf = scrubGiteeErrorBuf(buf, ct);
+  } else {
+    buf = enrichGiteeClientJson(pathOnly, buf, ct);
+    if (ct && /json/i.test(ct)) {
+      outHeaders["Content-Type"] = "application/json; charset=utf-8";
+    }
   }
   res.writeHead(upstream.status, outHeaders);
   res.end(buf);
+}
+
+/**
+ * Make Gitee async responses AI-agent friendly without breaking old clients:
+ * - always expose top-level id + task_id
+ * - map status success/failure/waiting → completed/failed/processing
+ * - alias output.file_url → url (+ Path-B-like data.result.videos when it's a media file)
+ */
+function enrichGiteeClientJson(pathOnly, buf, ct) {
+  if (!ct || !/json/i.test(String(ct))) return buf;
+  let j;
+  try {
+    j = JSON.parse(buf.toString("utf8") || "{}");
+  } catch {
+    return buf;
+  }
+  const isPoll = pathOnly.startsWith("/v1/task/");
+  const isSubmit = pathOnly.startsWith("/v1/async/");
+  if (!isPoll && !isSubmit) return buf;
+
+  const pollId = isPoll ? pathOnly.split("/").filter(Boolean).pop() : "";
+  const tid = String(j.task_id || j.id || pollId || "");
+  if (tid) {
+    if (j.id == null || j.id === "") j.id = tid;
+    if (j.task_id == null || j.task_id === "") j.task_id = tid;
+  }
+
+  if (isPoll) {
+    const rawSt = j.status;
+    const mapped = mapGiteeStatus(rawSt);
+    if (mapped) {
+      if (rawSt != null && String(rawSt).toLowerCase() !== mapped) {
+        j.status_raw = rawSt;
+      }
+      j.status = mapped;
+    }
+    const fileUrl =
+      (j.output && j.output.file_url) || j.file_url || j.url || "";
+    if (fileUrl) {
+      j.url = fileUrl;
+      if (!j.output || typeof j.output !== "object") j.output = {};
+      if (!j.output.file_url) j.output.file_url = fileUrl;
+      if (!j.data || typeof j.data !== "object" || Array.isArray(j.data)) {
+        j.data = {
+          id: tid || j.id,
+          task_id: tid || j.task_id,
+          status: j.status,
+          result: { videos: [{ url: [fileUrl] }] },
+        };
+      }
+    } else if (j.output && Array.isArray(j.output.segments)) {
+      const text = j.output.segments
+        .map((s) => (s && s.content != null ? String(s.content) : ""))
+        .filter(Boolean)
+        .join("\n");
+      if (text && (j.text == null || j.text === "")) j.text = text;
+      if (!j.data || typeof j.data !== "object" || Array.isArray(j.data)) {
+        j.data = {
+          id: tid || j.id,
+          task_id: tid || j.task_id,
+          status: j.status,
+          output: j.output,
+        };
+      }
+    } else if (tid && (!j.data || typeof j.data !== "object")) {
+      j.data = { id: tid, task_id: tid, status: j.status };
+    }
+  }
+
+  return Buffer.from(JSON.stringify(j), "utf8");
+}
+
+function mapGiteeStatus(raw) {
+  const st = String(raw || "").toLowerCase();
+  if (!st) return "";
+  if (["success", "succeeded", "completed", "done"].includes(st)) return "completed";
+  if (["failure", "failed", "error"].includes(st)) return "failed";
+  if (["cancelled", "canceled"].includes(st)) return "cancelled";
+  if (
+    [
+      "waiting",
+      "pending",
+      "queued",
+      "in_progress",
+      "running",
+      "processing",
+      "submitted",
+    ].includes(st)
+  ) {
+    return "processing";
+  }
+  return st;
 }
 
 const server = http.createServer(async (req, res) => {

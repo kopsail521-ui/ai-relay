@@ -29,6 +29,54 @@
 
 ---
 
+## 0.6 AI 读结果契约（所有异步统一习惯）
+
+异步任务：**提交 → 拿到 id → 按族轮询 → 读 url/文本**。不要混轮询路径。
+
+**统一状态词（网关已归一）：** `processing` | `completed` | `failed` | `cancelled`  
+（上游可能仍带 `status_raw`，如 `succeeded` / `success` / `waiting`——以归一后的 `status` 为准。）
+
+| 能力族 | 提交后取 id | 轮询直到 | 结果怎么拿 |
+|--------|-------------|---------|------------|
+| 视频 Path B | `id` 或 `task_id` 或 `data[0].task_id` | `status`/`data.status` = `completed` | **`url`** 或 `data.result.videos[0].url[0]` |
+| TTS 异步 / InfiniteTalk | `id` 或 `task_id` | `status` = `completed` | **`url`** 或 `output.file_url` |
+| MinerU | `id` 或 `task_id` | `status` = `completed` | **`text`** 或 `output.segments[].content` |
+| 视频 Path A（grok-1.5-video） | `id` | `status` = `completed` | 再 `GET /v1/videos/{id}/content` 取字节 |
+| Chat / OCR | — | — | `choices[0].message.content` |
+| ASR | — | — | `text` |
+| TTS 同步 | — | — | **响应体就是音频字节**（不是 JSON） |
+| 上传 | — | — | 响应里的 **`url`** |
+
+Path B 轮询成功示例：
+```json
+{
+  "code": 200,
+  "id": "task_xxx",
+  "task_id": "task_xxx",
+  "status": "completed",
+  "url": "https://…/out.mp4",
+  "data": {
+    "id": "task_xxx",
+    "task_id": "task_xxx",
+    "status": "completed",
+    "result": { "videos": [{ "url": ["https://…/out.mp4"] }] }
+  }
+}
+```
+
+Gitee 异步（TTS/InfiniteTalk）轮询成功示例：
+```json
+{
+  "id": "…",
+  "task_id": "…",
+  "status": "completed",
+  "url": "https://…/out.mp3",
+  "output": { "file_url": "https://…/out.mp3" }
+}
+```
+
+---
+
 ## 0.5 本地素材上传（本机图/音/视频 → 公网 URL）
 
 用于：**Path B 视频**（Seedance / MiniMax / Wan / FLUX / Omni / Grok-imagine）、**Unlimited-OCR** / 多模态 chat 的 `image_url.url`。  
@@ -208,7 +256,9 @@ curl https://www.keyoapi.xyz/v1/videos/generations \
   "data": [{ "id": "task_xxx", "task_id": "task_xxx", "status": "submitted" }]
 }
 ```
-读 **`id` / `task_id` / `data[0].task_id` 任一即可**，再 `GET /v1/tasks/{id}` 轮询；成片 URL 在 `data.result.videos[0].url[0]`。
+读 **`id` / `task_id` / `data[0].task_id` 任一即可**，再 `GET /v1/tasks/{id}` 轮询。  
+终态：`status`/`data.status` = `completed`（或 `failed`）。  
+成片：**优先读顶层 `url`**，也可用 `data.result.videos[0].url[0]`（`url` 为数组）。详见 §0.6。
 
 ### 5.1 MiniMax-H3
 
@@ -464,6 +514,8 @@ curl https://www.keyoapi.xyz/v1/audio/transcriptions \
 }
 ```
 
+提交成功至少含 `id` / `task_id`。轮询到 `status=completed` 后读 **`url`** 或 `output.file_url`（§0.6）。
+
 ---
 
 ## 9. OCR（Unlimited-OCR）
@@ -498,6 +550,8 @@ curl https://www.keyoapi.xyz/v1/async/documents/parse \
   -F file=@doc.pdf
 ```
 
+提交返回 `id`/`task_id`；轮询 `status=completed` 后读 **`text`**（或 `output.segments[].content`）。
+
 ---
 
 ## 11. 视觉 multipart（抠图 / 超分 / 展平 / 检测 / 分割 / 姿态）
@@ -530,6 +584,8 @@ curl https://www.keyoapi.xyz/v1/async/videos/image-to-video \
   -F image=@face.png \
   -F audio=@speech.wav
 ```
+
+提交返回 `id`/`task_id`；轮询 `status=completed` 后读 **`url`** 或 `output.file_url`。**不要**用 Path B 的 `/v1/tasks/`。
 
 ---
 

@@ -723,6 +723,9 @@ function normalizeGrsaiPollJson(raw, taskId) {
     "";
   const out = {
     code: 200,
+    id: taskId,
+    task_id: taskId,
+    status: mapped,
     data: {
       id: taskId,
       task_id: taskId,
@@ -734,7 +737,91 @@ function normalizeGrsaiPollJson(raw, taskId) {
         : j.data?.result || j.result || null,
     },
   };
+  if (url) out.url = url;
   return JSON.stringify(out);
+}
+
+/** Map vendor status words → processing|completed|failed|cancelled */
+function mapAsyncStatus(raw) {
+  const st = String(raw || "").toLowerCase();
+  if (["succeeded", "success", "completed", "done"].includes(st)) return "completed";
+  if (["failed", "failure", "error"].includes(st)) return "failed";
+  if (["cancelled", "canceled"].includes(st)) return "cancelled";
+  if (
+    [
+      "pending",
+      "queued",
+      "submitted",
+      "running",
+      "processing",
+      "waiting",
+      "in_progress",
+    ].includes(st)
+  ) {
+    return "processing";
+  }
+  return st || "processing";
+}
+
+function firstVideoUrlFromPoll(j) {
+  const videos = j?.data?.result?.videos || j?.result?.videos;
+  if (Array.isArray(videos) && videos[0]) {
+    const u = videos[0].url;
+    if (Array.isArray(u) && u[0]) return String(u[0]);
+    if (typeof u === "string" && u) return u;
+  }
+  return (
+    j?.url ||
+    j?.video_url ||
+    j?.data?.url ||
+    j?.data?.video_url ||
+    ""
+  );
+}
+
+/**
+ * APIMart / Openlux Path B poll: keep vendor fields, but make AI-friendly:
+ * - top-level id / task_id / status / url
+ * - data.status normalized to completed|failed|processing
+ * - data.result.videos[0].url always an array when present
+ */
+function normalizeApimartPollJson(raw, taskId) {
+  let j = {};
+  try {
+    j = JSON.parse(raw || "{}");
+  } catch {
+    return raw;
+  }
+  const data =
+    j.data && typeof j.data === "object" && !Array.isArray(j.data) ? { ...j.data } : {};
+  const rawSt = data.status || j.status || "";
+  const mapped = mapAsyncStatus(rawSt);
+  let url = firstVideoUrlFromPoll({ ...j, data });
+  if (url) {
+    if (!data.result || typeof data.result !== "object") data.result = {};
+    const videos = Array.isArray(data.result.videos) ? data.result.videos : [];
+    if (!videos[0]) {
+      data.result.videos = [{ url: [url] }];
+    } else {
+      const u0 = videos[0].url;
+      if (typeof u0 === "string") videos[0] = { ...videos[0], url: [u0] };
+      else if (!Array.isArray(u0) || !u0[0]) videos[0] = { ...videos[0], url: [url] };
+      data.result.videos = videos;
+    }
+  }
+  data.id = data.id || taskId;
+  data.task_id = data.task_id || taskId;
+  if (rawSt && String(rawSt).toLowerCase() !== mapped) data.status_raw = rawSt;
+  data.status = mapped;
+  if (mapped === "completed" && data.progress == null) data.progress = 100;
+
+  j.code = j.code ?? 200;
+  j.id = j.id || taskId;
+  j.task_id = j.task_id || taskId;
+  j.status = mapped;
+  j.data = data;
+  if (url) j.url = url;
+  return JSON.stringify(j);
 }
 
 function getPending(taskId) {
@@ -980,9 +1067,14 @@ const server = http.createServer(async (req, res) => {
           settleTask(tid, cost, st === "success" || st === "succeeded" || st === "done" ? "completed" : st);
         }
       } catch {}
-      const out = clientUp(up);
+      const normalized = Buffer.from(normalizeApimartPollJson(text, tid), "utf8");
+      const out = clientUp({
+        status: up.status,
+        buf: normalized,
+        ct: "application/json",
+      });
       res.writeHead(out.status, {
-        "Content-Type": out.ct,
+        "Content-Type": "application/json; charset=utf-8",
         "Access-Control-Allow-Origin": "*",
       });
       return res.end(out.buf);

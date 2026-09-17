@@ -29,6 +29,43 @@
 
 ---
 
+## 0.6 AI result contract (all async)
+
+Async flow: **submit → read id → poll by family → read url/text**. Never mix poll paths.
+
+**Normalized status:** `processing` | `completed` | `failed` | `cancelled`  
+(Upstream may keep `status_raw` like `succeeded` / `success` / `waiting` — use normalized `status`.)
+
+| Family | Submit id | Poll until | Result |
+|--------|-----------|------------|--------|
+| Video Path B | `id` \| `task_id` \| `data[0].task_id` | `status`/`data.status` = `completed` | **`url`** or `data.result.videos[0].url[0]` |
+| TTS async / InfiniteTalk | `id` \| `task_id` | `status` = `completed` | **`url`** or `output.file_url` |
+| MinerU | `id` \| `task_id` | `status` = `completed` | **`text`** or `output.segments[].content` |
+| Video Path A (`grok-1.5-video`) | `id` | `status` = `completed` | then `GET /v1/videos/{id}/content` |
+| Chat / OCR | — | — | `choices[0].message.content` |
+| ASR | — | — | `text` |
+| TTS sync | — | — | **raw audio bytes** (not JSON) |
+| Uploads | — | — | response **`url`** |
+
+Path B poll success:
+```json
+{
+  "code": 200,
+  "id": "task_xxx",
+  "task_id": "task_xxx",
+  "status": "completed",
+  "url": "https://…/out.mp4",
+  "data": {
+    "id": "task_xxx",
+    "task_id": "task_xxx",
+    "status": "completed",
+    "result": { "videos": [{ "url": ["https://…/out.mp4"] }] }
+  }
+}
+```
+
+---
+
 ## 0.5 Local media upload (file → public URL)
 
 For: **Path B video** (Seedance / MiniMax / Wan / FLUX / Omni / Grok-imagine), **Unlimited-OCR** / multimodal chat `image_url.url`.  
@@ -208,7 +245,9 @@ Media: public https URLs only. For local files, use §0.5 `POST /v1/uploads` fir
   "data": [{ "id": "task_xxx", "task_id": "task_xxx", "status": "submitted" }]
 }
 ```
-Read **`id` / `task_id` / `data[0].task_id` (any)** then poll `GET /v1/tasks/{id}`. Finished video: `data.result.videos[0].url[0]`.
+Read **`id` / `task_id` / `data[0].task_id` (any)** then poll `GET /v1/tasks/{id}`.  
+Terminal: `status`/`data.status` = `completed` (or `failed`).  
+Video: prefer top-level **`url`**, or `data.result.videos[0].url[0]` (`url` is an array). See §0.6.
 
 ### 5.1 MiniMax-H3
 

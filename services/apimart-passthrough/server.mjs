@@ -559,53 +559,58 @@ function mapAspectToGrsai(v) {
 
 function buildGrsaiVideoBody(meta, body) {
   const est = meta.estimate || {};
-  const duration = Number(body.duration ?? body.seconds ?? est.default_seconds ?? 5);
+  let duration = Number(body.duration ?? body.seconds ?? est.default_seconds ?? 5);
+  if (!Number.isFinite(duration) || duration <= 0) duration = 5;
   let resolution = String(
     body.resolution || body.size || est.default_resolution || "768p"
   ).toLowerCase();
   if (resolution === "2k") resolution = "1080p";
+  // 1080p max 10s (inventory rule)
+  if (resolution === "1080p" && duration > 10) duration = 10;
+  if (duration > 15) duration = 15;
+
   const out = {
     model: String(meta.upstream_model || "minimax-h3"),
     prompt: String(body.prompt || body.text || ""),
-    duration: Number.isFinite(duration) && duration > 0 ? duration : 5,
+    duration,
     resolution,
     aspectRatio: mapAspectToGrsai(
       body.aspectRatio || body.aspect_ratio || body.ratio
     ),
+    // Keyo async poll style (customer still uses /v1/tasks/{id})
     webHook: "-1",
     shutProgress: true,
   };
-  // Collect public image URLs (https only semantics enforced upstream)
-  const urls = [];
-  const pushUrl = (u) => {
-    if (typeof u === "string" && u) urls.push(u);
-    else if (u && typeof u === "object" && u.url) urls.push(String(u.url));
+
+  // images: prefer native `images`, else common aliases (https URLs)
+  const images = [];
+  const pushImg = (u) => {
+    if (typeof u === "string" && u) images.push(u);
+    else if (u && typeof u === "object" && u.url) images.push(String(u.url));
   };
-  if (typeof body.first_frame_image === "string") pushUrl(body.first_frame_image);
-  if (typeof body.last_frame_image === "string") pushUrl(body.last_frame_image);
-  if (Array.isArray(body.image_urls)) {
-    for (const u of body.image_urls) pushUrl(u);
-  }
-  if (typeof body.image_url === "string") pushUrl(body.image_url);
+  if (Array.isArray(body.images)) for (const u of body.images) pushImg(u);
+  if (Array.isArray(body.image_urls)) for (const u of body.image_urls) pushImg(u);
+  if (typeof body.image_url === "string") pushImg(body.image_url);
+  if (typeof body.first_frame_image === "string") pushImg(body.first_frame_image);
+  if (typeof body.last_frame_image === "string") pushImg(body.last_frame_image);
   if (Array.isArray(body.image_with_roles)) {
-    for (const it of body.image_with_roles) pushUrl(it);
+    for (const it of body.image_with_roles) pushImg(it);
   }
-  if (urls.length) out.urls = urls.slice(0, 9);
-  // Forward multimodal refs when present (inventory may accept or ignore)
-  if (Array.isArray(body.video_urls) && body.video_urls.length) {
-    out.video_urls = body.video_urls.slice(0, 3);
-  }
-  if (Array.isArray(body.audio_urls) && body.audio_urls.length) {
-    out.audio_urls = body.audio_urls.slice(0, 3);
-  }
-  if (typeof body.first_frame_image === "string" && body.first_frame_image) {
-    out.first_frame_image = body.first_frame_image;
-  }
-  if (typeof body.last_frame_image === "string" && body.last_frame_image) {
-    out.last_frame_image = body.last_frame_image;
-  }
-  if (Array.isArray(body.image_with_roles) && body.image_with_roles.length) {
-    out.image_with_roles = body.image_with_roles;
+  if (images.length) out.images = images.slice(0, 9);
+
+  // audios: prefer native `audios`
+  const audios = [];
+  const pushAud = (u) => {
+    if (typeof u === "string" && u) audios.push(u);
+    else if (u && typeof u === "object" && u.url) audios.push(String(u.url));
+  };
+  if (Array.isArray(body.audios)) for (const u of body.audios) pushAud(u);
+  if (Array.isArray(body.audio_urls)) for (const u of body.audio_urls) pushAud(u);
+  if (typeof body.audio_url === "string") pushAud(body.audio_url);
+  if (audios.length) out.audios = audios.slice(0, 3);
+
+  if (body.seed != null && Number.isFinite(Number(body.seed))) {
+    out.seed = Number(body.seed);
   }
   return out;
 }

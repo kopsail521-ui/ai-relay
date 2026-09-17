@@ -424,6 +424,31 @@
     border-color: var(--line-strong);
     color: var(--accent-ink);
   }
+  .doc-rules {
+    margin: 14px 0 0;
+    padding: 12px 14px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: var(--surface);
+    list-style: none;
+  }
+  .doc-rules li {
+    margin: 0 0 8px;
+    padding: 0 0 8px;
+    border-bottom: 1px dashed var(--line);
+    font-size: 13.5px;
+    color: var(--ink-2);
+    line-height: 1.5;
+  }
+  .doc-rules li:last-child {
+    margin: 0;
+    padding: 0;
+    border-bottom: none;
+  }
+  .doc-rules code {
+    font-family: var(--mono);
+    font-size: 12px;
+  }
 
   .client-grid {
     display: grid;
@@ -771,20 +796,30 @@
               </tr>
             </thead>
             <tbody>
-<tr><td class="model"><button type="button" class="model-btn" data-copy="wan3.0-video">wan3.0-video</button></td><td class="price">$0.0412+ <span data-i18n="perSecond"></span></td><td class="note-cell" data-i18n="nWanVideo"></td></tr>
-<tr><td class="model"><button type="button" class="model-btn" data-copy="seedance-2.5">seedance-2.5</button></td><td class="price">$0.1153+ <span data-i18n="perSecond"></span></td><td class="note-cell" data-i18n="nSeedance25"></td></tr>
-<tr><td class="model"><button type="button" class="model-btn" data-copy="seedance-2.0">seedance-2.0</button></td><td class="price">$0.0792+ <span data-i18n="perSecond"></span></td><td class="note-cell" data-i18n="nSeedance20"></td></tr>
-<tr><td class="model"><button type="button" class="model-btn" data-copy="flux-3-video">flux-3-video</button></td><td class="price">$0.0576–$0.5088 <span data-i18n="perSecond"></span></td><td class="note-cell" data-i18n="nFluxVideo"></td></tr>
-<tr><td class="model"><button type="button" class="model-btn" data-copy="MiniMax-H3">MiniMax-H3</button></td><td class="price">$0.02055 / $0.02877 / $0.04110 <span data-i18n="perSecond"></span></td><td class="note-cell" data-i18n="nMinimaxVideo"></td></tr>
-<tr><td class="model"><button type="button" class="model-btn" data-copy="gemini-omni-1.1-flash">gemini-omni-1.1-flash</button></td><td class="price">$0.1056 <span data-i18n="perSecond"></span></td><td class="note-cell" data-i18n="nGemOmni"></td></tr>
-<tr><td class="model"><button type="button" class="model-btn" data-copy="gemini-omni-1.1-flash-ext">gemini-omni-1.1-flash-ext</button></td><td class="price">$0.42 <span data-i18n="perVideo"></span> / $0.096 <span data-i18n="perSecond"></span></td><td class="note-cell" data-i18n="nGemOmniExt"></td></tr>
-<tr><td class="model"><button type="button" class="model-btn" data-copy="grok-imagine-video-1.5-preview">grok-imagine-video-1.5-preview</button></td><td class="price">$0.08825 / $0.1545 <span data-i18n="perSecond"></span></td><td class="note-cell" data-i18n="nGrokImagineVideo"></td></tr>
+<tr><td class="model"><button type="button" class="model-btn" data-copy="wan3.0-video">wan3.0-video</button></td><td class="price">$0.0412+ <span data-i18n="perSecond"></span></td><td class="note-cell"><a href="#api-wan" data-i18n="nWanVideo"></a></td></tr>
+<tr><td class="model"><button type="button" class="model-btn" data-copy="seedance-2.5">seedance-2.5</button></td><td class="price">$0.1153+ <span data-i18n="perSecond"></span></td><td class="note-cell"><a href="#api-seedance" data-i18n="nSeedance25"></a></td></tr>
+<tr><td class="model"><button type="button" class="model-btn" data-copy="seedance-2.0">seedance-2.0</button></td><td class="price">$0.0792+ <span data-i18n="perSecond"></span></td><td class="note-cell"><a href="#api-seedance" data-i18n="nSeedance20"></a></td></tr>
+<tr><td class="model"><button type="button" class="model-btn" data-copy="flux-3-video">flux-3-video</button></td><td class="price">$0.0576–$0.5088 <span data-i18n="perSecond"></span></td><td class="note-cell"><a href="#api-flux" data-i18n="nFluxVideo"></a></td></tr>
+<tr><td class="model"><button type="button" class="model-btn" data-copy="MiniMax-H3">MiniMax-H3</button></td><td class="price">$0.02055 / $0.02877 / $0.04110 <span data-i18n="perSecond"></span></td><td class="note-cell"><a href="#api-minimax-h3" data-i18n="nMinimaxVideo"></a></td></tr>
+<tr><td class="model"><button type="button" class="model-btn" data-copy="gemini-omni-1.1-flash">gemini-omni-1.1-flash</button></td><td class="price">$0.1056 <span data-i18n="perSecond"></span></td><td class="note-cell"><a href="#api-gemini-omni" data-i18n="nGemOmni"></a></td></tr>
+<tr><td class="model"><button type="button" class="model-btn" data-copy="gemini-omni-1.1-flash-ext">gemini-omni-1.1-flash-ext</button></td><td class="price">$0.42 <span data-i18n="perVideo"></span> / $0.096 <span data-i18n="perSecond"></span></td><td class="note-cell"><a href="#api-gemini-omni" data-i18n="nGemOmniExt"></a></td></tr>
+<tr><td class="model"><button type="button" class="model-btn" data-copy="grok-imagine-video-1.5-preview">grok-imagine-video-1.5-preview</button></td><td class="price">$0.08825 / $0.1545 <span data-i18n="perSecond"></span></td><td class="note-cell"><a href="#api-grok-imagine" data-i18n="nGrokImagineVideo"></a></td></tr>
             </tbody>
           </table>
         </div>
-        <p class="hint" data-i18n="videoHintGen"></p>
-        <p class="hint" data-i18n="videoMediaNote"></p>
-        <p class="hint"><a href="#video-api" data-i18n="videoImagineNote"></a></p>
+        <ul class="doc-rules">
+          <li data-i18n="videoRuleAsync"></li>
+          <li data-i18n="videoRuleMedia"></li>
+          <li data-i18n="videoRuleParams"></li>
+        </ul>
+        <div class="model-jump">
+          <a href="#api-minimax-h3">MiniMax-H3</a>
+          <a href="#api-seedance">seedance</a>
+          <a href="#api-wan">wan</a>
+          <a href="#api-flux">flux-3-video</a>
+          <a href="#api-gemini-omni">gemini-omni</a>
+          <a href="#api-grok-imagine">grok-imagine</a>
+        </div>
       </section>
 
       <section id="video-api">
@@ -912,7 +947,7 @@
           </article>
 
           <article class="model-api" id="api-wan">
-            <h3>wan2.6-video / wan2.6-r2v / wan3.0-video</h3>
+            <h3>wan3.0-video</h3>
             <p class="model-lead" data-i18n="wanLead"></p>
             <div class="table-wrap">
               <table class="field-table">
@@ -922,11 +957,21 @@
                 <tbody>
                   <tr><td>prompt<span class="req">*</span></td><td>string</td><td>文案</td></tr>
                   <tr><td>resolution / duration</td><td>string / int</td><td>如 <code>720P</code> + 秒数</td></tr>
-                  <tr><td>image_urls</td><td>string[]</td><td>图生 / 多图参考</td></tr>
+                  <tr><td>image_urls</td><td>string[]</td><td>1 张=首帧；2 张=首+尾；或多图参考</td></tr>
                   <tr><td>image_with_roles</td><td>object[]</td><td>首尾帧：<code>first_frame</code>+<code>last_frame</code></td></tr>
+                  <tr><td>generation_type</td><td>string</td><td>参考生时用 <code>reference</code>，配合 image/video/audio URLs</td></tr>
                   <tr><td>video_urls / audio_urls</td><td>string[]</td><td>参考视频 / 音频（勿与首尾帧混用）</td></tr>
                 </tbody>
               </table>
+            </div>
+            <div class="code-block" style="margin-top:12px">
+              <div class="code-bar"><span class="lang">JSON · 文生</span><button type="button" class="btn-copy" data-copy-target="ex-wan-t2v" data-i18n="copy"></button></div>
+              <pre id="ex-wan-t2v"><code>{
+  "model": "wan3.0-video",
+  "prompt": "A kitten running on a moonlit rooftop",
+  "resolution": "720P",
+  "duration": 5
+}</code></pre>
             </div>
           </article>
 

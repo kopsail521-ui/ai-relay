@@ -199,6 +199,17 @@ curl https://www.keyoapi.xyz/v1/videos/generations \
 统一轮询：`GET https://www.keyoapi.xyz/v1/tasks/{task_id}`  
 媒体：只能公网 https URL。本机文件先走 §0.5 `POST /v1/uploads`，再把返回的 `url` 填入下方字段。
 
+**提交成功响应（取 task id）：**
+```json
+{
+  "code": 200,
+  "id": "task_xxx",
+  "task_id": "task_xxx",
+  "data": [{ "id": "task_xxx", "task_id": "task_xxx", "status": "submitted" }]
+}
+```
+读 **`id` / `task_id` / `data[0].task_id` 任一即可**，再 `GET /v1/tasks/{id}` 轮询；成片 URL 在 `data.result.videos[0].url[0]`。
+
 ### 5.1 MiniMax-H3
 
 必填：`model` `prompt` `aspectRatio` `resolution` `duration`  

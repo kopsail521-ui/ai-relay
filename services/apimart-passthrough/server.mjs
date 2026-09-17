@@ -664,8 +664,37 @@ function normalizeGrsaiSubmitJson(raw) {
   }
   return JSON.stringify({
     code: 200,
-    data: [{ task_id: String(id), status: "submitted" }],
+    id: String(id),
+    task_id: String(id),
+    data: [{ id: String(id), task_id: String(id), status: "submitted" }],
   });
+}
+
+/**
+ * APIMart / Path B submit: keep upstream body, but always expose top-level
+ * `id` + `task_id` so OpenAI-style adapters (HyperFrames / Cursor) that only
+ * read id|task_id|job_id|video_id do not get HTTP 200 with an empty task id.
+ */
+function enrichSubmitTaskIdAliases(raw) {
+  const tid = extractTaskId(raw);
+  if (!tid) return { text: raw, tid: "" };
+  try {
+    const j = JSON.parse(raw || "{}");
+    if (j.id == null || j.id === "") j.id = tid;
+    if (j.task_id == null || j.task_id === "") j.task_id = tid;
+    if (Array.isArray(j.data) && j.data[0] && typeof j.data[0] === "object") {
+      if (j.data[0].id == null || j.data[0].id === "") j.data[0].id = tid;
+      if (j.data[0].task_id == null || j.data[0].task_id === "") {
+        j.data[0].task_id = tid;
+      }
+    } else if (j.data && typeof j.data === "object" && !Array.isArray(j.data)) {
+      if (j.data.id == null || j.data.id === "") j.data.id = tid;
+      if (j.data.task_id == null || j.data.task_id === "") j.data.task_id = tid;
+    }
+    return { text: JSON.stringify(j), tid };
+  } catch {
+    return { text: raw, tid };
+  }
 }
 
 function normalizeGrsaiPollJson(raw, taskId) {
@@ -1105,6 +1134,27 @@ const server = http.createServer(async (req, res) => {
         outStatus = 502;
       }
       text = normalized;
+    } else if (outStatus >= 200 && outStatus < 300) {
+      // Seedance / Wan / FLUX / Omni / Grok-imagine (APIMart): alias task id
+      const enriched = enrichSubmitTaskIdAliases(text);
+      if (enriched.tid) {
+        text = enriched.text;
+        outBuf = Buffer.from(text, "utf8");
+        outCt = "application/json";
+      } else {
+        // Never return 200 without a pollable task id (breaks HyperFrames etc.)
+        outStatus = 502;
+        text = JSON.stringify({
+          error: {
+            message:
+              "upstream accepted submit but returned no task_id; retry or contact support",
+            type: "server_error",
+            code: "missing_task_id",
+          },
+        });
+        outBuf = Buffer.from(text, "utf8");
+        outCt = "application/json";
+      }
     }
 
     if (outStatus >= 200 && outStatus < 300) {

@@ -199,6 +199,17 @@ Shared: `POST https://www.keyoapi.xyz/v1/videos/generations`
 Shared poll: `GET https://www.keyoapi.xyz/v1/tasks/{task_id}`  
 Media: public https URLs only. For local files, use §0.5 `POST /v1/uploads` first, then paste the returned `url`.
 
+**Submit success (task id):**
+```json
+{
+  "code": 200,
+  "id": "task_xxx",
+  "task_id": "task_xxx",
+  "data": [{ "id": "task_xxx", "task_id": "task_xxx", "status": "submitted" }]
+}
+```
+Read **`id` / `task_id` / `data[0].task_id` (any)** then poll `GET /v1/tasks/{id}`. Finished video: `data.result.videos[0].url[0]`.
+
 ### 5.1 MiniMax-H3
 
 Required: `model` `prompt` `aspectRatio` `resolution` `duration`  

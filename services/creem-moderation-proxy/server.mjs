@@ -2,6 +2,8 @@
  * Creem Moderation proxy — screens image prompts before New API.
  * Also injects a small fix so Google OAuth buttons are not stuck disabled
  * when Privacy/Terms consent checkbox is unchecked (Creem review).
+ * Also hosts POST /v1/uploads (+ /v1/files) → public /uploads/{id}.ext URLs
+ * for Path B video / OCR reference media (local files → https).
  *
  * Env:
  *   UPSTREAM_URL=http://127.0.0.1:3000
@@ -9,6 +11,10 @@
  *   CREEM_TEST_MODE=true|false
  *   PORT=3001
  *   LISTEN_HOST=127.0.0.1
+ *   UPLOAD_DIR=/opt/ai-relay/static/uploads
+ *   UPLOAD_PUBLIC_BASE=https://www.keyoapi.xyz/uploads
+ *   UPLOAD_MAX_BYTES=104857600
+ *   UPLOAD_TTL_HOURS=48
  */
 import http from "http";
 import { URL } from "url";
@@ -16,6 +22,7 @@ import zlib from "zlib";
 import { promisify } from "util";
 import fs from "fs";
 import path from "path";
+import crypto from "crypto";
 import { fileURLToPath } from "url";
 
 const gunzip = promisify(zlib.gunzip);
@@ -29,6 +36,58 @@ const CREEM_KEY = process.env.CREEM_API_KEY || "";
 const TEST_MODE = String(process.env.CREEM_TEST_MODE || "true").toLowerCase() !== "false";
 const CREEM_BASE = TEST_MODE ? "https://test-api.creem.io" : "https://api.creem.io";
 const TIMEOUT_MS = Number(process.env.CREEM_MODERATION_TIMEOUT_MS || 5000);
+
+const UPLOAD_DIR =
+  process.env.UPLOAD_DIR ||
+  path.join(path.dirname(fileURLToPath(import.meta.url)), "../../static/uploads");
+const UPLOAD_PUBLIC_BASE = (
+  process.env.UPLOAD_PUBLIC_BASE || "https://www.keyoapi.xyz/uploads"
+).replace(/\/$/, "");
+const UPLOAD_MAX_BYTES = Number(process.env.UPLOAD_MAX_BYTES || 104857600);
+const UPLOAD_TTL_MS =
+  Number(process.env.UPLOAD_TTL_HOURS || 48) * 3600 * 1000;
+
+const UPLOAD_EXT_MIME = {
+  ".jpg": "image/jpeg",
+  ".jpeg": "image/jpeg",
+  ".png": "image/png",
+  ".webp": "image/webp",
+  ".gif": "image/gif",
+  ".bmp": "image/bmp",
+  ".mp3": "audio/mpeg",
+  ".wav": "audio/wav",
+  ".m4a": "audio/mp4",
+  ".aac": "audio/aac",
+  ".ogg": "audio/ogg",
+  ".flac": "audio/flac",
+  ".mp4": "video/mp4",
+  ".webm": "video/webm",
+  ".mov": "video/quicktime",
+  ".mkv": "video/x-matroska",
+  ".pdf": "application/pdf",
+};
+
+const MIME_TO_EXT = {
+  "image/jpeg": ".jpg",
+  "image/jpg": ".jpg",
+  "image/png": ".png",
+  "image/webp": ".webp",
+  "image/gif": ".gif",
+  "image/bmp": ".bmp",
+  "audio/mpeg": ".mp3",
+  "audio/mp3": ".mp3",
+  "audio/wav": ".wav",
+  "audio/x-wav": ".wav",
+  "audio/mp4": ".m4a",
+  "audio/aac": ".aac",
+  "audio/ogg": ".ogg",
+  "audio/flac": ".flac",
+  "video/mp4": ".mp4",
+  "video/webm": ".webm",
+  "video/quicktime": ".mov",
+  "video/x-matroska": ".mkv",
+  "application/pdf": ".pdf",
+};
 
 const IMAGE_PATHS = new Set([
   "/v1/images/generations",
@@ -546,6 +605,334 @@ async function readBody(req) {
   return Buffer.concat(chunks);
 }
 
+async function readBodyLimited(req, maxBytes) {
+  const declared = Number(req.headers["content-length"] || 0);
+  if (declared > maxBytes) {
+    const err = new Error("payload too large");
+    err.code = "payload_too_large";
+    throw err;
+  }
+  const chunks = [];
+  let n = 0;
+  for await (const chunk of req) {
+    n += chunk.length;
+    if (n > maxBytes) {
+      const err = new Error("payload too large");
+      err.code = "payload_too_large";
+      throw err;
+    }
+    chunks.push(chunk);
+  }
+  return Buffer.concat(chunks);
+}
+
+function ensureUploadDir() {
+  try {
+    fs.mkdirSync(UPLOAD_DIR, { recursive: true });
+  } catch (e) {
+    console.error("[uploads] mkdir failed", e.message || e);
+  }
+}
+
+function safeExtFromName(name) {
+  const base = path.basename(String(name || "")).toLowerCase();
+  const ext = path.extname(base);
+  return UPLOAD_EXT_MIME[ext] ? ext : "";
+}
+
+function extFromMime(mime) {
+  const m = String(mime || "")
+    .split(";")[0]
+    .trim()
+    .toLowerCase();
+  return MIME_TO_EXT[m] || "";
+}
+
+function parseMultipartFile(buf, contentType) {
+  const bm = /boundary=(?:"([^"]+)"|([^;,\s]+))/i.exec(String(contentType || ""));
+  const boundary = bm && (bm[1] || bm[2]);
+  if (!boundary) return null;
+  const sep = Buffer.from(`--${boundary}`);
+  let start = buf.indexOf(sep);
+  if (start < 0) return null;
+  start += sep.length;
+  if (buf[start] === 0x0d && buf[start + 1] === 0x0a) start += 2;
+  while (start < buf.length) {
+    if (buf[start] === 0x2d && buf[start + 1] === 0x2d) break;
+    const next = buf.indexOf(sep, start);
+    if (next < 0) break;
+    let partEnd = next;
+    if (partEnd >= 2 && buf[partEnd - 2] === 0x0d && buf[partEnd - 1] === 0x0a) {
+      partEnd -= 2;
+    }
+    const part = buf.subarray(start, partEnd);
+    const headerEnd = part.indexOf("\r\n\r\n");
+    if (headerEnd >= 0) {
+      const header = part.subarray(0, headerEnd).toString("utf8");
+      const body = part.subarray(headerEnd + 4);
+      const nameM = /name="([^"]+)"/i.exec(header);
+      const fileM = /filename="([^"]*)"/i.exec(header);
+      const typeM = /Content-Type:\s*([^\r\n]+)/i.exec(header);
+      const field = (nameM && nameM[1]) || "";
+      if (fileM || /^(file|image|audio|video|media)$/i.test(field)) {
+        return {
+          field,
+          filename: (fileM && fileM[1]) || field || "upload.bin",
+          contentType: (typeM && typeM[1].trim()) || "application/octet-stream",
+          data: body,
+        };
+      }
+    }
+    start = next + sep.length;
+    if (buf[start] === 0x0d && buf[start + 1] === 0x0a) start += 2;
+  }
+  return null;
+}
+
+async function assertBearerKey(req) {
+  const auth = String(req.headers.authorization || "");
+  if (!/^Bearer\s+\S+/i.test(auth)) {
+    const err = new Error("Missing Authorization: Bearer <api_key>");
+    err.status = 401;
+    err.code = "invalid_api_key";
+    throw err;
+  }
+  try {
+    const r = await fetch(`${UPSTREAM}/v1/models`, {
+      method: "GET",
+      headers: {
+        authorization: auth,
+        accept: "application/json",
+      },
+    });
+    if (r.status === 401 || r.status === 403) {
+      const err = new Error("Invalid API key");
+      err.status = 401;
+      err.code = "invalid_api_key";
+      throw err;
+    }
+  } catch (e) {
+    if (e.status) throw e;
+    console.error("[uploads] key check failed", e.message || e);
+  }
+}
+
+function purgeExpiredUploads() {
+  try {
+    if (!fs.existsSync(UPLOAD_DIR)) return;
+    const now = Date.now();
+    for (const name of fs.readdirSync(UPLOAD_DIR)) {
+      if (name.startsWith(".")) continue;
+      const full = path.join(UPLOAD_DIR, name);
+      try {
+        const st = fs.statSync(full);
+        if (!st.isFile()) continue;
+        if (now - st.mtimeMs > UPLOAD_TTL_MS) fs.unlinkSync(full);
+      } catch {
+        /* ignore */
+      }
+    }
+  } catch (e) {
+    console.error("[uploads] purge", e.message || e);
+  }
+}
+
+async function handleUploadPost(req, res) {
+  try {
+    await assertBearerKey(req);
+  } catch (e) {
+    return json(res, e.status || 401, {
+      error: {
+        message: e.message || "Unauthorized",
+        type: "invalid_request_error",
+        code: e.code || "invalid_api_key",
+      },
+    });
+  }
+
+  let bodyBuf;
+  try {
+    bodyBuf = await readBodyLimited(req, UPLOAD_MAX_BYTES);
+  } catch (e) {
+    if (e.code === "payload_too_large") {
+      return json(res, 413, {
+        error: {
+          message: `File too large (max ${UPLOAD_MAX_BYTES} bytes)`,
+          type: "invalid_request_error",
+          code: "payload_too_large",
+        },
+      });
+    }
+    throw e;
+  }
+
+  const ct = String(req.headers["content-type"] || "");
+  let filename = "";
+  let mime = "";
+  let data = null;
+
+  if (/multipart\/form-data/i.test(ct)) {
+    const part = parseMultipartFile(bodyBuf, ct);
+    if (!part || !part.data || !part.data.length) {
+      return json(res, 400, {
+        error: {
+          message:
+            'multipart field required: file (or image/audio/video). Example: curl -F "file=@./still.jpg"',
+          type: "invalid_request_error",
+          code: "file_required",
+        },
+      });
+    }
+    filename = part.filename;
+    mime = part.contentType;
+    data = part.data;
+  } else if (/application\/json/i.test(ct)) {
+    let payload;
+    try {
+      payload = JSON.parse(bodyBuf.toString("utf8") || "{}");
+    } catch {
+      return json(res, 400, {
+        error: { message: "Invalid JSON body", type: "invalid_request_error" },
+      });
+    }
+    const b64 = String(
+      payload.file_base64 || payload.data || payload.content || ""
+    ).replace(/^data:[^;]+;base64,/, "");
+    if (!b64) {
+      return json(res, 400, {
+        error: {
+          message:
+            "JSON upload needs file_base64 (or use multipart -F file=@...). Prefer multipart.",
+          type: "invalid_request_error",
+          code: "file_required",
+        },
+      });
+    }
+    try {
+      data = Buffer.from(b64, "base64");
+    } catch {
+      return json(res, 400, {
+        error: {
+          message: "Invalid base64",
+          type: "invalid_request_error",
+          code: "invalid_base64",
+        },
+      });
+    }
+    filename = String(payload.filename || payload.name || "upload.bin");
+    mime = String(payload.content_type || payload.mime || "application/octet-stream");
+  } else {
+    data = bodyBuf;
+    const q = new URL(req.url || "/", "http://local");
+    filename =
+      String(req.headers["x-filename"] || "") ||
+      String(q.searchParams.get("filename") || "") ||
+      "upload.bin";
+    mime = ct.split(";")[0].trim() || "application/octet-stream";
+  }
+
+  if (!data || !data.length) {
+    return json(res, 400, {
+      error: {
+        message: "Empty file",
+        type: "invalid_request_error",
+        code: "file_required",
+      },
+    });
+  }
+  if (data.length > UPLOAD_MAX_BYTES) {
+    return json(res, 413, {
+      error: {
+        message: `File too large (max ${UPLOAD_MAX_BYTES} bytes)`,
+        type: "invalid_request_error",
+        code: "payload_too_large",
+      },
+    });
+  }
+
+  let ext = safeExtFromName(filename) || extFromMime(mime);
+  if (!ext) {
+    return json(res, 400, {
+      error: {
+        message:
+          "Unsupported file type. Allowed: jpg/png/webp/gif/bmp, mp3/wav/m4a/aac/ogg/flac, mp4/webm/mov/mkv, pdf",
+        type: "invalid_request_error",
+        code: "unsupported_media_type",
+      },
+    });
+  }
+
+  ensureUploadDir();
+  purgeExpiredUploads();
+  const id = crypto.randomUUID().replace(/-/g, "");
+  const stored = `${id}${ext}`;
+  const full = path.join(UPLOAD_DIR, stored);
+  fs.writeFileSync(full, data);
+
+  const url = `${UPLOAD_PUBLIC_BASE}/${stored}`;
+  const expiresAt = new Date(Date.now() + UPLOAD_TTL_MS).toISOString();
+  return json(res, 200, {
+    id: stored,
+    url,
+    bytes: data.length,
+    content_type: UPLOAD_EXT_MIME[ext] || mime || "application/octet-stream",
+    expires_at: expiresAt,
+    object: "upload",
+  });
+}
+
+function handleUploadGet(req, res, pathOnly) {
+  const name = path.basename(pathOnly);
+  if (!/^[a-f0-9]{32}\.[a-z0-9]+$/i.test(name)) {
+    return json(res, 404, {
+      error: { message: "Not found", type: "invalid_request_error", code: "not_found" },
+    });
+  }
+  const full = path.join(UPLOAD_DIR, name);
+  if (!full.startsWith(path.resolve(UPLOAD_DIR))) {
+    return json(res, 404, {
+      error: { message: "Not found", type: "invalid_request_error", code: "not_found" },
+    });
+  }
+  if (!fs.existsSync(full)) {
+    return json(res, 404, {
+      error: { message: "Not found", type: "invalid_request_error", code: "not_found" },
+    });
+  }
+  try {
+    const st = fs.statSync(full);
+    if (Date.now() - st.mtimeMs > UPLOAD_TTL_MS) {
+      try {
+        fs.unlinkSync(full);
+      } catch {
+        /* ignore */
+      }
+      return json(res, 404, {
+        error: {
+          message: "Upload expired",
+          type: "invalid_request_error",
+          code: "expired",
+        },
+      });
+    }
+    const ext = path.extname(name).toLowerCase();
+    const mime = UPLOAD_EXT_MIME[ext] || "application/octet-stream";
+    const buf = fs.readFileSync(full);
+    res.writeHead(200, {
+      "Content-Type": mime,
+      "Content-Length": buf.length,
+      "Cache-Control": "public, max-age=3600",
+      "X-Content-Type-Options": "nosniff",
+    });
+    res.end(buf);
+  } catch (e) {
+    console.error("[uploads] get", e.message || e);
+    return json(res, 500, {
+      error: { message: "Failed to read upload", type: "api_error" },
+    });
+  }
+}
+
 async function screenPrompt(prompt, externalId) {
   if (!CREEM_KEY) {
     const err = new Error("CREEM_API_KEY not configured");
@@ -785,10 +1172,28 @@ function redirectPublicPaths(req, res) {
   return true;
 }
 
+ensureUploadDir();
+setInterval(purgeExpiredUploads, 60 * 60 * 1000).unref?.();
+
 const server = http.createServer(async (req, res) => {
   try {
     const pathOnly = (req.url || "/").split("?")[0];
     if (redirectPublicPaths(req, res)) return;
+
+    if (
+      req.method === "POST" &&
+      (pathOnly === "/v1/uploads" || pathOnly === "/v1/files")
+    ) {
+      await handleUploadPost(req, res);
+      return;
+    }
+    if (
+      (req.method === "GET" || req.method === "HEAD") &&
+      pathOnly.startsWith("/uploads/")
+    ) {
+      handleUploadGet(req, res, pathOnly);
+      return;
+    }
 
     const bodyBuf = ["GET", "HEAD"].includes(req.method || "")
       ? Buffer.alloc(0)
@@ -910,6 +1315,6 @@ const server = http.createServer(async (req, res) => {
 
 server.listen(PORT, HOST, () => {
   console.log(
-    `creem-moderation-proxy on http://${HOST}:${PORT} -> ${UPSTREAM} (creem ${TEST_MODE ? "test" : "live"}; rankings×${RANKINGS_DISPLAY_MULTIPLIER})`
+    `creem-moderation-proxy on http://${HOST}:${PORT} -> ${UPSTREAM} (creem ${TEST_MODE ? "test" : "live"}; rankings×${RANKINGS_DISPLAY_MULTIPLIER}; uploads ${UPLOAD_DIR} → ${UPLOAD_PUBLIC_BASE})`
   );
 });

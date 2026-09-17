@@ -6,6 +6,8 @@ services:
     container_name: ai-relay-creem-moderation
     restart: always
     network_mode: host
+    volumes:
+      - /opt/ai-relay/static/uploads:/opt/ai-relay/static/uploads
     environment:
       - UPSTREAM_URL=http://127.0.0.1:3000
       - LISTEN_HOST=127.0.0.1
@@ -13,3 +15,7 @@ services:
       - CREEM_API_KEY=${CREEM_API_KEY}
       - CREEM_TEST_MODE=${CREEM_TEST_MODE:-true}
       - CREEM_MODERATION_TIMEOUT_MS=5000
+      - UPLOAD_DIR=/opt/ai-relay/static/uploads
+      - UPLOAD_PUBLIC_BASE=https://www.keyoapi.xyz/uploads
+      - UPLOAD_MAX_BYTES=104857600
+      - UPLOAD_TTL_HOURS=48

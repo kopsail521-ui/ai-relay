@@ -12,8 +12,9 @@
 > - Find the capability family for the model, then apply that template. Video models must use their own section — never mix fields.  
 > - For async jobs, poll until a terminal status, then return the result URL/text.  
 > - Video Path B (incl. Seedance) accepts **JSON only**; media must be **public `http(s)` URLs**.  
-> - **Forbidden:** local paths, `data:base64`, multipart file upload, invented `POST /v1/assets` (Keyo has **no** video asset upload).  
-> - No public still URL → use **text-to-video** (omit `image_urls`), or host the image yourself then pass the URL.  
+> - Local files only: **first** `POST /v1/uploads` (alias `/v1/files`) → use returned `url` in Path B / OCR JSON.  
+> - **Forbidden:** local paths, `data:base64`, multipart on Path B, invented `POST /v1/assets` / `asset://`.  
+> - ASR / matting / upscale / MinerU / InfiniteTalk already accept multipart `-F file=@` / `-F image=@` (no prior upload needed).  
 > - Model list in this handbook is authoritative; you may also `GET /v1/models`.
 
 ---
@@ -25,6 +26,58 @@
 | Video Path B (`/v1/videos/generations`) | `GET /v1/tasks/{id}` (**plural tasks**) |
 | Video Path A (`/v1/videos`) | `GET /v1/videos/{id}` |
 | TTS async / docs / InfiniteTalk | `GET /v1/task/{id}` (**singular task**) |
+
+---
+
+## 0.5 Local media upload (file → public URL)
+
+For: **Path B video** (Seedance / MiniMax / Wan / FLUX / Omni / Grok-imagine), **Unlimited-OCR** / multimodal chat `image_url.url`.  
+Not for: ASR, matting, upscale, MinerU, InfiniteTalk (those accept multipart directly).
+
+`POST https://www.keyoapi.xyz/v1/uploads`  
+Alias: `POST https://www.keyoapi.xyz/v1/files`  
+Header: `Authorization: Bearer sk-...`  
+Body: `multipart/form-data`, field `file` (also accepts `image` / `audio` / `video`)
+
+```bash
+curl https://www.keyoapi.xyz/v1/uploads \
+  -H "Authorization: Bearer sk-..." \
+  -F file=@./still.jpg
+```
+
+Success response:
+```json
+{
+  "object": "upload",
+  "id": "a1b2c3d4e5f6789012345678abcdef01.jpg",
+  "url": "https://www.keyoapi.xyz/uploads/a1b2c3d4e5f6789012345678abcdef01.jpg",
+  "bytes": 245760,
+  "content_type": "image/jpeg",
+  "expires_at": "2026-09-19T13:00:00.000Z"
+}
+```
+
+Rules:
+- Put the returned **`url`** into downstream JSON (`image_urls`, `images`, `video_urls`, `audios`, `image.url`, …).
+- Allowed: jpg/png/webp/gif/bmp, mp3/wav/m4a/aac/ogg/flac, mp4/webm/mov/mkv, pdf.
+- Default max ~**100MB**; files expire in ~**48h** (`expires_at`) — submit the video job before expiry.
+- There is **no** `POST /v1/assets` and **no** `asset://`.
+
+Two-step Seedance image-to-video:
+```bash
+# 1) Upload
+URL=$(curl -s https://www.keyoapi.xyz/v1/uploads \
+  -H "Authorization: Bearer sk-..." \
+  -F file=@./still.jpg | jq -r .url)
+
+# 2) Generate (JSON only)
+curl https://www.keyoapi.xyz/v1/videos/generations \
+  -H "Authorization: Bearer sk-..." \
+  -H "Content-Type: application/json" \
+  -d "{\"model\":\"seedance-2.0\",\"prompt\":\"animate this scene\",\"resolution\":\"480p\",\"duration\":5,\"image_urls\":[\"$URL\"]}"
+```
+
+Same pattern for other Path B models: upload once, map `url` to that model’s fields.
 
 ---
 
@@ -144,7 +197,7 @@ Only: `grok-1.5-video`
 
 Shared: `POST https://www.keyoapi.xyz/v1/videos/generations`  
 Shared poll: `GET https://www.keyoapi.xyz/v1/tasks/{task_id}`  
-Media: public https URLs only.
+Media: public https URLs only. For local files, use §0.5 `POST /v1/uploads` first, then paste the returned `url`.
 
 ### 5.1 MiniMax-H3
 
@@ -185,9 +238,9 @@ Reference image + audio:
 - `POST /v1/videos/generations`, body = **JSON only**
 - Poll = `GET /v1/tasks/{id}` (**plural tasks**, not TTS `/v1/task/`)
 - `image_urls` / `video_urls` / `audio_urls` / `image_with_roles[].url` must be public `https://...`
-- No multipart, no `data:`, no local paths, no `/v1/assets` (does not exist)
+- Local files: §0.5 `POST /v1/uploads` first — never multipart / `data:` / local paths / `/v1/assets` / `asset://` on the generate endpoint
 - First/last frames are **mutex** with `video_urls`/`audio_urls`
-- No public still → use text-to-video below (no character lock)
+- No reference media needed → use text-to-video below
 
 Text-to-video:
 ```json
@@ -199,14 +252,14 @@ Text-to-video:
 }
 ```
 
-Image-to-video (public still URL required):
+Image-to-video (`image_urls` = §0.5 `url`, or any public https):
 ```json
 {
   "model": "seedance-2.0",
   "prompt": "animate this scene",
   "resolution": "480p",
   "duration": 5,
-  "image_urls": ["https://example.com/still.jpg"]
+  "image_urls": ["https://www.keyoapi.xyz/uploads/<id>.jpg"]
 }
 ```
 
@@ -404,7 +457,9 @@ Models: `Qwen3-TTS` · `CosyVoice3`
 
 ## 9. OCR (Unlimited-OCR)
 
-`POST /v1/chat/completions`
+`POST /v1/chat/completions`  
+
+Local image: §0.5 upload first, then put returned `url` in `image_url.url`.
 
 ```json
 {
@@ -413,7 +468,7 @@ Models: `Qwen3-TTS` · `CosyVoice3`
     "role": "user",
     "content": [
       {"type": "text", "text": "Extract all text in the image"},
-      {"type": "image_url", "image_url": {"url": "https://example.com/page.png"}}
+      {"type": "image_url", "image_url": {"url": "https://www.keyoapi.xyz/uploads/<id>.png"}}
     ]
   }]
 }
@@ -436,7 +491,7 @@ curl https://www.keyoapi.xyz/v1/async/documents/parse \
 
 ## 11. Vision multipart (matting / upscale / unwarp / detect / seg / pose)
 
-Shared: `-F model=...` + `-F image=@file`  
+Shared: `-F model=...` + `-F image=@file` (**local files OK** — §0.5 not required)  
 Paths/models: §1.10.
 
 Matting example:
@@ -453,7 +508,9 @@ Upscale: use `/v1/images/upscaling` with `Real-ESRGAN` or `AnimeSharp`.
 
 ## 12. InfiniteTalk (image + audio → talking video)
 
-`POST /v1/async/videos/image-to-video` → `GET /v1/task/{id}`
+`POST /v1/async/videos/image-to-video` → `GET /v1/task/{id}`  
+
+Multipart accepts **local files directly** (no §0.5 needed).
 
 ```bash
 curl https://www.keyoapi.xyz/v1/async/videos/image-to-video \
@@ -494,9 +551,10 @@ curl https://www.keyoapi.xyz/v1/models \
 1. Is the model name in §1? If not, `GET /v1/models` or ask the user.  
 2. Pick the correct path (chat / image / video A / video B / ASR / TTS sync|async / vision).  
 3. If Video Path B: open the matching §5 subsection — do not reuse another model’s fields.  
-4. Async: use correct `tasks` vs `task`; poll to a terminal status.  
-5. Return results simply to the user.  
-6. Do not invent field names not in this handbook.
+4. Local media for Path B or OCR: §0.5 upload first, then paste `url`.  
+5. Async: use correct `tasks` vs `task`; poll to a terminal status.  
+6. Return results simply to the user.  
+7. Do not invent field names (incl. `/v1/assets`, `asset://`).
 
 ---
 
@@ -505,10 +563,10 @@ curl https://www.keyoapi.xyz/v1/models \
 | Mistake | Fix |
 |---------|-----|
 | MiniMax with `image_with_roles` / `first_frame_image` | Use `images` / `audios` / `aspectRatio` |
-| grok-imagine prompt only | Add `image:{"url":"https://..."}` |
-| Local path or base64 in video JSON | Host on a public CDN/image host, then pass `https://...`; or switch to text-to-video |
-| Multipart / `-F file=@` for Seedance | JSON + `image_urls:["https://..."]` only; multipart is for ASR / matting / InfiniteTalk |
-| Calling `POST /v1/assets` | **No such endpoint** — use your own host or text-to-video |
+| grok-imagine prompt only | Add `image:{"url":"https://..."}` (local file → §0.5 first) |
+| Local path or base64 in video JSON | `POST /v1/uploads`, put returned `url` in JSON; or text-to-video |
+| Multipart / `-F file=@` for Seedance / Path B | Upload first, then JSON + `image_urls` etc.; multipart only for ASR / matting / InfiniteTalk |
+| Calling `POST /v1/assets` or `asset://` | **None** — use `POST /v1/uploads` (or `/v1/files`) |
 | Video poll `/v1/task/` | Path B (Seedance etc.) uses `/v1/tasks/` |
 | TTS async poll `/v1/tasks/` | Use `/v1/task/` |
 | gemini-omni with `duration` | Remove `duration` |

@@ -14,6 +14,9 @@ const brandDir = path.join(root, "static/brand");
 const files = [
   "keyo-home.html",
   "keyo-docs.html",
+  "keyo-api-ref.md",
+  "keyo-api-ref.en.md",
+  "keyo-api-ref.html",
   "aup.html",
   "privacy.html",
   "terms.html",
@@ -29,12 +32,12 @@ const parts = files
   });
 
 const cmd = [
-  "sudo mkdir -p /opt/ai-relay/static/brand",
+  "sudo mkdir -p /opt/ai-relay/static/brand /opt/ai-relay/static/uploads",
+  "sudo chmod 755 /opt/ai-relay/static/uploads",
   ...parts,
-  "wc -c /opt/ai-relay/static/brand/*.html",
-  "curl -sI https://www.keyoapi.xyz/brand/keyo-home.html | head -n 3",
-  "curl -sI https://www.keyoapi.xyz/brand/aup.html | head -n 3",
-  'echo "NOTE: This script does not rewrite Caddyfile. For SEO routes use: node scripts/print-vps-seo-caddy.mjs"',
+  "wc -c /opt/ai-relay/static/brand/keyo-docs.html /opt/ai-relay/static/brand/keyo-api-ref.md /opt/ai-relay/static/brand/keyo-api-ref.en.md 2>/dev/null || true",
+  "curl -sI https://www.keyoapi.xyz/brand/keyo-docs.html | head -n 3",
+  'echo "NOTE: For POST /v1/uploads runtime, run: node scripts/print-vps-enable-uploads.mjs"',
 ].join(" && ");
 
 fs.writeFileSync(path.join(root, "scripts/vps-one-liner.txt"), cmd);

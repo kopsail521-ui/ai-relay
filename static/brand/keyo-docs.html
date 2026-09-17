@@ -811,7 +811,7 @@
         </div>
         <ul class="doc-rules">
           <li data-i18n="videoRuleAsync">异步：POST /v1/videos/generations 创建 → GET /v1/tasks/{task_id} 轮询。</li>
-          <li data-i18n="videoRuleMedia">媒体：只要 JSON；图/视频/音频须公网 http(s)。本机路径与 data:base64 拒绝。</li>
+          <li data-i18n="videoRuleMedia">媒体：只要 JSON；公网 http(s)。本机文件先 POST /v1/uploads。禁止路径 / data:base64 / /v1/assets。</li>
           <li data-i18n="videoRuleParams">各模型字段不同（文生 / 图生 / 首尾帧 / 参考）。点表格备注或下方芯片进入对应小节，不要套用其它模型的 body。</li>
         </ul>
         <div class="model-jump">
@@ -839,6 +839,20 @@
           <span class="method">GET</span>
           <span class="path">/v1/tasks/{task_id}</span>
           <button type="button" class="btn-copy" data-copy="https://www.keyoapi.xyz/v1/tasks/" data-i18n="copyUrl"></button>
+        </div>
+        <div class="endpoint" style="margin-top:8px">
+          <span class="method">POST</span>
+          <span class="path">/v1/uploads</span>
+          <button type="button" class="btn-copy" data-copy="https://www.keyoapi.xyz/v1/uploads" data-i18n="copyUrl"></button>
+        </div>
+        <p class="sec-desc" style="margin-top:12px" data-i18n="uploadIntro"></p>
+        <div class="code-block">
+          <div class="code-bar"><span class="lang">cURL · upload</span><button type="button" class="btn-copy" data-copy-target="curl-upload" data-i18n="copy"></button></div>
+          <pre id="curl-upload"><code>curl https://www.keyoapi.xyz/v1/uploads \
+  -H "Authorization: Bearer sk-..." \
+  -F file=@./still.jpg
+# → { "url": "https://www.keyoapi.xyz/uploads/....jpg", "expires_at": "..." }
+# Put url into image_urls / images / video_urls / audios / image.url</code></pre>
         </div>
         <div class="model-jump">
           <a href="#api-minimax-h3">MiniMax-H3</a>
@@ -950,7 +964,7 @@
   "prompt": "Animate this scene",
   "resolution": "480p",
   "duration": 5,
-  "image_urls": ["https://example.com/still.jpg"]
+  "image_urls": ["https://www.keyoapi.xyz/uploads/<id>.jpg"]
 }</code></pre>
             </div>
             <div class="code-block">
@@ -1430,14 +1444,14 @@ const I18N = {
     "pitfallsTitle": "Avoid these request errors",
     "pitfallsIntro": "Most 4xx on video/speech come from wrong fields or wrong poll path.",
     "pitPollVideo": "Video Path B poll: GET /v1/tasks/{id} (plural). TTS/docs/InfiniteTalk: GET /v1/task/{id} (singular).",
-    "pitMedia": "Video JSON media must be public https URLs — not local paths, not data:base64.",
+    "pitMedia": "Local media → POST /v1/uploads (or /v1/files) first; put returned url into video JSON. No local paths / data:base64 / /v1/assets.",
     "pitMix": "Do not reuse another model's field names (especially MiniMax vs Seedance/Wan).",
     "pit1": "MiniMax-H3: use aspectRatio + images[]/audios[] — not image_with_roles / first_frame_image.",
     "pit2": "grok-imagine-video-1.5-preview: image:{\"url\":\"https://...\"} is required (prompt-only fails).",
     "pit3": "seedance: first/last frames and video_urls/audio_urls are mutually exclusive.",
     "pit4": "gemini-omni: do not send duration.",
     "pit5": "Poll path: /v1/tasks (video generations) vs /v1/task (TTS async / docs / InfiniteTalk).",
-    "pit6": "No local file paths or data:base64 in video JSON bodies.",
+    "pit6": "Local path or data:base64 in video JSON — upload via POST /v1/uploads first.",
     "speechRuleSync": "TTS sync → POST /v1/audio/speech (returns audio). Models: GLM-TTS, Step-Audio-TTS-3B, IndexTTS-2.",
     "speechRuleAsync": "TTS async → POST /v1/async/audio/speech then GET /v1/task/{id} (singular). Models: Qwen3-TTS, CosyVoice3.",
     "moreRulePoll": "Async vision/docs: poll GET /v1/task/{id} (singular) — not /v1/tasks.",
@@ -1446,31 +1460,32 @@ const I18N = {
     "videoTitleGen": "Video — /v1/videos/generations",
     "videoApiTitle": "Video model parameters",
     "videoApiIntro": "Same Keyo path for all models below. Submit POST /v1/videos/generations, then poll GET /v1/tasks/{task_id}. Field names differ by model — do not mix MiniMax fields with Seedance/Wan.",
+    "uploadIntro": "Local image/audio/video: POST /v1/uploads (alias /v1/files) with -F file=@… → use returned url in Path B JSON. Max ~100MB, ~48h TTL. ASR/matting/InfiniteTalk already accept multipart directly.",
     "thField": "Field",
     "thType": "Type",
     "thDesc": "Description",
     "mmLead": "MiniMax-H3 uses its own field set (not image_urls / image_with_roles). Prompt quality matters.",
     "mmPrompt": "Required. Spell out duration, shots, dialogue, and negative prompts when needed.",
-    "mmImages": "Reference images, max 9. Public https URLs only.",
-    "mmAudios": "Reference audio, max 3. Public https URLs only.",
+    "mmImages": "Reference images, max 9. Public https (local → /v1/uploads first).",
+    "mmAudios": "Reference audio, max 3. Public https (local → /v1/uploads first).",
     "mmSeed": "Optional random seed.",
     "mmAlias": "Aliases mapped automatically: image_urls→images, audio_urls→audios, aspect_ratio→aspectRatio.",
-    "sdLead": "JSON only. Public https media. Poll /v1/tasks (plural). No /v1/assets. No local path / data:base64 / multipart. First-last mutex with video_urls/audio_urls.",
-    "sdRuleJson": "Body must be JSON — never multipart or -F file=@ for Seedance.",
-    "sdRuleUrl": "image_urls / video_urls / audio_urls must be public https URLs. Without a public still, use text-to-video (omit image_urls).",
+    "sdLead": "JSON only. Public https media (local → /v1/uploads). Poll /v1/tasks (plural). No /v1/assets / asset://. First-last mutex with video_urls/audio_urls.",
+    "sdRuleJson": "Body must be JSON — never multipart or -F file=@ on the Seedance generate endpoint.",
+    "sdRuleUrl": "image_urls / video_urls / audio_urls must be public https. Local files: POST /v1/uploads first, then paste url (or omit image_urls for text-to-video).",
     "sdRulePoll": "Poll GET /v1/tasks/{id} (plural). Do not use TTS /v1/task/.",
-    "sdRuleNoAssets": "There is no POST /v1/assets. Host the still yourself or switch to text-to-video.",
-    "wanLead": "Text, i2v, first-last, or multimodal refs. Public https media only.",
+    "sdRuleNoAssets": "There is no POST /v1/assets and no asset://. Use POST /v1/uploads (or /v1/files).",
+    "wanLead": "Text, i2v, first-last, or multimodal refs. Public https media (local → /v1/uploads).",
     "fluxLead": "Text, keyframe images, or video continuation. draft for HD preview.",
     "omniLead": "No duration. Supports first/last frame, multi-subject refs, and short video edit.",
-    "giLead": "Image-to-video only. image.url is required.",
+    "giLead": "Image-to-video only. image.url is required (local still → /v1/uploads first).",
     "videoIntroA": "Use this path for grok-1.5-video. wan / Seedance / FLUX / MiniMax / Gemini Omni / grok-imagine sent here are auto-forwarded.",
     "videoIntroB": "Recommended path for wan / Seedance / FLUX / MiniMax / Gemini Omni / grok-imagine. POST /v1/videos also works (auto-forward).",
     "videoHint": "Async: POST /v1/videos, then poll GET /v1/videos/{id}. Billing follows the console.",
     "videoHintGen": "Async: POST /v1/videos/generations, then poll GET /v1/tasks/{task_id} (or GET /v1/videos/{id}). Billing follows the console.",
-    "videoMediaNote": "Media rule: JSON body only. Images/videos/audio must be public http(s) URLs. Local paths, data:base64, and invented /v1/assets are rejected.",
+    "videoMediaNote": "Media: JSON only + public http(s). Local files → POST /v1/uploads first. No local paths / data:base64 / /v1/assets / asset://.",
     "videoRuleAsync": "Async: POST /v1/videos/generations → poll GET /v1/tasks/{task_id}.",
-    "videoRuleMedia": "Media: JSON only; public http(s) URLs. No local paths / data:base64 / /v1/assets.",
+    "videoRuleMedia": "Media: JSON only; public http(s). Local files → POST /v1/uploads. No paths / data:base64 / /v1/assets.",
     "videoRuleParams": "Each model has different fields (t2v / i2v / frames / refs). Use the links below — do not reuse another model's body.",
     "videoImagineNote": "Per-model field tables → Video params (#video-api).",
     "nGrokVideo": "text/ref · 1–15s · per request",
@@ -1598,14 +1613,14 @@ const I18N = {
     "pitfallsTitle": "易错点（先看这里）",
     "pitfallsIntro": "视频/语音 4xx 多数是字段抄错或轮询路径写错。",
     "pitPollVideo": "视频 Path B 轮询：GET /v1/tasks/{id}（复数 tasks）。TTS/文档/InfiniteTalk：GET /v1/task/{id}（单数 task）。",
-    "pitMedia": "视频 JSON 媒体必须是公网 https，不要本机路径，不要 data:base64。",
+    "pitMedia": "本机素材先 POST /v1/uploads（或 /v1/files），把返回的 url 填进视频 JSON。禁止本机路径 / data:base64 / /v1/assets。",
     "pitMix": "不要套用其它模型的字段名（尤其 MiniMax 与 Seedance/Wan）。",
     "pit1": "MiniMax-H3：用 aspectRatio + images[]/audios[]，不要用 image_with_roles / first_frame_image。",
     "pit2": "grok-imagine：必须 image:{\"url\":\"https://...\"}，只传 prompt 会失败。",
     "pit3": "seedance：首尾帧与 video_urls/audio_urls 互斥。",
     "pit4": "gemini-omni：不要传 duration。",
     "pit5": "轮询：/v1/tasks（视频 generations）vs /v1/task（TTS 异步 / 文档 / InfiniteTalk）。",
-    "pit6": "视频 JSON 禁止本机路径与 data:base64。",
+    "pit6": "视频 JSON 禁止本机路径与 data:base64——先 POST /v1/uploads。",
     "speechRuleSync": "TTS 同步 → POST /v1/audio/speech（直接返回音频）。模型：GLM-TTS、Step-Audio-TTS-3B、IndexTTS-2。",
     "speechRuleAsync": "TTS 异步 → POST /v1/async/audio/speech，再 GET /v1/task/{id}（单数）。模型：Qwen3-TTS、CosyVoice3。",
     "moreRulePoll": "扩展异步接口轮询：GET /v1/task/{id}（单数），不是 /v1/tasks。",
@@ -1614,31 +1629,32 @@ const I18N = {
     "videoTitleGen": "视频 — /v1/videos/generations",
     "videoApiTitle": "视频模型参数（按模型）",
     "videoApiIntro": "下列模型统一走 Keyo：POST /v1/videos/generations 提交，GET /v1/tasks/{task_id} 轮询。各模型字段不同——MiniMax 不要套 Seedance/Wan 的 image_urls / image_with_roles。",
+    "uploadIntro": "本机图/音/视频：POST /v1/uploads（别名 /v1/files）用 -F file=@… → 把返回的 url 填进 Path B JSON。约 100MB 上限、约 48 小时过期。ASR/抠图/InfiniteTalk 可直接 multipart，不必先上传。",
     "thField": "字段",
     "thType": "类型",
     "thDesc": "说明",
     "mmLead": "MiniMax-H3 字段独立（不要用 image_urls / image_with_roles / first_frame_image）。提示词门槛较高，建议写清时长、镜头、对白与负面提示。",
     "mmPrompt": "必填。建议写清时长、镜头、对白与负面提示。",
-    "mmImages": "参考图数组，最多 9；须公网 https URL。",
-    "mmAudios": "参考音频数组，最多 3；须公网 https URL。",
+    "mmImages": "参考图数组，最多 9；公网 https（本机先 /v1/uploads）。",
+    "mmAudios": "参考音频数组，最多 3；公网 https（本机先 /v1/uploads）。",
     "mmSeed": "可选随机种子。",
     "mmAlias": "兼容别名（自动映射）：image_urls→images，audio_urls→audios，aspect_ratio→aspectRatio。",
-    "sdLead": "只要 JSON；媒体须公网 https；轮询 /v1/tasks（复数）。没有 /v1/assets。禁止本机路径 / data:base64 / multipart。首尾帧与 video_urls/audio_urls 互斥。",
-    "sdRuleJson": "请求体必须是 JSON —— Seedance 不要用 multipart 或 -F file=@。",
-    "sdRuleUrl": "image_urls / video_urls / audio_urls 必须是公网 https。没有公网静帧就走文生（不传 image_urls）。",
+    "sdLead": "只要 JSON；媒体须公网 https（本机先 /v1/uploads）；轮询 /v1/tasks（复数）。没有 /v1/assets / asset://。首尾帧与 video_urls/audio_urls 互斥。",
+    "sdRuleJson": "请求体必须是 JSON —— Seedance 生成口不要用 multipart 或 -F file=@。",
+    "sdRuleUrl": "image_urls / video_urls / audio_urls 必须是公网 https。本机文件先 POST /v1/uploads 再填 url；不需要参考图就走文生（不传 image_urls）。",
     "sdRulePoll": "轮询 GET /v1/tasks/{id}（复数）。不要用 TTS 的 /v1/task/。",
-    "sdRuleNoAssets": "本站没有 POST /v1/assets。图请自己放到图床，或改文生。",
-    "wanLead": "文生、图生、首尾帧或多模态参考。媒体须公网 https。",
+    "sdRuleNoAssets": "本站没有 POST /v1/assets，也没有 asset://。请用 POST /v1/uploads（或 /v1/files）。",
+    "wanLead": "文生、图生、首尾帧或多模态参考。媒体须公网 https（本机先 /v1/uploads）。",
     "fluxLead": "文生、关键帧图或视频续写；draft 可出 hd 草稿。",
     "omniLead": "无 duration。支持首尾帧、多主体参考与短视频编辑。",
-    "giLead": "仅图生。必须传 image.url。",
+    "giLead": "仅图生。必须传 image.url（本机静帧先 /v1/uploads）。",
     "videoIntroA": "下表模型请用本路径。wan / Seedance / FLUX / MiniMax / Gemini Omni / grok-imagine 打到这里也会自动转发。",
     "videoIntroB": "wan / Seedance / FLUX / MiniMax / Gemini Omni / grok-imagine 推荐本路径。POST /v1/videos 也会自动转发。",
     "videoHint": "异步：POST /v1/videos 创建，再 GET /v1/videos/{id} 查询。扣费以控制台为准。",
     "videoHintGen": "异步：POST /v1/videos/generations 创建，再 GET /v1/tasks/{task_id}（或 GET /v1/videos/{id}）查询。扣费以控制台为准。",
-    "videoMediaNote": "媒体硬规则：只要 JSON。图/视频/音频必须是公网 http(s)（或支持的 asset://）。本机路径、data:base64 一律拒绝。",
+    "videoMediaNote": "媒体：只要 JSON + 公网 http(s)。本机文件先 POST /v1/uploads。禁止本机路径 / data:base64 / /v1/assets / asset://。",
     "videoRuleAsync": "异步：POST /v1/videos/generations 创建 → GET /v1/tasks/{task_id} 轮询。",
-    "videoRuleMedia": "媒体：只要 JSON；图/视频/音频须公网 http(s)。本机路径、data:base64、虚构的 /v1/assets 一律拒绝。",
+    "videoRuleMedia": "媒体：只要 JSON；公网 http(s)。本机文件先 POST /v1/uploads。禁止路径 / data:base64 / /v1/assets。",
     "videoRuleParams": "各模型字段不同（文生 / 图生 / 首尾帧 / 参考）。点表格备注或下方芯片进入对应小节，不要套用其它模型的 body。",
     "videoImagineNote": "各模型字段表与示例 → 见「视频参数」。",
     "nGrokVideo": "文生/参考图 · 1–15 秒 · 按次",
@@ -1767,7 +1783,7 @@ const I18N = {
     "videoIntroB": "wan / Seedance / FLUX / MiniMax / Gemini Omni / grok-imagine 建議本路徑。POST /v1/videos 也會自動轉發。",
     "videoHint": "非同步：POST /v1/videos 建立，再 GET /v1/videos/{id} 查詢。扣費以控制台為準。",
     "videoHintGen": "非同步：POST /v1/videos/generations 建立，再 GET /v1/tasks/{task_id}（或 GET /v1/videos/{id}）查詢。扣費以控制台為準。",
-    "videoMediaNote": "媒體硬規則：只要 JSON。圖/影/音須為公網 http(s)。本機路徑與 data:base64 會被拒。",
+    "videoMediaNote": "媒體：只要 JSON + 公網 http(s)。本機檔案先 POST /v1/uploads。禁止本機路徑 / data:base64 / /v1/assets。",
     "videoImagineNote": "grok-imagine-video-1.5-preview 僅支援圖生影片。必填 image:{\"url\":\"https://...\"}。預設 aspect_ratio 16:9、resolution 480p、duration 5。也接受 image_url / image_urls[0]。",
     "nGrokVideo": "文生/參考圖 · 1–15 秒 · 按次",
     "nVeoComponents": "（已下架）",
@@ -1895,7 +1911,7 @@ const I18N = {
     "videoIntroB": "wan / Seedance / FLUX / MiniMax / Gemini Omni / grok-imagine 推奨パス。POST /v1/videos でも自動転送。",
     "videoHint": "非同期：POST /v1/videos → GET /v1/videos/{id}。課金はコンソール準拠。",
     "videoHintGen": "非同期：POST /v1/videos/generations → GET /v1/tasks/{task_id}（または GET /v1/videos/{id}）。課金はコンソール準拠。",
-    "videoMediaNote": "Media: JSON only. Public http(s) URLs required. No local paths / data:base64.",
+    "videoMediaNote": "Media: JSON only + public http(s). Local files → POST /v1/uploads first. No local paths / data:base64 / /v1/assets.",
     "videoImagineNote": "grok-imagine-video-1.5-preview は画像→動画のみ。必須: image:{\"url\":\"https://...\"}。省略時 16:9 / 480p / 5s。image_url / image_urls[0] も可。",
     "nGrokVideo": "テキスト/参照 · 1–15秒 · リクエスト課金",
     "nVeoComponents": "約8秒 · リクエスト · 供給は在庫次第",
@@ -2023,7 +2039,7 @@ const I18N = {
     "videoIntroB": "Chemin recommandé pour wan / Seedance / FLUX / MiniMax / Gemini Omni / grok-imagine. POST /v1/videos est aussi redirigé.",
     "videoHint": "Async : POST /v1/videos puis GET /v1/videos/{id}. Facturation = console.",
     "videoHintGen": "Async : POST /v1/videos/generations puis GET /v1/tasks/{task_id} (ou GET /v1/videos/{id}). Facturation = console.",
-    "videoMediaNote": "Media: JSON only. Public http(s) URLs required. No local paths / data:base64.",
+    "videoMediaNote": "Media: JSON only + public http(s). Local files → POST /v1/uploads first. No local paths / data:base64 / /v1/assets.",
     "videoImagineNote": "grok-imagine-video-1.5-preview = image→vidéo uniquement. Requis: image:{\"url\":\"https://...\"}. Défauts 16:9 / 480p / 5s. Alias image_url / image_urls[0].",
     "nGrokVideo": "texte/réf · 1–15s · par requête",
     "nVeoComponents": "~8s · par requête · stock variable",
@@ -2151,7 +2167,7 @@ const I18N = {
     "videoIntroB": "Рекомендуемый путь для wan / Seedance / FLUX / MiniMax / Gemini Omni / grok-imagine. POST /v1/videos тоже перенаправляется.",
     "videoHint": "Асинхронно: POST /v1/videos, затем GET /v1/videos/{id}. Списание — по консоли.",
     "videoHintGen": "Асинхронно: POST /v1/videos/generations, затем GET /v1/tasks/{task_id} (или GET /v1/videos/{id}). Списание — по консоли.",
-    "videoMediaNote": "Media: JSON only. Public http(s) URLs required. No local paths / data:base64.",
+    "videoMediaNote": "Media: JSON only + public http(s). Local files → POST /v1/uploads first. No local paths / data:base64 / /v1/assets.",
     "videoImagineNote": "grok-imagine-video-1.5-preview только image→video. Нужно: image:{\"url\":\"https://...\"}. По умолчанию 16:9 / 480p / 5с. Также image_url / image_urls[0].",
     "nGrokVideo": "текст/реф · 1–15с · за запрос",
     "nVeoComponents": "~8с · за запрос · наличие может меняться",
@@ -2279,7 +2295,7 @@ const I18N = {
     "videoIntroB": "Path khuyến nghị cho wan / Seedance / FLUX / MiniMax / Gemini Omni / grok-imagine. POST /v1/videos cũng được chuyển tự động.",
     "videoHint": "Async: POST /v1/videos rồi GET /v1/videos/{id}. Tính phí theo console.",
     "videoHintGen": "Async: POST /v1/videos/generations rồi GET /v1/tasks/{task_id} (hoặc GET /v1/videos/{id}). Tính phí theo console.",
-    "videoMediaNote": "Media: JSON only. Public http(s) URLs required. No local paths / data:base64.",
+    "videoMediaNote": "Media: JSON only + public http(s). Local files → POST /v1/uploads first. No local paths / data:base64 / /v1/assets.",
     "videoImagineNote": "grok-imagine-video-1.5-preview chỉ image→video. Bắt buộc: image:{\"url\":\"https://...\"}. Mặc định 16:9 / 480p / 5s. Cũng nhận image_url / image_urls[0].",
     "nGrokVideo": "text/ref · 1–15s · theo lần",
     "nVeoComponents": "~8s · theo lần · nguồn có thể thay đổi",

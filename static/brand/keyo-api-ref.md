@@ -12,8 +12,9 @@
 > - 先根据模型名找到所属「能力族」，再套用该族模板；视频模型必须用对应小节的字段，禁止混用。  
 > - 异步任务必须轮询直到完成或失败，再把结果 URL/文本交给用户。  
 > - 视频 Path B（含 Seedance）**只收 JSON**；图/视频/音频必须是**公网 `http(s)` URL**。  
-> - **禁止**：本机路径、`data:base64`、multipart 塞文件、臆造的 `POST /v1/assets`（本站**没有**视频专用上传口）。  
-> - 没有公网静帧 URL → 只能走**文生视频**（不传 `image_urls`），或用户自己先把图传到图床再填 URL。  
+> - 用户只有本机文件时：**先** `POST /v1/uploads`（别名 `/v1/files`）拿到 `url`，再填进 Path B / OCR 的 JSON。  
+> - **禁止**：本机路径、`data:base64`、对 Path B 直接 multipart、臆造的 `POST /v1/assets` / `asset://`。  
+> - ASR / 抠图 / 超分 / MinerU / InfiniteTalk 等 multipart 接口可直接 `-F file=@` / `-F image=@`，不必先上传。  
 > - 完整模型列表以本手册为准；也可用 `GET /v1/models` 校验是否在售。
 
 ---
@@ -25,6 +26,58 @@
 | 视频 Path B（`/v1/videos/generations`） | `GET /v1/tasks/{id}`（**复数 tasks**） |
 | 视频 Path A（`/v1/videos`） | `GET /v1/videos/{id}` |
 | TTS 异步 / 文档解析 / InfiniteTalk | `GET /v1/task/{id}`（**单数 task**） |
+
+---
+
+## 0.5 本地素材上传（本机图/音/视频 → 公网 URL）
+
+用于：**Path B 视频**（Seedance / MiniMax / Wan / FLUX / Omni / Grok-imagine）、**Unlimited-OCR** / 多模态 chat 的 `image_url.url`。  
+不用于：ASR、抠图、超分、MinerU、InfiniteTalk（那些接口直接 multipart）。
+
+`POST https://www.keyoapi.xyz/v1/uploads`  
+别名：`POST https://www.keyoapi.xyz/v1/files`  
+Header：`Authorization: Bearer sk-...`  
+Body：`multipart/form-data`，字段名 `file`（也接受 `image` / `audio` / `video`）
+
+```bash
+curl https://www.keyoapi.xyz/v1/uploads \
+  -H "Authorization: Bearer sk-..." \
+  -F file=@./still.jpg
+```
+
+成功响应示例：
+```json
+{
+  "object": "upload",
+  "id": "a1b2c3d4e5f6789012345678abcdef01.jpg",
+  "url": "https://www.keyoapi.xyz/uploads/a1b2c3d4e5f6789012345678abcdef01.jpg",
+  "bytes": 245760,
+  "content_type": "image/jpeg",
+  "expires_at": "2026-09-19T13:00:00.000Z"
+}
+```
+
+规则：
+- 把返回的 **`url`** 原样填进下游 JSON（如 `image_urls`、`images`、`video_urls`、`audios`、`image.url`）。
+- 允许类型：jpg/png/webp/gif/bmp、mp3/wav/m4a/aac/ogg/flac、mp4/webm/mov/mkv、pdf。
+- 默认最大约 **100MB**；文件约 **48 小时**后过期（看 `expires_at`），过期前须完成视频任务提交。
+- **没有** `POST /v1/assets`，也没有 `asset://`；不要臆造。
+
+两步调用（Seedance 图生示例）：
+```bash
+# 1) 上传
+URL=$(curl -s https://www.keyoapi.xyz/v1/uploads \
+  -H "Authorization: Bearer sk-..." \
+  -F file=@./still.jpg | jq -r .url)
+
+# 2) 生成（JSON only）
+curl https://www.keyoapi.xyz/v1/videos/generations \
+  -H "Authorization: Bearer sk-..." \
+  -H "Content-Type: application/json" \
+  -d "{\"model\":\"seedance-2.0\",\"prompt\":\"让画面动起来\",\"resolution\":\"480p\",\"duration\":5,\"image_urls\":[\"$URL\"]}"
+```
+
+其它 Path B 模型同样：上传一次，把 `url` 换成该模型字段（MiniMax→`images`/`audios`，Grok-imagine→`image.url`，FLUX→`image_urls`/`video_url`，Omni→`first_frame_image` 等）。
 
 ---
 
@@ -144,7 +197,7 @@
 
 统一：`POST https://www.keyoapi.xyz/v1/videos/generations`  
 统一轮询：`GET https://www.keyoapi.xyz/v1/tasks/{task_id}`  
-媒体：只能公网 https URL。
+媒体：只能公网 https URL。本机文件先走 §0.5 `POST /v1/uploads`，再把返回的 `url` 填入下方字段。
 
 ### 5.1 MiniMax-H3
 
@@ -185,9 +238,9 @@
 - `POST /v1/videos/generations`，body = **JSON only**
 - 轮询 = `GET /v1/tasks/{id}`（复数 **tasks**，不是 TTS 的 `/v1/task/`）
 - `image_urls` / `video_urls` / `audio_urls` / `image_with_roles[].url` 只能是公网 `https://...`
-- 不要 multipart、不要 `data:`、不要本机路径、不要调用不存在的 `/v1/assets`
+- 本机文件：先 §0.5 `POST /v1/uploads`，再填返回的 `url`（不要对生成口 multipart / `data:` / 本机路径 / `/v1/assets` / `asset://`）
 - 首尾帧 与 `video_urls`/`audio_urls` **互斥**
-- 没有公网图 → 用下面「文生」模板（不绑人像首帧）
+- 既不要参考素材、也不上传 → 用下面「文生」模板
 
 文生：
 ```json
@@ -199,14 +252,14 @@
 }
 ```
 
-图生（须已有公网静帧 URL）：
+图生（`image_urls` 填 §0.5 返回的 url，或任意公网 https）：
 ```json
 {
   "model": "seedance-2.0",
   "prompt": "让画面动起来",
   "resolution": "480p",
   "duration": 5,
-  "image_urls": ["https://example.com/still.jpg"]
+  "image_urls": ["https://www.keyoapi.xyz/uploads/<id>.jpg"]
 }
 ```
 
@@ -404,7 +457,9 @@ curl https://www.keyoapi.xyz/v1/audio/transcriptions \
 
 ## 9. OCR（Unlimited-OCR）
 
-`POST /v1/chat/completions`
+`POST /v1/chat/completions`  
+
+本机图片：先 §0.5 上传，把返回的 `url` 填进 `image_url.url`。
 
 ```json
 {
@@ -413,7 +468,7 @@ curl https://www.keyoapi.xyz/v1/audio/transcriptions \
     "role": "user",
     "content": [
       {"type": "text", "text": "提取图中全部文字"},
-      {"type": "image_url", "image_url": {"url": "https://example.com/page.png"}}
+      {"type": "image_url", "image_url": {"url": "https://www.keyoapi.xyz/uploads/<id>.png"}}
     ]
   }]
 }
@@ -436,7 +491,7 @@ curl https://www.keyoapi.xyz/v1/async/documents/parse \
 
 ## 11. 视觉 multipart（抠图 / 超分 / 展平 / 检测 / 分割 / 姿态）
 
-统一：`-F model=...` + `-F image=@文件`  
+统一：`-F model=...` + `-F image=@文件`（**可直接传本机文件**，不必先走 §0.5）  
 路径与模型见 §1.10。
 
 抠图示例：
@@ -453,7 +508,9 @@ curl https://www.keyoapi.xyz/v1/images/mattings \
 
 ## 12. InfiniteTalk（图+音频 → 说话视频）
 
-`POST /v1/async/videos/image-to-video` → `GET /v1/task/{id}`
+`POST /v1/async/videos/image-to-video` → `GET /v1/task/{id}`  
+
+multipart **可直接传本机文件**（不必先走 §0.5）。
 
 ```bash
 curl https://www.keyoapi.xyz/v1/async/videos/image-to-video \
@@ -494,9 +551,10 @@ curl https://www.keyoapi.xyz/v1/models \
 1. 用户给的模型名是否在 §1？若否，`GET /v1/models` 核对或请用户改名。  
 2. 选对路径（对话 / 图 / 视频 A / 视频 B / ASR / TTS 同步或异步 / 扩展）。  
 3. 若是视频 Path B：打开 §5 对应小节，**不要**套其它模型字段。  
-4. 异步：用对 `tasks` vs `task`，轮询到 `succeeded`/`failed`/`completed` 等终态。  
-5. 把结果（文本、图片 URL、视频 URL、错误信息）用中文简单告诉用户。  
-6. 不要编造本手册没有的字段名。
+4. 用户要传本机图/音/视频给 Path B 或 OCR：先 §0.5 上传再填 `url`。  
+5. 异步：用对 `tasks` vs `task`，轮询到 `succeeded`/`failed`/`completed` 等终态。  
+6. 把结果（文本、图片 URL、视频 URL、错误信息）用中文简单告诉用户。  
+7. 不要编造本手册没有的字段名（含 `/v1/assets`、`asset://`）。
 
 ---
 
@@ -505,10 +563,10 @@ curl https://www.keyoapi.xyz/v1/models \
 | 现象/错误做法 | 正确做法 |
 |---------------|----------|
 | MiniMax 用了 `image_with_roles` / `first_frame_image` | 改用 `images` / `audios` / `aspectRatio` |
-| grok-imagine 只传 prompt | 必须加 `image:{"url":"https://..."}` |
-| 视频 JSON 塞了本机路径或 base64 | 用户先把文件放到公网图床，填 `https://...`；或改文生（不传图） |
-| 对 Seedance 用 multipart / `-F file=@` | 改成 JSON + `image_urls:[\"https://...\"]`；multipart 只给 ASR/抠图/InfiniteTalk |
-| 调用 `POST /v1/assets` | **没有这条接口**；自行图床或改文生 |
+| grok-imagine 只传 prompt | 必须加 `image:{"url":"https://..."}`（本机图先 §0.5） |
+| 视频 JSON 塞了本机路径或 base64 | 先 `POST /v1/uploads`，把返回的 `url` 填进 JSON；或改文生 |
+| 对 Seedance / Path B 用 multipart / `-F file=@` | 先 uploads，再 JSON + `image_urls` 等；multipart 只给 ASR/抠图/InfiniteTalk |
+| 调用 `POST /v1/assets` 或 `asset://` | **没有**；用 `POST /v1/uploads`（或 `/v1/files`） |
 | 视频轮询写成 `/v1/task/` | Path B（Seedance 等）用 `/v1/tasks/` |
 | TTS 异步轮询写成 `/v1/tasks/` | 用 `/v1/task/` |
 | gemini-omni 传了 `duration` | 删掉 `duration` |

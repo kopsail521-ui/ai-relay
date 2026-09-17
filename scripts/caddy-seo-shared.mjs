@@ -94,6 +94,12 @@ ${landingBlocks}
 	handle_path /brand/* {
 		root * ${seoRoot}/static/brand
 		file_server
+	}
+	handle_path /uploads/* {
+		root * ${seoRoot}/static/uploads
+		header Cache-Control "public, max-age=3600"
+		header X-Content-Type-Options "nosniff"
+		file_server
 	}`;
 }
 

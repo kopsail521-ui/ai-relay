@@ -11,7 +11,9 @@
 > - Header: `Authorization: Bearer <user key>`  
 > - Find the capability family for the model, then apply that template. Video models must use their own section — never mix fields.  
 > - For async jobs, poll until a terminal status, then return the result URL/text.  
-> - Video JSON media must be public `http(s)` URLs — no local paths, no `data:base64`.  
+> - Video Path B (incl. Seedance) accepts **JSON only**; media must be **public `http(s)` URLs**.  
+> - **Forbidden:** local paths, `data:base64`, multipart file upload, invented `POST /v1/assets` (Keyo has **no** video asset upload).  
+> - No public still URL → use **text-to-video** (omit `image_urls`), or host the image yourself then pass the URL.  
 > - Model list in this handbook is authoritative; you may also `GET /v1/models`.
 
 ---
@@ -179,7 +181,13 @@ Reference image + audio:
 
 ### 5.2 seedance-2.0 / seedance-2.5
 
-First/last frames are **mutex** with `video_urls`/`audio_urls`.
+**Hard rules:**
+- `POST /v1/videos/generations`, body = **JSON only**
+- Poll = `GET /v1/tasks/{id}` (**plural tasks**, not TTS `/v1/task/`)
+- `image_urls` / `video_urls` / `audio_urls` / `image_with_roles[].url` must be public `https://...`
+- No multipart, no `data:`, no local paths, no `/v1/assets` (does not exist)
+- First/last frames are **mutex** with `video_urls`/`audio_urls`
+- No public still → use text-to-video below (no character lock)
 
 Text-to-video:
 ```json
@@ -191,7 +199,7 @@ Text-to-video:
 }
 ```
 
-Image-to-video:
+Image-to-video (public still URL required):
 ```json
 {
   "model": "seedance-2.0",
@@ -498,8 +506,10 @@ curl https://www.keyoapi.xyz/v1/models \
 |---------|-----|
 | MiniMax with `image_with_roles` / `first_frame_image` | Use `images` / `audios` / `aspectRatio` |
 | grok-imagine prompt only | Add `image:{"url":"https://..."}` |
-| Local path or base64 in video JSON | Upload first; use public https URL |
-| Video poll `/v1/task/` | Path B uses `/v1/tasks/` |
+| Local path or base64 in video JSON | Host on a public CDN/image host, then pass `https://...`; or switch to text-to-video |
+| Multipart / `-F file=@` for Seedance | JSON + `image_urls:["https://..."]` only; multipart is for ASR / matting / InfiniteTalk |
+| Calling `POST /v1/assets` | **No such endpoint** — use your own host or text-to-video |
+| Video poll `/v1/task/` | Path B (Seedance etc.) uses `/v1/tasks/` |
 | TTS async poll `/v1/tasks/` | Use `/v1/task/` |
 | gemini-omni with `duration` | Remove `duration` |
 | seedance first/last + `video_urls` together | Keep only one mode |

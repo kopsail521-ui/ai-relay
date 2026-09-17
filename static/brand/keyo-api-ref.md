@@ -11,7 +11,9 @@
 > - Header: `Authorization: Bearer <用户提供的 key>`  
 > - 先根据模型名找到所属「能力族」，再套用该族模板；视频模型必须用对应小节的字段，禁止混用。  
 > - 异步任务必须轮询直到完成或失败，再把结果 URL/文本交给用户。  
-> - 视频 JSON 媒体只能用公网 `http(s)` URL，禁止本机路径与 `data:base64`。  
+> - 视频 Path B（含 Seedance）**只收 JSON**；图/视频/音频必须是**公网 `http(s)` URL**。  
+> - **禁止**：本机路径、`data:base64`、multipart 塞文件、臆造的 `POST /v1/assets`（本站**没有**视频专用上传口）。  
+> - 没有公网静帧 URL → 只能走**文生视频**（不传 `image_urls`），或用户自己先把图传到图床再填 URL。  
 > - 完整模型列表以本手册为准；也可用 `GET /v1/models` 校验是否在售。
 
 ---
@@ -179,7 +181,13 @@
 
 ### 5.2 seedance-2.0 / seedance-2.5
 
-首尾帧 与 `video_urls`/`audio_urls` **互斥**。
+**硬规则（再抄一遍）：**
+- `POST /v1/videos/generations`，body = **JSON only**
+- 轮询 = `GET /v1/tasks/{id}`（复数 **tasks**，不是 TTS 的 `/v1/task/`）
+- `image_urls` / `video_urls` / `audio_urls` / `image_with_roles[].url` 只能是公网 `https://...`
+- 不要 multipart、不要 `data:`、不要本机路径、不要调用不存在的 `/v1/assets`
+- 首尾帧 与 `video_urls`/`audio_urls` **互斥**
+- 没有公网图 → 用下面「文生」模板（不绑人像首帧）
 
 文生：
 ```json
@@ -191,7 +199,7 @@
 }
 ```
 
-图生：
+图生（须已有公网静帧 URL）：
 ```json
 {
   "model": "seedance-2.0",
@@ -498,8 +506,10 @@ curl https://www.keyoapi.xyz/v1/models \
 |---------------|----------|
 | MiniMax 用了 `image_with_roles` / `first_frame_image` | 改用 `images` / `audios` / `aspectRatio` |
 | grok-imagine 只传 prompt | 必须加 `image:{"url":"https://..."}` |
-| 视频 JSON 塞了本机路径或 base64 | 先上传得到公网 https，再填 URL |
-| 视频轮询写成 `/v1/task/` | Path B 用 `/v1/tasks/` |
+| 视频 JSON 塞了本机路径或 base64 | 用户先把文件放到公网图床，填 `https://...`；或改文生（不传图） |
+| 对 Seedance 用 multipart / `-F file=@` | 改成 JSON + `image_urls:[\"https://...\"]`；multipart 只给 ASR/抠图/InfiniteTalk |
+| 调用 `POST /v1/assets` | **没有这条接口**；自行图床或改文生 |
+| 视频轮询写成 `/v1/task/` | Path B（Seedance 等）用 `/v1/tasks/` |
 | TTS 异步轮询写成 `/v1/tasks/` | 用 `/v1/task/` |
 | gemini-omni 传了 `duration` | 删掉 `duration` |
 | seedance 同时首尾帧 + video_urls | 只保留一种模式 |

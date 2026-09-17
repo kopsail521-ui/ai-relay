@@ -911,6 +911,12 @@
           <article class="model-api" id="api-seedance">
             <h3>seedance-2.0 / seedance-2.5</h3>
             <p class="model-lead" data-i18n="sdLead"></p>
+            <ul class="rules" style="margin:10px 0 14px">
+              <li data-i18n="sdRuleJson"></li>
+              <li data-i18n="sdRuleUrl"></li>
+              <li data-i18n="sdRulePoll"></li>
+              <li data-i18n="sdRuleNoAssets"></li>
+            </ul>
             <div class="table-wrap">
               <table class="field-table">
                 <thead>
@@ -1449,7 +1455,11 @@ const I18N = {
     "mmAudios": "Reference audio, max 3. Public https URLs only.",
     "mmSeed": "Optional random seed.",
     "mmAlias": "Aliases mapped automatically: image_urls→images, audio_urls→audios, aspect_ratio→aspectRatio.",
-    "sdLead": "Text / first-last frame / video+audio reference. Do not mix first-last with video_urls/audio_urls.",
+    "sdLead": "JSON only. Public https media. Poll /v1/tasks (plural). No /v1/assets. No local path / data:base64 / multipart. First-last mutex with video_urls/audio_urls.",
+    "sdRuleJson": "Body must be JSON — never multipart or -F file=@ for Seedance.",
+    "sdRuleUrl": "image_urls / video_urls / audio_urls must be public https URLs. Without a public still, use text-to-video (omit image_urls).",
+    "sdRulePoll": "Poll GET /v1/tasks/{id} (plural). Do not use TTS /v1/task/.",
+    "sdRuleNoAssets": "There is no POST /v1/assets. Host the still yourself or switch to text-to-video.",
     "wanLead": "Text, i2v, first-last, or multimodal refs. Public https media only.",
     "fluxLead": "Text, keyframe images, or video continuation. draft for HD preview.",
     "omniLead": "No duration. Supports first/last frame, multi-subject refs, and short video edit.",
@@ -1458,9 +1468,9 @@ const I18N = {
     "videoIntroB": "Recommended path for wan / Seedance / FLUX / MiniMax / Gemini Omni / grok-imagine. POST /v1/videos also works (auto-forward).",
     "videoHint": "Async: POST /v1/videos, then poll GET /v1/videos/{id}. Billing follows the console.",
     "videoHintGen": "Async: POST /v1/videos/generations, then poll GET /v1/tasks/{task_id} (or GET /v1/videos/{id}). Billing follows the console.",
-    "videoMediaNote": "Media rule: JSON body only. Images/videos/audio must be public http(s) URLs (asset:// where supported). Local file paths and data: base64 are rejected.",
+    "videoMediaNote": "Media rule: JSON body only. Images/videos/audio must be public http(s) URLs. Local paths, data:base64, and invented /v1/assets are rejected.",
     "videoRuleAsync": "Async: POST /v1/videos/generations → poll GET /v1/tasks/{task_id}.",
-    "videoRuleMedia": "Media: JSON only; public http(s) URLs. No local paths / data:base64.",
+    "videoRuleMedia": "Media: JSON only; public http(s) URLs. No local paths / data:base64 / /v1/assets.",
     "videoRuleParams": "Each model has different fields (t2v / i2v / frames / refs). Use the links below — do not reuse another model's body.",
     "videoImagineNote": "Per-model field tables → Video params (#video-api).",
     "nGrokVideo": "text/ref · 1–15s · per request",
@@ -1552,7 +1562,7 @@ const I18N = {
     "capPose": "Pose detection",
     "capDuix": "Digital human — currently delisted (upstream hangs on multipart file upload).",
     "capInfinite": "Talking video (image → video)",
-    "moreHint": "Full catalog and live prices: <a href=\"https://www.keyoapi.xyz/pricing\" target=\"_top\">/pricing</a>. Model names must match exactly. Async jobs: create → poll <code>GET /v1/task/{id}</code>.",
+    "moreHint": "Full catalog and live prices: <a href=\"https://www.keyoapi.xyz/pricing\" target=\"_top\">/pricing</a>. Model names must match exactly. Video Path B poll <code>GET /v1/tasks/{id}</code> (plural); TTS/docs/InfiniteTalk poll <code>GET /v1/task/{id}</code> (singular).",
     "clientsTitle": "Clients",
     "clientsDesc": "Chat tools mainly cover text (and sometimes images). For speech / OCR / vision tools, use the curl samples above or an HTTP client.",
     "clientsTools": "ChatBox / Cursor etc.",
@@ -1613,7 +1623,11 @@ const I18N = {
     "mmAudios": "参考音频数组，最多 3；须公网 https URL。",
     "mmSeed": "可选随机种子。",
     "mmAlias": "兼容别名（自动映射）：image_urls→images，audio_urls→audios，aspect_ratio→aspectRatio。",
-    "sdLead": "文生 / 首尾帧 / 视频+音频参考。首尾帧族与 video_urls/audio_urls 互斥。",
+    "sdLead": "只要 JSON；媒体须公网 https；轮询 /v1/tasks（复数）。没有 /v1/assets。禁止本机路径 / data:base64 / multipart。首尾帧与 video_urls/audio_urls 互斥。",
+    "sdRuleJson": "请求体必须是 JSON —— Seedance 不要用 multipart 或 -F file=@。",
+    "sdRuleUrl": "image_urls / video_urls / audio_urls 必须是公网 https。没有公网静帧就走文生（不传 image_urls）。",
+    "sdRulePoll": "轮询 GET /v1/tasks/{id}（复数）。不要用 TTS 的 /v1/task/。",
+    "sdRuleNoAssets": "本站没有 POST /v1/assets。图请自己放到图床，或改文生。",
     "wanLead": "文生、图生、首尾帧或多模态参考。媒体须公网 https。",
     "fluxLead": "文生、关键帧图或视频续写；draft 可出 hd 草稿。",
     "omniLead": "无 duration。支持首尾帧、多主体参考与短视频编辑。",
@@ -1624,7 +1638,7 @@ const I18N = {
     "videoHintGen": "异步：POST /v1/videos/generations 创建，再 GET /v1/tasks/{task_id}（或 GET /v1/videos/{id}）查询。扣费以控制台为准。",
     "videoMediaNote": "媒体硬规则：只要 JSON。图/视频/音频必须是公网 http(s)（或支持的 asset://）。本机路径、data:base64 一律拒绝。",
     "videoRuleAsync": "异步：POST /v1/videos/generations 创建 → GET /v1/tasks/{task_id} 轮询。",
-    "videoRuleMedia": "媒体：只要 JSON；图/视频/音频须公网 http(s)。本机路径与 data:base64 拒绝。",
+    "videoRuleMedia": "媒体：只要 JSON；图/视频/音频须公网 http(s)。本机路径、data:base64、虚构的 /v1/assets 一律拒绝。",
     "videoRuleParams": "各模型字段不同（文生 / 图生 / 首尾帧 / 参考）。点表格备注或下方芯片进入对应小节，不要套用其它模型的 body。",
     "videoImagineNote": "各模型字段表与示例 → 见「视频参数」。",
     "nGrokVideo": "文生/参考图 · 1–15 秒 · 按次",
@@ -1716,7 +1730,7 @@ const I18N = {
     "capPose": "人体关键点",
     "capDuix": "数字人（已下架）：上游要求 multipart 文件 ref_audio+ref_video，且当前会超时无响应。",
     "capInfinite": "说话视频（图→视频）",
-    "moreHint": "完整目录与实时价格见 <a href=\"https://www.keyoapi.xyz/pricing\" target=\"_top\">/pricing</a>。模型名必须完全一致。异步任务：先创建，再轮询 <code>GET /v1/task/{id}</code>。",
+    "moreHint": "完整目录与实时价格见 <a href=\"https://www.keyoapi.xyz/pricing\" target=\"_top\">/pricing</a>。模型名必须完全一致。视频 Path B 轮询 <code>GET /v1/tasks/{id}</code>（复数）；TTS/文档/InfiniteTalk 轮询 <code>GET /v1/task/{id}</code>（单数）。",
     "clientsTitle": "客户端接入",
     "clientsDesc": "聊天类工具主要覆盖文本（部分支持图片）。语音 / OCR / 视觉工具请用上方 curl 或 HTTP 客户端。",
     "clientsTools": "ChatBox / Cursor 等",
@@ -1844,7 +1858,7 @@ const I18N = {
     "capPose": "人體關節點",
     "capDuix": "數位人（音訊視訊→影片）",
     "capInfinite": "說話影片（圖→影片）",
-    "moreHint": "完整目錄與即時價格見 <a href=\"https://www.keyoapi.xyz/pricing\" target=\"_top\">/pricing</a>。模型名必須完全一致。非同步任務：先建立，再輪詢 <code>GET /v1/task/{id}</code>。",
+    "moreHint": "完整目錄與即時價格見 <a href=\"https://www.keyoapi.xyz/pricing\" target=\"_top\">/pricing</a>。模型名必須完全一致。影片 Path B 輪詢 <code>GET /v1/tasks/{id}</code>（複數）；TTS/文件/InfiniteTalk 輪詢 <code>GET /v1/task/{id}</code>（單數）。",
     "clientsTitle": "客戶端接入",
     "clientsDesc": "聊天類工具主要涵蓋文字（部分支援圖片）。語音 / OCR / 視覺工具請用上方 curl 或 HTTP 客戶端。",
     "clientsTools": "ChatBox / Cursor 等",
@@ -1972,7 +1986,7 @@ const I18N = {
     "capPose": "姿勢検出",
     "capDuix": "デジタルヒューマン（音声+映像→動画）",
     "capInfinite": "トーキング動画（画像→動画）",
-    "moreHint": "全モデルと料金は <a href=\"https://www.keyoapi.xyz/pricing\" target=\"_top\">/pricing</a>。モデル名は完全一致。非同期は作成後 <code>GET /v1/task/{id}</code> をポーリング。",
+    "moreHint": "全モデルと料金は <a href=\"https://www.keyoapi.xyz/pricing\" target=\"_top\">/pricing</a>。モデル名は完全一致。動画 Path B は <code>GET /v1/tasks/{id}</code>（複数）；TTS/文書/InfiniteTalk は <code>GET /v1/task/{id}</code>（単数）。",
     "clientsTitle": "クライアント",
     "clientsDesc": "チャットツールは主にテキスト向け。音声 / OCR / ビジョンは上の curl か HTTP クライアントを使用。",
     "clientsTools": "ChatBox / Cursor など",
@@ -2100,7 +2114,7 @@ const I18N = {
     "capPose": "Détection de pose",
     "capDuix": "Humain digital (audio+vidéo → vidéo)",
     "capInfinite": "Vidéo parlante (image → vidéo)",
-    "moreHint": "Catalogue et prix : <a href=\"https://www.keyoapi.xyz/pricing\" target=\"_top\">/pricing</a>. Noms de modèles exacts. Async : créer puis interroger <code>GET /v1/task/{id}</code>.",
+    "moreHint": "Catalogue et prix : <a href=\"https://www.keyoapi.xyz/pricing\" target=\"_top\">/pricing</a>. Noms de modèles exacts. Vidéo Path B : <code>GET /v1/tasks/{id}</code> (pluriel) ; TTS/docs/InfiniteTalk : <code>GET /v1/task/{id}</code> (singulier).",
     "clientsTitle": "Clients",
     "clientsDesc": "Les outils de chat couvrent surtout le texte. Pour parole / OCR / vision, utilisez les curl ci-dessus.",
     "clientsTools": "ChatBox / Cursor etc.",
@@ -2228,7 +2242,7 @@ const I18N = {
     "capPose": "Детекция позы",
     "capDuix": "Цифровой человек (аудио+видео → видео)",
     "capInfinite": "Говорящее видео (изображение → видео)",
-    "moreHint": "Каталог и цены: <a href=\"https://www.keyoapi.xyz/pricing\" target=\"_top\">/pricing</a>. Имена моделей — точно. Async: создать, затем опросить <code>GET /v1/task/{id}</code>.",
+    "moreHint": "Каталог и цены: <a href=\"https://www.keyoapi.xyz/pricing\" target=\"_top\">/pricing</a>. Имена моделей — точно. Video Path B: <code>GET /v1/tasks/{id}</code> (мн.); TTS/docs/InfiniteTalk: <code>GET /v1/task/{id}</code> (ед.).",
     "clientsTitle": "Клиенты",
     "clientsDesc": "Чат-клиенты в основном для текста. Для речи / OCR / vision используйте curl выше.",
     "clientsTools": "ChatBox / Cursor и др.",
@@ -2356,7 +2370,7 @@ const I18N = {
     "capPose": "Nhận dạng tư thế",
     "capDuix": "Người số (audio+video → video)",
     "capInfinite": "Video nói (ảnh → video)",
-    "moreHint": "Danh mục & giá: <a href=\"https://www.keyoapi.xyz/pricing\" target=\"_top\">/pricing</a>. Tên model phải khớp. Async: tạo rồi poll <code>GET /v1/task/{id}</code>.",
+    "moreHint": "Danh mục & giá: <a href=\"https://www.keyoapi.xyz/pricing\" target=\"_top\">/pricing</a>. Tên model phải khớp. Video Path B poll <code>GET /v1/tasks/{id}</code> (số nhiều); TTS/docs/InfiniteTalk poll <code>GET /v1/task/{id}</code> (số ít).",
     "clientsTitle": "Client",
     "clientsDesc": "Công cụ chat chủ yếu cho text. Với speech / OCR / vision hãy dùng curl phía trên.",
     "clientsTools": "ChatBox / Cursor v.v.",

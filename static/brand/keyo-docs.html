@@ -365,6 +365,66 @@
     margin: 0;
   }
 
+  .api-ref {
+    margin-top: 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+  }
+  .model-api {
+    padding: 18px 18px 16px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: var(--surface);
+  }
+  .model-api > h3 {
+    margin: 0 0 6px;
+    font-size: 16px;
+    letter-spacing: -0.02em;
+  }
+  .model-api .model-lead {
+    margin: 0 0 14px;
+    font-size: 13.5px;
+    color: var(--ink-2);
+  }
+  .model-api .field-table th:first-child,
+  .model-api .field-table td:first-child {
+    font-family: var(--mono);
+    font-size: 12.5px;
+    white-space: nowrap;
+  }
+  .model-api .req {
+    color: #a33;
+    font-size: 11px;
+    font-weight: 600;
+    margin-left: 4px;
+  }
+  .model-api .opt {
+    color: var(--muted);
+    font-size: 11px;
+    margin-left: 4px;
+  }
+  .model-jump {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 12px 0 4px;
+  }
+  .model-jump a {
+    font-size: 12.5px;
+    font-family: var(--mono);
+    padding: 4px 8px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    color: var(--ink-2);
+    text-decoration: none;
+    background: #fff;
+  }
+  .model-jump a:hover {
+    border-color: var(--line-strong);
+    color: var(--accent-ink);
+  }
+
   .client-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -505,6 +565,7 @@
         <a href="#image" data-i18n="tocImage"></a>
         <a href="#video" data-i18n="tocVideo"></a>
         <a href="#video-gen" data-i18n="tocVideoGen"></a>
+        <a href="#video-api" data-i18n="tocVideoApi"></a>
         <a href="#speech" data-i18n="tocSpeech"></a>
         <a href="#more" data-i18n="tocMore"></a>
         <a href="#clients" data-i18n="tocClients"></a>
@@ -723,7 +784,223 @@
         </div>
         <p class="hint" data-i18n="videoHintGen"></p>
         <p class="hint" data-i18n="videoMediaNote"></p>
-        <p class="hint" data-i18n="videoImagineNote"></p>
+        <p class="hint"><a href="#video-api" data-i18n="videoImagineNote"></a></p>
+      </section>
+
+      <section id="video-api">
+        <div class="sec-head">
+          <span class="num">04c</span>
+          <h2 data-i18n="videoApiTitle"></h2>
+        </div>
+        <p class="sec-desc" data-i18n="videoApiIntro"></p>
+        <div class="endpoint">
+          <span class="method">POST</span>
+          <span class="path">/v1/videos/generations</span>
+          <button type="button" class="btn-copy" data-copy="https://www.keyoapi.xyz/v1/videos/generations" data-i18n="copyUrl"></button>
+        </div>
+        <div class="endpoint" style="margin-top:8px">
+          <span class="method">GET</span>
+          <span class="path">/v1/tasks/{task_id}</span>
+          <button type="button" class="btn-copy" data-copy="https://www.keyoapi.xyz/v1/tasks/" data-i18n="copyUrl"></button>
+        </div>
+        <div class="model-jump">
+          <a href="#api-minimax-h3">MiniMax-H3</a>
+          <a href="#api-seedance">seedance</a>
+          <a href="#api-wan">wan</a>
+          <a href="#api-flux">flux-3-video</a>
+          <a href="#api-gemini-omni">gemini-omni</a>
+          <a href="#api-grok-imagine">grok-imagine</a>
+        </div>
+
+        <div class="api-ref">
+          <article class="model-api" id="api-minimax-h3">
+            <h3>MiniMax-H3</h3>
+            <p class="model-lead" data-i18n="mmLead"></p>
+            <div class="table-wrap">
+              <table class="field-table">
+                <thead>
+                  <tr>
+                    <th data-i18n="thField"></th>
+                    <th data-i18n="thType"></th>
+                    <th data-i18n="thDesc"></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr><td>model<span class="req">*</span></td><td>string</td><td><code>MiniMax-H3</code></td></tr>
+                  <tr><td>prompt<span class="req">*</span></td><td>string</td><td data-i18n="mmPrompt"></td></tr>
+                  <tr><td>aspectRatio<span class="req">*</span></td><td>string</td><td><code>landscape</code> / <code>portrait</code> / <code>square</code>（亦接受 <code>16:9</code>/<code>9:16</code>/<code>1:1</code>）</td></tr>
+                  <tr><td>resolution<span class="req">*</span></td><td>string</td><td><code>480p</code> / <code>768p</code> / <code>1080p</code></td></tr>
+                  <tr><td>duration<span class="req">*</span></td><td>integer</td><td>1–15 秒；1080p 最长 10 秒</td></tr>
+                  <tr><td>images<span class="opt">可选</span></td><td>string[]</td><td data-i18n="mmImages"></td></tr>
+                  <tr><td>audios<span class="opt">可选</span></td><td>string[]</td><td data-i18n="mmAudios"></td></tr>
+                  <tr><td>seed<span class="opt">可选</span></td><td>integer</td><td data-i18n="mmSeed"></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="hint" data-i18n="mmAlias"></p>
+            <div class="code-block" style="margin-top:12px">
+              <div class="code-bar"><span class="lang">JSON · 文生</span><button type="button" class="btn-copy" data-copy-target="ex-mm-t2v" data-i18n="copy"></button></div>
+              <pre id="ex-mm-t2v"><code>{
+  "model": "MiniMax-H3",
+  "prompt": "一只红气球在蓝天缓缓上升，电影感，自然光",
+  "aspectRatio": "landscape",
+  "resolution": "480p",
+  "duration": 5
+}</code></pre>
+            </div>
+            <div class="code-block">
+              <div class="code-bar"><span class="lang">JSON · 参考图+音频</span><button type="button" class="btn-copy" data-copy-target="ex-mm-ref" data-i18n="copy"></button></div>
+              <pre id="ex-mm-ref"><code>{
+  "model": "MiniMax-H3",
+  "prompt": "人物按参考音色说话，镜头缓慢推进",
+  "aspectRatio": "portrait",
+  "resolution": "768p",
+  "duration": 8,
+  "images": ["https://example.com/char.png"],
+  "audios": ["https://example.com/voice.mp3"]
+}</code></pre>
+            </div>
+            <div class="code-block">
+              <div class="code-bar"><span class="lang">cURL</span><button type="button" class="btn-copy" data-copy-target="curl-mm-h3" data-i18n="copy"></button></div>
+              <pre id="curl-mm-h3"></pre>
+            </div>
+          </article>
+
+          <article class="model-api" id="api-seedance">
+            <h3>seedance-2.0 / seedance-2.5</h3>
+            <p class="model-lead" data-i18n="sdLead"></p>
+            <div class="table-wrap">
+              <table class="field-table">
+                <thead>
+                  <tr><th data-i18n="thField"></th><th data-i18n="thType"></th><th data-i18n="thDesc"></th></tr>
+                </thead>
+                <tbody>
+                  <tr><td>model<span class="req">*</span></td><td>string</td><td><code>seedance-2.0</code> / <code>seedance-2.5</code></td></tr>
+                  <tr><td>prompt<span class="req">*</span></td><td>string</td><td>文案提示</td></tr>
+                  <tr><td>resolution</td><td>string</td><td>如 <code>480p</code> / <code>720p</code></td></tr>
+                  <tr><td>duration</td><td>integer</td><td>秒</td></tr>
+                  <tr><td>image_urls</td><td>string[]</td><td>参考图，最多约 9，须公网 https</td></tr>
+                  <tr><td>image_with_roles</td><td>object[]</td><td><code>first_frame</code> / <code>last_frame</code>（与 video/audio 参考互斥）</td></tr>
+                  <tr><td>video_urls</td><td>string[]</td><td>参考视频 https</td></tr>
+                  <tr><td>audio_urls</td><td>string[]</td><td>参考音频 https</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="code-block" style="margin-top:12px">
+              <div class="code-bar"><span class="lang">JSON · 首尾帧</span><button type="button" class="btn-copy" data-copy-target="ex-sd-fl" data-i18n="copy"></button></div>
+              <pre id="ex-sd-fl"><code>{
+  "model": "seedance-2.0",
+  "prompt": "Transition from day to night",
+  "resolution": "480p",
+  "duration": 5,
+  "image_with_roles": [
+    {"url": "https://example.com/day.jpg", "role": "first_frame"},
+    {"url": "https://example.com/night.jpg", "role": "last_frame"}
+  ]
+}</code></pre>
+            </div>
+            <div class="code-block">
+              <div class="code-bar"><span class="lang">JSON · 参考视频</span><button type="button" class="btn-copy" data-copy-target="ex-sd-vid" data-i18n="copy"></button></div>
+              <pre id="ex-sd-vid"><code>{
+  "model": "seedance-2.0",
+  "prompt": "Follow the motion of the reference clip",
+  "resolution": "480p",
+  "duration": 5,
+  "video_urls": ["https://example.com/ref.mp4"]
+}</code></pre>
+            </div>
+          </article>
+
+          <article class="model-api" id="api-wan">
+            <h3>wan2.6-video / wan2.6-r2v / wan3.0-video</h3>
+            <p class="model-lead" data-i18n="wanLead"></p>
+            <div class="table-wrap">
+              <table class="field-table">
+                <thead>
+                  <tr><th data-i18n="thField"></th><th data-i18n="thType"></th><th data-i18n="thDesc"></th></tr>
+                </thead>
+                <tbody>
+                  <tr><td>prompt<span class="req">*</span></td><td>string</td><td>文案</td></tr>
+                  <tr><td>resolution / duration</td><td>string / int</td><td>如 <code>720P</code> + 秒数</td></tr>
+                  <tr><td>image_urls</td><td>string[]</td><td>图生 / 多图参考</td></tr>
+                  <tr><td>image_with_roles</td><td>object[]</td><td>首尾帧：<code>first_frame</code>+<code>last_frame</code></td></tr>
+                  <tr><td>video_urls / audio_urls</td><td>string[]</td><td>参考视频 / 音频（勿与首尾帧混用）</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </article>
+
+          <article class="model-api" id="api-flux">
+            <h3>flux-3-video</h3>
+            <p class="model-lead" data-i18n="fluxLead"></p>
+            <div class="table-wrap">
+              <table class="field-table">
+                <thead>
+                  <tr><th data-i18n="thField"></th><th data-i18n="thType"></th><th data-i18n="thDesc"></th></tr>
+                </thead>
+                <tbody>
+                  <tr><td>prompt<span class="req">*</span></td><td>string</td><td>文案</td></tr>
+                  <tr><td>duration</td><td>integer</td><td>5–20</td></tr>
+                  <tr><td>resolution / tier</td><td>string</td><td><code>hd</code>/<code>fhd</code> 或 <code>DRAFT</code>/<code>HD</code>/<code>FHD</code></td></tr>
+                  <tr><td>image_urls</td><td>string[]</td><td>1=首帧；2=首+尾；3–10=关键帧</td></tr>
+                  <tr><td>video_url(s)</td><td>string / string[]</td><td>视频续写（优先于图）</td></tr>
+                  <tr><td>draft / draft_from_task_id</td><td>bool / string</td><td>草稿与成片</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </article>
+
+          <article class="model-api" id="api-gemini-omni">
+            <h3>gemini-omni-1.1-flash / -ext</h3>
+            <p class="model-lead" data-i18n="omniLead"></p>
+            <div class="table-wrap">
+              <table class="field-table">
+                <thead>
+                  <tr><th data-i18n="thField"></th><th data-i18n="thType"></th><th data-i18n="thDesc"></th></tr>
+                </thead>
+                <tbody>
+                  <tr><td>prompt<span class="req">*</span></td><td>string</td><td>文案</td></tr>
+                  <tr><td>resolution</td><td>string</td><td><code>360p</code>/<code>720p</code>/<code>1080p</code>/<code>4k</code></td></tr>
+                  <tr><td>aspect_ratio</td><td>string</td><td>画面比例</td></tr>
+                  <tr><td>first_frame_image / last_frame_image</td><td>string</td><td>首尾帧 URL（或用 image_with_roles）</td></tr>
+                  <tr><td>image_urls</td><td>string[]</td><td>多主体参考</td></tr>
+                  <tr><td>video_urls</td><td>string[]</td><td>编辑/延长（≤1 段，≤10s）</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="hint">本模型<strong>无 duration</strong> 字段。</p>
+          </article>
+
+          <article class="model-api" id="api-grok-imagine">
+            <h3>grok-imagine-video-1.5-preview</h3>
+            <p class="model-lead" data-i18n="giLead"></p>
+            <div class="table-wrap">
+              <table class="field-table">
+                <thead>
+                  <tr><th data-i18n="thField"></th><th data-i18n="thType"></th><th data-i18n="thDesc"></th></tr>
+                </thead>
+                <tbody>
+                  <tr><td>prompt<span class="req">*</span></td><td>string</td><td>文案</td></tr>
+                  <tr><td>image<span class="req">*</span></td><td>object</td><td><code>{"url":"https://..."}</code>（亦接受 image_url / image_urls[0]）</td></tr>
+                  <tr><td>aspect_ratio</td><td>string</td><td>如 <code>16:9</code></td></tr>
+                  <tr><td>resolution</td><td>string</td><td>如 <code>480p</code></td></tr>
+                  <tr><td>duration</td><td>integer</td><td>秒</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="code-block" style="margin-top:12px">
+              <div class="code-bar"><span class="lang">JSON · 仅图生</span><button type="button" class="btn-copy" data-copy-target="ex-gi" data-i18n="copy"></button></div>
+              <pre id="ex-gi"><code>{
+  "model": "grok-imagine-video-1.5-preview",
+  "prompt": "gentle camera push in",
+  "image": {"url": "https://example.com/still.jpg"},
+  "aspect_ratio": "16:9",
+  "resolution": "480p",
+  "duration": 5
+}</code></pre>
+            </div>
+          </article>
+        </div>
       </section>
 
       <section id="speech">
@@ -942,14 +1219,31 @@ const I18N = {
     "tocImage": "Images",
     "tocVideo": "Video A",
     "tocVideoGen": "Video B",
+    "tocVideoApi": "Video params",
     "videoTitle": "Video — /v1/videos",
     "videoTitleGen": "Video — /v1/videos/generations",
+    "videoApiTitle": "Video model parameters",
+    "videoApiIntro": "Same Keyo path for all models below. Submit POST /v1/videos/generations, then poll GET /v1/tasks/{task_id}. Field names differ by model — do not mix MiniMax fields with Seedance/Wan.",
+    "thField": "Field",
+    "thType": "Type",
+    "thDesc": "Description",
+    "mmLead": "MiniMax-H3 uses its own field set (not image_urls / image_with_roles). Prompt quality matters.",
+    "mmPrompt": "Required. Spell out duration, shots, dialogue, and negative prompts when needed.",
+    "mmImages": "Reference images, max 9. Public https URLs only.",
+    "mmAudios": "Reference audio, max 3. Public https URLs only.",
+    "mmSeed": "Optional random seed.",
+    "mmAlias": "Aliases mapped automatically: image_urls→images, audio_urls→audios, aspect_ratio→aspectRatio.",
+    "sdLead": "Text / first-last frame / video+audio reference. Do not mix first-last with video_urls/audio_urls.",
+    "wanLead": "Text, i2v, first-last, or multimodal refs. Public https media only.",
+    "fluxLead": "Text, keyframe images, or video continuation. draft for HD preview.",
+    "omniLead": "No duration. Supports first/last frame, multi-subject refs, and short video edit.",
+    "giLead": "Image-to-video only. image.url is required.",
     "videoIntroA": "Use this path for grok-1.5-video. wan / Seedance / FLUX / MiniMax / Gemini Omni / grok-imagine sent here are auto-forwarded.",
     "videoIntroB": "Recommended path for wan / Seedance / FLUX / MiniMax / Gemini Omni / grok-imagine. POST /v1/videos also works (auto-forward).",
     "videoHint": "Async: POST /v1/videos, then poll GET /v1/videos/{id}. Billing follows the console.",
     "videoHintGen": "Async: POST /v1/videos/generations, then poll GET /v1/tasks/{task_id} (or GET /v1/videos/{id}). Billing follows the console.",
     "videoMediaNote": "Media rule: JSON body only. Images/videos/audio must be public http(s) URLs (asset:// where supported). Local file paths and data: base64 are rejected.",
-    "videoImagineNote": "Modes differ by model. seedance/wan: image_urls + image_with_roles(first/last) + video_urls/audio_urls. MiniMax-H3 uses different fields: aspectRatio (landscape/portrait/square), images[], audios[] — not image_urls/first_frame. flux-3: image_urls keyframes or video_url. gemini-omni: no duration; first_frame_image+last_frame_image. grok-imagine: image:{\"url\":\"https://...\"} only. Full examples: customer one-pager §4.2.",
+    "videoImagineNote": "Modes differ by model. seedance/wan: image_urls + image_with_roles(first/last) + video_urls/audio_urls. MiniMax-H3 uses different fields: aspectRatio (landscape/portrait/square), images[], audios[] — not image_urls/first_frame. flux-3: image_urls keyframes or video_url. gemini-omni: no duration; first_frame_image+last_frame_image. grok-imagine: image:{\"url\":\"https://...\"} only. Per-model field tables → Video params (#video-api).",
     "nGrokVideo": "text/ref · 1–15s · per request",
     "nVeoComponents": "(delisted)",
     "nWanVideo": "t2v / first·last / multimodal ref · /s",
@@ -1069,14 +1363,31 @@ const I18N = {
     "tocImage": "图片生成",
     "tocVideo": "视频 A",
     "tocVideoGen": "视频 B",
+    "tocVideoApi": "视频参数",
     "videoTitle": "视频 — /v1/videos",
     "videoTitleGen": "视频 — /v1/videos/generations",
+    "videoApiTitle": "视频模型参数（按模型）",
+    "videoApiIntro": "下列模型统一走 Keyo：POST /v1/videos/generations 提交，GET /v1/tasks/{task_id} 轮询。各模型字段不同——MiniMax 不要套 Seedance/Wan 的 image_urls / image_with_roles。",
+    "thField": "字段",
+    "thType": "类型",
+    "thDesc": "说明",
+    "mmLead": "MiniMax-H3 字段独立（不要用 image_urls / image_with_roles / first_frame_image）。提示词门槛较高，建议写清时长、镜头、对白与负面提示。",
+    "mmPrompt": "必填。建议写清时长、镜头、对白与负面提示。",
+    "mmImages": "参考图数组，最多 9；须公网 https URL。",
+    "mmAudios": "参考音频数组，最多 3；须公网 https URL。",
+    "mmSeed": "可选随机种子。",
+    "mmAlias": "兼容别名（自动映射）：image_urls→images，audio_urls→audios，aspect_ratio→aspectRatio。",
+    "sdLead": "文生 / 首尾帧 / 视频+音频参考。首尾帧族与 video_urls/audio_urls 互斥。",
+    "wanLead": "文生、图生、首尾帧或多模态参考。媒体须公网 https。",
+    "fluxLead": "文生、关键帧图或视频续写；draft 可出 hd 草稿。",
+    "omniLead": "无 duration。支持首尾帧、多主体参考与短视频编辑。",
+    "giLead": "仅图生。必须传 image.url。",
     "videoIntroA": "下表模型请用本路径。wan / Seedance / FLUX / MiniMax / Gemini Omni / grok-imagine 打到这里也会自动转发。",
     "videoIntroB": "wan / Seedance / FLUX / MiniMax / Gemini Omni / grok-imagine 推荐本路径。POST /v1/videos 也会自动转发。",
     "videoHint": "异步：POST /v1/videos 创建，再 GET /v1/videos/{id} 查询。扣费以控制台为准。",
     "videoHintGen": "异步：POST /v1/videos/generations 创建，再 GET /v1/tasks/{task_id}（或 GET /v1/videos/{id}）查询。扣费以控制台为准。",
     "videoMediaNote": "媒体硬规则：只要 JSON。图/视频/音频必须是公网 http(s)（或支持的 asset://）。本机路径、data:base64 一律拒绝。",
-    "videoImagineNote": "各模型写法不同。seedance/wan：image_urls、image_with_roles(首尾帧)、video_urls/audio_urls。MiniMax-H3 字段不同：aspectRatio(landscape/portrait/square)、images[]、audios[]，不要用 image_urls/first_frame。flux-3：image_urls 关键帧或 video_url。gemini-omni：无 duration。grok-imagine：仅 image:{\"url\":\"https://...\"}。完整示例见客户接入一页纸 §4.2。",
+    "videoImagineNote": "各模型写法不同。seedance/wan：image_urls、image_with_roles(首尾帧)、video_urls/audio_urls。MiniMax-H3 字段不同：aspectRatio(landscape/portrait/square)、images[]、audios[]，不要用 image_urls/first_frame。flux-3：image_urls 关键帧或 video_url。gemini-omni：无 duration。grok-imagine：仅 image:{\"url\":\"https://...\"}。各模型字段表与示例 → 见「视频参数」(#video-api)。",
     "nGrokVideo": "文生/参考图 · 1–15 秒 · 按次",
     "nVeoComponents": "（已下架）",
     "nWanVideo": "文生/首尾帧/多模态参考 · 按秒",
@@ -1196,6 +1507,7 @@ const I18N = {
     "tocImage": "圖片生成",
     "tocVideo": "影片 A",
     "tocVideoGen": "影片 B",
+    "tocVideoApi": "影片參數",
     "videoTitle": "影片 — /v1/videos",
     "videoTitleGen": "影片 — /v1/videos/generations",
     "videoIntroA": "下表模型請用本路徑。wan / Seedance / FLUX / MiniMax / Gemini Omni / grok-imagine 打到這裡也會自動轉發。",
@@ -1323,6 +1635,7 @@ const I18N = {
     "tocImage": "画像生成",
     "tocVideo": "動画 A",
     "tocVideoGen": "動画 B",
+    "tocVideoApi": "動画パラメータ",
     "videoTitle": "動画 — /v1/videos",
     "videoTitleGen": "動画 — /v1/videos/generations",
     "videoIntroA": "下表のモデルはこのパス。wan / Seedance / FLUX / MiniMax / Gemini Omni / grok-imagine も自動転送されます。",
@@ -1450,6 +1763,7 @@ const I18N = {
     "tocImage": "Images",
     "tocVideo": "Vidéo A",
     "tocVideoGen": "Vidéo B",
+    "tocVideoApi": "Params vidéo",
     "videoTitle": "Vidéo — /v1/videos",
     "videoTitleGen": "Vidéo — /v1/videos/generations",
     "videoIntroA": "Chemin pour grok-1.5-video. wan / Seedance / FLUX / MiniMax / Gemini Omni / grok-imagine envoyés ici sont redirigés.",
@@ -1577,6 +1891,7 @@ const I18N = {
     "tocImage": "Изображения",
     "tocVideo": "Видео A",
     "tocVideoGen": "Видео B",
+    "tocVideoApi": "Параметры видео",
     "videoTitle": "Видео — /v1/videos",
     "videoTitleGen": "Видео — /v1/videos/generations",
     "videoIntroA": "Путь для grok-1.5-video. wan / Seedance / FLUX / MiniMax / Gemini Omni / grok-imagine сюда — автоперенаправление.",
@@ -1704,6 +2019,7 @@ const I18N = {
     "tocImage": "Ảnh",
     "tocVideo": "Video A",
     "tocVideoGen": "Video B",
+    "tocVideoApi": "Tham số video",
     "videoTitle": "Video — /v1/videos",
     "videoTitleGen": "Video — /v1/videos/generations",
     "videoIntroA": "Path cho grok-1.5-video. wan / Seedance / FLUX / MiniMax / Gemini Omni / grok-imagine gửi vào đây sẽ được chuyển tự động.",
@@ -1892,6 +2208,13 @@ function renderSamples(dict) {
       '  -H <span class="tok-str">"Content-Type: application/json"</span> \\\n' +
       '  -d <span class="tok-str">\'{\n    "model": "wan3.0-video",\n    "prompt": "A kitten running on a moonlit rooftop",\n    "resolution": "720P",\n    "duration": 5\n  }\'</span></code>';
   }
+  const curlMm = document.getElementById('curl-mm-h3');
+  if (curlMm) {
+    curlMm.innerHTML = '<code><span class="tok-cmd">curl</span> https://www.keyoapi.xyz/v1/videos/generations \\\n' +
+      '  -H <span class="tok-str">"Authorization: Bearer ' + escapeHtml(key) + '"</span> \\\n' +
+      '  -H <span class="tok-str">"Content-Type: application/json"</span> \\\n' +
+      '  -d <span class="tok-str">\'{\n    "model": "MiniMax-H3",\n    "prompt": "a red balloon rising in a blue sky",\n    "aspectRatio": "landscape",\n    "resolution": "480p",\n    "duration": 5\n  }\'</span></code>';
+  }
   if (asr) {
     asr.innerHTML = '<code><span class="tok-cmd">curl</span> https://www.keyoapi.xyz/v1/audio/transcriptions \\\n' +
       '  -H <span class="tok-str">"Authorization: Bearer ' + escapeHtml(key) + '"</span> \\\n' +
@@ -1946,6 +2269,7 @@ function applyLang(raw) {
   document.querySelectorAll('[data-i18n]').forEach((el) => {
     const key = el.getAttribute('data-i18n');
     if (dict[key] != null) el.textContent = dict[key];
+    else if (I18N.en[key] != null) el.textContent = I18N.en[key];
   });
   document.querySelectorAll('[data-i18n-html]').forEach((el) => {
     const key = el.getAttribute('data-i18n-html');

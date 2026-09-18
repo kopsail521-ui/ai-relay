@@ -234,7 +234,7 @@
       "desc_zh": "Grok 1.5 Video · 按次"
     },
     {
-      "id": "seedance-2.0-1080p-full",
+      "id": "seedance-2.0-1080p",
       "vendor": "字节跳动",
       "icon": "Doubao.Color",
       "tag": "视频",
@@ -253,7 +253,7 @@
         "cost_cny_per_second": 0.538,
         "fx_cny_usd": 7.3
       },
-      "desc_zh": "seedance-2.0-1080p-full"
+      "desc_zh": "seedance-2.0-1080p"
     },
     {
       "id": "seedance-2.0-1080p-fast",
@@ -322,7 +322,7 @@
       "desc_zh": "seedance-2.5-1080p"
     },
     {
-      "id": "seedance-2.0-720p-full",
+      "id": "seedance-2.0-720p",
       "vendor": "字节跳动",
       "icon": "Doubao.Color",
       "tag": "视频",
@@ -341,7 +341,7 @@
         "cost_cny_per_second": 0.54,
         "fx_cny_usd": 7.3
       },
-      "desc_zh": "seedance-2.0-720p-full"
+      "desc_zh": "seedance-2.0-720p"
     },
     {
       "id": "seedance-2.0-720p-fast",

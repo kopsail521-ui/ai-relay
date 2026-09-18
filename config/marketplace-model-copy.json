@@ -4563,16 +4563,16 @@
     "price_key_zh": "",
     "price_key_en": ""
   },
-  "seedance-2.0-1080p-full": {
-    "description": "seedance-2.0-1080p-full",
+  "seedance-2.0-1080p": {
+    "description": "seedance-2.0-1080p",
     "descriptions": {
-      "zhCN": "seedance-2.0-1080p-full",
-      "zhTW": "seedance-2.0-1080p-full",
-      "en": "seedance-2.0-1080p-full",
-      "fr": "seedance-2.0-1080p-full",
-      "ru": "seedance-2.0-1080p-full",
-      "ja": "seedance-2.0-1080p-full",
-      "vi": "seedance-2.0-1080p-full"
+      "zhCN": "seedance-2.0-1080p",
+      "zhTW": "seedance-2.0-1080p",
+      "en": "seedance-2.0-1080p",
+      "fr": "seedance-2.0-1080p",
+      "ru": "seedance-2.0-1080p",
+      "ja": "seedance-2.0-1080p",
+      "vi": "seedance-2.0-1080p"
     },
     "unit": "second",
     "badge": {
@@ -4608,8 +4608,8 @@
     "suffix_en": "/ second",
     "price_key_zh": "每秒",
     "price_key_en": "Per second",
-    "description_zh": "seedance-2.0-1080p-full",
-    "description_en": "seedance-2.0-1080p-full",
+    "description_zh": "seedance-2.0-1080p",
+    "description_en": "seedance-2.0-1080p",
     "price_table": {
       "columns": {
         "zhCN": [
@@ -4839,16 +4839,16 @@
       ]
     }
   },
-  "seedance-2.0-720p-full": {
-    "description": "seedance-2.0-720p-full",
+  "seedance-2.0-720p": {
+    "description": "seedance-2.0-720p",
     "descriptions": {
-      "zhCN": "seedance-2.0-720p-full",
-      "zhTW": "seedance-2.0-720p-full",
-      "en": "seedance-2.0-720p-full",
-      "fr": "seedance-2.0-720p-full",
-      "ru": "seedance-2.0-720p-full",
-      "ja": "seedance-2.0-720p-full",
-      "vi": "seedance-2.0-720p-full"
+      "zhCN": "seedance-2.0-720p",
+      "zhTW": "seedance-2.0-720p",
+      "en": "seedance-2.0-720p",
+      "fr": "seedance-2.0-720p",
+      "ru": "seedance-2.0-720p",
+      "ja": "seedance-2.0-720p",
+      "vi": "seedance-2.0-720p"
     },
     "unit": "second",
     "badge": {
@@ -4884,8 +4884,8 @@
     "suffix_en": "/ second",
     "price_key_zh": "每秒",
     "price_key_en": "Per second",
-    "description_zh": "seedance-2.0-720p-full",
-    "description_en": "seedance-2.0-720p-full",
+    "description_zh": "seedance-2.0-720p",
+    "description_en": "seedance-2.0-720p",
     "price_table": {
       "columns": {
         "zhCN": [

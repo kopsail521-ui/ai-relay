@@ -147,7 +147,7 @@ curl https://www.keyoapi.xyz/v1/videos/generations \
 
 ### 1.4 视频 Path B → `POST /v1/videos/generations` → 轮询 `GET /v1/tasks/{id}`
 
-`wan3.0-video` · `flux-3-video` · `MiniMax-H3` · `gemini-omni-1.1-flash` · `gemini-omni-1.1-flash-ext` · `grok-imagine-video-1.5-preview` · `seedance-2.0-1080p-full` · `seedance-2.0-1080p-fast` · `seedance-2.0-1080p-mini` · `seedance-2.5-1080p` · `seedance-2.0-720p-full` · `seedance-2.0-720p-fast` · `seedance-2.0-720p-mini` · `seedance-2.5-720p`  
+`wan3.0-video` · `flux-3-video` · `MiniMax-H3` · `gemini-omni-1.1-flash` · `gemini-omni-1.1-flash-ext` · `grok-imagine-video-1.5-preview` · `seedance-2.0-1080p` · `seedance-2.0-1080p-fast` · `seedance-2.0-1080p-mini` · `seedance-2.5-1080p` · `seedance-2.0-720p` · `seedance-2.0-720p-fast` · `seedance-2.0-720p-mini` · `seedance-2.5-720p`  
 
 （`seedance-2.0` / `seedance-2.5` **已下架**，勿再调用。）
 
@@ -301,11 +301,11 @@ curl https://www.keyoapi.xyz/v1/videos/generations \
 
 | model | 售价 |
 |------|------|
-| `seedance-2.0-1080p-full` | **$0.095809/秒** |
+| `seedance-2.0-1080p` | **$0.095809/秒** |
 | `seedance-2.0-1080p-fast` | **$0.070877/秒** |
 | `seedance-2.0-1080p-mini` | **$0.047726/秒** |
 | `seedance-2.5-1080p` | **$0.131425/秒** |
-| `seedance-2.0-720p-full` | **$0.096165/秒** |
+| `seedance-2.0-720p` | **$0.096165/秒** |
 | `seedance-2.0-720p-fast` | **$0.074794/秒** |
 | `seedance-2.0-720p-mini` | **$0.049863/秒** |
 | `seedance-2.5-720p` | **$0.133562/秒** |

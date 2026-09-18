@@ -136,7 +136,7 @@ Paid: `gpt-5.6-luna` · `gpt-5.6-terra` · `gpt-5.6-sol` · `claude-sonnet-5` ·
 
 ### 1.4 Video Path B → `POST /v1/videos/generations` → poll `GET /v1/tasks/{id}`
 
-`wan3.0-video` · `flux-3-video` · `MiniMax-H3` · `gemini-omni-1.1-flash` · `gemini-omni-1.1-flash-ext` · `grok-imagine-video-1.5-preview` · `seedance-2.0-1080p-full` · `seedance-2.0-1080p-fast` · `seedance-2.0-1080p-mini` · `seedance-2.5-1080p` · `seedance-2.0-720p-full` · `seedance-2.0-720p-fast` · `seedance-2.0-720p-mini` · `seedance-2.5-720p`  
+`wan3.0-video` · `flux-3-video` · `MiniMax-H3` · `gemini-omni-1.1-flash` · `gemini-omni-1.1-flash-ext` · `grok-imagine-video-1.5-preview` · `seedance-2.0-1080p` · `seedance-2.0-1080p-fast` · `seedance-2.0-1080p-mini` · `seedance-2.5-1080p` · `seedance-2.0-720p` · `seedance-2.0-720p-fast` · `seedance-2.0-720p-mini` · `seedance-2.5-720p`  
 
 (`seedance-2.0` / `seedance-2.5` are **delisted** — do not call.)
 
@@ -290,11 +290,11 @@ Legacy IDs `seedance-2.0` / `seedance-2.5` are **delisted**. Use these fixed-res
 
 | model | sell |
 |------|------|
-| `seedance-2.0-1080p-full` | **$0.095809/sec** |
+| `seedance-2.0-1080p` | **$0.095809/sec** |
 | `seedance-2.0-1080p-fast` | **$0.070877/sec** |
 | `seedance-2.0-1080p-mini` | **$0.047726/sec** |
 | `seedance-2.5-1080p` | **$0.131425/sec** |
-| `seedance-2.0-720p-full` | **$0.096165/sec** |
+| `seedance-2.0-720p` | **$0.096165/sec** |
 | `seedance-2.0-720p-fast` | **$0.074794/sec** |
 | `seedance-2.0-720p-mini` | **$0.049863/sec** |
 | `seedance-2.5-720p` | **$0.133562/sec** |

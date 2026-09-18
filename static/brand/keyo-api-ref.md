@@ -302,7 +302,7 @@ curl https://www.keyoapi.xyz/v1/videos/generations \
 | model | 售价 |
 |------|------|
 | `seedance-2.0-1080p` | **$0.100599/秒** |
-| `seedance-2.0-1080p-fast` | **$0.074421/秒** |
+| `seedance-2.0-1080p-fast` | **$0.0754/秒** |
 | `seedance-2.0-1080p-mini` | **$0.050112/秒** |
 | `seedance-2.5-1080p` | **$0.137996/秒** |
 | `seedance-2.0-720p` | **$0.096165/秒** |

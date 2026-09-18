@@ -264,7 +264,7 @@
       "upstream": "aione",
       "upstream_model": "【超分版】sd2.0-1080p-fast",
       "upstream_submit_path": "/v1/videos",
-      "markup": 1.365,
+      "markup": 1.382953,
       "billing": "settle_cost",
       "display_unit": "second",
       "estimate": {
@@ -272,7 +272,7 @@
         "default_seconds": 5,
         "default_resolution": "1080p",
         "cost_usd_per_second": 0.054521,
-        "sell_usd_per_second": 0.074421,
+        "sell_usd_per_second": 0.0754,
         "cost_cny_per_second": 0.398,
         "fx_cny_usd": 7.3,
         "extra_markup": 1.05

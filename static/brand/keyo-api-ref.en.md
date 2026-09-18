@@ -291,7 +291,7 @@ Legacy IDs `seedance-2.0` / `seedance-2.5` are **delisted**. Use these fixed-res
 | model | sell |
 |------|------|
 | `seedance-2.0-1080p` | **$0.100599/sec** |
-| `seedance-2.0-1080p-fast` | **$0.074421/sec** |
+| `seedance-2.0-1080p-fast` | **$0.0754/sec** |
 | `seedance-2.0-1080p-mini` | **$0.050112/sec** |
 | `seedance-2.5-1080p` | **$0.137996/sec** |
 | `seedance-2.0-720p` | **$0.096165/sec** |

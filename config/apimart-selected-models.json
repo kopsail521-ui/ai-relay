@@ -153,10 +153,10 @@
       "icon": "Doubao.Color",
       "tag": "视频按秒",
       "billing": "settle_cost",
-      "sell_usd_per_second": 0.074421,
-      "model_price_usd": 0.074421,
+      "sell_usd_per_second": 0.0754,
+      "model_price_usd": 0.0754,
       "desc_zh": "seedance-2.0-1080p-fast",
-      "markup": 1.365
+      "markup": 1.382953
     },
     {
       "id": "seedance-2.0-1080p-mini",

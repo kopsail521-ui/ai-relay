@@ -253,7 +253,7 @@
         "cost_cny_per_second": 0.538,
         "fx_cny_usd": 7.3
       },
-      "desc_zh": "Seedance · 1080p 满血超分 · $0.095809/秒（成本 ¥0.538/秒 ÷7.3 ×1.3）"
+      "desc_zh": "seedance-2.0-1080p-full"
     },
     {
       "id": "seedance-2.0-1080p-fast",
@@ -275,7 +275,7 @@
         "cost_cny_per_second": 0.398,
         "fx_cny_usd": 7.3
       },
-      "desc_zh": "Seedance · 1080p Fast 超分 · $0.070877/秒（成本 ¥0.398/秒 ÷7.3 ×1.3）"
+      "desc_zh": "seedance-2.0-1080p-fast"
     },
     {
       "id": "seedance-2.0-1080p-mini",
@@ -297,7 +297,7 @@
         "cost_cny_per_second": 0.268,
         "fx_cny_usd": 7.3
       },
-      "desc_zh": "Seedance · 1080p Mini 超分 · $0.047726/秒（成本 ¥0.268/秒 ÷7.3 ×1.3）"
+      "desc_zh": "seedance-2.0-1080p-mini"
     },
     {
       "id": "seedance-2.5-1080p",
@@ -319,7 +319,7 @@
         "cost_cny_per_second": 0.738,
         "fx_cny_usd": 7.3
       },
-      "desc_zh": "Seedance · 1080p 2.5 超分 · $0.131425/秒（成本 ¥0.738/秒 ÷7.3 ×1.3）"
+      "desc_zh": "seedance-2.5-1080p"
     },
     {
       "id": "seedance-2.0-720p-full",
@@ -341,7 +341,7 @@
         "cost_cny_per_second": 0.54,
         "fx_cny_usd": 7.3
       },
-      "desc_zh": "Seedance · 720p 满血 · $0.096165/秒（成本 ¥0.54/秒 ÷7.3 ×1.3）"
+      "desc_zh": "seedance-2.0-720p-full"
     },
     {
       "id": "seedance-2.0-720p-fast",
@@ -363,7 +363,7 @@
         "cost_cny_per_second": 0.42,
         "fx_cny_usd": 7.3
       },
-      "desc_zh": "Seedance · 720p Fast · $0.074794/秒（成本 ¥0.42/秒 ÷7.3 ×1.3）"
+      "desc_zh": "seedance-2.0-720p-fast"
     },
     {
       "id": "seedance-2.0-720p-mini",
@@ -385,7 +385,7 @@
         "cost_cny_per_second": 0.28,
         "fx_cny_usd": 7.3
       },
-      "desc_zh": "Seedance · 720p Mini · $0.049863/秒（成本 ¥0.28/秒 ÷7.3 ×1.3）"
+      "desc_zh": "seedance-2.0-720p-mini"
     },
     {
       "id": "seedance-2.5-720p",
@@ -407,7 +407,7 @@
         "cost_cny_per_second": 0.75,
         "fx_cny_usd": 7.3
       },
-      "desc_zh": "Seedance · 720p 2.5 均衡 · $0.133562/秒（成本 ¥0.75/秒 ÷7.3 ×1.3）"
+      "desc_zh": "seedance-2.5-720p"
     }
   ],
   "fx_cny_usd": 7.3

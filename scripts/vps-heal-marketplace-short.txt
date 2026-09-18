@@ -1,0 +1,2 @@
+# 一键修复：供应商图标 + 免费标签（复制到 VPS）
+cd /opt/ai-relay && bash scripts/vps-heal-marketplace-meta.txt

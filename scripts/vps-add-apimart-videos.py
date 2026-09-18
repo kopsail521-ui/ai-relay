@@ -326,6 +326,9 @@ def main():
     conn.close()
     print(json.dumps({"ok": True, "markup": markup, "models": out}, ensure_ascii=False))
     print("DONE_ADD_APIMART_VIDEOS")
+    # Reminder: run scripts/vps-heal-marketplace-meta.txt after this so
+    # Step/sam3/RMBG/IndexTTS/OCR vendors + 免费 tags are not left stale.
+    print("NEXT: bash /opt/ai-relay/scripts/vps-heal-marketplace-meta.txt")
 
 
 if __name__ == "__main__":

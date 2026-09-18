@@ -79,3 +79,6 @@ t=re.sub(r"(?i)aione|aicopy|grsai|dakka|apimart|openlux|gitee|moark","provider",
 print(t[:500])
 PY
 echo DONE_SEEDANCE_AIONE
+
+# Always re-heal marketplace vendors/icons/免费 (video onboard must not leave stale meta)
+bash /opt/ai-relay/scripts/vps-heal-marketplace-meta.txt || true

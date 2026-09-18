@@ -12,7 +12,6 @@
     "Security-semantic-filtering": "/brand/model-icons/security-semantic.png",
     "nsfw-classifier": "/brand/model-icons/nsfw-classifier.png",
     "keyo-text-moderation": "/brand/model-icons/keyo-moderation.png",
-    "RMBG-2.0": "/brand/model-icons/rmbg-20.svg",
     "Atria-dawn-v2": "/brand/model-icons/atria-dawn-v2.svg"
   },
   "lobehub_fixes": {
@@ -30,6 +29,7 @@
     "Unlimited-OCR": "Wenxin.Color",
     "IndexTTS-2": "Bilibili.Color",
     "Real-ESRGAN": "Tencent.Color",
+    "RMBG-2.0": "Tencent.Color",
     "Fun-ASR-Nano-2512": "Qwen.Color",
     "Qwen3-TTS": "Qwen.Color",
     "CosyVoice3": "Qwen.Color",

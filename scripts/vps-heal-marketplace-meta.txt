@@ -1,0 +1,89 @@
+# Heal marketplace vendors + 免费 tags (survives other onboard scripts)
+# Source of truth: services/gitee-passthrough/fix-marketplace-meta.mjs
+# Python mirror must stay in sync; never run an older py after a newer mjs.
+set -e
+cd /opt/ai-relay
+sudo git pull
+
+DB=/opt/ai-relay/data/new-api/one-api.db
+
+# Keep gitee container RULES fresh (boot also re-applies meta)
+if sudo docker ps --format '{{.Names}}' | grep -q '^ai-relay-gitee-passthrough$'; then
+  sudo docker cp /opt/ai-relay/services/gitee-passthrough/fix-marketplace-meta.mjs \
+    ai-relay-gitee-passthrough:/app/fix-marketplace-meta.mjs 2>/dev/null || true
+fi
+
+# 1) Node RULES (preferred)
+FIXED=0
+if sudo docker ps --format '{{.Names}}' | grep -q '^ai-relay-gitee-passthrough$'; then
+  if curl -sS -m 20 -X POST http://127.0.0.1:3012/internal/fix-marketplace-meta | tee /tmp/heal-meta.json | grep -q '"updated"'; then
+    FIXED=1
+  elif sudo docker exec ai-relay-gitee-passthrough node /app/fix-marketplace-meta.mjs "$DB" | tee /tmp/heal-meta.json | grep -q '"updated"'; then
+    FIXED=1
+  fi
+fi
+
+# 2) Python only if Node failed (same RULES after this commit)
+if [ "$FIXED" != "1" ] && [ -f /opt/ai-relay/scripts/fix-marketplace-meta.py ]; then
+  sudo python3 /opt/ai-relay/scripts/fix-marketplace-meta.py "$DB" | tee /tmp/heal-meta.json || true
+fi
+
+# Free twin abilities (IDs / channels) — does not strip tags if already correct
+if [ -f /opt/ai-relay/scripts/vps-split-free-paid-models.py ]; then
+  sudo python3 /opt/ai-relay/scripts/vps-split-free-paid-models.py "$DB" || true
+fi
+
+# Re-apply meta AFTER free-split (split may touch models rows)
+if sudo docker ps --format '{{.Names}}' | grep -q '^ai-relay-gitee-passthrough$'; then
+  curl -sS -m 20 -X POST http://127.0.0.1:3012/internal/fix-marketplace-meta >/tmp/heal-meta2.json || \
+    sudo docker exec ai-relay-gitee-passthrough node /app/fix-marketplace-meta.mjs "$DB" >/tmp/heal-meta2.json || true
+fi
+
+# creem: icons + copy (RMBG→Tencent, Step→Stepfun, …)
+if sudo docker ps --format '{{.Names}}' | grep -q '^ai-relay-creem-moderation$'; then
+  sudo docker cp /opt/ai-relay/config/model-icon-map.json \
+    ai-relay-creem-moderation:/app/model-icon-map.json 2>/dev/null || true
+  sudo docker cp /opt/ai-relay/services/creem-moderation-proxy/model-icon-map.json \
+    ai-relay-creem-moderation:/app/model-icon-map.json 2>/dev/null || true
+  sudo docker cp /opt/ai-relay/services/creem-moderation-proxy/marketplace-model-copy.json \
+    ai-relay-creem-moderation:/app/marketplace-model-copy.json 2>/dev/null || true
+  sudo docker restart ai-relay-creem-moderation >/dev/null || true
+fi
+sudo docker restart ai-relay-new-api >/dev/null || true
+sleep 2
+
+python3 - <<'PY'
+import sqlite3
+db=sqlite3.connect("/opt/ai-relay/data/new-api/one-api.db")
+need=["Step-Audio-TTS-3B","sam3","RMBG-2.0","IndexTTS-2","Unlimited-OCR",
+      "deepseek-v4-pro-free","deepseek-v4-flash-free","glm-5.2-free","kimi-k3-free",
+      "Atria-dawn-v2","DeepSeek-Prover-V2-7B"]
+expect={
+  "Step-Audio-TTS-3B":("阶跃星辰","Stepfun.Color"),
+  "sam3":("Meta","Meta.Color"),
+  "RMBG-2.0":("腾讯","Tencent.Color"),
+  "IndexTTS-2":("哔哩哔哩","Bilibili.Color"),
+  "Unlimited-OCR":("百度","Wenxin.Color"),
+}
+rows=db.execute(
+  "SELECT m.model_name, v.name, m.icon, m.tags FROM models m LEFT JOIN vendors v ON v.id=m.vendor_id "
+  "WHERE m.deleted_at IS NULL AND m.model_name IN (%s)" % ",".join("?"*len(need)), need
+).fetchall()
+ok=True
+for name,vendor,icon,tags in rows:
+  print("%s | vendor=%s | icon=%s | tags=%s" % (name,vendor,icon,tags))
+  if name in expect:
+    ev,ei=expect[name]
+    if vendor!=ev or icon!=ei:
+      ok=False
+      print("  !! expected vendor=%s icon=%s" % (ev,ei))
+free=db.execute(
+  "SELECT count(*) FROM models WHERE deleted_at IS NULL AND (tags LIKE '%免费%' OR tags LIKE '%Free%')"
+).fetchone()[0]
+print("free_tag_count=", free)
+if free < 6:
+  ok=False
+  print("  !! expected free_tag_count >= 6")
+print("HEAL_OK" if ok else "HEAL_CHECK_FAILED")
+PY
+echo DONE_HEAL_MARKETPLACE_META

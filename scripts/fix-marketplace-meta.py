@@ -93,9 +93,9 @@ RULES = {
     "AnimeSharp": ("其他", "Custom", "图像处理", "p"),
     "Real-ESRGAN": ("腾讯", "Tencent.Color", "图像处理", "p"),
     "UVDoc": ("其他", "Custom", "图像处理", "p"),
-    "RMBG-2.0": ("BRIA AI", "BriaAI.Color", "图像处理", "p"),
+    "RMBG-2.0": ("腾讯", "Tencent.Color", "图像处理", "p"),
     "MinerU2.5-Pro": ("其他", "Custom", "OCR", "d"),
-    "Unlimited-OCR": ("百度", "Baidu.Color", "OCR", "c"),
+    "Unlimited-OCR": ("百度", "Wenxin.Color", "OCR", "c"),
     "Duix-Avatar": ("其他", "Custom", "数字人", "x"),
     "InfiniteTalk": ("其他", "Custom", "数字人", "n"),
     "MOSS-Audio-8B-Thinking": ("其他", "Custom", "语音识别", "a"),
@@ -113,6 +113,13 @@ RULES = {
     "Security-semantic-filtering": ("其他", "Custom", "内容风控", "m"),
     "nsfw-classifier": ("其他", "Custom", "内容风控", "m"),
     "gemma-4-26B-A4B-it": ("Google", "Gemini.Color", "大语言模型", "c"),
+    "Atria-dawn-v2": ("其他", "Custom", "大语言模型,免费", "c"),
+    "DeepSeek-Prover-V2-7B": ("DeepSeek", "DeepSeek.Color", "大语言模型,免费", "c"),
+    "deepseek-v4-pro-free": ("DeepSeek", "DeepSeek.Color", "大语言模型,免费", "c"),
+    "deepseek-v4-flash-free": ("DeepSeek", "DeepSeek.Color", "大语言模型,免费", "c"),
+    "glm-5.2-free": ("智谱", "Zhipu.Color", "大语言模型,免费", "c"),
+    "kimi-k3-free": ("Moonshot", "Moonshot", "大语言模型,免费", "c"),
+    "keyo-text-moderation": ("其他", "Custom", "内容风控", "m"),
     "gpt-image-2": ("OpenAI", "OpenAI", "图片", "i"),
     "gpt-image-2-vip": ("OpenAI", "OpenAI", "图片", "i"),
     "nano-banana-pro": ("Google", "Gemini.Color", "图片", "i"),
@@ -128,6 +135,7 @@ RULES = {
     "gemini-3.8-flash": ("Google", "Gemini.Color", "大语言模型", "c"),
     "deepseek-v4-pro-0813": ("DeepSeek", "DeepSeek.Color", "大语言模型", "c"),
     "deepseek-v4-flash": ("DeepSeek", "DeepSeek.Color", "大语言模型", "c"),
+    "deepseek-v4.1-flash": ("DeepSeek", "DeepSeek.Color", "大语言模型", "c"),
     "grok-4.6": ("xAI", "XAI", "大语言模型", "c"),
     "kimi-k3": ("Moonshot", "Moonshot", "大语言模型", "c"),
     "MiniMax-M3": ("MiniMax", "Minimax.Color", "大语言模型", "c"),
@@ -137,25 +145,35 @@ RULES = {
 
 def infer(name):
     s = name.lower()
+    rule = None
     if s.startswith("gpt-") or s.startswith("chatgpt") or s[:2] in ("o1", "o3", "o4"):
-        return ("OpenAI", "OpenAI", "大语言模型", "c")
-    if "claude" in s:
-        return ("Anthropic", "Claude.Color", "大语言模型", "c")
-    if "gemini" in s or s.startswith("gemma"):
-        return ("Google", "Gemini.Color", "大语言模型", "c")
-    if "deepseek" in s:
-        return ("DeepSeek", "DeepSeek.Color", "大语言模型", "c")
-    if "grok" in s:
-        return ("xAI", "XAI", "大语言模型", "c")
-    if "kimi" in s or "moonshot" in s:
-        return ("Moonshot", "Moonshot", "大语言模型", "c")
-    if "glm" in s or "zhipu" in s:
-        return ("智谱", "Zhipu.Color", "大语言模型", "c")
-    if "minimax" in s:
-        return ("MiniMax", "Minimax.Color", "大语言模型", "c")
-    if "qwen" in s:
-        return ("阿里巴巴", "Qwen.Color", "大语言模型", "c")
-    return None
+        rule = ("OpenAI", "OpenAI", "大语言模型", "c")
+    elif "claude" in s:
+        rule = ("Anthropic", "Claude.Color", "大语言模型", "c")
+    elif "gemini" in s or s.startswith("gemma"):
+        rule = ("Google", "Gemini.Color", "大语言模型", "c")
+    elif "deepseek" in s:
+        rule = ("DeepSeek", "DeepSeek.Color", "大语言模型", "c")
+    elif "grok" in s:
+        rule = ("xAI", "XAI", "大语言模型", "c")
+    elif "kimi" in s or "moonshot" in s:
+        rule = ("Moonshot", "Moonshot", "大语言模型", "c")
+    elif "glm" in s or "zhipu" in s:
+        rule = ("智谱", "Zhipu.Color", "大语言模型", "c")
+    elif "minimax" in s:
+        rule = ("MiniMax", "Minimax.Color", "大语言模型", "c")
+    elif "qwen" in s:
+        rule = ("阿里巴巴", "Qwen.Color", "大语言模型", "c")
+    if rule is None:
+        return None
+    # *-free twins must keep 免费 tag (sidebar count)
+    if name.lower().endswith("-free"):
+        vendor, icon, tag, ek = rule
+        parts = [p.strip() for p in str(tag).replace(";", ",").split(",") if p.strip()]
+        if "免费" not in parts:
+            parts.append("免费")
+        rule = (vendor, icon, ",".join(parts), ek)
+    return rule
 
 
 def ensure_vendor(cur, vendors, name, icon, now):

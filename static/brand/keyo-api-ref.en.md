@@ -11,7 +11,7 @@
 > - Header: `Authorization: Bearer <user key>`  
 > - Find the capability family for the model, then apply that template. Video models must use their own section — never mix fields.  
 > - For async jobs, poll until a terminal status, then return the result URL/text.  
-> - Video Path B (incl. Seedance) accepts **JSON only**; media must be **public `http(s)` URLs**.  
+> - Video Path B accepts **JSON only**; media must be **public `http(s)` URLs**.  
 > - Local files only: **first** `POST /v1/uploads` (alias `/v1/files`) → use returned `url` in Path B / OCR JSON.  
 > - **Forbidden:** local paths, `data:base64`, multipart on Path B, invented `POST /v1/assets` / `asset://`.  
 > - ASR / matting / upscale / MinerU / InfiniteTalk already accept multipart `-F file=@` / `-F image=@` (no prior upload needed).  
@@ -68,7 +68,7 @@ Path B poll success:
 
 ## 0.5 Local media upload (file → public URL)
 
-For: **Path B video** (Seedance / MiniMax / Wan / FLUX / Omni / Grok-imagine), **Unlimited-OCR** / multimodal chat `image_url.url`.  
+For: **Path B video** (MiniMax / Wan / FLUX / Omni / Grok-imagine), **Unlimited-OCR** / multimodal chat `image_url.url`.  
 Not for: ASR, matting, upscale, MinerU, InfiniteTalk (those accept multipart directly).
 
 `POST https://www.keyoapi.xyz/v1/uploads`  
@@ -100,7 +100,7 @@ Rules:
 - Default max ~**100MB**; files expire in ~**48h** (`expires_at`) — submit the video job before expiry.
 - There is **no** `POST /v1/assets` and **no** `asset://`.
 
-Two-step Seedance image-to-video:
+Two-step MiniMax-H3 reference image:
 ```bash
 # 1) Upload
 URL=$(curl -s https://www.keyoapi.xyz/v1/uploads \
@@ -111,7 +111,7 @@ URL=$(curl -s https://www.keyoapi.xyz/v1/uploads \
 curl https://www.keyoapi.xyz/v1/videos/generations \
   -H "Authorization: Bearer sk-..." \
   -H "Content-Type: application/json" \
-  -d "{\"model\":\"seedance-2.0\",\"prompt\":\"animate this scene\",\"resolution\":\"480p\",\"duration\":5,\"image_urls\":[\"$URL\"]}"
+  -d "{\"model\":\"MiniMax-H3\",\"prompt\":\"animate the character\",\"aspectRatio\":\"landscape\",\"resolution\":\"480p\",\"duration\":5,\"images\":[\"$URL\"]}"
 ```
 
 Same pattern for other Path B models: upload once, map `url` to that model’s fields.
@@ -136,7 +136,9 @@ Paid: `gpt-5.6-luna` · `gpt-5.6-terra` · `gpt-5.6-sol` · `claude-sonnet-5` ·
 
 ### 1.4 Video Path B → `POST /v1/videos/generations` → poll `GET /v1/tasks/{id}`
 
-`wan3.0-video` · `seedance-2.0` · `seedance-2.5` · `flux-3-video` · `MiniMax-H3` · `gemini-omni-1.1-flash` · `gemini-omni-1.1-flash-ext` · `grok-imagine-video-1.5-preview`
+`wan3.0-video` · `flux-3-video` · `MiniMax-H3` · `gemini-omni-1.1-flash` · `gemini-omni-1.1-flash-ext` · `grok-imagine-video-1.5-preview`  
+
+(`seedance-2.0` / `seedance-2.5` are **delisted** — do not call.)
 
 (Fields differ by model — see §5.)
 
@@ -282,61 +284,9 @@ Reference image + audio:
 }
 ```
 
-### 5.2 seedance-2.0 / seedance-2.5
+### 5.2 seedance-2.0 / seedance-2.5 (delisted)
 
-**Hard rules:**
-- `POST /v1/videos/generations`, body = **JSON only**
-- Poll = `GET /v1/tasks/{id}` (**plural tasks**, not TTS `/v1/task/`)
-- `image_urls` / `video_urls` / `audio_urls` / `image_with_roles[].url` must be public `https://...`
-- Local files: §0.5 `POST /v1/uploads` first — never multipart / `data:` / local paths / `/v1/assets` / `asset://` on the generate endpoint
-- First/last frames are **mutex** with `video_urls`/`audio_urls`
-- No reference media needed → use text-to-video below
-
-Text-to-video:
-```json
-{
-  "model": "seedance-2.0",
-  "prompt": "a cat walking in the rain",
-  "resolution": "480p",
-  "duration": 5
-}
-```
-
-Image-to-video (`image_urls` = §0.5 `url`, or any public https):
-```json
-{
-  "model": "seedance-2.0",
-  "prompt": "animate this scene",
-  "resolution": "480p",
-  "duration": 5,
-  "image_urls": ["https://www.keyoapi.xyz/uploads/<id>.jpg"]
-}
-```
-
-First/last frames:
-```json
-{
-  "model": "seedance-2.0",
-  "prompt": "Transition from day to night",
-  "resolution": "480p",
-  "duration": 5,
-  "image_with_roles": [
-    {"url": "https://example.com/day.jpg", "role": "first_frame"},
-    {"url": "https://example.com/night.jpg", "role": "last_frame"}
-  ]
-}
-```
-
-Reference video:
-```json
-{
-  "model": "seedance-2.0",
-  "prompt": "Follow the motion of the reference clip",
-  "resolution": "480p",
-  "duration": 5,
-  "video_urls": ["https://example.com/ref.mp4"]
-}
-```
+**Delisted — do not call.** Use `MiniMax-H3` / `wan3.0-video` / `flux-3-video` / `gemini-omni-*` / `grok-imagine-video-1.5-preview` instead.
 
 ### 5.3 wan3.0-video
 
@@ -615,12 +565,11 @@ curl https://www.keyoapi.xyz/v1/models \
 | MiniMax with `image_with_roles` / `first_frame_image` | Use `images` / `audios` / `aspectRatio` |
 | grok-imagine prompt only | Add `image:{"url":"https://..."}` (local file → §0.5 first) |
 | Local path or base64 in video JSON | `POST /v1/uploads`, put returned `url` in JSON; or text-to-video |
-| Multipart / `-F file=@` for Seedance / Path B | Upload first, then JSON + `image_urls` etc.; multipart only for ASR / matting / InfiniteTalk |
+| Multipart / `-F file=@` for Path B | Upload first, then JSON + `image_urls` etc.; multipart only for ASR / matting / InfiniteTalk |
 | Calling `POST /v1/assets` or `asset://` | **None** — use `POST /v1/uploads` (or `/v1/files`) |
-| Video poll `/v1/task/` | Path B (Seedance etc.) uses `/v1/tasks/` |
+| Video poll `/v1/task/` | Path B uses `/v1/tasks/` |
 | TTS async poll `/v1/tasks/` | Use `/v1/task/` |
 | gemini-omni with `duration` | Remove `duration` |
-| seedance first/last + `video_urls` together | Keep only one mode |
 
 ---
 

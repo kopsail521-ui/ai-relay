@@ -103,8 +103,6 @@ const VIDEO_GEN = (process.env.VIDEO_GEN_URL || "http://127.0.0.1:3011").replace
 const VIDEO_GEN_MODELS = new Set([
   "gemini-omni-1.1-flash",
   "gemini-omni-1.1-flash-ext",
-  "seedance-2.5",
-  "seedance-2.0",
   "flux-3-video",
   "MiniMax-H3",
   "wan3.0-video",

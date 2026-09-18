@@ -11,7 +11,7 @@
 > - Header: `Authorization: Bearer <用户提供的 key>`  
 > - 先根据模型名找到所属「能力族」，再套用该族模板；视频模型必须用对应小节的字段，禁止混用。  
 > - 异步任务必须轮询直到完成或失败，再把结果 URL/文本交给用户。  
-> - 视频 Path B（含 Seedance）**只收 JSON**；图/视频/音频必须是**公网 `http(s)` URL**。  
+> - 视频 Path B **只收 JSON**；图/视频/音频必须是**公网 `http(s)` URL**。  
 > - 用户只有本机文件时：**先** `POST /v1/uploads`（别名 `/v1/files`）拿到 `url`，再填进 Path B / OCR 的 JSON。  
 > - **禁止**：本机路径、`data:base64`、对 Path B 直接 multipart、臆造的 `POST /v1/assets` / `asset://`。  
 > - ASR / 抠图 / 超分 / MinerU / InfiniteTalk 等 multipart 接口可直接 `-F file=@` / `-F image=@`，不必先上传。  
@@ -79,7 +79,7 @@ Gitee 异步（TTS/InfiniteTalk）轮询成功示例：
 
 ## 0.5 本地素材上传（本机图/音/视频 → 公网 URL）
 
-用于：**Path B 视频**（Seedance / MiniMax / Wan / FLUX / Omni / Grok-imagine）、**Unlimited-OCR** / 多模态 chat 的 `image_url.url`。  
+用于：**Path B 视频**（MiniMax / Wan / FLUX / Omni / Grok-imagine）、**Unlimited-OCR** / 多模态 chat 的 `image_url.url`。  
 不用于：ASR、抠图、超分、MinerU、InfiniteTalk（那些接口直接 multipart）。
 
 `POST https://www.keyoapi.xyz/v1/uploads`  
@@ -111,7 +111,7 @@ curl https://www.keyoapi.xyz/v1/uploads \
 - 默认最大约 **100MB**；文件约 **48 小时**后过期（看 `expires_at`），过期前须完成视频任务提交。
 - **没有** `POST /v1/assets`，也没有 `asset://`；不要臆造。
 
-两步调用（Seedance 图生示例）：
+两步调用（MiniMax-H3 参考图示例）：
 ```bash
 # 1) 上传
 URL=$(curl -s https://www.keyoapi.xyz/v1/uploads \
@@ -122,10 +122,10 @@ URL=$(curl -s https://www.keyoapi.xyz/v1/uploads \
 curl https://www.keyoapi.xyz/v1/videos/generations \
   -H "Authorization: Bearer sk-..." \
   -H "Content-Type: application/json" \
-  -d "{\"model\":\"seedance-2.0\",\"prompt\":\"让画面动起来\",\"resolution\":\"480p\",\"duration\":5,\"image_urls\":[\"$URL\"]}"
+  -d "{\"model\":\"MiniMax-H3\",\"prompt\":\"人物按参考图动起来\",\"aspectRatio\":\"landscape\",\"resolution\":\"480p\",\"duration\":5,\"images\":[\"$URL\"]}"
 ```
 
-其它 Path B 模型同样：上传一次，把 `url` 换成该模型字段（MiniMax→`images`/`audios`，Grok-imagine→`image.url`，FLUX→`image_urls`/`video_url`，Omni→`first_frame_image` 等）。
+其它 Path B 模型同样：上传一次，把 `url` 换成该模型字段（Wan→`image_urls`，Grok-imagine→`image.url`，FLUX→`image_urls`/`video_url`，Omni→`first_frame_image` 等）。
 
 ---
 
@@ -147,7 +147,9 @@ curl https://www.keyoapi.xyz/v1/videos/generations \
 
 ### 1.4 视频 Path B → `POST /v1/videos/generations` → 轮询 `GET /v1/tasks/{id}`
 
-`wan3.0-video` · `seedance-2.0` · `seedance-2.5` · `flux-3-video` · `MiniMax-H3` · `gemini-omni-1.1-flash` · `gemini-omni-1.1-flash-ext` · `grok-imagine-video-1.5-preview`
+`wan3.0-video` · `flux-3-video` · `MiniMax-H3` · `gemini-omni-1.1-flash` · `gemini-omni-1.1-flash-ext` · `grok-imagine-video-1.5-preview`  
+
+（`seedance-2.0` / `seedance-2.5` **已下架**，勿再调用。）
 
 （字段因模型而异，见第 5 节。）
 
@@ -293,61 +295,9 @@ curl https://www.keyoapi.xyz/v1/videos/generations \
 }
 ```
 
-### 5.2 seedance-2.0 / seedance-2.5
+### 5.2 seedance-2.0 / seedance-2.5（已下架）
 
-**硬规则（再抄一遍）：**
-- `POST /v1/videos/generations`，body = **JSON only**
-- 轮询 = `GET /v1/tasks/{id}`（复数 **tasks**，不是 TTS 的 `/v1/task/`）
-- `image_urls` / `video_urls` / `audio_urls` / `image_with_roles[].url` 只能是公网 `https://...`
-- 本机文件：先 §0.5 `POST /v1/uploads`，再填返回的 `url`（不要对生成口 multipart / `data:` / 本机路径 / `/v1/assets` / `asset://`）
-- 首尾帧 与 `video_urls`/`audio_urls` **互斥**
-- 既不要参考素材、也不上传 → 用下面「文生」模板
-
-文生：
-```json
-{
-  "model": "seedance-2.0",
-  "prompt": "雨中行走的猫",
-  "resolution": "480p",
-  "duration": 5
-}
-```
-
-图生（`image_urls` 填 §0.5 返回的 url，或任意公网 https）：
-```json
-{
-  "model": "seedance-2.0",
-  "prompt": "让画面动起来",
-  "resolution": "480p",
-  "duration": 5,
-  "image_urls": ["https://www.keyoapi.xyz/uploads/<id>.jpg"]
-}
-```
-
-首尾帧：
-```json
-{
-  "model": "seedance-2.0",
-  "prompt": "从白天过渡到夜晚",
-  "resolution": "480p",
-  "duration": 5,
-  "image_with_roles": [
-    {"url": "https://example.com/day.jpg", "role": "first_frame"},
-    {"url": "https://example.com/night.jpg", "role": "last_frame"}
-  ]
-}
-```
-
-参考视频：
-```json
-{
-  "model": "seedance-2.0",
-  "prompt": "跟随参考片的运动",
-  "resolution": "480p",
-  "duration": 5,
-  "video_urls": ["https://example.com/ref.mp4"]
-}
-```
+**已下架，勿调用。** 请改用 `MiniMax-H3` / `wan3.0-video` / `flux-3-video` / `gemini-omni-*` / `grok-imagine-video-1.5-preview`。
 
 ### 5.3 wan3.0-video
 
@@ -632,12 +582,11 @@ curl https://www.keyoapi.xyz/v1/models \
 | MiniMax 用了 `image_with_roles` / `first_frame_image` | 改用 `images` / `audios` / `aspectRatio` |
 | grok-imagine 只传 prompt | 必须加 `image:{"url":"https://..."}`（本机图先 §0.5） |
 | 视频 JSON 塞了本机路径或 base64 | 先 `POST /v1/uploads`，把返回的 `url` 填进 JSON；或改文生 |
-| 对 Seedance / Path B 用 multipart / `-F file=@` | 先 uploads，再 JSON + `image_urls` 等；multipart 只给 ASR/抠图/InfiniteTalk |
+| 对 Path B 用 multipart / `-F file=@` | 先 uploads，再 JSON + `image_urls` 等；multipart 只给 ASR/抠图/InfiniteTalk |
 | 调用 `POST /v1/assets` 或 `asset://` | **没有**；用 `POST /v1/uploads`（或 `/v1/files`） |
-| 视频轮询写成 `/v1/task/` | Path B（Seedance 等）用 `/v1/tasks/` |
+| 视频轮询写成 `/v1/task/` | Path B 用 `/v1/tasks/` |
 | TTS 异步轮询写成 `/v1/tasks/` | 用 `/v1/task/` |
 | gemini-omni 传了 `duration` | 删掉 `duration` |
-| seedance 同时首尾帧 + video_urls | 只保留一种模式 |
 
 ---
 

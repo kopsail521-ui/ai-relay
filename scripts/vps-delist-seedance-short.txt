@@ -1,0 +1,31 @@
+cd /opt/ai-relay && sudo git pull --ff-only origin main && sudo docker build -t keyo-apimart-passthrough ./services/apimart-passthrough && sudo docker rm -f ai-relay-apimart-passthrough 2>/dev/null || true && sudo docker run -d --name ai-relay-apimart-passthrough --restart always --network host --env-file /opt/ai-relay/.env.apimart -v /opt/ai-relay/data:/data:rw -e NEW_API_DB=/data/new-api/one-api.db -e NEW_API_BASE=http://127.0.0.1:3000 -e CATALOG=/app/catalog.json -e LISTEN_HOST=127.0.0.1 -e PORT=3011 keyo-apimart-passthrough && sudo docker build -t keyo-creem-moderation ./services/creem-moderation-proxy && sudo docker rm -f ai-relay-creem-moderation 2>/dev/null || true && sudo docker run -d --name ai-relay-creem-moderation --restart always --network host --env-file /opt/ai-relay/.env.moderation -e UPSTREAM_URL=http://127.0.0.1:3000 -e LISTEN_HOST=127.0.0.1 -e PORT=3001 -e UPLOAD_DIR=/opt/ai-relay/static/uploads -e UPLOAD_PUBLIC_BASE=https://www.keyoapi.xyz/uploads -e UPLOAD_MAX_BYTES=104857600 -e UPLOAD_TTL_HOURS=48 -v /opt/ai-relay/static/uploads:/opt/ai-relay/static/uploads keyo-creem-moderation && sudo python3 - <<'PY'
+import sqlite3, time
+db="/opt/ai-relay/data/new-api/one-api.db"
+mids=["seedance-2.0","seedance-2.5"]
+con=sqlite3.connect(db)
+cur=con.cursor()
+cols={r[1] for r in cur.execute("PRAGMA table_info(models)")}
+tabs={r[0] for r in cur.execute("SELECT name FROM sqlite_master WHERE type='table'")}
+now=int(time.time())
+for mid in mids:
+  if "deleted_at" in cols:
+    cur.execute("UPDATE models SET deleted_at=? WHERE model_name=? AND (deleted_at IS NULL OR deleted_at=0)", (now, mid))
+    print(mid, "soft_delete", cur.rowcount)
+  if "status" in cols:
+    cur.execute("UPDATE models SET status=0 WHERE model_name=?", (mid,))
+    print(mid, "status0", cur.rowcount)
+  if "abilities" in tabs:
+    cur.execute("DELETE FROM abilities WHERE model=?", (mid,))
+    print(mid, "abilities_del", cur.rowcount)
+  for cid, models in cur.execute("SELECT id, models FROM channels").fetchall():
+    if not models or mid not in models: continue
+    parts=[p.strip() for p in models.replace("\n",",").split(",") if p.strip() and p.strip()!=mid]
+    cur.execute("UPDATE channels SET models=? WHERE id=?", (",".join(parts), cid))
+    print(mid, "channel_strip", cid)
+con.commit(); con.close(); print("DONE_DB")
+PY
+sudo docker restart ai-relay-new-api >/dev/null 2>&1 || true
+sleep 3
+curl -sS http://127.0.0.1:3011/healthz; echo
+curl -sS https://www.keyoapi.xyz/api/pricing | python3 -c "import sys,json;d=json.load(sys.stdin);n=[(m.get('model_name')or'') for m in (d.get('data')or[])];print('seedance20', 'seedance-2.0' in n); print('seedance25', 'seedance-2.5' in n); print('total', len(n))"
+echo DONE_DELIST_SEEDANCE

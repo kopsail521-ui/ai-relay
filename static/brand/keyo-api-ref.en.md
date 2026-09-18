@@ -136,7 +136,7 @@ Paid: `gpt-5.6-luna` · `gpt-5.6-terra` · `gpt-5.6-sol` · `claude-sonnet-5` ·
 
 ### 1.4 Video Path B → `POST /v1/videos/generations` → poll `GET /v1/tasks/{id}`
 
-`wan3.0-video` · `flux-3-video` · `MiniMax-H3` · `gemini-omni-1.1-flash` · `gemini-omni-1.1-flash-ext` · `grok-imagine-video-1.5-preview`  
+`wan3.0-video` · `flux-3-video` · `MiniMax-H3` · `gemini-omni-1.1-flash` · `gemini-omni-1.1-flash-ext` · `grok-imagine-video-1.5-preview` · `seedance-2.0-1080p-full` · `seedance-2.0-1080p-fast` · `seedance-2.0-1080p-mini` · `seedance-2.5-1080p` · `seedance-2.0-720p-full` · `seedance-2.0-720p-fast` · `seedance-2.0-720p-mini` · `seedance-2.5-720p`  
 
 (`seedance-2.0` / `seedance-2.5` are **delisted** — do not call.)
 
@@ -284,9 +284,55 @@ Reference image + audio:
 }
 ```
 
-### 5.2 seedance-2.0 / seedance-2.5 (delisted)
+### 5.2 Seedance SKUs (per-second)
 
-**Delisted — do not call.** Use `MiniMax-H3` / `wan3.0-video` / `flux-3-video` / `gemini-omni-*` / `grok-imagine-video-1.5-preview` instead.
+Legacy IDs `seedance-2.0` / `seedance-2.5` are **delisted**. Use these fixed-resolution SKUs (resolution is in the model id):
+
+| model | sell |
+|------|------|
+| `seedance-2.0-1080p-full` | **$0.6994/sec** |
+| `seedance-2.0-1080p-fast` | **$0.5174/sec** |
+| `seedance-2.0-1080p-mini` | **$0.3484/sec** |
+| `seedance-2.5-1080p` | **$0.9594/sec** |
+| `seedance-2.0-720p-full` | **$0.702/sec** |
+| `seedance-2.0-720p-fast` | **$0.546/sec** |
+| `seedance-2.0-720p-mini` | **$0.364/sec** |
+| `seedance-2.5-720p` | **$0.975/sec** |
+
+Required: `model` `prompt`. Recommended: `duration` (or `seconds`, default 5).  
+Optional: `size` (`1280x720` / `1920x1080`), `aspect_ratio`, `first_frame_image` / `image_with_roles`, `video_urls`, `audios`.
+
+Text-to-video:
+```json
+{
+  "model": "seedance-2.0-720p-mini",
+  "prompt": "A red paper boat on calm water at sunset, slow push-in",
+  "duration": 5
+}
+```
+
+First frame:
+```json
+{
+  "model": "seedance-2.0-1080p-fast",
+  "prompt": "Person looks up and walks forward, natural motion",
+  "duration": 5,
+  "first_frame_image": "https://example.com/first.jpg"
+}
+```
+
+First + last frames:
+```json
+{
+  "model": "seedance-2.5-720p",
+  "prompt": "Natural transition, keep identity consistent",
+  "duration": 5,
+  "image_with_roles": [
+    {"url": "https://example.com/a.jpg", "role": "first_frame"},
+    {"url": "https://example.com/b.jpg", "role": "last_frame"}
+  ]
+}
+```
 
 ### 5.3 wan3.0-video
 

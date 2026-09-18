@@ -108,6 +108,14 @@ const VIDEO_GEN_MODELS = new Set([
   "wan3.0-video",
   "grok-imagine-video-1.5-preview",
   "grok-1.5-video",
+  "seedance-2.0-1080p-full",
+  "seedance-2.0-1080p-fast",
+  "seedance-2.0-1080p-mini",
+  "seedance-2.5-1080p",
+  "seedance-2.0-720p-full",
+  "seedance-2.0-720p-fast",
+  "seedance-2.0-720p-mini",
+  "seedance-2.5-720p",
 ]);
 
 function qsOf(url) {

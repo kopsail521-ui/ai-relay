@@ -147,7 +147,7 @@ curl https://www.keyoapi.xyz/v1/videos/generations \
 
 ### 1.4 视频 Path B → `POST /v1/videos/generations` → 轮询 `GET /v1/tasks/{id}`
 
-`wan3.0-video` · `flux-3-video` · `MiniMax-H3` · `gemini-omni-1.1-flash` · `gemini-omni-1.1-flash-ext` · `grok-imagine-video-1.5-preview`  
+`wan3.0-video` · `flux-3-video` · `MiniMax-H3` · `gemini-omni-1.1-flash` · `gemini-omni-1.1-flash-ext` · `grok-imagine-video-1.5-preview` · `seedance-2.0-1080p-full` · `seedance-2.0-1080p-fast` · `seedance-2.0-1080p-mini` · `seedance-2.5-1080p` · `seedance-2.0-720p-full` · `seedance-2.0-720p-fast` · `seedance-2.0-720p-mini` · `seedance-2.5-720p`  
 
 （`seedance-2.0` / `seedance-2.5` **已下架**，勿再调用。）
 
@@ -295,9 +295,55 @@ curl https://www.keyoapi.xyz/v1/videos/generations \
 }
 ```
 
-### 5.2 seedance-2.0 / seedance-2.5（已下架）
+### 5.2 Seedance SKU（aione · 按秒）
 
-**已下架，勿调用。** 请改用 `MiniMax-H3` / `wan3.0-video` / `flux-3-video` / `gemini-omni-*` / `grok-imagine-video-1.5-preview`。
+旧 ID `seedance-2.0` / `seedance-2.5` **已下架**。请用下列固定分辨率 SKU（分辨率写在 model id 里，一般不必再传 `resolution`）：
+
+| model | 售价 |
+|------|------|
+| `seedance-2.0-1080p-full` | **$0.6994/秒** |
+| `seedance-2.0-1080p-fast` | **$0.5174/秒** |
+| `seedance-2.0-1080p-mini` | **$0.3484/秒** |
+| `seedance-2.5-1080p` | **$0.9594/秒** |
+| `seedance-2.0-720p-full` | **$0.702/秒** |
+| `seedance-2.0-720p-fast` | **$0.546/秒** |
+| `seedance-2.0-720p-mini` | **$0.364/秒** |
+| `seedance-2.5-720p` | **$0.975/秒** |
+
+必填：`model` `prompt`；推荐：`duration`（或 `seconds`，默认 5）。  
+可选：`size`（如 `1280x720` / `1920x1080`）、`aspect_ratio`、`first_frame_image` / `image_with_roles`、`video_urls`、`audios`。
+
+文生：
+```json
+{
+  "model": "seedance-2.0-720p-mini",
+  "prompt": "夕阳下红色纸船漂在平静水面上，镜头缓慢推进",
+  "duration": 5
+}
+```
+
+首帧：
+```json
+{
+  "model": "seedance-2.0-1080p-fast",
+  "prompt": "人物抬头并向前走，动作自然",
+  "duration": 5,
+  "first_frame_image": "https://example.com/first.jpg"
+}
+```
+
+首尾帧：
+```json
+{
+  "model": "seedance-2.5-720p",
+  "prompt": "自然过渡并保持人物一致",
+  "duration": 5,
+  "image_with_roles": [
+    {"url": "https://example.com/a.jpg", "role": "first_frame"},
+    {"url": "https://example.com/b.jpg", "role": "last_frame"}
+  ]
+}
+```
 
 ### 5.3 wan3.0-video
 

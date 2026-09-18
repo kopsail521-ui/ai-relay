@@ -1,10 +1,7 @@
-/**
- * APIMart 视频透传（KeyoAPI）
- *
- * 客户：POST /v1/videos/generations（也接受 POST /v1/videos）
- *       GET /v1/tasks/{id}（也接受 GET /v1/videos/{id}）
- * 鉴权：New API 令牌；上游：APIMart Key；grok-imagine → OpenLux
- * 扣费：预扣估算价；出片后按 upstream cost(USD) × markup 多退少补
+﻿/**
+ * APIMart 瑙嗛閫忎紶锛圞eyoAPI锛? *
+ * 瀹㈡埛锛歅OST /v1/videos/generations锛堜篃鎺ュ彈 POST /v1/videos锛? *       GET /v1/tasks/{id}锛堜篃鎺ュ彈 GET /v1/videos/{id}锛? * 閴存潈锛歂ew API 浠ょ墝锛涗笂娓革細APIMart Key锛沢rok-imagine 鈫?OpenLux
+ * 鎵ｈ垂锛氶鎵ｄ及绠椾环锛涘嚭鐗囧悗鎸?upstream cost(USD) 脳 markup 澶氶€€灏戣ˉ
  *
  * Env:
  *   PORT=3011
@@ -61,6 +58,10 @@ const OPENLUX_ORIGIN = (
 const GRSAI_KEY = process.env.GRSAI_API_KEY || "";
 const GRSAI_ORIGIN = (
   process.env.GRSAI_BASE_URL || "https://grsaiapi.com"
+).replace(/\/$/, "");
+const AIONE_KEY = process.env.AIONE_API_KEY || "";
+const AIONE_ORIGIN = (
+  process.env.AIONE_BASE_URL || "https://api.aione.help"
 ).replace(/\/$/, "");
 const NEW_API_BASE = (process.env.NEW_API_BASE || "http://127.0.0.1:3000").replace(
   /\/$/,
@@ -191,7 +192,7 @@ async function validateToken(apiKey) {
   }
   const db = openDb(DB_PATH, true);
   if (!db) {
-    console.warn("[apimart] DB missing at", DB_PATH, "— skipBill");
+    console.warn("[apimart] DB missing at", DB_PATH, "鈥?skipBill");
     return { userId: 0, tokenId: 0, skipBill: true };
   }
   try {
@@ -302,8 +303,7 @@ function estimateCostUsd(modelMeta, body) {
     return cost;
   }
 
-  // Seedance: 有参考视频 → (参考秒+生成秒)×input 单价；否则 生成秒×输出单价
-  if (est.mode === "per_second_resolution_input") {
+  // Seedance: 鏈夊弬鑰冭棰?鈫?(鍙傝€冪+鐢熸垚绉?脳input 鍗曚环锛涘惁鍒?鐢熸垚绉捗楄緭鍑哄崟浠?  if (est.mode === "per_second_resolution_input") {
     const withInput = hasRefVideo(body);
     const map = withInput
       ? est.cost_usd_per_second_with_input || est.cost_usd_per_second
@@ -319,7 +319,7 @@ function estimateCostUsd(modelMeta, body) {
     return billSeconds * Number(rate);
   }
 
-  // FLUX：按 DRAFT/HD/FHD/V2V-* 档位按秒
+  // FLUX锛氭寜 DRAFT/HD/FHD/V2V-* 妗ｄ綅鎸夌
   if (est.mode === "flux_tiers") {
     const tier =
       body.tier ||
@@ -333,8 +333,7 @@ function estimateCostUsd(modelMeta, body) {
     return seconds * Number(rate);
   }
 
-  // Omni Ext：有参考视频按秒；否则按 分辨率-时长 档位包
-  if (est.mode === "ext_pack_or_ref") {
+  // Omni Ext锛氭湁鍙傝€冭棰戞寜绉掞紱鍚﹀垯鎸?鍒嗚鲸鐜?鏃堕暱 妗ｄ綅鍖?  if (est.mode === "ext_pack_or_ref") {
     if (hasRefVideo(body)) {
       const map = est.ref_video_cost_usd_per_second || {};
       const rate = pickRate(map, body.resolution, resKey, "720P");
@@ -525,7 +524,8 @@ function isPollPath(p) {
   return (
     /^\/v1\/tasks\/[^/]+$/.test(p) ||
     /^\/v1\/videos\/generations\/[^/]+$/.test(p) ||
-    /^\/v1\/videos\/[^/]+$/.test(p)
+    /^\/v1\/videos\/[^/]+$/.test(p) ||
+    /^\/v1\/videos\/[^/]+\/content$/.test(p)
   );
 }
 
@@ -537,6 +537,7 @@ function qsOf(url) {
 
 function pollId(p) {
   const parts = String(p || "").split("/").filter(Boolean);
+  if (parts[parts.length - 1] === "content") return parts[parts.length - 2] || "";
   return parts[parts.length - 1] || "";
 }
 
@@ -546,6 +547,98 @@ function isOpenluxMeta(meta) {
 
 function isGrsaiMeta(meta) {
   return String(meta?.upstream || "").toLowerCase() === "grsai";
+}
+
+function isAioneMeta(meta) {
+  return String(meta?.upstream || "").toLowerCase() === "aione";
+}
+
+function firstHttpsUrl(v) {
+  if (typeof v === "string" && /^https?:\/\//i.test(v)) return v;
+  if (v && typeof v === "object" && v.url && /^https?:\/\//i.test(String(v.url))) {
+    return String(v.url);
+  }
+  return "";
+}
+
+function aioneDefaultSize(meta, body) {
+  if (body.size) return String(body.size);
+  const res = String(
+    body.resolution || meta?.estimate?.default_resolution || ""
+  ).toLowerCase();
+  if (res.includes("1080")) return "1920x1080";
+  if (res.includes("720")) return "1280x720";
+  if (res.includes("480")) return "854x480";
+  return "";
+}
+
+/** Keyo Path B JSON 鈫?aione POST /v1/videos */
+function buildAioneVideoBody(meta, body) {
+  const out = {
+    model: String(meta.upstream_model || ""),
+    prompt: String(body.prompt || body.text || ""),
+  };
+  const seconds = body.seconds ?? body.duration;
+  if (seconds != null && seconds !== "") out.seconds = seconds;
+  else out.seconds = Number(meta?.estimate?.default_seconds || 5);
+  const size = aioneDefaultSize(meta, body);
+  if (size) out.size = size;
+  const extra = {};
+  if (body.aspect_ratio || body.aspectRatio) {
+    extra.aspect_ratio = body.aspect_ratio || body.aspectRatio;
+  }
+  const resolution = body.resolution || meta?.estimate?.default_resolution;
+  if (resolution) extra.resolution = resolution;
+
+  const images = [];
+  const push = (u, role) => {
+    const url = firstHttpsUrl(u);
+    if (!url) return;
+    images.push(role ? { url, role } : { url });
+  };
+  if (Array.isArray(body.image_with_roles)) {
+    for (const it of body.image_with_roles) {
+      push(it, it?.role || "reference_image");
+    }
+  }
+  if (Array.isArray(body.image_urls)) for (const u of body.image_urls) push(u, "reference_image");
+  if (Array.isArray(body.images)) for (const u of body.images) push(u, "reference_image");
+  const first =
+    firstHttpsUrl(body.input_reference) ||
+    firstHttpsUrl(body.first_frame_image) ||
+    firstHttpsUrl(body.image) ||
+    firstHttpsUrl(body.image_url);
+  if (first && !images.some((x) => x.url === first)) {
+    images.unshift({ url: first, role: "first_frame" });
+  }
+  if (body.last_frame_image) push(body.last_frame_image, "last_frame");
+  if (images.length === 1) out.input_reference = { url: images[0].url };
+  else if (images.length > 1) extra.reference_images = images;
+
+  const videos = [];
+  if (Array.isArray(body.video_urls)) {
+    for (const u of body.video_urls) {
+      const url = firstHttpsUrl(u);
+      if (url) videos.push({ url });
+    }
+  }
+  if (videos.length) extra.reference_videos = videos;
+  const audios = [];
+  if (Array.isArray(body.audio_urls)) {
+    for (const u of body.audio_urls) {
+      const url = firstHttpsUrl(u);
+      if (url) audios.push({ url });
+    }
+  }
+  if (Array.isArray(body.audios)) {
+    for (const u of body.audios) {
+      const url = firstHttpsUrl(u);
+      if (url) audios.push({ url });
+    }
+  }
+  if (audios.length) extra.reference_audios = audios;
+  if (Object.keys(extra).length) out.extra = extra;
+  return out;
 }
 
 function mapAspectToGrsai(v) {
@@ -624,7 +717,7 @@ function grsaiCostUsd(j) {
     return Number(j.data.price_cny) / FX;
   }
   if (j.credits != null && Number.isFinite(Number(j.credits))) {
-    // 1 CNY ≈ 20000 credits on this inventory
+    // 1 CNY 鈮?20000 credits on this inventory
     return Number(j.credits) / 20000 / FX;
   }
   const raw = j.cost ?? j.data?.cost;
@@ -741,7 +834,7 @@ function normalizeGrsaiPollJson(raw, taskId) {
   return JSON.stringify(out);
 }
 
-/** Map vendor status words → processing|completed|failed|cancelled */
+/** Map vendor status words 鈫?processing|completed|failed|cancelled */
 function mapAsyncStatus(raw) {
   const st = String(raw || "").toLowerCase();
   if (["succeeded", "success", "completed", "done"].includes(st)) return "completed";
@@ -853,7 +946,7 @@ function scrubClientErrorBuf(buf, ct) {
     .replace(/https?:\/\/(?:[\w.-]+\.)?dakka\.com\.cn[^\s"'\\]*/gi, "[redacted]")
     .replace(/\bAPIMart\b/gi, "provider")
     .replace(/\bOpenLux\b/gi, "provider")
-    .replace(/模力方舟/g, "provider")
+    .replace(/妯″姏鏂硅垷/g, "provider")
     .replace(/\bMoArk\b/gi, "provider")
     .replace(/\bGitee(?:\s*AI)?\b/gi, "provider")
     .replace(/\bGrsai\b/gi, "provider")
@@ -931,6 +1024,7 @@ const server = http.createServer(async (req, res) => {
       inventory_a: !!APIMART_KEY,
       inventory_b: !!OPENLUX_KEY,
       inventory_c: !!GRSAI_KEY,
+      inventory_d: !!AIONE_KEY,
       new_api: NEW_API_BASE,
     });
   }
@@ -968,7 +1062,7 @@ const server = http.createServer(async (req, res) => {
       const pending = getPending(tid);
       const pendingMeta = pending ? modelMap[pending.model] : null;
 
-      // Inventory-C video poll → POST /v1/api/result {id}
+      // Inventory-C video poll 鈫?POST /v1/api/result {id}
       if (isGrsaiMeta(pendingMeta)) {
         if (!GRSAI_KEY) {
           return json(res, 500, {
@@ -1019,6 +1113,67 @@ const server = http.createServer(async (req, res) => {
           ct: "application/json",
         });
         res.writeHead(out.status >= 200 && out.status < 600 ? out.status : 200, {
+          "Content-Type": "application/json; charset=utf-8",
+          "Access-Control-Allow-Origin": "*",
+        });
+        return res.end(out.buf);
+      }
+
+      if (isAioneMeta(pendingMeta)) {
+        if (!AIONE_KEY) {
+          return json(res, 500, {
+            error: { message: "Service temporarily unavailable", type: "server_error" },
+          });
+        }
+        const wantContent = urlPath.endsWith("/content");
+        const path = wantContent
+          ? `/v1/videos/${tid}/content${qsOf(req.url)}`
+          : `/v1/videos/${tid}${qsOf(req.url)}`;
+        const up = await proxyOrigin(AIONE_ORIGIN, AIONE_KEY, req, bodyBuf, path);
+        if (wantContent) {
+          const out = clientUp(up);
+          res.writeHead(out.status, {
+            "Content-Type": out.ct || "application/octet-stream",
+            "Access-Control-Allow-Origin": "*",
+          });
+          return res.end(out.buf);
+        }
+        const text = up.buf.toString("utf8");
+        let mapped = text;
+        try {
+          const j = JSON.parse(text);
+          const st = String(j.status || "").toLowerCase();
+          const url = j.video_url || j.url || "";
+          const cost = j.cost ?? j.usage?.cost ?? j.data?.cost;
+          const done = ["completed", "failed", "cancelled", "success", "succeeded"].includes(st);
+          if (tid && done) {
+            settleTask(
+              tid,
+              cost != null && Number.isFinite(Number(cost)) ? Number(cost) : null,
+              st === "failed" || st === "cancelled" ? st : st === "completed" || st === "success" || st === "succeeded" ? "completed" : st
+            );
+          }
+          mapped = JSON.stringify({
+            code: 200,
+            id: tid,
+            task_id: tid,
+            status: st,
+            video_url: url,
+            data: {
+              id: tid,
+              task_id: tid,
+              status: st,
+              result: url ? { videos: [{ url: [url] }] } : null,
+            },
+          });
+        } catch {}
+        const normalized = Buffer.from(normalizeApimartPollJson(mapped, tid), "utf8");
+        const out = clientUp({
+          status: up.status,
+          buf: normalized,
+          ct: "application/json",
+        });
+        res.writeHead(out.status, {
           "Content-Type": "application/json; charset=utf-8",
           "Access-Control-Allow-Origin": "*",
         });
@@ -1102,19 +1257,28 @@ const server = http.createServer(async (req, res) => {
 
     const useGrsai = isGrsaiMeta(meta);
     const useOpenlux = isOpenluxMeta(meta);
-    const upKey = useGrsai ? GRSAI_KEY : useOpenlux ? OPENLUX_KEY : APIMART_KEY;
+    const useAione = isAioneMeta(meta);
+    const upKey = useGrsai
+      ? GRSAI_KEY
+      : useAione
+        ? AIONE_KEY
+        : useOpenlux
+          ? OPENLUX_KEY
+          : APIMART_KEY;
     const upOrigin = useGrsai
       ? GRSAI_ORIGIN
-      : useOpenlux
-        ? OPENLUX_ORIGIN
-        : APIMART_ORIGIN;
+      : useAione
+        ? AIONE_ORIGIN
+        : useOpenlux
+          ? OPENLUX_ORIGIN
+          : APIMART_ORIGIN;
     if (!upKey) {
       return json(res, 500, {
         error: { message: "Service temporarily unavailable", type: "server_error" },
       });
     }
 
-    // Inventory-C: rewrite client body → generate shape (never forward public model id)
+    // Inventory-C: rewrite client body 鈫?generate shape (never forward public model id)
     if (useGrsai) {
       const gBody = buildGrsaiVideoBody(meta, body);
       if (!gBody.prompt) {
@@ -1129,6 +1293,20 @@ const server = http.createServer(async (req, res) => {
       bodyBuf = Buffer.from(JSON.stringify(gBody), "utf8");
     }
 
+    if (useAione) {
+      const aBody = buildAioneVideoBody(meta, body);
+      if (!aBody.prompt) {
+        return json(res, 400, {
+          error: {
+            message: "prompt is required",
+            type: "invalid_request_error",
+            param: "prompt",
+          },
+        });
+      }
+      bodyBuf = Buffer.from(JSON.stringify(aBody), "utf8");
+    }
+
     // OpenLux grok-imagine: image-to-video only; need image:{url} + aspect/resolution/duration.
     if (modelId.includes("grok-imagine")) {
       const est = meta.estimate || {};
@@ -1139,7 +1317,7 @@ const server = http.createServer(async (req, res) => {
       if (body.duration == null && body.seconds == null) {
         body.duration = Number(est.default_seconds || 5);
       }
-      // Normalize common aliases → OpenLux shape: { image: { url } }
+      // Normalize common aliases 鈫?OpenLux shape: { image: { url } }
       const imgObj = body.image;
       let url = "";
       if (imgObj && typeof imgObj === "object" && imgObj.url) {
@@ -1189,7 +1367,7 @@ const server = http.createServer(async (req, res) => {
         return json(res, 403, {
           error: {
             message:
-              bill.error === "insufficient_quota" ? "额度不足" : bill.error,
+              bill.error === "insufficient_quota" ? "棰濆害涓嶈冻" : bill.error,
             type: "billing_error",
           },
         });
@@ -1284,6 +1462,7 @@ server.listen(PORT, HOST, () => {
   console.log(`  inventory_a: key=${!!APIMART_KEY}`);
   console.log(`  inventory_b: key=${!!OPENLUX_KEY}`);
   console.log(`  inventory_c: key=${!!GRSAI_KEY}`);
+  console.log(`  inventory_d: key=${!!AIONE_KEY}`);
   console.log(`  new-api: ${NEW_API_BASE}`);
   console.log(`  db: ${DB_PATH}`);
 });

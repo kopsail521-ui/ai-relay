@@ -1,0 +1,6 @@
+# 一行：写 key → 跑上架脚本（复制到 VPS）
+set -e
+cd /opt/ai-relay
+grep -q '^AIONE_API_KEY=.' .env 2>/dev/null || echo 'AIONE_API_KEY=sk-yKD9AN8fNzdqTyfluYubzGpOvURSgGQkDuSsZItvBHmCGYyj' | sudo tee -a .env >/dev/null
+grep -q '^AIONE_BASE_URL=' .env 2>/dev/null || echo 'AIONE_BASE_URL=https://api.aione.help' | sudo tee -a .env >/dev/null
+bash scripts/vps-aione-seedance-deploy.txt

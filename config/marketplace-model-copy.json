@@ -4562,5 +4562,557 @@
     "suffix_en": "",
     "price_key_zh": "",
     "price_key_en": ""
+  },
+  "seedance-2.0-1080p-full": {
+    "description": "字节 Seedance 2.0 · 1080p 满血超分，按秒计费。",
+    "descriptions": {
+      "zhCN": "字节 Seedance 2.0 · 1080p 满血超分，按秒计费。",
+      "zhTW": "字節 Seedance 2.0 · 1080p 满血超分，按秒計費。",
+      "en": "ByteDance Seedance 2.0 · 1080p 满血超分, billed per second.",
+      "fr": "ByteDance Seedance 2.0 · 1080p 满血超分, billed per second.",
+      "ru": "ByteDance Seedance 2.0 · 1080p 满血超分, billed per second.",
+      "ja": "ByteDance Seedance 2.0 · 1080p 满血超分, billed per second.",
+      "vi": "ByteDance Seedance 2.0 · 1080p 满血超分, billed per second."
+    },
+    "unit": "second",
+    "badge": {
+      "zhCN": "按秒计费",
+      "zhTW": "按秒計費",
+      "en": "Per Second",
+      "fr": "À la seconde",
+      "ru": "За секунду",
+      "ja": "秒課金",
+      "vi": "Theo giây"
+    },
+    "suffix": {
+      "zhCN": "/秒",
+      "zhTW": "/秒",
+      "en": "/ second",
+      "fr": "/ seconde",
+      "ru": "/ сек",
+      "ja": "/ 秒",
+      "vi": "/ giây"
+    },
+    "price_key": {
+      "zhCN": "每秒",
+      "zhTW": "每秒",
+      "en": "Per second",
+      "fr": "Par seconde",
+      "ru": "За секунду",
+      "ja": "秒ごと",
+      "vi": "Mỗi giây"
+    },
+    "badge_zh": "按秒计费",
+    "badge_en": "Per Second",
+    "suffix_zh": "/秒",
+    "suffix_en": "/ second",
+    "price_key_zh": "每秒",
+    "price_key_en": "Per second",
+    "description_zh": "字节 Seedance 2.0 · 1080p 满血超分，按秒计费。",
+    "description_en": "ByteDance Seedance 2.0 · 1080p 满血超分, billed per second.",
+    "price_table": {
+      "columns": {
+        "zhCN": [
+          "规格",
+          "说明",
+          "售价"
+        ],
+        "en": [
+          "Spec",
+          "Note",
+          "Price"
+        ]
+      },
+      "rows": [
+        [
+          "1080p",
+          "满血超分",
+          "$0.6994 / sec"
+        ]
+      ]
+    }
+  },
+  "seedance-2.0-1080p-fast": {
+    "description": "字节 Seedance 2.0 · 1080p Fast 超分，按秒计费。",
+    "descriptions": {
+      "zhCN": "字节 Seedance 2.0 · 1080p Fast 超分，按秒计费。",
+      "zhTW": "字節 Seedance 2.0 · 1080p Fast 超分，按秒計費。",
+      "en": "ByteDance Seedance 2.0 · 1080p Fast 超分, billed per second.",
+      "fr": "ByteDance Seedance 2.0 · 1080p Fast 超分, billed per second.",
+      "ru": "ByteDance Seedance 2.0 · 1080p Fast 超分, billed per second.",
+      "ja": "ByteDance Seedance 2.0 · 1080p Fast 超分, billed per second.",
+      "vi": "ByteDance Seedance 2.0 · 1080p Fast 超分, billed per second."
+    },
+    "unit": "second",
+    "badge": {
+      "zhCN": "按秒计费",
+      "zhTW": "按秒計費",
+      "en": "Per Second",
+      "fr": "À la seconde",
+      "ru": "За секунду",
+      "ja": "秒課金",
+      "vi": "Theo giây"
+    },
+    "suffix": {
+      "zhCN": "/秒",
+      "zhTW": "/秒",
+      "en": "/ second",
+      "fr": "/ seconde",
+      "ru": "/ сек",
+      "ja": "/ 秒",
+      "vi": "/ giây"
+    },
+    "price_key": {
+      "zhCN": "每秒",
+      "zhTW": "每秒",
+      "en": "Per second",
+      "fr": "Par seconde",
+      "ru": "За секунду",
+      "ja": "秒ごと",
+      "vi": "Mỗi giây"
+    },
+    "badge_zh": "按秒计费",
+    "badge_en": "Per Second",
+    "suffix_zh": "/秒",
+    "suffix_en": "/ second",
+    "price_key_zh": "每秒",
+    "price_key_en": "Per second",
+    "description_zh": "字节 Seedance 2.0 · 1080p Fast 超分，按秒计费。",
+    "description_en": "ByteDance Seedance 2.0 · 1080p Fast 超分, billed per second.",
+    "price_table": {
+      "columns": {
+        "zhCN": [
+          "规格",
+          "说明",
+          "售价"
+        ],
+        "en": [
+          "Spec",
+          "Note",
+          "Price"
+        ]
+      },
+      "rows": [
+        [
+          "1080p",
+          "Fast 超分",
+          "$0.5174 / sec"
+        ]
+      ]
+    }
+  },
+  "seedance-2.0-1080p-mini": {
+    "description": "字节 Seedance 2.0 · 1080p Mini 超分，按秒计费。",
+    "descriptions": {
+      "zhCN": "字节 Seedance 2.0 · 1080p Mini 超分，按秒计费。",
+      "zhTW": "字節 Seedance 2.0 · 1080p Mini 超分，按秒計費。",
+      "en": "ByteDance Seedance 2.0 · 1080p Mini 超分, billed per second.",
+      "fr": "ByteDance Seedance 2.0 · 1080p Mini 超分, billed per second.",
+      "ru": "ByteDance Seedance 2.0 · 1080p Mini 超分, billed per second.",
+      "ja": "ByteDance Seedance 2.0 · 1080p Mini 超分, billed per second.",
+      "vi": "ByteDance Seedance 2.0 · 1080p Mini 超分, billed per second."
+    },
+    "unit": "second",
+    "badge": {
+      "zhCN": "按秒计费",
+      "zhTW": "按秒計費",
+      "en": "Per Second",
+      "fr": "À la seconde",
+      "ru": "За секунду",
+      "ja": "秒課金",
+      "vi": "Theo giây"
+    },
+    "suffix": {
+      "zhCN": "/秒",
+      "zhTW": "/秒",
+      "en": "/ second",
+      "fr": "/ seconde",
+      "ru": "/ сек",
+      "ja": "/ 秒",
+      "vi": "/ giây"
+    },
+    "price_key": {
+      "zhCN": "每秒",
+      "zhTW": "每秒",
+      "en": "Per second",
+      "fr": "Par seconde",
+      "ru": "За секунду",
+      "ja": "秒ごと",
+      "vi": "Mỗi giây"
+    },
+    "badge_zh": "按秒计费",
+    "badge_en": "Per Second",
+    "suffix_zh": "/秒",
+    "suffix_en": "/ second",
+    "price_key_zh": "每秒",
+    "price_key_en": "Per second",
+    "description_zh": "字节 Seedance 2.0 · 1080p Mini 超分，按秒计费。",
+    "description_en": "ByteDance Seedance 2.0 · 1080p Mini 超分, billed per second.",
+    "price_table": {
+      "columns": {
+        "zhCN": [
+          "规格",
+          "说明",
+          "售价"
+        ],
+        "en": [
+          "Spec",
+          "Note",
+          "Price"
+        ]
+      },
+      "rows": [
+        [
+          "1080p",
+          "Mini 超分",
+          "$0.3484 / sec"
+        ]
+      ]
+    }
+  },
+  "seedance-2.5-1080p": {
+    "description": "字节 Seedance 2.5 · 1080p 2.5 超分，按秒计费。",
+    "descriptions": {
+      "zhCN": "字节 Seedance 2.5 · 1080p 2.5 超分，按秒计费。",
+      "zhTW": "字節 Seedance 2.5 · 1080p 2.5 超分，按秒計費。",
+      "en": "ByteDance Seedance 2.5 · 1080p 2.5 超分, billed per second.",
+      "fr": "ByteDance Seedance 2.5 · 1080p 2.5 超分, billed per second.",
+      "ru": "ByteDance Seedance 2.5 · 1080p 2.5 超分, billed per second.",
+      "ja": "ByteDance Seedance 2.5 · 1080p 2.5 超分, billed per second.",
+      "vi": "ByteDance Seedance 2.5 · 1080p 2.5 超分, billed per second."
+    },
+    "unit": "second",
+    "badge": {
+      "zhCN": "按秒计费",
+      "zhTW": "按秒計費",
+      "en": "Per Second",
+      "fr": "À la seconde",
+      "ru": "За секунду",
+      "ja": "秒課金",
+      "vi": "Theo giây"
+    },
+    "suffix": {
+      "zhCN": "/秒",
+      "zhTW": "/秒",
+      "en": "/ second",
+      "fr": "/ seconde",
+      "ru": "/ сек",
+      "ja": "/ 秒",
+      "vi": "/ giây"
+    },
+    "price_key": {
+      "zhCN": "每秒",
+      "zhTW": "每秒",
+      "en": "Per second",
+      "fr": "Par seconde",
+      "ru": "За секунду",
+      "ja": "秒ごと",
+      "vi": "Mỗi giây"
+    },
+    "badge_zh": "按秒计费",
+    "badge_en": "Per Second",
+    "suffix_zh": "/秒",
+    "suffix_en": "/ second",
+    "price_key_zh": "每秒",
+    "price_key_en": "Per second",
+    "description_zh": "字节 Seedance 2.5 · 1080p 2.5 超分，按秒计费。",
+    "description_en": "ByteDance Seedance 2.5 · 1080p 2.5 超分, billed per second.",
+    "price_table": {
+      "columns": {
+        "zhCN": [
+          "规格",
+          "说明",
+          "售价"
+        ],
+        "en": [
+          "Spec",
+          "Note",
+          "Price"
+        ]
+      },
+      "rows": [
+        [
+          "1080p",
+          "2.5 超分",
+          "$0.9594 / sec"
+        ]
+      ]
+    }
+  },
+  "seedance-2.0-720p-full": {
+    "description": "字节 Seedance 2.0 · 720p 满血，按秒计费。",
+    "descriptions": {
+      "zhCN": "字节 Seedance 2.0 · 720p 满血，按秒计费。",
+      "zhTW": "字節 Seedance 2.0 · 720p 满血，按秒計費。",
+      "en": "ByteDance Seedance 2.0 · 720p 满血, billed per second.",
+      "fr": "ByteDance Seedance 2.0 · 720p 满血, billed per second.",
+      "ru": "ByteDance Seedance 2.0 · 720p 满血, billed per second.",
+      "ja": "ByteDance Seedance 2.0 · 720p 满血, billed per second.",
+      "vi": "ByteDance Seedance 2.0 · 720p 满血, billed per second."
+    },
+    "unit": "second",
+    "badge": {
+      "zhCN": "按秒计费",
+      "zhTW": "按秒計費",
+      "en": "Per Second",
+      "fr": "À la seconde",
+      "ru": "За секунду",
+      "ja": "秒課金",
+      "vi": "Theo giây"
+    },
+    "suffix": {
+      "zhCN": "/秒",
+      "zhTW": "/秒",
+      "en": "/ second",
+      "fr": "/ seconde",
+      "ru": "/ сек",
+      "ja": "/ 秒",
+      "vi": "/ giây"
+    },
+    "price_key": {
+      "zhCN": "每秒",
+      "zhTW": "每秒",
+      "en": "Per second",
+      "fr": "Par seconde",
+      "ru": "За секунду",
+      "ja": "秒ごと",
+      "vi": "Mỗi giây"
+    },
+    "badge_zh": "按秒计费",
+    "badge_en": "Per Second",
+    "suffix_zh": "/秒",
+    "suffix_en": "/ second",
+    "price_key_zh": "每秒",
+    "price_key_en": "Per second",
+    "description_zh": "字节 Seedance 2.0 · 720p 满血，按秒计费。",
+    "description_en": "ByteDance Seedance 2.0 · 720p 满血, billed per second.",
+    "price_table": {
+      "columns": {
+        "zhCN": [
+          "规格",
+          "说明",
+          "售价"
+        ],
+        "en": [
+          "Spec",
+          "Note",
+          "Price"
+        ]
+      },
+      "rows": [
+        [
+          "720p",
+          "满血",
+          "$0.702 / sec"
+        ]
+      ]
+    }
+  },
+  "seedance-2.0-720p-fast": {
+    "description": "字节 Seedance 2.0 · 720p Fast，按秒计费。",
+    "descriptions": {
+      "zhCN": "字节 Seedance 2.0 · 720p Fast，按秒计费。",
+      "zhTW": "字節 Seedance 2.0 · 720p Fast，按秒計費。",
+      "en": "ByteDance Seedance 2.0 · 720p Fast, billed per second.",
+      "fr": "ByteDance Seedance 2.0 · 720p Fast, billed per second.",
+      "ru": "ByteDance Seedance 2.0 · 720p Fast, billed per second.",
+      "ja": "ByteDance Seedance 2.0 · 720p Fast, billed per second.",
+      "vi": "ByteDance Seedance 2.0 · 720p Fast, billed per second."
+    },
+    "unit": "second",
+    "badge": {
+      "zhCN": "按秒计费",
+      "zhTW": "按秒計費",
+      "en": "Per Second",
+      "fr": "À la seconde",
+      "ru": "За секунду",
+      "ja": "秒課金",
+      "vi": "Theo giây"
+    },
+    "suffix": {
+      "zhCN": "/秒",
+      "zhTW": "/秒",
+      "en": "/ second",
+      "fr": "/ seconde",
+      "ru": "/ сек",
+      "ja": "/ 秒",
+      "vi": "/ giây"
+    },
+    "price_key": {
+      "zhCN": "每秒",
+      "zhTW": "每秒",
+      "en": "Per second",
+      "fr": "Par seconde",
+      "ru": "За секунду",
+      "ja": "秒ごと",
+      "vi": "Mỗi giây"
+    },
+    "badge_zh": "按秒计费",
+    "badge_en": "Per Second",
+    "suffix_zh": "/秒",
+    "suffix_en": "/ second",
+    "price_key_zh": "每秒",
+    "price_key_en": "Per second",
+    "description_zh": "字节 Seedance 2.0 · 720p Fast，按秒计费。",
+    "description_en": "ByteDance Seedance 2.0 · 720p Fast, billed per second.",
+    "price_table": {
+      "columns": {
+        "zhCN": [
+          "规格",
+          "说明",
+          "售价"
+        ],
+        "en": [
+          "Spec",
+          "Note",
+          "Price"
+        ]
+      },
+      "rows": [
+        [
+          "720p",
+          "Fast",
+          "$0.546 / sec"
+        ]
+      ]
+    }
+  },
+  "seedance-2.0-720p-mini": {
+    "description": "字节 Seedance 2.0 · 720p Mini，按秒计费。",
+    "descriptions": {
+      "zhCN": "字节 Seedance 2.0 · 720p Mini，按秒计费。",
+      "zhTW": "字節 Seedance 2.0 · 720p Mini，按秒計費。",
+      "en": "ByteDance Seedance 2.0 · 720p Mini, billed per second.",
+      "fr": "ByteDance Seedance 2.0 · 720p Mini, billed per second.",
+      "ru": "ByteDance Seedance 2.0 · 720p Mini, billed per second.",
+      "ja": "ByteDance Seedance 2.0 · 720p Mini, billed per second.",
+      "vi": "ByteDance Seedance 2.0 · 720p Mini, billed per second."
+    },
+    "unit": "second",
+    "badge": {
+      "zhCN": "按秒计费",
+      "zhTW": "按秒計費",
+      "en": "Per Second",
+      "fr": "À la seconde",
+      "ru": "За секунду",
+      "ja": "秒課金",
+      "vi": "Theo giây"
+    },
+    "suffix": {
+      "zhCN": "/秒",
+      "zhTW": "/秒",
+      "en": "/ second",
+      "fr": "/ seconde",
+      "ru": "/ сек",
+      "ja": "/ 秒",
+      "vi": "/ giây"
+    },
+    "price_key": {
+      "zhCN": "每秒",
+      "zhTW": "每秒",
+      "en": "Per second",
+      "fr": "Par seconde",
+      "ru": "За секунду",
+      "ja": "秒ごと",
+      "vi": "Mỗi giây"
+    },
+    "badge_zh": "按秒计费",
+    "badge_en": "Per Second",
+    "suffix_zh": "/秒",
+    "suffix_en": "/ second",
+    "price_key_zh": "每秒",
+    "price_key_en": "Per second",
+    "description_zh": "字节 Seedance 2.0 · 720p Mini，按秒计费。",
+    "description_en": "ByteDance Seedance 2.0 · 720p Mini, billed per second.",
+    "price_table": {
+      "columns": {
+        "zhCN": [
+          "规格",
+          "说明",
+          "售价"
+        ],
+        "en": [
+          "Spec",
+          "Note",
+          "Price"
+        ]
+      },
+      "rows": [
+        [
+          "720p",
+          "Mini",
+          "$0.364 / sec"
+        ]
+      ]
+    }
+  },
+  "seedance-2.5-720p": {
+    "description": "字节 Seedance 2.5 · 720p 2.5 均衡，按秒计费。",
+    "descriptions": {
+      "zhCN": "字节 Seedance 2.5 · 720p 2.5 均衡，按秒计费。",
+      "zhTW": "字節 Seedance 2.5 · 720p 2.5 均衡，按秒計費。",
+      "en": "ByteDance Seedance 2.5 · 720p 2.5 均衡, billed per second.",
+      "fr": "ByteDance Seedance 2.5 · 720p 2.5 均衡, billed per second.",
+      "ru": "ByteDance Seedance 2.5 · 720p 2.5 均衡, billed per second.",
+      "ja": "ByteDance Seedance 2.5 · 720p 2.5 均衡, billed per second.",
+      "vi": "ByteDance Seedance 2.5 · 720p 2.5 均衡, billed per second."
+    },
+    "unit": "second",
+    "badge": {
+      "zhCN": "按秒计费",
+      "zhTW": "按秒計費",
+      "en": "Per Second",
+      "fr": "À la seconde",
+      "ru": "За секунду",
+      "ja": "秒課金",
+      "vi": "Theo giây"
+    },
+    "suffix": {
+      "zhCN": "/秒",
+      "zhTW": "/秒",
+      "en": "/ second",
+      "fr": "/ seconde",
+      "ru": "/ сек",
+      "ja": "/ 秒",
+      "vi": "/ giây"
+    },
+    "price_key": {
+      "zhCN": "每秒",
+      "zhTW": "每秒",
+      "en": "Per second",
+      "fr": "Par seconde",
+      "ru": "За секунду",
+      "ja": "秒ごと",
+      "vi": "Mỗi giây"
+    },
+    "badge_zh": "按秒计费",
+    "badge_en": "Per Second",
+    "suffix_zh": "/秒",
+    "suffix_en": "/ second",
+    "price_key_zh": "每秒",
+    "price_key_en": "Per second",
+    "description_zh": "字节 Seedance 2.5 · 720p 2.5 均衡，按秒计费。",
+    "description_en": "ByteDance Seedance 2.5 · 720p 2.5 均衡, billed per second.",
+    "price_table": {
+      "columns": {
+        "zhCN": [
+          "规格",
+          "说明",
+          "售价"
+        ],
+        "en": [
+          "Spec",
+          "Note",
+          "Price"
+        ]
+      },
+      "rows": [
+        [
+          "720p",
+          "2.5 均衡",
+          "$0.975 / sec"
+        ]
+      ]
+    }
   }
 }

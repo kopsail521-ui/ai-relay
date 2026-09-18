@@ -301,14 +301,14 @@ curl https://www.keyoapi.xyz/v1/videos/generations \
 
 | model | 售价 |
 |------|------|
-| `seedance-2.0-1080p-full` | **$0.6994/秒** |
-| `seedance-2.0-1080p-fast` | **$0.5174/秒** |
-| `seedance-2.0-1080p-mini` | **$0.3484/秒** |
-| `seedance-2.5-1080p` | **$0.9594/秒** |
-| `seedance-2.0-720p-full` | **$0.702/秒** |
-| `seedance-2.0-720p-fast` | **$0.546/秒** |
-| `seedance-2.0-720p-mini` | **$0.364/秒** |
-| `seedance-2.5-720p` | **$0.975/秒** |
+| `seedance-2.0-1080p-full` | **$0.095809/秒** |
+| `seedance-2.0-1080p-fast` | **$0.070877/秒** |
+| `seedance-2.0-1080p-mini` | **$0.047726/秒** |
+| `seedance-2.5-1080p` | **$0.131425/秒** |
+| `seedance-2.0-720p-full` | **$0.096165/秒** |
+| `seedance-2.0-720p-fast` | **$0.074794/秒** |
+| `seedance-2.0-720p-mini` | **$0.049863/秒** |
+| `seedance-2.5-720p` | **$0.133562/秒** |
 
 必填：`model` `prompt`；推荐：`duration`（或 `seconds`，默认 5）。  
 可选：`size`（如 `1280x720` / `1920x1080`）、`aspect_ratio`、`first_frame_image` / `image_with_roles`、`video_urls`、`audios`。

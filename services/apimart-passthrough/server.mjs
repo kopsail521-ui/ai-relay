@@ -303,7 +303,8 @@ function estimateCostUsd(modelMeta, body) {
     return cost;
   }
 
-  // Seedance: 鏈夊弬鑰冭棰?鈫?(鍙傝€冪+鐢熸垚绉?脳input 鍗曚环锛涘惁鍒?鐢熸垚绉捗楄緭鍑哄崟浠?  if (est.mode === "per_second_resolution_input") {
+  // Seedance: ref video => (ref+gen seconds) * input rate; else gen seconds * output rate
+  if (est.mode === "per_second_resolution_input") {
     const withInput = hasRefVideo(body);
     const map = withInput
       ? est.cost_usd_per_second_with_input || est.cost_usd_per_second
@@ -333,7 +334,8 @@ function estimateCostUsd(modelMeta, body) {
     return seconds * Number(rate);
   }
 
-  // Omni Ext锛氭湁鍙傝€冭棰戞寜绉掞紱鍚﹀垯鎸?鍒嗚鲸鐜?鏃堕暱 妗ｄ綅鍖?  if (est.mode === "ext_pack_or_ref") {
+  // Omni Ext: ref video per-second; else resolution-duration pack
+  if (est.mode === "ext_pack_or_ref") {
     if (hasRefVideo(body)) {
       const map = est.ref_video_cost_usd_per_second || {};
       const rate = pickRate(map, body.resolution, resKey, "720P");
@@ -717,12 +719,27 @@ function grsaiCostUsd(j) {
     return Number(j.data.price_cny) / FX;
   }
   if (j.credits != null && Number.isFinite(Number(j.credits))) {
-    // 1 CNY 鈮?20000 credits on this inventory
+    // 1 CNY ≈ 20000 credits on this inventory
     return Number(j.credits) / 20000 / FX;
   }
   const raw = j.cost ?? j.data?.cost;
   if (raw != null && Number.isFinite(Number(raw))) {
     // This inventory reports cost in CNY
+    return Number(raw) / FX;
+  }
+  return null;
+}
+
+/** aione / aicopy New-API style: cost fields are CNY */
+function aioneCostUsd(j) {
+  if (!j || typeof j !== "object") return null;
+  const raw =
+    j.price_cny ??
+    j.data?.price_cny ??
+    j.cost ??
+    j.usage?.cost ??
+    j.data?.cost;
+  if (raw != null && Number.isFinite(Number(raw))) {
     return Number(raw) / FX;
   }
   return null;
@@ -1144,12 +1161,12 @@ const server = http.createServer(async (req, res) => {
           const j = JSON.parse(text);
           const st = String(j.status || "").toLowerCase();
           const url = j.video_url || j.url || "";
-          const cost = j.cost ?? j.usage?.cost ?? j.data?.cost;
+          const costUsd = aioneCostUsd(j);
           const done = ["completed", "failed", "cancelled", "success", "succeeded"].includes(st);
           if (tid && done) {
             settleTask(
               tid,
-              cost != null && Number.isFinite(Number(cost)) ? Number(cost) : null,
+              costUsd,
               st === "failed" || st === "cancelled" ? st : st === "completed" || st === "success" || st === "succeeded" ? "completed" : st
             );
           }

@@ -142,9 +142,9 @@
       "icon": "Doubao.Color",
       "tag": "视频按秒",
       "billing": "settle_cost",
-      "sell_usd_per_second": 0.6994,
-      "model_price_usd": 0.6994,
-      "desc_zh": "Seedance 2.0 1080p 满血超分 · $0.6994/秒",
+      "sell_usd_per_second": 0.095809,
+      "model_price_usd": 0.095809,
+      "desc_zh": "Seedance · 1080p 满血超分 · $0.095809/秒（成本 ¥0.538/秒 ×1.3）",
       "markup": 1.3
     },
     {
@@ -153,9 +153,9 @@
       "icon": "Doubao.Color",
       "tag": "视频按秒",
       "billing": "settle_cost",
-      "sell_usd_per_second": 0.5174,
-      "model_price_usd": 0.5174,
-      "desc_zh": "Seedance 2.0 1080p Fast 超分 · $0.5174/秒",
+      "sell_usd_per_second": 0.070877,
+      "model_price_usd": 0.070877,
+      "desc_zh": "Seedance · 1080p Fast 超分 · $0.070877/秒（成本 ¥0.398/秒 ×1.3）",
       "markup": 1.3
     },
     {
@@ -164,9 +164,9 @@
       "icon": "Doubao.Color",
       "tag": "视频按秒",
       "billing": "settle_cost",
-      "sell_usd_per_second": 0.3484,
-      "model_price_usd": 0.3484,
-      "desc_zh": "Seedance 2.0 1080p Mini 超分 · $0.3484/秒",
+      "sell_usd_per_second": 0.047726,
+      "model_price_usd": 0.047726,
+      "desc_zh": "Seedance · 1080p Mini 超分 · $0.047726/秒（成本 ¥0.268/秒 ×1.3）",
       "markup": 1.3
     },
     {
@@ -175,9 +175,9 @@
       "icon": "Doubao.Color",
       "tag": "视频按秒",
       "billing": "settle_cost",
-      "sell_usd_per_second": 0.9594,
-      "model_price_usd": 0.9594,
-      "desc_zh": "Seedance 2.5 1080p 超分 · $0.9594/秒",
+      "sell_usd_per_second": 0.131425,
+      "model_price_usd": 0.131425,
+      "desc_zh": "Seedance · 1080p 2.5 超分 · $0.131425/秒（成本 ¥0.738/秒 ×1.3）",
       "markup": 1.3
     },
     {
@@ -186,9 +186,9 @@
       "icon": "Doubao.Color",
       "tag": "视频按秒",
       "billing": "settle_cost",
-      "sell_usd_per_second": 0.702,
-      "model_price_usd": 0.702,
-      "desc_zh": "Seedance 2.0 720p 满血 · $0.702/秒",
+      "sell_usd_per_second": 0.096165,
+      "model_price_usd": 0.096165,
+      "desc_zh": "Seedance · 720p 满血 · $0.096165/秒（成本 ¥0.54/秒 ×1.3）",
       "markup": 1.3
     },
     {
@@ -197,9 +197,9 @@
       "icon": "Doubao.Color",
       "tag": "视频按秒",
       "billing": "settle_cost",
-      "sell_usd_per_second": 0.546,
-      "model_price_usd": 0.546,
-      "desc_zh": "Seedance 2.0 720p Fast · $0.546/秒",
+      "sell_usd_per_second": 0.074794,
+      "model_price_usd": 0.074794,
+      "desc_zh": "Seedance · 720p Fast · $0.074794/秒（成本 ¥0.42/秒 ×1.3）",
       "markup": 1.3
     },
     {
@@ -208,9 +208,9 @@
       "icon": "Doubao.Color",
       "tag": "视频按秒",
       "billing": "settle_cost",
-      "sell_usd_per_second": 0.364,
-      "model_price_usd": 0.364,
-      "desc_zh": "Seedance 2.0 720p Mini · $0.364/秒",
+      "sell_usd_per_second": 0.049863,
+      "model_price_usd": 0.049863,
+      "desc_zh": "Seedance · 720p Mini · $0.049863/秒（成本 ¥0.28/秒 ×1.3）",
       "markup": 1.3
     },
     {
@@ -219,9 +219,9 @@
       "icon": "Doubao.Color",
       "tag": "视频按秒",
       "billing": "settle_cost",
-      "sell_usd_per_second": 0.975,
-      "model_price_usd": 0.975,
-      "desc_zh": "Seedance 2.5 720p 均衡 · $0.975/秒",
+      "sell_usd_per_second": 0.133562,
+      "model_price_usd": 0.133562,
+      "desc_zh": "Seedance · 720p 2.5 均衡 · $0.133562/秒（成本 ¥0.75/秒 ×1.3）",
       "markup": 1.3
     }
   ]

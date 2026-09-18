@@ -248,10 +248,12 @@
         "mode": "per_second",
         "default_seconds": 5,
         "default_resolution": "1080p",
-        "cost_usd_per_second": 0.538,
-        "sell_usd_per_second": 0.6994
+        "cost_usd_per_second": 0.073699,
+        "sell_usd_per_second": 0.095809,
+        "cost_cny_per_second": 0.538,
+        "fx_cny_usd": 7.3
       },
-      "desc_zh": "Seedance 2.0 1080p 满血超分 · $0.6994/秒"
+      "desc_zh": "Seedance · 1080p 满血超分 · $0.095809/秒（成本 ¥0.538/秒 ÷7.3 ×1.3）"
     },
     {
       "id": "seedance-2.0-1080p-fast",
@@ -268,10 +270,12 @@
         "mode": "per_second",
         "default_seconds": 5,
         "default_resolution": "1080p",
-        "cost_usd_per_second": 0.398,
-        "sell_usd_per_second": 0.5174
+        "cost_usd_per_second": 0.054521,
+        "sell_usd_per_second": 0.070877,
+        "cost_cny_per_second": 0.398,
+        "fx_cny_usd": 7.3
       },
-      "desc_zh": "Seedance 2.0 1080p Fast 超分 · $0.5174/秒"
+      "desc_zh": "Seedance · 1080p Fast 超分 · $0.070877/秒（成本 ¥0.398/秒 ÷7.3 ×1.3）"
     },
     {
       "id": "seedance-2.0-1080p-mini",
@@ -288,10 +292,12 @@
         "mode": "per_second",
         "default_seconds": 5,
         "default_resolution": "1080p",
-        "cost_usd_per_second": 0.268,
-        "sell_usd_per_second": 0.3484
+        "cost_usd_per_second": 0.036712,
+        "sell_usd_per_second": 0.047726,
+        "cost_cny_per_second": 0.268,
+        "fx_cny_usd": 7.3
       },
-      "desc_zh": "Seedance 2.0 1080p Mini 超分 · $0.3484/秒"
+      "desc_zh": "Seedance · 1080p Mini 超分 · $0.047726/秒（成本 ¥0.268/秒 ÷7.3 ×1.3）"
     },
     {
       "id": "seedance-2.5-1080p",
@@ -308,10 +314,12 @@
         "mode": "per_second",
         "default_seconds": 5,
         "default_resolution": "1080p",
-        "cost_usd_per_second": 0.738,
-        "sell_usd_per_second": 0.9594
+        "cost_usd_per_second": 0.101096,
+        "sell_usd_per_second": 0.131425,
+        "cost_cny_per_second": 0.738,
+        "fx_cny_usd": 7.3
       },
-      "desc_zh": "Seedance 2.5 1080p 超分 · $0.9594/秒"
+      "desc_zh": "Seedance · 1080p 2.5 超分 · $0.131425/秒（成本 ¥0.738/秒 ÷7.3 ×1.3）"
     },
     {
       "id": "seedance-2.0-720p-full",
@@ -328,10 +336,12 @@
         "mode": "per_second",
         "default_seconds": 5,
         "default_resolution": "720p",
-        "cost_usd_per_second": 0.54,
-        "sell_usd_per_second": 0.702
+        "cost_usd_per_second": 0.073973,
+        "sell_usd_per_second": 0.096165,
+        "cost_cny_per_second": 0.54,
+        "fx_cny_usd": 7.3
       },
-      "desc_zh": "Seedance 2.0 720p 满血 · $0.702/秒"
+      "desc_zh": "Seedance · 720p 满血 · $0.096165/秒（成本 ¥0.54/秒 ÷7.3 ×1.3）"
     },
     {
       "id": "seedance-2.0-720p-fast",
@@ -348,10 +358,12 @@
         "mode": "per_second",
         "default_seconds": 5,
         "default_resolution": "720p",
-        "cost_usd_per_second": 0.42,
-        "sell_usd_per_second": 0.546
+        "cost_usd_per_second": 0.057534,
+        "sell_usd_per_second": 0.074794,
+        "cost_cny_per_second": 0.42,
+        "fx_cny_usd": 7.3
       },
-      "desc_zh": "Seedance 2.0 720p Fast · $0.546/秒"
+      "desc_zh": "Seedance · 720p Fast · $0.074794/秒（成本 ¥0.42/秒 ÷7.3 ×1.3）"
     },
     {
       "id": "seedance-2.0-720p-mini",
@@ -368,10 +380,12 @@
         "mode": "per_second",
         "default_seconds": 5,
         "default_resolution": "720p",
-        "cost_usd_per_second": 0.28,
-        "sell_usd_per_second": 0.364
+        "cost_usd_per_second": 0.038356,
+        "sell_usd_per_second": 0.049863,
+        "cost_cny_per_second": 0.28,
+        "fx_cny_usd": 7.3
       },
-      "desc_zh": "Seedance 2.0 720p Mini · $0.364/秒"
+      "desc_zh": "Seedance · 720p Mini · $0.049863/秒（成本 ¥0.28/秒 ÷7.3 ×1.3）"
     },
     {
       "id": "seedance-2.5-720p",
@@ -388,10 +402,13 @@
         "mode": "per_second",
         "default_seconds": 5,
         "default_resolution": "720p",
-        "cost_usd_per_second": 0.75,
-        "sell_usd_per_second": 0.975
+        "cost_usd_per_second": 0.10274,
+        "sell_usd_per_second": 0.133562,
+        "cost_cny_per_second": 0.75,
+        "fx_cny_usd": 7.3
       },
-      "desc_zh": "Seedance 2.5 720p 均衡 · $0.975/秒"
+      "desc_zh": "Seedance · 720p 2.5 均衡 · $0.133562/秒（成本 ¥0.75/秒 ÷7.3 ×1.3）"
     }
-  ]
+  ],
+  "fx_cny_usd": 7.3
 }

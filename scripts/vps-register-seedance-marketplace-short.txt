@@ -1,0 +1,8 @@
+# 注册 Seedance 到广场 DB + heal 供应商/标签/端点（复制到 VPS）
+set -e
+cd /opt/ai-relay
+sudo git checkout -- scripts/vps-add-apimart-videos.py 2>/dev/null || true
+sudo git pull
+sudo python3 scripts/vps-add-apimart-videos.py /opt/ai-relay/data/new-api/one-api.db
+bash scripts/vps-heal-marketplace-meta.txt
+echo DONE_REGISTER_SEEDANCE_MARKETPLACE

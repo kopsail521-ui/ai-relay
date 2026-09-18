@@ -64,6 +64,9 @@ EP = {
         },
         separators=(",", ":"),
     ),
+    "vg": json.dumps(
+        {"openai-video": "/v1/videos/generations"}, separators=(",", ":")
+    ),
 }
 
 # vendor_name -> lobehub icon
@@ -84,6 +87,8 @@ VENDOR_ICONS = {
     "BRIA AI": "BriaAI.Color",
     "哔哩哔哩": "Bilibili.Color",
     "阶跃星辰": "Stepfun.Color",
+    "字节跳动": "Doubao.Color",
+    "Black Forest Labs": "Flux",
 }
 
 # model -> (vendor, icon, tag, endpoint_key)
@@ -140,6 +145,20 @@ RULES = {
     "kimi-k3": ("Moonshot", "Moonshot", "大语言模型", "c"),
     "MiniMax-M3": ("MiniMax", "Minimax.Color", "大语言模型", "c"),
     "glm-5.3": ("智谱", "Zhipu.Color", "大语言模型", "c"),
+    "MiniMax-H3": ("MiniMax", "Minimax.Color", "视频按秒", "vg"),
+    "wan3.0-video": ("阿里巴巴", "Qwen.Color", "视频按秒", "vg"),
+    "flux-3-video": ("Black Forest Labs", "Flux", "视频按秒", "vg"),
+    "gemini-omni-1.1-flash": ("Google", "Gemini.Color", "视频按秒", "vg"),
+    "gemini-omni-1.1-flash-ext": ("Google", "Gemini.Color", "视频按秒", "vg"),
+    "grok-imagine-video-1.5-preview": ("xAI", "XAI", "视频按秒", "vg"),
+    "seedance-2.0-1080p": ("字节跳动", "Doubao.Color", "视频按秒", "vg"),
+    "seedance-2.0-1080p-fast": ("字节跳动", "Doubao.Color", "视频按秒", "vg"),
+    "seedance-2.0-1080p-mini": ("字节跳动", "Doubao.Color", "视频按秒", "vg"),
+    "seedance-2.5-1080p": ("字节跳动", "Doubao.Color", "视频按秒", "vg"),
+    "seedance-2.0-720p": ("字节跳动", "Doubao.Color", "视频按秒", "vg"),
+    "seedance-2.0-720p-fast": ("字节跳动", "Doubao.Color", "视频按秒", "vg"),
+    "seedance-2.0-720p-mini": ("字节跳动", "Doubao.Color", "视频按秒", "vg"),
+    "seedance-2.5-720p": ("字节跳动", "Doubao.Color", "视频按秒", "vg"),
 }
 
 

@@ -33,6 +33,7 @@ export const EP = {
   infiniteTalk: JSON.stringify({
     openai: { path: "/v1/async/videos/image-to-video", method: "POST" },
   }),
+  videoGen: JSON.stringify({ "openai-video": "/v1/videos/generations" }),
 };
 
 export const RULES = {
@@ -220,6 +221,91 @@ export const RULES = {
   "kimi-k3": { vendor: "Moonshot", tag: "大语言模型", endpoints: EP.chat },
   "MiniMax-M3": { vendor: "MiniMax", tag: "大语言模型", endpoints: EP.chat },
   "glm-5.3": { vendor: "智谱", tag: "大语言模型", endpoints: EP.chat },
+  // Path B video (must stay in RULES or heal skips them → missing from sidebar)
+  "MiniMax-H3": {
+    vendor: "MiniMax",
+    tag: "视频按秒",
+    endpoints: EP.videoGen,
+    icon: "Minimax.Color",
+  },
+  "wan3.0-video": {
+    vendor: "阿里巴巴",
+    tag: "视频按秒",
+    endpoints: EP.videoGen,
+    icon: "Qwen.Color",
+  },
+  "flux-3-video": {
+    vendor: "Black Forest Labs",
+    tag: "视频按秒",
+    endpoints: EP.videoGen,
+    icon: "Flux",
+  },
+  "gemini-omni-1.1-flash": {
+    vendor: "Google",
+    tag: "视频按秒",
+    endpoints: EP.videoGen,
+    icon: "Gemini.Color",
+  },
+  "gemini-omni-1.1-flash-ext": {
+    vendor: "Google",
+    tag: "视频按秒",
+    endpoints: EP.videoGen,
+    icon: "Gemini.Color",
+  },
+  "grok-imagine-video-1.5-preview": {
+    vendor: "xAI",
+    tag: "视频按秒",
+    endpoints: EP.videoGen,
+    icon: "XAI",
+  },
+  "seedance-2.0-1080p": {
+    vendor: "字节跳动",
+    tag: "视频按秒",
+    endpoints: EP.videoGen,
+    icon: "Doubao.Color",
+  },
+  "seedance-2.0-1080p-fast": {
+    vendor: "字节跳动",
+    tag: "视频按秒",
+    endpoints: EP.videoGen,
+    icon: "Doubao.Color",
+  },
+  "seedance-2.0-1080p-mini": {
+    vendor: "字节跳动",
+    tag: "视频按秒",
+    endpoints: EP.videoGen,
+    icon: "Doubao.Color",
+  },
+  "seedance-2.5-1080p": {
+    vendor: "字节跳动",
+    tag: "视频按秒",
+    endpoints: EP.videoGen,
+    icon: "Doubao.Color",
+  },
+  "seedance-2.0-720p": {
+    vendor: "字节跳动",
+    tag: "视频按秒",
+    endpoints: EP.videoGen,
+    icon: "Doubao.Color",
+  },
+  "seedance-2.0-720p-fast": {
+    vendor: "字节跳动",
+    tag: "视频按秒",
+    endpoints: EP.videoGen,
+    icon: "Doubao.Color",
+  },
+  "seedance-2.0-720p-mini": {
+    vendor: "字节跳动",
+    tag: "视频按秒",
+    endpoints: EP.videoGen,
+    icon: "Doubao.Color",
+  },
+  "seedance-2.5-720p": {
+    vendor: "字节跳动",
+    tag: "视频按秒",
+    endpoints: EP.videoGen,
+    icon: "Doubao.Color",
+  },
 };
 
 const VENDOR_ICON = {
@@ -237,6 +323,8 @@ const VENDOR_ICON = {
   腾讯: "Tencent.Color",
   哔哩哔哩: "Bilibili.Color",
   阶跃星辰: "Stepfun.Color",
+  字节跳动: "Doubao.Color",
+  "Black Forest Labs": "Flux",
   其他: "Custom",
 };
 

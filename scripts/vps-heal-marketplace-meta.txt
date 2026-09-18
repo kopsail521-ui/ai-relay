@@ -57,19 +57,24 @@ import sqlite3
 db=sqlite3.connect("/opt/ai-relay/data/new-api/one-api.db")
 need=["Step-Audio-TTS-3B","sam3","RMBG-2.0","IndexTTS-2","Unlimited-OCR",
       "deepseek-v4-pro-free","deepseek-v4-flash-free","glm-5.2-free","kimi-k3-free",
-      "Atria-dawn-v2","DeepSeek-Prover-V2-7B"]
+      "Atria-dawn-v2","DeepSeek-Prover-V2-7B",
+      "seedance-2.0-1080p","seedance-2.0-720p-mini","seedance-2.5-720p"]
 expect={
   "Step-Audio-TTS-3B":("阶跃星辰","Stepfun.Color"),
   "sam3":("Meta","Meta.Color"),
   "RMBG-2.0":("腾讯","Tencent.Color"),
   "IndexTTS-2":("哔哩哔哩","Bilibili.Color"),
   "Unlimited-OCR":("百度","Wenxin.Color"),
+  "seedance-2.0-1080p":("字节跳动","Doubao.Color"),
+  "seedance-2.0-720p-mini":("字节跳动","Doubao.Color"),
+  "seedance-2.5-720p":("字节跳动","Doubao.Color"),
 }
 rows=db.execute(
   "SELECT m.model_name, v.name, m.icon, m.tags FROM models m LEFT JOIN vendors v ON v.id=m.vendor_id "
   "WHERE m.deleted_at IS NULL AND m.model_name IN (%s)" % ",".join("?"*len(need)), need
 ).fetchall()
 ok=True
+found={r[0] for r in rows}
 for name,vendor,icon,tags in rows:
   print("%s | vendor=%s | icon=%s | tags=%s" % (name,vendor,icon,tags))
   if name in expect:
@@ -77,13 +82,24 @@ for name,vendor,icon,tags in rows:
     if vendor!=ev or icon!=ei:
       ok=False
       print("  !! expected vendor=%s icon=%s" % (ev,ei))
+for miss in ["seedance-2.0-1080p","seedance-2.0-720p-mini","seedance-2.5-720p"]:
+  if miss not in found:
+    ok=False
+    print("  !! missing model in DB:", miss)
 free=db.execute(
   "SELECT count(*) FROM models WHERE deleted_at IS NULL AND (tags LIKE '%免费%' OR tags LIKE '%Free%')"
 ).fetchone()[0]
+sd=db.execute(
+  "SELECT count(*) FROM models WHERE deleted_at IS NULL AND model_name LIKE 'seedance-2.%' AND model_name NOT IN ('seedance-2.0','seedance-2.5')"
+).fetchone()[0]
 print("free_tag_count=", free)
+print("seedance_sku_count=", sd)
 if free < 6:
   ok=False
   print("  !! expected free_tag_count >= 6")
+if sd < 8:
+  ok=False
+  print("  !! expected seedance_sku_count >= 8 (run vps-add-apimart-videos.py first)")
 print("HEAL_OK" if ok else "HEAL_CHECK_FAILED")
 PY
 echo DONE_HEAL_MARKETPLACE_META

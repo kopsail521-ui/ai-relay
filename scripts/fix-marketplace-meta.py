@@ -82,6 +82,11 @@ VENDOR_ICONS = {
     "智谱": "Zhipu.Color",
     "阿里巴巴": "Qwen.Color",
     "Meta": "Meta.Color",
+    "NVIDIA": "Nvidia.Color",
+    "Mistral": "Mistral.Color",
+    "Poolside": "Custom",
+    "InclusionAI": "Custom",
+    "Dots": "Custom",
     "腾讯": "Tencent.Color",
     "百度": "Baidu.Color",
     "BRIA AI": "BriaAI.Color",
@@ -183,10 +188,25 @@ def infer(name):
         rule = ("MiniMax", "Minimax.Color", "大语言模型", "c")
     elif "qwen" in s:
         rule = ("阿里巴巴", "Qwen.Color", "大语言模型", "c")
+    elif "nemotron" in s or "nvidia" in s:
+        rule = ("NVIDIA", "Nvidia.Color", "大语言模型", "c")
+    elif "mistral" in s:
+        rule = ("Mistral", "Mistral.Color", "大语言模型", "c")
+    elif s.startswith("step-"):
+        rule = ("阶跃星辰", "Stepfun.Color", "大语言模型", "c")
+    elif s.startswith("muse-"):
+        rule = ("Meta", "Meta.Color", "大语言模型", "c")
+    elif "laguna" in s:
+        rule = ("Poolside", "Custom", "大语言模型", "c")
+    elif s.startswith("ling-"):
+        rule = ("InclusionAI", "Custom", "大语言模型", "c")
+    elif s.startswith("dots-"):
+        rule = ("Dots", "Custom", "大语言模型", "c")
     if rule is None:
         return None
-    # *-free twins must keep 免费 tag (sidebar count)
-    if name.lower().endswith("-free"):
+    # *-free / *:free twins must keep 免费 tag (sidebar count)
+    low = name.lower()
+    if low.endswith("-free") or low.endswith(":free"):
         vendor, icon, tag, ek = rule
         parts = [p.strip() for p in str(tag).replace(";", ",").split(",") if p.strip()]
         if "免费" not in parts:

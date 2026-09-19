@@ -319,6 +319,11 @@ const VENDOR_ICON = {
   智谱: "Zhipu.Color",
   阿里巴巴: "Qwen.Color",
   Meta: "Meta.Color",
+  NVIDIA: "Nvidia.Color",
+  Mistral: "Mistral.Color",
+  Poolside: "Custom",
+  InclusionAI: "Custom",
+  Dots: "Custom",
   百度: "Wenxin.Color",
   腾讯: "Tencent.Color",
   哔哩哔哩: "Bilibili.Color",
@@ -330,7 +335,7 @@ const VENDOR_ICON = {
 
 function withFreeTag(rule, name) {
   if (!rule) return null;
-  if (!/-free$/i.test(String(name || ""))) return rule;
+  if (!/[:-]free$/i.test(String(name || ""))) return rule;
   const tags = String(rule.tag || "")
     .split(/[,;|]+/)
     .map((s) => s.trim())
@@ -360,6 +365,20 @@ function inferLlm(name) {
     rule = { vendor: "MiniMax", tag: "大语言模型", endpoints: EP.chat, icon: "Minimax.Color" };
   else if (/qwen/.test(n))
     rule = { vendor: "阿里巴巴", tag: "大语言模型", endpoints: EP.chat, icon: "Qwen.Color" };
+  else if (/nemotron|nvidia/.test(n))
+    rule = { vendor: "NVIDIA", tag: "大语言模型", endpoints: EP.chat, icon: "Nvidia.Color" };
+  else if (/mistral/.test(n))
+    rule = { vendor: "Mistral", tag: "大语言模型", endpoints: EP.chat, icon: "Mistral.Color" };
+  else if (/^step-/.test(n))
+    rule = { vendor: "阶跃星辰", tag: "大语言模型", endpoints: EP.chat, icon: "Stepfun.Color" };
+  else if (/^muse-/.test(n))
+    rule = { vendor: "Meta", tag: "大语言模型", endpoints: EP.chat, icon: "Meta.Color" };
+  else if (/laguna/.test(n))
+    rule = { vendor: "Poolside", tag: "大语言模型", endpoints: EP.chat, icon: "Custom" };
+  else if (/^ling-/.test(n))
+    rule = { vendor: "InclusionAI", tag: "大语言模型", endpoints: EP.chat, icon: "Custom" };
+  else if (/^dots-/.test(n))
+    rule = { vendor: "Dots", tag: "大语言模型", endpoints: EP.chat, icon: "Custom" };
   return withFreeTag(rule, name);
 }
 

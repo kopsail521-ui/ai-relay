@@ -1,0 +1,18 @@
+# 前置：写入 UNOROUTER_API_KEY（勿提交到 git）
+set -e
+cd /opt/ai-relay
+sudo git pull --ff-only
+if ! sudo grep -q '^UNOROUTER_API_KEY=sk-' /opt/ai-relay/.env 2>/dev/null; then
+  echo "ERROR: set UNOROUTER_API_KEY in /opt/ai-relay/.env first" >&2
+  echo "  echo 'UNOROUTER_API_KEY=sk-...' | sudo tee -a /opt/ai-relay/.env" >&2
+  exit 1
+fi
+sudo python3 /opt/ai-relay/scripts/vps-add-unorouter-free.py /opt/ai-relay/data/new-api/one-api.db
+if sudo docker ps --format '{{.Names}}' | grep -q '^ai-relay-gitee-passthrough$'; then
+  sudo docker cp /opt/ai-relay/services/gitee-passthrough/fix-marketplace-meta.mjs \
+    ai-relay-gitee-passthrough:/app/fix-marketplace-meta.mjs 2>/dev/null || true
+  curl -sS -m 25 -X POST http://127.0.0.1:3012/internal/fix-marketplace-meta >/tmp/heal-uno.json || true
+  echo HEAL_UNO $(head -c 200 /tmp/heal-uno.json 2>/dev/null || true)
+fi
+sudo docker restart ai-relay-new-api >/dev/null || true
+echo DONE_UNOROUTER_FREE

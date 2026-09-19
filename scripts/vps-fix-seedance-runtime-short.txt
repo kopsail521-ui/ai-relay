@@ -65,82 +65,15 @@ sudo python3 /opt/ai-relay/scripts/vps-add-apimart-videos.py /opt/ai-relay/data/
 sudo docker restart ai-relay-new-api >/dev/null || true
 sleep 2
 
-KEY=$(python3 - <<'PY'
-import sqlite3
-k=sqlite3.connect("/opt/ai-relay/data/new-api/one-api.db").execute(
-  "SELECT key FROM tokens WHERE id=2 AND status=1"
-).fetchone()[0]
-print(k if str(k).startswith("sk-") else "sk-"+k)
-PY
-)
-printf '%s' "$KEY" | sudo tee /tmp/keyo-smoke-key.txt >/dev/null
-
-echo "=== smoke Path B seedance-2.0-720p-mini ==="
-curl -sS -o /tmp/sd-b.json -w "pathB=%{http_code}\n" -m 90 \
-  -X POST https://www.keyoapi.xyz/v1/videos/generations \
-  -H "Authorization: Bearer $KEY" -H "Content-Type: application/json" \
-  -d '{"model":"seedance-2.0-720p-mini","prompt":"a red balloon floating in blue sky, cinematic","duration":5}'
+# 不再自动提交生成任务（文生会扣费）。只检查白名单是否加载。
 python3 - <<'PY'
-import re
-t=open("/tmp/sd-b.json","r",encoding="utf-8",errors="ignore").read()
-t=re.sub(r"(?i)aione|aicopy|grsai|dakka|apimart|openlux|gitee|moark","provider",t)
-print(t[:600])
-bad=("Unknown model" in t) or ("model_not_available" in t) or ("无权" in t) or ("超分版" in t)
-ok=("task" in t.lower() or '"id"' in t) and not bad
-print("SMOKE_B", "OK" if ok else "FAIL")
-PY
-
-echo "=== smoke Path A alias /v1/videos (must forward to 3011) ==="
-curl -sS -o /tmp/sd-a.json -w "pathA=%{http_code}\n" -m 90 \
-  -X POST https://www.keyoapi.xyz/v1/videos \
-  -H "Authorization: Bearer $KEY" -H "Content-Type: application/json" \
-  -d '{"model":"seedance-2.0-1080p","prompt":"a red balloon floating in blue sky, cinematic","duration":5}'
-python3 - <<'PY'
-import re
-t=open("/tmp/sd-a.json","r",encoding="utf-8",errors="ignore").read()
-t=re.sub(r"(?i)aione|aicopy|grsai|dakka|apimart|openlux|gitee|moark","provider",t)
-print(t[:600])
-bad=("new_api_error" in t) or ("Unknown model" in t) or ("model_not_available" in t) or ("无权访问" in t) or ("无可用渠道" in t) or ("超分版" in t)
-ok=("task" in t.lower() or '"id"' in t) and not bad
-print("SMOKE_A", "OK" if ok else "FAIL")
-PY
-
-echo "=== whitelist probe ALL catalog models ==="
-python3 - <<'PY'
-import json, subprocess, os
+import json
 cat=json.load(open("/opt/ai-relay/services/apimart-passthrough/catalog.json",encoding="utf-8"))
-key=open("/tmp/keyo-smoke-key.txt").read().strip()
-fail=[]
-for m in cat["models"]:
-  mid=m["id"]
-  body={"model":mid,"prompt":"a red balloon floating in blue sky","duration":5}
-  # MiniMax needs its own fields; Seedance must NOT get landscape/480p
-  if mid=="MiniMax-H3":
-    body.update({"aspectRatio":"landscape","resolution":"480p"})
-  elif "grok-imagine" in mid:
-    body["image"]={"url":"https://www.keyoapi.xyz/brand/logo.svg"}
-  p=subprocess.run([
-    "curl","-sS","-m","60","-o","/tmp/vw.json","-w","%{http_code}",
-    "-X","POST","https://www.keyoapi.xyz/v1/videos/generations",
-    "-H",f"Authorization: Bearer {key}","-H","Content-Type: application/json",
-    "-d",json.dumps(body,ensure_ascii=False)
-  ],capture_output=True,text=True)
-  code=p.stdout.strip() or "000"
-  t=open("/tmp/vw.json",encoding="utf-8",errors="ignore").read()
-  hard=("Unknown model" in t) or ("model_not_available" in t) or ("无权访问" in t) or ("无可用渠道" in t) or ("超分版" in t) or ("不卡脸" in t)
-  # accept queued/submitted OR validation errors that are model-specific (e.g. grok needs image)
-  soft_ok = (code in ("200","201")) or ("image" in t.lower() and "grok-imagine" in mid) or (code=="400" and "prompt" in t.lower() and "Unknown" not in t and "model_not_available" not in t)
-  if hard or not (soft_ok or code in ("200","201","400","402","403","429","503")):
-    # 400 without model_not_available can still be OK (param); only hard fails count
-    if hard or code in ("000",):
-      fail.append(f"{mid} http={code} {t[:140].replace(chr(10),' ')}")
-      print("FAIL", mid, code)
-    else:
-      print("PASS", mid, code)
-  else:
-    print("PASS", mid, code)
-print("WHITELIST", "OK" if not fail else "FAIL", "fail_n=", len(fail))
-for x in fail: print(" ", x)
+ids=[m["id"] for m in cat["models"]]
+need=["wan3.0-video","flux-3-video","MiniMax-H3","gemini-omni-1.1-flash","gemini-omni-1.1-flash-ext","grok-imagine-video-1.5-preview","grok-1.5-video","seedance-2.0-1080p","seedance-2.0-1080p-fast","seedance-2.0-1080p-mini","seedance-2.5-1080p","seedance-2.0-720p","seedance-2.0-720p-fast","seedance-2.0-720p-mini","seedance-2.5-720p"]
+miss=[x for x in need if x not in ids]
+print("catalog_n", len(ids))
+print("WHITELIST", "OK" if not miss else "FAIL", miss)
 PY
-
+echo "NO_PAID_SMOKE"
 echo DONE_FIX_SEEDANCE_RUNTIME

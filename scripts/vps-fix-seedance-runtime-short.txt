@@ -1,0 +1,105 @@
+# 修 Seedance「目录有、生成没有」：重建视频网关运行时白名单 + DB
+# 根因：只更新了广场/文档，3011 catalog 与 3001 VIDEO_GEN_MODELS 仍是旧镜像
+set -e
+cd /opt/ai-relay
+sudo git pull --ff-only
+
+# AIONE key 必须进 .env.apimart（Seedance 走 aione）
+sudo touch /opt/ai-relay/.env.apimart
+if ! sudo grep -q '^AIONE_API_KEY=.' /opt/ai-relay/.env.apimart 2>/dev/null; then
+  if ! sudo grep -q '^AIONE_API_KEY=.' /opt/ai-relay/.env 2>/dev/null; then
+    echo "ERROR: set AIONE_API_KEY in /opt/ai-relay/.env first" >&2
+    exit 1
+  fi
+  sudo grep -E '^AIONE_(API_KEY|BASE_URL)=' /opt/ai-relay/.env | sudo tee -a /opt/ai-relay/.env.apimart >/dev/null
+fi
+if ! sudo grep -q '^AIONE_BASE_URL=' /opt/ai-relay/.env.apimart 2>/dev/null; then
+  echo 'AIONE_BASE_URL=https://api.aione.help' | sudo tee -a /opt/ai-relay/.env.apimart >/dev/null
+fi
+
+echo "=== rebuild apimart :3011 (catalog whitelist) ==="
+sudo docker build -t keyo-apimart-passthrough ./services/apimart-passthrough
+sudo docker rm -f ai-relay-apimart-passthrough 2>/dev/null || true
+sudo docker run -d --name ai-relay-apimart-passthrough --restart always --network host \
+  --env-file /opt/ai-relay/.env.apimart \
+  -v /opt/ai-relay/data:/data:rw \
+  -v /opt/ai-relay/services/apimart-passthrough/catalog.json:/app/catalog.json:ro \
+  -e NEW_API_DB=/data/new-api/one-api.db \
+  -e NEW_API_BASE=http://127.0.0.1:3000 \
+  -e CATALOG=/app/catalog.json \
+  -e LISTEN_HOST=127.0.0.1 \
+  -e PORT=3011 \
+  keyo-apimart-passthrough
+
+echo "=== rebuild creem :3001 (/v1/videos → 3011 whitelist) ==="
+sudo docker build -t keyo-creem-moderation ./services/creem-moderation-proxy
+sudo docker rm -f ai-relay-creem-moderation 2>/dev/null || true
+sudo docker run -d --name ai-relay-creem-moderation --restart always --network host \
+  --env-file /opt/ai-relay/.env.moderation \
+  -e UPSTREAM_URL=http://127.0.0.1:3000 \
+  -e LISTEN_HOST=127.0.0.1 \
+  -e PORT=3001 \
+  -e RANKINGS_DISPLAY_MULTIPLIER=10 \
+  -e VIDEO_GEN_URL=http://127.0.0.1:3011 \
+  -e UPLOAD_DIR=/opt/ai-relay/static/uploads \
+  -e UPLOAD_PUBLIC_BASE=https://www.keyoapi.xyz/uploads \
+  -e UPLOAD_MAX_BYTES=104857600 \
+  -e UPLOAD_TTL_HOURS=48 \
+  -v /opt/ai-relay/static/uploads:/opt/ai-relay/static/uploads \
+  keyo-creem-moderation
+
+sleep 3
+echo "=== healthz ==="
+curl -sS http://127.0.0.1:3011/healthz; echo
+sudo docker exec ai-relay-apimart-passthrough node -e '
+const c=require("./catalog.json");
+const ids=c.models.map(m=>m.id).filter(x=>String(x).includes("seedance"));
+console.log("catalog_seedance", ids.length, ids.join(","));
+console.log("inventory_d", !!process.env.AIONE_API_KEY);
+'
+
+echo "=== DB register ==="
+sudo python3 /opt/ai-relay/scripts/vps-add-apimart-videos.py /opt/ai-relay/data/new-api/one-api.db
+sudo docker restart ai-relay-new-api >/dev/null || true
+sleep 2
+
+KEY=$(python3 - <<'PY'
+import sqlite3
+k=sqlite3.connect("/opt/ai-relay/data/new-api/one-api.db").execute(
+  "SELECT key FROM tokens WHERE id=2 AND status=1"
+).fetchone()[0]
+print(k if str(k).startswith("sk-") else "sk-"+k)
+PY
+)
+
+echo "=== smoke Path B seedance-2.0-720p-mini ==="
+curl -sS -o /tmp/sd-b.json -w "pathB=%{http_code}\n" -m 90 \
+  -X POST https://www.keyoapi.xyz/v1/videos/generations \
+  -H "Authorization: Bearer $KEY" -H "Content-Type: application/json" \
+  -d '{"model":"seedance-2.0-720p-mini","prompt":"a red balloon floating in blue sky, cinematic","duration":5}'
+python3 - <<'PY'
+import re
+t=open("/tmp/sd-b.json","r",encoding="utf-8",errors="ignore").read()
+t=re.sub(r"(?i)aione|aicopy|grsai|dakka|apimart|openlux|gitee|moark","provider",t)
+print(t[:600])
+ok=("task" in t.lower() or '"id"' in t) and "Unknown model" not in t and "无权" not in t
+print("SMOKE_B", "OK" if ok else "FAIL")
+PY
+
+echo "=== smoke Path A alias /v1/videos (must forward to 3011) ==="
+curl -sS -o /tmp/sd-a.json -w "pathA=%{http_code}\n" -m 90 \
+  -X POST https://www.keyoapi.xyz/v1/videos \
+  -H "Authorization: Bearer $KEY" -H "Content-Type: application/json" \
+  -d '{"model":"seedance-2.0-1080p","prompt":"a red balloon floating in blue sky, cinematic","duration":5}'
+python3 - <<'PY'
+import re
+t=open("/tmp/sd-a.json","r",encoding="utf-8",errors="ignore").read()
+t=re.sub(r"(?i)aione|aicopy|grsai|dakka|apimart|openlux|gitee|moark","provider",t)
+print(t[:600])
+# New API wording means forward failed; apimart Unknown model means old catalog
+bad=("new_api_error" in t) or ("Unknown model" in t) or ("无权访问" in t) or ("无可用渠道" in t)
+ok=("task" in t.lower() or '"id"' in t) and not bad
+print("SMOKE_A", "OK" if ok else "FAIL")
+PY
+
+echo DONE_FIX_SEEDANCE_RUNTIME

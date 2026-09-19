@@ -63,7 +63,7 @@ const FIXES = {
   AnimeSharp: { vendorName: "其他", icon: "Custom", tag: "图像处理", endpoints: EP.imageProcess }, // Kim2091 个人，无公司 logo
   "Real-ESRGAN": { vendorName: "腾讯", icon: "Tencent.Color", tag: "图像处理", endpoints: EP.imageProcess },
   UVDoc: { vendorName: "其他", icon: "Custom", tag: "图像处理", endpoints: EP.imageProcess }, // ETH Zurich 学术项目
-  "RMBG-2.0": { vendorName: "BRIA AI", icon: "Custom", tag: "图像处理", endpoints: EP.imageProcess }, // no BriaAI in lobehub — PNG/SVG inject
+  "RMBG-2.0": { vendorName: "腾讯", icon: "Tencent.Color", tag: "图像处理", endpoints: EP.imageProcess },
 
   // —— OCR ——
   "MinerU2.5-Pro": { vendorName: "其他", icon: "Custom", tag: "OCR", endpoints: EP.docAsync }, // OpenDataLab，无现成 logo
@@ -142,8 +142,14 @@ const FIXES = {
   // —— APIMart 视频 ——
   "gemini-omni-1.1-flash": { vendorName: "Google", icon: "Gemini.Color", tag: "视频", endpoints: EP.apimartVideo },
   "gemini-omni-1.1-flash-ext": { vendorName: "Google", icon: "Gemini.Color", tag: "视频", endpoints: EP.apimartVideo },
-  "seedance-2.5": { vendorName: "字节跳动", icon: "Doubao.Color", tag: "视频", endpoints: EP.apimartVideo },
-  "seedance-2.0": { vendorName: "字节跳动", icon: "Doubao.Color", tag: "视频", endpoints: EP.apimartVideo },
+  "seedance-2.0-1080p": { vendorName: "字节跳动", icon: "Doubao.Color", tag: "视频按秒", endpoints: EP.apimartVideo },
+  "seedance-2.0-1080p-fast": { vendorName: "字节跳动", icon: "Doubao.Color", tag: "视频按秒", endpoints: EP.apimartVideo },
+  "seedance-2.0-1080p-mini": { vendorName: "字节跳动", icon: "Doubao.Color", tag: "视频按秒", endpoints: EP.apimartVideo },
+  "seedance-2.5-1080p": { vendorName: "字节跳动", icon: "Doubao.Color", tag: "视频按秒", endpoints: EP.apimartVideo },
+  "seedance-2.0-720p": { vendorName: "字节跳动", icon: "Doubao.Color", tag: "视频按秒", endpoints: EP.apimartVideo },
+  "seedance-2.0-720p-fast": { vendorName: "字节跳动", icon: "Doubao.Color", tag: "视频按秒", endpoints: EP.apimartVideo },
+  "seedance-2.0-720p-mini": { vendorName: "字节跳动", icon: "Doubao.Color", tag: "视频按秒", endpoints: EP.apimartVideo },
+  "seedance-2.5-720p": { vendorName: "字节跳动", icon: "Doubao.Color", tag: "视频按秒", endpoints: EP.apimartVideo },
   "flux-3-video": { vendorName: "Black Forest Labs", icon: "Flux", tag: "视频", endpoints: EP.apimartVideo },
   "MiniMax-H3": { vendorName: "MiniMax", icon: "Minimax.Color", tag: "视频", endpoints: EP.apimartVideo },
   "wan3.0-video": { vendorName: "阿里巴巴", icon: "Qwen.Color", tag: "视频", endpoints: EP.apimartVideo },

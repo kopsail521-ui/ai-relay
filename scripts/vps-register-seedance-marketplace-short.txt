@@ -1,4 +1,6 @@
-# 注册 Seedance 到广场 DB + heal 供应商/标签/端点（复制到 VPS）
+# 注册 Seedance 到广场 DB + heal（不够！生成白名单在 Docker 镜像里）
+# 若生成仍报 Unknown model / 路由拒绝，请改跑：
+#   sudo bash scripts/vps-fix-seedance-runtime-short.txt
 set -e
 cd /opt/ai-relay
 sudo git checkout -- scripts/vps-add-apimart-videos.py 2>/dev/null || true
@@ -6,3 +8,4 @@ sudo git pull
 sudo python3 scripts/vps-add-apimart-videos.py /opt/ai-relay/data/new-api/one-api.db
 bash scripts/vps-heal-marketplace-meta.txt
 echo DONE_REGISTER_SEEDANCE_MARKETPLACE
+echo "NOTE: marketplace only. Runtime whitelist needs: bash scripts/vps-fix-seedance-runtime-short.txt"

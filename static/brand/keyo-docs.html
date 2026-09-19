@@ -799,6 +799,14 @@
             </thead>
             <tbody>
 <tr><td class="model"><button type="button" class="model-btn" data-copy="wan3.0-video">wan3.0-video</button></td><td class="price">$0.0412+ <span data-i18n="perSecond"></span></td><td class="note-cell"><a href="#api-wan" data-i18n="nWanVideo"></a></td></tr>
+<tr><td class="model"><button type="button" class="model-btn" data-copy="seedance-2.0-1080p">seedance-2.0-1080p</button></td><td class="price">$0.100599 <span data-i18n="perSecond"></span></td><td class="note-cell"><a href="#api-seedance" data-i18n="nSeedance"></a></td></tr>
+<tr><td class="model"><button type="button" class="model-btn" data-copy="seedance-2.0-1080p-fast">seedance-2.0-1080p-fast</button></td><td class="price">$0.0754 <span data-i18n="perSecond"></span></td><td class="note-cell"><a href="#api-seedance" data-i18n="nSeedance"></a></td></tr>
+<tr><td class="model"><button type="button" class="model-btn" data-copy="seedance-2.0-1080p-mini">seedance-2.0-1080p-mini</button></td><td class="price">$0.050112 <span data-i18n="perSecond"></span></td><td class="note-cell"><a href="#api-seedance" data-i18n="nSeedance"></a></td></tr>
+<tr><td class="model"><button type="button" class="model-btn" data-copy="seedance-2.5-1080p">seedance-2.5-1080p</button></td><td class="price">$0.137996 <span data-i18n="perSecond"></span></td><td class="note-cell"><a href="#api-seedance" data-i18n="nSeedance"></a></td></tr>
+<tr><td class="model"><button type="button" class="model-btn" data-copy="seedance-2.0-720p">seedance-2.0-720p</button></td><td class="price">$0.096165 <span data-i18n="perSecond"></span></td><td class="note-cell"><a href="#api-seedance" data-i18n="nSeedance"></a></td></tr>
+<tr><td class="model"><button type="button" class="model-btn" data-copy="seedance-2.0-720p-fast">seedance-2.0-720p-fast</button></td><td class="price">$0.074794 <span data-i18n="perSecond"></span></td><td class="note-cell"><a href="#api-seedance" data-i18n="nSeedance"></a></td></tr>
+<tr><td class="model"><button type="button" class="model-btn" data-copy="seedance-2.0-720p-mini">seedance-2.0-720p-mini</button></td><td class="price">$0.049863 <span data-i18n="perSecond"></span></td><td class="note-cell"><a href="#api-seedance" data-i18n="nSeedance"></a></td></tr>
+<tr><td class="model"><button type="button" class="model-btn" data-copy="seedance-2.5-720p">seedance-2.5-720p</button></td><td class="price">$0.133562 <span data-i18n="perSecond"></span></td><td class="note-cell"><a href="#api-seedance" data-i18n="nSeedance"></a></td></tr>
 <tr><td class="model"><button type="button" class="model-btn" data-copy="flux-3-video">flux-3-video</button></td><td class="price">$0.0576–$0.5088 <span data-i18n="perSecond"></span></td><td class="note-cell"><a href="#api-flux" data-i18n="nFluxVideo"></a></td></tr>
 <tr><td class="model"><button type="button" class="model-btn" data-copy="MiniMax-H3">MiniMax-H3</button></td><td class="price">$0.02055 / $0.02877 / $0.04110 <span data-i18n="perSecond"></span></td><td class="note-cell"><a href="#api-minimax-h3" data-i18n="nMinimaxVideo"></a></td></tr>
 <tr><td class="model"><button type="button" class="model-btn" data-copy="gemini-omni-1.1-flash">gemini-omni-1.1-flash</button></td><td class="price">$0.1056 <span data-i18n="perSecond"></span></td><td class="note-cell"><a href="#api-gemini-omni" data-i18n="nGemOmni"></a></td></tr>
@@ -919,8 +927,40 @@
           </article>
 
           <article class="model-api" id="api-seedance">
-            <h3>seedance-2.0 / seedance-2.5</h3>
-            <p class="model-lead" data-i18n="sdDelisted"></p>
+            <h3>seedance-2.0-1080p / 720p</h3>
+            <p class="model-lead" data-i18n="sdLead"></p>
+            <div class="table-wrap">
+              <table class="field-table">
+                <thead>
+                  <tr><th data-i18n="thField"></th><th data-i18n="thType"></th><th data-i18n="thDesc"></th></tr>
+                </thead>
+                <tbody>
+                  <tr><td>model<span class="req">*</span></td><td>string</td><td data-i18n="sdModel"></td></tr>
+                  <tr><td>prompt<span class="req">*</span></td><td>string</td><td data-i18n="sdPrompt"></td></tr>
+                  <tr><td>duration / seconds</td><td>int</td><td data-i18n="sdDuration"></td></tr>
+                  <tr><td>first_frame_image</td><td>string</td><td data-i18n="sdFirst"></td></tr>
+                  <tr><td>image_with_roles</td><td>object[]</td><td data-i18n="sdRoles"></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="code-block" style="margin-top:12px">
+              <div class="code-bar"><span class="lang">JSON · 文生</span><button type="button" class="btn-copy" data-copy-target="ex-sd-t2v" data-i18n="copy"></button></div>
+              <pre id="ex-sd-t2v"><code>{
+  "model": "seedance-2.0-720p-mini",
+  "prompt": "夕阳下红色纸船漂在平静水面上，镜头缓慢推进",
+  "duration": 5
+}</code></pre>
+            </div>
+            <div class="code-block">
+              <div class="code-bar"><span class="lang">JSON · 首帧</span><button type="button" class="btn-copy" data-copy-target="ex-sd-first" data-i18n="copy"></button></div>
+              <pre id="ex-sd-first"><code>{
+  "model": "seedance-2.0-1080p-fast",
+  "prompt": "人物抬头并向前走，动作自然",
+  "duration": 5,
+  "first_frame_image": "https://example.com/first.jpg"
+}</code></pre>
+            </div>
+            <p class="hint" data-i18n="sdOldIds"></p>
           </article>
 
           <article class="model-api" id="api-wan">
@@ -1401,8 +1441,15 @@ const I18N = {
     "mmAudios": "Reference audio, max 3. Public https (local → /v1/uploads first).",
     "mmSeed": "Optional random seed.",
     "mmAlias": "Aliases mapped automatically: image_urls→images, audio_urls→audios, aspect_ratio→aspectRatio.",
-    "sdDelisted": "Delisted — do not call. Use MiniMax-H3 / wan3.0-video / flux-3-video / gemini-omni / grok-imagine instead.",
-    "sdLead": "Delisted.",
+    "sdDelisted": "Old ids seedance-2.0 and seedance-2.5 are delisted. Call the resolution SKUs below.",
+    "sdLead": "Resolution is in the model id. POST /v1/videos/generations, then poll GET /v1/tasks/{id}. Do not call seedance-2.0 or seedance-2.5.",
+    "sdModel": "One of: seedance-2.0-1080p, seedance-2.0-1080p-fast, seedance-2.0-1080p-mini, seedance-2.5-1080p, seedance-2.0-720p, seedance-2.0-720p-fast, seedance-2.0-720p-mini, seedance-2.5-720p.",
+    "sdPrompt": "Required prompt.",
+    "sdDuration": "Seconds. Default 5 if omitted. Alias: seconds.",
+    "sdFirst": "Optional first-frame public https URL. Local files: POST /v1/uploads first.",
+    "sdRoles": "Optional first/last frames: {url, role:first_frame|last_frame}. Public https only.",
+    "sdOldIds": "Do not call seedance-2.0 or seedance-2.5. Those ids are delisted.",
+    "nSeedance": "by resolution · per second",
     "sdRuleJson": "Body must be JSON — never multipart or -F file=@ on the Seedance generate endpoint.",
     "sdRuleUrl": "image_urls / video_urls / audio_urls must be public https. Local files: POST /v1/uploads first, then paste url (or omit image_urls for text-to-video).",
     "sdRulePoll": "Poll GET /v1/tasks/{id} (plural). Do not use TTS /v1/task/.",
@@ -1423,8 +1470,8 @@ const I18N = {
     "nGrokVideo": "text/ref · 1–15s · per request",
     "nVeoComponents": "(delisted)",
     "nWanVideo": "t2v / first·last / multimodal ref · /s",
-    "nSeedance25": "(delisted)",
-    "nSeedance20": "(delisted)",
+    "nSeedance25": "by resolution · per second",
+    "nSeedance20": "by resolution · per second",
     "nFluxVideo": "t2v / keyframes / v2v / draft · /s",
     "nMinimaxVideo": "480p/768p/1080p · images[]/audios[] · aspectRatio",
     "nGemOmni": "t2v / refs / first·last · no duration",
@@ -1571,8 +1618,15 @@ const I18N = {
     "mmAudios": "参考音频数组，最多 3；公网 https（本机先 /v1/uploads）。",
     "mmSeed": "可选随机种子。",
     "mmAlias": "兼容别名（自动映射）：image_urls→images，audio_urls→audios，aspect_ratio→aspectRatio。",
-    "sdDelisted": "已下架，勿调用。请改用 MiniMax-H3 / wan3.0-video / flux-3-video / gemini-omni / grok-imagine。",
-    "sdLead": "已下架。",
+    "sdDelisted": "旧 ID seedance-2.0 / seedance-2.5 已下架。请调用下面带分辨率的 SKU。",
+    "sdLead": "分辨率写在 model id 里。POST /v1/videos/generations 提交，GET /v1/tasks/{id} 轮询。不要再调 seedance-2.0 或 seedance-2.5。",
+    "sdModel": "只能是：seedance-2.0-1080p、seedance-2.0-1080p-fast、seedance-2.0-1080p-mini、seedance-2.5-1080p、seedance-2.0-720p、seedance-2.0-720p-fast、seedance-2.0-720p-mini、seedance-2.5-720p。",
+    "sdPrompt": "必填提示词。",
+    "sdDuration": "秒数，不传默认 5。别名 seconds。",
+    "sdFirst": "可选首帧，公网 https。本机文件先 POST /v1/uploads。",
+    "sdRoles": "可选首尾帧：{url, role:first_frame|last_frame}，必须公网 https。",
+    "sdOldIds": "不要调用 seedance-2.0 或 seedance-2.5，这两个旧 ID 已下架。",
+    "nSeedance": "按分辨率 · 按秒",
     "sdRuleJson": "请求体必须是 JSON —— Seedance 生成口不要用 multipart 或 -F file=@。",
     "sdRuleUrl": "image_urls / video_urls / audio_urls 必须是公网 https。本机文件先 POST /v1/uploads 再填 url；不需要参考图就走文生（不传 image_urls）。",
     "sdRulePoll": "轮询 GET /v1/tasks/{id}（复数）。不要用 TTS 的 /v1/task/。",
@@ -1593,8 +1647,8 @@ const I18N = {
     "nGrokVideo": "文生/参考图 · 1–15 秒 · 按次",
     "nVeoComponents": "（已下架）",
     "nWanVideo": "文生/首尾帧/多模态参考 · 按秒",
-    "nSeedance25": "（已下架）",
-    "nSeedance20": "（已下架）",
+    "nSeedance25": "按分辨率 · 按秒",
+    "nSeedance20": "按分辨率 · 按秒",
     "nFluxVideo": "文生/关键帧/续写/草稿 · 按秒",
     "nMinimaxVideo": "480p/768p/1080p · images[]/audios[] · aspectRatio",
     "nGemOmni": "文生/参考/首尾帧 · 无 duration",
@@ -1723,6 +1777,7 @@ const I18N = {
     "nWanVideo": "480P/720P/1080P · 按秒",
     "nSeedance25": "按解析度 · 按秒",
     "nSeedance20": "按解析度 · 按秒",
+    "nSeedance": "按解析度 · 按秒",
     "nFluxVideo": "DRAFT/HD/FHD · 按秒",
     "nMinimaxVideo": "768P / 2K · 按秒",
     "nGemOmni": "按秒",
@@ -1851,6 +1906,7 @@ const I18N = {
     "nWanVideo": "480P/720P/1080P · 秒課金",
     "nSeedance25": "解像度別 · 秒課金",
     "nSeedance20": "解像度別 · 秒課金",
+    "nSeedance": "解像度別 · 秒課金",
     "nFluxVideo": "DRAFT/HD/FHD · 秒課金",
     "nMinimaxVideo": "768P / 2K · 秒課金",
     "nGemOmni": "秒課金",
@@ -1979,6 +2035,7 @@ const I18N = {
     "nWanVideo": "480P/720P/1080P · par seconde",
     "nSeedance25": "par résolution · /s",
     "nSeedance20": "par résolution · /s",
+    "nSeedance": "par résolution · /s",
     "nFluxVideo": "DRAFT/HD/FHD · /s",
     "nMinimaxVideo": "768P / 2K · /s",
     "nGemOmni": "par seconde",
@@ -2107,6 +2164,7 @@ const I18N = {
     "nWanVideo": "480P/720P/1080P · за секунду",
     "nSeedance25": "по разрешению · /с",
     "nSeedance20": "по разрешению · /с",
+    "nSeedance": "по разрешению · /с",
     "nFluxVideo": "DRAFT/HD/FHD · /с",
     "nMinimaxVideo": "768P / 2K · /с",
     "nGemOmni": "за секунду",
@@ -2235,6 +2293,7 @@ const I18N = {
     "nWanVideo": "480P/720P/1080P · theo giây",
     "nSeedance25": "theo độ phân giải · /s",
     "nSeedance20": "theo độ phân giải · /s",
+    "nSeedance": "theo độ phân giải · /s",
     "nFluxVideo": "DRAFT/HD/FHD · /s",
     "nMinimaxVideo": "768P / 2K · /s",
     "nGemOmni": "theo giây",

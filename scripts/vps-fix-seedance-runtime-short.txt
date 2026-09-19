@@ -31,7 +31,7 @@ sudo docker run -d --name ai-relay-apimart-passthrough --restart always --networ
   -e PORT=3011 \
   keyo-apimart-passthrough
 
-echo "=== rebuild creem :3001 (/v1/videos → 3011 whitelist) ==="
+echo "=== rebuild creem :3001 (/v1/videos → 3011 from same catalog) ==="
 sudo docker build -t keyo-creem-moderation ./services/creem-moderation-proxy
 sudo docker rm -f ai-relay-creem-moderation 2>/dev/null || true
 sudo docker run -d --name ai-relay-creem-moderation --restart always --network host \
@@ -41,10 +41,12 @@ sudo docker run -d --name ai-relay-creem-moderation --restart always --network h
   -e PORT=3001 \
   -e RANKINGS_DISPLAY_MULTIPLIER=10 \
   -e VIDEO_GEN_URL=http://127.0.0.1:3011 \
+  -e VIDEO_CATALOG=/app/video-catalog.json \
   -e UPLOAD_DIR=/opt/ai-relay/static/uploads \
   -e UPLOAD_PUBLIC_BASE=https://www.keyoapi.xyz/uploads \
   -e UPLOAD_MAX_BYTES=104857600 \
   -e UPLOAD_TTL_HOURS=48 \
+  -v /opt/ai-relay/services/apimart-passthrough/catalog.json:/app/video-catalog.json:ro \
   -v /opt/ai-relay/static/uploads:/opt/ai-relay/static/uploads \
   keyo-creem-moderation
 
@@ -71,6 +73,7 @@ k=sqlite3.connect("/opt/ai-relay/data/new-api/one-api.db").execute(
 print(k if str(k).startswith("sk-") else "sk-"+k)
 PY
 )
+printf '%s' "$KEY" | sudo tee /tmp/keyo-smoke-key.txt >/dev/null
 
 echo "=== smoke Path B seedance-2.0-720p-mini ==="
 curl -sS -o /tmp/sd-b.json -w "pathB=%{http_code}\n" -m 90 \
@@ -100,6 +103,33 @@ print(t[:600])
 bad=("new_api_error" in t) or ("Unknown model" in t) or ("无权访问" in t) or ("无可用渠道" in t)
 ok=("task" in t.lower() or '"id"' in t) and not bad
 print("SMOKE_A", "OK" if ok else "FAIL")
+PY
+
+echo "=== whitelist probe ALL catalog models (Unknown model = FAIL) ==="
+python3 - <<'PY'
+import json, subprocess, os, re
+cat=json.load(open("/opt/ai-relay/services/apimart-passthrough/catalog.json",encoding="utf-8"))
+key=os.environ.get("KEYO_SMOKE_KEY") or open("/tmp/keyo-smoke-key.txt").read().strip()
+fail=[]
+for m in cat["models"]:
+  mid=m["id"]
+  body=json.dumps({"model":mid,"prompt":"a red balloon","duration":5,"aspectRatio":"landscape","resolution":"480p"})
+  p=subprocess.run([
+    "curl","-sS","-m","45","-o","/tmp/vw.json","-w","%{http_code}",
+    "-X","POST","https://www.keyoapi.xyz/v1/videos/generations",
+    "-H",f"Authorization: Bearer {key}","-H","Content-Type: application/json","-d",body
+  ],capture_output=True,text=True)
+  code=p.stdout.strip()
+  t=open("/tmp/vw.json",encoding="utf-8",errors="ignore").read()
+  bad=("Unknown model" in t) or ("无权访问" in t) or ("无可用渠道" in t) or ("new_api_error" in t and "Invalid token" not in t and code=="503")
+  # 401 auth is unexpected with DB key; still treat Unknown model as hard fail
+  if "Unknown model" in t or bad:
+    fail.append(f"{mid} http={code} {(t[:120]).replace(chr(10),' ')}")
+    print("FAIL", mid, code)
+  else:
+    print("PASS", mid, code)
+print("WHITELIST", "OK" if not fail else "FAIL", "fail_n=", len(fail))
+for x in fail: print(" ", x)
 PY
 
 echo DONE_FIX_SEEDANCE_RUNTIME

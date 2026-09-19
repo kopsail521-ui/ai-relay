@@ -100,7 +100,7 @@ const VIDEO_GEN = (process.env.VIDEO_GEN_URL || "http://127.0.0.1:3011").replace
   /\/$/,
   ""
 );
-const VIDEO_GEN_MODELS = new Set([
+const VIDEO_GEN_FALLBACK = [
   "gemini-omni-1.1-flash",
   "gemini-omni-1.1-flash-ext",
   "flux-3-video",
@@ -116,7 +116,34 @@ const VIDEO_GEN_MODELS = new Set([
   "seedance-2.0-720p-fast",
   "seedance-2.0-720p-mini",
   "seedance-2.5-720p",
-]);
+];
+function loadVideoGenModels() {
+  const candidates = [
+    process.env.VIDEO_CATALOG,
+    "/app/video-catalog.json",
+    path.join(
+      path.dirname(fileURLToPath(import.meta.url)),
+      "../apimart-passthrough/catalog.json"
+    ),
+    "/opt/ai-relay/services/apimart-passthrough/catalog.json",
+  ].filter(Boolean);
+  for (const p of candidates) {
+    try {
+      if (!fs.existsSync(p)) continue;
+      const j = JSON.parse(fs.readFileSync(p, "utf8"));
+      const ids = (j.models || []).map((m) => m.id).filter(Boolean);
+      if (ids.length) {
+        console.log(`[creem] VIDEO_GEN_MODELS from ${p} (${ids.length})`);
+        return new Set(ids);
+      }
+    } catch (e) {
+      console.warn("[creem] video catalog load failed", p, e.message || e);
+    }
+  }
+  console.warn("[creem] VIDEO_GEN_MODELS fallback hardcoded", VIDEO_GEN_FALLBACK.length);
+  return new Set(VIDEO_GEN_FALLBACK);
+}
+const VIDEO_GEN_MODELS = loadVideoGenModels();
 
 function qsOf(url) {
   const s = String(url || "");

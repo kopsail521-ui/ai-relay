@@ -566,7 +566,7 @@ function firstHttpsUrl(v) {
 function aioneDefaultSize(meta, body) {
   if (body.size) return String(body.size);
   const res = String(
-    body.resolution || meta?.estimate?.default_resolution || ""
+    body.resolution || meta?.estimate?.default_resolution || meta?.id || ""
   ).toLowerCase();
   if (res.includes("1080")) return "1920x1080";
   if (res.includes("720")) return "1280x720";
@@ -574,23 +574,46 @@ function aioneDefaultSize(meta, body) {
   return "";
 }
 
-/** Keyo Path B JSON 鈫?aione POST /v1/videos */
+/** aione rejects MiniMax-style aspect words with model_not_available */
+function mapAspectToAione(v) {
+  const s = String(v || "").trim().toLowerCase();
+  if (!s) return "";
+  if (/^\d+:\d+$/.test(s)) return s;
+  if (s === "16:9" || s === "landscape" || s === "horizontal") return "16:9";
+  if (s === "9:16" || s === "portrait" || s === "vertical") return "9:16";
+  if (s === "1:1" || s === "square") return "1:1";
+  return "";
+}
+
+/** Keyo Path B JSON → aione POST /v1/videos */
 function buildAioneVideoBody(meta, body) {
   const out = {
     model: String(meta.upstream_model || ""),
     prompt: String(body.prompt || body.text || ""),
   };
   const seconds = body.seconds ?? body.duration;
-  if (seconds != null && seconds !== "") out.seconds = seconds;
+  if (seconds != null && seconds !== "") out.seconds = Number(seconds);
   else out.seconds = Number(meta?.estimate?.default_seconds || 5);
-  const size = aioneDefaultSize(meta, body);
-  if (size) out.size = size;
-  const extra = {};
-  if (body.aspect_ratio || body.aspectRatio) {
-    extra.aspect_ratio = body.aspect_ratio || body.aspectRatio;
+  if (!Number.isFinite(out.seconds) || out.seconds <= 0) out.seconds = 5;
+
+  // size is required by aione Seedance SKUs; derive from model id when missing
+  let size = aioneDefaultSize(meta, body);
+  if (!size) {
+    const id = String(meta.id || "").toLowerCase();
+    if (id.includes("1080")) size = "1920x1080";
+    else if (id.includes("720")) size = "1280x720";
   }
-  const resolution = body.resolution || meta?.estimate?.default_resolution;
-  if (resolution) extra.resolution = resolution;
+  if (size) out.size = size;
+
+  const extra = {};
+  const ar = mapAspectToAione(body.aspect_ratio || body.aspectRatio || body.ratio);
+  if (ar) extra.aspect_ratio = ar;
+  // Prefer size over free-form resolution; only forward explicit client resolution
+  // that looks like a real tier (avoid leaking MiniMax 480p onto Seedance).
+  const clientRes = String(body.resolution || "").trim();
+  if (clientRes && /^(480p|720p|1080p|2k|4k)$/i.test(clientRes)) {
+    extra.resolution = clientRes.toLowerCase();
+  }
 
   const images = [];
   const push = (u, role) => {
@@ -785,21 +808,24 @@ function normalizeGrsaiSubmitJson(raw) {
  * `id` + `task_id` so OpenAI-style adapters (HyperFrames / Cursor) that only
  * read id|task_id|job_id|video_id do not get HTTP 200 with an empty task id.
  */
-function enrichSubmitTaskIdAliases(raw) {
+function enrichSubmitTaskIdAliases(raw, publicModelId) {
   const tid = extractTaskId(raw);
   if (!tid) return { text: raw, tid: "" };
   try {
     const j = JSON.parse(raw || "{}");
     if (j.id == null || j.id === "") j.id = tid;
     if (j.task_id == null || j.task_id === "") j.task_id = tid;
+    if (publicModelId) j.model = publicModelId;
     if (Array.isArray(j.data) && j.data[0] && typeof j.data[0] === "object") {
       if (j.data[0].id == null || j.data[0].id === "") j.data[0].id = tid;
       if (j.data[0].task_id == null || j.data[0].task_id === "") {
         j.data[0].task_id = tid;
       }
+      if (publicModelId) j.data[0].model = publicModelId;
     } else if (j.data && typeof j.data === "object" && !Array.isArray(j.data)) {
       if (j.data.id == null || j.data.id === "") j.data.id = tid;
       if (j.data.task_id == null || j.data.task_id === "") j.data.task_id = tid;
+      if (publicModelId) j.data.model = publicModelId;
     }
     return { text: JSON.stringify(j), tid };
   } catch {
@@ -961,6 +987,10 @@ function scrubClientErrorBuf(buf, ct) {
     .replace(/https?:\/\/ai\.gitee\.com[^\s"'\\]*/gi, "[redacted]")
     .replace(/https?:\/\/(?:[\w.-]+\.)?grsai(?:api)?\.(?:com|ai|dakka\.com\.cn)[^\s"'\\]*/gi, "[redacted]")
     .replace(/https?:\/\/(?:[\w.-]+\.)?dakka\.com\.cn[^\s"'\\]*/gi, "[redacted]")
+    .replace(/https?:\/\/(?:[\w.-]+\.)?aione\.help[^\s"'\\]*/gi, "[redacted]")
+    .replace(/https?:\/\/(?:[\w.-]+\.)?aicopy\.top[^\s"'\\]*/gi, "[redacted]")
+    .replace(/【超分版】[^"}\s,]*/g, "[model]")
+    .replace(/sd2\.[0-9][^"}\s,]*/g, "[model]")
     .replace(/\bAPIMart\b/gi, "provider")
     .replace(/\bOpenLux\b/gi, "provider")
     .replace(/妯″姏鏂硅垷/g, "provider")
@@ -1423,7 +1453,7 @@ const server = http.createServer(async (req, res) => {
       text = normalized;
     } else if (outStatus >= 200 && outStatus < 300) {
       // Seedance / Wan / FLUX / Omni / Grok-imagine (APIMart): alias task id
-      const enriched = enrichSubmitTaskIdAliases(text);
+      const enriched = enrichSubmitTaskIdAliases(text, modelId);
       if (enriched.tid) {
         text = enriched.text;
         outBuf = Buffer.from(text, "utf8");

@@ -22,6 +22,16 @@ import path from "path";
 import { fileURLToPath } from "url";
 import { DatabaseSync } from "node:sqlite";
 
+import {
+  firstHttpsUrl,
+  validateVideoClientBody,
+  normalizeApimartClientBody,
+  buildOpenluxGrok15Body,
+  buildAioneVideoBody,
+  buildGrsaiVideoBody,
+  mapAspectToAione,
+} from "./video-contracts.mjs";
+
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 function loadEnvFile() {
@@ -553,184 +563,6 @@ function isGrsaiMeta(meta) {
 
 function isAioneMeta(meta) {
   return String(meta?.upstream || "").toLowerCase() === "aione";
-}
-
-function firstHttpsUrl(v) {
-  if (typeof v === "string" && /^https?:\/\//i.test(v)) return v;
-  if (v && typeof v === "object" && v.url && /^https?:\/\//i.test(String(v.url))) {
-    return String(v.url);
-  }
-  return "";
-}
-
-function aioneDefaultSize(meta, body) {
-  if (body.size) return String(body.size);
-  const res = String(
-    body.resolution || meta?.estimate?.default_resolution || meta?.id || ""
-  ).toLowerCase();
-  if (res.includes("1080")) return "1920x1080";
-  if (res.includes("720")) return "1280x720";
-  if (res.includes("480")) return "854x480";
-  return "";
-}
-
-/** aione rejects MiniMax-style aspect words with model_not_available */
-function mapAspectToAione(v) {
-  const s = String(v || "").trim().toLowerCase();
-  if (!s) return "";
-  if (/^\d+:\d+$/.test(s)) return s;
-  if (s === "16:9" || s === "landscape" || s === "horizontal") return "16:9";
-  if (s === "9:16" || s === "portrait" || s === "vertical") return "9:16";
-  if (s === "1:1" || s === "square") return "1:1";
-  return "";
-}
-
-/** Keyo Path B JSON → aione POST /v1/videos */
-function buildAioneVideoBody(meta, body) {
-  const out = {
-    model: String(meta.upstream_model || ""),
-    prompt: String(body.prompt || body.text || ""),
-  };
-  const seconds = body.seconds ?? body.duration;
-  if (seconds != null && seconds !== "") out.seconds = Number(seconds);
-  else out.seconds = Number(meta?.estimate?.default_seconds || 5);
-  if (!Number.isFinite(out.seconds) || out.seconds <= 0) out.seconds = 5;
-
-  // size is required by aione Seedance SKUs; derive from model id when missing
-  let size = aioneDefaultSize(meta, body);
-  if (!size) {
-    const id = String(meta.id || "").toLowerCase();
-    if (id.includes("1080")) size = "1920x1080";
-    else if (id.includes("720")) size = "1280x720";
-  }
-  if (size) out.size = size;
-
-  const extra = {};
-  const ar = mapAspectToAione(body.aspect_ratio || body.aspectRatio || body.ratio);
-  if (ar) extra.aspect_ratio = ar;
-  // Prefer size over free-form resolution; only forward explicit client resolution
-  // that looks like a real tier (avoid leaking MiniMax 480p onto Seedance).
-  const clientRes = String(body.resolution || "").trim();
-  if (clientRes && /^(480p|720p|1080p|2k|4k)$/i.test(clientRes)) {
-    extra.resolution = clientRes.toLowerCase();
-  }
-
-  const images = [];
-  const push = (u, role) => {
-    const url = firstHttpsUrl(u);
-    if (!url) return;
-    images.push(role ? { url, role } : { url });
-  };
-  if (Array.isArray(body.image_with_roles)) {
-    for (const it of body.image_with_roles) {
-      push(it, it?.role || "reference_image");
-    }
-  }
-  if (Array.isArray(body.image_urls)) for (const u of body.image_urls) push(u, "reference_image");
-  if (Array.isArray(body.images)) for (const u of body.images) push(u, "reference_image");
-  const first =
-    firstHttpsUrl(body.input_reference) ||
-    firstHttpsUrl(body.first_frame_image) ||
-    firstHttpsUrl(body.image) ||
-    firstHttpsUrl(body.image_url);
-  if (first && !images.some((x) => x.url === first)) {
-    images.unshift({ url: first, role: "first_frame" });
-  }
-  if (body.last_frame_image) push(body.last_frame_image, "last_frame");
-  if (images.length === 1) out.input_reference = { url: images[0].url };
-  else if (images.length > 1) extra.reference_images = images;
-
-  const videos = [];
-  if (Array.isArray(body.video_urls)) {
-    for (const u of body.video_urls) {
-      const url = firstHttpsUrl(u);
-      if (url) videos.push({ url });
-    }
-  }
-  if (videos.length) extra.reference_videos = videos;
-  const audios = [];
-  if (Array.isArray(body.audio_urls)) {
-    for (const u of body.audio_urls) {
-      const url = firstHttpsUrl(u);
-      if (url) audios.push({ url });
-    }
-  }
-  if (Array.isArray(body.audios)) {
-    for (const u of body.audios) {
-      const url = firstHttpsUrl(u);
-      if (url) audios.push({ url });
-    }
-  }
-  if (audios.length) extra.reference_audios = audios;
-  if (Object.keys(extra).length) out.extra = extra;
-  return out;
-}
-
-function mapAspectToGrsai(v) {
-  const s = String(v || "").trim().toLowerCase();
-  if (!s) return "landscape";
-  if (s === "16:9" || s === "landscape" || s === "horizontal") return "landscape";
-  if (s === "9:16" || s === "portrait" || s === "vertical") return "portrait";
-  if (s === "1:1" || s === "square") return "square";
-  return "landscape";
-}
-
-function buildGrsaiVideoBody(meta, body) {
-  const est = meta.estimate || {};
-  let duration = Number(body.duration ?? body.seconds ?? est.default_seconds ?? 5);
-  if (!Number.isFinite(duration) || duration <= 0) duration = 5;
-  let resolution = String(
-    body.resolution || body.size || est.default_resolution || "768p"
-  ).toLowerCase();
-  if (resolution === "2k") resolution = "1080p";
-  // 1080p max 10s (inventory rule)
-  if (resolution === "1080p" && duration > 10) duration = 10;
-  if (duration > 15) duration = 15;
-
-  const out = {
-    model: String(meta.upstream_model || "minimax-h3"),
-    prompt: String(body.prompt || body.text || ""),
-    duration,
-    resolution,
-    aspectRatio: mapAspectToGrsai(
-      body.aspectRatio || body.aspect_ratio || body.ratio
-    ),
-    // Keyo async poll style (customer still uses /v1/tasks/{id})
-    webHook: "-1",
-    shutProgress: true,
-  };
-
-  // images: prefer native `images`, else common aliases (https URLs)
-  const images = [];
-  const pushImg = (u) => {
-    if (typeof u === "string" && u) images.push(u);
-    else if (u && typeof u === "object" && u.url) images.push(String(u.url));
-  };
-  if (Array.isArray(body.images)) for (const u of body.images) pushImg(u);
-  if (Array.isArray(body.image_urls)) for (const u of body.image_urls) pushImg(u);
-  if (typeof body.image_url === "string") pushImg(body.image_url);
-  if (typeof body.first_frame_image === "string") pushImg(body.first_frame_image);
-  if (typeof body.last_frame_image === "string") pushImg(body.last_frame_image);
-  if (Array.isArray(body.image_with_roles)) {
-    for (const it of body.image_with_roles) pushImg(it);
-  }
-  if (images.length) out.images = images.slice(0, 9);
-
-  // audios: prefer native `audios`
-  const audios = [];
-  const pushAud = (u) => {
-    if (typeof u === "string" && u) audios.push(u);
-    else if (u && typeof u === "object" && u.url) audios.push(String(u.url));
-  };
-  if (Array.isArray(body.audios)) for (const u of body.audios) pushAud(u);
-  if (Array.isArray(body.audio_urls)) for (const u of body.audio_urls) pushAud(u);
-  if (typeof body.audio_url === "string") pushAud(body.audio_url);
-  if (audios.length) out.audios = audios.slice(0, 3);
-
-  if (body.seed != null && Number.isFinite(Number(body.seed))) {
-    out.seed = Number(body.seed);
-  }
-  return out;
 }
 
 function grsaiCostUsd(j) {
@@ -1325,7 +1157,19 @@ const server = http.createServer(async (req, res) => {
       });
     }
 
-    // Inventory-C: rewrite client body 鈫?generate shape (never forward public model id)
+    // Validate BEFORE precharge — never bill known-bad requests
+    const verr = validateVideoClientBody(modelId, body);
+    if (verr) {
+      return json(res, 400, {
+        error: {
+          message: verr.message,
+          type: "invalid_request_error",
+          param: verr.param,
+        },
+      });
+    }
+
+    // Inventory-C: rewrite client body → upstream shape (never forward public model id)
     if (useGrsai) {
       const gBody = buildGrsaiVideoBody(meta, body);
       if (!gBody.prompt) {
@@ -1338,9 +1182,7 @@ const server = http.createServer(async (req, res) => {
         });
       }
       bodyBuf = Buffer.from(JSON.stringify(gBody), "utf8");
-    }
-
-    if (useAione) {
+    } else if (useAione) {
       const aBody = buildAioneVideoBody(meta, body);
       if (!aBody.prompt) {
         return json(res, 400, {
@@ -1352,10 +1194,20 @@ const server = http.createServer(async (req, res) => {
         });
       }
       bodyBuf = Buffer.from(JSON.stringify(aBody), "utf8");
-    }
-
-    // OpenLux grok-imagine: image-to-video only; need image:{url} + aspect/resolution/duration.
-    if (modelId.includes("grok-imagine")) {
+    } else if (modelId === "grok-1.5-video") {
+      const g15 = buildOpenluxGrok15Body(meta, body);
+      if (!g15.prompt) {
+        return json(res, 400, {
+          error: {
+            message: "prompt is required",
+            type: "invalid_request_error",
+            param: "prompt",
+          },
+        });
+      }
+      bodyBuf = Buffer.from(JSON.stringify(g15), "utf8");
+      body = g15;
+    } else if (modelId.includes("grok-imagine")) {
       const est = meta.estimate || {};
       if (!body.aspect_ratio) body.aspect_ratio = "16:9";
       if (!body.resolution) {
@@ -1364,7 +1216,7 @@ const server = http.createServer(async (req, res) => {
       if (body.duration == null && body.seconds == null) {
         body.duration = Number(est.default_seconds || 5);
       }
-      // Normalize common aliases 鈫?OpenLux shape: { image: { url } }
+      // Normalize common aliases → OpenLux shape: { image: { url } }
       const imgObj = body.image;
       let url = "";
       if (imgObj && typeof imgObj === "object" && imgObj.url) {
@@ -1381,12 +1233,14 @@ const server = http.createServer(async (req, res) => {
         url = typeof first === "string" ? first : String(first?.url || "");
       } else if (typeof body.input_reference === "string" && body.input_reference) {
         url = body.input_reference;
+      } else if (body.input_reference && typeof body.input_reference === "object") {
+        url = String(body.input_reference.url || "");
       }
       if (!url || !/^https?:\/\//i.test(url)) {
         return json(res, 400, {
           error: {
             message:
-              'grok-imagine-video-1.5-preview is image-to-video only. Pass image:{"url":"https://..."} (aliases: image_url, image_urls[0]).',
+              'grok-imagine-video-1.5-preview is image-to-video only. Pass image:{"url":"https://..."} (aliases: image_url, image_urls[0]). See /brand/video-capabilities.json',
             type: "invalid_request_error",
             param: "image",
           },
@@ -1397,7 +1251,13 @@ const server = http.createServer(async (req, res) => {
       delete body.image_urls;
       delete body.images;
       delete body.input_reference;
+      delete body.reference_images;
       bodyBuf = Buffer.from(JSON.stringify(body), "utf8");
+    } else {
+      // APIMart passthrough: wan / flux / gemini-omni*
+      const norm = normalizeApimartClientBody(modelId, body);
+      body = norm;
+      bodyBuf = Buffer.from(JSON.stringify(norm), "utf8");
     }
 
     const costEst = estimateCostUsd(meta, body);

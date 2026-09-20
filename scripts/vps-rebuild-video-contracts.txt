@@ -1,0 +1,20 @@
+# 重建 3011（含 video-contracts.mjs）— 不跑付费探针
+set -e
+cd /opt/ai-relay
+sudo git pull
+sudo docker build -t keyo-apimart-passthrough ./services/apimart-passthrough
+sudo docker rm -f ai-relay-apimart-passthrough 2>/dev/null || true
+sudo docker run -d --name ai-relay-apimart-passthrough --restart always --network host \
+  --env-file /opt/ai-relay/.env.apimart \
+  -v /opt/ai-relay/data:/data:rw \
+  -e NEW_API_DB=/data/new-api/one-api.db \
+  -e NEW_API_BASE=http://127.0.0.1:3000 \
+  -e CATALOG=/app/catalog.json \
+  -e LISTEN_HOST=127.0.0.1 \
+  -e PORT=3011 \
+  keyo-apimart-passthrough
+sleep 2
+curl -sS http://127.0.0.1:3011/healthz; echo
+sudo docker exec ai-relay-apimart-passthrough ls -la /app/video-contracts.mjs /app/server.mjs
+# 同步公开契约文档到 static（若站点从仓库挂载则 git pull 已够）
+echo DONE_VIDEO_CONTRACTS_REBUILD

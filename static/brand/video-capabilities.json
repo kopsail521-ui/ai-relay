@@ -1,0 +1,457 @@
+{
+  "$schema_note": "Machine-readable Keyo video API contract for coding agents (Cursor/Codex). Read this file BEFORE writing any video request. Submit POST /v1/videos/generations then poll GET /v1/tasks/{task_id}. Media must be public http(s) URLs — local files: POST /v1/uploads first. NEVER mix one model's field names with another's.",
+  "endpoint": {
+    "submit": "POST https://www.keyoapi.xyz/v1/videos/generations",
+    "poll": "GET https://www.keyoapi.xyz/v1/tasks/{task_id}",
+    "upload": "POST https://www.keyoapi.xyz/v1/uploads",
+    "also_accepts_submit": ["POST /v1/videos"],
+    "auth": "Authorization: Bearer sk-..."
+  },
+  "global_rules": [
+    "JSON body only on generate (no multipart file=@ on the generate endpoint).",
+    "All media fields: public http:// or https:// only. No local paths, no data:base64, no asset://.",
+    "Poll video tasks at /v1/tasks/{id} (plural). TTS uses /v1/task/{id} (singular) — different.",
+    "Each model has its own field contract. MiniMax ≠ Seedance ≠ Wan ≠ FLUX ≠ Gemini ≠ Grok.",
+    "On 400 with param message: fix that field; do not retry the same body."
+  ],
+  "models": {
+    "wan3.0-video": {
+      "upstream_style": "apimart_passthrough",
+      "required_any_of": ["prompt", "media"],
+      "enums": {
+        "resolution": ["480P", "720P", "1080P"],
+        "duration": "integer 2..30 or -1 (model chooses)",
+        "size": ["adaptive", "16:9", "4:3", "1:1", "3:4", "9:16"],
+        "generation_type": ["frame", "reference"]
+      },
+      "modes": {
+        "t2v": {
+          "body": { "model": "wan3.0-video", "prompt": "...", "resolution": "720P", "duration": 5, "size": "16:9" }
+        },
+        "first_frame": {
+          "note": "Bare image_urls with 1 image defaults to FRAME family (first frame).",
+          "body": {
+            "model": "wan3.0-video",
+            "prompt": "...",
+            "image_urls": ["https://example.com/first.png"],
+            "resolution": "720P",
+            "duration": 5
+          }
+        },
+        "first_last": {
+          "body": {
+            "model": "wan3.0-video",
+            "prompt": "...",
+            "image_with_roles": [
+              { "url": "https://example.com/first.png", "role": "first_frame" },
+              { "url": "https://example.com/last.jpg", "role": "last_frame" }
+            ],
+            "duration": 5,
+            "resolution": "480P"
+          }
+        },
+        "reference": {
+          "note": "Set generation_type=reference. Prompt may use 图1/视频1/音频1. Do NOT mix with first/last roles.",
+          "body": {
+            "model": "wan3.0-video",
+            "prompt": "视频1抱着图1，在图3的椅子上弹奏",
+            "generation_type": "reference",
+            "image_urls": [
+              "https://example.com/a.jpg",
+              "https://example.com/b.png",
+              "https://example.com/c.png"
+            ],
+            "video_urls": ["https://example.com/role.mp4"],
+            "audio_urls": ["https://example.com/voice.mp3"],
+            "resolution": "480P",
+            "duration": 5
+          }
+        },
+        "file_or_link": {
+          "note": "file_url XOR link_url. prompt optional for file_url.",
+          "body_file": {
+            "model": "wan3.0-video",
+            "file_url": "https://example.com/deck.pptx",
+            "resolution": "480P",
+            "duration": 10
+          },
+          "body_link": {
+            "model": "wan3.0-video",
+            "prompt": "Turn this article into a short educational video",
+            "link_url": "https://example.com/article/123",
+            "duration": 15
+          }
+        }
+      },
+      "aliases": {
+        "audio_url": "audio_urls[0]",
+        "video_url": "video_urls[0]",
+        "aspect_ratio": "size"
+      },
+      "limits": {
+        "reference_images": "≤10",
+        "reference_videos": "≤5 clips, 1–15s each, total ≤15s",
+        "reference_audios": "≤5 clips, 1–15s each, total ≤15s"
+      },
+      "forbidden": [
+        "Mix frame-family (first/last) with reference-family (generation_type=reference / video_urls / audio_urls / file_url / link_url)",
+        "Both file_url and link_url",
+        "duration outside 2–30 and not -1",
+        "Empty prompt with no media"
+      ]
+    },
+    "seedance-*": {
+      "ids": [
+        "seedance-2.0-1080p",
+        "seedance-2.0-1080p-fast",
+        "seedance-2.0-1080p-mini",
+        "seedance-2.5-1080p",
+        "seedance-2.0-720p",
+        "seedance-2.0-720p-fast",
+        "seedance-2.0-720p-mini",
+        "seedance-2.5-720p"
+      ],
+      "note": "Old ids seedance-2.0 / seedance-2.5 are DELISTED. Resolution is encoded in the model id — do not send conflicting resolution unless needed.",
+      "required": ["model", "prompt"],
+      "duration_field": "duration (alias seconds)",
+      "modes": {
+        "t2v": {
+          "body": {
+            "model": "seedance-2.0-720p-mini",
+            "prompt": "A kitten running on a moonlit rooftop",
+            "duration": 5
+          }
+        },
+        "first_frame": {
+          "note": "Use first_frame_image, OR generation_type=first_frame with one image. Do NOT use image_urls alone for first-frame (image_urls alone = REFERENCE).",
+          "body": {
+            "model": "seedance-2.0-1080p-fast",
+            "prompt": "Person looks up and walks forward",
+            "duration": 5,
+            "first_frame_image": "https://example.com/first.jpg"
+          },
+          "body_force_via_generation_type": {
+            "model": "seedance-2.0-720p-mini",
+            "prompt": "...",
+            "duration": 5,
+            "generation_type": "first_frame",
+            "image_urls": ["https://example.com/first.jpg"]
+          }
+        },
+        "first_last": {
+          "body": {
+            "model": "seedance-2.0-720p",
+            "prompt": "Natural transition, keep identity",
+            "duration": 5,
+            "image_with_roles": [
+              { "url": "https://example.com/first.jpg", "role": "first_frame" },
+              { "url": "https://example.com/last.jpg", "role": "last_frame" }
+            ]
+          }
+        },
+        "reference_images": {
+          "note": "image_urls / images = REFERENCE mode even with a single image.",
+          "body": {
+            "model": "seedance-2.0-720p-mini",
+            "prompt": "Keep identity of subject in the reference image",
+            "duration": 5,
+            "image_urls": ["https://example.com/char.jpg"]
+          }
+        },
+        "reference_multimodal": {
+          "note": "image_urls + video_urls + audios. NEVER combine with first_frame_image.",
+          "body": {
+            "model": "seedance-2.0-720p-mini",
+            "prompt": "Character speaks with the reference voice, slow push-in",
+            "duration": 5,
+            "image_urls": ["https://example.com/char.jpg"],
+            "video_urls": ["https://example.com/motion.mp4"],
+            "audios": ["https://example.com/voice.mp3"]
+          }
+        }
+      },
+      "aliases": {
+        "seconds": "duration",
+        "audio_urls": "audios",
+        "audio_url": "audios[0]",
+        "images": "image_urls"
+      },
+      "forbidden": [
+        "Calling seedance-2.0 or seedance-2.5",
+        "first_frame_image (or first/last roles) together with video_urls or audios",
+        "audios alone without any image_urls or video_urls"
+      ]
+    },
+    "flux-3-video": {
+      "required": ["model", "prompt"],
+      "enums": {
+        "duration": "integer 5..20",
+        "resolution": ["hd", "fhd"],
+        "tier": ["DRAFT", "HD", "FHD"],
+        "aspect_ratio": ["21:9", "2:1", "16:9", "4:3", "1:1", "3:4", "9:16", "auto"],
+        "mode": ["t2v", "i2v", "v2v", "draft_enhance", "text-to-video", "image-continuation", "video-continuation"]
+      },
+      "modes": {
+        "t2v": {
+          "body": {
+            "model": "flux-3-video",
+            "prompt": "Rainy Tokyo street at night",
+            "duration": 8,
+            "resolution": "fhd",
+            "aspect_ratio": "9:16"
+          }
+        },
+        "keyframes": {
+          "note": "image_urls order is semantic: 1=start; 2=start+end; 3–10=keyframes",
+          "body": {
+            "model": "flux-3-video",
+            "prompt": "Slow push-in as a flower opens",
+            "image_urls": [
+              "https://example.com/bud.jpg",
+              "https://example.com/bloom.jpg"
+            ],
+            "duration": 5,
+            "resolution": "hd"
+          }
+        },
+        "v2v": {
+          "body": {
+            "model": "flux-3-video",
+            "prompt": "Camera keeps following",
+            "video_url": "https://example.com/clip.mp4",
+            "duration": 5
+          }
+        },
+        "draft": {
+          "note": "draft only hd. Finalize with draft_from_task_id and NO prompt.",
+          "body_draft": {
+            "model": "flux-3-video",
+            "prompt": "...",
+            "duration": 5,
+            "draft": true
+          },
+          "body_finalize": {
+            "model": "flux-3-video",
+            "draft_from_task_id": "task_...",
+            "resolution": "fhd"
+          },
+          "body_tier_draft": {
+            "model": "flux-3-video",
+            "prompt": "...",
+            "tier": "DRAFT",
+            "duration": 5
+          }
+        },
+        "silent": {
+          "body": { "model": "flux-3-video", "prompt": "...", "audio": false, "duration": 5 }
+        }
+      },
+      "forbidden": [
+        "draft:true with fhd",
+        "draft together with draft_from_task_id",
+        "prompt on draft_from_task_id finalize",
+        "duration outside 5–20",
+        "more than 10 image_urls"
+      ]
+    },
+    "MiniMax-H3": {
+      "upstream_style": "grsai",
+      "required": ["model", "prompt", "aspectRatio", "resolution", "duration"],
+      "enums": {
+        "aspectRatio": ["landscape", "portrait", "square"],
+        "aspectRatio_aliases": ["16:9→landscape", "9:16→portrait", "1:1→square"],
+        "resolution": ["480p", "768p", "1080p"],
+        "duration": "1..15; 1080p max 10"
+      },
+      "modes": {
+        "t2v": {
+          "body": {
+            "model": "MiniMax-H3",
+            "prompt": "A red balloon rising in blue sky, cinematic",
+            "aspectRatio": "landscape",
+            "resolution": "480p",
+            "duration": 5
+          }
+        },
+        "reference": {
+          "note": "Use images[] and audios[] ONLY. This is NOT Wan/Seedance — no first_frame_image, no image_with_roles.",
+          "body": {
+            "model": "MiniMax-H3",
+            "prompt": "Person speaks with reference timbre, slow push-in",
+            "aspectRatio": "portrait",
+            "resolution": "768p",
+            "duration": 8,
+            "images": ["https://example.com/char.png"],
+            "audios": ["https://example.com/voice.mp3"]
+          }
+        }
+      },
+      "aliases": {
+        "image_urls": "images",
+        "audio_urls": "audios",
+        "aspect_ratio": "aspectRatio"
+      },
+      "limits": { "images": "≤9", "audios": "≤3" },
+      "forbidden": [
+        "first_frame_image / last_frame_image / image_with_roles (rejected)",
+        "Putting aspect ratio into resolution or size",
+        "1080p with duration > 10"
+      ]
+    },
+    "gemini-omni-1.1-flash": {
+      "required": ["model", "prompt"],
+      "enums": {
+        "resolution": ["360p", "720p", "1080p", "4k"],
+        "aspect_ratio": ["16:9", "9:16"]
+      },
+      "no_duration": true,
+      "modes": {
+        "t2v": {
+          "body": {
+            "model": "gemini-omni-1.1-flash",
+            "prompt": "a red apple on a wooden table, short cinematic clip",
+            "aspect_ratio": "16:9",
+            "resolution": "720p"
+          }
+        },
+        "multi_subject": {
+          "body": {
+            "model": "gemini-omni-1.1-flash",
+            "prompt": "subjects interact naturally",
+            "image_urls": ["https://example.com/a.jpg", "https://example.com/b.jpg"],
+            "resolution": "720p"
+          }
+        },
+        "first_last": {
+          "body": {
+            "model": "gemini-omni-1.1-flash",
+            "prompt": "smooth transition, camera slowly pushes in",
+            "first_frame_image": "https://example.com/start.jpg",
+            "last_frame_image": "https://example.com/end.jpg",
+            "resolution": "720p"
+          }
+        },
+        "edit_extend": {
+          "note": "video_urls ≤1 clip. Mutually exclusive with extend_from_task_id.",
+          "body": {
+            "model": "gemini-omni-1.1-flash",
+            "prompt": "continue the motion",
+            "video_urls": ["https://example.com/clip.mp4"]
+          }
+        }
+      },
+      "forbidden": [
+        "duration / seconds fields",
+        "last_frame_image without first_frame_image",
+        "video_urls together with extend_from_task_id"
+      ]
+    },
+    "gemini-omni-1.1-flash-ext": {
+      "required": ["model", "prompt"],
+      "enums": {
+        "duration": [4, 6, 8, 10],
+        "resolution": ["360p", "720p", "1080p", "4k"],
+        "generation_type": ["frame", "reference"]
+      },
+      "modes": {
+        "t2v": {
+          "body": {
+            "model": "gemini-omni-1.1-flash-ext",
+            "prompt": "...",
+            "duration": 8,
+            "resolution": "720p"
+          }
+        },
+        "frame": {
+          "body": {
+            "model": "gemini-omni-1.1-flash-ext",
+            "prompt": "...",
+            "generation_type": "frame",
+            "image_urls": ["https://example.com/one.jpg"],
+            "duration": 6
+          }
+        },
+        "reference": {
+          "note": "image count must be 0, 1, or 3 — never 2. If video_urls present, omit duration.",
+          "body": {
+            "model": "gemini-omni-1.1-flash-ext",
+            "prompt": "...",
+            "generation_type": "reference",
+            "image_urls": [
+              "https://example.com/a.jpg",
+              "https://example.com/b.jpg",
+              "https://example.com/c.jpg"
+            ],
+            "duration": 8
+          }
+        }
+      },
+      "forbidden": [
+        "Exactly 2 images",
+        "duration together with video_urls",
+        "generation_type=frame with image count ≠ 1"
+      ]
+    },
+    "grok-imagine-video-1.5-preview": {
+      "required": ["model", "prompt", "image"],
+      "enums": {
+        "aspect_ratio": ["1:1", "16:9", "9:16"],
+        "duration": "integer 1..15",
+        "resolution": ["480p", "720p"]
+      },
+      "modes": {
+        "i2v_only": {
+          "note": "Text-only is REJECTED. image must be {url: https...}.",
+          "body": {
+            "model": "grok-imagine-video-1.5-preview",
+            "prompt": "gentle camera push in",
+            "image": { "url": "https://example.com/still.jpg" },
+            "aspect_ratio": "16:9",
+            "resolution": "480p",
+            "duration": 5
+          }
+        }
+      },
+      "aliases": {
+        "image_url": "image.url",
+        "image_urls[0]": "image.url",
+        "images[0]": "image.url"
+      },
+      "forbidden": ["prompt-only without image"]
+    },
+    "grok-1.5-video": {
+      "preferred_path": "POST /v1/videos (also works on /v1/videos/generations)",
+      "billing": "per_request",
+      "required": ["model", "prompt"],
+      "enums": {
+        "seconds": [6, 10],
+        "size_aspect": ["16:9", "9:16", "1:1"]
+      },
+      "modes": {
+        "t2v": {
+          "body": {
+            "model": "grok-1.5-video",
+            "prompt": "A red paper boat floating on calm water at sunset",
+            "seconds": 6,
+            "aspect_ratio": "16:9"
+          }
+        },
+        "with_ref": {
+          "body": {
+            "model": "grok-1.5-video",
+            "prompt": "...",
+            "seconds": 10,
+            "aspect_ratio": "9:16",
+            "image_urls": ["https://example.com/ref.jpg"]
+          }
+        }
+      },
+      "note": "seconds MUST be 6 or 10 only. size field means aspect ratio (16:9), NOT 480p/720p.",
+      "forbidden": [
+        "seconds outside {6,10}",
+        "Treating size as pixel resolution tier"
+      ]
+    }
+  },
+  "delisted": ["seedance-2.0", "seedance-2.5", "Duix-Avatar"]
+}

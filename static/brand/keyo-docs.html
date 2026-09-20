@@ -929,7 +929,7 @@
           <article class="model-api" id="api-seedance">
             <h3>seedance-*-720p / *-1080p</h3>
             <p class="model-lead" data-i18n="sdLead"></p>
-            <p class="hint">Agent handbook (JSON): <a href="/brand/video-capabilities.json"><code>/brand/video-capabilities.json</code></a></p>
+            <p class="hint">给 AI：复制 <a href="/brand/keyo-api-ref.html"><code>/brand/keyo-api-ref.html</code></a> 全文（视频字段在 §4/§5）</p>
             <div class="table-wrap">
               <table class="field-table">
                 <thead>
@@ -1108,7 +1108,7 @@
                 </tbody>
               </table>
             </div>
-            <p class="hint"><code>gemini-omni-1.1-flash</code> 无 duration。完整契约：<a href="/brand/video-capabilities.json">video-capabilities.json</a></p>
+            <p class="hint"><code>gemini-omni-1.1-flash</code> 无 duration。给 AI：复制 <a href="/brand/keyo-api-ref.html">keyo-api-ref.html</a> 全文（§5）</p>
             <div class="code-block" style="margin-top:12px">
               <div class="code-bar"><span class="lang">JSON · flash 文生</span><button type="button" class="btn-copy" data-copy-target="ex-omni-t2v" data-i18n="copy"></button></div>
               <pre id="ex-omni-t2v"><code>{
@@ -1466,7 +1466,7 @@ const I18N = {
     "videoTitle": "Video — /v1/videos",
     "videoTitleGen": "Video — /v1/videos/generations",
     "videoApiTitle": "Video model parameters",
-    "videoApiIntro": "Same Keyo path for all models below. Submit POST /v1/videos/generations, then poll GET /v1/tasks/{task_id}. Field names differ by model — do not mix MiniMax fields with Seedance/Wan. Machine-readable contract: /brand/video-capabilities.json (paste that JSON to Cursor/Codex).",
+    "videoApiIntro": "Same Keyo path for all models below. Submit POST /v1/videos/generations, then poll GET /v1/tasks/{task_id}. Field names differ by model — do not mix MiniMax with Seedance/Wan. For Cursor/Codex: copy the AI handbook at /brand/keyo-api-ref.html (video rules are in §4/§5).",
     "uploadIntro": "Local image/audio/video: POST /v1/uploads (alias /v1/files) with -F file=@… → use returned url in Path B JSON. Max ~100MB, ~48h TTL. ASR/matting/InfiniteTalk already accept multipart directly.",
     "thField": "Field",
     "thType": "Type",
@@ -1643,7 +1643,7 @@ const I18N = {
     "videoTitle": "视频 — /v1/videos",
     "videoTitleGen": "视频 — /v1/videos/generations",
     "videoApiTitle": "视频模型参数（按模型）",
-    "videoApiIntro": "下列模型统一走 Keyo：POST /v1/videos/generations 提交，GET /v1/tasks/{task_id} 轮询。各模型字段不同——MiniMax 不要套 Seedance/Wan 的 image_urls / image_with_roles。",
+    "videoApiIntro": "下列模型统一走 Keyo：POST /v1/videos/generations 提交，GET /v1/tasks/{task_id} 轮询。各模型字段不同——MiniMax 不要套 Seedance/Wan。给 Cursor/Codex：复制 /brand/keyo-api-ref.html 全文（视频规则在 §4/§5）。",
     "uploadIntro": "本机图/音/视频：POST /v1/uploads（别名 /v1/files）用 -F file=@… → 把返回的 url 填进 Path B JSON。约 100MB 上限、约 48 小时过期。ASR/抠图/InfiniteTalk 可直接 multipart，不必先上传。",
     "thField": "字段",
     "thType": "类型",

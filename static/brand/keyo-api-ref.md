@@ -12,6 +12,7 @@
 > - 先根据模型名找到所属「能力族」，再套用该族模板；视频模型必须用对应小节的字段，禁止混用。  
 > - 异步任务必须轮询直到完成或失败，再把结果 URL/文本交给用户。  
 > - 视频 Path B **只收 JSON**；图/视频/音频必须是**公网 `http(s)` URL**。  
+> - 视频各模型的字段、模式、禁止项以本手册 **§4 / §5** 为准（用户复制本页给你即可，不必另找文档）。  
 > - 用户只有本机文件时：**先** `POST /v1/uploads`（别名 `/v1/files`）拿到 `url`，再填进 Path B / OCR 的 JSON。  
 > - **禁止**：本机路径、`data:base64`、对 Path B 直接 multipart、臆造的 `POST /v1/assets` / `asset://`。  
 > - ASR / 抠图 / 超分 / MinerU / InfiniteTalk 等 multipart 接口可直接 `-F file=@` / `-F image=@`，不必先上传。  
@@ -230,14 +231,20 @@ curl https://www.keyoapi.xyz/v1/videos/generations \
 
 ## 4. 视频 Path A
 
-`POST https://www.keyoapi.xyz/v1/videos` → `GET /v1/videos/{id}`
+`POST https://www.keyoapi.xyz/v1/videos` → `GET /v1/videos/{id}`  
+（Path B `/v1/videos/generations` 也会转发到此模型。）
 
-仅：`grok-1.5-video`
+仅：`grok-1.5-video`  
+**`seconds` 只能是 `6` 或 `10`**（不要写 1–15 任意秒）。  
+`aspect_ratio` / `size` 表示画幅（如 `16:9`），**不是** 480p 分辨率档。  
+可选参考图：`image_urls[0]` / `input_reference` / `image`。
 
 ```json
 {
   "model": "grok-1.5-video",
-  "prompt": "夕阳下红色纸船漂在平静水面上"
+  "prompt": "夕阳下红色纸船漂在平静水面上",
+  "seconds": 6,
+  "aspect_ratio": "16:9"
 }
 ```
 
@@ -247,7 +254,8 @@ curl https://www.keyoapi.xyz/v1/videos/generations \
 
 统一：`POST https://www.keyoapi.xyz/v1/videos/generations`  
 统一轮询：`GET https://www.keyoapi.xyz/v1/tasks/{task_id}`  
-媒体：只能公网 https URL。本机文件先走 §0.5 `POST /v1/uploads`，再把返回的 `url` 填入下方字段。
+媒体：只能公网 https URL。本机文件先走 §0.5 `POST /v1/uploads`，再把返回的 `url` 填入下方字段。  
+**本节即 AI 调用视频的完整字段合同**——按模型小节执行，禁止跨模型套字段。
 
 **提交成功响应（取 task id）：**
 ```json
@@ -311,7 +319,12 @@ curl https://www.keyoapi.xyz/v1/videos/generations \
 | `seedance-2.5-720p` | **$0.133562/秒** |
 
 必填：`model` `prompt`；推荐：`duration`（或 `seconds`，默认 5）。  
-可选：`size`（如 `1280x720` / `1920x1080`）、`aspect_ratio`、`first_frame_image` / `image_with_roles`、`video_urls`、`audios`。
+模式（勿混用）：  
+- **首帧**：`first_frame_image`（或 `generation_type":"first_frame"`）  
+- **参考（单图也可）**：`image_urls` / `images` —— 单张也是参考生，不是默认首帧  
+- **首尾帧**：`image_with_roles`（`first_frame`+`last_frame`）  
+- **参考音视频**：`image_urls` + `video_urls` / `audios`（**禁止**和 `first_frame_image` 混用）  
+可选：`size`（如 `1280x720`）、`aspect_ratio`。
 
 文生：
 ```json
@@ -345,7 +358,41 @@ curl https://www.keyoapi.xyz/v1/videos/generations \
 }
 ```
 
+参考图（单图也是参考，不是首帧）：
+```json
+{
+  "model": "seedance-2.0-720p-mini",
+  "prompt": "保持参考图人物身份与服装",
+  "duration": 5,
+  "image_urls": ["https://example.com/char.jpg"]
+}
+```
+
+参考图 + 参考音频（禁止与 first_frame_image 混用）：
+```json
+{
+  "model": "seedance-2.0-720p-mini",
+  "prompt": "人物按参考音色说话，镜头缓慢推进",
+  "duration": 5,
+  "image_urls": ["https://example.com/char.jpg"],
+  "audios": ["https://example.com/voice.mp3"]
+}
+```
+
+**禁止：** 调用已下架的 `seedance-2.0` / `seedance-2.5`；`first_frame_image`（或首尾帧角色）与 `video_urls`/`audios` 混用；只有 `audios` 没有图/视频。
+
 ### 5.3 wan3.0-video
+
+`resolution`：`480P` | `720P` | `1080P`（可写小写，网关会归一）  
+`duration`：`2`–`30`，或 `-1`（模型自选时长）  
+`size` / `aspect_ratio`：`adaptive` | `16:9` | `4:3` | `1:1` | `3:4` | `9:16`  
+
+模式（帧族与参考族互斥）：  
+- **文生**：仅 prompt + resolution + duration  
+- **首帧**：`image_urls` 1 张（默认帧族）  
+- **首尾帧**：`image_urls` 2 张，或 `image_with_roles`  
+- **参考**：必须 `generation_type":"reference"` + `image_urls` / `video_urls` / `audio_urls`（prompt 可用「图1」「视频1」）  
+- **文件/网页**：`file_url` **或** `link_url`（二选一）
 
 文生：
 ```json
@@ -375,16 +422,29 @@ curl https://www.keyoapi.xyz/v1/videos/generations \
 ```json
 {
   "model": "wan3.0-video",
-  "prompt": "保持参考主体身份一致",
-  "resolution": "720P",
+  "prompt": "视频1抱着图1，在图3的椅子上弹奏",
+  "resolution": "480P",
   "duration": 5,
   "generation_type": "reference",
-  "image_urls": ["https://example.com/subject.jpg"],
-  "video_urls": ["https://example.com/motion.mp4"]
+  "image_urls": [
+    "https://example.com/a.jpg",
+    "https://example.com/b.png",
+    "https://example.com/c.png"
+  ],
+  "video_urls": ["https://example.com/role.mp4"]
 }
 ```
 
+**禁止：** 首尾帧角色与 `generation_type=reference` / `video_urls` / `audio_urls` / `file_url` / `link_url` 混用；同时传 `file_url` 和 `link_url`。
+
 ### 5.4 flux-3-video
+
+`duration`：整数 `5`–`20`  
+`resolution`：`hd` | `fhd`（也可用 `tier`：`DRAFT`/`HD`/`FHD`；`DRAFT`≡`draft:true`+hd）  
+`aspect_ratio`：`21:9` | `2:1` | `16:9` | `4:3` | `1:1` | `3:4` | `9:16` | `auto`  
+`image_urls`：1=首帧；2=首+尾；3–10=关键帧  
+`video_url` / `video_urls`：续写（有视频时优先于图）  
+草稿：`draft:true`（仅 hd）；成片：`draft_from_task_id` 且**不要**带 prompt
 
 文生：
 ```json
@@ -421,9 +481,13 @@ curl https://www.keyoapi.xyz/v1/videos/generations \
 }
 ```
 
-### 5.5 gemini-omni-1.1-flash / gemini-omni-1.1-flash-ext
+**禁止：** `draft:true` 配 fhd；`draft` 与 `draft_from_task_id` 同时出现；finalize 时带 prompt；`image_urls`>10。
 
-**不要传 `duration`。**
+### 5.5 gemini-omni-1.1-flash
+
+**禁止传 `duration` / `seconds`**（时长由模型决定约 3–10s）。  
+`resolution`：`360p`|`720p`|`1080p`|`4k`；`aspect_ratio`：`16:9`|`9:16`。  
+可用：`image_urls`、`first_frame_image`+`last_frame_image`、`video_urls`（≤1）或 `extend_from_task_id`（与 video_urls 互斥）。
 
 文生：
 ```json
@@ -446,9 +510,31 @@ curl https://www.keyoapi.xyz/v1/videos/generations \
 }
 ```
 
+### 5.5b gemini-omni-1.1-flash-ext
+
+`duration` **必须**是 `4`|`6`|`8`|`10`。  
+`generation_type`：`frame`（恰好 1 张图）或 `reference`（图数量为 **0/1/3，禁止恰好 2**）。  
+有 `video_urls` 时**不要**再传 duration。
+
+```json
+{
+  "model": "gemini-omni-1.1-flash-ext",
+  "prompt": "多主体互动",
+  "generation_type": "reference",
+  "image_urls": [
+    "https://example.com/a.jpg",
+    "https://example.com/b.jpg",
+    "https://example.com/c.jpg"
+  ],
+  "duration": 8,
+  "resolution": "720p"
+}
+```
+
 ### 5.6 grok-imagine-video-1.5-preview
 
-**仅图生视频。** 必须有 `image.url`（公网 https）。只传 prompt 会失败。
+**仅图生视频。** 必须有 `image.url`（公网 https）。只传 prompt 会失败。  
+`aspect_ratio`：`1:1`|`16:9`|`9:16`；`resolution`：`480p`|`720p`；`duration`：1–15。
 
 ```json
 {
@@ -460,6 +546,8 @@ curl https://www.keyoapi.xyz/v1/videos/generations \
   "duration": 5
 }
 ```
+
+别名会映射：`image_url` / `image_urls[0]` / `images[0]` → `image.url`。
 
 ---
 
@@ -636,4 +724,4 @@ curl https://www.keyoapi.xyz/v1/models \
 
 ---
 
-价格与余额：控制台 https://www.keyoapi.xyz/pricing · 手册页（可复制）https://www.keyoapi.xyz/brand/keyo-api-ref.html · HTML 说明 https://www.keyoapi.xyz/brand/keyo-docs.html
+价格与余额：控制台 https://www.keyoapi.xyz/pricing · 手册页（复制给 AI）https://www.keyoapi.xyz/brand/keyo-api-ref.html · 给人看的说明 https://www.keyoapi.xyz/brand/keyo-docs.html

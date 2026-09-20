@@ -12,6 +12,7 @@
 > - Find the capability family for the model, then apply that template. Video models must use their own section — never mix fields.  
 > - For async jobs, poll until a terminal status, then return the result URL/text.  
 > - Video Path B accepts **JSON only**; media must be **public `http(s)` URLs**.  
+> - Per-model video fields / modes / forbidden rules are in **§4 / §5 of this handbook** (user pastes this page — do not require other docs).  
 > - Local files only: **first** `POST /v1/uploads` (alias `/v1/files`) → use returned `url` in Path B / OCR JSON.  
 > - **Forbidden:** local paths, `data:base64`, multipart on Path B, invented `POST /v1/assets` / `asset://`.  
 > - ASR / matting / upscale / MinerU / InfiniteTalk already accept multipart `-F file=@` / `-F image=@` (no prior upload needed).  
@@ -219,14 +220,20 @@ Pick model from §1.2.
 
 ## 4. Video Path A
 
-`POST https://www.keyoapi.xyz/v1/videos` → `GET /v1/videos/{id}`
+`POST https://www.keyoapi.xyz/v1/videos` → `GET /v1/videos/{id}`  
+(Path B `/v1/videos/generations` also forwards this model.)
 
-Only: `grok-1.5-video`
+Only: `grok-1.5-video`  
+**`seconds` must be `6` or `10` only** (not arbitrary 1–15).  
+`aspect_ratio` / `size` means aspect (e.g. `16:9`), **not** a 480p tier.  
+Optional ref image: `image_urls[0]` / `input_reference` / `image`.
 
 ```json
 {
   "model": "grok-1.5-video",
-  "prompt": "A red paper boat floating on calm water at sunset"
+  "prompt": "A red paper boat floating on calm water at sunset",
+  "seconds": 6,
+  "aspect_ratio": "16:9"
 }
 ```
 
@@ -236,7 +243,8 @@ Only: `grok-1.5-video`
 
 Shared: `POST https://www.keyoapi.xyz/v1/videos/generations`  
 Shared poll: `GET https://www.keyoapi.xyz/v1/tasks/{task_id}`  
-Media: public https URLs only. For local files, use §0.5 `POST /v1/uploads` first, then paste the returned `url`.
+Media: public https URLs only. For local files, use §0.5 `POST /v1/uploads` first, then paste the returned `url`.  
+**This section is the full video field contract for the AI** — follow each model subsection; never mix fields across models.
 
 **Submit success (task id):**
 ```json
@@ -300,7 +308,12 @@ Legacy IDs `seedance-2.0` / `seedance-2.5` are **delisted**. Use these fixed-res
 | `seedance-2.5-720p` | **$0.133562/sec** |
 
 Required: `model` `prompt`. Recommended: `duration` (or `seconds`, default 5).  
-Optional: `size` (`1280x720` / `1920x1080`), `aspect_ratio`, `first_frame_image` / `image_with_roles`, `video_urls`, `audios`.
+Modes (do not mix):  
+- **First frame:** `first_frame_image` (or `generation_type":"first_frame"`)  
+- **Reference (1 image OK):** `image_urls` / `images` — a single image is REFERENCE, not default first-frame  
+- **First+last:** `image_with_roles` (`first_frame`+`last_frame`)  
+- **Multimodal ref:** `image_urls` + `video_urls` / `audios` (**never** with `first_frame_image`)  
+Optional: `size` (e.g. `1280x720`), `aspect_ratio`.
 
 Text-to-video:
 ```json
@@ -334,7 +347,35 @@ First + last frames:
 }
 ```
 
+Reference image (1 image is still REFERENCE, not first-frame):
+```json
+{
+  "model": "seedance-2.0-720p-mini",
+  "prompt": "Keep identity and clothing from the reference",
+  "duration": 5,
+  "image_urls": ["https://example.com/char.jpg"]
+}
+```
+
+Reference image + audio (never mix with first_frame_image):
+```json
+{
+  "model": "seedance-2.0-720p-mini",
+  "prompt": "Character speaks with the reference voice, slow push-in",
+  "duration": 5,
+  "image_urls": ["https://example.com/char.jpg"],
+  "audios": ["https://example.com/voice.mp3"]
+}
+```
+
+**Forbidden:** delisted `seedance-2.0` / `seedance-2.5`; mixing `first_frame_image` (or frame roles) with `video_urls`/`audios`; `audios` alone without images/videos.
+
 ### 5.3 wan3.0-video
+
+`resolution`: `480P` | `720P` | `1080P`  
+`duration`: `2`–`30`, or `-1`  
+Modes: t2v; first frame (`image_urls`×1); first+last; **reference** (`generation_type":"reference"` + media); `file_url` XOR `link_url`.  
+**Forbidden:** mixing frame roles with reference family; both `file_url` and `link_url`.
 
 Text-to-video:
 ```json
@@ -365,7 +406,7 @@ Reference mode:
 {
   "model": "wan3.0-video",
   "prompt": "Keep identity of the reference subject",
-  "resolution": "720P",
+  "resolution": "480P",
   "duration": 5,
   "generation_type": "reference",
   "image_urls": ["https://example.com/subject.jpg"],
@@ -374,6 +415,8 @@ Reference mode:
 ```
 
 ### 5.4 flux-3-video
+
+`duration` 5–20; `resolution` `hd`|`fhd` (or `tier` DRAFT/HD/FHD); `image_urls` 1–10; `video_url` continuation; `draft:true` hd-only; finalize with `draft_from_task_id` and **no** prompt.
 
 Text-to-video:
 ```json
@@ -410,9 +453,10 @@ Continue:
 }
 ```
 
-### 5.5 gemini-omni-1.1-flash / gemini-omni-1.1-flash-ext
+### 5.5 gemini-omni-1.1-flash
 
-**Do not send `duration`.**
+**Do not send `duration` / `seconds`.**  
+Also: `image_urls`, `first_frame_image`+`last_frame_image`, `video_urls`≤1 XOR `extend_from_task_id`.
 
 Text-to-video:
 ```json
@@ -435,9 +479,31 @@ First/last frames:
 }
 ```
 
+### 5.5b gemini-omni-1.1-flash-ext
+
+`duration` must be `4`|`6`|`8`|`10`.  
+`generation_type` `frame` (exactly 1 image) or `reference` (0/1/3 images — **never 2**).  
+If `video_urls` present, omit duration.
+
+```json
+{
+  "model": "gemini-omni-1.1-flash-ext",
+  "prompt": "multi-subject interaction",
+  "generation_type": "reference",
+  "image_urls": [
+    "https://example.com/a.jpg",
+    "https://example.com/b.jpg",
+    "https://example.com/c.jpg"
+  ],
+  "duration": 8,
+  "resolution": "720p"
+}
+```
+
 ### 5.6 grok-imagine-video-1.5-preview
 
-**Image-to-video only.** `image.url` required (public https). Prompt-only fails.
+**Image-to-video only.** `image.url` required. Prompt-only fails.  
+Aliases: `image_url` / `image_urls[0]` / `images[0]` → `image.url`.
 
 ```json
 {
@@ -619,4 +685,4 @@ curl https://www.keyoapi.xyz/v1/models \
 
 ---
 
-Pricing: https://www.keyoapi.xyz/pricing · Handbook (copy UI): https://www.keyoapi.xyz/brand/keyo-api-ref.html · HTML docs: https://www.keyoapi.xyz/brand/keyo-docs.html
+Pricing: https://www.keyoapi.xyz/pricing · Handbook (copy to AI): https://www.keyoapi.xyz/brand/keyo-api-ref.html · Human docs: https://www.keyoapi.xyz/brand/keyo-docs.html

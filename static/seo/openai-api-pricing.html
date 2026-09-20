@@ -4,19 +4,19 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>OpenAI API Pricing Comparison | Cheap GPT on KeyoAPI</title>
-<meta name="description" content="OpenAI API pricing context on KeyoAPI: GPT-5.6 Luna ~$0.10/$0.62, Terra ~$0.37/$2.21, Sol ~$0.92/$5.52 per 1M — compare with typical OpenAI list rates. One OpenAI-compatible key." />
+<meta name="description" content="OpenAI API pricing context on KeyoAPI: gpt-6-astra ~$1.84/$9.19, deepseek-v4.1-flash ~$0.45/$1.80, gpt-5.6-luna ~$0.10/$0.62 per 1M — compare with current OpenAI list rates. One OpenAI-compatible key." />
 <link rel="canonical" href="https://www.keyoapi.xyz/openai-api-pricing" />
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://www.keyoapi.xyz/openai-api-pricing" />
 <meta property="og:title" content="OpenAI API Pricing Comparison | Cheap GPT on KeyoAPI" />
-<meta property="og:description" content="OpenAI API pricing context on KeyoAPI: GPT-5.6 Luna ~$0.10/$0.62, Terra ~$0.37/$2.21, Sol ~$0.92/$5.52 per 1M — compare with typical OpenAI list rates. One OpenAI-compatible key." />
+<meta property="og:description" content="OpenAI API pricing context on KeyoAPI: gpt-6-astra ~$1.84/$9.19, deepseek-v4.1-flash ~$0.45/$1.80, gpt-5.6-luna ~$0.10/$0.62 per 1M — compare with current OpenAI list rates. One OpenAI-compatible key." />
 <meta property="og:image" content="https://www.keyoapi.xyz/brand/logo.svg" />
 <link rel="icon" href="/brand/logo.svg" type="image/svg+xml" />
 <link rel="stylesheet" href="/brand/keyo-theme.css" />
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content="OpenAI API Pricing Comparison | Cheap GPT on KeyoAPI" />
-<meta name="twitter:description" content="OpenAI API pricing context on KeyoAPI: GPT-5.6 Luna ~$0.10/$0.62, Terra ~$0.37/$2.21, Sol ~$0.92/$5.52 per 1M — compare with typical OpenAI list rates. One OpenAI-compatible key." />
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebPage","name":"OpenAI API Pricing Comparison | Cheap GPT on KeyoAPI","url":"https://www.keyoapi.xyz/openai-api-pricing","description":"OpenAI API pricing context on KeyoAPI: GPT-5.6 Luna ~$0.10/$0.62, Terra ~$0.37/$2.21, Sol ~$0.92/$5.52 per 1M — compare with typical OpenAI list rates. One OpenAI-compatible key."}</script>
+<meta name="twitter:description" content="OpenAI API pricing context on KeyoAPI: gpt-6-astra ~$1.84/$9.19, deepseek-v4.1-flash ~$0.45/$1.80, gpt-5.6-luna ~$0.10/$0.62 per 1M — compare with current OpenAI list rates. One OpenAI-compatible key." />
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebPage","name":"OpenAI API Pricing Comparison | Cheap GPT on KeyoAPI","url":"https://www.keyoapi.xyz/openai-api-pricing","description":"OpenAI API pricing context on KeyoAPI: gpt-6-astra ~$1.84/$9.19, deepseek-v4.1-flash ~$0.45/$1.80, gpt-5.6-luna ~$0.10/$0.62 per 1M — compare with current OpenAI list rates. One OpenAI-compatible key."}</script>
 <style>.wrap{max-width:880px;margin:0 auto;padding:28px 24px 48px}
 .footer{display:flex;flex-wrap:wrap;gap:10px 16px;max-width:1080px;margin:0 auto;padding:24px 24px 40px;border-top:1px solid var(--line);font-size:13px;color:var(--muted)}
 .footer a{color:var(--ink-2);text-decoration:none}
@@ -74,7 +74,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
 <main class="wrap">
 <h1>OpenAI API Pricing — KeyoAPI GPT-Class Rates vs Typical List</h1>
 
-<p class="lead">This page compares indicative KeyoAPI sell rates for GPT-5.6 Luna, Terra, and Sol with typical public OpenAI list bands, then shows how to call them on one OpenAI-compatible base URL and prepaid wallet.</p>
+<p class="lead">This page compares indicative KeyoAPI sell rates for current GPT-class IDs with typical public OpenAI list bands (GPT-5.4 / mini), then shows how to call them on one OpenAI-compatible base URL and prepaid wallet.</p>
 <div class="btnrow">
   <a class="btn btn-primary" href="/sign-up">Get API key</a>
   <a class="btn btn-secondary" href="/pricing">Open Model Square</a>
@@ -87,27 +87,27 @@ ul{margin:0 0 14px;padding-left:1.2em}
 <thead><tr><th>Model ID</th><th>Typical official / context</th><th>KeyoAPI</th><th>Notes</th></tr></thead>
 <tbody>
 <tr>
+  <td><code>deepseek-v4.1-flash</code></td>
+  <td>OpenAI GPT-5.4 mini list ~$0.75 / $4.50 per 1M in/out (confirm on openai.com/api<a href="/pricing">/pricing</a>)</td>
+  <td class="ok">~$0.45 / $1.80 per 1M in/out</td>
+  <td>High-volume / batch · <a href="/pricing/deepseek-v4.1-flash">/pricing/deepseek-v4.1-flash</a></td>
+</tr>
+<tr>
+  <td><code>gpt-6-astra</code></td>
+  <td>OpenAI GPT-5.4 list ~$2.50 / $15.00 per 1M in/out (confirm on openai.com/api<a href="/pricing">/pricing</a>)</td>
+  <td class="ok">~$1.84 / $9.19 per 1M in/out</td>
+  <td>Flagship GPT-class · <a href="/pricing/gpt-6-astra">/pricing/gpt-6-astra</a></td>
+</tr>
+<tr>
   <td><code>gpt-5.6-luna</code></td>
-  <td>OpenAI GPT-4o mini list commonly cited near ~$0.15 / $0.60 per 1M in/out (confirm current mini band)</td>
+  <td>OpenAI GPT-5.4 mini list ~$0.75 / $4.50 per 1M in/out (confirm on openai.com/api<a href="/pricing">/pricing</a>)</td>
   <td class="ok">~$0.10 / $0.62 per 1M in/out</td>
-  <td>High-volume / batch · <a href="/pricing/gpt-5.6-luna">/pricing/gpt-5.6-luna</a> · <a href="/model/gpt-5.6-luna">/model/gpt-5.6-luna</a></td>
-</tr>
-<tr>
-  <td><code>gpt-5.6-terra</code></td>
-  <td>OpenAI GPT-4o list commonly cited near ~$2.50 / $10.00 per 1M in/out (confirm current flagship chat band)</td>
-  <td class="ok">~$0.37 / $2.21 per 1M in/out</td>
-  <td>Everyday default · <a href="/pricing/gpt-5.6-terra">/pricing/gpt-5.6-terra</a> · <a href="/model/gpt-5.6-terra">/model/gpt-5.6-terra</a></td>
-</tr>
-<tr>
-  <td><code>gpt-5.6-sol</code></td>
-  <td>OpenAI flagship / stronger GPT list bands are typically higher than GPT-4o — verify on platform.openai.com</td>
-  <td class="ok">~$0.92 / $5.52 per 1M in/out</td>
-  <td>Escalation · <a href="/pricing/gpt-5.6-sol">/pricing/gpt-5.6-sol</a> · <a href="/model/gpt-5.6-sol">/model/gpt-5.6-sol</a></td>
+  <td>Cheapest GPT-class twin · <a href="/pricing/gpt-5.6-luna">/pricing/gpt-5.6-luna</a> · <a href="/model/gpt-5.6-luna">/model/gpt-5.6-luna</a></td>
 </tr>
 </tbody>
 </table>
 <h2>Prototype free, then promote to GPT-class</h2>
-<p>Keyo does not ship OpenAI-branded free GPT IDs. For $0 prototyping on the same API key, use permanent free twins such as deepseek-v4-flash-free, deepseek-v4-pro-free, glm-5.2-free, and kimi-k3-free (fair-use limits). When quality gates pass, switch model= to gpt-5.6-luna, gpt-5.6-terra, or gpt-5.6-sol without changing base URL or auth.</p>
+<p>For $0 prototyping on the same API key, use free catalog IDs on <a href="/free-models">/free-models</a> (fair-use limits). When quality gates pass, switch model= to gpt-6-astra, gpt-5.6-luna, or deepseek-v4.1-flash without changing base URL or auth.</p>
 <h2>Rates and how to call</h2>
 <p>Teams that search OpenAI API pricing usually need GPT-class chat inside an OpenAI SDK with clearer unit economics — or one prepaid balance that also covers Claude, DeepSeek, Whisper, OCR, and TTS. Official OpenAI surfaces win on brand trust and first-party features. KeyoAPI is for when you want that stack without five invoices and without rewriting clients when you swap models.</p>
 <p>Keyo rates in the table are indicative sell prices from the live Keyo catalog. Always confirm interactive pages under <a href="/pricing/gpt-5.6-luna">/pricing/gpt-5.6-luna</a>, <a href="/pricing/gpt-5.6-terra">/pricing/gpt-5.6-terra</a>, and <a href="/pricing/gpt-5.6-sol">/pricing/gpt-5.6-sol</a> before contracting volume. OpenAI list bands, cached-input discounts, and model renames change — treat official figures as planning context only. Keyo GPT-5.6 IDs are GPT-class twins on an OpenAI-compatible API, not a claim that they are OpenAI first-party model names.</p>
@@ -130,7 +130,7 @@ r = client.chat.completions.create(
 )
 print(r.choices[0].message.content)</pre>
 <h2>FAQ</h2>
-<div class="faq"><details><summary>Is Keyo cheaper than OpenAI API pricing?</summary><p>Often on the Luna/Terra/Sol rows we list versus typical GPT-4o / mini list bands — but OpenAI’s public list, prompt caching, and batch discounts change. Treat this table as a planning snapshot and verify both sides before you commit.</p></details>
+<div class="faq"><details><summary>Is Keyo cheaper than OpenAI API pricing?</summary><p>Often on the Keyo rows we list versus current OpenAI GPT-5.4 / mini list bands — but OpenAI’s public list, prompt caching, and batch discounts change. Treat this table as a planning snapshot and verify both sides before you commit.</p></details>
 <details><summary>Are gpt-5.6-* the same as OpenAI GPT-5?</summary><p>No. They are Keyo GPT-class model IDs on an OpenAI-compatible gateway. Use them when you want OpenAI SDK shape and Keyo unit economics; confirm live rates on /pricing/{id}.</p></details>
 <details><summary>Do you offer a free OpenAI / GPT model?</summary><p>Not as an OpenAI-branded free ID. Use Keyo’s permanent $0 DeepSeek/GLM/Kimi free twins to prototype on the same key, then promote to paid GPT-5.6 IDs when you need that quality band.</p></details>
 <details><summary>How do I try GPT-class models on Keyo?</summary><p>Create a key at <a href="/sign-up">/sign-up</a>, then open <a href="/pricing/gpt-5.6-terra">/pricing/gpt-5.6-terra</a> (or Luna/Sol) for interactive try/buy. There is no separate upload playground — Model Square is the try path.</p></details>

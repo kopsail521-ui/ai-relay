@@ -1,49 +1,49 @@
 {
-  "_note": "Public list prices for AI API price comparison pages. Update when vendors change pricing. Amounts are USD per 1M tokens unless unit says otherwise.",
+  "_note": "Public list prices for AI API price comparison pages. Update when vendors change pricing. Amounts are USD per 1M tokens unless unit says otherwise. Column 'official' is a market reference — not a Keyo catalog ID.",
   "openai": {
-    "gpt-4o": { "input": 2.5, "output": 10, "unit": "per_1m_tokens", "label": "OpenAI GPT-4o" },
-    "gpt-4o-mini": { "input": 0.15, "output": 0.6, "unit": "per_1m_tokens", "label": "OpenAI GPT-4o mini" },
+    "gpt-5.4": { "input": 2.5, "output": 15, "unit": "per_1m_tokens", "label": "OpenAI GPT-5.4" },
+    "gpt-5.4-mini": { "input": 0.75, "output": 4.5, "unit": "per_1m_tokens", "label": "OpenAI GPT-5.4 mini" },
     "whisper": { "price": 0.006, "unit": "per_minute", "label": "OpenAI Whisper API" }
   },
   "anthropic": {
-    "claude-sonnet-4": { "input": 3, "output": 15, "unit": "per_1m_tokens", "label": "Anthropic Claude Sonnet 4" },
-    "claude-opus-4": { "input": 15, "output": 75, "unit": "per_1m_tokens", "label": "Anthropic Claude Opus 4" }
+    "claude-fable-5.1": { "input": 10, "output": 50, "unit": "per_1m_tokens", "label": "Anthropic Claude Fable 5.1" },
+    "claude-sonnet-5": { "input": 2, "output": 10, "unit": "per_1m_tokens", "label": "Anthropic Claude Sonnet 5" }
   },
   "compare_rows": [
     {
       "capability": "Flagship chat (GPT-class)",
-      "official": "OpenAI GPT-4o ~$2.50 / $10.00 per 1M in/out",
-      "keyo_model": "gpt-5.6-terra",
-      "keyo_price": "$0.37 / $2.21 per 1M in/out",
+      "official": "OpenAI GPT-5.4 list ~$2.50 / $15.00 per 1M in/out (confirm on openai.com/api/pricing)",
+      "keyo_model": "gpt-6-astra",
+      "keyo_price": "~$1.84 / $9.19 per 1M in/out",
       "note": "OpenAI-compatible /v1/chat/completions"
     },
     {
       "capability": "High-volume cheap LLM",
-      "official": "OpenAI GPT-4o mini ~$0.15 / $0.60 per 1M in/out",
-      "keyo_model": "gpt-5.6-luna",
-      "keyo_price": "$0.10 / $0.62 per 1M in/out",
-      "note": "Best Keyo price/perf for batch workloads"
+      "official": "OpenAI GPT-5.4 mini list ~$0.75 / $4.50 per 1M in/out (confirm on openai.com/api/pricing)",
+      "keyo_model": "deepseek-v4.1-flash",
+      "keyo_price": "~$0.45 / $1.80 per 1M in/out",
+      "note": "Best Keyo price/perf for batch chat workloads"
     },
     {
-      "capability": "Claude-class reasoning",
-      "official": "Anthropic Claude Sonnet 4 ~$3 / $15 per 1M in/out",
-      "keyo_model": "claude-sonnet-5",
-      "keyo_price": "$0.88 / $4.41 per 1M in/out",
+      "capability": "Claude-class flagship",
+      "official": "Anthropic Claude Fable 5.1 list ~$10 / $50 per 1M in/out (confirm on platform.claude.com)",
+      "keyo_model": "claude-fable-5-1",
+      "keyo_price": "~$7.35 / $36.77 per 1M in/out",
       "note": "Drop-in chat completions via Keyo relay"
-    },
-    {
-      "capability": "Speech to text",
-      "official": "OpenAI Whisper ~$0.006 / minute",
-      "keyo_model": "whisper-large-v3",
-      "keyo_price": "$0.0103 / request",
-      "note": "Per-request billing; strong for short clips"
     },
     {
       "capability": "Background removal",
       "official": "Typical SaaS remove.bg API often $0.05–0.20 / image",
       "keyo_model": "RMBG-2.0",
-      "keyo_price": "$0.0068 / request",
+      "keyo_price": "~$0.0068 / request",
       "note": "BRIA RMBG via unified Keyo endpoint"
+    },
+    {
+      "capability": "Segmentation / matte",
+      "official": "Vision SaaS segmentation APIs vary widely by vendor",
+      "keyo_model": "sam3",
+      "keyo_price": "~$0.0137 / request",
+      "note": "Per-request billing on Keyo"
     }
   ]
 }

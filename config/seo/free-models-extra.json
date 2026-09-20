@@ -1,0 +1,136 @@
+{
+  "_note": "Additional fixed-$0 model IDs from live /api/pricing (quota_type=1, model_price=0), excluding Keyo Free *-free IDs. Refresh with: node scripts/_sync-free-extra-from-live.mjs",
+  "synced_at": "2026-09-20",
+  "models": [
+    {
+      "id": "Atria-dawn-v2",
+      "family": "Other",
+      "note": "Fixed $0 on Keyo catalog (fair-use). Availability can change with upstream free pools."
+    },
+    {
+      "id": "DeepSeek-Prover-V2-7B",
+      "family": "DeepSeek",
+      "note": "Fixed $0 on Keyo catalog (fair-use). Availability can change with upstream free pools."
+    },
+    {
+      "id": "dots-3-note-preview:free",
+      "family": "Other",
+      "note": "Fixed $0 on Keyo catalog (fair-use). Availability can change with upstream free pools."
+    },
+    {
+      "id": "gemini-robotics-er-2-preview:free",
+      "family": "Google",
+      "note": "Fixed $0 on Keyo catalog (fair-use). Availability can change with upstream free pools."
+    },
+    {
+      "id": "gemma-4-26b:free",
+      "family": "Google",
+      "note": "Fixed $0 on Keyo catalog (fair-use). Availability can change with upstream free pools."
+    },
+    {
+      "id": "gemma-4-31b-it:free",
+      "family": "Google",
+      "note": "Fixed $0 on Keyo catalog (fair-use). Availability can change with upstream free pools."
+    },
+    {
+      "id": "glm-5.2-thinking:free",
+      "family": "GLM",
+      "note": "Fixed $0 on Keyo catalog (fair-use). Availability can change with upstream free pools."
+    },
+    {
+      "id": "glm-5.2:free",
+      "family": "GLM",
+      "note": "Fixed $0 on Keyo catalog (fair-use). Availability can change with upstream free pools."
+    },
+    {
+      "id": "glm-5.3-flash-search:free",
+      "family": "GLM",
+      "note": "Fixed $0 on Keyo catalog (fair-use). Availability can change with upstream free pools."
+    },
+    {
+      "id": "glm-5.3-flash-think-search:free",
+      "family": "GLM",
+      "note": "Fixed $0 on Keyo catalog (fair-use). Availability can change with upstream free pools."
+    },
+    {
+      "id": "glm-5.3-flash-thinking:free",
+      "family": "GLM",
+      "note": "Fixed $0 on Keyo catalog (fair-use). Availability can change with upstream free pools."
+    },
+    {
+      "id": "glm-5.3-search:free",
+      "family": "GLM",
+      "note": "Fixed $0 on Keyo catalog (fair-use). Availability can change with upstream free pools."
+    },
+    {
+      "id": "glm-5.3-think-search:free",
+      "family": "GLM",
+      "note": "Fixed $0 on Keyo catalog (fair-use). Availability can change with upstream free pools."
+    },
+    {
+      "id": "glm-5.3-thinking:free",
+      "family": "GLM",
+      "note": "Fixed $0 on Keyo catalog (fair-use). Availability can change with upstream free pools."
+    },
+    {
+      "id": "glm-5.3:free",
+      "family": "GLM",
+      "note": "Fixed $0 on Keyo catalog (fair-use). Availability can change with upstream free pools."
+    },
+    {
+      "id": "laguna-s-2.1:free",
+      "family": "Other",
+      "note": "Fixed $0 on Keyo catalog (fair-use). Availability can change with upstream free pools."
+    },
+    {
+      "id": "ling-3.0-flash-fin:free",
+      "family": "Ant Group",
+      "note": "Fixed $0 on Keyo catalog (fair-use). Availability can change with upstream free pools."
+    },
+    {
+      "id": "mistral-large-3-675b:free",
+      "family": "Mistral",
+      "note": "Fixed $0 on Keyo catalog (fair-use). Availability can change with upstream free pools."
+    },
+    {
+      "id": "muse-glimmer-30b:free",
+      "family": "Other",
+      "note": "Fixed $0 on Keyo catalog (fair-use). Availability can change with upstream free pools."
+    },
+    {
+      "id": "nemotron-3-super-120b-a12b:free",
+      "family": "NVIDIA",
+      "note": "Fixed $0 on Keyo catalog (fair-use). Availability can change with upstream free pools."
+    },
+    {
+      "id": "nemotron-3-ultra-550b-a55b:free",
+      "family": "NVIDIA",
+      "note": "Fixed $0 on Keyo catalog (fair-use). Availability can change with upstream free pools."
+    },
+    {
+      "id": "nemotron-3.5-lightning-30b-a3b:free",
+      "family": "NVIDIA",
+      "note": "Fixed $0 on Keyo catalog (fair-use). Availability can change with upstream free pools."
+    },
+    {
+      "id": "nemotron-3.5-lightning:free",
+      "family": "NVIDIA",
+      "note": "Fixed $0 on Keyo catalog (fair-use). Availability can change with upstream free pools."
+    },
+    {
+      "id": "qwen3.6-35b-a3b:free",
+      "family": "Qwen",
+      "note": "Fixed $0 on Keyo catalog (fair-use). Availability can change with upstream free pools."
+    },
+    {
+      "id": "qwen3.8-27b:free",
+      "family": "Qwen",
+      "note": "Fixed $0 on Keyo catalog (fair-use). Availability can change with upstream free pools."
+    },
+    {
+      "id": "step-3.7-flash:free",
+      "family": "StepFun",
+      "note": "Fixed $0 on Keyo catalog (fair-use). Availability can change with upstream free pools."
+    }
+  ]
+}

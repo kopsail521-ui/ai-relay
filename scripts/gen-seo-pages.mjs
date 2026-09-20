@@ -35,6 +35,55 @@ const pricingLandings = JSON.parse(
 const freeCfg = JSON.parse(
   fs.readFileSync(path.join(root, "config/sensenova-free-models.json"), "utf8")
 );
+const freeExtra = JSON.parse(
+  fs.readFileSync(path.join(root, "config/seo/free-models-extra.json"), "utf8")
+);
+const featuredCfg = JSON.parse(
+  fs.readFileSync(path.join(root, "config/seo/featured-models.json"), "utf8")
+);
+
+/** All fixed-$0 free IDs for hub + pricing-list (B1: one list, no hard-coded count). */
+function allFreeModels() {
+  const keyo = (freeCfg.models || []).map((m) => ({
+    id: m.id,
+    family: m.vendor || "Keyo Free",
+    twin: m.upstream || String(m.id).replace(/-free$/, ""),
+    source: "keyo-free",
+  }));
+  const extra = (freeExtra.models || []).map((m) => ({
+    id: m.id,
+    family: m.family || "Other",
+    twin: null,
+    source: "catalog-free",
+  }));
+  const seen = new Set();
+  const out = [];
+  for (const m of [...keyo, ...extra]) {
+    if (seen.has(m.id)) continue;
+    seen.add(m.id);
+    out.push(m);
+  }
+  return out.sort((a, b) => a.id.localeCompare(b.id));
+}
+
+function featuredCardsHtml() {
+  const guideIds = new Set(pages.models.map((m) => m.id));
+  return (featuredCfg.models || [])
+    .map((f) => {
+      const href = guideIds.has(f.id)
+        ? `/model/${encodeURIComponent(f.id)}`
+        : `/pricing/${encodeURIComponent(f.id)}`;
+      return `<a href="${href}"><span class="grid-title">${esc(f.label || f.id)}</span><span class="grid-meta">${esc(f.blurb || "")}</span></a>`;
+    })
+    .join("\n");
+}
+
+function featuredHref(id) {
+  const guideIds = new Set(pages.models.map((m) => m.id));
+  return guideIds.has(id)
+    ? `/model/${encodeURIComponent(id)}`
+    : `/pricing/${encodeURIComponent(id)}`;
+}
 
 function esc(s) {
   return String(s)
@@ -226,7 +275,7 @@ function compareTableRows() {
       (r) => `<tr>
   <td>${esc(r.capability)}</td>
   <td>${esc(r.official)}</td>
-  <td><a href="/model/${encodeURIComponent(r.keyo_model)}">${esc(r.keyo_model)}</a><br/><span class="ok">${esc(r.keyo_price)}</span></td>
+  <td><a href="${featuredHref(r.keyo_model)}">${esc(r.keyo_model)}</a><br/><span class="ok">${esc(r.keyo_price)}</span></td>
   <td>${esc(r.note)}</td>
 </tr>`
     )
@@ -336,32 +385,19 @@ function renderHome() {
       (r) => `<tr>
   <td>${esc(r.capability)}</td>
   <td>${esc(r.official)}</td>
-  <td><a href="/model/${encodeURIComponent(r.keyo_model)}">${esc(r.keyo_model)}</a><br/><span class="ok">${esc(r.keyo_price)}</span></td>
+  <td><a href="${featuredHref(r.keyo_model)}">${esc(r.keyo_model)}</a><br/><span class="ok">${esc(r.keyo_price)}</span></td>
   <td>${esc(r.note)}</td>
 </tr>`
     )
     .join("\n");
-  const featured = [
-    ["gpt-5.6-terra", "GPT-5.6 Terra", "flagship chat"],
-    ["gpt-5.6-luna", "GPT-5.6 Luna", "high-volume cheap LLM"],
-    ["claude-sonnet-5", "Claude Sonnet 5", "reasoning"],
-    ["deepseek-v4-flash", "DeepSeek V4 Flash", "fast lane"],
-    ["deepseek-v4-pro", "DeepSeek V4 Pro", "flagship open-model"],
-    ["glm-5.2", "GLM 5.2", "glm api lane"],
-    ["kimi-k3", "Kimi K3", "Moonshot lane"],
-    ["whisper-large-v3", "Whisper Large V3", "speech-to-text"],
-  ]
-    .filter(([id]) => pages.models.some((m) => m.id === id))
+  const featured = featuredCardsHtml();
+  const freeAll = allFreeModels();
+  const freeCards = freeAll
+    .slice(0, 12)
     .map(
-      ([id, name, blurb]) =>
-        `<a href="/model/${encodeURIComponent(id)}"><span class="grid-title">${esc(name)}</span><span class="grid-meta">${esc(blurb)}</span></a>`
+      (m) =>
+        `<a href="/pricing/${encodeURIComponent(m.id)}"><span class="grid-title"><code>${esc(m.id)}</code></span><span class="grid-meta">$0</span></a>`
     )
-    .join("\n");
-  const freeCards = freeCfg.models
-    .map((m) => {
-      const paid = m.upstream || String(m.id).replace(/-free$/, "");
-      return `<a href="/model/${encodeURIComponent(paid)}"><span class="grid-title"><code>${esc(m.id)}</code></span><span class="grid-meta">$0</span></a>`;
-    })
     .join("\n");
   const modelFoot = pages.models
     .map(
@@ -438,7 +474,7 @@ ${nav()}
       <div class="label">Base URL</div>
       <div>https://www.keyoapi.xyz/v1</div>
       <div class="label">Example (OpenAI-compatible chat)</div>
-      <div>POST /v1/chat/completions &nbsp;·&nbsp; model=gpt-5.6-luna</div>
+      <div>POST /v1/chat/completions &nbsp;·&nbsp; model=gpt-6-astra</div>
       <div class="label">What you get</div>
       <div>Compatible: chat / image / speech · Dedicated REST: OCR, CV, async video/docs, digital human · one key · /pricing</div>
     </div>
@@ -475,11 +511,12 @@ ${headlineRows}
 </tbody>
 </table>
 <p class="compare-jump"><a href="/compare">See the full comparison page →</a></p>
-<h2>Free models — permanently $0</h2>
-<p class="meta">Prototype on permanent free IDs, then flip to the token-metered twin. Rules: <a href="/free-models">/free-models</a>.</p>
+<h2>Free models — $0 (fair-use)</h2>
+<p class="meta">Fixed $0 catalog IDs for prototyping. Full list + rules: <a href="/free-models">/free-models</a>.</p>
 <div class="grid">
 ${freeCards}
 </div>
+<p class="meta"><a href="/free-models">See all free model IDs →</a></p>
 <h2>Featured models</h2>
 <div class="grid">
 ${featured}
@@ -488,9 +525,9 @@ ${featured}
 <h2>Integrate in minutes</h2>
 <pre><code>export OPENAI_BASE_URL=https://www.keyoapi.xyz/v1
 export OPENAI_API_KEY=sk-...
-# chat (OpenAI SDK): model=gpt-5.6-terra | claude-sonnet-5 | glm-5.2-free
-# speech: POST /v1/audio/transcriptions model=whisper-large-v3
-# OCR / matting / avatars: use dedicated paths in Docs — not drop-in chat SDK</code></pre>
+# chat (OpenAI SDK): model=gpt-6-astra | claude-fable-5-1 | deepseek-v4.1-flash
+# free: model=deepseek-v4-flash-free | glm-5.3:free (see /free-models)
+# speech / vision / video: IndexTTS-2 · sam3 · RMBG-2.0 · MiniMax-H3 — see Docs</code></pre>
 </div>
 <footer class="foot">
   <div class="frow">
@@ -572,11 +609,12 @@ function renderAbout() {
 </tr>`
     )
     .join("\n");
-  const freeCards = freeCfg.models
-    .map((m) => {
-      const paid = m.upstream || String(m.id).replace(/-free$/, "");
-      return `<a href="/model/${encodeURIComponent(paid)}"><span class="grid-title"><code>${esc(m.id)}</code></span><span class="grid-meta">$0</span></a>`;
-    })
+  const freeCards = allFreeModels()
+    .slice(0, 12)
+    .map(
+      (m) =>
+        `<a href="/pricing/${encodeURIComponent(m.id)}"><span class="grid-title"><code>${esc(m.id)}</code></span><span class="grid-meta">$0</span></a>`
+    )
     .join("\n");
   const bodyHtml = `
 <p class="lead">KeyoAPI is a developer-first <strong>AI API relay</strong>: chat, image and speech are OpenAI-compatible, while OCR, vision tools, async video/docs and digital-human models run on dedicated REST paths — <strong>same key, same prepaid balance</strong>. No five vendor dashboards, no five invoices.</p>
@@ -591,7 +629,7 @@ function renderAbout() {
   <li><strong>OpenAI-compatible paths:</strong> <code>/v1/chat/completions</code>, <code>/v1/images/generations</code>, <code>/v1/audio/transcriptions</code>, <code>/v1/audio/speech</code>.</li>
   <li><strong>Dedicated REST:</strong> OCR, CV tools, async TTS/video, digital humans — billed per page / request / second / characters.</li>
   <li><strong>One key, one balance:</strong> no per-vendor accounts or credits to manage.</li>
-  <li><strong>A permanently free tier:</strong> four models at $0 for prototyping (fair-use limits apply).</li>
+  <li><strong>A free tier:</strong> fixed <code>$0</code> model IDs for prototyping (fair-use limits apply — see <a href="/free-models">/free-models</a>).</li>
 </ul>
 <h2>Pricing philosophy</h2>
 <p>We publish rates openly, model by model. Sample indicative Keyo sell rates:</p>
@@ -602,8 +640,8 @@ ${priceSample}
 </tbody>
 </table>
 <p>Full list: <a href="/compare">/compare</a> · <a href="/pricing-list">/pricing-list</a> · deep dives: ${landingDeepDiveHtml()}</p>
-<h2>Four models, permanently free</h2>
-<p>No trial clock — these four run at <strong>$0</strong> when you call the <code>*-free</code> model ID. Paid twins (bare names) are token-metered for production. Rules: <a href="/free-models">/free-models</a></p>
+<h2>Free models at $0</h2>
+<p>Call a free ID from the catalog at <strong>$0</strong> with fair-use limits. Metered twins stay available for production. Rules: <a href="/free-models">/free-models</a></p>
 <div class="grid">
 ${freeCards}
 </div>
@@ -630,7 +668,7 @@ ${freeCards}
   return layout({
     title: "About KeyoAPI - One API Key for Chat, Speech, OCR & Vision | Cheap LLM API",
     description:
-      "KeyoAPI is an AI API relay: chat, image and speech are OpenAI-compatible; OCR, vision, TTS-async and digital-human models use dedicated REST paths — same key, same prepaid balance, 4 permanently free models.",
+      "KeyoAPI is an AI API relay: chat, image and speech are OpenAI-compatible; OCR, vision, TTS-async and digital-human models use dedicated REST paths — same key, same prepaid balance, with fixed $0 free model IDs.",
     canonical: `${site}/about`,
     h1: "One API for Multiple AI Models",
     bodyHtml,
@@ -672,7 +710,7 @@ function renderCompare() {
 </table>
 <h2>How to use this comparison</h2>
 <p>Searchers for <strong>ai api price comparison</strong> usually need a spreadsheet-ready story: same OpenAI SDK, lower blended token cost, and multimodal add-ons on one invoice. KeyoAPI is built as that <strong>ai api relay</strong>.</p>
-<p>Recommended rollout: <a href="/model/gpt-5.6-luna">gpt-5.6-luna</a> on high-volume paths, <a href="/model/gpt-5.6-terra">gpt-5.6-terra</a> or <a href="/model/claude-sonnet-5">claude-sonnet-5</a> as default chat, escalate to <a href="/model/claude-opus-5">claude-opus-5</a> / <a href="/model/claude-fable-5">claude-fable-5</a>.</p>
+<p>Recommended rollout: start with <a href="${featuredHref("deepseek-v4.1-flash")}"><code>deepseek-v4.1-flash</code></a> on high-volume paths, <a href="${featuredHref("gpt-6-astra")}"><code>gpt-6-astra</code></a> or <a href="/model/claude-sonnet-5">claude-sonnet-5</a> as default chat, escalate to <a href="/model/claude-fable-5-1">claude-fable-5-1</a> when you need denser reasoning.</p>
 <h2>Modality pages</h2>
 ${relatedLinks(["whisper-large-v3", "Qwen3-TTS", "MinerU2.5-Pro", "RMBG-2.0", "VajraV1", "Duix-Avatar"])}
 `;
@@ -695,6 +733,17 @@ ${relatedLinks(["whisper-large-v3", "Qwen3-TTS", "MinerU2.5-Pro", "RMBG-2.0", "V
 }
 
 function renderPricing() {
+  const freeRows = allFreeModels()
+    .map(
+      (m) => `<tr>
+  <td><a href="/pricing/${encodeURIComponent(m.id)}"><code>${esc(m.id)}</code></a></td>
+  <td>free</td>
+  <td class="ok">$0</td>
+  <td><code>POST /v1/chat/completions</code></td>
+  <td><a href="/free-models">Free hub</a> · <a href="/pricing/${encodeURIComponent(m.id)}">Try</a></td>
+</tr>`
+    )
+    .join("\n");
   const rows = pages.models
     .map(
       (m) => `<tr>
@@ -715,7 +764,13 @@ function renderPricing() {
   <a class="btn btn-secondary" href="/compare">AI API price comparison</a>
   <a class="btn btn-secondary" href="/brand/keyo-docs.html">Docs</a>
 </div>
-<h2>Batch 1 model price table</h2>
+<h2>Free models ($0, fair-use)</h2>
+<p class="meta">Fixed $0 catalog IDs. Rules and curl examples: <a href="/free-models">/free-models</a>.</p>
+<table>
+<thead><tr><th>Model ID</th><th>Category</th><th>Listed price</th><th>Endpoint</th><th>Links</th></tr></thead>
+<tbody>${freeRows}</tbody>
+</table>
+<h2>Guided model price table</h2>
 <table>
 <thead><tr><th>Model ID</th><th>Category</th><th>Listed price</th><th>Endpoint</th><th>Links</th></tr></thead>
 <tbody>${rows}</tbody>
@@ -732,7 +787,7 @@ function renderPricing() {
   return layout({
     title: "AI API Pricing List - KeyoAPI Models & Rates",
     description:
-      "KeyoAPI pricing list: GPT-class, Claude-class, Whisper, OCR, vision, TTS model IDs with indicative USD rates and endpoints.",
+      "KeyoAPI pricing list: free $0 models plus GPT-class, Claude-class, Whisper, OCR, vision, TTS model IDs with indicative USD rates.",
     canonical: `${site}/pricing-list`,
     h1: "AI API Pricing List: Models, Rates & Endpoints",
     bodyHtml,
@@ -748,41 +803,47 @@ function renderPricing() {
 }
 
 function renderFreeModels() {
-  const rows = freeCfg.models
+  const freeAll = allFreeModels();
+  const rows = freeAll
     .map((m) => {
-      const paid = m.upstream || String(m.id).replace(/-free$/, "");
+      const twinCell = m.twin
+        ? `<a href="${featuredHref(m.twin)}"><code>${esc(m.twin)}</code></a>`
+        : "—";
       return `<tr>
   <td><code>${esc(m.id)}</code></td>
-  <td><a href="/model/${encodeURIComponent(paid)}"><code>${esc(paid)}</code></a></td>
+  <td>${twinCell}</td>
   <td class="ok">$0</td>
-  <td>${esc(m.vendor || "—")}</td>
-  <td>${esc(freeCfg.channel_name || "Keyo Free")}</td>
+  <td>${esc(m.family || "—")}</td>
+  <td><a href="/pricing/${encodeURIComponent(m.id)}">Try</a></td>
 </tr>`;
     })
     .join("\n");
   const exampleFree =
-    freeCfg.models.find((m) => m.id.includes("flash"))?.id ||
-    freeCfg.models[0]?.id ||
+    freeAll.find((m) => m.id.includes("flash") && m.id.includes("free"))?.id ||
+    freeAll.find((m) => m.id.endsWith("-free"))?.id ||
+    freeAll[0]?.id ||
     "deepseek-v4-flash-free";
-  const examplePaid = String(exampleFree).replace(/-free$/, "");
   const bodyHtml = `
-<p class="lead">KeyoAPI offers a permanent <strong>free AI API</strong> tier — four LLM model IDs at <strong>$0</strong>, no credit card, not a time-boxed trial. Register a key and call with the <code>-free</code> suffix. Same capability family as the paid bare IDs; paid IDs are token-metered with higher priority.</p>
-<p class="meta">Built for prototypes, demos, CI smoke tests, and eval harnesses. Production workloads should prefer paid bare model IDs.</p>
+<p class="lead">KeyoAPI publishes a <strong>free AI API</strong> catalog: fixed <strong>$0</strong> model IDs, no credit card to start, fair-use limits. Register a key and set <code>model</code> to any ID in the table below.</p>
+<p class="meta">Built for prototypes, demos, CI smoke tests, and eval harnesses. For production QPS, switch to metered (paid) model IDs on the same base URL.</p>
 <div class="btnrow">
   <a class="btn btn-primary" href="/sign-up">Get a free API key</a>
   <a class="btn btn-secondary" href="/pricing-list">Full pricing list</a>
   <a class="btn btn-secondary" href="/brand/keyo-docs.html">Docs</a>
 </div>
-<h2>Free models (permanently $0)</h2>
+<h2>A free API key, no credit card</h2>
+<p>Create an account, mint a key, point <code>OPENAI_BASE_URL</code> to <code>https://www.keyoapi.xyz/v1</code>, and call chat completions with a free <code>model</code> ID. That is the whole free API key path.</p>
+<h2>Free models ($0)</h2>
 <table>
-<thead><tr><th>Free model ID</th><th>Paid twin (token-billed)</th><th>Price</th><th>Family</th><th>Channel</th></tr></thead>
+<thead><tr><th>Free model ID</th><th>Paid twin (if any)</th><th>Price</th><th>Family</th><th>Links</th></tr></thead>
 <tbody>
 ${rows}
 </tbody>
 </table>
-<p>Call the free ID exactly as listed (include <code>-free</code>). The paid twin uses the bare name and bills per token on the paid relay channel.</p>
+<p>Call the free ID exactly as listed (including <code>-free</code> or <code>:free</code> suffixes). Upstream free pools and catalog membership can change — confirm live availability on <a href="/pricing">/pricing</a>.</p>
+<h2>Free by family</h2>
+<p>Browse by family in the table above (DeepSeek, GLM, Qwen, Google, NVIDIA, and more). The highest-traffic free search intent is still “free API key” / “free LLM API” — this hub is that landing.</p>
 <h2>Quick start (curl)</h2>
-<p>Base URL is the OpenAI-compatible Chat Completions endpoint on KeyoAPI:</p>
 <pre>curl https://www.keyoapi.xyz/v1/chat/completions \\
   -H "Authorization: Bearer $KEYO_API_KEY" \\
   -H "Content-Type: application/json" \\
@@ -790,52 +851,44 @@ ${rows}
     "model": "${esc(exampleFree)}",
     "messages": [{"role":"user","content":"Hello"}]
   }'</pre>
-<p>Paid twin (same family, token-metered):</p>
-<pre>curl https://www.keyoapi.xyz/v1/chat/completions \\
-  -H "Authorization: Bearer $KEYO_API_KEY" \\
-  -H "Content-Type: application/json" \\
-  -d '{
-    "model": "${esc(examplePaid)}",
-    "messages": [{"role":"user","content":"Hello"}]
-  }'</pre>
 <h2>Free rules (read before you ship)</h2>
 <ul>
-  <li><strong>Price:</strong> ModelPrice is fixed at <strong>$0</strong> for <code>*-free</code> IDs — not a signup coupon that expires into a paid plan.</li>
-  <li><strong>ID naming:</strong> free = <code>{name}-free</code>; full capability paid = bare <code>{name}</code>.</li>
-  <li><strong>Fair use:</strong> Free traffic rides a dedicated free channel with <strong>fair-use rate / concurrency limits</strong>. Limits exist to keep the tier sustainable; they can be tightened under abuse. Do not treat free IDs as an unlimited production SLA.</li>
-  <li><strong>Catch (honest):</strong> You get real model capability at $0; you do <em>not</em> get paid-tier priority or guaranteed throughput. If you need stable production QPS, use the paid twin.</li>
+  <li><strong>Price:</strong> listed free IDs use fixed <strong>$0</strong> ModelPrice — not a timed coupon that flips to paid overnight.</li>
+  <li><strong>Fair use:</strong> free traffic has <strong>rate / concurrency limits</strong>. Limits can tighten under abuse. Do not treat free IDs as an unlimited production SLA.</li>
+  <li><strong>Availability:</strong> some <code>:free</code> IDs depend on upstream free pools and may be added or removed. Check <a href="/pricing">Model Square</a> before hard-coding.</li>
+  <li><strong>Catch (honest):</strong> you get real capability at $0; you do <em>not</em> get paid-tier priority or guaranteed throughput.</li>
 </ul>
 <div class="faq">
 <h2>FAQ</h2>
 <details open>
   <summary>Is it really free?</summary>
-  <p>Yes for the four <code>*-free</code> IDs listed above: permanently $0, no credit card required to start. Create an account, mint an API key, and set <code>model</code> to a free ID.</p>
+  <p>Yes for the <code>$0</code> IDs listed above: no credit card required to start. Create an account, mint an API key, and set <code>model</code> to a free ID.</p>
 </details>
 <details>
   <summary>What's the catch?</summary>
-  <p>Fair-use rate limiting and lower priority on the free channel. We publish this page so you are not surprised after signup. Exact RPM/concurrency can change; if you need predictable limits, use paid bare IDs.</p>
+  <p>Fair-use rate limiting and lower priority. Exact RPM can change; if you need predictable limits, use metered (paid) IDs.</p>
 </details>
 <details>
   <summary>Free vs paid?</summary>
-  <p>Same model family / capability class. Free IDs are $0 with fair-use limits. Paid bare IDs are token-billed with higher priority — preferred for production.</p>
+  <p>Free IDs are $0 with fair-use limits. Paid IDs are token- or request-metered with higher priority — preferred for production.</p>
 </details>
 <details>
   <summary>Can I use it in production?</summary>
-  <p>You can. For anything user-facing or latency-sensitive, we recommend the paid twin. Free is ideal for prototypes, demos, CI smoke tests, and eval harnesses.</p>
+  <p>You can. For anything user-facing or latency-sensitive, we recommend metered IDs. Free is ideal for prototypes, demos, CI smoke tests, and eval harnesses.</p>
 </details>
 <details>
-  <summary>Why one page for all four?</summary>
-  <p>Four near-identical pages would repeat the same curl example and drift out of sync; one hub keeps the IDs, limits, and examples accurate. Paid model guides embed a Free tier block where relevant.</p>
+  <summary>Why one hub page?</summary>
+  <p>One hub keeps free IDs, limits, and examples in sync. Building dozens of near-identical free model pages would drift and dilute quality.</p>
 </details>
 </div>
 <p class="meta">Also see the interactive catalog on <a href="/pricing">/pricing</a> (filter Free) and the OpenAI-compatible docs.</p>
 `;
   return layout({
-    title: "Free AI API — 4 Permanent $0 LLM Models | KeyoAPI",
+    title: "Free AI API — $0 Models, No Credit Card | KeyoAPI",
     description:
-      "Free AI API / free LLM API on KeyoAPI: four permanent $0 model IDs (deepseek-v4-pro-free, deepseek-v4-flash-free, kimi-k3-free, glm-5.2-free). No credit card. Fair-use limits apply.",
+      "Free AI API / free LLM API on KeyoAPI: fixed $0 model IDs, no credit card. Fair-use limits. Get a free API key and call OpenAI-compatible chat completions.",
     canonical: `${site}/free-models`,
-    h1: "Free AI API — 4 Models, Permanently $0, No Credit Card",
+    h1: "Free AI API — $0 Models, No Credit Card",
     bodyHtml,
     jsonLd: {
       "@context": "https://schema.org",
@@ -843,7 +896,7 @@ ${rows}
       name: "Free AI API — KeyoAPI",
       url: `${site}/free-models`,
       description:
-        "Permanent $0 free LLM API models on KeyoAPI with OpenAI-compatible chat completions.",
+        "Fixed $0 free LLM API models on KeyoAPI with OpenAI-compatible chat completions.",
     },
   });
 }

@@ -195,41 +195,50 @@ async function probeNewApiToken(apiKey) {
 }
 
 async function validateToken(apiKey) {
-  const authed = await probeNewApiToken(apiKey);
-  if (!authed) {
-    console.warn("[apimart] token probe failed (usage/models)");
-    return null;
-  }
+  // Prefer local DB: New API probe can flake during container restarts on a
+  // small VPS, which previously made poll return 401 while the task still ran.
   const db = openDb(DB_PATH, true);
-  if (!db) {
-    console.warn("[apimart] DB missing at", DB_PATH, "鈥?skipBill");
-    return { userId: 0, tokenId: 0, skipBill: true };
-  }
-  try {
-    const row = lookupTokenRow(db, apiKey);
-    if (!row) {
+  if (db) {
+    try {
+      const row = lookupTokenRow(db, apiKey);
+      if (row) {
+        if (Number(row.status) !== 1) {
+          console.warn(
+            "[apimart] token disabled status=",
+            row.status,
+            "id=",
+            row.id
+          );
+          return null;
+        }
+        return {
+          userId: row.user_id,
+          tokenId: row.id,
+          remainQuota: row.remain_quota,
+          unlimited: !!row.unlimited_quota,
+          skipBill: false,
+        };
+      }
       console.warn(
         "[apimart] token not in DB; db=",
         DB_PATH,
         "prefix=",
         String(apiKey).replace(/^sk-/i, "").trim().slice(0, 12)
       );
-      return null;
+    } finally {
+      db.close();
     }
-    if (Number(row.status) !== 1) {
-      console.warn("[apimart] token disabled status=", row.status, "id=", row.id);
-      return null;
-    }
-    return {
-      userId: row.user_id,
-      tokenId: row.id,
-      remainQuota: row.remain_quota,
-      unlimited: !!row.unlimited_quota,
-      skipBill: false,
-    };
-  } finally {
-    db.close();
+  } else {
+    console.warn("[apimart] DB missing at", DB_PATH);
   }
+
+  const authed = await probeNewApiToken(apiKey);
+  if (authed) {
+    // Valid against New API but not found in SQLite (rare key format / replica lag)
+    return { userId: 0, tokenId: 0, skipBill: true };
+  }
+  console.warn("[apimart] token probe failed (usage/models)");
+  return null;
 }
 
 function findChannelId(db) {

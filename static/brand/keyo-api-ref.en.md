@@ -261,6 +261,19 @@ Read **`id` / `task_id` / `data[0].task_id` (any)** then poll `GET /v1/tasks/{id
 Terminal: `status`/`data.status` = `completed` (or `failed`).  
 Video: prefer top-level **`url`**, or `data.result.videos[0].url[0]` (`url` is an array). See §0.6.
 
+### 5.0 Duration / resolution hard limits (read first)
+
+| model | duration / seconds | resolution / size | notes |
+|------|--------------------|-------------------|------|
+| `MiniMax-H3` | **1–15** (1080p **max 10**) | `480p` / `768p` / `1080p` | `aspectRatio` required |
+| All Seedance `*-720p` / `*-1080p` | **4–15** (default 5) | in model id | `<4` or `>15` rejected |
+| `wan3.0-video` | **2–30** or `-1` | e.g. `720P` | `-1` = model picks length |
+| `flux-3-video` | **5–20** | `draft`/`hd`/`fhd` | |
+| `gemini-omni-1.1-flash` | **do not send** | — | length ~3–10s by model |
+| `gemini-omni-1.1-flash-ext` | **4/6/8/10 only** | — | omit duration when using `video_urls` |
+| `grok-imagine-video-1.5-preview` | **1–15** | `480p`/`720p` | image-to-video |
+| `grok-1.5-video` | **6 or 10 only** | Path A | see §4 |
+
 ### 5.1 MiniMax-H3
 
 Required: `model` `prompt` `aspectRatio` `resolution` `duration`  
@@ -309,7 +322,14 @@ Legacy IDs `seedance-2.0` / `seedance-2.5` are **delisted**. Use these fixed-res
 | `seedance-2.0-720p-mini` | **$0.049863/sec** |
 | `seedance-2.5-720p` | **$0.133562/sec** |
 
-Required: `model` `prompt`. Recommended: `duration` (or `seconds`, default 5).  
+Required: `model` `prompt`. Recommended: `duration` (or `seconds`).
+
+**Duration hard limits (all Seedance SKUs):**
+| field | range | default |
+|------|------|------|
+| `duration` / `seconds` | **integer 4–15** | `5` |
+
+Values `1`/`2`/`3` or `>15` are rejected. Resolution is in the model id — usually omit `resolution`.  
 Modes (do not mix):  
 - **First frame:** `first_frame_image` (or `generation_type":"first_frame"`)  
 - **Reference (1 image OK):** `image_urls` / `images` — a single image is REFERENCE, not default first-frame  

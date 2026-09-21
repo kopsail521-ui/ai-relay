@@ -272,6 +272,19 @@ curl https://www.keyoapi.xyz/v1/videos/generations \
 终态：`status`/`data.status` = `completed`（或 `failed`）。  
 成片：**优先读顶层 `url`**，也可用 `data.result.videos[0].url[0]`（`url` 为数组）。详见 §0.6。
 
+### 5.0 各模型时长 / 分辨率硬限制（必读）
+
+| model | duration / seconds | resolution / size | 备注 |
+|------|--------------------|-------------------|------|
+| `MiniMax-H3` | **1–15**（1080p **最长 10**） | `480p` / `768p` / `1080p` | 必填 `aspectRatio` |
+| Seedance 全部 `*-720p` / `*-1080p` | **4–15**（默认 5） | 写在 model id 里 | `<4` 或 `>15` 直接拒 |
+| `wan3.0-video` | **2–30** 或 `-1` | 如 `720P` | `-1` = 模型自选时长 |
+| `flux-3-video` | **5–20** | `draft`/`hd`/`fhd` | |
+| `gemini-omni-1.1-flash` | **禁止传** | — | 时长约 3–10s 由模型定 |
+| `gemini-omni-1.1-flash-ext` | **仅 4/6/8/10** | — | 有 `video_urls` 时勿再传 duration |
+| `grok-imagine-video-1.5-preview` | **1–15** | `480p`/`720p` | 图生为主 |
+| `grok-1.5-video` | **仅 6 或 10** | Path A | 见 §4 |
+
 ### 5.1 MiniMax-H3
 
 必填：`model` `prompt` `aspectRatio` `resolution` `duration`  
@@ -320,7 +333,14 @@ curl https://www.keyoapi.xyz/v1/videos/generations \
 | `seedance-2.0-720p-mini` | **$0.049863/秒** |
 | `seedance-2.5-720p` | **$0.133562/秒** |
 
-必填：`model` `prompt`；推荐：`duration`（或 `seconds`，默认 5）。  
+必填：`model` `prompt`；推荐：`duration`（或 `seconds`）。
+
+**时长硬限制（所有 Seedance SKU 相同）：**
+| 字段 | 范围 | 默认 |
+|------|------|------|
+| `duration` / `seconds` | **整数 4–15** | `5` |
+
+传 `1`/`2`/`3` 或 `>15` 会直接被拒。分辨率写在 model id 里，一般不必再传 `resolution`。  
 模式（勿混用）：  
 - **首帧**：`first_frame_image`（或 `generation_type":"first_frame"`）  
 - **参考（单图也可）**：`image_urls` / `images` —— 单张也是参考生，不是默认首帧  

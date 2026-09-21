@@ -158,6 +158,17 @@ function validateVideoClientBody(modelId, body) {
           "Seedance: reference audio requires at least one reference image or video (image_urls / video_urls).",
       };
     }
+    const dur = body.duration ?? body.seconds;
+    if (dur != null && dur !== "") {
+      const n = Number(dur);
+      if (!Number.isFinite(n) || n !== Math.trunc(n) || n < 4 || n > 15) {
+        return {
+          param: "duration",
+          message:
+            "Seedance duration/seconds must be an integer 4–15 (default 5 if omitted)",
+        };
+      }
+    }
     return null;
   }
 
@@ -471,6 +482,10 @@ function buildAioneVideoBody(meta, body) {
   if (seconds != null && seconds !== "") out.seconds = Number(seconds);
   else out.seconds = Number(meta?.estimate?.default_seconds || 5);
   if (!Number.isFinite(out.seconds) || out.seconds <= 0) out.seconds = 5;
+  // Upstream Seedance accepts 4–15s; clamp so bad clients do not hard-fail mid-flight
+  if (out.seconds < 4) out.seconds = 4;
+  if (out.seconds > 15) out.seconds = 15;
+  out.seconds = Math.trunc(out.seconds);
 
   // size is required by aione Seedance SKUs; derive from model id when missing
   let size = aioneDefaultSize(meta, body);

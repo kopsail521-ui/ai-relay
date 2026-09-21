@@ -70,6 +70,30 @@ function ok(name) {
   assert.ok(err, "reject frame+audio mix");
   ok("seedance reject first_frame+audio");
 }
+{
+  const err = validateVideoClientBody("seedance-2.0-720p", {
+    prompt: "x",
+    duration: 2,
+  });
+  assert.ok(err?.param === "duration", "reject duration 2");
+  ok("seedance reject duration < 4");
+}
+{
+  const err = validateVideoClientBody("seedance-2.0-720p", {
+    prompt: "x",
+    duration: 16,
+  });
+  assert.ok(err?.param === "duration", "reject duration 16");
+  ok("seedance reject duration > 15");
+}
+{
+  const err = validateVideoClientBody("seedance-2.0-720p", {
+    prompt: "x",
+    duration: 8,
+  });
+  assert.equal(err, null);
+  ok("seedance accept duration 8");
+}
 
 // --- MiniMax ---
 {

@@ -1,0 +1,37 @@
+# Rebuild video gateways (401 poll fix + Seedance 4–15 duration) — no paid smoke
+set -e
+cd /opt/ai-relay
+sudo git pull --ff-only
+git log -1 --oneline
+
+sudo docker build -t keyo-apimart-passthrough ./services/apimart-passthrough
+sudo docker rm -f ai-relay-apimart-passthrough 2>/dev/null || true
+sudo docker run -d --name ai-relay-apimart-passthrough --restart always --network host \
+  --env-file /opt/ai-relay/.env.apimart \
+  -v /opt/ai-relay/data:/data:rw \
+  -e NEW_API_DB=/data/new-api/one-api.db \
+  -e NEW_API_BASE=http://127.0.0.1:3000 \
+  -e CATALOG=/app/catalog.json \
+  -e LISTEN_HOST=127.0.0.1 \
+  -e PORT=3011 \
+  keyo-apimart-passthrough
+
+sudo docker build -t keyo-creem-moderation ./services/creem-moderation-proxy
+sudo docker rm -f ai-relay-creem-moderation 2>/dev/null || true
+sudo docker run -d --name ai-relay-creem-moderation --restart always --network host \
+  --env-file /opt/ai-relay/.env.moderation \
+  -e UPSTREAM_URL=http://127.0.0.1:3000 \
+  -e LISTEN_HOST=127.0.0.1 \
+  -e PORT=3001 \
+  -e VIDEO_GEN_URL=http://127.0.0.1:3011 \
+  -e UPLOAD_DIR=/opt/ai-relay/static/uploads \
+  -e UPLOAD_PUBLIC_BASE=https://www.keyoapi.xyz/uploads \
+  -e UPLOAD_MAX_BYTES=104857600 \
+  -e UPLOAD_TTL_HOURS=48 \
+  -v /opt/ai-relay/static/uploads:/opt/ai-relay/static/uploads \
+  keyo-creem-moderation
+
+sleep 2
+curl -sS http://127.0.0.1:3011/healthz; echo
+curl -sS http://127.0.0.1:3001/healthz 2>/dev/null || curl -sS -o /dev/null -w "creem=%{http_code}\n" http://127.0.0.1:3001/ || true
+echo DONE_FIX_VIDEO_POLL_401

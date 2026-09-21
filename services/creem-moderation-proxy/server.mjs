@@ -180,24 +180,33 @@ function writeProxy(res, packed) {
 }
 
 function looksLikeMissingVideo(status, buf) {
-  if (status === 401 || status === 403) return false;
+  // Path B tasks live on :3011, not New API. Always fall back on common
+  // "not this service" responses — including 401, because New API may reject
+  // unknown video ids with Invalid token instead of a clean 404.
   if (status === 404 || status === 405) return true;
   const t = buf.toString("utf8");
   const low = t.toLowerCase();
   if (low.includes("invalid url")) return true;
-  if (status < 400) return false;
   try {
     const j = JSON.parse(t);
     const msg = String(j.error?.message || j.message || "").toLowerCase();
-    return (
+    if (
       msg.includes("invalid url") ||
       msg.includes("not found") ||
       msg.includes("no route") ||
-      msg.includes("does not exist")
-    );
+      msg.includes("does not exist") ||
+      msg.includes("invalid token") ||
+      msg.includes("invalid api token") ||
+      msg.includes("authentication")
+    ) {
+      return true;
+    }
   } catch {
-    return false;
+    /* ignore */
   }
+  if (status === 401 || status === 403) return true;
+  if (status < 400) return false;
+  return false;
 }
 
 /** 模型广场供应商展示顺序（越前越靠上）；「其他」永远最后 */

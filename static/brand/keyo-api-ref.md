@@ -35,14 +35,14 @@
 异步任务：**提交 → 拿到 id → 按族轮询 → 读 url/文本**。不要混轮询路径。
 
 **统一状态词（网关已归一）：** `processing` | `completed` | `failed` | `cancelled`  
-（上游可能仍带 `status_raw`，如 `succeeded` / `success` / `waiting`——以归一后的 `status` 为准。）
+（接口可能仍带 `status_raw`，如 `succeeded` / `success` / `waiting`——以归一后的 `status` 为准。）
 
 | 能力族 | 提交后取 id | 轮询直到 | 结果怎么拿 |
 |--------|-------------|---------|------------|
 | 视频 Path B | `id` 或 `task_id` 或 `data[0].task_id` | `status`/`data.status` = `completed` | **`url`** 或 `data.result.videos[0].url[0]` |
 | TTS 异步 / InfiniteTalk | `id` 或 `task_id` | `status` = `completed` | **`url`** 或 `output.file_url` |
 | MinerU | `id` 或 `task_id` | `status` = `completed` | **`text`** 或 `output.segments[].content` |
-| 视频 Path A（grok-1.5-video） | `id` | `status` = `completed` | 再 `GET /v1/videos/{id}/content` 取字节 |
+| 视频 Path A（grok-1.5-video） | `id` | `status` = `completed` | 读 **`url`**（与 Path B 相同）。不要再请求 `/v1/videos/{id}/content` |
 | Chat / OCR | — | — | `choices[0].message.content` |
 | ASR | — | — | `text` |
 | TTS 同步 | — | — | **响应体就是音频字节**（不是 JSON） |
@@ -65,7 +65,7 @@ Path B 轮询成功示例：
 }
 ```
 
-Gitee 异步（TTS/InfiniteTalk）轮询成功示例：
+异步语音/视频轮询成功示例：
 ```json
 {
   "id": "…",
@@ -134,9 +134,9 @@ curl https://www.keyoapi.xyz/v1/videos/generations \
 
 ### 1.1 文本对话 → `POST /v1/chat/completions`
 
-免费（`*-free`）：`deepseek-v4-flash-free` · `deepseek-v4-pro-free` · `glm-5.2-free` · `kimi-k3-free`  
+免费（`*-free`）：`deepseek-v4-flash-free` · `deepseek-v4-pro-free` · `glm-5.2-free` · `kimi-k3-free` · `Atria-dawn-v2` · `DeepSeek-Prover-V2-7B`
 
-另有一批 `:free` 对话模型（例如 `glm-5.3-flash:free`、`nemotron-3-ultra-550b-a55b:free`）。完整名单以 https://www.keyoapi.xyz/free-models 为准，上游会增减。  
+另有一批 `:free` 对话模型（例如 `glm-5.3-flash:free`、`nemotron-3-ultra-550b-a55b:free`）。完整名单以 https://www.keyoapi.xyz/free-models 为准，免费模型会动态调整。
 
 付费：`gpt-5.6-luna` · `gpt-5.6-terra` · `gpt-5.6-sol` · `claude-sonnet-5` · `claude-opus-5` · `claude-fable-5` · `claude-fable-5-1` · `gemini-3.7-flash` · `gemini-3.8-flash` · `deepseek-v4.1-flash` · `deepseek-v4-flash` · `deepseek-v4-pro-0813` · `kimi-k3` · `grok-4.6` · `MiniMax-M3` · `glm-5.3` · `gemma-4-26B-A4B-it` · `qwen3.8-max-0902`
 
@@ -193,7 +193,33 @@ curl https://www.keyoapi.xyz/v1/videos/generations \
 
 ### 1.12 内容审核 → `POST /v1/moderations`
 
-`nonescape-v0` · `keyo-text-moderation` · `Security-semantic-filtering` · `nsfw-classifier`
+`nonescape-v0` · `moark-text-moderation` · `keyo-text-moderation` · `Security-semantic-filtering` · `nsfw-classifier`
+
+### 1.13 向量与重排
+
+| 能力 | 路径 | 模型 |
+|------|------|------|
+| 向量 | `POST /v1/embeddings` | `WeMM-Embedding-9B` · `WeMM-Embedding-4B` · `WeMM-Embedding-2B` · `Qwen3-VL-Embedding-8B` |
+| 重排 | `POST /v1/rerank` | `Qwen3-VL-Reranker-2B` · `Qwen3-VL-Reranker-8B` |
+
+向量示例：
+
+```json
+{
+  "model": "WeMM-Embedding-9B",
+  "input": ["需要检索的文本"]
+}
+```
+
+重排示例：
+
+```json
+{
+  "model": "Qwen3-VL-Reranker-2B",
+  "query": "用户问题",
+  "documents": ["候选文档一", "候选文档二"]
+}
+```
 
 ---
 
@@ -279,7 +305,7 @@ curl https://www.keyoapi.xyz/v1/videos/generations \
 | `MiniMax-H3` | **1–15**（1080p **最长 10**） | `480p` / `768p` / `1080p` | 必填 `aspectRatio` |
 | Seedance 全部 `*-720p` / `*-1080p` | **4–15**（默认 5） | 写在 model id 里 | `<4` 或 `>15` 直接拒 |
 | `wan3.0-video` | **2–30** 或 `-1` | 如 `720P` | `-1` = 模型自选时长 |
-| `flux-3-video` | **5–20** | `draft`/`hd`/`fhd` | |
+| `flux-3-video` | **5–20** | `hd` / `fhd` | 草稿用 `draft:true`（仅 hd），不是 `resolution:"draft"` |
 | `gemini-omni-1.1-flash` | **禁止传** | — | 时长约 3–10s 由模型定 |
 | `gemini-omni-1.1-flash-ext` | **仅 4/6/8/10** | — | 有 `video_urls` 时勿再传 duration |
 | `grok-imagine-video-1.5-preview` | **1–15** | `480p`/`720p` | 图生为主 |
@@ -288,13 +314,13 @@ curl https://www.keyoapi.xyz/v1/videos/generations \
 ### 5.1 MiniMax-H3
 
 必填：`model` `prompt` `aspectRatio` `resolution` `duration`  
-`aspectRatio`：只能是 `landscape`（横屏）或 `portrait`（竖屏）。也可用 `16:9` / `9:16`。上游没有 `square` / `1:1`。  
+`aspectRatio`：只能是 `landscape`（横屏）或 `portrait`（竖屏）。也可用 `16:9` / `9:16`。不支持 `square` / `1:1`。
 `resolution`：`480p` | `768p` | `1080p`（1080p 最长 10 秒）  
 `duration`：整数 **1–15**  
 可选：`images`（最多 9 张 https）、`audios`（最多 3 段）、`seed`  
 **禁止**当主字段用：`image_with_roles`、`first_frame_image`（与 Seedance/Wan 不同）
 
-提交成功会马上返回 `id`，这时视频还在生成（上游状态 `running`）。请用同一把 Key 轮询 `GET /v1/tasks/{id}`：进行中是 `processing`，完成是 `completed` 并带 `url`。进行中不是失败。
+提交成功会马上返回 `id`，这时视频还在生成。请用同一把 Key 轮询 `GET /v1/tasks/{id}`：进行中是 `processing`，完成是 `completed` 并带 `url`。进行中不是失败。
 
 文生：
 ```json
@@ -320,7 +346,7 @@ curl https://www.keyoapi.xyz/v1/videos/generations \
 }
 ```
 
-### 5.2 Seedance SKU（aione · 按秒）
+### 5.2 Seedance SKU（按秒）
 
 旧 ID `seedance-2.0` / `seedance-2.5` **已下架**。请用下列固定分辨率 SKU（分辨率写在 model id 里，一般不必再传 `resolution`）：
 
@@ -618,7 +644,7 @@ curl https://www.keyoapi.xyz/v1/audio/transcriptions \
 ```json
 {
   "model": "Qwen3-TTS",
-  "input": "你好，欢迎使用 KeyoAPI"
+  "inputs": "你好，欢迎使用 KeyoAPI"
 }
 ```
 
@@ -727,7 +753,7 @@ curl https://www.keyoapi.xyz/v1/models \
 2. 选对路径（对话 / 图 / 视频 A / 视频 B / ASR / TTS 同步或异步 / 扩展）。  
 3. 若是视频 Path B：打开 §5 对应小节，**不要**套其它模型字段。  
 4. 用户要传本机图/音/视频给 Path B 或 OCR：先 §0.5 上传再填 `url`。  
-5. 异步：用对 `tasks` vs `task`，轮询到 `succeeded`/`failed`/`completed` 等终态。  
+5. 异步：用对 `tasks` vs `task`，轮询到归一后的 `completed` / `failed` / `cancelled`。进行中是 `processing`，不要把 `succeeded` 当成完成条件。  
 6. 把结果（文本、图片 URL、视频 URL、错误信息）用中文简单告诉用户。  
 7. 不要编造本手册没有的字段名（含 `/v1/assets`、`asset://`）。
 
@@ -744,7 +770,8 @@ curl https://www.keyoapi.xyz/v1/models \
 | 调用 `POST /v1/assets` 或 `asset://` | **没有**；用 `POST /v1/uploads`（或 `/v1/files`） |
 | 视频轮询写成 `/v1/task/` | Path B 用 `/v1/tasks/` |
 | TTS 异步轮询写成 `/v1/tasks/` | 用 `/v1/task/` |
-| gemini-omni 传了 `duration` | 删掉 `duration` |
+| `gemini-omni-1.1-flash` 传了 `duration` | 删掉 `duration` / `seconds` |
+| `gemini-omni-1.1-flash-ext` 的 duration | 只能是 `4`/`6`/`8`/`10`；有 `video_urls` 时不要传 |
 
 ---
 

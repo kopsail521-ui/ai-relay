@@ -35,14 +35,14 @@
 Async flow: **submit → read id → poll by family → read url/text**. Never mix poll paths.
 
 **Normalized status:** `processing` | `completed` | `failed` | `cancelled`  
-(Upstream may keep `status_raw` like `succeeded` / `success` / `waiting` — use normalized `status`.)
+(The response may keep `status_raw` like `succeeded` / `success` / `waiting` — use normalized `status`.)
 
 | Family | Submit id | Poll until | Result |
 |--------|-----------|------------|--------|
 | Video Path B | `id` \| `task_id` \| `data[0].task_id` | `status`/`data.status` = `completed` | **`url`** or `data.result.videos[0].url[0]` |
 | TTS async / InfiniteTalk | `id` \| `task_id` | `status` = `completed` | **`url`** or `output.file_url` |
 | MinerU | `id` \| `task_id` | `status` = `completed` | **`text`** or `output.segments[].content` |
-| Video Path A (`grok-1.5-video`) | `id` | `status` = `completed` | then `GET /v1/videos/{id}/content` |
+| Video Path A (`grok-1.5-video`) | `id` | `status` = `completed` | read **`url`** (same as Path B). Do not call `/v1/videos/{id}/content` |
 | Chat / OCR | — | — | `choices[0].message.content` |
 | ASR | — | — | `text` |
 | TTS sync | — | — | **raw audio bytes** (not JSON) |
@@ -123,9 +123,9 @@ Same pattern for other Path B models: upload once, map `url` to that model’s f
 
 ### 1.1 Chat → `POST /v1/chat/completions`
 
-Free (`*-free`): `deepseek-v4-flash-free` · `deepseek-v4-pro-free` · `glm-5.2-free` · `kimi-k3-free`  
+Free (`*-free`): `deepseek-v4-flash-free` · `deepseek-v4-pro-free` · `glm-5.2-free` · `kimi-k3-free` · `Atria-dawn-v2` · `DeepSeek-Prover-V2-7B`
 
-There is also a `:free` chat pool (for example `glm-5.3-flash:free`, `nemotron-3-ultra-550b-a55b:free`). The live list is https://www.keyoapi.xyz/free-models — upstream adds and removes IDs.  
+There is also a `:free` chat pool (for example `glm-5.3-flash:free`, `nemotron-3-ultra-550b-a55b:free`). The live list is https://www.keyoapi.xyz/free-models — the list changes over time.
 
 Paid: `gpt-5.6-luna` · `gpt-5.6-terra` · `gpt-5.6-sol` · `claude-sonnet-5` · `claude-opus-5` · `claude-fable-5` · `claude-fable-5-1` · `gemini-3.7-flash` · `gemini-3.8-flash` · `deepseek-v4.1-flash` · `deepseek-v4-flash` · `deepseek-v4-pro-0813` · `kimi-k3` · `grok-4.6` · `MiniMax-M3` · `glm-5.3` · `gemma-4-26B-A4B-it` · `qwen3.8-max-0902`
 
@@ -182,7 +182,33 @@ Paid: `gpt-5.6-luna` · `gpt-5.6-terra` · `gpt-5.6-sol` · `claude-sonnet-5` ·
 
 ### 1.12 Moderations → `POST /v1/moderations`
 
-`nonescape-v0` · `keyo-text-moderation` · `Security-semantic-filtering` · `nsfw-classifier`
+`nonescape-v0` · `moark-text-moderation` · `keyo-text-moderation` · `Security-semantic-filtering` · `nsfw-classifier`
+
+### 1.13 Embeddings and reranking
+
+| Capability | Path | Models |
+|---|---|---|
+| Embeddings | `POST /v1/embeddings` | `WeMM-Embedding-9B` · `WeMM-Embedding-4B` · `WeMM-Embedding-2B` · `Qwen3-VL-Embedding-8B` |
+| Reranking | `POST /v1/rerank` | `Qwen3-VL-Reranker-2B` · `Qwen3-VL-Reranker-8B` |
+
+Embedding example:
+
+```json
+{
+  "model": "WeMM-Embedding-9B",
+  "input": ["text to retrieve"]
+}
+```
+
+Reranking example:
+
+```json
+{
+  "model": "Qwen3-VL-Reranker-2B",
+  "query": "user question",
+  "documents": ["candidate document one", "candidate document two"]
+}
+```
 
 ---
 
@@ -268,7 +294,7 @@ Video: prefer top-level **`url`**, or `data.result.videos[0].url[0]` (`url` is a
 | `MiniMax-H3` | **1–15** (1080p **max 10**) | `480p` / `768p` / `1080p` | `aspectRatio` required |
 | All Seedance `*-720p` / `*-1080p` | **4–15** (default 5) | in model id | `<4` or `>15` rejected |
 | `wan3.0-video` | **2–30** or `-1` | e.g. `720P` | `-1` = model picks length |
-| `flux-3-video` | **5–20** | `draft`/`hd`/`fhd` | |
+| `flux-3-video` | **5–20** | `hd` / `fhd` | draft is `draft:true` (hd only), not `resolution:"draft"` |
 | `gemini-omni-1.1-flash` | **do not send** | — | length ~3–10s by model |
 | `gemini-omni-1.1-flash-ext` | **4/6/8/10 only** | — | omit duration when using `video_urls` |
 | `grok-imagine-video-1.5-preview` | **1–15** | `480p`/`720p` | image-to-video |
@@ -277,13 +303,13 @@ Video: prefer top-level **`url`**, or `data.result.videos[0].url[0]` (`url` is a
 ### 5.1 MiniMax-H3
 
 Required: `model` `prompt` `aspectRatio` `resolution` `duration`  
-`aspectRatio`: only `landscape` or `portrait` (aliases `16:9` / `9:16`). Upstream has no `square` / `1:1`.  
+`aspectRatio`: only `landscape` or `portrait` (aliases `16:9` / `9:16`). `square` / `1:1` is not supported.
 `resolution`: `480p` | `768p` | `1080p` (1080p max 10s)  
 `duration`: integer **1–15**  
 Optional: `images` (max 9 https URLs), `audios` (max 3), `seed`  
 Do **not** send `image_with_roles` or `first_frame_image` (those are Seedance/Wan).
 
-Submit returns `id` immediately while the video is still generating (upstream `running`). Poll `GET /v1/tasks/{id}` with the same key: `processing` while running, `completed` plus `url` when done. In-progress is not a failure.
+Submit returns `id` immediately while the video is still generating (`status=processing`). Poll `GET /v1/tasks/{id}` with the same key: `processing` while running, `completed` plus `url` when done. In-progress is not a failure.
 
 Text-to-video:
 ```json
@@ -585,7 +611,7 @@ Models: `Qwen3-TTS` · `CosyVoice3`
 ```json
 {
   "model": "Qwen3-TTS",
-  "input": "Hello, welcome to KeyoAPI"
+  "inputs": "Hello, welcome to KeyoAPI"
 }
 ```
 
@@ -705,7 +731,8 @@ curl https://www.keyoapi.xyz/v1/models \
 | Calling `POST /v1/assets` or `asset://` | **None** — use `POST /v1/uploads` (or `/v1/files`) |
 | Video poll `/v1/task/` | Path B uses `/v1/tasks/` |
 | TTS async poll `/v1/tasks/` | Use `/v1/task/` |
-| gemini-omni with `duration` | Remove `duration` |
+| `gemini-omni-1.1-flash` sent `duration` | Remove `duration` / `seconds` |
+| `gemini-omni-1.1-flash-ext` duration | Only `4`/`6`/`8`/`10`; omit it when `video_urls` is set |
 
 ---
 

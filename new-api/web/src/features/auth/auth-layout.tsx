@@ -19,6 +19,7 @@ For commercial licensing, please contact support@quantumnous.com
 import { Link } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
 
+import { LanguageSwitcher } from '@/components/language-switcher'
 import { Skeleton } from '@/components/ui/skeleton'
 import { useSystemConfig } from '@/hooks/use-system-config'
 
@@ -57,6 +58,9 @@ export function AuthLayout({ children }: AuthLayoutProps) {
           <h1 className='text-lg font-semibold tracking-tight'>{systemName}</h1>
         )}
       </Link>
+      <div className='absolute top-4 right-4 z-10 sm:top-8 sm:right-8'>
+        <LanguageSwitcher />
+      </div>
       <div className='container relative z-[1] flex items-center pt-16 sm:pt-0'>
         <div className='mx-auto flex w-full flex-col justify-center space-y-3 px-4 py-8 sm:w-[440px] sm:p-8'>
           {children}

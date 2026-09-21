@@ -34,10 +34,11 @@ export function TermsFooter({
   status,
 }: TermsFooterProps) {
   const { t } = useTranslation()
-  const text =
+  const text = t(
     variant === 'sign-in'
       ? 'By clicking sign in, you agree to our'
       : 'By creating an account, you agree to our'
+  )
 
   const hasUserAgreement = Boolean(status?.user_agreement_enabled)
   const hasPrivacyPolicy = Boolean(status?.privacy_policy_enabled)
@@ -47,11 +48,11 @@ export function TermsFooter({
   }
 
   const agreementLink = {
-    label: 'User Agreement',
+    label: t('User Agreement'),
     href: '/user-agreement',
   }
   const privacyLink = {
-    label: 'Privacy Policy',
+    label: t('Privacy Policy'),
     href: '/privacy-policy',
   }
 

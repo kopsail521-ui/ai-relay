@@ -8,6 +8,8 @@
  * "buyers usually want", "How to think about this page", "What this page is not".
  * Keep product CTAs to /pricing/{id}. Do not globally strip the word "SEO" from
  * use cases (e.g. "SEO rewriting").
+ * Also ban in user-facing copy: "search intent", "highest-traffic",
+ * "this hub is that landing", "for SEO", "search engines".
  */
 import fs from "fs";
 import path from "path";
@@ -842,7 +844,7 @@ ${rows}
 </table>
 <p>Call the free ID exactly as listed (including <code>-free</code> or <code>:free</code> suffixes). Upstream free pools and catalog membership can change — confirm live availability on <a href="/pricing">/pricing</a>.</p>
 <h2>Free by family</h2>
-<p>Browse by family in the table above (DeepSeek, GLM, Qwen, Google, NVIDIA, and more). The highest-traffic free search intent is still “free API key” / “free LLM API” — this hub is that landing.</p>
+<p>Browse by family in the table above (DeepSeek, GLM, Qwen, Google, NVIDIA, and more). Start with a free API key and a fixed $0 model ID; move to metered IDs when you outgrow fair-use limits.</p>
 <h2>Quick start (curl)</h2>
 <pre>curl https://www.keyoapi.xyz/v1/chat/completions \\
   -H "Authorization: Bearer $KEYO_API_KEY" \\

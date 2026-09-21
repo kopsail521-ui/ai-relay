@@ -49,11 +49,18 @@ if cfg.get("Cmd"):
     cmd += list(cfg["Cmd"])
 
 print("RUN:", " ".join(shlex.quote(x) for x in cmd), flush=True)
+# The old container still owns published ports (3000). Stop it first.
+# restart=always would bring it back immediately, so turn that off until swap.
+subprocess.call(["docker", "update", "--restart=no", name], stdout=subprocess.DEVNULL)
+subprocess.check_call(["docker", "stop", name])
 try:
     subprocess.check_call(cmd)
 except subprocess.CalledProcessError as exc:
-    print("DOCKER_RUN_FAILED", exc.returncode, flush=True)
-    raise
+    print("DOCKER_RUN_FAILED", exc.returncode, "restoring", name, flush=True)
+    subprocess.call(["docker", "start", name])
+    if rp and rp != "no":
+        subprocess.call(["docker", "update", "--restart=" + rp, name])
+    raise SystemExit(exc.returncode)
 
 subprocess.check_call(["docker", "rm", "-f", name])
 subprocess.check_call(["docker", "rename", tmp, name])

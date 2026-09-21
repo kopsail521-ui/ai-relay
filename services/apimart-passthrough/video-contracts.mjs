@@ -202,6 +202,13 @@ function validateVideoClientBody(modelId, body) {
           "MiniMax-H3: put aspect in aspectRatio (landscape or portrait), not size. resolution is 480p/768p/1080p.",
       };
     }
+    const ar = String(body.aspectRatio || body.aspect_ratio || body.ratio || "").trim().toLowerCase();
+    if (ar === "square" || ar === "1:1") {
+      return {
+        param: "aspectRatio",
+        message: "MiniMax-H3 aspectRatio is landscape or portrait only (upstream has no square / 1:1)",
+      };
+    }
     const dur = body.duration ?? body.seconds;
     if (dur != null) {
       const n = Number(dur);

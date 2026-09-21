@@ -288,11 +288,13 @@ curl https://www.keyoapi.xyz/v1/videos/generations \
 ### 5.1 MiniMax-H3
 
 必填：`model` `prompt` `aspectRatio` `resolution` `duration`  
-`aspectRatio`：`landscape` | `portrait` | `square`（也可用 `16:9` / `9:16` / `1:1`）  
+`aspectRatio`：只能是 `landscape`（横屏）或 `portrait`（竖屏）。也可用 `16:9` / `9:16`。上游没有 `square` / `1:1`。  
 `resolution`：`480p` | `768p` | `1080p`（1080p 最长 10 秒）  
-`duration`：1–15  
-可选：`images`（≤9）、`audios`（≤3）、`seed`  
+`duration`：整数 **1–15**  
+可选：`images`（最多 9 张 https）、`audios`（最多 3 段）、`seed`  
 **禁止**当主字段用：`image_with_roles`、`first_frame_image`（与 Seedance/Wan 不同）
+
+提交成功会马上返回 `id`，这时视频还在生成（上游状态 `running`）。请用同一把 Key 轮询 `GET /v1/tasks/{id}`：进行中是 `processing`，完成是 `completed` 并带 `url`。进行中不是失败。
 
 文生：
 ```json

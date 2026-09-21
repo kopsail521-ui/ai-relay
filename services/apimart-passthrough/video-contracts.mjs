@@ -648,7 +648,7 @@ function mapAspectToGrsai(v) {
   if (!s) return "landscape";
   if (s === "16:9" || s === "landscape" || s === "horizontal") return "landscape";
   if (s === "9:16" || s === "portrait" || s === "vertical") return "portrait";
-  if (s === "1:1" || s === "square") return "square";
+  // Upstream only documents portrait | landscape (no square).
   return "landscape";
 }
 
@@ -678,9 +678,9 @@ function buildGrsaiVideoBody(meta, body) {
     aspectRatio: mapAspectToGrsai(
       body.aspectRatio || body.aspect_ratio || body.ratio
     ),
-    // Keyo async poll style (customer still uses /v1/tasks/{id})
-    webHook: "-1",
-    shutProgress: true,
+    // Official Grsai contract: replyType=async returns {id,status:running}
+    // immediately. Poll with GET /v1/api/result?id= while status is running.
+    replyType: "async",
   };
 
   // images: native `images` + aliases image_urls / image_url only

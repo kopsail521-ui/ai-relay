@@ -685,7 +685,7 @@ function normalizeGrsaiPollJson(raw, taskId) {
   const mapped =
     st === "succeeded" || st === "success" || st === "completed" || st === "done"
       ? "completed"
-      : st === "failed" || st === "error" || st === "cancelled"
+      : st === "failed" || st === "error" || st === "cancelled" || st === "violation"
         ? "failed"
         : st === "pending" || st === "queued" || st === "running" || st === "processing"
           ? "processing"
@@ -950,24 +950,20 @@ const server = http.createServer(async (req, res) => {
       const pending = getPending(tid);
       const pendingMeta = pending ? modelMap[pending.model] : null;
 
-      // Inventory-C video poll 鈫?POST /v1/api/result {id}
+      // Grsai docs: GET /v1/api/result?id=  (not POST).
+      // While running the body is {id, status:"running", progress}.
       if (isGrsaiMeta(pendingMeta)) {
         if (!GRSAI_KEY) {
           return json(res, 500, {
             error: { message: "Service temporarily unavailable", type: "server_error" },
           });
         }
-        const pollBody = Buffer.from(JSON.stringify({ id: tid }), "utf8");
         const up = await proxyOrigin(
           GRSAI_ORIGIN,
           GRSAI_KEY,
-          {
-            ...req,
-            method: "POST",
-            headers: { ...req.headers, "content-type": "application/json" },
-          },
-          pollBody,
-          "/v1/api/result"
+          { ...req, method: "GET", headers: { ...req.headers } },
+          Buffer.alloc(0),
+          `/v1/api/result?id=${encodeURIComponent(tid)}`
         );
         const text = up.buf.toString("utf8");
         try {

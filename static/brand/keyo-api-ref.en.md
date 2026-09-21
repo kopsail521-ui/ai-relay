@@ -277,10 +277,15 @@ Video: prefer top-level **`url`**, or `data.result.videos[0].url[0]` (`url` is a
 ### 5.1 MiniMax-H3
 
 Required: `model` `prompt` `aspectRatio` `resolution` `duration`  
-`aspectRatio`: `landscape` | `portrait` | `square` (aliases `16:9` / `9:16` / `1:1`)  
+`aspectRatio`: only `landscape` or `portrait` (aliases `16:9` / `9:16`). Upstream has no `square` / `1:1`.  
 `resolution`: `480p` | `768p` | `1080p` (1080p max 10s)  
-`duration`: 1–15  
-Optional: `images` (≤9), `audios` (≤3), `seed`  
+`duration`: integer **1–15**  
+Optional: `images` (max 9 https URLs), `audios` (max 3), `seed`  
+Do **not** send `image_with_roles` or `first_frame_image` (those are Seedance/Wan).
+
+Submit returns `id` immediately while the video is still generating (upstream `running`). Poll `GET /v1/tasks/{id}` with the same key: `processing` while running, `completed` plus `url` when done. In-progress is not a failure.
+
+Text-to-video:  
 **Do not** use as primary: `image_with_roles`, `first_frame_image` (unlike Seedance/Wan)
 
 Text-to-video:

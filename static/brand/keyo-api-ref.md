@@ -134,7 +134,9 @@ curl https://www.keyoapi.xyz/v1/videos/generations \
 
 ### 1.1 文本对话 → `POST /v1/chat/completions`
 
-免费：`deepseek-v4-flash-free` · `deepseek-v4-pro-free` · `glm-5.2-free` · `kimi-k3-free`  
+免费（`*-free`）：`deepseek-v4-flash-free` · `deepseek-v4-pro-free` · `glm-5.2-free` · `kimi-k3-free`  
+
+另有一批 `:free` 对话模型（例如 `glm-5.3-flash:free`、`nemotron-3-ultra-550b-a55b:free`）。完整名单以 https://www.keyoapi.xyz/free-models 为准，上游会增减。  
 
 付费：`gpt-5.6-luna` · `gpt-5.6-terra` · `gpt-5.6-sol` · `claude-sonnet-5` · `claude-opus-5` · `claude-fable-5` · `claude-fable-5-1` · `gemini-3.7-flash` · `gemini-3.8-flash` · `deepseek-v4.1-flash` · `deepseek-v4-flash` · `deepseek-v4-pro-0813` · `kimi-k3` · `grok-4.6` · `MiniMax-M3` · `glm-5.3` · `gemma-4-26B-A4B-it` · `qwen3.8-max-0902`
 

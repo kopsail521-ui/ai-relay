@@ -151,13 +151,6 @@ ul{margin:0 0 14px;padding-left:1.2em}
   <td><a href="/pricing/glm-5.2-free">Try</a></td>
 </tr>
 <tr>
-  <td><code>glm-5.3-flash:free</code></td>
-  <td>—</td>
-  <td class="ok">$0</td>
-  <td>GLM</td>
-  <td><a href="/pricing/glm-5.3-flash%3Afree">Try</a></td>
-</tr>
-<tr>
   <td><code>glm-5.3-flash-search:free</code></td>
   <td>—</td>
   <td class="ok">$0</td>
@@ -177,6 +170,13 @@ ul{margin:0 0 14px;padding-left:1.2em}
   <td class="ok">$0</td>
   <td>GLM</td>
   <td><a href="/pricing/glm-5.3-flash-thinking%3Afree">Try</a></td>
+</tr>
+<tr>
+  <td><code>glm-5.3-flash:free</code></td>
+  <td>—</td>
+  <td class="ok">$0</td>
+  <td>GLM</td>
+  <td><a href="/pricing/glm-5.3-flash%3Afree">Try</a></td>
 </tr>
 <tr>
   <td><code>kimi-k3-free</code></td>
@@ -278,7 +278,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
 <h2>Free rules (read before you ship)</h2>
 <ul>
   <li><strong>Price:</strong> listed free IDs use fixed <strong>$0</strong> ModelPrice — not a timed coupon that flips to paid overnight.</li>
-  <li><strong>Fair use:</strong> free traffic has <strong>rate / concurrency limits</strong>. Upstream <code>:free</code> pools typically allow only a few requests per minute per upstream account; Keyo shares that pool. Do not treat free IDs as an unlimited production SLA.</li>
+  <li><strong>Fair use:</strong> free traffic has <strong>rate / concurrency limits</strong>. Limits can tighten under abuse. Do not treat free IDs as an unlimited production SLA.</li>
   <li><strong>Availability:</strong> some <code>:free</code> IDs depend on upstream free pools and may be added or removed. Check <a href="/pricing">Model Square</a> before hard-coding.</li>
   <li><strong>Catch (honest):</strong> you get real capability at $0; you do <em>not</em> get paid-tier priority or guaranteed throughput.</li>
 </ul>

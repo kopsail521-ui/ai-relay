@@ -526,7 +526,7 @@ ${featured}
 <pre><code>export OPENAI_BASE_URL=https://www.keyoapi.xyz/v1
 export OPENAI_API_KEY=sk-...
 # chat (OpenAI SDK): model=gpt-6-astra | claude-fable-5-1 | deepseek-v4.1-flash
-# free: model=deepseek-v4-flash-free | glm-5.3:free (see /free-models)
+# free: model=deepseek-v4-flash-free | glm-5.3-flash:free (see /free-models)
 # speech / vision / video: IndexTTS-2 · sam3 · RMBG-2.0 · MiniMax-H3 — see Docs</code></pre>
 </div>
 <footer class="foot">

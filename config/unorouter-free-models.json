@@ -18,20 +18,6 @@
       "desc_zh": "gemma-4-26b:free"
     },
     {
-      "id": "glm-5.3-thinking:free",
-      "vendor": "智谱",
-      "icon": "Zhipu.Color",
-      "tags": "大语言模型,免费",
-      "desc_zh": "glm-5.3-thinking:free"
-    },
-    {
-      "id": "glm-5.3:free",
-      "vendor": "智谱",
-      "icon": "Zhipu.Color",
-      "tags": "大语言模型,免费",
-      "desc_zh": "glm-5.3:free"
-    },
-    {
       "id": "laguna-s-2.1:free",
       "vendor": "Poolside",
       "icon": "Custom",
@@ -53,25 +39,18 @@
       "desc_zh": "nemotron-3-super-120b-a12b:free"
     },
     {
-      "id": "glm-5.2:free",
-      "vendor": "智谱",
-      "icon": "Zhipu.Color",
-      "tags": "大语言模型,免费",
-      "desc_zh": "glm-5.2:free"
-    },
-    {
-      "id": "glm-5.2-thinking:free",
-      "vendor": "智谱",
-      "icon": "Zhipu.Color",
-      "tags": "大语言模型,免费",
-      "desc_zh": "glm-5.2-thinking:free"
-    },
-    {
       "id": "ling-3.0-flash-fin:free",
       "vendor": "InclusionAI",
       "icon": "Custom",
       "tags": "大语言模型,免费",
       "desc_zh": "ling-3.0-flash-fin:free"
+    },
+    {
+      "id": "glm-5.3-flash:free",
+      "vendor": "智谱",
+      "icon": "Zhipu.Color",
+      "tags": "大语言模型,免费",
+      "desc_zh": "glm-5.3-flash:free"
     },
     {
       "id": "glm-5.3-flash-thinking:free",
@@ -93,13 +72,6 @@
       "icon": "Nvidia.Color",
       "tags": "大语言模型,免费",
       "desc_zh": "nemotron-3.5-lightning-30b-a3b:free"
-    },
-    {
-      "id": "glm-5.3-think-search:free",
-      "vendor": "智谱",
-      "icon": "Zhipu.Color",
-      "tags": "大语言模型,免费",
-      "desc_zh": "glm-5.3-think-search:free"
     },
     {
       "id": "gemini-robotics-er-2-preview:free",
@@ -163,13 +135,6 @@
       "icon": "Meta.Color",
       "tags": "大语言模型,免费",
       "desc_zh": "muse-glimmer-30b:free"
-    },
-    {
-      "id": "glm-5.3-search:free",
-      "vendor": "智谱",
-      "icon": "Zhipu.Color",
-      "tags": "大语言模型,免费",
-      "desc_zh": "glm-5.3-search:free"
     }
   ]
 }

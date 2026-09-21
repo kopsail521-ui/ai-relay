@@ -140,6 +140,16 @@ def main():
             break
 
     ids = [m["id"] for m in models]
+    id_set = set(ids)
+    # Previous onboarded IDs that upstream delisted; always prune even if still in channel.models
+    stale = [
+        "glm-5.3-thinking:free",
+        "glm-5.3:free",
+        "glm-5.2:free",
+        "glm-5.2-thinking:free",
+        "glm-5.3-think-search:free",
+        "glm-5.3-search:free",
+    ]
     if target is None:
         fields = ["type", "key", "name", "base_url", "models", '"group"', "status"]
         values = [1, key, cfg.get("channel_name") or "Keyo Chat Free", cfg["base_url"], ",".join(ids), "default", 1]
@@ -164,10 +174,8 @@ def main():
         print("channel created", cid)
     else:
         cid, cname, models_s = target
-        parts = [p.strip() for p in models_s.split(",") if p.strip()]
-        for mid in ids:
-            if mid not in parts:
-                parts.append(mid)
+        # Sync channel.models to config list (drop delisted, add new)
+        parts = list(ids)
         sets = ["models=?", "key=?", "base_url=?", "status=1"]
         vals = [",".join(parts), key, cfg["base_url"]]
         if "updated_time" in ch_cols:
@@ -206,6 +214,30 @@ def main():
             ("default", mid, cid, 1, 0, 1),
         )
         print("free", mid)
+
+    # Prune delisted :free rows so pricing / relay stop advertising dead IDs.
+    # Also drop any leftover :free abilities still pointing at this channel.
+    prune = set(x for x in stale if x not in id_set)
+    cur.execute(
+        'SELECT model FROM abilities WHERE channel_id=? AND model LIKE ?',
+        (cid, "%:free"),
+    )
+    for (mid,) in cur.fetchall():
+        if mid not in id_set:
+            prune.add(mid)
+    for mid in sorted(prune):
+        cur.execute("DELETE FROM abilities WHERE model=?", (mid,))
+        mp.pop(mid, None)
+        mr.pop(mid, None)
+        cr.pop(mid, None)
+        if "status" in m_cols:
+            sql = "UPDATE models SET status=0"
+            if "updated_time" in m_cols:
+                sql += ", updated_time=?"
+                cur.execute(sql + " WHERE model_name=?", (now, mid))
+            else:
+                cur.execute(sql + " WHERE model_name=?", (mid,))
+        print("pruned", mid)
 
     put_opt("ModelRatio", json.dumps(mr, ensure_ascii=False, separators=(",", ":")))
     put_opt("CompletionRatio", json.dumps(cr, ensure_ascii=False, separators=(",", ":")))

@@ -199,7 +199,7 @@ function validateVideoClientBody(modelId, body) {
       return {
         param: "size",
         message:
-          "MiniMax-H3: put aspect in aspectRatio (landscape|portrait|square), not size. resolution is 480p/768p/1080p.",
+          "MiniMax-H3: put aspect in aspectRatio (landscape or portrait), not size. resolution is 480p/768p/1080p.",
       };
     }
     const dur = body.duration ?? body.seconds;

@@ -285,9 +285,6 @@ Do **not** send `image_with_roles` or `first_frame_image` (those are Seedance/Wa
 
 Submit returns `id` immediately while the video is still generating (upstream `running`). Poll `GET /v1/tasks/{id}` with the same key: `processing` while running, `completed` plus `url` when done. In-progress is not a failure.
 
-Text-to-video:  
-**Do not** use as primary: `image_with_roles`, `first_frame_image` (unlike Seedance/Wan)
-
 Text-to-video:
 ```json
 {

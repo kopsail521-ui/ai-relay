@@ -2282,6 +2282,15 @@
       "ru": "RAG",
       "ja": "RAG",
       "vi": "RAG"
+    },
+    "系统一模型": {
+      "zhCN": "系统一模型",
+      "zhTW": "系統一模型",
+      "en": "System One Model",
+      "fr": "Modèle System One",
+      "ru": "Модель System One",
+      "ja": "System One モデル",
+      "vi": "Mô hình System One"
     }
   },
   "qwen3.8-max-0902": {
@@ -5114,5 +5123,53 @@
         ]
       ]
     }
+  },
+  "Bespoke-Nimble-9B": {
+    "description": "Bespoke Nimble 9B：System One 结构化决策模型。输入状态（state）与问题集（questions），一次返回 choice / score / noul 结构化答案（含选项概率），无需链式推理文本。计费：输入 $0.032 / 输出 $0（每百万 tokens）。",
+    "descriptions": {
+      "zhCN": "Bespoke Nimble 9B：System One 结构化决策模型。输入状态（state）与问题集（questions），一次返回 choice / score / noul 结构化答案（含选项概率），无需链式推理文本。计费：输入 $0.032 / 输出 $0（每百万 tokens）。",
+      "zhTW": "Bespoke Nimble 9B：System One 結構化決策模型。輸入狀態（state）與問題集（questions），一次回傳 choice / score / noul 結構化答案（含選項機率），無需鏈式推理文字。計費：輸入 $0.032 / 輸出 $0（每百萬 tokens）。",
+      "en": "Bespoke Nimble 9B — System One structured decision model. Pass state + questions; get choice / score / noul answers (with option probabilities) in one shot, without chain-of-thought text. Pricing: $0.032 input / $0 output per 1M tokens.",
+      "fr": "Bespoke Nimble 9B — modèle de décision structurée System One. Envoyez state + questions ; recevez choice / score / noul (avec probabilités) en un passage. Tarif : $0.032 entrée / $0 sortie pour 1M tokens.",
+      "ru": "Bespoke Nimble 9B — модель структурированных решений System One. Передайте state + questions; получите choice / score / noul (с вероятностями) за один проход. Тариф: вход $0.032 / выход $0 за 1M токенов.",
+      "ja": "Bespoke Nimble 9B：System One 構造化意思決定モデル。state と questions を渡し、choice / score / noul（選択肢確率付き）を一回で返します。料金：入力 $0.032 / 出力 $0（100万 tokens あたり）。",
+      "vi": "Bespoke Nimble 9B — mô hình quyết định có cấu trúc System One. Gửi state + questions; nhận choice / score / noul (kèm xác suất) trong một lần. Giá: vào $0.032 / ra $0 mỗi 1M tokens."
+    },
+    "unit": "token",
+    "badge": {
+      "zhCN": "按量计费",
+      "zhTW": "按量計費",
+      "en": "Token",
+      "fr": "Token",
+      "ru": "Token",
+      "ja": "従量",
+      "vi": "Theo token"
+    },
+    "suffix": {
+      "zhCN": "/百万tokens",
+      "zhTW": "/百萬tokens",
+      "en": "/ 1M tokens",
+      "fr": "/ 1M tokens",
+      "ru": "/ 1M токенов",
+      "ja": "/ 100万 tokens",
+      "vi": "/ 1M tokens"
+    },
+    "price_key": {
+      "zhCN": "输入 / 输出",
+      "zhTW": "輸入 / 輸出",
+      "en": "Input / Output",
+      "fr": "Entrée / Sortie",
+      "ru": "Вход / Выход",
+      "ja": "入力 / 出力",
+      "vi": "Vào / Ra"
+    },
+    "description_zh": "Bespoke Nimble 9B：System One 结构化决策模型。输入状态（state）与问题集（questions），一次返回 choice / score / noul 结构化答案（含选项概率），无需链式推理文本。计费：输入 $0.032 / 输出 $0（每百万 tokens）。",
+    "description_en": "Bespoke Nimble 9B — System One structured decision model. Pass state + questions; get choice / score / noul answers (with option probabilities) in one shot, without chain-of-thought text. Pricing: $0.032 input / $0 output per 1M tokens.",
+    "badge_zh": "按量计费",
+    "badge_en": "Token",
+    "suffix_zh": "/百万tokens",
+    "suffix_en": "/ 1M tokens",
+    "price_key_zh": "输入 / 输出",
+    "price_key_en": "Input / Output"
   }
 }

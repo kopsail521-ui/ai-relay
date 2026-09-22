@@ -34,6 +34,9 @@ export const EP = {
     openai: { path: "/v1/async/videos/image-to-video", method: "POST" },
   }),
   videoGen: JSON.stringify({ "openai-video": "/v1/videos/generations" }),
+  systemone: JSON.stringify({
+    openai: { path: "/v1/systemone", method: "POST" },
+  }),
 };
 
 export const RULES = {
@@ -200,6 +203,12 @@ export const RULES = {
     tag: "rag",
     endpoints: EP.embed,
     icon: "Qwen.Color",
+  },
+  "Bespoke-Nimble-9B": {
+    vendor: "其他",
+    tag: "系统一模型",
+    endpoints: EP.systemone,
+    icon: "Custom",
   },
   "gpt-image-2": { vendor: "OpenAI", tag: "图片", endpoints: EP.image },
   "gpt-image-2-vip": { vendor: "OpenAI", tag: "图片", endpoints: EP.image },

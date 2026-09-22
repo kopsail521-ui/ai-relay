@@ -60,6 +60,9 @@
       "Qwen3-VL-Reranker-2B",
       "Qwen3-VL-Reranker-8B",
       "Qwen3-VL-Embedding-8B"
+    ],
+    "system_one": [
+      "Bespoke-Nimble-9B"
     ]
   },
   "models": [
@@ -1064,7 +1067,7 @@
         "sell_in_cny_per_m": 4.5,
         "sell_out_cny_per_m": 4.5,
         "model_ratio": 0.308219,
-        "completion_ratio": 1.0
+        "completion_ratio": 1
       },
       "relay": "newapi_native",
       "markup": 5
@@ -1082,10 +1085,10 @@
         "mode": "token",
         "cost_in_cny_per_m": 0.8,
         "cost_out_cny_per_m": 0.8,
-        "sell_in_cny_per_m": 4.0,
-        "sell_out_cny_per_m": 4.0,
+        "sell_in_cny_per_m": 4,
+        "sell_out_cny_per_m": 4,
         "model_ratio": 0.273973,
-        "completion_ratio": 1.0
+        "completion_ratio": 1
       },
       "relay": "newapi_native",
       "markup": 5
@@ -1106,7 +1109,7 @@
         "sell_in_cny_per_m": 3.5,
         "sell_out_cny_per_m": 3.5,
         "model_ratio": 0.239726,
-        "completion_ratio": 1.0
+        "completion_ratio": 1
       },
       "relay": "newapi_native",
       "markup": 5
@@ -1127,7 +1130,7 @@
         "sell_in_cny_per_m": 0.44999999999999996,
         "sell_out_cny_per_m": 0.44999999999999996,
         "model_ratio": 0.030822,
-        "completion_ratio": 1.0
+        "completion_ratio": 1
       },
       "relay": "newapi_native",
       "markup": 5
@@ -1148,7 +1151,7 @@
         "sell_in_cny_per_m": 1.75,
         "sell_out_cny_per_m": 1.75,
         "model_ratio": 0.119863,
-        "completion_ratio": 1.0
+        "completion_ratio": 1
       },
       "relay": "newapi_native",
       "markup": 5
@@ -1169,11 +1172,33 @@
         "sell_in_cny_per_m": 0.05,
         "sell_out_cny_per_m": 0.05,
         "model_ratio": 0.003425,
-        "completion_ratio": 1.0,
+        "completion_ratio": 1,
         "free_upstream": true
       },
       "relay": "newapi_native",
       "markup": 5
+    },
+    {
+      "id": "Bespoke-Nimble-9B",
+      "upstream": "Bespoke-Nimble-9B",
+      "category": "system_one",
+      "category_zh": "系统一模型",
+      "description": "Bespoke Nimble 9B：System One 结构化决策模型。输入状态（state）与问题集（questions），一次返回 choice / score / noul 结构化答案（含选项概率），无需链式推理文本。",
+      "paths": [
+        "v1/systemone"
+      ],
+      "billing": {
+        "mode": "token",
+        "sell_in_usd_per_m": 0.032,
+        "sell_out_usd_per_m": 0,
+        "sell_in_cny_per_m": 0.2336,
+        "sell_out_cny_per_m": 0,
+        "model_ratio": 0.016,
+        "completion_ratio": 0
+      },
+      "relay": "gitee_passthrough",
+      "markup": 1,
+      "description_en": "Bespoke Nimble 9B — System One structured decision model. Pass state + questions; get choice / score / noul answers (with option probabilities) in one shot, without chain-of-thought text.."
     }
   ]
 }

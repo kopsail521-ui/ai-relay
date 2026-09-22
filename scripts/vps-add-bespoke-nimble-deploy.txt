@@ -1,0 +1,57 @@
+# VPS：上架 Bespoke-Nimble-9B + 透传/Caddy/品牌落地页
+# 前提：本机已 git push
+set -e
+cd /opt/ai-relay
+sudo git fetch origin
+sudo git checkout -- \
+  config/gitee-selected-models.json \
+  config/marketplace-model-copy.json \
+  config/seo/featured-models.json \
+  services/gitee-passthrough \
+  services/creem-moderation-proxy/marketplace-model-copy.json \
+  scripts/vps-add-bespoke-nimble-9b.py \
+  scripts/deploy-brand-static.sh \
+  static/brand static/seo \
+  || true
+sudo git pull --ff-only origin main
+
+# 1) New API：渠道 + 售价 $0.032/$0 + 标签「系统一模型」
+sudo docker run --rm \
+  -v /opt/ai-relay/data/new-api:/data \
+  -v /opt/ai-relay/scripts/vps-add-bespoke-nimble-9b.py:/tmp/add.py:ro \
+  python:3.12-alpine python /tmp/add.py /data/one-api.db
+
+# 2) Gitee 透传 rebuild（catalog + /v1/systemone）
+sudo cp -a /opt/ai-relay/config/gitee-selected-models.json \
+  /opt/ai-relay/services/gitee-passthrough/catalog.json
+sudo docker build -t keyo-gitee-passthrough ./services/gitee-passthrough
+sudo docker rm -f ai-relay-gitee-passthrough 2>/dev/null || true
+sudo docker run -d --name ai-relay-gitee-passthrough --restart always --network host \
+  --env-file /opt/ai-relay/.env.gitee \
+  -v /opt/ai-relay/data/new-api:/data:rw \
+  -e NEW_API_DB=/data/one-api.db \
+  -e CATALOG=/app/catalog.json \
+  keyo-gitee-passthrough
+sleep 2
+curl -sS http://127.0.0.1:3010/healthz; echo
+
+# 3) 广场简介/标签 i18n：热更新 copy 后重启 moderation（不重建镜像）
+MOD=$(sudo docker ps --format '{{.Names}}' | grep -E 'creem|moderation' | head -1 || true)
+if [ -n "$MOD" ]; then
+  sudo docker cp /opt/ai-relay/config/marketplace-model-copy.json \
+    "$MOD":/app/marketplace-model-copy.json
+  sudo docker restart "$MOD"
+  echo "moderation_copy_updated=$MOD"
+else
+  echo "WARN: moderation container not found — tag i18n may lag until next moderation deploy"
+fi
+
+# 4) 品牌 + SEO + Caddy（/v1/systemone* → :3010）
+sudo bash scripts/deploy-brand-static.sh
+
+echo "--- smoke ---"
+curl -sS https://www.keyoapi.xyz/ | grep -o 'Bespoke Nimble 9B' | head -1
+curl -sS https://www.keyoapi.xyz/brand/keyo-docs.html | grep -o 'Bespoke-Nimble-9B' | head -1
+curl -sS -o /dev/null -w "systemone_http=%{http_code}\n" -X POST https://www.keyoapi.xyz/v1/systemone \
+  -H "Content-Type: application/json" -d '{}'
+echo DONE_BESPOKE_NIMBLE

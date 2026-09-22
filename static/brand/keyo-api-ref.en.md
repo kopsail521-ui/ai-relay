@@ -180,6 +180,28 @@ Paid: `gpt-5.6-luna` · `gpt-5.6-terra` · `gpt-5.6-sol` · `claude-sonnet-5` ·
 
 `InfiniteTalk` (multipart: `model` + `image` + `audio`)
 
+### 1.11b System One decisions → `POST /v1/systemone`
+
+`Bespoke-Nimble-9B` (JSON: `model` + `state` + `questions`; about **$0.032 / $0** per 1M tokens)
+
+```bash
+curl https://www.keyoapi.xyz/v1/systemone \
+  -H "Authorization: Bearer sk-YOUR_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "Bespoke-Nimble-9B",
+    "state": "Customer was charged twice and asks for a refund.",
+    "questions": {
+      "refund": {"type":"noul","instructions":"Does the customer request a refund?"},
+      "dept": {
+        "type":"choice",
+        "instructions":"Which department should handle this?",
+        "criteria":{"billing":"Charges and refunds","tech":"Bugs and outages"}
+      }
+    }
+  }'
+```
+
 ### 1.12 Moderations → `POST /v1/moderations`
 
 `nonescape-v0` · `moark-text-moderation` · `keyo-text-moderation` · `Security-semantic-filtering` · `nsfw-classifier`

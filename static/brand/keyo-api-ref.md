@@ -191,6 +191,28 @@ curl https://www.keyoapi.xyz/v1/videos/generations \
 
 `InfiniteTalk`（multipart：`model` + `image` + `audio`）
 
+### 1.11b 系统一决策 → `POST /v1/systemone`
+
+`Bespoke-Nimble-9B`（JSON：`model` + `state` + `questions`；约 **$0.032 / $0** 每百万 tokens）
+
+```bash
+curl https://www.keyoapi.xyz/v1/systemone \
+  -H "Authorization: Bearer sk-你的密钥" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "Bespoke-Nimble-9B",
+    "state": "Customer was charged twice and asks for a refund.",
+    "questions": {
+      "refund": {"type":"noul","instructions":"Does the customer request a refund?"},
+      "dept": {
+        "type":"choice",
+        "instructions":"Which department should handle this?",
+        "criteria":{"billing":"Charges and refunds","tech":"Bugs and outages"}
+      }
+    }
+  }'
+```
+
 ### 1.12 内容审核 → `POST /v1/moderations`
 
 `nonescape-v0` · `moark-text-moderation` · `keyo-text-moderation` · `Security-semantic-filtering` · `nsfw-classifier`

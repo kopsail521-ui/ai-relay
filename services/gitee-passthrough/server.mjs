@@ -68,6 +68,7 @@ const PASSTHROUGH_PREFIXES = [
   "/v1/images/mattings",
   "/v1/async/",
   "/v1/task/",
+  "/v1/systemone",
 ];
 
 if (!fs.existsSync(CATALOG_PATH)) {
@@ -237,10 +238,40 @@ function priceUsdForModel(modelId) {
   const m = modelMap[modelId];
   if (!m) return null;
   if (m.billing?.mode === "token") {
-    const sellInUsd = (m.billing.sell_in_cny_per_m || 0) / (catalog.fx || 7.3);
+    // Approximate floor for pre-check (1000 input tokens). Prefer usage billing.
+    const sellInUsd =
+      m.billing.sell_in_usd_per_m != null
+        ? Number(m.billing.sell_in_usd_per_m)
+        : (m.billing.sell_in_cny_per_m || 0) / (catalog.fx || 7.3);
     return Number((sellInUsd * 0.001).toFixed(6));
   }
   return m.billing?.model_price_usd ?? null;
+}
+
+function sellUsdPerM(modelId) {
+  const m = modelMap[modelId];
+  if (!m || m.billing?.mode !== "token") return null;
+  const fx = catalog.fx || 7.3;
+  const sellIn =
+    m.billing.sell_in_usd_per_m != null
+      ? Number(m.billing.sell_in_usd_per_m)
+      : (m.billing.sell_in_cny_per_m || 0) / fx;
+  const sellOut =
+    m.billing.sell_out_usd_per_m != null
+      ? Number(m.billing.sell_out_usd_per_m)
+      : (m.billing.sell_out_cny_per_m || 0) / fx;
+  return { sellIn, sellOut };
+}
+
+function priceUsdFromUsage(modelId, usage) {
+  const rates = sellUsdPerM(modelId);
+  if (!rates) return null;
+  const tin = Number(
+    usage?.input_tokens ?? usage?.prompt_tokens ?? usage?.total_tokens ?? 0
+  );
+  const tout = Number(usage?.output_tokens ?? usage?.completion_tokens ?? 0);
+  const usd = (tin / 1e6) * rates.sellIn + (tout / 1e6) * rates.sellOut;
+  return Number(Math.max(0, usd).toFixed(8));
 }
 
 function deductQuota(userId, tokenId, modelId, priceUsd) {
@@ -340,7 +371,7 @@ function scrubGiteeErrorBuf(buf, ct) {
   return Buffer.from(t, "utf8");
 }
 
-async function proxyToGitee(req, res, bodyBuf) {
+async function proxyToGitee(req, res, bodyBuf, { capture = false } = {}) {
   const target = `${GITEE_ORIGIN}${req.url}`;
   const headers = { ...req.headers };
   delete headers.host;
@@ -370,6 +401,12 @@ async function proxyToGitee(req, res, bodyBuf) {
   }
   res.writeHead(upstream.status, outHeaders);
   res.end(buf);
+  if (!capture) return null;
+  let parsed = null;
+  try {
+    parsed = JSON.parse(buf.toString("utf8") || "{}");
+  } catch {}
+  return { status: upstream.status, body: parsed };
 }
 
 /**
@@ -548,6 +585,20 @@ const server = http.createServer(async (req, res) => {
   }
 
   let forwardBuf = bodyBuf;
+  // The async speech contract uses `inputs` (plural). Accept the common
+  // OpenAI-style `input` alias so existing clients do not fail with 400.
+  if (
+    urlPath === "/v1/async/audio/speech" &&
+    bodyBuf.length &&
+    String(req.headers["content-type"] || "").includes("json")
+  ) {
+    try {
+      const body = JSON.parse(bodyBuf.toString("utf8") || "{}");
+      if (body.inputs == null && body.input != null) body.inputs = body.input;
+      delete body.input;
+      forwardBuf = Buffer.from(JSON.stringify(body), "utf8");
+    } catch {}
+  }
   // Duix-Avatar upstream requires ref_audio / ref_video (normalize common aliases).
   if (
     urlPath.includes("/async/videos/audio-video-to-video") &&
@@ -586,7 +637,9 @@ const server = http.createServer(async (req, res) => {
     });
   }
 
-  if (!token.skipBill) {
+  const usageBill = urlPath === "/v1/systemone" && !!sellUsdPerM(modelId);
+
+  if (!token.skipBill && !usageBill) {
     const bill = deductQuota(token.userId, token.tokenId, modelId, priceUsd);
     if (!bill.ok) {
       return json(res, 403, {
@@ -597,10 +650,41 @@ const server = http.createServer(async (req, res) => {
         },
       });
     }
+  } else if (!token.skipBill && usageBill) {
+    // Soft pre-check: need some remaining quota before calling upstream.
+    const db = openDb(true);
+    try {
+      const user = db
+        ?.prepare(`SELECT quota FROM users WHERE id = ?`)
+        .get(token.userId);
+      if (user && user.quota <= 0) {
+        return json(res, 403, {
+          error: { message: "额度不足", type: "billing_error" },
+        });
+      }
+    } finally {
+      db?.close();
+    }
   }
 
   try {
-    await proxyToGitee(req, res, forwardBuf);
+    const captured = await proxyToGitee(req, res, forwardBuf, {
+      capture: usageBill,
+    });
+    if (usageBill && !token.skipBill && captured && captured.status < 400) {
+      const usd =
+        priceUsdFromUsage(modelId, captured.body?.usage) ?? priceUsd;
+      if (usd > 0) {
+        const bill = deductQuota(token.userId, token.tokenId, modelId, usd);
+        if (!bill.ok) {
+          console.warn(
+            "[gitee-passthrough] post-usage bill failed",
+            modelId,
+            bill.error
+          );
+        }
+      }
+    }
   } catch (e) {
     json(res, 502, {
       error: { message: String(e.message || e), type: "server_error" },

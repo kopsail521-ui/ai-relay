@@ -4,6 +4,7 @@
     { "id": "gpt-6-astra", "label": "GPT-6 Astra", "blurb": "flagship GPT-class chat" },
     { "id": "claude-fable-5-1", "label": "Claude Fable 5.1", "blurb": "top Claude-class reasoning" },
     { "id": "deepseek-v4.1-flash", "label": "DeepSeek V4.1 Flash", "blurb": "fast cheap DeepSeek" },
+    { "id": "Bespoke-Nimble-9B", "label": "Bespoke Nimble 9B", "blurb": "System One decisions" },
     { "id": "MiniMax-H3", "label": "MiniMax H3", "blurb": "video generation" },
     { "id": "seedance-2.5-1080p", "label": "Seedance 2.5 1080p", "blurb": "1080p video" },
     { "id": "IndexTTS-2", "label": "IndexTTS 2", "blurb": "TTS" },

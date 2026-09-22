@@ -1,0 +1,23 @@
+# 热修：Bespoke-Nimble-9B 放到阿里巴巴供应商（Qwen.Color logo）
+set -e
+cd /opt/ai-relay
+sudo git pull --ff-only origin main
+sudo docker run --rm \
+  -v /opt/ai-relay/data/new-api:/data \
+  -v /opt/ai-relay/scripts/vps-fix-bespoke-alibaba-icon.py:/tmp/fix.py:ro \
+  python:3.12-alpine python /tmp/fix.py /data/one-api.db
+# heal meta（若透传容器仍跑旧 RULES，下次透传 rebuild 也会对齐）
+sudo docker run --rm \
+  -v /opt/ai-relay/data/new-api:/data \
+  -v /opt/ai-relay/services/gitee-passthrough:/app:ro \
+  -w /app node:22-alpine \
+  node --input-type=module -e "import { fixMarketplaceMeta } from './fix-marketplace-meta.mjs'; console.log(JSON.stringify(fixMarketplaceMeta('/data/one-api.db')));"
+curl -sS http://127.0.0.1:3001/api/pricing 2>/dev/null | python3 -c "
+import sys,json
+j=json.load(sys.stdin)
+m=next((x for x in j.get('data',[]) if x.get('model_name')=='Bespoke-Nimble-9B'), None)
+print('model', m and (m.get('model_name'), m.get('icon'), m.get('vendor_id')))
+vs={v.get('id'):v.get('name') for v in j.get('vendors',[])}
+print('vendor_name', vs.get(m.get('vendor_id')) if m else None)
+"
+echo DONE_BESPOKE_ICON_ALIBABA

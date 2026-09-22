@@ -205,10 +205,10 @@ export const RULES = {
     icon: "Qwen.Color",
   },
   "Bespoke-Nimble-9B": {
-    vendor: "其他",
+    vendor: "阿里巴巴",
     tag: "系统一模型",
     endpoints: EP.systemone,
-    icon: "Custom",
+    icon: "Qwen.Color",
   },
   "gpt-image-2": { vendor: "OpenAI", tag: "图片", endpoints: EP.image },
   "gpt-image-2-vip": { vendor: "OpenAI", tag: "图片", endpoints: EP.image },

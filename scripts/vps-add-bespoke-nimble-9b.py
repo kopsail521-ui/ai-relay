@@ -17,8 +17,8 @@ OUR_COMPLETION_RATIO = 0
 SELL_IN = 0.032
 SELL_OUT = 0.0
 TAG = "系统一模型"
-VENDOR = "其他"
-ICON = "Custom"
+VENDOR = "阿里巴巴"  # Qwen-based → Alibaba / Qwen.Color logo
+ICON = "Qwen.Color"
 ENDPOINTS = json.dumps(
     {"openai": {"path": "/v1/systemone", "method": "POST"}},
     separators=(",", ":"),

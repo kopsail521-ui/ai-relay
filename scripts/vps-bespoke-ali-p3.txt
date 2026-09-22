@@ -1,0 +1,1 @@
+sudo docker run --rm -v /opt/ai-relay/data/new-api:/data -v /opt/ai-relay/services/gitee-passthrough:/app:ro -w /app node:22-alpine node --input-type=module -e "import{fixMarketplaceMeta}from'./fix-marketplace-meta.mjs';console.log(JSON.stringify(fixMarketplaceMeta('/data/one-api.db')))"

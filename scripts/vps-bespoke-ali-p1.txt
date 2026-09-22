@@ -1,0 +1,1 @@
+cd /opt/ai-relay && sudo git pull --ff-only origin main && echo OK_PULL

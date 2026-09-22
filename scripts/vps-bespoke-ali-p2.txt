@@ -1,0 +1,1 @@
+sudo docker run --rm -v /opt/ai-relay/data/new-api:/data -v /opt/ai-relay/scripts/vps-fix-bespoke-alibaba-icon.py:/tmp/fix.py:ro python:3.12-alpine python /tmp/fix.py /data/one-api.db

@@ -34,6 +34,7 @@
     "Qwen3-TTS": "Qwen.Color",
     "CosyVoice3": "Qwen.Color",
     "wan3.0-video": "Qwen.Color",
+    "Bespoke-Nimble-9B": "Qwen.Color",
     "MiniMax-H3": "Minimax.Color",
     "sam3": "Meta.Color",
     "GLM-ASR": "Zhipu.Color",

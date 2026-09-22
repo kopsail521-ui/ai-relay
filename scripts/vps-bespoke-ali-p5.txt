@@ -1,0 +1,1 @@
+curl -sS http://127.0.0.1:3001/api/pricing | python3 -c "import sys,json;j=json.load(sys.stdin);m=next(x for x in j['data'] if x['model_name']=='Bespoke-Nimble-9B');vs={v['id']:v['name'] for v in j['vendors']};print(m['icon'],vs.get(m['vendor_id']));print('DONE_BESPOKE_ALI')"

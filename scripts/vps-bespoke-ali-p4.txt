@@ -1,0 +1,1 @@
+sudo docker cp /opt/ai-relay/services/creem-moderation-proxy/model-icon-map.json ai-relay-creem-moderation:/app/model-icon-map.json && sudo docker restart ai-relay-creem-moderation && echo OK_ICON_MAP

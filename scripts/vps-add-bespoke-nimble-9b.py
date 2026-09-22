@@ -24,7 +24,8 @@ ENDPOINTS = json.dumps(
     separators=(",", ":"),
 )
 DESC = (
-    "Bespoke Nimble 9B（BespokeLabs，Open-Jev 路线）：不是通用对话模型，是「类型化判别决策」专用 LoRA（底座 Qwen3.5-9B-Instruct）。"
+    "Bespoke Nimble 9B：面向 Jev / Open-Jev 的开源 System One 决策模型（BespokeLabs，2026-09-18）。"
+    "不是通用对话模型，而是「类型化判别决策」专用 LoRA（底座 Qwen3.5-9B-Instruct）。"
     "输入 state + questions，一次返回 choice / score / noul；每字段最多 26 选项；>2048 tokens 拒绝而非截断。"
     "计费：输入 $%.3f / 输出 $%.0f（每百万 tokens）。" % (SELL_IN, SELL_OUT)
 )

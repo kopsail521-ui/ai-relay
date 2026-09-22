@@ -1183,7 +1183,7 @@
       "upstream": "Bespoke-Nimble-9B",
       "category": "system_one",
       "category_zh": "系统一模型",
-      "description": "Bespoke Nimble 9B（BespokeLabs，Open-Jev 路线）：不是通用对话模型，是「类型化判别决策」专用 LoRA（底座 Qwen3.5-9B-Instruct）。输入 state + questions，一次返回 choice / score / noul（含选项概率）；每字段最多 26 个选项；超过 2,048 tokens 的提示会被拒绝而非截断。",
+      "description": "Bespoke Nimble 9B：面向 Jev / Open-Jev 的开源 System One 决策模型（BespokeLabs，2026-09-18）。不是通用对话模型，而是「类型化判别决策」专用 LoRA（底座 Qwen3.5-9B-Instruct；权重、训练配方、数据集、评估集与推理 SDK 同步开源）。输入 state + questions，一次返回 choice / score / noul（含选项概率）；每字段最多 26 个选项；超过 2,048 tokens 的提示会被拒绝而非截断。",
       "paths": [
         "v1/systemone"
       ],
@@ -1198,7 +1198,7 @@
       },
       "relay": "gitee_passthrough",
       "markup": 1,
-      "description_en": "Bespoke Nimble 9B (BespokeLabs, Open-Jev line) — not a general chat model. A typed decision LoRA on Qwen3.5-9B-Instruct for System One judgments. Pass state + questions; get choice / score / noul (with option probabilities). Max 26 options per field; prompts over 2,048 tokens are rejected (not truncated).."
+      "description_en": "Bespoke Nimble 9B — open Jev / Open-Jev–style System One model (BespokeLabs, 2026-09-18). Not general chat: a typed-decision LoRA on Qwen3.5-9B-Instruct (weights, training recipe, datasets, evals, and inference SDK released together). Pass state + questions; get choice / score / noul with option probabilities. Max 26 options per field; prompts over 2,048 tokens are rejected, not truncated.."
     }
   ]
 }

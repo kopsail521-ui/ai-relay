@@ -5125,15 +5125,15 @@
     }
   },
   "Bespoke-Nimble-9B": {
-    "description": "Bespoke Nimble 9B（BespokeLabs，Open-Jev 路线）：不是通用对话模型，是「类型化判别决策」专用 LoRA（底座 Qwen3.5-9B-Instruct）。输入 state + questions，一次返回 choice / score / noul（含选项概率）；每字段最多 26 个选项；超过 2,048 tokens 的提示会被拒绝而非截断。计费：输入 $0.032 / 输出 $0（每百万 tokens）。",
+    "description": "Bespoke Nimble 9B：面向 Jev / Open-Jev 的开源 System One 决策模型（BespokeLabs，2026-09-18）。不是通用对话模型，而是「类型化判别决策」专用 LoRA（底座 Qwen3.5-9B-Instruct；权重、训练配方、数据集、评估集与推理 SDK 同步开源）。输入 state + questions，一次返回 choice / score / noul（含选项概率）；每字段最多 26 个选项；超过 2,048 tokens 的提示会被拒绝而非截断。计费：输入 $0.032 / 输出 $0（每百万 tokens）。",
     "descriptions": {
-      "zhCN": "Bespoke Nimble 9B（BespokeLabs，Open-Jev 路线）：不是通用对话模型，是「类型化判别决策」专用 LoRA（底座 Qwen3.5-9B-Instruct）。输入 state + questions，一次返回 choice / score / noul（含选项概率）；每字段最多 26 个选项；超过 2,048 tokens 的提示会被拒绝而非截断。计费：输入 $0.032 / 输出 $0（每百万 tokens）。",
-      "zhTW": "Bespoke Nimble 9B（BespokeLabs，Open-Jev 路線）：非通用對話模型，而是「類型化判別決策」專用 LoRA（底座 Qwen3.5-9B-Instruct）。輸入 state + questions，一次回傳 choice / score / noul（含選項機率）；每欄位最多 26 個選項；超過 2,048 tokens 的提示會被拒絕而非截斷。計費：輸入 $0.032 / 輸出 $0（每百萬 tokens）。",
-      "en": "Bespoke Nimble 9B (BespokeLabs, Open-Jev line) — not a general chat model. A typed decision LoRA on Qwen3.5-9B-Instruct for System One judgments. Pass state + questions; get choice / score / noul (with option probabilities). Max 26 options per field; prompts over 2,048 tokens are rejected (not truncated). Pricing: $0.032 input / $0 output per 1M tokens. Search-friendly for Jev / Open-Jev users.",
-      "fr": "Bespoke Nimble 9B (BespokeLabs, lignée Open-Jev) — pas un chat général. LoRA de décision typée sur Qwen3.5-9B-Instruct. Envoyez state + questions ; recevez choice / score / noul. Max 26 options/champ ; prompts > 2 048 tokens refusés. Tarif : $0.032 entrée / $0 sortie pour 1M tokens. Pertinent pour Jev / Open-Jev.",
-      "ru": "Bespoke Nimble 9B (BespokeLabs, линия Open-Jev) — не общий чат. Typed decision LoRA на Qwen3.5-9B-Instruct. Передайте state + questions; получите choice / score / noul. До 26 вариантов на поле; промпты > 2048 токенов отклоняются. Тариф: вход $0.032 / выход $0 за 1M токенов. Для пользователей Jev / Open-Jev.",
-      "ja": "Bespoke Nimble 9B（BespokeLabs / Open-Jev）：汎用対話ではなく、Qwen3.5-9B-Instruct 上の型付き判定 LoRA。state + questions で choice / score / noul を一回返却。フィールドあたり最大 26 選択肢。2,048 tokens 超のプロンプトは切り捨てず拒否。料金：入力 $0.032 / 出力 $0（100万 tokens）。Jev / Open-Jev 用途向け。",
-      "vi": "Bespoke Nimble 9B (BespokeLabs, dòng Open-Jev) — không phải chat tổng quát. LoRA quyết định có kiểu trên Qwen3.5-9B-Instruct. Gửi state + questions; nhận choice / score / noul. Tối đa 26 lựa chọn/trường; prompt > 2.048 tokens bị từ chối (không cắt). Giá: vào $0.032 / ra $0 mỗi 1M tokens. Phù hợp Jev / Open-Jev."
+      "zhCN": "Bespoke Nimble 9B：面向 Jev / Open-Jev 的开源 System One 决策模型（BespokeLabs，2026-09-18）。不是通用对话模型，而是「类型化判别决策」专用 LoRA（底座 Qwen3.5-9B-Instruct；权重、训练配方、数据集、评估集与推理 SDK 同步开源）。输入 state + questions，一次返回 choice / score / noul（含选项概率）；每字段最多 26 个选项；超过 2,048 tokens 的提示会被拒绝而非截断。计费：输入 $0.032 / 输出 $0（每百万 tokens）。",
+      "zhTW": "Bespoke Nimble 9B：面向 Jev / Open-Jev 的開源 System One 決策模型（BespokeLabs，2026-09-18）。非通用對話模型，而是「類型化判別決策」專用 LoRA（底座 Qwen3.5-9B-Instruct；權重、訓練配方、資料集、評估集與推理 SDK 同步開源）。輸入 state + questions，一次回傳 choice / score / noul（含選項機率）；每欄位最多 26 個選項；超過 2,048 tokens 的提示會被拒絕而非截斷。計費：輸入 $0.032 / 輸出 $0（每百萬 tokens）。",
+      "en": "Bespoke Nimble 9B — open Jev / Open-Jev–style System One model (BespokeLabs, 2026-09-18). Not general chat: a typed-decision LoRA on Qwen3.5-9B-Instruct (weights, training recipe, datasets, evals, and inference SDK released together). Pass state + questions; get choice / score / noul with option probabilities. Max 26 options per field; prompts over 2,048 tokens are rejected, not truncated. Pricing: $0.032 input / $0 output per 1M tokens.",
+      "fr": "Bespoke Nimble 9B — modèle System One open source style Jev / Open-Jev (BespokeLabs, 2026-09-18). Pas un chat général : LoRA de décision typée sur Qwen3.5-9B-Instruct (poids, recette, données, evals, SDK). Envoyez state + questions ; recevez choice / score / noul. Max 26 options/champ ; prompts > 2 048 tokens refusés. Tarif : $0.032 entrée / $0 sortie pour 1M tokens.",
+      "ru": "Bespoke Nimble 9B — открытая System One модель в стиле Jev / Open-Jev (BespokeLabs, 2026-09-18). Не общий чат: typed decision LoRA на Qwen3.5-9B-Instruct (веса, рецепт, данные, evals, SDK). Передайте state + questions; получите choice / score / noul. До 26 вариантов на поле; промпты > 2048 токенов отклоняются. Тариф: вход $0.032 / выход $0 за 1M токенов.",
+      "ja": "Bespoke Nimble 9B：Jev / Open-Jev 向けのオープン System One モデル（BespokeLabs、2026-09-18）。汎用対話ではなく、Qwen3.5-9B-Instruct 上の型付き判定 LoRA（重み・レシピ・データ・評価・SDK を公開）。state + questions で choice / score / noul を一回返却。フィールドあたり最大 26 選択肢。2,048 tokens 超は切り捨てず拒否。料金：入力 $0.032 / 出力 $0（100万 tokens）。",
+      "vi": "Bespoke Nimble 9B — mô hình System One mã nguồn mở kiểu Jev / Open-Jev (BespokeLabs, 2026-09-18). Không phải chat tổng quát: LoRA quyết định có kiểu trên Qwen3.5-9B-Instruct (weights, recipe, data, evals, SDK). Gửi state + questions; nhận choice / score / noul. Tối đa 26 lựa chọn/trường; prompt > 2.048 tokens bị từ chối. Giá: vào $0.032 / ra $0 mỗi 1M tokens."
     },
     "unit": "token",
     "badge": {
@@ -5163,8 +5163,8 @@
       "ja": "入力 / 出力",
       "vi": "Vào / Ra"
     },
-    "description_zh": "Bespoke Nimble 9B（BespokeLabs，Open-Jev 路线）：不是通用对话模型，是「类型化判别决策」专用 LoRA（底座 Qwen3.5-9B-Instruct）。输入 state + questions，一次返回 choice / score / noul（含选项概率）；每字段最多 26 个选项；超过 2,048 tokens 的提示会被拒绝而非截断。计费：输入 $0.032 / 输出 $0（每百万 tokens）。",
-    "description_en": "Bespoke Nimble 9B (BespokeLabs, Open-Jev line) — not a general chat model. A typed decision LoRA on Qwen3.5-9B-Instruct for System One judgments. Pass state + questions; get choice / score / noul (with option probabilities). Max 26 options per field; prompts over 2,048 tokens are rejected (not truncated). Pricing: $0.032 input / $0 output per 1M tokens. Search-friendly for Jev / Open-Jev users.",
+    "description_zh": "Bespoke Nimble 9B：面向 Jev / Open-Jev 的开源 System One 决策模型（BespokeLabs，2026-09-18）。不是通用对话模型，而是「类型化判别决策」专用 LoRA（底座 Qwen3.5-9B-Instruct；权重、训练配方、数据集、评估集与推理 SDK 同步开源）。输入 state + questions，一次返回 choice / score / noul（含选项概率）；每字段最多 26 个选项；超过 2,048 tokens 的提示会被拒绝而非截断。计费：输入 $0.032 / 输出 $0（每百万 tokens）。",
+    "description_en": "Bespoke Nimble 9B — open Jev / Open-Jev–style System One model (BespokeLabs, 2026-09-18). Not general chat: a typed-decision LoRA on Qwen3.5-9B-Instruct (weights, training recipe, datasets, evals, and inference SDK released together). Pass state + questions; get choice / score / noul with option probabilities. Max 26 options per field; prompts over 2,048 tokens are rejected, not truncated. Pricing: $0.032 input / $0 output per 1M tokens.",
     "badge_zh": "按量计费",
     "badge_en": "Token",
     "suffix_zh": "/百万tokens",

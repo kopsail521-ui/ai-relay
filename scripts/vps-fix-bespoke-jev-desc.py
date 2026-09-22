@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Update Bespoke-Nimble-9B marketplace description (Open-Jev / Jev)."""
+"""Update Bespoke-Nimble-9B marketplace description (Jev / Open-Jev)."""
 import os
 import sqlite3
 import sys
@@ -7,9 +7,10 @@ import time
 
 MODEL = "Bespoke-Nimble-9B"
 DESC = (
-    "Bespoke Nimble 9B（BespokeLabs，Open-Jev 路线）：不是通用对话模型，是「类型化判别决策」专用 LoRA"
-    "（底座 Qwen3.5-9B-Instruct）。输入 state + questions，一次返回 choice / score / noul；"
-    "每字段最多 26 选项；>2048 tokens 拒绝而非截断。计费：输入 $0.032 / 输出 $0（每百万 tokens）。"
+    "Bespoke Nimble 9B：面向 Jev / Open-Jev 的开源 System One 决策模型（BespokeLabs，2026-09-18）。"
+    "不是通用对话模型，而是「类型化判别决策」专用 LoRA（底座 Qwen3.5-9B-Instruct）。"
+    "输入 state + questions，一次返回 choice / score / noul；每字段最多 26 选项；"
+    ">2048 tokens 拒绝而非截断。计费：输入 $0.032 / 输出 $0（每百万 tokens）。"
 )
 
 
@@ -33,7 +34,7 @@ def main():
     except sqlite3.OperationalError:
         cur.execute("UPDATE models SET description=? WHERE id=?", (DESC, mid))
     conn.commit()
-    cur.execute("SELECT substr(description,1,80) FROM models WHERE id=?", (mid,))
+    cur.execute("SELECT substr(description,1,100) FROM models WHERE id=?", (mid,))
     print("desc", cur.fetchone()[0])
     print("DONE_BESPOKE_JEV_DESC")
     conn.close()

@@ -1,4 +1,4 @@
-# 更新 Bespoke 简介（Open-Jev / Jev）+ 广场 i18n + 品牌页
+# 热修：Bespoke 简介突出 Jev / Open-Jev + 广场 i18n
 set -e
 cd /opt/ai-relay
 sudo git pull --ff-only origin main
@@ -14,6 +14,11 @@ if [ -n "$MOD" ]; then
   echo "moderation_copy_updated=$MOD"
 fi
 sudo bash scripts/deploy-brand-static.sh
-curl -sS https://www.keyoapi.xyz/ | grep -o 'Open-Jev System One' | head -1
-curl -sS https://www.keyoapi.xyz/brand/keyo-docs.html | grep -o 'Open-Jev' | head -1
-echo DONE_BESPOKE_JEV_COPY
+curl -sS http://127.0.0.1:3001/api/pricing 2>/dev/null | python3 -c "
+import sys,json
+j=json.load(sys.stdin)
+m=next((x for x in j.get('data',[]) if x.get('model_name')=='Bespoke-Nimble-9B'), None)
+print((m or {}).get('description','')[:120])
+"
+curl -sS https://www.keyoapi.xyz/ | grep -o 'Jev / Open-Jev' | head -1
+echo DONE_BESPOKE_JEV_DESC

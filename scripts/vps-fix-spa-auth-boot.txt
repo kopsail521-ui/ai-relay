@@ -1,0 +1,10 @@
+# Short Workbench steps — fix sign-up/sign-in Loading failed
+# Run one line at a time on VPS.
+
+cd /opt/ai-relay && sudo git pull --ff-only origin main && echo OK_PULL
+
+sudo bash /opt/ai-relay/scripts/patch-spa-shell-noindex.sh && echo OK_SHELL
+
+sudo bash /opt/ai-relay/scripts/deploy-brand-static.sh && echo OK_CADDY
+
+curl -s https://www.keyoapi.xyz/sign-up | wc -c; curl -s https://www.keyoapi.xyz/sign-up | grep -o bootSpa | head -1 || echo NATIVE_SPA; curl -sI https://www.keyoapi.xyz/sign-up | grep -i x-robots

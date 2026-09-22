@@ -13,33 +13,44 @@
     <div id="root" translate="no" class="notranslate"></div>
     <script>
       (async function bootSpa() {
-        try {
-          var res = await fetch("/__spa_raw", { credentials: "same-origin" });
-          if (!res.ok) throw new Error("spa_raw " + res.status);
-          var html = await res.text();
-          var doc = new DOMParser().parseFromString(html, "text/html");
-          doc.querySelectorAll('link[rel="stylesheet"]').forEach(function (n) {
-            var l = document.createElement("link");
-            l.rel = "stylesheet";
-            l.href = n.getAttribute("href");
-            document.head.appendChild(l);
-          });
-          var scripts = Array.prototype.slice.call(doc.querySelectorAll("script"));
-          for (var i = 0; i < scripts.length; i++) {
-            var n = scripts[i];
-            var s = document.createElement("script");
-            Array.prototype.forEach.call(n.attributes, function (a) {
-              s.setAttribute(a.name, a.value);
-            });
-            if (n.textContent) s.textContent = n.textContent;
-            document.body.appendChild(s);
-            if (s.src) {
-              await new Promise(function (resolve, reject) {
-                s.onload = resolve;
-                s.onerror = reject;
-              });
+        // Prefer native HTML parse over DOMParser+re-inject: large moderation injects
+        // (~130KB) made script onerror / sync throws show "Loading failed".
+        function withNoindex(html) {
+          if (/name=["']robots["']/i.test(html)) {
+            return html.replace(
+              /<meta[^>]*name=["']robots["'][^>]*>/i,
+              '<meta name="robots" content="noindex, nofollow" />'
+            );
+          }
+          if (/<head[^>]*>/i.test(html)) {
+            return html.replace(
+              /<head([^>]*)>/i,
+              '<head$1><meta name="robots" content="noindex, nofollow" />'
+            );
+          }
+          return html;
+        }
+        async function loadRaw() {
+          var lastErr = null;
+          for (var attempt = 0; attempt < 3; attempt++) {
+            try {
+              var res = await fetch("/__spa_raw", { credentials: "same-origin", cache: "no-store" });
+              if (!res.ok) throw new Error("spa_raw " + res.status);
+              var html = await res.text();
+              if (!html || html.length < 500) throw new Error("spa_raw too short");
+              return html;
+            } catch (e) {
+              lastErr = e;
+              await new Promise(function (r) { setTimeout(r, 250 * (attempt + 1)); });
             }
           }
+          throw lastErr || new Error("spa_raw failed");
+        }
+        try {
+          var html = withNoindex(await loadRaw());
+          document.open();
+          document.write(html);
+          document.close();
         } catch (e) {
           console.error("spa boot failed", e);
           var el = document.getElementById("root");

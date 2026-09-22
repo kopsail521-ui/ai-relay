@@ -157,7 +157,15 @@ ${LANDING_HANDLES}
 			header_up Accept-Encoding identity
 		}
 	}
-	@spa_noindex path /sign-in /sign-in/* /sign-up /sign-up/* /console /console/* /rankings /rankings/* /dashboard /dashboard/* /admin /admin/* /setup /setup/*
+	# Auth: native SPA via :3001 (same as /login). Avoid spa-shell→DOMParser boot failures.
+	@spa_auth path /sign-in /sign-in/* /sign-up /sign-up/*
+	handle @spa_auth {
+		header X-Robots-Tag "noindex, nofollow"
+		reverse_proxy 127.0.0.1:3001 {
+			header_up Accept-Encoding identity
+		}
+	}
+	@spa_noindex path /console /console/* /rankings /rankings/* /dashboard /dashboard/* /admin /admin/* /setup /setup/*
 	handle @spa_noindex {
 		header X-Robots-Tag "noindex, nofollow"
 		header Content-Type "text/html; charset=utf-8"

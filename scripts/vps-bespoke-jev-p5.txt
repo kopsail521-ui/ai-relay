@@ -1,0 +1,1 @@
+curl -sS https://www.keyoapi.xyz/ | grep -o 'Jev / Open-Jev' | head -1; echo DONE_BESPOKE_JEV

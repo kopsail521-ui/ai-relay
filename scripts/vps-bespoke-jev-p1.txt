@@ -1,0 +1,1 @@
+cd /opt/ai-relay && sudo git pull --ff-only origin main && ls scripts/vps-fix-bespoke-jev-desc.py && echo OK_PULL

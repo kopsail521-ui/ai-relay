@@ -1,0 +1,1 @@
+sudo docker cp /opt/ai-relay/config/marketplace-model-copy.json ai-relay-creem-moderation:/app/marketplace-model-copy.json && sudo docker restart ai-relay-creem-moderation && echo OK_COPY

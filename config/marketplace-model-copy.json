@@ -5125,15 +5125,15 @@
     }
   },
   "Bespoke-Nimble-9B": {
-    "description": "Bespoke Nimble 9B：System One 结构化决策模型。输入状态（state）与问题集（questions），一次返回 choice / score / noul 结构化答案（含选项概率），无需链式推理文本。计费：输入 $0.032 / 输出 $0（每百万 tokens）。",
+    "description": "Bespoke Nimble 9B（BespokeLabs，Open-Jev 路线）：不是通用对话模型，是「类型化判别决策」专用 LoRA（底座 Qwen3.5-9B-Instruct）。输入 state + questions，一次返回 choice / score / noul（含选项概率）；每字段最多 26 个选项；超过 2,048 tokens 的提示会被拒绝而非截断。计费：输入 $0.032 / 输出 $0（每百万 tokens）。",
     "descriptions": {
-      "zhCN": "Bespoke Nimble 9B：System One 结构化决策模型。输入状态（state）与问题集（questions），一次返回 choice / score / noul 结构化答案（含选项概率），无需链式推理文本。计费：输入 $0.032 / 输出 $0（每百万 tokens）。",
-      "zhTW": "Bespoke Nimble 9B：System One 結構化決策模型。輸入狀態（state）與問題集（questions），一次回傳 choice / score / noul 結構化答案（含選項機率），無需鏈式推理文字。計費：輸入 $0.032 / 輸出 $0（每百萬 tokens）。",
-      "en": "Bespoke Nimble 9B — System One structured decision model. Pass state + questions; get choice / score / noul answers (with option probabilities) in one shot, without chain-of-thought text. Pricing: $0.032 input / $0 output per 1M tokens.",
-      "fr": "Bespoke Nimble 9B — modèle de décision structurée System One. Envoyez state + questions ; recevez choice / score / noul (avec probabilités) en un passage. Tarif : $0.032 entrée / $0 sortie pour 1M tokens.",
-      "ru": "Bespoke Nimble 9B — модель структурированных решений System One. Передайте state + questions; получите choice / score / noul (с вероятностями) за один проход. Тариф: вход $0.032 / выход $0 за 1M токенов.",
-      "ja": "Bespoke Nimble 9B：System One 構造化意思決定モデル。state と questions を渡し、choice / score / noul（選択肢確率付き）を一回で返します。料金：入力 $0.032 / 出力 $0（100万 tokens あたり）。",
-      "vi": "Bespoke Nimble 9B — mô hình quyết định có cấu trúc System One. Gửi state + questions; nhận choice / score / noul (kèm xác suất) trong một lần. Giá: vào $0.032 / ra $0 mỗi 1M tokens."
+      "zhCN": "Bespoke Nimble 9B（BespokeLabs，Open-Jev 路线）：不是通用对话模型，是「类型化判别决策」专用 LoRA（底座 Qwen3.5-9B-Instruct）。输入 state + questions，一次返回 choice / score / noul（含选项概率）；每字段最多 26 个选项；超过 2,048 tokens 的提示会被拒绝而非截断。计费：输入 $0.032 / 输出 $0（每百万 tokens）。",
+      "zhTW": "Bespoke Nimble 9B（BespokeLabs，Open-Jev 路線）：非通用對話模型，而是「類型化判別決策」專用 LoRA（底座 Qwen3.5-9B-Instruct）。輸入 state + questions，一次回傳 choice / score / noul（含選項機率）；每欄位最多 26 個選項；超過 2,048 tokens 的提示會被拒絕而非截斷。計費：輸入 $0.032 / 輸出 $0（每百萬 tokens）。",
+      "en": "Bespoke Nimble 9B (BespokeLabs, Open-Jev line) — not a general chat model. A typed decision LoRA on Qwen3.5-9B-Instruct for System One judgments. Pass state + questions; get choice / score / noul (with option probabilities). Max 26 options per field; prompts over 2,048 tokens are rejected (not truncated). Pricing: $0.032 input / $0 output per 1M tokens. Search-friendly for Jev / Open-Jev users.",
+      "fr": "Bespoke Nimble 9B (BespokeLabs, lignée Open-Jev) — pas un chat général. LoRA de décision typée sur Qwen3.5-9B-Instruct. Envoyez state + questions ; recevez choice / score / noul. Max 26 options/champ ; prompts > 2 048 tokens refusés. Tarif : $0.032 entrée / $0 sortie pour 1M tokens. Pertinent pour Jev / Open-Jev.",
+      "ru": "Bespoke Nimble 9B (BespokeLabs, линия Open-Jev) — не общий чат. Typed decision LoRA на Qwen3.5-9B-Instruct. Передайте state + questions; получите choice / score / noul. До 26 вариантов на поле; промпты > 2048 токенов отклоняются. Тариф: вход $0.032 / выход $0 за 1M токенов. Для пользователей Jev / Open-Jev.",
+      "ja": "Bespoke Nimble 9B（BespokeLabs / Open-Jev）：汎用対話ではなく、Qwen3.5-9B-Instruct 上の型付き判定 LoRA。state + questions で choice / score / noul を一回返却。フィールドあたり最大 26 選択肢。2,048 tokens 超のプロンプトは切り捨てず拒否。料金：入力 $0.032 / 出力 $0（100万 tokens）。Jev / Open-Jev 用途向け。",
+      "vi": "Bespoke Nimble 9B (BespokeLabs, dòng Open-Jev) — không phải chat tổng quát. LoRA quyết định có kiểu trên Qwen3.5-9B-Instruct. Gửi state + questions; nhận choice / score / noul. Tối đa 26 lựa chọn/trường; prompt > 2.048 tokens bị từ chối (không cắt). Giá: vào $0.032 / ra $0 mỗi 1M tokens. Phù hợp Jev / Open-Jev."
     },
     "unit": "token",
     "badge": {
@@ -5163,8 +5163,8 @@
       "ja": "入力 / 出力",
       "vi": "Vào / Ra"
     },
-    "description_zh": "Bespoke Nimble 9B：System One 结构化决策模型。输入状态（state）与问题集（questions），一次返回 choice / score / noul 结构化答案（含选项概率），无需链式推理文本。计费：输入 $0.032 / 输出 $0（每百万 tokens）。",
-    "description_en": "Bespoke Nimble 9B — System One structured decision model. Pass state + questions; get choice / score / noul answers (with option probabilities) in one shot, without chain-of-thought text. Pricing: $0.032 input / $0 output per 1M tokens.",
+    "description_zh": "Bespoke Nimble 9B（BespokeLabs，Open-Jev 路线）：不是通用对话模型，是「类型化判别决策」专用 LoRA（底座 Qwen3.5-9B-Instruct）。输入 state + questions，一次返回 choice / score / noul（含选项概率）；每字段最多 26 个选项；超过 2,048 tokens 的提示会被拒绝而非截断。计费：输入 $0.032 / 输出 $0（每百万 tokens）。",
+    "description_en": "Bespoke Nimble 9B (BespokeLabs, Open-Jev line) — not a general chat model. A typed decision LoRA on Qwen3.5-9B-Instruct for System One judgments. Pass state + questions; get choice / score / noul (with option probabilities). Max 26 options per field; prompts over 2,048 tokens are rejected (not truncated). Pricing: $0.032 input / $0 output per 1M tokens. Search-friendly for Jev / Open-Jev users.",
     "badge_zh": "按量计费",
     "badge_en": "Token",
     "suffix_zh": "/百万tokens",

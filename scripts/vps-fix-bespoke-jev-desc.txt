@@ -1,0 +1,19 @@
+# 更新 Bespoke 简介（Open-Jev / Jev）+ 广场 i18n + 品牌页
+set -e
+cd /opt/ai-relay
+sudo git pull --ff-only origin main
+sudo docker run --rm \
+  -v /opt/ai-relay/data/new-api:/data \
+  -v /opt/ai-relay/scripts/vps-fix-bespoke-jev-desc.py:/tmp/fix.py:ro \
+  python:3.12-alpine python /tmp/fix.py /data/one-api.db
+MOD=$(sudo docker ps --format '{{.Names}}' | grep -E 'creem|moderation' | head -1 || true)
+if [ -n "$MOD" ]; then
+  sudo docker cp /opt/ai-relay/config/marketplace-model-copy.json \
+    "$MOD":/app/marketplace-model-copy.json
+  sudo docker restart "$MOD"
+  echo "moderation_copy_updated=$MOD"
+fi
+sudo bash scripts/deploy-brand-static.sh
+curl -sS https://www.keyoapi.xyz/ | grep -o 'Open-Jev System One' | head -1
+curl -sS https://www.keyoapi.xyz/brand/keyo-docs.html | grep -o 'Open-Jev' | head -1
+echo DONE_BESPOKE_JEV_COPY

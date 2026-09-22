@@ -182,7 +182,7 @@ Paid: `gpt-5.6-luna` · `gpt-5.6-terra` · `gpt-5.6-sol` · `claude-sonnet-5` ·
 
 ### 1.11b System One decisions → `POST /v1/systemone`
 
-`Bespoke-Nimble-9B` (JSON: `model` + `state` + `questions`; about **$0.032 / $0** per 1M tokens)
+`Bespoke-Nimble-9B` (BespokeLabs / **Open-Jev** line on Qwen3.5-9B-Instruct; JSON: `model` + `state` + `questions`; about **$0.032 / $0** per 1M tokens. Not general chat; max 26 options per field; prompts over 2048 tokens are rejected, not truncated)
 
 ```bash
 curl https://www.keyoapi.xyz/v1/systemone \

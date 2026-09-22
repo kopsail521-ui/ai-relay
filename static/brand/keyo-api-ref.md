@@ -193,7 +193,7 @@ curl https://www.keyoapi.xyz/v1/videos/generations \
 
 ### 1.11b 系统一决策 → `POST /v1/systemone`
 
-`Bespoke-Nimble-9B`（JSON：`model` + `state` + `questions`；约 **$0.032 / $0** 每百万 tokens）
+`Bespoke-Nimble-9B`（BespokeLabs / **Open-Jev** 路线，底座 Qwen3.5-9B-Instruct；JSON：`model` + `state` + `questions`；约 **$0.032 / $0** 每百万 tokens。非通用对话；每字段最多 26 选项；>2048 tokens 拒绝而非截断）
 
 ```bash
 curl https://www.keyoapi.xyz/v1/systemone \

@@ -17,6 +17,11 @@
       "blurb": "fast cheap DeepSeek"
     },
     {
+      "id": "grok-4.7",
+      "label": "Grok 4.7",
+      "blurb": "xAI Grok chat"
+    },
+    {
       "id": "Bespoke-Nimble-9B",
       "label": "Bespoke Nimble 9B",
       "blurb": "Jev / Open-Jev System One"
@@ -45,11 +50,6 @@
       "id": "RMBG-2.0",
       "label": "RMBG 2.0",
       "blurb": "background removal"
-    },
-    {
-      "id": "InfiniteTalk",
-      "label": "InfiniteTalk",
-      "blurb": "talking avatar"
     }
   ]
 }

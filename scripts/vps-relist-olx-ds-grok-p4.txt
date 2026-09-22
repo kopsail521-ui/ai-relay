@@ -1,0 +1,6 @@
+curl -sS https://www.keyoapi.xyz/api/pricing -o /tmp/pricing.json && python3 -c "import json;d=json.load(open('/tmp/pricing.json'));arr=d.get('data')or[];want=['deepseek-v4.1-flash','deepseek-v4-pro-0813','deepseek-v4-flash-0731','grok-4.7'];
+for mid in want:
+ m=next((x for x in arr if x.get('model_name')==mid),None)
+ if not m: print(mid,'MISSING'); continue
+ si=(m.get('model_ratio')or0)*2; so=si*(m.get('completion_ratio')or1); print(mid,'sell~',round(si,4),'/',round(so,4))
+print('OK_RELIST')"

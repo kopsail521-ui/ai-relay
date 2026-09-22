@@ -1,0 +1,1 @@
+cd /opt/ai-relay && sudo bash scripts/deploy-brand-static.sh

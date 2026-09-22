@@ -136,7 +136,7 @@ const FIXES = {
 
   // —— OpenLux 视频 ——
   "grok-imagine-video-1.5-preview": { vendorName: "xAI", icon: "XAI", tag: "视频", endpoints: EP.apimartVideo },
-  "grok-1.5-video": { vendorName: "xAI", icon: "XAI", tag: "视频", endpoints: EP.openaiVideo },
+  "grok-1.5-video": { vendorName: "xAI", icon: "XAI", tag: "视频按次", endpoints: EP.openaiVideo },
   "veo_3_1-components": { vendorName: "Google", icon: "Gemini.Color", tag: "视频", endpoints: EP.openaiVideo },
 
   // —— APIMart 视频 ——

@@ -1,0 +1,18 @@
+base64 -d /tmp/price-tag-ops.b64 | gunzip | sudo tee /tmp/price-tag-ops.py >/dev/null && sudo docker run --rm -v /opt/ai-relay/data/new-api:/data -v /tmp/price-tag-ops.py:/fix.py:ro python:3.12-alpine python /fix.py /data/one-api.db && sudo docker restart ai-relay-new-api && sleep 4 && curl -sS -o /tmp/pricing.json -w 'pricing=%{http_code}\n' https://www.keyoapi.xyz/api/pricing && python3 - <<'PY'
+import json
+d=json.load(open("/tmp/pricing.json"))
+arr=d.get("data") or []
+names={m.get("model_name") for m in arr}
+ds=[n for n in sorted(names) if "deepseek" in n.lower()]
+print("deepseek_still_listed", ds or "NONE")
+want=["glm-5.2","glm-5.3","kimi-k3","MiniMax-M3","gpt-image-2.5","gpt-image-2.5-flare","gpt-image-2.5-sunburst","grok-1.5-video","Qwen3-VL-Embedding-8B"]
+for mid in want:
+  m=next((x for x in arr if x.get("model_name")==mid), None)
+  if not m:
+    print(mid, "MISSING")
+    continue
+  sell_in=(m.get("model_ratio") or 0)*2
+  sell_out=sell_in*(m.get("completion_ratio") or 1)
+  print(mid, "tags="+str(m.get("tags")), "ratio="+str(m.get("model_ratio")), "comp="+str(m.get("completion_ratio")), "sell≈", round(sell_in,6), "/", round(sell_out,6), "price="+str(m.get("model_price")))
+print("DONE_PRICE_TAG_OPS_20260922")
+PY

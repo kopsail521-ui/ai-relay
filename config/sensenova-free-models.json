@@ -1,26 +1,8 @@
 {
-  "note": "免费线对外 ID 带 -free；渠道 model_mapping 映射到上游裸名。收费线用裸名走 OpenLux。对外勿写 SenseNova。",
+  "note": "免费线对外 ID 带 -free；渠道 model_mapping 映射到上游裸名。收费线用裸名走 OpenLux。对外勿写 SenseNova。DeepSeek 系列已于 2026-09-22 下架。",
   "base_url": "https://token.sensenova.cn",
   "channel_name": "Keyo Free",
   "models": [
-    {
-      "id": "deepseek-v4-pro-free",
-      "upstream": "deepseek-v4-pro",
-      "vendor": "DeepSeek",
-      "icon": "DeepSeek",
-      "tags": "大语言模型,免费",
-      "desc_zh": "DeepSeek V4 Pro 免费额度（与收费版 deepseek-v4-pro 区分）。",
-      "desc_en": "DeepSeek V4 Pro free tier (distinct from paid deepseek-v4-pro)."
-    },
-    {
-      "id": "deepseek-v4-flash-free",
-      "upstream": "deepseek-v4-flash",
-      "vendor": "DeepSeek",
-      "icon": "DeepSeek",
-      "tags": "大语言模型,免费",
-      "desc_zh": "DeepSeek V4 Flash 免费额度（与收费版 deepseek-v4-flash 区分）。",
-      "desc_en": "DeepSeek V4 Flash free tier (distinct from paid deepseek-v4-flash)."
-    },
     {
       "id": "glm-5.2-free",
       "upstream": "glm-5.2",

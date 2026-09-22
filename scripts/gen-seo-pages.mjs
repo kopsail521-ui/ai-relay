@@ -528,7 +528,7 @@ ${featured}
 <pre><code>export OPENAI_BASE_URL=https://www.keyoapi.xyz/v1
 export OPENAI_API_KEY=sk-...
 # chat (OpenAI SDK): model=gpt-6-astra | claude-fable-5-1 | deepseek-v4.1-flash
-# free: model=deepseek-v4-flash-free | glm-5.3-flash:free (see /free-models)
+# free: model=glm-5.2-free | kimi-k3-free | glm-5.3-flash:free (see /free-models)
 # speech / vision / video: IndexTTS-2 · sam3 · RMBG-2.0 · MiniMax-H3 — see Docs</code></pre>
 </div>
 <footer class="foot">
@@ -824,7 +824,7 @@ function renderFreeModels() {
     freeAll.find((m) => m.id.includes("flash") && m.id.includes("free"))?.id ||
     freeAll.find((m) => m.id.endsWith("-free"))?.id ||
     freeAll[0]?.id ||
-    "deepseek-v4-flash-free";
+    "glm-5.2-free";
   const bodyHtml = `
 <p class="lead">KeyoAPI publishes a <strong>free AI API</strong> catalog: fixed <strong>$0</strong> model IDs, no credit card to start, fair-use limits. Register a key and set <code>model</code> to any ID in the table below.</p>
 <p class="meta">Built for prototypes, demos, CI smoke tests, and eval harnesses. For production QPS, switch to metered (paid) model IDs on the same base URL.</p>

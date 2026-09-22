@@ -119,19 +119,19 @@ ul{margin:0 0 14px;padding-left:1.2em}
 </tbody>
 </table>
 <h2>The $0 row competitors cannot match</h2>
-<p>Google Gemini free tiers are usually quota- or trial-shaped. On the same Keyo key you can also call permanent $0 IDs such as deepseek-v4-flash-free, deepseek-v4-pro-free, glm-5.2-free, and kimi-k3-free — fair-use limited, but ModelPrice stays $0. Use them to prototype while you meter Gemini-class paid traffic.</p>
+<p>Google Gemini free tiers are usually quota- or trial-shaped. On the same Keyo key you can also call permanent $0 IDs such as glm-5.2-free, and kimi-k3-free — fair-use limited, but ModelPrice stays $0. Use them to prototype while you meter Gemini-class paid traffic.</p>
 <h2>Rates and how to call</h2>
 <p>Engineers comparing Gemini API pricing usually already want Google-class models with clearer unit economics — or one prepaid balance across Gemini-class IDs plus DeepSeek, GLM, Whisper, OCR, and TTS. Official Google surfaces win on brand trust; KeyoAPI wins when you want that stack without five invoices.</p>
 <p>Keyo rates above are indicative sell prices from the live Keyo catalog. Always confirm interactive pricing pages under /pricing/{modelId} before contracting volume. Preview model IDs can change naming as Google ships stables.</p>
 <p>How to call: set OPENAI_BASE_URL=https://www.keyoapi.xyz/v1, use your Keyo API key, and pass the Gemini model string (for example gemini-2.5-flash) to POST /v1/chat/completions. Many Google-native features remain Google-console only; Keyo focuses on OpenAI-compatible chat access for overseas developer stacks.</p>
-<p>When Gemini list prices spike your margin, keep Gemini for multimodal strengths and shift plain text volume to deepseek-v4-flash or gpt-5.6-luna on the same key. For pure free prototyping, start on <a href="/free-models">/free-models</a>, then promote to Gemini paid IDs when quality gates pass.</p>
+<p>When Gemini list prices spike your margin, keep Gemini for multimodal strengths and shift plain text volume to deepseek-v4.1-flash or gpt-5.6-luna on the same key. For pure free prototyping, start on <a href="/free-models">/free-models</a>, then promote to Gemini paid IDs when quality gates pass.</p>
 <pre>curl https://www.keyoapi.xyz/v1/chat/completions \
   -H "Authorization: Bearer $KEYO_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{"model":"gemini-2.5-flash","messages":[{"role":"user","content":"Hello"}]}'</pre>
 <h2>FAQ</h2>
 <div class="faq"><details><summary>Is Keyo cheaper than Google Gemini API pricing?</summary><p>Often on the Flash/Pro rows we list — but Google’s public list, context tiers, and batch discounts change. Treat this table as a planning snapshot and verify both sides before you commit.</p></details>
-<details><summary>Do you offer a free Gemini model?</summary><p>Keyo’s permanent $0 IDs are DeepSeek/GLM/Kimi free twins today, not Gemini-branded free models. They sit on the same API key so you can prototype cheaply beside paid Gemini traffic.</p></details></div>
+<details><summary>Do you offer a free Gemini model?</summary><p>Keyo’s permanent $0 IDs are GLM/Kimi free twins today, not Gemini-branded free models. They sit on the same API key so you can prototype cheaply beside paid Gemini traffic.</p></details></div>
 <p class="meta">Also see <a href="/compare">/compare</a>, <a href="/free-models">/free-models</a>, and model guides under <code>/model/</code>.</p>
 
 </main>

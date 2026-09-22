@@ -47,13 +47,13 @@
       ],
       "freeKiller": {
         "title": "The $0 row competitors cannot match",
-        "body": "Google Gemini free tiers are usually quota- or trial-shaped. On the same Keyo key you can also call permanent $0 IDs such as deepseek-v4-flash-free, deepseek-v4-pro-free, glm-5.2-free, and kimi-k3-free — fair-use limited, but ModelPrice stays $0. Use them to prototype while you meter Gemini-class paid traffic."
+        "body": "Google Gemini free tiers are usually quota- or trial-shaped. On the same Keyo key you can also call permanent $0 IDs such as glm-5.2-free, and kimi-k3-free — fair-use limited, but ModelPrice stays $0. Use them to prototype while you meter Gemini-class paid traffic."
       },
       "body": [
         "Engineers comparing Gemini API pricing usually already want Google-class models with clearer unit economics — or one prepaid balance across Gemini-class IDs plus DeepSeek, GLM, Whisper, OCR, and TTS. Official Google surfaces win on brand trust; KeyoAPI wins when you want that stack without five invoices.",
         "Keyo rates above are indicative sell prices from the live Keyo catalog. Always confirm interactive pricing pages under /pricing/{modelId} before contracting volume. Preview model IDs can change naming as Google ships stables.",
         "How to call: set OPENAI_BASE_URL=https://www.keyoapi.xyz/v1, use your Keyo API key, and pass the Gemini model string (for example gemini-2.5-flash) to POST /v1/chat/completions. Many Google-native features remain Google-console only; Keyo focuses on OpenAI-compatible chat access for overseas developer stacks.",
-        "When Gemini list prices spike your margin, keep Gemini for multimodal strengths and shift plain text volume to deepseek-v4-flash or gpt-5.6-luna on the same key. For pure free prototyping, start on /free-models, then promote to Gemini paid IDs when quality gates pass."
+        "When Gemini list prices spike your margin, keep Gemini for multimodal strengths and shift plain text volume to deepseek-v4.1-flash or gpt-5.6-luna on the same key. For pure free prototyping, start on /free-models, then promote to Gemini paid IDs when quality gates pass."
       ],
       "faqs": [
         {
@@ -62,66 +62,60 @@
         },
         {
           "q": "Do you offer a free Gemini model?",
-          "a": "Keyo’s permanent $0 IDs are DeepSeek/GLM/Kimi free twins today, not Gemini-branded free models. They sit on the same API key so you can prototype cheaply beside paid Gemini traffic."
+          "a": "Keyo’s permanent $0 IDs are GLM/Kimi free twins today, not Gemini-branded free models. They sit on the same API key so you can prototype cheaply beside paid Gemini traffic."
         }
       ]
     },
     {
       "slug": "deepseek-api-pricing",
       "navLabel": "DeepSeek pricing",
-      "h1": "DeepSeek API Pricing — KeyoAPI Rates, Free Tier & Official Context",
-      "title": "DeepSeek API Pricing Comparison | Free + Paid on KeyoAPI",
-      "metaDescription": "DeepSeek API pricing on KeyoAPI: V4 Flash ~$1.10/$3.30, V4 Pro ~$3.30/$9.90 per 1M, plus permanent $0 *-free IDs. Compare with typical official DeepSeek list rates.",
+      "h1": "DeepSeek API Pricing — KeyoAPI Rates & Official Context",
+      "title": "DeepSeek API Pricing Comparison | KeyoAPI",
+      "metaDescription": "DeepSeek API pricing on KeyoAPI: deepseek-v4.1-flash ~$0.18/$0.72, deepseek-v4-flash-0731 ~$0.26/$0.79, deepseek-v4-pro-0813 ~$0.79/$2.38 per 1M. OpenAI-compatible.",
       "targetKeywords": [
         "deepseek api pricing",
         "deepseek api price",
         "cheap deepseek api"
       ],
-      "lead": "DeepSeek API pricing is one of the clearest purchase-intent queries in the open-model lane. This page puts KeyoAPI sell rates for DeepSeek V4 Flash and Pro next to typical official list context — and highlights permanent $0 free IDs that most pure comparison sites cannot honestly show.",
+      "lead": "DeepSeek API pricing is a clear purchase-intent query. This page puts current KeyoAPI sell rates for DeepSeek V4.1 Flash, V4 Flash 0731, and V4 Pro 0813 next to typical official list context — one OpenAI-compatible key.",
       "rows": [
         {
-          "model": "deepseek-v4-flash-free",
-          "official": "N/A — Keyo permanent free twin",
-          "keyo": "$0 (fair-use)",
-          "note": "model=deepseek-v4-flash-free"
+          "model": "deepseek-v4.1-flash",
+          "official": "Official DeepSeek Flash peak list — verify on api-docs.deepseek.com",
+          "keyo": "~$0.18 / $0.72 per 1M in/out",
+          "note": "High-volume Flash"
         },
         {
-          "model": "deepseek-v4-flash",
-          "official": "Official DeepSeek list for Flash-class models — verify on platform.deepseek.com",
-          "keyo": "~$1.10 / $3.30 per 1M in/out",
-          "note": "Paid high-volume twin"
+          "model": "deepseek-v4-flash-0731",
+          "official": "Official DeepSeek Flash-class list — verify on api-docs.deepseek.com",
+          "keyo": "~$0.26 / $0.79 per 1M in/out",
+          "note": "Flash 0731 snapshot"
         },
         {
-          "model": "deepseek-v4-pro-free",
-          "official": "N/A — Keyo permanent free twin",
-          "keyo": "$0 (fair-use)",
-          "note": "model=deepseek-v4-pro-free"
-        },
-        {
-          "model": "deepseek-v4-pro",
-          "official": "Official DeepSeek list for Pro-class models — verify on platform.deepseek.com",
-          "keyo": "~$3.30 / $9.90 per 1M in/out",
-          "note": "Paid flagship twin"
+          "model": "deepseek-v4-pro-0813",
+          "official": "Official DeepSeek Pro peak list — verify on api-docs.deepseek.com",
+          "keyo": "~$0.79 / $2.38 per 1M in/out",
+          "note": "Pro 0813 flagship"
         }
       ],
       "freeKiller": {
-        "title": "Why $0 rows beat “10% cheaper” tables",
-        "body": "Most deepseek api pricing articles only shuffle paid token rates. Keyo lists deepseek-v4-flash-free and deepseek-v4-pro-free at permanent $0 with fair-use limits — the strongest prototype story you can put in a comparison table without being clickbait, as long as you disclose rate limits."
+        "title": "Prototype free, then meter DeepSeek on the same key",
+        "body": "Keyo keeps permanent $0 chat IDs on /free-models (fair-use). When quality gates pass, switch model= to deepseek-v4.1-flash, deepseek-v4-flash-0731, or deepseek-v4-pro-0813 without changing base URL or auth."
       },
       "body": [
         "Engineers comparing deepseek api pricing usually already trust the model family and are shopping hosts: official platforms, aggregators, or a multi-model API. KeyoAPI is the third option — OpenAI-compatible base URL, prepaid balance, and Gemini/Whisper/OCR on the same key when DeepSeek is only part of the stack.",
-        "Indicative Keyo sell rates above come from the live Keyo catalog. Confirm /pricing/deepseek-v4-flash and /pricing/deepseek-v4-pro before volume contracts. Free IDs keep ModelPrice at $0; they are not unlimited production SLAs.",
-        "How to call: POST https://www.keyoapi.xyz/v1/chat/completions with Authorization: Bearer YOUR_KEY and model set to a Flash/Pro free or paid ID. See dedicated guides at /model/deepseek-v4-flash and /model/deepseek-v4-pro for longer how-tos.",
-        "If your search was really about Gemini dollars, jump to /gemini-api-pricing. For the full free catalog, open /free-models."
+        "Indicative Keyo sell rates above come from the live Keyo catalog. Confirm /pricing/deepseek-v4.1-flash, /pricing/deepseek-v4-flash-0731, and /pricing/deepseek-v4-pro-0813 before volume contracts.",
+        "How to call: POST https://www.keyoapi.xyz/v1/chat/completions with Authorization: Bearer YOUR_KEY and model set to a DeepSeek paid ID above.",
+        "If your search was really about Gemini dollars, jump to /gemini-api-pricing. For free prototyping, open /free-models."
       ],
       "faqs": [
         {
           "q": "Is Keyo’s DeepSeek API pricing cheaper than official?",
-          "a": "It depends on official promotions, cache discounts, and currency. Use this table for planning, then verify both Keyo live rates and DeepSeek’s current public list."
+          "a": "It depends on official promotions, cache discounts, peak/off-peak windows, and currency. Use this table for planning, then verify both Keyo live rates and DeepSeek’s current public list."
         },
         {
-          "q": "What’s the catch on $0 DeepSeek?",
-          "a": "Fair-use rate and concurrency limits on the Keyo Free channel. Disclose that in any public post — silent rate limits feel like bait-and-switch."
+          "q": "Which DeepSeek ID should I start with?",
+          "a": "Start with deepseek-v4.1-flash for high-volume chat. Use deepseek-v4-pro-0813 when you need stronger reasoning. Confirm live rates on /pricing before volume."
         }
       ]
     },
@@ -165,7 +159,7 @@
       ],
       "freeKiller": {
         "title": "Prototype free, then promote to Claude",
-        "body": "Keyo does not ship Anthropic-branded free Claude IDs. For $0 prototyping on the same API key, use permanent free twins such as deepseek-v4-flash-free, deepseek-v4-pro-free, glm-5.2-free, and kimi-k3-free (fair-use limits). When quality gates pass, switch model= to claude-sonnet-5 or another Claude ID without changing base URL or auth."
+        "body": "Keyo does not ship Anthropic-branded free Claude IDs. For $0 prototyping on the same API key, use permanent free twins such as glm-5.2-free, and kimi-k3-free (fair-use limits). When quality gates pass, switch model= to claude-sonnet-5 or another Claude ID without changing base URL or auth."
       },
       "body": [
         "Teams comparing Claude API pricing usually already want Anthropic-class chat or agents with clearer unit economics — or one prepaid balance across Claude-class IDs plus GPT-class, DeepSeek, Whisper, OCR, and TTS. Official Anthropic surfaces win on brand trust; KeyoAPI wins when you want that stack without five invoices.",
@@ -180,7 +174,7 @@
         },
         {
           "q": "Do you offer a free Claude model?",
-          "a": "Not as an Anthropic-branded free ID. Use Keyo’s permanent $0 DeepSeek/GLM/Kimi free twins to prototype on the same key, then promote to paid Claude IDs when you need that quality band."
+          "a": "Not as an Anthropic-branded free ID. Use Keyo’s permanent $0 GLM/Kimi free twins to prototype on the same key, then promote to paid Claude IDs when you need that quality band."
         },
         {
           "q": "How do I try Claude on Keyo?",
@@ -244,7 +238,7 @@
         },
         {
           "q": "Do you offer a free OpenAI / GPT model?",
-          "a": "Not as an OpenAI-branded free ID. Use Keyo’s permanent $0 DeepSeek/GLM/Kimi free twins to prototype on the same key, then promote to paid GPT-5.6 IDs when you need that quality band."
+          "a": "Not as an OpenAI-branded free ID. Use Keyo’s permanent $0 GLM/Kimi free twins to prototype on the same key, then promote to paid GPT-5.6 IDs when you need that quality band."
         },
         {
           "q": "How do I try GPT-class models on Keyo?",
@@ -363,7 +357,7 @@
       ],
       "freeKiller": {
         "title": "Prototype chat free, then meter TTS",
-        "body": "Permanent $0 chat twins (deepseek-v4-flash-free, glm-5.2-free, kimi-k3-free, …) sit on the same key for script drafting. TTS rows above are metered — confirm live rates on Model Square before volume. There is no separate upload playground; try from /pricing/{modelId}."
+        "body": "Permanent $0 chat twins (glm-5.2-free, kimi-k3-free, …) sit on the same key for script drafting. TTS rows above are metered — confirm live rates on Model Square before volume. There is no separate upload playground; try from /pricing/{modelId}."
       },
       "body": [
         "Teams call a TTS API for IVR, voice agents, course narration, and avatar pipelines. Keyo keeps STT (Whisper) and TTS on one prepaid balance so you are not juggling three vendor consoles.",

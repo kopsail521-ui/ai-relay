@@ -123,11 +123,11 @@ Same pattern for other Path B models: upload once, map `url` to that model’s f
 
 ### 1.1 Chat → `POST /v1/chat/completions`
 
-Free (`*-free`): `deepseek-v4-flash-free` · `deepseek-v4-pro-free` · `glm-5.2-free` · `kimi-k3-free` · `Atria-dawn-v2` · `DeepSeek-Prover-V2-7B`
+Free (`*-free`): `glm-5.2-free` · `kimi-k3-free` · `Atria-dawn-v2`
 
 There is also a `:free` chat pool (for example `glm-5.3-flash:free`, `nemotron-3-ultra-550b-a55b:free`). The live list is https://www.keyoapi.xyz/free-models — the list changes over time.
 
-Paid: `gpt-5.6-luna` · `gpt-5.6-terra` · `gpt-5.6-sol` · `claude-sonnet-5` · `claude-opus-5` · `claude-fable-5` · `claude-fable-5-1` · `gemini-3.7-flash` · `gemini-3.8-flash` · `deepseek-v4.1-flash` · `deepseek-v4-flash` · `deepseek-v4-pro-0813` · `kimi-k3` · `grok-4.6` · `MiniMax-M3` · `glm-5.3` · `gemma-4-26B-A4B-it` · `qwen3.8-max-0902`
+Paid: `gpt-5.6-luna` · `gpt-5.6-terra` · `gpt-5.6-sol` · `claude-sonnet-5` · `claude-opus-5` · `claude-fable-5` · `claude-fable-5-1` · `gemini-3.7-flash` · `gemini-3.8-flash` · `deepseek-v4.1-flash` · `deepseek-v4-flash-0731` · `deepseek-v4-pro-0813` · `kimi-k3` · `grok-4.7` · `grok-4.6` · `MiniMax-M3` · `glm-5.3` · `gemma-4-26B-A4B-it` · `qwen3.8-max-0902`
 
 ### 1.2 Images → `POST /v1/images/generations`
 

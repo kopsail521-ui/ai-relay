@@ -1,11 +1,7 @@
 #!/usr/bin/env python3
-"""Delist a fixed batch of chat models from New API (marketplace + channels + ratios).
+"""Delist leftover free twins + glm-5.3 (paid ×2 twins already re-listed).
 
-Targets (paid + free twins where they exist):
-  glm-5.3, glm-5.2, glm-5.2-free
-  deepseek-v4-pro-0813, deepseek-v4-flash-0731, deepseek-v4.1-flash,
-  deepseek-v4-pro, deepseek-v4-flash, deepseek-v4-flash-free, deepseek-v4-pro-free
-  kimi-k3, kimi-k3-free
+Avoids UNIQUE(model_name, deleted_at) by hard-deleting prior soft-deleted rows first.
 """
 from __future__ import annotations
 
@@ -17,17 +13,10 @@ import time
 
 DELIST = [
     "glm-5.3",
-    "glm-5.2",
     "glm-5.2-free",
-    "deepseek-v4-pro-0813",
-    "deepseek-v4-flash-0731",
-    "deepseek-v4.1-flash",
-    "deepseek-v4-pro",
-    "deepseek-v4-flash",
+    "kimi-k3-free",
     "deepseek-v4-flash-free",
     "deepseek-v4-pro-free",
-    "kimi-k3",
-    "kimi-k3-free",
 ]
 
 
@@ -55,7 +44,7 @@ def load_map(cur, key):
 
 
 def main():
-    db = sys.argv[1] if len(sys.argv) > 1 else "/opt/ai-relay/data/new-api/one-api.db"
+    db = sys.argv[1] if len(sys.argv) > 1 else "/data/one-api.db"
     if not os.path.exists(db):
         raise SystemExit("DB not found: " + db)
 
@@ -70,8 +59,8 @@ def main():
     print("delist_targets", ",".join(sorted(want)))
 
     for i, mid in enumerate(sorted(want)):
+        # Clear prior soft-deleted duplicates so UNIQUE(model_name, deleted_at) cannot fire
         if "deleted_at" in m_cols:
-            # Avoid UNIQUE(model_name, deleted_at) vs prior soft-deleted rows
             cur.execute(
                 "DELETE FROM models WHERE model_name=? AND deleted_at IS NOT NULL AND deleted_at!=0",
                 (mid,),
@@ -111,7 +100,6 @@ def main():
             )
         print("channel_strip", cid, name or "", "removed", ",".join(removed))
 
-    # option maps: exact keys only
     for key in ("ModelRatio", "CompletionRatio", "ModelPrice"):
         m = load_map(cur, key)
         changed = False
@@ -125,7 +113,7 @@ def main():
 
     con.commit()
     con.close()
-    print("DONE_DELIST_BATCH")
+    print("DONE_DELIST_FREE_TWINS")
 
 
 if __name__ == "__main__":

@@ -1,0 +1,10 @@
+# Retarget sell = cost×N for fable/kimi/glm (one line each).
+# fable ×5 (already live), kimi ×2, glm-5.2/5.3 ×2
+
+cd /opt/ai-relay && sudo git pull --ff-only origin main && echo OK_PULL
+
+sudo docker run --rm -v /opt/ai-relay/data/new-api:/data -v /opt/ai-relay/scripts/vps-retarget-markup-fable-kimi-glm.py:/fix.py:ro python:3.12-alpine python /fix.py /data/one-api.db
+
+sudo docker restart ai-relay-new-api && sleep 3 && echo OK_PRICE
+
+sudo bash /opt/ai-relay/scripts/deploy-brand-static.sh && echo OK_BRAND

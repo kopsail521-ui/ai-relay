@@ -4,7 +4,9 @@
     "submit": "POST https://www.keyoapi.xyz/v1/videos/generations",
     "poll": "GET https://www.keyoapi.xyz/v1/tasks/{task_id}",
     "upload": "POST https://www.keyoapi.xyz/v1/uploads",
-    "also_accepts_submit": ["POST /v1/videos"],
+    "also_accepts_submit": [
+      "POST /v1/videos"
+    ],
     "auth": "Authorization: Bearer sk-..."
   },
   "global_rules": [
@@ -16,24 +18,48 @@
   ],
   "models": {
     "wan3.0-video": {
-      "upstream_style": "apimart_passthrough",
-      "required_any_of": ["prompt", "media"],
+      "required_any_of": [
+        "prompt",
+        "media"
+      ],
       "enums": {
-        "resolution": ["480P", "720P", "1080P"],
+        "resolution": [
+          "480P",
+          "720P",
+          "1080P"
+        ],
         "duration": "integer 2..30 or -1 (model chooses)",
-        "size": ["adaptive", "16:9", "4:3", "1:1", "3:4", "9:16"],
-        "generation_type": ["frame", "reference"]
+        "size": [
+          "adaptive",
+          "16:9",
+          "4:3",
+          "1:1",
+          "3:4",
+          "9:16"
+        ],
+        "generation_type": [
+          "frame",
+          "reference"
+        ]
       },
       "modes": {
         "t2v": {
-          "body": { "model": "wan3.0-video", "prompt": "...", "resolution": "720P", "duration": 5, "size": "16:9" }
+          "body": {
+            "model": "wan3.0-video",
+            "prompt": "...",
+            "resolution": "720P",
+            "duration": 5,
+            "size": "16:9"
+          }
         },
         "first_frame": {
           "note": "Bare image_urls with 1 image defaults to FRAME family (first frame).",
           "body": {
             "model": "wan3.0-video",
             "prompt": "...",
-            "image_urls": ["https://example.com/first.png"],
+            "image_urls": [
+              "https://example.com/first.png"
+            ],
             "resolution": "720P",
             "duration": 5
           }
@@ -43,8 +69,14 @@
             "model": "wan3.0-video",
             "prompt": "...",
             "image_with_roles": [
-              { "url": "https://example.com/first.png", "role": "first_frame" },
-              { "url": "https://example.com/last.jpg", "role": "last_frame" }
+              {
+                "url": "https://example.com/first.png",
+                "role": "first_frame"
+              },
+              {
+                "url": "https://example.com/last.jpg",
+                "role": "last_frame"
+              }
             ],
             "duration": 5,
             "resolution": "480P"
@@ -61,8 +93,12 @@
               "https://example.com/b.png",
               "https://example.com/c.png"
             ],
-            "video_urls": ["https://example.com/role.mp4"],
-            "audio_urls": ["https://example.com/voice.mp3"],
+            "video_urls": [
+              "https://example.com/role.mp4"
+            ],
+            "audio_urls": [
+              "https://example.com/voice.mp3"
+            ],
             "resolution": "480P",
             "duration": 5
           }
@@ -112,7 +148,10 @@
         "seedance-2.5-720p"
       ],
       "note": "Old ids seedance-2.0 / seedance-2.5 are DELISTED. Resolution is encoded in the model id — do not send conflicting resolution unless needed.",
-      "required": ["model", "prompt"],
+      "required": [
+        "model",
+        "prompt"
+      ],
       "duration_field": "duration (alias seconds)",
       "modes": {
         "t2v": {
@@ -135,7 +174,9 @@
             "prompt": "...",
             "duration": 5,
             "generation_type": "first_frame",
-            "image_urls": ["https://example.com/first.jpg"]
+            "image_urls": [
+              "https://example.com/first.jpg"
+            ]
           }
         },
         "first_last": {
@@ -144,8 +185,14 @@
             "prompt": "Natural transition, keep identity",
             "duration": 5,
             "image_with_roles": [
-              { "url": "https://example.com/first.jpg", "role": "first_frame" },
-              { "url": "https://example.com/last.jpg", "role": "last_frame" }
+              {
+                "url": "https://example.com/first.jpg",
+                "role": "first_frame"
+              },
+              {
+                "url": "https://example.com/last.jpg",
+                "role": "last_frame"
+              }
             ]
           }
         },
@@ -155,7 +202,9 @@
             "model": "seedance-2.0-720p-mini",
             "prompt": "Keep identity of subject in the reference image",
             "duration": 5,
-            "image_urls": ["https://example.com/char.jpg"]
+            "image_urls": [
+              "https://example.com/char.jpg"
+            ]
           }
         },
         "reference_multimodal": {
@@ -164,9 +213,15 @@
             "model": "seedance-2.0-720p-mini",
             "prompt": "Character speaks with the reference voice, slow push-in",
             "duration": 5,
-            "image_urls": ["https://example.com/char.jpg"],
-            "video_urls": ["https://example.com/motion.mp4"],
-            "audios": ["https://example.com/voice.mp3"]
+            "image_urls": [
+              "https://example.com/char.jpg"
+            ],
+            "video_urls": [
+              "https://example.com/motion.mp4"
+            ],
+            "audios": [
+              "https://example.com/voice.mp3"
+            ]
           }
         }
       },
@@ -183,13 +238,40 @@
       ]
     },
     "flux-3-video": {
-      "required": ["model", "prompt"],
+      "required": [
+        "model",
+        "prompt"
+      ],
       "enums": {
         "duration": "integer 5..20",
-        "resolution": ["hd", "fhd"],
-        "tier": ["DRAFT", "HD", "FHD"],
-        "aspect_ratio": ["21:9", "2:1", "16:9", "4:3", "1:1", "3:4", "9:16", "auto"],
-        "mode": ["t2v", "i2v", "v2v", "draft_enhance", "text-to-video", "image-continuation", "video-continuation"]
+        "resolution": [
+          "hd",
+          "fhd"
+        ],
+        "tier": [
+          "DRAFT",
+          "HD",
+          "FHD"
+        ],
+        "aspect_ratio": [
+          "21:9",
+          "2:1",
+          "16:9",
+          "4:3",
+          "1:1",
+          "3:4",
+          "9:16",
+          "auto"
+        ],
+        "mode": [
+          "t2v",
+          "i2v",
+          "v2v",
+          "draft_enhance",
+          "text-to-video",
+          "image-continuation",
+          "video-continuation"
+        ]
       },
       "modes": {
         "t2v": {
@@ -243,7 +325,12 @@
           }
         },
         "silent": {
-          "body": { "model": "flux-3-video", "prompt": "...", "audio": false, "duration": 5 }
+          "body": {
+            "model": "flux-3-video",
+            "prompt": "...",
+            "audio": false,
+            "duration": 5
+          }
         }
       },
       "forbidden": [
@@ -255,12 +342,29 @@
       ]
     },
     "MiniMax-H3": {
-      "upstream_style": "grsai",
-      "required": ["model", "prompt", "aspectRatio", "resolution", "duration"],
+      "required": [
+        "model",
+        "prompt",
+        "aspectRatio",
+        "resolution",
+        "duration"
+      ],
       "enums": {
-        "aspectRatio": ["landscape", "portrait", "square"],
-        "aspectRatio_aliases": ["16:9→landscape", "9:16→portrait", "1:1→square"],
-        "resolution": ["480p", "768p", "1080p"],
+        "aspectRatio": [
+          "landscape",
+          "portrait",
+          "square"
+        ],
+        "aspectRatio_aliases": [
+          "16:9→landscape",
+          "9:16→portrait",
+          "1:1→square"
+        ],
+        "resolution": [
+          "480p",
+          "768p",
+          "1080p"
+        ],
         "duration": "1..15; 1080p max 10"
       },
       "modes": {
@@ -281,8 +385,12 @@
             "aspectRatio": "portrait",
             "resolution": "768p",
             "duration": 8,
-            "images": ["https://example.com/char.png"],
-            "audios": ["https://example.com/voice.mp3"]
+            "images": [
+              "https://example.com/char.png"
+            ],
+            "audios": [
+              "https://example.com/voice.mp3"
+            ]
           }
         }
       },
@@ -291,7 +399,10 @@
         "audio_urls": "audios",
         "aspect_ratio": "aspectRatio"
       },
-      "limits": { "images": "≤9", "audios": "≤3" },
+      "limits": {
+        "images": "≤9",
+        "audios": "≤3"
+      },
       "forbidden": [
         "first_frame_image / last_frame_image / image_with_roles (rejected)",
         "Putting aspect ratio into resolution or size",
@@ -299,10 +410,21 @@
       ]
     },
     "gemini-omni-1.1-flash": {
-      "required": ["model", "prompt"],
+      "required": [
+        "model",
+        "prompt"
+      ],
       "enums": {
-        "resolution": ["360p", "720p", "1080p", "4k"],
-        "aspect_ratio": ["16:9", "9:16"]
+        "resolution": [
+          "360p",
+          "720p",
+          "1080p",
+          "4k"
+        ],
+        "aspect_ratio": [
+          "16:9",
+          "9:16"
+        ]
       },
       "no_duration": true,
       "modes": {
@@ -318,7 +440,10 @@
           "body": {
             "model": "gemini-omni-1.1-flash",
             "prompt": "subjects interact naturally",
-            "image_urls": ["https://example.com/a.jpg", "https://example.com/b.jpg"],
+            "image_urls": [
+              "https://example.com/a.jpg",
+              "https://example.com/b.jpg"
+            ],
             "resolution": "720p"
           }
         },
@@ -336,7 +461,9 @@
           "body": {
             "model": "gemini-omni-1.1-flash",
             "prompt": "continue the motion",
-            "video_urls": ["https://example.com/clip.mp4"]
+            "video_urls": [
+              "https://example.com/clip.mp4"
+            ]
           }
         }
       },
@@ -347,11 +474,27 @@
       ]
     },
     "gemini-omni-1.1-flash-ext": {
-      "required": ["model", "prompt"],
+      "required": [
+        "model",
+        "prompt"
+      ],
       "enums": {
-        "duration": [4, 6, 8, 10],
-        "resolution": ["360p", "720p", "1080p", "4k"],
-        "generation_type": ["frame", "reference"]
+        "duration": [
+          4,
+          6,
+          8,
+          10
+        ],
+        "resolution": [
+          "360p",
+          "720p",
+          "1080p",
+          "4k"
+        ],
+        "generation_type": [
+          "frame",
+          "reference"
+        ]
       },
       "modes": {
         "t2v": {
@@ -367,7 +510,9 @@
             "model": "gemini-omni-1.1-flash-ext",
             "prompt": "...",
             "generation_type": "frame",
-            "image_urls": ["https://example.com/one.jpg"],
+            "image_urls": [
+              "https://example.com/one.jpg"
+            ],
             "duration": 6
           }
         },
@@ -393,11 +538,22 @@
       ]
     },
     "grok-imagine-video-1.5-preview": {
-      "required": ["model", "prompt", "image"],
+      "required": [
+        "model",
+        "prompt",
+        "image"
+      ],
       "enums": {
-        "aspect_ratio": ["1:1", "16:9", "9:16"],
+        "aspect_ratio": [
+          "1:1",
+          "16:9",
+          "9:16"
+        ],
         "duration": "integer 1..15",
-        "resolution": ["480p", "720p"]
+        "resolution": [
+          "480p",
+          "720p"
+        ]
       },
       "modes": {
         "i2v_only": {
@@ -405,7 +561,9 @@
           "body": {
             "model": "grok-imagine-video-1.5-preview",
             "prompt": "gentle camera push in",
-            "image": { "url": "https://example.com/still.jpg" },
+            "image": {
+              "url": "https://example.com/still.jpg"
+            },
             "aspect_ratio": "16:9",
             "resolution": "480p",
             "duration": 5
@@ -417,15 +575,27 @@
         "image_urls[0]": "image.url",
         "images[0]": "image.url"
       },
-      "forbidden": ["prompt-only without image"]
+      "forbidden": [
+        "prompt-only without image"
+      ]
     },
     "grok-1.5-video": {
       "preferred_path": "POST /v1/videos (also works on /v1/videos/generations)",
       "billing": "per_request",
-      "required": ["model", "prompt"],
+      "required": [
+        "model",
+        "prompt"
+      ],
       "enums": {
-        "seconds": [6, 10],
-        "size_aspect": ["16:9", "9:16", "1:1"]
+        "seconds": [
+          6,
+          10
+        ],
+        "size_aspect": [
+          "16:9",
+          "9:16",
+          "1:1"
+        ]
       },
       "modes": {
         "t2v": {
@@ -442,7 +612,9 @@
             "prompt": "...",
             "seconds": 10,
             "aspect_ratio": "9:16",
-            "image_urls": ["https://example.com/ref.jpg"]
+            "image_urls": [
+              "https://example.com/ref.jpg"
+            ]
           }
         }
       },
@@ -453,5 +625,9 @@
       ]
     }
   },
-  "delisted": ["seedance-2.0", "seedance-2.5", "Duix-Avatar"]
+  "delisted": [
+    "seedance-2.0",
+    "seedance-2.5",
+    "Duix-Avatar"
+  ]
 }

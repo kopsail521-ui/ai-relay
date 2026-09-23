@@ -663,6 +663,7 @@
             </thead>
             <tbody>
 <tr><td class="model"><button type="button" class="model-btn" data-copy="glm-5.2-free">glm-5.2-free</button></td><td class="price">$0</td><td class="price">$0</td><td class="note-cell" data-i18n="nFreeGlm"></td></tr>
+<tr><td class="model"><button type="button" class="model-btn" data-copy="glm-5.2">glm-5.2</button></td><td class="price">~$1.40</td><td class="price">~$4.40</td><td class="note-cell" data-i18n="nGlm52"></td></tr>
 <tr><td class="model"><button type="button" class="model-btn" data-copy="kimi-k3-free">kimi-k3-free</button></td><td class="price">$0</td><td class="price">$0</td><td class="note-cell" data-i18n="nFreeKimi"></td></tr>
 <tr><td class="model"><button type="button" class="model-btn" data-copy="gpt-5.6-luna">gpt-5.6-luna</button></td><td class="price">~$0.10</td><td class="price">~$0.62</td><td class="note-cell" data-i18n="nLuna"></td></tr>
 <tr><td class="model"><button type="button" class="model-btn" data-copy="gpt-5.6-terra">gpt-5.6-terra</button></td><td class="price">~$0.37</td><td class="price">~$2.21</td><td class="note-cell" data-i18n="nTerra"></td></tr>
@@ -1564,6 +1565,7 @@ const I18N = {
     "nGemma": "Multimodal chat — see /pricing",
     "nQwen38Max": "Qwen3.8 Max (0902)",
     "nFreeGlm": "Free · vs paid glm-5.2",
+    "nGlm52": "GLM 5.2 paid",
     "nFreeKimi": "Free · vs paid kimi-k3",
     "chatHint": "Click a model name to copy. IDs ending in -free are $0 (shared free quota; distinct from paid bare names). More $0 chat IDs use a :free suffix; the live list is /free-models. Paid models bill by token (console is source of truth).",
     "imageTitle": "Images",
@@ -1742,6 +1744,7 @@ const I18N = {
     "nGemma": "多模态对话 · 价格见 /pricing",
     "nQwen38Max": "Qwen3.8 Max（0902）",
     "nFreeGlm": "免费 · 对照收费 glm-5.2",
+    "nGlm52": "GLM 5.2 收费",
     "nFreeKimi": "免费 · 对照收费 kimi-k3",
     "chatHint": "点击模型名即可复制。带 -free 后缀的为免费模型（$0，与裸名收费版不是同一个 model）。另有 :free 后缀的 $0 对话模型，完整名单见 /free-models。收费模型按 token 计费，以控制台为准。",
     "imageTitle": "图片生成",
@@ -1872,6 +1875,7 @@ const I18N = {
     "nGemma": "多模態對話 · 價格見 /pricing",
     "nQwen38Max": "Qwen3.8 Max（0902）",
     "nFreeGlm": "免費 · 對照收費 glm-5.2",
+    "nGlm52": "GLM 5.2 收費",
     "nFreeKimi": "免費 · 對照收費 kimi-k3",
     "chatHint": "點擊模型名即可複製。帶 -free 後綴為免費模型（$0，與裸名收費版不同）。另有 :free 後綴的 $0 對話模型，完整名單見 /free-models。收費模型依 token 計費，以控制台為準。",
     "imageTitle": "圖片生成",
@@ -2002,6 +2006,7 @@ const I18N = {
     "nGemma": "マルチモーダル · 料金は /pricing",
     "nQwen38Max": "Qwen3.8 Max（0902）",
     "nFreeGlm": "無料 · 有料 glm-5.2 と別ID",
+    "nGlm52": "GLM 5.2 有料",
     "nFreeKimi": "無料 · 有料 kimi-k3 と別ID",
     "chatHint": "モデル名をクリックでコピー。-free 付きは無料（$0、有料の裸名とは別モデル）。:free 付きの無料チャットは /free-models の一覧が正。有料はトークン課金（コンソールが正）。",
     "imageTitle": "画像生成",
@@ -2132,6 +2137,7 @@ const I18N = {
     "nGemma": "Chat multimodal — voir /pricing",
     "nQwen38Max": "Qwen3.8 Max (0902)",
     "nFreeGlm": "Gratuit · vs glm-5.2 payant",
+    "nGlm52": "GLM 5.2 payant",
     "nFreeKimi": "Gratuit · vs kimi-k3 payant",
     "chatHint": "Cliquez un modèle pour copier. Les IDs en -free sont à $0 (distincts des noms payants sans suffixe). D'autres IDs chat à $0 se terminent par :free ; la liste à jour est /free-models. Les modèles payants facturent au token (console = référence).",
     "imageTitle": "Images",
@@ -2262,6 +2268,7 @@ const I18N = {
     "nGemma": "Мультимодальный чат — /pricing",
     "nQwen38Max": "Qwen3.8 Max (0902)",
     "nFreeGlm": "Бесплатно · vs платный glm-5.2",
+    "nGlm52": "GLM 5.2 платный",
     "nFreeKimi": "Бесплатно · vs платный kimi-k3",
     "chatHint": "Клик по модели — копировать. IDs с -free — $0 (отдельные от платных без суффикса). Другие бесплатные chat ID с суффиксом :free — актуальный список на /free-models. Платные — по токенам (консоль источник истины).",
     "imageTitle": "Изображения",
@@ -2392,6 +2399,7 @@ const I18N = {
     "nGemma": "Chat đa phương thức — xem /pricing",
     "nQwen38Max": "Qwen3.8 Max (0902)",
     "nFreeGlm": "Miễn phí · khác glm-5.2 trả phí",
+    "nGlm52": "GLM 5.2 trả phí",
     "nFreeKimi": "Miễn phí · khác kimi-k3 trả phí",
     "chatHint": "Bấm tên model để sao chép. ID kết thúc -free là $0 (khác bản trả phí không hậu tố). Các ID chat $0 khác có hậu tố :free; danh sách mới nhất ở /free-models. Model trả phí tính theo token (console là chuẩn).",
     "imageTitle": "Ảnh",

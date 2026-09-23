@@ -215,6 +215,111 @@
       "body": "Kimi K3 on KeyoAPI is the Moonshot-family chat model exposed as kimi-k3 (token-metered) and kimi-k3-free (permanent $0 fair-use). Indicative paid rates are about $3.00 / $15.00 per 1M in/out — confirm live on /pricing/kimi-k3. This page is intentionally short. Search demand for kimi k3 api is near zero, so we prioritize accurate IDs, a Free tier block, and links into /free-models plus stronger family pages like /model/glm-5.2 and /deepseek-api-pricing. Use the OpenAI-compatible base URL https://www.keyoapi.xyz/v1, set Authorization: Bearer YOUR_KEY, and pick the free or paid model string. Fair-use limits apply on free. For production QPS, prefer paid kimi-k3 or another Keyo chat model that fits your latency budget.",
       "curlExample": "curl https://www.keyoapi.xyz/v1/chat/completions \\\n  -H \"Authorization: Bearer YOUR_API_KEY\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\"model\":\"kimi-k3\",\"messages\":[{\"role\":\"user\",\"content\":\"Hello from Kimi K3\"}]}'",
       "uniqueBlurb": "Short catalog page: free + paid IDs only — no fake keyword chasing."
+    },
+    {
+      "id": "gpt-6-luna",
+      "category": "llm",
+      "batch": 2,
+      "targetKeywords": [
+        "gpt-6-luna",
+        "gpt 6 luna api",
+        "cheap gpt api"
+      ],
+      "h1": "GPT-6 Luna API on KeyoAPI — High-Volume Cheap Chat",
+      "title": "GPT-6 Luna API | Cheap GPT-Class Chat on KeyoAPI",
+      "metaDescription": "Call gpt-6-luna on KeyoAPI (~$0.03/$0.15 per 1M). OpenAI-compatible chat for high-volume GPT-class workloads.",
+      "priceLabel": "~$0.03 / $0.15 per 1M in/out",
+      "priceUnit": "per_1m_tokens",
+      "related": [
+        "gpt-6-sol",
+        "gpt-6-astra",
+        "gpt-5.6-luna"
+      ],
+      "endpoint": "POST /v1/chat/completions",
+      "codeHint": "model=gpt-6-luna",
+      "faqs": [
+        {
+          "q": "When should I use gpt-6-luna?",
+          "a": "Use it for high-volume classification, triage, and draft paths where unit cost matters more than peak IQ. Escalate to gpt-6-sol or gpt-6-astra when quality gates fail."
+        },
+        {
+          "q": "How do I call it?",
+          "a": "Set baseURL to https://www.keyoapi.xyz/v1, Authorization: Bearer YOUR_KEY, and model=gpt-6-luna on POST /v1/chat/completions."
+        }
+      ],
+      "body": "GPT-6 Luna on KeyoAPI is the cheap high-volume lane of the GPT-6 family. Indicative rates are about $0.03 / $0.15 per 1M in/out — confirm live on /pricing/gpt-6-luna. Keep product defaults on gpt-6-sol or gpt-6-astra and route bulk traffic here so blended COGS stays intentional. Same OpenAI-compatible gateway as the rest of KeyoAPI: https://www.keyoapi.xyz/v1 with Bearer auth. No second SDK.",
+      "curlExample": "curl https://www.keyoapi.xyz/v1/chat/completions \\\n  -H \"Authorization: Bearer YOUR_API_KEY\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\"model\":\"gpt-6-luna\",\"messages\":[{\"role\":\"user\",\"content\":\"Hello from GPT-6 Luna\"}]}'",
+      "uniqueBlurb": "Cheapest GPT-6-class ID on Keyo for bulk chat — escalate to Sol/Astra only when quality needs it."
+    },
+    {
+      "id": "gpt-6-sol",
+      "category": "llm",
+      "batch": 2,
+      "targetKeywords": [
+        "gpt-6-sol",
+        "gpt 6 sol api",
+        "gpt api pricing"
+      ],
+      "h1": "GPT-6 Sol API on KeyoAPI — Balanced GPT-Class Chat",
+      "title": "GPT-6 Sol API | Balanced GPT-Class on KeyoAPI",
+      "metaDescription": "Call gpt-6-sol on KeyoAPI (~$0.37/$1.84 per 1M). OpenAI-compatible mid-tier GPT-6 chat between Luna and Astra.",
+      "priceLabel": "~$0.37 / $1.84 per 1M in/out",
+      "priceUnit": "per_1m_tokens",
+      "related": [
+        "gpt-6-luna",
+        "gpt-6-astra",
+        "gpt-5.6-sol"
+      ],
+      "endpoint": "POST /v1/chat/completions",
+      "codeHint": "model=gpt-6-sol",
+      "faqs": [
+        {
+          "q": "Where does Sol sit vs Luna and Astra?",
+          "a": "Luna is the cheapest bulk lane; Sol is the balanced default; Astra is the flagship. Swap only the model string on the same Keyo key."
+        },
+        {
+          "q": "Where is live pricing?",
+          "a": "See /pricing/gpt-6-sol and /compare for the static planning table."
+        }
+      ],
+      "body": "GPT-6 Sol on KeyoAPI is the balanced mid-tier of the GPT-6 family. Indicative rates are about $0.37 / $1.84 per 1M in/out — confirm live on /pricing/gpt-6-sol. Use Sol as a production default chat model, demote high-volume paths to gpt-6-luna, and escalate stubborn jobs to gpt-6-astra. Call via OpenAI-compatible POST /v1/chat/completions at https://www.keyoapi.xyz/v1.",
+      "curlExample": "curl https://www.keyoapi.xyz/v1/chat/completions \\\n  -H \"Authorization: Bearer YOUR_API_KEY\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\"model\":\"gpt-6-sol\",\"messages\":[{\"role\":\"user\",\"content\":\"Hello from GPT-6 Sol\"}]}'",
+      "uniqueBlurb": "Balanced GPT-6 default between cheap Luna and flagship Astra — one model string change."
+    },
+    {
+      "id": "claude-opus-5-5",
+      "category": "llm",
+      "batch": 2,
+      "targetKeywords": [
+        "claude opus 5.5",
+        "claude-opus-5-5",
+        "claude api pricing"
+      ],
+      "h1": "Claude Opus 5.5 API on KeyoAPI — Hard Agents",
+      "title": "Claude Opus 5.5 API Pricing | KeyoAPI",
+      "metaDescription": "Call claude-opus-5-5 on KeyoAPI (~$1.76/$8.82 per 1M). OpenAI-compatible Opus-class agents and coding.",
+      "priceLabel": "~$1.76 / $8.82 per 1M in/out",
+      "priceUnit": "per_1m_tokens",
+      "related": [
+        "claude-opus-5",
+        "claude-sonnet-5",
+        "claude-fable-5"
+      ],
+      "endpoint": "POST /v1/chat/completions",
+      "codeHint": "model=claude-opus-5-5",
+      "faqs": [
+        {
+          "q": "Opus 5.5 vs Opus 5?",
+          "a": "claude-opus-5-5 is the newer Opus-class ID (~$1.76/$8.82). claude-opus-5 remains available at a lower indicative band (~$1.10/$5.52). Confirm live on /pricing."
+        },
+        {
+          "q": "How do I integrate?",
+          "a": "Keep your OpenAI SDK, set baseURL to https://www.keyoapi.xyz/v1, and use model=claude-opus-5-5."
+        }
+      ],
+      "body": "Claude Opus 5.5 on KeyoAPI is an Opus-class chat and agent model for hard coding and multi-step tool loops. Indicative rates are about $1.76 / $8.82 per 1M in/out — confirm live on /pricing/claude-opus-5-5. Reserve it for escalations; keep Sonnet or cheaper chat IDs on the hot path. Same OpenAI-compatible gateway as other Keyo chat models.",
+      "curlExample": "curl https://www.keyoapi.xyz/v1/chat/completions \\\n  -H \"Authorization: Bearer YOUR_API_KEY\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\"model\":\"claude-opus-5-5\",\"messages\":[{\"role\":\"user\",\"content\":\"Hello from Claude Opus 5.5\"}]}'",
+      "uniqueBlurb": "Newer Opus-class ID for stubborn agents — escalate intentionally so Claude spend stays controlled."
     }
   ]
 }

@@ -5,6 +5,15 @@
   "markup": 2,
   "models": [
     {
+      "id": "glm-5.3",
+      "cost_in": 0.05103,
+      "cost_out": 0.160382187,
+      "vendor": "智谱",
+      "icon": "Zhipu.Color",
+      "tags": "大语言模型",
+      "desc_zh": "GLM 5.3 通用对话与推理。"
+    },
+    {
       "id": "glm-5.3-flash",
       "cost_in": 0.036,
       "cost_out": 0.1199988,
@@ -12,6 +21,15 @@
       "icon": "Zhipu.Color",
       "tags": "大语言模型",
       "desc_zh": "GLM 5.3 Flash 高速对话。"
+    },
+    {
+      "id": "glm-5.3",
+      "cost_in": 0.05103,
+      "cost_out": 0.160382187,
+      "vendor": "智谱",
+      "icon": "Zhipu.Color",
+      "tags": "大语言模型",
+      "desc_zh": "GLM 5.3 通用对话与推理。"
     },
     {
       "id": "glm-5.2",

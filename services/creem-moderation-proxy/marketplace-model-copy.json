@@ -5171,5 +5171,149 @@
     "suffix_en": "/ 1M tokens",
     "price_key_zh": "输入 / 输出",
     "price_key_en": "Input / Output"
+  },
+  "gpt-6-sol": {
+    "description": "GPT-6 Sol 高档对话模型，更强推理与复杂任务表现。",
+    "descriptions": {
+      "zhCN": "GPT-6 Sol 高档对话模型，更强推理与复杂任务表现。",
+      "zhTW": "GPT-6 Sol 高档对话模型，更强推理与复杂任务表现。",
+      "en": "GPT-6 Sol high-tier chat model for stronger reasoning and complex tasks.",
+      "fr": "GPT-6 Sol high-tier chat model for stronger reasoning and complex tasks.",
+      "ru": "GPT-6 Sol high-tier chat model for stronger reasoning and complex tasks.",
+      "ja": "GPT-6 Sol 高档对话模型，更强推理与复杂任务表现。",
+      "vi": "GPT-6 Sol high-tier chat model for stronger reasoning and complex tasks."
+    },
+    "unit": "token",
+    "badge": {
+      "zhCN": "按 Token 计费",
+      "zhTW": "按 Token 計費",
+      "en": "Token-based",
+      "fr": "Au token",
+      "ru": "По токенам",
+      "ja": "Token 課金",
+      "vi": "Theo token"
+    },
+    "suffix": {
+      "zhCN": "",
+      "zhTW": "",
+      "en": "",
+      "fr": "",
+      "ru": "",
+      "ja": "",
+      "vi": ""
+    },
+    "price_key": {
+      "zhCN": "",
+      "zhTW": "",
+      "en": "",
+      "fr": "",
+      "ru": "",
+      "ja": "",
+      "vi": ""
+    },
+    "description_zh": "GPT-6 Sol 高档对话模型，更强推理与复杂任务表现。",
+    "description_en": "GPT-6 Sol high-tier chat model for stronger reasoning and complex tasks.",
+    "badge_zh": "按 Token 计费",
+    "badge_en": "Token-based",
+    "suffix_zh": "",
+    "suffix_en": "",
+    "price_key_zh": "",
+    "price_key_en": ""
+  },
+  "gpt-6-luna": {
+    "description": "GPT-6 Luna 轻量高性价比对话模型，适合高频低成本场景。",
+    "descriptions": {
+      "zhCN": "GPT-6 Luna 轻量高性价比对话模型，适合高频低成本场景。",
+      "zhTW": "GPT-6 Luna 轻量高性价比对话模型，适合高频低成本场景。",
+      "en": "GPT-6 Luna lightweight high-volume chat model for cost-sensitive workloads.",
+      "fr": "GPT-6 Luna lightweight high-volume chat model for cost-sensitive workloads.",
+      "ru": "GPT-6 Luna lightweight high-volume chat model for cost-sensitive workloads.",
+      "ja": "GPT-6 Luna 轻量高性价比对话模型，适合高频低成本场景。",
+      "vi": "GPT-6 Luna lightweight high-volume chat model for cost-sensitive workloads."
+    },
+    "unit": "token",
+    "badge": {
+      "zhCN": "按 Token 计费",
+      "zhTW": "按 Token 計費",
+      "en": "Token-based",
+      "fr": "Au token",
+      "ru": "По токенам",
+      "ja": "Token 課金",
+      "vi": "Theo token"
+    },
+    "suffix": {
+      "zhCN": "",
+      "zhTW": "",
+      "en": "",
+      "fr": "",
+      "ru": "",
+      "ja": "",
+      "vi": ""
+    },
+    "price_key": {
+      "zhCN": "",
+      "zhTW": "",
+      "en": "",
+      "fr": "",
+      "ru": "",
+      "ja": "",
+      "vi": ""
+    },
+    "description_zh": "GPT-6 Luna 轻量高性价比对话模型，适合高频低成本场景。",
+    "description_en": "GPT-6 Luna lightweight high-volume chat model for cost-sensitive workloads.",
+    "badge_zh": "按 Token 计费",
+    "badge_en": "Token-based",
+    "suffix_zh": "",
+    "suffix_en": "",
+    "price_key_zh": "",
+    "price_key_en": ""
+  },
+  "claude-opus-5-5": {
+    "description": "Claude Opus 5.5：强力代理与编程，适合高难度任务。",
+    "descriptions": {
+      "zhCN": "Claude Opus 5.5：强力代理与编程，适合高难度任务。",
+      "zhTW": "Claude Opus 5.5：强力代理与编程，适合高难度任务。",
+      "en": "Claude Opus 5.5 for powerful agents and coding on hard tasks.",
+      "fr": "Claude Opus 5.5 for powerful agents and coding on hard tasks.",
+      "ru": "Claude Opus 5.5 for powerful agents and coding on hard tasks.",
+      "ja": "Claude Opus 5.5：强力代理与编程，适合高难度任务。",
+      "vi": "Claude Opus 5.5 for powerful agents and coding on hard tasks."
+    },
+    "unit": "token",
+    "badge": {
+      "zhCN": "按 Token 计费",
+      "zhTW": "按 Token 計費",
+      "en": "Token-based",
+      "fr": "Au token",
+      "ru": "По токенам",
+      "ja": "Token 課金",
+      "vi": "Theo token"
+    },
+    "suffix": {
+      "zhCN": "",
+      "zhTW": "",
+      "en": "",
+      "fr": "",
+      "ru": "",
+      "ja": "",
+      "vi": ""
+    },
+    "price_key": {
+      "zhCN": "",
+      "zhTW": "",
+      "en": "",
+      "fr": "",
+      "ru": "",
+      "ja": "",
+      "vi": ""
+    },
+    "description_zh": "Claude Opus 5.5：强力代理与编程，适合高难度任务。",
+    "description_en": "Claude Opus 5.5 for powerful agents and coding on hard tasks.",
+    "badge_zh": "按 Token 计费",
+    "badge_en": "Token-based",
+    "suffix_zh": "",
+    "suffix_en": "",
+    "price_key_zh": "",
+    "price_key_en": ""
   }
 }

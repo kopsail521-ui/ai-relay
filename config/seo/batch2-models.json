@@ -2,53 +2,6 @@
   "_note": "Batch-2 model SEO pages. freeTier embeds Free block + dual curl. Do not invent vendor names publicly.",
   "models": [
     {
-      "id": "glm-5.2",
-      "category": "llm",
-      "batch": 2,
-      "targetKeywords": [
-        "glm 5.2 api",
-        "glm api",
-        "glm-5.2"
-      ],
-      "h1": "GLM 5.2 API — Call Zhipu GLM on KeyoAPI (OpenAI-Compatible)",
-      "title": "GLM 5.2 API Pricing & Free Tier | KeyoAPI",
-      "metaDescription": "Use GLM 5.2 API via KeyoAPI: OpenAI-compatible chat, paid twin ~$1.40/$4.40 per 1M, plus permanent $0 glm-5.2-free. One key for glm api workloads.",
-      "priceLabel": "~$1.40 / $4.40 per 1M in/out",
-      "priceUnit": "per_1m_tokens",
-      "related": [
-        "deepseek-v4-flash",
-        "kimi-k3",
-        "gpt-5.6-luna"
-      ],
-      "endpoint": "POST /v1/chat/completions",
-      "codeHint": "model=glm-5.2",
-      "freeTier": {
-        "id": "glm-5.2-free",
-        "channel": "Keyo Free"
-      },
-      "faqs": [
-        {
-          "q": "What is the GLM 5.2 API model ID on KeyoAPI?",
-          "a": "Use model=glm-5.2 for the paid, token-metered twin. For the permanent $0 fair-use tier, use model=glm-5.2-free. Both speak OpenAI-compatible chat completions at https://www.keyoapi.xyz/v1."
-        },
-        {
-          "q": "How does KeyoAPI GLM API pricing compare to official Zhipu?",
-          "a": "Keyo lists glm-5.2 around $1.40 input / $4.40 output per 1M tokens (indicative). Always confirm live sell rates on /pricing/glm-5.2. The free ID is fixed at $0 with fair-use limits."
-        },
-        {
-          "q": "Can I migrate an existing OpenAI SDK client to glm-5.2?",
-          "a": "Yes. Set baseURL to https://www.keyoapi.xyz/v1, keep Authorization: Bearer YOUR_KEY, and change the model string to glm-5.2 or glm-5.2-free. No custom Gemini/Anthropic SDK required for chat."
-        },
-        {
-          "q": "Is glm-5.2-free really permanent?",
-          "a": "Yes — ModelPrice is $0 for the free ID. Fair-use rate and concurrency limits apply on the Keyo Free channel. Production QPS should use the paid bare ID."
-        }
-      ],
-      "body": "Developers searching for a GLM 5.2 API usually want two things at once: a current Zhipu-class model and an OpenAI-shaped client they already trust. KeyoAPI exposes glm-5.2 as a paid twin and glm-5.2-free as a permanent $0 fair-use twin on the same gateway. That combination matters for teams evaluating glm api options after a new release window: you can prototype tonight on free, then flip one string to the token-metered ID when traffic hardens. GLM 5.2 sits in the general-purpose chat and reasoning lane — product copilots, bilingual support replies, structured extraction, and agent tool loops that already speak /v1/chat/completions. On KeyoAPI you do not juggle a separate Zhipu console for every environment. One prepaid balance covers glm-5.2 next to DeepSeek, Kimi, GPT-class, Whisper, and vision models. That is the practical meaning of an AI API relay for overseas developers who already standardized on OpenAI SDKs in Python, Node, or Cursor-compatible clients. Indicative Keyo sell rates for glm-5.2 are about $1.40 per 1M input tokens and $4.40 per 1M output tokens. Treat catalog numbers as planning anchors and confirm live rates on the interactive /pricing/glm-5.2 page before you sign a volume quote. Unlike trial coupons that expire into a paid plan, glm-5.2-free keeps ModelPrice at $0; the trade-off is fair-use rate limiting and lower priority on the Keyo Free channel. If your SLA needs stable concurrency, keep paid glm-5.2 in production and reserve free for CI smoke tests, demos, and eval harnesses. Why this page targets glm 5.2 api and the broader glm api cluster: model-release windows create short-lived search spikes when engineers compare vendors, paste curl snippets, and look for a key they can mint in minutes. Hugging Face threads and official docs will own brand-heavy discussion. Keyo’s job is different — show the exact model ID, the dual free/paid path, a honest fair-use caveat, and how pricing stacks against staying on a single-vendor bill. That is enough for long-tail conversion even when you are not chasing position one on the naked model name. Common shipping patterns: (1) bilingual SaaS support where Chinese and English tickets share one agent stack; (2) document-to-JSON pipelines that pair OCR on Keyo with glm-5.2 for field filling; (3) overnight batch jobs that start on free IDs during dry runs, then switch to paid for the full corpus. Because the base URL stays https://www.keyoapi.xyz/v1, environment promotion is a config change, not a rewrite. Integration is intentionally boring. Export OPENAI_BASE_URL=https://www.keyoapi.xyz/v1 and OPENAI_API_KEY, then call chat completions with model=glm-5.2. Streaming, tools, and JSON modes follow the same shapes your OpenAI client already expects. When you need a cheaper high-volume lane, compare gpt-5.6-luna on the same key; when you want another Chinese-capable family, try deepseek-v4-flash or kimi-k3. See also /free-models for the full $0 catalog and /deepseek-api-pricing if you are shopping across families before you lock a default model. Bottom line: KeyoAPI’s GLM 5.2 API path is built for developers who want glm api access without a second billing island — permanent free for tryout, transparent token rates for scale, and one relay for the rest of the multimodal stack.",
-      "curlExample": "curl https://www.keyoapi.xyz/v1/chat/completions \\\n  -H \"Authorization: Bearer YOUR_API_KEY\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\"model\":\"glm-5.2\",\"messages\":[{\"role\":\"user\",\"content\":\"Summarize GLM 5.2 API pricing on KeyoAPI\"}]}'",
-      "uniqueBlurb": "glm-5.2 is the batch-2 priority page: real glm 5.2 api demand plus a permanent $0 twin — rare among mid-KD model keywords."
-    },
-    {
       "id": "deepseek-v4-pro",
       "category": "llm",
       "batch": 2,
@@ -192,7 +145,6 @@
       "priceLabel": "~$3.00 / $15.00 per 1M in/out",
       "priceUnit": "per_1m_tokens",
       "related": [
-        "glm-5.2",
         "deepseek-v4-pro",
         "gpt-5.6-terra"
       ],
@@ -212,7 +164,7 @@
           "a": "Use model=kimi-k3-free against https://www.keyoapi.xyz/v1/chat/completions. Paid traffic uses kimi-k3."
         }
       ],
-      "body": "Kimi K3 on KeyoAPI is the Moonshot-family chat model exposed as kimi-k3 (token-metered) and kimi-k3-free (permanent $0 fair-use). Indicative paid rates are about $3.00 / $15.00 per 1M in/out — confirm live on /pricing/kimi-k3. This page is intentionally short. Search demand for kimi k3 api is near zero, so we prioritize accurate IDs, a Free tier block, and links into /free-models plus stronger family pages like /model/glm-5.2 and /deepseek-api-pricing. Use the OpenAI-compatible base URL https://www.keyoapi.xyz/v1, set Authorization: Bearer YOUR_KEY, and pick the free or paid model string. Fair-use limits apply on free. For production QPS, prefer paid kimi-k3 or another Keyo chat model that fits your latency budget.",
+      "body": "Kimi K3 on KeyoAPI is the Moonshot-family chat model exposed as kimi-k3 (token-metered) and kimi-k3-free (permanent $0 fair-use). Indicative paid rates are about $3.00 / $15.00 per 1M in/out — confirm live on /pricing/kimi-k3. This page is intentionally short. Search demand for kimi k3 api is near zero, so we prioritize accurate IDs, a Free tier block, and links into /free-models plus stronger family pages like /model/kimi-k3 and /deepseek-api-pricing. Use the OpenAI-compatible base URL https://www.keyoapi.xyz/v1, set Authorization: Bearer YOUR_KEY, and pick the free or paid model string. Fair-use limits apply on free. For production QPS, prefer paid kimi-k3 or another Keyo chat model that fits your latency budget.",
       "curlExample": "curl https://www.keyoapi.xyz/v1/chat/completions \\\n  -H \"Authorization: Bearer YOUR_API_KEY\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\"model\":\"kimi-k3\",\"messages\":[{\"role\":\"user\",\"content\":\"Hello from Kimi K3\"}]}'",
       "uniqueBlurb": "Short catalog page: free + paid IDs only — no fake keyword chasing."
     },

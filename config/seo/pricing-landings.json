@@ -47,7 +47,7 @@
       ],
       "freeKiller": {
         "title": "The $0 row competitors cannot match",
-        "body": "Google Gemini free tiers are usually quota- or trial-shaped. On the same Keyo key you can also call permanent $0 IDs such as glm-5.2-free, and kimi-k3-free — fair-use limited, but ModelPrice stays $0. Use them to prototype while you meter Gemini-class paid traffic."
+        "body": "Google Gemini free tiers are usually quota- or trial-shaped. On the same Keyo key you can also call permanent $0 IDs such as kimi-k3-free — fair-use limited, but ModelPrice stays $0. Use them to prototype while you meter Gemini-class paid traffic."
       },
       "body": [
         "Engineers comparing Gemini API pricing usually already want Google-class models with clearer unit economics — or one prepaid balance across Gemini-class IDs plus DeepSeek, GLM, Whisper, OCR, and TTS. Official Google surfaces win on brand trust; KeyoAPI wins when you want that stack without five invoices.",
@@ -165,7 +165,7 @@
       ],
       "freeKiller": {
         "title": "Prototype free, then promote to Claude",
-        "body": "Keyo does not ship Anthropic-branded free Claude IDs. For $0 prototyping on the same API key, use permanent free twins such as glm-5.2-free, and kimi-k3-free (fair-use limits). When quality gates pass, switch model= to claude-sonnet-5 or another Claude ID without changing base URL or auth."
+        "body": "Keyo does not ship Anthropic-branded free Claude IDs. For $0 prototyping on the same API key, use permanent free twins such as kimi-k3-free (fair-use limits). When quality gates pass, switch model= to claude-sonnet-5 or another Claude ID without changing base URL or auth."
       },
       "body": [
         "Teams comparing Claude API pricing usually already want Anthropic-class chat or agents with clearer unit economics — or one prepaid balance across Claude-class IDs plus GPT-class, DeepSeek, Whisper, OCR, and TTS. Official Anthropic surfaces win on brand trust; KeyoAPI wins when you want that stack without five invoices.",
@@ -363,7 +363,7 @@
       ],
       "freeKiller": {
         "title": "Prototype chat free, then meter TTS",
-        "body": "Permanent $0 chat twins (glm-5.2-free, kimi-k3-free, …) sit on the same key for script drafting. TTS rows above are metered — confirm live rates on Model Square before volume. There is no separate upload playground; try from /pricing/{modelId}."
+        "body": "Permanent $0 chat twins (kimi-k3-free, …) sit on the same key for script drafting. TTS rows above are metered — confirm live rates on Model Square before volume. There is no separate upload playground; try from /pricing/{modelId}."
       },
       "body": [
         "Teams call a TTS API for IVR, voice agents, course narration, and avatar pipelines. Keyo keeps STT (Whisper) and TTS on one prepaid balance so you are not juggling three vendor consoles.",

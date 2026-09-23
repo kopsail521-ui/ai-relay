@@ -46,20 +46,6 @@
       "desc_zh": "ling-3.0-flash-fin:free"
     },
     {
-      "id": "glm-5.3-flash:free",
-      "vendor": "智谱",
-      "icon": "Zhipu.Color",
-      "tags": "大语言模型,免费",
-      "desc_zh": "glm-5.3-flash:free"
-    },
-    {
-      "id": "glm-5.3-flash-thinking:free",
-      "vendor": "智谱",
-      "icon": "Zhipu.Color",
-      "tags": "大语言模型,免费",
-      "desc_zh": "glm-5.3-flash-thinking:free"
-    },
-    {
       "id": "qwen3.8-27b:free",
       "vendor": "阿里巴巴",
       "icon": "Qwen.Color",
@@ -95,13 +81,6 @@
       "desc_zh": "dots-3-note-preview:free"
     },
     {
-      "id": "glm-5.3-flash-search:free",
-      "vendor": "智谱",
-      "icon": "Zhipu.Color",
-      "tags": "大语言模型,免费",
-      "desc_zh": "glm-5.3-flash-search:free"
-    },
-    {
       "id": "gemma-4-31b-it:free",
       "vendor": "Google",
       "icon": "Gemini.Color",
@@ -114,13 +93,6 @@
       "icon": "Stepfun.Color",
       "tags": "大语言模型,免费",
       "desc_zh": "step-3.7-flash:free"
-    },
-    {
-      "id": "glm-5.3-flash-think-search:free",
-      "vendor": "智谱",
-      "icon": "Zhipu.Color",
-      "tags": "大语言模型,免费",
-      "desc_zh": "glm-5.3-flash-think-search:free"
     },
     {
       "id": "mistral-large-3-675b:free",

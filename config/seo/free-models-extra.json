@@ -46,26 +46,6 @@
       "note": "Fixed $0 on Keyo catalog (fair-use). Availability can change with upstream free pools."
     },
     {
-      "id": "glm-5.3-flash-search:free",
-      "family": "GLM",
-      "note": "Fixed $0 on Keyo catalog (fair-use). Availability can change with upstream free pools."
-    },
-    {
-      "id": "glm-5.3-flash-think-search:free",
-      "family": "GLM",
-      "note": "Fixed $0 on Keyo catalog (fair-use). Availability can change with upstream free pools."
-    },
-    {
-      "id": "glm-5.3-flash-thinking:free",
-      "family": "GLM",
-      "note": "Fixed $0 on Keyo catalog (fair-use). Availability can change with upstream free pools."
-    },
-    {
-      "id": "glm-5.3-flash:free",
-      "family": "GLM",
-      "note": "Fixed $0 on Keyo catalog (fair-use). Availability can change with upstream free pools."
-    },
-    {
       "id": "laguna-s-2.1:free",
       "family": "Other",
       "note": "Fixed $0 on Keyo catalog (fair-use). Availability can change with upstream free pools."

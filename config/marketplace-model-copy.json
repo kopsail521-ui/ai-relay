@@ -3428,64 +3428,6 @@
     "ja": "（無料）",
     "vi": " (Free)"
   },
-  "deepseek-v4-pro-free": {
-    "description": "DeepSeek V4 Pro 免费额度（调用 model=deepseek-v4-pro-free）。",
-    "descriptions": {
-      "zhCN": "DeepSeek V4 Pro 免费额度（调用 model=deepseek-v4-pro-free）。",
-      "zhTW": "DeepSeek V4 Pro 免費額度（呼叫 model=deepseek-v4-pro-free）。",
-      "en": "DeepSeek V4 Pro free tier (use model=deepseek-v4-pro-free).",
-      "fr": "DeepSeek V4 Pro gratuit (model=deepseek-v4-pro-free).",
-      "ru": "DeepSeek V4 Pro бесплатно (model=deepseek-v4-pro-free).",
-      "ja": "DeepSeek V4 Pro 無料（model=deepseek-v4-pro-free）。",
-      "vi": "DeepSeek V4 Pro miễn phí (model=deepseek-v4-pro-free)."
-    },
-    "display_names": {
-      "zhCN": "deepseek-v4-pro（免费）",
-      "zhTW": "deepseek-v4-pro（免費）",
-      "en": "deepseek-v4-pro (Free)",
-      "fr": "deepseek-v4-pro (Free)",
-      "ru": "deepseek-v4-pro (Free)",
-      "ja": "deepseek-v4-pro（無料）",
-      "vi": "deepseek-v4-pro (Free)"
-    },
-    "free": true,
-    "unit": "token",
-    "badge": {
-      "zhCN": "免费",
-      "zhTW": "免費",
-      "en": "Free",
-      "fr": "Free",
-      "ru": "Free",
-      "ja": "無料",
-      "vi": "Free"
-    },
-    "suffix": {
-      "zhCN": "",
-      "zhTW": "",
-      "en": "",
-      "fr": "",
-      "ru": "",
-      "ja": "",
-      "vi": ""
-    },
-    "price_key": {
-      "zhCN": "",
-      "zhTW": "",
-      "en": "",
-      "fr": "",
-      "ru": "",
-      "ja": "",
-      "vi": ""
-    },
-    "badge_zh": "免费",
-    "badge_en": "Free",
-    "suffix_zh": "",
-    "suffix_en": "",
-    "price_key_zh": "",
-    "price_key_en": "",
-    "description_zh": "DeepSeek V4 Pro 免费额度（调用 model=deepseek-v4-pro-free）。",
-    "description_en": "DeepSeek V4 Pro free tier (use model=deepseek-v4-pro-free)."
-  },
   "deepseek-v4-pro": {
     "description": "DeepSeek V4 Pro 旗舰对话与推理（按量付费）。",
     "descriptions": {
@@ -3533,64 +3475,6 @@
     "price_key_en": "",
     "description_zh": "DeepSeek V4 Pro 旗舰对话与推理（按量付费）。",
     "description_en": "DeepSeek V4 Pro flagship chat and reasoning (paid)."
-  },
-  "deepseek-v4-flash-free": {
-    "description": "DeepSeek V4 Flash 免费额度（调用 model=deepseek-v4-flash-free）。",
-    "descriptions": {
-      "zhCN": "DeepSeek V4 Flash 免费额度（调用 model=deepseek-v4-flash-free）。",
-      "zhTW": "DeepSeek V4 Flash 免費額度（呼叫 model=deepseek-v4-flash-free）。",
-      "en": "DeepSeek V4 Flash free tier (use model=deepseek-v4-flash-free).",
-      "fr": "DeepSeek V4 Flash gratuit (model=deepseek-v4-flash-free).",
-      "ru": "DeepSeek V4 Flash бесплатно (model=deepseek-v4-flash-free).",
-      "ja": "DeepSeek V4 Flash 無料（model=deepseek-v4-flash-free）。",
-      "vi": "DeepSeek V4 Flash miễn phí (model=deepseek-v4-flash-free)."
-    },
-    "display_names": {
-      "zhCN": "deepseek-v4-flash（免费）",
-      "zhTW": "deepseek-v4-flash（免費）",
-      "en": "deepseek-v4-flash (Free)",
-      "fr": "deepseek-v4-flash (Free)",
-      "ru": "deepseek-v4-flash (Free)",
-      "ja": "deepseek-v4-flash（無料）",
-      "vi": "deepseek-v4-flash (Free)"
-    },
-    "free": true,
-    "unit": "token",
-    "badge": {
-      "zhCN": "免费",
-      "zhTW": "免費",
-      "en": "Free",
-      "fr": "Free",
-      "ru": "Free",
-      "ja": "無料",
-      "vi": "Free"
-    },
-    "suffix": {
-      "zhCN": "",
-      "zhTW": "",
-      "en": "",
-      "fr": "",
-      "ru": "",
-      "ja": "",
-      "vi": ""
-    },
-    "price_key": {
-      "zhCN": "",
-      "zhTW": "",
-      "en": "",
-      "fr": "",
-      "ru": "",
-      "ja": "",
-      "vi": ""
-    },
-    "badge_zh": "免费",
-    "badge_en": "Free",
-    "suffix_zh": "",
-    "suffix_en": "",
-    "price_key_zh": "",
-    "price_key_en": "",
-    "description_zh": "DeepSeek V4 Flash 免费额度（调用 model=deepseek-v4-flash-free）。",
-    "description_en": "DeepSeek V4 Flash free tier (use model=deepseek-v4-flash-free)."
   },
   "deepseek-v4-flash": {
     "description": "DeepSeek V4 Flash 高速对话（按量付费）。",
@@ -3640,64 +3524,6 @@
     "description_zh": "DeepSeek V4 Flash 高速对话（按量付费）。",
     "description_en": "DeepSeek V4 Flash high-speed chat (paid)."
   },
-  "glm-5.2-free": {
-    "description": "GLM 5.2 免费额度（调用 model=glm-5.2-free）。",
-    "descriptions": {
-      "zhCN": "GLM 5.2 免费额度（调用 model=glm-5.2-free）。",
-      "zhTW": "GLM 5.2 免費額度（呼叫 model=glm-5.2-free）。",
-      "en": "GLM 5.2 free tier (use model=glm-5.2-free).",
-      "fr": "GLM 5.2 gratuit (model=glm-5.2-free).",
-      "ru": "GLM 5.2 бесплатно (model=glm-5.2-free).",
-      "ja": "GLM 5.2 無料（model=glm-5.2-free）。",
-      "vi": "GLM 5.2 miễn phí (model=glm-5.2-free)."
-    },
-    "display_names": {
-      "zhCN": "glm-5.2（免费）",
-      "zhTW": "glm-5.2（免費）",
-      "en": "glm-5.2 (Free)",
-      "fr": "glm-5.2 (Free)",
-      "ru": "glm-5.2 (Free)",
-      "ja": "glm-5.2（無料）",
-      "vi": "glm-5.2 (Free)"
-    },
-    "free": true,
-    "unit": "token",
-    "badge": {
-      "zhCN": "免费",
-      "zhTW": "免費",
-      "en": "Free",
-      "fr": "Free",
-      "ru": "Free",
-      "ja": "無料",
-      "vi": "Free"
-    },
-    "suffix": {
-      "zhCN": "",
-      "zhTW": "",
-      "en": "",
-      "fr": "",
-      "ru": "",
-      "ja": "",
-      "vi": ""
-    },
-    "price_key": {
-      "zhCN": "",
-      "zhTW": "",
-      "en": "",
-      "fr": "",
-      "ru": "",
-      "ja": "",
-      "vi": ""
-    },
-    "badge_zh": "免费",
-    "badge_en": "Free",
-    "suffix_zh": "",
-    "suffix_en": "",
-    "price_key_zh": "",
-    "price_key_en": "",
-    "description_zh": "GLM 5.2 免费额度（调用 model=glm-5.2-free）。",
-    "description_en": "GLM 5.2 free tier (use model=glm-5.2-free)."
-  },
   "glm-5.2": {
     "description": "GLM 5.2 旗舰对话与编码（按量付费）。",
     "descriptions": {
@@ -3745,64 +3571,6 @@
     "price_key_en": "",
     "description_zh": "GLM 5.2 旗舰对话与编码（按量付费）。",
     "description_en": "GLM 5.2 flagship chat and coding (paid)."
-  },
-  "kimi-k3-free": {
-    "description": "Kimi K3 免费额度（调用 model=kimi-k3-free）。",
-    "descriptions": {
-      "zhCN": "Kimi K3 免费额度（调用 model=kimi-k3-free）。",
-      "zhTW": "Kimi K3 免費額度（呼叫 model=kimi-k3-free）。",
-      "en": "Kimi K3 free tier (use model=kimi-k3-free).",
-      "fr": "Kimi K3 gratuit (model=kimi-k3-free).",
-      "ru": "Kimi K3 бесплатно (model=kimi-k3-free).",
-      "ja": "Kimi K3 無料（model=kimi-k3-free）。",
-      "vi": "Kimi K3 miễn phí (model=kimi-k3-free)."
-    },
-    "display_names": {
-      "zhCN": "kimi-k3（免费）",
-      "zhTW": "kimi-k3（免費）",
-      "en": "kimi-k3 (Free)",
-      "fr": "kimi-k3 (Free)",
-      "ru": "kimi-k3 (Free)",
-      "ja": "kimi-k3（無料）",
-      "vi": "kimi-k3 (Free)"
-    },
-    "free": true,
-    "unit": "token",
-    "badge": {
-      "zhCN": "免费",
-      "zhTW": "免費",
-      "en": "Free",
-      "fr": "Free",
-      "ru": "Free",
-      "ja": "無料",
-      "vi": "Free"
-    },
-    "suffix": {
-      "zhCN": "",
-      "zhTW": "",
-      "en": "",
-      "fr": "",
-      "ru": "",
-      "ja": "",
-      "vi": ""
-    },
-    "price_key": {
-      "zhCN": "",
-      "zhTW": "",
-      "en": "",
-      "fr": "",
-      "ru": "",
-      "ja": "",
-      "vi": ""
-    },
-    "badge_zh": "免费",
-    "badge_en": "Free",
-    "suffix_zh": "",
-    "suffix_en": "",
-    "price_key_zh": "",
-    "price_key_en": "",
-    "description_zh": "Kimi K3 免费额度（调用 model=kimi-k3-free）。",
-    "description_en": "Kimi K3 free tier (use model=kimi-k3-free)."
   },
   "kimi-k3": {
     "description": "Kimi K3 长上下文对话（按量付费）。",

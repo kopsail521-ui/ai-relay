@@ -1,0 +1,10 @@
+cd /opt/ai-relay && sudo git pull --ff-only origin main || echo PULL_SKIP && sudo docker cp /opt/ai-relay/services/creem-moderation-proxy/marketplace-model-copy.json ai-relay-creem-moderation:/app/marketplace-model-copy.json && sudo docker restart ai-relay-creem-moderation && sleep 3 && sudo bash scripts/deploy-brand-static.sh && curl -sS -o /tmp/pricing-page.html https://www.keyoapi.xyz/pricing && curl -sS -o /tmp/docs-check.html https://www.keyoapi.xyz/static/brand/keyo-docs.html && python3 - <<'PY'
+import re
+html=open('/tmp/pricing-page.html',encoding='utf-8',errors='ignore').read()
+docs=open('/tmp/docs-check.html',encoding='utf-8',errors='ignore').read()
+gone=['glm-5.2-free','kimi-k3-free','deepseek-v4-flash-free','deepseek-v4-pro-free']
+print('copy_gone_still', [g for g in gone if g in html] or 'NONE')
+print('docs_has_glm53', 'data-copy="glm-5.3"' in docs)
+print('public_leak', bool(re.search(r'unorouter|openlux|apimart|grsai|SenseNova|模力|上游|passthrough|gitee|moark', html+docs, re.I)))
+print('DONE_SCRUB_SYNC_BRAND')
+PY

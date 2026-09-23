@@ -71,51 +71,57 @@
       "navLabel": "DeepSeek pricing",
       "h1": "DeepSeek API Pricing — KeyoAPI Rates & Official Context",
       "title": "DeepSeek API Pricing Comparison | KeyoAPI",
-      "metaDescription": "DeepSeek API pricing on KeyoAPI: deepseek-v4.1-flash ~$0.18/$0.72, deepseek-v4-flash-0731 ~$0.26/$0.79, deepseek-v4-pro-0813 ~$0.79/$2.38 per 1M. OpenAI-compatible.",
+      "metaDescription": "DeepSeek API pricing on KeyoAPI: deepseek-v4.1-flash ~$0.18/$0.72, deepseek-v4-flash ~$1.10/$3.30, deepseek-v4-pro-0813 ~$0.79/$2.38 per 1M. OpenAI-compatible.",
       "targetKeywords": [
         "deepseek api pricing",
         "deepseek api price",
         "cheap deepseek api"
       ],
-      "lead": "DeepSeek API pricing is a clear purchase-intent query. This page puts current KeyoAPI sell rates for DeepSeek V4.1 Flash, V4 Flash 0731, and V4 Pro 0813 next to typical official list context — one OpenAI-compatible key.",
+      "lead": "This page puts current KeyoAPI sell rates for DeepSeek V4.1 Flash, V4 Flash, and V4 Pro 0813 next to typical official list context — one OpenAI-compatible key.",
       "rows": [
         {
           "model": "deepseek-v4.1-flash",
-          "official": "Official DeepSeek Flash peak list — verify on api-docs.deepseek.com",
+          "official": "Official deepseek-flash / V4.1-Flash peak list — verify on api-docs.deepseek.com",
           "keyo": "~$0.18 / $0.72 per 1M in/out",
-          "note": "High-volume Flash"
+          "note": "Preferred high-volume Flash"
+        },
+        {
+          "model": "deepseek-v4-flash",
+          "official": "Official legacy deepseek-v4-flash name routes to V4.1-Flash — verify on api-docs.deepseek.com",
+          "keyo": "~$1.10 / $3.30 per 1M in/out",
+          "note": "Separate Keyo catalog ID — confirm /pricing"
         },
         {
           "model": "deepseek-v4-flash-0731",
-          "official": "Official DeepSeek Flash-class list — verify on api-docs.deepseek.com",
+          "official": "Not on current official model list — confirm Keyo /pricing before use",
           "keyo": "~$0.26 / $0.79 per 1M in/out",
-          "note": "Flash 0731 snapshot"
+          "note": "Keyo catalog snapshot ID"
         },
         {
           "model": "deepseek-v4-pro-0813",
-          "official": "Official DeepSeek Pro peak list — verify on api-docs.deepseek.com",
+          "official": "Official deepseek-v4-pro → V4-Pro-0813 — verify on api-docs.deepseek.com",
           "keyo": "~$0.79 / $2.38 per 1M in/out",
-          "note": "Pro 0813 flagship"
+          "note": "Separate Pro ID — not an auto-upgrade from Flash"
         }
       ],
       "freeKiller": {
         "title": "Prototype free, then meter DeepSeek on the same key",
-        "body": "Keyo keeps permanent $0 chat IDs on /free-models (fair-use). When quality gates pass, switch model= to deepseek-v4.1-flash, deepseek-v4-flash-0731, or deepseek-v4-pro-0813 without changing base URL or auth."
+        "body": "Keyo keeps fixed $0 chat IDs on /free-models (fair-use). When you meter DeepSeek, switch model= to deepseek-v4.1-flash or deepseek-v4-pro-0813 without changing base URL or auth — those are separate IDs, not one upgrade ladder."
       },
       "body": [
-        "Engineers comparing deepseek api pricing usually already trust the model family and are shopping hosts: official platforms, aggregators, or a multi-model API. KeyoAPI is the third option — OpenAI-compatible base URL, prepaid balance, and Gemini/Whisper/OCR on the same key when DeepSeek is only part of the stack.",
-        "Indicative Keyo sell rates above come from the live Keyo catalog. Confirm /pricing/deepseek-v4.1-flash, /pricing/deepseek-v4-flash-0731, and /pricing/deepseek-v4-pro-0813 before volume contracts.",
-        "How to call: POST https://www.keyoapi.xyz/v1/chat/completions with Authorization: Bearer YOUR_KEY and model set to a DeepSeek paid ID above.",
-        "If your search was really about Gemini dollars, jump to /gemini-api-pricing. For free prototyping, open /free-models."
+        "Compare DeepSeek rates across official platforms, aggregators, and a multi-model API. KeyoAPI is the third option — OpenAI-compatible base URL, prepaid balance, and Gemini/Whisper/OCR on the same key when DeepSeek is only part of the stack.",
+        "Indicative Keyo sell rates above come from the live Keyo catalog (/pricing). Confirm each ID on /pricing before volume contracts.",
+        "How to call: POST https://www.keyoapi.xyz/v1/chat/completions with Authorization: Bearer YOUR_KEY and model set to the DeepSeek ID you want — Flash and Pro are different products.",
+        "For Gemini rates, see /gemini-api-pricing. For free prototyping, open /free-models."
       ],
       "faqs": [
         {
           "q": "Is Keyo’s DeepSeek API pricing cheaper than official?",
-          "a": "It depends on official promotions, cache discounts, peak/off-peak windows, and currency. Use this table for planning, then verify both Keyo live rates and DeepSeek’s current public list."
+          "a": "It depends on official promotions, cache discounts, peak/off-peak windows, and currency. Use this table for planning, then verify both Keyo live rates on /pricing and DeepSeek’s current public list."
         },
         {
           "q": "Which DeepSeek ID should I start with?",
-          "a": "Start with deepseek-v4.1-flash for high-volume chat, or deepseek-v4-flash-0731 for the 0731 Flash snapshot. Use deepseek-v4-pro-0813 when you need stronger reasoning. Confirm live rates on /pricing before volume."
+          "a": "Start with deepseek-v4.1-flash for high-volume chat. Use deepseek-v4-pro-0813 when you specifically want the Pro ID — it is not an automatic upgrade from Flash. Confirm live rates on /pricing before volume."
         }
       ]
     },

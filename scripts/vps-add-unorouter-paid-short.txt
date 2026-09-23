@@ -1,17 +1,13 @@
-cd /opt/ai-relay && sudo git pull --ff-only origin main && sudo docker run --rm --env-file /opt/ai-relay/.env -v /opt/ai-relay:/opt/ai-relay:ro -v /opt/ai-relay/data/new-api:/data -w /opt/ai-relay python:3.12-alpine python scripts/vps-add-unorouter-paid.py /data/one-api.db && sudo docker restart ai-relay-new-api && sleep 4 && sudo bash scripts/deploy-brand-static.sh || echo BRAND_SKIP && curl -sS -o /tmp/pricing.json -w 'pricing=%{http_code}\n' https://www.keyoapi.xyz/api/pricing && python3 - <<'PY'
+cd /opt/ai-relay && sudo git pull --ff-only origin main && sudo docker run --rm --env-file /opt/ai-relay/.env -v /opt/ai-relay:/opt/ai-relay:ro -v /opt/ai-relay/data/new-api:/data -w /opt/ai-relay python:3.12-alpine python scripts/vps-add-unorouter-paid.py /data/one-api.db && sudo docker restart ai-relay-new-api && sleep 4 && (sudo bash scripts/deploy-brand-static.sh || echo BRAND_SKIP) && curl -sS -o /tmp/pricing.json https://www.keyoapi.xyz/api/pricing && python3 - <<'PY'
 import json,re
-want={"glm-5.3-flash", "glm-5.2", "deepseek-v4.1-flash", "deepseek-v4-pro-0813", "deepseek-v4-flash-0731", "deepseek-v4-pro", "deepseek-v4-flash", "kimi-k3", "kimi-k2.7-code", "qwen3.8-flash"}
-d=json.load(open("/tmp/pricing.json"))
-by={m.get("model_name"):m for m in (d.get("data") or [])}
-miss=sorted(want-set(by))
-print("missing", miss or "NONE")
+want={"glm-5.3-flash","glm-5.2","deepseek-v4.1-flash","deepseek-v4-pro-0813","deepseek-v4-flash-0731","deepseek-v4-pro","deepseek-v4-flash","kimi-k3","kimi-k2.7-code","qwen3.8-flash"}
+by={m.get("model_name"):m for m in json.load(open("/tmp/pricing.json")).get("data") or []}
+print("missing", sorted(want-set(by)) or "NONE")
 for mid in sorted(want):
   m=by.get(mid)
   if not m: continue
-  mr=float(m.get("model_ratio") or 0)
-  cr=float(m.get("completion_ratio") or 1)
-  print(mid, "sell", round(mr*2,6), "/", round(mr*2*cr,6))
-blob=json.dumps(d,ensure_ascii=False)
-print("public_leak", bool(re.search(r'unorouter|openlux|apimart|grsai|SenseNova|模力|上游|passthrough', blob, re.I)))
+  mr=float(m.get("model_ratio") or 0); cr=float(m.get("completion_ratio") or 1)
+  print(mid,"sell",round(mr*2,6),"/",round(mr*2*cr,6))
+print("public_leak", bool(re.search(r'unorouter|openlux|apimart|grsai|SenseNova|模力|上游|passthrough', json.dumps(by,ensure_ascii=False), re.I)))
 print("DONE_ADD_UNOROUTER_PAID_SYNC")
 PY

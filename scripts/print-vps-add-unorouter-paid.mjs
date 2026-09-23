@@ -38,21 +38,30 @@ const short = [
   "base64 -d /tmp/uno-free-py.b64 | gunzip | sudo tee /opt/ai-relay/scripts/vps-add-unorouter-free.py >/dev/null",
   "sudo docker run --rm --env-file /opt/ai-relay/.env -v /opt/ai-relay:/opt/ai-relay:ro -v /opt/ai-relay/data/new-api:/data -w /opt/ai-relay python:3.12-alpine python scripts/vps-add-unorouter-paid.py /data/one-api.db",
   "sudo docker restart ai-relay-new-api && sleep 4",
+  "sudo git pull --ff-only origin main",
+  "sudo bash scripts/deploy-brand-static.sh",
   "curl -sS -o /tmp/pricing.json -w 'pricing=%{http_code}\\n' https://www.keyoapi.xyz/api/pricing",
   `python3 - <<'PY'
-import json
+import json,re
 want={${wantPy}}
 d=json.load(open("/tmp/pricing.json"))
 by={m.get("model_name"):m for m in (d.get("data") or [])}
 miss=sorted(want-set(by))
 print("missing", miss or "NONE")
+ok=0
 for mid in sorted(want):
   m=by.get(mid)
   if not m: continue
   mr=float(m.get("model_ratio") or 0)
   cr=float(m.get("completion_ratio") or 1)
-  print(mid, "sell", round(mr*2,6), "/", round(mr*2*cr,6))
-print("DONE_ADD_UNOROUTER_PAID")
+  sin=round(mr*2,6); sout=round(sin*cr,6)
+  print(mid, "sell", sin, "/", sout)
+  ok+=1
+blob=json.dumps(d,ensure_ascii=False)
+print("public_leak", bool(re.search(r'unorouter|openlux|apimart|grsai|SenseNova|模力|上游|passthrough', blob, re.I)))
+docs=open('/opt/ai-relay/static/brand/keyo-docs.html',encoding='utf-8',errors='ignore').read()
+print("docs_rows", sum(1 for mid in want if f'data-copy="{mid}"' in docs))
+print("DONE_ADD_UNOROUTER_PAID_SYNC")
 PY`,
 ].join(" && ");
 

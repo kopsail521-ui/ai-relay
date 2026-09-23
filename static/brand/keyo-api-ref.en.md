@@ -127,7 +127,7 @@ Free (`*-free`): `Atria-dawn-v2`
 
 There is also a `:free` chat pool (for example `glm-5.3-flash:free`, `nemotron-3-ultra-550b-a55b:free`). The live list is https://www.keyoapi.xyz/free-models — the list changes over time.
 
-Paid: `gpt-5.6-luna` · `gpt-5.6-terra` · `gpt-5.6-sol` · `gpt-6-luna` · `gpt-6-sol` · `gpt-6-astra` · `claude-sonnet-5` · `claude-opus-5` · `claude-opus-5-5` · `claude-fable-5` · `claude-fable-5-1` · `gemini-3.7-flash` · `gemini-3.8-flash` · `grok-4.7` · `grok-4.6` · `MiniMax-M3` · `gemma-4-26B-A4B-it` · `qwen3.8-max-0902`
+Paid: `gpt-5.6-luna` · `gpt-5.6-terra` · `gpt-5.6-sol` · `gpt-6-luna` · `gpt-6-sol` · `gpt-6-astra` · `claude-sonnet-5` · `claude-opus-5` · `claude-opus-5-5` · `claude-fable-5` · `claude-fable-5-1` · `gemini-3.7-flash` · `gemini-3.8-flash` · `grok-4.7` · `grok-4.6` · `MiniMax-M3` · `gemma-4-26B-A4B-it` · `glm-5.3-flash` · `glm-5.2` · `deepseek-v4.1-flash` · `deepseek-v4-pro-0813` · `deepseek-v4-flash-0731` · `deepseek-v4-pro` · `deepseek-v4-flash` · `kimi-k3` · `kimi-k2.7-code` · `qwen3.8-flash` · `qwen3.8-max-0902`
 
 ### 1.2 Images → `POST /v1/images/generations`
 

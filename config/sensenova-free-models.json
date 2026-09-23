@@ -1,16 +1,6 @@
 {
-  "note": "免费线对外 ID 带 -free；渠道 model_mapping 映射到上游裸名。收费线用裸名。对外勿写 SenseNova。DeepSeek 系列已于 2026-09-22 下架。GLM 5.2/5.3 已于 2026-09-23 下架。",
+  "note": "Keyo Free channel historically used SenseNova mapping. Paid twins moved off this channel. Public copy must not name SenseNova. Models list empty after 2026-09-23 delist of glm-5.2-free / kimi-k3-free.",
   "base_url": "https://token.sensenova.cn",
   "channel_name": "Keyo Free",
-  "models": [
-    {
-      "id": "kimi-k3-free",
-      "upstream": "kimi-k3",
-      "vendor": "Moonshot",
-      "icon": "Moonshot",
-      "tags": "大语言模型,免费",
-      "desc_zh": "Kimi K3 免费额度（与收费版 kimi-k3 区分）。",
-      "desc_en": "Kimi K3 free tier (distinct from paid kimi-k3)."
-    }
-  ]
+  "models": []
 }

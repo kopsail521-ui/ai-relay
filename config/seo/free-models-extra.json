@@ -5,100 +5,108 @@
     {
       "id": "Atria-dawn-v2",
       "family": "Other",
-      "note": "Fixed $0 on Keyo catalog (fair-use). Availability can change with upstream free pools."
+      "note": "Fixed $0 on Keyo catalog (fair-use). Availability can change; confirm live on /pricing."
     },
     {
       "id": "DeepSeek-Prover-V2-7B",
       "family": "DeepSeek",
       "twin": null,
-      "note": "Fixed $0 on Keyo catalog (fair-use). Availability can change with upstream free pools."
-    },
-    {
-      "id": "deepseek-v4-flash-free",
-      "family": "DeepSeek",
-      "twin": "deepseek-v4-flash",
-      "note": "Fixed $0 on Keyo catalog (fair-use). Distinct from paid deepseek-v4-flash / deepseek-v4.1-flash."
-    },
-    {
-      "id": "deepseek-v4-pro-free",
-      "family": "DeepSeek",
-      "twin": "deepseek-v4-pro",
-      "note": "Fixed $0 on Keyo catalog (fair-use). Distinct from paid deepseek-v4-pro-0813."
+      "note": "Fixed $0 on Keyo catalog (fair-use). Availability can change; confirm live on /pricing."
     },
     {
       "id": "dots-3-note-preview:free",
       "family": "Other",
-      "note": "Fixed $0 on Keyo catalog (fair-use). Availability can change with upstream free pools."
+      "note": "Fixed $0 on Keyo catalog (fair-use). Availability can change; confirm live on /pricing."
     },
     {
       "id": "gemini-robotics-er-2-preview:free",
       "family": "Google",
-      "note": "Fixed $0 on Keyo catalog (fair-use). Availability can change with upstream free pools."
+      "note": "Fixed $0 on Keyo catalog (fair-use). Availability can change; confirm live on /pricing."
     },
     {
       "id": "gemma-4-26b:free",
       "family": "Google",
-      "note": "Fixed $0 on Keyo catalog (fair-use). Availability can change with upstream free pools."
+      "note": "Fixed $0 on Keyo catalog (fair-use). Availability can change; confirm live on /pricing."
     },
     {
       "id": "gemma-4-31b-it:free",
       "family": "Google",
-      "note": "Fixed $0 on Keyo catalog (fair-use). Availability can change with upstream free pools."
+      "note": "Fixed $0 on Keyo catalog (fair-use). Availability can change; confirm live on /pricing."
+    },
+    {
+      "id": "glm-5.3-flash-search:free",
+      "family": "GLM",
+      "note": "Fixed $0 on Keyo catalog (fair-use). Availability can change; confirm live on /pricing."
+    },
+    {
+      "id": "glm-5.3-flash-think-search:free",
+      "family": "GLM",
+      "note": "Fixed $0 on Keyo catalog (fair-use). Availability can change; confirm live on /pricing."
+    },
+    {
+      "id": "glm-5.3-flash-thinking:free",
+      "family": "GLM",
+      "note": "Fixed $0 on Keyo catalog (fair-use). Availability can change; confirm live on /pricing."
+    },
+    {
+      "id": "glm-5.3-flash:free",
+      "family": "GLM",
+      "note": "Fixed $0 on Keyo catalog (fair-use). Availability can change; confirm live on /pricing."
     },
     {
       "id": "laguna-s-2.1:free",
       "family": "Other",
-      "note": "Fixed $0 on Keyo catalog (fair-use). Availability can change with upstream free pools."
+      "note": "Fixed $0 on Keyo catalog (fair-use). Availability can change; confirm live on /pricing."
     },
     {
       "id": "ling-3.0-flash-fin:free",
       "family": "Ant Group",
-      "note": "Fixed $0 on Keyo catalog (fair-use). Availability can change with upstream free pools."
+      "note": "Fixed $0 on Keyo catalog (fair-use). Availability can change; confirm live on /pricing."
     },
     {
       "id": "mistral-large-3-675b:free",
       "family": "Mistral",
-      "note": "Fixed $0 on Keyo catalog (fair-use). Availability can change with upstream free pools."
+      "note": "Fixed $0 on Keyo catalog (fair-use). Availability can change; confirm live on /pricing."
     },
     {
       "id": "muse-glimmer-30b:free",
       "family": "Other",
-      "note": "Fixed $0 on Keyo catalog (fair-use). Availability can change with upstream free pools."
+      "note": "Fixed $0 on Keyo catalog (fair-use). Availability can change; confirm live on /pricing."
     },
     {
       "id": "nemotron-3-super-120b-a12b:free",
       "family": "NVIDIA",
-      "note": "Fixed $0 on Keyo catalog (fair-use). Availability can change with upstream free pools."
+      "note": "Fixed $0 on Keyo catalog (fair-use). Availability can change; confirm live on /pricing."
     },
     {
       "id": "nemotron-3-ultra-550b-a55b:free",
       "family": "NVIDIA",
-      "note": "Fixed $0 on Keyo catalog (fair-use). Availability can change with upstream free pools."
+      "note": "Fixed $0 on Keyo catalog (fair-use). Availability can change; confirm live on /pricing."
     },
     {
       "id": "nemotron-3.5-lightning-30b-a3b:free",
       "family": "NVIDIA",
-      "note": "Fixed $0 on Keyo catalog (fair-use). Availability can change with upstream free pools."
+      "note": "Fixed $0 on Keyo catalog (fair-use). Availability can change; confirm live on /pricing."
     },
     {
       "id": "nemotron-3.5-lightning:free",
       "family": "NVIDIA",
-      "note": "Fixed $0 on Keyo catalog (fair-use). Availability can change with upstream free pools."
+      "note": "Fixed $0 on Keyo catalog (fair-use). Availability can change; confirm live on /pricing."
     },
     {
       "id": "qwen3.6-35b-a3b:free",
       "family": "Qwen",
-      "note": "Fixed $0 on Keyo catalog (fair-use). Availability can change with upstream free pools."
+      "note": "Fixed $0 on Keyo catalog (fair-use). Availability can change; confirm live on /pricing."
     },
     {
       "id": "qwen3.8-27b:free",
       "family": "Qwen",
-      "note": "Fixed $0 on Keyo catalog (fair-use). Availability can change with upstream free pools."
+      "note": "Fixed $0 on Keyo catalog (fair-use). Availability can change; confirm live on /pricing."
     },
     {
       "id": "step-3.7-flash:free",
       "family": "StepFun",
-      "note": "Fixed $0 on Keyo catalog (fair-use). Availability can change with upstream free pools."
+      "note": "Fixed $0 on Keyo catalog (fair-use). Availability can change; confirm live on /pricing."
     }
   ]
 }

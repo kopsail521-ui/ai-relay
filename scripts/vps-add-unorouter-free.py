@@ -134,7 +134,6 @@ def main():
     cur.execute(sql)
     target = None
     for cid, name, models_s, base, ckey in cur.fetchall():
-        blob = ((name or "") + " " + (base or "")).lower()
         # Match by channel name only — do not claim the paid "Keyo Chat" channel
         # that shares the same base_url.
         if (name or "") == (cfg.get("channel_name") or "Keyo Chat Free"):

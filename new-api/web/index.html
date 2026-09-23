@@ -25,6 +25,19 @@
     <meta name="twitter:card" content="summary_large_image" />
 
     <meta name="theme-color" content="#fff" />
+    <style>
+      /* Keep a slow or failed JS boot from looking like a blank page. */
+      #root:empty::before {
+        content: 'Loading…';
+        position: fixed;
+        inset: 0;
+        display: grid;
+        place-items: center;
+        color: #64748b;
+        font: 14px/1.4 system-ui, sans-serif;
+        background: #fff;
+      }
+    </style>
     <!--umami-->
     <!--Google Analytics-->
   </head>

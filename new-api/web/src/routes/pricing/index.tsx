@@ -2,11 +2,24 @@
 Copyright (C) 2023-2026 QuantumNous
 */
 import { createFileRoute, redirect } from '@tanstack/react-router'
+import { lazy, Suspense } from 'react'
 import z from 'zod'
 
-import { Pricing } from '@/features/pricing'
+import { LoadingState } from '@/components/loading-state'
 import { getFreshModuleAccess } from '@/lib/nav-modules'
 import { useAuthStore } from '@/stores/auth-store'
+
+const PricingPage = lazy(() =>
+  import('@/features/pricing').then(({ Pricing }) => ({ default: Pricing }))
+)
+
+function PricingRoute() {
+  return (
+    <Suspense fallback={<LoadingState className='min-h-svh' />}>
+      <PricingPage />
+    </Suspense>
+  )
+}
 
 const pricingSearchSchema = z.object({
   search: z.string().optional(),
@@ -38,5 +51,5 @@ export const Route = createFileRoute('/pricing/')({
       }
     }
   },
-  component: Pricing,
+  component: PricingRoute,
 })

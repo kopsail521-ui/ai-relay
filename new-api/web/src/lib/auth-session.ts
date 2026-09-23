@@ -69,6 +69,9 @@ export class AuthRotationError extends Error {
 const authClient = axios.create({
   baseURL: '',
   withCredentials: true,
+  // A public auth route must not wait forever for an expired/missing cookie.
+  // The root route treats a timeout as transient and can still render sign-in.
+  timeout: 3000,
   headers: {
     'Cache-Control': 'no-store',
   },

@@ -17,18 +17,31 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 For commercial licensing, please contact support@quantumnous.com
 */
 import { createFileRoute, redirect } from '@tanstack/react-router'
+import { lazy, Suspense } from 'react'
 import { z } from 'zod'
 
+import { LoadingState } from '@/components/loading-state'
 import { sanitizeAuthRedirect } from '@/features/auth/lib/auth-redirect'
-import { SignIn } from '@/features/auth/sign-in'
 import { useAuthStore } from '@/stores/auth-store'
+
+const SignInPage = lazy(() =>
+  import('@/features/auth/sign-in').then(({ SignIn }) => ({ default: SignIn }))
+)
+
+function SignInRoute() {
+  return (
+    <Suspense fallback={<LoadingState className='min-h-svh' />}>
+      <SignInPage />
+    </Suspense>
+  )
+}
 
 const searchSchema = z.object({
   redirect: z.string().optional(),
 })
 
 export const Route = createFileRoute('/(auth)/sign-in')({
-  component: SignIn,
+  component: SignInRoute,
   validateSearch: searchSchema,
   beforeLoad: async ({ search }) => {
     const { auth } = useAuthStore.getState()

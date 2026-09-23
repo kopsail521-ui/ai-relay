@@ -26,6 +26,9 @@ export async function getSetupStatus(): Promise<SetupResponse> {
     params: {
       t: Date.now(),
     },
+    // Setup is only a gate for the first route load; fail open after a short
+    // network timeout so auth pages do not remain blank indefinitely.
+    timeout: 3000,
   })
   return res.data
 }

@@ -17,12 +17,25 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 For commercial licensing, please contact support@quantumnous.com
 */
 import { createFileRoute, redirect } from '@tanstack/react-router'
+import { lazy, Suspense } from 'react'
 
-import { SignUp } from '@/features/auth/sign-up'
+import { LoadingState } from '@/components/loading-state'
 import { useAuthStore } from '@/stores/auth-store'
 
+const SignUpPage = lazy(() =>
+  import('@/features/auth/sign-up').then(({ SignUp }) => ({ default: SignUp }))
+)
+
+function SignUpRoute() {
+  return (
+    <Suspense fallback={<LoadingState className='min-h-svh' />}>
+      <SignUpPage />
+    </Suspense>
+  )
+}
+
 export const Route = createFileRoute('/(auth)/sign-up')({
-  component: SignUp,
+  component: SignUpRoute,
   beforeLoad: async () => {
     const { auth } = useAuthStore.getState()
 

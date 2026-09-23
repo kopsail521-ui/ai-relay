@@ -17,6 +17,7 @@
  *   UPLOAD_TTL_HOURS=48
  */
 import http from "http";
+import { looksLikeMissingVideo } from "./video-routing.mjs";
 import { URL } from "url";
 import zlib from "zlib";
 import { promisify } from "util";
@@ -174,40 +175,11 @@ async function proxyRaw(targetUrl, req, bodyBuf) {
 function writeProxy(res, packed) {
   const headers = { ...packed.outHeaders };
   headers["content-length"] = String(packed.buf.length);
-  headers["Content-Length"] = String(packed.buf.length);
+  delete headers["Content-Length"];
   res.writeHead(packed.status, headers);
   res.end(packed.buf);
 }
 
-function looksLikeMissingVideo(status, buf) {
-  // Path B tasks live on :3011, not New API. Always fall back on common
-  // "not this service" responses — including 401, because New API may reject
-  // unknown video ids with Invalid token instead of a clean 404.
-  if (status === 404 || status === 405) return true;
-  const t = buf.toString("utf8");
-  const low = t.toLowerCase();
-  if (low.includes("invalid url")) return true;
-  try {
-    const j = JSON.parse(t);
-    const msg = String(j.error?.message || j.message || "").toLowerCase();
-    if (
-      msg.includes("invalid url") ||
-      msg.includes("not found") ||
-      msg.includes("no route") ||
-      msg.includes("does not exist") ||
-      msg.includes("invalid token") ||
-      msg.includes("invalid api token") ||
-      msg.includes("authentication")
-    ) {
-      return true;
-    }
-  } catch {
-    /* ignore */
-  }
-  if (status === 401 || status === 403) return true;
-  if (status < 400) return false;
-  return false;
-}
 
 /** 模型广场供应商展示顺序（越前越靠上）；「其他」永远最后 */
 const VENDOR_ORDER = [
@@ -1067,7 +1039,7 @@ async function proxyRequest(req, res, bodyBuf) {
       delete outHeaders["content-encoding"];
       delete outHeaders["Content-Encoding"];
       outHeaders["content-length"] = String(buf.length);
-      outHeaders["Content-Length"] = String(buf.length);
+      delete outHeaders["Content-Length"];
       outHeaders["content-type"] = "application/json; charset=utf-8";
     } catch (e) {
       console.error("[pricing-reorder]", e.message || e);
@@ -1092,7 +1064,7 @@ async function proxyRequest(req, res, bodyBuf) {
       delete outHeaders["content-encoding"];
       delete outHeaders["Content-Encoding"];
       outHeaders["content-length"] = String(buf.length);
-      outHeaders["Content-Length"] = String(buf.length);
+      delete outHeaders["Content-Length"];
       outHeaders["content-type"] = "application/json; charset=utf-8";
     } catch (e) {
       console.error("[rankings-scale]", e.message || e);
@@ -1104,20 +1076,33 @@ async function proxyRequest(req, res, bodyBuf) {
     ctype.includes("text/html") &&
     buf.includes('id="root"');
 
+  // Auth pages use the same SPA document as the console, but they do not need
+  // the pricing/model marketing patches. Injecting those large scripts into
+  // every SPA response made /sign-in and /sign-up parse and execute roughly
+  // 150 KB of unrelated code before the form could render. Keep the auth
+  // patch, which is needed for the consent-gated OAuth buttons, and scope the
+  // other patches to the pages that actually use them.
+  const isAuthPage = /^\/sign-(?:in|up)(?:\/|$)/.test(pathOnly);
+  const isPricingPage = pathOnly === "/pricing" || pathOnly.startsWith("/pricing/");
+
   if (isSpaShell && buf.length > 0) {
     try {
       const enc = upstreamRes.headers.get("content-encoding") || "";
       let htmlBuf = await decodeBody(buf, enc);
       let html = htmlBuf.toString("utf8");
       let changed = false;
-      if (html.includes("</body>") && !html.includes("keyo-oauth-enable")) {
+      if (
+        isAuthPage &&
+        html.includes("</body>") &&
+        !html.includes("keyo-oauth-enable")
+      ) {
         html = html.replace(
           "</body>",
           `<!--keyo-oauth-enable-->${OAUTH_ENABLE_SCRIPT}</body>`
         );
         changed = true;
       }
-      if (!html.includes("keyo-copy-toast-v1")) {
+      if (isPricingPage && !html.includes("keyo-copy-toast-v1")) {
         const ac = `<!--keyo-copy-toast-v1-->${COPY_TOAST_AUTOCLOSE_SCRIPT}`;
         if (html.includes("<head>")) {
           html = html.replace("<head>", `<head>${ac}`);
@@ -1127,7 +1112,7 @@ async function proxyRequest(req, res, bodyBuf) {
           changed = true;
         }
       }
-      if (!html.includes("keyo-models-public")) {
+      if (isPricingPage && !html.includes("keyo-models-public")) {
         const pub = `<!--keyo-models-public-->${MODELS_PUBLIC_SCRIPT}`;
         if (html.includes("<head>")) {
           html = html.replace("<head>", `<head>${pub}`);
@@ -1138,7 +1123,7 @@ async function proxyRequest(req, res, bodyBuf) {
         }
       }
       // v11: 价目表按文本节点挂到「基础价格」块后（v10 因 childNodes 判断挂不上）
-      if (!html.includes("keyo-pricing-sort-v14")) {
+      if (isPricingPage && !html.includes("keyo-pricing-sort-v14")) {
         html = html
           .replace(/<!--keyo-pricing-sort(?:-v\d+)?-->[\s\S]*?<\/script>/g, "")
           .replace(/<!--keyo-billing-unit-->[\s\S]*?<\/script>/g, "")
@@ -1152,7 +1137,11 @@ async function proxyRequest(req, res, bodyBuf) {
           changed = true;
         }
       }
-      if (!html.includes("keyo-model-icons-v3") && Object.keys(MODEL_ICON_MAP).length) {
+      if (
+        isPricingPage &&
+        !html.includes("keyo-model-icons-v3") &&
+        Object.keys(MODEL_ICON_MAP).length
+      ) {
         const ic = `<!--keyo-model-icons-v3-->${MODEL_ICON_SCRIPT}`;
         if (html.includes("<head>")) {
           html = html.replace("<head>", `<head>${ic}`);
@@ -1167,7 +1156,7 @@ async function proxyRequest(req, res, bodyBuf) {
         delete outHeaders["content-encoding"];
         delete outHeaders["Content-Encoding"];
         outHeaders["content-length"] = String(buf.length);
-        outHeaders["Content-Length"] = String(buf.length);
+        delete outHeaders["Content-Length"];
       }
     } catch (e) {
       console.error("[html-inject]", e.message || e);
@@ -1320,7 +1309,7 @@ const server = http.createServer(async (req, res) => {
       }
     }
 
-    const pollM = /^\/v1\/videos\/([^/]+)$/.exec(pathOnly);
+    const pollM = /^\/v1\/videos\/([^/]+)(\/content)?$/.exec(pathOnly);
     if (req.method === "GET" && pollM && pollM[1] !== "generations") {
       const primary = await proxyRaw(`${UPSTREAM}${req.url}`, req, bodyBuf);
       if (!looksLikeMissingVideo(primary.status, primary.buf)) {
@@ -1329,7 +1318,7 @@ const server = http.createServer(async (req, res) => {
       }
       try {
         const alt = await proxyRaw(
-          `${VIDEO_GEN}/v1/tasks/${pollM[1]}${qsOf(req.url)}`,
+          `${VIDEO_GEN}/v1/videos/${pollM[1]}${pollM[2] || ""}${qsOf(req.url)}`,
           req,
           bodyBuf
         );

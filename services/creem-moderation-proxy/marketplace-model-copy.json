@@ -3244,6 +3244,60 @@
       "ja": "BRIA AI",
       "vi": "BRIA AI"
     },
+    "Mistral": {
+      "zhCN": "Mistral",
+      "zhTW": "Mistral",
+      "en": "Mistral",
+      "fr": "Mistral",
+      "ru": "Mistral",
+      "ja": "Mistral",
+      "vi": "Mistral"
+    },
+    "NVIDIA": {
+      "zhCN": "NVIDIA",
+      "zhTW": "NVIDIA",
+      "en": "NVIDIA",
+      "fr": "NVIDIA",
+      "ru": "NVIDIA",
+      "ja": "NVIDIA",
+      "vi": "NVIDIA"
+    },
+    "Nvidia": {
+      "zhCN": "NVIDIA",
+      "zhTW": "NVIDIA",
+      "en": "NVIDIA",
+      "fr": "NVIDIA",
+      "ru": "NVIDIA",
+      "ja": "NVIDIA",
+      "vi": "NVIDIA"
+    },
+    "InclusionAI": {
+      "zhCN": "InclusionAI",
+      "zhTW": "InclusionAI",
+      "en": "InclusionAI",
+      "fr": "InclusionAI",
+      "ru": "InclusionAI",
+      "ja": "InclusionAI",
+      "vi": "InclusionAI"
+    },
+    "Dots": {
+      "zhCN": "Dots",
+      "zhTW": "Dots",
+      "en": "Dots",
+      "fr": "Dots",
+      "ru": "Dots",
+      "ja": "Dots",
+      "vi": "Dots"
+    },
+    "Poolside": {
+      "zhCN": "Poolside",
+      "zhTW": "Poolside",
+      "en": "Poolside",
+      "fr": "Poolside",
+      "ru": "Poolside",
+      "ja": "Poolside",
+      "vi": "Poolside"
+    },
     "Black Forest Labs": {
       "zhCN": "Black Forest Labs",
       "zhTW": "Black Forest Labs",

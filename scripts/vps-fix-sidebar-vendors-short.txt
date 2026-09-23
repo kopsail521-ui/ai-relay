@@ -1,0 +1,7 @@
+cd /opt/ai-relay && sudo git pull --ff-only origin main && sudo docker cp /opt/ai-relay/services/creem-moderation-proxy/server.mjs ai-relay-creem-moderation:/app/server.mjs && sudo docker cp /opt/ai-relay/services/creem-moderation-proxy/marketplace-model-copy.json ai-relay-creem-moderation:/app/marketplace-model-copy.json && sudo docker restart ai-relay-creem-moderation && sleep 3 && curl -sS -o /tmp/pricing-page.html https://www.keyoapi.xyz/pricing && python3 - <<'PY'
+html=open('/tmp/pricing-page.html',encoding='utf-8',errors='ignore').read()
+bad=('(MAP.__vendors__||{})["字节跳动"]' in html)
+print('locale_script', 'V6' if '__keyoLocaleDescV6' in html else ('V5' if '__keyoLocaleDescV5' in html else 'UNKNOWN'))
+print('bad_bytedance_fallback', bad)
+print('DONE_FIX_SIDEBAR_VENDORS')
+PY

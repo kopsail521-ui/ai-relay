@@ -1,0 +1,98 @@
+{
+  "note": "UnoRouter paid chat. Key: VPS UNOROUTER_API_KEY. Sell = cost × 2. Public copy must not name the supplier.",
+  "base_url": "https://api.unorouter.com",
+  "channel_name": "Keyo Chat",
+  "markup": 2,
+  "models": [
+    {
+      "id": "glm-5.3-flash",
+      "cost_in": 0.036,
+      "cost_out": 0.1199988,
+      "vendor": "智谱",
+      "icon": "Zhipu.Color",
+      "tags": "大语言模型",
+      "desc_zh": "GLM 5.3 Flash 高速对话。"
+    },
+    {
+      "id": "glm-5.2",
+      "cost_in": 0.48006,
+      "cost_out": 1.508780574,
+      "vendor": "智谱",
+      "icon": "Zhipu.Color",
+      "tags": "大语言模型",
+      "desc_zh": "GLM 5.2 通用对话与推理。"
+    },
+    {
+      "id": "deepseek-v4.1-flash",
+      "cost_in": 0.0048,
+      "cost_out": 0.0192,
+      "vendor": "DeepSeek",
+      "icon": "DeepSeek",
+      "tags": "大语言模型",
+      "desc_zh": "DeepSeek V4.1 Flash 高速高性价比对话。"
+    },
+    {
+      "id": "deepseek-v4-pro-0813",
+      "cost_in": 0.036018,
+      "cost_out": 0.072036,
+      "vendor": "DeepSeek",
+      "icon": "DeepSeek",
+      "tags": "大语言模型",
+      "desc_zh": "DeepSeek V4 Pro 0813。"
+    },
+    {
+      "id": "deepseek-v4-flash-0731",
+      "cost_in": 0.018004,
+      "cost_out": 0.036008,
+      "vendor": "DeepSeek",
+      "icon": "DeepSeek",
+      "tags": "大语言模型",
+      "desc_zh": "DeepSeek V4 Flash 0731。"
+    },
+    {
+      "id": "deepseek-v4-pro",
+      "cost_in": 0.036018,
+      "cost_out": 0.072036,
+      "vendor": "DeepSeek",
+      "icon": "DeepSeek",
+      "tags": "大语言模型",
+      "desc_zh": "DeepSeek V4 Pro。"
+    },
+    {
+      "id": "deepseek-v4-flash",
+      "cost_in": 0.043204,
+      "cost_out": 0.086408,
+      "vendor": "DeepSeek",
+      "icon": "DeepSeek",
+      "tags": "大语言模型",
+      "desc_zh": "DeepSeek V4 Flash。"
+    },
+    {
+      "id": "kimi-k3",
+      "cost_in": 0.102,
+      "cost_out": 0.51,
+      "vendor": "Moonshot",
+      "icon": "Moonshot.Color",
+      "tags": "大语言模型",
+      "desc_zh": "Kimi K3 对话模型。"
+    },
+    {
+      "id": "kimi-k2.7-code",
+      "cost_in": 0.01672,
+      "cost_out": 0.07039956,
+      "vendor": "Moonshot",
+      "icon": "Moonshot.Color",
+      "tags": "大语言模型",
+      "desc_zh": "Kimi K2.7 Code 编程向对话。"
+    },
+    {
+      "id": "qwen3.8-flash",
+      "cost_in": 0.02748,
+      "cost_out": 0.086103084,
+      "vendor": "阿里巴巴",
+      "icon": "Qwen.Color",
+      "tags": "大语言模型",
+      "desc_zh": "Qwen 3.8 Flash 高速对话。"
+    }
+  ]
+}

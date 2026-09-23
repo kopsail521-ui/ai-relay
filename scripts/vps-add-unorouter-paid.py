@@ -1,9 +1,12 @@
 #!/usr/bin/env python3
-"""Register UnoRouter free chat models in New API.
+"""Register UnoRouter paid chat models in New API (sell = cost × 2).
 
-Key: UNOROUTER_API_KEY in env or /opt/ai-relay/.env (never print it).
-Public price: $0. Upstream name must not appear in marketplace copy.
+Key: UNOROUTER_API_KEY in /opt/ai-relay/.env (never print it).
+Channel: \"Keyo Chat\" (separate from \"Keyo Chat Free\").
+Public copy must NOT mention UnoRouter / cost / markup.
 """
+from __future__ import annotations
+
 import json
 import os
 import sqlite3
@@ -11,7 +14,7 @@ import sys
 import time
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-CFG = os.path.join(ROOT, "config", "unorouter-free-models.json")
+CFG = os.path.join(ROOT, "config", "unorouter-paid-models.json")
 EP = json.dumps({"openai": "/v1/chat/completions"}, separators=(",", ":"))
 
 
@@ -34,9 +37,20 @@ def read_key():
     return ""
 
 
+def get_opt(cur, key):
+    row = cur.execute("SELECT value FROM options WHERE key=?", (key,)).fetchone()
+    return row[0] if row else "{}"
+
+
+def put_opt(cur, key, value):
+    if cur.execute("SELECT key FROM options WHERE key=?", (key,)).fetchone() is None:
+        cur.execute("INSERT INTO options(key,value) VALUES(?,?)", (key, value))
+    else:
+        cur.execute("UPDATE options SET value=? WHERE key=?", (value, key))
+
+
 def ensure_vendor(cur, v_cols, name, icon, now):
-    cur.execute("SELECT id FROM vendors WHERE name=?", (name,))
-    row = cur.fetchone()
+    row = cur.execute("SELECT id FROM vendors WHERE name=?", (name,)).fetchone()
     if row:
         if "icon" in v_cols and icon:
             cur.execute(
@@ -49,9 +63,6 @@ def ensure_vendor(cur, v_cols, name, icon, now):
     if "icon" in v_cols:
         fields.append("icon")
         values.append(icon or "Custom")
-    if "description" in v_cols:
-        fields.append("description")
-        values.append("")
     if "status" in v_cols:
         fields.append("status")
         values.append(1)
@@ -70,11 +81,12 @@ def ensure_vendor(cur, v_cols, name, icon, now):
 
 
 def upsert_model(cur, m_cols, mid, desc, icon, tags, vid, now):
-    sql = "SELECT id FROM models WHERE model_name=?"
     if "deleted_at" in m_cols:
-        sql += " AND deleted_at IS NULL"
-    cur.execute(sql, (mid,))
-    row = cur.fetchone()
+        cur.execute(
+            "UPDATE models SET deleted_at=NULL WHERE model_name=? AND deleted_at IS NOT NULL AND deleted_at!=0",
+            (mid,),
+        )
+    row = cur.execute("SELECT id FROM models WHERE model_name=?", (mid,)).fetchone()
     if row is None:
         fields = ["model_name", "description", "icon", "tags", "vendor_id", "endpoints"]
         values = [mid, desc, icon, tags, vid, EP]
@@ -101,8 +113,8 @@ def upsert_model(cur, m_cols, mid, desc, icon, tags, vid, now):
         vals = [desc, icon, tags, vid, EP]
         if "status" in m_cols:
             sets.append("status=1")
-        if "sync_official" in m_cols:
-            sets.append("sync_official=0")
+        if "deleted_at" in m_cols:
+            sets.append("deleted_at=NULL")
         if "updated_time" in m_cols:
             sets.append("updated_time=?")
             vals.append(now)
@@ -117,6 +129,9 @@ def main():
         raise SystemExit("set UNOROUTER_API_KEY in /opt/ai-relay/.env")
     cfg = json.load(open(CFG, encoding="utf-8"))
     models = cfg["models"]
+    markup = float(cfg.get("markup") or 2)
+    ch_name = cfg.get("channel_name") or "Keyo Chat"
+    base_url = cfg["base_url"]
     db_path = sys.argv[1] if len(sys.argv) > 1 else "/data/one-api.db"
     if not os.path.exists(db_path):
         raise SystemExit("DB not found: " + db_path)
@@ -127,34 +142,22 @@ def main():
     ch_cols = cols(cur, "channels")
     m_cols = cols(cur, "models")
     v_cols = cols(cur, "vendors")
+    tabs = {r[0] for r in cur.execute("SELECT name FROM sqlite_master WHERE type='table'")}
 
-    sql = "SELECT id, name, models, base_url, key FROM channels"
+    sql = "SELECT id, name, models FROM channels"
     if "deleted_at" in ch_cols:
         sql += " WHERE deleted_at IS NULL"
     cur.execute(sql)
     target = None
-    for cid, name, models_s, base, ckey in cur.fetchall():
-        blob = ((name or "") + " " + (base or "")).lower()
-        # Match by channel name only — do not claim the paid "Keyo Chat" channel
-        # that shares the same base_url.
-        if (name or "") == (cfg.get("channel_name") or "Keyo Chat Free"):
+    for cid, name, models_s in cur.fetchall():
+        if (name or "") == ch_name:
             target = (cid, name, models_s or "")
             break
 
     ids = [m["id"] for m in models]
-    id_set = set(ids)
-    # Previous onboarded IDs that upstream delisted; always prune even if still in channel.models
-    stale = [
-        "glm-5.3-thinking:free",
-        "glm-5.3:free",
-        "glm-5.2:free",
-        "glm-5.2-thinking:free",
-        "glm-5.3-think-search:free",
-        "glm-5.3-search:free",
-    ]
     if target is None:
         fields = ["type", "key", "name", "base_url", "models", '"group"', "status"]
-        values = [1, key, cfg.get("channel_name") or "Keyo Chat Free", cfg["base_url"], ",".join(ids), "default", 1]
+        values = [1, key, ch_name, base_url, ",".join(ids), "default", 1]
         use_f, use_v = [], []
         for f, v in zip(fields, values):
             col = f.strip('"')
@@ -173,13 +176,18 @@ def main():
             use_v,
         )
         cid = cur.lastrowid
-        print("channel created", cid)
+        print("channel created", cid, ch_name)
     else:
         cid, cname, models_s = target
-        # Sync channel.models to config list (drop delisted, add new)
-        parts = list(ids)
+        parts = [p.strip() for p in models_s.replace("\n", ",").split(",") if p.strip()]
+        for mid in ids:
+            if mid not in parts:
+                parts.append(mid)
+                print("channel_add", mid)
+            else:
+                print("channel_has", mid)
         sets = ["models=?", "key=?", "base_url=?", "status=1"]
-        vals = [",".join(parts), key, cfg["base_url"]]
+        vals = [",".join(parts), key, base_url]
         if "updated_time" in ch_cols:
             sets.append("updated_time=?")
             vals.append(now)
@@ -187,67 +195,62 @@ def main():
         cur.execute("UPDATE channels SET %s WHERE id=?" % ",".join(sets), vals)
         print("channel updated", cid, cname, "models", len(parts))
 
-    def get_opt(k):
-        cur.execute("SELECT value FROM options WHERE key=?", (k,))
-        row = cur.fetchone()
-        return row[0] if row else "{}"
-
-    def put_opt(k, value):
-        cur.execute("SELECT key FROM options WHERE key=?", (k,))
-        if cur.fetchone() is None:
-            cur.execute("INSERT INTO options(key,value) VALUES(?,?)", (k, value))
-        else:
-            cur.execute("UPDATE options SET value=? WHERE key=?", (value, k))
-
-    mr = json.loads(get_opt("ModelRatio") or "{}")
-    cr = json.loads(get_opt("CompletionRatio") or "{}")
-    mp = json.loads(get_opt("ModelPrice") or "{}")
+    mr = json.loads(get_opt(cur, "ModelRatio") or "{}")
+    cr = json.loads(get_opt(cur, "CompletionRatio") or "{}")
+    mp = json.loads(get_opt(cur, "ModelPrice") or "{}")
 
     for m in models:
         mid = m["id"]
-        mr.pop(mid, None)
-        cr.pop(mid, None)
-        mp[mid] = 0
-        vid = ensure_vendor(cur, v_cols, m["vendor"], m["icon"], now)
-        upsert_model(cur, m_cols, mid, m.get("desc_zh") or mid, m["icon"], m.get("tags") or "大语言模型,免费", vid, now)
-        cur.execute("DELETE FROM abilities WHERE model=?", (mid,))
-        cur.execute(
-            'INSERT OR IGNORE INTO abilities("group", model, channel_id, enabled, priority, weight) VALUES (?,?,?,?,?,?)',
-            ("default", mid, cid, 1, 0, 1),
-        )
-        print("free", mid)
-
-    # Prune delisted :free rows so pricing / relay stop advertising dead IDs.
-    # Also drop any leftover :free abilities still pointing at this channel.
-    prune = set(x for x in stale if x not in id_set)
-    cur.execute(
-        'SELECT model FROM abilities WHERE channel_id=? AND model LIKE ?',
-        (cid, "%:free"),
-    )
-    for (mid,) in cur.fetchall():
-        if mid not in id_set:
-            prune.add(mid)
-    for mid in sorted(prune):
-        cur.execute("DELETE FROM abilities WHERE model=?", (mid,))
+        cost_in = float(m["cost_in"])
+        cost_out = float(m["cost_out"])
+        sell_in = round(cost_in * markup, 6)
+        sell_out = round(cost_out * markup, 6)
+        ratio = round(sell_in / 2.0, 6)
+        comp = round(sell_out / sell_in, 6) if sell_in else 1.0
+        mr[mid] = ratio
+        cr[mid] = comp
         mp.pop(mid, None)
-        mr.pop(mid, None)
-        cr.pop(mid, None)
-        if "status" in m_cols:
-            sql = "UPDATE models SET status=0"
-            if "updated_time" in m_cols:
-                sql += ", updated_time=?"
-                cur.execute(sql + " WHERE model_name=?", (now, mid))
-            else:
-                cur.execute(sql + " WHERE model_name=?", (mid,))
-        print("pruned", mid)
+        vid = ensure_vendor(cur, v_cols, m["vendor"], m.get("icon") or "Custom", now)
+        upsert_model(
+            cur,
+            m_cols,
+            mid,
+            m.get("desc_zh") or mid,
+            m.get("icon") or "Custom",
+            m.get("tags") or "大语言模型",
+            vid,
+            now,
+        )
+        if "abilities" in tabs:
+            cur.execute("DELETE FROM abilities WHERE model=?", (mid,))
+            cur.execute(
+                'INSERT OR IGNORE INTO abilities("group", model, channel_id, enabled, priority, weight) VALUES (?,?,?,?,?,?)',
+                ("default", mid, cid, 1, 0, 1),
+            )
+        print(
+            "price",
+            mid,
+            "sell",
+            sell_in,
+            "/",
+            sell_out,
+            "ratio",
+            ratio,
+            "comp",
+            comp,
+        )
 
-    put_opt("ModelRatio", json.dumps(mr, ensure_ascii=False, separators=(",", ":")))
-    put_opt("CompletionRatio", json.dumps(cr, ensure_ascii=False, separators=(",", ":")))
-    put_opt("ModelPrice", json.dumps(mp, ensure_ascii=False, separators=(",", ":")))
+    put_opt(cur, "ModelRatio", json.dumps(mr, ensure_ascii=False, separators=(",", ":")))
+    put_opt(
+        cur,
+        "CompletionRatio",
+        json.dumps(cr, ensure_ascii=False, separators=(",", ":")),
+    )
+    put_opt(cur, "ModelPrice", json.dumps(mp, ensure_ascii=False, separators=(",", ":")))
     conn.commit()
     conn.close()
     print("count", len(models))
-    print("DONE_ADD_UNOROUTER_FREE")
+    print("DONE_ADD_UNOROUTER_PAID")
 
 
 if __name__ == "__main__":

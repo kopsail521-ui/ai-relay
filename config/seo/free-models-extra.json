@@ -8,6 +8,24 @@
       "note": "Fixed $0 on Keyo catalog (fair-use). Availability can change with upstream free pools."
     },
     {
+      "id": "DeepSeek-Prover-V2-7B",
+      "family": "DeepSeek",
+      "twin": null,
+      "note": "Fixed $0 on Keyo catalog (fair-use). Availability can change with upstream free pools."
+    },
+    {
+      "id": "deepseek-v4-flash-free",
+      "family": "DeepSeek",
+      "twin": "deepseek-v4-flash",
+      "note": "Fixed $0 on Keyo catalog (fair-use). Distinct from paid deepseek-v4-flash / deepseek-v4.1-flash."
+    },
+    {
+      "id": "deepseek-v4-pro-free",
+      "family": "DeepSeek",
+      "twin": "deepseek-v4-pro",
+      "note": "Fixed $0 on Keyo catalog (fair-use). Distinct from paid deepseek-v4-pro-0813."
+    },
+    {
       "id": "dots-3-note-preview:free",
       "family": "Other",
       "note": "Fixed $0 on Keyo catalog (fair-use). Availability can change with upstream free pools."

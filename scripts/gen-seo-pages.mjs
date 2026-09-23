@@ -55,7 +55,7 @@ function allFreeModels() {
   const extra = (freeExtra.models || []).map((m) => ({
     id: m.id,
     family: m.family || "Other",
-    twin: null,
+    twin: m.twin || null,
     source: "catalog-free",
   }));
   const seen = new Set();

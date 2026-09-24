@@ -11,6 +11,7 @@
  * Also ban in user-facing copy: "search intent", "highest-traffic",
  * "this hub is that landing", "for SEO", "search engines".
  */
+import crypto from "crypto";
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
@@ -1016,7 +1017,42 @@ function fileLastmod(absPath) {
   }
 }
 
+function contentHash(raw) {
+  return crypto.createHash("sha256").update(String(raw)).digest("hex").slice(0, 16);
+}
+
+/** Keep lastmod stable across regenerations unless page content hash changes. */
+function stableLastmod(cache, loc, filePath) {
+  const today = new Date().toISOString().slice(0, 10);
+  let raw = "";
+  try {
+    raw = fs.readFileSync(filePath, "utf8");
+  } catch {
+    raw = loc;
+  }
+  const hash = contentHash(raw);
+  const prev = cache.entries[loc];
+  if (prev && prev.hash === hash && prev.lastmod) {
+    return prev.lastmod;
+  }
+  const lastmod =
+    prev?.hash && prev.hash !== hash
+      ? today
+      : prev?.lastmod || fileLastmod(filePath) || today;
+  cache.entries[loc] = { hash, lastmod };
+  return lastmod;
+}
+
 function writeSitemap() {
+  const cachePath = path.join(root, "config/seo/sitemap-lastmod.json");
+  let cache = { _note: "lastmod bumps only when page content hash changes.", entries: {} };
+  try {
+    cache = JSON.parse(fs.readFileSync(cachePath, "utf8"));
+    if (!cache.entries || typeof cache.entries !== "object") cache.entries = {};
+  } catch {
+    /* first run */
+  }
+
   const landingUrls = (pricingLandings.pages || []).map((p) => ({
     loc: `${site}/${p.slug}`,
     file: path.join(outDir, `${p.slug}.html`),
@@ -1094,10 +1130,11 @@ function writeSitemap() {
   ];
   const body = urls
     .map((u) => {
-      const lastmod = fileLastmod(u.file);
+      const lastmod = stableLastmod(cache, u.loc, u.file);
       return `  <url><loc>${u.loc}</loc><lastmod>${lastmod}</lastmod><changefreq>${u.changefreq}</changefreq><priority>${u.priority}</priority></url>`;
     })
     .join("\n");
+  fs.writeFileSync(cachePath, `${JSON.stringify(cache, null, 2)}\n`);
   return `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 ${body}

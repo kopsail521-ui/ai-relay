@@ -36,14 +36,15 @@ const short = [
 import json,re
 j=json.load(open('/tmp/pricing.json'))
 by={m['model_name']:m for m in j.get('data') or []}
-ids=['seedance-2.0-1080p','MiniMax-H3','flux-3-video','grok-1.5-video','gpt-image-2.5']
+ids=['seedance-2.0-1080p','MiniMax-H3','flux-3-video','grok-1.5-video','gpt-image-2.5','RMBG-2.0']
 for i in ids:
   m=by.get(i) or {}
   d=m.get('description') or ''
-  print(i, 'tag='+(m.get('tags') or ''), 'bill' if re.search(r'计费|/秒|/次', d) else 'NO_BILL', d[-40:])
+  print(i, 'tag='+(m.get('tags') or ''), 'bill' if re.search(r'计费|\\$|/秒|/次', d) else 'NO_BILL', d[-50:])
 sec=sum(1 for m in by.values() if (m.get('tags') or '')=='视频按秒')
 req=sum(1 for m in by.values() if (m.get('tags') or '')=='视频按次')
 print('tag_counts', '视频按秒', sec, '视频按次', req)
+print('rmbg_ok', '计费：$' in ((by.get('RMBG-2.0') or {}).get('description') or ''))
 blob=json.dumps(j,ensure_ascii=False)
 print('public_leak', bool(re.search(r'unorouter|openlux|apimart|grsai|上游|进货|二道|passthrough', blob, re.I)))
 print('DONE_HEAL_BILLING_LIVE')

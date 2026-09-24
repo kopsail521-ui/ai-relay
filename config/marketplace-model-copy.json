@@ -2342,15 +2342,15 @@
     "price_key_en": ""
   },
   "grok-1.5-video": {
-    "description": "xAI Grok 1.5 视频：文生或参考图生成，时长 1–15 秒，最高 1080p。",
+    "description": "xAI Grok 1.5 视频：文生或参考图生成，时长 1–15 秒，最高 1080p。 计费：$0.60675/次。",
     "descriptions": {
-      "zhCN": "xAI Grok 1.5 视频：文生或参考图生成，时长 1–15 秒，最高 1080p。",
-      "zhTW": "xAI Grok 1.5 影片：文生或參考圖生成，時長 1–15 秒，最高 1080p。",
-      "en": "xAI Grok 1.5 video from text or reference images, 1–15s, up to 1080p.",
-      "fr": "Grok 1.5 vidéo texte/image, 1–15s, jusqu’à 1080p.",
-      "ru": "Grok 1.5: текст/референс, 1–15с, до 1080p.",
-      "ja": "Grok 1.5。テキスト/参照画像、1–15秒、最大1080p。",
-      "vi": "Grok 1.5: text/ảnh, 1–15s, tối đa 1080p."
+      "zhCN": "xAI Grok 1.5 视频：文生或参考图生成，时长 1–15 秒，最高 1080p。 计费：$0.60675/次。",
+      "zhTW": "xAI Grok 1.5 视频：文生或参考图生成，时长 1–15 秒，最高 1080p。 计费：$0.60675/次。",
+      "en": "xAI Grok 1.5 video from text or reference images, 1–15s, up to 1080p. Billing: $0.60675/request.",
+      "fr": "xAI Grok 1.5 video from text or reference images, 1–15s, up to 1080p. Billing: $0.60675/request.",
+      "ru": "xAI Grok 1.5 video from text or reference images, 1–15s, up to 1080p. Billing: $0.60675/request.",
+      "ja": "xAI Grok 1.5 video from text or reference images, 1–15s, up to 1080p. Billing: $0.60675/request.",
+      "vi": "xAI Grok 1.5 video from text or reference images, 1–15s, up to 1080p. Billing: $0.60675/request."
     },
     "unit": "request",
     "badge": {
@@ -2386,8 +2386,8 @@
     "suffix_en": "/ request",
     "price_key_zh": "每次请求",
     "price_key_en": "Per request",
-    "description_zh": "xAI Grok 1.5 视频：文生或参考图生成，时长 1–15 秒，最高 1080p。",
-    "description_en": "xAI Grok 1.5 video from text or reference images, 1–15s, up to 1080p.",
+    "description_zh": "xAI Grok 1.5 视频：文生或参考图生成，时长 1–15 秒，最高 1080p。 计费：$0.60675/次。",
+    "description_en": "xAI Grok 1.5 video from text or reference images, 1–15s, up to 1080p. Billing: $0.60675/request.",
     "price_table": {
       "columns": {
         "zhCN": [
@@ -2474,15 +2474,15 @@
     }
   },
   "gemini-omni-1.1-flash": {
-    "description": "Google Gemini Omni 1.1 Flash，多模态视频生成，适合快速出片。",
+    "description": "Google Gemini Omni 1.1 Flash，多模态视频生成，适合快速出片。 计费：$0.1056/秒（时长由模型决定，约 3–10s）。",
     "descriptions": {
-      "zhCN": "Google Gemini Omni 1.1 Flash，多模态视频生成，适合快速出片。",
-      "zhTW": "Google Gemini Omni 1.1 Flash，多模態影片生成，適合快速出片。",
-      "en": "Google Gemini Omni 1.1 Flash multimodal video generation for fast turnaround.",
-      "fr": "Gemini Omni 1.1 Flash pour génération vidéo multimodale rapide.",
-      "ru": "Gemini Omni 1.1 Flash: быстрая мультимодальная генерация видео.",
-      "ja": "Gemini Omni 1.1 Flash。高速なマルチモーダル動画生成。",
-      "vi": "Gemini Omni 1.1 Flash tạo video đa phương thức nhanh."
+      "zhCN": "Google Gemini Omni 1.1 Flash，多模态视频生成，适合快速出片。 计费：$0.1056/秒（时长由模型决定，约 3–10s）。",
+      "zhTW": "Google Gemini Omni 1.1 Flash，多模态视频生成，适合快速出片。 计费：$0.1056/秒（时长由模型决定，约 3–10s）。",
+      "en": "Google Gemini Omni 1.1 Flash multimodal video generation for fast turnaround. Billing: $0.1056/sec (duration model-chosen, ~3–10s).",
+      "fr": "Google Gemini Omni 1.1 Flash multimodal video generation for fast turnaround. Billing: $0.1056/sec (duration model-chosen, ~3–10s).",
+      "ru": "Google Gemini Omni 1.1 Flash multimodal video generation for fast turnaround. Billing: $0.1056/sec (duration model-chosen, ~3–10s).",
+      "ja": "Google Gemini Omni 1.1 Flash multimodal video generation for fast turnaround. Billing: $0.1056/sec (duration model-chosen, ~3–10s).",
+      "vi": "Google Gemini Omni 1.1 Flash multimodal video generation for fast turnaround. Billing: $0.1056/sec (duration model-chosen, ~3–10s)."
     },
     "unit": "second",
     "badge": {
@@ -2518,8 +2518,8 @@
     "suffix_en": "/ second",
     "price_key_zh": "每秒",
     "price_key_en": "Per second",
-    "description_zh": "Google Gemini Omni 1.1 Flash，多模态视频生成，适合快速出片。",
-    "description_en": "Google Gemini Omni 1.1 Flash multimodal video generation for fast turnaround.",
+    "description_zh": "Google Gemini Omni 1.1 Flash，多模态视频生成，适合快速出片。 计费：$0.1056/秒（时长由模型决定，约 3–10s）。",
+    "description_en": "Google Gemini Omni 1.1 Flash multimodal video generation for fast turnaround. Billing: $0.1056/sec (duration model-chosen, ~3–10s).",
     "price_table": {
       "columns": {
         "zhCN": [
@@ -2540,15 +2540,15 @@
     }
   },
   "gemini-omni-1.1-flash-ext": {
-    "description": "Gemini Omni Ext 扩展档，支持更多分辨率与参考视频输入。",
+    "description": "Gemini Omni Ext 扩展档，支持更多分辨率与参考视频输入。 计费：档位包（如 720P-8s $0.42）；参考视频按秒。",
     "descriptions": {
-      "zhCN": "Gemini Omni Ext 扩展档，支持更多分辨率与参考视频输入。",
-      "zhTW": "Gemini Omni Ext 擴展檔，支援更多解析度與參考影片輸入。",
-      "en": "Gemini Omni Ext with more resolution packs and reference-video input.",
-      "fr": "Gemini Omni Ext avec plus de packs et vidéo de référence.",
-      "ru": "Gemini Omni Ext: больше пакетов и опорное видео.",
-      "ja": "Gemini Omni Ext。追加解像度パックと参照動画。",
-      "vi": "Gemini Omni Ext với thêm gói độ phân giải và video tham chiếu."
+      "zhCN": "Gemini Omni Ext 扩展档，支持更多分辨率与参考视频输入。 计费：档位包（如 720P-8s $0.42）；参考视频按秒。",
+      "zhTW": "Gemini Omni Ext 扩展档，支持更多分辨率与参考视频输入。 计费：档位包（如 720P-8s $0.42）；参考视频按秒。",
+      "en": "Gemini Omni Ext with more resolution packs and reference-video input. Billing: tier packs (e.g. 720P-8s $0.42); reference video per second.",
+      "fr": "Gemini Omni Ext with more resolution packs and reference-video input. Billing: tier packs (e.g. 720P-8s $0.42); reference video per second.",
+      "ru": "Gemini Omni Ext with more resolution packs and reference-video input. Billing: tier packs (e.g. 720P-8s $0.42); reference video per second.",
+      "ja": "Gemini Omni Ext with more resolution packs and reference-video input. Billing: tier packs (e.g. 720P-8s $0.42); reference video per second.",
+      "vi": "Gemini Omni Ext with more resolution packs and reference-video input. Billing: tier packs (e.g. 720P-8s $0.42); reference video per second."
     },
     "unit": "second",
     "badge": {
@@ -2584,8 +2584,8 @@
     "suffix_en": "/ second",
     "price_key_zh": "每秒",
     "price_key_en": "Per second",
-    "description_zh": "Gemini Omni Ext 扩展档，支持更多分辨率与参考视频输入。",
-    "description_en": "Gemini Omni Ext with more resolution packs and reference-video input.",
+    "description_zh": "Gemini Omni Ext 扩展档，支持更多分辨率与参考视频输入。 计费：档位包（如 720P-8s $0.42）；参考视频按秒。",
+    "description_en": "Gemini Omni Ext with more resolution packs and reference-video input. Billing: tier packs (e.g. 720P-8s $0.42); reference video per second.",
     "price_table": {
       "columns": {
         "zhCN": [
@@ -2832,15 +2832,15 @@
     }
   },
   "flux-3-video": {
-    "description": "FLUX.3 Video，多档位视频生成，含图生与视频到视频。",
+    "description": "FLUX.3 Video，多档位视频生成，含图生与视频到视频。 计费：DRAFT $0.0576/秒；HD $0.1632/秒；FHD $0.2784/秒。",
     "descriptions": {
-      "zhCN": "FLUX.3 Video，多档位视频生成，含图生与视频到视频。",
-      "zhTW": "FLUX.3 Video，多檔位影片生成，含圖生與影片到影片。",
-      "en": "FLUX.3 Video with DRAFT/HD/FHD tiers including image-to-video and V2V.",
-      "fr": "FLUX.3 Video (DRAFT/HD/FHD), image-to-video et V2V.",
-      "ru": "FLUX.3 Video: DRAFT/HD/FHD, image-to-video и V2V.",
-      "ja": "FLUX.3 Video。DRAFT/HD/FHD、画像→動画・V2V。",
-      "vi": "FLUX.3 Video với các bậc DRAFT/HD/FHD, gồm V2V."
+      "zhCN": "FLUX.3 Video，多档位视频生成，含图生与视频到视频。 计费：DRAFT $0.0576/秒；HD $0.1632/秒；FHD $0.2784/秒。",
+      "zhTW": "FLUX.3 Video，多档位视频生成，含图生与视频到视频。 计费：DRAFT $0.0576/秒；HD $0.1632/秒；FHD $0.2784/秒。",
+      "en": "FLUX.3 Video with DRAFT/HD/FHD tiers including image-to-video and V2V. Billing: DRAFT $0.0576/sec; HD $0.1632/sec; FHD $0.2784/sec.",
+      "fr": "FLUX.3 Video with DRAFT/HD/FHD tiers including image-to-video and V2V. Billing: DRAFT $0.0576/sec; HD $0.1632/sec; FHD $0.2784/sec.",
+      "ru": "FLUX.3 Video with DRAFT/HD/FHD tiers including image-to-video and V2V. Billing: DRAFT $0.0576/sec; HD $0.1632/sec; FHD $0.2784/sec.",
+      "ja": "FLUX.3 Video with DRAFT/HD/FHD tiers including image-to-video and V2V. Billing: DRAFT $0.0576/sec; HD $0.1632/sec; FHD $0.2784/sec.",
+      "vi": "FLUX.3 Video with DRAFT/HD/FHD tiers including image-to-video and V2V. Billing: DRAFT $0.0576/sec; HD $0.1632/sec; FHD $0.2784/sec."
     },
     "unit": "second",
     "badge": {
@@ -2876,8 +2876,8 @@
     "suffix_en": "/ second",
     "price_key_zh": "每秒",
     "price_key_en": "Per second",
-    "description_zh": "FLUX.3 Video，多档位视频生成，含图生与视频到视频。",
-    "description_en": "FLUX.3 Video with DRAFT/HD/FHD tiers including image-to-video and V2V.",
+    "description_zh": "FLUX.3 Video，多档位视频生成，含图生与视频到视频。 计费：DRAFT $0.0576/秒；HD $0.1632/秒；FHD $0.2784/秒。",
+    "description_en": "FLUX.3 Video with DRAFT/HD/FHD tiers including image-to-video and V2V. Billing: DRAFT $0.0576/sec; HD $0.1632/sec; FHD $0.2784/sec.",
     "price_table": {
       "columns": {
         "zhCN": [
@@ -2918,15 +2918,15 @@
     }
   },
   "MiniMax-H3": {
-    "description": "MiniMax-H3 视频生成，支持 480p / 768p / 1080p，可附参考图。",
+    "description": "MiniMax-H3 视频生成，支持 480p / 768p / 1080p，可附参考图。 计费：480p $0.02055/秒；768p $0.02877/秒；1080p $0.04110/秒。",
     "descriptions": {
-      "zhCN": "MiniMax-H3 视频生成，支持 480p / 768p / 1080p，可附参考图。",
-      "zhTW": "MiniMax-H3 影片生成，支援 480p / 768p / 1080p，可附參考圖。",
-      "en": "MiniMax-H3 video at 480p / 768p / 1080p with optional reference images.",
-      "fr": "MiniMax-H3 en 480p / 768p / 1080p avec images de référence optionnelles.",
-      "ru": "MiniMax-H3 480p / 768p / 1080p с опциональными референс-изображениями.",
-      "ja": "MiniMax-H3。480p / 768p / 1080p。参照画像対応。",
-      "vi": "MiniMax-H3 480p / 768p / 1080p, hỗ trợ ảnh tham chiếu."
+      "zhCN": "MiniMax-H3 视频生成，支持 480p / 768p / 1080p，可附参考图。 计费：480p $0.02055/秒；768p $0.02877/秒；1080p $0.04110/秒。",
+      "zhTW": "MiniMax-H3 视频生成，支持 480p / 768p / 1080p，可附参考图。 计费：480p $0.02055/秒；768p $0.02877/秒；1080p $0.04110/秒。",
+      "en": "MiniMax-H3 video at 480p / 768p / 1080p with optional reference images. Billing: 480p $0.02055/sec; 768p $0.02877/sec; 1080p $0.04110/sec.",
+      "fr": "MiniMax-H3 video at 480p / 768p / 1080p with optional reference images. Billing: 480p $0.02055/sec; 768p $0.02877/sec; 1080p $0.04110/sec.",
+      "ru": "MiniMax-H3 video at 480p / 768p / 1080p with optional reference images. Billing: 480p $0.02055/sec; 768p $0.02877/sec; 1080p $0.04110/sec.",
+      "ja": "MiniMax-H3 video at 480p / 768p / 1080p with optional reference images. Billing: 480p $0.02055/sec; 768p $0.02877/sec; 1080p $0.04110/sec.",
+      "vi": "MiniMax-H3 video at 480p / 768p / 1080p with optional reference images. Billing: 480p $0.02055/sec; 768p $0.02877/sec; 1080p $0.04110/sec."
     },
     "unit": "second",
     "badge": {
@@ -2962,8 +2962,8 @@
     "suffix_en": "/ second",
     "price_key_zh": "每秒",
     "price_key_en": "Per second",
-    "description_zh": "MiniMax-H3 视频生成，支持 480p / 768p / 1080p，可附参考图。",
-    "description_en": "MiniMax-H3 video at 480p / 768p / 1080p with optional reference images.",
+    "description_zh": "MiniMax-H3 视频生成，支持 480p / 768p / 1080p，可附参考图。 计费：480p $0.02055/秒；768p $0.02877/秒；1080p $0.04110/秒。",
+    "description_en": "MiniMax-H3 video at 480p / 768p / 1080p with optional reference images. Billing: 480p $0.02055/sec; 768p $0.02877/sec; 1080p $0.04110/sec.",
     "price_table": {
       "columns": {
         "zhCN": [
@@ -2997,15 +2997,15 @@
     }
   },
   "wan3.0-video": {
-    "description": "通义万相 Wan 3.0 视频生成，按分辨率输出。",
+    "description": "通义万相 Wan 3.0 视频生成，按分辨率输出。 计费：480P $0.04115/秒；720P $0.08228/秒；1080P $0.16457/秒。",
     "descriptions": {
-      "zhCN": "通义万相 Wan 3.0 视频生成，按分辨率输出。",
-      "zhTW": "通義萬相 Wan 3.0 影片生成，按解析度輸出。",
-      "en": "Wan 3.0 video generation by output resolution.",
-      "fr": "Wan 3.0 par résolution de sortie.",
-      "ru": "Wan 3.0 по разрешению выхода.",
-      "ja": "Wan 3.0。出力解像度別。",
-      "vi": "Wan 3.0 theo độ phân giải đầu ra."
+      "zhCN": "通义万相 Wan 3.0 视频生成，按分辨率输出。 计费：480P $0.04115/秒；720P $0.08228/秒；1080P $0.16457/秒。",
+      "zhTW": "通义万相 Wan 3.0 视频生成，按分辨率输出。 计费：480P $0.04115/秒；720P $0.08228/秒；1080P $0.16457/秒。",
+      "en": "Wan 3.0 video generation by output resolution. Billing: 480P $0.04115/sec; 720P $0.08228/sec; 1080P $0.16457/sec.",
+      "fr": "Wan 3.0 video generation by output resolution. Billing: 480P $0.04115/sec; 720P $0.08228/sec; 1080P $0.16457/sec.",
+      "ru": "Wan 3.0 video generation by output resolution. Billing: 480P $0.04115/sec; 720P $0.08228/sec; 1080P $0.16457/sec.",
+      "ja": "Wan 3.0 video generation by output resolution. Billing: 480P $0.04115/sec; 720P $0.08228/sec; 1080P $0.16457/sec.",
+      "vi": "Wan 3.0 video generation by output resolution. Billing: 480P $0.04115/sec; 720P $0.08228/sec; 1080P $0.16457/sec."
     },
     "unit": "second",
     "badge": {
@@ -3041,8 +3041,8 @@
     "suffix_en": "/ second",
     "price_key_zh": "每秒",
     "price_key_en": "Per second",
-    "description_zh": "通义万相 Wan 3.0 视频生成，按分辨率输出。",
-    "description_en": "Wan 3.0 video generation by output resolution.",
+    "description_zh": "通义万相 Wan 3.0 视频生成，按分辨率输出。 计费：480P $0.04115/秒；720P $0.08228/秒；1080P $0.16457/秒。",
+    "description_en": "Wan 3.0 video generation by output resolution. Billing: 480P $0.04115/sec; 720P $0.08228/sec; 1080P $0.16457/sec.",
     "price_table": {
       "columns": {
         "zhCN": [
@@ -3071,15 +3071,15 @@
     }
   },
   "grok-imagine-video-1.5-preview": {
-    "description": "xAI Grok Imagine Video 预览版，适合由图片快速生成短视频。",
+    "description": "xAI Grok Imagine Video 预览版，适合由图片快速生成短视频。 计费：480p $0.08825/秒；720p $0.1545/秒（仅图生）。",
     "descriptions": {
-      "zhCN": "xAI Grok Imagine Video 预览版，适合由图片快速生成短视频。",
-      "zhTW": "xAI Grok Imagine Video 預覽版，適合由圖片快速生成短影片。",
-      "en": "xAI Grok Imagine Video preview for short clips from images.",
-      "fr": "Grok Imagine Video preview pour clips courts depuis images.",
-      "ru": "Grok Imagine Video preview: короткие клипы из изображений.",
-      "ja": "Grok Imagine Video プレビュー。画像から短尺動画。",
-      "vi": "Grok Imagine Video preview tạo clip ngắn từ ảnh."
+      "zhCN": "xAI Grok Imagine Video 预览版，适合由图片快速生成短视频。 计费：480p $0.08825/秒；720p $0.1545/秒（仅图生）。",
+      "zhTW": "xAI Grok Imagine Video 预览版，适合由图片快速生成短视频。 计费：480p $0.08825/秒；720p $0.1545/秒（仅图生）。",
+      "en": "xAI Grok Imagine Video preview for short clips from images. Billing: 480p $0.08825/sec; 720p $0.1545/sec (image-to-video only).",
+      "fr": "xAI Grok Imagine Video preview for short clips from images. Billing: 480p $0.08825/sec; 720p $0.1545/sec (image-to-video only).",
+      "ru": "xAI Grok Imagine Video preview for short clips from images. Billing: 480p $0.08825/sec; 720p $0.1545/sec (image-to-video only).",
+      "ja": "xAI Grok Imagine Video preview for short clips from images. Billing: 480p $0.08825/sec; 720p $0.1545/sec (image-to-video only).",
+      "vi": "xAI Grok Imagine Video preview for short clips from images. Billing: 480p $0.08825/sec; 720p $0.1545/sec (image-to-video only)."
     },
     "unit": "second",
     "badge": {
@@ -3115,8 +3115,8 @@
     "suffix_en": "/ second",
     "price_key_zh": "每秒",
     "price_key_en": "Per second",
-    "description_zh": "xAI Grok Imagine Video 预览版，适合由图片快速生成短视频。",
-    "description_en": "xAI Grok Imagine Video preview for short clips from images.",
+    "description_zh": "xAI Grok Imagine Video 预览版，适合由图片快速生成短视频。 计费：480p $0.08825/秒；720p $0.1545/秒（仅图生）。",
+    "description_en": "xAI Grok Imagine Video preview for short clips from images. Billing: 480p $0.08825/sec; 720p $0.1545/sec (image-to-video only).",
     "price_table": {
       "columns": {
         "zhCN": [
@@ -4341,15 +4341,15 @@
     "price_key_en": ""
   },
   "seedance-2.0-1080p": {
-    "description": "字节 Seedance 2.0 文生/图生视频（1080p）：电影感运动与主体一致，适合高质量短视频成片。",
+    "description": "字节 Seedance 2.0 文生/图生视频（1080p）：电影感运动与主体一致，适合高质量短视频成片。 计费：$0.100599/秒。",
     "descriptions": {
-      "zhCN": "字节 Seedance 2.0 文生/图生视频（1080p）：电影感运动与主体一致，适合高质量短视频成片。",
-      "zhTW": "字节 Seedance 2.0 文生/图生视频（1080p）：电影感运动与主体一致，适合高质量短视频成片。",
-      "en": "ByteDance Seedance 2.0 text/image-to-video at 1080p: cinematic motion and subject consistency for polished shorts.",
-      "fr": "ByteDance Seedance 2.0 text/image-to-video at 1080p: cinematic motion and subject consistency for polished shorts.",
-      "ru": "ByteDance Seedance 2.0 text/image-to-video at 1080p: cinematic motion and subject consistency for polished shorts.",
-      "ja": "ByteDance Seedance 2.0 text/image-to-video at 1080p: cinematic motion and subject consistency for polished shorts.",
-      "vi": "ByteDance Seedance 2.0 text/image-to-video at 1080p: cinematic motion and subject consistency for polished shorts."
+      "zhCN": "字节 Seedance 2.0 文生/图生视频（1080p）：电影感运动与主体一致，适合高质量短视频成片。 计费：$0.100599/秒。",
+      "zhTW": "字节 Seedance 2.0 文生/图生视频（1080p）：电影感运动与主体一致，适合高质量短视频成片。 计费：$0.100599/秒。",
+      "en": "ByteDance Seedance 2.0 text/image-to-video at 1080p: cinematic motion and subject consistency for polished shorts. Billing: $0.100599/sec.",
+      "fr": "ByteDance Seedance 2.0 text/image-to-video at 1080p: cinematic motion and subject consistency for polished shorts. Billing: $0.100599/sec.",
+      "ru": "ByteDance Seedance 2.0 text/image-to-video at 1080p: cinematic motion and subject consistency for polished shorts. Billing: $0.100599/sec.",
+      "ja": "ByteDance Seedance 2.0 text/image-to-video at 1080p: cinematic motion and subject consistency for polished shorts. Billing: $0.100599/sec.",
+      "vi": "ByteDance Seedance 2.0 text/image-to-video at 1080p: cinematic motion and subject consistency for polished shorts. Billing: $0.100599/sec."
     },
     "unit": "second",
     "badge": {
@@ -4385,8 +4385,8 @@
     "suffix_en": "/ second",
     "price_key_zh": "每秒",
     "price_key_en": "Per second",
-    "description_zh": "字节 Seedance 2.0 文生/图生视频（1080p）：电影感运动与主体一致，适合高质量短视频成片。",
-    "description_en": "ByteDance Seedance 2.0 text/image-to-video at 1080p: cinematic motion and subject consistency for polished shorts.",
+    "description_zh": "字节 Seedance 2.0 文生/图生视频（1080p）：电影感运动与主体一致，适合高质量短视频成片。 计费：$0.100599/秒。",
+    "description_en": "ByteDance Seedance 2.0 text/image-to-video at 1080p: cinematic motion and subject consistency for polished shorts. Billing: $0.100599/sec.",
     "price_table": {
       "columns": {
         "zhCN": [
@@ -4410,15 +4410,15 @@
     }
   },
   "seedance-2.0-1080p-fast": {
-    "description": "字节 Seedance 2.0 1080p 加速档：更快出片的高清视频生成，适合迭代预览与批量生产。",
+    "description": "字节 Seedance 2.0 1080p 加速档：更快出片的高清视频生成，适合迭代预览与批量生产。 计费：$0.0754/秒。",
     "descriptions": {
-      "zhCN": "字节 Seedance 2.0 1080p 加速档：更快出片的高清视频生成，适合迭代预览与批量生产。",
-      "zhTW": "字节 Seedance 2.0 1080p 加速档：更快出片的高清视频生成，适合迭代预览与批量生产。",
-      "en": "ByteDance Seedance 2.0 1080p fast tier: quicker HD video generation for iteration and batch production.",
-      "fr": "ByteDance Seedance 2.0 1080p fast tier: quicker HD video generation for iteration and batch production.",
-      "ru": "ByteDance Seedance 2.0 1080p fast tier: quicker HD video generation for iteration and batch production.",
-      "ja": "ByteDance Seedance 2.0 1080p fast tier: quicker HD video generation for iteration and batch production.",
-      "vi": "ByteDance Seedance 2.0 1080p fast tier: quicker HD video generation for iteration and batch production."
+      "zhCN": "字节 Seedance 2.0 1080p 加速档：更快出片的高清视频生成，适合迭代预览与批量生产。 计费：$0.0754/秒。",
+      "zhTW": "字节 Seedance 2.0 1080p 加速档：更快出片的高清视频生成，适合迭代预览与批量生产。 计费：$0.0754/秒。",
+      "en": "ByteDance Seedance 2.0 1080p fast tier: quicker HD video generation for iteration and batch production. Billing: $0.0754/sec.",
+      "fr": "ByteDance Seedance 2.0 1080p fast tier: quicker HD video generation for iteration and batch production. Billing: $0.0754/sec.",
+      "ru": "ByteDance Seedance 2.0 1080p fast tier: quicker HD video generation for iteration and batch production. Billing: $0.0754/sec.",
+      "ja": "ByteDance Seedance 2.0 1080p fast tier: quicker HD video generation for iteration and batch production. Billing: $0.0754/sec.",
+      "vi": "ByteDance Seedance 2.0 1080p fast tier: quicker HD video generation for iteration and batch production. Billing: $0.0754/sec."
     },
     "unit": "second",
     "badge": {
@@ -4454,8 +4454,8 @@
     "suffix_en": "/ second",
     "price_key_zh": "每秒",
     "price_key_en": "Per second",
-    "description_zh": "字节 Seedance 2.0 1080p 加速档：更快出片的高清视频生成，适合迭代预览与批量生产。",
-    "description_en": "ByteDance Seedance 2.0 1080p fast tier: quicker HD video generation for iteration and batch production.",
+    "description_zh": "字节 Seedance 2.0 1080p 加速档：更快出片的高清视频生成，适合迭代预览与批量生产。 计费：$0.0754/秒。",
+    "description_en": "ByteDance Seedance 2.0 1080p fast tier: quicker HD video generation for iteration and batch production. Billing: $0.0754/sec.",
     "price_table": {
       "columns": {
         "zhCN": [
@@ -4479,15 +4479,15 @@
     }
   },
   "seedance-2.0-1080p-mini": {
-    "description": "字节 Seedance 2.0 1080p 精简档：更省资源的高清视频生成，适合短镜头与成本敏感任务。",
+    "description": "字节 Seedance 2.0 1080p 精简档：更省资源的高清视频生成，适合短镜头与成本敏感任务。 计费：$0.050112/秒。",
     "descriptions": {
-      "zhCN": "字节 Seedance 2.0 1080p 精简档：更省资源的高清视频生成，适合短镜头与成本敏感任务。",
-      "zhTW": "字节 Seedance 2.0 1080p 精简档：更省资源的高清视频生成，适合短镜头与成本敏感任务。",
-      "en": "ByteDance Seedance 2.0 1080p mini tier: leaner HD video generation for short clips and cost-sensitive jobs.",
-      "fr": "ByteDance Seedance 2.0 1080p mini tier: leaner HD video generation for short clips and cost-sensitive jobs.",
-      "ru": "ByteDance Seedance 2.0 1080p mini tier: leaner HD video generation for short clips and cost-sensitive jobs.",
-      "ja": "ByteDance Seedance 2.0 1080p mini tier: leaner HD video generation for short clips and cost-sensitive jobs.",
-      "vi": "ByteDance Seedance 2.0 1080p mini tier: leaner HD video generation for short clips and cost-sensitive jobs."
+      "zhCN": "字节 Seedance 2.0 1080p 精简档：更省资源的高清视频生成，适合短镜头与成本敏感任务。 计费：$0.050112/秒。",
+      "zhTW": "字节 Seedance 2.0 1080p 精简档：更省资源的高清视频生成，适合短镜头与成本敏感任务。 计费：$0.050112/秒。",
+      "en": "ByteDance Seedance 2.0 1080p mini tier: leaner HD video generation for short clips and cost-sensitive jobs. Billing: $0.050112/sec.",
+      "fr": "ByteDance Seedance 2.0 1080p mini tier: leaner HD video generation for short clips and cost-sensitive jobs. Billing: $0.050112/sec.",
+      "ru": "ByteDance Seedance 2.0 1080p mini tier: leaner HD video generation for short clips and cost-sensitive jobs. Billing: $0.050112/sec.",
+      "ja": "ByteDance Seedance 2.0 1080p mini tier: leaner HD video generation for short clips and cost-sensitive jobs. Billing: $0.050112/sec.",
+      "vi": "ByteDance Seedance 2.0 1080p mini tier: leaner HD video generation for short clips and cost-sensitive jobs. Billing: $0.050112/sec."
     },
     "unit": "second",
     "badge": {
@@ -4523,8 +4523,8 @@
     "suffix_en": "/ second",
     "price_key_zh": "每秒",
     "price_key_en": "Per second",
-    "description_zh": "字节 Seedance 2.0 1080p 精简档：更省资源的高清视频生成，适合短镜头与成本敏感任务。",
-    "description_en": "ByteDance Seedance 2.0 1080p mini tier: leaner HD video generation for short clips and cost-sensitive jobs.",
+    "description_zh": "字节 Seedance 2.0 1080p 精简档：更省资源的高清视频生成，适合短镜头与成本敏感任务。 计费：$0.050112/秒。",
+    "description_en": "ByteDance Seedance 2.0 1080p mini tier: leaner HD video generation for short clips and cost-sensitive jobs. Billing: $0.050112/sec.",
     "price_table": {
       "columns": {
         "zhCN": [
@@ -4548,15 +4548,15 @@
     }
   },
   "seedance-2.5-1080p": {
-    "description": "字节 Seedance 2.5 文生/图生视频（1080p）：更长镜头与更强参考控制，适合短片、广告与叙事视频。",
+    "description": "字节 Seedance 2.5 文生/图生视频（1080p）：更长镜头与更强参考控制，适合短片、广告与叙事视频。 计费：$0.137996/秒。",
     "descriptions": {
-      "zhCN": "字节 Seedance 2.5 文生/图生视频（1080p）：更长镜头与更强参考控制，适合短片、广告与叙事视频。",
-      "zhTW": "字节 Seedance 2.5 文生/图生视频（1080p）：更长镜头与更强参考控制，适合短片、广告与叙事视频。",
-      "en": "ByteDance Seedance 2.5 text/image-to-video at 1080p: longer clips and stronger reference control for shorts and ads.",
-      "fr": "ByteDance Seedance 2.5 text/image-to-video at 1080p: longer clips and stronger reference control for shorts and ads.",
-      "ru": "ByteDance Seedance 2.5 text/image-to-video at 1080p: longer clips and stronger reference control for shorts and ads.",
-      "ja": "ByteDance Seedance 2.5 text/image-to-video at 1080p: longer clips and stronger reference control for shorts and ads.",
-      "vi": "ByteDance Seedance 2.5 text/image-to-video at 1080p: longer clips and stronger reference control for shorts and ads."
+      "zhCN": "字节 Seedance 2.5 文生/图生视频（1080p）：更长镜头与更强参考控制，适合短片、广告与叙事视频。 计费：$0.137996/秒。",
+      "zhTW": "字节 Seedance 2.5 文生/图生视频（1080p）：更长镜头与更强参考控制，适合短片、广告与叙事视频。 计费：$0.137996/秒。",
+      "en": "ByteDance Seedance 2.5 text/image-to-video at 1080p: longer clips and stronger reference control for shorts and ads. Billing: $0.137996/sec.",
+      "fr": "ByteDance Seedance 2.5 text/image-to-video at 1080p: longer clips and stronger reference control for shorts and ads. Billing: $0.137996/sec.",
+      "ru": "ByteDance Seedance 2.5 text/image-to-video at 1080p: longer clips and stronger reference control for shorts and ads. Billing: $0.137996/sec.",
+      "ja": "ByteDance Seedance 2.5 text/image-to-video at 1080p: longer clips and stronger reference control for shorts and ads. Billing: $0.137996/sec.",
+      "vi": "ByteDance Seedance 2.5 text/image-to-video at 1080p: longer clips and stronger reference control for shorts and ads. Billing: $0.137996/sec."
     },
     "unit": "second",
     "badge": {
@@ -4592,8 +4592,8 @@
     "suffix_en": "/ second",
     "price_key_zh": "每秒",
     "price_key_en": "Per second",
-    "description_zh": "字节 Seedance 2.5 文生/图生视频（1080p）：更长镜头与更强参考控制，适合短片、广告与叙事视频。",
-    "description_en": "ByteDance Seedance 2.5 text/image-to-video at 1080p: longer clips and stronger reference control for shorts and ads.",
+    "description_zh": "字节 Seedance 2.5 文生/图生视频（1080p）：更长镜头与更强参考控制，适合短片、广告与叙事视频。 计费：$0.137996/秒。",
+    "description_en": "ByteDance Seedance 2.5 text/image-to-video at 1080p: longer clips and stronger reference control for shorts and ads. Billing: $0.137996/sec.",
     "price_table": {
       "columns": {
         "zhCN": [
@@ -4617,15 +4617,15 @@
     }
   },
   "seedance-2.0-720p": {
-    "description": "字节 Seedance 2.0 文生/图生视频（720p）：平衡画质与速度，适合社媒短视频与创意草稿。",
+    "description": "字节 Seedance 2.0 文生/图生视频（720p）：平衡画质与速度，适合社媒短视频与创意草稿。 计费：$0.096165/秒。",
     "descriptions": {
-      "zhCN": "字节 Seedance 2.0 文生/图生视频（720p）：平衡画质与速度，适合社媒短视频与创意草稿。",
-      "zhTW": "字节 Seedance 2.0 文生/图生视频（720p）：平衡画质与速度，适合社媒短视频与创意草稿。",
-      "en": "ByteDance Seedance 2.0 text/image-to-video at 720p: balanced quality/speed for social drafts.",
-      "fr": "ByteDance Seedance 2.0 text/image-to-video at 720p: balanced quality/speed for social drafts.",
-      "ru": "ByteDance Seedance 2.0 text/image-to-video at 720p: balanced quality/speed for social drafts.",
-      "ja": "ByteDance Seedance 2.0 text/image-to-video at 720p: balanced quality/speed for social drafts.",
-      "vi": "ByteDance Seedance 2.0 text/image-to-video at 720p: balanced quality/speed for social drafts."
+      "zhCN": "字节 Seedance 2.0 文生/图生视频（720p）：平衡画质与速度，适合社媒短视频与创意草稿。 计费：$0.096165/秒。",
+      "zhTW": "字节 Seedance 2.0 文生/图生视频（720p）：平衡画质与速度，适合社媒短视频与创意草稿。 计费：$0.096165/秒。",
+      "en": "ByteDance Seedance 2.0 text/image-to-video at 720p: balanced quality/speed for social drafts. Billing: $0.096165/sec.",
+      "fr": "ByteDance Seedance 2.0 text/image-to-video at 720p: balanced quality/speed for social drafts. Billing: $0.096165/sec.",
+      "ru": "ByteDance Seedance 2.0 text/image-to-video at 720p: balanced quality/speed for social drafts. Billing: $0.096165/sec.",
+      "ja": "ByteDance Seedance 2.0 text/image-to-video at 720p: balanced quality/speed for social drafts. Billing: $0.096165/sec.",
+      "vi": "ByteDance Seedance 2.0 text/image-to-video at 720p: balanced quality/speed for social drafts. Billing: $0.096165/sec."
     },
     "unit": "second",
     "badge": {
@@ -4661,8 +4661,8 @@
     "suffix_en": "/ second",
     "price_key_zh": "每秒",
     "price_key_en": "Per second",
-    "description_zh": "字节 Seedance 2.0 文生/图生视频（720p）：平衡画质与速度，适合社媒短视频与创意草稿。",
-    "description_en": "ByteDance Seedance 2.0 text/image-to-video at 720p: balanced quality/speed for social drafts.",
+    "description_zh": "字节 Seedance 2.0 文生/图生视频（720p）：平衡画质与速度，适合社媒短视频与创意草稿。 计费：$0.096165/秒。",
+    "description_en": "ByteDance Seedance 2.0 text/image-to-video at 720p: balanced quality/speed for social drafts. Billing: $0.096165/sec.",
     "price_table": {
       "columns": {
         "zhCN": [
@@ -4686,15 +4686,15 @@
     }
   },
   "seedance-2.0-720p-fast": {
-    "description": "字节 Seedance 2.0 720p 加速档：更快生成的标清成片，适合快速试错与批量镜头。",
+    "description": "字节 Seedance 2.0 720p 加速档：更快生成的标清成片，适合快速试错与批量镜头。 计费：$0.074794/秒。",
     "descriptions": {
-      "zhCN": "字节 Seedance 2.0 720p 加速档：更快生成的标清成片，适合快速试错与批量镜头。",
-      "zhTW": "字节 Seedance 2.0 720p 加速档：更快生成的标清成片，适合快速试错与批量镜头。",
-      "en": "ByteDance Seedance 2.0 720p fast tier: quicker SD/HD-ish clips for rapid iteration.",
-      "fr": "ByteDance Seedance 2.0 720p fast tier: quicker SD/HD-ish clips for rapid iteration.",
-      "ru": "ByteDance Seedance 2.0 720p fast tier: quicker SD/HD-ish clips for rapid iteration.",
-      "ja": "ByteDance Seedance 2.0 720p fast tier: quicker SD/HD-ish clips for rapid iteration.",
-      "vi": "ByteDance Seedance 2.0 720p fast tier: quicker SD/HD-ish clips for rapid iteration."
+      "zhCN": "字节 Seedance 2.0 720p 加速档：更快生成的标清成片，适合快速试错与批量镜头。 计费：$0.074794/秒。",
+      "zhTW": "字节 Seedance 2.0 720p 加速档：更快生成的标清成片，适合快速试错与批量镜头。 计费：$0.074794/秒。",
+      "en": "ByteDance Seedance 2.0 720p fast tier: quicker SD/HD-ish clips for rapid iteration. Billing: $0.074794/sec.",
+      "fr": "ByteDance Seedance 2.0 720p fast tier: quicker SD/HD-ish clips for rapid iteration. Billing: $0.074794/sec.",
+      "ru": "ByteDance Seedance 2.0 720p fast tier: quicker SD/HD-ish clips for rapid iteration. Billing: $0.074794/sec.",
+      "ja": "ByteDance Seedance 2.0 720p fast tier: quicker SD/HD-ish clips for rapid iteration. Billing: $0.074794/sec.",
+      "vi": "ByteDance Seedance 2.0 720p fast tier: quicker SD/HD-ish clips for rapid iteration. Billing: $0.074794/sec."
     },
     "unit": "second",
     "badge": {
@@ -4730,8 +4730,8 @@
     "suffix_en": "/ second",
     "price_key_zh": "每秒",
     "price_key_en": "Per second",
-    "description_zh": "字节 Seedance 2.0 720p 加速档：更快生成的标清成片，适合快速试错与批量镜头。",
-    "description_en": "ByteDance Seedance 2.0 720p fast tier: quicker SD/HD-ish clips for rapid iteration.",
+    "description_zh": "字节 Seedance 2.0 720p 加速档：更快生成的标清成片，适合快速试错与批量镜头。 计费：$0.074794/秒。",
+    "description_en": "ByteDance Seedance 2.0 720p fast tier: quicker SD/HD-ish clips for rapid iteration. Billing: $0.074794/sec.",
     "price_table": {
       "columns": {
         "zhCN": [
@@ -4755,15 +4755,15 @@
     }
   },
   "seedance-2.0-720p-mini": {
-    "description": "字节 Seedance 2.0 720p 精简档：更轻量的视频生成，适合短时长与高频调用。",
+    "description": "字节 Seedance 2.0 720p 精简档：更轻量的视频生成，适合短时长与高频调用。 计费：$0.049863/秒。",
     "descriptions": {
-      "zhCN": "字节 Seedance 2.0 720p 精简档：更轻量的视频生成，适合短时长与高频调用。",
-      "zhTW": "字节 Seedance 2.0 720p 精简档：更轻量的视频生成，适合短时长与高频调用。",
-      "en": "ByteDance Seedance 2.0 720p mini tier: lighter video generation for short clips and high volume.",
-      "fr": "ByteDance Seedance 2.0 720p mini tier: lighter video generation for short clips and high volume.",
-      "ru": "ByteDance Seedance 2.0 720p mini tier: lighter video generation for short clips and high volume.",
-      "ja": "ByteDance Seedance 2.0 720p mini tier: lighter video generation for short clips and high volume.",
-      "vi": "ByteDance Seedance 2.0 720p mini tier: lighter video generation for short clips and high volume."
+      "zhCN": "字节 Seedance 2.0 720p 精简档：更轻量的视频生成，适合短时长与高频调用。 计费：$0.049863/秒。",
+      "zhTW": "字节 Seedance 2.0 720p 精简档：更轻量的视频生成，适合短时长与高频调用。 计费：$0.049863/秒。",
+      "en": "ByteDance Seedance 2.0 720p mini tier: lighter video generation for short clips and high volume. Billing: $0.049863/sec.",
+      "fr": "ByteDance Seedance 2.0 720p mini tier: lighter video generation for short clips and high volume. Billing: $0.049863/sec.",
+      "ru": "ByteDance Seedance 2.0 720p mini tier: lighter video generation for short clips and high volume. Billing: $0.049863/sec.",
+      "ja": "ByteDance Seedance 2.0 720p mini tier: lighter video generation for short clips and high volume. Billing: $0.049863/sec.",
+      "vi": "ByteDance Seedance 2.0 720p mini tier: lighter video generation for short clips and high volume. Billing: $0.049863/sec."
     },
     "unit": "second",
     "badge": {
@@ -4799,8 +4799,8 @@
     "suffix_en": "/ second",
     "price_key_zh": "每秒",
     "price_key_en": "Per second",
-    "description_zh": "字节 Seedance 2.0 720p 精简档：更轻量的视频生成，适合短时长与高频调用。",
-    "description_en": "ByteDance Seedance 2.0 720p mini tier: lighter video generation for short clips and high volume.",
+    "description_zh": "字节 Seedance 2.0 720p 精简档：更轻量的视频生成，适合短时长与高频调用。 计费：$0.049863/秒。",
+    "description_en": "ByteDance Seedance 2.0 720p mini tier: lighter video generation for short clips and high volume. Billing: $0.049863/sec.",
     "price_table": {
       "columns": {
         "zhCN": [
@@ -4824,15 +4824,15 @@
     }
   },
   "seedance-2.5-720p": {
-    "description": "字节 Seedance 2.5 文生/图生视频（720p）：更长时长与多模态参考，适合社媒与快速成片。",
+    "description": "字节 Seedance 2.5 文生/图生视频（720p）：更长时长与多模态参考，适合社媒与快速成片。 计费：$0.133562/秒。",
     "descriptions": {
-      "zhCN": "字节 Seedance 2.5 文生/图生视频（720p）：更长时长与多模态参考，适合社媒与快速成片。",
-      "zhTW": "字节 Seedance 2.5 文生/图生视频（720p）：更长时长与多模态参考，适合社媒与快速成片。",
-      "en": "ByteDance Seedance 2.5 text/image-to-video at 720p: longer clips with multimodal references for social drafts.",
-      "fr": "ByteDance Seedance 2.5 text/image-to-video at 720p: longer clips with multimodal references for social drafts.",
-      "ru": "ByteDance Seedance 2.5 text/image-to-video at 720p: longer clips with multimodal references for social drafts.",
-      "ja": "ByteDance Seedance 2.5 text/image-to-video at 720p: longer clips with multimodal references for social drafts.",
-      "vi": "ByteDance Seedance 2.5 text/image-to-video at 720p: longer clips with multimodal references for social drafts."
+      "zhCN": "字节 Seedance 2.5 文生/图生视频（720p）：更长时长与多模态参考，适合社媒与快速成片。 计费：$0.133562/秒。",
+      "zhTW": "字节 Seedance 2.5 文生/图生视频（720p）：更长时长与多模态参考，适合社媒与快速成片。 计费：$0.133562/秒。",
+      "en": "ByteDance Seedance 2.5 text/image-to-video at 720p: longer clips with multimodal references for social drafts. Billing: $0.133562/sec.",
+      "fr": "ByteDance Seedance 2.5 text/image-to-video at 720p: longer clips with multimodal references for social drafts. Billing: $0.133562/sec.",
+      "ru": "ByteDance Seedance 2.5 text/image-to-video at 720p: longer clips with multimodal references for social drafts. Billing: $0.133562/sec.",
+      "ja": "ByteDance Seedance 2.5 text/image-to-video at 720p: longer clips with multimodal references for social drafts. Billing: $0.133562/sec.",
+      "vi": "ByteDance Seedance 2.5 text/image-to-video at 720p: longer clips with multimodal references for social drafts. Billing: $0.133562/sec."
     },
     "unit": "second",
     "badge": {
@@ -4868,8 +4868,8 @@
     "suffix_en": "/ second",
     "price_key_zh": "每秒",
     "price_key_en": "Per second",
-    "description_zh": "字节 Seedance 2.5 文生/图生视频（720p）：更长时长与多模态参考，适合社媒与快速成片。",
-    "description_en": "ByteDance Seedance 2.5 text/image-to-video at 720p: longer clips with multimodal references for social drafts.",
+    "description_zh": "字节 Seedance 2.5 文生/图生视频（720p）：更长时长与多模态参考，适合社媒与快速成片。 计费：$0.133562/秒。",
+    "description_en": "ByteDance Seedance 2.5 text/image-to-video at 720p: longer clips with multimodal references for social drafts. Billing: $0.133562/sec.",
     "price_table": {
       "columns": {
         "zhCN": [

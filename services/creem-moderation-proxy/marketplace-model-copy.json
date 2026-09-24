@@ -240,9 +240,9 @@
     "price_key_en": "Per request"
   },
   "RMBG-2.0": {
-    "description": "腾讯 RMBG 智能抠图去背景，适用于商品图、人像与设计素材。 计费：.006849/次。",
+    "description": "腾讯 RMBG 智能抠图去背景，适用于商品图、人像与设计素材。 计费：$0.006849/次。",
     "descriptions": {
-      "zhCN": "腾讯 RMBG 智能抠图去背景，适用于商品图、人像与设计素材。 计费：.006849/次。",
+      "zhCN": "腾讯 RMBG 智能抠图去背景，适用于商品图、人像与设计素材。 计费：$0.006849/次。",
       "zhTW": "腾讯 RMBG 智能抠图去背景，適用於商品图、人像与设计素材。 計費：.006849/次。",
       "en": "Tencent RMBG background removal for product photos, portraits, and design assets. Pricing: .006849 / request.",
       "fr": "Tencent RMBG background removal for product photos, portraits, and design assets. Pricing: .006849 / request.",
@@ -278,7 +278,7 @@
       "ja": "リクエストごと",
       "vi": "Mỗi lần gọi"
     },
-    "description_zh": "腾讯 RMBG 智能抠图去背景，适用于商品图、人像与设计素材。 计费：.006849/次。",
+    "description_zh": "腾讯 RMBG 智能抠图去背景，适用于商品图、人像与设计素材。 计费：$0.006849/次。",
     "description_en": "Tencent RMBG background removal for product photos, portraits, and design assets. Pricing: .006849 / request.",
     "badge_zh": "按次计费",
     "badge_en": "Per Request",

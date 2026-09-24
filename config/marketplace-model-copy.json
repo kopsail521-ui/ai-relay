@@ -5377,5 +5377,33 @@
       "ja": "Free Dots 3 Note Preview: note/knowledge-style chat preview for summaries, outlines, and drafts.",
       "vi": "Free Dots 3 Note Preview: note/knowledge-style chat preview for summaries, outlines, and drafts."
     }
+  },
+  "mimo-v2.6-pro": {
+    "description": "小米 MiMo V2.6 Pro 旗舰对话与推理，适合复杂问答、代码与 Agent。",
+    "description_zh": "小米 MiMo V2.6 Pro 旗舰对话与推理，适合复杂问答、代码与 Agent。",
+    "description_en": "Xiaomi MiMo V2.6 Pro flagship chat/reasoning for complex Q&A, coding, and agents.",
+    "descriptions": {
+      "zhCN": "小米 MiMo V2.6 Pro 旗舰对话与推理，适合复杂问答、代码与 Agent。",
+      "zhTW": "小米 MiMo V2.6 Pro 旗舰对话与推理，适合复杂问答、代码与 Agent。",
+      "en": "Xiaomi MiMo V2.6 Pro flagship chat/reasoning for complex Q&A, coding, and agents.",
+      "fr": "Xiaomi MiMo V2.6 Pro flagship chat/reasoning for complex Q&A, coding, and agents.",
+      "ru": "Xiaomi MiMo V2.6 Pro flagship chat/reasoning for complex Q&A, coding, and agents.",
+      "ja": "Xiaomi MiMo V2.6 Pro flagship chat/reasoning for complex Q&A, coding, and agents.",
+      "vi": "Xiaomi MiMo V2.6 Pro flagship chat/reasoning for complex Q&A, coding, and agents."
+    }
+  },
+  "mimo-v2.6-flash": {
+    "description": "小米 MiMo V2.6 Flash 高速对话，适合日常助手与高吞吐场景。",
+    "description_zh": "小米 MiMo V2.6 Flash 高速对话，适合日常助手与高吞吐场景。",
+    "description_en": "Xiaomi MiMo V2.6 Flash fast chat for everyday assistants and high-throughput use.",
+    "descriptions": {
+      "zhCN": "小米 MiMo V2.6 Flash 高速对话，适合日常助手与高吞吐场景。",
+      "zhTW": "小米 MiMo V2.6 Flash 高速对话，适合日常助手与高吞吐场景。",
+      "en": "Xiaomi MiMo V2.6 Flash fast chat for everyday assistants and high-throughput use.",
+      "fr": "Xiaomi MiMo V2.6 Flash fast chat for everyday assistants and high-throughput use.",
+      "ru": "Xiaomi MiMo V2.6 Flash fast chat for everyday assistants and high-throughput use.",
+      "ja": "Xiaomi MiMo V2.6 Flash fast chat for everyday assistants and high-throughput use.",
+      "vi": "Xiaomi MiMo V2.6 Flash fast chat for everyday assistants and high-throughput use."
+    }
   }
 }

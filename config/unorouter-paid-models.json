@@ -23,15 +23,6 @@
       "desc_zh": "GLM 5.3 Flash 高速对话。"
     },
     {
-      "id": "glm-5.3",
-      "cost_in": 0.05103,
-      "cost_out": 0.160382187,
-      "vendor": "智谱",
-      "icon": "Zhipu.Color",
-      "tags": "大语言模型",
-      "desc_zh": "GLM 5.3 通用对话与推理。"
-    },
-    {
       "id": "glm-5.2",
       "cost_in": 0.48006,
       "cost_out": 1.508780574,
@@ -111,6 +102,24 @@
       "icon": "Qwen.Color",
       "tags": "大语言模型",
       "desc_zh": "Qwen 3.8 Flash 高速对话。"
+    },
+    {
+      "id": "mimo-v2.6-pro",
+      "cost_in": 0.1200165,
+      "cost_out": 0.240033,
+      "vendor": "Xiaomi",
+      "icon": "Xiaomi",
+      "tags": "大语言模型",
+      "desc_zh": "小米 MiMo V2.6 Pro 旗舰对话与推理，适合复杂问答、代码与 Agent。"
+    },
+    {
+      "id": "mimo-v2.6-flash",
+      "cost_in": 0.075194,
+      "cost_out": 0.150388,
+      "vendor": "Xiaomi",
+      "icon": "Xiaomi",
+      "tags": "大语言模型",
+      "desc_zh": "小米 MiMo V2.6 Flash 高速对话，适合日常助手与高吞吐场景。"
     }
   ]
 }

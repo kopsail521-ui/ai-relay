@@ -88,19 +88,19 @@
         {
           "model": "deepseek-v4-flash",
           "official": "Official legacy deepseek-v4-flash name routes to V4.1-Flash — verify on api-docs.deepseek.com",
-          "keyo": "~$1.10 / $3.30 per 1M in/out",
+          "keyo": "~$0.09 / $0.17 per 1M in/out",
           "note": "Separate Keyo catalog ID — confirm /pricing"
         },
         {
           "model": "deepseek-v4-flash-0731",
           "official": "Not on current official model list — confirm Keyo /pricing before use",
-          "keyo": "~$0.26 / $0.79 per 1M in/out",
+          "keyo": "~$0.04 / $0.07 per 1M in/out",
           "note": "Keyo catalog snapshot ID"
         },
         {
           "model": "deepseek-v4-pro-0813",
           "official": "Official deepseek-v4-pro → V4-Pro-0813 — verify on api-docs.deepseek.com",
-          "keyo": "~$0.79 / $2.38 per 1M in/out",
+          "keyo": "~$0.07 / $0.14 per 1M in/out",
           "note": "Separate Pro ID — not an auto-upgrade from Flash"
         }
       ],

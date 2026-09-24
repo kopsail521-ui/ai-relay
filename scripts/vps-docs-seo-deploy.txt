@@ -1,5 +1,4 @@
-# VPS：DeepSeek free 回表（flash-free / pro-free / Prover）
-# 前提：本机已 git push
+# VPS：DeepSeek 枢纽价对齐 console（v4-flash/0731/pro）
 set -e
 cd /opt/ai-relay
 sudo git fetch origin
@@ -7,7 +6,5 @@ sudo git checkout -- static/seo config/seo || true
 sudo git pull --ff-only origin main
 sudo bash scripts/deploy-brand-static.sh
 echo "--- smoke ---"
-curl -sS https://www.keyoapi.xyz/free-models | grep -oE 'deepseek-v4-flash-free|deepseek-v4-pro-free|DeepSeek-Prover-V2-7B|Family.*DeepSeek' | sort -u
-curl -sS https://www.keyoapi.xyz/model/deepseek-v4-flash | grep -oE 'Free Tier|Free tier available|deepseek-v4-flash-free' | sort -u
-curl -sS https://www.keyoapi.xyz/model/deepseek-v4-pro | grep -oE 'Free Tier|Free tier available|deepseek-v4-pro-free' | sort -u
+curl -sS https://www.keyoapi.xyz/deepseek-api-pricing | grep -oE '\$0\.01 / \$0\.04|\$0\.09 / \$0\.17|\$0\.04 / \$0\.07|\$0\.07 / \$0\.14|\$1\.10 / \$3\.30|\$0\.79 / \$2\.38' | sort | uniq -c
 git -C /opt/ai-relay rev-parse --short HEAD

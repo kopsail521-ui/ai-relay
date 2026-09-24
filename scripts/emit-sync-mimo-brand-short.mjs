@@ -18,25 +18,6 @@ const refB64 = pack("static/brand/keyo-api-ref.md");
 const refEnB64 = pack("static/brand/keyo-api-ref.en.md");
 const copyB64 = pack("services/creem-moderation-proxy/marketplace-model-copy.json");
 
-const verifyPy = [
-  "import json,re",
-  "docs=open('/tmp/docs.html',encoding='utf-8',errors='ignore').read()",
-  "ref=open('/tmp/ref.md',encoding='utf-8',errors='ignore').read()",
-  "j=json.load(open('/tmp/pricing.json'))",
-  "blob=json.dumps(j,ensure_ascii=False)+docs+ref",
-  "leak=bool(re.search(r'unorouter|openlux|apimart|grsai|sensenova|模力|上游|passthrough|进货|二道', blob, re.I))",
-  "ids=['mimo-v2.6-pro','mimo-v2.6-flash']",
-  "by={m['model_name']:m for m in j.get('data') or []}",
-  "print('docs_mimo', all(f'data-copy=\"{i}\"' in docs for i in ids))",
-  "print('ref_mimo', all(i in ref for i in ids))",
-  "for i in ids:",
-  "  m=by.get(i) or {}",
-  "  d=(m.get('description') or '')",
-  "  print(i, 'listed' if m else 'MISSING', 'desc_ok' if d and d!=i and len(d)>20 else 'WEAK')",
-  "print('public_leak', leak)",
-  "print('DONE_SYNC_MIMO_BRAND')",
-].join("\n");
-
 const short = [
   "cd /opt/ai-relay",
   "sudo mkdir -p /opt/ai-relay/static/brand /opt/ai-relay/services/creem-moderation-proxy",
@@ -55,7 +36,24 @@ const short = [
   "curl -sS -o /tmp/docs.html https://www.keyoapi.xyz/brand/keyo-docs.html",
   "curl -sS -o /tmp/ref.md https://www.keyoapi.xyz/brand/keyo-api-ref.md",
   "curl -sS -o /tmp/pricing.json https://www.keyoapi.xyz/api/pricing",
-  `python3 -c ${JSON.stringify(verifyPy)}`,
+  `python3 - <<'PY'
+import json,re
+docs=open('/tmp/docs.html',encoding='utf-8',errors='ignore').read()
+ref=open('/tmp/ref.md',encoding='utf-8',errors='ignore').read()
+j=json.load(open('/tmp/pricing.json'))
+blob=json.dumps(j,ensure_ascii=False)+docs+ref
+leak=bool(re.search(r'unorouter|openlux|apimart|grsai|sensenova|模力|上游|passthrough|进货|二道', blob, re.I))
+ids=['mimo-v2.6-pro','mimo-v2.6-flash']
+by={m['model_name']:m for m in j.get('data') or []}
+print('docs_mimo', all(f'data-copy="{i}"' in docs for i in ids))
+print('ref_mimo', all(i in ref for i in ids))
+for i in ids:
+  m=by.get(i) or {}
+  d=(m.get('description') or '')
+  print(i, 'listed' if m else 'MISSING', 'desc_ok' if d and d!=i and len(d)>20 else 'WEAK')
+print('public_leak', leak)
+print('DONE_SYNC_MIMO_BRAND')
+PY`,
 ].join(" && ");
 
 const out = path.join(root, "scripts/vps-sync-mimo-brand-short.txt");

@@ -1008,43 +1008,95 @@ Disallow: /__spa_raw
 `;
 }
 
+function fileLastmod(absPath) {
+  try {
+    return fs.statSync(absPath).mtime.toISOString().slice(0, 10);
+  } catch {
+    return new Date().toISOString().slice(0, 10);
+  }
+}
+
 function writeSitemap() {
   const landingUrls = (pricingLandings.pages || []).map((p) => ({
     loc: `${site}/${p.slug}`,
+    file: path.join(outDir, `${p.slug}.html`),
     priority: "0.95",
     changefreq: "weekly",
   }));
   const urls = [
-    { loc: `${site}/`, priority: "1.0", changefreq: "weekly" },
-    { loc: `${site}/compare`, priority: "0.95", changefreq: "weekly" },
-    { loc: `${site}/pricing-list`, priority: "0.9", changefreq: "daily" },
-    { loc: `${site}/free-models`, priority: "0.95", changefreq: "weekly" },
-    { loc: `${site}/models`, priority: "0.85", changefreq: "weekly" },
+    {
+      loc: `${site}/`,
+      file: path.join(outDir, "index.html"),
+      priority: "1.0",
+      changefreq: "weekly",
+    },
+    {
+      loc: `${site}/compare`,
+      file: path.join(outDir, "compare.html"),
+      priority: "0.95",
+      changefreq: "weekly",
+    },
+    {
+      loc: `${site}/pricing-list`,
+      file: path.join(outDir, "pricing.html"),
+      priority: "0.9",
+      changefreq: "daily",
+    },
+    {
+      loc: `${site}/free-models`,
+      file: path.join(outDir, "free-models.html"),
+      priority: "0.95",
+      changefreq: "weekly",
+    },
+    {
+      loc: `${site}/models`,
+      file: path.join(outDir, "models.html"),
+      priority: "0.85",
+      changefreq: "weekly",
+    },
     ...landingUrls,
-    { loc: `${site}/about`, priority: "0.7", changefreq: "monthly" },
+    {
+      loc: `${site}/about`,
+      file: path.join(outDir, "about.html"),
+      priority: "0.7",
+      changefreq: "monthly",
+    },
     ...pages.models.map((m) => ({
       loc: `${site}/model/${encodeURIComponent(m.id)}`,
+      file: path.join(outDir, "model", `${m.id}.html`),
       priority: "0.9",
       changefreq: "weekly",
     })),
     {
       loc: `${site}/brand/keyo-docs.html`,
+      file: path.join(root, "static/brand/keyo-docs.html"),
       priority: "0.5",
       changefreq: "monthly",
     },
-    { loc: `${site}/brand/faq.html`, priority: "0.4", changefreq: "monthly" },
+    {
+      loc: `${site}/brand/faq.html`,
+      file: path.join(root, "static/brand/faq.html"),
+      priority: "0.4",
+      changefreq: "monthly",
+    },
     {
       loc: `${site}/brand/privacy.html`,
+      file: path.join(root, "static/brand/privacy.html"),
       priority: "0.2",
       changefreq: "yearly",
     },
-    { loc: `${site}/brand/terms.html`, priority: "0.2", changefreq: "yearly" },
+    {
+      loc: `${site}/brand/terms.html`,
+      file: path.join(root, "static/brand/terms.html"),
+      priority: "0.2",
+      changefreq: "yearly",
+    },
   ];
   const body = urls
-    .map(
-      (u) =>
-        `  <url><loc>${u.loc}</loc><changefreq>${u.changefreq}</changefreq><priority>${u.priority}</priority></url>`
-    )
+    .map((u) => {
+      const lastmod = fileLastmod(u.file);
+      return `  <url><loc>${u.loc}</loc><lastmod>${lastmod}</lastmod><changefreq>${u.changefreq}</changefreq><priority>${u.priority}</priority></url>`;
+    })
     .join("\n");
   return `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">

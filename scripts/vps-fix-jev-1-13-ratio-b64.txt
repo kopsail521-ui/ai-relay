@@ -1,0 +1,17 @@
+set -e
+cd /opt/ai-relay
+echo 'H4sIAAAAAAAACp2UUWvbMBDH3/UpblofbFCdhEAZBS+U1KUdTVKctBuUYhz73Kq1JU+Ss4ax132AfcR9kiHbqZPQDTo/+U6n//3uTtL7d71Kq96Six6KFZRr8yDFkFBKz6XJ+DM84upw4A2GXh805jmo2HCpj+Gg7/WHwyPgAnpw0AdZGfj98xdMZIp5aIP8vtcfHH2AsSzKHA2XYuOmlBJelFIZeNRSbP7115wbHL6Ya03IZHYaXIIPtOOgZBKCD406Gbf/hJAUMyhiLhz3mAAApEvwrYoXq/vV7eAOeAY5CmfjcuEjDABzjUB7aWzinhR4GJfcS5e0VkikEFajAfOsiYlx0qXbLFcK/DrISyqlpXJc0mTGDO7ROE+4blnsp+Q3G14pD58xqQw6dB5cBuMFrOK8QjgLZxOQpe2Uhs/nQRjAE679EWVglZjrehma5EEKdNxOFU2lhBW/7dcl2jRNUd9/0I6nrGoe1iTbwuLZq0xPuH4bEXANUymwU2571ElfTOdBuICL6WK2ka11GiS4Obm8DubOiI3cTYaWtivXVvaPDNdXpyeL4IV5HrTN9Uf7/LWbWdttp1bYadoD6eUyTrVjJ0i780xdkKpuajv918L3Dvv+nqL8W4orxRPcDy8VF8ahS8ykQsqgUJ7dUV8Kl0GyaxblltnmU7e1eQc+TMIWu3ONw5bKK2XZbGT1DNv01W4DWIOeVkWpnUIxQKErhVGsE879szjXyEBjGavYSKV9hzLKgB5T190S3G/Rjmryv6pbTdzFLN8u2NxoWRTcONueXOrNzWsnE2cGFWUwCRmMw52l09k0iM4uvkSfgpsoPFlczKhLCOEZRJGIC4wi8H2gUWSfrCiizaFu3i/yB3jtteiXBQAA' | base64 -d | gunzip | sudo tee /tmp/fix-jev-ratio.py >/dev/null
+sudo docker run --rm -v /opt/ai-relay/data/new-api:/data -v /tmp/fix-jev-ratio.py:/tmp/fix.py:ro python:3.12-alpine python /tmp/fix.py /data/one-api.db
+# bounce new-api to clear option cache
+NAME=$(sudo docker ps --format '{{.Names}}' | grep -E 'new-api|one-api' | head -1 || true)
+if [ -n "$NAME" ]; then sudo docker restart "$NAME"; sleep 3; fi
+curl -sS http://127.0.0.1:3001/api/pricing | python3 -c "
+import sys,json
+j=json.load(sys.stdin)
+m=next((x for x in j.get('data',[]) if x.get('model_name')=='jev-1.13.0'), None)
+mr=float((m or {}).get('model_ratio') or -1); cr=float((m or {}).get('completion_ratio') or -1)
+print('pricing', mr, cr, 'sell_in', mr*2, 'sell_out', mr*2*cr)
+assert abs(mr-0.0168)<1e-9 and cr==0, (mr, cr, m)
+print('OK_JEV_RATIO')
+"
+echo DONE_FIX_JEV_RATIO

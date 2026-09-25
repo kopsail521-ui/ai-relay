@@ -1,0 +1,35 @@
+# Hotfix jev-1.13.0 ModelRatio (was wrongly 37.5 → should be 0.0168 / CR=0)
+set -e
+cd /opt/ai-relay
+sudo git pull --ff-only || true
+
+# If pull fails / file missing, write script inline via python heredoc is heavy —
+# prefer pull; also allow local copy if already present.
+if [ ! -f scripts/vps-fix-jev-1-13-ratio.py ]; then
+  echo "MISSING scripts/vps-fix-jev-1-13-ratio.py — git pull first"
+  exit 1
+fi
+
+sudo docker run --rm \
+  -v /opt/ai-relay/data/new-api:/data \
+  -v /opt/ai-relay/scripts/vps-fix-jev-1-13-ratio.py:/tmp/fix.py:ro \
+  python:3.12-alpine python /tmp/fix.py /data/one-api.db
+
+# New API may cache options; bounce if container name known
+if sudo docker ps --format '{{.Names}}' | grep -q '^new-api$'; then
+  sudo docker restart new-api || true
+elif sudo docker ps --format '{{.Names}}' | grep -q 'ai-relay-new-api'; then
+  sudo docker restart ai-relay-new-api || true
+fi
+sleep 2
+
+curl -sS http://127.0.0.1:3001/api/pricing | python3 -c "
+import sys,json
+j=json.load(sys.stdin)
+m=next((x for x in j.get('data',[]) if x.get('model_name')=='jev-1.13.0'), None)
+mr=(m or {}).get('model_ratio'); cr=(m or {}).get('completion_ratio')
+print('pricing', mr, cr, 'sell_in', (mr or 0)*2, 'sell_out', (mr or 0)*2*(cr or 0))
+assert m and abs(float(mr)-0.0168)<1e-9 and float(cr)==0, m
+print('OK_JEV_RATIO')
+"
+echo DONE_FIX_JEV_RATIO

@@ -21,9 +21,9 @@ const short = [
   "base64 -d /tmp/gitee-srv.b64 | gunzip | sudo tee /opt/ai-relay/services/gitee-passthrough/server.mjs >/dev/null",
   "sudo docker build -t keyo-gitee-passthrough /opt/ai-relay/services/gitee-passthrough",
   "sudo docker rm -f ai-relay-gitee-passthrough 2>/dev/null || true",
-  "sudo docker run -d --name ai-relay-gitee-passthrough --restart always --network host --env-file /opt/ai-relay/.env.gitee -e PORT=3010 keyo-gitee-passthrough",
+  "sudo docker run -d --name ai-relay-gitee-passthrough --restart always --network host --env-file /opt/ai-relay/.env.gitee -v /opt/ai-relay/data/new-api:/data:rw -e NEW_API_DB=/data/one-api.db -e NEW_API_BASE=http://127.0.0.1:3000 -e CATALOG=/app/catalog.json -e LISTEN_HOST=127.0.0.1 -e PORT=3010 keyo-gitee-passthrough",
   "sleep 2",
-  "curl -sS http://127.0.0.1:3010/healthz | head -c 200; echo",
+  "curl -sS http://127.0.0.1:3010/healthz; echo",
   "echo DONE_GITEE_ERR_SCRUB",
 ].join(" && ");
 

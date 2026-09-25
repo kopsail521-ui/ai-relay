@@ -425,7 +425,7 @@
       "upstream": "InfiniteTalk",
       "category": "digital_human",
       "category_zh": "数字人/视频",
-      "description": "音频驱动的数字人讲述视频（异步）：图/视频 + 音频生成自然口型与肢体动作，时长跟随音频。",
+      "description": "音频驱动的数字人讲述视频（异步）：图/视频 + 音频生成自然口型与肢体动作，单任务音频最长 15 秒。",
       "cover": "https://gitee-ai.su.bcebos.com/v1/uploads/img/id-djjdtgpgh-avatar-infinitetalk.png",
       "paths": [
         "v1/async/videos/image-to-video"

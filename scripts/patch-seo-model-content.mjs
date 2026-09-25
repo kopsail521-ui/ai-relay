@@ -119,7 +119,7 @@ const EXPAND = {
   "Duix-Avatar":
     "Talking avatars are async media jobs: validate face video and voice sample length before submit, then poll task status. Show progress UI; do not block HTTP workers. Moderate inputs for deepfake abuse. Cache finished MP4s by (face hash, audio hash). Digital human API buyers care about lip sync and queue time—log both. KeyoAPI’s audio-video-to-video route keeps avatar generation on the same key as TTS and STT for full agent personas.",
   InfiniteTalk:
-    "Image-to-talking-head starts with one portrait and one audio track. Upload the portrait directly as cond_video, the audio as cond_audio, and include prompt. Duration follows the audio — submit the full track in one job; do not split into 15s chunks. Upstream resolutions are 480P and 720P. For support bots, pre-render common answers and generate live only when needed.",
+    "Image-to-talking-head starts with one portrait and one audio track. Upload the portrait directly as cond_video, the audio as cond_audio, and include prompt. Audio must be 15 seconds or shorter per job (upstream hard limit). Upstream resolutions are 480P and 720P. For support bots, pre-render common answers and generate live only when needed.",
 };
 
 function curlFor(id, endpoint) {

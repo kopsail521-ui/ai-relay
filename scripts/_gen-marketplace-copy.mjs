@@ -100,7 +100,7 @@ const DESC = {
     vi: "Người số điều khiển bởi audio+video (async): đồng bộ miệng và biểu cảm cho avatar nói chuyện.",
   },
   InfiniteTalk: {
-    zhCN: "音频驱动的数字人讲述视频（异步）：图/视频 + 音频生成自然口型与肢体动作，时长跟随音频。",
+    zhCN: "音频驱动的数字人讲述视频（异步）：图/视频 + 音频生成自然口型与肢体动作，单任务音频最长 15 秒。",
     zhTW: "音訊驅動的數位人講述影片（非同步）：圖/影片 + 音訊產生自然口型與肢體動作，時長跟隨音訊。",
     en: "Audio-driven talking-head video from an image/video (async). Natural lip-sync and body motion; duration follows the input audio.",
     fr: "Vidéo talking-head pilotée par l’audio (async) à partir d’image/vidéo. Sync labiale et mouvements ; durée = audio.",

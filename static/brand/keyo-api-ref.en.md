@@ -699,7 +699,7 @@ Upscale: use `/v1/images/upscaling` with `Real-ESRGAN` or `AnimeSharp`.
 `POST /v1/async/videos/image-to-video` → `GET /v1/task/{id}`  
 
 Multipart accepts **local files directly** (no §0.5 needed).
-Upload a portrait image directly as `cond_video`; there is no need to turn it into a static video. Upload the driving audio as `cond_audio`. **Output duration follows the audio — do not split a long clip into 15s chunks** (billing is per request; one job for the whole track). Upstream resolutions: **480P / 720P** (`infinitetalk-480` / `infinitetalk-720`); aspect ratio follows the input image. Do not blindly retry a submission that returned no task `id`.
+Upload a portrait image directly as `cond_video`; there is no need to turn it into a static video. Upload the driving audio as `cond_audio`. **Audio must be 15 seconds or shorter per job** (upstream hard limit). Split longer tracks yourself; each chunk bills as a separate request. Upstream resolutions: **480P / 720P**; aspect ratio follows the input image. Do not blindly retry a submission that returned no task `id`.
 
 ```bash
 curl https://www.keyoapi.xyz/v1/async/videos/image-to-video \

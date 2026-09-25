@@ -18,7 +18,9 @@
  */
 import http from "http";
 import fs from "fs";
+import os from "os";
 import path from "path";
+import { spawn } from "child_process";
 import { fileURLToPath } from "url";
 import { DatabaseSync } from "node:sqlite";
 import { fixMarketplaceMeta } from "./fix-marketplace-meta.mjs";
@@ -469,14 +471,77 @@ async function prepareInfiniteTalkRequest(bodyBuf, contentType) {
       code: "invalid_infinitetalk_audio",
     };
   }
-  // Duration follows audio (upstream InfiniteTalk is unlimited-length). Do not
-  // split long audio into 15s chunks on Keyo's side.
+  // Upstream Gitee rejects audio longer than 15s after accepting the task.
+  // Fail fast here so clients do not wait or get charged for a doomed job.
+  let duration;
+  try {
+    duration = await audioDurationSeconds(
+      Buffer.from(await audio.arrayBuffer()),
+      audio.name
+    );
+  } catch (e) {
+    console.warn("[gitee-passthrough] audio probe failed:", e.message || e);
+    return {
+      error: "Unable to read cond_audio duration; upload a valid audio file",
+      code: "invalid_infinitetalk_audio",
+    };
+  }
+  if (duration > 15) {
+    return {
+      error: `InfiniteTalk audio must be 15 seconds or shorter (received ${duration.toFixed(2)} seconds)`,
+      code: "infinitetalk_audio_too_long",
+    };
+  }
   if (!changed) return { body: bodyBuf, contentType };
   const request = new Request("http://localhost/", { method: "POST", body: form });
   return {
     body: Buffer.from(await request.arrayBuffer()),
     contentType: request.headers.get("content-type"),
   };
+}
+
+async function audioDurationSeconds(audioBuf, fileName) {
+  const tempDir = await fs.promises.mkdtemp(path.join(os.tmpdir(), "keyo-audio-"));
+  const extension = path.extname(fileName || "").toLowerCase();
+  const audioPath = path.join(
+    tempDir,
+    `audio${/^\.[a-z0-9]{1,8}$/.test(extension) ? extension : ".bin"}`
+  );
+  try {
+    await fs.promises.writeFile(audioPath, audioBuf, { flag: "wx", mode: 0o600 });
+    return await new Promise((resolve, reject) => {
+      const child = spawn("ffprobe", [
+        "-v",
+        "error",
+        "-show_entries",
+        "format=duration",
+        "-of",
+        "default=noprint_wrappers=1:nokey=1",
+        audioPath,
+      ]);
+      let output = "";
+      let errorOutput = "";
+      const timer = setTimeout(() => child.kill(), 10000);
+      child.stdout.on("data", (chunk) => {
+        output += chunk;
+      });
+      child.stderr.on("data", (chunk) => {
+        errorOutput += chunk;
+      });
+      child.once("error", reject);
+      child.once("close", (code) => {
+        clearTimeout(timer);
+        const d = Number(output.trim());
+        if (code !== 0 || !Number.isFinite(d) || d <= 0) {
+          reject(new Error(`invalid audio duration: ${errorOutput.trim()}`));
+        } else {
+          resolve(d);
+        }
+      });
+    });
+  } finally {
+    await fs.promises.rm(tempDir, { recursive: true, force: true });
+  }
 }
 
 function upstreamCreds(modelId) {

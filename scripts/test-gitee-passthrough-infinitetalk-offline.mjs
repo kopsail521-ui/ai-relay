@@ -222,7 +222,7 @@ try {
   assert.equal(upstreamBody.length, upstreamBytes);
   assert.equal(userQuota(), quotaAfterSuccess);
 
-  // Long audio must pass through (no Keyo 15s gate); duration follows audio.
+  // Upstream Gitee caps audio at 15s — Keyo rejects longer clips up front.
   const longResponse = await fetch(
     `http://127.0.0.1:${servicePort}/v1/async/videos/image-to-video`,
     {
@@ -234,10 +234,13 @@ try {
       body: bodyForAudio(wavSeconds(16)),
     }
   );
-  assert.equal(longResponse.status, 200, await longResponse.text());
-  assert.match(upstreamBody.toString("latin1"), /name="cond_audio"/);
-  assert.ok(userQuota() < quotaAfterSuccess);
-  const quotaAfterLong = userQuota();
+  assert.equal(longResponse.status, 400);
+  assert.equal(
+    (await longResponse.json()).error.code,
+    "infinitetalk_audio_too_long"
+  );
+  assert.equal(upstreamBody.length, upstreamBytes);
+  assert.equal(userQuota(), quotaAfterSuccess);
 
   upstreamStatus = 400;
   const rejectedResponse = await fetch(
@@ -253,8 +256,8 @@ try {
   );
   assert.equal(rejectedResponse.status, 400);
   // Bill-after-task_id: no precharge before upstream, so quota unchanged on 400.
-  assert.equal(quotaAtRejectedRequest, quotaAfterLong);
-  assert.equal(userQuota(), quotaAfterLong);
+  assert.equal(quotaAtRejectedRequest, quotaAfterSuccess);
+  assert.equal(userQuota(), quotaAfterSuccess);
 
   upstreamStatus = 200;
   upstreamOmitTaskId = true;
@@ -271,7 +274,7 @@ try {
   );
   assert.equal(missingIdResponse.status, 502);
   assert.equal((await missingIdResponse.json()).error.code, "missing_task_id");
-  assert.equal(userQuota(), quotaAfterLong);
+  assert.equal(userQuota(), quotaAfterSuccess);
   upstreamOmitTaskId = false;
 
   upstreamDelayMs = 200;
@@ -291,7 +294,7 @@ try {
     (await timeoutResponse.json()).error.code,
     "submission_status_unknown"
   );
-  assert.equal(userQuota(), quotaAfterLong);
+  assert.equal(userQuota(), quotaAfterSuccess);
   upstreamDelayMs = 0;
 
   const currentBody = Buffer.from(
@@ -314,7 +317,7 @@ try {
   assert.equal(currentResponse.status, 200);
   assert.match(upstreamBody.toString("latin1"), /name="cond_video"/);
   assert.match(upstreamBody.toString("latin1"), /name="cond_audio"/);
-  assert.ok(userQuota() < quotaAfterLong);
+  assert.ok(userQuota() < quotaAfterSuccess);
 
   const pollResponse = await fetch(
     `http://127.0.0.1:${servicePort}/v1/task/mock-task`,

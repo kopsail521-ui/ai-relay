@@ -112,7 +112,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
 <p>This is the API path, not a consumer app: prepaid metering, OpenAI-style auth for adjacent chat and speech, async task polling for renders.</p>
 <p>Indicative rates: Duix-Avatar ~$0.0068 per second of output; InfiniteTalk ~$0.342 per request. Confirm <a href="/pricing/Duix-Avatar">/pricing/Duix-Avatar</a> and <a href="/pricing/InfiniteTalk">/pricing/InfiniteTalk</a> before volume. Pick Duix when you have driving video; pick InfiniteTalk when you start from a still spokesperson photo.</p>
 <p>How to call: async video endpoints with model=Duix-Avatar or InfiniteTalk, then GET /v1/task/{id}. Speech side: <a href="/tts-api">/tts-api</a> and <a href="/voice-cloning-api">/voice-cloning-api</a>. Model guides under <a href="/model/Duix-Avatar">/model/Duix-Avatar</a> and <a href="/model/InfiniteTalk">/model/InfiniteTalk</a>.</p>
-<p>InfiniteTalk duration follows the audio — submit the full track in one job (do not split into 15s chunks). Use multipart fields <code>cond_video</code> and <code>cond_audio</code>. Upstream resolutions: 480P / 720P.</p>
+<p>InfiniteTalk audio must be <strong>15 seconds or shorter</strong> per job (upstream hard limit). Use multipart fields <code>cond_video</code> and <code>cond_audio</code>. Upstream resolutions: 480P / 720P.</p>
 <p>Likeness rights and abuse prevention are your product’s responsibility — rate-limit, log, and require consent flags before queueing.</p>
 <pre>curl https://www.keyoapi.xyz/v1/async/videos/image-to-video \
   -H &quot;Authorization: Bearer $KEYO_API_KEY&quot; \

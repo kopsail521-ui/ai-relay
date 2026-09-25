@@ -3,8 +3,8 @@
  * Loaded by server.mjs as raw JS (no template-literal escaping).
  */
 (function () {
-  if (window.__keyoBillV14) return;
-  window.__keyoBillV14 = 1;
+  if (window.__keyoBillV15) return;
+  window.__keyoBillV15 = 1;
 
   function MAP() {
     return window.__KEYO_MKT_COPY || {};

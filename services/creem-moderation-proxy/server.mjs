@@ -1117,7 +1117,10 @@ async function proxyRequest(req, res, bodyBuf) {
   // patch, which is needed for the consent-gated OAuth buttons, and scope the
   // other patches to the pages that actually use them.
   const isAuthPage = /^\/sign-(?:in|up)(?:\/|$)/.test(pathOnly);
-  const isPricingPage = pathOnly === "/pricing" || pathOnly.startsWith("/pricing/");
+  // Pricing patches must ship on every non-auth SPA shell. If we only inject on
+  // /pricing HTML, client-side navigations from / or /console never get the
+  // OpenLux price-table script — users still see native「按分组定价」only.
+  const wantPricingPatches = !isAuthPage;
 
   if (isSpaShell && buf.length > 0) {
     try {
@@ -1136,7 +1139,7 @@ async function proxyRequest(req, res, bodyBuf) {
         );
         changed = true;
       }
-      if (isPricingPage && !html.includes("keyo-copy-toast-v1")) {
+      if (wantPricingPatches && !html.includes("keyo-copy-toast-v1")) {
         const ac = `<!--keyo-copy-toast-v1-->${COPY_TOAST_AUTOCLOSE_SCRIPT}`;
         if (html.includes("<head>")) {
           html = html.replace("<head>", `<head>${ac}`);
@@ -1146,7 +1149,7 @@ async function proxyRequest(req, res, bodyBuf) {
           changed = true;
         }
       }
-      if (isPricingPage && !html.includes("keyo-models-public")) {
+      if (wantPricingPatches && !html.includes("keyo-models-public")) {
         const pub = `<!--keyo-models-public-->${MODELS_PUBLIC_SCRIPT}`;
         if (html.includes("<head>")) {
           html = html.replace("<head>", `<head>${pub}`);
@@ -1156,13 +1159,13 @@ async function proxyRequest(req, res, bodyBuf) {
           changed = true;
         }
       }
-      // v15: force refresh billing-unit (OpenLux-style detail price table)
-      if (isPricingPage && !html.includes("keyo-pricing-sort-v19")) {
+      // v20: billing inject on all non-auth SPA shells (SPA soft-nav safe)
+      if (wantPricingPatches && !html.includes("keyo-pricing-sort-v20")) {
         html = html
           .replace(/<!--keyo-pricing-sort(?:-v\d+)?-->[\s\S]*?<\/script>/g, "")
           .replace(/<!--keyo-billing-unit-->[\s\S]*?<\/script>/g, "")
           .replace(/<!--keyo-locale-desc-->[\s\S]*?<\/script>/g, "");
-        const inject = `<!--keyo-pricing-sort-v19-->${PRICING_SORT_SCRIPT}<!--keyo-locale-desc-->${LOCALE_DESC_SCRIPT}<!--keyo-billing-unit-->${BILLING_UNIT_SCRIPT}`;
+        const inject = `<!--keyo-pricing-sort-v20-->${PRICING_SORT_SCRIPT}<!--keyo-locale-desc-->${LOCALE_DESC_SCRIPT}<!--keyo-billing-unit-->${BILLING_UNIT_SCRIPT}`;
         if (html.includes("<head>")) {
           html = html.replace("<head>", `<head>${inject}`);
           changed = true;
@@ -1172,7 +1175,7 @@ async function proxyRequest(req, res, bodyBuf) {
         }
       }
       if (
-        isPricingPage &&
+        wantPricingPatches &&
         !html.includes("keyo-model-icons-v3") &&
         Object.keys(MODEL_ICON_MAP).length
       ) {
@@ -1191,6 +1194,9 @@ async function proxyRequest(req, res, bodyBuf) {
         delete outHeaders["Content-Encoding"];
         outHeaders["content-length"] = String(buf.length);
         delete outHeaders["Content-Length"];
+        // Prevent CDN/browser from keeping a shell without pricing patches.
+        outHeaders["cache-control"] = "no-store";
+        outHeaders["Cache-Control"] = "no-store";
       }
     } catch (e) {
       console.error("[html-inject]", e.message || e);

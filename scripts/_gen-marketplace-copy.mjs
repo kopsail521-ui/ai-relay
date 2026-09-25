@@ -101,12 +101,12 @@ const DESC = {
   },
   InfiniteTalk: {
     zhCN: "音频驱动的数字人讲述视频（异步）：图/视频 + 音频生成自然口型与肢体动作，单任务音频最长 15 秒。",
-    zhTW: "音訊驅動的數位人講述影片（非同步）：圖/影片 + 音訊產生自然口型與肢體動作，時長跟隨音訊。",
-    en: "Audio-driven talking-head video from an image/video (async). Natural lip-sync and body motion; duration follows the input audio.",
-    fr: "Vidéo talking-head pilotée par l’audio (async) à partir d’image/vidéo. Sync labiale et mouvements ; durée = audio.",
-    ru: "Видео говорящей головы по аудио (async) из изображения/видео. Липсинк и жесты; длительность = аудио.",
-    ja: "音声駆動のトーキングヘッド動画（非同期）。画像/動画+音声で自然な口パクと動作。尺は音声に追従。",
-    vi: "Video talking-head điều khiển bởi audio (async) từ ảnh/video. Đồng bộ miệng & cử động; thời lượng theo audio.",
+    zhTW: "音訊驅動的數位人講述影片（非同步）：圖/影片 + 音訊產生自然口型與肢體動作，單任務音訊最長 15 秒。",
+    en: "Audio-driven talking-head video from an image/video (async). Natural lip-sync and body motion; audio max 15s per job.",
+    fr: "Vidéo talking-head pilotée par l’audio (async) à partir d’image/vidéo. Sync labiale et mouvements ; audio ≤ 15 s / job.",
+    ru: "Видео говорящей головы по аудио (async) из изображения/видео. Липсинк и жесты; аудио ≤ 15 с за задачу.",
+    ja: "音声駆動のトーキングヘッド動画（非同期）。画像/動画+音声で自然な口パクと動作。音声は1ジョブ最大15秒。",
+    vi: "Video talking-head điều khiển bởi audio (async) từ ảnh/video. Đồng bộ miệng & cử động; audio tối đa 15s/job.",
   },
   "MOSS-Audio-8B-Thinking": {
     zhCN: "具备语音理解与推理的音频大模型，可转写并分析多人对话，适用于会议与语音交互。",

@@ -97,10 +97,10 @@ ul{margin:0 0 14px;padding-left:1.2em}
   -F cond_audio=@./voice.wav
 # then: GET /v1/task/{id}</code></pre>
 <p>Auth uses the same Bearer API key as chat. Full notes: <a href="/brand/keyo-docs.html">Keyo docs</a>.</p>
-<p><strong>Input notes:</strong> use multipart fields <code>cond_video</code> and <code>cond_audio</code>. Audio must be <strong>15 seconds or shorter</strong> per job (upstream hard limit). Upstream resolutions: 480P / 720P. Poll <code>GET /v1/task/{id}</code>.</p>
+<p><strong>Input notes:</strong> use multipart fields <code>cond_video</code> and <code>cond_audio</code>. Audio must be <strong>15 seconds or shorter</strong> per job. Resolutions: 480P / 720P. Poll <code>GET /v1/task/{id}</code>.</p>
 </div>
 <h2>FAQ</h2>
-<div class="faq"><details><summary>What inputs are required?</summary><p>Typically an image or video portrait plus driving audio. Output duration follows the audio length.</p></details>
+<div class="faq"><details><summary>What inputs are required?</summary><p>Typically an image or video portrait plus driving audio. Audio must be 15 seconds or shorter per job.</p></details>
 <details><summary>InfiniteTalk vs Duix-Avatar?</summary><p>Both target digital humans; pick based on input modality and pricing unit (per request vs per second). Prototype both on KeyoAPI.</p></details>
 <details><summary>Price?</summary><p>About $0.342 per request—confirm on <a href="/pricing/InfiniteTalk">/pricing/InfiniteTalk</a>.</p></details></div>
 <h2>Related models</h2>

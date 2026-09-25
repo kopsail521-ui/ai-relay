@@ -736,7 +736,7 @@ curl https://www.keyoapi.xyz/v1/images/mattings \
 `POST /v1/async/videos/image-to-video` → `GET /v1/task/{id}`  
 
 multipart **可直接传本机文件**（不必先走 §0.5）。
-`cond_video` 可以直接上传人物图片，无须先制成静态视频；`cond_audio` 上传驱动音频。**当前单任务音频最多 15 秒**（上游硬限制）。长音频需自行切段，拆片会按次计费。分辨率上游支持 **480P / 720P**；画幅跟随输入图。没有拿到任务 `id` 时不要盲目重试。
+`cond_video` 可以直接上传人物图片，无须先制成静态视频；`cond_audio` 上传驱动音频。**当前单任务音频最多 15 秒**。长音频需自行切段，拆片会按次计费。分辨率支持 **480P / 720P**；画幅跟随输入图。没有拿到任务 `id` 时不要盲目重试。
 
 ```bash
 curl https://www.keyoapi.xyz/v1/async/videos/image-to-video \

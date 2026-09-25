@@ -432,15 +432,15 @@
     "price_key_en": "Per second"
   },
   "InfiniteTalk": {
-    "description": "音频驱动的数字人讲述视频（异步）：图/视频 + 音频生成自然口型与肢体动作，时长跟随音频。 计费：$0.342/次。",
+    "description": "音频驱动的数字人讲述视频（异步）：图/视频 + 音频生成自然口型与肢体动作，单任务音频最长 15 秒。 计费：$0.342/次。",
     "descriptions": {
-      "zhCN": "音频驱动的数字人讲述视频（异步）：图/视频 + 音频生成自然口型与肢体动作，时长跟随音频。 计费：$0.342/次。",
-      "zhTW": "音訊驅動的數位人講述影片（非同步）：圖/影片 + 音訊產生自然口型與肢體動作，時長跟隨音訊。 計費：$0.342/次。",
-      "en": "Audio-driven talking-head video from an image/video (async). Natural lip-sync and body motion; duration follows the input audio. Pricing: $0.342 / request.",
-      "fr": "Vidéo talking-head pilotée par l’audio (async) à partir d’image/vidéo. Sync labiale et mouvements ; durée = audio. Tarif : $0.342 / requête.",
-      "ru": "Видео говорящей головы по аудио (async) из изображения/видео. Липсинк и жесты; длительность = аудио. Тариф: $0.342 / запрос.",
-      "ja": "音声駆動のトーキングヘッド動画（非同期）。画像/動画+音声で自然な口パクと動作。尺は音声に追従。 料金：$0.342/ 回。",
-      "vi": "Video talking-head điều khiển bởi audio (async) từ ảnh/video. Đồng bộ miệng & cử động; thời lượng theo audio. Giá: $0.342/ lần."
+      "zhCN": "音频驱动的数字人讲述视频（异步）：图/视频 + 音频生成自然口型与肢体动作，单任务音频最长 15 秒。 计费：$0.342/次。",
+      "zhTW": "音訊驅動的數位人講述影片（非同步）：圖/影片 + 音訊產生自然口型與肢體動作，單任務音訊最長 15 秒。 計費：$0.342/次。",
+      "en": "Audio-driven talking-head video from an image/video (async). Natural lip-sync and body motion; audio max 15s per job. Pricing: $0.342 / request.",
+      "fr": "Vidéo talking-head pilotée par l’audio (async) à partir d’image/vidéo. Sync labiale et mouvements ; audio ≤ 15 s / job. Tarif : $0.342 / requête.",
+      "ru": "Видео говорящей головы по аудио (async) из изображения/видео. Липсинк и жесты; аудио ≤ 15 с за задачу. Тариф: $0.342 / запрос.",
+      "ja": "音声駆動のトーキングヘッド動画（非同期）。画像/動画+音声で自然な口パクと動作。音声は1ジョブ最大15秒。 料金：$0.342/ 回。",
+      "vi": "Video talking-head điều khiển bởi audio (async) từ ảnh/video. Đồng bộ miệng & cử động; audio tối đa 15s/job. Giá: $0.342/ lần."
     },
     "unit": "request",
     "badge": {
@@ -470,8 +470,8 @@
       "ja": "リクエストごと",
       "vi": "Mỗi lần gọi"
     },
-    "description_zh": "音频驱动的数字人讲述视频（异步）：图/视频 + 音频生成自然口型与肢体动作，时长跟随音频。 计费：$0.342/次。",
-    "description_en": "Audio-driven talking-head video from an image/video (async). Natural lip-sync and body motion; duration follows the input audio. Pricing: $0.342 / request.",
+    "description_zh": "音频驱动的数字人讲述视频（异步）：图/视频 + 音频生成自然口型与肢体动作，单任务音频最长 15 秒。 计费：$0.342/次。",
+    "description_en": "Audio-driven talking-head video from an image/video (async). Natural lip-sync and body motion; audio max 15s per job. Pricing: $0.342 / request.",
     "badge_zh": "按次计费",
     "badge_en": "Per Request",
     "suffix_zh": "/次",

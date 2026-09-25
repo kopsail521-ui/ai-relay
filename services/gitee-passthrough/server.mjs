@@ -471,7 +471,7 @@ async function prepareInfiniteTalkRequest(bodyBuf, contentType) {
       code: "invalid_infinitetalk_audio",
     };
   }
-  // Upstream Gitee rejects audio longer than 15s after accepting the task.
+  // Audio longer than 15s is rejected after accept; gate here.
   // Fail fast here so clients do not wait or get charged for a doomed job.
   let duration;
   try {
@@ -789,10 +789,9 @@ const server = http.createServer(async (req, res) => {
   if (!token) {
     return json(res, 401, {
       error: {
-        message:
-          "Token rejected by special-path gateway (models OK but billing lookup failed). Check NEW_API_DB mount.",
+        message: "Invalid API key or billing lookup failed. Retry or contact support.",
         type: "auth_error",
-        code: "passthrough_token_lookup_failed",
+        code: "token_lookup_failed",
       },
     });
   }

@@ -494,7 +494,7 @@ async function proxyToGitee(
   req,
   res,
   bodyBuf,
-  { capture = false, timeoutMs = 0, modelId = "" } = {}
+  { capture = false, timeoutMs = 0, modelId = "", deferWrite = false } = {}
 ) {
   const { origin, key } = upstreamCreds(modelId);
   const target = `${origin}${req.url}`;
@@ -525,14 +525,44 @@ async function proxyToGitee(
       outHeaders["Content-Type"] = "application/json; charset=utf-8";
     }
   }
-  res.writeHead(upstream.status, outHeaders);
-  res.end(buf);
-  if (!capture) return { status: upstream.status };
+  if (!deferWrite) {
+    res.writeHead(upstream.status, outHeaders);
+    res.end(buf);
+  }
   let parsed = null;
   try {
     parsed = JSON.parse(buf.toString("utf8") || "{}");
   } catch {}
-  return { status: upstream.status, body: parsed };
+  if (!capture && !deferWrite) return { status: upstream.status };
+  return { status: upstream.status, body: parsed, buf, headers: outHeaders };
+}
+
+function extractTaskId(body) {
+  if (!body || typeof body !== "object") return "";
+  return String(
+    body.task_id ||
+      body.id ||
+      body.data?.task_id ||
+      body.data?.id ||
+      (Array.isArray(body.data) && body.data[0]?.task_id) ||
+      (Array.isArray(body.data) && body.data[0]?.id) ||
+      ""
+  ).trim();
+}
+
+function softCheckQuota(userId, minQuota) {
+  const db = openDb(true);
+  try {
+    const user = db
+      ?.prepare(`SELECT quota FROM users WHERE id = ?`)
+      .get(userId);
+    if (!user || user.quota < minQuota) {
+      return { ok: false, error: "insufficient_quota" };
+    }
+    return { ok: true };
+  } finally {
+    db?.close();
+  }
 }
 
 /**
@@ -783,9 +813,15 @@ const server = http.createServer(async (req, res) => {
   }
 
   const usageBill = urlPath === "/v1/systemone" && !!sellUsdPerM(modelId);
+  // InfiniteTalk: bill only after upstream returns a pollable task_id (avoids
+  // 504 submission_status_unknown keeping a precharge with nothing to poll).
+  const billAfterTaskId = modelId === "InfiniteTalk";
+  const infinitetalkTimeoutMs = Number(
+    process.env.INFINITETALK_SUBMIT_TIMEOUT_MS || 600000
+  );
 
   let precharged = null;
-  if (!token.skipBill && !usageBill) {
+  if (!token.skipBill && !usageBill && !billAfterTaskId) {
     precharged = deductQuota(token.userId, token.tokenId, modelId, priceUsd);
     if (!precharged.ok) {
       return json(res, 403, {
@@ -796,27 +832,66 @@ const server = http.createServer(async (req, res) => {
         },
       });
     }
-  } else if (!token.skipBill && usageBill) {
-    // Soft pre-check: need some remaining quota before calling upstream.
-    const db = openDb(true);
-    try {
-      const user = db
-        ?.prepare(`SELECT quota FROM users WHERE id = ?`)
-        .get(token.userId);
-      if (user && user.quota <= 0) {
-        return json(res, 403, {
-          error: { message: "额度不足", type: "billing_error" },
-        });
-      }
-    } finally {
-      db?.close();
+  } else if (!token.skipBill && (usageBill || billAfterTaskId)) {
+    const minQuota = billAfterTaskId
+      ? Math.max(1, Math.round(priceUsd * QUOTA_PER_USD))
+      : 1;
+    const soft = softCheckQuota(token.userId, minQuota);
+    if (!soft.ok) {
+      return json(res, 403, {
+        error: { message: "额度不足", type: "billing_error" },
+      });
     }
   }
 
   try {
+    if (billAfterTaskId) {
+      const captured = await proxyToGitee(req, res, forwardBuf, {
+        capture: true,
+        deferWrite: true,
+        timeoutMs: infinitetalkTimeoutMs,
+        modelId,
+      });
+      if (captured.status >= 400) {
+        res.writeHead(captured.status, captured.headers);
+        res.end(captured.buf);
+        return;
+      }
+      const tid = extractTaskId(captured.body);
+      if (!tid) {
+        return json(res, 502, {
+          error: {
+            message:
+              "upstream accepted submit but returned no task_id; retry or contact support",
+            type: "server_error",
+            code: "missing_task_id",
+          },
+        });
+      }
+      if (!token.skipBill) {
+        const bill = deductQuota(
+          token.userId,
+          token.tokenId,
+          modelId,
+          priceUsd
+        );
+        if (!bill.ok) {
+          console.warn(
+            "[gitee-passthrough] InfiniteTalk post-task_id bill failed",
+            bill.error,
+            "task_id",
+            tid
+          );
+        }
+      }
+      res.writeHead(captured.status, captured.headers);
+      res.end(captured.buf);
+      return;
+    }
+
     const captured = await proxyToGitee(req, res, forwardBuf, {
       capture: usageBill,
-      timeoutMs: modelId === "InfiniteTalk" ? 300000 : 0,
+      timeoutMs: 0,
       modelId,
     });
     if (precharged?.quota > 0 && captured?.status >= 400) {
@@ -837,6 +912,9 @@ const server = http.createServer(async (req, res) => {
       }
     }
   } catch (e) {
+    if (precharged?.quota > 0) {
+      refundQuota(token.userId, token.tokenId, precharged);
+    }
     const timedOut = e?.name === "TimeoutError";
     json(res, timedOut ? 504 : 502, {
       error: {

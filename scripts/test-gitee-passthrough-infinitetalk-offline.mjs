@@ -50,17 +50,28 @@ function waitForStart(child) {
 
 let upstreamBody = Buffer.alloc(0);
 let upstreamStatus = 200;
+let upstreamDelayMs = 0;
+let upstreamOmitTaskId = false;
 let quotaAtRejectedRequest = null;
 const upstream = http.createServer(async (req, res) => {
   upstreamBody = Buffer.alloc(0);
   for await (const chunk of req) upstreamBody = Buffer.concat([upstreamBody, chunk]);
+  if (upstreamDelayMs > 0) {
+    await new Promise((resolve) => setTimeout(resolve, upstreamDelayMs));
+  }
   if (upstreamStatus === 400) quotaAtRejectedRequest = userQuota();
   res.writeHead(upstreamStatus, { "content-type": "application/json" });
-  res.end(
-    upstreamStatus === 200
-      ? JSON.stringify({ id: "mock-task", status: "submitted" })
-      : JSON.stringify({ error: { message: "invalid request" } })
-  );
+  if (upstreamStatus === 200) {
+    res.end(
+      JSON.stringify(
+        upstreamOmitTaskId
+          ? { status: "submitted" }
+          : { id: "mock-task", status: "submitted" }
+      )
+    );
+  } else {
+    res.end(JSON.stringify({ error: { message: "invalid request" } }));
+  }
 });
 const upstreamPort = await listen(upstream);
 
@@ -139,6 +150,7 @@ const child = spawn(process.execPath, [serviceFile], {
     NEW_API_BASE: `http://127.0.0.1:${newApiPort}`,
     NEW_API_DB: dbPath,
     CATALOG: path.join(repoRoot, "services", "gitee-passthrough", "catalog.json"),
+    INFINITETALK_SUBMIT_TIMEOUT_MS: "80",
   },
   stdio: ["ignore", "pipe", "pipe"],
 });
@@ -240,11 +252,48 @@ try {
     }
   );
   assert.equal(rejectedResponse.status, 400);
-  assert.ok(quotaAtRejectedRequest < quotaAfterLong);
-  await waitForQuota(quotaAfterLong);
-  assert.equal(latestLogQuota(), 0);
+  // Bill-after-task_id: no precharge before upstream, so quota unchanged on 400.
+  assert.equal(quotaAtRejectedRequest, quotaAfterLong);
+  assert.equal(userQuota(), quotaAfterLong);
 
   upstreamStatus = 200;
+  upstreamOmitTaskId = true;
+  const missingIdResponse = await fetch(
+    `http://127.0.0.1:${servicePort}/v1/async/videos/image-to-video`,
+    {
+      method: "POST",
+      headers: {
+        Authorization: "Bearer sk-mock",
+        "content-type": `multipart/form-data; boundary=${boundary}`,
+      },
+      body,
+    }
+  );
+  assert.equal(missingIdResponse.status, 502);
+  assert.equal((await missingIdResponse.json()).error.code, "missing_task_id");
+  assert.equal(userQuota(), quotaAfterLong);
+  upstreamOmitTaskId = false;
+
+  upstreamDelayMs = 200;
+  const timeoutResponse = await fetch(
+    `http://127.0.0.1:${servicePort}/v1/async/videos/image-to-video`,
+    {
+      method: "POST",
+      headers: {
+        Authorization: "Bearer sk-mock",
+        "content-type": `multipart/form-data; boundary=${boundary}`,
+      },
+      body,
+    }
+  );
+  assert.equal(timeoutResponse.status, 504);
+  assert.equal(
+    (await timeoutResponse.json()).error.code,
+    "submission_status_unknown"
+  );
+  assert.equal(userQuota(), quotaAfterLong);
+  upstreamDelayMs = 0;
+
   const currentBody = Buffer.from(
     body.toString("latin1")
       .replace('name="image"', 'name="cond_video"')
@@ -265,6 +314,7 @@ try {
   assert.equal(currentResponse.status, 200);
   assert.match(upstreamBody.toString("latin1"), /name="cond_video"/);
   assert.match(upstreamBody.toString("latin1"), /name="cond_audio"/);
+  assert.ok(userQuota() < quotaAfterLong);
 
   const pollResponse = await fetch(
     `http://127.0.0.1:${servicePort}/v1/task/mock-task`,

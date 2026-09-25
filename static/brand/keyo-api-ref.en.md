@@ -186,12 +186,14 @@ Paid: `gpt-5.6-luna` · `gpt-5.6-terra` · `gpt-5.6-sol` · `gpt-6-luna` · `gpt
 
 `Bespoke-Nimble-9B` (**Jev / Open-Jev**–style, BespokeLabs 2026-09-18, on Qwen3.5-9B-Instruct; JSON: `model` + `state` + `questions`; about **$0.032 / $0** per 1M tokens. Not general chat; max 26 options per field; prompts over 2048 tokens are rejected, not truncated)
 
+`jev-1.13.0` (TypeSafe Jev System One; same JSON shape; about **$0.0336 / $0** per 1M tokens; ~32k context; no free-form text)
+
 ```bash
 curl https://www.keyoapi.xyz/v1/systemone \
   -H "Authorization: Bearer sk-YOUR_KEY" \
   -H "Content-Type: application/json" \
   -d '{
-    "model": "Bespoke-Nimble-9B",
+    "model": "jev-1.13.0",
     "state": "Customer was charged twice and asks for a refund.",
     "questions": {
       "refund": {"type":"noul","instructions":"Does the customer request a refund?"},

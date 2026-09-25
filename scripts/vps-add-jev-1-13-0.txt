@@ -1,0 +1,67 @@
+# List jev-1.13.0 (System One, sell=cost×2 via OpenLux) + rebuild passthrough.
+set -e
+cd /opt/ai-relay
+sudo git pull --ff-only
+git log -1 --oneline
+
+# Ensure OpenLux key is available to gitee-passthrough container
+if [ -f /opt/ai-relay/.env ]; then
+  if ! sudo grep -q '^OPENLUX_API_KEY=.' /opt/ai-relay/.env.gitee 2>/dev/null; then
+    sudo grep -E '^OPENLUX_(API_KEY|BASE_URL)=' /opt/ai-relay/.env 2>/dev/null \
+      | sudo tee -a /opt/ai-relay/.env.gitee >/dev/null || true
+  fi
+fi
+if ! sudo grep -q '^OPENLUX_BASE_URL=' /opt/ai-relay/.env.gitee 2>/dev/null; then
+  echo 'OPENLUX_BASE_URL=https://api.openlux.ai' | sudo tee -a /opt/ai-relay/.env.gitee >/dev/null
+fi
+echo "openlux_key_in_gitee=$(sudo grep -c '^OPENLUX_API_KEY=.' /opt/ai-relay/.env.gitee || true)"
+
+# DB: marketplace + ratios + OpenLux channel
+sudo docker run --rm \
+  -v /opt/ai-relay/data/new-api:/data \
+  -v /opt/ai-relay/scripts/vps-add-jev-1-13-0.py:/tmp/add.py:ro \
+  python:3.12-alpine python /tmp/add.py /data/one-api.db
+
+# Heal marketplace meta (tag 系统一模型 + endpoints)
+sudo docker run --rm \
+  -v /opt/ai-relay/data/new-api:/data \
+  -v /opt/ai-relay/services/gitee-passthrough:/app:ro \
+  -w /app node:22-alpine \
+  node --input-type=module -e "import{fixMarketplaceMeta}from'./fix-marketplace-meta.mjs';console.log(JSON.stringify(fixMarketplaceMeta('/data/one-api.db')))"
+
+# Rebuild passthrough (catalog + OpenLux upstream routing)
+sudo docker build -t keyo-gitee-passthrough ./services/gitee-passthrough
+sudo docker rm -f ai-relay-gitee-passthrough 2>/dev/null || true
+sudo docker run -d --name ai-relay-gitee-passthrough --restart always --network host \
+  --env-file /opt/ai-relay/.env.gitee \
+  -v /opt/ai-relay/data/new-api:/data:rw \
+  -e NEW_API_DB=/data/one-api.db \
+  -e NEW_API_BASE=http://127.0.0.1:3000 \
+  -e CATALOG=/app/catalog.json \
+  -e LISTEN_HOST=127.0.0.1 \
+  -e PORT=3010 \
+  keyo-gitee-passthrough
+
+# Sync brand docs + marketplace copy into creem if present
+sudo cp -f static/brand/keyo-api-ref.md /opt/ai-relay/static/brand/ 2>/dev/null || true
+if [ -f /opt/ai-relay/services/creem-moderation-proxy/marketplace-model-copy.json ]; then
+  sudo cp -f config/marketplace-model-copy.json \
+    /opt/ai-relay/services/creem-moderation-proxy/marketplace-model-copy.json || true
+fi
+
+sleep 2
+curl -sS http://127.0.0.1:3010/healthz || true
+echo
+curl -sS http://127.0.0.1:3001/api/pricing | python3 -c "
+import sys,json
+j=json.load(sys.stdin)
+m=next((x for x in j.get('data',[]) if x.get('model_name')=='jev-1.13.0'), None)
+print('pricing_jev', bool(m), (m or {}).get('tags'), (m or {}).get('model_ratio'))
+"
+sudo docker exec ai-relay-gitee-passthrough node -e "
+const c=require('/app/catalog.json');
+const m=c.models.find(x=>x.id==='jev-1.13.0');
+console.log('catalog_jev', !!m, m&&m.relay, m&&m.billing&&m.billing.sell_in_usd_per_m);
+"
+sudo docker logs --tail 15 ai-relay-gitee-passthrough
+echo DONE_ADD_JEV_113

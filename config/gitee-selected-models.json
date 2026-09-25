@@ -62,7 +62,8 @@
       "Qwen3-VL-Embedding-8B"
     ],
     "system_one": [
-      "Bespoke-Nimble-9B"
+      "Bespoke-Nimble-9B",
+      "jev-1.13.0"
     ]
   },
   "models": [
@@ -1199,6 +1200,30 @@
       "relay": "gitee_passthrough",
       "markup": 1,
       "description_en": "Bespoke Nimble 9B — open Jev / Open-Jev–style System One model (BespokeLabs, 2026-09-18). Not general chat: a typed-decision LoRA on Qwen3.5-9B-Instruct (weights, training recipe, datasets, evals, and inference SDK released together). Pass state + questions; get choice / score / noul with option probabilities. Max 26 options per field; prompts over 2,048 tokens are rejected, not truncated.."
+    },
+    {
+      "id": "jev-1.13.0",
+      "upstream": "jev-1.13.0",
+      "category": "system_one",
+      "category_zh": "系统一模型",
+      "description": "TypeSafe Jev 1.13.0：System One 结构化决策模型（不生成自由文本），用于程序内分类、工单分诊、风险打分与路由。输入 state + questions，返回 choice / score / noul；上下文约 32k tokens。",
+      "paths": [
+        "v1/systemone"
+      ],
+      "billing": {
+        "mode": "token",
+        "sell_in_usd_per_m": 0.0336,
+        "sell_out_usd_per_m": 0,
+        "sell_in_cny_per_m": 0.24528,
+        "sell_out_cny_per_m": 0,
+        "cost_in_usd_per_m": 0.0168,
+        "cost_out_usd_per_m": 0,
+        "model_ratio": 0.0168,
+        "completion_ratio": 0
+      },
+      "relay": "openlux_passthrough",
+      "markup": 2,
+      "description_en": "TypeSafe Jev 1.13.0 — System One structured decision model (no free-form text) for in-app classification, ticket triage, risk scoring, and routing. Pass state + questions; get choice / score / noul. ~32k context."
     }
   ]
 }

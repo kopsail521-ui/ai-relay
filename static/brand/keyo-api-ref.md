@@ -197,12 +197,14 @@ curl https://www.keyoapi.xyz/v1/videos/generations \
 
 `Bespoke-Nimble-9B`（**Jev / Open-Jev** 风格，BespokeLabs 2026-09-18，底座 Qwen3.5-9B-Instruct；JSON：`model` + `state` + `questions`；约 **$0.032 / $0** 每百万 tokens。非通用对话；每字段最多 26 选项；>2048 tokens 拒绝而非截断）
 
+`jev-1.13.0`（TypeSafe Jev System One；JSON 同上；约 **$0.0336 / $0** 每百万 tokens；上下文约 32k；不生成自由文本）
+
 ```bash
 curl https://www.keyoapi.xyz/v1/systemone \
   -H "Authorization: Bearer sk-你的密钥" \
   -H "Content-Type: application/json" \
   -d '{
-    "model": "Bespoke-Nimble-9B",
+    "model": "jev-1.13.0",
     "state": "Customer was charged twice and asks for a refund.",
     "questions": {
       "refund": {"type":"noul","instructions":"Does the customer request a refund?"},

@@ -210,6 +210,12 @@ export const RULES = {
     endpoints: EP.systemone,
     icon: "Qwen.Color",
   },
+  "jev-1.13.0": {
+    vendor: "其他",
+    tag: "系统一模型",
+    endpoints: EP.systemone,
+    icon: "Custom",
+  },
   "gpt-image-2": { vendor: "OpenAI", tag: "图片", endpoints: EP.image },
   "gpt-image-2-vip": { vendor: "OpenAI", tag: "图片", endpoints: EP.image },
   "nano-banana-pro": { vendor: "Google", tag: "图片", endpoints: EP.image },

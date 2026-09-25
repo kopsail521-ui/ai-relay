@@ -9,6 +9,8 @@
  *   LISTEN_HOST=127.0.0.1
  *   GITEE_API_KEY=...
  *   GITEE_BASE_URL=https://ai.gitee.com
+ *   OPENLUX_API_KEY=...   (for relay: openlux_passthrough models e.g. jev-1.13.0)
+ *   OPENLUX_BASE_URL=https://api.openlux.ai
  *   NEW_API_BASE=http://127.0.0.1:3000
  *   NEW_API_DB=/data/one-api.db
  *   CATALOG=/app/catalog.json
@@ -27,6 +29,7 @@ function loadEnvFile() {
   for (const p of [
     path.resolve(__dirname, "../../.env"),
     path.resolve(__dirname, "../.env"),
+    "/opt/ai-relay/.env",
     "/opt/ai-relay/.env.gitee",
   ]) {
     if (!fs.existsSync(p)) continue;
@@ -50,6 +53,10 @@ const GITEE_ORIGIN = (process.env.GITEE_BASE_URL || "https://ai.gitee.com").repl
   /\/v1\/?$/,
   ""
 );
+const OPENLUX_KEY = process.env.OPENLUX_API_KEY || "";
+const OPENLUX_ORIGIN = (
+  process.env.OPENLUX_BASE_URL || "https://api.openlux.ai"
+).replace(/\/v1\/?$/, "");
 const NEW_API_BASE = (process.env.NEW_API_BASE || "http://127.0.0.1:3000").replace(
   /\/$/,
   ""
@@ -472,12 +479,29 @@ async function prepareInfiniteTalkRequest(bodyBuf, contentType) {
   };
 }
 
-async function proxyToGitee(req, res, bodyBuf, { capture = false, timeoutMs = 0 } = {}) {
-  const target = `${GITEE_ORIGIN}${req.url}`;
+function upstreamCreds(modelId) {
+  const relay = modelMap[modelId]?.relay || "";
+  if (relay === "openlux_passthrough" || relay === "openlux") {
+    if (!OPENLUX_KEY) {
+      throw new Error("OPENLUX_API_KEY missing for openlux_passthrough model");
+    }
+    return { origin: OPENLUX_ORIGIN, key: OPENLUX_KEY };
+  }
+  return { origin: GITEE_ORIGIN, key: GITEE_KEY };
+}
+
+async function proxyToGitee(
+  req,
+  res,
+  bodyBuf,
+  { capture = false, timeoutMs = 0, modelId = "" } = {}
+) {
+  const { origin, key } = upstreamCreds(modelId);
+  const target = `${origin}${req.url}`;
   const headers = { ...req.headers };
   delete headers.host;
   delete headers["content-length"];
-  headers.authorization = `Bearer ${GITEE_KEY}`;
+  headers.authorization = `Bearer ${key}`;
   headers["x-failover-enabled"] = headers["x-failover-enabled"] || "true";
 
   const upstream = await fetch(target, {
@@ -793,6 +817,7 @@ const server = http.createServer(async (req, res) => {
     const captured = await proxyToGitee(req, res, forwardBuf, {
       capture: usageBill,
       timeoutMs: modelId === "InfiniteTalk" ? 300000 : 0,
+      modelId,
     });
     if (precharged?.quota > 0 && captured?.status >= 400) {
       refundQuota(token.userId, token.tokenId, precharged);

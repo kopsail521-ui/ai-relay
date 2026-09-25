@@ -4940,6 +4940,54 @@
     "price_key_zh": "输入 / 输出",
     "price_key_en": "Input / Output"
   },
+  "jev-1.13.0": {
+    "description": "TypeSafe Jev 1.13.0：System One 结构化决策模型（不生成自由文本），用于程序内分类、工单分诊、风险打分与路由。输入 state + questions，返回 choice / score / noul；上下文约 32k tokens。计费：输入 $0.0336 / 输出 $0（每百万 tokens）。",
+    "descriptions": {
+      "zhCN": "TypeSafe Jev 1.13.0：System One 结构化决策模型（不生成自由文本），用于程序内分类、工单分诊、风险打分与路由。输入 state + questions，返回 choice / score / noul；上下文约 32k tokens。计费：输入 $0.0336 / 输出 $0（每百万 tokens）。",
+      "zhTW": "TypeSafe Jev 1.13.0：System One 結構化決策模型（不產生自由文字），用於程式內分類、工單分診、風險評分與路由。輸入 state + questions，回傳 choice / score / noul；上下文約 32k tokens。計費：輸入 $0.0336 / 輸出 $0（每百萬 tokens）。",
+      "en": "TypeSafe Jev 1.13.0 — System One structured decision model (no free-form text) for in-app classification, ticket triage, risk scoring, and routing. Pass state + questions; get choice / score / noul. ~32k context. Pricing: $0.0336 input / $0 output per 1M tokens.",
+      "fr": "TypeSafe Jev 1.13.0 — modèle System One de décision structurée (pas de texte libre) pour classification, triage, scoring et routage. Envoyez state + questions ; recevez choice / score / noul. Contexte ~32k. Tarif : $0.0336 entrée / $0 sortie pour 1M tokens.",
+      "ru": "TypeSafe Jev 1.13.0 — System One модель структурированных решений (без свободного текста) для классификации, triage, скоринга и маршрутизации. Передайте state + questions; получите choice / score / noul. Контекст ~32k. Тариф: вход $0.0336 / выход $0 за 1M токенов.",
+      "ja": "TypeSafe Jev 1.13.0：System One 構造化意思決定モデル（自由テキスト非生成）。アプリ内分類・チケット振り分け・リスク採点・ルーティング向け。state + questions で choice / score / noul。文脈約 32k。料金：入力 $0.0336 / 出力 $0（100万 tokens）。",
+      "vi": "TypeSafe Jev 1.13.0 — mô hình quyết định có cấu trúc System One (không sinh văn bản tự do) cho phân loại, triage, chấm rủi ro và định tuyến. Gửi state + questions; nhận choice / score / noul. Ngữ cảnh ~32k. Giá: vào $0.0336 / ra $0 mỗi 1M tokens."
+    },
+    "unit": "token",
+    "badge": {
+      "zhCN": "按量计费",
+      "zhTW": "按量計費",
+      "en": "Token",
+      "fr": "Token",
+      "ru": "Token",
+      "ja": "従量",
+      "vi": "Theo token"
+    },
+    "suffix": {
+      "zhCN": "/百万tokens",
+      "zhTW": "/百萬tokens",
+      "en": "/ 1M tokens",
+      "fr": "/ 1M tokens",
+      "ru": "/ 1M токенов",
+      "ja": "/ 100万 tokens",
+      "vi": "/ 1M tokens"
+    },
+    "price_key": {
+      "zhCN": "输入 / 输出",
+      "zhTW": "輸入 / 輸出",
+      "en": "Input / Output",
+      "fr": "Entrée / Sortie",
+      "ru": "Вход / Выход",
+      "ja": "入力 / 出力",
+      "vi": "Vào / Ra"
+    },
+    "description_zh": "TypeSafe Jev 1.13.0：System One 结构化决策模型（不生成自由文本），用于程序内分类、工单分诊、风险打分与路由。输入 state + questions，返回 choice / score / noul；上下文约 32k tokens。计费：输入 $0.0336 / 输出 $0（每百万 tokens）。",
+    "description_en": "TypeSafe Jev 1.13.0 — System One structured decision model (no free-form text) for in-app classification, ticket triage, risk scoring, and routing. Pass state + questions; get choice / score / noul. ~32k context. Pricing: $0.0336 input / $0 output per 1M tokens.",
+    "badge_zh": "按量计费",
+    "badge_en": "Token",
+    "suffix_zh": "/百万tokens",
+    "suffix_en": "/ 1M tokens",
+    "price_key_zh": "输入 / 输出",
+    "price_key_en": "Input / Output"
+  },
   "gpt-6-sol": {
     "description": "GPT-6 Sol 高档对话模型，更强推理与复杂任务表现。",
     "descriptions": {

@@ -13,27 +13,29 @@ STASH="/tmp/keyo-geo-blog-preserve-$(date +%s)"
 
 cd "$ROOT"
 
-mkdir -p "$BLOG/article"
+sudo mkdir -p "$BLOG/article"
 if [[ -d "$BLOG" ]]; then
   mkdir -p "$STASH"
-  cp -a "$BLOG/." "$STASH/"
-  echo "==> preserved blog -> $STASH ($(find "$STASH" -type f | wc -l) files)"
+  sudo cp -a "$BLOG/." "$STASH/"
+  sudo chown -R "$(whoami):$(whoami)" "$STASH" 2>/dev/null || true
+  echo "==> preserved blog -> $STASH ($(find "$STASH" -type f 2>/dev/null | wc -l) files)"
 fi
 
+sudo chown -R "$(whoami):$(whoami)" "$ROOT" 2>/dev/null || true
 git stash push -u -m "wb-preserve-$(date +%s)" 2>/dev/null || true
 git fetch origin
 git reset --hard origin/main
 
-mkdir -p "$BLOG/article"
+sudo mkdir -p "$BLOG/article"
 if [[ -d "$STASH" ]]; then
   # Restore GEO files without deleting repo-tracked guides.
-  cp -a "$STASH/." "$BLOG/"
+  sudo cp -a "$STASH/." "$BLOG/"
   echo "==> restored blog from $STASH"
 fi
 
 # Ensure GEO can keep writing after chown/reset cycles.
-chmod -R u+rwX,go+rX "$BLOG" 2>/dev/null || true
-chown -R "$(stat -c '%U:%G' "$ROOT" 2>/dev/null || echo admin:admin)" "$BLOG" 2>/dev/null || true
+sudo chmod -R u+rwX,go+rX "$BLOG" 2>/dev/null || true
+sudo chown -R "$(whoami):$(whoami)" "$BLOG" 2>/dev/null || true
 
 echo "HEAD=$(git rev-parse --short HEAD)"
 echo "blog_files=$(find "$BLOG" -type f | wc -l)"

@@ -1,0 +1,32 @@
+# InfiniteTalk: remove Keyo 15s audio gate; duration follows audio (upstream unlimited).
+set -e
+cd /opt/ai-relay
+sudo git pull --ff-only
+git log -1 --oneline
+
+# Rebuild gitee passthrough (duration gate lives here)
+sudo docker build -t keyo-gitee-passthrough ./services/gitee-passthrough
+sudo docker rm -f ai-relay-gitee-passthrough 2>/dev/null || true
+sudo docker run -d --name ai-relay-gitee-passthrough --restart always --network host \
+  --env-file /opt/ai-relay/.env.gitee \
+  -v /opt/ai-relay/data/new-api:/data:rw \
+  -e NEW_API_DB=/data/one-api.db \
+  -e NEW_API_BASE=http://127.0.0.1:3000 \
+  -e CATALOG=/app/catalog.json \
+  -e LISTEN_HOST=127.0.0.1 \
+  -e PORT=3010 \
+  keyo-gitee-passthrough
+
+# Sync public docs that say "no 15s split"
+sudo mkdir -p /opt/ai-relay/static/brand /opt/ai-relay/static/seo/model
+sudo cp -f static/brand/keyo-api-ref.md static/brand/keyo-api-ref.en.md static/brand/keyo-docs.html \
+  /opt/ai-relay/static/brand/ 2>/dev/null || true
+# If site mounts from repo static/, the git pull already updated them.
+
+sleep 2
+curl -sS http://127.0.0.1:3010/healthz || true
+echo
+# Prove 15s reject string is gone
+sudo docker exec ai-relay-gitee-passthrough grep -n "15 seconds\|infinitetalk_audio_too_long\|Duration follows audio" /app/server.mjs | head -20
+sudo docker logs --tail 15 ai-relay-gitee-passthrough
+echo DONE_INFINITETALK_UNLIMITED

@@ -210,6 +210,7 @@ try {
   assert.equal(upstreamBody.length, upstreamBytes);
   assert.equal(userQuota(), quotaAfterSuccess);
 
+  // Long audio must pass through (no Keyo 15s gate); duration follows audio.
   const longResponse = await fetch(
     `http://127.0.0.1:${servicePort}/v1/async/videos/image-to-video`,
     {
@@ -221,10 +222,10 @@ try {
       body: bodyForAudio(wavSeconds(16)),
     }
   );
-  assert.equal(longResponse.status, 400);
-  assert.equal((await longResponse.json()).error.code, "infinitetalk_audio_too_long");
-  assert.equal(upstreamBody.length, upstreamBytes);
-  assert.equal(userQuota(), quotaAfterSuccess);
+  assert.equal(longResponse.status, 200, await longResponse.text());
+  assert.match(upstreamBody.toString("latin1"), /name="cond_audio"/);
+  assert.ok(userQuota() < quotaAfterSuccess);
+  const quotaAfterLong = userQuota();
 
   upstreamStatus = 400;
   const rejectedResponse = await fetch(
@@ -239,8 +240,8 @@ try {
     }
   );
   assert.equal(rejectedResponse.status, 400);
-  assert.ok(quotaAtRejectedRequest < quotaAfterSuccess);
-  await waitForQuota(quotaAfterSuccess);
+  assert.ok(quotaAtRejectedRequest < quotaAfterLong);
+  await waitForQuota(quotaAfterLong);
   assert.equal(latestLogQuota(), 0);
 
   upstreamStatus = 200;

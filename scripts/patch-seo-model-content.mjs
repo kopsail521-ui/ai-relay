@@ -119,7 +119,7 @@ const EXPAND = {
   "Duix-Avatar":
     "Talking avatars are async media jobs: validate face video and voice sample length before submit, then poll task status. Show progress UI; do not block HTTP workers. Moderate inputs for deepfake abuse. Cache finished MP4s by (face hash, audio hash). Digital human API buyers care about lip sync and queue time—log both. KeyoAPI’s audio-video-to-video route keeps avatar generation on the same key as TTS and STT for full agent personas.",
   InfiniteTalk:
-    "Image-to-talking-head is the onboarding-friendly digital human path: one portrait plus one audio track. Enforce portrait resolution minimums and reject group photos. Localize audio with Qwen3-TTS, then animate with InfiniteTalk for multilingual explainers. Store consent flags for likeness rights. For support bots, pre-render common answers; only generate live for long-tail questions. This workflow is hard to assemble across vendors—KeyoAPI packages it as one relay.",
+    "Image-to-talking-head starts with one portrait and one audio track. Upload the portrait directly as cond_video, the audio as cond_audio, and include prompt. Duration follows the audio — submit the full track in one job; do not split into 15s chunks. Upstream resolutions are 480P and 720P. For support bots, pre-render common answers and generate live only when needed.",
 };
 
 function curlFor(id, endpoint) {
@@ -151,7 +151,7 @@ function curlFor(id, endpoint) {
     return `curl https://www.keyoapi.xyz/v1/async/videos/audio-video-to-video \\\n  -H "Authorization: Bearer YOUR_API_KEY" \\\n  -F model=${id} \\\n  -F audio=@./voice.wav \\\n  -F video=@./face.mp4\n# then: GET /v1/task/{id}`;
   }
   if (endpoint.includes("/async/videos/image-to-video")) {
-    return `curl https://www.keyoapi.xyz/v1/async/videos/image-to-video \\\n  -H "Authorization: Bearer YOUR_API_KEY" \\\n  -F model=${id} \\\n  -F image=@./portrait.png \\\n  -F audio=@./voice.wav\n# then: GET /v1/task/{id}`;
+    return `curl https://www.keyoapi.xyz/v1/async/videos/image-to-video \\\n  -H "Authorization: Bearer YOUR_API_KEY" \\\n  -F model=${id} \\\n  -F "prompt=natural talking-head delivery" \\\n  -F cond_video=@./portrait.png \\\n  -F cond_audio=@./voice.wav\n# then: GET /v1/task/{id}`;
   }
   if (id === "Unlimited-OCR") {
     return `curl https://www.keyoapi.xyz/v1/chat/completions \\\n  -H "Authorization: Bearer YOUR_API_KEY" \\\n  -H "Content-Type: application/json" \\\n  -d '{"model":"Unlimited-OCR","messages":[{"role":"user","content":[{"type":"text","text":"Extract tables as markdown"},{"type":"image_url","image_url":{"url":"https://example.com/scan.png"}}]}]}'`;

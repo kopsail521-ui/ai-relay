@@ -1157,12 +1157,12 @@ async function proxyRequest(req, res, bodyBuf) {
         }
       }
       // v15: force refresh billing-unit (OpenLux-style detail price table)
-      if (isPricingPage && !html.includes("keyo-pricing-sort-v18")) {
+      if (isPricingPage && !html.includes("keyo-pricing-sort-v19")) {
         html = html
           .replace(/<!--keyo-pricing-sort(?:-v\d+)?-->[\s\S]*?<\/script>/g, "")
           .replace(/<!--keyo-billing-unit-->[\s\S]*?<\/script>/g, "")
           .replace(/<!--keyo-locale-desc-->[\s\S]*?<\/script>/g, "");
-        const inject = `<!--keyo-pricing-sort-v18-->${PRICING_SORT_SCRIPT}<!--keyo-locale-desc-->${LOCALE_DESC_SCRIPT}<!--keyo-billing-unit-->${BILLING_UNIT_SCRIPT}`;
+        const inject = `<!--keyo-pricing-sort-v19-->${PRICING_SORT_SCRIPT}<!--keyo-locale-desc-->${LOCALE_DESC_SCRIPT}<!--keyo-billing-unit-->${BILLING_UNIT_SCRIPT}`;
         if (html.includes("<head>")) {
           html = html.replace("<head>", `<head>${inject}`);
           changed = true;

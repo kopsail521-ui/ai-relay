@@ -3,8 +3,8 @@
  * Loaded by server.mjs as raw JS (no template-literal escaping).
  */
 (function () {
-  if (window.__keyoBillV13) return;
-  window.__keyoBillV13 = 1;
+  if (window.__keyoBillV14) return;
+  window.__keyoBillV14 = 1;
 
   function MAP() {
     return window.__KEYO_MKT_COPY || {};
@@ -200,6 +200,12 @@
     )
       return "$" + String(suf).replace(/^\//, "");
     if (t === "/请求" || t === "/請求" || t === "/request") return suf;
+    // List cards often keep one text node: "$0.0288 / 请求"
+    if (/^\$[\d.]+\s*\/\s*(请求|請求|request)\s*$/i.test(t)) {
+      var unit = String(suf || "/秒");
+      if (unit.charAt(0) !== "/") unit = "/" + unit;
+      return t.replace(/\/\s*(请求|請求|request)\s*$/i, unit.replace(/^\//, "/"));
+    }
     return null;
   }
 
@@ -353,6 +359,7 @@
       var txt = norm(kid.textContent).slice(0, 20);
       if (tag === "h2" && (txt === "定价" || txt === "Pricing" || txt === "定價"))
         continue;
+      // Keep native base/group blocks hidden even after React remounts siblings.
       kid.style.setProperty("display", "none", "important");
       kid.setAttribute("data-keyo-hid", "1");
     }

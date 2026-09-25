@@ -1,8 +1,7 @@
 /**
  * Patch creem billing inject → v13.
- * Root cause: regex like /^\/?\s*/ broke after HTML/template escaping
- * ("Invalid regular expression flags"), so __keyoBillV12 never ran.
- * Fix: no fragile regex literals; replace entire 定价 section with OpenLux table.
+ * Root cause: escaped regex in template broke inject (Invalid regular expression flags).
+ * Fix: embed browser JS via JSON.stringify; replace entire Pricing card with OpenLux table.
  */
 import fs from "fs";
 import path from "path";
@@ -106,7 +105,7 @@ const browserJs = [
   "  for(var i=0;i<cands.length;i++){var tx=cands[i].innerText||'';",
   "    if((tx.indexOf('定价')===0||tx.indexOf('Pricing')===0||tx.indexOf('定价')>=0)&&",
   "       (tx.indexOf('基础价格')>=0||tx.indexOf('Base Price')>=0||tx.indexOf('按分组')>=0||tx.indexOf('Group')>=0)){",
-  "      section=cands[i];break}}",
+  "      section=cands[i];break}",
   "  if(!section)section=root;",
   "  // Hide native base/group blocks (keep title node if present)",
   "  var kids=Array.prototype.slice.call(section.children);",
@@ -136,10 +135,14 @@ const browserJs = [
 ].join("");
 
 // Validate before writing
+fs.writeFileSync(path.join(root, "tmp/_bill-v13-browser.js"), browserJs);
 try {
   new Function(browserJs);
 } catch (e) {
   console.error("browserJs syntax fail", e.message);
+  // find approximate position
+  const msg = String(e.stack || e.message);
+  console.error(msg.slice(0, 400));
   process.exit(1);
 }
 

@@ -30,3 +30,7 @@ bin/*.exe.*
 tmp-*
 _tmp_*
 scripts/_*.txt
+
+# GEO auto-published CMS articles (VPS-only; do not wipe on git reset)
+static/brand/blog/article/*
+!static/brand/blog/article/.gitkeep

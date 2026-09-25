@@ -10,7 +10,9 @@ BRAND_DIR="${ROOT}/static/brand"
 SEO_DIR="${ROOT}/static/seo"
 DOMAIN="${DOMAIN:-www.keyoapi.xyz}"
 
-mkdir -p "$BRAND_DIR" "$SEO_DIR"
+mkdir -p "$BRAND_DIR" "$SEO_DIR" "$BRAND_DIR/blog" "$BRAND_DIR/blog/article"
+# GEO auto-publish writes here; keep world-readable, owner-writable across deploys.
+chmod u+rwX,go+rX "$BRAND_DIR/blog" "$BRAND_DIR/blog/article" 2>/dev/null || true
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
@@ -117,6 +119,16 @@ ${LANDING_HANDLES}
 	handle @seo_model {
 		root * ${ROOT}/static/seo
 		try_files {path}.html {path}/index.html {path}
+		file_server
+	}
+	# GEO blog (durable — must survive every Caddyfile rewrite):
+	#   /brand/blog/{slug}.html
+	#   /brand/blog/article/{id}/  (+ index.html)
+	#   /brand/blog/sitemap.txt
+	@geo_blog path /brand/blog /brand/blog/*
+	handle @geo_blog {
+		root * ${ROOT}/static
+		try_files {path} {path}.html {path}/index.html
 		file_server
 	}
 	handle_path /brand/* {

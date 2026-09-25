@@ -8,6 +8,9 @@
   每次 SEO/品牌发版都会 **整文件重写** `/etc/caddy/Caddyfile`，但只要跑这个脚本，blog 路由会一起写回去。  
   **不要**只在 `/etc/caddy/Caddyfile` 上手改——会被下次发版盖掉。
 - **发版拉代码必须保 blog**：用 `scripts/vps-safe-pull-preserve-blog.sh`，不要裸 `git reset --hard`（会覆盖 GEO 改过的 `index.html` / `sitemap.txt`）。
+- **线上状态（2026-09-25）**：`@geo_blog` 已写入 Caddy；`/brand/blog/`、示例文章、`sitemap.txt` smoke 均为 200。GEO 可重试站点同步。
+
+对外副本（给 GEO）：`../geo-write-access.md`（与本文同步）。
 
 ## 线上真实可写目录（静态站）
 
@@ -47,13 +50,16 @@ handle @geo_blog {
 }
 ```
 
-恢复/重装路由（Workbench）：
+恢复/重装路由（Workbench，推荐整段）：
 
 ```bash
-cd /opt/ai-relay && sudo bash scripts/vps-safe-pull-preserve-blog.sh
-# 若只重装 Caddy、不拉代码：
-# RELOAD_CADDY=1 可在 safe-pull 末尾触发；或：
-sudo bash /opt/ai-relay/scripts/deploy-brand-static.sh
+cd /opt/ai-relay && RELOAD_CADDY=1 bash scripts/vps-safe-pull-preserve-blog.sh
+```
+
+若脚本尚不存在（未 pull），先保 blog 再拉再装：
+
+```bash
+cd /opt/ai-relay && sudo chown -R "$(whoami):$(whoami)" /opt/ai-relay && BLOG=static/brand/blog && STASH=/tmp/keyo-geo-blog-preserve-$(date +%s) && mkdir -p "$STASH" "$BLOG/article" && cp -a "$BLOG/." "$STASH/" 2>/dev/null; git fetch origin && git reset --hard origin/main && cp -a "$STASH/." "$BLOG/" && RELOAD_CADDY=1 bash scripts/vps-safe-pull-preserve-blog.sh
 ```
 
 ## 写入方式

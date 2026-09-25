@@ -1359,6 +1359,7 @@
             <button type="button" class="btn-copy" data-copy-target="curl-infinite" data-i18n="copy"></button>
           </div>
           <pre id="curl-infinite"></pre>
+          <p class="hint" data-i18n="infiniteLimit"></p>
         </div>
         <div class="code-block">
           <div class="code-bar">
@@ -1485,6 +1486,7 @@ const I18N = {
     "videoApiTitle": "Video model parameters",
     "videoApiIntro": "Same Keyo path for all models below. Submit POST /v1/videos/generations, then poll GET /v1/tasks/{task_id}. Field names differ by model — do not mix MiniMax with Seedance/Wan. For Cursor/Codex: copy the AI handbook at /brand/keyo-api-ref.html (video rules are in §4/§5).",
     "uploadIntro": "Local image/audio/video: POST /v1/uploads (alias /v1/files) with -F file=@… → use returned url in Path B JSON. Max ~100MB, ~48h TTL. ASR/matting/InfiniteTalk already accept multipart directly.",
+    "infiniteLimit": "InfiniteTalk requires prompt, cond_video (a portrait image works directly) and cond_audio. Audio is limited to 15 seconds per task; confirm the extra per-request cost before splitting long audio.",
     "thField": "Field",
     "thType": "Type",
     "thDesc": "Description",
@@ -1664,6 +1666,7 @@ const I18N = {
     "videoApiTitle": "视频模型参数（按模型）",
     "videoApiIntro": "下列模型统一走 Keyo：POST /v1/videos/generations 提交，GET /v1/tasks/{task_id} 轮询。各模型字段不同——MiniMax 不要套 Seedance/Wan。给 Cursor/Codex：复制 /brand/keyo-api-ref.html 全文（视频规则在 §4/§5）。",
     "uploadIntro": "本机图/音/视频：POST /v1/uploads（别名 /v1/files）用 -F file=@… → 把返回的 url 填进 Path B JSON。约 100MB 上限、约 48 小时过期。ASR/抠图/InfiniteTalk 可直接 multipart，不必先上传。",
+    "infiniteLimit": "InfiniteTalk 必填 prompt、cond_video（可直接传人物图片）和 cond_audio。单任务音频最多 15 秒；长音频拆片前先确认增加的按次费用。",
     "thField": "字段",
     "thType": "类型",
     "thDesc": "说明",
@@ -2583,8 +2586,9 @@ function renderSamples(dict) {
     infinite.innerHTML = '<code><span class="tok-cmd">curl</span> https://www.keyoapi.xyz/v1/async/videos/image-to-video \\\n' +
       '  -H <span class="tok-str">"Authorization: Bearer ' + escapeHtml(key) + '"</span> \\\n' +
       '  -F <span class="tok-str">model=InfiniteTalk</span> \\\n' +
-      '  -F <span class="tok-str">image=@face.png</span> \\\n' +
-      '  -F <span class="tok-str">audio=@speech.wav</span>\n\n' +
+      '  -F <span class="tok-str">prompt=natural talking-head delivery</span> \\\n' +
+      '  -F <span class="tok-str">cond_video=@face.png</span> \\\n' +
+      '  -F <span class="tok-str">cond_audio=@speech.wav</span>\n\n' +
       '<span class="tok-cmd">curl</span> https://www.keyoapi.xyz/v1/task/TASK_ID \\\n' +
       '  -H <span class="tok-str">"Authorization: Bearer ' + escapeHtml(key) + '"</span></code>';
   }

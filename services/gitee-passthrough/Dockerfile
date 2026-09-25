@@ -1,4 +1,5 @@
 FROM node:22-alpine
+RUN apk add --no-cache ffmpeg
 WORKDIR /app
 COPY server.mjs fix-marketplace-meta.mjs catalog.json ./
 ENV NODE_ENV=production

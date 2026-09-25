@@ -124,7 +124,8 @@ export function caddyFullSite(opts = {}) {
 }
 
 www.keyoapi.xyz {
-	encode gzip
+	@compress_pages not path /v1/*
+	encode @compress_pages gzip
 ${caddySeoHandles()}
 	handle /static/* {
 		reverse_proxy 127.0.0.1:3000 {

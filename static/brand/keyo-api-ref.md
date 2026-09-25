@@ -138,6 +138,8 @@ curl https://www.keyoapi.xyz/v1/videos/generations \
 
 另有一批 `:free` 对话模型（例如 `glm-5.3-flash:free`、`nemotron-3-ultra-550b-a55b:free`）。完整名单以 https://www.keyoapi.xyz/free-models 为准，免费模型会动态调整。
 
+`nemotron-3-ultra-550b-a55b:free` 不接受 `enable_thinking`；在客户端关闭该参数。客户端的“连接测试成功”只说明测试请求通过；流式聊天还应确认收到 `choices[].delta.content` 和结束标记 `[DONE]`。若某个付费模型返回余额不足，先核对账户余额；账户仍有余额时保留 request id 联系支持，勿反复重试。
+
 付费：`gpt-5.6-luna` · `gpt-5.6-terra` · `gpt-5.6-sol` · `gpt-6-luna` · `gpt-6-sol` · `gpt-6-astra` · `claude-sonnet-5` · `claude-opus-5` · `claude-opus-5-5` · `claude-fable-5` · `claude-fable-5-1` · `gemini-3.7-flash` · `gemini-3.8-flash` · `grok-4.7` · `grok-4.6` · `MiniMax-M3` · `gemma-4-26B-A4B-it` · `glm-5.3` · `glm-5.3-flash` · `glm-5.2` · `deepseek-v4.1-flash` · `deepseek-v4-pro-0813` · `deepseek-v4-flash-0731` · `deepseek-v4-pro` · `deepseek-v4-flash` · `kimi-k3` · `kimi-k2.7-code` · `qwen3.8-flash` · `mimo-v2.6-pro` · `mimo-v2.6-flash` · `qwen3.8-max-0902`
 
 ### 1.2 文生图 → `POST /v1/images/generations`
@@ -189,7 +191,7 @@ curl https://www.keyoapi.xyz/v1/videos/generations \
 
 ### 1.11 数字人说话视频 → `POST /v1/async/videos/image-to-video` → `GET /v1/task/{id}`
 
-`InfiniteTalk`（multipart：`model` + `image` + `audio`）
+`InfiniteTalk`（multipart：`model` + `prompt` + `cond_video` + `cond_audio`）
 
 ### 1.11b 系统一决策 → `POST /v1/systemone`
 
@@ -732,13 +734,15 @@ curl https://www.keyoapi.xyz/v1/images/mattings \
 `POST /v1/async/videos/image-to-video` → `GET /v1/task/{id}`  
 
 multipart **可直接传本机文件**（不必先走 §0.5）。
+`cond_video` 可以直接上传人物图片，无须先制成静态视频；`cond_audio` 上传驱动音频。当前单任务音频最多 15 秒，建议切成不超过 14 秒的片段。长音频拆片会产生多次按次计费，应先告知用户预计片数与费用，再提交。没有拿到任务 `id` 时不要盲目重试。
 
 ```bash
 curl https://www.keyoapi.xyz/v1/async/videos/image-to-video \
   -H "Authorization: Bearer sk-..." \
   -F model=InfiniteTalk \
-  -F image=@face.png \
-  -F audio=@speech.wav
+  -F 'prompt=人物自然地面对镜头口播，保持身份和背景稳定' \
+  -F cond_video=@face.png \
+  -F cond_audio=@speech.wav
 ```
 
 提交返回 `id`/`task_id`；轮询 `status=completed` 后读 **`url`** 或 `output.file_url`。**不要**用 Path B 的 `/v1/tasks/`。

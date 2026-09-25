@@ -82,7 +82,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
   <a class="btn btn-secondary" href="/sign-up">Create account</a>
 </div>
 <h2>Overview</h2>
-<p>InfiniteTalk generates audio-driven talking-head video from an image or video—ideal when you need a digital human api without a motion-capture stage. Creators generate a voice with Qwen3-TTS, then animate a still spokesperson photo through KeyoAPI. Natural lip-sync and body motion make short marketing and education clips feel presentable. Async processing fits batch content calendars better than realtime WebRTC avatars. Per-request pricing around $0.342 is simple for “one clip = one charge” packaging. For long continuous streams, evaluate Duix-Avatar’s per-second meter instead. Localized ads, course intros, newsreader demos, and support explainers. Transcribe source scripts with Whisper, synthesize with TTS, animate with InfiniteTalk. Submit async jobs with model=InfiniteTalk via Keyo task APIs. Get started at <a href="/pricing/InfiniteTalk">/pricing/InfiniteTalk</a>. InfiniteTalk turns an image into talking-head video via /v1/async/videos/image-to-video—ideal for support avatars and localized explainers. Image-to-talking-head is the onboarding-friendly digital human path: one portrait plus one audio track. Enforce portrait resolution minimums and reject group photos. Localize audio with Qwen3-TTS, then animate with InfiniteTalk for multilingual explainers. Store consent flags for likeness rights. For support bots, pre-render common answers; only generate live for long-tail questions. This workflow is hard to assemble across vendors—KeyoAPI packages it as one relay. Require single-subject portraits. Reject images with text overlays that break lipsync. Pre-generate FAQs; live-generate only long-tail answers to control async cost.</p>
+<p>InfiniteTalk generates audio-driven talking-head video from an image or video—ideal when you need a digital human api without a motion-capture stage. Creators generate a voice with Qwen3-TTS, then animate a still spokesperson photo through KeyoAPI. Natural lip-sync and body motion make short marketing and education clips feel presentable. Async processing fits batch content calendars better than realtime WebRTC avatars. Per-request pricing around $0.342 is simple for “one clip = one charge” packaging. For long continuous streams, evaluate Duix-Avatar’s per-second meter instead. Localized ads, course intros, newsreader demos, and support explainers. Transcribe source scripts with Whisper, synthesize with TTS, animate with InfiniteTalk. Submit async jobs with model=InfiniteTalk via Keyo task APIs. Get started at <a href="/pricing/InfiniteTalk">/pricing/InfiniteTalk</a>. InfiniteTalk turns an image into talking-head video via /v1/async/videos/image-to-video—ideal for support avatars and localized explainers. Image-to-talking-head is the onboarding-friendly digital human path: one portrait plus one audio track. Enforce portrait resolution minimums and reject group photos. Localize audio with Qwen3-TTS, then animate with InfiniteTalk for multilingual explainers. Store consent flags for likeness rights. For support bots, pre-render common answers; only generate live for long-tail questions. KeyoAPI provides speech and avatar generation through one API. Require single-subject portraits. Reject images with text overlays that break lipsync. Pre-generate FAQs; live-generate only long-tail answers to control async cost.</p>
 
 <h2>Quick start</h2>
 <div class="card">
@@ -92,10 +92,12 @@ ul{margin:0 0 14px;padding-left:1.2em}
 <pre><code>curl https://www.keyoapi.xyz/v1/async/videos/image-to-video \
   -H &quot;Authorization: Bearer YOUR_API_KEY&quot; \
   -F model=InfiniteTalk \
-  -F image=@./portrait.png \
-  -F audio=@./voice.wav
+  -F &quot;prompt=natural talking-head delivery&quot; \
+  -F cond_video=@./portrait.png \
+  -F cond_audio=@./voice.wav
 # then: GET /v1/task/{id}</code></pre>
 <p>Auth uses the same Bearer API key as chat. Full notes: <a href="/brand/keyo-docs.html">Keyo docs</a>.</p>
+<p><strong>Current input limits:</strong> use multipart fields <code>cond_video</code> and <code>cond_audio</code>. The hosted endpoint accepts at most 15 seconds of audio per task; split longer audio into clips no longer than 14 seconds only after confirming the additional per-request charges. Poll <code>GET /v1/task/{id}</code>.</p>
 </div>
 <h2>FAQ</h2>
 <div class="faq"><details><summary>What inputs are required?</summary><p>Typically an image or video portrait plus driving audio. Output duration follows the audio length.</p></details>

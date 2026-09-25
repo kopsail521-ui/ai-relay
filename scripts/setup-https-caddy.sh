@@ -26,7 +26,8 @@ echo "==> 写 Caddyfile（自动申请 Let's Encrypt 证书 + /brand 静态页�
 mkdir -p /opt/ai-relay/static/brand
 cat >/etc/caddy/Caddyfile <<EOF
 ${DOMAIN} {
-	encode gzip
+	@compress_pages not path /v1/*
+	encode @compress_pages gzip
 
 	handle_path /brand/* {
 		root * /opt/ai-relay/static/brand

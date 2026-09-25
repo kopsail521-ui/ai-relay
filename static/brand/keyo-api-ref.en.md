@@ -127,6 +127,8 @@ Free (`*-free`): `Atria-dawn-v2`
 
 There is also a `:free` chat pool (for example `glm-5.3-flash:free`, `nemotron-3-ultra-550b-a55b:free`). The live list is https://www.keyoapi.xyz/free-models — the list changes over time.
 
+`nemotron-3-ultra-550b-a55b:free` does not accept `enable_thinking`; disable that option in your client. A successful connection test only confirms the test request. For streaming chat, verify that `choices[].delta.content` arrives and the stream ends with `[DONE]`. If one paid model reports insufficient balance, check your account balance; if funds remain, keep the request id and contact support instead of retrying repeatedly.
+
 Paid: `gpt-5.6-luna` · `gpt-5.6-terra` · `gpt-5.6-sol` · `gpt-6-luna` · `gpt-6-sol` · `gpt-6-astra` · `claude-sonnet-5` · `claude-opus-5` · `claude-opus-5-5` · `claude-fable-5` · `claude-fable-5-1` · `gemini-3.7-flash` · `gemini-3.8-flash` · `grok-4.7` · `grok-4.6` · `MiniMax-M3` · `gemma-4-26B-A4B-it` · `glm-5.3` · `glm-5.3-flash` · `glm-5.2` · `deepseek-v4.1-flash` · `deepseek-v4-pro-0813` · `deepseek-v4-flash-0731` · `deepseek-v4-pro` · `deepseek-v4-flash` · `kimi-k3` · `kimi-k2.7-code` · `qwen3.8-flash` · `mimo-v2.6-pro` · `mimo-v2.6-flash` · `qwen3.8-max-0902`
 
 ### 1.2 Images → `POST /v1/images/generations`
@@ -178,7 +180,7 @@ Paid: `gpt-5.6-luna` · `gpt-5.6-terra` · `gpt-5.6-sol` · `gpt-6-luna` · `gpt
 
 ### 1.11 Talking-head → `POST /v1/async/videos/image-to-video` → `GET /v1/task/{id}`
 
-`InfiniteTalk` (multipart: `model` + `image` + `audio`)
+`InfiniteTalk` (multipart: `model` + `prompt` + `cond_video` + `cond_audio`)
 
 ### 1.11b System One decisions → `POST /v1/systemone`
 
@@ -695,13 +697,15 @@ Upscale: use `/v1/images/upscaling` with `Real-ESRGAN` or `AnimeSharp`.
 `POST /v1/async/videos/image-to-video` → `GET /v1/task/{id}`  
 
 Multipart accepts **local files directly** (no §0.5 needed).
+Upload a portrait image directly as `cond_video`; there is no need to turn it into a static video. Upload the driving audio as `cond_audio`. The current per-task audio limit is 15 seconds; clips of 14 seconds or less leave a small margin. Splitting long audio creates multiple per-request charges, so show the user the estimated count and cost before submitting. Do not blindly retry a submission that returned no task `id`.
 
 ```bash
 curl https://www.keyoapi.xyz/v1/async/videos/image-to-video \
   -H "Authorization: Bearer sk-..." \
   -F model=InfiniteTalk \
-  -F image=@face.png \
-  -F audio=@speech.wav
+  -F 'prompt=a person speaking naturally to camera, keeping identity and background stable' \
+  -F cond_video=@face.png \
+  -F cond_audio=@speech.wav
 ```
 
 ---

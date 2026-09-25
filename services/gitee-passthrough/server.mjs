@@ -16,9 +16,11 @@
  */
 import http from "http";
 import fs from "fs";
+import os from "node:os";
 import path from "path";
 import { fileURLToPath } from "url";
 import { DatabaseSync } from "node:sqlite";
+import { spawn } from "node:child_process";
 import { fixMarketplaceMeta } from "./fix-marketplace-meta.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -279,6 +281,7 @@ function deductQuota(userId, tokenId, modelId, priceUsd) {
   const quota = Math.max(1, Math.round(priceUsd * QUOTA_PER_USD));
   const db = openDb(false);
   if (!db) return { ok: true, quota: 0, skipped: true };
+  const requestId = `gpt_${Math.floor(Date.now() / 1000)}_${Math.random().toString(36).slice(2, 10)}`;
   try {
     db.exec("BEGIN");
     const user = db.prepare(`SELECT quota FROM users WHERE id = ?`).get(userId);
@@ -316,7 +319,7 @@ function deductQuota(userId, tokenId, modelId, priceUsd) {
         quota,
         channelId,
         tokenId,
-        `gpt_${now}_${Math.random().toString(36).slice(2, 10)}`,
+        requestId,
         JSON.stringify({ source: "relay", price_usd: priceUsd })
       );
     } catch (logErr) {
@@ -324,12 +327,48 @@ function deductQuota(userId, tokenId, modelId, priceUsd) {
     }
 
     db.exec("COMMIT");
-    return { ok: true, quota };
+    return { ok: true, quota, requestId };
   } catch (e) {
     try {
       db.exec("ROLLBACK");
     } catch {}
     return { ok: false, quota, error: String(e.message || e) };
+  } finally {
+    db.close();
+  }
+}
+
+function refundQuota(userId, tokenId, bill) {
+  if (!userId || !bill?.quota) return;
+  const db = openDb(false);
+  if (!db) return;
+  try {
+    db.exec("PRAGMA busy_timeout = 5000");
+    db.exec("BEGIN");
+    db.prepare(
+      `UPDATE users SET quota = quota + ?, used_quota = MAX(0, used_quota - ?) WHERE id = ?`
+    ).run(bill.quota, bill.quota, userId);
+    const token = db
+      .prepare(`SELECT unlimited_quota FROM tokens WHERE id = ?`)
+      .get(tokenId);
+    if (token && !token.unlimited_quota) {
+      db.prepare(
+        `UPDATE tokens SET remain_quota = remain_quota + ?, used_quota = MAX(0, used_quota - ?) WHERE id = ?`
+      ).run(bill.quota, bill.quota, tokenId);
+    }
+    if (bill.requestId) {
+      try {
+        db.prepare(
+          `UPDATE logs SET quota = 0, content = content || ' (refunded: request rejected)' WHERE request_id = ?`
+        ).run(bill.requestId);
+      } catch (e) {
+        console.warn("[gitee-passthrough] refund log update skipped:", e.message);
+      }
+    }
+    db.exec("COMMIT");
+  } catch (e) {
+    try { db.exec("ROLLBACK"); } catch {}
+    console.error("[gitee-passthrough] quota refund failed:", e.message || e);
   } finally {
     db.close();
   }
@@ -371,7 +410,123 @@ function scrubGiteeErrorBuf(buf, ct) {
   return Buffer.from(t, "utf8");
 }
 
-async function proxyToGitee(req, res, bodyBuf, { capture = false } = {}) {
+async function prepareInfiniteTalkRequest(bodyBuf, contentType) {
+  if (!/multipart\/form-data/i.test(String(contentType || ""))) {
+    return {
+      error: "InfiniteTalk requires multipart/form-data",
+      code: "invalid_infinitetalk_content_type",
+    };
+  }
+  let form;
+  try {
+    form = await new Request("http://localhost/", {
+      method: "POST",
+      headers: { "content-type": contentType },
+      body: bodyBuf,
+    }).formData();
+  } catch {
+    return { error: "Invalid multipart body", code: "invalid_multipart_body" };
+  }
+
+  let changed = false;
+  for (const [legacy, current] of [
+    ["image", "cond_video"],
+    ["audio", "cond_audio"],
+  ]) {
+    if (!form.has(current) && form.has(legacy)) {
+      form.set(current, form.get(legacy));
+      changed = true;
+    }
+    if (form.has(legacy)) {
+      form.delete(legacy);
+      changed = true;
+    }
+  }
+  const missing = ["model", "prompt", "cond_video", "cond_audio"].filter(
+    (field) => {
+      const value = form.get(field);
+      return value == null || (typeof value === "string" && !value.trim());
+    }
+  );
+  if (missing.length) {
+    return {
+      error: `InfiniteTalk requires multipart fields: ${missing.join(", ")}`,
+      code: "missing_infinitetalk_field",
+    };
+  }
+  if (String(form.get("model")) !== "InfiniteTalk") {
+    return { error: "Invalid model for this endpoint", code: "invalid_model" };
+  }
+  const audio = form.get("cond_audio");
+  if (!(audio instanceof Blob)) {
+    return {
+      error: "InfiniteTalk cond_audio must be an uploaded audio file",
+      code: "invalid_infinitetalk_audio",
+    };
+  }
+  let duration;
+  try {
+    duration = await audioDurationSeconds(
+      Buffer.from(await audio.arrayBuffer()),
+      audio.name
+    );
+  } catch (e) {
+    console.warn("[gitee-passthrough] audio probe failed:", e.message || e);
+    return {
+      error: "Unable to read cond_audio duration; upload a valid audio file",
+      code: "invalid_infinitetalk_audio",
+    };
+  }
+  if (duration > 15) {
+    return {
+      error: `InfiniteTalk audio must be 15 seconds or shorter (received ${duration.toFixed(2)} seconds)`,
+      code: "infinitetalk_audio_too_long",
+    };
+  }
+  if (!changed) return { body: bodyBuf, contentType };
+  const request = new Request("http://localhost/", { method: "POST", body: form });
+  return {
+    body: Buffer.from(await request.arrayBuffer()),
+    contentType: request.headers.get("content-type"),
+  };
+}
+
+async function audioDurationSeconds(audioBuf, fileName) {
+  const tempDir = await fs.promises.mkdtemp(path.join(os.tmpdir(), "keyo-audio-"));
+  const extension = path.extname(fileName || "").toLowerCase();
+  const audioPath = path.join(
+    tempDir,
+    `audio${/^\.[a-z0-9]{1,8}$/.test(extension) ? extension : ".bin"}`
+  );
+  try {
+    await fs.promises.writeFile(audioPath, audioBuf, { flag: "wx", mode: 0o600 });
+    return await new Promise((resolve, reject) => {
+      const child = spawn("ffprobe", [
+        "-v", "error", "-show_entries", "format=duration",
+        "-of", "default=noprint_wrappers=1:nokey=1", audioPath,
+      ]);
+      let output = "";
+      let errorOutput = "";
+      const timer = setTimeout(() => child.kill(), 10000);
+      child.stdout.on("data", (chunk) => { output += chunk; });
+      child.stderr.on("data", (chunk) => { errorOutput += chunk; });
+      child.once("error", reject);
+      child.once("close", (code) => {
+        clearTimeout(timer);
+        const duration = Number(output.trim());
+        if (code !== 0 || !Number.isFinite(duration) || duration <= 0) {
+          reject(new Error(`invalid audio duration: ${errorOutput.trim()}`));
+        } else {
+          resolve(duration);
+        }
+      });
+    });
+  } finally {
+    await fs.promises.rm(tempDir, { recursive: true, force: true });
+  }
+}
+
+async function proxyToGitee(req, res, bodyBuf, { capture = false, timeoutMs = 0 } = {}) {
   const target = `${GITEE_ORIGIN}${req.url}`;
   const headers = { ...req.headers };
   delete headers.host;
@@ -383,6 +538,7 @@ async function proxyToGitee(req, res, bodyBuf, { capture = false } = {}) {
     method: req.method,
     headers,
     body: ["GET", "HEAD"].includes(req.method || "") ? undefined : bodyBuf,
+    signal: timeoutMs ? AbortSignal.timeout(timeoutMs) : undefined,
   });
 
   // 只回传必要头，避免上游响应头暴露来源；错误体 scrub 供应商名
@@ -401,7 +557,7 @@ async function proxyToGitee(req, res, bodyBuf, { capture = false } = {}) {
   }
   res.writeHead(upstream.status, outHeaders);
   res.end(buf);
-  if (!capture) return null;
+  if (!capture) return { status: upstream.status };
   let parsed = null;
   try {
     parsed = JSON.parse(buf.toString("utf8") || "{}");
@@ -585,6 +741,23 @@ const server = http.createServer(async (req, res) => {
   }
 
   let forwardBuf = bodyBuf;
+  if (urlPath === "/v1/async/videos/image-to-video") {
+    const prepared = await prepareInfiniteTalkRequest(
+      bodyBuf,
+      req.headers["content-type"]
+    );
+    if (prepared.error) {
+      return json(res, 400, {
+        error: {
+          message: prepared.error,
+          type: "invalid_request_error",
+          code: prepared.code,
+        },
+      });
+    }
+    forwardBuf = prepared.body;
+    req.headers["content-type"] = prepared.contentType;
+  }
   // The async speech contract uses `inputs` (plural). Accept the common
   // OpenAI-style `input` alias so existing clients do not fail with 400.
   if (
@@ -617,7 +790,9 @@ const server = http.createServer(async (req, res) => {
     } catch {}
   }
 
-  const modelId = extractModel(req.url || "", forwardBuf, req.headers["content-type"]);
+  const modelId = urlPath === "/v1/async/videos/image-to-video"
+    ? "InfiniteTalk"
+    : extractModel(req.url || "", forwardBuf, req.headers["content-type"]);
   if (!modelId || !modelMap[modelId]) {
     return json(res, 400, {
       error: {
@@ -639,13 +814,14 @@ const server = http.createServer(async (req, res) => {
 
   const usageBill = urlPath === "/v1/systemone" && !!sellUsdPerM(modelId);
 
+  let precharged = null;
   if (!token.skipBill && !usageBill) {
-    const bill = deductQuota(token.userId, token.tokenId, modelId, priceUsd);
-    if (!bill.ok) {
+    precharged = deductQuota(token.userId, token.tokenId, modelId, priceUsd);
+    if (!precharged.ok) {
       return json(res, 403, {
         error: {
           message:
-            bill.error === "insufficient_quota" ? "额度不足" : bill.error,
+            precharged.error === "insufficient_quota" ? "额度不足" : precharged.error,
           type: "billing_error",
         },
       });
@@ -670,7 +846,11 @@ const server = http.createServer(async (req, res) => {
   try {
     const captured = await proxyToGitee(req, res, forwardBuf, {
       capture: usageBill,
+      timeoutMs: modelId === "InfiniteTalk" ? 300000 : 0,
     });
+    if (precharged?.quota > 0 && captured?.status >= 400) {
+      refundQuota(token.userId, token.tokenId, precharged);
+    }
     if (usageBill && !token.skipBill && captured && captured.status < 400) {
       const usd =
         priceUsdFromUsage(modelId, captured.body?.usage) ?? priceUsd;
@@ -686,8 +866,15 @@ const server = http.createServer(async (req, res) => {
       }
     }
   } catch (e) {
-    json(res, 502, {
-      error: { message: String(e.message || e), type: "server_error" },
+    const timedOut = e?.name === "TimeoutError";
+    json(res, timedOut ? 504 : 502, {
+      error: {
+        message: timedOut
+          ? "Task submission timed out; creation status is unknown. Do not resubmit blindly. Contact support with the request time."
+          : String(e.message || e),
+        type: "server_error",
+        code: timedOut ? "submission_status_unknown" : "upstream_error",
+      },
     });
   }
 });

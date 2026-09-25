@@ -486,13 +486,13 @@ const chatModels = [
   ["claude-fable-5-1", "~$14.71", "~$73.53", "nClaudeFlag51"],
   ["gemini-3.7-flash", "~$0.28", "~$1.38", "nGemFast"],
   ["gemini-3.8-flash", "~$0.28", "~$1.38", "nGemFast38"],
-  ["deepseek-v4.1-flash", "~$0.45", "~$1.80", "nDsFast41"],
-  ["deepseek-v4-flash", "~$1.10", "~$3.30", "nDsFast"],
-  ["deepseek-v4-pro-0813", "~$3.30", "~$9.90", "nDsStrong"],
-  ["kimi-k3", "~$7.50", "~$37.50", "nKimi"],
+  ["deepseek-v4.1-flash", "~$0.30", "~$1.20", "nDsFast41"],
+  ["deepseek-v4-flash", "~$0.44", "~$1.32", "nDsFast"],
+  ["deepseek-v4-pro-0813", "~$1.32", "~$3.96", "nDsStrong"],
+  ["kimi-k3", "~$3.00", "~$15.00", "nKimi"],
   ["grok-4.6", "~$0.74", "~$2.21", "nGrok"],
   ["MiniMax-M3", "~$0.75", "~$3.00", "nMinimax"],
-  ["glm-5.3", "~$3.50", "~$11.00", "nGlm"],
+  ["glm-5.3", "~$1.40", "~$4.40", "nGlm"],
 ];
 
 const imageModels = [

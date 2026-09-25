@@ -38,8 +38,8 @@ const short = [
   "base64 -d /tmp/uno-free-py.b64 | gunzip | sudo tee /opt/ai-relay/scripts/vps-add-unorouter-free.py >/dev/null",
   "sudo docker run --rm --env-file /opt/ai-relay/.env -v /opt/ai-relay:/opt/ai-relay:ro -v /opt/ai-relay/data/new-api:/data -w /opt/ai-relay python:3.12-alpine python scripts/vps-add-unorouter-paid.py /data/one-api.db",
   "sudo docker restart ai-relay-new-api && sleep 4",
-  "sudo git pull --ff-only origin main",
-  "sudo bash scripts/deploy-brand-static.sh",
+  "sudo git pull --ff-only origin main || echo PULL_SKIP",
+  "sudo bash scripts/deploy-brand-static.sh || echo BRAND_SKIP",
   "curl -sS -o /tmp/pricing.json -w 'pricing=%{http_code}\\n' https://www.keyoapi.xyz/api/pricing",
   `python3 - <<'PY'
 import json,re

@@ -102,8 +102,8 @@ export const EXTRA_MODELS = {
   },
   "glm-5.2": {
     mode: "token",
-    ratio: 0.48006,
-    completion: 3.1429,
+    ratio: 0.7,
+    completion: 3.142857,
     desc: {
       zhCN: "GLM 5.2 通用对话与推理。",
       zhTW: "GLM 5.2 通用對話與推理。",
@@ -116,7 +116,7 @@ export const EXTRA_MODELS = {
   },
   "deepseek-v4.1-flash": {
     mode: "token",
-    ratio: 0.0048,
+    ratio: 0.15,
     completion: 4,
     desc: {
       zhCN: "DeepSeek V4.1 Flash 高速高性价比对话。",
@@ -130,8 +130,8 @@ export const EXTRA_MODELS = {
   },
   "deepseek-v4-pro-0813": {
     mode: "token",
-    ratio: 0.036018,
-    completion: 2,
+    ratio: 0.66,
+    completion: 3,
     desc: {
       zhCN: "DeepSeek V4 Pro 0813。",
       zhTW: "DeepSeek V4 Pro 0813。",
@@ -144,8 +144,8 @@ export const EXTRA_MODELS = {
   },
   "deepseek-v4-flash-0731": {
     mode: "token",
-    ratio: 0.018004,
-    completion: 2,
+    ratio: 0.22,
+    completion: 3,
     desc: {
       zhCN: "DeepSeek V4 Flash 0731。",
       zhTW: "DeepSeek V4 Flash 0731。",
@@ -158,8 +158,8 @@ export const EXTRA_MODELS = {
   },
   "deepseek-v4-pro": {
     mode: "token",
-    ratio: 0.036018,
-    completion: 2,
+    ratio: 0.66,
+    completion: 3,
     desc: {
       zhCN: "DeepSeek V4 Pro。",
       zhTW: "DeepSeek V4 Pro。",
@@ -172,8 +172,8 @@ export const EXTRA_MODELS = {
   },
   "deepseek-v4-flash": {
     mode: "token",
-    ratio: 0.043204,
-    completion: 2,
+    ratio: 0.22,
+    completion: 3,
     desc: {
       zhCN: "DeepSeek V4 Flash。",
       zhTW: "DeepSeek V4 Flash。",
@@ -186,7 +186,7 @@ export const EXTRA_MODELS = {
   },
   "kimi-k3": {
     mode: "token",
-    ratio: 0.102,
+    ratio: 1.5,
     completion: 5,
     desc: {
       zhCN: "Kimi K3 对话模型。",
@@ -239,7 +239,15 @@ export const EXTRA_MODELS = {
       ja: "GPT-6 Astra 旗艦チャット／推論モデル。複雑タスクと長コンテキスト向け。",
       vi: "GPT-6 Astra — mô hình chat/suy luận flagship cho tác vụ phức tạp và ngữ cảnh dài.",
     },
-  },
+  },
+
+
+
+
+
+
+
+
   "claude-fable-5-1": {
     mode: "token",
     ratio: 7.353,
@@ -323,7 +331,8 @@ export const EXTRA_MODELS = {
       ja: "Gemini 3.7 Flash。マルチモーダル主力モデル。",
       vi: "Gemini 3.7 Flash — mô hình đa phương thức chủ lực.",
     },
-  },
+  },
+
   "grok-4.6": {
     mode: "token",
     ratio: 0.36765,
@@ -337,7 +346,7 @@ export const EXTRA_MODELS = {
       ja: "xAI Grok 4.6 チャット／推論モデル。",
       vi: "Mô hình chat và suy luận xAI Grok 4.6.",
     },
-  },
+  },
   "MiniMax-M3": {
     mode: "token",
     ratio: 0.375,
@@ -354,7 +363,7 @@ export const EXTRA_MODELS = {
   },
   "glm-5.3": {
     mode: "token",
-    ratio: 1.75,
+    ratio: 0.7,
     completion: 3.142857,
     desc: {
       zhCN: "智谱 GLM-5.3 对话与推理模型。",
@@ -393,7 +402,8 @@ export const EXTRA_MODELS = {
       ja: "GPT Image 2.5 Sunburst（リクエスト課金）：高精度編集向け。",
       vi: "GPT Image 2.5 Sunburst (theo lần): chỉnh sửa độ chính xác cao.",
     },
-  },
+  },
+
   "gpt-image-2.5": {
     mode: "unit",
     unit: "per_call",

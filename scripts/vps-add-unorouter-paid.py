@@ -179,21 +179,21 @@ def main():
         print("channel created", cid, ch_name)
     else:
         cid, cname, models_s = target
-        parts = [p.strip() for p in models_s.replace("\n", ",").split(",") if p.strip()]
+        # Exact replace: Keyo Chat holds only models in this cfg (OpenLux-moved IDs stay off).
+        old = [p.strip() for p in models_s.replace("\n", ",").split(",") if p.strip()]
+        for mid in old:
+            if mid not in ids:
+                print("channel_drop", mid)
         for mid in ids:
-            if mid not in parts:
-                parts.append(mid)
-                print("channel_add", mid)
-            else:
-                print("channel_has", mid)
+            print("channel_set", mid)
         sets = ["models=?", "key=?", "base_url=?", "status=1"]
-        vals = [",".join(parts), key, base_url]
+        vals = [",".join(ids), key, base_url]
         if "updated_time" in ch_cols:
             sets.append("updated_time=?")
             vals.append(now)
         vals.append(cid)
         cur.execute("UPDATE channels SET %s WHERE id=?" % ",".join(sets), vals)
-        print("channel updated", cid, cname, "models", len(parts))
+        print("channel updated", cid, cname, "models", len(ids))
 
     mr = json.loads(get_opt(cur, "ModelRatio") or "{}")
     cr = json.loads(get_opt(cur, "CompletionRatio") or "{}")

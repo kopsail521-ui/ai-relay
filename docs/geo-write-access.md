@@ -1,47 +1,47 @@
-# GEO 工具写入说明（KeyoAPI）
+# GEO / GEOFlow 写入说明（KeyoAPI）
 
-## 结论（给 GEO / 运维）
+## 结论（给 GEOFlow / 运维）
 
-- **文章落盘目录是** `/opt/ai-relay/static/brand/blog/`（不是 SPA `/blog`）。
-- **公开 URL**：`https://www.keyoapi.xyz/brand/blog/...`
-- **Caddy 永久源**：`scripts/deploy-brand-static.sh` 里的 `@geo_blog` 块。  
-  每次 SEO/品牌发版都会 **整文件重写** `/etc/caddy/Caddyfile`，但只要跑这个脚本，blog 路由会一起写回去。  
-  **不要**只在 `/etc/caddy/Caddyfile` 上手改——会被下次发版盖掉。
-- **发版拉代码必须保 blog**：用 `scripts/vps-safe-pull-preserve-blog.sh`，不要裸 `git reset --hard`（会覆盖 GEO 改过的 `index.html` / `sitemap.txt`）。
-- **线上状态（2026-09-25）**：`@geo_blog` 已写入 Caddy；`/brand/blog/`、示例文章、`sitemap.txt` smoke 均为 200。GEO 可重试站点同步。
+- **自动发文接口（契约）**：`POST https://www.keyoapi.xyz/brand/blog/geoflow-agent/v1/articles`  
+  验签路径字符串固定为：`/geoflow-agent/v1/articles`（不含 `/brand/blog` 前缀）。
+- **落盘**：`/opt/ai-relay/static/brand/blog/article/{slug}/index.html`，并更新 `index.html` + `sitemap.txt`。
+- **Caddy 永久源**：`scripts/deploy-brand-static.sh` 内 `@geo_blog_agent`（php_fastcgi）+ `@geo_blog`（静态）。  
+  **不要**只改 `/etc/caddy/Caddyfile`。
+- **密钥**：`/opt/ai-relay/data/geoflow-agent/config.json`（`key_id` + `secret`，须与 GEOFlow 一致）。示例：`config/geoflow-agent.example.json`。
+- **发版**：`scripts/vps-safe-pull-preserve-blog.sh`（只保 `article/` + index/sitemap，不盖掉 `geoflow-agent` PHP）。
 
-对外副本（给 GEO）：`../geo-write-access.md`（与本文同步）。
+对外副本：`../geo-write-access.md`。
 
-## 线上真实可写目录（静态站）
+## 接口契约摘要
 
-服务器：阿里云 ECS（www.keyoapi.xyz）
+| 项 | 值 |
+|---|---|
+| URL | `POST /brand/blog/geoflow-agent/v1/articles` |
+| 鉴权头 | `X-GEOFlow-Key-Id` / `Timestamp` / `Nonce` / `Idempotency-Key` / `Body-SHA256` / `Signature` / `Event` |
+| 签名原文 | `POST\n/geoflow-agent/v1/articles\n{timestamp}\n{nonce}\n{body_hash}` |
+| 成功 | HTTP 200 + `{"ok":true,"remote_id":"geoflow-{slug}","remote_url":"https://www.keyoapi.xyz/brand/blog/article/{slug}/"}` |
+| 幂等 | 相同 `Idempotency-Key` 返回原 `remote_id` / `remote_url` |
 
-| 用途 | 服务器路径 | 对应 URL |
-|------|------------|----------|
-| 品牌/博客静态页 | `/opt/ai-relay/static/brand/` | `https://www.keyoapi.xyz/brand/...` |
-| 博客文章（slug） | `/opt/ai-relay/static/brand/blog/{slug}.html` | `/brand/blog/{slug}.html` |
-| 博客文章（CMS id） | `/opt/ai-relay/static/brand/blog/article/{id}/index.html` | `/brand/blog/article/{id}/` |
-| 博客索引 | `/opt/ai-relay/static/brand/blog/index.html` | `/brand/blog/` |
-| 博客 sitemap | `/opt/ai-relay/static/brand/blog/sitemap.txt` | `/brand/blog/sitemap.txt` |
-| robots / 主 sitemap | `/opt/ai-relay/static/seo/` | `/robots.txt` · `/sitemap.xml` |
+实现文件：`static/brand/blog/geoflow-agent/index.php`  
+本地/VPS 冒烟：`python3 scripts/geoflow-agent-smoke.py`
 
-文章发布约定：
-- 索引：更新 `index.html`（列出真实存在的文章）
-- 单篇：写 `{slug}.html` **或** `article/{id}/index.html`
-- 每发一篇：更新 `sitemap.txt`（只列真实 200 的 URL）
-- `article/` 已进 `.gitignore`，不会被 git 跟踪/冲掉
+## 静态目录
 
-## 不要写入 Sitemap 的路径（当前不当作 GEO 目标）
+| 用途 | 服务器路径 | URL |
+|------|------------|-----|
+| Agent | `.../blog/geoflow-agent/index.php` | `/brand/blog/geoflow-agent/v1/articles` |
+| CMS 文 | `.../blog/article/{slug}/index.html` | `/brand/blog/article/{slug}/` |
+| 索引 / sitemap | `.../blog/index.html` · `sitemap.txt` | `/brand/blog/` · `sitemap.txt` |
 
-- `/blog`（New API SPA 壳，**不是**静态博客）
-- `/docs`
-- `/integrations/*`（除非你们明确改路由）
-
-公开模型目录请用：`https://www.keyoapi.xyz/pricing-list` 或 Model Square `/pricing`（noindex）。
-
-## Caddy 里定死的路由（源：deploy-brand-static.sh）
+## Caddy（源：deploy-brand-static.sh）
 
 ```caddy
+@geo_blog_agent path /brand/blog/geoflow-agent /brand/blog/geoflow-agent/*
+handle @geo_blog_agent {
+  root * /opt/ai-relay/static/brand/blog/geoflow-agent
+  rewrite * /index.php
+  php_fastcgi unix//run/php/php8.3-fpm.sock { ... }
+}
 @geo_blog path /brand/blog /brand/blog/*
 handle @geo_blog {
   root * /opt/ai-relay/static
@@ -50,34 +50,30 @@ handle @geo_blog {
 }
 ```
 
-恢复/重装路由（Workbench，推荐整段）：
+`@geo_blog_agent` **必须在** `@geo_blog` 前面。
+
+## Workbench 上线（装 php-fpm + 路由 + 配密钥）
 
 ```bash
-cd /opt/ai-relay && RELOAD_CADDY=1 bash scripts/vps-safe-pull-preserve-blog.sh
+cd /opt/ai-relay
+sudo apt-get update -y
+sudo apt-get install -y php8.3-fpm php8.3-cli || sudo apt-get install -y php-fpm php-cli
+sudo systemctl enable --now php8.3-fpm 2>/dev/null || sudo systemctl enable --now php-fpm
+RELOAD_CADDY=1 bash scripts/vps-safe-pull-preserve-blog.sh
+# 把 GEOFlow 的 key_id / secret 写入（勿提交 git）：
+sudo nano /opt/ai-relay/data/geoflow-agent/config.json
+sudo chgrp www-data /opt/ai-relay/data/geoflow-agent/config.json
+sudo chmod 640 /opt/ai-relay/data/geoflow-agent/config.json
+python3 scripts/geoflow-agent-smoke.py
 ```
 
-若脚本尚不存在（未 pull），先保 blog 再拉再装：
+期望 smoke：`200 {"ok":true,...}`，然后通知 GEOFlow **重试那 5 篇**。
 
-```bash
-cd /opt/ai-relay && sudo chown -R "$(whoami):$(whoami)" /opt/ai-relay && BLOG=static/brand/blog && STASH=/tmp/keyo-geo-blog-preserve-$(date +%s) && mkdir -p "$STASH" "$BLOG/article" && cp -a "$BLOG/." "$STASH/" 2>/dev/null; git fetch origin && git reset --hard origin/main && cp -a "$STASH/." "$BLOG/" && RELOAD_CADDY=1 bash scripts/vps-safe-pull-preserve-blog.sh
-```
+## 发版为何会 404
 
-## 写入方式
+1. 裸 `git reset --hard` 盖掉 GEO 的 index/sitemap  
+2. 旧脚本重写 Caddy 丢掉 `@geo_blog_agent`  
+3. php-fpm 未装 / sock 不对 / `www-data` 无写权限  
+4. `config.json` 仍是 `REPLACE_ME` → `agent_not_configured`
 
-### 1）SSH / SFTP 直写（GEO 自动发文推荐）
-
-目录见上表。用户需对 `/opt/ai-relay/static/brand/blog` 可写。
-
-### 2）本机仓库 + Workbench
-
-把 HTML 放到本仓 `static/brand/blog/`，再用 `vps-safe-pull-preserve-blog.sh` 上线（会先备份再还原 blog）。
-
-## 发版时为什么会「突然 404」
-
-常见不是「Caddy 坏了」，而是：
-
-1. 有人跑了裸 `git reset --hard` → GEO 刚写的 `index.html` / `sitemap.txt` / 未忽略文件被盖回仓库版；
-2. 有人跑了会重写 Caddyfile、但**不是**当前 `deploy-brand-static.sh` 的旧脚本 → `@geo_blog` 丢失；
-3. 权限：blog 目录被 root 写死后，GEO 用户写不进去。
-
-对策：永远用 `vps-safe-pull-preserve-blog.sh`；改 Caddy 只改 `deploy-brand-static.sh` 再部署。
+对策：永远用 `vps-safe-pull-preserve-blog.sh`；改 Caddy 只改 `deploy-brand-static.sh`。

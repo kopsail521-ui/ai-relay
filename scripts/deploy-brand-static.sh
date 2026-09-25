@@ -9,15 +9,41 @@ ROOT="${ROOT:-/opt/ai-relay}"
 BRAND_DIR="${ROOT}/static/brand"
 SEO_DIR="${ROOT}/static/seo"
 DOMAIN="${DOMAIN:-www.keyoapi.xyz}"
-
-mkdir -p "$BRAND_DIR" "$SEO_DIR" "$BRAND_DIR/blog" "$BRAND_DIR/blog/article"
-# GEO auto-publish writes here; keep world-readable, owner-writable across deploys.
-chmod u+rwX,go+rX "$BRAND_DIR/blog" "$BRAND_DIR/blog/article" 2>/dev/null || true
-
+GEOFLOW_DATA="${ROOT}/data/geoflow-agent"
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
 REPO_BRAND="$REPO_ROOT/static/brand"
 REPO_SEO="$REPO_ROOT/static/seo"
+PHP_FPM_SOCK=""
+for s in /run/php/php8.3-fpm.sock /run/php/php8.2-fpm.sock /run/php/php8.1-fpm.sock /run/php/php-fpm.sock; do
+  if [[ -S "$s" ]]; then
+    PHP_FPM_SOCK="$s"
+    break
+  fi
+done
+
+mkdir -p "$BRAND_DIR" "$SEO_DIR" "$BRAND_DIR/blog" "$BRAND_DIR/blog/article" "$GEOFLOW_DATA"
+# GEO auto-publish writes here; keep world-readable, owner-writable across deploys.
+chmod u+rwX,go+rX "$BRAND_DIR/blog" "$BRAND_DIR/blog/article" 2>/dev/null || true
+# Seed GEOFlow agent config once (never overwrite secrets).
+if [[ ! -f "$GEOFLOW_DATA/config.json" ]]; then
+  if [[ -f "$REPO_ROOT/config/geoflow-agent.example.json" ]]; then
+    cp -a "$REPO_ROOT/config/geoflow-agent.example.json" "$GEOFLOW_DATA/config.json"
+  fi
+  echo "==> seeded $GEOFLOW_DATA/config.json — set key_id + secret before GEOFlow sync"
+fi
+chmod 750 "$GEOFLOW_DATA" 2>/dev/null || true
+chmod 640 "$GEOFLOW_DATA/config.json" 2>/dev/null || true
+# php-fpm (www-data) must write articles + catalog
+if id www-data >/dev/null 2>&1; then
+  chgrp -R www-data "$BRAND_DIR/blog" "$GEOFLOW_DATA" 2>/dev/null || true
+  chmod -R g+rwX "$BRAND_DIR/blog" "$GEOFLOW_DATA" 2>/dev/null || true
+  chmod 640 "$GEOFLOW_DATA/config.json" 2>/dev/null || true
+fi
+
+if [[ -z "$PHP_FPM_SOCK" ]]; then
+  echo "WARN: no php-fpm sock found yet (needed before Caddy rewrite)" >&2
+fi
 
 if [[ -d "$REPO_BRAND" && "$(realpath "$REPO_BRAND")" != "$(realpath "$BRAND_DIR")" ]]; then
   cp -a "$REPO_BRAND/." "$BRAND_DIR/"
@@ -57,6 +83,27 @@ if [[ -z "${LANDING_HANDLES//[[:space:]]/}" ]]; then
   exit 1
 fi
 echo "==> Pricing landing handles: $(grep -c 'handle /' <<<"$LANDING_HANDLES" || true)"
+
+if [[ -z "$PHP_FPM_SOCK" ]]; then
+  echo "ERROR: php-fpm socket missing — install with: sudo apt-get install -y php8.3-fpm php8.3-cli && sudo systemctl enable --now php8.3-fpm" >&2
+  exit 1
+fi
+echo "==> GEOFlow agent php_fastcgi sock=$PHP_FPM_SOCK"
+
+GEOFLOW_AGENT_BLOCK=$(cat <<BLOCK
+	# GEOFlow agent (MUST be ahead of @geo_blog static handle)
+	@geo_blog_agent path /brand/blog/geoflow-agent /brand/blog/geoflow-agent/*
+	handle @geo_blog_agent {
+		root * ${ROOT}/static/brand/blog/geoflow-agent
+		rewrite * /index.php
+		php_fastcgi unix/${PHP_FPM_SOCK} {
+			env GEOFLOW_CONFIG_PATH ${ROOT}/data/geoflow-agent/config.json
+			env GEOFLOW_DATA_DIR ${ROOT}/data/geoflow-agent
+			env GEOFLOW_BLOG_DIR ${ROOT}/static/brand/blog
+		}
+	}
+BLOCK
+)
 
 cat >/etc/caddy/Caddyfile <<EOF
 ${APEX_DOMAIN} {
@@ -121,6 +168,7 @@ ${LANDING_HANDLES}
 		try_files {path}.html {path}/index.html {path}
 		file_server
 	}
+${GEOFLOW_AGENT_BLOCK}
 	# GEO blog (durable — must survive every Caddyfile rewrite):
 	#   /brand/blog/{slug}.html
 	#   /brand/blog/article/{id}/  (+ index.html)

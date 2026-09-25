@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Use KeyoAPI in Cursor — OpenAI Compatible Base URL</title>
+<meta name="description" content="Point Cursor at KeyoAPI: OpenAI-compatible base URL https://www.keyoapi.xyz/v1, your Keyo API key, and a catalog model ID." />
+<link rel="canonical" href="https://www.keyoapi.xyz/brand/blog/openai-compatible-api-cursor.html" />
+<link rel="icon" href="/brand/logo.svg" type="image/svg+xml" />
+<link rel="stylesheet" href="/brand/keyo-theme.css" />
+</head>
+<body>
+  <header class="k-nav">
+    <a class="k-wordmark" href="/"><img src="/brand/logo.svg" alt="" width="22" height="22" />KeyoAPI</a>
+    <nav aria-label="Primary">
+      <a href="/pricing-list">Pricing list</a>
+      <a href="/pricing">Model Square</a>
+      <a href="/brand/keyo-docs.html">Docs</a>
+      <a href="/brand/faq.html">FAQ</a>
+      <a href="/sign-in">Sign in</a>
+      <a class="k-nav-cta" href="/sign-up">Get started</a>
+    </nav>
+  </header>
+  <div class="k-page">
+    <p class="meta"><a href="/brand/blog/">← Blog</a></p>
+    <h1>Use KeyoAPI in Cursor</h1>
+    <p class="sub">Cursor speaks OpenAI-compatible chat. Swap base URL + key to route through KeyoAPI.</p>
+
+    <h2>1. Get a key</h2>
+    <ol>
+      <li><a href="/sign-up">Create an account</a> and top up Wallet if you will use metered models.</li>
+      <li>Create an API key in the console.</li>
+    </ol>
+
+    <h2>2. Configure Cursor</h2>
+    <p>In Cursor model / OpenAI-compatible settings (wording varies by Cursor version):</p>
+    <ul>
+      <li><strong>Base URL</strong>: <code>https://www.keyoapi.xyz/v1</code></li>
+      <li><strong>API Key</strong>: your Keyo key</li>
+      <li><strong>Model</strong>: a live catalog ID, e.g. <code>deepseek-v4.1-flash</code></li>
+    </ul>
+    <p>Confirm IDs on <a href="/pricing-list">/pricing-list</a> or <a href="/pricing">/pricing</a>.</p>
+
+    <h2>3. Smoke test</h2>
+    <p>Send a short chat. If you see auth or balance errors, re-check the key and Wallet. Wrong model strings fail even with a valid key.</p>
+
+    <h2>4. Free vs paid</h2>
+    <p>For prototypes, start with a $0 ID from <a href="/free-models">/free-models</a> (fair-use). Switch the model string to a metered twin when you need higher priority.</p>
+
+    <p>Also: <a href="/brand/blog/openai-compatible-api-python.html">Python</a> · <a href="/brand/blog/openai-compatible-api-nodejs.html">Node.js</a> · <a href="/brand/keyo-docs.html">Docs</a>.</p>
+    <p class="k-foot"><a href="/brand/blog/">← Blog</a> · <a href="/">Home</a></p>
+  </div>
+</body>
+</html>

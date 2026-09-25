@@ -1,1 +1,4 @@
 https://www.keyoapi.xyz/brand/blog/
+https://www.keyoapi.xyz/brand/blog/openai-compatible-api-python.html
+https://www.keyoapi.xyz/brand/blog/openai-compatible-api-nodejs.html
+https://www.keyoapi.xyz/brand/blog/openai-compatible-api-cursor.html

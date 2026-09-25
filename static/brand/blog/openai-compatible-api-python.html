@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>OpenAI-Compatible API in Python — KeyoAPI</title>
+<meta name="description" content="Call an OpenAI-compatible chat API from Python: set base_url to KeyoAPI, pass your API key, and swap model IDs." />
+<link rel="canonical" href="https://www.keyoapi.xyz/brand/blog/openai-compatible-api-python.html" />
+<link rel="icon" href="/brand/logo.svg" type="image/svg+xml" />
+<link rel="stylesheet" href="/brand/keyo-theme.css" />
+</head>
+<body>
+  <header class="k-nav">
+    <a class="k-wordmark" href="/"><img src="/brand/logo.svg" alt="" width="22" height="22" />KeyoAPI</a>
+    <nav aria-label="Primary">
+      <a href="/pricing-list">Pricing list</a>
+      <a href="/pricing">Model Square</a>
+      <a href="/brand/keyo-docs.html">Docs</a>
+      <a href="/brand/faq.html">FAQ</a>
+      <a href="/sign-in">Sign in</a>
+      <a class="k-nav-cta" href="/sign-up">Get started</a>
+    </nav>
+  </header>
+  <div class="k-page">
+    <p class="meta"><a href="/brand/blog/">← Blog</a></p>
+    <h1>How to use an OpenAI-compatible API in Python</h1>
+    <p class="sub">Point the official OpenAI Python SDK at KeyoAPI — same client, different <code>base_url</code> and key.</p>
+
+    <h2>1. Install</h2>
+<pre><code>pip install openai</code></pre>
+
+    <h2>2. Create a client</h2>
+    <p>After <a href="/sign-up">sign-up</a>, mint an API key and set:</p>
+<pre><code>from openai import OpenAI
+
+client = OpenAI(
+    api_key="YOUR_KEYO_API_KEY",
+    base_url="https://www.keyoapi.xyz/v1",
+)
+
+resp = client.chat.completions.create(
+    model="deepseek-v4.1-flash",
+    messages=[{"role": "user", "content": "Hello from KeyoAPI"}],
+)
+print(resp.choices[0].message.content)</code></pre>
+
+    <h2>3. Pick a model ID</h2>
+    <p>Use exact catalog IDs from the static list <a href="/pricing-list">/pricing-list</a> or interactive <a href="/pricing">/pricing</a>. Free $0 IDs (fair-use) are on <a href="/free-models">/free-models</a>.</p>
+
+    <h2>4. Common mistakes</h2>
+    <ul>
+      <li>Leaving the default OpenAI host — you must set <code>base_url</code>.</li>
+      <li>Typos in <code>model</code> — IDs are case-sensitive and often include suffixes like <code>:free</code>.</li>
+      <li>Empty wallet — prepaid credits are required for metered IDs.</li>
+    </ul>
+
+    <p>More setup notes: <a href="/brand/keyo-docs.html">Docs</a>. Also see <a href="/brand/blog/openai-compatible-api-nodejs.html">Node.js</a> and <a href="/brand/blog/openai-compatible-api-cursor.html">Cursor</a>.</p>
+    <p class="k-foot"><a href="/brand/blog/">← Blog</a> · <a href="/">Home</a></p>
+  </div>
+</body>
+</html>

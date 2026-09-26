@@ -225,6 +225,14 @@ ${GEOFLOW_AGENT_BLOCK}
 			header_up Accept-Encoding identity
 		}
 	}
+	# SPA locale shells (i18n only — not crawlable translated landings)
+	@locale_spa path /en /en/* /zh /zh/* /zh-CN /zh-CN/* /zh-TW /zh-TW/* /ja /ja/* /ko /ko/* /fr /fr/* /ru /ru/* /vi /vi/*
+	handle @locale_spa {
+		header X-Robots-Tag "noindex, nofollow"
+		reverse_proxy 127.0.0.1:3001 {
+			header_up Accept-Encoding identity
+		}
+	}
 	@spa_noindex path /console /console/* /rankings /rankings/* /dashboard /dashboard/* /admin /admin/* /setup /setup/*
 	handle @spa_noindex {
 		header X-Robots-Tag "noindex, nofollow"

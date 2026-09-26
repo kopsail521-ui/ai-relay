@@ -30,3 +30,13 @@ Disallow: /setup
 Disallow: /admin
 Disallow: /api/
 Disallow: /__spa_raw
+# SPA i18n shells (en/zh/ja/…): not translated landing pages — do not index.
+Disallow: /en
+Disallow: /zh
+Disallow: /zh-CN
+Disallow: /zh-TW
+Disallow: /ja
+Disallow: /ko
+Disallow: /fr
+Disallow: /ru
+Disallow: /vi

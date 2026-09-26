@@ -712,7 +712,7 @@ function renderCompare() {
 <tbody>${llmRows}</tbody>
 </table>
 <h2>How to use this comparison</h2>
-<p>Searchers for <strong>ai api price comparison</strong> usually need a spreadsheet-ready story: same OpenAI SDK, lower blended token cost, and multimodal add-ons on one invoice. KeyoAPI is built as that <strong>ai api relay</strong>.</p>
+<p>One OpenAI-compatible SDK, one balance, and multimodal add-ons on one invoice.</p>
 <p>Recommended rollout: start with <a href="${featuredHref("deepseek-v4.1-flash")}"><code>deepseek-v4.1-flash</code></a> on high-volume paths, <a href="${featuredHref("gpt-6-astra")}"><code>gpt-6-astra</code></a> or <a href="/model/claude-sonnet-5">claude-sonnet-5</a> as default chat, escalate to <a href="/model/claude-fable-5-1">claude-fable-5-1</a> when you need denser reasoning.</p>
 <h2>Modality pages</h2>
 ${relatedLinks(["whisper-large-v3", "Qwen3-TTS", "MinerU2.5-Pro", "RMBG-2.0", "VajraV1", "Duix-Avatar"])}
@@ -1007,6 +1007,16 @@ Disallow: /setup
 Disallow: /admin
 Disallow: /api/
 Disallow: /__spa_raw
+# SPA i18n shells (en/zh/ja/…): not translated landing pages — do not index.
+Disallow: /en
+Disallow: /zh
+Disallow: /zh-CN
+Disallow: /zh-TW
+Disallow: /ja
+Disallow: /ko
+Disallow: /fr
+Disallow: /ru
+Disallow: /vi
 `;
 }
 

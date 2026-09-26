@@ -204,7 +204,7 @@
       "rows": [
         {
           "model": "deepseek-v4.1-flash",
-          "official": "OpenAI GPT-5.4 mini list ~$0.75 / $4.50 per 1M in/out (confirm on openai.com/api/pricing)",
+          "official": "DeepSeek official Flash-class list often ~$0.14–$0.28 / $0.28–$1.10 per 1M in/out (confirm on platform.deepseek.com; not an OpenAI GPT mini equivalent)",
           "keyo": "~$0.01 / $0.04 per 1M in/out",
           "note": "High-volume / batch · /pricing/deepseek-v4.1-flash"
         },
@@ -493,7 +493,7 @@
         "How to call: async video endpoints with model=Duix-Avatar or InfiniteTalk, then GET /v1/task/{id}. Speech side: /tts-api and /voice-cloning-api. Model guides under /model/Duix-Avatar and /model/InfiniteTalk.",
         "Likeness rights and abuse prevention are your product’s responsibility — rate-limit, log, and require consent flags before queueing."
       ],
-      "curlExample": "curl https://www.keyoapi.xyz/v1/async/videos/image-to-video \\\n  -H \"Authorization: Bearer $KEYO_API_KEY\" \\\n  -F model=InfiniteTalk \\\n  -F image=@./portrait.png \\\n  -F audio=@./voice.wav\n# then: GET /v1/task/{id}",
+      "curlExample": "curl https://www.keyoapi.xyz/v1/async/videos/image-to-video \\\n  -H \"Authorization: Bearer $KEYO_API_KEY\" \\\n  -F model=InfiniteTalk \\\n  -F \"prompt=natural talking-head delivery\" \\\n  -F cond_video=@./portrait.png \\\n  -F cond_audio=@./voice.wav\n# then: GET /v1/task/{id}",
       "faqs": [
         {
           "q": "Realtime avatar streaming?",

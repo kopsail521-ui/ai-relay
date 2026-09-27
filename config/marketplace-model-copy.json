@@ -240,15 +240,15 @@
     "price_key_en": "Per request"
   },
   "RMBG-2.0": {
-    "description": "腾讯 RMBG 智能抠图去背景，适用于商品图、人像与设计素材。 计费：$0.006849/次。",
+    "description": "BRIA RMBG 智能抠图去背景，适用于商品图、人像与设计素材。 计费：$0.006849/次。",
     "descriptions": {
-      "zhCN": "腾讯 RMBG 智能抠图去背景，适用于商品图、人像与设计素材。 计费：$0.006849/次。",
-      "zhTW": "腾讯 RMBG 智能抠图去背景，適用於商品图、人像与设计素材。 計費：.006849/次。",
-      "en": "Tencent RMBG background removal for product photos, portraits, and design assets. Pricing: .006849 / request.",
-      "fr": "Tencent RMBG background removal for product photos, portraits, and design assets. Pricing: .006849 / request.",
-      "ru": "Tencent RMBG background removal for product photos, portraits, and design assets. Pricing: .006849 / request.",
-      "ja": "Tencent RMBG background removal for product photos, portraits, and design assets. Pricing: .006849 / request.",
-      "vi": "Tencent RMBG background removal for product photos, portraits, and design assets. Pricing: .006849 / request."
+      "zhCN": "BRIA RMBG 智能抠图去背景，适用于商品图、人像与设计素材。 计费：$0.006849/次。",
+      "zhTW": "BRIA RMBG 智能抠图去背景，適用於商品圖、人像與設計素材。 計費：$0.006849/次。",
+      "en": "BRIA RMBG background removal for product photos, portraits, and design assets. Pricing: $0.006849 / request.",
+      "fr": "Détourage BRIA RMBG pour photos produit, portraits et assets design. Tarif : $0.006849 / requête.",
+      "ru": "Удаление фона BRIA RMBG для товарных фото, портретов и дизайн‑ассетов. Тариф: $0.006849 / запрос.",
+      "ja": "BRIA RMBG 背景除去。商品写真・ポートレート・デザイン素材向け。 料金：$0.006849/ 回。",
+      "vi": "Tách nền BRIA RMBG cho ảnh sản phẩm, chân dung và asset thiết kế. Giá: $0.006849/ lần."
     },
     "unit": "request",
     "badge": {
@@ -278,8 +278,8 @@
       "ja": "リクエストごと",
       "vi": "Mỗi lần gọi"
     },
-    "description_zh": "腾讯 RMBG 智能抠图去背景，适用于商品图、人像与设计素材。 计费：$0.006849/次。",
-    "description_en": "Tencent RMBG background removal for product photos, portraits, and design assets. Pricing: .006849 / request.",
+    "description_zh": "BRIA RMBG 智能抠图去背景，适用于商品图、人像与设计素材。 计费：$0.006849/次。",
+    "description_en": "BRIA RMBG background removal for product photos, portraits, and design assets. Pricing: $0.006849 / request.",
     "badge_zh": "按次计费",
     "badge_en": "Per Request",
     "suffix_zh": "/次",

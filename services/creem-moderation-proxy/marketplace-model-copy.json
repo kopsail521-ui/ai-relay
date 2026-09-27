@@ -240,15 +240,15 @@
     "price_key_en": "Per request"
   },
   "RMBG-2.0": {
-    "description": "腾讯 RMBG 智能抠图去背景，适用于商品图、人像与设计素材。 计费：$0.006849/次。",
+    "description": "BRIA RMBG 智能抠图去背景，适用于商品图、人像与设计素材。 计费：$0.006849/次。",
     "descriptions": {
-      "zhCN": "腾讯 RMBG 智能抠图去背景，适用于商品图、人像与设计素材。 计费：$0.006849/次。",
-      "zhTW": "腾讯 RMBG 智能抠图去背景，適用於商品图、人像与设计素材。 計費：.006849/次。",
-      "en": "Tencent RMBG background removal for product photos, portraits, and design assets. Pricing: .006849 / request.",
-      "fr": "Tencent RMBG background removal for product photos, portraits, and design assets. Pricing: .006849 / request.",
-      "ru": "Tencent RMBG background removal for product photos, portraits, and design assets. Pricing: .006849 / request.",
-      "ja": "Tencent RMBG background removal for product photos, portraits, and design assets. Pricing: .006849 / request.",
-      "vi": "Tencent RMBG background removal for product photos, portraits, and design assets. Pricing: .006849 / request."
+      "zhCN": "BRIA RMBG 智能抠图去背景，适用于商品图、人像与设计素材。 计费：$0.006849/次。",
+      "zhTW": "BRIA RMBG 智能抠图去背景，適用於商品圖、人像與設計素材。 計費：$0.006849/次。",
+      "en": "BRIA RMBG background removal for product photos, portraits, and design assets. Pricing: $0.006849 / request.",
+      "fr": "Détourage BRIA RMBG pour photos produit, portraits et assets design. Tarif : $0.006849 / requête.",
+      "ru": "Удаление фона BRIA RMBG для товарных фото, портретов и дизайн‑ассетов. Тариф: $0.006849 / запрос.",
+      "ja": "BRIA RMBG 背景除去。商品写真・ポートレート・デザイン素材向け。 料金：$0.006849/ 回。",
+      "vi": "Tách nền BRIA RMBG cho ảnh sản phẩm, chân dung và asset thiết kế. Giá: $0.006849/ lần."
     },
     "unit": "request",
     "badge": {
@@ -278,8 +278,8 @@
       "ja": "リクエストごと",
       "vi": "Mỗi lần gọi"
     },
-    "description_zh": "腾讯 RMBG 智能抠图去背景，适用于商品图、人像与设计素材。 计费：$0.006849/次。",
-    "description_en": "Tencent RMBG background removal for product photos, portraits, and design assets. Pricing: .006849 / request.",
+    "description_zh": "BRIA RMBG 智能抠图去背景，适用于商品图、人像与设计素材。 计费：$0.006849/次。",
+    "description_en": "BRIA RMBG background removal for product photos, portraits, and design assets. Pricing: $0.006849 / request.",
     "badge_zh": "按次计费",
     "badge_en": "Per Request",
     "suffix_zh": "/次",
@@ -3244,60 +3244,6 @@
       "ja": "BRIA AI",
       "vi": "BRIA AI"
     },
-    "Mistral": {
-      "zhCN": "Mistral",
-      "zhTW": "Mistral",
-      "en": "Mistral",
-      "fr": "Mistral",
-      "ru": "Mistral",
-      "ja": "Mistral",
-      "vi": "Mistral"
-    },
-    "NVIDIA": {
-      "zhCN": "NVIDIA",
-      "zhTW": "NVIDIA",
-      "en": "NVIDIA",
-      "fr": "NVIDIA",
-      "ru": "NVIDIA",
-      "ja": "NVIDIA",
-      "vi": "NVIDIA"
-    },
-    "Nvidia": {
-      "zhCN": "NVIDIA",
-      "zhTW": "NVIDIA",
-      "en": "NVIDIA",
-      "fr": "NVIDIA",
-      "ru": "NVIDIA",
-      "ja": "NVIDIA",
-      "vi": "NVIDIA"
-    },
-    "InclusionAI": {
-      "zhCN": "InclusionAI",
-      "zhTW": "InclusionAI",
-      "en": "InclusionAI",
-      "fr": "InclusionAI",
-      "ru": "InclusionAI",
-      "ja": "InclusionAI",
-      "vi": "InclusionAI"
-    },
-    "Dots": {
-      "zhCN": "Dots",
-      "zhTW": "Dots",
-      "en": "Dots",
-      "fr": "Dots",
-      "ru": "Dots",
-      "ja": "Dots",
-      "vi": "Dots"
-    },
-    "Poolside": {
-      "zhCN": "Poolside",
-      "zhTW": "Poolside",
-      "en": "Poolside",
-      "fr": "Poolside",
-      "ru": "Poolside",
-      "ja": "Poolside",
-      "vi": "Poolside"
-    },
     "Black Forest Labs": {
       "zhCN": "Black Forest Labs",
       "zhTW": "Black Forest Labs",
@@ -4533,15 +4479,15 @@
     }
   },
   "seedance-2.0-1080p-mini": {
-    "description": "字节 Seedance 2.0 1080p 精简档：更省资源的高清视频生成，适合短镜头与轻量批量任务。 计费：$0.050112/秒。",
+    "description": "字节 Seedance 2.0 1080p 精简档：更省资源的高清视频生成，适合短镜头与成本敏感任务。 计费：$0.050112/秒。",
     "descriptions": {
-      "zhCN": "字节 Seedance 2.0 1080p 精简档：更省资源的高清视频生成，适合短镜头与轻量批量任务。 计费：$0.050112/秒。",
-      "zhTW": "字节 Seedance 2.0 1080p 精简档：更省资源的高清视频生成，适合短镜头与轻量批量任务。 计费：$0.050112/秒。",
-      "en": "ByteDance Seedance 2.0 1080p mini tier: leaner HD video generation for short clips and light batch jobs. Billing: $0.050112/sec.",
-      "fr": "ByteDance Seedance 2.0 1080p mini tier: leaner HD video generation for short clips and light batch jobs. Billing: $0.050112/sec.",
-      "ru": "ByteDance Seedance 2.0 1080p mini tier: leaner HD video generation for short clips and light batch jobs. Billing: $0.050112/sec.",
-      "ja": "ByteDance Seedance 2.0 1080p mini tier: leaner HD video generation for short clips and light batch jobs. Billing: $0.050112/sec.",
-      "vi": "ByteDance Seedance 2.0 1080p mini tier: leaner HD video generation for short clips and light batch jobs. Billing: $0.050112/sec."
+      "zhCN": "字节 Seedance 2.0 1080p 精简档：更省资源的高清视频生成，适合短镜头与成本敏感任务。 计费：$0.050112/秒。",
+      "zhTW": "字节 Seedance 2.0 1080p 精简档：更省资源的高清视频生成，适合短镜头与成本敏感任务。 计费：$0.050112/秒。",
+      "en": "ByteDance Seedance 2.0 1080p mini tier: leaner HD video generation for short clips and cost-sensitive jobs. Billing: $0.050112/sec.",
+      "fr": "ByteDance Seedance 2.0 1080p mini tier: leaner HD video generation for short clips and cost-sensitive jobs. Billing: $0.050112/sec.",
+      "ru": "ByteDance Seedance 2.0 1080p mini tier: leaner HD video generation for short clips and cost-sensitive jobs. Billing: $0.050112/sec.",
+      "ja": "ByteDance Seedance 2.0 1080p mini tier: leaner HD video generation for short clips and cost-sensitive jobs. Billing: $0.050112/sec.",
+      "vi": "ByteDance Seedance 2.0 1080p mini tier: leaner HD video generation for short clips and cost-sensitive jobs. Billing: $0.050112/sec."
     },
     "unit": "second",
     "badge": {
@@ -4577,8 +4523,8 @@
     "suffix_en": "/ second",
     "price_key_zh": "每秒",
     "price_key_en": "Per second",
-    "description_zh": "字节 Seedance 2.0 1080p 精简档：更省资源的高清视频生成，适合短镜头与轻量批量任务。 计费：$0.050112/秒。",
-    "description_en": "ByteDance Seedance 2.0 1080p mini tier: leaner HD video generation for short clips and light batch jobs. Billing: $0.050112/sec.",
+    "description_zh": "字节 Seedance 2.0 1080p 精简档：更省资源的高清视频生成，适合短镜头与成本敏感任务。 计费：$0.050112/秒。",
+    "description_en": "ByteDance Seedance 2.0 1080p mini tier: leaner HD video generation for short clips and cost-sensitive jobs. Billing: $0.050112/sec.",
     "price_table": {
       "columns": {
         "zhCN": [
@@ -4994,6 +4940,54 @@
     "price_key_zh": "输入 / 输出",
     "price_key_en": "Input / Output"
   },
+  "jev-1.13.0": {
+    "description": "TypeSafe Jev 1.13.0：System One 结构化决策模型（不生成自由文本），用于程序内分类、工单分诊、风险打分与路由。输入 state + questions，返回 choice / score / noul；上下文约 32k tokens。计费：输入 $0.0336 / 输出 $0（每百万 tokens）。",
+    "descriptions": {
+      "zhCN": "TypeSafe Jev 1.13.0：System One 结构化决策模型（不生成自由文本），用于程序内分类、工单分诊、风险打分与路由。输入 state + questions，返回 choice / score / noul；上下文约 32k tokens。计费：输入 $0.0336 / 输出 $0（每百万 tokens）。",
+      "zhTW": "TypeSafe Jev 1.13.0：System One 結構化決策模型（不產生自由文字），用於程式內分類、工單分診、風險評分與路由。輸入 state + questions，回傳 choice / score / noul；上下文約 32k tokens。計費：輸入 $0.0336 / 輸出 $0（每百萬 tokens）。",
+      "en": "TypeSafe Jev 1.13.0 — System One structured decision model (no free-form text) for in-app classification, ticket triage, risk scoring, and routing. Pass state + questions; get choice / score / noul. ~32k context. Pricing: $0.0336 input / $0 output per 1M tokens.",
+      "fr": "TypeSafe Jev 1.13.0 — modèle System One de décision structurée (pas de texte libre) pour classification, triage, scoring et routage. Envoyez state + questions ; recevez choice / score / noul. Contexte ~32k. Tarif : $0.0336 entrée / $0 sortie pour 1M tokens.",
+      "ru": "TypeSafe Jev 1.13.0 — System One модель структурированных решений (без свободного текста) для классификации, triage, скоринга и маршрутизации. Передайте state + questions; получите choice / score / noul. Контекст ~32k. Тариф: вход $0.0336 / выход $0 за 1M токенов.",
+      "ja": "TypeSafe Jev 1.13.0：System One 構造化意思決定モデル（自由テキスト非生成）。アプリ内分類・チケット振り分け・リスク採点・ルーティング向け。state + questions で choice / score / noul。文脈約 32k。料金：入力 $0.0336 / 出力 $0（100万 tokens）。",
+      "vi": "TypeSafe Jev 1.13.0 — mô hình quyết định có cấu trúc System One (không sinh văn bản tự do) cho phân loại, triage, chấm rủi ro và định tuyến. Gửi state + questions; nhận choice / score / noul. Ngữ cảnh ~32k. Giá: vào $0.0336 / ra $0 mỗi 1M tokens."
+    },
+    "unit": "token",
+    "badge": {
+      "zhCN": "按量计费",
+      "zhTW": "按量計費",
+      "en": "Token",
+      "fr": "Token",
+      "ru": "Token",
+      "ja": "従量",
+      "vi": "Theo token"
+    },
+    "suffix": {
+      "zhCN": "/百万tokens",
+      "zhTW": "/百萬tokens",
+      "en": "/ 1M tokens",
+      "fr": "/ 1M tokens",
+      "ru": "/ 1M токенов",
+      "ja": "/ 100万 tokens",
+      "vi": "/ 1M tokens"
+    },
+    "price_key": {
+      "zhCN": "输入 / 输出",
+      "zhTW": "輸入 / 輸出",
+      "en": "Input / Output",
+      "fr": "Entrée / Sortie",
+      "ru": "Вход / Выход",
+      "ja": "入力 / 出力",
+      "vi": "Vào / Ra"
+    },
+    "description_zh": "TypeSafe Jev 1.13.0：System One 结构化决策模型（不生成自由文本），用于程序内分类、工单分诊、风险打分与路由。输入 state + questions，返回 choice / score / noul；上下文约 32k tokens。计费：输入 $0.0336 / 输出 $0（每百万 tokens）。",
+    "description_en": "TypeSafe Jev 1.13.0 — System One structured decision model (no free-form text) for in-app classification, ticket triage, risk scoring, and routing. Pass state + questions; get choice / score / noul. ~32k context. Pricing: $0.0336 input / $0 output per 1M tokens.",
+    "badge_zh": "按量计费",
+    "badge_en": "Token",
+    "suffix_zh": "/百万tokens",
+    "suffix_en": "/ 1M tokens",
+    "price_key_zh": "输入 / 输出",
+    "price_key_en": "Input / Output"
+  },
   "gpt-6-sol": {
     "description": "GPT-6 Sol 高档对话模型，更强推理与复杂任务表现。",
     "descriptions": {
@@ -5349,17 +5343,17 @@
     }
   },
   "qwen3.8-27b:free": {
-    "description": "通义千问 Qwen3.8-27B 免费额度：中英双语通用对话与代码辅助，适合高频试用与轻量日常任务。",
-    "description_zh": "通义千问 Qwen3.8-27B 免费额度：中英双语通用对话与代码辅助，适合高频试用与轻量日常任务。",
-    "description_en": "Free Qwen3.8-27B: bilingual chat and coding help for high-frequency everyday trials.",
+    "description": "通义千问 Qwen3.8-27B 免费额度：中英双语通用对话与代码辅助，适合高频试用与成本敏感场景。",
+    "description_zh": "通义千问 Qwen3.8-27B 免费额度：中英双语通用对话与代码辅助，适合高频试用与成本敏感场景。",
+    "description_en": "Free Qwen3.8-27B: bilingual chat and coding help for high-frequency, cost-sensitive trials.",
     "descriptions": {
-      "zhCN": "通义千问 Qwen3.8-27B 免费额度：中英双语通用对话与代码辅助，适合高频试用与轻量日常任务。",
-      "zhTW": "通义千问 Qwen3.8-27B 免费额度：中英双语通用对话与代码辅助，适合高频试用与轻量日常任务。",
-      "en": "Free Qwen3.8-27B: bilingual chat and coding help for high-frequency everyday trials.",
-      "fr": "Free Qwen3.8-27B: bilingual chat and coding help for high-frequency everyday trials.",
-      "ru": "Free Qwen3.8-27B: bilingual chat and coding help for high-frequency everyday trials.",
-      "ja": "Free Qwen3.8-27B: bilingual chat and coding help for high-frequency everyday trials.",
-      "vi": "Free Qwen3.8-27B: bilingual chat and coding help for high-frequency everyday trials."
+      "zhCN": "通义千问 Qwen3.8-27B 免费额度：中英双语通用对话与代码辅助，适合高频试用与成本敏感场景。",
+      "zhTW": "通义千问 Qwen3.8-27B 免费额度：中英双语通用对话与代码辅助，适合高频试用与成本敏感场景。",
+      "en": "Free Qwen3.8-27B: bilingual chat and coding help for high-frequency, cost-sensitive trials.",
+      "fr": "Free Qwen3.8-27B: bilingual chat and coding help for high-frequency, cost-sensitive trials.",
+      "ru": "Free Qwen3.8-27B: bilingual chat and coding help for high-frequency, cost-sensitive trials.",
+      "ja": "Free Qwen3.8-27B: bilingual chat and coding help for high-frequency, cost-sensitive trials.",
+      "vi": "Free Qwen3.8-27B: bilingual chat and coding help for high-frequency, cost-sensitive trials."
     }
   },
   "qwen3.6-35b-a3b:free": {
@@ -5459,53 +5453,5 @@
       "ja": "Xiaomi MiMo V2.6 Flash fast chat for everyday assistants and high-throughput use.",
       "vi": "Xiaomi MiMo V2.6 Flash fast chat for everyday assistants and high-throughput use."
     }
-  },
-  "jev-1.13.0": {
-    "description": "TypeSafe Jev 1.13.0：System One 结构化决策模型（不生成自由文本），用于程序内分类、工单分诊、风险打分与路由。输入 state + questions，返回 choice / score / noul；上下文约 32k tokens。计费：输入 $0.0336 / 输出 $0（每百万 tokens）。",
-    "descriptions": {
-      "zhCN": "TypeSafe Jev 1.13.0：System One 结构化决策模型（不生成自由文本），用于程序内分类、工单分诊、风险打分与路由。输入 state + questions，返回 choice / score / noul；上下文约 32k tokens。计费：输入 $0.0336 / 输出 $0（每百万 tokens）。",
-      "zhTW": "TypeSafe Jev 1.13.0：System One 結構化決策模型（不產生自由文字），用於程式內分類、工單分診、風險評分與路由。輸入 state + questions，回傳 choice / score / noul；上下文約 32k tokens。計費：輸入 $0.0336 / 輸出 $0（每百萬 tokens）。",
-      "en": "TypeSafe Jev 1.13.0 — System One structured decision model (no free-form text) for in-app classification, ticket triage, risk scoring, and routing. Pass state + questions; get choice / score / noul. ~32k context. Pricing: $0.0336 input / $0 output per 1M tokens.",
-      "fr": "TypeSafe Jev 1.13.0 — modèle System One de décision structurée (pas de texte libre) pour classification, triage, scoring et routage. Envoyez state + questions ; recevez choice / score / noul. Contexte ~32k. Tarif : $0.0336 entrée / $0 sortie pour 1M tokens.",
-      "ru": "TypeSafe Jev 1.13.0 — System One модель структурированных решений (без свободного текста) для классификации, triage, скоринга и маршрутизации. Передайте state + questions; получите choice / score / noul. Контекст ~32k. Тариф: вход $0.0336 / выход $0 за 1M токенов.",
-      "ja": "TypeSafe Jev 1.13.0：System One 構造化意思決定モデル（自由テキスト非生成）。アプリ内分類・チケット振り分け・リスク採点・ルーティング向け。state + questions で choice / score / noul。文脈約 32k。料金：入力 $0.0336 / 出力 $0（100万 tokens）。",
-      "vi": "TypeSafe Jev 1.13.0 — mô hình quyết định có cấu trúc System One (không sinh văn bản tự do) cho phân loại, triage, chấm rủi ro và định tuyến. Gửi state + questions; nhận choice / score / noul. Ngữ cảnh ~32k. Giá: vào $0.0336 / ra $0 mỗi 1M tokens."
-    },
-    "unit": "token",
-    "badge": {
-      "zhCN": "按量计费",
-      "zhTW": "按量計費",
-      "en": "Token",
-      "fr": "Token",
-      "ru": "Token",
-      "ja": "従量",
-      "vi": "Theo token"
-    },
-    "suffix": {
-      "zhCN": "/百万tokens",
-      "zhTW": "/百萬tokens",
-      "en": "/ 1M tokens",
-      "fr": "/ 1M tokens",
-      "ru": "/ 1M токенов",
-      "ja": "/ 100万 tokens",
-      "vi": "/ 1M tokens"
-    },
-    "price_key": {
-      "zhCN": "输入 / 输出",
-      "zhTW": "輸入 / 輸出",
-      "en": "Input / Output",
-      "fr": "Entrée / Sortie",
-      "ru": "Вход / Выход",
-      "ja": "入力 / 出力",
-      "vi": "Vào / Ra"
-    },
-    "description_zh": "TypeSafe Jev 1.13.0：System One 结构化决策模型（不生成自由文本），用于程序内分类、工单分诊、风险打分与路由。输入 state + questions，返回 choice / score / noul；上下文约 32k tokens。计费：输入 $0.0336 / 输出 $0（每百万 tokens）。",
-    "description_en": "TypeSafe Jev 1.13.0 — System One structured decision model (no free-form text) for in-app classification, ticket triage, risk scoring, and routing. Pass state + questions; get choice / score / noul. ~32k context. Pricing: $0.0336 input / $0 output per 1M tokens.",
-    "badge_zh": "按量计费",
-    "badge_en": "Token",
-    "suffix_zh": "/百万tokens",
-    "suffix_en": "/ 1M tokens",
-    "price_key_zh": "输入 / 输出",
-    "price_key_en": "Input / Output"
   }
 }

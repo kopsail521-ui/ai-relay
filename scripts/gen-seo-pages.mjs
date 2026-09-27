@@ -1014,7 +1014,7 @@ Disallow: /zh-CN
 Disallow: /zh-TW
 Disallow: /ja
 Disallow: /ko
-Disallow: /fr
+Disallow: /fr/
 Disallow: /ru
 Disallow: /vi
 `;

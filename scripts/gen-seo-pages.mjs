@@ -881,7 +881,7 @@ ${rows}
 </details>
 <details>
   <summary>Why one hub page?</summary>
-  <p>One hub keeps free IDs, limits, and examples in sync. Building dozens of near-identical free model pages would drift and dilute quality.</p>
+  <p>One page keeps every free ID and its limits in one place — bookmark it; we update it when the free catalog changes.</p>
 </details>
 </div>
 <p class="meta">Also see the interactive catalog on <a href="/pricing">/pricing</a> (filter Free) and the OpenAI-compatible docs.</p>

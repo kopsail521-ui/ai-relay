@@ -1,0 +1,22 @@
+---
+description: Marketplace pricing detail must keep group price tier tables (never drop)
+alwaysApply: true
+---
+
+# Marketplace pricing inject — do not drop
+
+Owner confirmed: MiniMax-H3 (and other multi-tier video / per-second models) **must** show the injected **「分组价格」** resolution tier table in pricing detail (e.g. 480p / 768p / 1080p), not only native「按分组定价 → default 1x」+「每次请求」.
+
+## Hard requirements
+
+1. **SPA inject scope**: In `services/creem-moderation-proxy/server.mjs`, pricing patches (`keyo-locale-desc`, `keyo-billing-unit`, pricing-sort) must use `wantPricingPatches = !isAuthPage` — inject on **all non-auth SPA shells**, not only `/pricing` HTML. Soft-nav from `/` or `/console` → `/pricing` otherwise never gets the script.
+2. **Source of tiers**: Multi-resolution / per-second models need `price_table.rows` in `marketplace-model-copy.json` **and** the same file under `services/creem-moderation-proxy/`. Keep `unit` / `badge` / `suffix` / `price_key` as per-second (not「每次请求」).
+3. **Inject implementation**: `services/creem-moderation-proxy/billing-unit-inject.js` replaces the Pricing card with the group price tier table. Do not remove or narrow this without an equivalent replacement.
+4. **VPS redeploy**: When updating creem, **always** `docker cp` all three: `server.mjs`, `billing-unit-inject.js`, `marketplace-model-copy.json`, then restart. Missing inject file = silent regress to native group list.
+5. **Gitee passthrough**: Always remount `-v /opt/ai-relay/data/new-api:/data:rw` + `NEW_API_DB=/data/one-api.db` on `ai-relay-gitee-passthrough` (never run without DB).
+6. **Public copy**: No「上游」/ supplier names (gitee / openlux / unorouter) on customer-facing pages. InfiniteTalk audio **≤ 15s** everywhere public.
+
+## After any pricing / creem / marketplace change
+
+- Verify live `/pricing` HTML contains current bill marker (e.g. `__keyoBillV15` / `keyo-pricing-sort-v20`+) and model `price_table` ids like `0.02055` for MiniMax-H3.
+- Tell owner to hard-open `/pricing` (full document load) after deploy; SPA soft-nav alone is not enough if the shell was loaded before the patch.

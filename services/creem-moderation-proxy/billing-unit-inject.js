@@ -1,5 +1,5 @@
 /**
- * Browser inject: replace Pricing card with OpenLux-style group price table.
+ * Browser inject: replace Pricing card with Keyo group price table.
  * Loaded by server.mjs as raw JS (no template-literal escaping).
  */
 (function () {
@@ -233,7 +233,7 @@
     } catch (e) {}
   }
 
-  function buildOpenLuxTable(id, mid, u) {
+  function buildGroupPriceTable(id, mid, u) {
     var zh = lang().indexOf("zh") === 0;
     var wrap = document.createElement("div");
     wrap.id = id;
@@ -370,7 +370,7 @@
         old.remove();
       } catch (e) {}
     }
-    card.appendChild(buildOpenLuxTable(id, mid, u));
+    card.appendChild(buildGroupPriceTable(id, mid, u));
   }
 
   function rewriteListCards() {

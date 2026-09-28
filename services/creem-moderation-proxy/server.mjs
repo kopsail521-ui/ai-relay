@@ -603,7 +603,7 @@ function buildLocaleDescScript() {
 }
 
 function buildBillingUnitScript() {
-  // v13: load raw inject file (avoid template-literal regex breakage); replace 定价 card with OpenLux table.
+  // v13: load raw inject file (avoid template-literal regex breakage); replace 定价 card with group price table.
   const injectPath = path.join(__dirname, "billing-unit-inject.js");
   const js = fs.readFileSync(injectPath, "utf8");
   return "<script>" + js + "</script>";
@@ -1119,7 +1119,7 @@ async function proxyRequest(req, res, bodyBuf) {
   const isAuthPage = /^\/sign-(?:in|up)(?:\/|$)/.test(pathOnly);
   // Pricing patches must ship on every non-auth SPA shell. If we only inject on
   // /pricing HTML, client-side navigations from / or /console never get the
-  // OpenLux price-table script — users still see native「按分组定价」only.
+  // Group price-table script — users still see native「按分组定价」only.
   const wantPricingPatches = !isAuthPage;
 
   if (isSpaShell && buf.length > 0) {

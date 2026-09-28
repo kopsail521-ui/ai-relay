@@ -1,5 +1,5 @@
 /**
- * Deploy creem bill v15: inject OpenLux price table on all non-auth SPA shells
+ * Deploy creem bill v15: inject group price table on all non-auth SPA shells
  * so soft-nav from / → /pricing still gets the resolution tier list.
  * Usage: node scripts/print-vps-creem-bill-v15.mjs
  */

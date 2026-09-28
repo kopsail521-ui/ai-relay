@@ -491,7 +491,7 @@ const chatModels = [
   ["deepseek-v4-pro-0813", "~$1.32", "~$3.96", "nDsStrong"],
   ["kimi-k3", "~$3.00", "~$15.00", "nKimi"],
   ["grok-4.6", "~$0.74", "~$2.21", "nGrok"],
-  ["MiniMax-M3", "~$0.75", "~$3.00", "nMinimax"],
+  ["minimax-m3", "~$0.12", "~$0.48", "nMinimax"],
   ["glm-5.3", "~$1.40", "~$4.40", "nGlm"],
 ];
 

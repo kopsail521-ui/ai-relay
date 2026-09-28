@@ -1,6 +1,6 @@
 /**
- * Generate short VPS paste: OpenLux-ever models → Keyo Primary (cost×2);
- * Uno-only models stay on Keyo Chat (cost×2).
+ * Generate short VPS paste: remaining OpenLux models stay Keyo Primary (cost×2);
+ * listed models move to Keyo Chat / UnoRouter (cost×2).
  *   node scripts/print-vps-retarget-openlux-uno-split.mjs
  */
 import fs from "fs";
@@ -25,36 +25,37 @@ const olCfg = pack("config/openlux-paid-chat-models.json");
 const unoCfg = pack("config/unorouter-paid-models.json");
 const py = pack("scripts/vps-retarget-openlux-uno-split.py");
 const docs = pack("static/brand/keyo-docs.html");
+const copyCfg = pack("config/marketplace-model-copy.json");
 
 const olIds = JSON.parse(
   fs.readFileSync(path.join(root, "config/openlux-paid-chat-models.json"), "utf8")
 ).models.map((m) => m.id);
-const unoIds = JSON.parse(
+const unoModels = JSON.parse(
   fs.readFileSync(path.join(root, "config/unorouter-paid-models.json"), "utf8")
-).models.map((m) => m.id);
+).models;
+const unoIds = unoModels.map((m) => m.id);
+const markup = 2;
 
-const expect = {
-  "glm-5.3": [1.4, 4.4],
-  "glm-5.2": [1.4, 4.4],
-  "deepseek-v4.1-flash": [0.3, 1.2],
-  "deepseek-v4-pro-0813": [1.32, 3.96],
-  "deepseek-v4-flash-0731": [0.44, 1.32],
-  "deepseek-v4-pro": [1.32, 3.96],
-  "deepseek-v4-flash": [0.44, 1.32],
-  "kimi-k3": [3, 15],
-  "glm-5.3-flash": [0.072, 0.239998],
-  "kimi-k2.7-code": [0.03344, 0.140799],
-  "qwen3.8-flash": [0.05496, 0.172206],
-  "mimo-v2.6-pro": [0.240033, 0.480066],
-  "mimo-v2.6-flash": [0.150388, 0.300776],
-};
+const expect = {};
+for (const m of [
+  ...JSON.parse(
+    fs.readFileSync(path.join(root, "config/openlux-paid-chat-models.json"), "utf8")
+  ).models,
+  ...unoModels,
+]) {
+  expect[m.id] = [
+    +(m.cost_in * markup).toFixed(6),
+    +(m.cost_out * markup).toFixed(6),
+  ];
+}
 
 const wantPy = [...olIds, ...unoIds].map((id) => JSON.stringify(id)).join(", ");
 const expectPy = JSON.stringify(expect);
+const unoWantPy = unoIds.map((id) => JSON.stringify(id)).join(", ");
 
 const short = [
   "cd /opt/ai-relay",
-  "sudo mkdir -p /opt/ai-relay/config /opt/ai-relay/scripts /opt/ai-relay/static/brand",
+  "sudo mkdir -p /opt/ai-relay/config /opt/ai-relay/scripts /opt/ai-relay/static/brand /opt/ai-relay/services/creem-moderation-proxy",
   `echo '${olCfg}' | sudo tee /tmp/ol-paid-cfg.b64 >/dev/null`,
   "base64 -d /tmp/ol-paid-cfg.b64 | gunzip | sudo tee /opt/ai-relay/config/openlux-paid-chat-models.json >/dev/null",
   `echo '${unoCfg}' | sudo tee /tmp/uno-paid-cfg.b64 >/dev/null`,
@@ -63,14 +64,20 @@ const short = [
   "base64 -d /tmp/retarget-py.b64 | gunzip | sudo tee /opt/ai-relay/scripts/vps-retarget-openlux-uno-split.py >/dev/null",
   `echo '${docs}' | sudo tee /tmp/keyo-docs.b64 >/dev/null`,
   "base64 -d /tmp/keyo-docs.b64 | gunzip | sudo tee /opt/ai-relay/static/brand/keyo-docs.html >/dev/null",
+  `echo '${copyCfg}' | sudo tee /tmp/mkt-copy.b64 >/dev/null`,
+  "base64 -d /tmp/mkt-copy.b64 | gunzip | sudo tee /opt/ai-relay/config/marketplace-model-copy.json >/dev/null",
+  "base64 -d /tmp/mkt-copy.b64 | gunzip | sudo tee /opt/ai-relay/services/creem-moderation-proxy/marketplace-model-copy.json >/dev/null",
   "sudo docker run --rm --env-file /opt/ai-relay/.env -v /opt/ai-relay:/opt/ai-relay:ro -v /opt/ai-relay/data/new-api:/data -w /opt/ai-relay python:3.12-alpine python scripts/vps-retarget-openlux-uno-split.py /data/one-api.db",
-  "sudo docker restart ai-relay-new-api && sleep 4",
+  "sudo docker run --rm -v /opt/ai-relay:/opt/ai-relay:ro -v /opt/ai-relay/data/new-api:/data -w /opt/ai-relay python:3.12-alpine python scripts/vps-update-marketplace-copy.py /data/one-api.db /opt/ai-relay/config/marketplace-model-copy.json || echo COPY_SKIP",
+  "sudo docker cp /opt/ai-relay/services/creem-moderation-proxy/marketplace-model-copy.json ai-relay-creem-moderation:/app/marketplace-model-copy.json 2>/dev/null || true",
+  "sudo docker restart ai-relay-new-api ai-relay-creem-moderation && sleep 5",
   "sudo bash scripts/deploy-brand-static.sh || echo BRAND_SKIP",
   "curl -sS -o /tmp/pricing.json -w 'pricing=%{http_code}\\n' https://www.keyoapi.xyz/api/pricing",
   "curl -sS -o /tmp/docs.html https://www.keyoapi.xyz/brand/keyo-docs.html",
   `python3 - <<'PY'
 import json,re
 want={${wantPy}}
+uno={${unoWantPy}}
 expect=${expectPy}
 d=json.load(open("/tmp/pricing.json"))
 by={m.get("model_name"):m for m in (d.get("data") or [])}
@@ -85,10 +92,11 @@ for mid, (ein, eout) in expect.items():
   ok=abs(sin-ein)<1e-4 and abs(sout-eout)<1e-3
   print(mid, "sell", sin, "/", sout, "OK" if ok else "BAD want %s/%s"%(ein,eout))
   if not ok: bad.append(mid)
-blob=json.dumps(d,ensure_ascii=False)
 docs=open("/tmp/docs.html",encoding="utf-8",errors="ignore").read()
-print("docs_glm53", "~$1.40" in docs and 'data-copy="glm-5.3"' in docs)
-print("public_leak", bool(re.search(r'unorouter|openlux|apimart|grsai|SenseNova|模力|上游|passthrough', blob, re.I)))
+print("docs_glm53", "~$0.12" in docs and 'data-copy="glm-5.3"' in docs)
+print("docs_minimax_m3", 'data-copy="minimax-m3"' in docs and "~$0.12" in docs)
+print("public_leak", bool(re.search(r'unorouter|openlux|apimart|grsai|SenseNova|模力|上游|passthrough', json.dumps(d,ensure_ascii=False), re.I)))
+print("uno_count", len(uno))
 print("bad", bad or "NONE")
 print("DONE_RETARGET_OPENLUX_UNO_SPLIT")
 PY`,
@@ -97,10 +105,14 @@ PY`,
 writeLf(path.join(root, "scripts/vps-retarget-openlux-uno-split-short.txt"), short + "\n");
 writeLf(
   path.join(root, "scripts/vps-retarget-openlux-uno-split-readme.txt"),
-  `# OpenLux 原上架模型回 Keyo Primary（成本×2）；Uno 独有 5 个仍 Keyo Chat（成本×2）
+  `# 13 个模型改走 Keyo Chat（Uno，成本×2）；OpenLux 仅留 glm-5.2 / deepseek-v4-flash
 
-OpenLux→Primary: glm-5.3 / glm-5.2 / deepseek-v4* / kimi-k3
-Uno→Chat: glm-5.3-flash / kimi-k2.7-code / qwen3.8-flash / mimo-v2.6-pro / mimo-v2.6-flash
+Uno→Chat:
+deepseek-v4.1-flash / glm-5.3 / kimi-k3 / deepseek-v4-flash-0731 / deepseek-v4-pro /
+qwen3.8-flash / deepseek-v4-pro-0813 / glm-5.3-flash / minimax-m3 / mimo-v2.6-pro /
+kimi-k2.7-code / hy4-preview / mimo-v2.6-flash
+
+OpenLux→Primary 剩余: glm-5.2 / deepseek-v4-flash
 
 粘贴：scripts/vps-retarget-openlux-uno-split-short.txt
 → missing NONE / bad NONE / docs_glm53 True
@@ -110,14 +122,14 @@ Uno→Chat: glm-5.3-flash / kimi-k2.7-code / qwen3.8-flash / mimo-v2.6-pro / mim
 
 writeLf(
   path.join(root, "scripts/vps-add-unorouter-paid-readme.txt"),
-  `# 上架 UnoRouter 付费对话（仅 OpenLux 未上过的；成本×2）
+  `# 上架 / 刷新 UnoRouter 付费对话（Keyo Chat；成本×2）
 
-glm-5.3-flash / kimi-k2.7-code / qwen3.8-flash / mimo-v2.6-pro / mimo-v2.6-flash
+见 config/unorouter-paid-models.json（当前 13 个）。
 
-OpenLux 重叠模型请用：scripts/vps-retarget-openlux-uno-split-readme.txt
+若要从 Keyo Primary 迁走重叠模型，用：
+scripts/vps-retarget-openlux-uno-split-readme.txt
 
 粘贴：scripts/vps-add-unorouter-paid-short.txt
-→ missing NONE
 → DONE_ADD_UNOROUTER_PAID
 `
 );
@@ -127,7 +139,9 @@ console.log({
   unoCfg: unoCfg.length,
   py: py.length,
   docs: docs.length,
+  copyCfg: copyCfg.length,
   short: Buffer.byteLength(short),
   olIds,
   unoIds,
+  expect,
 });

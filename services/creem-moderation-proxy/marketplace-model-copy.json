@@ -1584,15 +1584,15 @@
     "price_key_en": ""
   },
   "deepseek-v4-pro-0813": {
-    "description": "DeepSeek V4 Pro：高能力推理与编程模型。",
+    "description": "DeepSeek V4 Pro 0813：高能力推理与编程模型。 约 $0.072036 / $0.144072 每百万 tokens。",
     "descriptions": {
-      "zhCN": "DeepSeek V4 Pro：高能力推理与编程模型。",
-      "zhTW": "DeepSeek V4 Pro：高能力推理與編程模型。",
-      "en": "DeepSeek V4 Pro for strong reasoning and coding.",
-      "fr": "DeepSeek V4 Pro pour raisonnement et code avancés.",
-      "ru": "DeepSeek V4 Pro: сильное рассуждение и код.",
-      "ja": "DeepSeek V4 Pro。高い推論・コーディング能力。",
-      "vi": "DeepSeek V4 Pro: suy luận và coding mạnh."
+      "zhCN": "DeepSeek V4 Pro 0813：高能力推理与编程模型。 约 $0.072036 / $0.144072 每百万 tokens。",
+      "zhTW": "DeepSeek V4 Pro 0813：高能力推理与编程模型。 约 $0.072036 / $0.144072 每百万 tokens。",
+      "en": "DeepSeek V4 Pro 0813 for strong reasoning and coding. About $0.072036 / $0.144072 per 1M tokens.",
+      "fr": "DeepSeek V4 Pro 0813 for strong reasoning and coding. About $0.072036 / $0.144072 per 1M tokens.",
+      "ru": "DeepSeek V4 Pro 0813 for strong reasoning and coding. About $0.072036 / $0.144072 per 1M tokens.",
+      "ja": "DeepSeek V4 Pro 0813 for strong reasoning and coding. About $0.072036 / $0.144072 per 1M tokens.",
+      "vi": "DeepSeek V4 Pro 0813 for strong reasoning and coding. About $0.072036 / $0.144072 per 1M tokens."
     },
     "unit": "token",
     "badge": {
@@ -1622,8 +1622,8 @@
       "ja": "",
       "vi": ""
     },
-    "description_zh": "DeepSeek V4 Pro：高能力推理与编程模型。",
-    "description_en": "DeepSeek V4 Pro for strong reasoning and coding.",
+    "description_zh": "DeepSeek V4 Pro 0813：高能力推理与编程模型。 约 $0.072036 / $0.144072 每百万 tokens。",
+    "description_en": "DeepSeek V4 Pro 0813 for strong reasoning and coding. About $0.072036 / $0.144072 per 1M tokens.",
     "badge_zh": "按 Token 计费",
     "badge_en": "Token-based",
     "suffix_zh": "",
@@ -1728,15 +1728,15 @@
     "price_key_en": ""
   },
   "glm-5.3": {
-    "description": "智谱 GLM-5.3 旗舰对话与推理模型：强制深度思考、工具调用与长上下文，适合复杂规划、代码与知识工作。",
+    "description": "智谱 GLM-5.3 旗舰对话与推理模型：强制深度思考、工具调用与长上下文，适合复杂规划、代码与知识工作。 约 $0.122304 / $0.384390 每百万 tokens。",
     "descriptions": {
-      "zhCN": "智谱 GLM-5.3 旗舰对话与推理模型：强制深度思考、工具调用与长上下文，适合复杂规划、代码与知识工作。",
-      "zhTW": "智谱 GLM-5.3 旗舰对话与推理模型：强制深度思考、工具调用与长上下文，适合复杂规划、代码与知识工作。",
-      "en": "Zhipu GLM-5.3 flagship chat/reasoning with required deep thinking, tool use, and long context for complex planning, coding, and knowledge work.",
-      "fr": "Zhipu GLM-5.3 flagship chat/reasoning with required deep thinking, tool use, and long context for complex planning, coding, and knowledge work.",
-      "ru": "Zhipu GLM-5.3 flagship chat/reasoning with required deep thinking, tool use, and long context for complex planning, coding, and knowledge work.",
-      "ja": "Zhipu GLM-5.3 flagship chat/reasoning with required deep thinking, tool use, and long context for complex planning, coding, and knowledge work.",
-      "vi": "Zhipu GLM-5.3 flagship chat/reasoning with required deep thinking, tool use, and long context for complex planning, coding, and knowledge work."
+      "zhCN": "智谱 GLM-5.3 旗舰对话与推理模型：强制深度思考、工具调用与长上下文，适合复杂规划、代码与知识工作。 约 $0.122304 / $0.384390 每百万 tokens。",
+      "zhTW": "智谱 GLM-5.3 旗舰对话与推理模型：强制深度思考、工具调用与长上下文，适合复杂规划、代码与知识工作。 约 $0.122304 / $0.384390 每百万 tokens。",
+      "en": "Zhipu GLM-5.3 flagship chat/reasoning with required deep thinking, tool use, and long context for complex planning, coding, and knowledge work. About $0.122304 / $0.384390 per 1M tokens.",
+      "fr": "Zhipu GLM-5.3 flagship chat/reasoning with required deep thinking, tool use, and long context for complex planning, coding, and knowledge work. About $0.122304 / $0.384390 per 1M tokens.",
+      "ru": "Zhipu GLM-5.3 flagship chat/reasoning with required deep thinking, tool use, and long context for complex planning, coding, and knowledge work. About $0.122304 / $0.384390 per 1M tokens.",
+      "ja": "Zhipu GLM-5.3 flagship chat/reasoning with required deep thinking, tool use, and long context for complex planning, coding, and knowledge work. About $0.122304 / $0.384390 per 1M tokens.",
+      "vi": "Zhipu GLM-5.3 flagship chat/reasoning with required deep thinking, tool use, and long context for complex planning, coding, and knowledge work. About $0.122304 / $0.384390 per 1M tokens."
     },
     "unit": "token",
     "badge": {
@@ -1766,8 +1766,8 @@
       "ja": "",
       "vi": ""
     },
-    "description_zh": "智谱 GLM-5.3 旗舰对话与推理模型：强制深度思考、工具调用与长上下文，适合复杂规划、代码与知识工作。",
-    "description_en": "Zhipu GLM-5.3 flagship chat/reasoning with required deep thinking, tool use, and long context for complex planning, coding, and knowledge work.",
+    "description_zh": "智谱 GLM-5.3 旗舰对话与推理模型：强制深度思考、工具调用与长上下文，适合复杂规划、代码与知识工作。 约 $0.122304 / $0.384390 每百万 tokens。",
+    "description_en": "Zhipu GLM-5.3 flagship chat/reasoning with required deep thinking, tool use, and long context for complex planning, coding, and knowledge work. About $0.122304 / $0.384390 per 1M tokens.",
     "badge_zh": "按 Token 计费",
     "badge_en": "Token-based",
     "suffix_zh": "",
@@ -3429,15 +3429,15 @@
     "vi": " (Free)"
   },
   "deepseek-v4-pro": {
-    "description": "DeepSeek V4 Pro 旗舰对话与推理（按量付费）。",
+    "description": "DeepSeek V4 Pro 旗舰对话与推理（按量付费）。 约 $0.072036 / $0.144072 每百万 tokens。",
     "descriptions": {
-      "zhCN": "DeepSeek V4 Pro 旗舰对话与推理（按量付费）。",
-      "zhTW": "DeepSeek V4 Pro 旗艦對話與推理（按量付費）。",
-      "en": "DeepSeek V4 Pro flagship chat and reasoning (paid).",
-      "fr": "DeepSeek V4 Pro phare (payant).",
-      "ru": "DeepSeek V4 Pro флагман (платно).",
-      "ja": "DeepSeek V4 Pro 旗艦（有料）。",
-      "vi": "DeepSeek V4 Pro flagship (trả phí)."
+      "zhCN": "DeepSeek V4 Pro 旗舰对话与推理（按量付费）。 约 $0.072036 / $0.144072 每百万 tokens。",
+      "zhTW": "DeepSeek V4 Pro 旗舰对话与推理（按量付费）。 约 $0.072036 / $0.144072 每百万 tokens。",
+      "en": "DeepSeek V4 Pro flagship chat and reasoning (paid). About $0.072036 / $0.144072 per 1M tokens.",
+      "fr": "DeepSeek V4 Pro flagship chat and reasoning (paid). About $0.072036 / $0.144072 per 1M tokens.",
+      "ru": "DeepSeek V4 Pro flagship chat and reasoning (paid). About $0.072036 / $0.144072 per 1M tokens.",
+      "ja": "DeepSeek V4 Pro flagship chat and reasoning (paid). About $0.072036 / $0.144072 per 1M tokens.",
+      "vi": "DeepSeek V4 Pro flagship chat and reasoning (paid). About $0.072036 / $0.144072 per 1M tokens."
     },
     "unit": "token",
     "badge": {
@@ -3473,8 +3473,8 @@
     "suffix_en": "",
     "price_key_zh": "",
     "price_key_en": "",
-    "description_zh": "DeepSeek V4 Pro 旗舰对话与推理（按量付费）。",
-    "description_en": "DeepSeek V4 Pro flagship chat and reasoning (paid)."
+    "description_zh": "DeepSeek V4 Pro 旗舰对话与推理（按量付费）。 约 $0.072036 / $0.144072 每百万 tokens。",
+    "description_en": "DeepSeek V4 Pro flagship chat and reasoning (paid). About $0.072036 / $0.144072 per 1M tokens."
   },
   "deepseek-v4-flash": {
     "description": "DeepSeek V4 Flash 高速对话（按量付费）。",
@@ -3573,15 +3573,15 @@
     "description_en": "Zhipu GLM-5.2 flagship chat/coding model with strong reasoning and tool calling for assistants and production workloads."
   },
   "kimi-k3": {
-    "description": "Kimi K3 长上下文对话（按量付费）。",
+    "description": "Kimi K3 长上下文对话（按量付费）。 约 $0.204000 / $1.020000 每百万 tokens。",
     "descriptions": {
-      "zhCN": "Kimi K3 长上下文对话（按量付费）。",
-      "zhTW": "Kimi K3 長上下文對話（按量付費）。",
-      "en": "Kimi K3 long-context chat (paid).",
-      "fr": "Kimi K3 long contexte (payant).",
-      "ru": "Kimi K3 длинный контекст (платно).",
-      "ja": "Kimi K3 長コンテキスト（有料）。",
-      "vi": "Kimi K3 ngữ cảnh dài (trả phí)."
+      "zhCN": "Kimi K3 长上下文对话（按量付费）。 约 $0.204000 / $1.020000 每百万 tokens。",
+      "zhTW": "Kimi K3 长上下文对话（按量付费）。 约 $0.204000 / $1.020000 每百万 tokens。",
+      "en": "Kimi K3 long-context chat (paid). About $0.204000 / $1.020000 per 1M tokens.",
+      "fr": "Kimi K3 long-context chat (paid). About $0.204000 / $1.020000 per 1M tokens.",
+      "ru": "Kimi K3 long-context chat (paid). About $0.204000 / $1.020000 per 1M tokens.",
+      "ja": "Kimi K3 long-context chat (paid). About $0.204000 / $1.020000 per 1M tokens.",
+      "vi": "Kimi K3 long-context chat (paid). About $0.204000 / $1.020000 per 1M tokens."
     },
     "unit": "token",
     "badge": {
@@ -3617,8 +3617,8 @@
     "suffix_en": "",
     "price_key_zh": "",
     "price_key_en": "",
-    "description_zh": "Kimi K3 长上下文对话（按量付费）。",
-    "description_en": "Kimi K3 long-context chat (paid)."
+    "description_zh": "Kimi K3 长上下文对话（按量付费）。 约 $0.204000 / $1.020000 每百万 tokens。",
+    "description_en": "Kimi K3 long-context chat (paid). About $0.204000 / $1.020000 per 1M tokens."
   },
   "gpt-image-2.5-flare": {
     "description": "GPT Image 2.5 Flare：低延迟通用文生图 / 图生图，适合批量快速出图。按张计费。 计费：$0.020548/次。",
@@ -3909,15 +3909,15 @@
     "price_key_en": "Per request"
   },
   "deepseek-v4.1-flash": {
-    "description": "DeepSeek V4.1 Flash：更快更省的对话与代码模型。约 $0.45 / $1.80 每百万 tokens。",
+    "description": "DeepSeek V4.1 Flash：更快更省的对话与代码模型。 约 $0.069990 / $0.279960 每百万 tokens。",
     "descriptions": {
-      "zhCN": "DeepSeek V4.1 Flash：更快更省的对话与代码模型。约 $0.45 / $1.80 每百万 tokens。",
-      "zhTW": "DeepSeek V4.1 Flash：更快更省的對話與程式模型。約 $0.45 / $1.80 每百萬 tokens。",
-      "en": "DeepSeek V4.1 Flash — faster, cheaper chat and coding. About $0.45 / $1.80 per 1M tokens.",
-      "fr": "DeepSeek V4.1 Flash — chat/code plus rapide et économique. Environ $0.45 / $1.80 / 1M tokens.",
-      "ru": "DeepSeek V4.1 Flash — быстрее и дешевле для чата и кода. Около $0.45 / $1.80 за 1M токенов.",
-      "ja": "DeepSeek V4.1 Flash。より高速・低コストなチャット／コード。約 $0.45 / $1.80 / 100万 tokens。",
-      "vi": "DeepSeek V4.1 Flash — chat/coding nhanh và tiết kiệm hơn. Khoảng $0.45 / $1.80 / 1M tokens."
+      "zhCN": "DeepSeek V4.1 Flash：更快更省的对话与代码模型。 约 $0.069990 / $0.279960 每百万 tokens。",
+      "zhTW": "DeepSeek V4.1 Flash：更快更省的对话与代码模型。 约 $0.069990 / $0.279960 每百万 tokens。",
+      "en": "DeepSeek V4.1 Flash — faster, cheaper chat and coding. About $0.069990 / $0.279960 per 1M tokens.",
+      "fr": "DeepSeek V4.1 Flash — faster, cheaper chat and coding. About $0.069990 / $0.279960 per 1M tokens.",
+      "ru": "DeepSeek V4.1 Flash — faster, cheaper chat and coding. About $0.069990 / $0.279960 per 1M tokens.",
+      "ja": "DeepSeek V4.1 Flash — faster, cheaper chat and coding. About $0.069990 / $0.279960 per 1M tokens.",
+      "vi": "DeepSeek V4.1 Flash — faster, cheaper chat and coding. About $0.069990 / $0.279960 per 1M tokens."
     },
     "unit": "token",
     "badge": {
@@ -3947,8 +3947,8 @@
       "ja": "",
       "vi": ""
     },
-    "description_zh": "DeepSeek V4.1 Flash：更快更省的对话与代码模型。约 $0.45 / $1.80 每百万 tokens。",
-    "description_en": "DeepSeek V4.1 Flash — faster, cheaper chat and coding. About $0.45 / $1.80 per 1M tokens.",
+    "description_zh": "DeepSeek V4.1 Flash：更快更省的对话与代码模型。 约 $0.069990 / $0.279960 每百万 tokens。",
+    "description_en": "DeepSeek V4.1 Flash — faster, cheaper chat and coding. About $0.069990 / $0.279960 per 1M tokens.",
     "badge_zh": "按 Token 计费",
     "badge_en": "Token-based",
     "suffix_zh": "",
@@ -5133,18 +5133,19 @@
     "price_key_en": ""
   },
   "glm-5.3-flash": {
-    "description": "智谱 GLM-5.3 Flash 原生多模态高速模型：支持图/视频/文件，强化视觉 Coding、Agent 与 Office 文档任务，约 1M 上下文。",
-    "description_zh": "智谱 GLM-5.3 Flash 原生多模态高速模型：支持图/视频/文件，强化视觉 Coding、Agent 与 Office 文档任务，约 1M 上下文。",
-    "description_en": "Zhipu GLM-5.3 Flash native multimodal model for image/video/file inputs, strong visual coding/agents/Office workflows, ~1M context.",
+    "description": "智谱 GLM-5.3 Flash 原生多模态高速模型：支持图/视频/文件，强化视觉 Coding、Agent 与 Office 文档任务，约 1M 上下文。 约 $0.107670 / $0.358896 每百万 tokens。",
+    "description_zh": "智谱 GLM-5.3 Flash 原生多模态高速模型：支持图/视频/文件，强化视觉 Coding、Agent 与 Office 文档任务，约 1M 上下文。 约 $0.107670 / $0.358896 每百万 tokens。",
+    "description_en": "Zhipu GLM-5.3 Flash native multimodal model for image/video/file inputs, strong visual coding/agents/Office workflows, ~1M context. About $0.107670 / $0.358896 per 1M tokens.",
     "descriptions": {
-      "zhCN": "智谱 GLM-5.3 Flash 原生多模态高速模型：支持图/视频/文件，强化视觉 Coding、Agent 与 Office 文档任务，约 1M 上下文。",
-      "zhTW": "智谱 GLM-5.3 Flash 原生多模态高速模型：支持图/视频/文件，强化视觉 Coding、Agent 与 Office 文档任务，约 1M 上下文。",
-      "en": "Zhipu GLM-5.3 Flash native multimodal model for image/video/file inputs, strong visual coding/agents/Office workflows, ~1M context.",
-      "fr": "Zhipu GLM-5.3 Flash native multimodal model for image/video/file inputs, strong visual coding/agents/Office workflows, ~1M context.",
-      "ru": "Zhipu GLM-5.3 Flash native multimodal model for image/video/file inputs, strong visual coding/agents/Office workflows, ~1M context.",
-      "ja": "Zhipu GLM-5.3 Flash native multimodal model for image/video/file inputs, strong visual coding/agents/Office workflows, ~1M context.",
-      "vi": "Zhipu GLM-5.3 Flash native multimodal model for image/video/file inputs, strong visual coding/agents/Office workflows, ~1M context."
-    }
+      "zhCN": "智谱 GLM-5.3 Flash 原生多模态高速模型：支持图/视频/文件，强化视觉 Coding、Agent 与 Office 文档任务，约 1M 上下文。 约 $0.107670 / $0.358896 每百万 tokens。",
+      "zhTW": "智谱 GLM-5.3 Flash 原生多模态高速模型：支持图/视频/文件，强化视觉 Coding、Agent 与 Office 文档任务，约 1M 上下文。 约 $0.107670 / $0.358896 每百万 tokens。",
+      "en": "Zhipu GLM-5.3 Flash native multimodal model for image/video/file inputs, strong visual coding/agents/Office workflows, ~1M context. About $0.107670 / $0.358896 per 1M tokens.",
+      "fr": "Zhipu GLM-5.3 Flash native multimodal model for image/video/file inputs, strong visual coding/agents/Office workflows, ~1M context. About $0.107670 / $0.358896 per 1M tokens.",
+      "ru": "Zhipu GLM-5.3 Flash native multimodal model for image/video/file inputs, strong visual coding/agents/Office workflows, ~1M context. About $0.107670 / $0.358896 per 1M tokens.",
+      "ja": "Zhipu GLM-5.3 Flash native multimodal model for image/video/file inputs, strong visual coding/agents/Office workflows, ~1M context. About $0.107670 / $0.358896 per 1M tokens.",
+      "vi": "Zhipu GLM-5.3 Flash native multimodal model for image/video/file inputs, strong visual coding/agents/Office workflows, ~1M context. About $0.107670 / $0.358896 per 1M tokens."
+    },
+    "unit": "token"
   },
   "glm-5.3-flash:free": {
     "description": "GLM-5.3 Flash 免费额度：原生多模态高速对话（图/视频/文件），适合试用与轻量 Agent/视觉 Coding。",
@@ -5427,31 +5428,273 @@
     }
   },
   "mimo-v2.6-pro": {
-    "description": "小米 MiMo V2.6 Pro 旗舰对话与推理，适合复杂问答、代码与 Agent。",
-    "description_zh": "小米 MiMo V2.6 Pro 旗舰对话与推理，适合复杂问答、代码与 Agent。",
-    "description_en": "Xiaomi MiMo V2.6 Pro flagship chat/reasoning for complex Q&A, coding, and agents.",
+    "description": "小米 MiMo V2.6 Pro 旗舰对话与推理，适合复杂问答、代码与 Agent。 约 $0.153642 / $0.307284 每百万 tokens。",
+    "description_zh": "小米 MiMo V2.6 Pro 旗舰对话与推理，适合复杂问答、代码与 Agent。 约 $0.153642 / $0.307284 每百万 tokens。",
+    "description_en": "Xiaomi MiMo V2.6 Pro flagship chat/reasoning for complex Q&A, coding, and agents. About $0.153642 / $0.307284 per 1M tokens.",
     "descriptions": {
-      "zhCN": "小米 MiMo V2.6 Pro 旗舰对话与推理，适合复杂问答、代码与 Agent。",
-      "zhTW": "小米 MiMo V2.6 Pro 旗舰对话与推理，适合复杂问答、代码与 Agent。",
-      "en": "Xiaomi MiMo V2.6 Pro flagship chat/reasoning for complex Q&A, coding, and agents.",
-      "fr": "Xiaomi MiMo V2.6 Pro flagship chat/reasoning for complex Q&A, coding, and agents.",
-      "ru": "Xiaomi MiMo V2.6 Pro flagship chat/reasoning for complex Q&A, coding, and agents.",
-      "ja": "Xiaomi MiMo V2.6 Pro flagship chat/reasoning for complex Q&A, coding, and agents.",
-      "vi": "Xiaomi MiMo V2.6 Pro flagship chat/reasoning for complex Q&A, coding, and agents."
-    }
+      "zhCN": "小米 MiMo V2.6 Pro 旗舰对话与推理，适合复杂问答、代码与 Agent。 约 $0.153642 / $0.307284 每百万 tokens。",
+      "zhTW": "小米 MiMo V2.6 Pro 旗舰对话与推理，适合复杂问答、代码与 Agent。 约 $0.153642 / $0.307284 每百万 tokens。",
+      "en": "Xiaomi MiMo V2.6 Pro flagship chat/reasoning for complex Q&A, coding, and agents. About $0.153642 / $0.307284 per 1M tokens.",
+      "fr": "Xiaomi MiMo V2.6 Pro flagship chat/reasoning for complex Q&A, coding, and agents. About $0.153642 / $0.307284 per 1M tokens.",
+      "ru": "Xiaomi MiMo V2.6 Pro flagship chat/reasoning for complex Q&A, coding, and agents. About $0.153642 / $0.307284 per 1M tokens.",
+      "ja": "Xiaomi MiMo V2.6 Pro flagship chat/reasoning for complex Q&A, coding, and agents. About $0.153642 / $0.307284 per 1M tokens.",
+      "vi": "Xiaomi MiMo V2.6 Pro flagship chat/reasoning for complex Q&A, coding, and agents. About $0.153642 / $0.307284 per 1M tokens."
+    },
+    "unit": "token"
   },
   "mimo-v2.6-flash": {
-    "description": "小米 MiMo V2.6 Flash 高速对话，适合日常助手与高吞吐场景。",
-    "description_zh": "小米 MiMo V2.6 Flash 高速对话，适合日常助手与高吞吐场景。",
-    "description_en": "Xiaomi MiMo V2.6 Flash fast chat for everyday assistants and high-throughput use.",
+    "description": "小米 MiMo V2.6 Flash 高速对话，适合日常助手与高吞吐场景。 约 $0.038388 / $0.076776 每百万 tokens。",
+    "description_zh": "小米 MiMo V2.6 Flash 高速对话，适合日常助手与高吞吐场景。 约 $0.038388 / $0.076776 每百万 tokens。",
+    "description_en": "Xiaomi MiMo V2.6 Flash fast chat for everyday assistants and high-throughput use. About $0.038388 / $0.076776 per 1M tokens.",
     "descriptions": {
-      "zhCN": "小米 MiMo V2.6 Flash 高速对话，适合日常助手与高吞吐场景。",
-      "zhTW": "小米 MiMo V2.6 Flash 高速对话，适合日常助手与高吞吐场景。",
-      "en": "Xiaomi MiMo V2.6 Flash fast chat for everyday assistants and high-throughput use.",
-      "fr": "Xiaomi MiMo V2.6 Flash fast chat for everyday assistants and high-throughput use.",
-      "ru": "Xiaomi MiMo V2.6 Flash fast chat for everyday assistants and high-throughput use.",
-      "ja": "Xiaomi MiMo V2.6 Flash fast chat for everyday assistants and high-throughput use.",
-      "vi": "Xiaomi MiMo V2.6 Flash fast chat for everyday assistants and high-throughput use."
-    }
+      "zhCN": "小米 MiMo V2.6 Flash 高速对话，适合日常助手与高吞吐场景。 约 $0.038388 / $0.076776 每百万 tokens。",
+      "zhTW": "小米 MiMo V2.6 Flash 高速对话，适合日常助手与高吞吐场景。 约 $0.038388 / $0.076776 每百万 tokens。",
+      "en": "Xiaomi MiMo V2.6 Flash fast chat for everyday assistants and high-throughput use. About $0.038388 / $0.076776 per 1M tokens.",
+      "fr": "Xiaomi MiMo V2.6 Flash fast chat for everyday assistants and high-throughput use. About $0.038388 / $0.076776 per 1M tokens.",
+      "ru": "Xiaomi MiMo V2.6 Flash fast chat for everyday assistants and high-throughput use. About $0.038388 / $0.076776 per 1M tokens.",
+      "ja": "Xiaomi MiMo V2.6 Flash fast chat for everyday assistants and high-throughput use. About $0.038388 / $0.076776 per 1M tokens.",
+      "vi": "Xiaomi MiMo V2.6 Flash fast chat for everyday assistants and high-throughput use. About $0.038388 / $0.076776 per 1M tokens."
+    },
+    "unit": "token"
+  },
+  "deepseek-v4-flash-0731": {
+    "description": "DeepSeek V4 Flash 0731 高速对话。 约 $0.043204 / $0.086408 每百万 tokens。",
+    "description_zh": "DeepSeek V4 Flash 0731 高速对话。 约 $0.043204 / $0.086408 每百万 tokens。",
+    "description_en": "DeepSeek V4 Flash 0731 high-speed chat. About $0.043204 / $0.086408 per 1M tokens.",
+    "descriptions": {
+      "zhCN": "DeepSeek V4 Flash 0731 高速对话。 约 $0.043204 / $0.086408 每百万 tokens。",
+      "zhTW": "DeepSeek V4 Flash 0731 高速对话。 约 $0.043204 / $0.086408 每百万 tokens。",
+      "en": "DeepSeek V4 Flash 0731 high-speed chat. About $0.043204 / $0.086408 per 1M tokens.",
+      "fr": "DeepSeek V4 Flash 0731 high-speed chat. About $0.043204 / $0.086408 per 1M tokens.",
+      "ru": "DeepSeek V4 Flash 0731 high-speed chat. About $0.043204 / $0.086408 per 1M tokens.",
+      "ja": "DeepSeek V4 Flash 0731 high-speed chat. About $0.043204 / $0.086408 per 1M tokens.",
+      "vi": "DeepSeek V4 Flash 0731 high-speed chat. About $0.043204 / $0.086408 per 1M tokens."
+    },
+    "unit": "token",
+    "badge": {
+      "zhCN": "按 Token 计费",
+      "zhTW": "按 Token 計費",
+      "en": "Token-based",
+      "fr": "Token-based",
+      "ru": "Token-based",
+      "ja": "Token 課金",
+      "vi": "Token-based"
+    },
+    "badge_zh": "按 Token 计费",
+    "badge_en": "Token-based",
+    "suffix": {
+      "zhCN": "",
+      "zhTW": "",
+      "en": "",
+      "fr": "",
+      "ru": "",
+      "ja": "",
+      "vi": ""
+    },
+    "suffix_zh": "",
+    "suffix_en": "",
+    "price_key": {
+      "zhCN": "",
+      "zhTW": "",
+      "en": "",
+      "fr": "",
+      "ru": "",
+      "ja": "",
+      "vi": ""
+    },
+    "price_key_zh": "",
+    "price_key_en": ""
+  },
+  "qwen3.8-flash": {
+    "description": "Qwen 3.8 Flash 高速对话。 约 $0.018990 / $0.059502 每百万 tokens。",
+    "description_zh": "Qwen 3.8 Flash 高速对话。 约 $0.018990 / $0.059502 每百万 tokens。",
+    "description_en": "Qwen 3.8 Flash high-speed chat. About $0.018990 / $0.059502 per 1M tokens.",
+    "descriptions": {
+      "zhCN": "Qwen 3.8 Flash 高速对话。 约 $0.018990 / $0.059502 每百万 tokens。",
+      "zhTW": "Qwen 3.8 Flash 高速对话。 约 $0.018990 / $0.059502 每百万 tokens。",
+      "en": "Qwen 3.8 Flash high-speed chat. About $0.018990 / $0.059502 per 1M tokens.",
+      "fr": "Qwen 3.8 Flash high-speed chat. About $0.018990 / $0.059502 per 1M tokens.",
+      "ru": "Qwen 3.8 Flash high-speed chat. About $0.018990 / $0.059502 per 1M tokens.",
+      "ja": "Qwen 3.8 Flash high-speed chat. About $0.018990 / $0.059502 per 1M tokens.",
+      "vi": "Qwen 3.8 Flash high-speed chat. About $0.018990 / $0.059502 per 1M tokens."
+    },
+    "unit": "token",
+    "badge": {
+      "zhCN": "按 Token 计费",
+      "zhTW": "按 Token 計費",
+      "en": "Token-based",
+      "fr": "Token-based",
+      "ru": "Token-based",
+      "ja": "Token 課金",
+      "vi": "Token-based"
+    },
+    "badge_zh": "按 Token 计费",
+    "badge_en": "Token-based",
+    "suffix": {
+      "zhCN": "",
+      "zhTW": "",
+      "en": "",
+      "fr": "",
+      "ru": "",
+      "ja": "",
+      "vi": ""
+    },
+    "suffix_zh": "",
+    "suffix_en": "",
+    "price_key": {
+      "zhCN": "",
+      "zhTW": "",
+      "en": "",
+      "fr": "",
+      "ru": "",
+      "ja": "",
+      "vi": ""
+    },
+    "price_key_zh": "",
+    "price_key_en": ""
+  },
+  "minimax-m3": {
+    "description": "MiniMax M3 通用对话模型。 约 $0.120000 / $0.480000 每百万 tokens。",
+    "description_zh": "MiniMax M3 通用对话模型。 约 $0.120000 / $0.480000 每百万 tokens。",
+    "description_en": "MiniMax M3 general chat model. About $0.120000 / $0.480000 per 1M tokens.",
+    "descriptions": {
+      "zhCN": "MiniMax M3 通用对话模型。 约 $0.120000 / $0.480000 每百万 tokens。",
+      "zhTW": "MiniMax M3 通用对话模型。 约 $0.120000 / $0.480000 每百万 tokens。",
+      "en": "MiniMax M3 general chat model. About $0.120000 / $0.480000 per 1M tokens.",
+      "fr": "MiniMax M3 general chat model. About $0.120000 / $0.480000 per 1M tokens.",
+      "ru": "MiniMax M3 general chat model. About $0.120000 / $0.480000 per 1M tokens.",
+      "ja": "MiniMax M3 general chat model. About $0.120000 / $0.480000 per 1M tokens.",
+      "vi": "MiniMax M3 general chat model. About $0.120000 / $0.480000 per 1M tokens."
+    },
+    "unit": "token",
+    "badge": {
+      "zhCN": "按 Token 计费",
+      "zhTW": "按 Token 計費",
+      "en": "Token-based",
+      "fr": "Token-based",
+      "ru": "Token-based",
+      "ja": "Token 課金",
+      "vi": "Token-based"
+    },
+    "badge_zh": "按 Token 计费",
+    "badge_en": "Token-based",
+    "suffix": {
+      "zhCN": "",
+      "zhTW": "",
+      "en": "",
+      "fr": "",
+      "ru": "",
+      "ja": "",
+      "vi": ""
+    },
+    "suffix_zh": "",
+    "suffix_en": "",
+    "price_key": {
+      "zhCN": "",
+      "zhTW": "",
+      "en": "",
+      "fr": "",
+      "ru": "",
+      "ja": "",
+      "vi": ""
+    },
+    "price_key_zh": "",
+    "price_key_en": ""
+  },
+  "kimi-k2.7-code": {
+    "description": "Kimi K2.7 Code 编程向对话。 约 $0.122360 / $0.515196 每百万 tokens。",
+    "description_zh": "Kimi K2.7 Code 编程向对话。 约 $0.122360 / $0.515196 每百万 tokens。",
+    "description_en": "Kimi K2.7 Code coding-oriented chat. About $0.122360 / $0.515196 per 1M tokens.",
+    "descriptions": {
+      "zhCN": "Kimi K2.7 Code 编程向对话。 约 $0.122360 / $0.515196 每百万 tokens。",
+      "zhTW": "Kimi K2.7 Code 编程向对话。 约 $0.122360 / $0.515196 每百万 tokens。",
+      "en": "Kimi K2.7 Code coding-oriented chat. About $0.122360 / $0.515196 per 1M tokens.",
+      "fr": "Kimi K2.7 Code coding-oriented chat. About $0.122360 / $0.515196 per 1M tokens.",
+      "ru": "Kimi K2.7 Code coding-oriented chat. About $0.122360 / $0.515196 per 1M tokens.",
+      "ja": "Kimi K2.7 Code coding-oriented chat. About $0.122360 / $0.515196 per 1M tokens.",
+      "vi": "Kimi K2.7 Code coding-oriented chat. About $0.122360 / $0.515196 per 1M tokens."
+    },
+    "unit": "token",
+    "badge": {
+      "zhCN": "按 Token 计费",
+      "zhTW": "按 Token 計費",
+      "en": "Token-based",
+      "fr": "Token-based",
+      "ru": "Token-based",
+      "ja": "Token 課金",
+      "vi": "Token-based"
+    },
+    "badge_zh": "按 Token 计费",
+    "badge_en": "Token-based",
+    "suffix": {
+      "zhCN": "",
+      "zhTW": "",
+      "en": "",
+      "fr": "",
+      "ru": "",
+      "ja": "",
+      "vi": ""
+    },
+    "suffix_zh": "",
+    "suffix_en": "",
+    "price_key": {
+      "zhCN": "",
+      "zhTW": "",
+      "en": "",
+      "fr": "",
+      "ru": "",
+      "ja": "",
+      "vi": ""
+    },
+    "price_key_zh": "",
+    "price_key_en": ""
+  },
+  "hy4-preview": {
+    "description": "腾讯混元 hy4-preview 对话预览。 约 $0.103750 / $0.311114 每百万 tokens。",
+    "description_zh": "腾讯混元 hy4-preview 对话预览。 约 $0.103750 / $0.311114 每百万 tokens。",
+    "description_en": "Tencent Hunyuan hy4-preview chat. About $0.103750 / $0.311114 per 1M tokens.",
+    "descriptions": {
+      "zhCN": "腾讯混元 hy4-preview 对话预览。 约 $0.103750 / $0.311114 每百万 tokens。",
+      "zhTW": "腾讯混元 hy4-preview 对话预览。 约 $0.103750 / $0.311114 每百万 tokens。",
+      "en": "Tencent Hunyuan hy4-preview chat. About $0.103750 / $0.311114 per 1M tokens.",
+      "fr": "Tencent Hunyuan hy4-preview chat. About $0.103750 / $0.311114 per 1M tokens.",
+      "ru": "Tencent Hunyuan hy4-preview chat. About $0.103750 / $0.311114 per 1M tokens.",
+      "ja": "Tencent Hunyuan hy4-preview chat. About $0.103750 / $0.311114 per 1M tokens.",
+      "vi": "Tencent Hunyuan hy4-preview chat. About $0.103750 / $0.311114 per 1M tokens."
+    },
+    "unit": "token",
+    "badge": {
+      "zhCN": "按 Token 计费",
+      "zhTW": "按 Token 計費",
+      "en": "Token-based",
+      "fr": "Token-based",
+      "ru": "Token-based",
+      "ja": "Token 課金",
+      "vi": "Token-based"
+    },
+    "badge_zh": "按 Token 计费",
+    "badge_en": "Token-based",
+    "suffix": {
+      "zhCN": "",
+      "zhTW": "",
+      "en": "",
+      "fr": "",
+      "ru": "",
+      "ja": "",
+      "vi": ""
+    },
+    "suffix_zh": "",
+    "suffix_en": "",
+    "price_key": {
+      "zhCN": "",
+      "zhTW": "",
+      "en": "",
+      "fr": "",
+      "ru": "",
+      "ja": "",
+      "vi": ""
+    },
+    "price_key_zh": "",
+    "price_key_en": ""
   }
 }

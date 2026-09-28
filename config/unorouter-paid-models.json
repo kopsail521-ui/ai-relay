@@ -1,53 +1,125 @@
 {
-  "note": "UnoRouter paid chat — only models OpenLux never listed. Key: VPS UNOROUTER_API_KEY. Sell = cost × 2. Public copy must not name the supplier.",
+  "note": "UnoRouter paid chat on Keyo Chat. Sell = cost × 2. Public copy must not name the supplier.",
   "base_url": "https://api.unorouter.com",
   "channel_name": "Keyo Chat",
   "markup": 2,
   "models": [
     {
-      "id": "glm-5.3-flash",
-      "cost_in": 0.036,
-      "cost_out": 0.1199988,
+      "id": "deepseek-v4.1-flash",
+      "cost_in": 0.034995,
+      "cost_out": 0.13998,
+      "vendor": "DeepSeek",
+      "icon": "DeepSeek",
+      "tags": "大语言模型",
+      "desc_zh": "DeepSeek V4.1 Flash 高速高性价比对话。"
+    },
+    {
+      "id": "glm-5.3",
+      "cost_in": 0.061152,
+      "cost_out": 0.192195,
       "vendor": "智谱",
       "icon": "Zhipu.Color",
       "tags": "大语言模型",
-      "desc_zh": "GLM 5.3 Flash 高速对话。"
+      "desc_zh": "GLM 5.3 通用对话与推理。"
     },
     {
-      "id": "kimi-k2.7-code",
-      "cost_in": 0.01672,
-      "cost_out": 0.07039956,
+      "id": "kimi-k3",
+      "cost_in": 0.102,
+      "cost_out": 0.51,
       "vendor": "Moonshot",
       "icon": "Moonshot.Color",
       "tags": "大语言模型",
-      "desc_zh": "Kimi K2.7 Code 编程向对话。"
+      "desc_zh": "Kimi K3 对话模型。"
+    },
+    {
+      "id": "deepseek-v4-flash-0731",
+      "cost_in": 0.021602,
+      "cost_out": 0.043204,
+      "vendor": "DeepSeek",
+      "icon": "DeepSeek",
+      "tags": "大语言模型",
+      "desc_zh": "DeepSeek V4 Flash 0731。"
+    },
+    {
+      "id": "deepseek-v4-pro",
+      "cost_in": 0.036018,
+      "cost_out": 0.072036,
+      "vendor": "DeepSeek",
+      "icon": "DeepSeek",
+      "tags": "大语言模型",
+      "desc_zh": "DeepSeek V4 Pro。"
     },
     {
       "id": "qwen3.8-flash",
-      "cost_in": 0.02748,
-      "cost_out": 0.086103084,
+      "cost_in": 0.009495,
+      "cost_out": 0.029751,
       "vendor": "阿里巴巴",
       "icon": "Qwen.Color",
       "tags": "大语言模型",
       "desc_zh": "Qwen 3.8 Flash 高速对话。"
     },
     {
+      "id": "deepseek-v4-pro-0813",
+      "cost_in": 0.036018,
+      "cost_out": 0.072036,
+      "vendor": "DeepSeek",
+      "icon": "DeepSeek",
+      "tags": "大语言模型",
+      "desc_zh": "DeepSeek V4 Pro 0813。"
+    },
+    {
+      "id": "glm-5.3-flash",
+      "cost_in": 0.053835,
+      "cost_out": 0.179448,
+      "vendor": "智谱",
+      "icon": "Zhipu.Color",
+      "tags": "大语言模型",
+      "desc_zh": "GLM 5.3 Flash 高速对话。"
+    },
+    {
+      "id": "minimax-m3",
+      "cost_in": 0.06,
+      "cost_out": 0.24,
+      "vendor": "MiniMax",
+      "icon": "Minimax.Color",
+      "tags": "大语言模型",
+      "desc_zh": "MiniMax M3 对话模型。"
+    },
+    {
       "id": "mimo-v2.6-pro",
-      "cost_in": 0.1200165,
-      "cost_out": 0.240033,
+      "cost_in": 0.076821,
+      "cost_out": 0.153642,
       "vendor": "Xiaomi",
       "icon": "Xiaomi",
       "tags": "大语言模型",
-      "desc_zh": "小米 MiMo V2.6 Pro 旗舰对话与推理，适合复杂问答、代码与 Agent。"
+      "desc_zh": "小米 MiMo V2.6 Pro 旗舰对话与推理。"
+    },
+    {
+      "id": "kimi-k2.7-code",
+      "cost_in": 0.06118,
+      "cost_out": 0.257598,
+      "vendor": "Moonshot",
+      "icon": "Moonshot.Color",
+      "tags": "大语言模型",
+      "desc_zh": "Kimi K2.7 Code 编程向对话。"
+    },
+    {
+      "id": "hy4-preview",
+      "cost_in": 0.051875,
+      "cost_out": 0.155557,
+      "vendor": "腾讯",
+      "icon": "Tencent.Color",
+      "tags": "大语言模型",
+      "desc_zh": "混元 hy4-preview 对话预览。"
     },
     {
       "id": "mimo-v2.6-flash",
-      "cost_in": 0.075194,
-      "cost_out": 0.150388,
+      "cost_in": 0.019194,
+      "cost_out": 0.038388,
       "vendor": "Xiaomi",
       "icon": "Xiaomi",
       "tags": "大语言模型",
-      "desc_zh": "小米 MiMo V2.6 Flash 高速对话，适合日常助手与高吞吐场景。"
+      "desc_zh": "小米 MiMo V2.6 Flash 高速对话。"
     }
   ]
 }

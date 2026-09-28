@@ -1,10 +1,13 @@
 #!/usr/bin/env python3
-"""Move OpenLux-ever-listed chat models off UnoRouter onto Keyo Primary;
-keep Uno-only models on Keyo Chat at cost × 2.
+"""Sync OpenLux-remaining chat models onto Keyo Primary and Uno paid models
+onto Keyo Chat (exact replace), both at cost × 2.
 
 Uses:
-  config/openlux-paid-chat-models.json  → OpenLux / Keyo Primary
+  config/openlux-paid-chat-models.json  → OpenLux / Keyo Primary (ensure + keep others)
   config/unorouter-paid-models.json     → UnoRouter / Keyo Chat (exact replace)
+
+Any model listed in the Uno cfg is stripped from Keyo Primary so routing
+goes only through Keyo Chat.
 
 Public copy must NOT mention OpenLux / UnoRouter / cost / markup.
 """
@@ -210,11 +213,18 @@ def main():
     v_cols = cols(cur, "vendors")
     tabs = {r[0] for r in cur.execute("SELECT name FROM sqlite_master WHERE type='table'")}
 
+    uno_id_set = set(uno_ids)
+
     ol = find_openlux_channel(cur, ch_cols)
     if ol is None:
         raise SystemExit("OpenLux / Keyo Primary channel not found")
     ol_cid, ol_cname, ol_models_s = ol
     parts = [p.strip() for p in ol_models_s.replace("\n", ",").split(",") if p.strip()]
+    # Strip models that now live on Keyo Chat (Uno)
+    stripped = [p for p in parts if p in uno_id_set]
+    parts = [p for p in parts if p not in uno_id_set]
+    for mid in stripped:
+        print("openlux_channel_strip", mid)
     for mid in [m["id"] for m in ol_models]:
         if mid not in parts:
             parts.append(mid)

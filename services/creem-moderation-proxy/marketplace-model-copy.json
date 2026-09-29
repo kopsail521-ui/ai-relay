@@ -5698,17 +5698,17 @@
     "price_key_en": ""
   },
   "subtitle-erase-pro": {
-    "description": "视频压制字幕无痕擦除（精细化），适合短剧出海与二创去硬字幕。 计费：.018265/秒。",
-    "description_zh": "视频压制字幕无痕擦除（精细化），适合短剧出海与二创去硬字幕。 计费：.018265/秒。",
-    "description_en": "Refined hard-subtitle erasure for short drama export and remix. Billing: .018265/sec.",
+    "description": "视频压制字幕无痕擦除（精细化），适合短剧出海与二创去硬字幕。 计费：0.018265/秒。",
+    "description_zh": "视频压制字幕无痕擦除（精细化），适合短剧出海与二创去硬字幕。 计费：0.018265/秒。",
+    "description_en": "Refined hard-subtitle erasure for short drama export and remix. Billing: 0.018265/sec.",
     "descriptions": {
-      "zhCN": "视频压制字幕无痕擦除（精细化），适合短剧出海与二创去硬字幕。 计费：.018265/秒。",
-      "zhTW": "视频压制字幕无痕擦除（精细化），适合短剧出海与二创去硬字幕。 计费：.018265/秒。",
-      "en": "Refined hard-subtitle erasure for short drama export and remix. Billing: .018265/sec.",
-      "fr": "Refined hard-subtitle erasure for short drama export and remix. Billing: .018265/sec.",
-      "ru": "Refined hard-subtitle erasure for short drama export and remix. Billing: .018265/sec.",
-      "ja": "Refined hard-subtitle erasure for short drama export and remix. Billing: .018265/sec.",
-      "vi": "Refined hard-subtitle erasure for short drama export and remix. Billing: .018265/sec."
+      "zhCN": "视频压制字幕无痕擦除（精细化），适合短剧出海与二创去硬字幕。 计费：0.018265/秒。",
+      "zhTW": "视频压制字幕无痕擦除（精细化），适合短剧出海与二创去硬字幕。 计费：0.018265/秒。",
+      "en": "Refined hard-subtitle erasure for short drama export and remix. Billing: 0.018265/sec.",
+      "fr": "Refined hard-subtitle erasure for short drama export and remix. Billing: 0.018265/sec.",
+      "ru": "Refined hard-subtitle erasure for short drama export and remix. Billing: 0.018265/sec.",
+      "ja": "Refined hard-subtitle erasure for short drama export and remix. Billing: 0.018265/sec.",
+      "vi": "Refined hard-subtitle erasure for short drama export and remix. Billing: 0.018265/sec."
     },
     "unit": "second",
     "badge": {
@@ -5761,23 +5761,23 @@
         [
           "standard",
           "精细化字幕擦除",
-          ".018265"
+          "0.018265"
         ]
       ]
     }
   },
   "video-enhance-pro": {
-    "description": "视频画质增强（大模型），按输出分辨率档位按秒计费。 计费：720p .034247/秒；1080p .068493/秒；2K .136986/秒。",
-    "description_zh": "视频画质增强（大模型），按输出分辨率档位按秒计费。 计费：720p .034247/秒；1080p .068493/秒；2K .136986/秒。",
-    "description_en": "Large-model video quality enhance; billed per second by output resolution. Billing: 720p .034247/sec; 1080p .068493/sec; 2K .136986/sec.",
+    "description": "视频画质增强（大模型），按输出分辨率档位按秒计费。 计费：720p 0.034247/秒；1080p 0.068493/秒；2K 0.136986/秒。",
+    "description_zh": "视频画质增强（大模型），按输出分辨率档位按秒计费。 计费：720p 0.034247/秒；1080p 0.068493/秒；2K 0.136986/秒。",
+    "description_en": "Large-model video quality enhance; billed per second by output resolution. Billing: 720p 0.034247/sec; 1080p 0.068493/sec; 2K 0.136986/sec.",
     "descriptions": {
-      "zhCN": "视频画质增强（大模型），按输出分辨率档位按秒计费。 计费：720p .034247/秒；1080p .068493/秒；2K .136986/秒。",
-      "zhTW": "视频画质增强（大模型），按输出分辨率档位按秒计费。 计费：720p .034247/秒；1080p .068493/秒；2K .136986/秒。",
-      "en": "Large-model video quality enhance; billed per second by output resolution. Billing: 720p .034247/sec; 1080p .068493/sec; 2K .136986/sec.",
-      "fr": "Large-model video quality enhance; billed per second by output resolution. Billing: 720p .034247/sec; 1080p .068493/sec; 2K .136986/sec.",
-      "ru": "Large-model video quality enhance; billed per second by output resolution. Billing: 720p .034247/sec; 1080p .068493/sec; 2K .136986/sec.",
-      "ja": "Large-model video quality enhance; billed per second by output resolution. Billing: 720p .034247/sec; 1080p .068493/sec; 2K .136986/sec.",
-      "vi": "Large-model video quality enhance; billed per second by output resolution. Billing: 720p .034247/sec; 1080p .068493/sec; 2K .136986/sec."
+      "zhCN": "视频画质增强（大模型），按输出分辨率档位按秒计费。 计费：720p 0.034247/秒；1080p 0.068493/秒；2K 0.136986/秒。",
+      "zhTW": "视频画质增强（大模型），按输出分辨率档位按秒计费。 计费：720p 0.034247/秒；1080p 0.068493/秒；2K 0.136986/秒。",
+      "en": "Large-model video quality enhance; billed per second by output resolution. Billing: 720p 0.034247/sec; 1080p 0.068493/sec; 2K 0.136986/sec.",
+      "fr": "Large-model video quality enhance; billed per second by output resolution. Billing: 720p 0.034247/sec; 1080p 0.068493/sec; 2K 0.136986/sec.",
+      "ru": "Large-model video quality enhance; billed per second by output resolution. Billing: 720p 0.034247/sec; 1080p 0.068493/sec; 2K 0.136986/sec.",
+      "ja": "Large-model video quality enhance; billed per second by output resolution. Billing: 720p 0.034247/sec; 1080p 0.068493/sec; 2K 0.136986/sec.",
+      "vi": "Large-model video quality enhance; billed per second by output resolution. Billing: 720p 0.034247/sec; 1080p 0.068493/sec; 2K 0.136986/sec."
     },
     "unit": "second",
     "badge": {
@@ -5830,17 +5830,17 @@
         [
           "720p",
           "标准输出",
-          ".034247"
+          "0.034247"
         ],
         [
           "1080p",
           "标准输出",
-          ".068493"
+          "0.068493"
         ],
         [
           "2K",
           "标准输出",
-          ".136986"
+          "0.136986"
         ]
       ]
     }

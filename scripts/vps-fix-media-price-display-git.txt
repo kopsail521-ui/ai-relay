@@ -1,0 +1,15 @@
+set -e
+cd /opt/ai-relay
+sudo git pull
+git log -1 --oneline
+sudo docker run --rm \
+  -v /opt/ai-relay:/opt/ai-relay:ro \
+  -v /opt/ai-relay/data/new-api:/data \
+  -w /opt/ai-relay python:3.12-alpine \
+  python scripts/vps-update-marketplace-copy.py /data/one-api.db /opt/ai-relay/config/marketplace-model-copy.json \
+  || echo COPY_SKIP
+sudo docker cp /opt/ai-relay/services/creem-moderation-proxy/marketplace-model-copy.json \
+  ai-relay-creem-moderation:/app/marketplace-model-copy.json
+sudo docker restart ai-relay-creem-moderation ai-relay-new-api >/dev/null || true
+sleep 4
+echo DONE_PRICE_LEADING_ZERO

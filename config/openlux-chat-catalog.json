@@ -4095,6 +4095,20 @@
       "completion_ratio": 1,
       "our_model_ratio": 24.266,
       "our_completion_ratio": 1
+    },
+    {
+      "model": "claude-sonnet-5-5",
+      "endpoints": "anthropic|openai",
+      "group": "Claude-Code-1",
+      "cost_in_usd": 0.35294,
+      "cost_out_usd": 1.7647,
+      "sell_in_usd": 0.88235,
+      "sell_out_usd": 4.41175,
+      "model_ratio": 1,
+      "completion_ratio": 5,
+      "our_model_ratio": 0.441175,
+      "our_completion_ratio": 5,
+      "markup": 2.5
     }
   ]
 }

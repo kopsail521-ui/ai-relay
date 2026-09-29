@@ -1,0 +1,40 @@
+set -e
+cd /opt/ai-relay
+sudo git pull
+git log -1 --oneline
+
+sudo docker run --rm \
+  -v /opt/ai-relay:/opt/ai-relay:ro \
+  -v /opt/ai-relay/data/new-api:/data \
+  -w /opt/ai-relay python:3.12-alpine \
+  python scripts/vps-add-claude-sonnet-5-5.py /data/one-api.db
+
+sudo docker run --rm \
+  -v /opt/ai-relay:/opt/ai-relay:ro \
+  -v /opt/ai-relay/data/new-api:/data \
+  -w /opt/ai-relay python:3.12-alpine \
+  python scripts/vps-update-marketplace-copy.py /data/one-api.db /opt/ai-relay/config/marketplace-model-copy.json \
+  || echo COPY_SKIP
+
+# brand docs
+sudo docker cp /opt/ai-relay/static/brand/keyo-docs.html ai-relay-new-api:/app/web/dist/brand/keyo-docs.html 2>/dev/null || true
+sudo docker cp /opt/ai-relay/static/brand/keyo-api-ref.md ai-relay-new-api:/app/web/dist/brand/keyo-api-ref.md 2>/dev/null || true
+# if brand served from host static, also sync common path
+sudo mkdir -p /opt/ai-relay/static/brand
+sudo cp -f /opt/ai-relay/static/brand/keyo-docs.html /opt/ai-relay/static/brand/keyo-docs.html
+sudo cp -f /opt/ai-relay/static/brand/keyo-api-ref.md /opt/ai-relay/static/brand/keyo-api-ref.md
+
+sudo docker cp /opt/ai-relay/services/creem-moderation-proxy/marketplace-model-copy.json \
+  ai-relay-creem-moderation:/app/marketplace-model-copy.json
+sudo docker restart ai-relay-creem-moderation ai-relay-new-api >/dev/null
+sleep 5
+
+curl -sS https://www.keyoapi.xyz/api/pricing | python3 -c '
+import sys,json
+j=json.load(sys.stdin)
+m=next((x for x in (j.get("data") or []) if x.get("model_name")=="claude-sonnet-5-5"), None)
+print(m and {"model":m["model_name"],"ratio":m.get("model_ratio"),"comp":m.get("completion_ratio"),"tags":m.get("tags"),"desc":(m.get("description") or "")[:60]})
+leak="openlux" in (m.get("description") or "").lower() if m else None
+print("leak_openlux", leak)
+'
+echo DONE_ADD_CLAUDE_SONNET_5_5

@@ -6019,5 +6019,53 @@
       "ja": "RED",
       "vi": "RED"
     }
+  },
+  "claude-sonnet-5-5": {
+    "description": "Claude Sonnet 5.5：均衡编程与推理，适合日常开发与 Agent。",
+    "descriptions": {
+      "zhCN": "Claude Sonnet 5.5：均衡编程与推理，适合日常开发与 Agent。",
+      "zhTW": "Claude Sonnet 5.5：均衡編程與推理，適合日常開發與 Agent。",
+      "en": "Claude Sonnet 5.5 balanced coding and reasoning for everyday development and agents.",
+      "fr": "Claude Sonnet 5.5 balanced coding and reasoning for everyday development and agents.",
+      "ru": "Claude Sonnet 5.5 balanced coding and reasoning for everyday development and agents.",
+      "ja": "Claude Sonnet 5.5：均衡编程与推理，适合日常开发与 Agent。",
+      "vi": "Claude Sonnet 5.5 balanced coding and reasoning for everyday development and agents."
+    },
+    "unit": "token",
+    "badge": {
+      "zhCN": "按 Token 计费",
+      "zhTW": "按 Token 計費",
+      "en": "Token-based",
+      "fr": "Au token",
+      "ru": "По токенам",
+      "ja": "Token 課金",
+      "vi": "Theo token"
+    },
+    "suffix": {
+      "zhCN": "",
+      "zhTW": "",
+      "en": "",
+      "fr": "",
+      "ru": "",
+      "ja": "",
+      "vi": ""
+    },
+    "price_key": {
+      "zhCN": "",
+      "zhTW": "",
+      "en": "",
+      "fr": "",
+      "ru": "",
+      "ja": "",
+      "vi": ""
+    },
+    "description_zh": "Claude Sonnet 5.5：均衡编程与推理，适合日常开发与 Agent。",
+    "description_en": "Claude Sonnet 5.5 balanced coding and reasoning for everyday development and agents.",
+    "badge_zh": "按 Token 计费",
+    "badge_en": "Token-based",
+    "suffix_zh": "",
+    "suffix_en": "",
+    "price_key_zh": "",
+    "price_key_en": ""
   }
 }

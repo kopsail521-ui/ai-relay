@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+# Deploy day-seeded synthetic /rankings via creem (git pull short).
+set -euo pipefail
+cd /opt/ai-relay
+sudo git pull --ff-only origin main
+sudo docker cp /opt/ai-relay/services/creem-moderation-proxy/rankings-synthetic.mjs \
+  ai-relay-creem-moderation:/app/rankings-synthetic.mjs
+sudo docker cp /opt/ai-relay/services/creem-moderation-proxy/server.mjs \
+  ai-relay-creem-moderation:/app/server.mjs
+sudo docker restart ai-relay-creem-moderation
+sleep 2
+curl -sS "http://127.0.0.1:3001/api/rankings?period=week" | head -c 400
+echo
+echo DONE_RANKINGS_SYNTH

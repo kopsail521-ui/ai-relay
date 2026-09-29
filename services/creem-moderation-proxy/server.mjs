@@ -15,9 +15,15 @@
  *   UPLOAD_PUBLIC_BASE=https://www.keyoapi.xyz/uploads
  *   UPLOAD_MAX_BYTES=104857600
  *   UPLOAD_TTL_HOURS=48
+ *   RANKINGS_DISPLAY_MULTIPLIER=10
+ *   RANKINGS_SYNTHETIC=1|0   (default 1: day-seeded fake public rankings)
  */
 import http from "http";
 import { looksLikeMissingVideo } from "./video-routing.mjs";
+import {
+  rankingsSyntheticEnabled,
+  buildSyntheticRankings,
+} from "./rankings-synthetic.mjs";
 import { URL } from "url";
 import zlib from "zlib";
 import { promisify } from "util";
@@ -1282,6 +1288,17 @@ const server = http.createServer(async (req, res) => {
       });
     }
 
+    // Public leaderboard: day-seeded synthetic payload (smooth chart, capped growth).
+    if (
+      req.method === "GET" &&
+      pathOnly === "/api/rankings" &&
+      rankingsSyntheticEnabled()
+    ) {
+      const u = new URL(req.url || "/", "http://local");
+      const period = u.searchParams.get("period") || "week";
+      return json(res, 200, buildSyntheticRankings(period));
+    }
+
     if (
       req.method === "POST" &&
       (pathOnly === "/v1/uploads" || pathOnly === "/v1/files")
@@ -1442,6 +1459,6 @@ const server = http.createServer(async (req, res) => {
 
 server.listen(PORT, HOST, () => {
   console.log(
-    `creem-moderation-proxy on http://${HOST}:${PORT} -> ${UPSTREAM} (creem ${TEST_MODE ? "test" : "live"}; rankings×${RANKINGS_DISPLAY_MULTIPLIER}; uploads ${UPLOAD_DIR} → ${UPLOAD_PUBLIC_BASE})`
+    `creem-moderation-proxy on http://${HOST}:${PORT} -> ${UPSTREAM} (creem ${TEST_MODE ? "test" : "live"}; rankings×${RANKINGS_DISPLAY_MULTIPLIER}; synth=${rankingsSyntheticEnabled() ? "on" : "off"}; uploads ${UPLOAD_DIR} → ${UPLOAD_PUBLIC_BASE})`
   );
 });

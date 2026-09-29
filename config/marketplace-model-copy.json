@@ -2050,13 +2050,13 @@
       "vi": "Video"
     },
     "视频·按秒": {
-      "zhCN": "视频按秒",
-      "zhTW": "影片按秒",
-      "en": "VideoSec",
-      "fr": "VideoSec",
-      "ru": "VideoSec",
-      "ja": "動画秒課金",
-      "vi": "VideoSec"
+      "zhCN": "视频模型",
+      "zhTW": "影片模型",
+      "en": "Video",
+      "fr": "Video",
+      "ru": "Video",
+      "ja": "動画モデル",
+      "vi": "Video"
     },
     "视频·按次": {
       "zhCN": "视频按次",
@@ -2149,13 +2149,22 @@
       "vi": "Free"
     },
     "视频按秒": {
-      "zhCN": "视频按秒",
-      "zhTW": "影片按秒",
-      "en": "VideoSec",
-      "fr": "VideoSec",
-      "ru": "VideoSec",
-      "ja": "動画秒課金",
-      "vi": "VideoSec"
+      "zhCN": "视频模型",
+      "zhTW": "影片模型",
+      "en": "Video",
+      "fr": "Video",
+      "ru": "Video",
+      "ja": "動画モデル",
+      "vi": "Video"
+    },
+    "视频模型": {
+      "zhCN": "视频模型",
+      "zhTW": "影片模型",
+      "en": "Video",
+      "fr": "Video",
+      "ru": "Video",
+      "ja": "動画モデル",
+      "vi": "Video"
     },
     "视频按次": {
       "zhCN": "视频按次",
@@ -3279,6 +3288,42 @@
       "ru": "Alibaba",
       "ja": "Alibaba",
       "vi": "Alibaba"
+    },
+    "小米": {
+      "zhCN": "小米",
+      "zhTW": "小米",
+      "en": "Xiaomi",
+      "fr": "Xiaomi",
+      "ru": "Xiaomi",
+      "ja": "Xiaomi",
+      "vi": "Xiaomi"
+    },
+    "Xiaomi": {
+      "zhCN": "小米",
+      "zhTW": "小米",
+      "en": "Xiaomi",
+      "fr": "Xiaomi",
+      "ru": "Xiaomi",
+      "ja": "Xiaomi",
+      "vi": "Xiaomi"
+    },
+    "小红书": {
+      "zhCN": "小红书",
+      "zhTW": "小紅書",
+      "en": "RED",
+      "fr": "RED",
+      "ru": "RED",
+      "ja": "RED",
+      "vi": "RED"
+    },
+    "Dots": {
+      "zhCN": "小红书",
+      "zhTW": "小紅書",
+      "en": "RED",
+      "fr": "RED",
+      "ru": "RED",
+      "ja": "RED",
+      "vi": "RED"
     },
     "Alibaba": {
       "zhCN": "阿里巴巴",
@@ -5863,6 +5908,116 @@
       "ru": "VideoProc",
       "ja": "動画処理",
       "vi": "VideoProc"
+    },
+    "视频模型": {
+      "zhCN": "视频模型",
+      "zhTW": "影片模型",
+      "en": "Video",
+      "fr": "Video",
+      "ru": "Video",
+      "ja": "動画モデル",
+      "vi": "Video"
+    },
+    "VideoModel": {
+      "zhCN": "视频模型",
+      "zhTW": "影片模型",
+      "en": "Video",
+      "fr": "Video",
+      "ru": "Video",
+      "ja": "動画モデル",
+      "vi": "Video"
+    },
+    "视频按秒": {
+      "zhCN": "视频模型",
+      "zhTW": "影片模型",
+      "en": "Video",
+      "fr": "Video",
+      "ru": "Video",
+      "ja": "動画モデル",
+      "vi": "Video"
+    },
+    "VideoSec": {
+      "zhCN": "视频模型",
+      "zhTW": "影片模型",
+      "en": "Video",
+      "fr": "Video",
+      "ru": "Video",
+      "ja": "動画モデル",
+      "vi": "Video"
+    },
+    "per": {
+      "zhCN": "视频模型",
+      "zhTW": "影片模型",
+      "en": "Video",
+      "fr": "Video",
+      "ru": "Video",
+      "ja": "動画モデル",
+      "vi": "Video"
+    },
+    "second": {
+      "zhCN": "视频模型",
+      "zhTW": "影片模型",
+      "en": "Video",
+      "fr": "Video",
+      "ru": "Video",
+      "ja": "動画モデル",
+      "vi": "Video"
+    }
+  },
+  "vendors": {
+    "小米": {
+      "zhCN": "小米",
+      "zhTW": "小米",
+      "en": "Xiaomi",
+      "fr": "Xiaomi",
+      "ru": "Xiaomi",
+      "ja": "Xiaomi",
+      "vi": "Xiaomi"
+    },
+    "Xiaomi": {
+      "zhCN": "小米",
+      "zhTW": "小米",
+      "en": "Xiaomi",
+      "fr": "Xiaomi",
+      "ru": "Xiaomi",
+      "ja": "Xiaomi",
+      "vi": "Xiaomi"
+    },
+    "XiaomiMiMo": {
+      "zhCN": "小米",
+      "zhTW": "小米",
+      "en": "Xiaomi",
+      "fr": "Xiaomi",
+      "ru": "Xiaomi",
+      "ja": "Xiaomi",
+      "vi": "Xiaomi"
+    },
+    "小红书": {
+      "zhCN": "小红书",
+      "zhTW": "小紅書",
+      "en": "RED",
+      "fr": "RED",
+      "ru": "RED",
+      "ja": "RED",
+      "vi": "RED"
+    },
+    "Dots": {
+      "zhCN": "小红书",
+      "zhTW": "小紅書",
+      "en": "RED",
+      "fr": "RED",
+      "ru": "RED",
+      "ja": "RED",
+      "vi": "RED"
+    },
+    "Dots Studio": {
+      "zhCN": "小红书",
+      "zhTW": "小紅書",
+      "en": "RED",
+      "fr": "RED",
+      "ru": "RED",
+      "ja": "RED",
+      "vi": "RED"
     }
   }
 }

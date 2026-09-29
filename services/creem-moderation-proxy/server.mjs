@@ -204,6 +204,9 @@ const VENDOR_ORDER = [
   "字节跳动",
   "ByteDance",
   "Doubao",
+  "小米",
+  "Xiaomi",
+  "小红书",
   "阶跃星辰",
   "百度",
   "腾讯",
@@ -213,7 +216,6 @@ const VENDOR_ORDER = [
   "Flux",
   "Midjourney",
   "Ollama",
-  "Xiaomi",
   "Vidu",
   "Kling",
   "Wenxin",
@@ -249,6 +251,10 @@ const VENDOR_ALIAS = {
   Stepfun: "阶跃星辰",
   Bria: "BRIA AI",
   BriaAI: "BRIA AI",
+  Xiaomi: "小米",
+  XiaomiMiMo: "小米",
+  Dots: "小红书",
+  "Dots Studio": "小红书",
 };
 
 function canonVendor(name) {
@@ -422,13 +428,13 @@ function normalizeTagToken(tag) {
   let t = String(tag || "").trim();
   if (!t || /^[·.•\-—_/|]+$/.test(t)) return "";
   const map = {
-    "视频·按秒": "视频按秒",
+    "视频·按秒": "视频模型",
     "视频·按次": "视频按次",
-    "影片·按秒": "视频按秒",
+    "影片·按秒": "视频模型",
     "影片·按次": "视频按次",
-    "Video · per second": "视频按秒",
+    "Video · per second": "视频模型",
     "Video · per request": "视频按次",
-    VideoSec: "视频按秒",
+    VideoSec: "视频模型",
     VideoReq: "视频按次",
     DigitalHuman: "数字人",
     ImageProc: "图像处理",
@@ -436,8 +442,8 @@ function normalizeTagToken(tag) {
     free: "免费",
     rag: "rag",
     RAG: "rag",
-    per: "视频按秒",
-    second: "视频按秒",
+    per: "视频模型",
+    second: "视频模型",
     request: "视频按次",
     processing: "图像处理",
     digital: "数字人",
@@ -451,13 +457,17 @@ function normalizeTagToken(tag) {
     ocr: "OCR",
     VideoProc: "视频处理",
     "视频处理": "视频处理",
+    "视频按秒": "视频模型",
+    "视频模型": "视频模型",
+    VideoModel: "视频模型",
   };
   if (map[t]) return map[t];
   if (t.includes("·")) {
     const flat = t.replace(/·/g, "");
-    if (flat === "视频按秒" || flat === "影片按秒") return "视频按秒";
+    if (flat === "视频按秒" || flat === "影片按秒") return "视频模型";
     if (flat === "视频按次" || flat === "影片按次") return "视频按次";
     if (flat === "视频处理" || flat === "影片處理") return "视频处理";
+    if (flat === "视频模型" || flat === "影片模型") return "视频模型";
     t = flat;
   }
   return t;

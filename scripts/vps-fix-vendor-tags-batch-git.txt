@@ -1,0 +1,37 @@
+set -e
+cd /opt/ai-relay
+sudo git pull
+git log -1 --oneline
+
+sudo docker run --rm \
+  -v /opt/ai-relay:/opt/ai-relay:ro \
+  -v /opt/ai-relay/data/new-api:/data \
+  -w /opt/ai-relay python:3.12-alpine \
+  python scripts/vps-fix-vendor-tags-batch.py /data/one-api.db
+
+sudo docker run --rm \
+  -v /opt/ai-relay:/opt/ai-relay:ro \
+  -v /opt/ai-relay/data/new-api:/data \
+  -w /opt/ai-relay python:3.12-alpine \
+  python scripts/vps-update-marketplace-copy.py /data/one-api.db /opt/ai-relay/config/marketplace-model-copy.json \
+  || echo COPY_SKIP
+
+sudo docker cp /opt/ai-relay/services/creem-moderation-proxy/server.mjs ai-relay-creem-moderation:/app/server.mjs
+sudo docker cp /opt/ai-relay/services/creem-moderation-proxy/marketplace-model-copy.json ai-relay-creem-moderation:/app/marketplace-model-copy.json
+sudo docker cp /opt/ai-relay/services/creem-moderation-proxy/model-icon-map.json ai-relay-creem-moderation:/app/model-icon-map.json
+sudo docker restart ai-relay-creem-moderation ai-relay-new-api >/dev/null
+sleep 5
+
+curl -sS https://www.keyoapi.xyz/api/pricing | python3 -c '
+import sys,json
+j=json.load(sys.stdin)
+vs={v["id"]:v.get("name") for v in (j.get("vendors") or [])}
+want=["ling-3.0-flash-fin:free","mimo-v2.6-pro","mimo-v2.6-flash","dots-3-note-preview:free","laguna-s-2.1:free"]
+for m in j.get("data") or []:
+  if m.get("model_name") in want:
+    print(m["model_name"], "vendor=", vs.get(m.get("vendor_id")), "icon=", m.get("icon"), "tags=", m.get("tags"))
+sec=sum(1 for m in (j.get("data") or []) if "视频按秒" in str(m.get("tags") or ""))
+vm=sum(1 for m in (j.get("data") or []) if "视频模型" in str(m.get("tags") or ""))
+print("left_视频按秒", sec, "视频模型", vm)
+'
+echo DONE_VENDOR_TAGS_BATCH

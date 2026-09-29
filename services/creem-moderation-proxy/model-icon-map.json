@@ -12,7 +12,8 @@
     "Security-semantic-filtering": "/brand/model-icons/security-semantic.png",
     "nsfw-classifier": "/brand/model-icons/nsfw-classifier.png",
     "keyo-text-moderation": "/brand/model-icons/keyo-moderation.png",
-    "Atria-dawn-v2": "/brand/model-icons/atria-dawn-v2.svg"
+    "Atria-dawn-v2": "/brand/model-icons/atria-dawn-v2.svg",
+    "dots-3-note-preview:free": "/brand/model-icons/xiaohongshu.svg"
   },
   "lobehub_fixes": {
     "seedance-2.5": "Doubao.Color",
@@ -39,6 +40,9 @@
     "sam3": "Meta.Color",
     "GLM-ASR": "Zhipu.Color",
     "GLM-TTS": "Zhipu.Color",
-    "Step-Audio-TTS-3B": "Stepfun.Color"
+    "Step-Audio-TTS-3B": "Stepfun.Color",
+    "mimo-v2.6-pro": "XiaomiMiMo",
+    "mimo-v2.6-flash": "XiaomiMiMo",
+    "ling-3.0-flash-fin:free": "Qwen.Color"
   }
 }

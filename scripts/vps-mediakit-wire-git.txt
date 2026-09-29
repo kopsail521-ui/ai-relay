@@ -1,0 +1,24 @@
+# 接线 MediaKit submit/poll（需 MEDIAKIT_API_KEY）
+set -e
+cd /opt/ai-relay
+sudo git pull
+git log -1 --oneline
+
+# 若已有 MEDIAKIT_API_KEY 在 .env 则直接重建；否则把 key 写进下一行再跑
+# printf 'MEDIAKIT_API_KEY=%s\n' 'YOUR_KEY' | sudo tee -a /opt/ai-relay/.env >/dev/null
+
+echo "mk_key_set=$(sudo grep -c '^MEDIAKIT_API_KEY=.' /opt/ai-relay/.env || true)"
+echo "volc_ak_set=$(sudo grep -c '^VOLC_ACCESS_KEY=.' /opt/ai-relay/.env || true)"
+
+sudo docker build -t ai-relay-volc-passthrough:local ./services/volc-passthrough
+sudo docker rm -f ai-relay-volc-passthrough 2>/dev/null || true
+sudo docker run -d --name ai-relay-volc-passthrough --restart unless-stopped --network host \
+  --env-file /opt/ai-relay/.env \
+  -e PORT=3012 -e LISTEN_HOST=0.0.0.0 \
+  -e NEW_API_BASE=http://127.0.0.1:3000 \
+  -e NEW_API_DB=/data/one-api.db \
+  -v /opt/ai-relay/data/new-api:/data:rw \
+  ai-relay-volc-passthrough:local
+sleep 2
+curl -sS -m 3 http://127.0.0.1:3012/healthz; echo
+echo DONE_MEDIAKIT_WIRE

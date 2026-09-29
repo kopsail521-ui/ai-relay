@@ -399,7 +399,7 @@ function sanitizeDescription(desc) {
     .replace(/上游(?:成本|进货价|标价|渠道|供应商)?/g, "")
     .replace(/透传|二道贩子?|中转站|转卖/g, "")
     .replace(
-      /模力方舟|MoArk|moark|APIMart|Apimart|apimart|OpenLux|openlux|UnoRouter|unorouter|Gitee(?:\s*AI)?|gitee|Grsai|grsai|SenseNova|sensenova|商汤|SenseTime|Sorux|soruxgpt/gi,
+      /模力方舟|MoArk|moark|APIMart|Apimart|apimart|OpenLux|openlux|UnoRouter|unorouter|Gitee(?:\s*AI)?|gitee|Grsai|grsai|SenseNova|sensenova|商汤|SenseTime|Sorux|soruxgpt|InclusionAI|Poolside|Dots Studio|volcengine|Volcengine|MediaKit|火山引擎|passthrough/gi,
       ""
     )
     .replace(/¥[\d.]+/g, "")
@@ -414,7 +414,7 @@ function scrubVendorName(name) {
   const n = String(name || "").trim();
   if (!n) return n;
   if (
-    /模力方舟|MoArk|moark|APIMart|Apimart|apimart|OpenLux|openlux|UnoRouter|unorouter|Gitee|gitee|Grsai|grsai|SenseNova|sensenova|商汤|SenseTime|Sorux|中转|上游|透传/i.test(
+    /模力方舟|MoArk|moark|APIMart|Apimart|apimart|OpenLux|openlux|UnoRouter|unorouter|Gitee|gitee|Grsai|grsai|SenseNova|sensenova|商汤|SenseTime|Sorux|InclusionAI|Poolside|中转|上游|透传/i.test(
       n
     )
   ) {
@@ -569,9 +569,20 @@ function enrichPricingPayload(payload) {
     }
     if (next.owner_by) next.owner_by = scrubVendorName(next.owner_by);
     if (next.tags != null) next.tags = normalizeModelTags(next.tags);
+    if (next.description) next.description = sanitizeDescription(next.description);
     return next;
   });
-  return { ...payload, data, vendors };
+
+  // Drop empty vendor shells (e.g. leftover InclusionAI / Poolside after remaps)
+  const usedVids = new Set();
+  for (const m of data) {
+    if (m && m.vendor_id != null) usedVids.add(m.vendor_id);
+  }
+  const vendorsUsed = Array.isArray(vendors)
+    ? vendors.filter((v) => v && usedVids.has(v.id))
+    : vendors;
+
+  return { ...payload, data, vendors: vendorsUsed };
 }
 
 /** 排行榜展示倍率：只放大 token 展示量，不改库、不影响扣费。份额/增速不变。 */

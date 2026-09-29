@@ -5431,31 +5431,31 @@
     }
   },
   "ling-3.0-flash-fin:free": {
-    "description": "InclusionAI Ling 3.0 Flash Fin 免费额度：面向金融等垂直场景优化的高速对话模型，适合行业问答试用。",
-    "description_zh": "InclusionAI Ling 3.0 Flash Fin 免费额度：面向金融等垂直场景优化的高速对话模型，适合行业问答试用。",
-    "description_en": "Free InclusionAI Ling 3.0 Flash Fin: fast chat tuned for finance-style vertical Q&A trials.",
+    "description": "Ling 3.0 Flash Fin 免费额度：面向金融等垂直场景优化的高速对话模型，适合行业问答试用。",
+    "description_zh": "Ling 3.0 Flash Fin 免费额度：面向金融等垂直场景优化的高速对话模型，适合行业问答试用。",
+    "description_en": "Free Ling 3.0 Flash Fin: fast chat tuned for finance-style vertical Q&A trials.",
     "descriptions": {
-      "zhCN": "InclusionAI Ling 3.0 Flash Fin 免费额度：面向金融等垂直场景优化的高速对话模型，适合行业问答试用。",
-      "zhTW": "InclusionAI Ling 3.0 Flash Fin 免费额度：面向金融等垂直场景优化的高速对话模型，适合行业问答试用。",
-      "en": "Free InclusionAI Ling 3.0 Flash Fin: fast chat tuned for finance-style vertical Q&A trials.",
-      "fr": "Free InclusionAI Ling 3.0 Flash Fin: fast chat tuned for finance-style vertical Q&A trials.",
-      "ru": "Free InclusionAI Ling 3.0 Flash Fin: fast chat tuned for finance-style vertical Q&A trials.",
-      "ja": "Free InclusionAI Ling 3.0 Flash Fin: fast chat tuned for finance-style vertical Q&A trials.",
-      "vi": "Free InclusionAI Ling 3.0 Flash Fin: fast chat tuned for finance-style vertical Q&A trials."
+      "zhCN": "Ling 3.0 Flash Fin 免费额度：面向金融等垂直场景优化的高速对话模型，适合行业问答试用。",
+      "zhTW": "Ling 3.0 Flash Fin 免费额度：面向金融等垂直场景优化的高速对话模型，适合行业问答试用。",
+      "en": "Free Ling 3.0 Flash Fin: fast chat tuned for finance-style vertical Q&A trials.",
+      "fr": "Free Ling 3.0 Flash Fin: fast chat tuned for finance-style vertical Q&A trials.",
+      "ru": "Free Ling 3.0 Flash Fin: fast chat tuned for finance-style vertical Q&A trials.",
+      "ja": "Free Ling 3.0 Flash Fin: fast chat tuned for finance-style vertical Q&A trials.",
+      "vi": "Free Ling 3.0 Flash Fin: fast chat tuned for finance-style vertical Q&A trials."
     }
   },
   "laguna-s-2.1:free": {
-    "description": "Poolside Laguna S 2.1 免费额度：面向软件工程与代码助手的对话模型，适合编程问答与补全试用。",
-    "description_zh": "Poolside Laguna S 2.1 免费额度：面向软件工程与代码助手的对话模型，适合编程问答与补全试用。",
-    "description_en": "Free Poolside Laguna S 2.1: software-engineering oriented chat for coding Q&A and completion trials.",
+    "description": "Laguna S 2.1 免费额度：面向软件工程与代码助手的对话模型，适合编程问答与补全试用。",
+    "description_zh": "Laguna S 2.1 免费额度：面向软件工程与代码助手的对话模型，适合编程问答与补全试用。",
+    "description_en": "Free Laguna S 2.1: software-engineering oriented chat for coding Q&A and completion trials.",
     "descriptions": {
-      "zhCN": "Poolside Laguna S 2.1 免费额度：面向软件工程与代码助手的对话模型，适合编程问答与补全试用。",
-      "zhTW": "Poolside Laguna S 2.1 免费额度：面向软件工程与代码助手的对话模型，适合编程问答与补全试用。",
-      "en": "Free Poolside Laguna S 2.1: software-engineering oriented chat for coding Q&A and completion trials.",
-      "fr": "Free Poolside Laguna S 2.1: software-engineering oriented chat for coding Q&A and completion trials.",
-      "ru": "Free Poolside Laguna S 2.1: software-engineering oriented chat for coding Q&A and completion trials.",
-      "ja": "Free Poolside Laguna S 2.1: software-engineering oriented chat for coding Q&A and completion trials.",
-      "vi": "Free Poolside Laguna S 2.1: software-engineering oriented chat for coding Q&A and completion trials."
+      "zhCN": "Laguna S 2.1 免费额度：面向软件工程与代码助手的对话模型，适合编程问答与补全试用。",
+      "zhTW": "Laguna S 2.1 免费额度：面向软件工程与代码助手的对话模型，适合编程问答与补全试用。",
+      "en": "Free Laguna S 2.1: software-engineering oriented chat for coding Q&A and completion trials.",
+      "fr": "Free Laguna S 2.1: software-engineering oriented chat for coding Q&A and completion trials.",
+      "ru": "Free Laguna S 2.1: software-engineering oriented chat for coding Q&A and completion trials.",
+      "ja": "Free Laguna S 2.1: software-engineering oriented chat for coding Q&A and completion trials.",
+      "vi": "Free Laguna S 2.1: software-engineering oriented chat for coding Q&A and completion trials."
     }
   },
   "dots-3-note-preview:free": {

@@ -5844,5 +5844,25 @@
         ]
       ]
     }
+  },
+  "tags": {
+    "视频处理": {
+      "zhCN": "视频处理",
+      "zhTW": "影片處理",
+      "en": "VideoProc",
+      "fr": "VideoProc",
+      "ru": "VideoProc",
+      "ja": "動画処理",
+      "vi": "VideoProc"
+    },
+    "VideoProc": {
+      "zhCN": "视频处理",
+      "zhTW": "影片處理",
+      "en": "VideoProc",
+      "fr": "VideoProc",
+      "ru": "VideoProc",
+      "ja": "動画処理",
+      "vi": "VideoProc"
+    }
   }
 }

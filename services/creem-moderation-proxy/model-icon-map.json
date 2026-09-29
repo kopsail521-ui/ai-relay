@@ -1,5 +1,5 @@
 {
-  "note": "Custom PNG/SVG only when lobehub has no vendor logo. Models with a real vendor use lobehub keys in DB (Wenxin/Bilibili/Tencent/Doubao/…). Injected on SPA by creem-moderation-proxy.",
+  "note": "Explicit PNG/SVG overlays. Vendor「其他」models always use /brand/logo.svg via creem inject v4 (API vendor_id), overriding this map.",
   "icons": {
     "VajraV1": "/brand/model-icons/vajrav1.png",
     "AnimeSharp": "/brand/model-icons/animesharp.png",

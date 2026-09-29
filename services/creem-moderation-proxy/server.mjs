@@ -372,7 +372,8 @@ const LOBEHUB_ICON_FIXES = MODEL_ICON_PACK.lobehubFixes;
 
 function buildModelIconScript() {
   const map = JSON.stringify(MODEL_ICON_MAP);
-  const js = `(function(){if(window.__keyoModelIconsV3)return;window.__keyoModelIconsV3=1;var MAP=${map};function apply(){try{var names=Object.keys(MAP);if(!names.length)return;var nodes=document.querySelectorAll("h3,h2,h1,span,div,a,td,button");for(var i=0;i<nodes.length;i++){var el=nodes[i];if(el.children&&el.children.length>2)continue;var t=(el.textContent||"").replace(/\\s+/g," ").trim();if(!t||!MAP[t])continue;if(t.length>64)continue;var slot=null;var p=el.parentElement;for(var d=0;d<6&&p;d++){var cand=p.querySelector('[class*="bg-muted/40"],[class*="bg-muted\\\\/40"],.size-9,.size-10,[class*="size-9"],[class*="size-10"]');if(cand){slot=cand;break}var prev=p.firstElementChild;if(prev&&prev!==el&&/bg-muted|size-9|size-10|rounded/.test(prev.className||"")){slot=prev;break}p=p.parentElement}if(!slot)continue;if(slot.getAttribute("data-keyo-icon")==="1")continue;var img=document.createElement("img");img.src=MAP[t];img.alt=t;img.width=28;img.height=28;img.decoding="async";img.loading="lazy";img.setAttribute("translate","no");img.className="notranslate";img.style.cssText="width:28px;height:28px;border-radius:10px;object-fit:cover;display:block";slot.innerHTML="";slot.appendChild(img);slot.setAttribute("data-keyo-icon","1");slot.setAttribute("translate","no")}}catch(e){}}setInterval(apply,600);try{new MutationObserver(function(){apply()}).observe(document.documentElement,{childList:true,subtree:true})}catch(e){}document.addEventListener("DOMContentLoaded",apply);setTimeout(apply,400)})();`;
+  // v4: vendor「其他」一律用站点 logo；显式 MAP 仍可覆盖单模型资源
+  const js = `(function(){if(window.__keyoModelIconsV4)return;window.__keyoModelIconsV4=1;var MAP=${map};var LOGO="/brand/logo.svg";var other={};function loadOther(){try{fetch("/api/pricing",{credentials:"same-origin"}).then(function(r){return r.json()}).then(function(j){var vs=j&&j.vendors||[];var idO={};for(var i=0;i<vs.length;i++){var n=String(vs[i]&&vs[i].name||"");if(n==="其他"||n==="Other")idO[vs[i].id]=1}var data=j&&j.data||[];for(var k=0;k<data.length;k++){var m=data[k];if(m&&idO[m.vendor_id]&&(m.model_name||m.model))other[String(m.model_name||m.model)]=1}apply()}).catch(function(){})}catch(e){}}function srcFor(t){if(other[t])return LOGO;return MAP[t]||""}function apply(){try{var nodes=document.querySelectorAll("h3,h2,h1,span,div,a,td,button");for(var i=0;i<nodes.length;i++){var el=nodes[i];if(el.children&&el.children.length>2)continue;var t=(el.textContent||"").replace(/\\s+/g," ").trim();if(!t||t.length>64)continue;var src=srcFor(t);if(!src)continue;var slot=null;var p=el.parentElement;for(var d=0;d<6&&p;d++){var cand=p.querySelector('[class*="bg-muted/40"],[class*="bg-muted\\\\/40"],.size-9,.size-10,[class*="size-9"],[class*="size-10"]');if(cand){slot=cand;break}var prev=p.firstElementChild;if(prev&&prev!==el&&/bg-muted|size-9|size-10|rounded/.test(prev.className||"")){slot=prev;break}p=p.parentElement}if(!slot)continue;if(slot.getAttribute("data-keyo-icon")==="1"&&slot.getAttribute("data-keyo-icon-src")===src)continue;var img=document.createElement("img");img.src=src;img.alt=t;img.width=28;img.height=28;img.decoding="async";img.loading="lazy";img.setAttribute("translate","no");img.className="notranslate";img.style.cssText="width:28px;height:28px;border-radius:10px;object-fit:contain;display:block;background:#111";slot.innerHTML="";slot.appendChild(img);slot.setAttribute("data-keyo-icon","1");slot.setAttribute("data-keyo-icon-src",src);slot.setAttribute("translate","no")}}catch(e){}}loadOther();setInterval(apply,600);try{new MutationObserver(function(){apply()}).observe(document.documentElement,{childList:true,subtree:true})}catch(e){}document.addEventListener("DOMContentLoaded",apply);setTimeout(apply,400)})();`;
   return "<script>" + js + "</script>";
 }
 
@@ -448,12 +449,15 @@ function normalizeTagToken(tag) {
     image: "图片",
     moderation: "内容风控",
     ocr: "OCR",
+    VideoProc: "视频处理",
+    "视频处理": "视频处理",
   };
   if (map[t]) return map[t];
   if (t.includes("·")) {
     const flat = t.replace(/·/g, "");
     if (flat === "视频按秒" || flat === "影片按秒") return "视频按秒";
     if (flat === "视频按次" || flat === "影片按次") return "视频按次";
+    if (flat === "视频处理" || flat === "影片處理") return "视频处理";
     t = flat;
   }
   return t;
@@ -1174,12 +1178,9 @@ async function proxyRequest(req, res, bodyBuf) {
           changed = true;
         }
       }
-      if (
-        wantPricingPatches &&
-        !html.includes("keyo-model-icons-v3") &&
-        Object.keys(MODEL_ICON_MAP).length
-      ) {
-        const ic = `<!--keyo-model-icons-v3-->${MODEL_ICON_SCRIPT}`;
+      if (wantPricingPatches) {
+        html = html.replace(/<!--keyo-model-icons(?:-v\d+)?-->[\s\S]*?<\/script>/g, "");
+        const ic = `<!--keyo-model-icons-v4-->${MODEL_ICON_SCRIPT}`;
         if (html.includes("<head>")) {
           html = html.replace("<head>", `<head>${ic}`);
           changed = true;

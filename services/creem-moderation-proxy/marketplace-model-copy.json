@@ -5696,5 +5696,153 @@
     },
     "price_key_zh": "",
     "price_key_en": ""
+  },
+  "subtitle-erase-pro": {
+    "description": "视频压制字幕无痕擦除（精细化），适合短剧出海与二创去硬字幕。 计费：.018265/秒。",
+    "description_zh": "视频压制字幕无痕擦除（精细化），适合短剧出海与二创去硬字幕。 计费：.018265/秒。",
+    "description_en": "Refined hard-subtitle erasure for short drama export and remix. Billing: .018265/sec.",
+    "descriptions": {
+      "zhCN": "视频压制字幕无痕擦除（精细化），适合短剧出海与二创去硬字幕。 计费：.018265/秒。",
+      "zhTW": "视频压制字幕无痕擦除（精细化），适合短剧出海与二创去硬字幕。 计费：.018265/秒。",
+      "en": "Refined hard-subtitle erasure for short drama export and remix. Billing: .018265/sec.",
+      "fr": "Refined hard-subtitle erasure for short drama export and remix. Billing: .018265/sec.",
+      "ru": "Refined hard-subtitle erasure for short drama export and remix. Billing: .018265/sec.",
+      "ja": "Refined hard-subtitle erasure for short drama export and remix. Billing: .018265/sec.",
+      "vi": "Refined hard-subtitle erasure for short drama export and remix. Billing: .018265/sec."
+    },
+    "unit": "second",
+    "badge": {
+      "zhCN": "按秒收费",
+      "zhTW": "按秒計費",
+      "en": "Per Second",
+      "fr": "À la seconde",
+      "ru": "За секунду",
+      "ja": "秒課金",
+      "vi": "Theo giây"
+    },
+    "badge_zh": "按秒收费",
+    "badge_en": "Per Second",
+    "suffix": {
+      "zhCN": "/秒",
+      "zhTW": "/秒",
+      "en": "/ second",
+      "fr": "/ seconde",
+      "ru": "/ сек",
+      "ja": "/ 秒",
+      "vi": "/ giây"
+    },
+    "suffix_zh": "/秒",
+    "suffix_en": "/ second",
+    "price_key": {
+      "zhCN": "每秒",
+      "zhTW": "每秒",
+      "en": "Per second",
+      "fr": "Per second",
+      "ru": "Per second",
+      "ja": "Per second",
+      "vi": "Per second"
+    },
+    "price_key_zh": "每秒",
+    "price_key_en": "Per second",
+    "price_table": {
+      "columns": {
+        "zhCN": [
+          "规格",
+          "说明",
+          "价格 (/秒)"
+        ],
+        "en": [
+          "Spec",
+          "Note",
+          "Price (/sec)"
+        ]
+      },
+      "rows": [
+        [
+          "standard",
+          "精细化字幕擦除",
+          ".018265"
+        ]
+      ]
+    }
+  },
+  "video-enhance-pro": {
+    "description": "视频画质增强（大模型），按输出分辨率档位按秒计费。 计费：720p .034247/秒；1080p .068493/秒；2K .136986/秒。",
+    "description_zh": "视频画质增强（大模型），按输出分辨率档位按秒计费。 计费：720p .034247/秒；1080p .068493/秒；2K .136986/秒。",
+    "description_en": "Large-model video quality enhance; billed per second by output resolution. Billing: 720p .034247/sec; 1080p .068493/sec; 2K .136986/sec.",
+    "descriptions": {
+      "zhCN": "视频画质增强（大模型），按输出分辨率档位按秒计费。 计费：720p .034247/秒；1080p .068493/秒；2K .136986/秒。",
+      "zhTW": "视频画质增强（大模型），按输出分辨率档位按秒计费。 计费：720p .034247/秒；1080p .068493/秒；2K .136986/秒。",
+      "en": "Large-model video quality enhance; billed per second by output resolution. Billing: 720p .034247/sec; 1080p .068493/sec; 2K .136986/sec.",
+      "fr": "Large-model video quality enhance; billed per second by output resolution. Billing: 720p .034247/sec; 1080p .068493/sec; 2K .136986/sec.",
+      "ru": "Large-model video quality enhance; billed per second by output resolution. Billing: 720p .034247/sec; 1080p .068493/sec; 2K .136986/sec.",
+      "ja": "Large-model video quality enhance; billed per second by output resolution. Billing: 720p .034247/sec; 1080p .068493/sec; 2K .136986/sec.",
+      "vi": "Large-model video quality enhance; billed per second by output resolution. Billing: 720p .034247/sec; 1080p .068493/sec; 2K .136986/sec."
+    },
+    "unit": "second",
+    "badge": {
+      "zhCN": "按秒收费",
+      "zhTW": "按秒計費",
+      "en": "Per Second",
+      "fr": "À la seconde",
+      "ru": "За секунду",
+      "ja": "秒課金",
+      "vi": "Theo giây"
+    },
+    "badge_zh": "按秒收费",
+    "badge_en": "Per Second",
+    "suffix": {
+      "zhCN": "/秒",
+      "zhTW": "/秒",
+      "en": "/ second",
+      "fr": "/ seconde",
+      "ru": "/ сек",
+      "ja": "/ 秒",
+      "vi": "/ giây"
+    },
+    "suffix_zh": "/秒",
+    "suffix_en": "/ second",
+    "price_key": {
+      "zhCN": "每秒",
+      "zhTW": "每秒",
+      "en": "Per second",
+      "fr": "Per second",
+      "ru": "Per second",
+      "ja": "Per second",
+      "vi": "Per second"
+    },
+    "price_key_zh": "每秒",
+    "price_key_en": "Per second",
+    "price_table": {
+      "columns": {
+        "zhCN": [
+          "分辨率",
+          "场景",
+          "价格 (/秒)"
+        ],
+        "en": [
+          "Resolution",
+          "Scenario",
+          "Price (/sec)"
+        ]
+      },
+      "rows": [
+        [
+          "720p",
+          "标准输出",
+          ".034247"
+        ],
+        [
+          "1080p",
+          "标准输出",
+          ".068493"
+        ],
+        [
+          "2K",
+          "标准输出",
+          ".136986"
+        ]
+      ]
+    }
   }
 }

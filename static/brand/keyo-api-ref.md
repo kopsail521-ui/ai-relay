@@ -193,6 +193,15 @@ curl https://www.keyoapi.xyz/v1/videos/generations \
 
 `InfiniteTalk`（multipart：`model` + `prompt` + `cond_video` + `cond_audio`）
 
+### 1.11a 视频工具（异步按秒）→ `GET /v1/task/{id}`
+
+| 能力 | 路径 | 模型 | 售价（约） |
+|------|------|------|------------|
+| 硬字幕擦除（精细化） | `POST /v1/async/videos/subtitle-erase` | `subtitle-erase-pro` | **$0.018265/秒** |
+| 画质增强（Pro） | `POST /v1/async/videos/enhance` | `video-enhance-pro` | 720p **$0.034247/秒** · 1080p **$0.068493/秒** · 2K **$0.136986/秒** |
+
+JSON 提交（示例）含 `model` + 视频 URL（或平台约定的 `video_url` / `url` 字段）；按成功处理时长折算秒计费。
+
 ### 1.11b 系统一决策 → `POST /v1/systemone`
 
 `Bespoke-Nimble-9B`（**Jev / Open-Jev** 风格，BespokeLabs 2026-09-18，底座 Qwen3.5-9B-Instruct；JSON：`model` + `state` + `questions`；约 **$0.032 / $0** 每百万 tokens。非通用对话；每字段最多 26 选项；>2048 tokens 拒绝而非截断）

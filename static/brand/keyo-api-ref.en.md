@@ -182,6 +182,15 @@ Paid: `gpt-5.6-luna` · `gpt-5.6-terra` · `gpt-5.6-sol` · `gpt-6-luna` · `gpt
 
 `InfiniteTalk` (multipart: `model` + `prompt` + `cond_video` + `cond_audio`)
 
+### 1.11a Video tools (async, per-second) → `GET /v1/task/{id}`
+
+| Capability | Path | Model | Sell (approx.) |
+|------------|------|-------|----------------|
+| Hard-subtitle erase (refined) | `POST /v1/async/videos/subtitle-erase` | `subtitle-erase-pro` | **$0.018265/sec** |
+| Video quality enhance (pro) | `POST /v1/async/videos/enhance` | `video-enhance-pro` | 720p **$0.034247/sec** · 1080p **$0.068493/sec** · 2K **$0.136986/sec** |
+
+Submit JSON with `model` + video URL (`video_url` / `url`). Billed by successful processed duration in seconds.
+
 ### 1.11b System One decisions → `POST /v1/systemone`
 
 `Bespoke-Nimble-9B` (**Jev / Open-Jev**–style, BespokeLabs 2026-09-18, on Qwen3.5-9B-Instruct; JSON: `model` + `state` + `questions`; about **$0.032 / $0** per 1M tokens. Not general chat; max 26 options per field; prompts over 2048 tokens are rejected, not truncated)

@@ -1333,6 +1333,8 @@
 <tr><td class="note-cell" data-i18n="capSeg"></td><td class="price">POST /v1/images/segmentation</td><td class="model"><button type="button" class="model-btn" data-copy="VajraV1">VajraV1</button> · <button type="button" class="model-btn" data-copy="sam3">sam3</button></td></tr>
 <tr><td class="note-cell" data-i18n="capPose"></td><td class="price">POST /v1/images/pose-detection</td><td class="model"><button type="button" class="model-btn" data-copy="VajraV1">VajraV1</button></td></tr>
 <tr><td class="note-cell" data-i18n="capInfinite"></td><td class="price">POST /v1/async/videos/image-to-video → GET /v1/task/{id}</td><td class="model"><button type="button" class="model-btn" data-copy="InfiniteTalk">InfiniteTalk</button></td></tr>
+<tr><td class="note-cell" data-i18n="capSubtitleErase"></td><td class="price">POST /v1/async/videos/subtitle-erase → GET /v1/task/{id}</td><td class="model"><button type="button" class="model-btn" data-copy="subtitle-erase-pro">subtitle-erase-pro</button></td></tr>
+<tr><td class="note-cell" data-i18n="capVideoEnhance"></td><td class="price">POST /v1/async/videos/enhance → GET /v1/task/{id}</td><td class="model"><button type="button" class="model-btn" data-copy="video-enhance-pro">video-enhance-pro</button></td></tr>
 <tr><td class="note-cell" data-i18n="capSystemOne"></td><td class="price">POST /v1/systemone · ~$0.032 / $0</td><td class="model"><button type="button" class="model-btn" data-copy="Bespoke-Nimble-9B">Bespoke-Nimble-9B</button></td></tr>
 <tr><td class="note-cell" data-i18n="capMod"></td><td class="price">POST /v1/moderations</td><td class="model"><button type="button" class="model-btn" data-copy="nonescape-v0">nonescape-v0</button> · <button type="button" class="model-btn" data-copy="keyo-text-moderation">keyo-text-moderation</button> · <button type="button" class="model-btn" data-copy="Security-semantic-filtering">Security-semantic-filtering</button> · <button type="button" class="model-btn" data-copy="nsfw-classifier">nsfw-classifier</button></td></tr>
             </tbody>
@@ -1615,6 +1617,8 @@ const I18N = {
     "capPose": "Pose detection",
     "capDuix": "Digital human — currently unavailable.",
     "capInfinite": "Talking video (image → video)",
+    "capSubtitleErase": "Hard-subtitle erase (refined)",
+    "capVideoEnhance": "Video quality enhance (pro)",
     "capSystemOne": "Jev / Open-Jev System One (typed decisions)",
     "moreHint": "Full catalog and live prices: <a href=\"https://www.keyoapi.xyz/pricing\" target=\"_top\">/pricing</a>. Model names must match exactly. Video Path B poll <code>GET /v1/tasks/{id}</code> (plural); TTS/docs/InfiniteTalk poll <code>GET /v1/task/{id}</code> (singular).",
     "clientsTitle": "Clients",
@@ -1795,6 +1799,8 @@ const I18N = {
     "capPose": "人体关键点",
     "capDuix": "数字人（已下架）：当前暂不可用。",
     "capInfinite": "说话视频（图→视频）",
+    "capSubtitleErase": "硬字幕擦除（精细化）",
+    "capVideoEnhance": "视频画质增强（Pro）",
     "capSystemOne": "Jev / Open-Jev 系统一决策（类型化判别）",
     "moreHint": "完整目录与实时价格见 <a href=\"https://www.keyoapi.xyz/pricing\" target=\"_top\">/pricing</a>。模型名必须完全一致。视频 Path B 轮询 <code>GET /v1/tasks/{id}</code>（复数）；TTS/文档/InfiniteTalk 轮询 <code>GET /v1/task/{id}</code>（单数）。",
     "clientsTitle": "客户端接入",
@@ -1926,6 +1932,8 @@ const I18N = {
     "capPose": "人體關節點",
     "capDuix": "數位人（音訊視訊→影片）",
     "capInfinite": "說話影片（圖→影片）",
+    "capSubtitleErase": "硬字幕擦除（精細化）",
+    "capVideoEnhance": "影片畫質增強（Pro）",
     "capSystemOne": "Jev / Open-Jev 系統一決策（類型化判別）",
     "moreHint": "完整目錄與即時價格見 <a href=\"https://www.keyoapi.xyz/pricing\" target=\"_top\">/pricing</a>。模型名必須完全一致。影片 Path B 輪詢 <code>GET /v1/tasks/{id}</code>（複數）；TTS/文件/InfiniteTalk 輪詢 <code>GET /v1/task/{id}</code>（單數）。",
     "clientsTitle": "客戶端接入",
@@ -2057,6 +2065,8 @@ const I18N = {
     "capPose": "姿勢検出",
     "capDuix": "デジタルヒューマン（音声+映像→動画）",
     "capInfinite": "トーキング動画（画像→動画）",
+    "capSubtitleErase": "ハード字幕消去（精細）",
+    "capVideoEnhance": "動画画質強化（Pro）",
     "capSystemOne": "Jev / Open-Jev System One（型付き判定）",
     "moreHint": "全モデルと料金は <a href=\"https://www.keyoapi.xyz/pricing\" target=\"_top\">/pricing</a>。モデル名は完全一致。動画 Path B は <code>GET /v1/tasks/{id}</code>（複数）；TTS/文書/InfiniteTalk は <code>GET /v1/task/{id}</code>（単数）。",
     "clientsTitle": "クライアント",
@@ -2188,6 +2198,8 @@ const I18N = {
     "capPose": "Détection de pose",
     "capDuix": "Humain digital (audio+vidéo → vidéo)",
     "capInfinite": "Vidéo parlante (image → vidéo)",
+    "capSubtitleErase": "Effacement de sous-titres (raffiné)",
+    "capVideoEnhance": "Amélioration vidéo (pro)",
     "capSystemOne": "Jev / Open-Jev System One (décisions typées)",
     "moreHint": "Catalogue et prix : <a href=\"https://www.keyoapi.xyz/pricing\" target=\"_top\">/pricing</a>. Noms de modèles exacts. Vidéo Path B : <code>GET /v1/tasks/{id}</code> (pluriel) ; TTS/docs/InfiniteTalk : <code>GET /v1/task/{id}</code> (singulier).",
     "clientsTitle": "Clients",
@@ -2319,6 +2331,8 @@ const I18N = {
     "capPose": "Детекция позы",
     "capDuix": "Цифровой человек (аудио+видео → видео)",
     "capInfinite": "Говорящее видео (изображение → видео)",
+    "capSubtitleErase": "Стирание субтитров (тонкое)",
+    "capVideoEnhance": "Улучшение видео (pro)",
     "capSystemOne": "Jev / Open-Jev System One (типизированные решения)",
     "moreHint": "Каталог и цены: <a href=\"https://www.keyoapi.xyz/pricing\" target=\"_top\">/pricing</a>. Имена моделей — точно. Video Path B: <code>GET /v1/tasks/{id}</code> (мн.); TTS/docs/InfiniteTalk: <code>GET /v1/task/{id}</code> (ед.).",
     "clientsTitle": "Клиенты",
@@ -2450,6 +2464,8 @@ const I18N = {
     "capPose": "Nhận dạng tư thế",
     "capDuix": "Người số (audio+video → video)",
     "capInfinite": "Video nói (ảnh → video)",
+    "capSubtitleErase": "Xóa phụ đề cứng (tinh chỉnh)",
+    "capVideoEnhance": "Tăng cường chất lượng video (pro)",
     "capSystemOne": "Jev / Open-Jev System One (quyết định có kiểu)",
     "moreHint": "Danh mục & giá: <a href=\"https://www.keyoapi.xyz/pricing\" target=\"_top\">/pricing</a>. Tên model phải khớp. Video Path B poll <code>GET /v1/tasks/{id}</code> (số nhiều); TTS/docs/InfiniteTalk poll <code>GET /v1/task/{id}</code> (số ít).",
     "clientsTitle": "Client",

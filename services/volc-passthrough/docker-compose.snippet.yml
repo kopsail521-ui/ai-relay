@@ -1,0 +1,16 @@
+# Snippet for /opt/ai-relay/docker-compose.yml — Keyo Media Tools (:3012)
+  ai-relay-volc-passthrough:
+    build: ./services/volc-passthrough
+    container_name: ai-relay-volc-passthrough
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      PORT: "3012"
+      LISTEN_HOST: "0.0.0.0"
+      NEW_API_BASE: http://ai-relay-new-api:3000
+      NEW_API_DB: /data/one-api.db
+      # VOLC_ACCESS_KEY / VOLC_SECRET_KEY from .env
+    volumes:
+      - /opt/ai-relay/data/new-api:/data:rw
+    network_mode: host

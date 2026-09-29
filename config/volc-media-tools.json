@@ -1,0 +1,48 @@
+{
+  "note": "Volcengine AI MediaKit tools listed on Keyo as first-party IDs. Public copy must NOT name the supplier. Sell = cost × 2. FX CNY→USD = 7.3. Runtime: services/volc-passthrough (needs VOLC_ACCESS_KEY / VOLC_SECRET_KEY).",
+  "fx": 7.3,
+  "markup": 2,
+  "channel_name": "Keyo Media Tools",
+  "base_url": "http://127.0.0.1:3012",
+  "models": [
+    {
+      "id": "subtitle-erase-pro",
+      "vendor": "其他",
+      "icon": "Custom",
+      "tags": "视频按秒",
+      "billing": "per_second",
+      "cost_cny_per_minute": 4,
+      "sell_usd_per_second": 0.018265,
+      "model_price_usd": 0.018265,
+      "paths": [
+        "v1/async/videos/subtitle-erase"
+      ],
+      "poll": "v1/task/{id}",
+      "upstream_api": "SubmitSubtitleErasureRefinedVersionTaskAPI",
+      "desc_zh": "视频压制字幕无痕擦除（精细化），适合短剧出海与二创去硬字幕。",
+      "desc_en": "Refined hard-subtitle erasure for short drama export and remix."
+    },
+    {
+      "id": "video-enhance-pro",
+      "vendor": "其他",
+      "icon": "Custom",
+      "tags": "视频按秒",
+      "billing": "per_second_tiers",
+      "cost_cny_per_minute_base": 7.5,
+      "cost_note": "Maps to professional / large-model quality enhance base 7.5 CNY/min × resolution coeff (≤30fps). Confirm console rate before production.",
+      "sell_usd_per_second": {
+        "720p": 0.034247,
+        "1080p": 0.068493,
+        "2k": 0.136986
+      },
+      "model_price_usd": 0.068493,
+      "paths": [
+        "v1/async/videos/enhance"
+      ],
+      "poll": "v1/task/{id}",
+      "upstream_api": "画质增强（大模型版）",
+      "desc_zh": "视频画质增强（大模型），按输出分辨率档位按秒计费。",
+      "desc_en": "Large-model video quality enhance; billed per second by output resolution."
+    }
+  ]
+}

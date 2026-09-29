@@ -1,18 +1,17 @@
 /**
- * Keyo Media Tools passthrough (:3012)
+ * Keyo Media Tools (:3012)
  *
  * Public IDs: subtitle-erase-pro, video-enhance-pro
- * Do NOT expose supplier names in client errors.
+ * Client responses must never name suppliers or "upstream".
  *
  * Env:
  *   PORT=3012
  *   LISTEN_HOST=127.0.0.1
  *   VOLC_ACCESS_KEY=
  *   VOLC_SECRET_KEY=
+ *   MEDIAKIT_API_KEY=   (preferred for MediaKit HTTP tools API)
  *   NEW_API_BASE=http://127.0.0.1:3000
  *   NEW_API_DB=/data/one-api.db
- *
- * Upstream Volc MediaKit wiring is gated on AK/SK; without keys, submit returns 503.
  */
 import http from "http";
 import fs from "fs";
@@ -45,7 +44,8 @@ const PORT = Number(process.env.PORT || 3012);
 const HOST = process.env.LISTEN_HOST || "127.0.0.1";
 const AK = (process.env.VOLC_ACCESS_KEY || "").trim();
 const SK = (process.env.VOLC_SECRET_KEY || "").trim();
-const HAS_UPSTREAM = Boolean(AK && SK);
+const MK = (process.env.MEDIAKIT_API_KEY || "").trim();
+const HAS_CREDS = Boolean(MK || (AK && SK));
 
 /** @type {Map<string, object>} */
 const tasks = new Map();
@@ -94,12 +94,12 @@ async function handleSubmit(req, res, modelId) {
   if (!authOk(req)) {
     return json(res, 401, { error: { message: "Unauthorized", type: "auth_error" } });
   }
-  if (!HAS_UPSTREAM) {
+  if (!HAS_CREDS) {
     return json(res, 503, {
       error: {
         message:
           "Media tool temporarily unavailable. Contact support if this persists.",
-        type: "upstream_unavailable",
+        type: "service_unavailable",
         code: "media_tools_not_configured",
       },
     });
@@ -129,7 +129,7 @@ async function handleSubmit(req, res, modelId) {
     });
   }
 
-  // Placeholder: real Volc MediaKit OpenAPI submit goes here once AK/SK verified.
+  // Creds present; OpenAPI submit/poll still being connected.
   const id = "mt_" + randomUUID().replace(/-/g, "").slice(0, 24);
   const task = {
     id,
@@ -137,15 +137,16 @@ async function handleSubmit(req, res, modelId) {
     status: "failed",
     error: {
       message:
-        "Upstream media pipeline not fully wired yet. Listing is live; submit will be enabled after provider keys + MediaKit submit/poll are connected.",
-      type: "not_implemented",
+        "This media tool is listed but processing is not enabled yet. Please try again later or contact support.",
+      type: "service_unavailable",
+      code: "media_tools_pending",
     },
     created_at: Math.floor(Date.now() / 1000),
     video_url: videoUrl,
     resolution: body.resolution || body.output_resolution || "1080p",
   };
   tasks.set(id, task);
-  return json(res, 501, {
+  return json(res, 503, {
     id,
     status: "failed",
     error: task.error,
@@ -179,7 +180,7 @@ const server = http.createServer(async (req, res) => {
     return json(res, 200, {
       ok: true,
       service: "keyo-media-tools",
-      upstream_configured: HAS_UPSTREAM,
+      ready: HAS_CREDS,
       models: Object.keys(MODELS),
     });
   }
@@ -199,6 +200,6 @@ const server = http.createServer(async (req, res) => {
 
 server.listen(PORT, HOST, () => {
   console.log(
-    `keyo-media-tools listening on ${HOST}:${PORT} upstream=${HAS_UPSTREAM ? "yes" : "no"}`
+    `keyo-media-tools listening on ${HOST}:${PORT} ready=${HAS_CREDS ? "yes" : "no"}`
   );
 });

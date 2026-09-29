@@ -1,0 +1,36 @@
+# 上架 Keyo Media Tools（已推 GitHub 后粘贴）
+set -e
+cd /opt/ai-relay
+sudo git pull
+git log -1 --oneline
+
+sudo docker build -t ai-relay-volc-passthrough:local ./services/volc-passthrough
+sudo docker rm -f ai-relay-volc-passthrough 2>/dev/null || true
+sudo docker run -d --name ai-relay-volc-passthrough --restart unless-stopped --network host \
+  --env-file /opt/ai-relay/.env \
+  -e PORT=3012 -e LISTEN_HOST=0.0.0.0 \
+  -e NEW_API_BASE=http://127.0.0.1:3000 \
+  -e NEW_API_DB=/data/one-api.db \
+  -v /opt/ai-relay/data/new-api:/data:rw \
+  ai-relay-volc-passthrough:local
+sleep 2
+curl -sS -m 3 http://127.0.0.1:3012/healthz; echo
+
+sudo docker run --rm \
+  -v /opt/ai-relay:/opt/ai-relay:ro \
+  -v /opt/ai-relay/data/new-api:/data \
+  -w /opt/ai-relay python:3.12-alpine \
+  python scripts/vps-add-volc-media-tools.py /data/one-api.db
+
+sudo docker run --rm \
+  -v /opt/ai-relay:/opt/ai-relay:ro \
+  -v /opt/ai-relay/data/new-api:/data \
+  -w /opt/ai-relay python:3.12-alpine \
+  python scripts/vps-update-marketplace-copy.py /data/one-api.db /opt/ai-relay/config/marketplace-model-copy.json \
+  || echo COPY_SKIP
+
+sudo docker cp /opt/ai-relay/services/creem-moderation-proxy/marketplace-model-copy.json \
+  ai-relay-creem-moderation:/app/marketplace-model-copy.json 2>/dev/null || true
+sudo docker restart ai-relay-new-api ai-relay-creem-moderation >/dev/null || true
+sleep 5
+echo DONE_ADD_VOLC_MEDIA_TOOLS

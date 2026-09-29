@@ -848,13 +848,16 @@
       "id": "Duix-Avatar",
       "category": "digital-human",
       "targetKeywords": [
+        "duix avatar",
+        "duix avatar api",
+        "duix-avatar",
         "digital human api",
         "talking avatar api",
         "lip sync api"
       ],
-      "h1": "Duix-Avatar API — Audio+Video Driven Digital Human",
-      "title": "Duix-Avatar Digital Human API | KeyoAPI",
-      "metaDescription": "Duix-Avatar async digital human API on KeyoAPI. Lip-sync and expression generation from ~$0.0068 per second.",
+      "h1": "Duix Avatar API — Audio+Video Driven Digital Human",
+      "title": "Duix Avatar API | Duix-Avatar on KeyoAPI",
+      "metaDescription": "Duix Avatar API on KeyoAPI (model=Duix-Avatar). Async lip-sync digital human from ~$0.0068 per second — hosted alternative to self-managed avatar stacks.",
       "priceLabel": "$0.0068 / second",
       "priceUnit": "per_second",
       "related": [
@@ -866,6 +869,10 @@
       "endpoint": "POST /v1/async/videos/audio-video-to-video",
       "codeHint": "model=Duix-Avatar",
       "faqs": [
+        {
+          "q": "What is the Duix Avatar API on Keyo?",
+          "a": "Call model=Duix-Avatar on POST /v1/async/videos/audio-video-to-video with driving audio and a face video, then poll /v1/task/{id}. Hub: /ai-avatar-video-generator."
+        },
         {
           "q": "Is generation realtime?",
           "a": "Duix-Avatar runs as an async job—submit audio/video drivers, then fetch the rendered avatar clip."
@@ -880,14 +887,14 @@
         }
       ],
       "sections": {
-        "intro": "Duix-Avatar is KeyoAPI’s audio+video driven talking-avatar API: feed a face video plus driving audio, get lip-sync and expressions back as an async render job. Built for course creators, support explainers, and product demos that need a speaking face without a custom Unreal pipeline.",
+        "intro": "Searching for a Duix Avatar API? KeyoAPI hosts Duix-Avatar as an async talking-avatar endpoint: feed a face video plus driving audio, get lip-sync and expressions back without a custom Unreal pipeline.",
         "about": "Digital humans used to mean custom game engines. HTTP async APIs let SaaS teams productize avatars faster. KeyoAPI collocates TTS, STT, and avatar models so you can build the full loop on one relay key.",
         "pricing": "Per-second pricing (~$0.0068) maps cleanly to video length sold to end users. Cap max duration in your product to control worst-case invoices.",
         "useCases": "Training videos, localized spokesperson clips, and in-app guides. Pair with InfiniteTalk when you start from a still image plus audio.",
         "integrate": "Async endpoint POST /v1/async/videos/audio-video-to-video with model=Duix-Avatar. Keys: /pricing/Duix-Avatar."
       },
       "bodyWordCount": 320,
-      "body": "Duix-Avatar is KeyoAPI’s audio+video driven talking-avatar API: feed a face video plus driving audio, get lip-sync and expressions back as an async render job. Built for course creators, support explainers, and product demos that need a speaking face without a custom Unreal pipeline. Digital humans used to mean custom game engines. HTTP async APIs let SaaS teams productize avatars faster. KeyoAPI collocates TTS, STT, and avatar models so you can build the full loop on one relay key. Per-second pricing (~$0.0068) maps cleanly to video length sold to end users. Cap max duration in your product to control worst-case invoices. Training videos, localized spokesperson clips, and in-app guides. Pair with InfiniteTalk when you start from a still image plus audio. Async endpoint POST /v1/async/videos/audio-video-to-video with model=Duix-Avatar. Keys: /pricing/Duix-Avatar. Submit the job, then poll /v1/task/{id} for the rendered clip. Validate face video and voice sample length before submit; show progress UI and do not block HTTP workers. Moderate inputs for deepfake abuse. Cache finished MP4s by (face hash, audio hash). Buyers care about lip-sync quality and queue time—log both. Validate face frontal angle and audio SNR before queueing; show ETA from queue depth. Abuse prevention matters as much as render quality—rate-limit and log. Generate speech with IndexTTS-2, CosyVoice3, or Qwen3-TTS, then drive Duix-Avatar on the same key.",
+      "body": "Searching for a Duix Avatar API or a hosted alternative to self-managed digital-human stacks? KeyoAPI exposes Duix-Avatar as an async talking-avatar API: feed a face video plus driving audio, get lip-sync and expressions back as a render job. This is the API path for product teams — not a consumer Duix app. Build the loop on one prepaid key: generate speech with CosyVoice3 / Qwen3-TTS / IndexTTS-2, then drive Duix-Avatar. Per-second pricing (~$0.0068) maps to output length; confirm on /pricing/Duix-Avatar. Cap max duration, show queue ETA, and moderate deepfake abuse. Prefer InfiniteTalk when you start from a still photo plus audio. Endpoint: POST /v1/async/videos/audio-video-to-video with model=Duix-Avatar, then GET /v1/task/{id}. Hub page: /ai-avatar-video-generator.",
       "curlExample": "curl https://www.keyoapi.xyz/v1/async/videos/audio-video-to-video \\\n  -H \"Authorization: Bearer YOUR_API_KEY\" \\\n  -F model=Duix-Avatar \\\n  -F audio=@./voice.wav \\\n  -F video=@./face.mp4\n# then: GET /v1/task/{id}",
       "uniqueBlurb": "Duix-Avatar is async audio+video→talking avatar: post to /v1/async/videos/audio-video-to-video and poll /v1/task/{id} for the rendered clip."
     },
@@ -993,14 +1000,16 @@
       "id": "CosyVoice3",
       "category": "speech",
       "targetKeywords": [
+        "cosyvoice3 api",
+        "cosyvoice 3 api",
         "cosyvoice",
         "cosyvoice 3",
         "cosyvoice api",
         "text to speech api"
       ],
-      "h1": "CosyVoice3 API — Multilingual Zero-Shot TTS",
-      "title": "CosyVoice3 API — Hosted TTS on KeyoAPI",
-      "metaDescription": "CosyVoice3 API on KeyoAPI: async multilingual zero-shot TTS via POST /v1/async/audio/speech. About $1.37 / 10K characters — no self-host GPU.",
+      "h1": "CosyVoice3 API — How to Call Multilingual Zero-Shot TTS",
+      "title": "CosyVoice3 API — How to Call Hosted TTS | KeyoAPI",
+      "metaDescription": "CosyVoice3 API on KeyoAPI: call async multilingual TTS via POST /v1/async/audio/speech with model=CosyVoice3. About $1.37 / 10K characters.",
       "priceLabel": "$1.37 / 10K characters",
       "priceUnit": "per_10k_chars",
       "related": [
@@ -1012,6 +1021,10 @@
       "endpoint": "POST /v1/async/audio/speech",
       "codeHint": "model=CosyVoice3",
       "faqs": [
+        {
+          "q": "How do I call the CosyVoice3 API?",
+          "a": "Set Authorization: Bearer YOUR_KEY, POST https://www.keyoapi.xyz/v1/async/audio/speech with model=CosyVoice3 and your text input, then poll GET /v1/task/{id} until the audio URL is ready."
+        },
         {
           "q": "Is CosyVoice3 synchronous?",
           "a": "No. On KeyoAPI it uses POST /v1/async/audio/speech — create a task, then poll GET /v1/task/{id}. For a sync round trip, use IndexTTS-2 on /v1/audio/speech."
@@ -1030,14 +1043,14 @@
         }
       ],
       "sections": {
-        "intro": "CosyVoice3 is KeyoAPI’s async CosyVoice 3 TTS: multilingual zero-shot speech without cloning a repo or renting a GPU. Call it with the same OpenAI-style key you use for Whisper and chat models.",
-        "about": "Async generation fits podcasts, course narration, IVR, and avatar pipelines that already wait on renderers. Prefer IndexTTS-2 when you need audio back inside a single HTTP round trip.",
+        "intro": "Looking for a CosyVoice3 API without self-hosting GPUs? KeyoAPI exposes CosyVoice3 as async multilingual zero-shot TTS on the same OpenAI-style key you use for Whisper and chat.",
+        "about": "How to call CosyVoice3 API on Keyo: mint a key, POST /v1/async/audio/speech with model=CosyVoice3, poll /v1/task/{id}, then play or CDN-cache the returned audio. Prefer IndexTTS-2 when you need audio back inside a single HTTP round trip.",
         "pricing": "About $1.37 per 10,000 characters. Map CMS script length to spend; confirm live rates on /pricing/CosyVoice3.",
         "useCases": "Product voiceovers, localized support replies, game NPCs, and digital humans (pair with Duix-Avatar or InfiniteTalk). Customer bots that answer in the user’s language.",
-        "integrate": "POST /v1/async/audio/speech with model=CosyVoice3, then poll /v1/task/{id}. Docs: /brand/keyo-docs.html."
+        "integrate": "POST /v1/async/audio/speech with model=CosyVoice3, then poll /v1/task/{id}. Docs: /brand/keyo-docs.html. Broader map: /tts-api."
       },
-      "bodyWordCount": 325,
-      "body": "CosyVoice3 is KeyoAPI’s async CosyVoice 3 TTS: multilingual zero-shot speech without cloning a repo or renting a GPU. Call it with the same OpenAI-style key you use for Whisper and chat models. Async generation fits podcasts, course narration, IVR, and avatar pipelines that already wait on renderers. Prefer IndexTTS-2 when you need audio back inside a single HTTP round trip. About $1.37 per 10,000 characters. Map CMS script length to spend; confirm live rates on /pricing/CosyVoice3. Product voiceovers, localized support replies, game NPCs, and digital humans (pair with Duix-Avatar or InfiniteTalk). Customer bots that answer in the user’s language. POST /v1/async/audio/speech with model=CosyVoice3, then poll /v1/task/{id}. Docs: /brand/keyo-docs.html. If you want hosted inference instead of a research install, KeyoAPI is that path. Create speech jobs, poll until ready, then CDN-cache the audio URL. Offer clone samples only after consent. Fallback to a default voice when clone confidence is low. Measure time-to-first-byte of finished audio, not just API accept latency. Normalize text before synthesis. Store voice ids per locale. Fail closed on celebrity likeness without rights. Try it from /pricing/CosyVoice3. There is no separate upload playground.",
+      "bodyWordCount": 360,
+      "body": "Looking for a CosyVoice3 API without self-hosting GPUs? KeyoAPI exposes CosyVoice3 as async multilingual zero-shot TTS on the same OpenAI-style key you use for Whisper and chat. How to call CosyVoice3 API on Keyo: create a key at /sign-up, set Authorization: Bearer YOUR_KEY, POST https://www.keyoapi.xyz/v1/async/audio/speech with JSON {\"model\":\"CosyVoice3\",\"input\":\"...\"}, then poll GET /v1/task/{id} until the audio URL is ready. Prefer IndexTTS-2 when you need audio back inside a single HTTP round trip. About $1.37 per 10,000 characters — confirm live rates on /pricing/CosyVoice3. Product voiceovers, localized support replies, game NPCs, and digital humans (pair with Duix-Avatar or InfiniteTalk via /ai-avatar-video-generator). If you want hosted inference instead of a research install, KeyoAPI is that path. Normalize text before synthesis, store voice ids per locale, and CDN-cache finished audio. Try it from /pricing/CosyVoice3. Broader TTS map: /tts-api.",
       "curlExample": "curl https://www.keyoapi.xyz/v1/async/audio/speech \\\n  -H \"Authorization: Bearer YOUR_API_KEY\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\"model\":\"CosyVoice3\",\"input\":\"Hello from KeyoAPI TTS.\"}'\n# then: GET /v1/task/{id}",
       "uniqueBlurb": "CosyVoice3 is async TTS on /v1/async/audio/speech—poll the task for audio; use IndexTTS-2 when you want sync /v1/audio/speech."
     }

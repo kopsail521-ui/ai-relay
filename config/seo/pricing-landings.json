@@ -451,10 +451,12 @@
     {
       "slug": "ai-avatar-video-generator",
       "navLabel": "Avatar video API",
-      "h1": "AI Avatar Video Generator API — Duix-Avatar & InfiniteTalk",
-      "title": "AI Avatar Video Generator API | Duix & InfiniteTalk on KeyoAPI",
-      "metaDescription": "AI avatar video generator API on KeyoAPI: Duix-Avatar (~$0.0068/sec) and InfiniteTalk (~$0.342/request). Pair with Keyo TTS on one prepaid key.",
+      "h1": "Duix Avatar API & AI Avatar Video Generator — KeyoAPI",
+      "title": "Duix Avatar API | AI Avatar Video Generator on KeyoAPI",
+      "metaDescription": "Duix Avatar API on KeyoAPI: Duix-Avatar (~$0.0068/sec) and InfiniteTalk (~$0.342/request). Hosted talking-avatar path for SaaS products.",
       "targetKeywords": [
+        "duix avatar",
+        "duix avatar api",
         "ai avatar video generator",
         "talking avatar api",
         "digital human api"
@@ -462,7 +464,7 @@
       "tableHeading": "Digital human models",
       "colOfficial": "Input → output",
       "bodyHeading": "Rates and pipeline",
-      "lead": "Building an AI avatar video generator? KeyoAPI hosts Duix-Avatar (audio+video → talking face) and InfiniteTalk (image/audio → talking head) as async jobs — generate speech with IndexTTS-2 / CosyVoice3 / Qwen3-TTS on the same key, then render.",
+      "lead": "Looking for a Duix Avatar API without running your own render farm? KeyoAPI hosts Duix-Avatar (audio+video → talking face) and InfiniteTalk (image/audio → talking head) as async jobs — generate speech with IndexTTS-2 / CosyVoice3 / Qwen3-TTS on the same key, then render.",
       "rows": [
         {
           "model": "Duix-Avatar",
@@ -488,6 +490,7 @@
         "body": "Typical product loop: draft script → TTS (optionally cloned) → avatar render → CDN cache. Cap max duration, show queue ETA, and moderate deepfake abuse. Try/buy each model from its /pricing/{id} page after /sign-up — no separate upload playground."
       },
       "body": [
+        "Duix Avatar API (downstream use): product teams often search “duix avatar” when they need a talking-face render they can meter in SaaS — Keyo exposes that as model=Duix-Avatar on an async video endpoint, not as a consumer editor.",
         "This is the API path, not a consumer app: prepaid metering, OpenAI-style auth for adjacent chat and speech, async task polling for renders.",
         "Indicative rates: Duix-Avatar ~$0.0068 per second of output; InfiniteTalk ~$0.342 per request. Confirm /pricing/Duix-Avatar and /pricing/InfiniteTalk before volume. Pick Duix when you have driving video; pick InfiniteTalk when you start from a still spokesperson photo.",
         "How to call: async video endpoints with model=Duix-Avatar or InfiniteTalk, then GET /v1/task/{id}. Speech side: /tts-api and /voice-cloning-api. Model guides under /model/Duix-Avatar and /model/InfiniteTalk.",
@@ -495,6 +498,10 @@
       ],
       "curlExample": "curl https://www.keyoapi.xyz/v1/async/videos/image-to-video \\\n  -H \"Authorization: Bearer $KEYO_API_KEY\" \\\n  -F model=InfiniteTalk \\\n  -F \"prompt=natural talking-head delivery\" \\\n  -F cond_video=@./portrait.png \\\n  -F cond_audio=@./voice.wav\n# then: GET /v1/task/{id}",
       "faqs": [
+        {
+          "q": "Is this a Duix Avatar API alternative?",
+          "a": "Yes for developers who want hosted Duix-Avatar metering on Keyo: same prepaid key as TTS and chat. It is not the official Duix consumer product UI."
+        },
         {
           "q": "Realtime avatar streaming?",
           "a": "These models are async render jobs, not WebRTC realtime avatars. Design UX around queue + progress."

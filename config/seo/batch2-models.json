@@ -113,11 +113,13 @@
       "targetKeywords": [
         "deepseek v4 flash",
         "deepseek-v4-flash",
+        "deepseek v4 flash pricing",
+        "deepseek v4 flash free",
         "deepseek api"
       ],
-      "h1": "DeepSeek V4 Flash on KeyoAPI — Catalog ID & Price",
-      "title": "DeepSeek V4 Flash API Guide & Pricing | KeyoAPI",
-      "metaDescription": "deepseek-v4-flash ~$0.09/$0.17 on KeyoAPI. Prefer deepseek-v4.1-flash ~$0.01/$0.04 for cheaper high-volume Flash.",
+      "h1": "DeepSeek V4 Flash API — Pricing & Free Prototype Path",
+      "title": "DeepSeek V4 Flash Pricing & Free Options | KeyoAPI",
+      "metaDescription": "deepseek-v4-flash pricing ~$0.09/$0.17 on KeyoAPI. Compare Flash IDs and $0 free catalog models on the same key.",
       "priceLabel": "~$0.09 / $0.17 per 1M in/out",
       "priceUnit": "per_1m_tokens",
       "related": [
@@ -129,11 +131,19 @@
       "codeHint": "model=deepseek-v4-flash",
       "faqs": [
         {
+          "q": "What is deepseek-v4-flash pricing on Keyo?",
+          "a": "Indicative ~$0.09 / $0.17 per 1M in/out. Confirm live on /pricing/deepseek-v4-flash. Family table: /deepseek-api-pricing."
+        },
+        {
+          "q": "Is there a free DeepSeek V4 Flash?",
+          "a": "This ID is metered. For $0 prototyping on the same key, use fixed free catalog IDs on /free-models (including DeepSeek-Prover-V2-7B), then switch model= to deepseek-v4-flash or deepseek-v4.1-flash when you need this Flash band."
+        },
+        {
           "q": "Is this the cheapest DeepSeek Flash?",
           "a": "No. Prefer deepseek-v4.1-flash (~$0.01 / $0.04) for cheaper high-volume paid Flash. Confirm all IDs on /pricing."
         }
       ],
-      "body": "deepseek-v4-flash is a Keyo catalog ID at indicative ~$0.09 / $0.17 per 1M in/out — not the same row as deepseek-v4.1-flash (~$0.01 / $0.04). Prefer deepseek-v4.1-flash for cheaper high-volume paid Flash traffic. deepseek-v4-flash-0731 (~$0.04 / $0.07) is another separate Flash-class ID. deepseek-v4-pro-0813 (~$0.07 / $0.14) is a different Pro model. Confirm interactive /pricing before volume.",
+      "body": "Looking up DeepSeek V4 Flash pricing or a free path on an OpenAI-compatible relay? On KeyoAPI, deepseek-v4-flash is a metered catalog ID at indicative ~$0.09 / $0.17 per 1M in/out — confirm live on /pricing/deepseek-v4-flash. It is not the same row as deepseek-v4.1-flash (~$0.01 / $0.04) or deepseek-v4-flash-0731 (~$0.04 / $0.07). Prefer deepseek-v4.1-flash for cheaper high-volume paid Flash; keep deepseek-v4-flash when your stack already pins this exact model string. For DeepSeek V4 Flash free prototyping on the same API key, use fixed $0 IDs on /free-models (fair-use), then switch model= to a metered Flash ID without changing base URL or auth. deepseek-v4-pro-0813 (~$0.07 / $0.14) is a separate Pro model. Family table: /deepseek-api-pricing. Call POST /v1/chat/completions with Bearer auth and model=deepseek-v4-flash.",
       "curlExample": "curl https://www.keyoapi.xyz/v1/chat/completions \\\n  -H \"Authorization: Bearer YOUR_API_KEY\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\"model\":\"deepseek-v4-flash\",\"messages\":[{\"role\":\"user\",\"content\":\"Hello from DeepSeek V4 Flash\"}]}'",
       "uniqueBlurb": "Flash catalog ID with its own sell rate — distinct from deepseek-v4.1-flash."
     },
@@ -178,11 +188,13 @@
       "targetKeywords": [
         "kimi-k3",
         "kimi k3",
+        "kimi k3 api key free",
+        "kimi k3 free",
         "moonshot kimi api"
       ],
-      "h1": "Kimi K3 API on KeyoAPI — Paid Twin + Free Tier",
-      "title": "Kimi K3 API | KeyoAPI",
-      "metaDescription": "Call kimi-k3 on KeyoAPI (~$0.20/$1.02 per 1M). OpenAI-compatible chat for Moonshot Kimi workloads.",
+      "h1": "Kimi K3 API on KeyoAPI — Paid ID + Free Key Path",
+      "title": "Kimi K3 API Key (Free Prototyping Path) | KeyoAPI",
+      "metaDescription": "Call kimi-k3 on KeyoAPI (~$0.20/$1.02 per 1M). One free-key path for $0 prototypes, then switch to kimi-k3.",
       "priceLabel": "~$0.20 / $1.02 per 1M in/out",
       "priceUnit": "per_1m_tokens",
       "related": [
@@ -198,11 +210,15 @@
           "a": "Use model=kimi-k3 against https://www.keyoapi.xyz/v1/chat/completions with Bearer auth."
         },
         {
+          "q": "Is there a Kimi K3 API key free path?",
+          "a": "Mint a Keyo key (no credit card required to start). For $0 calls, use fixed free catalog IDs on /free-models with fair-use limits, then switch model= to kimi-k3 for this paid Moonshot-family ID on the same key."
+        },
+        {
           "q": "Where is live pricing?",
           "a": "See /pricing/kimi-k3. Indicative rates ~$0.20 / $1.02 per 1M in/out."
         }
       ],
-      "body": "Kimi K3 on KeyoAPI is the Moonshot-family chat model exposed as kimi-k3. Indicative rates are about $0.20 / $1.02 per 1M in/out — confirm live on /pricing/kimi-k3. Use the OpenAI-compatible base URL https://www.keyoapi.xyz/v1 and Bearer auth.",
+      "body": "Need a Kimi K3 API key with a free prototyping path? On KeyoAPI, kimi-k3 is the metered Moonshot-family chat ID (~$0.20 / $1.02 per 1M in/out — confirm on /pricing/kimi-k3). Create a key at /sign-up, set base URL to https://www.keyoapi.xyz/v1, and call POST /v1/chat/completions with Bearer auth. For a free API key workflow before you meter Kimi traffic: use fixed $0 catalog IDs on /free-models (fair-use), then flip model= to kimi-k3 without changing auth or base URL. This page is not the Kimi consumer app — it is an OpenAI-compatible relay ID for product backends and agents. Prefer glm-5.2 or deepseek-v4.1-flash nearby when you need a different cost/quality band on the same wallet.",
       "curlExample": "curl https://www.keyoapi.xyz/v1/chat/completions \\\n  -H \"Authorization: Bearer YOUR_API_KEY\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\"model\":\"kimi-k3\",\"messages\":[{\"role\":\"user\",\"content\":\"Hello from Kimi K3\"}]}'",
       "uniqueBlurb": "Short catalog page for kimi-k3 with live Keyo sell rates."
     },

@@ -3,20 +3,20 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>AI Avatar Video Generator API | Duix &amp; InfiniteTalk on KeyoAPI</title>
-<meta name="description" content="AI avatar video generator API on KeyoAPI: Duix-Avatar (~$0.0068/sec) and InfiniteTalk (~$0.342/request). Pair with Keyo TTS on one prepaid key." />
+<title>Duix Avatar API | AI Avatar Video Generator on KeyoAPI</title>
+<meta name="description" content="Duix Avatar API on KeyoAPI: Duix-Avatar (~$0.0068/sec) and InfiniteTalk (~$0.342/request). Hosted talking-avatar path for SaaS products." />
 <link rel="canonical" href="https://www.keyoapi.xyz/ai-avatar-video-generator" />
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://www.keyoapi.xyz/ai-avatar-video-generator" />
-<meta property="og:title" content="AI Avatar Video Generator API | Duix &amp; InfiniteTalk on KeyoAPI" />
-<meta property="og:description" content="AI avatar video generator API on KeyoAPI: Duix-Avatar (~$0.0068/sec) and InfiniteTalk (~$0.342/request). Pair with Keyo TTS on one prepaid key." />
+<meta property="og:title" content="Duix Avatar API | AI Avatar Video Generator on KeyoAPI" />
+<meta property="og:description" content="Duix Avatar API on KeyoAPI: Duix-Avatar (~$0.0068/sec) and InfiniteTalk (~$0.342/request). Hosted talking-avatar path for SaaS products." />
 <meta property="og:image" content="https://www.keyoapi.xyz/brand/logo.svg" />
 <link rel="icon" href="/brand/logo.svg" type="image/svg+xml" />
 <link rel="stylesheet" href="/brand/keyo-theme.css" />
 <meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:title" content="AI Avatar Video Generator API | Duix &amp; InfiniteTalk on KeyoAPI" />
-<meta name="twitter:description" content="AI avatar video generator API on KeyoAPI: Duix-Avatar (~$0.0068/sec) and InfiniteTalk (~$0.342/request). Pair with Keyo TTS on one prepaid key." />
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebPage","name":"AI Avatar Video Generator API | Duix & InfiniteTalk on KeyoAPI","url":"https://www.keyoapi.xyz/ai-avatar-video-generator","description":"AI avatar video generator API on KeyoAPI: Duix-Avatar (~$0.0068/sec) and InfiniteTalk (~$0.342/request). Pair with Keyo TTS on one prepaid key."}</script>
+<meta name="twitter:title" content="Duix Avatar API | AI Avatar Video Generator on KeyoAPI" />
+<meta name="twitter:description" content="Duix Avatar API on KeyoAPI: Duix-Avatar (~$0.0068/sec) and InfiniteTalk (~$0.342/request). Hosted talking-avatar path for SaaS products." />
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebPage","name":"Duix Avatar API | AI Avatar Video Generator on KeyoAPI","url":"https://www.keyoapi.xyz/ai-avatar-video-generator","description":"Duix Avatar API on KeyoAPI: Duix-Avatar (~$0.0068/sec) and InfiniteTalk (~$0.342/request). Hosted talking-avatar path for SaaS products."}</script>
 <style>.wrap{max-width:880px;margin:0 auto;padding:28px 24px 48px}
 .footer{display:flex;flex-wrap:wrap;gap:10px 16px;max-width:1080px;margin:0 auto;padding:24px 24px 40px;border-top:1px solid var(--line);font-size:13px;color:var(--muted)}
 .footer a{color:var(--ink-2);text-decoration:none}
@@ -72,9 +72,9 @@ ul{margin:0 0 14px;padding-left:1.2em}
   </nav>
 </header>
 <main class="wrap">
-<h1>AI Avatar Video Generator API — Duix-Avatar &amp; InfiniteTalk</h1>
+<h1>Duix Avatar API &amp; AI Avatar Video Generator — KeyoAPI</h1>
 
-<p class="lead">Building an AI avatar video generator? KeyoAPI hosts Duix-Avatar (audio+video → talking face) and InfiniteTalk (image/audio → talking head) as async jobs — generate speech with IndexTTS-2 / CosyVoice3 / Qwen3-TTS on the same key, then render.</p>
+<p class="lead">Looking for a Duix Avatar API without running your own render farm? KeyoAPI hosts Duix-Avatar (audio+video → talking face) and InfiniteTalk (image/audio → talking head) as async jobs — generate speech with IndexTTS-2 / CosyVoice3 / Qwen3-TTS on the same key, then render.</p>
 <div class="btnrow">
   <a class="btn btn-primary" href="/sign-up">Get API key</a>
   <a class="btn btn-secondary" href="/pricing">Open Model Square</a>
@@ -109,6 +109,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
 <h2>Productize the loop, not a single model</h2>
 <p>Typical product loop: draft script → TTS (optionally cloned) → avatar render → CDN cache. Cap max duration, show queue ETA, and moderate deepfake abuse. Try/buy each model from its /pricing/{id} page after <a href="/sign-up">/sign-up</a> — no separate upload playground.</p>
 <h2>Rates and pipeline</h2>
+<p>Duix Avatar API (downstream use): product teams often search “duix avatar” when they need a talking-face render they can meter in SaaS — Keyo exposes that as model=Duix-Avatar on an async video endpoint, not as a consumer editor.</p>
 <p>This is the API path, not a consumer app: prepaid metering, OpenAI-style auth for adjacent chat and speech, async task polling for renders.</p>
 <p>Indicative rates: Duix-Avatar ~$0.0068 per second of output; InfiniteTalk ~$0.342 per request. Confirm <a href="/pricing/Duix-Avatar">/pricing/Duix-Avatar</a> and <a href="/pricing/InfiniteTalk">/pricing/InfiniteTalk</a> before volume. Pick Duix when you have driving video; pick InfiniteTalk when you start from a still spokesperson photo.</p>
 <p>How to call: async video endpoints with model=Duix-Avatar or InfiniteTalk, then GET /v1/task/{id}. Speech side: <a href="/tts-api">/tts-api</a> and <a href="/voice-cloning-api">/voice-cloning-api</a>. Model guides under <a href="/model/Duix-Avatar">/model/Duix-Avatar</a> and <a href="/model/InfiniteTalk">/model/InfiniteTalk</a>.</p>
@@ -121,7 +122,8 @@ ul{margin:0 0 14px;padding-left:1.2em}
   -F cond_audio=@./voice.wav
 # then: GET /v1/task/{id}</pre>
 <h2>FAQ</h2>
-<div class="faq"><details><summary>Realtime avatar streaming?</summary><p>These models are async render jobs, not WebRTC realtime avatars. Design UX around queue + progress.</p></details>
+<div class="faq"><details><summary>Is this a Duix Avatar API alternative?</summary><p>Yes for developers who want hosted Duix-Avatar metering on Keyo: same prepaid key as TTS and chat. It is not the official Duix consumer product UI.</p></details>
+<details><summary>Realtime avatar streaming?</summary><p>These models are async render jobs, not WebRTC realtime avatars. Design UX around queue + progress.</p></details>
 <details><summary>Duix vs InfiniteTalk?</summary><p>Different input modalities and billing units (per second vs per request). Prototype both on Keyo; see each model guide.</p></details>
 <details><summary>How do I try?</summary><p>Create a key at <a href="/sign-up">/sign-up</a>, then open <a href="/pricing/Duix-Avatar">/pricing/Duix-Avatar</a> or <a href="/pricing/InfiniteTalk">/pricing/InfiniteTalk</a> for interactive try/buy.</p></details></div>
 <p class="meta">Also see <a href="/compare">/compare</a>, <a href="/free-models">/free-models</a>, and model guides under <code>/model/</code>.</p>

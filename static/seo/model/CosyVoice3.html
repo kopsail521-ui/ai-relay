@@ -3,20 +3,20 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>CosyVoice3 API — Hosted TTS on KeyoAPI</title>
-<meta name="description" content="CosyVoice3 API on KeyoAPI: async multilingual zero-shot TTS via POST /v1/async/audio/speech. About $1.37 / 10K characters — no self-host GPU." />
+<title>CosyVoice3 API — How to Call Hosted TTS | KeyoAPI</title>
+<meta name="description" content="CosyVoice3 API on KeyoAPI: call async multilingual TTS via POST /v1/async/audio/speech with model=CosyVoice3. About $1.37 / 10K characters." />
 <link rel="canonical" href="https://www.keyoapi.xyz/model/CosyVoice3" />
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://www.keyoapi.xyz/model/CosyVoice3" />
-<meta property="og:title" content="CosyVoice3 API — Hosted TTS on KeyoAPI" />
-<meta property="og:description" content="CosyVoice3 API on KeyoAPI: async multilingual zero-shot TTS via POST /v1/async/audio/speech. About $1.37 / 10K characters — no self-host GPU." />
+<meta property="og:title" content="CosyVoice3 API — How to Call Hosted TTS | KeyoAPI" />
+<meta property="og:description" content="CosyVoice3 API on KeyoAPI: call async multilingual TTS via POST /v1/async/audio/speech with model=CosyVoice3. About $1.37 / 10K characters." />
 <meta property="og:image" content="https://www.keyoapi.xyz/brand/logo.svg" />
 <link rel="icon" href="/brand/logo.svg" type="image/svg+xml" />
 <link rel="stylesheet" href="/brand/keyo-theme.css" />
 <meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:title" content="CosyVoice3 API — Hosted TTS on KeyoAPI" />
-<meta name="twitter:description" content="CosyVoice3 API on KeyoAPI: async multilingual zero-shot TTS via POST /v1/async/audio/speech. About $1.37 / 10K characters — no self-host GPU." />
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"SoftwareApplication","name":"KeyoAPI CosyVoice3","applicationCategory":"DeveloperApplication","url":"https://www.keyoapi.xyz/model/CosyVoice3","description":"CosyVoice3 API on KeyoAPI: async multilingual zero-shot TTS via POST /v1/async/audio/speech. About $1.37 / 10K characters — no self-host GPU.","offers":{"@type":"Offer","priceCurrency":"USD","description":"$1.37 / 10K characters"}}</script>
+<meta name="twitter:title" content="CosyVoice3 API — How to Call Hosted TTS | KeyoAPI" />
+<meta name="twitter:description" content="CosyVoice3 API on KeyoAPI: call async multilingual TTS via POST /v1/async/audio/speech with model=CosyVoice3. About $1.37 / 10K characters." />
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"SoftwareApplication","name":"KeyoAPI CosyVoice3","applicationCategory":"DeveloperApplication","url":"https://www.keyoapi.xyz/model/CosyVoice3","description":"CosyVoice3 API on KeyoAPI: call async multilingual TTS via POST /v1/async/audio/speech with model=CosyVoice3. About $1.37 / 10K characters.","offers":{"@type":"Offer","priceCurrency":"USD","description":"$1.37 / 10K characters"}}</script>
 <style>.wrap{max-width:880px;margin:0 auto;padding:28px 24px 48px}
 .footer{display:flex;flex-wrap:wrap;gap:10px 16px;max-width:1080px;margin:0 auto;padding:24px 24px 40px;border-top:1px solid var(--line);font-size:13px;color:var(--muted)}
 .footer a{color:var(--ink-2);text-decoration:none}
@@ -72,9 +72,9 @@ ul{margin:0 0 14px;padding-left:1.2em}
   </nav>
 </header>
 <main class="wrap">
-<h1>CosyVoice3 API — Multilingual Zero-Shot TTS</h1>
+<h1>CosyVoice3 API — How to Call Multilingual Zero-Shot TTS</h1>
 
-<p class="lead">CosyVoice3 is KeyoAPI’s async CosyVoice 3 TTS: multilingual zero-shot speech without cloning a repo or renting a GPU.</p>
+<p class="lead">Looking for a CosyVoice3 API without self-hosting GPUs?</p>
 <p class="meta">Listed price: <span class="ok">$1.37 / 10K characters</span> · Confirm live rates on <a href="/pricing/CosyVoice3">interactive pricing</a>.</p>
 <div class="btnrow">
   <a class="btn btn-primary" href="/pricing/CosyVoice3">Open interactive pricing</a>
@@ -82,7 +82,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
   <a class="btn btn-secondary" href="/sign-up">Create account</a>
 </div>
 <h2>Overview</h2>
-<p>CosyVoice3 is KeyoAPI’s async CosyVoice 3 TTS: multilingual zero-shot speech without cloning a repo or renting a GPU. Call it with the same OpenAI-style key you use for Whisper and chat models. Async generation fits podcasts, course narration, IVR, and avatar pipelines that already wait on renderers. Prefer IndexTTS-2 when you need audio back inside a single HTTP round trip. About $1.37 per 10,000 characters. Map CMS script length to spend; confirm live rates on <a href="/pricing/CosyVoice3">/pricing/CosyVoice3</a>. Product voiceovers, localized support replies, game NPCs, and digital humans (pair with Duix-Avatar or InfiniteTalk). Customer bots that answer in the user’s language. POST /v1/async/audio/speech with model=CosyVoice3, then poll /v1/task/{id}. Docs: /brand/keyo-docs.html. If you want hosted inference instead of a research install, KeyoAPI is that path. Create speech jobs, poll until ready, then CDN-cache the audio URL. Offer clone samples only after consent. Fallback to a default voice when clone confidence is low. Measure time-to-first-byte of finished audio, not just API accept latency. Normalize text before synthesis. Store voice ids per locale. Fail closed on celebrity likeness without rights. Try it from <a href="/pricing/CosyVoice3">/pricing/CosyVoice3</a>. There is no separate upload playground.</p>
+<p>Looking for a CosyVoice3 API without self-hosting GPUs? KeyoAPI exposes CosyVoice3 as async multilingual zero-shot TTS on the same OpenAI-style key you use for Whisper and chat. How to call CosyVoice3 API on Keyo: create a key at <a href="/sign-up">/sign-up</a>, set Authorization: Bearer YOUR_KEY, POST https://www.keyoapi.xyz/v1/async/audio/speech with JSON {&quot;model&quot;:&quot;CosyVoice3&quot;,&quot;input&quot;:&quot;...&quot;}, then poll GET /v1/task/{id} until the audio URL is ready. Prefer IndexTTS-2 when you need audio back inside a single HTTP round trip. About $1.37 per 10,000 characters — confirm live rates on <a href="/pricing/CosyVoice3">/pricing/CosyVoice3</a>. Product voiceovers, localized support replies, game NPCs, and digital humans (pair with Duix-Avatar or InfiniteTalk via <a href="/ai-avatar-video-generator">/ai-avatar-video-generator</a>). If you want hosted inference instead of a research install, KeyoAPI is that path. Normalize text before synthesis, store voice ids per locale, and CDN-cache finished audio. Try it from <a href="/pricing/CosyVoice3">/pricing/CosyVoice3</a>. Broader TTS map: <a href="/tts-api">/tts-api</a>.</p>
 
 <h2>Quick start</h2>
 <div class="card">
@@ -97,7 +97,8 @@ ul{margin:0 0 14px;padding-left:1.2em}
 <p>Auth uses the same Bearer API key as chat. Full notes: <a href="/brand/keyo-docs.html">Keyo docs</a>.</p>
 </div>
 <h2>FAQ</h2>
-<div class="faq"><details><summary>Is CosyVoice3 synchronous?</summary><p>No. On KeyoAPI it uses POST /v1/async/audio/speech — create a task, then poll GET /v1/task/{id}. For a sync round trip, use IndexTTS-2 on /v1/audio/speech.</p></details>
+<div class="faq"><details><summary>How do I call the CosyVoice3 API?</summary><p>Set Authorization: Bearer YOUR_KEY, POST https://www.keyoapi.xyz/v1/async/audio/speech with model=CosyVoice3 and your text input, then poll GET /v1/task/{id} until the audio URL is ready.</p></details>
+<details><summary>Is CosyVoice3 synchronous?</summary><p>No. On KeyoAPI it uses POST /v1/async/audio/speech — create a task, then poll GET /v1/task/{id}. For a sync round trip, use IndexTTS-2 on /v1/audio/speech.</p></details>
 <details><summary>What is CosyVoice3 good for?</summary><p>Multilingual zero-shot TTS with streaming-friendly async jobs, dialect and emotion/speed controls where the API schema exposes them.</p></details>
 <details><summary>How do I try it?</summary><p>Open <a href="/pricing/CosyVoice3">/pricing/CosyVoice3</a> after <a href="/sign-up">/sign-up</a>. No separate upload playground — try from interactive pricing.</p></details>
 <details><summary>Price?</summary><p>About $1.37 per 10,000 characters — confirm on <a href="/pricing/CosyVoice3">/pricing/CosyVoice3</a>.</p></details></div>
@@ -105,7 +106,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
 <div class="grid"><a href="/model/IndexTTS-2">IndexTTS-2 API</a>
 <a href="/model/Qwen3-TTS">Qwen3-TTS API</a>
 <a href="/model/whisper-large-v3">Whisper Large V3 API</a>
-<a href="/model/Duix-Avatar">Duix-Avatar API</a></div>
+<a href="/model/Duix-Avatar">Duix Avatar API</a></div>
 <p class="meta">Guide for <strong>CosyVoice3</strong>. Try/buy: <a href="/pricing/CosyVoice3">/pricing/CosyVoice3</a> · Catalog: <a href="/pricing">/pricing</a>.</p>
 
 </main>

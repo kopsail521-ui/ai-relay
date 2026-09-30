@@ -42,13 +42,14 @@ function a(string $path, ?string $label = null): string
 
 /**
  * Count scaffold / hedge tokens — KeyoAPI docs scaffolding only
- * (not physical "packaging materials" / "transparent materials").
+ * (not physical "packaging materials" / "transparent materials",
+ * and not generic "A does not establish B" engineering prose).
  */
 function claim_hits(string $html): array
 {
     $patterns = [
-        'materials' => '/\b(?:KeyoAPI(?:[\'’]s)?\s+)?(?:product\s+|provided\s+|supplied\s+|available\s+|published\s+|official\s+)?materials\b(?!\s+(?:and\s+complex|should\s+be\s+tested))|\b(?:these|those|the)\s+materials\s+(?:do|does|describe|document|recommend|identify|verify|state|provide|show)\b|\bpricing\s+materials\b|\bWhat the provided KeyoAPI materials\b/i',
-        'hedge' => '/\b(?:do not(?:,? by themselves,?)? establish|does not establish|they do not verify|do not verify (?:a |an |KeyoAPI)|materials do not|unverified (?:integration|assumptions)|drop-in Claude|never be assumed|do not describe KeyoAPI as an avatar|do not route avatar|without inventing unsupported KeyoAPI)\b/i',
+        'materials' => '/\b(?:KeyoAPI(?:[\'’]s)?\s+(?:product\s+)?materials|(?:product|provided|supplied|available|published|official)\s+materials|(?:these|those|the)\s+materials\s+(?:do|does|describe|document|recommend|identify|verify|state|provide|show)|pricing\s+materials|What the provided KeyoAPI materials)\b/i',
+        'hedge' => '/\b(?:(?:pricing information|materials|docs|documentation)\s+)?(?:do not|does not)(?:\s*,?\s*by themselves,?)?\s+establish that KeyoAPI|they do not verify (?:a |an )?KeyoAPI|do not verify (?:a |an )?KeyoAPI|materials do not|unverified integration|drop-in Claude|Claude compatibility should never be assumed|do not describe KeyoAPI as an avatar|do not route avatar|without inventing unsupported KeyoAPI)\b/i',
     ];
     $out = [];
     foreach ($patterns as $k => $re) {
@@ -198,7 +199,11 @@ function scrub_claims_html(string $html, string $title = ''): array
 
     if ($isAvatar || $isVideo) {
         $paraReplacements[] = [
-            'match' => '/do not verify (?:a |an )?KeyoAPI digital-human|do not establish that KeyoAPI provides a digital-human|do not confirm an avatar-generation|do not verify a digital-human|avatar-video, or lip-sync endpoint|talking-avatar, lip-sync, or avatar-video/i',
+            'match' => '/pricing information does not establish that KeyoAPI offers an InfiniteTalk/i',
+            'replace' => '<p>Confirm in the live catalog whether InfiniteTalk / avatar-video / lip-sync model IDs are listed for your account (see ' . a('/pricing-list') . ' and related model guides) before routing that workload through KeyoAPI.</p>',
+        ];
+        $paraReplacements[] = [
+            'match' => '/do not verify (?:a |an )?KeyoAPI digital-human|do not establish that KeyoAPI provides a digital-human|do not confirm an avatar-generation|do not verify a digital-human|avatar-video, or lip-sync endpoint|talking-avatar, lip-sync, or avatar-video|does not establish that KeyoAPI offers an InfiniteTalk/i',
             'replace' => '<p>Confirm in the live catalog and docs whether your KeyoAPI plan exposes avatar / lip-sync / talking-head video endpoints for the model IDs you need (see ' . a('/pricing-list') . ' and related model guides). Do not invent unsupported endpoints; keep a provider adapter so you can swap a documented avatar provider if the capability is not listed.</p>',
         ];
         $paraReplacements[] = [
@@ -249,6 +254,8 @@ function scrub_claims_html(string $html, string $title = ''): array
 
     // Residual sentence surgery
     $sentenceMap = [
+        '/That pricing information does not establish that KeyoAPI offers an InfiniteTalk, avatar-video, or lip-sync API\.?\s*Verify the live documentation and model catalog before treating it as a candidate for this workload\.?/iu'
+            => 'Confirm InfiniteTalk / avatar-video / lip-sync availability in the live catalog and on ' . a('/pricing-list') . ' before routing that workload through KeyoAPI.',
         '/[,.]?\s*They do not establish that KeyoAPI supports Claude models[^<.]{0,120}\.?/iu'
             => '. Confirm Claude-class IDs and rates on ' . a('/claude-api-pricing') . ' and ' . a('/pricing-list') . '.',
         '/[,.]?\s*They do not establish Claude-specific tool-use compatibility[^<.]{0,160}\.?/iu'

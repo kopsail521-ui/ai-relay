@@ -100,27 +100,28 @@ function clean_meta_text(string $raw, string $title = '', int $maxLen = 160): st
         return '';
     }
 
-    $len = function_exists('mb_strlen') ? mb_strlen($s) : strlen($s);
-    $soft = $maxLen > 0 ? $maxLen : 300;
-    if ($len <= $soft) {
-        return $s;
-    }
-
-    // Prefer first complete sentence if it fits
+    // Always prefer a complete first sentence (up to 280). Never leave "… such as".
     if (preg_match('/^(.+?[.!?])(\s|$)/u', $s, $m)) {
         $sentence = trim($m[1]);
         $slen = function_exists('mb_strlen') ? mb_strlen($sentence) : strlen($sentence);
-        if ($slen >= 40 && $slen <= $soft) {
+        if ($slen >= 40 && $slen <= 280) {
             return $sentence;
         }
     }
 
-    // Word-boundary cut — never mid-word
+    $len = function_exists('mb_strlen') ? mb_strlen($s) : strlen($s);
+    $soft = $maxLen > 0 ? max($maxLen, 200) : 280;
+    if ($len <= $soft) {
+        return $s;
+    }
+
+    // No sentence end — word-boundary only; strip dangling stop-words
     $slice = function_exists('mb_substr') ? mb_substr($s, 0, $soft) : substr($s, 0, $soft);
     if (preg_match('/^(.*)\s+\S*$/u', $slice, $m) && trim($m[1]) !== '') {
         $slice = rtrim($m[1], " \t.,;:|-");
     }
-    return $slice;
+    $slice = preg_replace('/\b(?:such as|including|with|and|or|to|for|a|an|the|of|in|on)$/iu', '', $slice) ?? $slice;
+    return trim($slice);
 }
 
 /** Remove GEOFlow template blocks from article body HTML. Returns [html, extractedMeta]. */
@@ -217,23 +218,35 @@ function rewrite_article_html(string $blogDir, string $slug, array &$row, bool $
 
     $candidates = [
         $fromTemplate,
+        (string)($row['meta_description_full'] ?? ''),
         (string)($row['meta_description'] ?? ''),
         (string)($row['excerpt'] ?? ''),
         first_body_sentence($body),
     ];
     $desc = '';
     foreach ($candidates as $c) {
-        $cleaned = clean_meta_text($c, $title, 0); // full sentence first
+        $cleaned = clean_meta_text($c, $title, 0);
         if ($cleaned === '') {
             continue;
         }
-        // Prefer longer complete copy (template often has full sentence)
-        if (mb_strlen($cleaned) > mb_strlen($desc)) {
+        // Prefer longest complete sentence (ends with .!?)
+        $score = mb_strlen($cleaned);
+        if (preg_match('/[.!?]$/u', $cleaned)) {
+            $score += 1000;
+        }
+        $best = 0;
+        if ($desc !== '') {
+            $best = mb_strlen($desc);
+            if (preg_match('/[.!?]$/u', $desc)) {
+                $best += 1000;
+            }
+        }
+        if ($score > $best) {
             $desc = $cleaned;
         }
     }
-    // Card / meta attribute: word-safe soft limit
-    $descAttr = clean_meta_text($desc, $title, 160);
+    // Keep complete sentence in attribute — no 160 hard cut
+    $descAttr = clean_meta_text($desc, $title, 0);
     $excerpt = $descAttr;
 
     $row['excerpt'] = $excerpt;

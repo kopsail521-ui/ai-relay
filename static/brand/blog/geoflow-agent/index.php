@@ -144,22 +144,26 @@ function clean_meta_text(string $raw, string $title = '', int $maxLen = 160): st
         return '';
     }
 
-    $len = mb_strlen($s);
-    $soft = $maxLen > 0 ? $maxLen : 300;
-    if ($len <= $soft) {
-        return $s;
-    }
+    // Always prefer a complete first sentence (up to 280). Never leave "… such as".
     if (preg_match('/^(.+?[.!?])(\s|$)/u', $s, $m)) {
         $sentence = trim($m[1]);
-        if (mb_strlen($sentence) >= 40 && mb_strlen($sentence) <= $soft) {
+        if (mb_strlen($sentence) >= 40 && mb_strlen($sentence) <= 280) {
             return $sentence;
         }
     }
+
+    $len = mb_strlen($s);
+    $soft = $maxLen > 0 ? max($maxLen, 200) : 280;
+    if ($len <= $soft) {
+        return $s;
+    }
+
     $slice = mb_substr($s, 0, $soft);
     if (preg_match('/^(.*)\s+\S*$/u', $slice, $m) && trim($m[1]) !== '') {
         $slice = rtrim($m[1], " \t.,;:|-");
     }
-    return $slice;
+    $slice = preg_replace('/\b(?:such as|including|with|and|or|to|for|a|an|the|of|in|on)$/iu', '', $slice) ?? $slice;
+    return trim($slice);
 }
 
 /** Remove GEOFlow template blocks from body. Returns [html, extractedMeta]. */

@@ -428,10 +428,6 @@ body > .lang-bar select {
     justify-self: stretch;
     max-width: none;
   }
-  .k-home .k-home-shell { padding: 28px 20px 48px; }
-}
-    gap: 28px;
-  }
   .k-nav { padding: 16px 20px 0; }
   .k-home .k-home-shell { padding: 28px 20px 48px; }
 }

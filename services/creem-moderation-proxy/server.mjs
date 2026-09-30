@@ -1216,8 +1216,7 @@ async function proxyRequest(req, res, bodyBuf) {
           changed = true;
         }
       }
-      // LaunchVault: keep a single in-page dofollow badge (keyo-home / SEO /).
-      // Do not inject a fixed bottom-right floater — it duplicates the footer badge.
+      // (LaunchVault badge inject removed — listing deferred.)
       if (changed) {
         buf = Buffer.from(html, "utf8");
         delete outHeaders["content-encoding"];

@@ -254,15 +254,6 @@ html.is-embed .k-nav { display: none; }
 }
 .k-home .legal-links a { color: var(--ink-2); }
 .k-home .legal-links a:hover { color: var(--ink); }
-.k-home .keyo-partner-badges {
-  margin: 16px 0 0;
-  line-height: 0;
-}
-.k-home .keyo-partner-badges img {
-  width: 160px;
-  height: auto;
-  opacity: 0.92;
-}
 .k-page .lang-bar,
 body > .lang-bar {
   position: fixed;

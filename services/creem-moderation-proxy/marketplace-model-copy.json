@@ -3417,11 +3417,11 @@
     }
   },
   "gpt-6-astra": {
-    "description": "GPT-6 Astra 旗舰对话与推理模型，适合复杂任务与长上下文。",
+    "description": "OpenAI GPT-6 Astra 旗舰对话与推理模型，适合复杂任务与长上下文。",
     "descriptions": {
-      "zhCN": "GPT-6 Astra 旗舰对话与推理模型，适合复杂任务与长上下文。",
-      "zhTW": "GPT-6 Astra 旗艦對話與推理模型，適合複雜任務與長上下文。",
-      "en": "GPT-6 Astra flagship chat and reasoning model for complex tasks and long context.",
+      "zhCN": "OpenAI GPT-6 Astra 旗舰对话与推理模型，适合复杂任务与长上下文。",
+      "zhTW": "OpenAI GPT-6 Astra 旗艦對話與推理模型，適合複雜任務與長上下文。",
+      "en": "OpenAI GPT-6 Astra flagship chat and reasoning — call model=gpt-6-astra on Keyo.",
       "fr": "GPT-6 Astra — modèle phare de chat et de raisonnement pour tâches complexes et long contexte.",
       "ru": "Флагманский чат/рассуждение GPT-6 Astra для сложных задач и длинного контекста.",
       "ja": "GPT-6 Astra 旗艦チャット／推論モデル。複雑タスクと長コンテキスト向け。",
@@ -3461,8 +3461,8 @@
     "suffix_en": "",
     "price_key_zh": "",
     "price_key_en": "",
-    "description_zh": "GPT-6 Astra 旗舰对话与推理模型，适合复杂任务与长上下文。",
-    "description_en": "GPT-6 Astra flagship chat and reasoning model for complex tasks and long context."
+    "description_zh": "OpenAI GPT-6 Astra 旗舰对话与推理模型，适合复杂任务与长上下文。",
+    "description_en": "OpenAI GPT-6 Astra flagship chat and reasoning — call model=gpt-6-astra on Keyo."
   },
   "__free_suffix__": {
     "zhCN": "（免费）",

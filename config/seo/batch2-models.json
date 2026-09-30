@@ -334,13 +334,15 @@
       "targetKeywords": [
         "gpt-6-astra",
         "gpt 6 astra",
+        "gpt 6 astra price",
+        "how to use gpt 6 astra",
+        "gpt 6 astra free",
         "gpt-6 astra api",
-        "astra api",
         "gpt astra api pricing"
       ],
-      "h1": "GPT-6 Astra API on KeyoAPI — Flagship GPT-Class Chat",
+      "h1": "GPT-6 Astra API on KeyoAPI — OpenAI Flagship Chat",
       "title": "GPT-6 Astra API Pricing & Guide | KeyoAPI",
-      "metaDescription": "Call gpt-6-astra on KeyoAPI (~$1.84/$9.19 per 1M). Flagship GPT-class chat on an OpenAI-compatible gateway — escalate from Luna/Sol only when quality needs it.",
+      "metaDescription": "Call OpenAI gpt-6-astra on KeyoAPI (~$1.84/$9.19 per 1M). Same model ID, OpenAI-compatible base URL — escalate from Luna/Sol only when quality needs it.",
       "priceLabel": "~$1.84 / $9.19 per 1M in/out",
       "priceUnit": "per_1m_tokens",
       "related": [
@@ -352,21 +354,29 @@
       "codeHint": "model=gpt-6-astra",
       "faqs": [
         {
-          "q": "How do I call the GPT-6 Astra API?",
-          "a": "Set baseURL to https://www.keyoapi.xyz/v1, Authorization: Bearer YOUR_KEY, and model=gpt-6-astra on POST /v1/chat/completions."
+          "q": "Is gpt-6-astra the OpenAI model?",
+          "a": "Yes. On KeyoAPI, model=gpt-6-astra is OpenAI’s gpt-6-astra, served through Keyo’s OpenAI-compatible gateway (prepaid Keyo key). Confirm live Keyo sell rates on /pricing/gpt-6-astra."
+        },
+        {
+          "q": "How do I use GPT-6 Astra (how to call)?",
+          "a": "Create a key at /sign-up, set baseURL to https://www.keyoapi.xyz/v1, Authorization: Bearer YOUR_KEY, and model=gpt-6-astra on POST /v1/chat/completions. Interactive try/buy: /pricing/gpt-6-astra."
+        },
+        {
+          "q": "What is GPT-6 Astra price on Keyo?",
+          "a": "Indicative Keyo sell ~$1.84 / $9.19 per 1M in/out. Confirm live on /pricing/gpt-6-astra. Nearby lanes: gpt-6-luna ~$0.03/$0.15, gpt-6-sol ~$0.37/$1.84. Family hub: /openai-api-pricing."
+        },
+        {
+          "q": "Is there a free GPT-6 Astra / gpt 6 astra free path?",
+          "a": "There is no permanent $0 gpt-6-astra ID. Prototype on /free-models ($0 catalog IDs, fair-use), then meter gpt-6-sol for cheap production smoke tests and escalate only failing jobs to gpt-6-astra on the same key."
         },
         {
           "q": "When should I use Astra vs Sol or Luna?",
-          "a": "Use Luna for bulk cheap paths, Sol as a balanced default, and Astra as the flagship escalate lane when quality gates fail. Same Keyo key — change only the model string."
-        },
-        {
-          "q": "Where is live GPT-6 Astra pricing?",
-          "a": "See /pricing/gpt-6-astra. Indicative ~$1.84 / $9.19 per 1M in/out. Family context: /openai-api-pricing."
+          "a": "Use Luna for bulk cheap paths, Sol as a balanced default, and Astra as the OpenAI flagship escalate lane when quality gates fail. Same Keyo key — change only the model string."
         }
       ],
-      "body": "Looking for a GPT-6 Astra API without juggling a separate vendor stack? KeyoAPI exposes gpt-6-astra as the flagship GPT-class chat ID on an OpenAI-compatible gateway (~$1.84 / $9.19 per 1M in/out — confirm on /pricing/gpt-6-astra). Create a key at /sign-up, set base URL to https://www.keyoapi.xyz/v1, and call POST /v1/chat/completions with model=gpt-6-astra. Keep high-volume classification on gpt-6-luna (~$0.03 / $0.15) and product defaults on gpt-6-sol (~$0.37 / $1.84); escalate stubborn jobs to Astra so blended COGS stays intentional. This is a Keyo GPT-class twin ID, not a claim that it is an OpenAI first-party model name. Broader OpenAI API pricing context: /openai-api-pricing. Side-by-side planning: /compare.",
+      "body": "Looking for a GPT-6 Astra API? On KeyoAPI, gpt-6-astra is OpenAI’s gpt-6-astra model ID on an OpenAI-compatible gateway (~$1.84 / $9.19 per 1M in/out — confirm on /pricing/gpt-6-astra). Create a key at /sign-up, set base URL to https://www.keyoapi.xyz/v1, and call POST /v1/chat/completions with model=gpt-6-astra — same string as OpenAI’s API docs, prepaid on a Keyo wallet that also covers Whisper, Claude-class, and TTS.\n\nGPT-6 Astra price vs nearby Keyo lanes (indicative): gpt-6-luna ~$0.03 / $0.15 per 1M, gpt-6-sol ~$0.37 / $1.84, gpt-6-astra ~$1.84 / $9.19. Astra is roughly 5× Sol on output dollars — worth it when Sol fails quality gates and you need OpenAI’s flagship band; not worth it as the default for every classification job. Confirm live rows on /pricing/gpt-6-astra, /pricing/gpt-6-sol, and /pricing/gpt-6-luna.\n\nHow to use GPT-6 Astra: (1) register at /sign-up and top up Wallet; (2) mint an API key in console; (3) set OPENAI_BASE_URL or sdk base_url to https://www.keyoapi.xyz/v1; (4) POST /v1/chat/completions with Authorization: Bearer YOUR_KEY and model=gpt-6-astra; (5) read usage from the response and re-check /pricing/gpt-6-astra before volume contracts. Keep the OpenAI Python/Node SDK — only swap base_url, key, and model string.\n\ngpt 6 astra free / lowest-cost trial: Keyo does not ship a permanent $0 Astra ID. Draft and smoke-test on /free-models (fair-use), run production defaults on gpt-6-sol, and escalate only failing slices to gpt-6-astra so blended COGS stays intentional. Broader OpenAI / ChatGPT API pricing context: /openai-api-pricing. Side-by-side planning: /compare.",
       "curlExample": "curl https://www.keyoapi.xyz/v1/chat/completions \\\n  -H \"Authorization: Bearer YOUR_API_KEY\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\"model\":\"gpt-6-astra\",\"messages\":[{\"role\":\"user\",\"content\":\"Hello from GPT-6 Astra\"}]}'",
-      "uniqueBlurb": "Flagship GPT-6-class ID on Keyo — escalate from Luna/Sol only when quality needs it; live rates on /pricing/gpt-6-astra."
+      "uniqueBlurb": "OpenAI gpt-6-astra on Keyo — escalate from Luna/Sol only when quality needs it; live rates on /pricing/gpt-6-astra."
     }
   ]
 }

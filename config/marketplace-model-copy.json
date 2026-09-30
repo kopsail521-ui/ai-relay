@@ -2050,13 +2050,13 @@
       "vi": "Video"
     },
     "视频·按秒": {
-      "zhCN": "视频模型",
-      "zhTW": "影片模型",
-      "en": "Video",
-      "fr": "Video",
-      "ru": "Video",
-      "ja": "動画モデル",
-      "vi": "Video"
+      "zhCN": "视频按秒",
+      "zhTW": "影片按秒",
+      "en": "VideoSec",
+      "fr": "VideoSec",
+      "ru": "VideoSec",
+      "ja": "動画秒課金",
+      "vi": "VideoSec"
     },
     "视频·按次": {
       "zhCN": "视频按次",
@@ -2149,22 +2149,13 @@
       "vi": "Free"
     },
     "视频按秒": {
-      "zhCN": "视频模型",
-      "zhTW": "影片模型",
-      "en": "Video",
-      "fr": "Video",
-      "ru": "Video",
-      "ja": "動画モデル",
-      "vi": "Video"
-    },
-    "视频模型": {
-      "zhCN": "视频模型",
-      "zhTW": "影片模型",
-      "en": "Video",
-      "fr": "Video",
-      "ru": "Video",
-      "ja": "動画モデル",
-      "vi": "Video"
+      "zhCN": "视频按秒",
+      "zhTW": "影片按秒",
+      "en": "VideoSec",
+      "fr": "VideoSec",
+      "ru": "VideoSec",
+      "ja": "動画秒課金",
+      "vi": "VideoSec"
     },
     "视频按次": {
       "zhCN": "视频按次",
@@ -3289,42 +3280,6 @@
       "ja": "Alibaba",
       "vi": "Alibaba"
     },
-    "小米": {
-      "zhCN": "小米",
-      "zhTW": "小米",
-      "en": "Xiaomi",
-      "fr": "Xiaomi",
-      "ru": "Xiaomi",
-      "ja": "Xiaomi",
-      "vi": "Xiaomi"
-    },
-    "Xiaomi": {
-      "zhCN": "小米",
-      "zhTW": "小米",
-      "en": "Xiaomi",
-      "fr": "Xiaomi",
-      "ru": "Xiaomi",
-      "ja": "Xiaomi",
-      "vi": "Xiaomi"
-    },
-    "小红书": {
-      "zhCN": "小红书",
-      "zhTW": "小紅書",
-      "en": "RED",
-      "fr": "RED",
-      "ru": "RED",
-      "ja": "RED",
-      "vi": "RED"
-    },
-    "Dots": {
-      "zhCN": "小红书",
-      "zhTW": "小紅書",
-      "en": "RED",
-      "fr": "RED",
-      "ru": "RED",
-      "ja": "RED",
-      "vi": "RED"
-    },
     "Alibaba": {
       "zhCN": "阿里巴巴",
       "zhTW": "阿里巴巴",
@@ -3417,11 +3372,11 @@
     }
   },
   "gpt-6-astra": {
-    "description": "GPT-6 Astra 旗舰对话与推理模型，适合复杂任务与长上下文。",
+    "description": "OpenAI GPT-6 Astra 旗舰对话与推理模型，适合复杂任务与长上下文。",
     "descriptions": {
-      "zhCN": "GPT-6 Astra 旗舰对话与推理模型，适合复杂任务与长上下文。",
-      "zhTW": "GPT-6 Astra 旗艦對話與推理模型，適合複雜任務與長上下文。",
-      "en": "GPT-6 Astra flagship chat and reasoning model for complex tasks and long context.",
+      "zhCN": "OpenAI GPT-6 Astra 旗舰对话与推理模型，适合复杂任务与长上下文。",
+      "zhTW": "OpenAI GPT-6 Astra 旗艦對話與推理模型，適合複雜任務與長上下文。",
+      "en": "OpenAI GPT-6 Astra flagship chat and reasoning — call model=gpt-6-astra on Keyo.",
       "fr": "GPT-6 Astra — modèle phare de chat et de raisonnement pour tâches complexes et long contexte.",
       "ru": "Флагманский чат/рассуждение GPT-6 Astra для сложных задач и длинного контекста.",
       "ja": "GPT-6 Astra 旗艦チャット／推論モデル。複雑タスクと長コンテキスト向け。",
@@ -3461,8 +3416,8 @@
     "suffix_en": "",
     "price_key_zh": "",
     "price_key_en": "",
-    "description_zh": "GPT-6 Astra 旗舰对话与推理模型，适合复杂任务与长上下文。",
-    "description_en": "GPT-6 Astra flagship chat and reasoning model for complex tasks and long context."
+    "description_zh": "OpenAI GPT-6 Astra 旗舰对话与推理模型，适合复杂任务与长上下文。",
+    "description_en": "OpenAI GPT-6 Astra flagship chat and reasoning — call model=gpt-6-astra on Keyo."
   },
   "__free_suffix__": {
     "zhCN": "（免费）",
@@ -5431,31 +5386,31 @@
     }
   },
   "ling-3.0-flash-fin:free": {
-    "description": "Ling 3.0 Flash Fin 免费额度：面向金融等垂直场景优化的高速对话模型，适合行业问答试用。",
-    "description_zh": "Ling 3.0 Flash Fin 免费额度：面向金融等垂直场景优化的高速对话模型，适合行业问答试用。",
-    "description_en": "Free Ling 3.0 Flash Fin: fast chat tuned for finance-style vertical Q&A trials.",
+    "description": "InclusionAI Ling 3.0 Flash Fin 免费额度：面向金融等垂直场景优化的高速对话模型，适合行业问答试用。",
+    "description_zh": "InclusionAI Ling 3.0 Flash Fin 免费额度：面向金融等垂直场景优化的高速对话模型，适合行业问答试用。",
+    "description_en": "Free InclusionAI Ling 3.0 Flash Fin: fast chat tuned for finance-style vertical Q&A trials.",
     "descriptions": {
-      "zhCN": "Ling 3.0 Flash Fin 免费额度：面向金融等垂直场景优化的高速对话模型，适合行业问答试用。",
-      "zhTW": "Ling 3.0 Flash Fin 免费额度：面向金融等垂直场景优化的高速对话模型，适合行业问答试用。",
-      "en": "Free Ling 3.0 Flash Fin: fast chat tuned for finance-style vertical Q&A trials.",
-      "fr": "Free Ling 3.0 Flash Fin: fast chat tuned for finance-style vertical Q&A trials.",
-      "ru": "Free Ling 3.0 Flash Fin: fast chat tuned for finance-style vertical Q&A trials.",
-      "ja": "Free Ling 3.0 Flash Fin: fast chat tuned for finance-style vertical Q&A trials.",
-      "vi": "Free Ling 3.0 Flash Fin: fast chat tuned for finance-style vertical Q&A trials."
+      "zhCN": "InclusionAI Ling 3.0 Flash Fin 免费额度：面向金融等垂直场景优化的高速对话模型，适合行业问答试用。",
+      "zhTW": "InclusionAI Ling 3.0 Flash Fin 免费额度：面向金融等垂直场景优化的高速对话模型，适合行业问答试用。",
+      "en": "Free InclusionAI Ling 3.0 Flash Fin: fast chat tuned for finance-style vertical Q&A trials.",
+      "fr": "Free InclusionAI Ling 3.0 Flash Fin: fast chat tuned for finance-style vertical Q&A trials.",
+      "ru": "Free InclusionAI Ling 3.0 Flash Fin: fast chat tuned for finance-style vertical Q&A trials.",
+      "ja": "Free InclusionAI Ling 3.0 Flash Fin: fast chat tuned for finance-style vertical Q&A trials.",
+      "vi": "Free InclusionAI Ling 3.0 Flash Fin: fast chat tuned for finance-style vertical Q&A trials."
     }
   },
   "laguna-s-2.1:free": {
-    "description": "Laguna S 2.1 免费额度：面向软件工程与代码助手的对话模型，适合编程问答与补全试用。",
-    "description_zh": "Laguna S 2.1 免费额度：面向软件工程与代码助手的对话模型，适合编程问答与补全试用。",
-    "description_en": "Free Laguna S 2.1: software-engineering oriented chat for coding Q&A and completion trials.",
+    "description": "Poolside Laguna S 2.1 免费额度：面向软件工程与代码助手的对话模型，适合编程问答与补全试用。",
+    "description_zh": "Poolside Laguna S 2.1 免费额度：面向软件工程与代码助手的对话模型，适合编程问答与补全试用。",
+    "description_en": "Free Poolside Laguna S 2.1: software-engineering oriented chat for coding Q&A and completion trials.",
     "descriptions": {
-      "zhCN": "Laguna S 2.1 免费额度：面向软件工程与代码助手的对话模型，适合编程问答与补全试用。",
-      "zhTW": "Laguna S 2.1 免费额度：面向软件工程与代码助手的对话模型，适合编程问答与补全试用。",
-      "en": "Free Laguna S 2.1: software-engineering oriented chat for coding Q&A and completion trials.",
-      "fr": "Free Laguna S 2.1: software-engineering oriented chat for coding Q&A and completion trials.",
-      "ru": "Free Laguna S 2.1: software-engineering oriented chat for coding Q&A and completion trials.",
-      "ja": "Free Laguna S 2.1: software-engineering oriented chat for coding Q&A and completion trials.",
-      "vi": "Free Laguna S 2.1: software-engineering oriented chat for coding Q&A and completion trials."
+      "zhCN": "Poolside Laguna S 2.1 免费额度：面向软件工程与代码助手的对话模型，适合编程问答与补全试用。",
+      "zhTW": "Poolside Laguna S 2.1 免费额度：面向软件工程与代码助手的对话模型，适合编程问答与补全试用。",
+      "en": "Free Poolside Laguna S 2.1: software-engineering oriented chat for coding Q&A and completion trials.",
+      "fr": "Free Poolside Laguna S 2.1: software-engineering oriented chat for coding Q&A and completion trials.",
+      "ru": "Free Poolside Laguna S 2.1: software-engineering oriented chat for coding Q&A and completion trials.",
+      "ja": "Free Poolside Laguna S 2.1: software-engineering oriented chat for coding Q&A and completion trials.",
+      "vi": "Free Poolside Laguna S 2.1: software-engineering oriented chat for coding Q&A and completion trials."
     }
   },
   "dots-3-note-preview:free": {
@@ -5743,17 +5698,17 @@
     "price_key_en": ""
   },
   "subtitle-erase-pro": {
-    "description": "视频压制字幕无痕擦除（精细化），适合短剧出海与二创去硬字幕。 计费：0.018265/秒。",
-    "description_zh": "视频压制字幕无痕擦除（精细化），适合短剧出海与二创去硬字幕。 计费：0.018265/秒。",
-    "description_en": "Refined hard-subtitle erasure for short drama export and remix. Billing: 0.018265/sec.",
+    "description": "视频压制字幕无痕擦除（精细化），适合短剧出海与二创去硬字幕。 计费：.018265/秒。",
+    "description_zh": "视频压制字幕无痕擦除（精细化），适合短剧出海与二创去硬字幕。 计费：.018265/秒。",
+    "description_en": "Refined hard-subtitle erasure for short drama export and remix. Billing: .018265/sec.",
     "descriptions": {
-      "zhCN": "视频压制字幕无痕擦除（精细化），适合短剧出海与二创去硬字幕。 计费：0.018265/秒。",
-      "zhTW": "视频压制字幕无痕擦除（精细化），适合短剧出海与二创去硬字幕。 计费：0.018265/秒。",
-      "en": "Refined hard-subtitle erasure for short drama export and remix. Billing: 0.018265/sec.",
-      "fr": "Refined hard-subtitle erasure for short drama export and remix. Billing: 0.018265/sec.",
-      "ru": "Refined hard-subtitle erasure for short drama export and remix. Billing: 0.018265/sec.",
-      "ja": "Refined hard-subtitle erasure for short drama export and remix. Billing: 0.018265/sec.",
-      "vi": "Refined hard-subtitle erasure for short drama export and remix. Billing: 0.018265/sec."
+      "zhCN": "视频压制字幕无痕擦除（精细化），适合短剧出海与二创去硬字幕。 计费：.018265/秒。",
+      "zhTW": "视频压制字幕无痕擦除（精细化），适合短剧出海与二创去硬字幕。 计费：.018265/秒。",
+      "en": "Refined hard-subtitle erasure for short drama export and remix. Billing: .018265/sec.",
+      "fr": "Refined hard-subtitle erasure for short drama export and remix. Billing: .018265/sec.",
+      "ru": "Refined hard-subtitle erasure for short drama export and remix. Billing: .018265/sec.",
+      "ja": "Refined hard-subtitle erasure for short drama export and remix. Billing: .018265/sec.",
+      "vi": "Refined hard-subtitle erasure for short drama export and remix. Billing: .018265/sec."
     },
     "unit": "second",
     "badge": {
@@ -5806,23 +5761,23 @@
         [
           "standard",
           "精细化字幕擦除",
-          "0.018265"
+          ".018265"
         ]
       ]
     }
   },
   "video-enhance-pro": {
-    "description": "视频画质增强（大模型），按输出分辨率档位按秒计费。 计费：720p 0.034247/秒；1080p 0.068493/秒；2K 0.136986/秒。",
-    "description_zh": "视频画质增强（大模型），按输出分辨率档位按秒计费。 计费：720p 0.034247/秒；1080p 0.068493/秒；2K 0.136986/秒。",
-    "description_en": "Large-model video quality enhance; billed per second by output resolution. Billing: 720p 0.034247/sec; 1080p 0.068493/sec; 2K 0.136986/sec.",
+    "description": "视频画质增强（大模型），按输出分辨率档位按秒计费。 计费：720p .034247/秒；1080p .068493/秒；2K .136986/秒。",
+    "description_zh": "视频画质增强（大模型），按输出分辨率档位按秒计费。 计费：720p .034247/秒；1080p .068493/秒；2K .136986/秒。",
+    "description_en": "Large-model video quality enhance; billed per second by output resolution. Billing: 720p .034247/sec; 1080p .068493/sec; 2K .136986/sec.",
     "descriptions": {
-      "zhCN": "视频画质增强（大模型），按输出分辨率档位按秒计费。 计费：720p 0.034247/秒；1080p 0.068493/秒；2K 0.136986/秒。",
-      "zhTW": "视频画质增强（大模型），按输出分辨率档位按秒计费。 计费：720p 0.034247/秒；1080p 0.068493/秒；2K 0.136986/秒。",
-      "en": "Large-model video quality enhance; billed per second by output resolution. Billing: 720p 0.034247/sec; 1080p 0.068493/sec; 2K 0.136986/sec.",
-      "fr": "Large-model video quality enhance; billed per second by output resolution. Billing: 720p 0.034247/sec; 1080p 0.068493/sec; 2K 0.136986/sec.",
-      "ru": "Large-model video quality enhance; billed per second by output resolution. Billing: 720p 0.034247/sec; 1080p 0.068493/sec; 2K 0.136986/sec.",
-      "ja": "Large-model video quality enhance; billed per second by output resolution. Billing: 720p 0.034247/sec; 1080p 0.068493/sec; 2K 0.136986/sec.",
-      "vi": "Large-model video quality enhance; billed per second by output resolution. Billing: 720p 0.034247/sec; 1080p 0.068493/sec; 2K 0.136986/sec."
+      "zhCN": "视频画质增强（大模型），按输出分辨率档位按秒计费。 计费：720p .034247/秒；1080p .068493/秒；2K .136986/秒。",
+      "zhTW": "视频画质增强（大模型），按输出分辨率档位按秒计费。 计费：720p .034247/秒；1080p .068493/秒；2K .136986/秒。",
+      "en": "Large-model video quality enhance; billed per second by output resolution. Billing: 720p .034247/sec; 1080p .068493/sec; 2K .136986/sec.",
+      "fr": "Large-model video quality enhance; billed per second by output resolution. Billing: 720p .034247/sec; 1080p .068493/sec; 2K .136986/sec.",
+      "ru": "Large-model video quality enhance; billed per second by output resolution. Billing: 720p .034247/sec; 1080p .068493/sec; 2K .136986/sec.",
+      "ja": "Large-model video quality enhance; billed per second by output resolution. Billing: 720p .034247/sec; 1080p .068493/sec; 2K .136986/sec.",
+      "vi": "Large-model video quality enhance; billed per second by output resolution. Billing: 720p .034247/sec; 1080p .068493/sec; 2K .136986/sec."
     },
     "unit": "second",
     "badge": {
@@ -5875,197 +5830,19 @@
         [
           "720p",
           "标准输出",
-          "0.034247"
+          ".034247"
         ],
         [
           "1080p",
           "标准输出",
-          "0.068493"
+          ".068493"
         ],
         [
           "2K",
           "标准输出",
-          "0.136986"
+          ".136986"
         ]
       ]
     }
-  },
-  "tags": {
-    "视频处理": {
-      "zhCN": "视频处理",
-      "zhTW": "影片處理",
-      "en": "VideoProc",
-      "fr": "VideoProc",
-      "ru": "VideoProc",
-      "ja": "動画処理",
-      "vi": "VideoProc"
-    },
-    "VideoProc": {
-      "zhCN": "视频处理",
-      "zhTW": "影片處理",
-      "en": "VideoProc",
-      "fr": "VideoProc",
-      "ru": "VideoProc",
-      "ja": "動画処理",
-      "vi": "VideoProc"
-    },
-    "视频模型": {
-      "zhCN": "视频模型",
-      "zhTW": "影片模型",
-      "en": "Video",
-      "fr": "Video",
-      "ru": "Video",
-      "ja": "動画モデル",
-      "vi": "Video"
-    },
-    "VideoModel": {
-      "zhCN": "视频模型",
-      "zhTW": "影片模型",
-      "en": "Video",
-      "fr": "Video",
-      "ru": "Video",
-      "ja": "動画モデル",
-      "vi": "Video"
-    },
-    "视频按秒": {
-      "zhCN": "视频模型",
-      "zhTW": "影片模型",
-      "en": "Video",
-      "fr": "Video",
-      "ru": "Video",
-      "ja": "動画モデル",
-      "vi": "Video"
-    },
-    "VideoSec": {
-      "zhCN": "视频模型",
-      "zhTW": "影片模型",
-      "en": "Video",
-      "fr": "Video",
-      "ru": "Video",
-      "ja": "動画モデル",
-      "vi": "Video"
-    },
-    "per": {
-      "zhCN": "视频模型",
-      "zhTW": "影片模型",
-      "en": "Video",
-      "fr": "Video",
-      "ru": "Video",
-      "ja": "動画モデル",
-      "vi": "Video"
-    },
-    "second": {
-      "zhCN": "视频模型",
-      "zhTW": "影片模型",
-      "en": "Video",
-      "fr": "Video",
-      "ru": "Video",
-      "ja": "動画モデル",
-      "vi": "Video"
-    }
-  },
-  "vendors": {
-    "小米": {
-      "zhCN": "小米",
-      "zhTW": "小米",
-      "en": "Xiaomi",
-      "fr": "Xiaomi",
-      "ru": "Xiaomi",
-      "ja": "Xiaomi",
-      "vi": "Xiaomi"
-    },
-    "Xiaomi": {
-      "zhCN": "小米",
-      "zhTW": "小米",
-      "en": "Xiaomi",
-      "fr": "Xiaomi",
-      "ru": "Xiaomi",
-      "ja": "Xiaomi",
-      "vi": "Xiaomi"
-    },
-    "XiaomiMiMo": {
-      "zhCN": "小米",
-      "zhTW": "小米",
-      "en": "Xiaomi",
-      "fr": "Xiaomi",
-      "ru": "Xiaomi",
-      "ja": "Xiaomi",
-      "vi": "Xiaomi"
-    },
-    "小红书": {
-      "zhCN": "小红书",
-      "zhTW": "小紅書",
-      "en": "RED",
-      "fr": "RED",
-      "ru": "RED",
-      "ja": "RED",
-      "vi": "RED"
-    },
-    "Dots": {
-      "zhCN": "小红书",
-      "zhTW": "小紅書",
-      "en": "RED",
-      "fr": "RED",
-      "ru": "RED",
-      "ja": "RED",
-      "vi": "RED"
-    },
-    "Dots Studio": {
-      "zhCN": "小红书",
-      "zhTW": "小紅書",
-      "en": "RED",
-      "fr": "RED",
-      "ru": "RED",
-      "ja": "RED",
-      "vi": "RED"
-    }
-  },
-  "claude-sonnet-5-5": {
-    "description": "Claude Sonnet 5.5：均衡编程与推理，适合日常开发与 Agent。",
-    "descriptions": {
-      "zhCN": "Claude Sonnet 5.5：均衡编程与推理，适合日常开发与 Agent。",
-      "zhTW": "Claude Sonnet 5.5：均衡編程與推理，適合日常開發與 Agent。",
-      "en": "Claude Sonnet 5.5 balanced coding and reasoning for everyday development and agents.",
-      "fr": "Claude Sonnet 5.5 balanced coding and reasoning for everyday development and agents.",
-      "ru": "Claude Sonnet 5.5 balanced coding and reasoning for everyday development and agents.",
-      "ja": "Claude Sonnet 5.5：均衡编程与推理，适合日常开发与 Agent。",
-      "vi": "Claude Sonnet 5.5 balanced coding and reasoning for everyday development and agents."
-    },
-    "unit": "token",
-    "badge": {
-      "zhCN": "按 Token 计费",
-      "zhTW": "按 Token 計費",
-      "en": "Token-based",
-      "fr": "Au token",
-      "ru": "По токенам",
-      "ja": "Token 課金",
-      "vi": "Theo token"
-    },
-    "suffix": {
-      "zhCN": "",
-      "zhTW": "",
-      "en": "",
-      "fr": "",
-      "ru": "",
-      "ja": "",
-      "vi": ""
-    },
-    "price_key": {
-      "zhCN": "",
-      "zhTW": "",
-      "en": "",
-      "fr": "",
-      "ru": "",
-      "ja": "",
-      "vi": ""
-    },
-    "description_zh": "Claude Sonnet 5.5：均衡编程与推理，适合日常开发与 Agent。",
-    "description_en": "Claude Sonnet 5.5 balanced coding and reasoning for everyday development and agents.",
-    "badge_zh": "按 Token 计费",
-    "badge_en": "Token-based",
-    "suffix_zh": "",
-    "suffix_en": "",
-    "price_key_zh": "",
-    "price_key_en": ""
   }
 }

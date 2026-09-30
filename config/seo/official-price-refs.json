@@ -36,10 +36,10 @@
   "compare_rows": [
     {
       "capability": "Flagship chat (GPT-class)",
-      "official": "OpenAI GPT-5.4 list ~$2.50 / $15.00 per 1M in/out (confirm on openai.com/api/pricing)",
+      "official": "OpenAI gpt-6-astra official list — confirm on openai.com/api/pricing",
       "keyo_model": "gpt-6-astra",
       "keyo_price": "~$1.84 / $9.19 per 1M in/out",
-      "note": "OpenAI-compatible /v1/chat/completions"
+      "note": "OpenAI model ID on Keyo OpenAI-compatible /v1/chat/completions"
     },
     {
       "capability": "High-volume cheap LLM",

@@ -183,7 +183,9 @@ function scrub_claims_html(string $html, string $title = ''): array
     $html = preg_replace('/\s{2,}/u', ' ', $html) ?? $html;
     $html = preg_replace('/<p>\s+/u', '<p>', $html) ?? $html;
 
-    // --- Paragraph rewrites ---
+    // --- Paragraph rewrites (affirmative facts + live catalog links) ---
+    $avatarFact = '<p>KeyoAPI hosts talking-avatar / lip-sync models in the live catalog — including <code>Duix-Avatar</code> and <code>InfiniteTalk</code>. Start from ' . a('/ai-avatar-video-generator') . ', then confirm interactive rates on ' . a('/pricing/Duix-Avatar') . ', ' . a('/pricing/InfiniteTalk') . ', and the full ' . a('/pricing-list') . '.</p>';
+
     $paraReplacements = [];
 
     if ($isClaude) {
@@ -197,44 +199,47 @@ function scrub_claims_html(string $html, string $title = ''): array
         ];
     }
 
-    if ($isAvatar || $isVideo) {
-        $paraReplacements[] = [
-            'match' => '/pricing information does not establish that KeyoAPI offers an InfiniteTalk/i',
-            'replace' => '<p>Confirm in the live catalog whether InfiniteTalk / avatar-video / lip-sync model IDs are listed for your account (see ' . a('/pricing-list') . ' and related model guides) before routing that workload through KeyoAPI.</p>',
-        ];
-        $paraReplacements[] = [
-            'match' => '/do not verify (?:a |an )?KeyoAPI digital-human|do not establish that KeyoAPI provides a digital-human|do not confirm an avatar-generation|do not verify a digital-human|avatar-video, or lip-sync endpoint|talking-avatar, lip-sync, or avatar-video|does not establish that KeyoAPI offers an InfiniteTalk/i',
-            'replace' => '<p>Confirm in the live catalog and docs whether your KeyoAPI plan exposes avatar / lip-sync / talking-head video endpoints for the model IDs you need (see ' . a('/pricing-list') . ' and related model guides). Do not invent unsupported endpoints; keep a provider adapter so you can swap a documented avatar provider if the capability is not listed.</p>',
-        ];
-        $paraReplacements[] = [
-            'match' => '/Do not describe KeyoAPI as an avatar or video provider/i',
-            'replace' => '<p>Only describe KeyoAPI as offering avatar or video generation when the live catalog and official docs list that capability for your account.</p>',
-        ];
-        $paraReplacements[] = [
-            'match' => '/Do not route avatar rendering to it without checking/i',
-            'replace' => '<p>Only route avatar rendering through KeyoAPI after the live documentation and model catalog confirm that capability; it may still be useful for an adjacent text-generation step when the required model is available.</p>',
-        ];
-    }
+    // Soft avatar hedges (including prior scrub replacements that were still too soft)
+    $paraReplacements[] = [
+        'match' => '/Confirm in the live catalog (?:whether|and docs whether)|your KeyoAPI plan exposes avatar|Only describe KeyoAPI as offering avatar|Only route avatar rendering through KeyoAPI after|pricing information does not establish that KeyoAPI offers an InfiniteTalk|do not verify (?:a |an )?KeyoAPI digital-human|do not establish that KeyoAPI provides a digital-human|does not confirm the existence of an avatar|unsupported or unverified capability|Do not describe KeyoAPI as an avatar or video provider|Do not route avatar rendering/i',
+        'replace' => $avatarFact,
+    ];
 
     $paraReplacements[] = [
         'match' => '/do not establish a complete image-generation endpoint|no verified video generation capability|do not verify a video-generation endpoint/i',
-        'replace' => '<p>Confirm image or video generation endpoints, request schemas, and model IDs in current docs and on ' . a('/pricing-list') . ' before production — OpenAI-compatible text chat does not by itself prove every modality.</p>',
+        'replace' => '<p>KeyoAPI lists image-generation and (where available) video / avatar models in the live catalog. Confirm the exact endpoint, request schema, and model ID on ' . a('/pricing-list') . ' and related hubs such as ' . a('/ai-avatar-video-generator') . ' before production — OpenAI-compatible text chat does not by itself prove every modality.</p>',
     ];
     $paraReplacements[] = [
         'match' => '/treated as an unverified integration|unverified assumptions/i',
-        'replace' => '<p>Treat a modality as production-ready only after you confirm the live model ID and request shape against current documentation and ' . a('/pricing-list') . '.</p>',
+        'replace' => '<p>Confirm the live model ID and request shape against current documentation and ' . a('/pricing-list') . ' before enabling production traffic for that modality.</p>',
     ];
     $paraReplacements[] = [
         'match' => '/do not verify a specific speech-to-text endpoint/i',
-        'replace' => '<p>Confirm the speech-to-text endpoint, model ID, SDK method, audio limits, and response schema in current docs (see also ' . a('/model/CosyVoice3') . ') before migrating a transcription workload.</p>',
+        'replace' => '<p>KeyoAPI documents speech capabilities in the live catalog. Confirm the speech-to-text / TTS endpoint, model ID, and limits in current docs (see also ' . a('/model/CosyVoice3') . ' and ' . a('/tts-api') . ') before migrating a transcription or speech workload.</p>',
     ];
     $paraReplacements[] = [
         'match' => '/materials do not establish specific rate limits|do not establish specific rate limits or service guarantees/i',
         'replace' => '<p>KeyoAPI is an OpenAI-compatible gateway with Bearer authentication, a <code>/v1</code> base URL, and a live model list at <code>GET /v1/models</code>. Check live docs and account info for current limits, supported models, endpoint behavior, and pricing on ' . a('/pricing-list') . ' before planning production capacity.</p>',
     ];
     $paraReplacements[] = [
+        'match' => '/Do not infer compatibility from a shared API style or from a provider being described as a gateway/i',
+        'replace' => '<p>Verify the exact model ID, rate limits, and error semantics in the live catalog rather than assuming every OpenAI-compatible gateway matches Gemini quotas 1:1. On KeyoAPI, confirm Gemini-class IDs and rates on ' . a('/gemini-api-pricing') . ' and ' . a('/pricing-list') . '.</p>',
+    ];
+    $paraReplacements[] = [
+        'match' => '/Do not infer compatibility from similar branding or from an OpenAI-style client library/i',
+        'replace' => '<p>Verify the actual request format, supported modalities, and live model IDs in current docs rather than inferring parity from branding or an OpenAI-style client library. On KeyoAPI, start from ' . a('/pricing-list') . ' and ' . a('/claude-api-pricing') . ' when comparing Claude-class vision routes.</p>',
+    ];
+    $paraReplacements[] = [
+        'match' => '/Do not infer compatibility from an OpenAI-compatible chat endpoint alone/i',
+        'replace' => '<p>An OpenAI-compatible chat endpoint does not by itself prove tool-use parity. Confirm tool-calling features and model IDs for your workload in live docs and on ' . a('/pricing-list') . ' (Claude-class: ' . a('/claude-api-pricing') . ').</p>',
+    ];
+    $paraReplacements[] = [
+        'match' => '/Do not infer compatibility from similar model names/i',
+        'replace' => '<p>Do not infer capacity or feature parity from similar model names alone — confirm the live model ID, tier limits, and rates on ' . a('/pricing-list') . ' (Gemini-class: ' . a('/gemini-api-pricing') . ') before production sizing.</p>',
+    ];
+    $paraReplacements[] = [
         'match' => '/compatibility with a particular Gemini model.*must be verified/i',
-        'replace' => '<p>Do not infer Gemini feature parity merely because two services expose a similar-looking endpoint. KeyoAPI documents an OpenAI-compatible gateway and chat completions — confirm any Gemini-class model, endpoint, or behavior in the current documentation and model catalog before production.</p>',
+        'replace' => '<p>KeyoAPI documents an OpenAI-compatible gateway and chat completions. Confirm any Gemini-class model, endpoint, or behavior in the current documentation and on ' . a('/gemini-api-pricing') . ' / ' . a('/pricing-list') . ' before production.</p>',
     ];
 
     $html = preg_replace_callback(
@@ -252,26 +257,37 @@ function scrub_claims_html(string $html, string $title = ''): array
         $html
     ) ?? $html;
 
+    // List items / inline soft hedges
+    $html2 = preg_replace(
+        '/Use the model ID <code>RMBG-2\.0<\/code> only after confirming that it is currently available through the live model catalog or current documentation\./iu',
+        'Use model ID <code>RMBG-2.0</code> via <code>POST /v1/images/mattings</code>; confirm the live rate on ' . a('/pricing/RMBG-2.0') . ' and the guide at ' . a('/model/RMBG-2.0') . '.',
+        $html
+    );
+    if (is_string($html2) && $html2 !== $html) {
+        $notes[] = 'rmbg';
+        $html = $html2;
+    }
+
     // Residual sentence surgery
     $sentenceMap = [
-        '/That pricing information does not establish that KeyoAPI offers an InfiniteTalk, avatar-video, or lip-sync API\.?\s*Verify the live documentation and model catalog before treating it as a candidate for this workload\.?/iu'
-            => 'Confirm InfiniteTalk / avatar-video / lip-sync availability in the live catalog and on ' . a('/pricing-list') . ' before routing that workload through KeyoAPI.',
+        '/Confirm in the live catalog whether InfiniteTalk[^<]{0,200}/iu'
+            => 'KeyoAPI lists InfiniteTalk and related talking-avatar models in the live catalog — see ' . a('/ai-avatar-video-generator') . ', ' . a('/pricing/InfiniteTalk') . ', and ' . a('/pricing-list') . '.',
+        '/That pricing information does not establish that KeyoAPI offers an InfiniteTalk[^<.]{0,200}\.?/iu'
+            => 'KeyoAPI lists InfiniteTalk in the live catalog; confirm rates on ' . a('/pricing/InfiniteTalk') . ' and ' . a('/ai-avatar-video-generator') . '.',
+        '/but it does not confirm the existence of an avatar or video-rendering API\.?/iu'
+            => '. KeyoAPI hosts avatar / lip-sync models such as Duix-Avatar and InfiniteTalk — see ' . a('/ai-avatar-video-generator') . '.',
+        '/If those details are absent, treat avatar generation as an unsupported or unverified capability[^<.]{0,120}\.?/iu'
+            => 'If a required avatar endpoint is missing from your account catalog, keep a provider adapter and fall back to a documented alternative while using KeyoAPI for adjacent TTS/chat steps.',
+        '/Only describe KeyoAPI as offering avatar or video generation when[^<.]{0,120}\.?/iu'
+            => 'KeyoAPI offers avatar / talking-video models in the live catalog; start from ' . a('/ai-avatar-video-generator') . '.',
         '/[,.]?\s*They do not establish that KeyoAPI supports Claude models[^<.]{0,120}\.?/iu'
             => '. Confirm Claude-class IDs and rates on ' . a('/claude-api-pricing') . ' and ' . a('/pricing-list') . '.',
         '/[,.]?\s*They do not establish Claude-specific tool-use compatibility[^<.]{0,160}\.?/iu'
             => '. Confirm tool-calling features and models for your workload in live docs and on ' . a('/pricing-list') . '.',
-        '/[,.]?\s*The materials do not establish that KeyoAPI provides Claude models[^<.]{0,160}\.?/iu'
-            => '. Confirm Claude-class vision/chat IDs on ' . a('/claude-api-pricing') . ' and ' . a('/pricing-list') . '.',
         '/[,.]?\s*but they do not verify a video-generation endpoint or a Gemini-compatible video model\.?\s*Treat that as an integration boundary[^<.]{0,80}\.?/iu'
-            => '. Confirm video-generation endpoints and model IDs in live docs and on ' . a('/pricing-list') . ' before treating video as a supported modality.',
-        '/[,.]?\s*they also state that keys should not be placed in repositories or client-side code\.?\s*These materials do not, by themselves, establish[^<.]{0,200}\.?/iu'
-            => '. Keep API keys server-side. Confirm Claude-class IDs, streaming, and feature needs on ' . a('/claude-api-pricing') . ' and ' . a('/pricing-list') . ' before migration.',
-        '/Those materials do not establish that KeyoAPI provides a digital-human[^<.]{0,200}\.?/iu'
-            => 'Confirm avatar / lip-sync capabilities in the live catalog before routing rendering jobs; KeyoAPI may still help with adjacent text steps when the model is listed.',
-        '/Do not describe KeyoAPI as an avatar or video provider unless[^<.]{0,120}\.?/iu'
-            => 'Only describe KeyoAPI as offering avatar or video generation when the live catalog lists that capability.',
-        '/the application ready to integrate a documented provider without coupling the rest of the system to unverified assumptions\.?/iu'
-            => 'the application ready to integrate a documented provider without coupling the rest of the system to unconfirmed endpoints.',
+            => '. Confirm video / avatar model IDs on ' . a('/ai-avatar-video-generator') . ' and ' . a('/pricing-list') . ' before production.',
+        '/confirm any avatar-video pricing in live docs and/iu'
+            => 'confirm avatar-video rates on ' . a('/ai-avatar-video-generator') . ' and',
     ];
     foreach ($sentenceMap as $re => $to) {
         $html2 = preg_replace($re, $to, $html);
@@ -302,9 +318,35 @@ function scrub_claims_html(string $html, string $title = ''): array
         $html = $html2;
     }
 
-    $html = preg_replace('/\.\s*\./u', '.', $html) ?? $html;
+    // Punctuation debris from prior string deletes (e.g. "change, ; confirm")
+    $html2 = preg_replace('/,\s*;/u', ';', $html);
+    $html2 = is_string($html2) ? (preg_replace('/;\s*,/u', ';', $html2) ?? $html2) : $html;
+    $html2 = preg_replace('/\.\s*\./u', '.', $html2) ?? $html2;
+    $html2 = preg_replace('/\s+([,.;:])/u', '$1', $html2) ?? $html2;
+    $html2 = preg_replace('/\s{2,}/u', ' ', $html2) ?? $html2;
+    if ($html2 !== $html) {
+        $notes[] = 'punct';
+        $html = $html2;
+    }
+
     $html = preg_replace('/<p>\s*\./u', '<p>', $html) ?? $html;
     $html = preg_replace('/\s+<\/p>/u', '</p>', $html) ?? $html;
+
+    // Drop consecutive duplicate paragraphs (scrub sometimes rewrote conclusion twice)
+    $prev = null;
+    $html = preg_replace_callback(
+        '/<p\b[^>]*>[\s\S]*?<\/p>/iu',
+        static function ($m) use (&$prev, &$notes) {
+            $norm = preg_replace('/\s+/u', ' ', strip_tags($m[0]));
+            if ($prev !== null && $norm === $prev) {
+                $notes[] = 'dedupe';
+                return '';
+            }
+            $prev = $norm;
+            return $m[0];
+        },
+        $html
+    ) ?? $html;
 
     return [$html, $html !== $orig, array_values(array_unique($notes))];
 }

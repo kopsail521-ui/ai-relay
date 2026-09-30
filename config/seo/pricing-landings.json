@@ -107,13 +107,13 @@
       ],
       "freeKiller": {
         "title": "Prototype free, then meter DeepSeek on the same key",
-        "body": "For $0 prototyping on the same key, use catalog free IDs on /free-models (fair-use) — including DeepSeek-Prover-V2-7B. When you meter DeepSeek chat, switch model= to deepseek-v4.1-flash or deepseek-v4-pro-0813 without changing base URL or auth — those are separate IDs, not one upgrade ladder."
+        "body": "For $0 prototyping on the same key, use catalog free IDs on /free-models (fair-use) — including DeepSeek-Prover-V2-7B. When you meter DeepSeek chat, switch model= to deepseek-v4.1-flash, deepseek-v4-flash, or deepseek-v4-pro-0813 without changing base URL or auth — those are separate IDs, not one upgrade ladder. Free-path vs pricing detail for Flash: /model/deepseek-v4-flash."
       },
       "body": [
         "Compare DeepSeek rates across official platforms, aggregators, and a multi-model API. KeyoAPI is the third option — OpenAI-compatible base URL, prepaid balance, and Gemini/Whisper/OCR on the same key when DeepSeek is only part of the stack.",
-        "Indicative Keyo sell rates above come from the live Keyo catalog (/pricing). Confirm each ID on /pricing before volume contracts.",
+        "Indicative Keyo sell rates above come from the live Keyo catalog (/pricing). Confirm each ID on /pricing before volume contracts. For DeepSeek V4 Flash free prototyping vs metered pricing detail, see the guide at /model/deepseek-v4-flash (also covers deepseek-v4.1-flash as the cheaper high-volume Flash when you want a different catalog row).",
         "How to call: POST https://www.keyoapi.xyz/v1/chat/completions with Authorization: Bearer YOUR_KEY and model set to the DeepSeek ID you want — Flash and Pro are different products.",
-        "For Gemini rates, see /gemini-api-pricing. For free prototyping, open /free-models."
+        "For Gemini rates, see /gemini-api-pricing. For free prototyping, open /free-models. Side-by-side planning: /compare."
       ],
       "faqs": [
         {
@@ -122,7 +122,7 @@
         },
         {
           "q": "Which DeepSeek ID should I start with?",
-          "a": "Start with deepseek-v4.1-flash for high-volume chat. Use deepseek-v4-pro-0813 when you specifically want the Pro ID — it is not an automatic upgrade from Flash. Confirm live rates on /pricing before volume."
+          "a": "Start with deepseek-v4.1-flash for high-volume chat. Use deepseek-v4-flash when your stack already pins that catalog string — see /model/deepseek-v4-flash for free-path and pricing context. Use deepseek-v4-pro-0813 when you specifically want the Pro ID. Confirm live rates on /pricing before volume."
         }
       ]
     },
@@ -232,7 +232,7 @@
       ],
       "freeKiller": {
         "title": "Prototype free, then promote to GPT-class",
-        "body": "For $0 prototyping on the same API key, use free catalog IDs on /free-models (fair-use limits). When quality gates pass, switch model= to gpt-6-astra, gpt-5.6-luna, or deepseek-v4.1-flash without changing base URL or auth."
+        "body": "For $0 prototyping on the same API key, use free catalog IDs on /free-models (fair-use limits). When quality gates pass, switch model= to gpt-6-astra, gpt-5.6-luna, deepseek-v4.1-flash, or kimi-k3 without changing base URL or auth. Guides: /model/gpt-6-astra, /model/deepseek-v4-flash, /model/kimi-k3."
       },
       "body": [
         "Teams that search OpenAI API pricing or OpenAI API costs usually need GPT-class chat inside an OpenAI SDK with clearer unit economics — or one prepaid balance that also covers Claude, DeepSeek, Whisper, OCR, and TTS. Official OpenAI surfaces win on brand trust and first-party features. KeyoAPI is for when you want that stack without five invoices and without rewriting clients when you swap models.",
@@ -365,7 +365,7 @@
           "model": "CosyVoice3",
           "official": "Async multilingual / zero-shot TTS for longer scripts",
           "keyo": "~$1.37 / 10K characters",
-          "note": "POST /v1/async/audio/speech · /pricing/CosyVoice3"
+          "note": "POST /v1/async/audio/speech · guide /model/CosyVoice3 · /pricing/CosyVoice3"
         },
         {
           "model": "Qwen3-TTS",
@@ -381,22 +381,22 @@
       "body": [
         "Teams call a TTS API for IVR, voice agents, course narration, and avatar pipelines. Keyo keeps STT (Whisper) and TTS on one prepaid balance so you are not juggling three vendor consoles.",
         "Indicative rates above come from the live Keyo catalog — always confirm /pricing/IndexTTS-2, /pricing/CosyVoice3, and /pricing/Qwen3-TTS. Prefer IndexTTS-2 when the product needs audio inside one request; prefer CosyVoice3 or Qwen3-TTS when jobs are already async.",
-        "How to call: set base URL https://www.keyoapi.xyz/v1, authenticate with your Keyo key, pass the model id. Guides: /model/IndexTTS-2, /model/CosyVoice3, /model/Qwen3-TTS. Voice clone angle: /voice-cloning-api. Talking video: /ai-avatar-video-generator.",
+        "How to call CosyVoice3 API (and siblings): set base URL https://www.keyoapi.xyz/v1, authenticate with your Keyo key, pass the model id. Full CosyVoice3 walkthrough: /model/CosyVoice3. Also /model/IndexTTS-2, /model/Qwen3-TTS. Voice clone angle: /voice-cloning-api. Talking video: /ai-avatar-video-generator.",
         "Create a key at /sign-up, then open the model’s /pricing/{id} page for interactive try/buy."
       ],
       "curlExample": "curl https://www.keyoapi.xyz/v1/audio/speech \\\n  -H \"Authorization: Bearer $KEYO_API_KEY\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\"model\":\"IndexTTS-2\",\"input\":\"Hello from KeyoAPI TTS.\"}'",
       "faqs": [
         {
           "q": "Which TTS model should I start with?",
-          "a": "Start with IndexTTS-2 for sync demos; move to CosyVoice3 or Qwen3-TTS for batch/async and clone-heavy workloads. Compare live rates on each /pricing page."
+          "a": "Start with IndexTTS-2 for sync demos; move to CosyVoice3 or Qwen3-TTS for batch/async and clone-heavy workloads. See /model/CosyVoice3 for the CosyVoice3 API call shape, and compare live rates on each /pricing page."
         },
         {
           "q": "Is there a free TTS model?",
-          "a": "Not as a permanent $0 TTS ID today. Use free chat twins to draft scripts, then meter TTS. See /free-models."
+          "a": "Not as a permanent $0 TTS ID today. Use free chat twins to draft scripts, then meter TTS. See /free-models and /model/CosyVoice3."
         },
         {
           "q": "Can I pair TTS with avatars?",
-          "a": "Yes — generate audio, then drive Duix-Avatar or InfiniteTalk on the same key. See /ai-avatar-video-generator."
+          "a": "Yes — generate audio, then drive Duix-Avatar or InfiniteTalk on the same key. Guides: /model/Duix-Avatar, hub /ai-avatar-video-generator."
         }
       ]
     },

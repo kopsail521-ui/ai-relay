@@ -716,6 +716,14 @@ function renderCompare() {
 <h2>How to use this comparison</h2>
 <p>One OpenAI-compatible SDK, one balance, and multimodal add-ons on one invoice.</p>
 <p>Recommended rollout: start with <a href="${featuredHref("deepseek-v4.1-flash")}"><code>deepseek-v4.1-flash</code></a> on high-volume paths, <a href="${featuredHref("gpt-6-astra")}"><code>gpt-6-astra</code></a> or <a href="/model/claude-sonnet-5">claude-sonnet-5</a> as default chat, escalate to <a href="/model/claude-fable-5-1">claude-fable-5-1</a> when you need denser reasoning.</p>
+<h2>Guides for high-intent model searches</h2>
+<p>Deep pages for queries already ranking on Keyo:</p>
+<ul>
+  <li><a href="/model/deepseek-v4-flash">DeepSeek V4 Flash — free path &amp; pricing</a></li>
+  <li><a href="/model/CosyVoice3">How to call CosyVoice3 API</a></li>
+  <li><a href="/model/kimi-k3">Kimi K3 API key — free prototyping path</a></li>
+  <li><a href="/model/gpt-6-astra">GPT-6 Astra API</a> · <a href="/model/Duix-Avatar">Duix Avatar API</a></li>
+</ul>
 <h2>Modality pages</h2>
 ${relatedLinks(["whisper-large-v3", "Qwen3-TTS", "MinerU2.5-Pro", "RMBG-2.0", "VajraV1", "Duix-Avatar"])}
 `;
@@ -886,6 +894,15 @@ ${rows}
   <p>One page keeps every free ID and its limits in one place — bookmark it; we update it when the free catalog changes.</p>
 </details>
 </div>
+<h2>When you outgrow free IDs</h2>
+<p>Same key, switch <code>model=</code> only:</p>
+<ul>
+  <li><a href="/model/deepseek-v4-flash"><strong>DeepSeek V4 Flash free / pricing</strong></a> — metered Flash after $0 prototypes (<code>deepseek-v4-flash</code>)</li>
+  <li><a href="/model/kimi-k3"><strong>Kimi K3 API key (free path)</strong></a> — draft on free IDs, then <code>kimi-k3</code></li>
+  <li><a href="/model/CosyVoice3"><strong>CosyVoice3 API</strong></a> — hosted TTS when scripts leave the free chat tier</li>
+  <li><a href="/model/Duix-Avatar"><strong>Duix Avatar API</strong></a> — talking-face render after TTS</li>
+  <li><a href="/deepseek-api-pricing">DeepSeek API pricing hub</a> · <a href="/tts-api">TTS API hub</a> · <a href="/ai-avatar-video-generator">Avatar hub</a> · <a href="/compare">Compare rates</a></li>
+</ul>
 <p class="meta">Also see the interactive catalog on <a href="/pricing">/pricing</a> (filter Free) and the OpenAI-compatible docs.</p>
 `;
   return layout({
@@ -962,7 +979,7 @@ ${bodyParas}
 ${curlBlock}
 <h2>FAQ</h2>
 <div class="faq">${faqs}</div>
-<p class="meta">Also see <a href="/compare">/compare</a>, <a href="/free-models">/free-models</a>, and model guides under <code>/model/</code>.</p>
+<p class="meta">Also see <a href="/compare">/compare</a>, <a href="/free-models">/free-models</a>, and guides: <a href="/model/deepseek-v4-flash">DeepSeek V4 Flash</a> · <a href="/model/CosyVoice3">CosyVoice3 API</a> · <a href="/model/kimi-k3">Kimi K3</a> · <a href="/model/Duix-Avatar">Duix Avatar</a>.</p>
 `;
   return layout({
     title: p.title,

@@ -107,7 +107,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
 </tbody>
 </table>
 <h2>Prototype free, then promote to GPT-class</h2>
-<p>For $0 prototyping on the same API key, use free catalog IDs on <a href="/free-models">/free-models</a> (fair-use limits). When quality gates pass, switch model= to gpt-6-astra, gpt-5.6-luna, or deepseek-v4.1-flash without changing base URL or auth.</p>
+<p>For $0 prototyping on the same API key, use free catalog IDs on <a href="/free-models">/free-models</a> (fair-use limits). When quality gates pass, switch model= to gpt-6-astra, gpt-5.6-luna, deepseek-v4.1-flash, or kimi-k3 without changing base URL or auth. Guides: <a href="/model/gpt-6-astra">/model/gpt-6-astra</a>, <a href="/model/deepseek-v4-flash">/model/deepseek-v4-flash</a>, <a href="/model/kimi-k3">/model/kimi-k3</a>.</p>
 <h2>Rates and how to call</h2>
 <p>Teams that search OpenAI API pricing or OpenAI API costs usually need GPT-class chat inside an OpenAI SDK with clearer unit economics — or one prepaid balance that also covers Claude, DeepSeek, Whisper, OCR, and TTS. Official OpenAI surfaces win on brand trust and first-party features. KeyoAPI is for when you want that stack without five invoices and without rewriting clients when you swap models.</p>
 <p>Keyo rates in the table are indicative sell prices from the live Keyo catalog. Always confirm interactive pages under <a href="/pricing/gpt-5.6-luna">/pricing/gpt-5.6-luna</a>, <a href="/pricing/gpt-5.6-terra">/pricing/gpt-5.6-terra</a>, and <a href="/pricing/gpt-5.6-sol">/pricing/gpt-5.6-sol</a> before contracting volume. OpenAI list bands, cached-input discounts, and model renames change — treat official figures as planning context only. Keyo GPT-5.6 IDs are GPT-class twins on an OpenAI-compatible API, not a claim that they are OpenAI first-party model names.</p>
@@ -137,7 +137,7 @@ print(r.choices[0].message.content)</pre>
 <details><summary>How do I estimate monthly GPT-class cost on Keyo?</summary><p>Multiply expected input/output millions of tokens by the live <a href="/pricing/gpt-5.6-luna">/pricing/gpt-5.6-luna</a> (or Terra/Sol) rates. Add retry overhead. Use <a href="/compare">/compare</a> when you want a side-by-side planning table.</p></details>
 <details><summary>Can I keep my OpenAI Python/Node SDK?</summary><p>Yes. Change base_url to https://www.keyoapi.xyz/v1 and the API key to your Keyo key, then pass a Keyo model id such as gpt-5.6-terra.</p></details>
 <details><summary>How do I estimate OpenAI API costs on Keyo?</summary><p>Multiply expected millions of input/output tokens by the live /pricing/{model} rates (for example gpt-6-astra or gpt-5.6-luna), add retries, then confirm on Model Square. A worked example is on this page; for a side-by-side catalog see <a href="/compare">/compare</a>.</p></details></div>
-<p class="meta">Also see <a href="/compare">/compare</a>, <a href="/free-models">/free-models</a>, and model guides under <code>/model/</code>.</p>
+<p class="meta">Also see <a href="/compare">/compare</a>, <a href="/free-models">/free-models</a>, and guides: <a href="/model/deepseek-v4-flash">DeepSeek V4 Flash</a> · <a href="/model/CosyVoice3">CosyVoice3 API</a> · <a href="/model/kimi-k3">Kimi K3</a> · <a href="/model/Duix-Avatar">Duix Avatar</a>.</p>
 
 </main>
 <footer class="footer">

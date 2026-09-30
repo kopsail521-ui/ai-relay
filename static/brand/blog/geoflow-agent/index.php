@@ -192,8 +192,10 @@ function scrub_body_html(string $html): array
     $html = preg_replace('/\bThe available materials indicate that\b/iu', '', $html) ?? $html;
     $html = preg_replace('/\bThe product materials describe\b/iu', '', $html) ?? $html;
     $html = preg_replace('/\bThe provided materials show that\b/iu', '', $html) ?? $html;
+    $html = preg_replace('/\b(?:the\s+)?(?:available|supplied|provided|published|official|current)\s+KeyoAPI\s+materials\b/iu', 'KeyoAPI docs', $html) ?? $html;
+    $html = preg_replace('/\bKeyoAPI(?:[\'’]s)?\s+(?:product\s+)?materials\b/iu', 'KeyoAPI docs', $html) ?? $html;
     $html = preg_replace('/\b(?:provided|supplied|available)\s+product\s+materials\b/iu', 'current documentation', $html) ?? $html;
-    $html = preg_replace('/\b(?:provided|supplied|available)\s+materials\b/iu', 'current documentation', $html) ?? $html;
+    $html = preg_replace('/\b(?:provided|supplied|available|published)\s+materials\b/iu', 'current documentation', $html) ?? $html;
     $html = preg_replace('/\s{2,}/u', ' ', $html) ?? $html;
     return [$html, $extracted];
 }

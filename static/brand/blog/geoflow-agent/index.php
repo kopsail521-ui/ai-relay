@@ -4,6 +4,11 @@ declare(strict_types=1);
 /**
  * GEOFlow agent — POST /brand/blog/geoflow-agent/v1/articles
  * Signing path (HMAC): /geoflow-agent/v1/articles
+ *
+ * Gate (default):
+ * - New articles land as draft (not on blog index / not in sitemap)
+ * - Smoke / test slugs never listed
+ * - Manual publish via scripts/geoflow-publish-article.php
  */
 
 header('X-Content-Type-Options: nosniff');
@@ -46,12 +51,73 @@ function read_config(string $path): array
     $cfg['clock_skew_seconds'] = max(30, (int)($cfg['clock_skew_seconds'] ?? 300));
     $cfg['site_origin'] = rtrim((string)($cfg['site_origin'] ?? 'https://www.keyoapi.xyz'), '/');
     $cfg['allowed_events'] = $cfg['allowed_events'] ?? ['article.publish'];
+    // Publishing gate defaults (override in config.json / gate.json)
+    $cfg['auto_publish'] = (bool)($cfg['auto_publish'] ?? false);
+    $cfg['sitemap_include_articles'] = (bool)($cfg['sitemap_include_articles'] ?? false);
+    $cfg['max_publish_per_week'] = max(1, (int)($cfg['max_publish_per_week'] ?? 5));
+    $cfg['require_previous_batch_ok'] = (bool)($cfg['require_previous_batch_ok'] ?? true);
     return $cfg;
+}
+
+function load_gate(string $dataDir, array $cfg): array
+{
+    $path = $dataDir . '/gate.json';
+    $gate = [
+        'auto_publish' => (bool)($cfg['auto_publish'] ?? false),
+        'sitemap_include_articles' => (bool)($cfg['sitemap_include_articles'] ?? false),
+        'max_publish_per_week' => (int)($cfg['max_publish_per_week'] ?? 5),
+        'require_previous_batch_ok' => (bool)($cfg['require_previous_batch_ok'] ?? true),
+        'previous_batch_ok' => false,
+        'notes' => 'Set previous_batch_ok=true only after prior batch has GSC impressions/indexing. Articles stay draft until scripts/geoflow-publish-article.php.',
+    ];
+    if (is_file($path)) {
+        $raw = json_decode((string)file_get_contents($path), true);
+        if (is_array($raw)) {
+            $gate = array_merge($gate, $raw);
+        }
+    } else {
+        ensure_writable_dir($dataDir);
+        file_put_contents($path, json_encode($gate, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES) . "\n");
+    }
+    return $gate;
 }
 
 function h(string $s): string
 {
     return htmlspecialchars($s, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+}
+
+function is_smoke_slug(string $slug): bool
+{
+    $s = strtolower($slug);
+    return str_contains($s, 'smoke') || str_contains($s, 'test-only') || preg_match('/(^|-)test$/', $s) === 1;
+}
+
+/**
+ * Strip GEOFlow template leaks and title duplication from SERP / card blurbs.
+ */
+function clean_meta_text(string $raw, string $title = ''): string
+{
+    $s = html_entity_decode(trim($raw), ENT_QUOTES | ENT_HTML5, 'UTF-8');
+    if ($s === '') {
+        return '';
+    }
+    // Leaked template labels
+    $s = preg_replace('/\bMeta\s*description\s*:\s*/iu', '', $s) ?? $s;
+    $s = preg_replace('/\b(SEO\s*)?Title\s*:\s*/iu', '', $s) ?? $s;
+    $s = preg_replace('/\bKey\s*Takeaways\s*:?\s*/iu', '', $s) ?? $s;
+    // Drop leading title echo
+    $title = trim($title);
+    if ($title !== '' && strncasecmp($s, $title, strlen($title)) === 0) {
+        $s = trim(substr($s, strlen($title)));
+        $s = preg_replace('/^[\s:;,\-—–|]+/u', '', $s) ?? $s;
+    }
+    $s = preg_replace('/\s+/u', ' ', $s) ?? $s;
+    $s = trim($s);
+    if (mb_strlen($s) > 155) {
+        $s = mb_substr($s, 0, 152) . '...';
+    }
+    return $s;
 }
 
 function ensure_writable_dir(string $dir): void
@@ -141,17 +207,22 @@ function verify_signature(array $cfg, string $rawBody): void
     }
 }
 
-function render_article_html(array $article, string $site, string $canonical): string
+function render_article_html(array $article, string $site, string $canonical, bool $isDraft): string
 {
     $title = (string)($article['title'] ?? 'Untitled');
-    $desc = (string)($article['meta_description'] ?? $article['excerpt'] ?? '');
-    $excerpt = (string)($article['excerpt'] ?? '');
+    $desc = clean_meta_text((string)($article['meta_description'] ?? $article['excerpt'] ?? ''), $title);
+    $excerpt = clean_meta_text((string)($article['excerpt'] ?? ''), $title);
+    if ($excerpt === '' && $desc !== '') {
+        $excerpt = $desc;
+    }
     $html = (string)($article['content_html'] ?? '');
     if ($html === '' && !empty($article['content'])) {
-        // Minimal markdown fallback: escape + paragraphs
         $html = '<p>' . nl2br(h((string)$article['content']), false) . '</p>';
     }
     $published = (string)($article['published_at'] ?? '');
+    $robots = $isDraft
+        ? '<meta name="robots" content="noindex,nofollow" />' . "\n"
+        : '';
 
     return '<!DOCTYPE html>
 <html lang="en">
@@ -160,7 +231,7 @@ function render_article_html(array $article, string $site, string $canonical): s
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>' . h($title) . ' — KeyoAPI</title>
 <meta name="description" content="' . h($desc) . '" />
-<link rel="canonical" href="' . h($canonical) . '" />
+' . $robots . '<link rel="canonical" href="' . h($canonical) . '" />
 <link rel="icon" href="/brand/logo.svg" type="image/svg+xml" />
 <link rel="stylesheet" href="/brand/keyo-theme.css" />
 </head>
@@ -178,7 +249,7 @@ function render_article_html(array $article, string $site, string $canonical): s
     </nav>
   </header>
   <div class="k-page">
-    <p class="meta"><a href="/brand/blog/">← Blog</a>' . ($published !== '' ? ' · <time datetime="' . h($published) . '">' . h(substr($published, 0, 10)) . '</time>' : '') . '</p>
+    <p class="meta"><a href="/brand/blog/">← Blog</a>' . ($published !== '' ? ' · <time datetime="' . h($published) . '">' . h(substr($published, 0, 10)) . '</time>' : '') . ($isDraft ? ' · <span>Draft</span>' : '') . '</p>
     <h1>' . h($title) . '</h1>
     ' . ($excerpt !== '' ? '<p class="sub">' . h($excerpt) . '</p>' : '') . '
     <article class="geoflow-body">
@@ -191,10 +262,9 @@ function render_article_html(array $article, string $site, string $canonical): s
 ';
 }
 
-function rebuild_index_and_sitemap(string $blogDir, string $site, array $catalog): void
+function rebuild_index_and_sitemap(string $blogDir, string $site, array $catalog, array $gate): void
 {
     $cards = [];
-    // Keep hand-written guides first
     $guides = [
         ['href' => '/brand/blog/openai-compatible-api-python.html', 'title' => 'How to use an OpenAI-compatible API in Python', 'meta' => 'Python SDK · custom base URL'],
         ['href' => '/brand/blog/openai-compatible-api-nodejs.html', 'title' => 'How to use an OpenAI-compatible API in Node.js', 'meta' => 'Node SDK · baseURL'],
@@ -207,18 +277,24 @@ function rebuild_index_and_sitemap(string $blogDir, string $site, array $catalog
     </div>';
     }
 
-    // Newest GEO articles first
     $geo = array_values($catalog);
     usort($geo, static function ($a, $b) {
         return strcmp((string)($b['published_at'] ?? ''), (string)($a['published_at'] ?? ''));
     });
     foreach ($geo as $item) {
-        if (($item['status'] ?? 'published') !== 'published') {
+        $slug = (string)($item['slug'] ?? '');
+        if (is_smoke_slug($slug)) {
+            continue;
+        }
+        if (($item['status'] ?? 'draft') !== 'published') {
             continue;
         }
         $href = (string)$item['path'];
         $title = (string)$item['title'];
-        $meta = (string)($item['excerpt'] ?? 'GEOFlow');
+        $meta = clean_meta_text((string)($item['excerpt'] ?? ''), $title);
+        if ($meta === '') {
+            $meta = 'Developer guide';
+        }
         if (strlen($meta) > 120) {
             $meta = substr($meta, 0, 117) . '...';
         }
@@ -263,7 +339,7 @@ function rebuild_index_and_sitemap(string $blogDir, string $site, array $catalog
     <h1>Blog</h1>
     <p class="sub">Guides for OpenAI-compatible APIs, custom base URLs, and multi-model gateways.</p>
 ' . implode("\n", $cards) . '
-    <p class="k-foot"><a href="/">← KeyoAPI home</a> · <a href="/pricing-list">Pricing list</a> · <a href="/free-models">Free models</a></p>
+    <p class="k-foot"><a href="/">← KeyoAPI home</a> · <a href="/pricing-list">Pricing list</a> · <a href="/free-models">Free models</a> · <a href="/model/CosyVoice3">CosyVoice3 API</a> · <a href="/tts-api">TTS API</a></p>
   </div>
 </body>
 </html>
@@ -273,17 +349,24 @@ function rebuild_index_and_sitemap(string $blogDir, string $site, array $catalog
         fail(500, 'article_storage_not_writable');
     }
 
+    // Sitemap: guides only until gate allows articles (after meta repair).
     $lines = [
         $site . '/brand/blog/',
         $site . '/brand/blog/openai-compatible-api-python.html',
         $site . '/brand/blog/openai-compatible-api-nodejs.html',
         $site . '/brand/blog/openai-compatible-api-cursor.html',
     ];
-    foreach ($geo as $item) {
-        if (($item['status'] ?? 'published') !== 'published') {
-            continue;
+    if (!empty($gate['sitemap_include_articles'])) {
+        foreach ($geo as $item) {
+            $slug = (string)($item['slug'] ?? '');
+            if (is_smoke_slug($slug)) {
+                continue;
+            }
+            if (($item['status'] ?? 'draft') !== 'published') {
+                continue;
+            }
+            $lines[] = $site . $item['path'];
         }
-        $lines[] = $site . $item['path'];
     }
     $lines = array_values(array_unique($lines));
     if (file_put_contents($blogDir . '/sitemap.txt', implode("\n", $lines) . "\n") === false) {
@@ -299,19 +382,17 @@ if (($_SERVER['REQUEST_METHOD'] ?? 'GET') !== 'POST') {
 
 $uri = parse_url($_SERVER['REQUEST_URI'] ?? '', PHP_URL_PATH) ?: '';
 if (!str_ends_with(rtrim($uri, '/'), rtrim(ROUTE_SUFFIX, '/')) && !str_contains($uri, ROUTE_SUFFIX)) {
-    // Allow exact match after rewrite; still require articles endpoint
     if (!preg_match('#/geoflow-agent/v1/articles/?$#', $uri)) {
         fail(404, 'not_found');
     }
 }
 
-$root = dirname(__DIR__, 4); // .../static/brand/blog/geoflow-agent -> repo root if layout matches
-// Prefer env; fallbacks for /opt/ai-relay layout
-$blogDir = env_path('GEOFLOW_BLOG_DIR', dirname(__DIR__)); // static/brand/blog
+$blogDir = env_path('GEOFLOW_BLOG_DIR', dirname(__DIR__));
 $dataDir = env_path('GEOFLOW_DATA_DIR', dirname($blogDir, 3) . '/data/geoflow-agent');
 $configPath = env_path('GEOFLOW_CONFIG_PATH', $dataDir . '/config.json');
 
 $cfg = read_config($configPath);
+$gate = load_gate($dataDir, $cfg);
 $rawBody = file_get_contents('php://input');
 if ($rawBody === false) {
     fail(422, 'invalid_article_payload');
@@ -336,7 +417,7 @@ if (isset($idem[$idemKey]) && is_array($idem[$idemKey])) {
         'ok' => true,
         'remote_id' => $prev['remote_id'],
         'remote_url' => $prev['remote_url'],
-        'static' => ['idempotent' => true],
+        'static' => ['idempotent' => true, 'status' => $prev['status'] ?? 'draft'],
     ]);
 }
 
@@ -360,6 +441,22 @@ if ($slug === '' || $slug !== (string)$article['slug']) {
     fail(422, 'invalid_article_payload');
 }
 
+$title = (string)$article['title'];
+$excerpt = clean_meta_text((string)($article['excerpt'] ?? ''), $title);
+$metaDesc = clean_meta_text((string)($article['meta_description'] ?? $excerpt), $title);
+$article['excerpt'] = $excerpt;
+$article['meta_description'] = $metaDesc !== '' ? $metaDesc : $excerpt;
+
+// Default draft. Smoke always draft. Auto-publish only if gate explicitly allows.
+$requested = strtolower((string)($article['status'] ?? 'draft'));
+$isSmoke = is_smoke_slug($slug);
+$status = 'draft';
+if (!$isSmoke && !empty($gate['auto_publish']) && $requested === 'published') {
+    $status = 'published';
+}
+$article['status'] = $status;
+$isDraft = $status !== 'published';
+
 $site = $cfg['site_origin'];
 $remotePath = '/brand/blog/article/' . $slug . '/';
 $remoteUrl = $site . $remotePath;
@@ -367,7 +464,6 @@ $remoteId = 'geoflow-' . $slug;
 $articleDir = $blogDir . '/article/' . $slug;
 ensure_writable_dir($articleDir);
 
-// Optional assets
 $assets = $payload['assets']['images'] ?? [];
 $savedAssets = [];
 if (is_array($assets) && $assets) {
@@ -391,7 +487,7 @@ if (is_array($assets) && $assets) {
     }
 }
 
-$html = render_article_html($article, $site, $remoteUrl);
+$html = render_article_html($article, $site, $remoteUrl, $isDraft || $isSmoke);
 if (file_put_contents($articleDir . '/index.html', $html) === false) {
     fail(500, 'article_storage_not_writable');
 }
@@ -403,20 +499,23 @@ if (!is_array($catalog)) {
 }
 $catalog[$slug] = [
     'slug' => $slug,
-    'title' => (string)$article['title'],
-    'excerpt' => (string)($article['excerpt'] ?? ''),
+    'title' => $title,
+    'excerpt' => $excerpt,
+    'meta_description' => $metaDesc,
     'published_at' => (string)($article['published_at'] ?? ''),
     'path' => $remotePath,
     'remote_id' => $remoteId,
-    'status' => (string)($article['status'] ?? 'published'),
+    'status' => $status,
+    'is_smoke' => $isSmoke,
 ];
 save_json_file($catalogPath, $catalog);
-rebuild_index_and_sitemap($blogDir, $site, $catalog);
+rebuild_index_and_sitemap($blogDir, $site, $catalog, $gate);
 
 $idem[$idemKey] = [
     'remote_id' => $remoteId,
     'remote_url' => $remoteUrl,
     'slug' => $slug,
+    'status' => $status,
     'saved_at' => gmdate('c'),
 ];
 save_json_file($idemPath, $idem);
@@ -428,5 +527,11 @@ json_out(200, [
     'static' => [
         'article_path' => $articleDir . '/index.html',
         'assets' => $savedAssets,
+        'status' => $status,
+        'listed_on_index' => !$isDraft && !$isSmoke,
+        'gate' => [
+            'auto_publish' => !empty($gate['auto_publish']),
+            'sitemap_include_articles' => !empty($gate['sitemap_include_articles']),
+        ],
     ],
 ]);

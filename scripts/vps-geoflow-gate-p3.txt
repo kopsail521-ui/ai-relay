@@ -1,0 +1,45 @@
+sudo python3 - <<'PY'
+import json, os
+p="/opt/ai-relay/data/geoflow-agent/config.json"
+g="/opt/ai-relay/data/geoflow-agent/gate.json"
+os.makedirs("/opt/ai-relay/data/geoflow-agent", exist_ok=True)
+if os.path.isfile(p):
+    cfg=json.load(open(p))
+    cfg["auto_publish"]=False
+    cfg["sitemap_include_articles"]=False
+    cfg["max_publish_per_week"]=5
+    cfg["require_previous_batch_ok"]=True
+    json.dump(cfg, open(p,"w"), indent=2, ensure_ascii=False)
+    open(p,"a").write("\n")
+    print("OK_CONFIG_PATCH")
+else:
+    print("WARN_NO_CONFIG")
+gate={
+  "auto_publish": False,
+  "sitemap_include_articles": False,
+  "max_publish_per_week": 5,
+  "require_previous_batch_ok": True,
+  "previous_batch_ok": False,
+  "notes": "GSC ack before next publish; articles stay draft until publish CLI"
+}
+if os.path.isfile(g):
+    old=json.load(open(g))
+    if isinstance(old, dict):
+        gate={**gate, **old}
+        gate["auto_publish"]=False
+        gate["sitemap_include_articles"]=False
+json.dump(gate, open(g,"w"), indent=2)
+open(g,"a").write("\n")
+print("OK_GATE_SEED")
+PY
+
+cd /opt/ai-relay && sudo php scripts/geoflow-rebuild-blog.php --delete-smoke --sanitize-all
+
+# Optional — only if TDK reviewed + volume evidence for Claude 529 (already live, re-flag OK):
+# sudo php scripts/geoflow-publish-article.php --slug=ncx234u2 --tdk-ok --keyword-volume=170 --ack-previous-batch
+
+sudo bash /opt/ai-relay/scripts/deploy-brand-static.sh 2>/dev/null || sudo systemctl reload caddy 2>/dev/null || true
+curl -sS -o /dev/null -w 'claude_http=%{http_code}\n' https://www.keyoapi.xyz/claude-api-pricing
+curl -sS https://www.keyoapi.xyz/claude-api-pricing | grep -o 'brand/blog/article/ncx234u2' | head -1
+curl -sS https://www.keyoapi.xyz/brand/blog/sitemap.txt | head -10
+echo DONE_GEOFLOW_GATE

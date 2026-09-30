@@ -10,6 +10,19 @@
 - **密钥**：`/opt/ai-relay/data/geoflow-agent/config.json`（`key_id` + `secret`，须与 GEOFlow 一致）。示例：`config/geoflow-agent.example.json`。
 - **发版**：`scripts/vps-safe-pull-preserve-blog.sh`（只保 `article/` + index/sitemap，不盖掉 `geoflow-agent` PHP）。
 
+## 发布闸门（2026-09 起）
+
+| 规则 | 行为 |
+|---|---|
+| 默认 draft | Agent `article.publish` **落盘但不进 blog 首页 / sitemap**（`auto_publish: false`） |
+| 冒烟文 | slug 含 `smoke` 永不进首页；定期 `php scripts/geoflow-rebuild-blog.php --delete-smoke` |
+| 人工上线 | `php scripts/geoflow-publish-article.php --slug=ID --tdk-ok --keyword-volume=N --ack-previous-batch` |
+| 周上限 | `max_publish_per_week` 默认 **5** |
+| 上一批 | `gate.previous_batch_ok`：发完一篇会重置为 false，需 GSC 确认后再 `--ack-previous-batch` |
+| sitemap | 默认 **仅 4 条指南**；摘要修好后再把 `sitemap_include_articles` 设 true |
+
+摘要清洗：写入时剥掉 `Meta description:` / 标题重复。批量修存量：`php scripts/geoflow-rebuild-blog.php --sanitize-all --delete-smoke`
+
 对外副本：`../geo-write-access.md`。
 
 ## 接口契约摘要
@@ -67,7 +80,7 @@ sudo chmod 640 /opt/ai-relay/data/geoflow-agent/config.json
 python3 scripts/geoflow-agent-smoke.py
 ```
 
-期望 smoke：`200 {"ok":true,...}`，然后通知 GEOFlow **重试那 5 篇**。
+期望 smoke：`200 {"ok":true,...}` 且 `static.status` 为 **`draft`**（不会出现在 `/brand/blog/` 列表）。然后通知 GEOFlow 按闸门人工 publish。
 
 ## 发版为何会 404
 

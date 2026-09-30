@@ -42,7 +42,7 @@ def main() -> int:
             "hero_image_url": "",
             "keywords": "",
             "meta_description": "Smoke",
-            "status": "published",
+            "status": "draft",
             "is_featured": False,
             "is_hot": False,
             "published_at": datetime.now(timezone.utc).isoformat().replace("+00:00", "Z"),
@@ -53,6 +53,7 @@ def main() -> int:
         },
         "assets": {"images": []},
     }
+    # Agent forces draft + never lists smoke on /brand/blog/ even if status=published.
     raw = json.dumps(body_obj, ensure_ascii=False, separators=(",", ":")).encode("utf-8")
     body_hash = hashlib.sha256(raw).hexdigest()
     ts = datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")

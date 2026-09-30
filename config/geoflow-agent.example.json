@@ -3,5 +3,10 @@
   "secret": "REPLACE_ME_LONG_RANDOM_SECRET",
   "clock_skew_seconds": 300,
   "site_origin": "https://www.keyoapi.xyz",
-  "allowed_events": ["article.publish"]
+  "allowed_events": ["article.publish"],
+  "auto_publish": false,
+  "sitemap_include_articles": false,
+  "max_publish_per_week": 5,
+  "require_previous_batch_ok": true,
+  "_notes": "Agent always stores drafts unless auto_publish=true. Manual: php scripts/geoflow-publish-article.php --slug=ID --tdk-ok --keyword-volume=N --ack-previous-batch"
 }

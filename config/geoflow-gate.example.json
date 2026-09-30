@@ -1,0 +1,8 @@
+{
+  "auto_publish": false,
+  "sitemap_include_articles": false,
+  "max_publish_per_week": 5,
+  "require_previous_batch_ok": true,
+  "previous_batch_ok": false,
+  "notes": "Set previous_batch_ok=true only after GSC shows the prior published batch has impressions/indexing. New GEOFlow posts stay draft until scripts/geoflow-publish-article.php."
+}

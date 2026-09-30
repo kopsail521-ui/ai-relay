@@ -131,7 +131,7 @@
       "navLabel": "Claude pricing",
       "h1": "Anthropic / Claude API Pricing — KeyoAPI vs Typical List Rates",
       "title": "Anthropic API Pricing & Claude Rates | KeyoAPI",
-      "metaDescription": "Anthropic API pricing context on KeyoAPI: Claude Sonnet ~$0.88/$4.41, Opus ~$2.21/$11, Fable tiers — compare with typical Anthropic list rates. One OpenAI-compatible key.",
+      "metaDescription": "Anthropic API pricing context on KeyoAPI: Claude Sonnet ~$0.88/$4.41, Opus ~$1.10/$5.52, Fable tiers — compare with typical Anthropic list rates. One OpenAI-compatible key.",
       "targetKeywords": [
         "anthropic api pricing",
         "anthropic claude api pricing",
@@ -150,8 +150,8 @@
         {
           "model": "claude-opus-5",
           "official": "Anthropic Claude Opus 4 list commonly cited near ~$15 / $75 per 1M in/out (confirm current Opus band)",
-          "keyo": "~$2.21 / $11.03 per 1M in/out",
-          "note": "Hard agent / coding escalations"
+          "keyo": "~$1.10 / $5.52 per 1M in/out",
+          "note": "Hard agent / coding escalations · confirm /pricing/claude-opus-5"
         },
         {
           "model": "claude-fable-5",

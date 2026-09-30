@@ -185,12 +185,12 @@ html.is-embed .k-nav { display: none; }
 }
 .k-home .k-hero {
   display: grid;
-  grid-template-columns: minmax(0, 1.28fr) minmax(280px, 0.78fr);
-  gap: 36px 40px;
-  align-items: stretch;
+  grid-template-columns: minmax(0, 1.2fr) minmax(260px, 0.8fr);
+  gap: 28px 36px;
+  align-items: center;
   min-height: 0;
 }
-.k-home .k-hero > div:first-child {
+.k-home .k-hero-copy {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -237,21 +237,32 @@ html.is-embed .k-nav { display: none; }
   margin-bottom: 0;
 }
 .k-home .k-panel {
-  align-self: stretch;
+  align-self: center;
+  width: 100%;
+  max-width: 420px;
+  justify-self: end;
 }
 .k-home .k-panel .label,
 .k-home .k-panel .k-label {
   color: #b9b6ab;
 }
 .k-home .legal-links {
-  margin: 36px 0 0;
+  margin: 28px 0 0;
   font-size: 12.5px;
   color: var(--ink-2);
   line-height: 1.8;
-  grid-column: 1 / -1;
 }
 .k-home .legal-links a { color: var(--ink-2); }
 .k-home .legal-links a:hover { color: var(--ink); }
+.k-home .keyo-partner-badges {
+  margin: 16px 0 0;
+  line-height: 0;
+}
+.k-home .keyo-partner-badges img {
+  width: 160px;
+  height: auto;
+  opacity: 0.92;
+}
 .k-page .lang-bar,
 body > .lang-bar {
   position: fixed;
@@ -411,6 +422,14 @@ body > .lang-bar select {
   .k-home .k-hero {
     grid-template-columns: 1fr;
     min-height: 0;
+    gap: 22px;
+  }
+  .k-home .k-panel {
+    justify-self: stretch;
+    max-width: none;
+  }
+  .k-home .k-home-shell { padding: 28px 20px 48px; }
+}
     gap: 28px;
   }
   .k-nav { padding: 16px 20px 0; }

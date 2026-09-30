@@ -1216,16 +1216,8 @@ async function proxyRequest(req, res, bodyBuf) {
           changed = true;
         }
       }
-      // LaunchVault badge: dofollow HTML on non-auth SPA shells (homepage verify).
-      if (
-        wantPricingPatches &&
-        html.includes("</body>") &&
-        !html.includes("keyo-launchvault-badge")
-      ) {
-        const badge = `<!--keyo-launchvault-badge--><div id="keyo-launchvault-badge" style="position:fixed;right:12px;bottom:12px;z-index:40;line-height:0"><a href="https://www.launchvault.dev" target="_blank" title="Featured on LaunchVault"><img src="https://www.launchvault.dev/images/badges/launch-valut-badge.svg" alt="Featured on LaunchVault" style="width:195px;height:auto" /></a></div>`;
-        html = html.replace("</body>", `${badge}</body>`);
-        changed = true;
-      }
+      // LaunchVault: keep a single in-page dofollow badge (keyo-home / SEO /).
+      // Do not inject a fixed bottom-right floater — it duplicates the footer badge.
       if (changed) {
         buf = Buffer.from(html, "utf8");
         delete outHeaders["content-encoding"];

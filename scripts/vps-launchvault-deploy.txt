@@ -1,0 +1,27 @@
+set -e
+cd /opt/ai-relay
+sudo mkdir -p /opt/ai-relay/static/brand
+base64 -d /tmp/lv-home.b64 | gunzip | sudo tee /opt/ai-relay/static/brand/keyo-home.html >/dev/null
+base64 -d /tmp/lv-faq.b64 | gunzip | sudo tee /opt/ai-relay/static/brand/faq.html >/dev/null
+grep -o 'launchvault.dev' /opt/ai-relay/static/brand/keyo-home.html | head -1
+grep -o 'launchvault.dev' /opt/ai-relay/static/brand/faq.html | head -1
+sudo docker cp /opt/ai-relay/services/creem-moderation-proxy/server.mjs ai-relay-creem-moderation:/app/server.mjs
+if [ -f /opt/ai-relay/services/creem-moderation-proxy/billing-unit-inject.js ]; then
+  sudo docker cp /opt/ai-relay/services/creem-moderation-proxy/billing-unit-inject.js ai-relay-creem-moderation:/app/billing-unit-inject.js
+fi
+if [ -f /opt/ai-relay/services/creem-moderation-proxy/marketplace-model-copy.json ]; then
+  sudo docker cp /opt/ai-relay/services/creem-moderation-proxy/marketplace-model-copy.json ai-relay-creem-moderation:/app/marketplace-model-copy.json
+fi
+sudo docker restart ai-relay-creem-moderation
+if [ -d /opt/ai-relay/data/new-api ]; then
+  sudo mkdir -p /opt/ai-relay/data/new-api/brand
+  sudo cp -f /opt/ai-relay/static/brand/keyo-home.html /opt/ai-relay/static/brand/faq.html /opt/ai-relay/data/new-api/brand/
+fi
+if sudo docker inspect ai-relay-new-api >/dev/null 2>&1; then
+  sudo docker cp /opt/ai-relay/static/brand/keyo-home.html ai-relay-new-api:/app/web/dist/brand/keyo-home.html 2>/dev/null || true
+  sudo docker cp /opt/ai-relay/static/brand/faq.html ai-relay-new-api:/app/web/dist/brand/faq.html 2>/dev/null || true
+fi
+sleep 4
+curl -sS -H 'Cache-Control: no-cache' https://www.keyoapi.xyz/ | tr -d '\n' | grep -o 'keyo-launchvault-badge\|launchvault.dev' | head -3
+curl -sS -H 'Cache-Control: no-cache' https://www.keyoapi.xyz/brand/faq.html | tr -d '\n' | grep -o 'launchvault.dev' | head -1
+echo DONE_LAUNCHVAULT_BADGE

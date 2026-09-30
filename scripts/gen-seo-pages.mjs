@@ -717,15 +717,15 @@ function renderCompare() {
 <p>One OpenAI-compatible SDK, one balance, and multimodal add-ons on one invoice.</p>
 <p>Recommended rollout: start with <a href="${featuredHref("deepseek-v4.1-flash")}"><code>deepseek-v4.1-flash</code></a> on high-volume paths, <a href="${featuredHref("gpt-6-astra")}"><code>gpt-6-astra</code></a> or <a href="/model/claude-sonnet-5">claude-sonnet-5</a> as default chat, escalate to <a href="/model/claude-fable-5-1">claude-fable-5-1</a> when you need denser reasoning.</p>
 <h2>Guides for high-intent model searches</h2>
-<p>Deep pages for queries already ranking on Keyo:</p>
+<p>Priority deep page this month: <a href="/model/CosyVoice3"><strong>How to call CosyVoice3 API</strong></a>. Nearby guides:</p>
 <ul>
+  <li><a href="/model/CosyVoice3">CosyVoice3 API — async multilingual TTS</a></li>
+  <li><a href="/tts-api">TTS API hub</a> · <a href="/voice-cloning-api">Voice cloning API</a></li>
   <li><a href="/model/deepseek-v4-flash">DeepSeek V4 Flash — free path &amp; pricing</a></li>
-  <li><a href="/model/CosyVoice3">How to call CosyVoice3 API</a></li>
-  <li><a href="/model/kimi-k3">Kimi K3 API key — free prototyping path</a></li>
-  <li><a href="/model/gpt-6-astra">GPT-6 Astra API</a> · <a href="/model/Duix-Avatar">Duix Avatar API</a></li>
+  <li><a href="/model/kimi-k3">Kimi K3 API key — free prototyping path</a> · <a href="/model/Duix-Avatar">Duix Avatar API</a></li>
 </ul>
 <h2>Modality pages</h2>
-${relatedLinks(["whisper-large-v3", "Qwen3-TTS", "MinerU2.5-Pro", "RMBG-2.0", "VajraV1", "Duix-Avatar"])}
+${relatedLinks(["CosyVoice3", "whisper-large-v3", "Qwen3-TTS", "IndexTTS-2", "Duix-Avatar", "RMBG-2.0"])}
 `;
   return layout({
     title: "AI API Price Comparison - KeyoAPI vs Official Rates",
@@ -897,11 +897,11 @@ ${rows}
 <h2>When you outgrow free IDs</h2>
 <p>Same key, switch <code>model=</code> only:</p>
 <ul>
-  <li><a href="/model/deepseek-v4-flash"><strong>DeepSeek V4 Flash free / pricing</strong></a> — metered Flash after $0 prototypes (<code>deepseek-v4-flash</code>)</li>
+  <li><a href="/model/CosyVoice3"><strong>CosyVoice3 API</strong></a> — hosted async TTS when scripts leave the free chat tier (priority guide)</li>
+  <li><a href="/tts-api">TTS API hub</a> · <a href="/voice-cloning-api">Voice cloning</a> · <a href="/model/IndexTTS-2">IndexTTS-2</a></li>
+  <li><a href="/model/deepseek-v4-flash"><strong>DeepSeek V4 Flash free / pricing</strong></a> — metered Flash after $0 prototypes</li>
   <li><a href="/model/kimi-k3"><strong>Kimi K3 API key (free path)</strong></a> — draft on free IDs, then <code>kimi-k3</code></li>
-  <li><a href="/model/CosyVoice3"><strong>CosyVoice3 API</strong></a> — hosted TTS when scripts leave the free chat tier</li>
-  <li><a href="/model/Duix-Avatar"><strong>Duix Avatar API</strong></a> — talking-face render after TTS</li>
-  <li><a href="/deepseek-api-pricing">DeepSeek API pricing hub</a> · <a href="/tts-api">TTS API hub</a> · <a href="/ai-avatar-video-generator">Avatar hub</a> · <a href="/compare">Compare rates</a></li>
+  <li><a href="/model/Duix-Avatar"><strong>Duix Avatar API</strong></a> — talking-face after TTS · <a href="/compare">Compare rates</a></li>
 </ul>
 <p class="meta">Also see the interactive catalog on <a href="/pricing">/pricing</a> (filter Free) and the OpenAI-compatible docs.</p>
 `;
@@ -979,7 +979,7 @@ ${bodyParas}
 ${curlBlock}
 <h2>FAQ</h2>
 <div class="faq">${faqs}</div>
-<p class="meta">Also see <a href="/compare">/compare</a>, <a href="/free-models">/free-models</a>, and guides: <a href="/model/deepseek-v4-flash">DeepSeek V4 Flash</a> · <a href="/model/CosyVoice3">CosyVoice3 API</a> · <a href="/model/kimi-k3">Kimi K3</a> · <a href="/model/Duix-Avatar">Duix Avatar</a>.</p>
+<p class="meta">Also see <a href="/compare">/compare</a>, <a href="/free-models">/free-models</a>, and the priority TTS guide: <a href="/model/CosyVoice3">CosyVoice3 API</a> · nearby: <a href="/model/deepseek-v4-flash">DeepSeek V4 Flash</a> · <a href="/model/kimi-k3">Kimi K3</a> · <a href="/model/Duix-Avatar">Duix Avatar</a>.</p>
 `;
   return layout({
     title: p.title,

@@ -17,8 +17,8 @@
       "priceUnit": "per_call",
       "related": [
         "whisper-large-v3-turbo",
-        "Qwen3-TTS",
-        "Unlimited-OCR"
+        "CosyVoice3",
+        "Qwen3-TTS"
       ],
       "endpoint": "POST /v1/audio/transcriptions",
       "codeHint": "model=whisper-large-v3",
@@ -63,8 +63,8 @@
       "priceUnit": "per_call",
       "related": [
         "whisper-large-v3",
-        "Qwen3-TTS",
-        "gpt-5.6-luna"
+        "CosyVoice3",
+        "IndexTTS-2"
       ],
       "endpoint": "POST /v1/audio/transcriptions",
       "codeHint": "model=whisper-large-v3-turbo",

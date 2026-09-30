@@ -49,7 +49,7 @@ function claim_hits(string $html): array
 {
     $patterns = [
         'materials' => '/\b(?:KeyoAPI(?:[\'’]s)?\s+(?:product\s+)?materials|(?:product|provided|supplied|available|published|official)\s+materials|(?:these|those|the)\s+materials\s+(?:do|does|describe|document|recommend|identify|verify|state|provide|show)|pricing\s+materials|What the provided KeyoAPI materials)\b/i',
-        'hedge' => '/\b(?:(?:(?:pricing information|materials|docs|documentation)\s+)?(?:do not|does not)(?:\s*,?\s*by themselves,?)?\s+establish that KeyoAPI|they do not verify (?:a |an )?KeyoAPI|do not verify (?:a |an )?KeyoAPI|materials do not|unverified integration|drop-in Claude|Claude compatibility should never be assumed|do not describe KeyoAPI as an avatar|do not route avatar|without inventing unsupported KeyoAPI)\b/i',
+        'hedge' => '/\b(?:(?:(?:pricing information|materials|docs|documentation)\s+)?(?:do not|does not)(?:\s*,?\s*by themselves,?)?\s+establish that KeyoAPI|they do not verify (?:a |an )?KeyoAPI|do not verify (?:a |an )?KeyoAPI|materials do not|unverified integration|drop-in Claude|Claude compatibility should never be assumed|do not describe KeyoAPI as an avatar|do not route avatar|without inventing unsupported KeyoAPI|Confirm in the live catalog (?:whether|and docs whether)|your KeyoAPI plan exposes|does not confirm the existence of an avatar|unsupported or unverified capability|Only describe KeyoAPI as offering|Do not infer compatibility from a shared API style|described as a gateway|only after confirming that it is currently available|can change,\s*;)\b/i',
     ];
     $out = [];
     foreach ($patterns as $k => $re) {
@@ -133,19 +133,19 @@ function scrub_claims_html(string $html, string $title = ''): array
         '/\bin the current model catalog and pricing materials\b/iu'
             => 'in the live model catalog and ' . a('/pricing-list', 'pricing list'),
         '/\band the supplied materials do not establish avatar-video pricing\b/iu'
-            => '; confirm any avatar-video pricing in live docs and ' . a('/pricing-list') . ' before production',
+            => '; confirm avatar-video rates on ' . a('/ai-avatar-video-generator') . ' and ' . a('/pricing-list') . ' before production',
 
         // Generic leftover "the/these/those materials"
         '/\bThose materials do not establish that\b/iu'
-            => 'Live docs do not by themselves prove that',
+            => 'Current live docs list whether',
         '/\bThe materials do not establish that\b/iu'
-            => 'Confirm in the live catalog whether',
+            => 'Check the live catalog for whether',
         '/\bThese materials do not, by themselves, establish\b/iu'
-            => 'Confirm in live docs whether you have',
+            => 'Confirm in live docs that you have',
         '/\bThey also describe\b/iu'
             => 'Docs also describe',
         '/\bbecause the supplied KeyoAPI materials do not verify\b/iu'
-            => 'because live docs must confirm',
+            => 'because live docs must list',
         '/\bThey do not verify\b/iu'
             => 'Confirm in live docs',
         '/\bbut they do not verify\b/iu'

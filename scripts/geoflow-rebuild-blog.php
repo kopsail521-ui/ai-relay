@@ -4,12 +4,10 @@ declare(strict_types=1);
 
 /**
  * Rebuild blog index.html + sitemap.txt from catalog.json.
- * Optionally rewrite one article HTML (clean meta + robots by status).
+ * Full meta/body sanitize for GEOFlow articles.
  *
  *   php scripts/geoflow-rebuild-blog.php
- *   php scripts/geoflow-rebuild-blog.php --rewrite-html=ncx234u2
- *   php scripts/geoflow-rebuild-blog.php --sanitize-all
- *   php scripts/geoflow-rebuild-blog.php --delete-smoke
+ *   php scripts/geoflow-rebuild-blog.php --sanitize-all --delete-smoke
  */
 
 $opts = getopt('', ['rewrite-html:', 'sanitize-all', 'delete-smoke', 'help']);
@@ -40,31 +38,135 @@ function h(string $s): string
 function is_smoke_slug(string $slug): bool
 {
     $s = strtolower($slug);
-    return str_contains($s, 'smoke') || str_contains($s, 'test-only');
+    return str_contains($s, 'smoke') || str_contains($s, 'test-only') || preg_match('/(^|-)test$/', $s) === 1;
 }
 
-function clean_meta_text(string $raw, string $title = ''): string
+function norm_key(string $t): string
+{
+    $t = html_entity_decode($t, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+    $t = mb_strtolower(trim($t));
+    $t = str_replace(['—', '–', '-', ':', '|'], ' ', $t);
+    $t = preg_replace('/\s+/u', ' ', $t) ?? $t;
+    return trim($t);
+}
+
+/**
+ * Clean SERP / card blurbs. Never mid-word truncate.
+ * $maxLen 0 = keep full cleaned sentence(s) up to soft 300.
+ */
+function clean_meta_text(string $raw, string $title = '', int $maxLen = 160): string
 {
     $s = html_entity_decode(trim($raw), ENT_QUOTES | ENT_HTML5, 'UTF-8');
     if ($s === '') {
         return '';
     }
+    // Template labels (optional trailing punctuation after colon)
     $s = preg_replace('/\bMeta\s*description\s*:\s*/iu', '', $s) ?? $s;
     $s = preg_replace('/\b(SEO\s*)?Title\s*:\s*/iu', '', $s) ?? $s;
     $s = preg_replace('/\bKey\s*Takeaways\s*:?\s*/iu', '', $s) ?? $s;
+    // Leftover leading junk after label strip (e.g. ". A developer…")
+    $s = preg_replace('/^[\s.·•:;,\-—–|]+/u', '', $s) ?? $s;
+
     $title = trim($title);
-    if ($title !== '' && strncasecmp($s, $title, strlen($title)) === 0) {
-        $s = trim(substr($s, strlen($title)));
-        $s = preg_replace('/^[\s:;,\-—–|]+/u', '', $s) ?? $s;
+    if ($title !== '') {
+        $ns = norm_key($s);
+        $nt = norm_key($title);
+        if ($nt !== '' && str_starts_with($ns, $nt)) {
+            // Drop title-length prefix from original with flexible separators
+            $pattern = '/^' . preg_quote($title, '/') . '/iu';
+            $pattern = str_replace(['\\-', '\\—', '\\–', ' '], '[\\s\\-—–]+', $pattern);
+            $s2 = preg_replace($pattern, '', $s, 1);
+            if (is_string($s2) && $s2 !== $s) {
+                $s = $s2;
+            } else {
+                // Fallback: cut by normalized length map — take remainder after first title-ish span
+                $s = preg_replace('/^.{0,' . (strlen($title) + 12) . '}?\s+(?=[A-Z“"\'(])/u', '', $s, 1) ?? $s;
+                if (norm_key($s) === $ns) {
+                    // last resort: strip mb prefix equal to title word count
+                    $words = preg_split('/\s+/u', $nt) ?: [];
+                    $sw = preg_split('/\s+/u', $s) ?: [];
+                    if (count($sw) > count($words)) {
+                        $s = implode(' ', array_slice($sw, count($words)));
+                    }
+                }
+            }
+            $s = preg_replace('/^[\s.·•:;,\-—–|]+/u', '', $s) ?? $s;
+        }
     }
+
     $s = preg_replace('/\s+/u', ' ', $s) ?? $s;
     $s = trim($s);
-    if (function_exists('mb_strlen') && mb_strlen($s) > 155) {
-        $s = mb_substr($s, 0, 152) . '...';
-    } elseif (strlen($s) > 155) {
-        $s = substr($s, 0, 152) . '...';
+    if ($s === '' || $s === '.') {
+        return '';
     }
-    return $s;
+
+    $len = function_exists('mb_strlen') ? mb_strlen($s) : strlen($s);
+    $soft = $maxLen > 0 ? $maxLen : 300;
+    if ($len <= $soft) {
+        return $s;
+    }
+
+    // Prefer first complete sentence if it fits
+    if (preg_match('/^(.+?[.!?])(\s|$)/u', $s, $m)) {
+        $sentence = trim($m[1]);
+        $slen = function_exists('mb_strlen') ? mb_strlen($sentence) : strlen($sentence);
+        if ($slen >= 40 && $slen <= $soft) {
+            return $sentence;
+        }
+    }
+
+    // Word-boundary cut — never mid-word
+    $slice = function_exists('mb_substr') ? mb_substr($s, 0, $soft) : substr($s, 0, $soft);
+    if (preg_match('/^(.*)\s+\S*$/u', $slice, $m) && trim($m[1]) !== '') {
+        $slice = rtrim($m[1], " \t.,;:|-");
+    }
+    return $slice;
+}
+
+/** Remove GEOFlow template blocks from article body HTML. Returns [html, extractedMeta]. */
+function scrub_body_html(string $html): array
+{
+    $extracted = '';
+    $html = preg_replace_callback(
+        '/<p[^>]*>\s*(?:<strong>\s*)?Meta\s*description\s*:?\s*(?:<\/strong>)?\s*([\s\S]*?)<\/p>/iu',
+        static function ($m) use (&$extracted) {
+            $t = trim(html_entity_decode(strip_tags($m[1]), ENT_QUOTES | ENT_HTML5, 'UTF-8'));
+            if ($t !== '' && (strlen($t) > strlen($extracted))) {
+                $extracted = $t;
+            }
+            return '';
+        },
+        $html
+    ) ?? $html;
+
+    $html = preg_replace(
+        '/<p[^>]*>\s*(?:<strong>\s*)?(?:SEO\s*)?Title\s*:?\s*(?:<\/strong>)?\s*[\s\S]*?<\/p>/iu',
+        '',
+        $html
+    ) ?? $html;
+
+    $html = preg_replace(
+        '/<p[^>]*>\s*(?:<strong>\s*)?Key\s*Takeaways\s*:?\s*(?:<\/strong>)?\s*<\/p>/iu',
+        '',
+        $html
+    ) ?? $html;
+
+    // Collapse leftover blank lines at start of body
+    $html = preg_replace('/^(\s*\n)+/', '', $html) ?? $html;
+    return [$html, $extracted];
+}
+
+function first_body_sentence(string $html): string
+{
+    if (!preg_match('/<p[^>]*>([\s\S]*?)<\/p>/i', $html, $m)) {
+        return '';
+    }
+    $t = trim(html_entity_decode(strip_tags($m[1]), ENT_QUOTES | ENT_HTML5, 'UTF-8'));
+    $t = preg_replace('/\s+/u', ' ', $t) ?? $t;
+    if (preg_match('/^(.+?[.!?])(\s|$)/u', $t, $sm)) {
+        return trim($sm[1]);
+    }
+    return $t;
 }
 
 function load_gate(string $dataDir): array
@@ -92,7 +194,7 @@ function load_gate(string $dataDir): array
     return $gate;
 }
 
-function rewrite_article_html(string $blogDir, string $slug, array $row, bool $isDraft): void
+function rewrite_article_html(string $blogDir, string $slug, array &$row, bool $isDraft): void
 {
     $path = $blogDir . '/article/' . $slug . '/index.html';
     if (!is_file($path)) {
@@ -100,18 +202,53 @@ function rewrite_article_html(string $blogDir, string $slug, array $row, bool $i
     }
     $html = (string)file_get_contents($path);
     $title = (string)($row['title'] ?? '');
-    $desc = clean_meta_text((string)($row['meta_description'] ?? $row['excerpt'] ?? ''), $title);
-    $excerpt = clean_meta_text((string)($row['excerpt'] ?? ''), $title);
+    if ($title === '' && preg_match('/<h1[^>]*>(.*?)<\/h1>/is', $html, $m)) {
+        $title = trim(html_entity_decode(strip_tags($m[1]), ENT_QUOTES | ENT_HTML5, 'UTF-8'));
+        $row['title'] = $title;
+    }
 
-    // Replace meta description
+    $body = '';
+    if (preg_match('/<article class="geoflow-body">([\s\S]*?)<\/article>/i', $html, $m)) {
+        $body = $m[1];
+    } else {
+        $body = $html;
+    }
+    [$body, $fromTemplate] = scrub_body_html($body);
+
+    $candidates = [
+        $fromTemplate,
+        (string)($row['meta_description'] ?? ''),
+        (string)($row['excerpt'] ?? ''),
+        first_body_sentence($body),
+    ];
+    $desc = '';
+    foreach ($candidates as $c) {
+        $cleaned = clean_meta_text($c, $title, 0); // full sentence first
+        if ($cleaned === '') {
+            continue;
+        }
+        // Prefer longer complete copy (template often has full sentence)
+        if (mb_strlen($cleaned) > mb_strlen($desc)) {
+            $desc = $cleaned;
+        }
+    }
+    // Card / meta attribute: word-safe soft limit
+    $descAttr = clean_meta_text($desc, $title, 160);
+    $excerpt = $descAttr;
+
+    $row['excerpt'] = $excerpt;
+    $row['meta_description'] = $descAttr;
+    if ($fromTemplate !== '') {
+        $row['meta_description_full'] = clean_meta_text($fromTemplate, $title, 0);
+    }
+
     $html = preg_replace(
         '/<meta name="description" content="[^"]*"\s*\/?>/i',
-        '<meta name="description" content="' . h($desc) . '" />',
+        '<meta name="description" content="' . h($descAttr) . '" />',
         $html,
         1
     ) ?? $html;
 
-    // Robots: draft/smoke => noindex; published => remove noindex
     if ($isDraft || is_smoke_slug($slug)) {
         if (!preg_match('/name="robots"/i', $html)) {
             $html = preg_replace(
@@ -125,11 +262,26 @@ function rewrite_article_html(string $blogDir, string $slug, array $row, bool $i
         $html = preg_replace('/\s*<meta name="robots" content="noindex[^"]*"\s*\/?>/i', '', $html) ?? $html;
     }
 
-    // Fix visible sub blurb if present
-    if ($excerpt !== '') {
+    if (preg_match('/<p class="sub">/i', $html)) {
         $html = preg_replace(
-            '/<p class="sub">.*?<\/p>/s',
+            '/<p class="sub">[\s\S]*?<\/p>/i',
             '<p class="sub">' . h($excerpt) . '</p>',
+            $html,
+            1
+        ) ?? $html;
+    } elseif ($excerpt !== '') {
+        $html = preg_replace(
+            '/(<h1[^>]*>[\s\S]*?<\/h1>)/i',
+            '$1' . "\n" . '    <p class="sub">' . h($excerpt) . '</p>',
+            $html,
+            1
+        ) ?? $html;
+    }
+
+    if (preg_match('/<article class="geoflow-body">/i', $html)) {
+        $html = preg_replace(
+            '/<article class="geoflow-body">[\s\S]*?<\/article>/i',
+            '<article class="geoflow-body">' . "\n" . $body . "\n" . '    </article>',
             $html,
             1
         ) ?? $html;
@@ -164,12 +316,9 @@ function rebuild(string $blogDir, string $site, array $catalog, array $gate): vo
             continue;
         }
         $title = (string)$item['title'];
-        $meta = clean_meta_text((string)($item['excerpt'] ?? ''), $title);
+        $meta = clean_meta_text((string)($item['excerpt'] ?? $item['meta_description'] ?? ''), $title, 140);
         if ($meta === '') {
             $meta = 'Developer guide';
-        }
-        if (strlen($meta) > 120) {
-            $meta = substr($meta, 0, 117) . '...';
         }
         $cards[] = '    <div class="k-card" style="margin-bottom:10px">
       <a href="' . h((string)$item['path']) . '">' . h($title) . '</a>
@@ -251,7 +400,6 @@ if (isset($opts['delete-smoke'])) {
         }
         $dir = $blogDir . '/article/' . $slug;
         if (is_dir($dir)) {
-            // recursive delete
             $it = new RecursiveIteratorIterator(
                 new RecursiveDirectoryIterator($dir, FilesystemIterator::SKIP_DOTS),
                 RecursiveIteratorIterator::CHILD_FIRST
@@ -271,10 +419,6 @@ if (isset($opts['sanitize-all'])) {
         if (!is_array($row)) {
             continue;
         }
-        $title = (string)($row['title'] ?? '');
-        $row['excerpt'] = clean_meta_text((string)($row['excerpt'] ?? ''), $title);
-        $row['meta_description'] = clean_meta_text((string)($row['meta_description'] ?? $row['excerpt'] ?? ''), $title);
-        // Existing public articles stay published; smoke forced draft
         if (is_smoke_slug((string)$slug)) {
             $row['status'] = 'draft';
         } elseif (!isset($row['status']) || $row['status'] === '') {
@@ -298,4 +442,10 @@ if (!empty($opts['rewrite-html'])) {
 
 file_put_contents($catalogPath, json_encode($catalog, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) . "\n");
 rebuild($blogDir, $site, $catalog, $gate);
-echo "DONE_GEOFLOW_REBUILD index+sitemap (sitemap_include_articles=" . (!empty($gate['sitemap_include_articles']) ? '1' : '0') . ")\n";
+$n = 0;
+foreach ($catalog as $slug => $row) {
+    if (!is_smoke_slug((string)$slug) && ($row['status'] ?? '') === 'published') {
+        $n++;
+    }
+}
+echo "DONE_GEOFLOW_REBUILD published={$n} sitemap_include_articles=" . (!empty($gate['sitemap_include_articles']) ? '1' : '0') . "\n";

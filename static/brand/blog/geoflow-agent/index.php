@@ -93,31 +93,96 @@ function is_smoke_slug(string $slug): bool
     return str_contains($s, 'smoke') || str_contains($s, 'test-only') || preg_match('/(^|-)test$/', $s) === 1;
 }
 
+function norm_key(string $t): string
+{
+    $t = html_entity_decode($t, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+    $t = mb_strtolower(trim($t));
+    $t = str_replace(['—', '–', '-', ':', '|'], ' ', $t);
+    $t = preg_replace('/\s+/u', ' ', $t) ?? $t;
+    return trim($t);
+}
+
 /**
- * Strip GEOFlow template leaks and title duplication from SERP / card blurbs.
+ * Strip GEOFlow template leaks / title echo. Never mid-word truncate.
+ * $maxLen 0 = soft 300; otherwise word-boundary cut.
  */
-function clean_meta_text(string $raw, string $title = ''): string
+function clean_meta_text(string $raw, string $title = '', int $maxLen = 160): string
 {
     $s = html_entity_decode(trim($raw), ENT_QUOTES | ENT_HTML5, 'UTF-8');
     if ($s === '') {
         return '';
     }
-    // Leaked template labels
     $s = preg_replace('/\bMeta\s*description\s*:\s*/iu', '', $s) ?? $s;
     $s = preg_replace('/\b(SEO\s*)?Title\s*:\s*/iu', '', $s) ?? $s;
     $s = preg_replace('/\bKey\s*Takeaways\s*:?\s*/iu', '', $s) ?? $s;
-    // Drop leading title echo
+    $s = preg_replace('/^[\s.·•:;,\-—–|]+/u', '', $s) ?? $s;
+
     $title = trim($title);
-    if ($title !== '' && strncasecmp($s, $title, strlen($title)) === 0) {
-        $s = trim(substr($s, strlen($title)));
-        $s = preg_replace('/^[\s:;,\-—–|]+/u', '', $s) ?? $s;
+    if ($title !== '') {
+        $ns = norm_key($s);
+        $nt = norm_key($title);
+        if ($nt !== '' && str_starts_with($ns, $nt)) {
+            $pattern = '/^' . preg_quote($title, '/') . '/iu';
+            $pattern = str_replace(['\\-', '\\—', '\\–', ' '], '[\\s\\-—–]+', $pattern);
+            $s2 = preg_replace($pattern, '', $s, 1);
+            if (is_string($s2) && $s2 !== $s) {
+                $s = $s2;
+            } else {
+                $words = preg_split('/\s+/u', $nt) ?: [];
+                $sw = preg_split('/\s+/u', $s) ?: [];
+                if (count($sw) > count($words)) {
+                    $s = implode(' ', array_slice($sw, count($words)));
+                }
+            }
+            $s = preg_replace('/^[\s.·•:;,\-—–|]+/u', '', $s) ?? $s;
+        }
     }
+
     $s = preg_replace('/\s+/u', ' ', $s) ?? $s;
     $s = trim($s);
-    if (mb_strlen($s) > 155) {
-        $s = mb_substr($s, 0, 152) . '...';
+    if ($s === '' || $s === '.') {
+        return '';
     }
-    return $s;
+
+    $len = mb_strlen($s);
+    $soft = $maxLen > 0 ? $maxLen : 300;
+    if ($len <= $soft) {
+        return $s;
+    }
+    if (preg_match('/^(.+?[.!?])(\s|$)/u', $s, $m)) {
+        $sentence = trim($m[1]);
+        if (mb_strlen($sentence) >= 40 && mb_strlen($sentence) <= $soft) {
+            return $sentence;
+        }
+    }
+    $slice = mb_substr($s, 0, $soft);
+    if (preg_match('/^(.*)\s+\S*$/u', $slice, $m) && trim($m[1]) !== '') {
+        $slice = rtrim($m[1], " \t.,;:|-");
+    }
+    return $slice;
+}
+
+/** Remove GEOFlow template blocks from body. Returns [html, extractedMeta]. */
+function scrub_body_html(string $html): array
+{
+    $extracted = '';
+    $html = preg_replace_callback(
+        '/<p[^>]*>\s*(?:<strong>\s*)?Meta\s*description\s*:?\s*(?:<\/strong>)?\s*([\s\S]*?)<\/p>/iu',
+        static function ($m) use (&$extracted) {
+            $t = trim(html_entity_decode(strip_tags($m[1]), ENT_QUOTES | ENT_HTML5, 'UTF-8'));
+            if ($t !== '' && strlen($t) > strlen($extracted)) {
+                $extracted = $t;
+            }
+            return '';
+        },
+        $html
+    ) ?? $html;
+    $html = preg_replace(
+        '/<p[^>]*>\s*(?:<strong>\s*)?(?:SEO\s*)?Title\s*:?\s*(?:<\/strong>)?\s*[\s\S]*?<\/p>/iu',
+        '',
+        $html
+    ) ?? $html;
+    return [$html, $extracted];
 }
 
 function ensure_writable_dir(string $dir): void
@@ -210,15 +275,28 @@ function verify_signature(array $cfg, string $rawBody): void
 function render_article_html(array $article, string $site, string $canonical, bool $isDraft): string
 {
     $title = (string)($article['title'] ?? 'Untitled');
-    $desc = clean_meta_text((string)($article['meta_description'] ?? $article['excerpt'] ?? ''), $title);
-    $excerpt = clean_meta_text((string)($article['excerpt'] ?? ''), $title);
-    if ($excerpt === '' && $desc !== '') {
-        $excerpt = $desc;
-    }
     $html = (string)($article['content_html'] ?? '');
     if ($html === '' && !empty($article['content'])) {
         $html = '<p>' . nl2br(h((string)$article['content']), false) . '</p>';
     }
+    [$html, $fromTemplate] = scrub_body_html($html);
+
+    $rawDesc = (string)($article['meta_description'] ?? '');
+    if ($fromTemplate !== '' && (strlen($fromTemplate) > strlen($rawDesc) || $rawDesc === '')) {
+        $rawDesc = $fromTemplate;
+    }
+    if ($rawDesc === '') {
+        $rawDesc = (string)($article['excerpt'] ?? '');
+    }
+    $desc = clean_meta_text($rawDesc, $title, 160);
+    $excerpt = clean_meta_text((string)($article['excerpt'] ?? ''), $title, 160);
+    if ($excerpt === '' || str_starts_with(norm_key($excerpt), norm_key($title))) {
+        $excerpt = $desc;
+    }
+    if ($desc === '' && $excerpt !== '') {
+        $desc = $excerpt;
+    }
+
     $published = (string)($article['published_at'] ?? '');
     $robots = $isDraft
         ? '<meta name="robots" content="noindex,nofollow" />' . "\n"
@@ -291,12 +369,9 @@ function rebuild_index_and_sitemap(string $blogDir, string $site, array $catalog
         }
         $href = (string)$item['path'];
         $title = (string)$item['title'];
-        $meta = clean_meta_text((string)($item['excerpt'] ?? ''), $title);
+        $meta = clean_meta_text((string)($item['excerpt'] ?? $item['meta_description'] ?? ''), $title, 140);
         if ($meta === '') {
             $meta = 'Developer guide';
-        }
-        if (strlen($meta) > 120) {
-            $meta = substr($meta, 0, 117) . '...';
         }
         $cards[] = '    <div class="k-card" style="margin-bottom:10px">
       <a href="' . h($href) . '">' . h($title) . '</a>
@@ -442,10 +517,27 @@ if ($slug === '' || $slug !== (string)$article['slug']) {
 }
 
 $title = (string)$article['title'];
-$excerpt = clean_meta_text((string)($article['excerpt'] ?? ''), $title);
-$metaDesc = clean_meta_text((string)($article['meta_description'] ?? $excerpt), $title);
+$contentHtml = (string)($article['content_html'] ?? '');
+if ($contentHtml === '' && !empty($article['content'])) {
+    $contentHtml = '<p>' . nl2br(h((string)$article['content']), false) . '</p>';
+}
+[$contentHtml, $fromTemplate] = scrub_body_html($contentHtml);
+$article['content_html'] = $contentHtml;
+
+$rawDesc = (string)($article['meta_description'] ?? '');
+if ($fromTemplate !== '' && strlen($fromTemplate) >= strlen($rawDesc)) {
+    $rawDesc = $fromTemplate;
+}
+$excerpt = clean_meta_text((string)($article['excerpt'] ?? ''), $title, 160);
+$metaDesc = clean_meta_text($rawDesc !== '' ? $rawDesc : $excerpt, $title, 160);
+if ($metaDesc === '') {
+    $metaDesc = $excerpt;
+}
+if ($excerpt === '' || str_starts_with(norm_key($excerpt), norm_key($title))) {
+    $excerpt = $metaDesc;
+}
 $article['excerpt'] = $excerpt;
-$article['meta_description'] = $metaDesc !== '' ? $metaDesc : $excerpt;
+$article['meta_description'] = $metaDesc;
 
 // Default draft. Smoke always draft. Auto-publish only if gate explicitly allows.
 $requested = strtolower((string)($article['status'] ?? 'draft'));

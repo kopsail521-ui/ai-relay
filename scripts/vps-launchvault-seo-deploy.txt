@@ -1,0 +1,5 @@
+set -e
+base64 -d /tmp/lv-seo.b64 | gunzip | sudo tee /opt/ai-relay/static/seo/index.html >/dev/null
+grep -o 'launchvault.dev' /opt/ai-relay/static/seo/index.html | head -1
+curl -sS -H 'Cache-Control: no-cache' https://www.keyoapi.xyz/ | tr -d '\n' | grep -o 'launchvault.dev' | head -3
+echo DONE_LAUNCHVAULT_SEO

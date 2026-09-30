@@ -198,7 +198,8 @@
           "q": "How do I try Claude on Keyo?",
           "a": "Create a key at /sign-up, then open /pricing/claude-sonnet-5 (or another Claude ID) for interactive try/buy. There is no separate upload playground — Model Square is the try path."
         }
-      ]
+      ],
+      "bodyHeading": "Anthropic API pricing at a glance"
     },
     {
       "slug": "openai-api-pricing",

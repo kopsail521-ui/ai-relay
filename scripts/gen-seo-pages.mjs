@@ -711,6 +711,8 @@ function renderCompare() {
 <thead><tr><th>Model</th><th>Listed Keyo price</th><th>Interactive page</th></tr></thead>
 <tbody>${llmRows}</tbody>
 </table>
+<h2>How to estimate API costs (no calculator app required)</h2>
+<p>For token-metered chat IDs: expected cost ≈ (input millions × input $/1M) + (output millions × output $/1M), then add retries. Pull the $/1M figures from live <a href="/pricing">/pricing</a> or the rows on this page — do not hard-code a spreadsheet forever. Worked OpenAI-side example: <a href="/openai-api-pricing">/openai-api-pricing</a>. Brand hubs: <a href="/claude-api-pricing">Claude / Anthropic</a>, <a href="/grok-api-pricing">Grok</a>, <a href="/gemini-api-pricing">Gemini</a>, <a href="/deepseek-api-pricing">DeepSeek</a>.</p>
 <h2>How to use this comparison</h2>
 <p>One OpenAI-compatible SDK, one balance, and multimodal add-ons on one invoice.</p>
 <p>Recommended rollout: start with <a href="${featuredHref("deepseek-v4.1-flash")}"><code>deepseek-v4.1-flash</code></a> on high-volume paths, <a href="${featuredHref("gpt-6-astra")}"><code>gpt-6-astra</code></a> or <a href="/model/claude-sonnet-5">claude-sonnet-5</a> as default chat, escalate to <a href="/model/claude-fable-5-1">claude-fable-5-1</a> when you need denser reasoning.</p>

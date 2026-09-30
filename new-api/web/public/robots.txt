@@ -13,6 +13,7 @@ Allow: /remove-bg-api-alternative
 Allow: /tts-api
 Allow: /voice-cloning-api
 Allow: /ai-avatar-video-generator
+Allow: /grok-api-pricing
 Allow: /brand/
 Allow: /about
 

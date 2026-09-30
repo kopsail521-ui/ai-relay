@@ -186,6 +186,15 @@ function scrub_body_html(string $html): array
         '',
         $html
     ) ?? $html;
+    // Soft claim scrub for newly ingested drafts (full rewrite is scripts/geoflow-scrub-body-claims.php)
+    $html = preg_replace('/\bThe supplied product materials describe KeyoAPI as\b/iu', 'KeyoAPI is', $html) ?? $html;
+    $html = preg_replace('/\bKeyoAPI is described in the provided product materials as\b/iu', 'KeyoAPI is', $html) ?? $html;
+    $html = preg_replace('/\bThe available materials indicate that\b/iu', '', $html) ?? $html;
+    $html = preg_replace('/\bThe product materials describe\b/iu', '', $html) ?? $html;
+    $html = preg_replace('/\bThe provided materials show that\b/iu', '', $html) ?? $html;
+    $html = preg_replace('/\b(?:provided|supplied|available)\s+product\s+materials\b/iu', 'current documentation', $html) ?? $html;
+    $html = preg_replace('/\b(?:provided|supplied|available)\s+materials\b/iu', 'current documentation', $html) ?? $html;
+    $html = preg_replace('/\s{2,}/u', ' ', $html) ?? $html;
     return [$html, $extracted];
 }
 

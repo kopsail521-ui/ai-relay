@@ -23,6 +23,8 @@
 
 摘要清洗：写入时剥掉 `Meta description:` / 标题重复。批量修存量：`php scripts/geoflow-rebuild-blog.php --sanitize-all --delete-smoke`
 
+正文脚手架（`product materials` / 自家能力 hedge）：`php scripts/geoflow-scrub-body-claims.php`（再跑 sanitize）。GEOFlow 侧 prompt 不在本仓。
+
 对外副本：`../geo-write-access.md`。
 
 ## 接口契约摘要

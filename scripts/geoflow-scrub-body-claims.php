@@ -49,7 +49,7 @@ function claim_hits(string $html): array
 {
     $patterns = [
         'materials' => '/\b(?:KeyoAPI(?:[\'’]s)?\s+(?:product\s+)?materials|(?:product|provided|supplied|available|published|official)\s+materials|(?:these|those|the)\s+materials\s+(?:do|does|describe|document|recommend|identify|verify|state|provide|show)|pricing\s+materials|What the provided KeyoAPI materials)\b/i',
-        'hedge' => '/\b(?:(?:pricing information|materials|docs|documentation)\s+)?(?:do not|does not)(?:\s*,?\s*by themselves,?)?\s+establish that KeyoAPI|they do not verify (?:a |an )?KeyoAPI|do not verify (?:a |an )?KeyoAPI|materials do not|unverified integration|drop-in Claude|Claude compatibility should never be assumed|do not describe KeyoAPI as an avatar|do not route avatar|without inventing unsupported KeyoAPI)\b/i',
+        'hedge' => '/\b(?:(?:(?:pricing information|materials|docs|documentation)\s+)?(?:do not|does not)(?:\s*,?\s*by themselves,?)?\s+establish that KeyoAPI|they do not verify (?:a |an )?KeyoAPI|do not verify (?:a |an )?KeyoAPI|materials do not|unverified integration|drop-in Claude|Claude compatibility should never be assumed|do not describe KeyoAPI as an avatar|do not route avatar|without inventing unsupported KeyoAPI)\b/i',
     ];
     $out = [];
     foreach ($patterns as $k => $re) {

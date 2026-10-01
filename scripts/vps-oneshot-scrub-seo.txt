@@ -1,0 +1,10 @@
+# One-shot: pull + scrub blog claims + deploy static SEO
+# Paste on VPS Workbench:
+
+cd /opt/ai-relay && sudo git pull && sudo php scripts/geoflow-scrub-body-claims.php && sudo bash scripts/deploy-brand-static.sh && echo DONE_ONESHOT
+
+# Expect DONE_ONESHOT. Quick checks:
+# curl -fsS https://www.keyoapi.xyz/robots.txt | grep -E 'Disallow: /fr$'
+# curl -fsS https://www.keyoapi.xyz/gemini-api-pricing | grep -E 'gemini-3.8-flash|Priority deep' | head
+# curl -fsS https://www.keyoapi.xyz/pricing-list | grep -E 'gemini-3.8|grok-4.7|deepseek-v4-pro-0813' | head
+# curl -fsS https://www.keyoapi.xyz/brand/blog/article/exq994v0/ | grep -E 'does not confirm that the gateway|async/videos/image-to-video|Product documentation and integration' | head

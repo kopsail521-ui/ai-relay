@@ -652,7 +652,7 @@ ${freeCards}
 <div class="grid">
   <a href="/model/gpt-5.6-terra">GPT-class chat</a>
   <a href="/model/claude-sonnet-5">Claude-class reasoning</a>
-  <a href="/model/deepseek-v4-pro">DeepSeek open models</a>
+  <a href="/model/deepseek-v4-pro-0813">DeepSeek open models</a>
   <a href="/model/glm-5.2">GLM</a>
   <a href="/model/kimi-k3">Kimi</a>
   <a href="/model/whisper-large-v3">Speech-to-text</a>
@@ -717,7 +717,7 @@ function renderCompare() {
 <p>One OpenAI-compatible SDK, one balance, and multimodal add-ons on one invoice.</p>
 <p>Recommended rollout: start with <a href="${featuredHref("deepseek-v4.1-flash")}"><code>deepseek-v4.1-flash</code></a> on high-volume paths, <a href="${featuredHref("gpt-6-astra")}"><code>gpt-6-astra</code></a> or <a href="/model/claude-sonnet-5">claude-sonnet-5</a> as default chat, escalate to <a href="/model/claude-fable-5-1">claude-fable-5-1</a> when you need denser reasoning.</p>
 <h2>Guides for high-intent model searches</h2>
-<p>Priority deep page this month: <a href="/model/CosyVoice3"><strong>How to call CosyVoice3 API</strong></a>. Nearby guides:</p>
+<p>Related guide: <a href="/model/CosyVoice3"><strong>How to call CosyVoice3 API</strong></a>. Nearby:</p>
 <ul>
   <li><a href="/model/CosyVoice3">CosyVoice3 API — async multilingual TTS</a></li>
   <li><a href="/tts-api">TTS API hub</a> · <a href="/voice-cloning-api">Voice cloning API</a></li>
@@ -757,16 +757,38 @@ function renderPricing() {
 </tr>`
     )
     .join("\n");
-  const rows = pages.models
-    .map(
-      (m) => `<tr>
-  <td><a href="/model/${encodeURIComponent(m.id)}"><code>${esc(m.id)}</code></a></td>
+  const seenIds = new Set(pages.models.map((m) => m.id));
+  const landingExtra = [];
+  for (const p of pricingLandings.pages || []) {
+    for (const r of p.rows || []) {
+      const id = r.model;
+      if (!id || seenIds.has(id)) continue;
+      seenIds.add(id);
+      landingExtra.push({
+        id,
+        category: "llm",
+        priceLabel: r.keyo,
+        endpoint: "POST /v1/chat/completions",
+        guide: false,
+      });
+    }
+  }
+  const rows = [...pages.models, ...landingExtra]
+    .map((m) => {
+      const guide = m.guide === false
+        ? `<a href="/pricing-list">List</a>`
+        : `<a href="/model/${encodeURIComponent(m.id)}">Guide</a>`;
+      const modelHref = m.guide === false
+        ? `/pricing/${encodeURIComponent(m.id)}`
+        : `/model/${encodeURIComponent(m.id)}`;
+      return `<tr>
+  <td><a href="${modelHref}"><code>${esc(m.id)}</code></a></td>
   <td>${esc(m.category)}</td>
   <td class="ok">${esc(m.priceLabel)}</td>
   <td><code>${esc(m.endpoint)}</code></td>
-  <td><a href="/model/${encodeURIComponent(m.id)}">Guide</a> · <a href="/pricing/${encodeURIComponent(m.id)}">Try / buy</a></td>
-</tr>`
-    )
+  <td>${guide} · <a href="/pricing/${encodeURIComponent(m.id)}">Try / buy</a></td>
+</tr>`;
+    })
     .join("\n");
   const bodyHtml = `
 <p class="lead">Static <strong>AI API pricing</strong> list for KeyoAPI — model IDs, indicative USD rates, and real endpoints. Use this page to compare rates; open interactive try/buy links when you are ready to generate keys.</p>
@@ -897,7 +919,7 @@ ${rows}
 <h2>When you outgrow free IDs</h2>
 <p>Same key, switch <code>model=</code> only:</p>
 <ul>
-  <li><a href="/model/CosyVoice3"><strong>CosyVoice3 API</strong></a> — hosted async TTS when scripts leave the free chat tier (priority guide)</li>
+  <li><a href="/model/CosyVoice3"><strong>CosyVoice3 API</strong></a> — hosted async TTS when scripts leave the free chat tier</li>
   <li><a href="/tts-api">TTS API hub</a> · <a href="/voice-cloning-api">Voice cloning</a> · <a href="/model/IndexTTS-2">IndexTTS-2</a></li>
   <li><a href="/model/deepseek-v4-flash"><strong>DeepSeek V4 Flash free / pricing</strong></a> — metered Flash after $0 prototypes</li>
   <li><a href="/model/kimi-k3"><strong>Kimi K3 API key (free path)</strong></a> — draft on free IDs, then <code>kimi-k3</code></li>
@@ -921,6 +943,34 @@ ${rows}
         "Fixed $0 free LLM API models on KeyoAPI with OpenAI-compatible chat completions.",
     },
   });
+}
+
+/** Brand-aware related links — avoid one TTS boilerplate on every LLM hub. */
+function landingRelatedLinks(slug) {
+  const base =
+    '<a href="/compare">/compare</a>, <a href="/free-models">/free-models</a>, <a href="/pricing-list">/pricing-list</a>';
+  const bySlug = {
+    "tts-api":
+      `${base}, and <a href="/model/CosyVoice3">CosyVoice3 API</a> · <a href="/voice-cloning-api">Voice cloning</a> · <a href="/model/IndexTTS-2">IndexTTS-2</a>`,
+    "voice-cloning-api":
+      `${base}, and <a href="/tts-api">TTS API</a> · <a href="/model/CosyVoice3">CosyVoice3</a> · <a href="/model/Qwen3-TTS">Qwen3-TTS</a>`,
+    "ai-avatar-video-generator":
+      `${base}, and <a href="/model/Duix-Avatar">Duix Avatar</a> · <a href="/model/InfiniteTalk">InfiniteTalk</a> · <a href="/tts-api">TTS API</a>`,
+    "remove-bg-api-alternative":
+      `${base}, and <a href="/model/RMBG-2.0">RMBG-2.0</a> · <a href="/model/sam3">sam3</a>`,
+    "gemini-api-pricing":
+      `${base}, and <a href="/model/gemini-3.8-flash">gemini-3.8-flash</a> · <a href="/model/gemini-3.7-flash">gemini-3.7-flash</a>`,
+    "grok-api-pricing":
+      `${base}, and <a href="/model/grok-4.7">grok-4.7</a> · <a href="/model/grok-4.6">grok-4.6</a>`,
+    "deepseek-api-pricing":
+      `${base}, and <a href="/model/deepseek-v4.1-flash">deepseek-v4.1-flash</a> · <a href="/model/deepseek-v4-pro-0813">deepseek-v4-pro-0813</a>`,
+    "claude-api-pricing":
+      `${base}, and <a href="/model/claude-sonnet-5">claude-sonnet-5</a> · <a href="/model/claude-opus-5">claude-opus-5</a>`,
+    "openai-api-pricing":
+      `${base}, and <a href="/model/gpt-6-astra">gpt-6-astra</a> · <a href="/model/gpt-5.6-luna">gpt-5.6-luna</a>`,
+  };
+  const links = bySlug[slug] || `${base}, and <a href="/tts-api">TTS API</a> · <a href="/ai-avatar-video-generator">Avatar video</a>`;
+  return `<p class="meta">Also see ${links}.</p>`;
 }
 
 function renderPricingLanding(p) {
@@ -979,7 +1029,7 @@ ${bodyParas}
 ${curlBlock}
 <h2>FAQ</h2>
 <div class="faq">${faqs}</div>
-<p class="meta">Also see <a href="/compare">/compare</a>, <a href="/free-models">/free-models</a>, and the priority TTS guide: <a href="/model/CosyVoice3">CosyVoice3 API</a> · nearby: <a href="/model/deepseek-v4-flash">DeepSeek V4 Flash</a> · <a href="/model/kimi-k3">Kimi K3</a> · <a href="/model/Duix-Avatar">Duix Avatar</a>.</p>
+${landingRelatedLinks(p.slug)}
 `;
   return layout({
     title: p.title,
@@ -1033,7 +1083,7 @@ Disallow: /zh-CN
 Disallow: /zh-TW
 Disallow: /ja
 Disallow: /ko
-Disallow: /fr/
+Disallow: /fr
 Disallow: /ru
 Disallow: /vi
 `;

@@ -6,64 +6,58 @@
       "navLabel": "Gemini pricing",
       "h1": "Gemini API Pricing — KeyoAPI vs Typical Google List Rates",
       "title": "Gemini API Pricing Comparison | Cheap Gemini on KeyoAPI",
-      "metaDescription": "Gemini API pricing on KeyoAPI: compare Google-class list rates with Keyo sell prices for Flash/Pro twins, plus $0 free LLM alternatives on the same key.",
+      "metaDescription": "Gemini API pricing on KeyoAPI: gemini-3.8-flash ~$0.28/$1.38, gemini-3.7-flash same band, plus Omni request IDs. OpenAI-compatible.",
       "targetKeywords": [
         "google gemini api pricing",
         "gemini api pricing",
         "gemini api price",
         "cheap gemini api"
       ],
-      "lead": "Looking up Gemini API pricing usually means you already want Google-class models but need clearer unit economics — or a relay that also hosts paid DeepSeek IDs and Whisper under one balance. This page compares indicative Keyo sell rates with typical public Google list figures and shows how to call Gemini-class IDs on an OpenAI-compatible gateway.",
+      "lead": "Looking up Gemini API pricing usually means you already want Google-class models but need clearer unit economics — or a relay that also hosts paid DeepSeek IDs and Whisper under one balance. This page lists current Keyo catalog Gemini-class IDs with indicative sell rates on an OpenAI-compatible gateway.",
       "rows": [
         {
-          "model": "gemini-2.5-flash",
-          "official": "Google Gemini 2.5 Flash list often cited near ~$0.30 / $2.50 per 1M in/out (varies by tier/context)",
-          "keyo": "~$0.11 / $0.92 per 1M in/out",
-          "note": "High-volume Flash lane"
+          "model": "gemini-3.8-flash",
+          "official": "Google Gemini Flash-class list bands move by tier/context — verify on AI Studio",
+          "keyo": "~$0.28 / $1.38 per 1M in/out",
+          "note": "Current Keyo Flash chat ID"
         },
         {
-          "model": "gemini-2.5-pro",
-          "official": "Google Gemini 2.5 Pro list commonly higher than Flash (check AI Studio)",
-          "keyo": "~$0.46 / $3.68 per 1M in/out",
-          "note": "Stronger Pro twin"
+          "model": "gemini-3.7-flash",
+          "official": "Prior Flash-class list — verify on Google if still published",
+          "keyo": "~$0.28 / $1.38 per 1M in/out",
+          "note": "Catalog twin Flash ID"
         },
         {
-          "model": "gemini-3-flash-preview",
-          "official": "Preview list pricing moves quickly — verify on Google",
-          "keyo": "~$0.18 / $1.10 per 1M in/out",
-          "note": "Newer Flash preview"
+          "model": "gemini-omni-1.1-flash",
+          "official": "Google Omni / multimodal list — verify on Google",
+          "keyo": "~$0.11 per request",
+          "note": "Request-metered Omni Flash"
         },
         {
-          "model": "gemini-3-pro-preview",
-          "official": "Preview Pro list — verify on Google AI Studio",
-          "keyo": "~$0.74 / $4.41 per 1M in/out",
-          "note": "Newer Pro preview"
-        },
-        {
-          "model": "gemini-3.5-flash",
-          "official": "Google 3.5 Flash public list (confirm current)",
-          "keyo": "~$0.55 / $3.31 per 1M in/out",
-          "note": "3.5 Flash on Keyo"
+          "model": "gemini-omni-1.1-flash-ext",
+          "official": "Extended Omni list — verify on Google",
+          "keyo": "~$0.42 per request",
+          "note": "Request-metered Omni Ext"
         }
       ],
       "freeKiller": {
         "title": "The $0 row competitors cannot match",
-        "body": "Google Gemini free tiers are usually quota- or trial-shaped. On the same Keyo key you can also call permanent $0 IDs such as Atria-dawn-v2 and :free catalog IDs — fair-use limited, but ModelPrice stays $0. Use them to prototype while you meter Gemini-class paid traffic."
+        "body": "Google Gemini free tiers are usually quota- or trial-shaped. On the same Keyo key you can call gemini-robotics-er-2-preview:free and other fixed $0 catalog IDs on /free-models — fair-use limited, ModelPrice stays $0. Prototype there, then meter paid Gemini-class traffic."
       },
       "body": [
         "Engineers comparing Gemini API pricing usually already want Google-class models with clearer unit economics — or one prepaid balance across Gemini-class IDs plus DeepSeek, GLM, Whisper, OCR, and TTS. Official Google surfaces win on brand trust; KeyoAPI wins when you want that stack without five invoices.",
-        "Keyo rates above are indicative sell prices from the live Keyo catalog. Always confirm interactive pricing pages under /pricing/{modelId} before contracting volume. Preview model IDs can change naming as Google ships stables.",
-        "How to call: set OPENAI_BASE_URL=https://www.keyoapi.xyz/v1, use your Keyo API key, and pass the Gemini model string (for example gemini-2.5-flash) to POST /v1/chat/completions. Many Google-native features remain Google-console only; Keyo focuses on OpenAI-compatible chat access for overseas developer stacks.",
+        "Keyo rates above are indicative sell prices from the live Keyo catalog. Always confirm interactive pricing pages under /pricing/{modelId} before contracting volume. Catalog IDs can change as Google ships new stables — this page tracks what Keyo currently lists.",
+        "How to call: set OPENAI_BASE_URL=https://www.keyoapi.xyz/v1, use your Keyo API key, and pass the Gemini model string (for example gemini-3.8-flash) to POST /v1/chat/completions. Many Google-native features remain Google-console only; Keyo focuses on OpenAI-compatible chat access for overseas developer stacks.",
         "When Gemini list prices spike your margin, keep Gemini for multimodal strengths and shift plain text volume to deepseek-v4.1-flash or gpt-5.6-luna on the same key. For pure free prototyping, start on /free-models, then promote to Gemini paid IDs when quality gates pass."
       ],
       "faqs": [
         {
           "q": "Is Keyo cheaper than Google Gemini API pricing?",
-          "a": "Often on the Flash/Pro rows we list — but Google’s public list, context tiers, and batch discounts change. Treat this table as a planning snapshot and verify both sides before you commit."
+          "a": "Often on the Flash/Omni rows we list — but Google’s public list, context tiers, and batch discounts change. Treat this table as a planning snapshot and verify both sides before you commit."
         },
         {
           "q": "Do you offer a free Gemini model?",
-          "a": "Keyo’s permanent $0 IDs are GLM/Kimi free twins today, not Gemini-branded free models. They sit on the same API key so you can prototype cheaply beside paid Gemini traffic."
+          "a": "Yes — gemini-robotics-er-2-preview:free is a fixed $0 catalog ID (fair-use). Other free IDs on /free-models sit on the same API key beside paid Gemini traffic."
         }
       ]
     },

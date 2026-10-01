@@ -49,7 +49,7 @@ function claim_hits(string $html): array
 {
     $patterns = [
         'materials' => '/\b(?:KeyoAPI(?:[\'’]s)?\s+(?:product\s+)?materials|(?:product|provided|supplied|available|published|official)\s+materials|(?:these|those|the)\s+materials\s+(?:do|does|describe|document|recommend|identify|verify|state|provide|show)|pricing\s+materials|What the provided KeyoAPI materials)\b/i',
-        'hedge' => '/\b(?:(?:(?:pricing information|materials|docs|documentation)\s+)?(?:do not|does not)(?:\s*,?\s*by themselves,?)?\s+establish that KeyoAPI|they do not verify (?:a |an )?KeyoAPI|do not verify (?:a |an )?KeyoAPI|materials do not|unverified integration|drop-in Claude|Claude compatibility should never be assumed|do not describe KeyoAPI as an avatar|do not route avatar|without inventing unsupported KeyoAPI|Confirm in the live catalog (?:whether|and docs whether)|your KeyoAPI plan exposes|does not confirm the existence of an avatar|unsupported or unverified capability|Only describe KeyoAPI as offering|Do not infer compatibility from a shared API style|described as a gateway|only after confirming that it is currently available|can change,\s*;|Live docs do not by themselves prove)\b/i',
+        'hedge' => '/\b(?:(?:(?:pricing information|materials|docs|documentation)\s+)?(?:do not|does not)(?:\s*,?\s*by themselves,?)?\s+establish that KeyoAPI|they do not verify (?:a |an )?KeyoAPI|do not verify (?:a |an )?KeyoAPI|materials do not|unverified integration|drop-in Claude|Claude compatibility should never be assumed|do not describe KeyoAPI as an avatar|do not route avatar|without inventing unsupported KeyoAPI|Confirm in the live catalog (?:whether|and docs whether)|your KeyoAPI plan exposes|does not confirm the existence of an avatar|does not confirm that the gateway provides|unsupported or unverified capability|Only describe KeyoAPI as offering|Do not infer compatibility from a shared API style|described as a gateway|only after confirming that it is currently available|can change,\s*;|Live docs do not by themselves prove|Product documentation and integration code should describe)\b/i',
         'dup_avatar' => '/KeyoAPI hosts talking-avatar \/ lip-sync models in the live catalog/i',
     ];
     $out = [];
@@ -190,7 +190,8 @@ function scrub_claims_html(string $html, string $title = ''): array
     $html = preg_replace('/<p>\s+/u', '<p>', $html) ?? $html;
 
     // --- Paragraph rewrites (affirmative facts + live catalog links) ---
-    $avatarFact = '<p>KeyoAPI hosts talking-avatar / lip-sync models in the live catalog — including <code>Duix-Avatar</code> and <code>InfiniteTalk</code>. Start from ' . a('/ai-avatar-video-generator') . ', then confirm interactive rates on ' . a('/pricing/Duix-Avatar') . ', ' . a('/pricing/InfiniteTalk') . ', and the full ' . a('/pricing-list') . '.</p>';
+    // Crawlable deep links: /model/{id} + hubs (robots Disallow: /pricing/).
+    $avatarFact = '<p>KeyoAPI hosts talking-avatar / lip-sync models in the live catalog — including <code>Duix-Avatar</code> and <code>InfiniteTalk</code>. Start from ' . a('/ai-avatar-video-generator') . ', then confirm guides at ' . a('/model/Duix-Avatar') . ', ' . a('/model/InfiniteTalk') . ', and the full ' . a('/pricing-list') . '.</p>';
 
     $paraReplacements = [];
 
@@ -207,7 +208,7 @@ function scrub_claims_html(string $html, string $title = ''): array
 
     // Soft avatar hedges (including prior scrub replacements that were still too soft)
     $paraReplacements[] = [
-        'match' => '/Confirm in the live catalog (?:whether|and docs whether)|your KeyoAPI plan exposes avatar|Only describe KeyoAPI as offering avatar|Only route avatar rendering through KeyoAPI after|pricing information does not establish that KeyoAPI offers an InfiniteTalk|do not verify (?:a |an )?KeyoAPI digital-human|do not establish that KeyoAPI provides a digital-human|does not confirm the existence of an avatar|unsupported or unverified capability|Do not describe KeyoAPI as an avatar or video provider|Do not route avatar rendering/i',
+        'match' => '/Confirm in the live catalog (?:whether|and docs whether)|your KeyoAPI plan exposes avatar|Only describe KeyoAPI as offering avatar|Only route avatar rendering through KeyoAPI after|pricing information does not establish that KeyoAPI offers an InfiniteTalk|do not verify (?:a |an )?KeyoAPI digital-human|do not establish that KeyoAPI provides a digital-human|does not confirm the existence of an avatar|does not confirm that the gateway provides InfiniteTalk|unsupported or unverified capability|Do not describe KeyoAPI as an avatar or video provider|Do not route avatar rendering/i',
         'replace' => $avatarFact,
     ];
 
@@ -266,7 +267,7 @@ function scrub_claims_html(string $html, string $title = ''): array
     // List items / inline soft hedges
     $html2 = preg_replace(
         '/Use the model ID <code>RMBG-2\.0<\/code> only after confirming that it is currently available through the live model catalog or current documentation\./iu',
-        'Use model ID <code>RMBG-2.0</code> via <code>POST /v1/images/mattings</code>; confirm the live rate on ' . a('/pricing/RMBG-2.0') . ' and the guide at ' . a('/model/RMBG-2.0') . '.',
+        'Use model ID <code>RMBG-2.0</code> via <code>POST /v1/images/mattings</code>; confirm the live rate on ' . a('/pricing-list') . ' and the guide at ' . a('/model/RMBG-2.0') . '.',
         $html
     );
     if (is_string($html2) && $html2 !== $html) {
@@ -277,13 +278,17 @@ function scrub_claims_html(string $html, string $title = ''): array
     // Residual sentence surgery
     $sentenceMap = [
         '/Confirm in the live catalog whether InfiniteTalk[^<]{0,200}/iu'
-            => 'KeyoAPI lists InfiniteTalk and related talking-avatar models in the live catalog — see ' . a('/ai-avatar-video-generator') . ', ' . a('/pricing/InfiniteTalk') . ', and ' . a('/pricing-list') . '.',
+            => 'KeyoAPI lists InfiniteTalk and related talking-avatar models in the live catalog — see ' . a('/ai-avatar-video-generator') . ', ' . a('/model/InfiniteTalk') . ', and ' . a('/pricing-list') . '.',
         '/Confirm in the live catalog whether[^.<]{0,160}\.?/iu'
             => 'Confirm the live model ID and rates on ' . a('/pricing-list') . '.',
         '/Live docs do not by themselves prove that/iu'
             => 'Confirm in the live catalog that',
         '/That pricing information does not establish that KeyoAPI offers an InfiniteTalk[^<.]{0,200}\.?/iu'
-            => 'KeyoAPI lists InfiniteTalk in the live catalog; confirm rates on ' . a('/pricing/InfiniteTalk') . ' and ' . a('/ai-avatar-video-generator') . '.',
+            => 'KeyoAPI lists InfiniteTalk in the live catalog; confirm rates on ' . a('/model/InfiniteTalk') . ' and ' . a('/ai-avatar-video-generator') . '.',
+        '/[,.]?\s*but it does not confirm that the gateway provides InfiniteTalk,\s*lip-sync,\s*talking-avatar,\s*or video-generation support\.?/iu'
+            => '. KeyoAPI lists InfiniteTalk and related talking-avatar models in the live catalog — see ' . a('/ai-avatar-video-generator') . ', ' . a('/model/InfiniteTalk') . ', and ' . a('/pricing-list') . '.',
+        '/does not confirm that the gateway provides InfiniteTalk[^<.]{0,120}\.?/iu'
+            => 'KeyoAPI lists InfiniteTalk in the live catalog — see ' . a('/ai-avatar-video-generator') . ' and ' . a('/model/InfiniteTalk') . '.',
         '/but it does not confirm the existence of an avatar or video-rendering API\.?/iu'
             => '. KeyoAPI hosts avatar / lip-sync models such as Duix-Avatar and InfiniteTalk — see ' . a('/ai-avatar-video-generator') . '.',
         '/If those details are absent, treat avatar generation as an unsupported or unverified capability[^<.]{0,120}\.?/iu'
@@ -303,12 +308,90 @@ function scrub_claims_html(string $html, string $title = ''): array
         '/Check the live catalog for whether/iu'
             => 'Confirm in the live catalog that',
         '/Do not assume that a product supports a specific model, endpoint, output format, or deployment workflow because those features are common in the avatar-video market\.?/iu'
-            => 'KeyoAPI lists InfiniteTalk in the live catalog — confirm the request contract, limits, and rates on ' . a('/pricing/InfiniteTalk') . ' and ' . a('/ai-avatar-video-generator') . ' before production (do not infer every avatar-video feature from market norms alone).',
+            => 'KeyoAPI lists InfiniteTalk in the live catalog — confirm the request contract, limits, and rates on ' . a('/model/InfiniteTalk') . ' and ' . a('/ai-avatar-video-generator') . ' before production (do not infer every avatar-video feature from market norms alone).',
+        '/\s*Product documentation and integration code should describe the service accurately\.?/iu'
+            => '',
+        '/\b(?:documentation|product docs|integration code)\s+should\s+(?:describe|not claim|claim)\b[^.<]{0,120}\.?/iu'
+            => '',
     ];
     foreach ($sentenceMap as $re => $to) {
         $html2 = preg_replace($re, $to, $html);
         if (is_string($html2) && $html2 !== $html) {
             $notes[] = 'sent';
+            $html = $html2;
+        }
+    }
+
+    // Writer-instruction leaks (not for readers)
+    $html2 = preg_replace(
+        '/\s*Product documentation and integration code should describe the service accurately\.?/iu',
+        '',
+        $html
+    );
+    if (is_string($html2) && $html2 !== $html) {
+        $notes[] = 'writer-leak';
+        $html = $html2;
+    }
+    $html2 = preg_replace(
+        '/\b(?:documentation|integration code|product copy)\s+should\s+(?:describe|not claim)[^.]*\./iu',
+        '',
+        $html
+    );
+    if (is_string($html2) && $html2 !== $html) {
+        $notes[] = 'writer-leak2';
+        $html = $html2;
+    }
+
+    // Checklist widgets → accessible static markers (no bare disabled inputs)
+    $html2 = preg_replace(
+        '/<input\b[^>]*\btype=["\']checkbox["\'][^>]*>/iu',
+        '<span aria-hidden="true">☐</span> ',
+        $html
+    );
+    if (is_string($html2) && $html2 !== $html) {
+        $notes[] = 'checkbox';
+        $html = $html2;
+    }
+
+    // Prefer crawlable /model/{id} over robots-Disallow /pricing/{id} for avatar IDs
+    $html2 = preg_replace(
+        '/href="(?:https:\/\/www\.keyoapi\.xyz)?\/pricing\/(Duix-Avatar|InfiniteTalk)"/u',
+        'href="/model/$1"',
+        $html
+    );
+    if (is_string($html2) && $html2 !== $html) {
+        $notes[] = 'pricing-to-model';
+        $html = $html2;
+    }
+    $html2 = preg_replace(
+        '/href="https:\/\/www\.keyoapi\.xyz\/pricing"/u',
+        'href="/pricing-list"',
+        $html
+    );
+    if (is_string($html2) && $html2 !== $html) {
+        $notes[] = 'pricing-hub';
+        $html = $html2;
+    }
+
+    // InfiniteTalk: inject a runnable submit example if the article only has discovery curls
+    if (preg_match('/\bInfiniteTalk\b/i', $title) && !preg_match('/\/v1\/async\/videos\//i', $html)) {
+        $curl = '<h2>Minimal request example</h2>
+<p>Submit an InfiniteTalk job with a Keyo API key. Audio input should stay within the published limit (≤ 15 seconds). Confirm live fields on ' . a('/model/InfiniteTalk') . ' before production:</p>
+<pre><code>curl https://www.keyoapi.xyz/v1/async/videos/image-to-video \
+  -H "Authorization: Bearer YOUR_KEYO_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d \'{"model":"InfiniteTalk","prompt":"Say hello","image_url":"https://example.com/face.jpg","audio_url":"https://example.com/clip.mp3"}\'
+
+# Poll: GET https://www.keyoapi.xyz/v1/task/{task_id}</code></pre>
+<p>Hub: ' . a('/ai-avatar-video-generator') . ' · rates: ' . a('/pricing-list') . '.</p>
+';
+        if (preg_match('/<h2[^>]*>\s*Conclusion/i', $html)) {
+            $html2 = preg_replace('/(<h2[^>]*>\s*Conclusion)/i', $curl . '$1', $html, 1);
+        } else {
+            $html2 = $html . $curl;
+        }
+        if (is_string($html2) && $html2 !== $html) {
+            $notes[] = 'it-curl';
             $html = $html2;
         }
     }
@@ -371,6 +454,28 @@ function scrub_claims_html(string $html, string $title = ''): array
         },
         $html
     ) ?? $html;
+
+    // Checklist chrome: bare disabled checkboxes without labels → decorative symbols
+    $html2 = preg_replace(
+        '/<input\b[^>]*\btype=["\']checkbox["\'][^>]*>/iu',
+        '<span aria-hidden="true">☐</span> ',
+        $html
+    );
+    if (is_string($html2) && $html2 !== $html) {
+        $notes[] = 'checkbox';
+        $html = $html2;
+    }
+
+    // Empty “workflow problem” conclusions → next action
+    $html2 = preg_replace(
+        '/is primarily a workflow and state-management problem\.?/iu',
+        'is a workflow and state-management problem — start from ' . a('/ai-avatar-video-generator') . ', pick a live avatar ID on ' . a('/pricing-list') . ', then verify one end-to-end render before scaling concurrency',
+        $html
+    );
+    if (is_string($html2) && $html2 !== $html) {
+        $notes[] = 'conclusion';
+        $html = $html2;
+    }
 
     return [$html, $html !== $orig, array_values(array_unique($notes))];
 }

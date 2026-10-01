@@ -1,0 +1,5 @@
+# Scrub InfiniteTalk soft hedges + fix mismatched /pricing anchor text
+cd /opt/ai-relay && sudo git pull && sudo php scripts/geoflow-scrub-body-claims.php && echo DONE_SCRUB_EXQ
+
+# Expect no: general-purpose API gateway / model catalog does not list / >/pricing/InfiniteTalk
+# curl -fsS https://www.keyoapi.xyz/brand/blog/article/exq994v0/ | grep -E 'general-purpose API gateway|model catalog does not list|>/pricing/InfiniteTalk|>https://www.keyoapi.xyz/pricing' || echo CLEAN

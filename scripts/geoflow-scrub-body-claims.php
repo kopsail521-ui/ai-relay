@@ -309,6 +309,10 @@ function scrub_claims_html(string $html, string $title = ''): array
             => 'Confirm in the live catalog that',
         '/Do not assume that a product supports a specific model, endpoint, output format, or deployment workflow because those features are common in the avatar-video market\.?/iu'
             => 'KeyoAPI lists InfiniteTalk in the live catalog — confirm the request contract, limits, and rates on ' . a('/model/InfiniteTalk') . ' and ' . a('/ai-avatar-video-generator') . ' before production (do not infer every avatar-video feature from market norms alone).',
+        '/If you are using a general-purpose API gateway, verify whether the gateway exposes avatar or video capabilities at all\.[^<]{0,280}/iu'
+            => 'On KeyoAPI, avatar / lip-sync models are in the live catalog — start from ' . a('/ai-avatar-video-generator') . ' and confirm InfiniteTalk request fields on ' . a('/model/InfiniteTalk') . '. Do not infer avatar support from unrelated model categories alone.',
+        '/If the model catalog does not list the required avatar or video capability, stop the integration evaluation\.[^<]{0,160}/iu'
+            => 'If InfiniteTalk is missing from your account model list, stop and confirm availability on ' . a('/model/InfiniteTalk') . ' and ' . a('/pricing-list') . ' before writing client code. Changing the request body will not unlock an unlisted model.',
         '/\s*Product documentation and integration code should describe the service accurately\.?/iu'
             => '',
         '/\b(?:documentation|product docs|integration code)\s+should\s+(?:describe|not claim|claim)\b[^.<]{0,120}\.?/iu'
@@ -363,6 +367,16 @@ function scrub_claims_html(string $html, string $title = ''): array
         $notes[] = 'pricing-to-model';
         $html = $html2;
     }
+    // Keep visible anchor text aligned with crawlable hrefs
+    $html2 = preg_replace(
+        '/(href="\/model\/(Duix-Avatar|InfiniteTalk)")>(?:https:\/\/www\.keyoapi\.xyz)?\/pricing\/\2</u',
+        '$1>/model/$2<',
+        $html
+    );
+    if (is_string($html2) && $html2 !== $html) {
+        $notes[] = 'anchor-text-model';
+        $html = $html2;
+    }
     $html2 = preg_replace(
         '/href="https:\/\/www\.keyoapi\.xyz\/pricing"/u',
         'href="/pricing-list"',
@@ -370,6 +384,15 @@ function scrub_claims_html(string $html, string $title = ''): array
     );
     if (is_string($html2) && $html2 !== $html) {
         $notes[] = 'pricing-hub';
+        $html = $html2;
+    }
+    $html2 = preg_replace(
+        '/(href="\/pricing-list")>(?:https:\/\/www\.keyoapi\.xyz)?\/pricing</u',
+        '$1>/pricing-list<',
+        $html
+    );
+    if (is_string($html2) && $html2 !== $html) {
+        $notes[] = 'anchor-text-list';
         $html = $html2;
     }
 

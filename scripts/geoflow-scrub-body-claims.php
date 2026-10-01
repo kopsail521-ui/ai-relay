@@ -49,12 +49,18 @@ function claim_hits(string $html): array
 {
     $patterns = [
         'materials' => '/\b(?:KeyoAPI(?:[\'’]s)?\s+(?:product\s+)?materials|(?:product|provided|supplied|available|published|official)\s+materials|(?:these|those|the)\s+materials\s+(?:do|does|describe|document|recommend|identify|verify|state|provide|show)|pricing\s+materials|What the provided KeyoAPI materials)\b/i',
-        'hedge' => '/\b(?:(?:(?:pricing information|materials|docs|documentation)\s+)?(?:do not|does not)(?:\s*,?\s*by themselves,?)?\s+establish that KeyoAPI|they do not verify (?:a |an )?KeyoAPI|do not verify (?:a |an )?KeyoAPI|materials do not|unverified integration|drop-in Claude|Claude compatibility should never be assumed|do not describe KeyoAPI as an avatar|do not route avatar|without inventing unsupported KeyoAPI|Confirm in the live catalog (?:whether|and docs whether)|your KeyoAPI plan exposes|does not confirm the existence of an avatar|unsupported or unverified capability|Only describe KeyoAPI as offering|Do not infer compatibility from a shared API style|described as a gateway|only after confirming that it is currently available|can change,\s*;)\b/i',
+        'hedge' => '/\b(?:(?:(?:pricing information|materials|docs|documentation)\s+)?(?:do not|does not)(?:\s*,?\s*by themselves,?)?\s+establish that KeyoAPI|they do not verify (?:a |an )?KeyoAPI|do not verify (?:a |an )?KeyoAPI|materials do not|unverified integration|drop-in Claude|Claude compatibility should never be assumed|do not describe KeyoAPI as an avatar|do not route avatar|without inventing unsupported KeyoAPI|Confirm in the live catalog (?:whether|and docs whether)|your KeyoAPI plan exposes|does not confirm the existence of an avatar|unsupported or unverified capability|Only describe KeyoAPI as offering|Do not infer compatibility from a shared API style|described as a gateway|only after confirming that it is currently available|can change,\s*;|Live docs do not by themselves prove)\b/i',
+        'dup_avatar' => '/KeyoAPI hosts talking-avatar \/ lip-sync models in the live catalog/i',
     ];
     $out = [];
     foreach ($patterns as $k => $re) {
         $out[$k] = preg_match_all($re, $html) ?: 0;
     }
+    // More than one avatar boilerplate copy counts as residual
+    if (($out['dup_avatar'] ?? 0) > 1) {
+        $out['hedge'] += ($out['dup_avatar'] - 1);
+    }
+    unset($out['dup_avatar']);
     return $out;
 }
 
@@ -296,6 +302,8 @@ function scrub_claims_html(string $html, string $title = ''): array
             => 'Confirm in the live catalog that',
         '/Check the live catalog for whether/iu'
             => 'Confirm in the live catalog that',
+        '/Do not assume that a product supports a specific model, endpoint, output format, or deployment workflow because those features are common in the avatar-video market\.?/iu'
+            => 'KeyoAPI lists InfiniteTalk in the live catalog — confirm the request contract, limits, and rates on ' . a('/pricing/InfiniteTalk') . ' and ' . a('/ai-avatar-video-generator') . ' before production (do not infer every avatar-video feature from market norms alone).',
     ];
     foreach ($sentenceMap as $re => $to) {
         $html2 = preg_replace($re, $to, $html);
@@ -340,17 +348,25 @@ function scrub_claims_html(string $html, string $title = ''): array
     $html = preg_replace('/<p>\s*\./u', '<p>', $html) ?? $html;
     $html = preg_replace('/\s+<\/p>/u', '</p>', $html) ?? $html;
 
-    // Drop consecutive duplicate paragraphs (scrub sometimes rewrote conclusion twice)
-    $prev = null;
+    // Drop duplicate paragraphs anywhere in the article (same normalized text → keep first only)
+    $seen = [];
     $html = preg_replace_callback(
         '/<p\b[^>]*>[\s\S]*?<\/p>/iu',
-        static function ($m) use (&$prev, &$notes) {
-            $norm = preg_replace('/\s+/u', ' ', strip_tags($m[0]));
-            if ($prev !== null && $norm === $prev) {
+        static function ($m) use (&$seen, &$notes) {
+            $norm = strtolower(trim(preg_replace('/\s+/u', ' ', strip_tags($m[0])) ?? ''));
+            if ($norm === '') {
+                return $m[0];
+            }
+            // Also key on distinctive product boilerplate stems
+            $stem = $norm;
+            if (str_contains($norm, 'keyoapi hosts talking-avatar')) {
+                $stem = '__avatar_fact__';
+            }
+            if (isset($seen[$stem])) {
                 $notes[] = 'dedupe';
                 return '';
             }
-            $prev = $norm;
+            $seen[$stem] = true;
             return $m[0];
         },
         $html

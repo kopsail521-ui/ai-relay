@@ -135,11 +135,11 @@ function scrub_claims_html(string $html, string $title = ''): array
         '/\band the supplied materials do not establish avatar-video pricing\b/iu'
             => '; confirm avatar-video rates on ' . a('/ai-avatar-video-generator') . ' and ' . a('/pricing-list') . ' before production',
 
-        // Generic leftover "the/these/those materials"
+        // Generic leftover "the/these/those materials" → affirmative catalog pointer
         '/\bThose materials do not establish that\b/iu'
-            => 'Current live docs list whether',
+            => 'Confirm in the live catalog that',
         '/\bThe materials do not establish that\b/iu'
-            => 'Check the live catalog for whether',
+            => 'Confirm in the live catalog that',
         '/\bThese materials do not, by themselves, establish\b/iu'
             => 'Confirm in live docs that you have',
         '/\bThey also describe\b/iu'
@@ -272,6 +272,10 @@ function scrub_claims_html(string $html, string $title = ''): array
     $sentenceMap = [
         '/Confirm in the live catalog whether InfiniteTalk[^<]{0,200}/iu'
             => 'KeyoAPI lists InfiniteTalk and related talking-avatar models in the live catalog — see ' . a('/ai-avatar-video-generator') . ', ' . a('/pricing/InfiniteTalk') . ', and ' . a('/pricing-list') . '.',
+        '/Confirm in the live catalog whether[^.<]{0,160}\.?/iu'
+            => 'Confirm the live model ID and rates on ' . a('/pricing-list') . '.',
+        '/Live docs do not by themselves prove that/iu'
+            => 'Confirm in the live catalog that',
         '/That pricing information does not establish that KeyoAPI offers an InfiniteTalk[^<.]{0,200}\.?/iu'
             => 'KeyoAPI lists InfiniteTalk in the live catalog; confirm rates on ' . a('/pricing/InfiniteTalk') . ' and ' . a('/ai-avatar-video-generator') . '.',
         '/but it does not confirm the existence of an avatar or video-rendering API\.?/iu'
@@ -288,6 +292,10 @@ function scrub_claims_html(string $html, string $title = ''): array
             => '. Confirm video / avatar model IDs on ' . a('/ai-avatar-video-generator') . ' and ' . a('/pricing-list') . ' before production.',
         '/confirm any avatar-video pricing in live docs and/iu'
             => 'confirm avatar-video rates on ' . a('/ai-avatar-video-generator') . ' and',
+        '/Current live docs list whether/iu'
+            => 'Confirm in the live catalog that',
+        '/Check the live catalog for whether/iu'
+            => 'Confirm in the live catalog that',
     ];
     foreach ($sentenceMap as $re => $to) {
         $html2 = preg_replace($re, $to, $html);

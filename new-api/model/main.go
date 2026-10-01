@@ -311,6 +311,9 @@ func migrateDB() error {
 			return err
 		}
 	}
+	if err := MigrateAffQuotaToGift(); err != nil {
+		return err
+	}
 	return nil
 }
 

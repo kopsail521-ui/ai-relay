@@ -228,13 +228,15 @@ export interface UserWalletData {
   id: number
   /** Username */
   username: string
-  /** Current quota balance */
+  /** Recharge balance (any model) */
   quota: number
+  /** Gift credits (free models first) */
+  gift_quota: number
   /** Total used quota */
   used_quota: number
   /** Total request count */
   request_count: number
-  /** Affiliate quota (pending rewards) */
+  /** Legacy pending invite rewards (migrated to gift_quota) */
   aff_quota: number
   /** Total affiliate quota earned (historical) */
   aff_history_quota: number

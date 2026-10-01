@@ -42,6 +42,13 @@ import {
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
+import {
   Sheet,
   SheetClose,
   SheetContent,
@@ -311,6 +318,42 @@ export function RedemptionsMutateDrawer({
                           : t('Enter the quota amount in {{currency}}', {
                               currency: currencyLabel,
                             })}
+                      </FormDescription>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name='credit_wallet'
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>{t('Credit Wallet')}</FormLabel>
+                      <Select
+                        value={field.value}
+                        onValueChange={field.onChange}
+                      >
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue
+                              placeholder={t('Select credit wallet')}
+                            />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          <SelectItem value='paid'>
+                            {t('Recharge balance (any model)')}
+                          </SelectItem>
+                          <SelectItem value='gift'>
+                            {t('Gift credits / experience code (free models)')}
+                          </SelectItem>
+                        </SelectContent>
+                      </Select>
+                      <FormDescription>
+                        {t(
+                          'Experience codes credit gift balance. Regular codes credit recharge balance.'
+                        )}
                       </FormDescription>
                       <FormMessage />
                     </FormItem>

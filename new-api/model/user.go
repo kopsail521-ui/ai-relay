@@ -92,14 +92,15 @@ type User struct {
 	TelegramId       string                     `json:"telegram_id" gorm:"column:telegram_id;index"`
 	VerificationCode string                     `json:"verification_code" gorm:"-:all"`                         // this field is only for Email verification, don't save it to database!
 	AccessToken      *string                    `json:"-" gorm:"type:char(32);column:access_token;uniqueIndex"` // this token is for system management
-	Quota            int                        `json:"quota" gorm:"type:int;default:0"`
+	Quota            int                        `json:"quota" gorm:"type:int;default:0"`                              // 充值金（任意模型）
+	GiftQuota        int                        `json:"gift_quota" gorm:"type:int;default:0;column:gift_quota"`       // 赠送金（仅免费模型优先）
 	UsedQuota        int                        `json:"used_quota" gorm:"type:int;default:0;column:used_quota"` // used quota
 	RequestCount     int                        `json:"request_count" gorm:"type:int;default:0;"`               // request number
 	Group            string                     `json:"group" gorm:"type:varchar(64);default:'default'"`
 	AffCode          string                     `json:"aff_code" gorm:"type:varchar(32);column:aff_code;uniqueIndex"`
 	AffCount         int                        `json:"aff_count" gorm:"type:int;default:0;column:aff_count"`
-	AffQuota         int                        `json:"aff_quota" gorm:"type:int;default:0;column:aff_quota"`           // 邀请剩余额度
-	AffHistoryQuota  int                        `json:"aff_history_quota" gorm:"type:int;default:0;column:aff_history"` // 邀请历史额度
+	AffQuota         int                        `json:"aff_quota" gorm:"type:int;default:0;column:aff_quota"`           // legacy pending invite; migrated → gift_quota
+	AffHistoryQuota  int                        `json:"aff_history_quota" gorm:"type:int;default:0;column:aff_history"` // 累计邀请奖励（展示）
 	InviterId        int                        `json:"inviter_id" gorm:"type:int;column:inviter_id;index"`
 	DeletedAt        gorm.DeletedAt             `gorm:"index"`
 	LinuxDOId        string                     `json:"linux_do_id" gorm:"column:linux_do_id;index"`
@@ -117,6 +118,7 @@ func (user *User) ToBaseUser() *UserBase {
 		Id:          user.Id,
 		Group:       user.Group,
 		Quota:       user.Quota,
+		GiftQuota:   user.GiftQuota,
 		Status:      user.Status,
 		Role:        user.Role,
 		Username:    user.Username,
@@ -530,10 +532,24 @@ func HardDeleteUserById(id int) error {
 }
 
 func inviteUser(inviterId int) error {
+	amount := common.GiftQuotaForInviter
+	if amount <= 0 {
+		amount = common.QuotaForInviter // legacy fallback → gift wallet
+	}
+	if amount <= 0 {
+		result := DB.Model(&User{}).Where("id = ?", inviterId).Update("aff_count", gorm.Expr("aff_count + ?", 1))
+		if result.Error != nil {
+			return result.Error
+		}
+		if result.RowsAffected == 0 {
+			return gorm.ErrRecordNotFound
+		}
+		return nil
+	}
 	result := DB.Model(&User{}).Where("id = ?", inviterId).Updates(map[string]interface{}{
 		"aff_count":   gorm.Expr("aff_count + ?", 1),
-		"aff_quota":   gorm.Expr("aff_quota + ?", common.QuotaForInviter),
-		"aff_history": gorm.Expr("aff_history + ?", common.QuotaForInviter),
+		"gift_quota":  gorm.Expr("gift_quota + ?", amount),
+		"aff_history": gorm.Expr("aff_history + ?", amount),
 	})
 	if result.Error != nil {
 		return result.Error
@@ -541,44 +557,12 @@ func inviteUser(inviterId int) error {
 	if result.RowsAffected == 0 {
 		return gorm.ErrRecordNotFound
 	}
+	syncCreditUserGiftQuotaCache(inviterId, amount, "invite reward")
 	return nil
 }
 
 func (user *User) TransferAffQuotaToQuota(quota int) error {
-	// 检查quota是否小于最小额度
-	if float64(quota) < common.QuotaPerUnit {
-		return fmt.Errorf("转移额度最小为%s！", logger.LogQuota(common.QuotaFromFloat(common.QuotaPerUnit)))
-	}
-
-	// 开始数据库事务
-	tx := DB.Begin()
-	if tx.Error != nil {
-		return tx.Error
-	}
-	defer tx.Rollback() // 确保在函数退出时事务能回滚
-
-	// 加锁查询用户以确保数据一致性
-	err := lockForUpdate(tx).First(user, user.Id).Error
-	if err != nil {
-		return err
-	}
-
-	// 再次检查用户的AffQuota是否足够
-	if user.AffQuota < quota {
-		return errors.New("邀请额度不足！")
-	}
-
-	// 更新用户额度
-	user.AffQuota -= quota
-	user.Quota += quota
-
-	// 保存用户状态
-	if err := tx.Save(user).Error; err != nil {
-		return err
-	}
-
-	// 提交事务
-	return tx.Commit().Error
+	return errors.New("邀请奖励已直接进入赠送金，无法转入充值余额")
 }
 
 func (user *User) prepareForInsert(tx *gorm.DB) error {
@@ -638,7 +622,8 @@ func (user *User) Insert(inviterId int) error {
 			if err := user.prepareForInsert(tx); err != nil {
 				return err
 			}
-			user.Quota = common.QuotaForNewUser
+			user.Quota = 0
+			user.GiftQuota = common.GiftQuotaForNewUser
 			user.AffCode = common.GetRandomString(4)
 
 			// 初始化用户设置，包括默认的边栏配置
@@ -674,18 +659,19 @@ func (user *User) finishInsert(inviterId int) {
 		}
 	}
 
-	if common.QuotaForNewUser > 0 {
-		RecordLog(user.Id, LogTypeSystem, fmt.Sprintf("新用户注册赠送 %s", logger.LogQuota(common.QuotaForNewUser)))
+	if common.GiftQuotaForNewUser > 0 {
+		RecordLog(user.Id, LogTypeSystem, fmt.Sprintf("新用户注册赠送金 %s", logger.LogQuota(common.GiftQuotaForNewUser)))
 	}
 	if inviterId != 0 && operation_setting.IsPaymentComplianceConfirmed() {
-		if common.QuotaForInvitee > 0 {
-			_ = IncreaseUserQuota(user.Id, common.QuotaForInvitee, true)
-			RecordLog(user.Id, LogTypeSystem, fmt.Sprintf("使用邀请码赠送 %s", logger.LogQuota(common.QuotaForInvitee)))
+		amount := common.GiftQuotaForInviter
+		if amount <= 0 {
+			amount = common.QuotaForInviter
 		}
-		if common.QuotaForInviter > 0 {
-			//_ = IncreaseUserQuota(inviterId, common.QuotaForInviter)
-			RecordLog(inviterId, LogTypeSystem, fmt.Sprintf("邀请用户赠送 %s", logger.LogQuota(common.QuotaForInviter)))
+		if amount > 0 {
+			RecordLog(inviterId, LogTypeSystem, fmt.Sprintf("邀请用户赠送金 %s", logger.LogQuota(amount)))
 			_ = inviteUser(inviterId)
+		} else {
+			_ = inviteUser(inviterId) // still bump aff_count
 		}
 	}
 }
@@ -702,7 +688,8 @@ func (user *User) InsertWithTx(tx *gorm.DB, inviterId int) error {
 		if err := user.prepareForInsert(tx); err != nil {
 			return err
 		}
-		user.Quota = common.QuotaForNewUser
+		user.Quota = 0
+		user.GiftQuota = common.GiftQuotaForNewUser
 		user.AffCode = common.GetRandomString(4)
 
 		// 初始化用户设置
@@ -731,18 +718,18 @@ func (user *User) FinalizeOAuthUserCreation(inviterId int) {
 		}
 	}
 
-	if common.QuotaForNewUser > 0 {
-		RecordLog(user.Id, LogTypeSystem, fmt.Sprintf("新用户注册赠送 %s", logger.LogQuota(common.QuotaForNewUser)))
+	if common.GiftQuotaForNewUser > 0 {
+		RecordLog(user.Id, LogTypeSystem, fmt.Sprintf("新用户注册赠送金 %s", logger.LogQuota(common.GiftQuotaForNewUser)))
 	}
 	if inviterId != 0 && operation_setting.IsPaymentComplianceConfirmed() {
-		if common.QuotaForInvitee > 0 {
-			_ = IncreaseUserQuota(user.Id, common.QuotaForInvitee, true)
-			RecordLog(user.Id, LogTypeSystem, fmt.Sprintf("使用邀请码赠送 %s", logger.LogQuota(common.QuotaForInvitee)))
+		amount := common.GiftQuotaForInviter
+		if amount <= 0 {
+			amount = common.QuotaForInviter
 		}
-		if common.QuotaForInviter > 0 {
-			RecordLog(inviterId, LogTypeSystem, fmt.Sprintf("邀请用户赠送 %s", logger.LogQuota(common.QuotaForInviter)))
-			_ = inviteUser(inviterId)
+		if amount > 0 {
+			RecordLog(inviterId, LogTypeSystem, fmt.Sprintf("邀请用户赠送金 %s", logger.LogQuota(amount)))
 		}
+		_ = inviteUser(inviterId)
 	}
 }
 
@@ -1315,6 +1302,61 @@ func decreaseUserQuota(id int, quota int) (err error) {
 		return err
 	}
 	return err
+}
+
+func IncreaseUserGiftQuota(id int, quota int) (err error) {
+	if quota < 0 {
+		return errors.New("quota 不能为负数！")
+	}
+	if quota == 0 {
+		return nil
+	}
+	if err = DB.Model(&User{}).Where("id = ?", id).Update("gift_quota", gorm.Expr("gift_quota + ?", quota)).Error; err != nil {
+		return err
+	}
+	gopool.Go(func() {
+		if e := cacheIncrUserGiftQuota(id, int64(quota)); e != nil {
+			common.SysLog("failed to increase user gift quota cache: " + e.Error())
+		}
+	})
+	return nil
+}
+
+func DecreaseUserGiftQuota(id int, quota int) (err error) {
+	if quota < 0 {
+		return errors.New("quota 不能为负数！")
+	}
+	if quota == 0 {
+		return nil
+	}
+	if err = DB.Model(&User{}).Where("id = ?", id).Update("gift_quota", gorm.Expr("gift_quota - ?", quota)).Error; err != nil {
+		return err
+	}
+	gopool.Go(func() {
+		if e := cacheIncrUserGiftQuota(id, -int64(quota)); e != nil {
+			common.SysLog("failed to decrease user gift quota cache: " + e.Error())
+		}
+	})
+	return nil
+}
+
+func GetUserGiftQuota(id int, fromDB bool) (quota int, err error) {
+	if !fromDB && common.RedisEnabled {
+		if cache, e := GetUserCache(id); e == nil {
+			return cache.GiftQuota, nil
+		}
+	}
+	err = DB.Model(&User{}).Where("id = ?", id).Select("gift_quota").Find(&quota).Error
+	return quota, err
+}
+
+func GetUserWalletBalance(id int, fromDB bool) (paid int, gift int, err error) {
+	paid, err = GetUserQuota(id, fromDB)
+	if err != nil {
+		return 0, 0, err
+	}
+	gift, err = GetUserGiftQuota(id, fromDB)
+	return paid, gift, err
 }
 
 func DeltaUpdateUserQuota(id int, delta int) (err error) {

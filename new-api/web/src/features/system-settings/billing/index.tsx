@@ -26,6 +26,8 @@ import {
 
 const defaultBillingSettings: BillingSettings = {
   QuotaForNewUser: 0,
+  GiftQuotaForNewUser: 5_000_000,
+  GiftQuotaForInviter: 1_500_000,
   PreConsumedQuota: 0,
   QuotaForInviter: 0,
   QuotaForInvitee: 0,

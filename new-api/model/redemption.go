@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"strconv"
+	"strings"
 
 	"github.com/QuantumNous/new-api/common"
 	"github.com/QuantumNous/new-api/logger"
@@ -18,6 +19,7 @@ type Redemption struct {
 	Status       int            `json:"status" gorm:"default:1"`
 	Name         string         `json:"name" gorm:"index"`
 	Quota        int            `json:"quota" gorm:"default:100"`
+	CreditWallet string         `json:"credit_wallet" gorm:"type:varchar(16);default:'paid';column:credit_wallet"` // paid | gift
 	CreatedTime  int64          `json:"created_time" gorm:"bigint"`
 	RedeemedTime int64          `json:"redeemed_time" gorm:"bigint"`
 	Count        int            `json:"count" gorm:"-:all"` // only for api request
@@ -175,14 +177,24 @@ func Redeem(key string, userId int) (quota int, err error) {
 		if result.RowsAffected == 0 {
 			return errors.New("该兑换码已被使用")
 		}
+		wallet := strings.ToLower(strings.TrimSpace(redemption.CreditWallet))
+		if wallet == "gift" {
+			return tx.Model(&User{}).Where("id = ?", userId).Update("gift_quota", gorm.Expr("gift_quota + ?", redemption.Quota)).Error
+		}
 		return tx.Model(&User{}).Where("id = ?", userId).Update("quota", gorm.Expr("quota + ?", redemption.Quota)).Error
 	})
 	if err != nil {
 		common.SysError("redemption failed: " + err.Error())
 		return 0, ErrRedeemFailed
 	}
-	syncCreditUserQuotaCache(userId, redemption.Quota, "redemption")
-	RecordLog(userId, LogTypeTopup, fmt.Sprintf("通过兑换码充值 %s，兑换码ID %d", logger.LogQuota(redemption.Quota), redemption.Id))
+	wallet := strings.ToLower(strings.TrimSpace(redemption.CreditWallet))
+	if wallet == "gift" {
+		syncCreditUserGiftQuotaCache(userId, redemption.Quota, "gift redemption")
+		RecordLog(userId, LogTypeTopup, fmt.Sprintf("通过体验码充值赠送金 %s，兑换码ID %d", logger.LogQuota(redemption.Quota), redemption.Id))
+	} else {
+		syncCreditUserQuotaCache(userId, redemption.Quota, "redemption")
+		RecordLog(userId, LogTypeTopup, fmt.Sprintf("通过兑换码充值 %s，兑换码ID %d", logger.LogQuota(redemption.Quota), redemption.Id))
+	}
 	return redemption.Quota, nil
 }
 
@@ -200,7 +212,7 @@ func (redemption *Redemption) SelectUpdate() error {
 // Update Make sure your token's fields is completed, because this will update non-zero values
 func (redemption *Redemption) Update() error {
 	var err error
-	err = DB.Model(redemption).Select("name", "status", "quota", "redeemed_time", "expired_time").Updates(redemption).Error
+	err = DB.Model(redemption).Select("name", "status", "quota", "credit_wallet", "redeemed_time", "expired_time").Updates(redemption).Error
 	return err
 }
 

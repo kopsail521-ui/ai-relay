@@ -39,6 +39,43 @@ end
 redis.call('HINCRBY', KEYS[1], 'Quota', tonumber(ARGV[1]))
 return 1`
 
+const userGiftQuotaDeltaScript = `
+if tonumber(redis.call('HGET', KEYS[1], 'Id') or '0') ~= tonumber(ARGV[2])
+  or tonumber(redis.call('HGET', KEYS[1], 'CacheSchema') or '0') ~= tonumber(ARGV[3])
+  or redis.call('HEXISTS', KEYS[1], 'GiftQuota') == 0 then
+  return -1
+end
+redis.call('HINCRBY', KEYS[1], 'GiftQuota', tonumber(ARGV[1]))
+return 1`
+
+// Prefer gift first, then paid. Returns giftUsed via positive return (>=0), or -1 miss / encoding.
+// Return value: giftUsed + 1 when OK (so 0 gift → return 1); 0 = insufficient; -1 = miss.
+const userWalletSplitReserveScript = `
+if tonumber(redis.call('HGET', KEYS[1], 'Id') or '0') ~= tonumber(ARGV[2])
+  or tonumber(redis.call('HGET', KEYS[1], 'CacheSchema') or '0') ~= tonumber(ARGV[3])
+  or redis.call('HEXISTS', KEYS[1], 'Quota') == 0
+  or redis.call('HEXISTS', KEYS[1], 'GiftQuota') == 0 then
+  return -1
+end
+local amount = tonumber(ARGV[1])
+local gift = tonumber(redis.call('HGET', KEYS[1], 'GiftQuota')) or 0
+local paid = tonumber(redis.call('HGET', KEYS[1], 'Quota')) or 0
+if gift + paid < amount then
+  return 0
+end
+local fromGift = gift
+if fromGift > amount then
+  fromGift = amount
+end
+local fromPaid = amount - fromGift
+if fromGift > 0 then
+  redis.call('HINCRBY', KEYS[1], 'GiftQuota', -fromGift)
+end
+if fromPaid > 0 then
+  redis.call('HINCRBY', KEYS[1], 'Quota', -fromPaid)
+end
+return fromGift + 1`
+
 const tokenQuotaReserveScript = `
 if tonumber(redis.call('HGET', KEYS[1], 'Id') or '0') ~= tonumber(ARGV[2])
   or redis.call('HEXISTS', KEYS[1], 'RemainQuota') == 0
@@ -89,6 +126,28 @@ func cacheApplyUserQuotaDelta(userID int, delta int64) (cacheQuotaResult, error)
 	result, err := common.RDB.Eval(context.Background(), userQuotaDeltaScript,
 		[]string{getUserCacheKey(userID)}, delta, userID, userCacheSchemaVersion).Int()
 	return quotaResultFromLua(result, err)
+}
+
+func cacheApplyUserGiftQuotaDelta(userID int, delta int64) (cacheQuotaResult, error) {
+	result, err := common.RDB.Eval(context.Background(), userGiftQuotaDeltaScript,
+		[]string{getUserCacheKey(userID)}, delta, userID, userCacheSchemaVersion).Int()
+	return quotaResultFromLua(result, err)
+}
+
+func cacheTryReserveUserWalletSplit(userID int, amount int64) (giftUsed int, result cacheQuotaResult, err error) {
+	raw, err := common.RDB.Eval(context.Background(), userWalletSplitReserveScript,
+		[]string{getUserCacheKey(userID)}, amount, userID, userCacheSchemaVersion).Int()
+	if err != nil {
+		return 0, cacheQuotaMiss, err
+	}
+	switch {
+	case raw == -1:
+		return 0, cacheQuotaMiss, nil
+	case raw == 0:
+		return 0, cacheQuotaInsufficient, nil
+	default:
+		return raw - 1, cacheQuotaOK, nil
+	}
 }
 
 func cacheTryReserveTokenQuota(id int, key string, amount int64) (cacheQuotaResult, error) {
@@ -196,6 +255,110 @@ func TryReserveUserQuota(id int, quota int) (bool, error) {
 		return false, err
 	}
 	return true, nil
+}
+
+// TryReserveUserWallet reserves amount preferring gift_quota then paid quota when preferGift.
+// When preferGift is false, only paid quota is used (same as TryReserveUserQuota).
+func TryReserveUserWallet(id int, amount int, preferGift bool) (giftUsed int, paidUsed int, ok bool, err error) {
+	if amount < 0 {
+		return 0, 0, false, errors.New("quota 不能为负数！")
+	}
+	if amount == 0 {
+		return 0, 0, true, nil
+	}
+	if !preferGift {
+		ok, err = TryReserveUserQuota(id, amount)
+		if ok {
+			return 0, amount, true, nil
+		}
+		return 0, 0, false, err
+	}
+	if !common.RedisEnabled {
+		return reserveUserWalletSplitDB(id, amount)
+	}
+
+	giftUsed, result, err := cacheTryReserveUserWalletSplit(id, int64(amount))
+	if err == nil && result == cacheQuotaMiss {
+		if _, hydrateErr := GetUserCache(id); hydrateErr == nil {
+			giftUsed, result, err = cacheTryReserveUserWalletSplit(id, int64(amount))
+		}
+	}
+	if err != nil || result == cacheQuotaMiss {
+		if err != nil {
+			common.SysLog("user wallet split cache reserve unavailable, falling back to database: " + err.Error())
+		}
+		return reserveUserWalletSplitDB(id, amount)
+	}
+	if result == cacheQuotaInsufficient {
+		return 0, 0, false, nil
+	}
+	paidUsed = amount - giftUsed
+	if giftUsed > 0 {
+		if err = persistUserGiftQuotaDelta(id, -giftUsed); err != nil {
+			_, _ = cacheApplyUserGiftQuotaDelta(id, int64(giftUsed))
+			if paidUsed > 0 {
+				_, _ = cacheApplyUserQuotaDelta(id, int64(paidUsed))
+			}
+			return 0, 0, false, err
+		}
+	}
+	if paidUsed > 0 {
+		if err = persistUserQuotaDelta(id, -paidUsed); err != nil {
+			_, _ = cacheApplyUserQuotaDelta(id, int64(paidUsed))
+			if giftUsed > 0 {
+				_ = persistUserGiftQuotaDelta(id, giftUsed)
+				_, _ = cacheApplyUserGiftQuotaDelta(id, int64(giftUsed))
+			}
+			return 0, 0, false, err
+		}
+	}
+	return giftUsed, paidUsed, true, nil
+}
+
+func persistUserGiftQuotaDelta(id int, delta int) error {
+	result := DB.Model(&User{}).Where("id = ?", id).Update("gift_quota", gorm.Expr("gift_quota + ?", delta))
+	if result.Error != nil {
+		return result.Error
+	}
+	if result.RowsAffected != 1 {
+		return gorm.ErrRecordNotFound
+	}
+	return nil
+}
+
+func reserveUserWalletSplitDB(id int, amount int) (giftUsed int, paidUsed int, ok bool, err error) {
+	err = DB.Transaction(func(tx *gorm.DB) error {
+		var u User
+		if e := lockForUpdate(tx).Select("id", "quota", "gift_quota").First(&u, id).Error; e != nil {
+			return e
+		}
+		if u.GiftQuota+u.Quota < amount {
+			ok = false
+			return nil
+		}
+		giftUsed = u.GiftQuota
+		if giftUsed > amount {
+			giftUsed = amount
+		}
+		paidUsed = amount - giftUsed
+		updates := map[string]interface{}{}
+		if giftUsed > 0 {
+			updates["gift_quota"] = gorm.Expr("gift_quota - ?", giftUsed)
+		}
+		if paidUsed > 0 {
+			updates["quota"] = gorm.Expr("quota - ?", paidUsed)
+		}
+		if len(updates) == 0 {
+			ok = true
+			return nil
+		}
+		if e := tx.Model(&User{}).Where("id = ?", id).Updates(updates).Error; e != nil {
+			return e
+		}
+		ok = true
+		return nil
+	})
+	return giftUsed, paidUsed, ok, err
 }
 
 // TryReserveTokenQuota atomically checks and deducts a token quota. Unlimited

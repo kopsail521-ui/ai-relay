@@ -76,6 +76,7 @@ function redemption(id: number, quota = 500001): Redemption {
     key: `key-${id}`,
     status: 1,
     quota,
+    credit_wallet: 'paid',
     created_time: 1,
     redeemed_time: 0,
     expired_time: 0,

@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+# Deploy dual-wallet gift credits (new-api rebuild + restart).
+set -euo pipefail
+cd /opt/ai-relay
+sudo git pull --ff-only origin main
+sudo docker compose build new-api
+sudo docker compose up -d new-api
+sleep 3
+# Migration runs on startup (aff_quota → gift_quota).
+curl -sS "http://127.0.0.1:3000/api/status" | head -c 200 || true
+echo
+echo DONE_WALLET_GIFT_CREDITS

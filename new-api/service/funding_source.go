@@ -33,8 +33,11 @@ type FundingSource interface {
 var ErrInsufficientWalletQuota = errors.New("wallet quota insufficient")
 
 type WalletFunding struct {
-	userId   int
-	consumed int // 实际预扣的用户额度
+	userId     int
+	preferGift  bool // free-pool models: gift first, then paid
+	consumed    int  // total pre-consumed (gift + paid)
+	giftUsed    int
+	paidUsed    int
 }
 
 func (w *WalletFunding) Source() string { return BillingSourceWallet }
@@ -43,13 +46,15 @@ func (w *WalletFunding) PreConsume(amount int) error {
 	if amount <= 0 {
 		return nil
 	}
-	reserved, err := model.TryReserveUserQuota(w.userId, amount)
+	gift, paid, ok, err := model.TryReserveUserWallet(w.userId, amount, w.preferGift)
 	if err != nil {
 		return err
 	}
-	if !reserved {
+	if !ok {
 		return ErrInsufficientWalletQuota
 	}
+	w.giftUsed = gift
+	w.paidUsed = paid
 	w.consumed = amount
 	return nil
 }
@@ -59,18 +64,85 @@ func (w *WalletFunding) Settle(delta int) error {
 		return nil
 	}
 	if delta > 0 {
-		return model.DecreaseUserQuota(w.userId, delta, false)
+		return w.debitMore(delta)
 	}
-	return model.IncreaseUserQuota(w.userId, -delta, false)
+	return w.creditBack(-delta)
+}
+
+func (w *WalletFunding) debitMore(amount int) error {
+	if amount <= 0 {
+		return nil
+	}
+	if w.preferGift {
+		gift, paid, ok, err := model.TryReserveUserWallet(w.userId, amount, true)
+		if err != nil {
+			return err
+		}
+		if !ok {
+			// Match prior paid-wallet Settle: unconditional debit can go negative on paid only.
+			if err := model.DecreaseUserQuota(w.userId, amount, false); err != nil {
+				return err
+			}
+			w.paidUsed += amount
+			w.consumed += amount
+			return nil
+		}
+		w.giftUsed += gift
+		w.paidUsed += paid
+		w.consumed += amount
+		return nil
+	}
+	if err := model.DecreaseUserQuota(w.userId, amount, false); err != nil {
+		return err
+	}
+	w.paidUsed += amount
+	w.consumed += amount
+	return nil
+}
+
+func (w *WalletFunding) creditBack(amount int) error {
+	if amount <= 0 {
+		return nil
+	}
+	// Reverse spend order: refund paid first, then gift.
+	paidRefund := amount
+	if paidRefund > w.paidUsed {
+		paidRefund = w.paidUsed
+	}
+	giftRefund := amount - paidRefund
+	if giftRefund > w.giftUsed {
+		giftRefund = w.giftUsed
+	}
+	leftover := amount - paidRefund - giftRefund
+	if paidRefund > 0 {
+		if err := model.IncreaseUserQuota(w.userId, paidRefund, false); err != nil {
+			return err
+		}
+		w.paidUsed -= paidRefund
+		w.consumed -= paidRefund
+	}
+	if giftRefund > 0 {
+		if err := model.IncreaseUserGiftQuota(w.userId, giftRefund); err != nil {
+			return err
+		}
+		w.giftUsed -= giftRefund
+		w.consumed -= giftRefund
+	}
+	if leftover > 0 {
+		// Over-refund safety: put remainder into paid wallet.
+		if err := model.IncreaseUserQuota(w.userId, leftover, false); err != nil {
+			return err
+		}
+		w.consumed -= leftover
+	}
+	return nil
 }
 
 func (w *WalletFunding) Refund() error {
 	if w.consumed <= 0 {
 		return nil
 	}
-	// IncreaseUserQuota 是 quota += N 的非幂等操作，不能重试，否则会多退额度。
-	// 订阅的 RefundSubscriptionPreConsume 有 requestId 幂等保护所以可以重试。
-	return model.IncreaseUserQuota(w.userId, w.consumed, false)
+	return w.creditBack(w.consumed)
 }
 
 // ---------------------------------------------------------------------------

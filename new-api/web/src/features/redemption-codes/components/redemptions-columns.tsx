@@ -82,6 +82,20 @@ export function useRedemptionsColumns(): ColumnDef<Redemption>[] {
       size: 180,
     },
     {
+      accessorKey: 'credit_wallet',
+      header: t('Wallet'),
+      meta: { mobileHidden: true },
+      cell: ({ row }) => {
+        const wallet = (row.original.credit_wallet || 'paid') as string
+        return (
+          <span className='text-muted-foreground text-sm'>
+            {wallet === 'gift' ? t('Gift credits') : t('Recharge')}
+          </span>
+        )
+      },
+      size: 110,
+    },
+    {
       accessorKey: 'status',
       header: t('Status'),
       meta: { mobileBadge: true },

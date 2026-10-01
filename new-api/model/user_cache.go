@@ -11,13 +11,14 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-const userCacheSchemaVersion = 2
+const userCacheSchemaVersion = 3
 
 type UserBase struct {
 	Id          int    `json:"id"`
 	Group       string `json:"group"`
 	Email       string `json:"email"`
 	Quota       int    `json:"quota"`
+	GiftQuota   int    `json:"gift_quota"`
 	Status      int    `json:"status"`
 	Role        int    `json:"role"`
 	Username    string `json:"username"`
@@ -33,6 +34,24 @@ func (user *UserBase) WriteContext(c *gin.Context) {
 	common.SetContextKey(c, constant.ContextKeyUserEmail, user.Email)
 	common.SetContextKey(c, constant.ContextKeyUserName, user.Username)
 	common.SetContextKey(c, constant.ContextKeyUserSetting, user.GetSetting())
+}
+
+// syncCreditUserGiftQuotaCache mirrors syncCreditUserQuotaCache for gift wallet.
+func syncCreditUserGiftQuotaCache(userId int, quota int, operation string) {
+	if quota <= 0 {
+		return
+	}
+	if err := cacheIncrUserGiftQuota(userId, int64(quota)); err != nil {
+		common.SysLog(fmt.Sprintf("failed to sync %s credit to user gift quota cache: %s", operation, err.Error()))
+	}
+}
+
+func cacheIncrUserGiftQuota(userId int, delta int64) error {
+	if !common.RedisEnabled {
+		return nil
+	}
+	_, err := cacheApplyUserGiftQuotaDelta(userId, delta)
+	return err
 }
 
 func (user *UserBase) GetSetting() dto.UserSetting {

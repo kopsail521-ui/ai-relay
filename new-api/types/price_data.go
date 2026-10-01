@@ -15,6 +15,7 @@ type GroupRatioInfo struct {
 
 type PriceData struct {
 	FreeModel            bool
+	PreferGiftWallet     bool // free-pool IDs: debit gift_quota first, then paid quota
 	ModelPrice           float64
 	ModelRatio           float64
 	CompletionRatio      float64

@@ -60,6 +60,8 @@ const BILLING_SECTIONS = [
       <QuotaSettingsSection
         defaultValues={{
           QuotaForNewUser: settings.QuotaForNewUser,
+          GiftQuotaForNewUser: settings.GiftQuotaForNewUser,
+          GiftQuotaForInviter: settings.GiftQuotaForInviter,
           PreConsumedQuota: settings.PreConsumedQuota,
           QuotaForInviter: settings.QuotaForInviter,
           QuotaForInvitee: settings.QuotaForInvitee,

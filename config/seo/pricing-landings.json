@@ -609,7 +609,7 @@
       "rows": [
         {
           "model": "gpt-6-astra",
-          "official": "OpenAI gpt-6-astra list — confirm on openai.com/api/pricing",
+          "official": "OpenAI gpt-6-astra list — confirm on OpenAI public pricing",
           "keyo": "~$1.84 / $9.19 per 1M in/out",
           "note": "Same model string on Keyo · /model/gpt-6-astra"
         },

@@ -112,8 +112,9 @@ function linkifySitePaths(raw) {
     ])
     .sort((a, b) => b.length - a.length)
     .map((p) => p.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"));
+  // Do not linkify "/pricing" inside foreign paths like openai.com/api/pricing
   const re = new RegExp(
-    `(\\/brand\\/blog\\/article\\/[A-Za-z0-9][A-Za-z0-9_-]*\\/?|\\/(?:pricing|model)\\/[A-Za-z0-9](?:[A-Za-z0-9._-]*[A-Za-z0-9_-])?|${literals.join("|")}|\\/pricing)(?![A-Za-z0-9_/-])`,
+    `(\\/brand\\/blog\\/article\\/[A-Za-z0-9][A-Za-z0-9_-]*\\/?|\\/(?:pricing|model)\\/[A-Za-z0-9](?:[A-Za-z0-9._-]*[A-Za-z0-9_-])?|${literals.join("|")}|(?<![A-Za-z0-9./])\\/pricing)(?![A-Za-z0-9_/-])`,
     "g"
   );
   return s.replace(re, (m) => `<a href="${m}">${m}</a>`);

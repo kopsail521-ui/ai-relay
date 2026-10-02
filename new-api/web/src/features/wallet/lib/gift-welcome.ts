@@ -19,6 +19,9 @@ For commercial licensing, please contact support@quantumnous.com
 
 const STORAGE_PREFIX = 'keyo.giftWelcome.v1.'
 
+/** Live-bundle marker — must appear in deployed /static/js/*.js */
+export const GIFT_WELCOME_BUILD_MARKER = '__KEYO_GIFT_WELCOME_V3__'
+
 export function giftWelcomeStorageKey(userId: number): string {
   return `${STORAGE_PREFIX}${userId}`
 }

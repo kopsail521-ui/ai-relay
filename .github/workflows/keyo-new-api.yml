@@ -59,8 +59,10 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+          # Stale GHA layers previously shipped i18n without GiftWelcomeDialog.
+          no-cache: true
+          build-args: |
+            WEB_CACHEBUST=${{ github.sha }}
 
       - name: Make the package public
         continue-on-error: true

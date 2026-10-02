@@ -43,3 +43,8 @@
 		rewrite * /grok-api-pricing.html
 		file_server
 	}
+	handle /openai-api-alternative {
+		root * __AI_RELAY_ROOT__/static/seo
+		rewrite * /openai-api-alternative.html
+		file_server
+	}

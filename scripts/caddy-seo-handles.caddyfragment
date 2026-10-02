@@ -73,6 +73,16 @@
 		rewrite * /ai-avatar-video-generator.html
 		file_server
 	}
+	handle /grok-api-pricing {
+		root * /opt/ai-relay/static/seo
+		rewrite * /grok-api-pricing.html
+		file_server
+	}
+	handle /openai-api-alternative {
+		root * /opt/ai-relay/static/seo
+		rewrite * /openai-api-alternative.html
+		file_server
+	}
 	handle /about {
 		root * /opt/ai-relay/static/seo
 		rewrite * /about.html

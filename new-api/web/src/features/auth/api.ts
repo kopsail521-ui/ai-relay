@@ -21,7 +21,7 @@ import axios from 'axios'
 import { api, refreshAuthentication, type RefreshOutcome } from '@/lib/api'
 import { useAuthStore } from '@/stores/auth-store'
 
-import { getAffiliateCode } from './lib/storage'
+import { getAffiliateCode, saveAffiliateCode } from './lib/storage'
 import type { TelegramAuthorization } from './lib/telegram-login'
 import type {
   LoginPayload,
@@ -142,6 +142,16 @@ export async function createOAuthFlow(
   provider: string,
   intent: 'login' | 'bind'
 ): Promise<string> {
+  // Invite links land on /sign-up?aff=…; also accept ?aff= on the current page
+  // in case the user clicks Google before the sign-up effect persists localStorage.
+  if (intent === 'login' && typeof window !== 'undefined') {
+    const affFromUrl = new URLSearchParams(window.location.search)
+      .get('aff')
+      ?.trim()
+    if (affFromUrl) {
+      saveAffiliateCode(affFromUrl)
+    }
+  }
   const aff = intent === 'login' ? getAffiliateCode() : ''
   const res = await api.post(
     '/api/oauth/state',

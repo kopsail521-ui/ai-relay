@@ -47,6 +47,7 @@ import { loginFormSchema } from '@/features/auth/constants'
 import { useAuthRedirect } from '@/features/auth/hooks/use-auth-redirect'
 import { useTurnstile } from '@/features/auth/hooks/use-turnstile'
 import { remindLegalConsent } from '@/features/auth/lib/legal-consent-remind'
+import { saveAffiliateCode } from '@/features/auth/lib/storage'
 import { beginPasskeyLogin, finishPasskeyLogin } from '@/features/auth/passkey'
 import type { AuthFormProps } from '@/features/auth/types'
 import { useStatus } from '@/hooks/use-status'
@@ -117,6 +118,13 @@ export function UserAuthForm({
   )
   const hasAlternativeLogin =
     passkeyLoginEnabled || hasWeChatLogin || hasOAuthLogin
+
+  useEffect(() => {
+    const aff = new URLSearchParams(window.location.search).get('aff')?.trim()
+    if (aff) {
+      saveAffiliateCode(aff)
+    }
+  }, [])
 
   useEffect(() => {
     if (requiresLegalConsent) {

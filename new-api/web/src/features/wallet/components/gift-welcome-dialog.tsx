@@ -18,7 +18,7 @@ For commercial licensing, please contact support@quantumnous.com
 */
 import { useNavigate } from '@tanstack/react-router'
 import { Gift } from 'lucide-react'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { Button } from '@/components/ui/button'
@@ -47,6 +47,26 @@ type SelfPayload = {
   request_count?: number
 }
 
+async function loadSelfWithRetry(attempts = 4): Promise<SelfPayload | null> {
+  let lastError: unknown
+  for (let i = 0; i < attempts; i++) {
+    try {
+      const res = await getSelf()
+      if (res?.success && res.data) {
+        return res.data as SelfPayload
+      }
+    } catch (error) {
+      lastError = error
+    }
+    await new Promise((r) => setTimeout(r, 250 * (i + 1)))
+  }
+  if (lastError) {
+    // eslint-disable-next-line no-console
+    console.warn('gift welcome: failed to load self', lastError)
+  }
+  return null
+}
+
 export function GiftWelcomeDialog() {
   const { t } = useTranslation()
   const navigate = useNavigate()
@@ -54,59 +74,62 @@ export function GiftWelcomeDialog() {
   const setUser = useAuthStore((s) => s.auth.setUser)
   const [open, setOpen] = useState(false)
   const [giftQuota, setGiftQuota] = useState(0)
+  const shownRef = useRef(false)
+  const runIdRef = useRef(0)
 
   const dismiss = useCallback((id: number) => {
     markGiftWelcomeSeen(id)
+    shownRef.current = false
     setOpen(false)
   }, [])
 
   useEffect(() => {
     if (!userId) return
 
-    let cancelled = false
+    const runId = ++runIdRef.current
     let openTimer: ReturnType<typeof setTimeout> | undefined
 
     async function check() {
-      // Always load /api/user/self — OAuth login bundles can race the layout mount.
-      let snapshot: SelfPayload = { id: userId }
-      try {
-        const res = await getSelf()
-        if (cancelled) return
-        if (res?.success && res.data) {
-          const data = res.data as SelfPayload
-          snapshot = {
+      const data = await loadSelfWithRetry()
+      if (runId !== runIdRef.current) return
+
+      const authUser = useAuthStore.getState().auth.user
+      const snapshot: SelfPayload = data
+        ? {
             id: data.id ?? userId,
             gift_quota: data.gift_quota,
             used_quota: data.used_quota,
             request_count: data.request_count,
           }
-          const authUser = useAuthStore.getState().auth.user
-          if (authUser && authUser.id === userId) {
-            setUser({
-              ...authUser,
-              gift_quota: data.gift_quota,
-              used_quota: data.used_quota ?? authUser.used_quota,
-              request_count: data.request_count ?? authUser.request_count,
-            })
+        : {
+            id: userId,
+            gift_quota: authUser?.gift_quota,
+            used_quota: authUser?.used_quota,
+            request_count: authUser?.request_count,
           }
-        }
-      } catch {
-        return
+
+      if (data && authUser && authUser.id === userId) {
+        setUser({
+          ...authUser,
+          gift_quota: data.gift_quota,
+          used_quota: data.used_quota ?? authUser.used_quota,
+          request_count: data.request_count ?? authUser.request_count,
+        })
       }
 
-      if (cancelled) return
       if (!shouldOfferGiftWelcome(snapshot)) return
 
       setGiftQuota(Number(snapshot.gift_quota ?? 0))
-      // Defer open until after OAuth → dashboard navigation settles.
+      // Wait for OAuth → dashboard navigation / layout settle.
       openTimer = setTimeout(() => {
-        if (!cancelled) setOpen(true)
-      }, 400)
+        if (runId !== runIdRef.current) return
+        shownRef.current = true
+        setOpen(true)
+      }, 600)
     }
 
     void check()
     return () => {
-      cancelled = true
       if (openTimer) clearTimeout(openTimer)
     }
   }, [userId, setUser])
@@ -117,8 +140,17 @@ export function GiftWelcomeDialog() {
     <Dialog
       open={open}
       onOpenChange={(next) => {
-        if (!next && userId) dismiss(userId)
-        else setOpen(next)
+        if (next) {
+          setOpen(true)
+          return
+        }
+        // Only persist "seen" after the dialog was actually shown.
+        // Base UI may emit false during mount/unmount without user action.
+        if (shownRef.current && userId) {
+          dismiss(userId)
+        } else {
+          setOpen(false)
+        }
       }}
     >
       <DialogContent className='sm:max-w-md' showCloseButton>

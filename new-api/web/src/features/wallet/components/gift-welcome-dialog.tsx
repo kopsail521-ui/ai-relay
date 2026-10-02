@@ -18,7 +18,7 @@ For commercial licensing, please contact support@quantumnous.com
 */
 import { useNavigate } from '@tanstack/react-router'
 import { Gift } from 'lucide-react'
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { Button } from '@/components/ui/button'
@@ -54,45 +54,34 @@ export function GiftWelcomeDialog() {
   const setUser = useAuthStore((s) => s.auth.setUser)
   const [open, setOpen] = useState(false)
   const [giftQuota, setGiftQuota] = useState(0)
-  const checkedForUser = useRef<number | null>(null)
 
-  const dismiss = useCallback(
-    (id: number) => {
-      markGiftWelcomeSeen(id)
-      setOpen(false)
-    },
-    []
-  )
+  const dismiss = useCallback((id: number) => {
+    markGiftWelcomeSeen(id)
+    setOpen(false)
+  }, [])
 
   useEffect(() => {
+    if (!userId) return
+
     let cancelled = false
+    let openTimer: ReturnType<typeof setTimeout> | undefined
 
     async function check() {
-      if (!userId) return
-      if (checkedForUser.current === userId) return
-      checkedForUser.current = userId
-
-      const authUser = useAuthStore.getState().auth.user
-      if (!authUser || authUser.id !== userId) return
-
-      let snapshot: SelfPayload = {
-        id: authUser.id,
-        gift_quota: authUser.gift_quota,
-        used_quota: authUser.used_quota,
-        request_count: authUser.request_count,
-      }
-
-      if (snapshot.gift_quota == null) {
-        try {
-          const res = await getSelf()
-          if (res?.success && res.data) {
-            const data = res.data as SelfPayload
-            snapshot = {
-              id: data.id ?? authUser.id,
-              gift_quota: data.gift_quota,
-              used_quota: data.used_quota,
-              request_count: data.request_count,
-            }
+      // Always load /api/user/self — OAuth login bundles can race the layout mount.
+      let snapshot: SelfPayload = { id: userId }
+      try {
+        const res = await getSelf()
+        if (cancelled) return
+        if (res?.success && res.data) {
+          const data = res.data as SelfPayload
+          snapshot = {
+            id: data.id ?? userId,
+            gift_quota: data.gift_quota,
+            used_quota: data.used_quota,
+            request_count: data.request_count,
+          }
+          const authUser = useAuthStore.getState().auth.user
+          if (authUser && authUser.id === userId) {
             setUser({
               ...authUser,
               gift_quota: data.gift_quota,
@@ -100,21 +89,25 @@ export function GiftWelcomeDialog() {
               request_count: data.request_count ?? authUser.request_count,
             })
           }
-        } catch {
-          checkedForUser.current = null
-          return
         }
+      } catch {
+        return
       }
 
       if (cancelled) return
       if (!shouldOfferGiftWelcome(snapshot)) return
+
       setGiftQuota(Number(snapshot.gift_quota ?? 0))
-      setOpen(true)
+      // Defer open until after OAuth → dashboard navigation settles.
+      openTimer = setTimeout(() => {
+        if (!cancelled) setOpen(true)
+      }, 400)
     }
 
     void check()
     return () => {
       cancelled = true
+      if (openTimer) clearTimeout(openTimer)
     }
   }, [userId, setUser])
 

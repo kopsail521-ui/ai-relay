@@ -41,7 +41,7 @@ export function markGiftWelcomeSeen(userId: number): void {
   }
 }
 
-/** New signup gift recipients: have gift credits and no usage yet. */
+/** New signup gift recipients: have gift credits and little/no usage yet. */
 export function shouldOfferGiftWelcome(user: {
   id?: number
   gift_quota?: number
@@ -52,8 +52,9 @@ export function shouldOfferGiftWelcome(user: {
   if (!id) return false
   if (hasSeenGiftWelcome(id)) return false
   const gift = Number(user.gift_quota ?? 0)
-  if (gift <= 0) return false
+  if (!(gift > 0)) return false
+  // Prefer unused accounts; still allow if they only opened console (0 usage).
   const used = Number(user.used_quota ?? 0)
-  const requests = Number(user.request_count ?? 0)
-  return used <= 0 && requests <= 0
+  if (used > 0) return false
+  return true
 }

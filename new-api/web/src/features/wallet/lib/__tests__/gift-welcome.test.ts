@@ -78,6 +78,17 @@ describe('gift-welcome', () => {
     ).toBe(false)
   })
 
+  it('allows gift users with request_count but zero used_quota', () => {
+    expect(
+      shouldOfferGiftWelcome({
+        id: 9,
+        gift_quota: 5_000_000,
+        used_quota: 0,
+        request_count: 3,
+      })
+    ).toBe(true)
+  })
+
   it('uses stable storage key', () => {
     expect(giftWelcomeStorageKey(42)).toBe('keyo.giftWelcome.v1.42')
   })

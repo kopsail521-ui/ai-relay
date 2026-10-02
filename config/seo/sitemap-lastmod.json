@@ -2,184 +2,184 @@
   "_note": "lastmod bumps only when page content hash changes.",
   "entries": {
     "https://www.keyoapi.xyz/": {
-      "hash": "2cddffa17cf48869",
-      "lastmod": "2026-10-01"
+      "hash": "408ad67a3f0e6ae6",
+      "lastmod": "2026-10-02"
     },
     "https://www.keyoapi.xyz/compare": {
-      "hash": "b335221accf39939",
-      "lastmod": "2026-10-01"
+      "hash": "6130f2a3d3e8e5de",
+      "lastmod": "2026-10-02"
     },
     "https://www.keyoapi.xyz/pricing-list": {
-      "hash": "d8a30a8d4d3c1b89",
-      "lastmod": "2026-10-01"
+      "hash": "b883503f508752df",
+      "lastmod": "2026-10-02"
     },
     "https://www.keyoapi.xyz/free-models": {
-      "hash": "8aa879b630d52fee",
-      "lastmod": "2026-10-01"
+      "hash": "d4f3a41ef2f7cc45",
+      "lastmod": "2026-10-02"
     },
     "https://www.keyoapi.xyz/models": {
-      "hash": "3b7704af69cf172c",
-      "lastmod": "2026-10-01"
+      "hash": "410ad09167f8da10",
+      "lastmod": "2026-10-02"
     },
     "https://www.keyoapi.xyz/gemini-api-pricing": {
-      "hash": "a4a57be0bb270603",
-      "lastmod": "2026-10-01"
+      "hash": "84408359229a7591",
+      "lastmod": "2026-10-02"
     },
     "https://www.keyoapi.xyz/deepseek-api-pricing": {
-      "hash": "2178b6ce8b855138",
-      "lastmod": "2026-10-01"
+      "hash": "d936a2b600861d73",
+      "lastmod": "2026-10-02"
     },
     "https://www.keyoapi.xyz/claude-api-pricing": {
-      "hash": "0fb272b65f0e7804",
-      "lastmod": "2026-10-01"
+      "hash": "3765cf2303e26cc8",
+      "lastmod": "2026-10-02"
     },
     "https://www.keyoapi.xyz/openai-api-pricing": {
-      "hash": "9f1296fb80644af6",
-      "lastmod": "2026-10-01"
+      "hash": "6645512dc39b0c7c",
+      "lastmod": "2026-10-02"
     },
     "https://www.keyoapi.xyz/remove-bg-api-alternative": {
-      "hash": "9e38d6a5f98dd0a9",
-      "lastmod": "2026-10-01"
+      "hash": "2aac43e2df74cabf",
+      "lastmod": "2026-10-02"
     },
     "https://www.keyoapi.xyz/tts-api": {
-      "hash": "76c6393e006cb749",
-      "lastmod": "2026-10-01"
+      "hash": "52c614c22d571bff",
+      "lastmod": "2026-10-02"
     },
     "https://www.keyoapi.xyz/voice-cloning-api": {
-      "hash": "14dc2de940a6e698",
-      "lastmod": "2026-10-01"
+      "hash": "38c0dca61ec432a6",
+      "lastmod": "2026-10-02"
     },
     "https://www.keyoapi.xyz/ai-avatar-video-generator": {
-      "hash": "aa1fcdba7a7e6117",
-      "lastmod": "2026-10-01"
+      "hash": "40dd8d3ec8b84266",
+      "lastmod": "2026-10-02"
     },
     "https://www.keyoapi.xyz/about": {
-      "hash": "1fe9577b97d1d588",
-      "lastmod": "2026-10-01"
+      "hash": "b0bc7f8fc6958877",
+      "lastmod": "2026-10-02"
     },
     "https://www.keyoapi.xyz/model/whisper-large-v3": {
-      "hash": "9388679408bf3c1b",
-      "lastmod": "2026-09-30"
+      "hash": "decb72de4dc293ec",
+      "lastmod": "2026-10-02"
     },
     "https://www.keyoapi.xyz/model/whisper-large-v3-turbo": {
-      "hash": "a9d503332ba10399",
-      "lastmod": "2026-09-30"
+      "hash": "a8f01d9adc77eeab",
+      "lastmod": "2026-10-02"
     },
     "https://www.keyoapi.xyz/model/claude-fable-5-1": {
-      "hash": "5c583c629567a9df",
-      "lastmod": "2026-09-30"
+      "hash": "e36fbf4af94d5d04",
+      "lastmod": "2026-10-02"
     },
     "https://www.keyoapi.xyz/model/claude-fable-5": {
-      "hash": "3af6dfea878a19d7",
-      "lastmod": "2026-09-30"
+      "hash": "95cb5debb9317941",
+      "lastmod": "2026-10-02"
     },
     "https://www.keyoapi.xyz/model/claude-opus-5": {
-      "hash": "c30167f7b5ac4cf9",
-      "lastmod": "2026-09-30"
+      "hash": "8e0902ccaddca72d",
+      "lastmod": "2026-10-02"
     },
     "https://www.keyoapi.xyz/model/claude-sonnet-5": {
-      "hash": "20ace596e6831cd8",
-      "lastmod": "2026-09-30"
+      "hash": "d8cbeedca1e9091f",
+      "lastmod": "2026-10-02"
     },
     "https://www.keyoapi.xyz/model/gpt-5.6-terra": {
-      "hash": "e34aa0669894f08c",
-      "lastmod": "2026-09-30"
+      "hash": "814f42d7b29f3185",
+      "lastmod": "2026-10-02"
     },
     "https://www.keyoapi.xyz/model/gpt-5.6-sol": {
-      "hash": "7fdfaed85f8b2441",
-      "lastmod": "2026-09-30"
+      "hash": "56d4fd723ab1278b",
+      "lastmod": "2026-10-02"
     },
     "https://www.keyoapi.xyz/model/gpt-5.6-luna": {
-      "hash": "36a635b6e2e2f7e4",
-      "lastmod": "2026-09-30"
+      "hash": "72301f1b9e59ecdf",
+      "lastmod": "2026-10-02"
     },
     "https://www.keyoapi.xyz/model/MinerU2.5-Pro": {
-      "hash": "eb1ccc4c5fa7d582",
-      "lastmod": "2026-09-30"
+      "hash": "bb3804f165713005",
+      "lastmod": "2026-10-02"
     },
     "https://www.keyoapi.xyz/model/Unlimited-OCR": {
-      "hash": "5e7b13e7ad0c6bd2",
-      "lastmod": "2026-09-30"
+      "hash": "36089b2e9ce04280",
+      "lastmod": "2026-10-02"
     },
     "https://www.keyoapi.xyz/model/UVDoc": {
-      "hash": "db82b94001fb3fa7",
-      "lastmod": "2026-09-30"
+      "hash": "dd2afe9ad6ee0afd",
+      "lastmod": "2026-10-02"
     },
     "https://www.keyoapi.xyz/model/Qwen3-TTS": {
-      "hash": "ea299a775de90ad6",
-      "lastmod": "2026-09-30"
+      "hash": "a55b887a9509d94b",
+      "lastmod": "2026-10-02"
     },
     "https://www.keyoapi.xyz/model/RMBG-2.0": {
-      "hash": "c9926a8114308fcd",
-      "lastmod": "2026-09-30"
+      "hash": "51f98abf8e65c27b",
+      "lastmod": "2026-10-02"
     },
     "https://www.keyoapi.xyz/model/VajraV1": {
-      "hash": "90c29027ef089fbe",
-      "lastmod": "2026-09-30"
+      "hash": "f6ec71e1a34e6516",
+      "lastmod": "2026-10-02"
     },
     "https://www.keyoapi.xyz/model/sam3": {
-      "hash": "d27da1b1b58f2516",
-      "lastmod": "2026-09-30"
+      "hash": "0c87a5884bedbf5e",
+      "lastmod": "2026-10-02"
     },
     "https://www.keyoapi.xyz/model/Real-ESRGAN": {
-      "hash": "d1a5ff9faac10d61",
-      "lastmod": "2026-09-30"
+      "hash": "58c75ec2f3092933",
+      "lastmod": "2026-10-02"
     },
     "https://www.keyoapi.xyz/model/AnimeSharp": {
-      "hash": "b80e3ff965341d2a",
-      "lastmod": "2026-09-30"
+      "hash": "4b99a24602835d4c",
+      "lastmod": "2026-10-02"
     },
     "https://www.keyoapi.xyz/model/Duix-Avatar": {
-      "hash": "490cabab7b6e3aee",
-      "lastmod": "2026-09-30"
+      "hash": "a62192e5d6cd6a4f",
+      "lastmod": "2026-10-02"
     },
     "https://www.keyoapi.xyz/model/InfiniteTalk": {
-      "hash": "cd56fcc220fc05f6",
-      "lastmod": "2026-09-30"
+      "hash": "520e9b95bfe9aa55",
+      "lastmod": "2026-10-02"
     },
     "https://www.keyoapi.xyz/model/IndexTTS-2": {
-      "hash": "9e58384d19ab44c2",
-      "lastmod": "2026-09-30"
+      "hash": "29067a7ba9c6b828",
+      "lastmod": "2026-10-02"
     },
     "https://www.keyoapi.xyz/model/CosyVoice3": {
-      "hash": "cd1c5d66b1f81a5a",
-      "lastmod": "2026-09-30"
+      "hash": "ccc43f5e91e319f0",
+      "lastmod": "2026-10-02"
     },
     "https://www.keyoapi.xyz/model/glm-5.2": {
-      "hash": "be6c93e156662adb",
-      "lastmod": "2026-09-30"
+      "hash": "d184233921b1b22e",
+      "lastmod": "2026-10-02"
     },
     "https://www.keyoapi.xyz/model/deepseek-v4-pro": {
       "hash": "585b409693b3f1c6",
       "lastmod": "2026-09-30"
     },
     "https://www.keyoapi.xyz/model/deepseek-v4.1-flash": {
-      "hash": "d90cfd598f98569a",
-      "lastmod": "2026-10-01"
+      "hash": "b1c846f53c32ae02",
+      "lastmod": "2026-10-02"
     },
     "https://www.keyoapi.xyz/model/deepseek-v4-flash": {
-      "hash": "26751a54a6e94537",
-      "lastmod": "2026-10-01"
+      "hash": "45554a8f2034d9be",
+      "lastmod": "2026-10-02"
     },
     "https://www.keyoapi.xyz/model/deepseek-v4-flash-0731": {
-      "hash": "95c8ca394ce3b186",
-      "lastmod": "2026-10-01"
+      "hash": "30d812cc74173f8d",
+      "lastmod": "2026-10-02"
     },
     "https://www.keyoapi.xyz/model/kimi-k3": {
-      "hash": "bc6de5ec86d2bdd6",
-      "lastmod": "2026-10-01"
+      "hash": "fb1bc9621c564544",
+      "lastmod": "2026-10-02"
     },
     "https://www.keyoapi.xyz/model/gpt-6-luna": {
-      "hash": "dd52dcea4e94936b",
-      "lastmod": "2026-09-30"
+      "hash": "46c69e8e47d87fe3",
+      "lastmod": "2026-10-02"
     },
     "https://www.keyoapi.xyz/model/gpt-6-sol": {
-      "hash": "3a1e990df5d770aa",
-      "lastmod": "2026-09-30"
+      "hash": "1e696b2491142012",
+      "lastmod": "2026-10-02"
     },
     "https://www.keyoapi.xyz/model/claude-opus-5-5": {
-      "hash": "46483ef15c880c23",
-      "lastmod": "2026-09-30"
+      "hash": "63514a0c1b9faa7e",
+      "lastmod": "2026-10-02"
     },
     "https://www.keyoapi.xyz/brand/keyo-docs.html": {
       "hash": "4b7d2193c09290ff",
@@ -198,32 +198,36 @@
       "lastmod": "2026-09-26"
     },
     "https://www.keyoapi.xyz/grok-api-pricing": {
-      "hash": "e6d2f43962856d32",
-      "lastmod": "2026-10-01"
+      "hash": "cc5d7d596dde088c",
+      "lastmod": "2026-10-02"
     },
     "https://www.keyoapi.xyz/model/gpt-6-astra": {
-      "hash": "283e6020a80a9c7a",
-      "lastmod": "2026-09-30"
+      "hash": "72cf47fc0c8df707",
+      "lastmod": "2026-10-02"
     },
     "https://www.keyoapi.xyz/model/deepseek-v4-pro-0813": {
-      "hash": "ecb1c72213256284",
-      "lastmod": "2026-10-01"
+      "hash": "27f0bf7ec3ffeafc",
+      "lastmod": "2026-10-02"
     },
     "https://www.keyoapi.xyz/model/gemini-3.8-flash": {
-      "hash": "1d5709663d33c99e",
-      "lastmod": "2026-10-01"
+      "hash": "2572a9edee02d5fa",
+      "lastmod": "2026-10-02"
     },
     "https://www.keyoapi.xyz/model/gemini-3.7-flash": {
-      "hash": "7e479e68616071e4",
-      "lastmod": "2026-10-01"
+      "hash": "ebd4db775f350b1f",
+      "lastmod": "2026-10-02"
     },
     "https://www.keyoapi.xyz/model/grok-4.7": {
-      "hash": "84b65c93a75076fd",
-      "lastmod": "2026-10-01"
+      "hash": "b031fb68256143a9",
+      "lastmod": "2026-10-02"
     },
     "https://www.keyoapi.xyz/model/grok-4.6": {
-      "hash": "c20a8b99d80c3c44",
-      "lastmod": "2026-10-01"
+      "hash": "94dfa78a531cef4f",
+      "lastmod": "2026-10-02"
+    },
+    "https://www.keyoapi.xyz/openai-api-alternative": {
+      "hash": "026013f05a8f8222",
+      "lastmod": "2026-10-02"
     }
   }
 }

@@ -14,6 +14,7 @@ Allow: /tts-api
 Allow: /voice-cloning-api
 Allow: /ai-avatar-video-generator
 Allow: /grok-api-pricing
+Allow: /openai-api-alternative
 Allow: /brand/
 Allow: /about
 

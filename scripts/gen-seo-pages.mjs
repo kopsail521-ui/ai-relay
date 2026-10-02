@@ -695,13 +695,14 @@ function renderCompare() {
     )
     .join("\n");
   const bodyHtml = `
-<p class="lead">This <strong>AI API price comparison</strong> page shows how KeyoAPI relay pricing stacks up against common official list rates for GPT-class, Claude-class, Whisper, and vision APIs.</p>
+<p class="lead">This <strong>LLM API pricing comparison</strong> (and broader <strong>AI API price comparison</strong>) page puts KeyoAPI sell rates next to typical official list bands for GPT-class, Claude-class, DeepSeek, Whisper, and vision APIs — useful when you want a <strong>cheap LLM API</strong> path without juggling five vendor invoices.</p>
 <p class="meta">Figures are indicative for planning. Always confirm live sell rates in <a href="/pricing">Model Square</a> or the static <a href="/pricing-list">pricing list</a> before contracting volume.</p>
 <div class="btnrow">
   <a class="btn btn-primary" href="/sign-up">Create KeyoAPI account</a>
   <a class="btn btn-secondary" href="/pricing-list">Open pricing list</a>
+  <a class="btn btn-secondary" href="/openai-api-alternative">OpenAI API alternative</a>
 </div>
-<h2>Headline comparisons</h2>
+<h2>Headline LLM API pricing comparison</h2>
 <table>
 <thead><tr><th>Capability</th><th>Typical official list</th><th>KeyoAPI model</th><th>Notes</th></tr></thead>
 <tbody>${compareTableRows()}</tbody>
@@ -714,33 +715,32 @@ function renderCompare() {
 <h2>How to estimate API costs (no calculator app required)</h2>
 <p>For token-metered chat IDs: expected cost ≈ (input millions × input $/1M) + (output millions × output $/1M), then add retries. Pull the $/1M figures from live <a href="/pricing">/pricing</a> or the rows on this page — do not hard-code a spreadsheet forever. Worked OpenAI-side example: <a href="/openai-api-pricing">/openai-api-pricing</a>. Brand hubs: <a href="/claude-api-pricing">Claude / Anthropic</a>, <a href="/grok-api-pricing">Grok</a>, <a href="/gemini-api-pricing">Gemini</a>, <a href="/deepseek-api-pricing">DeepSeek</a>.</p>
 <h2>How to use this comparison</h2>
-<p>One OpenAI-compatible SDK, one balance, and multimodal add-ons on one invoice.</p>
+<p>One OpenAI-compatible SDK, one prepaid balance, and multimodal add-ons on one invoice. Swap <code>base_url</code> + key; keep your existing client for chat / image / speech paths.</p>
 <p>Recommended rollout: start with <a href="${featuredHref("deepseek-v4.1-flash")}"><code>deepseek-v4.1-flash</code></a> on high-volume paths, <a href="${featuredHref("gpt-6-astra")}"><code>gpt-6-astra</code></a> or <a href="/model/claude-sonnet-5">claude-sonnet-5</a> as default chat, escalate to <a href="/model/claude-fable-5-1">claude-fable-5-1</a> when you need denser reasoning.</p>
-<h2>Guides for high-intent model searches</h2>
-<p>Related guide: <a href="/model/CosyVoice3"><strong>How to call CosyVoice3 API</strong></a>. Nearby:</p>
+<h2>Related guides</h2>
 <ul>
-  <li><a href="/model/CosyVoice3">CosyVoice3 API — async multilingual TTS</a></li>
-  <li><a href="/tts-api">TTS API hub</a> · <a href="/voice-cloning-api">Voice cloning API</a></li>
-  <li><a href="/model/deepseek-v4-flash">DeepSeek V4 Flash — free path &amp; pricing</a></li>
-  <li><a href="/model/kimi-k3">Kimi K3 API key — free prototyping path</a> · <a href="/model/Duix-Avatar">Duix Avatar API</a></li>
+  <li><a href="/openai-api-alternative"><strong>OpenAI API alternative</strong></a> — why switch, two-line migration, price table</li>
+  <li><a href="/openai-api-pricing">OpenAI / ChatGPT API pricing</a> · <a href="/claude-api-pricing">Claude API pricing</a> · <a href="/deepseek-api-pricing">DeepSeek API pricing</a></li>
+  <li><a href="/free-models">Free AI API</a> — fixed $0 catalog IDs for prototyping</li>
+  <li><a href="/model/CosyVoice3">CosyVoice3 API</a> · <a href="/tts-api">TTS API</a> · <a href="/model/Duix-Avatar">Duix Avatar</a></li>
 </ul>
 <h2>Modality pages</h2>
 ${relatedLinks(["CosyVoice3", "whisper-large-v3", "Qwen3-TTS", "IndexTTS-2", "Duix-Avatar", "RMBG-2.0"])}
 `;
   return layout({
-    title: "AI API Price Comparison - KeyoAPI vs Official Rates",
+    title: "LLM API Pricing Comparison | Cheap LLM API on KeyoAPI",
     description:
-      "AI API price comparison for cheap LLM API and multimodal relay pricing on KeyoAPI versus typical OpenAI and Anthropic list rates.",
+      "LLM API pricing comparison and AI API price comparison: KeyoAPI vs typical official list rates for GPT-class, Claude, DeepSeek, and multimodal IDs. Cheap LLM API on one prepaid key.",
     canonical: `${site}/compare`,
-    h1: "AI API Price Comparison: KeyoAPI vs Official List Rates",
+    h1: "LLM API Pricing Comparison: KeyoAPI vs Official List Rates",
     bodyHtml,
     jsonLd: {
       "@context": "https://schema.org",
       "@type": "WebPage",
-      name: "AI API Price Comparison",
+      name: "LLM API Pricing Comparison",
       url: `${site}/compare`,
       description:
-        "Compare KeyoAPI relay prices with official OpenAI and Anthropic list rates.",
+        "Compare KeyoAPI LLM and multimodal API prices with typical official list rates.",
     },
   });
 }
@@ -967,7 +967,9 @@ function landingRelatedLinks(slug) {
     "claude-api-pricing":
       `${base}, and <a href="/model/claude-sonnet-5">claude-sonnet-5</a> · <a href="/model/claude-opus-5">claude-opus-5</a>`,
     "openai-api-pricing":
-      `${base}, and <a href="/model/gpt-6-astra">gpt-6-astra</a> · <a href="/model/gpt-5.6-luna">gpt-5.6-luna</a>`,
+      `${base}, and <a href="/model/gpt-6-astra">gpt-6-astra</a> · <a href="/model/gpt-5.6-luna">gpt-5.6-luna</a> · <a href="/openai-api-alternative">OpenAI API alternative</a>`,
+    "openai-api-alternative":
+      `${base}, and <a href="/openai-api-pricing">OpenAI API pricing</a> · <a href="/model/gpt-6-astra">gpt-6-astra</a> · <a href="/model/deepseek-v4.1-flash">deepseek-v4.1-flash</a>`,
   };
   const links = bySlug[slug] || `${base}, and <a href="/tts-api">TTS API</a> · <a href="/ai-avatar-video-generator">Avatar video</a>`;
   return `<p class="meta">Also see ${links}.</p>`;

@@ -1,0 +1,7 @@
+# Deploy compare retarget + /openai-api-alternative
+cd /opt/ai-relay && sudo git pull && sudo bash scripts/deploy-brand-static.sh && echo DONE_COMPARE_ALT
+
+# Expect:
+# curl -fsS https://www.keyoapi.xyz/compare | grep -E 'LLM API Pricing Comparison|openai-api-alternative' | head
+# curl -fsS https://www.keyoapi.xyz/openai-api-alternative | grep -E '<h1>|gpt-6-astra|Why switch' | head
+# curl -fsS https://www.keyoapi.xyz/robots.txt | grep openai-api-alternative

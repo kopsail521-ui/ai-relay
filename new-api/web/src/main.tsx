@@ -86,8 +86,10 @@ const queryClient = new QueryClient({
     onError: (error) => {
       if (error instanceof AxiosError) {
         if (error.response?.status === 500) {
+          // Toast only — do not force-navigate to /500. That hijacks
+          // pages like /profile whenever any background query fails
+          // (login sessions, check-in, etc.) and leaves a stuck error UI.
           toast.error(i18next.t('Internal Server Error!'))
-          router.navigate({ to: '/500' })
         }
       }
     },

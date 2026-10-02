@@ -44,7 +44,11 @@ export function sessionDevice(
   return system ? `${browser} · ${system}` : browser
 }
 
-export function loginMethodLabel(method: string, t: TFunction): string {
+export function loginMethodLabel(
+  method: string | null | undefined,
+  t: TFunction
+): string {
+  if (method == null || method === '') return t('Unknown')
   const normalized = method.trim().toLowerCase()
   switch (normalized) {
     case 'password':
@@ -71,6 +75,7 @@ export function loginMethodLabel(method: string, t: TFunction): string {
   const providerNames: Record<string, string> = {
     discord: 'Discord',
     github: 'GitHub',
+    google: 'Google',
     linuxdo: 'LinuxDO',
     oidc: 'OIDC',
   }

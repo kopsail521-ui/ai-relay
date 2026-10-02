@@ -28,9 +28,16 @@ describe('login session presentation', () => {
     expect(loginMethodLabel('password', translate)).toBe('Password')
     expect(loginMethodLabel('2fa', translate)).toBe('Two-factor Authentication')
     expect(loginMethodLabel('oauth:github', translate)).toBe('OAuth · GitHub')
+    expect(loginMethodLabel('oauth:google', translate)).toBe('OAuth · Google')
     expect(loginMethodLabel('oauth:custom-provider', translate)).toBe(
       'OAuth · custom-provider'
     )
+  })
+
+  test('does not throw when login method is missing', () => {
+    expect(loginMethodLabel(undefined, translate)).toBe('Unknown')
+    expect(loginMethodLabel(null, translate)).toBe('Unknown')
+    expect(loginMethodLabel('', translate)).toBe('Unknown')
   })
 
   test('labels iPad Safari as iOS when its user agent also mentions Mac OS X', () => {

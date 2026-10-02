@@ -178,7 +178,8 @@ export function GiftWelcomeDialog() {
           <Button
             onClick={() => {
               if (userId) dismiss(userId)
-              window.location.assign('/free-models')
+              // Stay in SPA — /free-models is a static SEO page, not a console route.
+              void navigate({ to: '/models' })
             }}
           >
             {t('Try free models')}

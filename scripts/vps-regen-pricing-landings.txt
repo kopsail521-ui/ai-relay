@@ -1,0 +1,6 @@
+# Regen openai/claude landings after linkify + $0 fix
+cd /opt/ai-relay && sudo git pull && sudo bash scripts/deploy-brand-static.sh && echo DONE_REGEN_PRICING
+
+# Expect clean OpenAI public pricing text (no /pricing split link):
+# curl -fsS https://www.keyoapi.xyz/openai-api-pricing | grep -E 'openai.com/api|OpenAI public pricing|/model/gpt-6-astra' | head
+# curl -fsS https://www.keyoapi.xyz/claude-api-pricing | grep -E 'For \$0 prototyping|For  prototyping' | head

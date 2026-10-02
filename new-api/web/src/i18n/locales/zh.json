@@ -5337,6 +5337,11 @@
     "Gift Credits For New User": "新用户赠送金",
     "Gift credits given on registration (free models only). Default . ({{formattedQuota}})": "注册赠送的赠送金（仅免费模型）。默认 。（{{formattedQuota}}）",
     "Gift Credits For Inviter": "邀请人赠送金",
-    "Gift credits credited to inviter on each successful signup. Default . ({{formattedQuota}})": "每成功邀请一人注册，邀请人获得赠送金。默认 。（{{formattedQuota}}）"
+    "Gift credits credited to inviter on each successful signup. Default . ({{formattedQuota}})": "每成功邀请一人注册，邀请人获得赠送金。默认 。（{{formattedQuota}}）",
+    "You've got {{amount}} gift credits": "送你 {{amount}} 赠送金",
+    "Welcome to KeyoAPI. Gift credits work only on free model IDs (for example glm-5.3-flash:free). Public price stays $0; usage is deducted from gift credits at the paid twin sell rate. Recharge balance is separate — use it for paid models.": "欢迎使用 KeyoAPI。赠送金只能用于免费模型 ID（例如 glm-5.3-flash:free）。公开价仍为 $0；系统按对应付费模型售价从赠送金扣减。充值余额与赠送金分开，付费模型请先充值。",
+    "Got it": "知道了",
+    "View wallet": "查看钱包",
+    "Try free models": "去试用免费模型"
   }
 }

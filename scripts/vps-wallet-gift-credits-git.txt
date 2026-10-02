@@ -1,12 +1,10 @@
 #!/usr/bin/env bash
-# Deploy dual-wallet gift credits (new-api rebuild + restart).
+# Deploy dual-wallet gift credits WITHOUT compiling on the 1GB VPS.
+# Pulls ghcr.io image built by GitHub Actions, then recreates the container.
 set -euo pipefail
 cd /opt/ai-relay
-sudo git pull --ff-only origin main
-sudo docker compose build new-api
-sudo docker compose up -d new-api
+sudo bash /opt/ai-relay/scripts/vps-pull-keyo-console.sh
 sleep 3
-# Migration runs on startup (aff_quota → gift_quota).
 curl -sS "http://127.0.0.1:3000/api/status" | head -c 200 || true
 echo
 echo DONE_WALLET_GIFT_CREDITS

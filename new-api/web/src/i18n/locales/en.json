@@ -5337,6 +5337,11 @@
     "Gift Credits For New User": "Gift Credits For New User",
     "Gift credits given on registration (free models only). Default . ({{formattedQuota}})": "Gift credits given on registration (free models only). Default . ({{formattedQuota}})",
     "Gift Credits For Inviter": "Gift Credits For Inviter",
-    "Gift credits credited to inviter on each successful signup. Default . ({{formattedQuota}})": "Gift credits credited to inviter on each successful signup. Default . ({{formattedQuota}})"
+    "Gift credits credited to inviter on each successful signup. Default . ({{formattedQuota}})": "Gift credits credited to inviter on each successful signup. Default . ({{formattedQuota}})",
+    "You've got {{amount}} gift credits": "You've got {{amount}} gift credits",
+    "Welcome to KeyoAPI. Gift credits work only on free model IDs (for example glm-5.3-flash:free). Public price stays $0; usage is deducted from gift credits at the paid twin sell rate. Recharge balance is separate — use it for paid models.": "Welcome to KeyoAPI. Gift credits work only on free model IDs (for example glm-5.3-flash:free). Public price stays $0; usage is deducted from gift credits at the paid twin sell rate. Recharge balance is separate — use it for paid models.",
+    "Got it": "Got it",
+    "View wallet": "View wallet",
+    "Try free models": "Try free models"
   }
 }

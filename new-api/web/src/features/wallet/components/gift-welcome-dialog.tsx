@@ -44,15 +44,12 @@ type SelfPayload = {
   request_count?: number
 }
 
-async function loadSelfWithRetry(attempts = 5): Promise<SelfPayload | null> {
-  for (let i = 0; i < attempts; i++) {
-    try {
-      const res = await getSelf()
-      if (res?.success && res.data) return res.data as SelfPayload
-    } catch {
-      // retry
-    }
-    await new Promise((r) => setTimeout(r, 300 * (i + 1)))
+async function loadSelfOnce(): Promise<SelfPayload | null> {
+  try {
+    const res = await getSelf()
+    if (res?.success && res.data) return res.data as SelfPayload
+  } catch {
+    // 429 / network: still show overlay from the session user
   }
   return null
 }
@@ -89,21 +86,31 @@ export function GiftWelcomeDialog() {
     if (!userId || !accessToken) return
 
     const runId = ++runIdRef.current
-    let openTimer: ReturnType<typeof setTimeout> | undefined
     let cancelled = false
 
     async function check() {
-      // Prefetch paste-ready curl in parallel with /self so the overlay
-      // opens with a real key already filled (not after a second wait).
+      const authUser = useAuthStore.getState().auth.user
+      const localSnapshot: SelfPayload = {
+        id: userId,
+        gift_quota: authUser?.gift_quota,
+        used_quota: authUser?.used_quota,
+        request_count: authUser?.request_count,
+      }
+      if (!shouldOfferGiftWelcome(localSnapshot)) return
+
+      // Open immediately so a 429 on /self or token APIs cannot swallow the overlay.
+      shownRef.current = true
+      setOpen(true)
+      setGiftQuota(Number(localSnapshot.gift_quota ?? 0))
       setCurlLoading(true)
+
       const curlPromise = resolveStarterCurl()
         .then((ready) => ready?.curl ?? null)
         .catch(() => null)
 
-      const data = await loadSelfWithRetry()
+      const data = await loadSelfOnce()
       if (cancelled || runId !== runIdRef.current) return
 
-      const authUser = useAuthStore.getState().auth.user
       const snapshot: SelfPayload = data
         ? {
             id: data.id ?? userId,
@@ -111,12 +118,7 @@ export function GiftWelcomeDialog() {
             used_quota: data.used_quota,
             request_count: data.request_count,
           }
-        : {
-            id: userId,
-            gift_quota: authUser?.gift_quota,
-            used_quota: authUser?.used_quota,
-            request_count: authUser?.request_count,
-          }
+        : localSnapshot
 
       if (data && authUser && authUser.id === userId) {
         setUser({
@@ -129,25 +131,20 @@ export function GiftWelcomeDialog() {
 
       if (!shouldOfferGiftWelcome(snapshot)) {
         setCurlLoading(false)
+        setOpen(false)
         return
       }
 
+      setGiftQuota(Number(snapshot.gift_quota ?? 0))
       const readyCurl = await curlPromise
       if (cancelled || runId !== runIdRef.current) return
       setCurl(readyCurl)
       setCurlLoading(false)
-      setGiftQuota(Number(snapshot.gift_quota ?? 0))
-      openTimer = setTimeout(() => {
-        if (cancelled || runId !== runIdRef.current) return
-        shownRef.current = true
-        setOpen(true)
-      }, 300)
     }
 
     void check()
     return () => {
       cancelled = true
-      if (openTimer) clearTimeout(openTimer)
     }
   }, [userId, accessToken, setUser])
 

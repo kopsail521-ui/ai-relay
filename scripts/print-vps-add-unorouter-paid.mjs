@@ -1,5 +1,5 @@
 /**
- * Generate short VPS paste to list UnoRouter paid chat (sell = cost × 2).
+ * Generate short VPS paste to list UnoRouter paid chat (sell = cost × 8).
  *   node scripts/print-vps-add-unorouter-paid.mjs
  */
 import fs from "fs";
@@ -68,9 +68,9 @@ PY`,
 writeLf(path.join(root, "scripts/vps-add-unorouter-paid-short.txt"), short + "\n");
 writeLf(
   path.join(root, "scripts/vps-add-unorouter-paid-readme.txt"),
-  `# 上架 UnoRouter 付费对话（成本×2）
+  `# 刷新 UnoRouter 付费对话售价（Keyo Chat；成本×8）
 
-glm-5.3-flash / glm-5.2 / deepseek-v4* / kimi-k3 / kimi-k2.7-code / qwen3.8-flash
+见 config/unorouter-paid-models.json。
 
 粘贴：scripts/vps-add-unorouter-paid-short.txt
 → missing NONE

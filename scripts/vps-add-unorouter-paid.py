@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Register UnoRouter paid chat models in New API (sell = cost × 2).
+"""Register UnoRouter paid chat models in New API (sell = cost × 8).
 
 Key: UNOROUTER_API_KEY in /opt/ai-relay/.env (never print it).
 Channel: \"Keyo Chat\" (separate from \"Keyo Chat Free\").
@@ -129,7 +129,7 @@ def main():
         raise SystemExit("set UNOROUTER_API_KEY in /opt/ai-relay/.env")
     cfg = json.load(open(CFG, encoding="utf-8"))
     models = cfg["models"]
-    markup = float(cfg.get("markup") or 2)
+    markup = float(cfg.get("markup") or 8)
     ch_name = cfg.get("channel_name") or "Keyo Chat"
     base_url = cfg["base_url"]
     db_path = sys.argv[1] if len(sys.argv) > 1 else "/data/one-api.db"

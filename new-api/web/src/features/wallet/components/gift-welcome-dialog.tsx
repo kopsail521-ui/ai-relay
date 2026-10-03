@@ -193,7 +193,7 @@ export function GiftWelcomeDialog() {
         </div>
         <p className='text-muted-foreground mt-3 text-sm leading-relaxed'>
           {t(
-            'Paste the curl below into a terminal. The free model and your API key are already filled in — you should see a JSON reply within a few seconds. No credit card.'
+            'Click Copy command, paste it into your computer’s terminal, and press Enter. The model and API key are already filled in. You should see JSON in a few seconds — no card.'
           )}
         </p>
         {giftQuota > 0 ? (
@@ -209,26 +209,9 @@ export function GiftWelcomeDialog() {
             <div className='flex min-w-0 items-center gap-2'>
               <TerminalSquare className='text-muted-foreground size-3.5 shrink-0' />
               <span className='truncate text-xs font-medium'>
-                {t('Run this first')}
+                {t('Command to paste')}
               </span>
             </div>
-            <Button
-              type='button'
-              size='sm'
-              variant='secondary'
-              className='h-7 shrink-0 gap-1 px-2 text-xs'
-              disabled={!curl || curlLoading || isCopying}
-              onClick={() => {
-                void handleCopyCurl()
-              }}
-            >
-              {curlLoading ? (
-                <Loader2 className='size-3.5 animate-spin' />
-              ) : (
-                <Copy className='size-3.5' />
-              )}
-              {t('Copy curl')}
-            </Button>
           </div>
           <pre className='max-h-44 overflow-auto px-3 py-2 font-mono text-[11px] leading-relaxed break-all whitespace-pre-wrap select-all'>
             {curlLoading
@@ -271,7 +254,7 @@ export function GiftWelcomeDialog() {
             ) : (
               <Copy className='size-4' />
             )}
-            {t('Copy curl')}
+            {t('Copy command')}
           </Button>
         </div>
       </div>

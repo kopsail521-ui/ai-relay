@@ -65,7 +65,7 @@ export const EXTRA_MODELS = {
     desc: {
       zhCN: "GPT-6.1 Sol 对话与推理，Sol 线更新档。",
       zhTW: "GPT-6.1 Sol 對話與推理，Sol 線更新檔。",
-      en: "GPT-6.1 Sol chat and reasoning — updated Sol-tier lane.",
+      en: "GPT-6.1 Sol chat and reasoning — updated Sol-class GPT-6.",
       fr: "GPT-6.1 Sol — chat/raisonnement, ligne Sol mise à jour.",
       ru: "GPT-6.1 Sol — чат/рассуждение, обновлённая линейка Sol.",
       ja: "GPT-6.1 Sol 対話と推論。Sol ラインの更新版。",

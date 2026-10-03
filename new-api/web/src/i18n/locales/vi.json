@@ -5321,6 +5321,7 @@
     "Zhipu V4": "Zhipu V4",
     "Zoom": "Zoom",
     "You've got {{amount}} gift credits": "Bạn nhận được {{amount}} tín dụng tặng",
+    "Gift credits are for free models only. Paid models use your recharge balance.": "Tín dụng tặng chỉ dùng cho model miễn phí. Model trả phí dùng số dư nạp.",
     "Welcome to KeyoAPI. Gift credits work only on free model IDs (for example glm-5.3-flash:free). Public price stays $0; usage is deducted from gift credits at the paid twin sell rate. Recharge balance is separate — use it for paid models.": "Chào mừng đến KeyoAPI. Tín dụng tặng chỉ dùng cho ID mô hình miễn phí (ví dụ glm-5.3-flash:free). Giá công khai vẫn $0; mức dùng trừ từ tín dụng tặng theo giá bán của bản trả phí. Số dư nạp riêng — dùng cho mô hình trả phí.",
     "Got it": "Đã hiểu",
     "View wallet": "Xem ví",

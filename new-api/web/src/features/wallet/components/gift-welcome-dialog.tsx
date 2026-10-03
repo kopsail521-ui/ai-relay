@@ -199,7 +199,7 @@ export function GiftWelcomeDialog() {
         {giftQuota > 0 ? (
           <p className='text-muted-foreground mt-2 text-xs leading-relaxed'>
             {t(
-              'Gift credits work only on free model IDs (for example glm-5.3-flash:free). Public price stays $0; usage is deducted from gift credits at the paid twin sell rate. Recharge balance is separate — use it for paid models.'
+              'Gift credits are for free models only. Paid models use your recharge balance.'
             )}
           </p>
         ) : null}
@@ -230,11 +230,6 @@ export function GiftWelcomeDialog() {
               {t('Copy curl')}
             </Button>
           </div>
-          <p className='text-muted-foreground px-3 pt-2 text-xs leading-relaxed'>
-            {t(
-              'Paste this into a terminal — your API key is already filled in. You should see a JSON reply within a few seconds.'
-            )}
-          </p>
           <pre className='max-h-44 overflow-auto px-3 py-2 font-mono text-[11px] leading-relaxed break-all whitespace-pre-wrap select-all'>
             {curlLoading
               ? t('Preparing your first request…')

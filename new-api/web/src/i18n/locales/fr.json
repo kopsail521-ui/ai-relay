@@ -5321,6 +5321,7 @@
     "Zhipu V4": "Zhipu V4",
     "Zoom": "Zoom",
     "You've got {{amount}} gift credits": "Vous avez reçu {{amount}} de crédits cadeau",
+    "Gift credits are for free models only. Paid models use your recharge balance.": "Les crédits cadeau sont réservés aux modèles gratuits. Les modèles payants utilisent le solde rechargé.",
     "Welcome to KeyoAPI. Gift credits work only on free model IDs (for example glm-5.3-flash:free). Public price stays $0; usage is deducted from gift credits at the paid twin sell rate. Recharge balance is separate — use it for paid models.": "Bienvenue sur KeyoAPI. Les crédits cadeau ne fonctionnent que sur les modèles gratuits (ex. glm-5.3-flash:free). Le prix public reste à $0 ; l’usage est déduit des crédits cadeau au tarif du jumeau payant. Le solde rechargé est séparé — utilisez-le pour les modèles payants.",
     "Got it": "Compris",
     "View wallet": "Voir le portefeuille",

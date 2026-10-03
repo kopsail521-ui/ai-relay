@@ -5322,6 +5322,7 @@
     "Zhipu V4": "智譜 V4",
     "Zoom": "縮放",
     "You've got {{amount}} gift credits": "送你 {{amount}} 贈送金",
+    "Gift credits are for free models only. Paid models use your recharge balance.": "贈送金只能打免費模型。付費模型請用儲值餘額。",
     "Welcome to KeyoAPI. Gift credits work only on free model IDs (for example glm-5.3-flash:free). Public price stays $0; usage is deducted from gift credits at the paid twin sell rate. Recharge balance is separate — use it for paid models.": "歡迎使用 KeyoAPI。贈送金只能用於免費模型 ID（例如 glm-5.3-flash:free）。公開價仍為 $0；系統按對應付費模型售價從贈送金扣減。儲值餘額與贈送金分開，付費模型請先儲值。",
     "Got it": "知道了",
     "View wallet": "查看錢包",

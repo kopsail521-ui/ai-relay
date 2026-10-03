@@ -20,7 +20,7 @@ For commercial licensing, please contact support@quantumnous.com
 const STORAGE_PREFIX = 'keyo.giftWelcome.v1.'
 
 /** Live-bundle marker — must appear in deployed /static/js/*.js */
-export const GIFT_WELCOME_BUILD_MARKER = '__KEYO_GIFT_WELCOME_V3__'
+export const GIFT_WELCOME_BUILD_MARKER = '__KEYO_GIFT_WELCOME_V11__'
 
 export function giftWelcomeStorageKey(userId: number): string {
   return `${STORAGE_PREFIX}${userId}`
@@ -44,7 +44,7 @@ export function markGiftWelcomeSeen(userId: number): void {
   }
 }
 
-/** New signup gift recipients: have gift credits and little/no usage yet. */
+/** First-run overlay: unused accounts (gift or not) who have not dismissed it. */
 export function shouldOfferGiftWelcome(user: {
   id?: number
   gift_quota?: number
@@ -54,10 +54,9 @@ export function shouldOfferGiftWelcome(user: {
   const id = user.id ?? 0
   if (!id) return false
   if (hasSeenGiftWelcome(id)) return false
-  const gift = Number(user.gift_quota ?? 0)
-  if (!(gift > 0)) return false
-  // Prefer unused accounts; still allow if they only opened console (0 usage).
   const used = Number(user.used_quota ?? 0)
   if (used > 0) return false
+  const requests = Number(user.request_count ?? 0)
+  if (requests > 0) return false
   return true
 }

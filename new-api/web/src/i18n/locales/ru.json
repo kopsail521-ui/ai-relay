@@ -5325,6 +5325,12 @@
     "Got it": "Понятно",
     "View wallet": "Открыть кошелёк",
     "Try free models": "Попробовать бесплатные модели",
+    "Run this first": "Сначала выполните это",
+    "Copy curl": "Копировать curl",
+    "Paste the curl below into a terminal. The free model and your API key are already filled in — you should see a JSON reply within a few seconds. No credit card.": "Вставьте curl в терминал. Бесплатная модель и API-ключ уже подставлены — через несколько секунд должен прийти JSON. Карта не нужна.",
+    "Paste this into a terminal — your API key is already filled in. You should see a JSON reply within a few seconds.": "Вставьте в терминал — API-ключ уже подставлен. Через несколько секунд должен прийти JSON.",
+    "Preparing your first request…": "Готовим первый запрос…",
+    "Could not prepare a starter key yet. Open Dashboard → First API request.": "Не удалось подготовить starter key. Откройте Dashboard → First API request.",
     "Recharge Balance": "Баланс пополнения",
     "Gift Credits": "Подарочные кредиты",
     "Usable on any model": "Доступно для любой модели",
@@ -5341,6 +5347,7 @@
     "New User Quota (legacy paid)": "Квота нового пользователя (старое · платное)",
     "Legacy paid-wallet grant on signup. Prefer Gift Credits For New User below. ({{formattedQuota}})": "Старое начисление на платный кошелёк при регистрации. Предпочтительнее подарок ниже.（{{formattedQuota}}）",
     "Gift credits given on registration (free models only). Default . ({{formattedQuota}})": "Подарок при регистрации (только бесплатные модели). По умолчанию .（{{formattedQuota}}）",
-    "Gift credits credited to inviter on each successful signup. Default . ({{formattedQuota}})": "Подарок пригласившему за каждую успешную регистрацию. По умолчанию .（{{formattedQuota}}）"
+    "Gift credits credited to inviter on each successful signup. Default . ({{formattedQuota}})": "Подарок пригласившему за каждую успешную регистрацию. По умолчанию .（{{formattedQuota}}）",
+    "Account created. Copy the curl on the dashboard and press Enter.": "Аккаунт создан. Скопируйте curl на дашборде и нажмите Enter."
   }
 }

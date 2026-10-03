@@ -16,7 +16,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 For commercial licensing, please contact support@quantumnous.com
 */
-import { useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { Link } from '@tanstack/react-router'
 import {
   ArrowRight,
@@ -37,7 +37,7 @@ import {
   type LucideIcon,
 } from 'lucide-react'
 import { motion, useReducedMotion } from 'motion/react'
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 
@@ -47,7 +47,15 @@ import {
 } from '@/components/page-transition'
 import { Button } from '@/components/ui/button'
 import { IconBadge, type IconBadgeTone } from '@/components/ui/icon-badge'
-import { fetchTokenKey, getApiKeys } from '@/features/keys/api'
+import { createApiKey, fetchTokenKey, getApiKeys } from '@/features/keys/api'
+import {
+  STARTER_FREE_MODEL,
+  buildCurlCommand,
+  formatBearerKey,
+  getPreferredKey,
+  normalizeEndpoint,
+  pickStarterModel,
+} from '@/features/dashboard/lib/starter-curl'
 import type { ApiKey } from '@/features/keys/types'
 import { useCopyToClipboard } from '@/hooks/use-copy-to-clipboard'
 import { getUserModels } from '@/lib/api'
@@ -110,8 +118,10 @@ interface RequestExample {
   model: string
   keyName: string
   keyId?: number
+  /** Real sk-… when resolved; otherwise placeholder while loading. */
   displayKey: string
   ready: boolean
+  isFreeModel: boolean
 }
 
 interface HeroSignal {
@@ -137,48 +147,7 @@ function saveSetupGuideExpanded(expanded: boolean): void {
   )
 }
 
-function getCurrentOrigin(): string {
-  if (typeof window === 'undefined') return ''
-  return window.location.origin
-}
-
-function normalizeEndpoint(sourceUrl?: string): string {
-  const fallback = `${getCurrentOrigin()}/v1/chat/completions`
-  const trimmed = sourceUrl?.trim()
-  if (!trimmed) return fallback
-
-  const withoutTrailingSlash = trimmed.replace(/\/+$/, '')
-  if (withoutTrailingSlash.endsWith('/v1/chat/completions')) {
-    return withoutTrailingSlash
-  }
-  if (withoutTrailingSlash.endsWith('/v1')) {
-    return `${withoutTrailingSlash}/chat/completions`
-  }
-  return `${withoutTrailingSlash}/v1/chat/completions`
-}
-
-function getPreferredKey(keys: ApiKey[]): ApiKey | null {
-  return keys.find((item) => item.status === 1) ?? keys[0] ?? null
-}
-
-function formatDisplayKey(key?: string): string {
-  if (!key) return 'sk-...'
-  if (key.length <= 14) return key
-  return `${key.slice(0, 7)}...${key.slice(-4)}`
-}
-
-function buildCurlCommand(args: {
-  endpoint: string
-  apiKey: string
-  model: string
-}): string {
-  return [
-    `curl ${args.endpoint} \\`,
-    '  -H "Content-Type: application/json" \\',
-    `  -H "Authorization: Bearer ${args.apiKey}" \\`,
-    `  -d '{"model":"${args.model}","messages":[{"role":"user","content":"Say hello in one sentence."}]}'`,
-  ].join('\n')
-}
+const OVERVIEW_KEYS_QUERY_KEY = ['dashboard', 'overview', 'api-keys'] as const
 
 function SetupGuideBackdrop(props: { compact?: boolean }) {
   return (
@@ -282,10 +251,31 @@ function RequestPreview(props: {
   const { t } = useTranslation()
   const shouldReduceMotion = useReducedMotion()
   const [isCopying, setIsCopying] = useState(false)
+  const [resolvedKey, setResolvedKey] = useState<string | null>(null)
   const { copyToClipboard } = useCopyToClipboard({ notify: false })
+
+  useEffect(() => {
+    let cancelled = false
+    setResolvedKey(null)
+    if (!props.example.keyId) return
+
+    void (async () => {
+      const result = await fetchTokenKey(props.example.keyId!)
+      if (cancelled) return
+      const key = result.success && result.data?.key ? result.data.key : ''
+      const formatted = formatBearerKey(key)
+      if (formatted) setResolvedKey(formatted)
+    })()
+
+    return () => {
+      cancelled = true
+    }
+  }, [props.example.keyId])
+
+  const displayApiKey = resolvedKey ?? props.example.displayKey
   const previewCurl = buildCurlCommand({
     endpoint: props.example.endpoint,
-    apiKey: props.example.displayKey,
+    apiKey: displayApiKey,
     model: props.example.model,
   })
   const previewLines = previewCurl.split('\n')
@@ -294,16 +284,22 @@ function RequestPreview(props: {
 
     setIsCopying(true)
     try {
-      const result = await fetchTokenKey(props.example.keyId)
-      const key = result.success && result.data?.key ? result.data.key : ''
-      if (!key) {
-        toast.error(result.message || t('Failed to copy to clipboard'))
-        return
+      let apiKey = resolvedKey
+      if (!apiKey) {
+        const result = await fetchTokenKey(props.example.keyId)
+        const key = result.success && result.data?.key ? result.data.key : ''
+        const formatted = formatBearerKey(key)
+        if (!formatted) {
+          toast.error(result.message || t('Failed to copy to clipboard'))
+          return
+        }
+        apiKey = formatted
+        setResolvedKey(apiKey)
       }
 
       const realCurl = buildCurlCommand({
         endpoint: props.example.endpoint,
-        apiKey: `sk-${key}`,
+        apiKey,
         model: props.example.model,
       })
       const copied = await copyToClipboard(realCurl)
@@ -344,7 +340,9 @@ function RequestPreview(props: {
             </div>
             <div className='text-muted-foreground truncate text-xs'>
               {props.example.ready
-                ? props.example.keyName
+                ? props.example.isFreeModel
+                  ? t('Paste in a terminal — free model, no recharge needed')
+                  : props.example.keyName
                 : t('Create an API key to unlock the real request')}
             </div>
           </div>
@@ -354,12 +352,12 @@ function RequestPreview(props: {
             variant='outline'
             size='sm'
             className='h-7 gap-1.5 px-2 text-xs'
-            disabled={isCopying}
+            disabled={isCopying || !resolvedKey}
             onClick={handleCopyRequest}
             aria-label={t('Copy ready-to-run curl')}
           >
             <Copy data-icon='inline-start' />
-            {isCopying ? t('Loading') : t('Copy')}
+            {isCopying || !resolvedKey ? t('Loading') : t('Copy')}
           </Button>
         ) : (
           <Button size='sm' variant='outline' render={<Link to='/keys' />}>
@@ -374,11 +372,11 @@ function RequestPreview(props: {
           <span className='bg-warning size-2 rounded-full' />
           <span className='bg-success size-2 rounded-full' />
         </div>
-        <div className='flex flex-col gap-1 overflow-hidden'>
-          {previewLines.map((line) => (
+        <div className='flex flex-col gap-1'>
+          {previewLines.map((line, index) => (
             <code
-              key={line}
-              className='text-muted-foreground truncate'
+              key={`${index}-${line.slice(0, 24)}`}
+              className='text-muted-foreground select-all whitespace-pre-wrap break-all'
               title={line}
             >
               {line}
@@ -457,6 +455,7 @@ function CompactQuickAction(props: { action: QuickAction }) {
 
 export function OverviewDashboard() {
   const { t } = useTranslation()
+  const queryClient = useQueryClient()
   const user = useAuthStore((state) => state.auth.user)
   const { items: apiInfoItems } = useApiInfo()
   const {
@@ -468,14 +467,18 @@ export function OverviewDashboard() {
   const [manualSetupGuideExpanded, setManualSetupGuideExpanded] = useState<
     boolean | null
   >(() => getSavedSetupGuideExpanded())
+  const starterKeyAttemptedRef = useRef(false)
 
   const requestCount = Number(user?.request_count ?? 0)
   const remainQuota = Number(user?.quota ?? 0)
   const usedQuota = Number(user?.used_quota ?? 0)
+  const giftQuota = Number(user?.gift_quota ?? 0)
+  /** Unused accounts: keep the prefilled curl path in front of recharge CTAs. */
+  const isFirstRunUnused = requestCount === 0 && usedQuota === 0
   const isAdmin = Boolean(user?.role && user.role >= ROLE.ADMIN)
 
   const apiKeysQuery = useQuery({
-    queryKey: ['dashboard', 'overview', 'api-keys'],
+    queryKey: OVERVIEW_KEYS_QUERY_KEY,
     queryFn: async () => {
       const result = await getApiKeys({ p: 1, size: 10 })
       return result.success ? (result.data?.items ?? []) : []
@@ -492,10 +495,59 @@ export function OverviewDashboard() {
     staleTime: 5 * 60 * 1000,
   })
 
+  const createStarterKeyMutation = useMutation({
+    mutationFn: async () =>
+      createApiKey({
+        name: 'starter',
+        remain_quota: 0,
+        expired_time: -1,
+        unlimited_quota: true,
+        model_limits_enabled: false,
+        model_limits: '',
+        allow_ips: '',
+        group: '',
+        auto_groups: [],
+        cross_group_retry: false,
+      }),
+    onSuccess: (result) => {
+      if (result.success) {
+        void queryClient.invalidateQueries({ queryKey: OVERVIEW_KEYS_QUERY_KEY })
+      }
+    },
+  })
+
+  // First-run: ensure an API key exists so curl can be prefilled immediately.
+  useEffect(() => {
+    if (!apiKeysQuery.isFetched || !user?.id) return
+    if (starterKeyAttemptedRef.current) return
+    if ((apiKeysQuery.data?.length ?? 0) > 0) return
+    if (createStarterKeyMutation.isPending) return
+
+    starterKeyAttemptedRef.current = true
+    createStarterKeyMutation.mutate()
+  }, [
+    apiKeysQuery.data?.length,
+    apiKeysQuery.isFetched,
+    createStarterKeyMutation,
+    user?.id,
+  ])
+
   const preferredKey = useMemo(
     () => getPreferredKey(apiKeysQuery.data ?? []),
     [apiKeysQuery.data]
   )
+
+  const starterModel = useMemo(
+    () => pickStarterModel(modelsQuery.data),
+    [modelsQuery.data]
+  )
+
+  const starterIsFreeModel =
+    starterModel.endsWith(':free') ||
+    starterModel.endsWith('-free') ||
+    starterModel === STARTER_FREE_MODEL
+  const trialReady =
+    remainQuota > 0 || usedQuota > 0 || giftQuota > 0 || starterIsFreeModel
 
   const startSteps = useMemo<StartStep[]>(
     () => [
@@ -507,21 +559,23 @@ export function OverviewDashboard() {
         completed: Boolean(preferredKey),
       },
       {
-        title: t('Add credits'),
-        description: t('Keep enough balance before production traffic'),
+        title: t('Trial ready'),
+        description: t(
+          'Free models and gift credits work without a recharge — copy the curl on the right'
+        ),
         to: '/wallet',
         icon: CreditCard,
-        completed: remainQuota > 0 || usedQuota > 0,
+        completed: trialReady,
       },
       {
         title: t('Send a request'),
-        description: t('Verify routing with Playground or your client'),
+        description: t('Paste the curl into a terminal, or try Playground'),
         to: '/playground',
         icon: TerminalSquare,
         completed: requestCount > 0,
       },
     ],
-    [preferredKey, remainQuota, requestCount, t, usedQuota]
+    [preferredKey, requestCount, t, trialReady]
   )
 
   const quickActions = useMemo<QuickAction[]>(
@@ -576,37 +630,45 @@ export function OverviewDashboard() {
       },
       {
         label: t('Model selected'),
-        value: modelsQuery.data?.[0] ?? t('Loading'),
+        value: starterModel,
         icon: Timer,
         tone: 'chart-4',
       },
     ],
-    [apiInfoItems.length, modelsQuery.data, preferredKey, t]
+    [apiInfoItems.length, preferredKey, starterModel, t]
   )
 
   const requestExample = useMemo<RequestExample>(() => {
     const endpoint = normalizeEndpoint(apiInfoItems[0]?.url)
-    const model = modelsQuery.data?.[0] ?? 'gpt-4o-mini'
+    const model = starterModel
     const keyName = preferredKey?.name ?? t('No API key yet')
     const ready = Boolean(preferredKey?.id && model)
+    const isFreeModel =
+      model.endsWith(':free') ||
+      model.endsWith('-free') ||
+      model === STARTER_FREE_MODEL
 
     return {
       endpoint,
       model,
       keyName,
       keyId: preferredKey?.id,
-      displayKey: preferredKey
-        ? formatDisplayKey(`sk-${preferredKey.key}`)
-        : 'sk-...',
+      // Placeholder until RequestPreview resolves the real secret.
+      displayKey: preferredKey ? 'sk-…' : 'sk-...',
       ready,
+      isFreeModel,
     }
-  }, [apiInfoItems, modelsQuery.data, preferredKey, t])
+  }, [apiInfoItems, preferredKey, starterModel, t])
 
   const completedStepCount = startSteps.filter((step) => step.completed).length
   const setupComplete = completedStepCount === startSteps.length
   const setupStatusReady = apiKeysQuery.isFetched && Boolean(user)
-  const setupGuideExpanded =
-    manualSetupGuideExpanded ?? (setupStatusReady && !setupComplete)
+  // First unused login: default open so the prefilled curl is visible.
+  // Users can still collapse; we keep a compact curl card below when unused.
+  const setupGuideExpanded = isFirstRunUnused
+    ? manualSetupGuideExpanded !== false
+    : (manualSetupGuideExpanded ?? (setupStatusReady && !setupComplete))
+  const showCompactFirstCurl = isFirstRunUnused && !setupGuideExpanded
   const showLeftContentPanels =
     isAdmin || showApiInfoPanel || showAnnouncementsPanel || showFAQPanel
   const showContentPanels = showLeftContentPanels || showUptimePanel
@@ -633,12 +695,18 @@ export function OverviewDashboard() {
                         {t('Get started')}
                       </div>
                       <h3 className='text-xl font-semibold tracking-tight sm:text-2xl'>
-                        {t('Build on your API gateway in minutes')}
+                        {isFirstRunUnused
+                          ? t('Run your first request in under a minute')
+                          : t('Build on your API gateway in minutes')}
                       </h3>
                       <p className='text-muted-foreground max-w-xl text-sm leading-relaxed'>
-                        {t(
-                          'A focused home for keys, balance, routing, and service health.'
-                        )}
+                        {isFirstRunUnused
+                          ? t(
+                              'Copy the curl on the right — your API key and a free model are already filled in. Paste into a terminal and press Enter.'
+                            )
+                          : t(
+                              'A focused home for keys, balance, routing, and service health.'
+                            )}
                       </p>
                     </div>
                     <div className='flex flex-wrap items-center gap-2'>
@@ -696,7 +764,7 @@ export function OverviewDashboard() {
           </CardStaggerItem>
         </CardStaggerContainer>
       ) : (
-        <CardStaggerContainer>
+        <CardStaggerContainer className='flex flex-col gap-4'>
           <CardStaggerItem className='bg-card overflow-hidden rounded-2xl border shadow-xs'>
             <div className='relative overflow-hidden px-4 py-3 sm:px-5'>
               <SetupGuideBackdrop compact />
@@ -720,11 +788,15 @@ export function OverviewDashboard() {
                       </span>
                     </div>
                     <p className='text-muted-foreground line-clamp-1 text-xs'>
-                      {setupComplete
+                      {isFirstRunUnused
                         ? t(
-                            'Your setup guide is collapsed so usage stays in focus.'
+                            'Your first curl is still below — paste it into a terminal to activate the account.'
                           )
-                        : t('Setup guide is collapsed. Expand it anytime.')}
+                        : setupComplete
+                          ? t(
+                              'Your setup guide is collapsed so usage stays in focus.'
+                            )
+                          : t('Setup guide is collapsed. Expand it anytime.')}
                     </p>
                   </div>
                 </div>
@@ -746,6 +818,14 @@ export function OverviewDashboard() {
               </div>
             </div>
           </CardStaggerItem>
+          {showCompactFirstCurl ? (
+            <CardStaggerItem className='max-w-xl'>
+              <RequestPreview
+                example={requestExample}
+                signals={heroSignals}
+              />
+            </CardStaggerItem>
+          ) : null}
         </CardStaggerContainer>
       )}
 

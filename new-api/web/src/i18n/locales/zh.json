@@ -181,6 +181,12 @@
     "Add condition": "新增条件",
     "Add Condition": "添加条件",
     "Add credits": "添加额度",
+    "Trial ready": "可以试用了",
+    "Free models and gift credits work without a recharge — copy the curl on the right": "免费模型和赠送金无需充值——复制右侧 curl 即可",
+    "Paste the curl into a terminal, or try Playground": "把 curl 粘贴到终端，或用 Playground 试一下",
+    "Run your first request in under a minute": "一分钟内发出第一条请求",
+    "Copy the curl on the right — your API key and a free model are already filled in. Paste into a terminal and press Enter.": "复制右侧 curl——已填好你的 API key 和免费模型。粘贴到终端回车即可。",
+    "Your first curl is still below — paste it into a terminal to activate the account.": "下方仍有预填 curl——粘贴到终端即可激活账户。",
     "Add custom model \"{{value}}\"": "添加自定义模型“{{value}}”",
     "Add discount tier": "添加折扣等级",
     "Add each model or tag you want to include.": "添加您想要包含的每个模型或标签。",
@@ -5342,6 +5348,14 @@
     "Welcome to KeyoAPI. Gift credits work only on free model IDs (for example glm-5.3-flash:free). Public price stays $0; usage is deducted from gift credits at the paid twin sell rate. Recharge balance is separate — use it for paid models.": "欢迎使用 KeyoAPI。赠送金只能用于免费模型 ID（例如 glm-5.3-flash:free）。公开价仍为 $0；系统按对应付费模型售价从赠送金扣减。充值余额与赠送金分开，付费模型请先充值。",
     "Got it": "知道了",
     "View wallet": "查看钱包",
-    "Try free models": "去试用免费模型"
+    "Try free models": "去试用免费模型",
+    "Run your first request": "先发出第一条请求",
+    "Paste the curl below into a terminal. The free model and your API key are already filled in — you should see a JSON reply within a few seconds. No credit card.": "把下面的 curl 粘到终端即可。免费模型和 API key 已填好，几秒内应返回 JSON。无需绑卡。",
+    "Run this first": "先跑这一条",
+    "Copy curl": "复制 curl",
+    "Paste this into a terminal — your API key is already filled in. You should see a JSON reply within a few seconds.": "粘贴到终端即可——API key 已填好。几秒内应返回 JSON。",
+    "Preparing your first request…": "正在准备第一条请求…",
+    "Could not prepare a starter key yet. Open Dashboard → First API request.": "暂时无法生成 starter key。请打开控制台 → First API request。",
+    "Account created. Copy the curl on the dashboard and press Enter.": "账号已创建。复制控制台里的 curl 粘到终端回车即可。"
   }
 }

@@ -5342,6 +5342,20 @@
     "Welcome to KeyoAPI. Gift credits work only on free model IDs (for example glm-5.3-flash:free). Public price stays $0; usage is deducted from gift credits at the paid twin sell rate. Recharge balance is separate — use it for paid models.": "Welcome to KeyoAPI. Gift credits work only on free model IDs (for example glm-5.3-flash:free). Public price stays $0; usage is deducted from gift credits at the paid twin sell rate. Recharge balance is separate — use it for paid models.",
     "Got it": "Got it",
     "View wallet": "View wallet",
-    "Try free models": "Try free models"
+    "Try free models": "Try free models",
+    "Run your first request": "Run your first request",
+    "Paste the curl below into a terminal. The free model and your API key are already filled in — you should see a JSON reply within a few seconds. No credit card.": "Paste the curl below into a terminal. The free model and your API key are already filled in — you should see a JSON reply within a few seconds. No credit card.",
+    "Run this first": "Run this first",
+    "Copy curl": "Copy curl",
+    "Paste this into a terminal — your API key is already filled in. You should see a JSON reply within a few seconds.": "Paste this into a terminal — your API key is already filled in. You should see a JSON reply within a few seconds.",
+    "Preparing your first request…": "Preparing your first request…",
+    "Could not prepare a starter key yet. Open Dashboard → First API request.": "Could not prepare a starter key yet. Open Dashboard → First API request.",
+    "Trial ready": "Trial ready",
+    "Free models and gift credits work without a recharge — copy the curl on the right": "Free models and gift credits work without a recharge — copy the curl on the right",
+    "Paste the curl into a terminal, or try Playground": "Paste the curl into a terminal, or try Playground",
+    "Run your first request in under a minute": "Run your first request in under a minute",
+    "Copy the curl on the right — your API key and a free model are already filled in. Paste into a terminal and press Enter.": "Copy the curl on the right — your API key and a free model are already filled in. Paste into a terminal and press Enter.",
+    "Your first curl is still below — paste it into a terminal to activate the account.": "Your first curl is still below — paste it into a terminal to activate the account.",
+    "Account created. Copy the curl on the dashboard and press Enter.": "Account created. Copy the curl on the dashboard and press Enter."
   }
 }

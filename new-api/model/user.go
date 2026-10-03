@@ -662,6 +662,7 @@ func (user *User) finishInsert(inviterId int) {
 	if common.GiftQuotaForNewUser > 0 {
 		RecordLog(user.Id, LogTypeSystem, fmt.Sprintf("新用户注册赠送金 %s", logger.LogQuota(common.GiftQuotaForNewUser)))
 	}
+	EnsureStarterToken(user.Id)
 	if inviterId != 0 && operation_setting.IsPaymentComplianceConfirmed() {
 		amount := common.GiftQuotaForInviter
 		if amount <= 0 {
@@ -721,6 +722,7 @@ func (user *User) FinalizeOAuthUserCreation(inviterId int) {
 	if common.GiftQuotaForNewUser > 0 {
 		RecordLog(user.Id, LogTypeSystem, fmt.Sprintf("新用户注册赠送金 %s", logger.LogQuota(common.GiftQuotaForNewUser)))
 	}
+	EnsureStarterToken(user.Id)
 	if inviterId != 0 && operation_setting.IsPaymentComplianceConfirmed() {
 		amount := common.GiftQuotaForInviter
 		if amount <= 0 {

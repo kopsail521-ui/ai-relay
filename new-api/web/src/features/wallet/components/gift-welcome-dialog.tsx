@@ -17,13 +17,16 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 For commercial licensing, please contact support@quantumnous.com
 */
 import { useNavigate } from '@tanstack/react-router'
-import { Gift } from 'lucide-react'
+import { Copy, Gift, Loader2, TerminalSquare } from 'lucide-react'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { useTranslation } from 'react-i18next'
+import { toast } from 'sonner'
 
 import { Button } from '@/components/ui/button'
 import { IconBadge } from '@/components/ui/icon-badge'
+import { resolveStarterCurl } from '@/features/dashboard/lib/starter-curl'
+import { useCopyToClipboard } from '@/hooks/use-copy-to-clipboard'
 import { getSelf } from '@/lib/api'
 import { formatQuota } from '@/lib/format'
 import { useAuthStore } from '@/stores/auth-store'
@@ -55,7 +58,7 @@ async function loadSelfWithRetry(attempts = 5): Promise<SelfPayload | null> {
 }
 
 /**
- * First-login gift credits notice.
+ * First-login gift credits notice + prefilled curl (real API key).
  * Uses a portal overlay (not Base UI Dialog) so OAuth navigation cannot swallow it.
  */
 export function GiftWelcomeDialog() {
@@ -69,27 +72,36 @@ export function GiftWelcomeDialog() {
   const setUser = useAuthStore((s) => s.auth.setUser)
   const [open, setOpen] = useState(false)
   const [giftQuota, setGiftQuota] = useState(0)
+  const [curl, setCurl] = useState<string | null>(null)
+  const [curlLoading, setCurlLoading] = useState(false)
+  const [isCopying, setIsCopying] = useState(false)
   const shownRef = useRef(false)
   const runIdRef = useRef(0)
+  const { copyToClipboard } = useCopyToClipboard({ notify: false })
 
-  const dismiss = useCallback(
-    (id: number) => {
-      markGiftWelcomeSeen(id)
-      shownRef.current = false
-      setOpen(false)
-    },
-    []
-  )
+  const dismiss = useCallback((id: number) => {
+    markGiftWelcomeSeen(id)
+    shownRef.current = false
+    setOpen(false)
+  }, [])
 
   useEffect(() => {
     if (!userId || !accessToken) return
 
     const runId = ++runIdRef.current
     let openTimer: ReturnType<typeof setTimeout> | undefined
+    let cancelled = false
 
     async function check() {
+      // Prefetch paste-ready curl in parallel with /self so the overlay
+      // opens with a real key already filled (not after a second wait).
+      setCurlLoading(true)
+      const curlPromise = resolveStarterCurl()
+        .then((ready) => ready?.curl ?? null)
+        .catch(() => null)
+
       const data = await loadSelfWithRetry()
-      if (runId !== runIdRef.current) return
+      if (cancelled || runId !== runIdRef.current) return
 
       const authUser = useAuthStore.getState().auth.user
       const snapshot: SelfPayload = data
@@ -115,21 +127,44 @@ export function GiftWelcomeDialog() {
         })
       }
 
-      if (!shouldOfferGiftWelcome(snapshot)) return
+      if (!shouldOfferGiftWelcome(snapshot)) {
+        setCurlLoading(false)
+        return
+      }
 
+      const readyCurl = await curlPromise
+      if (cancelled || runId !== runIdRef.current) return
+      setCurl(readyCurl)
+      setCurlLoading(false)
       setGiftQuota(Number(snapshot.gift_quota ?? 0))
       openTimer = setTimeout(() => {
-        if (runId !== runIdRef.current) return
+        if (cancelled || runId !== runIdRef.current) return
         shownRef.current = true
         setOpen(true)
-      }, 500)
+      }, 300)
     }
 
     void check()
     return () => {
+      cancelled = true
       if (openTimer) clearTimeout(openTimer)
     }
   }, [userId, accessToken, setUser])
+
+  const handleCopyCurl = async () => {
+    if (!curl || isCopying) return
+    setIsCopying(true)
+    try {
+      const copied = await copyToClipboard(curl)
+      if (copied) {
+        toast.success(t('Copied to clipboard'))
+      } else {
+        toast.error(t('Failed to copy to clipboard'))
+      }
+    } finally {
+      setIsCopying(false)
+    }
+  }
 
   if (!open || typeof document === 'undefined') return null
 
@@ -143,20 +178,73 @@ export function GiftWelcomeDialog() {
       aria-modal='true'
       aria-labelledby='keyo-gift-welcome-title'
     >
-      <div className='bg-popover text-popover-foreground ring-foreground/10 w-full max-w-md rounded-xl p-5 shadow-lg ring-1'>
+      <div className='bg-popover text-popover-foreground ring-foreground/10 w-full max-w-lg rounded-xl p-5 shadow-lg ring-1'>
         <div className='flex items-center gap-2.5'>
           <IconBadge tone='chart-3'>
             <Gift />
           </IconBadge>
           <h2 id='keyo-gift-welcome-title' className='text-base font-semibold'>
-            {t("You've got {{amount}} gift credits", { amount: amountLabel })}
+            {giftQuota > 0
+              ? t("You've got {{amount}} gift credits", {
+                  amount: amountLabel,
+                })
+              : t('Run your first request')}
           </h2>
         </div>
         <p className='text-muted-foreground mt-3 text-sm leading-relaxed'>
           {t(
-            'Welcome to KeyoAPI. Gift credits work only on free model IDs (for example glm-5.3-flash:free). Public price stays $0; usage is deducted from gift credits at the paid twin sell rate. Recharge balance is separate — use it for paid models.'
+            'Paste the curl below into a terminal. The free model and your API key are already filled in — you should see a JSON reply within a few seconds. No credit card.'
           )}
         </p>
+        {giftQuota > 0 ? (
+          <p className='text-muted-foreground mt-2 text-xs leading-relaxed'>
+            {t(
+              'Gift credits work only on free model IDs (for example glm-5.3-flash:free). Public price stays $0; usage is deducted from gift credits at the paid twin sell rate. Recharge balance is separate — use it for paid models.'
+            )}
+          </p>
+        ) : null}
+
+        <div className='bg-muted/40 mt-4 overflow-hidden rounded-lg border'>
+          <div className='flex items-center justify-between gap-2 border-b px-3 py-2'>
+            <div className='flex min-w-0 items-center gap-2'>
+              <TerminalSquare className='text-muted-foreground size-3.5 shrink-0' />
+              <span className='truncate text-xs font-medium'>
+                {t('Run this first')}
+              </span>
+            </div>
+            <Button
+              type='button'
+              size='sm'
+              variant='secondary'
+              className='h-7 shrink-0 gap-1 px-2 text-xs'
+              disabled={!curl || curlLoading || isCopying}
+              onClick={() => {
+                void handleCopyCurl()
+              }}
+            >
+              {curlLoading ? (
+                <Loader2 className='size-3.5 animate-spin' />
+              ) : (
+                <Copy className='size-3.5' />
+              )}
+              {t('Copy curl')}
+            </Button>
+          </div>
+          <p className='text-muted-foreground px-3 pt-2 text-xs leading-relaxed'>
+            {t(
+              'Paste this into a terminal — your API key is already filled in. You should see a JSON reply within a few seconds.'
+            )}
+          </p>
+          <pre className='max-h-44 overflow-auto px-3 py-2 font-mono text-[11px] leading-relaxed break-all whitespace-pre-wrap select-all'>
+            {curlLoading
+              ? t('Preparing your first request…')
+              : (curl ??
+                t(
+                  'Could not prepare a starter key yet. Open Dashboard → First API request.'
+                ))}
+          </pre>
+        </div>
+
         <div className='mt-5 flex flex-col gap-2 sm:flex-row sm:justify-end'>
           <Button
             variant='outline'
@@ -166,23 +254,29 @@ export function GiftWelcomeDialog() {
           >
             {t('Got it')}
           </Button>
+          {giftQuota > 0 ? (
+            <Button
+              variant='outline'
+              onClick={() => {
+                if (userId) dismiss(userId)
+                void navigate({ to: '/wallet' })
+              }}
+            >
+              {t('View wallet')}
+            </Button>
+          ) : null}
           <Button
-            variant='outline'
+            disabled={!curl || curlLoading || isCopying}
             onClick={() => {
-              if (userId) dismiss(userId)
-              void navigate({ to: '/wallet' })
+              void handleCopyCurl()
             }}
           >
-            {t('View wallet')}
-          </Button>
-          <Button
-            onClick={() => {
-              if (userId) dismiss(userId)
-              // Stay in SPA — /free-models is a static SEO page, not a console route.
-              void navigate({ to: '/models' })
-            }}
-          >
-            {t('Try free models')}
+            {curlLoading ? (
+              <Loader2 className='size-4 animate-spin' />
+            ) : (
+              <Copy className='size-4' />
+            )}
+            {t('Copy curl')}
           </Button>
         </div>
       </div>

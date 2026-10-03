@@ -19,6 +19,7 @@ For commercial licensing, please contact support@quantumnous.com
 import { describe, expect, it, beforeEach, afterEach, vi } from 'vitest'
 
 import {
+  GIFT_WELCOME_BUILD_MARKER,
   giftWelcomeStorageKey,
   hasSeenGiftWelcome,
   markGiftWelcomeSeen,
@@ -54,6 +55,17 @@ describe('gift-welcome', () => {
     ).toBe(true)
   })
 
+  it('offers welcome for unused accounts without gift credits', () => {
+    expect(
+      shouldOfferGiftWelcome({
+        id: 11,
+        gift_quota: 0,
+        used_quota: 0,
+        request_count: 0,
+      })
+    ).toBe(true)
+  })
+
   it('skips when already seen', () => {
     markGiftWelcomeSeen(7)
     expect(hasSeenGiftWelcome(7)).toBe(true)
@@ -78,7 +90,7 @@ describe('gift-welcome', () => {
     ).toBe(false)
   })
 
-  it('allows gift users with request_count but zero used_quota', () => {
+  it('skips users who already sent requests', () => {
     expect(
       shouldOfferGiftWelcome({
         id: 9,
@@ -86,10 +98,14 @@ describe('gift-welcome', () => {
         used_quota: 0,
         request_count: 3,
       })
-    ).toBe(true)
+    ).toBe(false)
   })
 
   it('uses stable storage key', () => {
     expect(giftWelcomeStorageKey(42)).toBe('keyo.giftWelcome.v1.42')
+  })
+
+  it('ships a live-bundle marker for deploy checks', () => {
+    expect(GIFT_WELCOME_BUILD_MARKER).toMatch(/^__KEYO_GIFT_WELCOME_V\d+__$/)
   })
 })

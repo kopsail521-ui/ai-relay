@@ -6,6 +6,7 @@ import (
 	"strings"
 
 	"github.com/QuantumNous/new-api/common"
+	"github.com/QuantumNous/new-api/setting"
 	"github.com/QuantumNous/new-api/setting/operation_setting"
 	"github.com/bytedance/gopkg/util/gopool"
 	"gorm.io/gorm"
@@ -304,6 +305,44 @@ func (token *Token) Insert() error {
 	var err error
 	err = DB.Create(token).Error
 	return err
+}
+
+// EnsureStarterToken creates a never-expiring "starter" key if the user has none.
+// Used so the first-login curl can be prefilled without waiting on the console UI.
+func EnsureStarterToken(userId int) {
+	if userId <= 0 || DB == nil {
+		return
+	}
+	var count int64
+	if err := DB.Model(&Token{}).Where("user_id = ?", userId).Count(&count).Error; err != nil {
+		common.SysLog(fmt.Sprintf("EnsureStarterToken count user %d: %v", userId, err))
+		return
+	}
+	if count > 0 {
+		return
+	}
+	key, err := common.GenerateKey()
+	if err != nil {
+		common.SysLog("EnsureStarterToken generate key: " + err.Error())
+		return
+	}
+	token := Token{
+		UserId:         userId,
+		Name:           "starter",
+		Key:            key,
+		CreatedTime:    common.GetTimestamp(),
+		AccessedTime:   common.GetTimestamp(),
+		ExpiredTime:    -1,
+		RemainQuota:    0,
+		UnlimitedQuota: true,
+		Status:         common.TokenStatusEnabled,
+	}
+	if setting.DefaultUseAutoGroup {
+		token.Group = "auto"
+	}
+	if err := token.Insert(); err != nil {
+		common.SysLog(fmt.Sprintf("EnsureStarterToken insert user %d: %v", userId, err))
+	}
 }
 
 // Update Make sure your token's fields is completed, because this will update non-zero values

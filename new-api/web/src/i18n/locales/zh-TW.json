@@ -5326,6 +5326,13 @@
     "Got it": "知道了",
     "View wallet": "查看錢包",
     "Try free models": "去試用免費模型",
+    "Run your first request": "先發出第一條請求",
+    "Paste the curl below into a terminal. The free model and your API key are already filled in — you should see a JSON reply within a few seconds. No credit card.": "把下面的 curl 貼到終端即可。免費模型和 API key 已填好，幾秒內應回傳 JSON。無需綁卡。",
+    "Run this first": "先跑這一條",
+    "Copy curl": "複製 curl",
+    "Paste this into a terminal — your API key is already filled in. You should see a JSON reply within a few seconds.": "貼到終端機即可——API key 已填好。幾秒內應回傳 JSON。",
+    "Preparing your first request…": "正在準備第一條請求…",
+    "Could not prepare a starter key yet. Open Dashboard → First API request.": "暫時無法產生 starter key。請開啟控制台 → First API request。",
     "Recharge Balance": "儲值餘額",
     "Gift Credits": "贈送金",
     "Usable on any model": "可用於任意模型",
@@ -5342,6 +5349,7 @@
     "New User Quota (legacy paid)": "新用戶額度（舊·儲值金）",
     "Legacy paid-wallet grant on signup. Prefer Gift Credits For New User below. ({{formattedQuota}})": "舊版註冊儲值金贈送，請優先使用下方「新用戶贈送金」。（{{formattedQuota}}）",
     "Gift credits given on registration (free models only). Default . ({{formattedQuota}})": "註冊贈送的贈送金（僅免費模型）。預設 。（{{formattedQuota}}）",
-    "Gift credits credited to inviter on each successful signup. Default . ({{formattedQuota}})": "每成功邀請一人註冊，邀請人獲得贈送金。預設 。（{{formattedQuota}}）"
+    "Gift credits credited to inviter on each successful signup. Default . ({{formattedQuota}})": "每成功邀請一人註冊，邀請人獲得贈送金。預設 。（{{formattedQuota}}）",
+    "Account created. Copy the curl on the dashboard and press Enter.": "帳號已建立。複製控制台裡的 curl 貼到終端機按 Enter 即可。"
   }
 }

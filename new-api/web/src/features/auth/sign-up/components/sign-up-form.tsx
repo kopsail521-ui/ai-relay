@@ -38,7 +38,7 @@ import {
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { register, wechatLoginByCode } from '@/features/auth/api'
+import { login, register, wechatLoginByCode } from '@/features/auth/api'
 import { LegalConsent } from '@/features/auth/components/legal-consent'
 import { OAuthProviders } from '@/features/auth/components/oauth-providers'
 import { registerFormSchema } from '@/features/auth/constants'
@@ -173,6 +173,23 @@ export function SignUpForm({
       })
 
       if (res?.success) {
+        try {
+          const loginRes = await login({
+            username: data.username,
+            password: data.password,
+          })
+          if (loginRes?.success && isAuthBundle(loginRes.data)) {
+            await handleLoginSuccess(loginRes.data)
+            toast.success(
+              t(
+                'Account created. Copy the curl on the dashboard and press Enter.'
+              )
+            )
+            return
+          }
+        } catch {
+          // Fall through: turnstile / 2FA / login errors still need sign-in.
+        }
         toast.success(t('Account created! Please sign in'))
         redirectToLogin()
       } else {

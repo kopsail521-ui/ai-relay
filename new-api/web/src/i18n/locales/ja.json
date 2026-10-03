@@ -5325,6 +5325,13 @@
     "Got it": "了解",
     "View wallet": "ウォレットを見る",
     "Try free models": "無料モデルを試す",
+    "Run your first request": "最初のリクエストを送る",
+    "Paste the curl below into a terminal. The free model and your API key are already filled in — you should see a JSON reply within a few seconds. No credit card.": "下の curl をターミナルに貼り付けてください。無料モデルと API キーはすでに入っています。数秒で JSON が返ります。カード登録は不要です。",
+    "Run this first": "まずこれを実行",
+    "Copy curl": "curl をコピー",
+    "Paste this into a terminal — your API key is already filled in. You should see a JSON reply within a few seconds.": "ターミナルに貼り付けてください — API キーはすでに入っています。数秒で JSON が返ります。",
+    "Preparing your first request…": "最初のリクエストを準備中…",
+    "Could not prepare a starter key yet. Open Dashboard → First API request.": "starter key をまだ用意できません。ダッシュボード → First API request を開いてください。",
     "Recharge Balance": "チャージ残高",
     "Gift Credits": "ギフトクレジット",
     "Usable on any model": "すべてのモデルで利用可能",
@@ -5341,6 +5348,7 @@
     "New User Quota (legacy paid)": "新規ユーザー枠（旧・チャージ）",
     "Legacy paid-wallet grant on signup. Prefer Gift Credits For New User below. ({{formattedQuota}})": "旧方式の登録時チャージ付与です。下の「新規ユーザーのギフト」を優先してください。（{{formattedQuota}}）",
     "Gift credits given on registration (free models only). Default . ({{formattedQuota}})": "登録時に付与するギフト（無料モデルのみ）。デフォルト 。（{{formattedQuota}}）",
-    "Gift credits credited to inviter on each successful signup. Default . ({{formattedQuota}})": "紹介登録が成功するたびに紹介者へ付与するギフト。デフォルト 。（{{formattedQuota}}）"
+    "Gift credits credited to inviter on each successful signup. Default . ({{formattedQuota}})": "紹介登録が成功するたびに紹介者へ付与するギフト。デフォルト 。（{{formattedQuota}}）",
+    "Account created. Copy the curl on the dashboard and press Enter.": "アカウントを作成しました。ダッシュボードの curl をコピーして Enter を押してください。"
   }
 }

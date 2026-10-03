@@ -5844,5 +5844,53 @@
         ]
       ]
     }
+  },
+  "gpt-6.1-sol": {
+    "description": "GPT-6.1 Sol 对话与推理，Sol 线更新档。",
+    "descriptions": {
+      "zhCN": "GPT-6.1 Sol 对话与推理，Sol 线更新档。",
+      "zhTW": "GPT-6.1 Sol 對話與推理，Sol 線更新檔。",
+      "en": "GPT-6.1 Sol chat and reasoning — updated Sol-tier lane.",
+      "fr": "GPT-6.1 Sol chat and reasoning — updated Sol-tier lane.",
+      "ru": "GPT-6.1 Sol chat and reasoning — updated Sol-tier lane.",
+      "ja": "GPT-6.1 Sol 対話と推論。Sol ラインの更新版。",
+      "vi": "GPT-6.1 Sol chat/suy luận — bản Sol mới."
+    },
+    "unit": "token",
+    "badge": {
+      "zhCN": "按 Token 计费",
+      "zhTW": "按 Token 計費",
+      "en": "Token-based",
+      "fr": "Au token",
+      "ru": "По токенам",
+      "ja": "Token 課金",
+      "vi": "Theo token"
+    },
+    "suffix": {
+      "zhCN": "",
+      "zhTW": "",
+      "en": "",
+      "fr": "",
+      "ru": "",
+      "ja": "",
+      "vi": ""
+    },
+    "price_key": {
+      "zhCN": "",
+      "zhTW": "",
+      "en": "",
+      "fr": "",
+      "ru": "",
+      "ja": "",
+      "vi": ""
+    },
+    "description_zh": "GPT-6.1 Sol 对话与推理，Sol 线更新档。",
+    "description_en": "GPT-6.1 Sol chat and reasoning — updated Sol-tier lane.",
+    "badge_zh": "按 Token 计费",
+    "badge_en": "Token-based",
+    "suffix_zh": "",
+    "suffix_en": "",
+    "price_key_zh": "",
+    "price_key_en": ""
   }
 }

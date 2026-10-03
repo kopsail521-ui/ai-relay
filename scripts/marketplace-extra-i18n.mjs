@@ -58,6 +58,20 @@ export const EXTRA_MODELS = {
       vi: "GPT-6 Luna chat tiết kiệm cho lưu lượng cao.",
     },
   },
+  "gpt-6.1-sol": {
+    mode: "token",
+    ratio: 0.03677,
+    completion: 5,
+    desc: {
+      zhCN: "GPT-6.1 Sol 对话与推理，Sol 线更新档。",
+      zhTW: "GPT-6.1 Sol 對話與推理，Sol 線更新檔。",
+      en: "GPT-6.1 Sol chat and reasoning — updated Sol-tier lane.",
+      fr: "GPT-6.1 Sol — chat/raisonnement, ligne Sol mise à jour.",
+      ru: "GPT-6.1 Sol — чат/рассуждение, обновлённая линейка Sol.",
+      ja: "GPT-6.1 Sol 対話と推論。Sol ラインの更新版。",
+      vi: "GPT-6.1 Sol chat/suy luận — bản Sol mới.",
+    },
+  },
   "gpt-6-sol": {
     mode: "token",
     ratio: 0.18385,

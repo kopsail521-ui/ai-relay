@@ -1,15 +1,16 @@
 #!/usr/bin/env python3
-"""List gpt-6.1-sol on Keyo Primary (OpenLux). Sell = cost × 1.
+"""List gpt-6.1-sol on Keyo Primary (OpenLux). Sell = cost × 5 (same as gpt-6-sol).
 
 Cost from cheapest OpenLux group (Codex-Gpt-1):
   $0.07354 / $0.3677 per 1M in/out
-Sell = cost → ModelRatio = 0.03677 · CompletionRatio = 5
+Sell = cost × 5 → $0.3677 / $1.8385 → ModelRatio = 0.18385 · CompletionRatio = 5
 Public copy must NOT mention the supplier.
 """
 from __future__ import annotations
 
 import json
 import os
+import re
 import sqlite3
 import sys
 import time
@@ -17,7 +18,7 @@ import time
 MODEL = "gpt-6.1-sol"
 COST_IN = 0.07354
 COST_OUT = 0.3677
-MARKUP = 1.0
+MARKUP = 5.0
 SELL_IN = round(COST_IN * MARKUP, 6)
 SELL_OUT = round(COST_OUT * MARKUP, 6)
 OUR_MODEL_RATIO = round(SELL_IN / 2.0, 6)
@@ -100,11 +101,18 @@ def patch_docs(path):
         print("docs_skip", path)
         return
     html = open(path, encoding="utf-8", errors="ignore").read()
-    if 'data-copy="gpt-6.1-sol"' in html:
-        print("docs_has", MODEL)
+    row = '<tr><td class="model"><button type="button" class="model-btn" data-copy="gpt-6.1-sol">gpt-6.1-sol</button></td><td class="price">~$0.37</td><td class="price">~$1.84</td><td class="note-cell">GPT-6.1 Sol</td></tr>'
+    new_html, n = re.subn(
+        r'<tr><td class="model"><button type="button" class="model-btn" data-copy="gpt-6\.1-sol">gpt-6\.1-sol</button></td><td class="price">~\$[^<]+</td><td class="price">~\$[^<]+</td><td class="note-cell">GPT-6\.1 Sol</td></tr>',
+        row,
+        html,
+        count=1,
+    )
+    if n:
+        open(path, "w", encoding="utf-8").write(new_html)
+        print("docs_price", MODEL)
         return
     needle = '<tr><td class="model"><button type="button" class="model-btn" data-copy="gpt-6-sol">gpt-6-sol</button></td><td class="price">~$0.37</td><td class="price">~$1.84</td><td class="note-cell">GPT-6 Sol</td></tr>'
-    row = '<tr><td class="model"><button type="button" class="model-btn" data-copy="gpt-6.1-sol">gpt-6.1-sol</button></td><td class="price">~$0.07</td><td class="price">~$0.37</td><td class="note-cell">GPT-6.1 Sol</td></tr>'
     if needle in html:
         html = html.replace(needle, needle + "\n" + row, 1)
         open(path, "w", encoding="utf-8").write(html)

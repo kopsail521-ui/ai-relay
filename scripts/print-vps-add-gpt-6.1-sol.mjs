@@ -1,5 +1,5 @@
 /**
- * Generate short VPS paste: list gpt-6.1-sol on Keyo Primary (sell = cost).
+ * Generate short VPS paste: list gpt-6.1-sol on Keyo Primary (sell = cost × 5).
  *   node scripts/print-vps-add-gpt-6.1-sol.mjs
  */
 import fs from "fs";
@@ -50,9 +50,9 @@ PY`,
 writeLf(path.join(root, "scripts/vps-add-gpt-6.1-sol-short.txt"), short + "\n");
 writeLf(
   path.join(root, "scripts/vps-add-gpt-6.1-sol-readme.txt"),
-  `# 上架 gpt-6.1-sol（Keyo Primary；售价=成本）
+  `# 上架 gpt-6.1-sol（Keyo Primary；售价=成本×5，同 gpt-6-sol）
 
-约 $0.07354 / $0.3677 每百万 tokens。
+约 $0.3677 / $1.8385 每百万 tokens。
 
 粘贴：scripts/vps-add-gpt-6.1-sol-short.txt
 → DONE_ADD_GPT61_SOL

@@ -1,6 +1,6 @@
-# 上架 gpt-6.1-sol（Keyo Primary；售价=成本）
+# 上架 gpt-6.1-sol（Keyo Primary；售价=成本×5，同 gpt-6-sol）
 
-约 $0.07354 / $0.3677 每百万 tokens。
+约 $0.3677 / $1.8385 每百万 tokens。
 
 粘贴：scripts/vps-add-gpt-6.1-sol-short.txt
 → DONE_ADD_GPT61_SOL

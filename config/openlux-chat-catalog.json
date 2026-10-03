@@ -54,6 +54,22 @@
       "markup": 5
     },
     {
+      "model": "gpt-6.1-sol",
+      "endpoints": "openai|openai-response",
+      "group": "Codex-Gpt-1",
+      "cost_in_usd": 0.07354,
+      "cost_out_usd": 0.3677,
+      "sell_in_usd": 0.3677,
+      "sell_out_usd": 1.8385,
+      "sell_in_cny": 2.68421,
+      "sell_out_cny": 13.42105,
+      "model_ratio": 0.07354,
+      "completion_ratio": 5,
+      "our_model_ratio": 0.18385,
+      "our_completion_ratio": 5,
+      "markup": 5
+    },
+    {
       "model": "gpt-6-astra",
       "endpoints": "openai|openai-response",
       "group": "Codex-Gpt-1",

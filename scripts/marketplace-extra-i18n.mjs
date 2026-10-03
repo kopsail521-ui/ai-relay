@@ -60,7 +60,7 @@ export const EXTRA_MODELS = {
   },
   "gpt-6.1-sol": {
     mode: "token",
-    ratio: 0.03677,
+    ratio: 0.18385,
     completion: 5,
     desc: {
       zhCN: "GPT-6.1 Sol 对话与推理，Sol 线更新档。",

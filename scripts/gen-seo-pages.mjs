@@ -6,8 +6,9 @@
  * User-facing copy: do not use meta-talk such as "crawlable", "for SEO",
  * "search engines", "this page targets", "search demand", "searches are",
  * "buyers usually want", "How to think about this page", "What this page is not".
- * Keep product CTAs to /pricing/{id}. Do not globally strip the word "SEO" from
- * use cases (e.g. "SEO rewriting").
+ * Prefer crawlable CTAs to /model/{id} when a guide exists; free IDs without a
+ * guide go to /free-models. Interactive Model Square (/pricing) stays for humans.
+ * Do not globally strip the word "SEO" from use cases (e.g. "SEO rewriting").
  * Also ban in user-facing copy: "search intent", "highest-traffic",
  * "this hub is that landing", "for SEO", "search engines".
  */
@@ -69,23 +70,26 @@ function allFreeModels() {
   return out.sort((a, b) => a.id.localeCompare(b.id));
 }
 
-function featuredCardsHtml() {
+/** Crawlable catalog link: guide page > free hub > pricing-list. */
+function catalogHref(id) {
   const guideIds = new Set(pages.models.map((m) => m.id));
+  if (guideIds.has(id)) return `/model/${encodeURIComponent(id)}`;
+  const s = String(id);
+  if (s.endsWith(":free") || s.endsWith("-free")) return "/free-models";
+  return "/pricing-list";
+}
+
+function featuredCardsHtml() {
   return (featuredCfg.models || [])
     .map((f) => {
-      const href = guideIds.has(f.id)
-        ? `/model/${encodeURIComponent(f.id)}`
-        : `/pricing/${encodeURIComponent(f.id)}`;
+      const href = catalogHref(f.id);
       return `<a href="${href}"><span class="grid-title">${esc(f.label || f.id)}</span><span class="grid-meta">${esc(f.blurb || "")}</span></a>`;
     })
     .join("\n");
 }
 
 function featuredHref(id) {
-  const guideIds = new Set(pages.models.map((m) => m.id));
-  return guideIds.has(id)
-    ? `/model/${encodeURIComponent(id)}`
-    : `/pricing/${encodeURIComponent(id)}`;
+  return catalogHref(id);
 }
 
 function esc(s) {
@@ -117,7 +121,17 @@ function linkifySitePaths(raw) {
     `(\\/brand\\/blog\\/article\\/[A-Za-z0-9][A-Za-z0-9_-]*\\/?|\\/(?:pricing|model)\\/[A-Za-z0-9](?:[A-Za-z0-9._-]*[A-Za-z0-9_-])?|${literals.join("|")}|(?<![A-Za-z0-9./])\\/pricing)(?![A-Za-z0-9_/-])`,
     "g"
   );
-  return s.replace(re, (m) => `<a href="${m}">${m}</a>`);
+  return s.replace(re, (m) => {
+    const href = rewritePricingIdPath(m);
+    return `<a href="${href}">${href}</a>`;
+  });
+}
+
+/** Crawlers cannot fetch /pricing/{id} (robots Disallow: /pricing/). */
+function rewritePricingIdPath(pathname) {
+  const m = String(pathname).match(/^\/pricing\/(.+)$/);
+  if (!m) return pathname;
+  return catalogHref(decodeURIComponent(m[1]));
 }
 
 /** First sentence without breaking on decimals like RMBG-2.0 */
@@ -177,7 +191,8 @@ function nav() {
   <a class="k-wordmark" href="/"><img src="/brand/logo.svg" alt="" width="22" height="22" />KeyoAPI</a>
   <nav aria-label="Primary">
     <a href="/pricing">Pricing</a>
-    <a href="/pricing-list">Pricing list</a>
+    <a href="/models">Models</a>
+    <a href="/compare">Compare</a>
     <a href="/brand/keyo-docs.html">Docs</a>
     <a href="/brand/faq.html">FAQ</a>
     <a href="/console">Console</a>
@@ -328,11 +343,11 @@ function renderModel(m) {
   const curl = m.curlExample || "";
   const bodyHtml = `
 <p class="lead">${linkifySitePaths(lead)}</p>
-<p class="meta">Listed price: <span class="ok">${esc(m.priceLabel)}</span> · Confirm live rates on <a href="/pricing/${encodeURIComponent(m.id)}">interactive pricing</a>.</p>
+<p class="meta">Listed price: <span class="ok">${esc(m.priceLabel)}</span> · Live catalog: <a href="/pricing">Model Square</a> · Static list: <a href="/pricing-list">pricing list</a>.</p>
 <div class="btnrow">
-  <a class="btn btn-primary" href="/pricing/${encodeURIComponent(m.id)}">Open interactive pricing</a>
+  <a class="btn btn-primary" href="/sign-up">Get API key</a>
+  <a class="btn btn-secondary" href="/pricing">Open Model Square</a>
   <a class="btn btn-secondary" href="/compare">Compare API prices</a>
-  <a class="btn btn-secondary" href="/sign-up">Create account</a>
 </div>
 <h2>Overview</h2>
 ${paras}
@@ -349,7 +364,7 @@ ${freeTierBlock(m)}
 <div class="faq">${faqs}</div>
 <h2>Related models</h2>
 ${relatedLinks(m.related)}
-<p class="meta">Guide for <strong>${esc(m.id)}</strong>. Try/buy: <a href="/pricing/${encodeURIComponent(m.id)}">/pricing/${esc(m.id)}</a> · Catalog: <a href="/pricing">/pricing</a>.</p>
+<p class="meta">Guide for <strong>${esc(m.id)}</strong>. Catalog: <a href="/pricing">/pricing</a> · Rates: <a href="/pricing-list">/pricing-list</a>.</p>
 `;
   return layout({
     title: m.title,
@@ -376,9 +391,10 @@ ${relatedLinks(m.related)}
 function renderHome() {
   // Conversion-first hero (matches keyo-home) + below-fold anchors.
   // OpenAI-compatible is a path fact, not a whole-catalog claim.
-  const title = "KeyoAPI - One API Key for Chat, Speech, OCR & Vision | Cheap LLM API";
+  const title =
+    "KeyoAPI — One Key for Chat, Speech, OCR & Digital Humans";
   const description =
-    "One key, one balance for GPT-class, Claude, DeepSeek, Whisper, OCR, vision, TTS and avatar models. Chat, image and speech paths are OpenAI-compatible; OCR, CV and digital-human use dedicated REST paths. Cheap LLM API with prepaid credits.";
+    "One prepaid key for GPT-class chat, Whisper, TTS, OCR, vision tools, and talking-avatar / video models. Chat, image and speech paths are OpenAI-compatible; OCR, CV and digital-human use dedicated REST — same balance.";
   const canonical = `${site}/`;
   const ogDescription =
     "One API key for chat, image, speech, OCR, vision and avatars — OpenAI-compatible on chat/image/speech paths; dedicated REST for the rest.";
@@ -400,7 +416,7 @@ function renderHome() {
     .slice(0, 12)
     .map(
       (m) =>
-        `<a href="/pricing/${encodeURIComponent(m.id)}"><span class="grid-title"><code>${esc(m.id)}</code></span><span class="grid-meta">$0</span></a>`
+        `<a href="/free-models"><span class="grid-title"><code>${esc(m.id)}</code></span><span class="grid-meta">$0</span></a>`
     )
     .join("\n");
   const modelFoot = pages.models
@@ -433,7 +449,7 @@ function renderHome() {
     name: "KeyoAPI",
     url: site,
     description:
-      "Cheap LLM API relay: OpenAI-compatible chat/image/speech paths plus dedicated REST for OCR, vision and avatars — one prepaid key.",
+      "Prepaid AI API gateway: OpenAI-compatible chat/image/speech plus dedicated REST for OCR, vision, TTS and digital humans — one key, one balance.",
     applicationCategory: "DeveloperApplication",
     offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
   })}</script>
@@ -466,8 +482,8 @@ ${nav()}
 <section class="hero">
   <div class="inner">
     <div>
-      <h1>One API for Multiple AI Models</h1>
-      <p class="sub">One prepaid key for chat, speech, OCR &amp; vision. Lower rates — one balance.</p>
+      <h1>One key for chat, speech, OCR &amp; digital humans</h1>
+      <p class="sub">OpenAI-compatible chat, image and speech — plus OCR, TTS and talking-avatar APIs on the same prepaid balance.</p>
       <div class="actions">
         <a class="btn btn-primary" href="/sign-up">Start free — get API key</a>
         <a class="btn btn-secondary" href="/brand/keyo-docs.html">Docs</a>
@@ -564,7 +580,7 @@ function renderModelsIndex() {
   const rows = pages.models
     .map(
       (m) =>
-        `<tr><td><a href="/model/${encodeURIComponent(m.id)}"><code>${esc(m.id)}</code></a></td><td>${esc(m.category || "")}</td><td class="ok">${esc(m.priceLabel)}</td><td><a href="/model/${encodeURIComponent(m.id)}">Guide</a> · <a href="/pricing/${encodeURIComponent(m.id)}">Try</a></td></tr>`
+        `<tr><td><a href="/model/${encodeURIComponent(m.id)}"><code>${esc(m.id)}</code></a></td><td>${esc(m.category || "")}</td><td class="ok">${esc(m.priceLabel)}</td><td><a href="/model/${encodeURIComponent(m.id)}">Guide</a> · <a href="/pricing">Catalog</a></td></tr>`
     )
     .join("\n");
   const bodyHtml = `
@@ -617,7 +633,7 @@ function renderAbout() {
     .slice(0, 12)
     .map(
       (m) =>
-        `<a href="/pricing/${encodeURIComponent(m.id)}"><span class="grid-title"><code>${esc(m.id)}</code></span><span class="grid-meta">$0</span></a>`
+        `<a href="/free-models"><span class="grid-title"><code>${esc(m.id)}</code></span><span class="grid-meta">$0</span></a>`
     )
     .join("\n");
   const bodyHtml = `
@@ -670,11 +686,11 @@ ${freeCards}
 </div>
 `;
   return layout({
-    title: "About KeyoAPI - One API Key for Chat, Speech, OCR & Vision | Cheap LLM API",
+    title: "About KeyoAPI — One Key for Chat, Speech, OCR & Digital Humans",
     description:
       "KeyoAPI is an AI API relay: chat, image and speech are OpenAI-compatible; OCR, vision, TTS-async and digital-human models use dedicated REST paths — same key, same prepaid balance, with fixed $0 free model IDs.",
     canonical: `${site}/about`,
-    h1: "One API for Multiple AI Models",
+    h1: "One key for chat, speech, OCR & digital humans",
     bodyHtml,
     jsonLd: {
       "@context": "https://schema.org",
@@ -682,7 +698,7 @@ ${freeCards}
       name: "About KeyoAPI",
       url: `${site}/about`,
       description:
-        "About KeyoAPI — cheap LLM API relay with OpenAI-compatible chat/image/speech and dedicated REST for OCR, vision and avatars.",
+        "About KeyoAPI — prepaid AI API gateway with OpenAI-compatible chat/image/speech and dedicated REST for OCR, vision and avatars.",
     },
   });
 }
@@ -692,11 +708,11 @@ function renderCompare() {
     .filter((m) => m.category === "llm")
     .map(
       (m) =>
-        `<tr><td><a href="/model/${encodeURIComponent(m.id)}">${esc(m.id)}</a></td><td>${esc(m.priceLabel)}</td><td><a href="/pricing/${encodeURIComponent(m.id)}">Interactive</a></td></tr>`
+        `<tr><td><a href="/model/${encodeURIComponent(m.id)}">${esc(m.id)}</a></td><td>${esc(m.priceLabel)}</td><td><a href="/model/${encodeURIComponent(m.id)}">Guide</a></td></tr>`
     )
     .join("\n");
   const bodyHtml = `
-<p class="lead">This <strong>LLM API pricing comparison</strong> (and broader <strong>AI API price comparison</strong>) page puts KeyoAPI sell rates next to typical official list bands for GPT-class, Claude-class, DeepSeek, Whisper, and vision APIs — useful when you want a <strong>cheap LLM API</strong> path without juggling five vendor invoices.</p>
+<p class="lead">This <strong>LLM API pricing comparison</strong> (and broader <strong>AI API price comparison</strong>) page puts KeyoAPI sell rates next to typical official list bands for GPT-class, Claude-class, DeepSeek, Whisper, and vision APIs — useful when you want one prepaid key without juggling five vendor invoices.</p>
 <p class="meta">Figures are indicative for planning. Always confirm live sell rates in <a href="/pricing">Model Square</a> or the static <a href="/pricing-list">pricing list</a> before contracting volume.</p>
 <div class="btnrow">
   <a class="btn btn-primary" href="/sign-up">Create KeyoAPI account</a>
@@ -723,15 +739,15 @@ function renderCompare() {
   <li><a href="/openai-api-alternative"><strong>OpenAI API alternative</strong></a> — why switch, two-line migration, price table</li>
   <li><a href="/openai-api-pricing">OpenAI / ChatGPT API pricing</a> · <a href="/claude-api-pricing">Claude API pricing</a> · <a href="/deepseek-api-pricing">DeepSeek API pricing</a></li>
   <li><a href="/free-models">Free AI API</a> — fixed $0 catalog IDs for prototyping</li>
-  <li><a href="/model/CosyVoice3">CosyVoice3 API</a> · <a href="/tts-api">TTS API</a> · <a href="/model/Duix-Avatar">Duix Avatar</a></li>
+  <li><a href="/model/CosyVoice3">CosyVoice3 API</a> · <a href="/tts-api">Text to Speech API</a> · <a href="/model/Duix-Avatar">Duix Avatar</a></li>
 </ul>
 <h2>Modality pages</h2>
 ${relatedLinks(["CosyVoice3", "whisper-large-v3", "Qwen3-TTS", "IndexTTS-2", "Duix-Avatar", "RMBG-2.0"])}
 `;
   return layout({
-    title: "LLM API Pricing Comparison | Cheap LLM API on KeyoAPI",
+    title: "LLM API Pricing Comparison | KeyoAPI",
     description:
-      "LLM API pricing comparison and AI API price comparison: KeyoAPI vs typical official list rates for GPT-class, Claude, DeepSeek, and multimodal IDs. Cheap LLM API on one prepaid key.",
+      "LLM API pricing comparison and AI API price comparison: KeyoAPI vs typical official list rates for GPT-class, Claude, DeepSeek, and multimodal IDs on one prepaid key.",
     canonical: `${site}/compare`,
     h1: "LLM API Pricing Comparison: KeyoAPI vs Official List Rates",
     bodyHtml,
@@ -750,11 +766,11 @@ function renderPricing() {
   const freeRows = allFreeModels()
     .map(
       (m) => `<tr>
-  <td><a href="/pricing/${encodeURIComponent(m.id)}"><code>${esc(m.id)}</code></a></td>
+  <td><a href="/free-models"><code>${esc(m.id)}</code></a></td>
   <td>free</td>
   <td class="ok">$0</td>
   <td><code>POST /v1/chat/completions</code></td>
-  <td><a href="/free-models">Free hub</a> · <a href="/pricing/${encodeURIComponent(m.id)}">Try</a></td>
+  <td><a href="/free-models">Free hub</a> · <a href="/sign-up">Get key</a></td>
 </tr>`
     )
     .join("\n");
@@ -779,20 +795,18 @@ function renderPricing() {
       const guide = m.guide === false
         ? `<a href="/pricing-list">List</a>`
         : `<a href="/model/${encodeURIComponent(m.id)}">Guide</a>`;
-      const modelHref = m.guide === false
-        ? `/pricing/${encodeURIComponent(m.id)}`
-        : `/model/${encodeURIComponent(m.id)}`;
+      const modelHref = catalogHref(m.id);
       return `<tr>
   <td><a href="${modelHref}"><code>${esc(m.id)}</code></a></td>
   <td>${esc(m.category)}</td>
   <td class="ok">${esc(m.priceLabel)}</td>
   <td><code>${esc(m.endpoint)}</code></td>
-  <td>${guide} · <a href="/pricing/${encodeURIComponent(m.id)}">Try / buy</a></td>
+  <td>${guide} · <a href="/pricing">Catalog</a></td>
 </tr>`;
     })
     .join("\n");
   const bodyHtml = `
-<p class="lead">Static <strong>AI API pricing</strong> list for KeyoAPI — model IDs, indicative USD rates, and real endpoints. Use this page to compare rates; open interactive try/buy links when you are ready to generate keys.</p>
+<p class="lead">Static <strong>AI API pricing</strong> list for KeyoAPI — model IDs, indicative USD rates, and real endpoints. Use this page to compare rates; open Model Square when you are ready to generate keys.</p>
 <p class="meta">Rates below are catalog snapshots for planning. Wallet top-up and live sell prices are confirmed in the console after <a href="/sign-up">sign-up</a>.</p>
 <div class="btnrow">
   <a class="btn btn-primary" href="/sign-up">Create account</a>
@@ -818,7 +832,7 @@ function renderPricing() {
 </table>
 <h2>How billing works</h2>
 <p>KeyoAPI is a prepaid <strong>ai api relay</strong>: one balance covers chat, Whisper, OCR, vision, TTS, and digital humans. LLM rows are usually token-metered; many vision/speech models are per-request or async-task metered.</p>
-<p>Try or buy from <code>/pricing/{modelId}</code> after login. Model explainers are at <code>/model/{modelId}</code>.</p>
+<p>Open interactive catalog at <a href="/pricing">/pricing</a> after login. Model explainers are at <code>/model/{modelId}</code>.</p>
 `;
   return layout({
     title: "AI API Pricing List - KeyoAPI Models & Rates",
@@ -833,7 +847,7 @@ function renderPricing() {
       name: "KeyoAPI Pricing List",
       url: `${site}/pricing-list`,
       description:
-        "Static pricing table for KeyoAPI cheap LLM API and multimodal models.",
+        "Static pricing table for KeyoAPI multimodal and chat models on one prepaid key.",
     },
   });
 }
@@ -850,7 +864,7 @@ function renderFreeModels() {
   <td>${twinCell}</td>
   <td class="ok">$0</td>
   <td>${esc(m.family || "—")}</td>
-  <td><a href="/pricing/${encodeURIComponent(m.id)}">Try</a></td>
+  <td><a href="/sign-up">Get key</a></td>
 </tr>`;
     })
     .join("\n");
@@ -954,9 +968,9 @@ function landingRelatedLinks(slug) {
     "tts-api":
       `${base}, and <a href="/model/CosyVoice3">CosyVoice3 API</a> · <a href="/voice-cloning-api">Voice cloning</a> · <a href="/model/IndexTTS-2">IndexTTS-2</a>`,
     "voice-cloning-api":
-      `${base}, and <a href="/tts-api">TTS API</a> · <a href="/model/CosyVoice3">CosyVoice3</a> · <a href="/model/Qwen3-TTS">Qwen3-TTS</a>`,
+      `${base}, and <a href="/tts-api">Text to Speech</a> · <a href="/model/CosyVoice3">CosyVoice3</a> · <a href="/model/Qwen3-TTS">Qwen3-TTS</a>`,
     "ai-avatar-video-generator":
-      `${base}, and <a href="/model/Duix-Avatar">Duix Avatar</a> · <a href="/model/InfiniteTalk">InfiniteTalk</a> · <a href="/tts-api">TTS API</a>`,
+      `${base}, and <a href="/model/Duix-Avatar">Duix Avatar</a> · <a href="/model/InfiniteTalk">InfiniteTalk</a> · <a href="/tts-api">Text to Speech</a>`,
     "remove-bg-api-alternative":
       `${base}, and <a href="/model/RMBG-2.0">RMBG-2.0</a> · <a href="/model/sam3">sam3</a>`,
     "gemini-api-pricing":
@@ -984,7 +998,7 @@ function renderPricingLanding(p) {
   const rows = p.rows
     .map(
       (r) => `<tr>
-  <td><code>${esc(r.model)}</code></td>
+  <td><a href="${catalogHref(r.model)}"><code>${esc(r.model)}</code></a></td>
   <td>${linkifySitePaths(r.official)}</td>
   <td class="ok">${esc(r.keyo)}</td>
   <td>${linkifySitePaths(r.note)}</td>

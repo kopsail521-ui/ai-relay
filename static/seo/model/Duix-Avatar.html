@@ -63,7 +63,8 @@ ul{margin:0 0 14px;padding-left:1.2em}
   <a class="k-wordmark" href="/"><img src="/brand/logo.svg" alt="" width="22" height="22" />KeyoAPI</a>
   <nav aria-label="Primary">
     <a href="/pricing">Pricing</a>
-    <a href="/pricing-list">Pricing list</a>
+    <a href="/models">Models</a>
+    <a href="/compare">Compare</a>
     <a href="/brand/keyo-docs.html">Docs</a>
     <a href="/brand/faq.html">FAQ</a>
     <a href="/console">Console</a>
@@ -75,14 +76,14 @@ ul{margin:0 0 14px;padding-left:1.2em}
 <h1>Duix Avatar API — Audio+Video Driven Digital Human</h1>
 
 <p class="lead">Searching for a Duix Avatar API?</p>
-<p class="meta">Listed price: <span class="ok">$0.0068 / second</span> · Confirm live rates on <a href="/pricing/Duix-Avatar">interactive pricing</a>.</p>
+<p class="meta">Listed price: <span class="ok">$0.0068 / second</span> · Live catalog: <a href="/pricing">Model Square</a> · Static list: <a href="/pricing-list">pricing list</a>.</p>
 <div class="btnrow">
-  <a class="btn btn-primary" href="/pricing/Duix-Avatar">Open interactive pricing</a>
+  <a class="btn btn-primary" href="/sign-up">Get API key</a>
+  <a class="btn btn-secondary" href="/pricing">Open Model Square</a>
   <a class="btn btn-secondary" href="/compare">Compare API prices</a>
-  <a class="btn btn-secondary" href="/sign-up">Create account</a>
 </div>
 <h2>Overview</h2>
-<p>Searching for a Duix Avatar API or a hosted alternative to self-managed digital-human stacks? KeyoAPI exposes Duix-Avatar as an async talking-avatar API: feed a face video plus driving audio, get lip-sync and expressions back as a render job. This is the API path for product teams — not a consumer Duix app. Build the loop on one prepaid key: generate speech with CosyVoice3 / Qwen3-TTS / IndexTTS-2, then drive Duix-Avatar. Per-second pricing (~$0.0068) maps to output length; confirm on <a href="/pricing/Duix-Avatar">/pricing/Duix-Avatar</a>. Cap max duration, show queue ETA, and moderate deepfake abuse. Prefer InfiniteTalk when you start from a still photo plus audio. Endpoint: POST /v1/async/videos/audio-video-to-video with model=Duix-Avatar, then GET /v1/task/{id}. Hub page: <a href="/ai-avatar-video-generator">/ai-avatar-video-generator</a>.</p>
+<p>Searching for a Duix Avatar API or a hosted alternative to self-managed digital-human stacks? KeyoAPI exposes Duix-Avatar as an async talking-avatar API: feed a face video plus driving audio, get lip-sync and expressions back as a render job. This is the API path for product teams — not a consumer Duix app. Build the loop on one prepaid key: generate speech with CosyVoice3 / Qwen3-TTS / IndexTTS-2, then drive Duix-Avatar. Per-second pricing (~$0.0068) maps to output length; confirm on <a href="/model/Duix-Avatar">/model/Duix-Avatar</a>. Cap max duration, show queue ETA, and moderate deepfake abuse. Prefer InfiniteTalk when you start from a still photo plus audio. Endpoint: POST /v1/async/videos/audio-video-to-video with model=Duix-Avatar, then GET /v1/task/{id}. Hub page: <a href="/ai-avatar-video-generator">/ai-avatar-video-generator</a>.</p>
 
 <h2>Quick start</h2>
 <div class="card">
@@ -101,13 +102,13 @@ ul{margin:0 0 14px;padding-left:1.2em}
 <div class="faq"><details><summary>What is the Duix Avatar API on Keyo?</summary><p>Call model=Duix-Avatar on POST /v1/async/videos/audio-video-to-video with driving audio and a face video, then poll /v1/task/{id}. Hub: <a href="/ai-avatar-video-generator">/ai-avatar-video-generator</a>.</p></details>
 <details><summary>Is generation realtime?</summary><p>Duix-Avatar runs as an async job—submit audio/video drivers, then fetch the rendered avatar clip.</p></details>
 <details><summary>How do I supply voice?</summary><p>Generate speech with IndexTTS-2, CosyVoice3, or Qwen3-TTS (or upload audio), then drive Duix-Avatar for lip-sync and expressions.</p></details>
-<details><summary>Billing unit?</summary><p>About $0.0068 per second of output—see <a href="/pricing/Duix-Avatar">/pricing/Duix-Avatar</a>.</p></details></div>
+<details><summary>Billing unit?</summary><p>About $0.0068 per second of output—see <a href="/model/Duix-Avatar">/model/Duix-Avatar</a>.</p></details></div>
 <h2>Related models</h2>
 <div class="grid"><a href="/model/InfiniteTalk">InfiniteTalk API</a>
 <a href="/model/IndexTTS-2">IndexTTS-2 API</a>
 <a href="/model/CosyVoice3">CosyVoice3 API</a>
 <a href="/model/Qwen3-TTS">Qwen3-TTS API</a></div>
-<p class="meta">Guide for <strong>Duix-Avatar</strong>. Try/buy: <a href="/pricing/Duix-Avatar">/pricing/Duix-Avatar</a> · Catalog: <a href="/pricing">/pricing</a>.</p>
+<p class="meta">Guide for <strong>Duix-Avatar</strong>. Catalog: <a href="/pricing">/pricing</a> · Rates: <a href="/pricing-list">/pricing-list</a>.</p>
 
 </main>
 <footer class="footer">
@@ -122,7 +123,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
   <a href="/claude-api-pricing">Claude pricing</a>
   <a href="/openai-api-pricing">OpenAI pricing</a>
   <a href="/remove-bg-api-alternative">remove.bg API</a>
-  <a href="/tts-api">TTS API</a>
+  <a href="/tts-api">Text to Speech</a>
   <a href="/voice-cloning-api">Voice clone API</a>
   <a href="/ai-avatar-video-generator">Avatar video API</a>
   <a href="/grok-api-pricing">Grok pricing</a>

@@ -63,7 +63,8 @@ ul{margin:0 0 14px;padding-left:1.2em}
   <a class="k-wordmark" href="/"><img src="/brand/logo.svg" alt="" width="22" height="22" />KeyoAPI</a>
   <nav aria-label="Primary">
     <a href="/pricing">Pricing</a>
-    <a href="/pricing-list">Pricing list</a>
+    <a href="/models">Models</a>
+    <a href="/compare">Compare</a>
     <a href="/brand/keyo-docs.html">Docs</a>
     <a href="/brand/faq.html">FAQ</a>
     <a href="/console">Console</a>
@@ -87,16 +88,16 @@ ul{margin:0 0 14px;padding-left:1.2em}
 <thead><tr><th>Model ID</th><th>Typical official / context</th><th>KeyoAPI</th><th>Notes</th></tr></thead>
 <tbody>
 <tr>
-  <td><code>grok-4.7</code></td>
+  <td><a href="/model/grok-4.7"><code>grok-4.7</code></a></td>
   <td>xAI Grok public list bands move quickly — verify on x.ai / console before budgeting</td>
   <td class="ok">~$0.74 / $2.21 per 1M in/out</td>
-  <td>Featured Grok chat · <a href="/pricing/grok-4.7">/pricing/grok-4.7</a></td>
+  <td>Featured Grok chat · <a href="/model/grok-4.7">/model/grok-4.7</a></td>
 </tr>
 <tr>
-  <td><code>grok-4.6</code></td>
+  <td><a href="/model/grok-4.6"><code>grok-4.6</code></a></td>
   <td>Prior Grok 4.6 list — verify on xAI if still published</td>
   <td class="ok">~$0.74 / $2.21 per 1M in/out</td>
-  <td>Catalog twin · confirm <a href="/pricing/grok-4.6">/pricing/grok-4.6</a></td>
+  <td>Catalog twin · confirm <a href="/model/grok-4.6">/model/grok-4.6</a></td>
 </tr>
 </tbody>
 </table>
@@ -104,7 +105,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
 <p>Keyo does not ship an xAI-branded free Grok ID. For $0 prototyping on the same API key, use fixed free catalog IDs on <a href="/free-models">/free-models</a> (fair-use), then switch model= to grok-4.7 without changing base URL or auth.</p>
 <h2>Rates and how to call</h2>
 <p>Teams comparing Grok API pricing usually want xAI-class chat with clearer unit economics — or one prepaid balance that also covers GPT-class, Claude, DeepSeek, Whisper, and vision. Official xAI surfaces win on brand-first features; KeyoAPI wins when you want that model string on an OpenAI-compatible client without a second vendor stack.</p>
-<p>Keyo rates above are indicative sell prices from the live Keyo catalog. Always confirm interactive pages under <a href="/pricing/grok-4.7">/pricing/grok-4.7</a> (and <a href="/pricing/grok-4.6">/pricing/grok-4.6</a> if you pin that ID) before contracting volume. xAI list bands change — treat official figures as planning context.</p>
+<p>Keyo rates above are indicative sell prices from the live Keyo catalog. Always confirm interactive pages under <a href="/model/grok-4.7">/model/grok-4.7</a> (and <a href="/model/grok-4.6">/model/grok-4.6</a> if you pin that ID) before contracting volume. xAI list bands change — treat official figures as planning context.</p>
 <p>How to call: set OPENAI_BASE_URL=https://www.keyoapi.xyz/v1, use your Keyo API key, and pass model=grok-4.7 to POST /v1/chat/completions.</p>
 <p>When Grok list prices spike your margin, keep Grok for the workloads that need it and shift bulk classification to deepseek-v4.1-flash or gpt-6-luna on the same key. For Claude dollars see <a href="/claude-api-pricing">/claude-api-pricing</a>; for OpenAI see <a href="/openai-api-pricing">/openai-api-pricing</a>; for Gemini see <a href="/gemini-api-pricing">/gemini-api-pricing</a>; for DeepSeek see <a href="/deepseek-api-pricing">/deepseek-api-pricing</a>; for free prototyping see <a href="/free-models">/free-models</a>.</p>
 <pre>curl https://www.keyoapi.xyz/v1/chat/completions \
@@ -113,7 +114,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
   -d '{"model":"grok-4.7","messages":[{"role":"user","content":"Hello"}]}'</pre>
 <h2>FAQ</h2>
 <div class="faq"><details><summary>Is Keyo cheaper than official Grok API pricing?</summary><p>Often on the Keyo rows we list versus typical public xAI bands — but xAI list, tiers, and discounts change. Treat this table as a planning snapshot and verify both sides before you commit.</p></details>
-<details><summary>How do I try Grok on Keyo?</summary><p>Create a key at <a href="/sign-up">/sign-up</a>, then open <a href="/pricing/grok-4.7">/pricing/grok-4.7</a> for interactive try/buy. Model Square is the try path.</p></details></div>
+<details><summary>How do I try Grok on Keyo?</summary><p>Create a key at <a href="/sign-up">/sign-up</a>, then open <a href="/model/grok-4.7">/model/grok-4.7</a> for interactive try/buy. Model Square is the try path.</p></details></div>
 <p class="meta">Also see <a href="/compare">/compare</a>, <a href="/free-models">/free-models</a>, <a href="/pricing-list">/pricing-list</a>, and <a href="/model/grok-4.7">grok-4.7</a> · <a href="/model/grok-4.6">grok-4.6</a>.</p>
 
 </main>
@@ -129,7 +130,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
   <a href="/claude-api-pricing">Claude pricing</a>
   <a href="/openai-api-pricing">OpenAI pricing</a>
   <a href="/remove-bg-api-alternative">remove.bg API</a>
-  <a href="/tts-api">TTS API</a>
+  <a href="/tts-api">Text to Speech</a>
   <a href="/voice-cloning-api">Voice clone API</a>
   <a href="/ai-avatar-video-generator">Avatar video API</a>
   <a href="/grok-api-pricing">Grok pricing</a>

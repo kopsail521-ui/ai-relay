@@ -63,7 +63,8 @@ ul{margin:0 0 14px;padding-left:1.2em}
   <a class="k-wordmark" href="/"><img src="/brand/logo.svg" alt="" width="22" height="22" />KeyoAPI</a>
   <nav aria-label="Primary">
     <a href="/pricing">Pricing</a>
-    <a href="/pricing-list">Pricing list</a>
+    <a href="/models">Models</a>
+    <a href="/compare">Compare</a>
     <a href="/brand/keyo-docs.html">Docs</a>
     <a href="/brand/faq.html">FAQ</a>
     <a href="/console">Console</a>
@@ -87,19 +88,19 @@ ul{margin:0 0 14px;padding-left:1.2em}
 <thead><tr><th>Model ID</th><th>Input → output</th><th>KeyoAPI</th><th>Notes</th></tr></thead>
 <tbody>
 <tr>
-  <td><code>Duix-Avatar</code></td>
+  <td><a href="/model/Duix-Avatar"><code>Duix-Avatar</code></a></td>
   <td>Audio + face video → lip-sync / expression render (async)</td>
   <td class="ok">~$0.0068 / second</td>
-  <td><a href="/pricing/Duix-Avatar">/pricing/Duix-Avatar</a> · <a href="/model/Duix-Avatar">/model/Duix-Avatar</a></td>
+  <td><a href="/model/Duix-Avatar">/model/Duix-Avatar</a> · <a href="/model/Duix-Avatar">/model/Duix-Avatar</a></td>
 </tr>
 <tr>
-  <td><code>InfiniteTalk</code></td>
+  <td><a href="/model/InfiniteTalk"><code>InfiniteTalk</code></a></td>
   <td>Portrait image (or video) + audio → talking-head clip (async)</td>
   <td class="ok">~$0.342 / request</td>
-  <td><a href="/pricing/InfiniteTalk">/pricing/InfiniteTalk</a> · <a href="/model/InfiniteTalk">/model/InfiniteTalk</a></td>
+  <td><a href="/model/InfiniteTalk">/model/InfiniteTalk</a> · <a href="/model/InfiniteTalk">/model/InfiniteTalk</a></td>
 </tr>
 <tr>
-  <td><code>Qwen3-TTS</code></td>
+  <td><a href="/model/Qwen3-TTS"><code>Qwen3-TTS</code></a></td>
   <td>Upstream voice for avatar pipelines (async TTS)</td>
   <td class="ok">~$0.548 / 10K characters</td>
   <td>Often used before Duix / InfiniteTalk</td>
@@ -111,7 +112,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
 <h2>Rates and pipeline</h2>
 <p>Duix Avatar API (downstream use): product teams often search “duix avatar” when they need a talking-face render they can meter in SaaS — Keyo exposes that as model=Duix-Avatar on an async video endpoint, not as a consumer editor.</p>
 <p>This is the API path, not a consumer app: prepaid metering, OpenAI-style auth for adjacent chat and speech, async task polling for renders.</p>
-<p>Indicative rates: Duix-Avatar ~$0.0068 per second of output; InfiniteTalk ~$0.342 per request. Confirm <a href="/pricing/Duix-Avatar">/pricing/Duix-Avatar</a> and <a href="/pricing/InfiniteTalk">/pricing/InfiniteTalk</a> before volume. Pick Duix when you have driving video; pick InfiniteTalk when you start from a still spokesperson photo.</p>
+<p>Indicative rates: Duix-Avatar ~$0.0068 per second of output; InfiniteTalk ~$0.342 per request. Confirm <a href="/model/Duix-Avatar">/model/Duix-Avatar</a> and <a href="/model/InfiniteTalk">/model/InfiniteTalk</a> before volume. Pick Duix when you have driving video; pick InfiniteTalk when you start from a still spokesperson photo.</p>
 <p>How to call: async video endpoints with model=Duix-Avatar or InfiniteTalk, then GET /v1/task/{id}. Speech side: <a href="/tts-api">/tts-api</a> and <a href="/voice-cloning-api">/voice-cloning-api</a>. Model guides under <a href="/model/Duix-Avatar">/model/Duix-Avatar</a> and <a href="/model/InfiniteTalk">/model/InfiniteTalk</a>.</p>
 <p>Likeness rights and abuse prevention are your product’s responsibility — rate-limit, log, and require consent flags before queueing.</p>
 <pre>curl https://www.keyoapi.xyz/v1/async/videos/image-to-video \
@@ -125,8 +126,8 @@ ul{margin:0 0 14px;padding-left:1.2em}
 <div class="faq"><details><summary>Is this a Duix Avatar API alternative?</summary><p>Yes for developers who want hosted Duix-Avatar metering on Keyo: same prepaid key as TTS and chat. It is not the official Duix consumer product UI.</p></details>
 <details><summary>Realtime avatar streaming?</summary><p>These models are async render jobs, not WebRTC realtime avatars. Design UX around queue + progress.</p></details>
 <details><summary>Duix vs InfiniteTalk?</summary><p>Different input modalities and billing units (per second vs per request). Prototype both on Keyo; see each model guide.</p></details>
-<details><summary>How do I try?</summary><p>Create a key at <a href="/sign-up">/sign-up</a>, then open <a href="/pricing/Duix-Avatar">/pricing/Duix-Avatar</a> or <a href="/pricing/InfiniteTalk">/pricing/InfiniteTalk</a> for interactive try/buy.</p></details></div>
-<p class="meta">Also see <a href="/compare">/compare</a>, <a href="/free-models">/free-models</a>, <a href="/pricing-list">/pricing-list</a>, and <a href="/model/Duix-Avatar">Duix Avatar</a> · <a href="/model/InfiniteTalk">InfiniteTalk</a> · <a href="/tts-api">TTS API</a>.</p>
+<details><summary>How do I try?</summary><p>Create a key at <a href="/sign-up">/sign-up</a>, then open <a href="/model/Duix-Avatar">/model/Duix-Avatar</a> or <a href="/model/InfiniteTalk">/model/InfiniteTalk</a> for interactive try/buy.</p></details></div>
+<p class="meta">Also see <a href="/compare">/compare</a>, <a href="/free-models">/free-models</a>, <a href="/pricing-list">/pricing-list</a>, and <a href="/model/Duix-Avatar">Duix Avatar</a> · <a href="/model/InfiniteTalk">InfiniteTalk</a> · <a href="/tts-api">Text to Speech</a>.</p>
 
 </main>
 <footer class="footer">
@@ -141,7 +142,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
   <a href="/claude-api-pricing">Claude pricing</a>
   <a href="/openai-api-pricing">OpenAI pricing</a>
   <a href="/remove-bg-api-alternative">remove.bg API</a>
-  <a href="/tts-api">TTS API</a>
+  <a href="/tts-api">Text to Speech</a>
   <a href="/voice-cloning-api">Voice clone API</a>
   <a href="/ai-avatar-video-generator">Avatar video API</a>
   <a href="/grok-api-pricing">Grok pricing</a>

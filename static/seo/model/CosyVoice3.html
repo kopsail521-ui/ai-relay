@@ -63,7 +63,8 @@ ul{margin:0 0 14px;padding-left:1.2em}
   <a class="k-wordmark" href="/"><img src="/brand/logo.svg" alt="" width="22" height="22" />KeyoAPI</a>
   <nav aria-label="Primary">
     <a href="/pricing">Pricing</a>
-    <a href="/pricing-list">Pricing list</a>
+    <a href="/models">Models</a>
+    <a href="/compare">Compare</a>
     <a href="/brand/keyo-docs.html">Docs</a>
     <a href="/brand/faq.html">FAQ</a>
     <a href="/console">Console</a>
@@ -75,14 +76,14 @@ ul{margin:0 0 14px;padding-left:1.2em}
 <h1>CosyVoice3 API — How to Call Multilingual Zero-Shot TTS</h1>
 
 <p class="lead">Looking for a CosyVoice3 API without self-hosting GPUs?</p>
-<p class="meta">Listed price: <span class="ok">$1.37 / 10K characters</span> · Confirm live rates on <a href="/pricing/CosyVoice3">interactive pricing</a>.</p>
+<p class="meta">Listed price: <span class="ok">$1.37 / 10K characters</span> · Live catalog: <a href="/pricing">Model Square</a> · Static list: <a href="/pricing-list">pricing list</a>.</p>
 <div class="btnrow">
-  <a class="btn btn-primary" href="/pricing/CosyVoice3">Open interactive pricing</a>
+  <a class="btn btn-primary" href="/sign-up">Get API key</a>
+  <a class="btn btn-secondary" href="/pricing">Open Model Square</a>
   <a class="btn btn-secondary" href="/compare">Compare API prices</a>
-  <a class="btn btn-secondary" href="/sign-up">Create account</a>
 </div>
 <h2>Overview</h2>
-<p>Looking for a CosyVoice3 API without self-hosting GPUs? KeyoAPI exposes CosyVoice3 as async multilingual zero-shot TTS on the same OpenAI-style key you use for Whisper and chat. How to call CosyVoice3 API on Keyo: create a key at <a href="/sign-up">/sign-up</a>, set Authorization: Bearer YOUR_KEY, POST https://www.keyoapi.xyz/v1/async/audio/speech with JSON {&quot;model&quot;:&quot;CosyVoice3&quot;,&quot;input&quot;:&quot;...&quot;}, then poll GET /v1/task/{id} until the audio URL is ready. Prefer IndexTTS-2 when you need audio back inside a single HTTP round trip. About $1.37 per 10,000 characters — confirm live rates on <a href="/pricing/CosyVoice3">/pricing/CosyVoice3</a>. Product voiceovers, localized support replies, game NPCs, and digital humans (pair with Duix-Avatar or InfiniteTalk via <a href="/ai-avatar-video-generator">/ai-avatar-video-generator</a>). If you want hosted inference instead of a research install, KeyoAPI is that path. Normalize text before synthesis, store voice ids per locale, and CDN-cache finished audio. Try it from <a href="/pricing/CosyVoice3">/pricing/CosyVoice3</a>. Broader TTS map: <a href="/tts-api">/tts-api</a>.</p>
+<p>Looking for a CosyVoice3 API without self-hosting GPUs? KeyoAPI exposes CosyVoice3 as async multilingual zero-shot TTS on the same OpenAI-style key you use for Whisper and chat. How to call CosyVoice3 API on Keyo: create a key at <a href="/sign-up">/sign-up</a>, set Authorization: Bearer YOUR_KEY, POST https://www.keyoapi.xyz/v1/async/audio/speech with JSON {&quot;model&quot;:&quot;CosyVoice3&quot;,&quot;input&quot;:&quot;...&quot;}, then poll GET /v1/task/{id} until the audio URL is ready. Prefer IndexTTS-2 when you need audio back inside a single HTTP round trip. About $1.37 per 10,000 characters — confirm live rates on <a href="/model/CosyVoice3">/model/CosyVoice3</a>. Product voiceovers, localized support replies, game NPCs, and digital humans (pair with Duix-Avatar or InfiniteTalk via <a href="/ai-avatar-video-generator">/ai-avatar-video-generator</a>). If you want hosted inference instead of a research install, KeyoAPI is that path. Normalize text before synthesis, store voice ids per locale, and CDN-cache finished audio. Try it from <a href="/model/CosyVoice3">/model/CosyVoice3</a>. Broader TTS map: <a href="/tts-api">/tts-api</a>.</p>
 
 <h2>Quick start</h2>
 <div class="card">
@@ -100,14 +101,14 @@ ul{margin:0 0 14px;padding-left:1.2em}
 <div class="faq"><details><summary>How do I call the CosyVoice3 API?</summary><p>Set Authorization: Bearer YOUR_KEY, POST https://www.keyoapi.xyz/v1/async/audio/speech with model=CosyVoice3 and your text input, then poll GET /v1/task/{id} until the audio URL is ready.</p></details>
 <details><summary>Is CosyVoice3 synchronous?</summary><p>No. On KeyoAPI it uses POST /v1/async/audio/speech — create a task, then poll GET /v1/task/{id}. For a sync round trip, use IndexTTS-2 on /v1/audio/speech.</p></details>
 <details><summary>What is CosyVoice3 good for?</summary><p>Multilingual zero-shot TTS with streaming-friendly async jobs, dialect and emotion/speed controls where the API schema exposes them.</p></details>
-<details><summary>How do I try it?</summary><p>Open <a href="/pricing/CosyVoice3">/pricing/CosyVoice3</a> after <a href="/sign-up">/sign-up</a>. No separate upload playground — try from interactive pricing.</p></details>
-<details><summary>Price?</summary><p>About $1.37 per 10,000 characters — confirm on <a href="/pricing/CosyVoice3">/pricing/CosyVoice3</a>.</p></details></div>
+<details><summary>How do I try it?</summary><p>Open <a href="/model/CosyVoice3">/model/CosyVoice3</a> after <a href="/sign-up">/sign-up</a>. No separate upload playground — try from interactive pricing.</p></details>
+<details><summary>Price?</summary><p>About $1.37 per 10,000 characters — confirm on <a href="/model/CosyVoice3">/model/CosyVoice3</a>.</p></details></div>
 <h2>Related models</h2>
 <div class="grid"><a href="/model/IndexTTS-2">IndexTTS-2 API</a>
 <a href="/model/Qwen3-TTS">Qwen3-TTS API</a>
 <a href="/model/whisper-large-v3">Whisper Large V3 API</a>
 <a href="/model/Duix-Avatar">Duix Avatar API</a></div>
-<p class="meta">Guide for <strong>CosyVoice3</strong>. Try/buy: <a href="/pricing/CosyVoice3">/pricing/CosyVoice3</a> · Catalog: <a href="/pricing">/pricing</a>.</p>
+<p class="meta">Guide for <strong>CosyVoice3</strong>. Catalog: <a href="/pricing">/pricing</a> · Rates: <a href="/pricing-list">/pricing-list</a>.</p>
 
 </main>
 <footer class="footer">
@@ -122,7 +123,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
   <a href="/claude-api-pricing">Claude pricing</a>
   <a href="/openai-api-pricing">OpenAI pricing</a>
   <a href="/remove-bg-api-alternative">remove.bg API</a>
-  <a href="/tts-api">TTS API</a>
+  <a href="/tts-api">Text to Speech</a>
   <a href="/voice-cloning-api">Voice clone API</a>
   <a href="/ai-avatar-video-generator">Avatar video API</a>
   <a href="/grok-api-pricing">Grok pricing</a>

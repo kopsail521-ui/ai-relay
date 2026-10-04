@@ -354,54 +354,54 @@
     },
     {
       "slug": "tts-api",
-      "navLabel": "TTS API",
-      "h1": "TTS API on KeyoAPI — IndexTTS-2, CosyVoice3 & Qwen3-TTS",
-      "title": "TTS API | Text to Speech Models on KeyoAPI",
-      "metaDescription": "TTS API on KeyoAPI: IndexTTS-2 (sync), CosyVoice3 & Qwen3-TTS (async). From ~$0.548–$1.37 / 10K characters. One key with Whisper and avatars.",
+      "navLabel": "Text to Speech",
+      "h1": "Text to Speech API on KeyoAPI — IndexTTS-2, CosyVoice3 & Qwen3-TTS",
+      "title": "Text to Speech API | TTS Models on KeyoAPI",
+      "metaDescription": "Text to speech API on KeyoAPI: IndexTTS-2 (sync), CosyVoice3 & Qwen3-TTS (async). From ~$0.548–$1.37 / 10K characters. One key with Whisper and avatars.",
       "targetKeywords": [
-        "tts api",
         "text to speech api",
+        "tts api",
         "speech synthesis api"
       ],
       "tableHeading": "TTS models on Keyo",
       "colOfficial": "Shape",
       "bodyHeading": "Rates and endpoints",
-      "lead": "Looking for a TTS API you can call from the same OpenAI-style key as Whisper and chat? KeyoAPI hosts sync IndexTTS-2 plus async CosyVoice3 and Qwen3-TTS — pick latency vs batch, then drive Duix-Avatar or InfiniteTalk when you need a talking face.",
+      "lead": "Looking for a text to speech API you can call from the same OpenAI-style key as Whisper and chat? KeyoAPI hosts sync IndexTTS-2 plus async CosyVoice3 and Qwen3-TTS — pick latency vs batch, then drive Duix-Avatar or InfiniteTalk when you need a talking face.",
       "rows": [
         {
           "model": "IndexTTS-2",
           "official": "Synchronous speech — audio in one HTTP round trip",
           "keyo": "~$1.37 / 10K characters",
-          "note": "POST /v1/audio/speech · /pricing/IndexTTS-2"
+          "note": "POST /v1/audio/speech · guide /model/IndexTTS-2"
         },
         {
           "model": "CosyVoice3",
           "official": "Async multilingual / zero-shot TTS for longer scripts",
           "keyo": "~$1.37 / 10K characters",
-          "note": "POST /v1/async/audio/speech · guide /model/CosyVoice3 · /pricing/CosyVoice3"
+          "note": "POST /v1/async/audio/speech · guide /model/CosyVoice3"
         },
         {
           "model": "Qwen3-TTS",
           "official": "Async flagship TTS with clone-friendly voices",
           "keyo": "~$0.548 / 10K characters",
-          "note": "POST /v1/async/audio/speech · /pricing/Qwen3-TTS"
+          "note": "POST /v1/async/audio/speech · guide /model/Qwen3-TTS"
         }
       ],
       "freeKiller": {
         "title": "Prototype chat free, then meter TTS",
-        "body": "Permanent $0 chat twins (Atria-dawn-v2 / :free catalog IDs, …) sit on the same key for script drafting. TTS rows above are metered — confirm live rates on Model Square before volume. There is no separate upload playground; try from /pricing/{modelId}."
+        "body": "Permanent $0 chat twins (Atria-dawn-v2 / :free catalog IDs, …) sit on the same key for script drafting. TTS rows above are metered — confirm live rates on Model Square. Guides: /model/IndexTTS-2, /model/CosyVoice3, /model/Qwen3-TTS."
       },
       "body": [
-        "Teams call a TTS API for IVR, voice agents, course narration, and avatar pipelines. Keyo keeps STT (Whisper) and TTS on one prepaid balance so you are not juggling three vendor consoles.",
-        "Indicative rates above come from the live Keyo catalog — always confirm /pricing/IndexTTS-2, /pricing/CosyVoice3, and /pricing/Qwen3-TTS. Prefer IndexTTS-2 when the product needs audio inside one request; prefer CosyVoice3 or Qwen3-TTS when jobs are already async.",
+        "Teams call a text to speech API for IVR, voice agents, course narration, and avatar pipelines. Keyo keeps STT (Whisper) and TTS on one prepaid balance so you are not juggling three vendor consoles.",
+        "Indicative rates above come from the live Keyo catalog — confirm /model/IndexTTS-2, /model/CosyVoice3, and /model/Qwen3-TTS (live rates on /pricing). Prefer IndexTTS-2 when the product needs audio inside one request; prefer CosyVoice3 or Qwen3-TTS when jobs are already async.",
         "How to call CosyVoice3 API (and siblings): set base URL https://www.keyoapi.xyz/v1, authenticate with your Keyo key, pass the model id. Full CosyVoice3 walkthrough: /model/CosyVoice3. Also /model/IndexTTS-2, /model/Qwen3-TTS. Voice clone angle: /voice-cloning-api. Talking video: /ai-avatar-video-generator.",
-        "Create a key at /sign-up, then open the model’s /pricing/{id} page for interactive try/buy."
+        "Create a key at /sign-up, then open Model Square (/pricing) for interactive try/buy."
       ],
       "curlExample": "curl https://www.keyoapi.xyz/v1/audio/speech \\\n  -H \"Authorization: Bearer $KEYO_API_KEY\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\"model\":\"IndexTTS-2\",\"input\":\"Hello from KeyoAPI TTS.\"}'",
       "faqs": [
         {
           "q": "Which TTS model should I start with?",
-          "a": "Start with IndexTTS-2 for sync demos; move to CosyVoice3 or Qwen3-TTS for batch/async and clone-heavy workloads. See /model/CosyVoice3 for the CosyVoice3 API call shape, and compare live rates on each /pricing page."
+          "a": "Start with IndexTTS-2 for sync demos; move to CosyVoice3 or Qwen3-TTS for batch/async and clone-heavy workloads. See /model/CosyVoice3 for the CosyVoice3 API call shape, and confirm live rates on /pricing."
         },
         {
           "q": "Is there a free TTS model?",

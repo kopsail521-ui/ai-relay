@@ -1341,7 +1341,49 @@
     "suffix_zh": "",
     "suffix_en": "",
     "price_key_zh": "",
-    "price_key_en": ""
+    "price_key_en": "",
+    "price_table": {
+      "columns": {
+        "zhCN": [
+          "分组",
+          "输入 / 输出 · 每 1M"
+        ],
+        "zhTW": [
+          "分組",
+          "輸入 / 輸出 · 每 1M"
+        ],
+        "en": [
+          "Group",
+          "In / Out per 1M"
+        ],
+        "fr": [
+          "Groupe",
+          "Entrée / sortie / 1M"
+        ],
+        "ru": [
+          "Группа",
+          "Вход / выход / 1M"
+        ],
+        "ja": [
+          "グループ",
+          "入力 / 出力 · 1M"
+        ],
+        "vi": [
+          "Nhóm",
+          "Vào / ra / 1M"
+        ]
+      },
+      "rows": [
+        [
+          "default",
+          "$7.353 / $36.765"
+        ],
+        [
+          "Claude-Code-2",
+          "$12.255139 / $61.275694"
+        ]
+      ]
+    }
   },
   "claude-fable-5": {
     "description": "Claude Fable 5 旗舰对话与代理模型。",
@@ -1389,7 +1431,53 @@
     "suffix_zh": "",
     "suffix_en": "",
     "price_key_zh": "",
-    "price_key_en": ""
+    "price_key_en": "",
+    "price_table": {
+      "columns": {
+        "zhCN": [
+          "分组",
+          "输入 / 输出 · 每 1M"
+        ],
+        "zhTW": [
+          "分組",
+          "輸入 / 輸出 · 每 1M"
+        ],
+        "en": [
+          "Group",
+          "In / Out per 1M"
+        ],
+        "fr": [
+          "Groupe",
+          "Entrée / sortie / 1M"
+        ],
+        "ru": [
+          "Группа",
+          "Вход / выход / 1M"
+        ],
+        "ja": [
+          "グループ",
+          "入力 / 出力 · 1M"
+        ],
+        "vi": [
+          "Nhóm",
+          "Vào / ra / 1M"
+        ]
+      },
+      "rows": [
+        [
+          "default",
+          "$4.41175 / $22.05875"
+        ],
+        [
+          "Claude-Code-2",
+          "$7.353 / $36.765"
+        ],
+        [
+          "AWS-Bedrock-2",
+          "$14.706 / $73.53"
+        ]
+      ]
+    }
   },
   "claude-opus-5": {
     "description": "Claude Opus 5：强力代理与编程，适合高难度任务。",
@@ -1437,7 +1525,53 @@
     "suffix_zh": "",
     "suffix_en": "",
     "price_key_zh": "",
-    "price_key_en": ""
+    "price_key_en": "",
+    "price_table": {
+      "columns": {
+        "zhCN": [
+          "分组",
+          "输入 / 输出 · 每 1M"
+        ],
+        "zhTW": [
+          "分組",
+          "輸入 / 輸出 · 每 1M"
+        ],
+        "en": [
+          "Group",
+          "In / Out per 1M"
+        ],
+        "fr": [
+          "Groupe",
+          "Entrée / sortie / 1M"
+        ],
+        "ru": [
+          "Группа",
+          "Вход / выход / 1M"
+        ],
+        "ja": [
+          "グループ",
+          "入力 / 出力 · 1M"
+        ],
+        "vi": [
+          "Nhóm",
+          "Vào / ra / 1M"
+        ]
+      },
+      "rows": [
+        [
+          "default",
+          "$1.103 / $5.515"
+        ],
+        [
+          "Claude-Code-2",
+          "$1.838354 / $9.191771"
+        ],
+        [
+          "AWS-Bedrock-2",
+          "$3.676708 / $18.383542"
+        ]
+      ]
+    }
   },
   "claude-sonnet-5": {
     "description": "Claude Sonnet 5：长上下文平衡型模型。",
@@ -1485,7 +1619,53 @@
     "suffix_zh": "",
     "suffix_en": "",
     "price_key_zh": "",
-    "price_key_en": ""
+    "price_key_en": "",
+    "price_table": {
+      "columns": {
+        "zhCN": [
+          "分组",
+          "输入 / 输出 · 每 1M"
+        ],
+        "zhTW": [
+          "分組",
+          "輸入 / 輸出 · 每 1M"
+        ],
+        "en": [
+          "Group",
+          "In / Out per 1M"
+        ],
+        "fr": [
+          "Groupe",
+          "Entrée / sortie / 1M"
+        ],
+        "ru": [
+          "Группа",
+          "Вход / выход / 1M"
+        ],
+        "ja": [
+          "グループ",
+          "入力 / 出力 · 1M"
+        ],
+        "vi": [
+          "Nhóm",
+          "Vào / ra / 1M"
+        ]
+      },
+      "rows": [
+        [
+          "default",
+          "$0.4412 / $2.206"
+        ],
+        [
+          "Claude-Code-2",
+          "$0.735342 / $3.676708"
+        ],
+        [
+          "AWS-Bedrock-2",
+          "$1.470683 / $7.353417"
+        ]
+      ]
+    }
   },
   "gemini-3.8-flash": {
     "description": "Gemini 3.8 Flash：更快更强的多模态轻量模型。",
@@ -5130,7 +5310,53 @@
     "suffix_zh": "",
     "suffix_en": "",
     "price_key_zh": "",
-    "price_key_en": ""
+    "price_key_en": "",
+    "price_table": {
+      "columns": {
+        "zhCN": [
+          "分组",
+          "输入 / 输出 · 每 1M"
+        ],
+        "zhTW": [
+          "分組",
+          "輸入 / 輸出 · 每 1M"
+        ],
+        "en": [
+          "Group",
+          "In / Out per 1M"
+        ],
+        "fr": [
+          "Groupe",
+          "Entrée / sortie / 1M"
+        ],
+        "ru": [
+          "Группа",
+          "Вход / выход / 1M"
+        ],
+        "ja": [
+          "グループ",
+          "入力 / 出力 · 1M"
+        ],
+        "vi": [
+          "Nhóm",
+          "Vào / ra / 1M"
+        ]
+      },
+      "rows": [
+        [
+          "default",
+          "$1.7647 / $8.8235"
+        ],
+        [
+          "Claude-Code-2",
+          "$2.9412 / $14.706"
+        ],
+        [
+          "AWS-Bedrock-2",
+          "$5.8824 / $29.412"
+        ]
+      ]
+    }
   },
   "glm-5.3-flash": {
     "description": "智谱 GLM-5.3 Flash 原生多模态高速模型：支持图/视频/文件，强化视觉 Coding、Agent 与 Office 文档任务，约 1M 上下文。 约 $0.107670 / $0.358896 每百万 tokens。",
@@ -6036,5 +6262,99 @@
     "suffix_en": "",
     "price_key_zh": "",
     "price_key_en": ""
+  },
+  "claude-sonnet-5-5": {
+    "description": "Claude Sonnet 5.5：均衡编程与推理，适合日常开发与 Agent。",
+    "descriptions": {
+      "zhCN": "Claude Sonnet 5.5：均衡编程与推理，适合日常开发与 Agent。",
+      "zhTW": "Claude Sonnet 5.5：均衡編程與推理，適合日常開發與 Agent。",
+      "en": "Claude Sonnet 5.5 balanced coding and reasoning for everyday development and agents.",
+      "fr": "Claude Sonnet 5.5 balanced coding and reasoning for everyday development and agents.",
+      "ru": "Claude Sonnet 5.5 balanced coding and reasoning for everyday development and agents.",
+      "ja": "Claude Sonnet 5.5：均衡编程与推理，适合日常开发与 Agent。",
+      "vi": "Claude Sonnet 5.5 balanced coding and reasoning for everyday development and agents."
+    },
+    "unit": "token",
+    "badge": {
+      "zhCN": "按 Token 计费",
+      "zhTW": "按 Token 計費",
+      "en": "Token-based",
+      "fr": "Au token",
+      "ru": "По токенам",
+      "ja": "Token 課金",
+      "vi": "Theo token"
+    },
+    "suffix": {
+      "zhCN": "",
+      "zhTW": "",
+      "en": "",
+      "fr": "",
+      "ru": "",
+      "ja": "",
+      "vi": ""
+    },
+    "price_key": {
+      "zhCN": "",
+      "zhTW": "",
+      "en": "",
+      "fr": "",
+      "ru": "",
+      "ja": "",
+      "vi": ""
+    },
+    "description_zh": "Claude Sonnet 5.5：均衡编程与推理，适合日常开发与 Agent。",
+    "description_en": "Claude Sonnet 5.5 balanced coding and reasoning for everyday development and agents.",
+    "badge_zh": "按 Token 计费",
+    "badge_en": "Token-based",
+    "suffix_zh": "",
+    "suffix_en": "",
+    "price_key_zh": "",
+    "price_key_en": "",
+    "price_table": {
+      "columns": {
+        "zhCN": [
+          "分组",
+          "输入 / 输出 · 每 1M"
+        ],
+        "zhTW": [
+          "分組",
+          "輸入 / 輸出 · 每 1M"
+        ],
+        "en": [
+          "Group",
+          "In / Out per 1M"
+        ],
+        "fr": [
+          "Groupe",
+          "Entrée / sortie / 1M"
+        ],
+        "ru": [
+          "Группа",
+          "Вход / выход / 1M"
+        ],
+        "ja": [
+          "グループ",
+          "入力 / 出力 · 1M"
+        ],
+        "vi": [
+          "Nhóm",
+          "Vào / ra / 1M"
+        ]
+      },
+      "rows": [
+        [
+          "default",
+          "$0.88235 / $4.41175"
+        ],
+        [
+          "Claude-Code-2",
+          "$1.4706 / $7.353"
+        ],
+        [
+          "AWS-Bedrock-2",
+          "$2.9412 / $14.706"
+        ]
+      ]
+    }
   }
 }

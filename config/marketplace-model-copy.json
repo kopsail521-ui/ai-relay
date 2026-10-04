@@ -5850,9 +5850,9 @@
     "descriptions": {
       "zhCN": "GPT-6.1 Sol 对话与推理，Sol 线更新档。",
       "zhTW": "GPT-6.1 Sol 對話與推理，Sol 線更新檔。",
-        "en": "GPT-6.1 Sol chat and reasoning — updated Sol-class GPT-6.",
-        "fr": "GPT-6.1 Sol chat and reasoning — updated Sol-class GPT-6.",
-        "ru": "GPT-6.1 Sol chat and reasoning — updated Sol-class GPT-6.",
+      "en": "GPT-6.1 Sol chat and reasoning — updated Sol-class GPT-6.",
+      "fr": "GPT-6.1 Sol chat and reasoning — updated Sol-class GPT-6.",
+      "ru": "GPT-6.1 Sol chat and reasoning — updated Sol-class GPT-6.",
       "ja": "GPT-6.1 Sol 対話と推論。Sol ラインの更新版。",
       "vi": "GPT-6.1 Sol chat/suy luận — bản Sol mới."
     },
@@ -5886,6 +5886,150 @@
     },
     "description_zh": "GPT-6.1 Sol 对话与推理，Sol 线更新档。",
     "description_en": "GPT-6.1 Sol chat and reasoning — updated Sol-class GPT-6.",
+    "badge_zh": "按 Token 计费",
+    "badge_en": "Token-based",
+    "suffix_zh": "",
+    "suffix_en": "",
+    "price_key_zh": "",
+    "price_key_en": ""
+  },
+  "suno_music_open": {
+    "description": "Suno 歌曲生成（自定义 / 灵感 / 续写），按次计费：$0.0039/次。",
+    "descriptions": {
+      "zhCN": "Suno 歌曲生成（自定义 / 灵感 / 续写），按次计费：$0.0039/次。",
+      "zhTW": "Suno 歌曲生成（自訂 / 靈感 / 續寫），按次計費：$0.0039/次。",
+      "en": "Suno song generation (custom, inspiration, continue). Pricing: $0.0039 / request.",
+      "fr": "Suno song generation (custom, inspiration, continue). Pricing: $0.0039 / request.",
+      "ru": "Suno song generation (custom, inspiration, continue). Pricing: $0.0039 / request.",
+      "ja": "Suno 楽曲生成（カスタム/インスピレーション/続き）。料金：$0.0039/ 回。",
+      "vi": "Suno tạo bài hát (tuỳ chỉnh / cảm hứng / tiếp nối). Giá: $0.0039/ lần."
+    },
+    "unit": "request",
+    "badge": {
+      "zhCN": "按次计费",
+      "zhTW": "按次計費",
+      "en": "Per Request",
+      "fr": "Par requête",
+      "ru": "За запрос",
+      "ja": "リクエスト課金",
+      "vi": "Theo lần gọi"
+    },
+    "suffix": {
+      "zhCN": "/次",
+      "zhTW": "/次",
+      "en": "/ request",
+      "fr": "/ requête",
+      "ru": "/ запрос",
+      "ja": "/ 回",
+      "vi": "/ lần"
+    },
+    "price_key": {
+      "zhCN": "每次请求",
+      "zhTW": "每次請求",
+      "en": "Per request",
+      "fr": "Par requête",
+      "ru": "За запрос",
+      "ja": "リクエストごと",
+      "vi": "Mỗi lần gọi"
+    },
+    "description_zh": "Suno 歌曲生成（自定义 / 灵感 / 续写），按次计费：$0.0039/次。",
+    "description_en": "Suno song generation (custom, inspiration, continue). Pricing: $0.0039 / request.",
+    "badge_zh": "按次计费",
+    "badge_en": "Per Request",
+    "suffix_zh": "/次",
+    "suffix_en": "/ request",
+    "price_key_zh": "每次请求",
+    "price_key_en": "Per request"
+  },
+  "gemini-3.1-flash-tts-preview": {
+    "description": "Gemini 3.1 Flash TTS Preview：低延迟可控语音合成，适合产品旁白与语音助手。",
+    "descriptions": {
+      "zhCN": "Gemini 3.1 Flash TTS Preview：低延迟可控语音合成，适合产品旁白与语音助手。",
+      "zhTW": "Gemini 3.1 Flash TTS Preview：低延遲可控語音合成，適合產品旁白與語音助手。",
+      "en": "Gemini 3.1 Flash TTS Preview — low-latency controllable speech for product voice and assistants.",
+      "fr": "Gemini 3.1 Flash TTS Preview — low-latency controllable speech for product voice and assistants.",
+      "ru": "Gemini 3.1 Flash TTS Preview — low-latency controllable speech for product voice and assistants.",
+      "ja": "Gemini 3.1 Flash TTS Preview。低遅延で制御可能な音声合成。",
+      "vi": "Gemini 3.1 Flash TTS Preview — TTS độ trễ thấp, kiểm soát được."
+    },
+    "unit": "token",
+    "badge": {
+      "zhCN": "按 Token 计费",
+      "zhTW": "按 Token 計費",
+      "en": "Token-based",
+      "fr": "Au token",
+      "ru": "По токенам",
+      "ja": "Token 課金",
+      "vi": "Theo token"
+    },
+    "suffix": {
+      "zhCN": "",
+      "zhTW": "",
+      "en": "",
+      "fr": "",
+      "ru": "",
+      "ja": "",
+      "vi": ""
+    },
+    "price_key": {
+      "zhCN": "",
+      "zhTW": "",
+      "en": "",
+      "fr": "",
+      "ru": "",
+      "ja": "",
+      "vi": ""
+    },
+    "description_zh": "Gemini 3.1 Flash TTS Preview：低延迟可控语音合成，适合产品旁白与语音助手。",
+    "description_en": "Gemini 3.1 Flash TTS Preview — low-latency controllable speech for product voice and assistants.",
+    "badge_zh": "按 Token 计费",
+    "badge_en": "Token-based",
+    "suffix_zh": "",
+    "suffix_en": "",
+    "price_key_zh": "",
+    "price_key_en": ""
+  },
+  "gemini-embedding-2-preview": {
+    "description": "Gemini Embedding 2 Preview：多模态向量化（文本/图/音/视频），适用于跨模态检索与 RAG。",
+    "descriptions": {
+      "zhCN": "Gemini Embedding 2 Preview：多模态向量化（文本/图/音/视频），适用于跨模态检索与 RAG。",
+      "zhTW": "Gemini Embedding 2 Preview：多模態向量化（文本/圖/音/影片），適用於跨模態檢索與 RAG。",
+      "en": "Gemini Embedding 2 Preview — multimodal vectors (text/image/audio/video) for retrieval and RAG.",
+      "fr": "Gemini Embedding 2 Preview — multimodal vectors (text/image/audio/video) for retrieval and RAG.",
+      "ru": "Gemini Embedding 2 Preview — multimodal vectors (text/image/audio/video) for retrieval and RAG.",
+      "ja": "Gemini Embedding 2 Preview。テキスト/画像/音声/動画のマルチモーダル埋め込み。",
+      "vi": "Gemini Embedding 2 Preview — embedding đa phương thức cho RAG."
+    },
+    "unit": "token",
+    "badge": {
+      "zhCN": "按 Token 计费",
+      "zhTW": "按 Token 計費",
+      "en": "Token-based",
+      "fr": "Au token",
+      "ru": "По токенам",
+      "ja": "Token 課金",
+      "vi": "Theo token"
+    },
+    "suffix": {
+      "zhCN": "",
+      "zhTW": "",
+      "en": "",
+      "fr": "",
+      "ru": "",
+      "ja": "",
+      "vi": ""
+    },
+    "price_key": {
+      "zhCN": "",
+      "zhTW": "",
+      "en": "",
+      "fr": "",
+      "ru": "",
+      "ja": "",
+      "vi": ""
+    },
+    "description_zh": "Gemini Embedding 2 Preview：多模态向量化（文本/图/音/视频），适用于跨模态检索与 RAG。",
+    "description_en": "Gemini Embedding 2 Preview — multimodal vectors (text/image/audio/video) for retrieval and RAG.",
     "badge_zh": "按 Token 计费",
     "badge_en": "Token-based",
     "suffix_zh": "",

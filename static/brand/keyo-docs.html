@@ -1274,11 +1274,18 @@
 <tr><td class="model"><button type="button" class="model-btn" data-copy="GLM-TTS">GLM-TTS</button></td><td class="note-cell" data-i18n="nGlmTts"></td></tr>
 <tr><td class="model"><button type="button" class="model-btn" data-copy="Step-Audio-TTS-3B">Step-Audio-TTS-3B</button></td><td class="note-cell" data-i18n="nStepTts"></td></tr>
 <tr><td class="model"><button type="button" class="model-btn" data-copy="IndexTTS-2">IndexTTS-2</button></td><td class="note-cell" data-i18n="nIndexTts"></td></tr>
+<tr><td class="model"><button type="button" class="model-btn" data-copy="gemini-3.1-flash-tts-preview">gemini-3.1-flash-tts-preview</button></td><td class="note-cell">Gemini Flash TTS</td></tr>
             </tbody>
           </table>
         </div>
 
-        <h3 style="font-size:15px;margin:28px 0 10px;letter-spacing:-0.01em;" data-i18n="ttsAsyncTitle"></h3>
+        <h3 style="font-size:15px;margin:28px 0 10px;letter-spacing:-0.01em;">Music</h3>
+<div class="endpoint"><span class="method">POST</span><span class="path">/suno/submit/MUSIC</span><button type="button" class="btn-copy" data-copy="https://www.keyoapi.xyz/suno/submit/MUSIC">Copy</button></div>
+<p class="sec-desc">Suno song generation. Model id <code>suno_music_open</code>. Poll the returned task id.</p>
+<div class="table-wrap"><table><thead><tr><th>Model</th><th>Note</th></tr></thead><tbody>
+<tr><td class="model"><button type="button" class="model-btn" data-copy="suno_music_open">suno_music_open</button></td><td class="note-cell">Suno music · ~$0.0039 / request</td></tr>
+</tbody></table></div>
+<h3 style="font-size:15px;margin:28px 0 10px;letter-spacing:-0.01em;" data-i18n="ttsAsyncTitle"></h3>
         <div class="endpoint">
           <span class="method">POST</span>
           <span class="path">/v1/async/audio/speech</span>
@@ -1337,6 +1344,7 @@
 <tr><td class="note-cell" data-i18n="capSubtitleErase"></td><td class="price">POST /v1/async/videos/subtitle-erase → GET /v1/task/{id}</td><td class="model"><button type="button" class="model-btn" data-copy="subtitle-erase-pro">subtitle-erase-pro</button></td></tr>
 <tr><td class="note-cell" data-i18n="capVideoEnhance"></td><td class="price">POST /v1/async/videos/enhance → GET /v1/task/{id}</td><td class="model"><button type="button" class="model-btn" data-copy="video-enhance-pro">video-enhance-pro</button></td></tr>
 <tr><td class="note-cell" data-i18n="capSystemOne"></td><td class="price">POST /v1/systemone · ~$0.032 / $0</td><td class="model"><button type="button" class="model-btn" data-copy="Bespoke-Nimble-9B">Bespoke-Nimble-9B</button></td></tr>
+<tr><td class="note-cell">Embeddings</td><td class="price">POST /v1/embeddings · ~$0.18 / $0.71</td><td class="model"><button type="button" class="model-btn" data-copy="gemini-embedding-2-preview">gemini-embedding-2-preview</button></td></tr>
 <tr><td class="note-cell" data-i18n="capMod"></td><td class="price">POST /v1/moderations</td><td class="model"><button type="button" class="model-btn" data-copy="nonescape-v0">nonescape-v0</button> · <button type="button" class="model-btn" data-copy="keyo-text-moderation">keyo-text-moderation</button> · <button type="button" class="model-btn" data-copy="Security-semantic-filtering">Security-semantic-filtering</button> · <button type="button" class="model-btn" data-copy="nsfw-classifier">nsfw-classifier</button></td></tr>
             </tbody>
           </table>
@@ -1483,7 +1491,7 @@ const I18N = {
     "pit4": "gemini-omni: do not send duration.",
     "pit5": "Poll path: /v1/tasks (video generations) vs /v1/task (TTS async / docs / InfiniteTalk).",
     "pit6": "Local path or data:base64 in video JSON — upload via POST /v1/uploads first.",
-    "speechRuleSync": "TTS sync → POST /v1/audio/speech (returns audio). Models: GLM-TTS, Step-Audio-TTS-3B, IndexTTS-2.",
+    "speechRuleSync": "TTS sync → POST /v1/audio/speech (returns audio). Models: GLM-TTS, Step-Audio-TTS-3B, IndexTTS-2, gemini-3.1-flash-tts-preview.",
     "speechRuleAsync": "TTS async → POST /v1/async/audio/speech then GET /v1/task/{id} (singular). Models: Qwen3-TTS, CosyVoice3.",
     "moreRulePoll": "Async vision/docs: poll GET /v1/task/{id} (singular) — not /v1/tasks.",
     "moreRuleMp": "Matting/upscale/InfiniteTalk/MinerU: multipart form fields, not JSON (except Unlimited-OCR chat).",
@@ -1665,7 +1673,7 @@ const I18N = {
     "pit4": "gemini-omni：不要传 duration。",
     "pit5": "轮询：/v1/tasks（视频 generations）vs /v1/task（TTS 异步 / 文档 / InfiniteTalk）。",
     "pit6": "视频 JSON 禁止本机路径与 data:base64——先 POST /v1/uploads。",
-    "speechRuleSync": "TTS 同步 → POST /v1/audio/speech（直接返回音频）。模型：GLM-TTS、Step-Audio-TTS-3B、IndexTTS-2。",
+    "speechRuleSync": "TTS 同步 → POST /v1/audio/speech（直接返回音频）。模型：GLM-TTS、Step-Audio-TTS-3B、IndexTTS-2、gemini-3.1-flash-tts-preview。",
     "speechRuleAsync": "TTS 异步 → POST /v1/async/audio/speech，再 GET /v1/task/{id}（单数）。模型：Qwen3-TTS、CosyVoice3。",
     "moreRulePoll": "扩展异步接口轮询：GET /v1/task/{id}（单数），不是 /v1/tasks。",
     "moreRuleMp": "抠图/超分/InfiniteTalk/MinerU：multipart 表单，不是 JSON（Unlimited-OCR 除外，走 chat）。",

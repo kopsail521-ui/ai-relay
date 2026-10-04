@@ -263,4 +263,22 @@ export const TAG_I18N = {
     ja: "デジタルヒューマン",
     vi: "Người số",
   },
+  音乐: {
+    zhCN: "音乐",
+    zhTW: "音樂",
+    en: "Music",
+    fr: "Musique",
+    ru: "Музыка",
+    ja: "音楽",
+    vi: "Nhạc",
+  },
+  rag: {
+    zhCN: "RAG",
+    zhTW: "RAG",
+    en: "RAG",
+    fr: "RAG",
+    ru: "RAG",
+    ja: "RAG",
+    vi: "RAG",
+  },
 };

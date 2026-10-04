@@ -38,6 +38,9 @@
     "sam3": "Meta.Color",
     "GLM-ASR": "Zhipu.Color",
     "GLM-TTS": "Zhipu.Color",
-    "Step-Audio-TTS-3B": "Stepfun.Color"
+    "Step-Audio-TTS-3B": "Stepfun.Color",
+    "suno_music_open": "Suno",
+    "gemini-3.1-flash-tts-preview": "Gemini.Color",
+    "gemini-embedding-2-preview": "Gemini.Color"
   }
 }

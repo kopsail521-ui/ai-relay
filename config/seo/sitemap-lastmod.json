@@ -237,5 +237,17 @@
   "https://www.keyoapi.xyz/model/gpt-6.1-sol": {
     "hash": "gpt61sol20261003",
     "lastmod": "2026-10-03"
+  },
+  "https://www.keyoapi.xyz/model/suno_music_open": {
+    "hash": "suno_music_open20261004",
+    "lastmod": "2026-10-04"
+  },
+  "https://www.keyoapi.xyz/model/gemini-3.1-flash-tts-preview": {
+    "hash": "gemini-3.1-flash-tts-preview20261004",
+    "lastmod": "2026-10-04"
+  },
+  "https://www.keyoapi.xyz/model/gemini-embedding-2-preview": {
+    "hash": "gemini-embedding-2-preview20261004",
+    "lastmod": "2026-10-04"
   }
 }

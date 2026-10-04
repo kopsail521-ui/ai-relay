@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Gemini Embedding 2 API on KeyoAPI | RAG Vectors</title>
+<meta name="description" content="Call gemini-embedding-2-preview on KeyoAPI (~$0.18 / $0.71 per 1M). Multimodal embeddings for retrieval and RAG." />
+<link rel="canonical" href="https://www.keyoapi.xyz/model/gemini-embedding-2-preview" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://www.keyoapi.xyz/model/gemini-embedding-2-preview" />
+<meta property="og:title" content="Gemini Embedding 2 API on KeyoAPI | RAG Vectors" />
+<meta property="og:description" content="Call gemini-embedding-2-preview on KeyoAPI (~$0.18 / $0.71 per 1M). Multimodal embeddings for retrieval and RAG." />
+<meta property="og:image" content="https://www.keyoapi.xyz/brand/logo.svg" />
+<link rel="icon" href="/brand/logo.svg" type="image/svg+xml" />
+<link rel="stylesheet" href="/brand/keyo-theme.css" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Gemini Embedding 2 API on KeyoAPI | RAG Vectors" />
+<meta name="twitter:description" content="Call gemini-embedding-2-preview on KeyoAPI (~$0.18 / $0.71 per 1M). Multimodal embeddings for retrieval and RAG." />
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"SoftwareApplication","name":"KeyoAPI gemini-embedding-2-preview","applicationCategory":"DeveloperApplication","url":"https://www.keyoapi.xyz/model/gemini-embedding-2-preview","description":"Call gemini-embedding-2-preview on KeyoAPI (~$0.18 / $0.71 per 1M). Multimodal embeddings for retrieval and RAG.","offers":{"@type":"Offer","priceCurrency":"USD","description":"~$0.18 / $0.71 per 1M in/out"}}</script>
+<style>.wrap{max-width:880px;margin:0 auto;padding:28px 24px 48px}
+.footer{display:flex;flex-wrap:wrap;gap:10px 16px;max-width:1080px;margin:0 auto;padding:24px 24px 40px;border-top:1px solid var(--line);font-size:13px;color:var(--muted)}
+.footer a{color:var(--ink-2);text-decoration:none}
+.footer a:hover{color:var(--ink)}
+h1{font-size:clamp(1.7rem,3.1vw,2.35rem);line-height:1.18;letter-spacing:-.035em;margin:0 0 14px;font-weight:600;text-wrap:balance}
+h2{font-size:1.15rem;margin:28px 0 10px;letter-spacing:-.02em}
+p{margin:0 0 14px;color:var(--ink)}
+.lead{font-size:1.02rem;color:var(--ink-2);line-height:1.55;text-wrap:pretty}
+.meta{font-size:14px;color:var(--muted);margin:0 0 18px}
+.btnrow{display:flex;flex-wrap:wrap;gap:10px;margin:18px 0 28px}
+.btn,.k-btn{display:inline-block;padding:10px 16px;border-radius:var(--radius);font-weight:600;font-size:14px;text-decoration:none;line-height:1.2}
+.btn-primary,.k-btn-primary{background:var(--ink);color:#f6f5f1}
+.btn-primary:hover,.k-btn-primary:hover{background:#000;color:#f6f5f1;text-decoration:none}
+.btn-secondary,.k-btn-secondary{background:transparent;color:var(--ink);border:1px solid var(--line-strong,#c9c4b8)}
+.btn-secondary:hover,.k-btn-secondary:hover{border-color:var(--ink);text-decoration:none}
+.btn-link,.k-btn-link{background:transparent;color:var(--link);padding-inline:8px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:16px 18px;margin:16px 0}
+pre,code{font-family:var(--mono)}
+pre{background:var(--panel);color:var(--panel-ink);padding:14px 16px;border-radius:var(--radius);overflow:auto;font-size:13px}
+pre code{background:transparent;padding:0;color:inherit;font-size:inherit;border-radius:0}
+table{width:100%;border-collapse:collapse;font-size:14px;background:var(--surface)}
+th,td{border:1px solid var(--line);padding:10px 12px;text-align:left;vertical-align:top}
+th{background:color-mix(in srgb,var(--line) 40%,var(--surface));font-weight:600}
+.ok{color:var(--ok);font-weight:600}
+.grid{display:grid;gap:10px;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));margin:16px 0}
+.grid a{display:flex;flex-direction:column;justify-content:center;gap:4px;min-height:4.5rem;padding:12px 14px;border:1px solid var(--line);border-radius:var(--radius);background:var(--surface);color:var(--ink);text-decoration:none;font-weight:500;line-height:1.35}
+.grid a:hover{border-color:var(--ink)}
+.grid a .grid-title{font-weight:600;overflow-wrap:anywhere}
+.grid a .grid-meta{color:var(--muted);font-size:13px;font-weight:500}
+.grid a code{font-size:12.5px;background:transparent;padding:0}
+ul{margin:0 0 14px;padding-left:1.2em}
+.faq details{border:1px solid var(--line);border-radius:var(--radius);padding:12px 14px;margin:0 0 10px;background:var(--surface)}
+.faq summary{cursor:pointer;font-weight:600}
+.surfaces{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));margin:16px 0 8px}
+.surf{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:14px 16px;font-size:14px}
+.surf h3{font-size:15px;margin:0 0 8px}
+.surf ul{margin:0;padding-left:1.15em;color:var(--muted)}
+.panel{background:var(--panel);color:var(--panel-ink);border-radius:var(--radius);padding:18px;text-align:left;font-family:var(--mono);font-size:12.5px;overflow:auto;border:1px solid #2a2924}
+.panel .label{color:#b9b6ab;margin-bottom:5px;font-size:11px;letter-spacing:.06em;text-transform:uppercase}
+.panel .label+.label{margin-top:14px}</style>
+</head>
+<body>
+<header class="k-nav">
+  <a class="k-wordmark" href="/"><img src="/brand/logo.svg" alt="" width="22" height="22" />KeyoAPI</a>
+  <nav aria-label="Primary">
+    <a href="/pricing">Pricing</a>
+    <a href="/models">Models</a>
+    <a href="/compare">Compare</a>
+    <a href="/brand/keyo-docs.html">Docs</a>
+    <a href="/brand/faq.html">FAQ</a>
+    <a href="/console">Console</a>
+    <a href="/sign-in">Sign in</a>
+    <a class="k-nav-cta" href="/sign-up">Get started</a>
+  </nav>
+</header>
+<main class="wrap">
+<h1>Gemini Embedding 2 API on KeyoAPI — Multimodal RAG</h1>
+<p class="lead">Map text, images, audio, video, and documents into one vector space for search, classification, and RAG.</p>
+<p class="meta">Listed price: <span class="ok">~$0.18 / $0.71 per 1M in/out</span> · Confirm live on <a href="/pricing/gemini-embedding-2-preview">interactive pricing</a>.</p>
+<div class="btnrow">
+  <a class="btn btn-primary" href="/pricing/gemini-embedding-2-preview">Open interactive pricing</a>
+  <a class="btn btn-secondary" href="/compare">Compare API prices</a>
+  <a class="btn btn-secondary" href="/sign-up">Create account</a>
+</div>
+<h2>Overview</h2>
+<p>gemini-embedding-2-preview is Gemini’s multimodal embedding ID on KeyoAPI. Indicative rates about $0.18 / $0.71 per 1M in/out — confirm live on <a href="/pricing/gemini-embedding-2-preview">/pricing/gemini-embedding-2-preview</a>. Call POST /v1/embeddings at https://www.keyoapi.xyz/v1. Nearby Keyo RAG IDs: WeMM-Embedding-2B and Qwen3-VL-Embedding-8B on the same key.</p>
+<h2>Quick start</h2>
+<div class="card">
+<p>Base URL: <code>https://www.keyoapi.xyz/v1</code></p>
+<p>Endpoint: <code>POST /v1/embeddings</code></p>
+<p>Model: <code>model=gemini-embedding-2-preview</code></p>
+<pre><code>curl https://www.keyoapi.xyz/v1/embeddings \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"model":"gemini-embedding-2-preview","input":"KeyoAPI multimodal retrieval"}'</code></pre>
+<p>Auth uses the same Bearer API key as chat. Full notes: <a href="/brand/keyo-docs.html">Keyo docs</a>.</p>
+</div>
+<h2>FAQ</h2>
+<div class="faq"><details><summary>Text only, or images too?</summary><p>This ID is multimodal (text, image, audio, video, documents). Confirm payload shape on live docs before production.</p></details>
+<details><summary>Where is live pricing?</summary><p>See /pricing/gemini-embedding-2-preview. Indicative ~$0.18 / $0.71 per 1M in/out.</p></details></div>
+<h2>Related models</h2>
+<div class="grid"><a href="/model/WeMM-Embedding-2B">WeMM Embedding 2B</a>
+<a href="/model/Qwen3-VL-Embedding-8B">Qwen3-VL Embedding 8B</a>
+<a href="/model/gemini-3.1-flash-tts-preview">Gemini Flash TTS API</a></div>
+<p class="meta">Guide for <strong>gemini-embedding-2-preview</strong>. Try/buy: <a href="/pricing/gemini-embedding-2-preview">/pricing/gemini-embedding-2-preview</a> · Catalog: <a href="/pricing">/pricing</a>.</p>
+</main>
+<footer class="footer">
+  <a href="/">Home</a>
+  <a href="/pricing">Pricing</a>
+  <a href="/pricing-list">Pricing list</a>
+  <a href="/models">Model guides</a>
+  <a href="/compare">Compare</a>
+  <a href="/free-models">Free models</a>
+  <a href="/gemini-api-pricing">Gemini pricing</a>
+  <a href="/deepseek-api-pricing">DeepSeek pricing</a>
+  <a href="/claude-api-pricing">Claude pricing</a>
+  <a href="/openai-api-pricing">OpenAI pricing</a>
+  <a href="/remove-bg-api-alternative">remove.bg API</a>
+  <a href="/tts-api">Text to Speech</a>
+  <a href="/voice-cloning-api">Voice clone API</a>
+  <a href="/ai-avatar-video-generator">Avatar video API</a>
+  <a href="/grok-api-pricing">Grok pricing</a>
+  <a href="/openai-api-alternative">OpenAI alternative</a>
+  <a href="/brand/keyo-docs.html">Docs</a>
+  <a href="/brand/faq.html">FAQ</a>
+  <a href="/brand/privacy.html">Privacy</a>
+  <a href="/brand/terms.html">Terms</a>
+  <a href="/sign-in">Sign in</a>
+</footer>
+</body>
+</html>

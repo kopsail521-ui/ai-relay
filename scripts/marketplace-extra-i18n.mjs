@@ -516,6 +516,48 @@ export const EXTRA_MODELS = {
       vi: "Sinh ảnh chất lượng cao, nhiều tỉ lệ/độ phân giải. Theo ảnh.",
     },
   },
+  "suno_music_open": {
+    mode: "unit",
+    unit: "per_call",
+    model_price_usd: 0.003922,
+    desc: {
+      zhCN: "Suno 歌曲生成（自定义 / 灵感 / 续写），按次计费：$0.0039/次。",
+      zhTW: "Suno 歌曲生成（自訂 / 靈感 / 續寫），按次計費：$0.0039/次。",
+      en: "Suno song generation (custom, inspiration, continue). Pricing: $0.0039 / request.",
+      fr: "Suno song generation (custom, inspiration, continue). Pricing: $0.0039 / request.",
+      ru: "Suno song generation (custom, inspiration, continue). Pricing: $0.0039 / request.",
+      ja: "Suno 楽曲生成（カスタム/インスピレーション/続き）。料金：$0.0039/ 回。",
+      vi: "Suno tạo bài hát (tuỳ chỉnh / cảm hứng / tiếp nối). Giá: $0.0039/ lần.",
+    },
+  },
+  "gemini-3.1-flash-tts-preview": {
+    mode: "token",
+    ratio: 0.2,
+    completion: 20,
+    desc: {
+      zhCN: "Gemini 3.1 Flash TTS Preview：低延迟可控语音合成，适合产品旁白与语音助手。",
+      zhTW: "Gemini 3.1 Flash TTS Preview：低延遲可控語音合成，適合產品旁白與語音助手。",
+      en: "Gemini 3.1 Flash TTS Preview — low-latency controllable speech for product voice and assistants.",
+      fr: "Gemini 3.1 Flash TTS Preview — low-latency controllable speech for product voice and assistants.",
+      ru: "Gemini 3.1 Flash TTS Preview — low-latency controllable speech for product voice and assistants.",
+      ja: "Gemini 3.1 Flash TTS Preview。低遅延で制御可能な音声合成。",
+      vi: "Gemini 3.1 Flash TTS Preview — TTS độ trễ thấp, kiểm soát được.",
+    },
+  },
+  "gemini-embedding-2-preview": {
+    mode: "token",
+    ratio: 0.088236,
+    completion: 4,
+    desc: {
+      zhCN: "Gemini Embedding 2 Preview：多模态向量化（文本/图/音/视频），适用于跨模态检索与 RAG。",
+      zhTW: "Gemini Embedding 2 Preview：多模態向量化（文本/圖/音/影片），適用於跨模態檢索與 RAG。",
+      en: "Gemini Embedding 2 Preview — multimodal vectors (text/image/audio/video) for retrieval and RAG.",
+      fr: "Gemini Embedding 2 Preview — multimodal vectors (text/image/audio/video) for retrieval and RAG.",
+      ru: "Gemini Embedding 2 Preview — multimodal vectors (text/image/audio/video) for retrieval and RAG.",
+      ja: "Gemini Embedding 2 Preview。テキスト/画像/音声/動画のマルチモーダル埋め込み。",
+      vi: "Gemini Embedding 2 Preview — embedding đa phương thức cho RAG.",
+    },
+  },
 };
 
 /** 广场标签多语言（DB 里存的是中文 key） */
@@ -618,5 +660,23 @@ export const TAG_I18N = {
     ru: "Видео · /запрос",
     ja: "動画·回課金",
     vi: "Video · /lần",
+  },
+  音乐: {
+    zhCN: "音乐",
+    zhTW: "音樂",
+    en: "Music",
+    fr: "Musique",
+    ru: "Музыка",
+    ja: "音楽",
+    vi: "Nhạc",
+  },
+  rag: {
+    zhCN: "RAG",
+    zhTW: "RAG",
+    en: "RAG",
+    fr: "RAG",
+    ru: "RAG",
+    ja: "RAG",
+    vi: "RAG",
   },
 };

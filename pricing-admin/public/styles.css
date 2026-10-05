@@ -168,6 +168,114 @@ fieldset {
 }
 .error { color: var(--danger); min-height: 1.2em; }
 
+/* ---- 标签页 ---- */
+.tabs {
+  display: flex;
+  gap: 6px;
+  padding: 4px 28px 0;
+  border-bottom: 1px solid var(--line);
+}
+.tab {
+  background: transparent;
+  color: var(--muted);
+  border: none;
+  border-bottom: 2px solid transparent;
+  border-radius: 8px 8px 0 0;
+  padding: 10px 14px;
+}
+.tab.active {
+  color: var(--ink);
+  font-weight: 600;
+  border-bottom-color: var(--ink);
+}
+
+/* ---- 转化漏斗 ---- */
+.funnel-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 28px 0;
+}
+.funnel-toolbar .sub { margin: 0; }
+.funnel-cards {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+  padding: 16px 28px 0;
+}
+.funnel-step {
+  position: relative;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 16px;
+  display: grid;
+  gap: 4px;
+}
+.funnel-step strong { font-size: 1.7rem; font-variant-numeric: tabular-nums; }
+.funnel-step span { font-size: 0.92rem; }
+.funnel-step em { font-style: normal; color: var(--muted); font-size: 0.78rem; }
+.funnel-step .conv {
+  position: absolute;
+  top: -10px;
+  left: 14px;
+  background: var(--ink);
+  color: #fff;
+  font-size: 0.75rem;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-variant-numeric: tabular-nums;
+}
+.funnel-note {
+  margin: 14px 28px 0;
+  background: #fef3c766;
+  border: 1px solid #fde68a;
+  border-radius: 12px;
+  padding: 12px 16px;
+  font-size: 0.9rem;
+}
+.funnel-note ul { margin: 6px 0 0; padding-left: 18px; }
+.funnel-note li { margin: 3px 0; }
+.funnel-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.4fr;
+  gap: 14px;
+  margin: 14px 28px 0;
+}
+.funnel-card {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 16px;
+  overflow: auto;
+}
+.funnel-card h3 { margin: 0 0 10px; font-size: 1rem; }
+.funnel-card h3 .muted { font-weight: 400; font-size: 0.78rem; }
+.funnel-card table { min-width: 0; }
+.bar-cell {
+  position: relative;
+  min-width: 120px;
+  font-variant-numeric: tabular-nums;
+}
+.bar-cell .bar {
+  position: absolute;
+  left: 0;
+  top: 4px;
+  bottom: 4px;
+  max-width: calc(100% - 34px);
+  background: #99f6e4;
+  border-radius: 4px;
+  z-index: 0;
+}
+.bar-cell .bar.c2 { background: #fde68a; }
+.muted-row td { color: var(--muted); }
+
+@media (max-width: 900px) {
+  .funnel-cards { grid-template-columns: repeat(2, 1fr); }
+  .funnel-grid { grid-template-columns: 1fr; }
+}
+
 @media (max-width: 800px) {
   .grid, .grid.three { grid-template-columns: 1fr; }
   .topbar { flex-direction: column; }

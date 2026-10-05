@@ -327,6 +327,140 @@ app.post("/api/seed", authRequired, (_req, res) => {
   res.json({ ok: true, models: SEED.map(enrich) });
 });
 
+// ---- 转化漏斗：只读 new-api 的 SQLite ----
+const NEW_API_DB_PATH =
+  process.env.NEW_API_DB_PATH ||
+  path.join(__dirname, "..", "data", "new-api", "one-api.db");
+const PAY_SUCCESS_STATUS = new Set(["success", "completed", "paid"]);
+
+let funnelDb = null;
+function openFunnelDb() {
+  if (funnelDb) {
+    try {
+      funnelDb.prepare("SELECT 1").get();
+      return funnelDb;
+    } catch {
+      try { funnelDb.close(); } catch {}
+      funnelDb = null;
+    }
+  }
+  if (!fs.existsSync(NEW_API_DB_PATH)) {
+    throw new Error(
+      `未找到 new-api 数据库：${NEW_API_DB_PATH}（生产环境需在 docker-compose 给 pricing-admin 挂载 data/new-api）`
+    );
+  }
+  funnelDb = require("better-sqlite3")(NEW_API_DB_PATH, {
+    readonly: true,
+    fileMustExist: true,
+  });
+  return funnelDb;
+}
+
+app.get("/api/analytics/funnel", authRequired, (_req, res) => {
+  try {
+    const db = openFunnelDb();
+
+    const users = db
+      .prepare(
+        `SELECT COUNT(*) AS total,
+                SUM(CASE WHEN request_count > 0 THEN 1 ELSE 0 END) AS withRequest
+         FROM users WHERE deleted_at IS NULL`
+      )
+      .get();
+    const keyUsers = db
+      .prepare("SELECT COUNT(DISTINCT user_id) AS c FROM tokens")
+      .get();
+    const consumeUsers = db
+      .prepare("SELECT COUNT(DISTINCT user_id) AS c FROM logs WHERE type = 2")
+      .get();
+    const payStatus = db
+      .prepare(
+        `SELECT status, COUNT(*) AS n, ROUND(SUM(money), 2) AS money
+         FROM top_ups GROUP BY status ORDER BY n DESC`
+      )
+      .all();
+    const paid = db
+      .prepare(
+        `SELECT COUNT(DISTINCT user_id) AS users, ROUND(SUM(money), 2) AS money
+         FROM top_ups WHERE status IN ('success', 'completed', 'paid')`
+      )
+      .get();
+
+    const since = Math.floor(Date.now() / 1000) - 30 * 24 * 3600;
+    const dailyRows = {
+      users: db
+        .prepare(
+          `SELECT DATE(created_at,'unixepoch','localtime') AS d, COUNT(*) AS n
+           FROM users WHERE deleted_at IS NULL AND created_at >= ?
+           GROUP BY d`
+        )
+        .all(since),
+      consume: db
+        .prepare(
+          `SELECT DATE(created_at,'unixepoch','localtime') AS d, COUNT(*) AS n
+           FROM logs WHERE type = 2 AND created_at >= ?
+           GROUP BY d`
+        )
+        .all(since),
+      topups: db
+        .prepare(
+          `SELECT DATE(create_time,'unixepoch','localtime') AS d,
+                  COUNT(*) AS n,
+                  ROUND(SUM(CASE WHEN status IN ('success','completed','paid') THEN money ELSE 0 END), 2) AS paidMoney
+           FROM top_ups WHERE create_time >= ?
+           GROUP BY d`
+        )
+        .all(since),
+    };
+    const dayMap = new Map();
+    const today = new Date();
+    for (let i = 29; i >= 0; i--) {
+      const d = new Date(today - i * 24 * 3600 * 1000).toLocaleDateString("sv");
+      dayMap.set(d, { d, users: 0, consume: 0, topups: 0, paidMoney: 0 });
+    }
+    for (const r of dailyRows.users) {
+      if (dayMap.has(r.d)) dayMap.get(r.d).users = r.n;
+    }
+    for (const r of dailyRows.consume) {
+      if (dayMap.has(r.d)) dayMap.get(r.d).consume = r.n;
+    }
+    for (const r of dailyRows.topups) {
+      if (dayMap.has(r.d)) {
+        dayMap.get(r.d).topups = r.n;
+        dayMap.get(r.d).paidMoney = r.paidMoney || 0;
+      }
+    }
+
+    const recentTopups = db
+      .prepare(
+        `SELECT t.id, u.username, u.email, t.amount, t.money, t.status,
+                t.payment_method, t.payment_provider, t.create_time
+         FROM top_ups t LEFT JOIN users u ON u.id = t.user_id
+         ORDER BY t.create_time DESC LIMIT 20`
+      )
+      .all();
+
+    res.json({
+      ok: true,
+      generatedAt: new Date().toISOString(),
+      dbPath: NEW_API_DB_PATH,
+      funnel: {
+        registered: users.total || 0,
+        withRequest: users.withRequest || 0,
+        keyUsers: keyUsers.c || 0,
+        consumeUsers: consumeUsers.c || 0,
+        paidUsers: paid.users || 0,
+        paidMoney: paid.money || 0,
+      },
+      payStatus,
+      daily: [...dayMap.values()],
+      recentTopups,
+    });
+  } catch (e) {
+    res.status(503).json({ ok: false, error: e.message });
+  }
+});
+
 app.get("/api/export.csv", authRequired, (_req, res) => {
   const models = loadModels().map(enrich);
   const lines = [

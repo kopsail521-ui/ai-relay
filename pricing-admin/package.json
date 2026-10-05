@@ -12,7 +12,8 @@
     "node": ">=18"
   },
   "dependencies": {
-    "express": "^4.21.2",
-    "cookie-parser": "^1.4.7"
+    "better-sqlite3": "^13.0.3",
+    "cookie-parser": "^1.4.7",
+    "express": "^4.21.2"
   }
 }

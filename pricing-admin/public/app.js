@@ -227,6 +227,161 @@ tbody.addEventListener("click", async (e) => {
   }
 });
 
+// ---- 标签页：模型价格 / 转化漏斗 ----
+let funnelLoaded = false;
+
+document.querySelectorAll(".tab").forEach((btn) => {
+  btn.addEventListener("click", () => {
+    document
+      .querySelectorAll(".tab")
+      .forEach((b) => b.classList.toggle("active", b === btn));
+    const tab = btn.getAttribute("data-tab");
+    document.getElementById("tab-pricing").classList.toggle("hidden", tab !== "pricing");
+    document.getElementById("tab-funnel").classList.toggle("hidden", tab !== "funnel");
+    if (tab === "funnel" && !funnelLoaded) loadFunnel();
+  });
+});
+
+const PAY_STATUS_LABEL = {
+  success: "成功",
+  completed: "成功",
+  paid: "成功",
+  pending: "待支付",
+  failed: "失败",
+  expired: "超时",
+  canceled: "已取消",
+};
+
+function payStatusClass(status) {
+  if (PAY_SUCCESS_STATUS_LABEL_SET.has(status)) return "good";
+  if (status === "pending") return "warn";
+  return "bad";
+}
+const PAY_SUCCESS_STATUS_LABEL_SET = new Set(["success", "completed", "paid"]);
+
+function renderFunnel(data) {
+  const f = data.funnel;
+  const steps = [
+    { label: "注册用户", value: f.registered, note: "含 Google / GitHub 登录" },
+    { label: "创建 API Key", value: f.keyUsers, note: "拿到密钥才算激活" },
+    { label: "实际调用过", value: f.consumeUsers, note: "至少一次成功消费" },
+    { label: "付过费", value: f.paidUsers, note: `累计充值 ${f.paidMoney ?? 0}（币种以渠道为准）` },
+  ];
+  const conv = (a, b) =>
+    a > 0 ? Math.round((b / a) * 1000) / 10 + "%" : "—";
+
+  const funnelHtml = `
+    <div class="funnel-cards">
+      ${steps
+        .map(
+          (s, i) => `
+        <div class="funnel-step${i > 0 ? " with-conv" : ""}">
+          ${i > 0 ? `<span class="conv">${conv(steps[i - 1].value, s.value)}</span>` : ""}
+          <strong>${money(s.value)}</strong>
+          <span>${s.label}</span>
+          <em>${s.note}</em>
+        </div>`
+        )
+        .join("")}
+    </div>`;
+
+  const neverUsed = f.registered - (f.withRequest || 0);
+  const insight = [
+    f.registered === 0
+      ? "还没有注册用户"
+      : `注册后从未调用 API：${money(neverUsed)} 人（${conv(f.registered, neverUsed)}）`,
+    f.paidUsers === 0 && f.registered > 0
+      ? "还没有任何付费用户——若充值单大量 pending/failed，先查支付通道；若连充值单都没有，先看定价页与注册后的引导"
+      : "",
+  ]
+    .filter(Boolean)
+    .map((t) => `<li>${t}</li>`)
+    .join("");
+
+  const statusHtml = data.payStatus.length
+    ? `
+      <table style="min-width:0">
+        <thead><tr><th>充值单状态</th><th>单数</th><th>金额</th></tr></thead>
+        <tbody>
+          ${data.payStatus
+            .map(
+              (s) => `<tr>
+                <td><span class="badge ${payStatusClass(s.status)}">${PAY_STATUS_LABEL[s.status] || escapeHtml(s.status)}</span></td>
+                <td>${money(s.n)}</td>
+                <td>${s.money ?? "—"}</td>
+              </tr>`
+            )
+            .join("")}
+        </tbody>
+      </table>`
+    : `<p class="muted">暂无充值记录——若线上已开放充值，先确认支付通道（Creem / Stripe）是否已切换正式模式。</p>`;
+
+  const maxDaily = Math.max(1, ...data.daily.map((r) => Math.max(r.users, r.consume)));
+  const trendHtml = `
+    <table style="min-width:0">
+      <thead><tr><th>日期</th><th>新注册</th><th>消费请求</th><th>充值单</th><th>成功充值金额</th></tr></thead>
+      <tbody>
+        ${[...data.daily]
+          .reverse()
+          .map((r) => {
+            const noData = !r.users && !r.consume && !r.topups;
+            return `<tr class="${noData ? "muted-row" : ""}">
+              <td>${r.d}</td>
+              <td><div class="bar-cell"><span class="bar" style="width:${(r.users / maxDaily) * 100}%"></span>${r.users || ""}</div></td>
+              <td><div class="bar-cell"><span class="bar c2" style="width:${(r.consume / maxDaily) * 100}%"></span>${r.consume || ""}</div></td>
+              <td>${r.topups || ""}</td>
+              <td>${r.paidMoney || ""}</td>
+            </tr>`;
+          })
+          .join("")}
+      </tbody>
+    </table>`;
+
+  const topupHtml = data.recentTopups.length
+    ? `
+    <table style="min-width:0">
+      <thead><tr><th>时间</th><th>用户</th><th>金额</th><th>到账额度</th><th>状态</th><th>渠道</th></tr></thead>
+      <tbody>
+        ${data.recentTopups
+          .map(
+            (t) => `<tr>
+              <td>${t.create_time ? new Date(t.create_time * 1000).toLocaleString("zh-CN", { hour12: false }) : "—"}</td>
+              <td>${escapeHtml(t.username || "—")}${t.email ? `<div class="muted">${escapeHtml(t.email)}</div>` : ""}</td>
+              <td>${t.money ?? "—"}</td>
+              <td>${t.amount ?? "—"}</td>
+              <td><span class="badge ${payStatusClass(t.status)}">${PAY_STATUS_LABEL[t.status] || escapeHtml(t.status || "—")}</span></td>
+              <td>${escapeHtml(t.payment_method || t.payment_provider || "—")}</td>
+            </tr>`
+          )
+          .join("")}
+      </tbody>
+    </table>`
+    : `<p class="muted">暂无充值单记录</p>`;
+
+  document.getElementById("funnel-body").innerHTML = `
+    ${funnelHtml}
+    <div class="funnel-note"><strong>先看这里</strong><ul>${insight}</ul></div>
+    <div class="funnel-grid">
+      <div class="funnel-card"><h3>充值单状态分布<span class="muted">（盯紧有没有 pending / failed 堆积，那是支付通道问题）</span></h3>${statusHtml}</div>
+      <div class="funnel-card"><h3>最近充值记录<span class="muted">（金额为支付渠道币种）</span></h3>${topupHtml}</div>
+    </div>
+    <div class="funnel-card"><h3>近 30 天趋势</h3>${trendHtml}</div>
+    <p class="muted" style="margin: 12px 28px">数据源：${escapeHtml(data.dbPath)} · 生成于 ${new Date(data.generatedAt).toLocaleString("zh-CN", { hour12: false })}</p>`;
+}
+
+async function loadFunnel() {
+  const body = document.getElementById("funnel-body");
+  try {
+    const data = await api("/api/analytics/funnel");
+    renderFunnel(data);
+    funnelLoaded = true;
+  } catch (ex) {
+    body.innerHTML = `<div class="funnel-card"><h3>无法读取数据</h3><p>${escapeHtml(ex.message)}</p></div>`;
+  }
+}
+
+document.getElementById("btn-funnel-refresh").addEventListener("click", loadFunnel);
+
 (async function init() {
   try {
     const me = await api("/api/me");

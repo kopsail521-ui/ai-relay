@@ -32,6 +32,12 @@
       </div>
     </header>
 
+    <nav class="tabs">
+      <button type="button" class="tab active" data-tab="pricing">模型价格</button>
+      <button type="button" class="tab" data-tab="funnel">转化漏斗</button>
+    </nav>
+
+    <section id="tab-pricing">
     <section class="filters">
       <label>
         类型
@@ -70,6 +76,15 @@
         <tbody id="tbody"></tbody>
       </table>
     </div>
+    </section>
+
+    <section id="tab-funnel" class="hidden">
+      <div class="funnel-toolbar">
+        <p class="sub">数据来自 new-api 数据库（服务端记录）· 访问量 / 页面浏览 / 按钮点击等上半段指标需接入站点埋点后才可见</p>
+        <button type="button" id="btn-funnel-refresh" class="ghost small">刷新</button>
+      </div>
+      <div id="funnel-body"><p class="muted" style="padding: 0 28px">加载中…</p></div>
+    </section>
   </div>
 
   <dialog id="edit-dialog">

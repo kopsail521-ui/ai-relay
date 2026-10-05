@@ -40,11 +40,14 @@ services:
       - "3100:3100"
     volumes:
       - ./data/pricing:/app/data
+      # 转化漏斗页只读 new-api 的 SQLite（users / logs / top_ups）
+      - ./data/new-api:/data/new-api:ro
     environment:
       - PORT=3100
       - TZ=Asia/Shanghai
       - ADMIN_PASSWORD=admin123
       - DATA_DIR=/app/data
+      - NEW_API_DB_PATH=/data/new-api/one-api.db
       # 可选：同步售价到 New API（填管理员令牌后启用）
       - NEW_API_BASE=http://new-api:3000
       # - NEW_API_TOKEN=

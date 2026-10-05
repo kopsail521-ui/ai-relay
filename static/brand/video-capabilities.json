@@ -536,98 +536,13 @@
         "duration together with video_urls",
         "generation_type=frame with image count ≠ 1"
       ]
-    },
-    "grok-imagine-video-1.5-preview": {
-      "required": [
-        "model",
-        "prompt",
-        "image"
-      ],
-      "enums": {
-        "aspect_ratio": [
-          "1:1",
-          "16:9",
-          "9:16"
-        ],
-        "duration": "integer 1..15",
-        "resolution": [
-          "480p",
-          "720p"
-        ]
-      },
-      "modes": {
-        "i2v_only": {
-          "note": "Text-only is REJECTED. image must be {url: https...}.",
-          "body": {
-            "model": "grok-imagine-video-1.5-preview",
-            "prompt": "gentle camera push in",
-            "image": {
-              "url": "https://example.com/still.jpg"
-            },
-            "aspect_ratio": "16:9",
-            "resolution": "480p",
-            "duration": 5
-          }
-        }
-      },
-      "aliases": {
-        "image_url": "image.url",
-        "image_urls[0]": "image.url",
-        "images[0]": "image.url"
-      },
-      "forbidden": [
-        "prompt-only without image"
-      ]
-    },
-    "grok-1.5-video": {
-      "preferred_path": "POST /v1/videos (also works on /v1/videos/generations)",
-      "billing": "per_request",
-      "required": [
-        "model",
-        "prompt"
-      ],
-      "enums": {
-        "seconds": [
-          6,
-          10
-        ],
-        "size_aspect": [
-          "16:9",
-          "9:16",
-          "1:1"
-        ]
-      },
-      "modes": {
-        "t2v": {
-          "body": {
-            "model": "grok-1.5-video",
-            "prompt": "A red paper boat floating on calm water at sunset",
-            "seconds": 6,
-            "aspect_ratio": "16:9"
-          }
-        },
-        "with_ref": {
-          "body": {
-            "model": "grok-1.5-video",
-            "prompt": "...",
-            "seconds": 10,
-            "aspect_ratio": "9:16",
-            "image_urls": [
-              "https://example.com/ref.jpg"
-            ]
-          }
-        }
-      },
-      "note": "seconds MUST be 6 or 10 only. size field means aspect ratio (16:9), NOT 480p/720p.",
-      "forbidden": [
-        "seconds outside {6,10}",
-        "Treating size as pixel resolution tier"
-      ]
     }
   },
   "delisted": [
     "seedance-2.0",
     "seedance-2.5",
-    "Duix-Avatar"
+    "Duix-Avatar",
+    "grok-1.5-video",
+    "grok-imagine-video-1.5-preview"
   ]
 }

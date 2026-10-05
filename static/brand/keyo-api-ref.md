@@ -42,7 +42,7 @@
 | 视频 Path B | `id` 或 `task_id` 或 `data[0].task_id` | `status`/`data.status` = `completed` | **`url`** 或 `data.result.videos[0].url[0]` |
 | TTS 异步 / InfiniteTalk | `id` 或 `task_id` | `status` = `completed` | **`url`** 或 `output.file_url` |
 | MinerU | `id` 或 `task_id` | `status` = `completed` | **`text`** 或 `output.segments[].content` |
-| 视频 Path A（grok-1.5-video） | `id` | `status` = `completed` | 读 **`url`**（与 Path B 相同）。不要再请求 `/v1/videos/{id}/content` |
+| 视频 Path A（自动转发） | `id` | `status` = `completed` | 读 **`url`**。Path A 已无独立模型，仅作为 Path B 的自动转发入口 |
 | Chat / OCR | — | — | `choices[0].message.content` |
 | ASR | — | — | `text` |
 | TTS 同步 | — | — | **响应体就是音频字节**（不是 JSON） |
@@ -146,13 +146,13 @@ curl https://www.keyoapi.xyz/v1/videos/generations \
 
 `gpt-image-2.5` · `gpt-image-2.5-flare` · `gpt-image-2.5-sunburst` · `gpt-image-2` · `gpt-image-2-vip` · `nano-banana-2` · `nano-banana-pro`
 
-### 1.3 视频 Path A → `POST /v1/videos` → 轮询 `GET /v1/videos/{id}`
+### 1.3 视频 Path A → `POST /v1/videos`（仅自动转发）
 
-`grok-1.5-video`
+Path A 已无独立模型：打到这里的 wan / Seedance / FLUX / MiniMax / Gemini Omni 会自动转发到 Path B。Grok 视频改走 chat 接口（见 §4）。
 
 ### 1.4 视频 Path B → `POST /v1/videos/generations` → 轮询 `GET /v1/tasks/{id}`
 
-`wan3.0-video` · `flux-3-video` · `MiniMax-H3` · `gemini-omni-1.1-flash` · `gemini-omni-1.1-flash-ext` · `grok-imagine-video-1.5-preview` · `seedance-2.0-1080p` · `seedance-2.0-1080p-fast` · `seedance-2.0-1080p-mini` · `seedance-2.5-1080p` · `seedance-2.0-720p` · `seedance-2.0-720p-fast` · `seedance-2.0-720p-mini` · `seedance-2.5-720p`  
+`wan3.0-video` · `flux-3-video` · `MiniMax-H3` · `gemini-omni-1.1-flash` · `gemini-omni-1.1-flash-ext` · `seedance-2.0-1080p` · `seedance-2.0-1080p-fast` · `seedance-2.0-1080p-mini` · `seedance-2.5-1080p` · `seedance-2.0-720p` · `seedance-2.0-720p-fast` · `seedance-2.0-720p-mini` · `seedance-2.5-720p`  
 
 （`seedance-2.0` / `seedance-2.5` **已下架**，勿再调用。）
 
@@ -292,21 +292,43 @@ curl https://www.keyoapi.xyz/v1/systemone \
 
 ---
 
-## 4. 视频 Path A
+## 4. Grok Imagine Video 1.5（chat 接口）
 
-`POST https://www.keyoapi.xyz/v1/videos` → `GET /v1/videos/{id}`  
-（Path B `/v1/videos/generations` 也会转发到此模型。）
+`POST https://www.keyoapi.xyz/v1/chat/completions` · model=`grok-imagine-video-1.5` · **$0.3082/次**
 
-仅：`grok-1.5-video`  
-**`seconds` 只能是 `6` 或 `10`**（不要写 1–15 任意秒）。  
-`aspect_ratio` / `size` 表示画幅（如 `16:9`），**不是** 480p 分辨率档。  
-可选参考图：`image_urls[0]` / `input_reference` / `image`。
+文生 / 单图 / 首尾帧 / 多参考图同一个接口；字段与官方 Grok Imagine Video API 一致，视频链接随回复返回。可选 `duration`、`resolution`（`480p`/`720p`/`1080p`）、`aspect_ratio`（如 `16:9`）。
 
+**单图（钉首帧）**
 ```json
 {
-  "model": "grok-1.5-video",
-  "prompt": "夕阳下红色纸船漂在平静水面上",
-  "seconds": 6,
+  "model": "grok-imagine-video-1.5",
+  "messages": [{"role": "user", "content": "a red paper boat drifting on calm water at sunset"}],
+  "image": "https://example.com/first.jpg",
+  "duration": 10,
+  "resolution": "720p"
+}
+```
+
+**首尾帧**（`image` 钉首帧；只传 `last_frame` 则只钉尾帧）
+```json
+{
+  "model": "grok-imagine-video-1.5",
+  "messages": [{"role": "user", "content": "camera glides from the day scene into the night skyline"}],
+  "image": "https://example.com/first.jpg",
+  "last_frame": "https://example.com/last.jpg"
+}
+```
+
+**多参考图**（不锁首帧；prompt 里用 `<IMAGE_0>`、`<IMAGE_1>` 引用）
+```json
+{
+  "model": "grok-imagine-video-1.5",
+  "messages": [{"role": "user", "content": "the model from <IMAGE_0> wears the shirt from <IMAGE_1> and walks the runway"}],
+  "reference_images": [
+    {"url": "https://example.com/model.jpg"},
+    {"url": "https://example.com/shirt.jpg"}
+  ],
+  "duration": 10,
   "aspect_ratio": "16:9"
 }
 ```
@@ -343,8 +365,6 @@ curl https://www.keyoapi.xyz/v1/systemone \
 | `flux-3-video` | **5–20** | `hd` / `fhd` | 草稿用 `draft:true`（仅 hd），不是 `resolution:"draft"` |
 | `gemini-omni-1.1-flash` | **禁止传** | — | 时长约 3–10s 由模型定 |
 | `gemini-omni-1.1-flash-ext` | **仅 4/6/8/10** | — | 有 `video_urls` 时勿再传 duration |
-| `grok-imagine-video-1.5-preview` | **1–15** | `480p`/`720p` | 图生为主 |
-| `grok-1.5-video` | **仅 6 或 10** | Path A | 见 §4 |
 
 ### 5.1 MiniMax-H3
 
@@ -616,25 +636,9 @@ curl https://www.keyoapi.xyz/v1/systemone \
 }
 ```
 
-### 5.6 grok-imagine-video-1.5-preview
+### 5.6 grok-imagine-video-1.5 → 已改走 chat 接口
 
-**仅图生视频。** 必须有 `image.url`（公网 https）。只传 prompt 会失败。  
-`aspect_ratio`：`1:1`|`16:9`|`9:16`；`resolution`：`480p`|`720p`；`duration`：1–15。
-
-```json
-{
-  "model": "grok-imagine-video-1.5-preview",
-  "prompt": "镜头轻轻推进",
-  "image": {"url": "https://example.com/still.jpg"},
-  "aspect_ratio": "16:9",
-  "resolution": "480p",
-  "duration": 5
-}
-```
-
-别名会映射：`image_url` / `image_urls[0]` / `images[0]` → `image.url`。
-
----
+文生 / 单图 / 首尾帧 / 多参考图统一走 `POST /v1/chat/completions`（字段与官方一致），见 §4。不属于 Path B。
 
 ## 6. 语音识别 ASR
 

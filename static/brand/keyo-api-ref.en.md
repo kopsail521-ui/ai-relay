@@ -42,7 +42,7 @@ Async flow: **submit → read id → poll by family → read url/text**. Never m
 | Video Path B | `id` \| `task_id` \| `data[0].task_id` | `status`/`data.status` = `completed` | **`url`** or `data.result.videos[0].url[0]` |
 | TTS async / InfiniteTalk | `id` \| `task_id` | `status` = `completed` | **`url`** or `output.file_url` |
 | MinerU | `id` \| `task_id` | `status` = `completed` | **`text`** or `output.segments[].content` |
-| Video Path A (`grok-1.5-video`) | `id` | `status` = `completed` | read **`url`** (same as Path B). Do not call `/v1/videos/{id}/content` |
+| Video Path A (auto-forward) | `id` | `status` = `completed` | read **`url`**. Path A has no own models; it only forwards to Path B |
 | Chat / OCR | — | — | `choices[0].message.content` |
 | ASR | — | — | `text` |
 | TTS sync | — | — | **raw audio bytes** (not JSON) |
@@ -135,13 +135,13 @@ Paid: `gpt-5.6-luna` · `gpt-5.6-terra` · `gpt-5.6-sol` · `gpt-6-luna` · `gpt
 
 `gpt-image-2.5` · `gpt-image-2.5-flare` · `gpt-image-2.5-sunburst` · `gpt-image-2` · `gpt-image-2-vip` · `nano-banana-2` · `nano-banana-pro`
 
-### 1.3 Video Path A → `POST /v1/videos` → poll `GET /v1/videos/{id}`
+### 1.3 Video Path A → `POST /v1/videos` (forward only)
 
-`grok-1.5-video`
+Path A has no own models: wan / Seedance / FLUX / MiniMax / Gemini Omni posted here are forwarded to Path B. Grok video moved to the chat endpoint (see §4).
 
 ### 1.4 Video Path B → `POST /v1/videos/generations` → poll `GET /v1/tasks/{id}`
 
-`wan3.0-video` · `flux-3-video` · `MiniMax-H3` · `gemini-omni-1.1-flash` · `gemini-omni-1.1-flash-ext` · `grok-imagine-video-1.5-preview` · `seedance-2.0-1080p` · `seedance-2.0-1080p-fast` · `seedance-2.0-1080p-mini` · `seedance-2.5-1080p` · `seedance-2.0-720p` · `seedance-2.0-720p-fast` · `seedance-2.0-720p-mini` · `seedance-2.5-720p`  
+`wan3.0-video` · `flux-3-video` · `MiniMax-H3` · `gemini-omni-1.1-flash` · `gemini-omni-1.1-flash-ext` · `seedance-2.0-1080p` · `seedance-2.0-1080p-fast` · `seedance-2.0-1080p-mini` · `seedance-2.5-1080p` · `seedance-2.0-720p` · `seedance-2.0-720p-fast` · `seedance-2.0-720p-mini` · `seedance-2.5-720p`  
 
 (`seedance-2.0` / `seedance-2.5` are **delisted** — do not call.)
 
@@ -281,21 +281,43 @@ Pick model from §1.2.
 
 ---
 
-## 4. Video Path A
+## 4. Grok Imagine Video 1.5 (chat)
 
-`POST https://www.keyoapi.xyz/v1/videos` → `GET /v1/videos/{id}`  
-(Path B `/v1/videos/generations` also forwards this model.)
+`POST https://www.keyoapi.xyz/v1/chat/completions` · model=`grok-imagine-video-1.5` · **$0.3082/request**
 
-Only: `grok-1.5-video`  
-**`seconds` must be `6` or `10` only** (not arbitrary 1–15).  
-`aspect_ratio` / `size` means aspect (e.g. `16:9`), **not** a 480p tier.  
-Optional ref image: `image_urls[0]` / `input_reference` / `image`.
+Text / single image / first & last frame / multi-reference in one endpoint; fields follow the official Grok Imagine Video API and the video link returns in the reply. Optional `duration`, `resolution` (`480p`/`720p`/`1080p`), `aspect_ratio` (e.g. `16:9`).
 
+**Single image (pinned first frame)**
 ```json
 {
-  "model": "grok-1.5-video",
-  "prompt": "A red paper boat floating on calm water at sunset",
-  "seconds": 6,
+  "model": "grok-imagine-video-1.5",
+  "messages": [{"role": "user", "content": "a red paper boat drifting on calm water at sunset"}],
+  "image": "https://example.com/first.jpg",
+  "duration": 10,
+  "resolution": "720p"
+}
+```
+
+**First & last frame** (`image` pins the first frame; `last_frame` alone pins only the tail)
+```json
+{
+  "model": "grok-imagine-video-1.5",
+  "messages": [{"role": "user", "content": "camera glides from the day scene into the night skyline"}],
+  "image": "https://example.com/first.jpg",
+  "last_frame": "https://example.com/last.jpg"
+}
+```
+
+**Multi-reference** (first frame not locked; reference via `<IMAGE_0>`, `<IMAGE_1>` in the prompt)
+```json
+{
+  "model": "grok-imagine-video-1.5",
+  "messages": [{"role": "user", "content": "the model from <IMAGE_0> wears the shirt from <IMAGE_1> and walks the runway"}],
+  "reference_images": [
+    {"url": "https://example.com/model.jpg"},
+    {"url": "https://example.com/shirt.jpg"}
+  ],
+  "duration": 10,
   "aspect_ratio": "16:9"
 }
 ```
@@ -332,8 +354,6 @@ Video: prefer top-level **`url`**, or `data.result.videos[0].url[0]` (`url` is a
 | `flux-3-video` | **5–20** | `hd` / `fhd` | draft is `draft:true` (hd only), not `resolution:"draft"` |
 | `gemini-omni-1.1-flash` | **do not send** | — | length ~3–10s by model |
 | `gemini-omni-1.1-flash-ext` | **4/6/8/10 only** | — | omit duration when using `video_urls` |
-| `grok-imagine-video-1.5-preview` | **1–15** | `480p`/`720p` | image-to-video |
-| `grok-1.5-video` | **6 or 10 only** | Path A | see §4 |
 
 ### 5.1 MiniMax-H3
 
@@ -585,23 +605,9 @@ If `video_urls` present, omit duration.
 }
 ```
 
-### 5.6 grok-imagine-video-1.5-preview
+### 5.6 grok-imagine-video-1.5 → moved to the chat endpoint
 
-**Image-to-video only.** `image.url` required. Prompt-only fails.  
-Aliases: `image_url` / `image_urls[0]` / `images[0]` → `image.url`.
-
-```json
-{
-  "model": "grok-imagine-video-1.5-preview",
-  "prompt": "gentle camera push in",
-  "image": {"url": "https://example.com/still.jpg"},
-  "aspect_ratio": "16:9",
-  "resolution": "480p",
-  "duration": 5
-}
-```
-
----
+Text / single image / first & last frame / multi-reference all go through `POST /v1/chat/completions` (official fields); see §4. Not part of Path B.
 
 ## 6. ASR
 

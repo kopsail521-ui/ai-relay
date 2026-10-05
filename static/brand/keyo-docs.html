@@ -591,6 +591,7 @@
         <a href="#image" data-i18n="tocImage"></a>
         <a href="#video" data-i18n="tocVideo"></a>
         <a href="#video-gen" data-i18n="tocVideoGen"></a>
+        <a href="#grok-video" data-i18n="tocGrok"></a>
         <a href="#video-api" data-i18n="tocVideoApi"></a>
         <a href="#pitfalls" data-i18n="tocPitfalls"></a>
         <a href="#speech" data-i18n="tocSpeech"></a>
@@ -764,20 +765,7 @@
           <pre id="curl-video"></pre>
         </div>
 
-        <div class="table-wrap">
-          <table>
-            <thead>
-              <tr>
-                <th data-i18n="thModel"></th>
-                <th data-i18n="thPrice"></th>
-                <th data-i18n="thNote"></th>
-              </tr>
-            </thead>
-            <tbody>
-<tr><td class="model"><button type="button" class="model-btn" data-copy="grok-1.5-video">grok-1.5-video</button></td><td class="price">$0.60675 <span data-i18n="perVideo"></span></td><td class="note-cell" data-i18n="nGrokVideo"></td></tr>
-            </tbody>
-          </table>
-        </div>
+        
         <p class="hint" data-i18n="videoHint"></p>
       </section>
 
@@ -824,7 +812,6 @@
 <tr><td class="model"><button type="button" class="model-btn" data-copy="MiniMax-H3">MiniMax-H3</button></td><td class="price">$0.02055 / $0.02877 / $0.04110 <span data-i18n="perSecond"></span></td><td class="note-cell"><a href="#api-minimax-h3" data-i18n="nMinimaxVideo"></a></td></tr>
 <tr><td class="model"><button type="button" class="model-btn" data-copy="gemini-omni-1.1-flash">gemini-omni-1.1-flash</button></td><td class="price">$0.1056 <span data-i18n="perSecond"></span></td><td class="note-cell"><a href="#api-gemini-omni" data-i18n="nGemOmni"></a></td></tr>
 <tr><td class="model"><button type="button" class="model-btn" data-copy="gemini-omni-1.1-flash-ext">gemini-omni-1.1-flash-ext</button></td><td class="price">$0.42 <span data-i18n="perVideo"></span> / $0.096 <span data-i18n="perSecond"></span></td><td class="note-cell"><a href="#api-gemini-omni" data-i18n="nGemOmniExt"></a></td></tr>
-<tr><td class="model"><button type="button" class="model-btn" data-copy="grok-imagine-video-1.5-preview">grok-imagine-video-1.5-preview</button></td><td class="price">$0.08825 / $0.1545 <span data-i18n="perSecond"></span></td><td class="note-cell"><a href="#api-grok-imagine" data-i18n="nGrokImagineVideo"></a></td></tr>
             </tbody>
           </table>
         </div>
@@ -842,7 +829,63 @@
         </div>
       </section>
 
-      <section id="video-api">
+            <section id="grok-video">
+        <div class="sec-head">
+          <span class="num">04c</span>
+          <h2 data-i18n="grokTitle"></h2>
+        </div>
+        <p class="sec-desc" data-i18n="grokIntro"></p>
+        <div class="endpoint">
+          <span class="method">POST</span>
+          <span class="path">/v1/chat/completions</span>
+          <button type="button" class="btn-copy" data-copy="https://www.keyoapi.xyz/v1/chat/completions" data-i18n="copyUrl"></button>
+        </div>
+
+        <div class="code-block">
+          <div class="code-bar">
+            <span class="lang">cURL</span>
+            <span data-i18n="grokMode1"></span>
+            <button type="button" class="btn-copy" data-copy-target="curl-grok-i2v" data-i18n="copy"></button>
+          </div>
+          <pre id="curl-grok-i2v"></pre>
+        </div>
+
+        <div class="code-block">
+          <div class="code-bar">
+            <span class="lang">cURL</span>
+            <span data-i18n="grokMode2"></span>
+            <button type="button" class="btn-copy" data-copy-target="curl-grok-flf" data-i18n="copy"></button>
+          </div>
+          <pre id="curl-grok-flf"></pre>
+        </div>
+
+        <div class="code-block">
+          <div class="code-bar">
+            <span class="lang">cURL</span>
+            <span data-i18n="grokMode3"></span>
+            <button type="button" class="btn-copy" data-copy-target="curl-grok-ref" data-i18n="copy"></button>
+          </div>
+          <pre id="curl-grok-ref"></pre>
+        </div>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th data-i18n="thModel"></th>
+                <th data-i18n="thPrice"></th>
+                <th data-i18n="thNote"></th>
+              </tr>
+            </thead>
+            <tbody>
+<tr><td class="model"><button type="button" class="model-btn" data-copy="grok-imagine-video-1.5">grok-imagine-video-1.5</button></td><td class="price">$0.3082 <span data-i18n="perVideo"></span></td><td class="note-cell" data-i18n="nGrokVideo"></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="hint" data-i18n="grokHint"></p>
+      </section>
+
+<section id="video-api">
         <div class="sec-head">
           <span class="num">04c</span>
           <h2 data-i18n="videoApiTitle"></h2>
@@ -1158,8 +1201,8 @@
             </div>
           </article>
 
-          <article class="model-api" id="api-grok-imagine">
-            <h3>grok-imagine-video-1.5-preview</h3>
+                    <article class="model-api" id="api-grok-imagine">
+            <h3>grok-imagine-video-1.5</h3>
             <p class="model-lead" data-i18n="giLead"></p>
             <div class="table-wrap">
               <table class="field-table">
@@ -1167,23 +1210,25 @@
                   <tr><th data-i18n="thField"></th><th data-i18n="thType"></th><th data-i18n="thDesc"></th></tr>
                 </thead>
                 <tbody>
-                  <tr><td>prompt<span class="req">*</span></td><td>string</td><td>文案</td></tr>
-                  <tr><td>image<span class="req">*</span></td><td>object</td><td><code>{"url":"https://..."}</code>（亦接受 image_url / image_urls[0]）</td></tr>
-                  <tr><td>aspect_ratio</td><td>string</td><td>如 <code>16:9</code></td></tr>
-                  <tr><td>resolution</td><td>string</td><td>如 <code>480p</code></td></tr>
+                  <tr><td>messages</td><td>array</td><td>chat 消息；prompt 写在 content（可用 <code>&lt;IMAGE_0&gt;</code> 引用参考图）</td></tr>
+                  <tr><td>image</td><td>string</td><td>单图 URL/base64/file_id，钉首帧；与 last_frame 同传 = 首尾帧</td></tr>
+                  <tr><td>last_frame</td><td>string</td><td>钉尾帧；也可只传此字段</td></tr>
+                  <tr><td>reference_images</td><td>array</td><td><code>[{"url":"https://..."}]</code> 多参考图，不锁首帧</td></tr>
                   <tr><td>duration</td><td>integer</td><td>秒</td></tr>
+                  <tr><td>resolution</td><td>string</td><td><code>480p</code> / <code>720p</code> / <code>1080p</code></td></tr>
+                  <tr><td>aspect_ratio</td><td>string</td><td>如 <code>16:9</code></td></tr>
                 </tbody>
               </table>
             </div>
             <div class="code-block" style="margin-top:12px">
-              <div class="code-bar"><span class="lang">JSON · 仅图生</span><button type="button" class="btn-copy" data-copy-target="ex-gi" data-i18n="copy"></button></div>
+              <div class="code-bar"><span class="lang">JSON · chat</span><button type="button" class="btn-copy" data-copy-target="ex-gi" data-i18n="copy"></button></div>
               <pre id="ex-gi"><code>{
-  "model": "grok-imagine-video-1.5-preview",
-  "prompt": "gentle camera push in",
-  "image": {"url": "https://example.com/still.jpg"},
+  "model": "grok-imagine-video-1.5",
+  "messages": [{"role": "user", "content": "gentle camera push in"}],
+  "image": "https://example.com/still.jpg",
   "aspect_ratio": "16:9",
-  "resolution": "480p",
-  "duration": 5
+  "resolution": "720p",
+  "duration": 10
 }</code></pre>
             </div>
           </article>
@@ -1477,6 +1522,13 @@ const I18N = {
     "tocImage": "Images",
     "tocVideo": "Video A",
     "tocVideoGen": "Video B",
+    "tocGrok": "Grok video",
+    "grokTitle": "Grok Imagine Video 1.5 — chat",
+    "grokIntro": "Text / single image / first & last frame / multi-reference in one chat endpoint. Fields follow the official Grok Imagine Video API; the video link comes back in the reply.",
+    "grokMode1": "Single image (pinned first frame)",
+    "grokMode2": "First & last frame",
+    "grokMode3": "Multi-reference",
+    "grokHint": "Also accepts prompt, duration, resolution (480p/720p/1080p) and aspect_ratio. Pricing: $0.3082 per request.",
     "tocVideoApi": "Video params",
     "tocPitfalls": "Avoid errors",
     "aiRefLink": "Copy to AI handbook (all models + one-click copy) → /brand/keyo-api-ref.html",
@@ -1486,7 +1538,7 @@ const I18N = {
     "pitMedia": "Local media → POST /v1/uploads (or /v1/files) first; put returned url into video JSON. No local paths / data:base64 / /v1/assets.",
     "pitMix": "Do not reuse another model's field names (especially MiniMax vs Seedance/Wan).",
     "pit1": "MiniMax-H3: use aspectRatio + images[]/audios[] — not image_with_roles / first_frame_image.",
-    "pit2": "grok-imagine-video-1.5-preview: image:{\"url\":\"https://...\"} is required (prompt-only fails).",
+    "pit2": "grok-imagine-video-1.5: image / last_frame / reference_images go as top-level chat body fields (official Grok Imagine Video API contract).",
     "pit3": "seedance: first_frame_image = first-frame; image_urls = reference (even 1 image). Never mix first_frame_image with video_urls/audios.",
     "pit4": "gemini-omni: do not send duration.",
     "pit5": "Poll path: /v1/tasks (video generations) vs /v1/task (TTS async / docs / InfiniteTalk).",
@@ -1526,9 +1578,9 @@ const I18N = {
     "wanLead": "Text, i2v, first-last, or multimodal refs. Public https media (local → /v1/uploads).",
     "fluxLead": "Text, keyframe images, or video continuation. draft for HD preview.",
     "omniLead": "No duration. Supports first/last frame, multi-subject refs, and short video edit.",
-    "giLead": "Image-to-video only. image.url is required (local still → /v1/uploads first).",
-    "videoIntroA": "Use this path for grok-1.5-video. wan / Seedance / FLUX / MiniMax / Gemini Omni / grok-imagine sent here are auto-forwarded.",
-    "videoIntroB": "Recommended path for wan / Seedance / FLUX / MiniMax / Gemini Omni / grok-imagine. POST /v1/videos also works (auto-forward).",
+    "giLead": "Text / single image / first & last frame / multi-reference. Chat endpoint — the video link returns in the reply.",
+    "videoIntroA": "Auto-forward: wan / Seedance / FLUX / MiniMax / Gemini Omni sent here are auto-forwarded.",
+    "videoIntroB": "Recommended path for wan / Seedance / FLUX / MiniMax / Gemini Omni. POST /v1/videos also works (auto-forward).",
     "videoHint": "Async: POST /v1/videos, then poll GET /v1/videos/{id}. Billing follows the console.",
     "videoHintGen": "Async: POST /v1/videos/generations, then poll GET /v1/tasks/{task_id} (or GET /v1/videos/{id}). Billing follows the console.",
     "videoMediaNote": "Media: JSON only + public http(s). Local files → POST /v1/uploads first. No local paths / data:base64 / /v1/assets / asset://.",
@@ -1536,7 +1588,7 @@ const I18N = {
     "videoRuleMedia": "Media: JSON only; public http(s). Local files → POST /v1/uploads. No paths / data:base64 / /v1/assets.",
     "videoRuleParams": "Each model has different fields (t2v / i2v / frames / refs). Use the links below — do not reuse another model's body.",
     "videoImagineNote": "Per-model field tables → Video params (#video-api).",
-    "nGrokVideo": "text/ref · seconds 6|10 only · per request",
+    "nGrokVideo": "text / 1 image / first·last / multi-ref · per request",
     "nVeoComponents": "(delisted)",
     "nWanVideo": "t2v / first·last / multimodal ref · /s",
     "nSeedance25": "by resolution · per second",
@@ -1624,7 +1676,7 @@ const I18N = {
     "capMod": "Moderation",
     "capUnwarp": "Document unwarping",
     "capPose": "Pose detection",
-    "capDuix": "Digital human — currently unavailable.",
+    "capDuix": "Digital human (audio+video → video, max 60s)",
     "capInfinite": "Talking video (image → video)",
     "capSubtitleErase": "Hard-subtitle erase (refined)",
     "capVideoEnhance": "Video quality enhance (pro)",
@@ -1659,6 +1711,13 @@ const I18N = {
     "tocImage": "图片生成",
     "tocVideo": "视频 A",
     "tocVideoGen": "视频 B",
+    "tocGrok": "Grok 视频",
+    "grokTitle": "Grok Imagine Video 1.5 — chat 接口",
+    "grokIntro": "文生 / 单图 / 首尾帧 / 多参考图同一个 chat 接口。字段与官方 Grok Imagine Video API 一致，视频链接随回复返回。",
+    "grokMode1": "单图（钉首帧）",
+    "grokMode2": "首尾帧",
+    "grokMode3": "多参考图",
+    "grokHint": "另支持 prompt、duration、resolution（480p/720p/1080p）与 aspect_ratio。计费：$0.3082/次。",
     "tocVideoApi": "视频参数",
     "tocPitfalls": "易错点",
     "aiRefLink": "给小白：完整手册 + 一键复制给 AI → /brand/keyo-api-ref.html",
@@ -1668,7 +1727,7 @@ const I18N = {
     "pitMedia": "本机素材先 POST /v1/uploads（或 /v1/files），把返回的 url 填进视频 JSON。禁止本机路径 / data:base64 / /v1/assets。",
     "pitMix": "不要套用其它模型的字段名（尤其 MiniMax 与 Seedance/Wan）。",
     "pit1": "MiniMax-H3：用 aspectRatio + images[]/audios[]，不要用 image_with_roles / first_frame_image。",
-    "pit2": "grok-imagine：必须 image:{\"url\":\"https://...\"}，只传 prompt 会失败。",
+    "pit2": "grok-imagine-video-1.5：image / last_frame / reference_images 直接放在 chat 请求体顶层（字段与官方一致）。",
     "pit3": "seedance：first_frame_image=首帧；image_urls=参考（单图也是参考）。禁止 first_frame_image 与 video_urls/audios 混用。",
     "pit4": "gemini-omni：不要传 duration。",
     "pit5": "轮询：/v1/tasks（视频 generations）vs /v1/task（TTS 异步 / 文档 / InfiniteTalk）。",
@@ -1708,9 +1767,9 @@ const I18N = {
     "wanLead": "文生、图生、首尾帧或多模态参考。媒体须公网 https（本机先 /v1/uploads）。",
     "fluxLead": "文生、关键帧图或视频续写；draft 可出 hd 草稿。",
     "omniLead": "无 duration。支持首尾帧、多主体参考与短视频编辑。",
-    "giLead": "仅图生。必须传 image.url（本机静帧先 /v1/uploads）。",
-    "videoIntroA": "下表模型请用本路径。wan / Seedance / FLUX / MiniMax / Gemini Omni / grok-imagine 打到这里也会自动转发。",
-    "videoIntroB": "wan / Seedance / FLUX / MiniMax / Gemini Omni / grok-imagine 推荐本路径。POST /v1/videos 也会自动转发。",
+    "giLead": "文生 / 单图 / 首尾帧 / 多参考图。chat 接口，视频链接随回复返回。",
+    "videoIntroA": "自动转发路径：wan / Seedance / FLUX / MiniMax / Gemini Omni 打到这里也会自动转发。",
+    "videoIntroB": "wan / Seedance / FLUX / MiniMax / Gemini Omni 推荐本路径。POST /v1/videos 也会自动转发。",
     "videoHint": "异步：POST /v1/videos 创建，再 GET /v1/videos/{id} 查询。扣费以控制台为准。",
     "videoHintGen": "异步：POST /v1/videos/generations 创建，再 GET /v1/tasks/{task_id}（或 GET /v1/videos/{id}）查询。扣费以控制台为准。",
     "videoMediaNote": "媒体：只要 JSON + 公网 http(s)。本机文件先 POST /v1/uploads。禁止本机路径 / data:base64 / /v1/assets / asset://。",
@@ -1718,7 +1777,7 @@ const I18N = {
     "videoRuleMedia": "媒体：只要 JSON；公网 http(s)。本机文件先 POST /v1/uploads。禁止路径 / data:base64 / /v1/assets。",
     "videoRuleParams": "各模型字段不同（文生 / 图生 / 首尾帧 / 参考）。点表格备注或下方芯片进入对应小节，不要套用其它模型的 body。",
     "videoImagineNote": "各模型字段表与示例 → 见「视频参数」。",
-    "nGrokVideo": "文生/参考图 · 仅 seconds=6|10 · 按次",
+    "nGrokVideo": "文生 / 单图 / 首尾帧 / 多参考图 · 按次",
     "nVeoComponents": "（已下架）",
     "nWanVideo": "文生/首尾帧/多模态参考 · 按秒",
     "nSeedance25": "按分辨率 · 按秒",
@@ -1806,7 +1865,7 @@ const I18N = {
     "capMod": "内容风控",
     "capUnwarp": "文档展平",
     "capPose": "人体关键点",
-    "capDuix": "数字人（已下架）：当前暂不可用。",
+    "capDuix": "数字人（音频+视频→视频，最长 60 秒）",
     "capInfinite": "说话视频（图→视频）",
     "capSubtitleErase": "硬字幕擦除（精细化）",
     "capVideoEnhance": "视频画质增强（Pro）",
@@ -1841,16 +1900,23 @@ const I18N = {
     "tocImage": "圖片生成",
     "tocVideo": "影片 A",
     "tocVideoGen": "影片 B",
+    "tocGrok": "Grok 影片",
+    "grokTitle": "Grok Imagine Video 1.5 — chat 介面",
+    "grokIntro": "文生 / 單圖 / 首尾幀 / 多參考圖同一個 chat 介面。欄位與官方 Grok Imagine Video API 一致，影片連結隨回覆返回。",
+    "grokMode1": "單圖（釘首幀）",
+    "grokMode2": "首尾幀",
+    "grokMode3": "多參考圖",
+    "grokHint": "另支援 prompt、duration、resolution（480p/720p/1080p）與 aspect_ratio。計費：$0.3082/次。",
     "tocVideoApi": "影片參數",
     "videoTitle": "影片 — /v1/videos",
     "videoTitleGen": "影片 — /v1/videos/generations",
-    "videoIntroA": "下表模型請用本路徑。wan / Seedance / FLUX / MiniMax / Gemini Omni / grok-imagine 打到這裡也會自動轉發。",
-    "videoIntroB": "wan / Seedance / FLUX / MiniMax / Gemini Omni / grok-imagine 建議本路徑。POST /v1/videos 也會自動轉發。",
+    "videoIntroA": "自動轉發路徑：wan / Seedance / FLUX / MiniMax / Gemini Omni 打到這裡也會自動轉發。",
+    "videoIntroB": "wan / Seedance / FLUX / MiniMax / Gemini Omni 建議本路徑。POST /v1/videos 也會自動轉發。",
     "videoHint": "非同步：POST /v1/videos 建立，再 GET /v1/videos/{id} 查詢。扣費以控制台為準。",
     "videoHintGen": "非同步：POST /v1/videos/generations 建立，再 GET /v1/tasks/{task_id}（或 GET /v1/videos/{id}）查詢。扣費以控制台為準。",
     "videoMediaNote": "媒體：只要 JSON + 公網 http(s)。本機檔案先 POST /v1/uploads。禁止本機路徑 / data:base64 / /v1/assets。",
-    "videoImagineNote": "grok-imagine-video-1.5-preview 僅支援圖生影片。必填 image:{\"url\":\"https://...\"}。預設 aspect_ratio 16:9、resolution 480p、duration 5。也接受 image_url / image_urls[0]。",
-    "nGrokVideo": "文生/參考圖 · 僅 6 秒或 10 秒 · 按次",
+    "videoImagineNote": "grok-imagine-video-1.5：chat 介面（欄位見 #api-grok-imagine）。",
+    "nGrokVideo": "文生 / 單圖 / 首尾幀 / 多參考圖 · 按次",
     "nVeoComponents": "（已下架）",
     "nWanVideo": "480P/720P/1080P · 按秒",
     "nSeedance25": "按解析度 · 按秒",
@@ -1974,16 +2040,23 @@ const I18N = {
     "tocImage": "画像生成",
     "tocVideo": "動画 A",
     "tocVideoGen": "動画 B",
+    "tocGrok": "Grok 動画",
+    "grokTitle": "Grok Imagine Video 1.5 — chat",
+    "grokIntro": "テキスト／単一画像／最初と最後のフレーム／マルチ参照を 1 つの chat で。フィールドは公式 Grok Imagine Video API 準拠、動画リンクは応答で返却。",
+    "grokMode1": "単一画像（先頭フレーム固定）",
+    "grokMode2": "最初と最後のフレーム",
+    "grokMode3": "マルチ参照",
+    "grokHint": "prompt、duration、resolution（480p/720p/1080p）、aspect_ratio にも対応。料金：$0.3082/回。",
     "tocVideoApi": "動画パラメータ",
     "videoTitle": "動画 — /v1/videos",
     "videoTitleGen": "動画 — /v1/videos/generations",
-    "videoIntroA": "下表のモデルはこのパス。wan / Seedance / FLUX / MiniMax / Gemini Omni / grok-imagine も自動転送されます。",
-    "videoIntroB": "wan / Seedance / FLUX / MiniMax / Gemini Omni / grok-imagine 推奨パス。POST /v1/videos でも自動転送。",
+    "videoIntroA": "自動転送パス：wan / Seedance / FLUX / MiniMax / Gemini Omni も自動転送されます。",
+    "videoIntroB": "wan / Seedance / FLUX / MiniMax / Gemini Omni 推奨パス。POST /v1/videos でも自動転送。",
     "videoHint": "非同期：POST /v1/videos → GET /v1/videos/{id}。課金はコンソール準拠。",
     "videoHintGen": "非同期：POST /v1/videos/generations → GET /v1/tasks/{task_id}（または GET /v1/videos/{id}）。課金はコンソール準拠。",
     "videoMediaNote": "Media: JSON only + public http(s). Local files → POST /v1/uploads first. No local paths / data:base64 / /v1/assets.",
-    "videoImagineNote": "grok-imagine-video-1.5-preview は画像→動画のみ。必須: image:{\"url\":\"https://...\"}。省略時 16:9 / 480p / 5s。image_url / image_urls[0] も可。",
-    "nGrokVideo": "テキスト/参照 · 1–15秒 · リクエスト課金",
+    "videoImagineNote": "grok-imagine-video-1.5：chat エンドポイント（フィールドは #api-grok-imagine）。",
+    "nGrokVideo": "テキスト / 1画像 / 前後フレーム / マルチ参照 · リクエスト課金",
     "nVeoComponents": "約8秒 · リクエスト · 供給は在庫次第",
     "nWanVideo": "480P/720P/1080P · 秒課金",
     "nSeedance25": "解像度別 · 秒課金",
@@ -2107,16 +2180,23 @@ const I18N = {
     "tocImage": "Images",
     "tocVideo": "Vidéo A",
     "tocVideoGen": "Vidéo B",
+    "tocGrok": "Grok vidéo",
+    "grokTitle": "Grok Imagine Video 1.5 — chat",
+    "grokIntro": "Texte / image unique / première et dernière frame / multi-références dans un seul endpoint chat. Champs conformes à l\u0027API officielle Grok Imagine Video ; le lien vidéo arrive dans la réponse.",
+    "grokMode1": "Image unique (première frame épinglée)",
+    "grokMode2": "Première et dernière frame",
+    "grokMode3": "Multi-références",
+    "grokHint": "Accepte aussi prompt, duration, resolution (480p/720p/1080p) et aspect_ratio. Tarif : 0,3082 $ / requête.",
     "tocVideoApi": "Params vidéo",
     "videoTitle": "Vidéo — /v1/videos",
     "videoTitleGen": "Vidéo — /v1/videos/generations",
-    "videoIntroA": "Chemin pour grok-1.5-video. wan / Seedance / FLUX / MiniMax / Gemini Omni / grok-imagine envoyés ici sont redirigés.",
-    "videoIntroB": "Chemin recommandé pour wan / Seedance / FLUX / MiniMax / Gemini Omni / grok-imagine. POST /v1/videos est aussi redirigé.",
+    "videoIntroA": "Chemin de transfert : wan / Seedance / FLUX / MiniMax / Gemini Omni envoyés ici sont redirigés.",
+    "videoIntroB": "Chemin recommandé pour wan / Seedance / FLUX / MiniMax / Gemini Omni. POST /v1/videos est aussi redirigé.",
     "videoHint": "Async : POST /v1/videos puis GET /v1/videos/{id}. Facturation = console.",
     "videoHintGen": "Async : POST /v1/videos/generations puis GET /v1/tasks/{task_id} (ou GET /v1/videos/{id}). Facturation = console.",
     "videoMediaNote": "Media: JSON only + public http(s). Local files → POST /v1/uploads first. No local paths / data:base64 / /v1/assets.",
-    "videoImagineNote": "grok-imagine-video-1.5-preview = image→vidéo uniquement. Requis: image:{\"url\":\"https://...\"}. Défauts 16:9 / 480p / 5s. Alias image_url / image_urls[0].",
-    "nGrokVideo": "texte/réf · 1–15s · par requête",
+    "videoImagineNote": "grok-imagine-video-1.5 : endpoint chat (champs : #api-grok-imagine).",
+    "nGrokVideo": "texte / 1 image / première·dernière frame / multi-réf · par requête",
     "nVeoComponents": "~8s · par requête · stock variable",
     "nWanVideo": "480P/720P/1080P · par seconde",
     "nSeedance25": "par résolution · /s",
@@ -2240,16 +2320,23 @@ const I18N = {
     "tocImage": "Изображения",
     "tocVideo": "Видео A",
     "tocVideoGen": "Видео B",
+    "tocGrok": "Grok видео",
+    "grokTitle": "Grok Imagine Video 1.5 — chat",
+    "grokIntro": "Текст / одно изображение / первый и последний кадр / мультиреференс в одном chat-эндпоинте. Поля как в официальном Grok Imagine Video API; ссылка на видео придёт в ответе.",
+    "grokMode1": "Одно изображение (первый кадр)",
+    "grokMode2": "Первый и последний кадр",
+    "grokMode3": "Мультиреференс",
+    "grokHint": "Также принимает prompt, duration, resolution (480p/720p/1080p) и aspect_ratio. Тариф: $0.3082 / запрос.",
     "tocVideoApi": "Параметры видео",
     "videoTitle": "Видео — /v1/videos",
     "videoTitleGen": "Видео — /v1/videos/generations",
-    "videoIntroA": "Путь для grok-1.5-video. wan / Seedance / FLUX / MiniMax / Gemini Omni / grok-imagine сюда — автоперенаправление.",
-    "videoIntroB": "Рекомендуемый путь для wan / Seedance / FLUX / MiniMax / Gemini Omni / grok-imagine. POST /v1/videos тоже перенаправляется.",
+    "videoIntroA": "Путь перенаправления: wan / Seedance / FLUX / MiniMax / Gemini Omni сюда — автоперенаправление.",
+    "videoIntroB": "Рекомендуемый путь для wan / Seedance / FLUX / MiniMax / Gemini Omni. POST /v1/videos тоже перенаправляется.",
     "videoHint": "Асинхронно: POST /v1/videos, затем GET /v1/videos/{id}. Списание — по консоли.",
     "videoHintGen": "Асинхронно: POST /v1/videos/generations, затем GET /v1/tasks/{task_id} (или GET /v1/videos/{id}). Списание — по консоли.",
     "videoMediaNote": "Media: JSON only + public http(s). Local files → POST /v1/uploads first. No local paths / data:base64 / /v1/assets.",
-    "videoImagineNote": "grok-imagine-video-1.5-preview только image→video. Нужно: image:{\"url\":\"https://...\"}. По умолчанию 16:9 / 480p / 5с. Также image_url / image_urls[0].",
-    "nGrokVideo": "текст/реф · 1–15с · за запрос",
+    "videoImagineNote": "grok-imagine-video-1.5: chat-эндпоинт (поля: #api-grok-imagine).",
+    "nGrokVideo": "текст / 1 изображение / первый·последний кадр / мультиреф · за запрос",
     "nVeoComponents": "~8с · за запрос · наличие может меняться",
     "nWanVideo": "480P/720P/1080P · за секунду",
     "nSeedance25": "по разрешению · /с",
@@ -2373,16 +2460,23 @@ const I18N = {
     "tocImage": "Ảnh",
     "tocVideo": "Video A",
     "tocVideoGen": "Video B",
+    "tocGrok": "Grok video",
+    "grokTitle": "Grok Imagine Video 1.5 — chat",
+    "grokIntro": "Văn bản / một ảnh / khung đầu & cuối / đa tham chiếu trong một endpoint chat. Trường theo API chính thức Grok Imagine Video; liên kết video trả về trong phản hồi.",
+    "grokMode1": "Một ảnh (cố định khung đầu)",
+    "grokMode2": "Khung đầu & cuối",
+    "grokMode3": "Đa tham chiếu",
+    "grokHint": "Hỗ trợ thêm prompt, duration, resolution (480p/720p/1080p) và aspect_ratio. Giá: $0.3082/ lần.",
     "tocVideoApi": "Tham số video",
     "videoTitle": "Video — /v1/videos",
     "videoTitleGen": "Video — /v1/videos/generations",
-    "videoIntroA": "Path cho grok-1.5-video. wan / Seedance / FLUX / MiniMax / Gemini Omni / grok-imagine gửi vào đây sẽ được chuyển tự động.",
-    "videoIntroB": "Path khuyến nghị cho wan / Seedance / FLUX / MiniMax / Gemini Omni / grok-imagine. POST /v1/videos cũng được chuyển tự động.",
+    "videoIntroA": "Path chuyển tiếp: wan / Seedance / FLUX / MiniMax / Gemini Omni gửi vào đây sẽ được chuyển tự động.",
+    "videoIntroB": "Path khuyến nghị cho wan / Seedance / FLUX / MiniMax / Gemini Omni. POST /v1/videos cũng được chuyển tự động.",
     "videoHint": "Async: POST /v1/videos rồi GET /v1/videos/{id}. Tính phí theo console.",
     "videoHintGen": "Async: POST /v1/videos/generations rồi GET /v1/tasks/{task_id} (hoặc GET /v1/videos/{id}). Tính phí theo console.",
     "videoMediaNote": "Media: JSON only + public http(s). Local files → POST /v1/uploads first. No local paths / data:base64 / /v1/assets.",
-    "videoImagineNote": "grok-imagine-video-1.5-preview chỉ image→video. Bắt buộc: image:{\"url\":\"https://...\"}. Mặc định 16:9 / 480p / 5s. Cũng nhận image_url / image_urls[0].",
-    "nGrokVideo": "text/ref · 1–15s · theo lần",
+    "videoImagineNote": "grok-imagine-video-1.5: endpoint chat (trường: #api-grok-imagine).",
+    "nGrokVideo": "văn bản / 1 ảnh / đầu·cuối / đa tham chiếu · theo lần",
     "nVeoComponents": "~8s · theo lần · nguồn có thể thay đổi",
     "nWanVideo": "480P/720P/1080P · theo giây",
     "nSeedance25": "theo độ phân giải · /s",
@@ -2558,7 +2652,7 @@ function renderSamples(dict) {
     video.innerHTML = '<code><span class="tok-cmd">curl</span> https://www.keyoapi.xyz/v1/videos \\\n' +
       '  -H <span class="tok-str">"Authorization: Bearer ' + escapeHtml(key) + '"</span> \\\n' +
       '  -H <span class="tok-str">"Content-Type: application/json"</span> \\\n' +
-      '  -d <span class="tok-str">\'{\n    "model": "grok-1.5-video",\n    "prompt": "A red paper boat floating on calm water at sunset"\n  }\'</span></code>';
+      '  -d <span class="tok-str">\'{\n    "model": "wan3.0-video",\n    "prompt": "A red paper boat floating on calm water at sunset"\n  }\'</span></code>';
   }
   const videoGen = document.getElementById('curl-video-gen');
   if (videoGen) {
@@ -2566,6 +2660,36 @@ function renderSamples(dict) {
       '  -H <span class="tok-str">"Authorization: Bearer ' + escapeHtml(key) + '"</span> \\\n' +
       '  -H <span class="tok-str">"Content-Type: application/json"</span> \\\n' +
       '  -d <span class="tok-str">\'{\n    "model": "wan3.0-video",\n    "prompt": "A kitten running on a moonlit rooftop",\n    "resolution": "720P",\n    "duration": 5\n  }\'</span></code>';
+  }
+  const grokI2v = document.getElementById('curl-grok-i2v');
+  if (grokI2v) {
+    grokI2v.innerHTML = '<code><span class="tok-cmd">curl</span> https://www.keyoapi.xyz/v1/chat/completions \
+' +
+      '  -H <span class="tok-str">"Authorization: Bearer ' + escapeHtml(key) + '"</span> \
+' +
+      '  -H <span class="tok-str">"Content-Type: application/json"</span> \
+' +
+      '  -d <span class="tok-str">\'{\n    "model": "grok-imagine-video-1.5",\n    "messages": [{"role": "user", "content": "a red paper boat drifting on calm water at sunset"}],\n    "image": "https://example.com/first.jpg",\n    "duration": 10,\n    "resolution": "720p"\n  }\'</span></code>';
+  }
+  const grokFlf = document.getElementById('curl-grok-flf');
+  if (grokFlf) {
+    grokFlf.innerHTML = '<code><span class="tok-cmd">curl</span> https://www.keyoapi.xyz/v1/chat/completions \
+' +
+      '  -H <span class="tok-str">"Authorization: Bearer ' + escapeHtml(key) + '"</span> \
+' +
+      '  -H <span class="tok-str">"Content-Type: application/json"</span> \
+' +
+      '  -d <span class="tok-str">\'{\n    "model": "grok-imagine-video-1.5",\n    "messages": [{"role": "user", "content": "camera glides from the day scene into the night skyline"}],\n    "image": "https://example.com/first.jpg",\n    "last_frame": "https://example.com/last.jpg"\n  }\'</span></code>';
+  }
+  const grokRef = document.getElementById('curl-grok-ref');
+  if (grokRef) {
+    grokRef.innerHTML = '<code><span class="tok-cmd">curl</span> https://www.keyoapi.xyz/v1/chat/completions \
+' +
+      '  -H <span class="tok-str">"Authorization: Bearer ' + escapeHtml(key) + '"</span> \
+' +
+      '  -H <span class="tok-str">"Content-Type: application/json"</span> \
+' +
+      '  -d <span class="tok-str">\'{\n    "model": "grok-imagine-video-1.5",\n    "messages": [{"role": "user", "content": "the model from <IMAGE_0> wears the shirt from <IMAGE_1> and walks the runway"}],\n    "reference_images": [\n      {"url": "https://example.com/model.jpg"},\n      {"url": "https://example.com/shirt.jpg"}\n    ],\n    "duration": 10,\n    "aspect_ratio": "16:9"\n  }\'</span></code>';
   }
   const curlMm = document.getElementById('curl-mm-h3');
   if (curlMm) {

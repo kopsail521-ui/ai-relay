@@ -194,6 +194,7 @@ function nav() {
     <a href="/models">Models</a>
     <a href="/compare">Compare</a>
     <a href="/brand/keyo-docs.html">Docs</a>
+    <a href="/brand/blog/">Blog</a>
     <a href="/brand/faq.html">FAQ</a>
     <a href="/console">Console</a>
     <a href="/sign-in">Sign in</a>
@@ -232,6 +233,7 @@ function footer() {
   <a href="/models">Model guides</a>
   <a href="/compare">Compare</a>
   <a href="/free-models">Free models</a>
+  <a href="/brand/blog/">Blog</a>
 ${landingLinks}
   <a href="/brand/keyo-docs.html">Docs</a>
   <a href="/brand/faq.html">FAQ</a>
@@ -487,7 +489,7 @@ ${nav()}
       <div class="actions">
         <a class="btn btn-primary" href="/sign-up">Start free — get API key</a>
         <a class="btn btn-secondary" href="/brand/keyo-docs.html">Docs</a>
-        <a class="btn btn-secondary" href="/pricing">Browse Models</a>
+        <a class="btn btn-secondary" href="/models">Browse Models</a>
       </div>
     </div>
     <div class="panel">
@@ -556,6 +558,7 @@ export OPENAI_API_KEY=sk-...
     <a href="/models">All model guides</a>
     <a href="/compare">Compare</a>
     <a href="/free-models">Free AI API</a>
+    <a href="/brand/blog/">Blog</a>
 ${(pricingLandings.pages || [])
   .map(
     (p) =>
@@ -641,7 +644,7 @@ function renderAbout() {
 <div class="btnrow">
   <a class="btn btn-primary" href="/sign-up">Start free — get API key</a>
   <a class="btn btn-secondary" href="/brand/keyo-docs.html">Docs</a>
-  <a class="btn btn-secondary" href="/pricing">Browse Models</a>
+  <a class="btn btn-secondary" href="/models">Browse Models</a>
 </div>
 <h2>What we do</h2>
 <p>We aggregate many model providers behind one prepaid account. For chat (and supported image/speech paths), keep the OpenAI SDK: set <code>OPENAI_BASE_URL=https://www.keyoapi.xyz/v1</code> and swap <code>model=</code>. For OCR, matting, detection, async video and avatars, call the documented dedicated paths with the same key.</p>

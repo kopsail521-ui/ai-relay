@@ -5,7 +5,7 @@
       "slug": "gemini-api-pricing",
       "navLabel": "Gemini pricing",
       "h1": "Gemini API Pricing — KeyoAPI vs Typical Google List Rates",
-      "title": "Gemini API Pricing Comparison | Cheap Gemini on KeyoAPI",
+      "title": "Gemini API Pricing Comparison | KeyoAPI",
       "metaDescription": "Gemini API pricing on KeyoAPI: gemini-3.8-flash ~$0.28/$1.38, gemini-3.7-flash same band, plus Omni request IDs. OpenAI-compatible.",
       "targetKeywords": [
         "google gemini api pricing",
@@ -48,7 +48,7 @@
         "Engineers comparing Gemini API pricing usually already want Google-class models with clearer unit economics — or one prepaid balance across Gemini-class IDs plus DeepSeek, GLM, Whisper, OCR, and TTS. Official Google surfaces win on brand trust; KeyoAPI wins when you want that stack without five invoices.",
         "Keyo rates above are indicative sell prices from the live Keyo catalog. Always confirm interactive pricing pages under /pricing/{modelId} before contracting volume. Catalog IDs can change as Google ships new stables — this page tracks what Keyo currently lists.",
         "How to call: set OPENAI_BASE_URL=https://www.keyoapi.xyz/v1, use your Keyo API key, and pass the Gemini model string (for example gemini-3.8-flash) to POST /v1/chat/completions. Many Google-native features remain Google-console only; Keyo focuses on OpenAI-compatible chat access for overseas developer stacks.",
-        "When Gemini list prices spike your margin, keep Gemini for multimodal strengths and shift plain text volume to deepseek-v4.1-flash or gpt-5.6-luna on the same key. For pure free prototyping, start on /free-models, then promote to Gemini paid IDs when quality gates pass."
+        "When Gemini list prices spike your margin, keep Gemini for multimodal strengths and shift plain text volume to deepseek-v4.1-flash or gpt-6-luna on the same key. For pure free prototyping, start on /free-models, then promote to Gemini paid IDs when quality gates pass."
       ],
       "faqs": [
         {
@@ -169,7 +169,7 @@
         "Keyo rates above are indicative sell prices from the live Keyo catalog. Always confirm interactive pages under /pricing/claude-sonnet-5, /pricing/claude-opus-5, /pricing/claude-fable-5, and /pricing/claude-fable-5-1 before contracting volume. Anthropic list bands and context tiers change — treat official figures as planning context.",
         "How to call: set OPENAI_BASE_URL=https://www.keyoapi.xyz/v1, use your Keyo API key, and pass a Claude model string (for example claude-sonnet-5) to POST /v1/chat/completions. Longer guides live at /model/claude-sonnet-5, /model/claude-opus-5, and the Fable pages.",
         "When Claude returns HTTP 529 overloaded (or you are planning retries around Claude API overloaded errors), see the developer playbook: /brand/blog/article/ncx234u2/ — retry/backoff and fallback patterns on the same Keyo key.",
-        "When Anthropic / Claude list prices spike your margin, keep Claude for hard reasoning and shift bulk classification or drafts to gpt-5.6-luna or deepseek-v4.1-flash on the same key. For OpenAI / GPT dollars see /openai-api-pricing; for Gemini dollars see /gemini-api-pricing; for DeepSeek see /deepseek-api-pricing; for Grok see /grok-api-pricing; for free prototyping see /free-models."
+        "When Anthropic / Claude list prices spike your margin, keep Claude for hard reasoning and shift bulk classification or drafts to gpt-6-luna or deepseek-v4.1-flash on the same key. For OpenAI / GPT dollars see /openai-api-pricing; for Gemini dollars see /gemini-api-pricing; for DeepSeek see /deepseek-api-pricing; for Grok see /grok-api-pricing; for free prototyping see /free-models."
       ],
       "faqs": [
         {
@@ -594,7 +594,7 @@
       "slug": "openai-api-alternative",
       "navLabel": "OpenAI alternative",
       "h1": "OpenAI API Alternative — Swap Two Lines, Keep Your SDK",
-      "title": "OpenAI API Alternative | Cheap Multi-Model Gateway on KeyoAPI",
+      "title": "OpenAI API Alternative | Multi-Model Gateway on KeyoAPI",
       "metaDescription": "OpenAI API alternative on KeyoAPI: keep your OpenAI SDK, change base URL + key, call gpt-6-astra, deepseek-v4.1-flash, Claude-class IDs on one prepaid wallet. Compare rates on /compare.",
       "tableHeading": "What you keep vs what changes",
       "colOfficial": "Official OpenAI path",

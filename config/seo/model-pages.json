@@ -11,7 +11,7 @@
         "speech to text api"
       ],
       "h1": "Whisper Large V3 API — Accurate Multilingual Speech to Text",
-      "title": "Whisper Large V3 API | Cheap Speech-to-Text on KeyoAPI",
+      "title": "Whisper Large V3 API | Speech-to-Text on KeyoAPI",
       "metaDescription": "Call OpenAI Whisper Large V3 via KeyoAPI for multilingual speech-to-text. Per-request pricing from $0.0103. OpenAI-compatible endpoint for apps and agents.",
       "priceLabel": "$0.0103 / request",
       "priceUnit": "per_call",
@@ -102,9 +102,9 @@
         "claude api pricing",
         "cheap llm api"
       ],
-      "h1": "Claude Fable 5.1 API — Flagship Agents on a Cheap LLM API",
+      "h1": "Claude Fable 5.1 API — Flagship Agents on KeyoAPI",
       "title": "Claude Fable 5.1 API Pricing & Access | KeyoAPI Relay",
-      "metaDescription": "Access Claude Fable 5.1 through KeyoAPI’s OpenAI-compatible cheap LLM API. Indicative ~$7.35 / $36.77 per 1M in/out for long-horizon agents and coding.",
+      "metaDescription": "Access Claude Fable 5.1 through KeyoAPI’s OpenAI-compatible API. Indicative ~$7.35 / $36.77 per 1M in/out for long-horizon agents and coding.",
       "priceLabel": "~$7.35 / $36.77 per 1M in/out",
       "priceUnit": "per_1m_tokens",
       "related": [
@@ -149,7 +149,7 @@
         "cheap llm api"
       ],
       "h1": "Claude Fable 5 API — Flagship Chat & Agents",
-      "title": "Claude Fable 5 API | KeyoAPI Cheap LLM Relay",
+      "title": "Claude Fable 5 API | KeyoAPI Relay",
       "metaDescription": "Claude Fable 5 on KeyoAPI: flagship chat and agent model via OpenAI-compatible API. Check live Claude API pricing and compare vs official rates.",
       "priceLabel": "~$8.82 / $44.12 per 1M in/out",
       "priceUnit": "per_1m_tokens",
@@ -242,7 +242,7 @@
       ],
       "h1": "Claude Sonnet 5 API — Balanced Quality & Cost",
       "title": "Claude Sonnet 5 API | Affordable Claude on KeyoAPI",
-      "metaDescription": "Claude Sonnet 5 on KeyoAPI: balanced long-context chat with competitive Claude API pricing via an OpenAI-compatible cheap LLM API.",
+      "metaDescription": "Claude Sonnet 5 on KeyoAPI: balanced long-context chat with competitive Claude API pricing via an OpenAI-compatible API.",
       "priceLabel": "~$0.88 / $4.41 per 1M in/out",
       "priceUnit": "per_1m_tokens",
       "related": [
@@ -287,8 +287,8 @@
         "openai compatible api"
       ],
       "h1": "GPT-5.6 Terra API — Everyday Flagship Chat",
-      "title": "GPT-5.6 Terra API Pricing | KeyoAPI Cheap LLM",
-      "metaDescription": "GPT-5.6 Terra on KeyoAPI for everyday Q&A and assistants. OpenAI-compatible cheap LLM API with competitive GPT API pricing.",
+      "title": "GPT-5.6 Terra API Pricing | KeyoAPI",
+      "metaDescription": "GPT-5.6 Terra on KeyoAPI for everyday Q&A and assistants. OpenAI-compatible API with competitive GPT API pricing.",
       "priceLabel": "~$0.37 / $2.21 per 1M in/out",
       "priceUnit": "per_1m_tokens",
       "related": [

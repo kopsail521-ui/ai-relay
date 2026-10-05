@@ -3,15 +3,9 @@
 # 前提：本机已 git push
 set -e
 cd /opt/ai-relay
-sudo git fetch origin
-sudo git checkout -- \
-  config/gitee-selected-models.json \
-  config/marketplace-model-copy.json \
-  services/creem-moderation-proxy/marketplace-model-copy.json \
-  services/gitee-passthrough \
-  scripts/vps-add-gitee-systemone-3.py \
-  || true
-sudo git pull --ff-only origin main
+# VPS 树常因热补丁/生成物漂移，git pull 会被脏文件挡住：
+# 用仓库既定的 safe-pull（保留 GEO 博客 → stash -u → reset --hard origin/main → 还原博客）
+sudo bash scripts/vps-safe-pull-preserve-blog.sh
 
 # 1) New API：渠道 + 售价（ModelRatio/CompletionRatio）+ 广场单标签「系统一模型」
 sudo docker run --rm \

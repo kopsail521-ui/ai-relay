@@ -2524,15 +2524,6 @@
       "ja": "埋め込みモデル",
       "vi": "Embedding"
     },
-    "系统一模型": {
-      "zhCN": "系统一模型",
-      "zhTW": "系統一模型",
-      "en": "System One Model",
-      "fr": "Modèle System One",
-      "ru": "Модель System One",
-      "ja": "System One モデル",
-      "vi": "Mô hình System One"
-    },
     "嵌入模型": {
       "zhCN": "嵌入模型",
       "zhTW": "嵌入模型",
@@ -2550,6 +2541,15 @@
       "ru": "Эмбеддинг",
       "ja": "埋め込みモデル",
       "vi": "Embedding"
+    },
+    "决策模型": {
+      "zhCN": "决策模型",
+      "zhTW": "決策模型",
+      "en": "Decision Model",
+      "fr": "Modèle de décision",
+      "ru": "Модель принятия решений",
+      "ja": "意思決定モデル",
+      "vi": "Mô hình quyết định"
     }
   },
   "qwen3.8-max-0902": {

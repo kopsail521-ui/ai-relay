@@ -19,7 +19,7 @@ import sys
 import time
 
 ABILITY_SRC = "Bespoke-Nimble-9B"
-TAG = "系统一模型"
+TAG = "决策模型"
 ENDPOINTS = json.dumps(
     {"openai": {"path": "/v1/systemone", "method": "POST"}},
     separators=(",", ":"),

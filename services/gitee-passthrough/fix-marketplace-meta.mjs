@@ -324,6 +324,24 @@ export const RULES = {
     endpoints: EP.embed,
     icon: "Gemini.Color",
   },
+  "suno_music_open": {
+    vendor: "Suno",
+    tag: "音乐",
+    endpoints: JSON.stringify({ suno: "/suno/submit/MUSIC" }),
+    icon: "Suno",
+  },
+  "suno_music": {
+    vendor: "Suno",
+    tag: "音乐",
+    endpoints: JSON.stringify({ suno: "/suno/submit/MUSIC" }),
+    icon: "Suno",
+  },
+  "gemini-3.1-flash-tts-preview": {
+    vendor: "Google",
+    tag: "语音合成",
+    endpoints: EP.tts,
+    icon: "Gemini.Color",
+  },
   "seedance-2.0-1080p": {
     vendor: "字节跳动",
     tag: "视频按秒",
@@ -396,6 +414,7 @@ const VENDOR_ICON = {
   阶跃星辰: "Stepfun.Color",
   字节跳动: "Doubao.Color",
   "Black Forest Labs": "Flux",
+  Suno: "Custom",
   其他: "Custom",
 };
 

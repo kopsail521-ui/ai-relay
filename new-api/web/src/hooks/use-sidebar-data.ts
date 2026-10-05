@@ -21,6 +21,7 @@ import {
   Box,
   CreditCard,
   FileText,
+  Filter,
   FlaskConical,
   Key,
   LayoutDashboard,
@@ -119,6 +120,11 @@ export function useSidebarData(): SidebarData {
         id: 'admin',
         title: t('Admin'),
         items: [
+          {
+            title: t('Funnel'),
+            url: '/funnel',
+            icon: Filter,
+          },
           {
             title: t('Channels'),
             url: '/channels',

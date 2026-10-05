@@ -1,0 +1,47 @@
+# VPS：grok 视频换上游 —— 下架旧 Path A 双 SKU，上架 aicopy 官转 grok-imagine-video-1.5
+# 定价：进价 ¥0.9/次 ×2.5 = ¥2.25/次 = $0.30822/次（按次）
+# 前提：本机已 git push；/opt/ai-relay/.env 已加 AICOPY_API_KEY=sk-xxx
+set -e
+cd /opt/ai-relay
+sudo bash scripts/vps-safe-pull-preserve-blog.sh
+
+if ! sudo grep -q '^AICOPY_API_KEY=sk-' /opt/ai-relay/.env 2>/dev/null; then
+  echo "ERROR: add AICOPY_API_KEY=sk-xxx to /opt/ai-relay/.env first" >&2
+  exit 1
+fi
+
+# 1) New API：下架旧双 SKU + 建/更新 Keyo Video 频道（model_mapping → 上游 id）+ 定价/广场
+sudo python3 /opt/ai-relay/scripts/vps-grok15-video-swap.py /opt/ai-relay/data/new-api/one-api.db
+
+# 2) apimart :3011（Path A 视频服务）：摘除两个旧 SKU，堵住绕过 new-api 的计费口
+APICONT=$(sudo docker ps --format '{{.Names}}' | grep -i 'apimart' | head -1 || true)
+if [ -n "$APICONT" ]; then
+  sudo docker cp /opt/ai-relay/services/apimart-passthrough/catalog.json "$APICONT":/app/catalog.json
+  sudo docker restart "$APICONT"
+  echo "apimart_catalog_updated=$APICONT"
+else
+  echo "WARN: apimart container not found"
+fi
+
+# 3) moderation：转发列表清理 + 广场 copy 热更新
+MOD=$(sudo docker ps --format '{{.Names}}' | grep -E 'creem|moderation' | head -1 || true)
+if [ -n "$MOD" ]; then
+  sudo docker cp /opt/ai-relay/services/creem-moderation-proxy/server.mjs "$MOD":/app/server.mjs
+  sudo docker cp /opt/ai-relay/services/creem-moderation-proxy/marketplace-model-copy.json \
+    "$MOD":/app/marketplace-model-copy.json
+  sudo docker restart "$MOD"
+  echo "moderation_updated=$MOD"
+else
+  echo "WARN: moderation container not found"
+fi
+
+echo "--- smoke ---"
+P3JSON=$(mktemp)
+curl -sS https://www.keyoapi.xyz/api/pricing -o "$P3JSON"
+grep -q "grok-imagine-video-1.5" "$P3JSON" && echo "pricing_ok=grok-imagine-video-1.5" || echo "pricing_MISSING=grok-imagine-video-1.5"
+grep -q "grok-1.5-video" "$P3JSON" && echo "DELIST_FAIL=grok-1.5-video_still_listed" || echo "delist_ok=grok-1.5-video"
+grep -q "grok-imagine-video-1.5-preview" "$P3JSON" && echo "DELIST_FAIL=preview_still_listed" || echo "delist_ok=preview"
+rm -f "$P3JSON"
+curl -sS -o /dev/null -w "chat_http=%{http_code}\n" -X POST https://www.keyoapi.xyz/v1/chat/completions \
+  -H "Content-Type: application/json" -d '{"model":"grok-imagine-video-1.5"}'
+echo DONE_GROK15_VIDEO_SWAP

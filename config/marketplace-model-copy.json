@@ -2600,72 +2600,6 @@
     "price_key_zh": "",
     "price_key_en": ""
   },
-  "grok-1.5-video": {
-    "description": "xAI Grok 1.5 视频：文生或参考图生成，时长 1–15 秒，最高 1080p。 计费：$0.60675/次。",
-    "descriptions": {
-      "zhCN": "xAI Grok 1.5 视频：文生或参考图生成，时长 1–15 秒，最高 1080p。 计费：$0.60675/次。",
-      "zhTW": "xAI Grok 1.5 视频：文生或参考图生成，时长 1–15 秒，最高 1080p。 计费：$0.60675/次。",
-      "en": "xAI Grok 1.5 video from text or reference images, 1–15s, up to 1080p. Billing: $0.60675/request.",
-      "fr": "xAI Grok 1.5 video from text or reference images, 1–15s, up to 1080p. Billing: $0.60675/request.",
-      "ru": "xAI Grok 1.5 video from text or reference images, 1–15s, up to 1080p. Billing: $0.60675/request.",
-      "ja": "xAI Grok 1.5 video from text or reference images, 1–15s, up to 1080p. Billing: $0.60675/request.",
-      "vi": "xAI Grok 1.5 video from text or reference images, 1–15s, up to 1080p. Billing: $0.60675/request."
-    },
-    "unit": "request",
-    "badge": {
-      "zhCN": "按次计费",
-      "zhTW": "按次計費",
-      "en": "Per Request",
-      "fr": "Par requête",
-      "ru": "За запрос",
-      "ja": "リクエスト課金",
-      "vi": "Theo lần gọi"
-    },
-    "suffix": {
-      "zhCN": "/次",
-      "zhTW": "/次",
-      "en": "/ request",
-      "fr": "/ requête",
-      "ru": "/ запрос",
-      "ja": "/ 回",
-      "vi": "/ lần"
-    },
-    "price_key": {
-      "zhCN": "每次请求",
-      "zhTW": "每次請求",
-      "en": "Per request",
-      "fr": "Par requête",
-      "ru": "За запрос",
-      "ja": "リクエストごと",
-      "vi": "Mỗi lần gọi"
-    },
-    "badge_zh": "按次计费",
-    "badge_en": "Per Request",
-    "suffix_zh": "/次",
-    "suffix_en": "/ request",
-    "price_key_zh": "每次请求",
-    "price_key_en": "Per request",
-    "description_zh": "xAI Grok 1.5 视频：文生或参考图生成，时长 1–15 秒，最高 1080p。 计费：$0.60675/次。",
-    "description_en": "xAI Grok 1.5 video from text or reference images, 1–15s, up to 1080p. Billing: $0.60675/request.",
-    "price_table": {
-      "columns": {
-        "zhCN": [
-          "项目",
-          "售价"
-        ],
-        "en": [
-          "Item",
-          "Price"
-        ]
-      },
-      "rows": [
-        [
-          "标准生成",
-          "$0.60675 / request"
-        ]
-      ]
-    }
-  },
   "veo_3_1-components": {
     "description": "Google Veo 3.1 Components，约 8 秒成片，支持首帧参考。",
     "descriptions": {
@@ -3325,80 +3259,6 @@
         [
           "1080P",
           "$0.16457 / sec"
-        ]
-      ]
-    }
-  },
-  "grok-imagine-video-1.5-preview": {
-    "description": "xAI Grok Imagine Video 预览版，适合由图片快速生成短视频。 计费：480p $0.08825/秒；720p $0.1545/秒（仅图生）。",
-    "descriptions": {
-      "zhCN": "xAI Grok Imagine Video 预览版，适合由图片快速生成短视频。 计费：480p $0.08825/秒；720p $0.1545/秒（仅图生）。",
-      "zhTW": "xAI Grok Imagine Video 预览版，适合由图片快速生成短视频。 计费：480p $0.08825/秒；720p $0.1545/秒（仅图生）。",
-      "en": "xAI Grok Imagine Video preview for short clips from images. Billing: 480p $0.08825/sec; 720p $0.1545/sec (image-to-video only).",
-      "fr": "xAI Grok Imagine Video preview for short clips from images. Billing: 480p $0.08825/sec; 720p $0.1545/sec (image-to-video only).",
-      "ru": "xAI Grok Imagine Video preview for short clips from images. Billing: 480p $0.08825/sec; 720p $0.1545/sec (image-to-video only).",
-      "ja": "xAI Grok Imagine Video preview for short clips from images. Billing: 480p $0.08825/sec; 720p $0.1545/sec (image-to-video only).",
-      "vi": "xAI Grok Imagine Video preview for short clips from images. Billing: 480p $0.08825/sec; 720p $0.1545/sec (image-to-video only)."
-    },
-    "unit": "second",
-    "badge": {
-      "zhCN": "按秒收费",
-      "zhTW": "按秒計費",
-      "en": "Per Second",
-      "fr": "À la seconde",
-      "ru": "За секунду",
-      "ja": "秒課金",
-      "vi": "Theo giây"
-    },
-    "suffix": {
-      "zhCN": "/秒",
-      "zhTW": "/秒",
-      "en": "/ second",
-      "fr": "/ seconde",
-      "ru": "/ сек",
-      "ja": "/ 秒",
-      "vi": "/ giây"
-    },
-    "price_key": {
-      "zhCN": "每秒",
-      "zhTW": "每秒",
-      "en": "Per second",
-      "fr": "Par seconde",
-      "ru": "За секунду",
-      "ja": "秒ごと",
-      "vi": "Mỗi giây"
-    },
-    "badge_zh": "按秒收费",
-    "badge_en": "Per Second",
-    "suffix_zh": "/秒",
-    "suffix_en": "/ second",
-    "price_key_zh": "每秒",
-    "price_key_en": "Per second",
-    "description_zh": "xAI Grok Imagine Video 预览版，适合由图片快速生成短视频。 计费：480p $0.08825/秒；720p $0.1545/秒（仅图生）。",
-    "description_en": "xAI Grok Imagine Video preview for short clips from images. Billing: 480p $0.08825/sec; 720p $0.1545/sec (image-to-video only).",
-    "price_table": {
-      "columns": {
-        "zhCN": [
-          "规格",
-          "售价"
-        ],
-        "en": [
-          "Spec",
-          "Price"
-        ]
-      },
-      "rows": [
-        [
-          "480p 输出",
-          "$0.08825 / sec"
-        ],
-        [
-          "720p 输出",
-          "$0.1545 / sec"
-        ],
-        [
-          "输入图片",
-          "$0.011025 / image"
         ]
       ]
     }
@@ -6655,5 +6515,53 @@
       "ja": "Space Bunny Alpha 無料枠：実験的な汎用対話モデル。",
       "vi": "Space Bunny Alpha miễn phí: chat tổng quát thử nghiệm."
     }
+  },
+  "grok-imagine-video-1.5": {
+    "description": "xAI Grok Imagine Video 1.5：文生 / 单图 / 首尾帧 / 多参考图一个接口全支持，可调时长、分辨率与画幅，内置音频。计费：/usr/bin/bash.3082/次。",
+    "descriptions": {
+      "zhCN": "xAI Grok Imagine Video 1.5：文生 / 单图 / 首尾帧 / 多参考图一个接口全支持，可调时长、分辨率与画幅，内置音频。计费：/usr/bin/bash.3082/次。",
+      "zhTW": "xAI Grok Imagine Video 1.5：文生 / 單圖 / 首尾幀 / 多參考圖一個介面全支援，可調時長、解析度與畫幅，內建音訊。計費：/usr/bin/bash.3082/次。",
+      "en": "xAI Grok Imagine Video 1.5 — text / single image / first & last frame / multi-reference in one API, with duration, resolution and aspect-ratio controls and native audio. Pricing: /usr/bin/bash.3082 / request.",
+      "fr": "xAI Grok Imagine Video 1.5 — texte / image unique / première et dernière frame / multi-références dans une seule API, avec durée, résolution, ratio et audio natif. Tarif : 0,3082 $ / requête.",
+      "ru": "xAI Grok Imagine Video 1.5 — текст / одно изображение / первый и последний кадр / мультиреференс в одном API: длительность, разрешение, соотношение сторон и встроенный звук. Тариф: $0.3082 / запрос.",
+      "ja": "xAI Grok Imagine Video 1.5：テキスト／単一画像／最初と最後のフレーム／マルチ参照を 1 つの API で。長さ・解像度・アスペクト比を指定でき、音声付き。料金：$0.3082/ 回。",
+      "vi": "xAI Grok Imagine Video 1.5 — văn bản / một ảnh / khung đầu & cuối / đa tham chiếu trong một API, kèm thời lượng, độ phân giải, tỉ lệ khung hình và âm thanh gốc. Giá: $0.3082/ lần."
+    },
+    "unit": "request",
+    "badge": {
+      "zhCN": "按次计费",
+      "zhTW": "按次計費",
+      "en": "Per Request",
+      "fr": "Par requête",
+      "ru": "За запрос",
+      "ja": "リクエスト課金",
+      "vi": "Theo lần gọi"
+    },
+    "suffix": {
+      "zhCN": "/次",
+      "zhTW": "/次",
+      "en": "/ request",
+      "fr": "/ requête",
+      "ru": "/ запрос",
+      "ja": "/ 回",
+      "vi": "/ lần"
+    },
+    "price_key": {
+      "zhCN": "每次请求",
+      "zhTW": "每次請求",
+      "en": "Per request",
+      "fr": "Par requête",
+      "ru": "За запрос",
+      "ja": "リクエストごと",
+      "vi": "Mỗi lần gọi"
+    },
+    "description_zh": "xAI Grok Imagine Video 1.5：文生 / 单图 / 首尾帧 / 多参考图一个接口全支持，可调时长、分辨率与画幅，内置音频。计费：/usr/bin/bash.3082/次。",
+    "description_en": "xAI Grok Imagine Video 1.5 — text / single image / first & last frame / multi-reference in one API, with duration, resolution and aspect-ratio controls and native audio. Pricing: /usr/bin/bash.3082 / request.",
+    "badge_zh": "按次计费",
+    "badge_en": "Per Request",
+    "suffix_zh": "/次",
+    "suffix_en": "/ request",
+    "price_key_zh": "每次请求",
+    "price_key_en": "Per request"
   }
 }

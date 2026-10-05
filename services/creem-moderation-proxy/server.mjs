@@ -115,8 +115,6 @@ const VIDEO_GEN_FALLBACK = [
   "flux-3-video",
   "MiniMax-H3",
   "wan3.0-video",
-  "grok-imagine-video-1.5-preview",
-  "grok-1.5-video",
   "seedance-2.0-1080p",
   "seedance-2.0-1080p-fast",
   "seedance-2.0-1080p-mini",

@@ -312,10 +312,10 @@ export const RULES = {
     endpoints: EP.videoGen,
     icon: "Gemini.Color",
   },
-  "grok-imagine-video-1.5-preview": {
+  "grok-imagine-video-1.5": {
     vendor: "xAI",
-    tag: "视频按秒",
-    endpoints: EP.videoGen,
+    tag: "视频按次",
+    endpoints: EP.chat,
     icon: "XAI",
   },
   "seedance-2.0-1080p": {

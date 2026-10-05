@@ -2446,22 +2446,22 @@
       "vi": "ImageProc"
     },
     "rag": {
-      "zhCN": "RAG",
-      "zhTW": "RAG",
-      "en": "RAG",
-      "fr": "RAG",
-      "ru": "RAG",
-      "ja": "RAG",
-      "vi": "RAG"
+      "zhCN": "嵌入模型",
+      "zhTW": "嵌入模型",
+      "en": "Embedding",
+      "fr": "Embedding",
+      "ru": "Эмбеддинг",
+      "ja": "埋め込みモデル",
+      "vi": "Embedding"
     },
     "RAG": {
-      "zhCN": "RAG",
-      "zhTW": "RAG",
-      "en": "RAG",
-      "fr": "RAG",
-      "ru": "RAG",
-      "ja": "RAG",
-      "vi": "RAG"
+      "zhCN": "嵌入模型",
+      "zhTW": "嵌入模型",
+      "en": "Embedding",
+      "fr": "Embedding",
+      "ru": "Эмбеддинг",
+      "ja": "埋め込みモデル",
+      "vi": "Embedding"
     },
     "系统一模型": {
       "zhCN": "系统一模型",
@@ -2471,6 +2471,24 @@
       "ru": "Модель System One",
       "ja": "System One モデル",
       "vi": "Mô hình System One"
+    },
+    "嵌入模型": {
+      "zhCN": "嵌入模型",
+      "zhTW": "嵌入模型",
+      "en": "Embedding",
+      "fr": "Embedding",
+      "ru": "Эмбеддинг",
+      "ja": "埋め込みモデル",
+      "vi": "Embedding"
+    },
+    "Embedding": {
+      "zhCN": "嵌入模型",
+      "zhTW": "嵌入模型",
+      "en": "Embedding",
+      "fr": "Embedding",
+      "ru": "Эмбеддинг",
+      "ja": "埋め込みモデル",
+      "vi": "Embedding"
     }
   },
   "qwen3.8-max-0902": {

@@ -33,6 +33,12 @@ export const EP = {
   infiniteTalk: JSON.stringify({
     openai: { path: "/v1/async/videos/image-to-video", method: "POST" },
   }),
+  subtitleErase: JSON.stringify({
+    openai: { path: "/v1/async/videos/subtitle-erase", method: "POST" },
+  }),
+  videoEnhance: JSON.stringify({
+    openai: { path: "/v1/async/videos/enhance", method: "POST" },
+  }),
   videoGen: JSON.stringify({ "openai-video": "/v1/videos/generations" }),
   systemone: JSON.stringify({
     openai: { path: "/v1/systemone", method: "POST" },
@@ -65,6 +71,18 @@ export const RULES = {
   },
   "Duix-Avatar": { vendor: "其他", tag: "数字人", endpoints: EP.duixAvatar, icon: "Custom" },
   InfiniteTalk: { vendor: "其他", tag: "数字人", endpoints: EP.infiniteTalk, icon: "Custom" },
+  "subtitle-erase-pro": {
+    vendor: "其他",
+    tag: "视频按秒",
+    endpoints: EP.subtitleErase,
+    icon: "Custom",
+  },
+  "video-enhance-pro": {
+    vendor: "其他",
+    tag: "视频按秒",
+    endpoints: EP.videoEnhance,
+    icon: "Custom",
+  },
   "MOSS-Audio-8B-Thinking": {
     vendor: "其他",
     tag: "语音识别",
@@ -170,37 +188,37 @@ export const RULES = {
   },
   "WeMM-Embedding-9B": {
     vendor: "腾讯",
-    tag: "rag",
+    tag: "嵌入模型",
     endpoints: EP.embed,
     icon: "Tencent.Color",
   },
   "WeMM-Embedding-4B": {
     vendor: "腾讯",
-    tag: "rag",
+    tag: "嵌入模型",
     endpoints: EP.embed,
     icon: "Tencent.Color",
   },
   "WeMM-Embedding-2B": {
     vendor: "腾讯",
-    tag: "rag",
+    tag: "嵌入模型",
     endpoints: EP.embed,
     icon: "Tencent.Color",
   },
   "Qwen3-VL-Reranker-2B": {
     vendor: "阿里巴巴",
-    tag: "rag",
+    tag: "嵌入模型",
     endpoints: EP.rerank,
     icon: "Qwen.Color",
   },
   "Qwen3-VL-Reranker-8B": {
     vendor: "阿里巴巴",
-    tag: "rag",
+    tag: "嵌入模型",
     endpoints: EP.rerank,
     icon: "Qwen.Color",
   },
   "Qwen3-VL-Embedding-8B": {
     vendor: "阿里巴巴",
-    tag: "rag",
+    tag: "嵌入模型",
     endpoints: EP.embed,
     icon: "Qwen.Color",
   },

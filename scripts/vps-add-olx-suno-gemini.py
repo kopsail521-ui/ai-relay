@@ -190,7 +190,7 @@ MODELS = [
         "comp": EMB_COMP,
         "sell_in": EMB_SELL_IN,
         "sell_out": EMB_SELL_OUT,
-        "tag": "rag",
+        "tag": "嵌入模型",
         "vendor": "Google",
         "icon": "Gemini.Color",
         "endpoints": EP_EMB,

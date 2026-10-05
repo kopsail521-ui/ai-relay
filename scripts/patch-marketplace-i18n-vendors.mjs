@@ -77,7 +77,7 @@ const TAG_VIDEO = LANG("视频", "影片", "Video", "Video", "Video", "動画", 
 const TAG_VIDEO_SEC = LANG("视频按秒", "影片按秒", "VideoSec", "VideoSec", "VideoSec", "動画秒課金", "VideoSec");
 const TAG_VIDEO_REQ = LANG("视频按次", "影片按次", "VideoReq", "VideoReq", "VideoReq", "動画回課金", "VideoReq");
 const TAG_FREE = LANG("免费", "免費", "Free", "Free", "Free", "無料", "Free");
-const TAG_RAG = LANG("RAG", "RAG", "RAG", "RAG", "RAG", "RAG", "RAG");
+const TAG_EMBED = LANG("嵌入模型", "嵌入模型", "Embedding", "Embedding", "Эмбеддинг", "埋め込みモデル", "Embedding");
 
 const TAGS = {
   大语言模型: TAG_LLM,
@@ -97,8 +97,10 @@ const TAGS = {
   "视频·按次": TAG_VIDEO_REQ,
   免费: TAG_FREE,
   Free: TAG_FREE,
-  rag: TAG_RAG,
-  RAG: TAG_RAG,
+  嵌入模型: TAG_EMBED,
+  rag: TAG_EMBED,
+  RAG: TAG_EMBED,
+  Embedding: TAG_EMBED,
   // fragment aliases from broken English sidebar splits
   asr: TAG_ASR,
   llm: TAG_LLM,

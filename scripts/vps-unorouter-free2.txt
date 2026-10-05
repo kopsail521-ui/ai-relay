@@ -1,0 +1,40 @@
+# VPS：上架 UnoRouter 免费模型 k2-horizon:free / space-bunny-alpha:free
+# 渠道 Keyo Chat Free（api.unorouter.com），ModelPrice=0；/free-models 页已随 git 更新
+# 前提：本机已 git push；VPS /opt/ai-relay/.env 已有 UNOROUTER_API_KEY
+set -e
+cd /opt/ai-relay
+sudo bash scripts/vps-safe-pull-preserve-blog.sh
+
+if ! sudo grep -q '^UNOROUTER_API_KEY=sk-' /opt/ai-relay/.env 2>/dev/null; then
+  echo "ERROR: set UNOROUTER_API_KEY in /opt/ai-relay/.env first" >&2
+  exit 1
+fi
+
+# 1) 渠道/定价/广场：配置驱动的幂等脚本（同时会清理已下线的 :free）
+sudo python3 /opt/ai-relay/scripts/vps-add-unorouter-free.py /opt/ai-relay/data/new-api/one-api.db
+
+# 2) 广场简介 copy 热更新（两个新模型的 7 语言简介）
+MOD=$(sudo docker ps --format '{{.Names}}' | grep -E 'creem|moderation' | head -1 || true)
+if [ -n "$MOD" ]; then
+  sudo docker cp /opt/ai-relay/services/creem-moderation-proxy/marketplace-model-copy.json \
+    "$MOD":/app/marketplace-model-copy.json
+  sudo docker restart "$MOD"
+  echo "moderation_copy_updated=$MOD"
+else
+  echo "WARN: moderation container not found"
+fi
+
+# 3) 品牌/SEO 静态页（/free-models 等）同步到站点根
+sudo bash /opt/ai-relay/scripts/deploy-brand-static.sh
+
+echo "--- smoke ---"
+P3JSON=$(mktemp)
+curl -sS https://www.keyoapi.xyz/api/pricing -o "$P3JSON"
+for m in k2-horizon:free space-bunny-alpha:free; do
+  grep -q "$m" "$P3JSON" && echo "pricing_ok=$m" || echo "pricing_MISSING=$m"
+done
+rm -f "$P3JSON"
+curl -sS -o /dev/null -w "free_page_http=%{http_code}\n" https://www.keyoapi.xyz/free-models
+curl -sS -o /dev/null -w "chat_http=%{http_code}\n" -X POST https://www.keyoapi.xyz/v1/chat/completions \
+  -H "Content-Type: application/json" -d '{"model":"k2-horizon:free"}'
+echo DONE_UNOROUTER_FREE2

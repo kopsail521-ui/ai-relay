@@ -208,7 +208,7 @@ def main():
         cr.pop(mid, None)
         mp[mid] = 0
         vid = ensure_vendor(cur, v_cols, m["vendor"], m["icon"], now)
-        upsert_model(cur, m_cols, mid, m.get("desc_zh") or mid, m["icon"], m.get("tags") or "大语言模型,免费", vid, now)
+        upsert_model(cur, m_cols, mid, m.get("desc_zh") or mid, m["icon"], m.get("tags") or "大语言模型", vid, now)
         cur.execute("DELETE FROM abilities WHERE model=?", (mid,))
         cur.execute(
             'INSERT OR IGNORE INTO abilities("group", model, channel_id, enabled, priority, weight) VALUES (?,?,?,?,?,?)',

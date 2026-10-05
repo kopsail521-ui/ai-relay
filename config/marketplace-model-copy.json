@@ -6627,5 +6627,33 @@
     "suffix_en": "/ request",
     "price_key_zh": "每次请求",
     "price_key_en": "Per request"
+  },
+  "k2-horizon:free": {
+    "description": "K2 Horizon 免费额度：通用对话模型，适合日常问答与轻量任务。",
+    "description_zh": "K2 Horizon 免费额度：通用对话模型，适合日常问答与轻量任务。",
+    "description_en": "Free K2 Horizon: general chat for everyday Q&A and light tasks.",
+    "descriptions": {
+      "zhCN": "K2 Horizon 免费额度：通用对话模型，适合日常问答与轻量任务。",
+      "zhTW": "K2 Horizon 免費額度：通用對話模型，適合日常問答與輕量任務。",
+      "en": "Free K2 Horizon: general chat for everyday Q&A and light tasks.",
+      "fr": "K2 Horizon gratuit : chat général pour questions courantes et tâches légères.",
+      "ru": "Бесплатный K2 Horizon: универсальный чат для повседневных вопросов и лёгких задач.",
+      "ja": "K2 Horizon 無料枠：日常の質問応答や軽いタスク向けの汎用対話モデル。",
+      "vi": "K2 Horizon miễn phí: chat tổng quát cho hỏi đáp hằng ngày và tác vụ nhẹ."
+    }
+  },
+  "space-bunny-alpha:free": {
+    "description": "Space Bunny Alpha 免费额度：实验性通用对话模型。",
+    "description_zh": "Space Bunny Alpha 免费额度：实验性通用对话模型。",
+    "description_en": "Free Space Bunny Alpha: experimental general chat.",
+    "descriptions": {
+      "zhCN": "Space Bunny Alpha 免费额度：实验性通用对话模型。",
+      "zhTW": "Space Bunny Alpha 免費額度：實驗性通用對話模型。",
+      "en": "Free Space Bunny Alpha: experimental general chat.",
+      "fr": "Space Bunny Alpha gratuit : chat général expérimental.",
+      "ru": "Бесплатный Space Bunny Alpha: экспериментальный универсальный чат.",
+      "ja": "Space Bunny Alpha 無料枠：実験的な汎用対話モデル。",
+      "vi": "Space Bunny Alpha miễn phí: chat tổng quát thử nghiệm."
+    }
   }
 }

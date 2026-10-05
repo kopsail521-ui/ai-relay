@@ -1,6 +1,6 @@
 {
   "_note": "Additional fixed-$0 model IDs from live /api/pricing (quota_type=1, model_price=0), excluding Keyo Free *-free IDs. Refresh with: node scripts/_sync-free-extra-from-live.mjs",
-  "synced_at": "2026-09-20",
+  "synced_at": "2026-10-05",
   "models": [
     {
       "id": "Atria-dawn-v2",
@@ -107,6 +107,16 @@
     {
       "id": "step-3.7-flash:free",
       "family": "StepFun",
+      "note": "Fixed $0 on Keyo catalog (fair-use). Availability can change; confirm live on /pricing."
+    },
+    {
+      "id": "k2-horizon:free",
+      "family": "Moonshot",
+      "note": "Fixed $0 on Keyo catalog (fair-use). Availability can change; confirm live on /pricing."
+    },
+    {
+      "id": "space-bunny-alpha:free",
+      "family": "Other",
       "note": "Fixed $0 on Keyo catalog (fair-use). Availability can change; confirm live on /pricing."
     }
   ]

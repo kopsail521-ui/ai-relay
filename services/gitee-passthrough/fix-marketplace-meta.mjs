@@ -154,38 +154,38 @@ export const RULES = {
   },
   "Atria-dawn-v2": {
     vendor: "其他",
-    tag: "大语言模型,免费",
+    tag: "大语言模型",
     endpoints: EP.chat,
     icon: "Custom",
   },
   "DeepSeek-Prover-V2-7B": {
     vendor: "DeepSeek",
-    tag: "大语言模型,免费",
+    tag: "大语言模型",
     endpoints: EP.chat,
     icon: "DeepSeek",
   },
-  // SenseNova free twins — must keep「免费」or sidebar count collapses
+  // SenseNova free twins — 免费 moved to the 定价类型 filter (price-based), tag no longer set
   "deepseek-v4-pro-free": {
     vendor: "DeepSeek",
-    tag: "大语言模型,免费",
+    tag: "大语言模型",
     endpoints: EP.chat,
     icon: "DeepSeek",
   },
   "deepseek-v4-flash-free": {
     vendor: "DeepSeek",
-    tag: "大语言模型,免费",
+    tag: "大语言模型",
     endpoints: EP.chat,
     icon: "DeepSeek",
   },
   "glm-5.2-free": {
     vendor: "智谱",
-    tag: "大语言模型,免费",
+    tag: "大语言模型",
     endpoints: EP.chat,
     icon: "ChatGLM.Color",
   },
   "kimi-k3-free": {
     vendor: "Moonshot",
-    tag: "大语言模型,免费",
+    tag: "大语言模型",
     endpoints: EP.chat,
     icon: "Moonshot",
   },
@@ -221,13 +221,13 @@ export const RULES = {
   },
   "SenseVoiceSmall": {
     vendor: "阿里巴巴",
-    tag: "语音识别,免费",
+    tag: "语音识别",
     endpoints: EP.asr,
     icon: "Qwen.Color",
   },
   "Spark-TTS-0.5B": {
     vendor: "其他",
-    tag: "语音合成,免费",
+    tag: "语音合成",
     endpoints: EP.asyncTts,
     icon: "Custom",
   },
@@ -400,7 +400,7 @@ function withFreeTag(rule, name) {
     .split(/[,;|]+/)
     .map((s) => s.trim())
     .filter(Boolean);
-  if (!tags.includes("免费")) tags.push("免费");
+  // 免费 is now the price-based 定价类型 filter — do not re-add the tag here
   return { ...rule, tag: tags.join(",") };
 }
 

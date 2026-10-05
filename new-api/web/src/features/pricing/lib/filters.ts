@@ -71,6 +71,17 @@ export function filterByGroup(
 }
 
 /**
+ * True when the model costs nothing: per-request price is 0 (ModelPrice=0)
+ * or token ratio is 0. Used by the 免费 pricing-type filter.
+ */
+export function isFreeModel(model: PricingModel): boolean {
+  if (model.quota_type === 1) {
+    return Number(model.model_price ?? 0) === 0
+  }
+  return Number(model.model_ratio ?? 0) === 0
+}
+
+/**
  * Filter models by quota type
  */
 export function filterByQuotaType(
@@ -78,6 +89,9 @@ export function filterByQuotaType(
   quotaType: string
 ): PricingModel[] {
   if (quotaType === QUOTA_TYPES.ALL) return models
+  if (quotaType === QUOTA_TYPES.FREE) {
+    return models.filter(isFreeModel)
+  }
   const targetType =
     quotaType === QUOTA_TYPES.TOKEN
       ? QUOTA_TYPE_VALUES.TOKEN

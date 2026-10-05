@@ -47,6 +47,7 @@ export const FILTER_ALL = 'all'
 /** Quota type options */
 export const QUOTA_TYPES = {
   ALL: 'all',
+  FREE: 'free',
   TOKEN: 'token',
   REQUEST: 'request',
 } as const
@@ -59,6 +60,7 @@ export function getQuotaTypeLabels(
 ): Record<QuotaTypeOption, string> {
   return {
     [QUOTA_TYPES.ALL]: t('All Models'),
+    [QUOTA_TYPES.FREE]: t('Free models'),
     [QUOTA_TYPES.TOKEN]: t('Token-based'),
     [QUOTA_TYPES.REQUEST]: t('Per Request'),
   }

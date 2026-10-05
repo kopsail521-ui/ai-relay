@@ -37,7 +37,7 @@ import {
   getEndpointTypeLabels,
   getQuotaTypeLabels,
 } from '../constants'
-import { parseTags } from '../lib/filters'
+import { isFreeModel, parseTags } from '../lib/filters'
 import type { PricingModel, PricingVendor } from '../types'
 
 type FilterOption = {
@@ -197,6 +197,11 @@ export function PricingSidebar(props: PricingSidebarProps) {
       value: QUOTA_TYPES.ALL,
       label: quotaTypeLabels[QUOTA_TYPES.ALL],
       count: props.models.length,
+    },
+    {
+      value: QUOTA_TYPES.FREE,
+      label: quotaTypeLabels[QUOTA_TYPES.FREE],
+      count: countBy(props.models, isFreeModel),
     },
     {
       value: QUOTA_TYPES.TOKEN,

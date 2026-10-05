@@ -1,0 +1,50 @@
+# VPS：把「免费」从模型标签挪到定价类型（Free models 价格筛选）
+# 1) DB 全量摘除「免费」标签（free models 照常出现在 语音识别/语音合成 等能力分组）
+# 2) gitee-passthrough 重建（RULES 不再挂免费标签，重启自愈也不会加回）
+# 3) 拉取新 keyo-new-api 控制台镜像并重建容器（前端新增 定价类型→免费 筛选）
+# 前提：本机已 git push，且 GitHub Actions 已构建完 ghcr.io/kopsail521-ui/keyo-new-api:main
+set -e
+cd /opt/ai-relay
+sudo bash scripts/vps-safe-pull-preserve-blog.sh
+
+# 1) DB：摘除「免费」标签
+sudo docker run --rm \
+  -v /opt/ai-relay/data/new-api:/data \
+  -v /opt/ai-relay/scripts/vps-strip-free-tag.py:/tmp/strip.py:ro \
+  python:3.12-alpine python /tmp/strip.py /data/one-api.db
+
+# 2) Gitee 透传 rebuild（RULES 变更）
+sudo docker build -t keyo-gitee-passthrough ./services/gitee-passthrough
+sudo docker rm -f ai-relay-gitee-passthrough 2>/dev/null || true
+sudo docker run -d --name ai-relay-gitee-passthrough --restart always --network host \
+  --env-file /opt/ai-relay/.env.gitee \
+  -v /opt/ai-relay/data/new-api:/data:rw \
+  -e NEW_API_DB=/data/one-api.db \
+  -e CATALOG=/app/catalog.json \
+  keyo-gitee-passthrough
+sleep 2
+curl -sS http://127.0.0.1:3010/healthz; echo
+
+# 3) 控制台镜像：拉取 + 原样重建容器（如 CI 已自动部署，此步幂等）
+echo "${KEYO_GH_TOKEN:-}" | sudo docker login ghcr.io -u kopsail521-ui --password-stdin 2>/dev/null || true
+sudo docker pull ghcr.io/kopsail521-ui/keyo-new-api:main
+sudo IMAGE=ghcr.io/kopsail521-ui/keyo-new-api:main bash scripts/vps-recreate-new-api-container.sh
+sleep 5
+curl -sS -o /dev/null -w "console_http=%{http_code}\n" http://127.0.0.1:3000/api/status
+
+echo "--- smoke ---"
+# 定价接口仍正常、免费模型在列
+P3JSON=$(mktemp)
+curl -sS https://www.keyoapi.xyz/api/pricing -o "$P3JSON"
+for m in SenseVoiceSmall Spark-TTS-0.5B Atria-dawn-v2; do
+  grep -q "$m" "$P3JSON" && echo "pricing_ok=$m" || echo "pricing_MISSING=$m"
+done
+rm -f "$P3JSON"
+# DB 中不应再有「免费」标签
+sudo docker run --rm -v /opt/ai-relay/data/new-api:/data \
+  python:3.12-alpine python - <<'EOF'
+import sqlite3
+c = sqlite3.connect('/data/one-api.db')
+print('free_tag_left =', c.execute("SELECT COUNT(*) FROM models WHERE tags LIKE '%免费%'").fetchone()[0])
+EOF
+echo DONE_MOVE_FREE_TO_PRICING_TYPE

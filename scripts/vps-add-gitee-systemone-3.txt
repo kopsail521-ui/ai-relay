@@ -42,10 +42,13 @@ echo "--- smoke ---"
 # 2') 透传健康：模型数应为 38
 curl -sS http://127.0.0.1:3010/healthz | grep -o '"models":[0-9]*'
 # 3') 公开定价接口应出现 3 个新模型（ abilities + ratio 生效 ）
-curl -sS https://www.keyoapi.xyz/api/pricing > /tmp/pricing.json
+# 写 /tmp 固定名会被 fs.protected_regular 拒绝（root 覆盖用户文件），用 mktemp
+P3JSON=$(mktemp)
+curl -sS https://www.keyoapi.xyz/api/pricing -o "$P3JSON"
 for m in SemIf-OpenJev-4B DiffusionGemma-26B-A4B-it-Jev laya-multilingual; do
-  grep -q "$m" /tmp/pricing.json && echo "pricing_ok=$m" || echo "pricing_MISSING=$m"
+  grep -q "$m" "$P3JSON" && echo "pricing_ok=$m" || echo "pricing_MISSING=$m"
 done
+rm -f "$P3JSON"
 # 4') /v1/systemone 路由应打到透传（未带 key 返回 401 而非 404）
 curl -sS -o /dev/null -w "systemone_http=%{http_code}\n" -X POST https://www.keyoapi.xyz/v1/systemone \
   -H "Content-Type: application/json" -d '{}'

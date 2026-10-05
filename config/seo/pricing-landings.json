@@ -232,7 +232,7 @@
           "model": "gpt-5.6-luna",
           "official": "OpenAI GPT-5.4 mini list ~$0.75 / $4.50 per 1M in/out (confirm on OpenAI public pricing)",
           "keyo": "~$0.10 / $0.62 per 1M in/out",
-          "note": "Cheapest GPT-class twin · /model/gpt-5.6-luna"
+          "note": "Budget GPT-5.6 twin · /model/gpt-5.6-luna (lowest: /model/gpt-6-luna)"
         }
       ],
       "freeKiller": {
@@ -617,7 +617,7 @@
           "model": "gpt-5.6-luna",
           "official": "OpenAI mini-class list bands (confirm official)",
           "keyo": "~$0.10 / $0.62 per 1M in/out",
-          "note": "Cheaper GPT-class twin · /model/gpt-5.6-luna"
+          "note": "Budget GPT-5.6 twin · /model/gpt-5.6-luna (lowest: /model/gpt-6-luna)"
         },
         {
           "model": "deepseek-v4.1-flash",

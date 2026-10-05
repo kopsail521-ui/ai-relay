@@ -59,6 +59,7 @@ export function SystemBrand(props: SystemBrandProps) {
     return (
       <Link
         to='/'
+        reloadDocument
         aria-label={t('Go to home')}
         className={cn(
           'text-foreground inline-flex h-7 items-center gap-2 rounded-sm px-1.5 text-sm font-semibold tracking-tight transition-colors outline-none select-none',

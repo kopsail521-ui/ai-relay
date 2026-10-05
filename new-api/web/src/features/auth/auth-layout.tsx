@@ -39,6 +39,7 @@ export function AuthLayout({ children }: AuthLayoutProps) {
       />
       <Link
         to='/'
+        reloadDocument
         className='absolute top-4 left-4 z-10 flex items-center gap-2.5 transition-opacity hover:opacity-80 sm:top-8 sm:left-8'
       >
         <div className='relative h-8 w-8 overflow-hidden rounded-sm'>

@@ -55,6 +55,7 @@ function BrandLogo({
   return (
     <Link
       to={homeUrl}
+      reloadDocument={homeUrl === '/'}
       className='flex items-center gap-2 text-xl font-bold'
       onClick={onClick}
     >
@@ -269,6 +270,7 @@ export function MobileDrawer({
                       >
                         <Link
                           to={link.href}
+                          reloadDocument={link.reloadDocument}
                           className='text-primary/60 hover:text-primary/80 transition-colors'
                           onClick={onClose}
                         >

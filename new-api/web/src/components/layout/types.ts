@@ -97,6 +97,13 @@ export type TopNavLink = {
   disabled?: boolean
   requiresAuth?: boolean
   external?: boolean
+  /**
+   * Force a full page load instead of SPA navigation.
+   * `/` is served as a static page by Caddy and must never be claimed by the
+   * App router, so links targeting it set this to avoid soft-navigating into
+   * the App's `/` route.
+   */
+  reloadDocument?: boolean
 }
 
 /**

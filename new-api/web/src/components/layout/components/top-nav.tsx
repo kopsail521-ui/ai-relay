@@ -47,6 +47,7 @@ export function TopNav({ className, links, ...props }: TopNavProps) {
         isActive: false,
         disabled: false,
         external: false,
+        reloadDocument: false,
         ...link,
       })),
     [links]
@@ -64,7 +65,7 @@ export function TopNav({ className, links, ...props }: TopNavProps) {
           </DropdownMenuTrigger>
           <DropdownMenuContent side='bottom' align='start'>
             {normalizedLinks.map(
-              ({ title, href, isActive, disabled, external }) => (
+              ({ title, href, isActive, disabled, external, reloadDocument }) => (
                 <DropdownMenuItem
                   key={`${title}-${href}`}
                   render={
@@ -82,6 +83,7 @@ export function TopNav({ className, links, ...props }: TopNavProps) {
                         to={href}
                         className={!isActive ? 'text-muted-foreground' : ''}
                         disabled={disabled}
+                        reloadDocument={reloadDocument}
                       >
                         {title}
                       </Link>
@@ -102,27 +104,29 @@ export function TopNav({ className, links, ...props }: TopNavProps) {
         )}
         {...props}
       >
-        {normalizedLinks.map(({ title, href, isActive, disabled, external }) =>
-          external ? (
-            <a
-              key={`${title}-${href}`}
-              href={href}
-              target='_blank'
-              rel='noopener noreferrer'
-              className={`hover:text-primary text-sm font-medium transition-colors ${isActive ? '' : 'text-muted-foreground'}`}
-            >
-              {title}
-            </a>
-          ) : (
-            <Link
-              key={`${title}-${href}`}
-              to={href}
-              disabled={disabled}
-              className={`hover:text-primary text-sm font-medium transition-colors ${isActive ? '' : 'text-muted-foreground'}`}
-            >
-              {title}
-            </Link>
-          )
+        {normalizedLinks.map(
+          ({ title, href, isActive, disabled, external, reloadDocument }) =>
+            external ? (
+              <a
+                key={`${title}-${href}`}
+                href={href}
+                target='_blank'
+                rel='noopener noreferrer'
+                className={`hover:text-primary text-sm font-medium transition-colors ${isActive ? '' : 'text-muted-foreground'}`}
+              >
+                {title}
+              </a>
+            ) : (
+              <Link
+                key={`${title}-${href}`}
+                to={href}
+                disabled={disabled}
+                reloadDocument={reloadDocument}
+                className={`hover:text-primary text-sm font-medium transition-colors ${isActive ? '' : 'text-muted-foreground'}`}
+              >
+                {title}
+              </Link>
+            )
         )}
       </nav>
     </>

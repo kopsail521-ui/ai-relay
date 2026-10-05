@@ -29,6 +29,8 @@ export type TopNavLink = {
   disabled?: boolean
   requiresAuth?: boolean
   external?: boolean
+  /** Force a full page load — required for `/` (static page, see layout/types.ts). */
+  reloadDocument?: boolean
 }
 
 /**
@@ -59,9 +61,9 @@ export function useTopNavLinks(): TopNavLink[] {
 
   const links: TopNavLink[] = []
 
-  // Home
+  // Home — full page load: `/` is a server-rendered static page the App must not claim
   if (modules?.home !== false) {
-    links.push({ title: t('Home'), href: '/' })
+    links.push({ title: t('Home'), href: '/', reloadDocument: true })
   }
 
   // Console -> /dashboard (new console path)

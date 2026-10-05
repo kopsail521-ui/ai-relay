@@ -193,6 +193,7 @@ export function PublicHeader(props: PublicHeaderProps) {
             {/* Logo */}
             <Link
               to={homeUrl}
+              reloadDocument={homeUrl === '/'}
               className='group flex shrink-0 items-center gap-2.5'
             >
               <div className='flex size-7 shrink-0 items-center justify-center overflow-hidden rounded-sm transition-opacity duration-200 group-hover:opacity-80'>

@@ -63,7 +63,10 @@
     ],
     "system_one": [
       "Bespoke-Nimble-9B",
-      "jev-1.13.0"
+      "jev-1.13.0",
+      "SemIf-OpenJev-4B",
+      "DiffusionGemma-26B-A4B-it-Jev",
+      "laya-multilingual"
     ]
   },
   "models": [
@@ -390,7 +393,7 @@
       "upstream": "Duix-Avatar",
       "category": "digital_human",
       "category_zh": "数字人/视频",
-      "description": "音频+视频驱动的数字人（异步），生成口型同步与表情互动，适合虚拟角色说话场景。",
+      "description": "音频+视频驱动的数字人（异步）：参考视频 + 驱动音频，最长 60 秒。按分辨率×时长分档按秒计费。",
       "cover": "https://gitee-ai.su.bcebos.com/v1/uploads/img/id-11g3myb8s-id-rb71nnf85-olynv1vmvrx.png",
       "paths": [
         "v1/async/videos/audio-video-to-video"
@@ -400,7 +403,7 @@
           "name": "数字人生成",
           "type": "audio_video2video",
           "path": "v1/async/videos/audio-video-to-video",
-          "price_cny": 0.01,
+          "price_cny": 0.1,
           "unit_tag": 1264,
           "in_m": 0,
           "out_m": 0
@@ -410,11 +413,41 @@
         "mode": "unit",
         "unit": "per_second",
         "unit_label": "秒",
-        "unit_note": "数字人按秒（上游 unit_tag=1264）",
+        "unit_note": "数字人按秒：分辨率×时长分档，售价=成本×5",
         "unit_tag": 1264,
-        "cost_cny": 0.01,
-        "sell_cny": 0.05,
-        "model_price_usd": 0.006849,
+        "cost_cny": 0.1,
+        "sell_cny": 0.5,
+        "model_price_usd": 0.06849,
+        "tiers": [
+          {
+            "resolution": "≤720P",
+            "duration": "0-15s",
+            "cost_cny": 0.1,
+            "sell_cny": 0.5,
+            "sell_usd": 0.06849
+          },
+          {
+            "resolution": "≤720P",
+            "duration": "15-60s",
+            "cost_cny": 0.2,
+            "sell_cny": 1.0,
+            "sell_usd": 0.13699
+          },
+          {
+            "resolution": "720P-1080P",
+            "duration": "0-15s",
+            "cost_cny": 0.15,
+            "sell_cny": 0.75,
+            "sell_usd": 0.10274
+          },
+          {
+            "resolution": "720P-1080P",
+            "duration": "15-60s",
+            "cost_cny": 0.3,
+            "sell_cny": 1.5,
+            "sell_usd": 0.20548
+          }
+        ],
         "free_upstream": false
       },
       "relay": "gitee_passthrough",
@@ -1224,6 +1257,111 @@
       "relay": "openlux_passthrough",
       "markup": 2,
       "description_en": "TypeSafe Jev 1.13.0 — System One structured decision model (no free-form text) for in-app classification, ticket triage, risk scoring, and routing. Pass state + questions; get choice / score / noul. ~32k context."
+    },
+    {
+      "id": "SemIf-OpenJev-4B",
+      "upstream": "SemIf-OpenJev-4B",
+      "category": "system_one",
+      "category_zh": "系统一模型",
+      "description": "SemIf-OpenJev-4B：SemIf（原 OpenJev）项目的 4B 语义决策模型（System One，底座 Qwen3.5-4B，128K 上下文）。输入上下文 + 决策条件 + 候选选项，直接读取候选选项 Logits 概率返回结构化决策，不生成自然语言回答、无需 JSON 解析，适合 Agent 路由、分类、重试与完成判断等高频语义 if/else。计费：输入 $0.0274 / 输出 $0（每百万 tokens）。",
+      "paths": [
+        "v1/systemone"
+      ],
+      "operations": [
+        {
+          "name": "System One",
+          "type": "systemone",
+          "path": "v1/systemone",
+          "price_cny": 0,
+          "unit_tag": 1216,
+          "in_m": 0.1,
+          "out_m": 0
+        }
+      ],
+      "billing": {
+        "mode": "token",
+        "sell_in_usd_per_m": 0.027397,
+        "sell_out_usd_per_m": 0,
+        "sell_in_cny_per_m": 0.2,
+        "sell_out_cny_per_m": 0,
+        "cost_in_cny_per_m": 0.1,
+        "cost_in_usd_per_m": 0.013699,
+        "model_ratio": 0.013699,
+        "completion_ratio": 0
+      },
+      "relay": "gitee_passthrough",
+      "markup": 2,
+      "description_en": "SemIf-OpenJev-4B — 4B semantic decision model from the SemIf (formerly OpenJev) project (System One; Qwen3.5-4B base, 128K context). Pass context + decision criteria + candidate options; the model reads option logits directly and returns structured decisions with probabilities — no free-form generation, no JSON parsing. Ideal for high-frequency semantic if/else: routing, classification, retry and completion checks. Pricing: $0.0274 input / $0 output per 1M tokens."
+    },
+    {
+      "id": "DiffusionGemma-26B-A4B-it-Jev",
+      "upstream": "DiffusionGemma-26B-A4B-it-Jev",
+      "category": "system_one",
+      "category_zh": "系统一模型",
+      "description": "DiffusionGemma-26B-A4B-it-Jev：基于 Google DeepMind DiffusionGemma 26B A4B IT 的块扩散语言模型（System One 决策，MoE 架构，总参约 25.2B、激活约 3.8B，NVFP4 量化，64K 上下文）。区别于逐 token 自回归生成，模型在固定 Token Canvas 上迭代去噪、可并行生成，直接读取预定义候选答案的概率分布，无需生成自由文本再解析，适用于 Agent 路由、工具选择、条件判断与分类评估。计费：输入 $0.0822 / 输出 $0（每百万 tokens）。",
+      "paths": [
+        "v1/systemone"
+      ],
+      "operations": [
+        {
+          "name": "System One",
+          "type": "systemone",
+          "path": "v1/systemone",
+          "price_cny": 0,
+          "unit_tag": 1216,
+          "in_m": 0.3,
+          "out_m": 0
+        }
+      ],
+      "billing": {
+        "mode": "token",
+        "sell_in_usd_per_m": 0.082192,
+        "sell_out_usd_per_m": 0,
+        "sell_in_cny_per_m": 0.6,
+        "sell_out_cny_per_m": 0,
+        "cost_in_cny_per_m": 0.3,
+        "cost_in_usd_per_m": 0.041096,
+        "model_ratio": 0.041096,
+        "completion_ratio": 0
+      },
+      "relay": "gitee_passthrough",
+      "markup": 2,
+      "description_en": "DiffusionGemma-26B-A4B-it-Jev — block-diffusion language model built on Google DeepMind DiffusionGemma 26B A4B IT (System One decisions; MoE, ~25.2B total / ~3.8B active params, NVFP4 quantization, 64K context). Instead of token-by-token autoregression it denoises a fixed token canvas and reads probability distributions over predefined candidate answers directly — no free-form generation to parse. Built for agent routing, tool selection, conditional checks, and classification. Pricing: $0.0822 input / $0 output per 1M tokens."
+    },
+    {
+      "id": "laya-multilingual",
+      "upstream": "laya-multilingual",
+      "category": "system_one",
+      "category_zh": "系统一模型",
+      "description": "Laya Multilingual：Convai Innovations 开源的多语言文本决策模型（System One，基于 mmBERT，约 322M 参数，8K 上下文，支持 100+ 语言）。非自回归架构一次前向完成判断，返回 choice（分类选择）/ score（等级评分）/ noul（条件判断）及对应概率；单次请求最多 16 道问题、每题 ≤8192 tokens、选择题 ≤20 个候选、请求体 ≤1 MiB。适用于工单分流、意图识别、内容审核与智能体路由。计费：输入 $0.00274 / 输出 $0（每百万 tokens）。",
+      "paths": [
+        "v1/systemone"
+      ],
+      "operations": [
+        {
+          "name": "System One",
+          "type": "systemone",
+          "path": "v1/systemone",
+          "price_cny": 0,
+          "unit_tag": 1216,
+          "in_m": 0.01,
+          "out_m": 0
+        }
+      ],
+      "billing": {
+        "mode": "token",
+        "sell_in_usd_per_m": 0.00274,
+        "sell_out_usd_per_m": 0,
+        "sell_in_cny_per_m": 0.02,
+        "sell_out_cny_per_m": 0,
+        "cost_in_cny_per_m": 0.01,
+        "cost_in_usd_per_m": 0.00137,
+        "model_ratio": 0.00137,
+        "completion_ratio": 0
+      },
+      "relay": "gitee_passthrough",
+      "markup": 2,
+      "description_en": "Laya Multilingual — open-source multilingual text decision model by Convai Innovations (System One; mmBERT base, ~322M params, 8K context, 100+ languages). Non-autoregressive: one forward pass returns choice / score / noul decisions with probabilities. Up to 16 questions per request, 8,192 tokens per question, 20 candidates per choice, 1 MiB body. Built for ticket triage, intent detection, content moderation, and agent routing. Pricing: $0.00274 input / $0 output per 1M tokens."
     }
   ]
 }

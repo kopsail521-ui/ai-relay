@@ -89,6 +89,19 @@ function pct(part: number, total: number): string {
   return `${Math.round((part / total) * 1000) / 10}%`
 }
 
+// i18n 语言码可能是 zhCN 这类非 BCP-47 形式，toLocaleString 遇到非法标签会抛 RangeError
+function formatDateTime(tsSeconds: number, language: string | undefined): string {
+  const date = new Date(tsSeconds * 1000)
+  const tag = language
+    ? language.replace(/^([a-zA-Z]{2,3})([A-Z]{2})$/, '$1-$2')
+    : undefined
+  try {
+    return date.toLocaleString(tag || undefined, { hour12: false })
+  } catch {
+    return date.toLocaleString(undefined, { hour12: false })
+  }
+}
+
 function FunnelStepCard(props: {
   icon: ReactNode
   label: string
@@ -378,10 +391,7 @@ export function Funnel() {
                             <TableRow key={topUp.id}>
                               <TableCell className='whitespace-nowrap tabular-nums'>
                                 {topUp.create_time
-                                  ? new Date(topUp.create_time * 1000).toLocaleString(
-                                      i18n.language,
-                                      { hour12: false }
-                                    )
+                                  ? formatDateTime(topUp.create_time, i18n.language)
                                   : '—'}
                               </TableCell>
                               <TableCell>

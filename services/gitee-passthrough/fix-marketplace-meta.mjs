@@ -21,6 +21,9 @@ export const EP = {
   tts: JSON.stringify({
     openai: { path: "/v1/audio/speech", method: "POST" },
   }),
+  asyncTts: JSON.stringify({
+    openai: { path: "/v1/async/audio/speech", method: "POST" },
+  }),
   moderation: JSON.stringify({
     openai: { path: "/v1/moderations", method: "POST" },
   }),
@@ -216,11 +219,17 @@ export const RULES = {
     endpoints: EP.rerank,
     icon: "Qwen.Color",
   },
-  "Qwen3-VL-Embedding-8B": {
+  "SenseVoiceSmall": {
     vendor: "阿里巴巴",
-    tag: "嵌入模型",
-    endpoints: EP.embed,
+    tag: "语音识别,免费",
+    endpoints: EP.asr,
     icon: "Qwen.Color",
+  },
+  "Spark-TTS-0.5B": {
+    vendor: "其他",
+    tag: "语音合成,免费",
+    endpoints: EP.asyncTts,
+    icon: "Custom",
   },
   "Bespoke-Nimble-9B": {
     vendor: "阿里巴巴",

@@ -31,14 +31,16 @@
       "Fun-ASR-Nano-2512",
       "GLM-ASR",
       "whisper-large-v3",
-      "whisper-large-v3-turbo"
+      "whisper-large-v3-turbo",
+      "SenseVoiceSmall"
     ],
     "tts": [
       "Qwen3-TTS",
       "CosyVoice3",
       "GLM-TTS",
       "IndexTTS-2",
-      "Step-Audio-TTS-3B"
+      "Step-Audio-TTS-3B",
+      "Spark-TTS-0.5B"
     ],
     "moderation": [
       "nonescape-v0",
@@ -58,8 +60,7 @@
       "WeMM-Embedding-4B",
       "WeMM-Embedding-2B",
       "Qwen3-VL-Reranker-2B",
-      "Qwen3-VL-Reranker-8B",
-      "Qwen3-VL-Embedding-8B"
+      "Qwen3-VL-Reranker-8B"
     ],
     "system_one": [
       "Bespoke-Nimble-9B",
@@ -662,6 +663,41 @@
       },
       "relay": "newapi_native",
       "markup": 5
+    },    {
+      "id": "SenseVoiceSmall",
+      "upstream": "SenseVoiceSmall",
+      "category": "asr",
+      "category_zh": "语音识别 ASR",
+      "description": "SenseVoiceSmall：FunAudioLLM 轻量级语音识别模型，低延迟、高准确度，适合实时转写、会议记录与语音交互（免费）。计费：$0/次。",
+      "cover": "https://gitee-ai.su.bcebos.com/v1/uploads/img/news_cover_2-avatar-funaudiollm.png",
+      "paths": [
+        "v1/audio/transcriptions"
+      ],
+      "operations": [
+        {
+          "name": "语音识别",
+          "type": "speech2text",
+          "path": "v1/audio/transcriptions",
+          "price_cny": 0,
+          "unit_tag": 0,
+          "in_m": 0,
+          "out_m": 0
+        }
+      ],
+      "billing": {
+        "mode": "unit",
+        "unit": "per_call",
+        "unit_label": "次",
+        "unit_note": "免费",
+        "unit_tag": 0,
+        "cost_cny": 0,
+        "sell_cny": 0,
+        "model_price_usd": 0,
+        "free_upstream": true
+      },
+      "relay": "newapi_native",
+      "markup": 5,
+      "description_en": "SenseVoiceSmall — lightweight speech recognition by FunAudioLLM: low latency, high accuracy for realtime transcription, meeting notes, and voice interaction. Free."
     },
     {
       "id": "Qwen3-TTS",
@@ -865,6 +901,50 @@
       },
       "relay": "newapi_native",
       "markup": 5
+    },    {
+      "id": "Spark-TTS-0.5B",
+      "upstream": "Spark-TTS-0.5B",
+      "category": "tts",
+      "category_zh": "语音合成 TTS",
+      "description": "Spark-TTS 0.5B：基于 LLM 的文本转语音系统，高精度自然合成，支持多语言与音色克隆（异步接口，免费）。计费：$0/次。",
+      "cover": "https://gitee-ai.su.bcebos.com/v1/uploads/img/id-uyn4fzvdq-avatar-sparktts.png",
+      "paths": [
+        "v1/async/audio/speech"
+      ],
+      "operations": [
+        {
+          "name": "语音生成",
+          "type": "text2speech",
+          "path": "v1/async/audio/speech",
+          "price_cny": 0,
+          "unit_tag": 0,
+          "in_m": 0,
+          "out_m": 0
+        },
+        {
+          "name": "音色克隆",
+          "type": "text2speech",
+          "path": "v1/async/audio/speech",
+          "price_cny": 0,
+          "unit_tag": 0,
+          "in_m": 0,
+          "out_m": 0
+        }
+      ],
+      "billing": {
+        "mode": "unit",
+        "unit": "per_call",
+        "unit_label": "次",
+        "unit_note": "免费",
+        "unit_tag": 0,
+        "cost_cny": 0,
+        "sell_cny": 0,
+        "model_price_usd": 0,
+        "free_upstream": true
+      },
+      "relay": "gitee_passthrough",
+      "markup": 5,
+      "description_en": "Spark-TTS 0.5B — LLM-based text-to-speech with natural, high-fidelity voices; multilingual, with voice cloning via the async speech endpoint. Free."
     },
     {
       "id": "nonescape-v0",
@@ -1190,28 +1270,7 @@
       "relay": "newapi_native",
       "markup": 5
     },
-    {
-      "id": "Qwen3-VL-Embedding-8B",
-      "upstream": "Qwen3-VL-Embedding-8B",
-      "category": "rag",
-      "category_zh": "RAG",
-      "description": "Qwen3-VL Embedding 8B：多模态向量化（上游免费底价）。",
-      "paths": [
-        "v1/embeddings"
-      ],
-      "billing": {
-        "mode": "token",
-        "cost_in_cny_per_m": 0.01,
-        "cost_out_cny_per_m": 0.01,
-        "sell_in_cny_per_m": 0.05,
-        "sell_out_cny_per_m": 0.05,
-        "model_ratio": 0.003425,
-        "completion_ratio": 1,
-        "free_upstream": true
-      },
-      "relay": "newapi_native",
-      "markup": 5
-    },
+
     {
       "id": "Bespoke-Nimble-9B",
       "upstream": "Bespoke-Nimble-9B",

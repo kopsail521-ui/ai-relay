@@ -1,0 +1,54 @@
+# VPS：上架 2 个 Gitee 免费模型（SenseVoiceSmall ASR / Spark-TTS-0.5B 异步 TTS）+ 下架 Qwen3-VL-Embedding-8B
+# 免费 = ModelPrice 0（$0/次），上游操作全免费。透传 catalog 38→39（-1+2）
+# 前提：本机已 git push
+set -e
+cd /opt/ai-relay
+# VPS 树常因热补丁漂移：safe-pull（保留 GEO 博客 → stash -u → reset --hard origin/main → 还原博客）
+sudo bash scripts/vps-safe-pull-preserve-blog.sh
+
+# 1) New API：加二免（ModelPrice=0）+ 下架 Qwen3-VL-Embedding-8B（abilities/渠道/options/广场软删）
+sudo docker run --rm \
+  -v /opt/ai-relay/data/new-api:/data \
+  -v /opt/ai-relay/scripts/vps-gitee-free2-add-embedding8b-delist.py:/tmp/add.py:ro \
+  python:3.12-alpine python /tmp/add.py /data/one-api.db
+
+# 2) Gitee 透传 rebuild（catalog 39 + RULES 加二删一）
+sudo cp -a /opt/ai-relay/config/gitee-selected-models.json \
+  /opt/ai-relay/services/gitee-passthrough/catalog.json
+sudo docker build -t keyo-gitee-passthrough ./services/gitee-passthrough
+sudo docker rm -f ai-relay-gitee-passthrough 2>/dev/null || true
+sudo docker run -d --name ai-relay-gitee-passthrough --restart always --network host \
+  --env-file /opt/ai-relay/.env.gitee \
+  -v /opt/ai-relay/data/new-api:/data:rw \
+  -e NEW_API_DB=/data/one-api.db \
+  -e CATALOG=/app/catalog.json \
+  keyo-gitee-passthrough
+sleep 2
+curl -sS http://127.0.0.1:3010/healthz; echo
+
+# 3) 广场简介/标签 i18n：热更新 copy 后重启 moderation（不重建镜像）
+MOD=$(sudo docker ps --format '{{.Names}}' | grep -E 'creem|moderation' | head -1 || true)
+if [ -n "$MOD" ]; then
+  sudo docker cp /opt/ai-relay/services/creem-moderation-proxy/marketplace-model-copy.json \
+    "$MOD":/app/marketplace-model-copy.json
+  sudo docker restart "$MOD"
+  echo "moderation_copy_updated=$MOD"
+else
+  echo "WARN: moderation container not found"
+fi
+
+echo "--- smoke ---"
+# 透传健康：模型数应为 39
+curl -sS http://127.0.0.1:3010/healthz | grep -o '"models":[0-9]*'
+# 公开定价：两个免费模型在，Qwen3-VL-Embedding-8B 不在
+P3JSON=$(mktemp)
+curl -sS https://www.keyoapi.xyz/api/pricing -o "$P3JSON"
+for m in SenseVoiceSmall Spark-TTS-0.5B; do
+  grep -q "$m" "$P3JSON" && echo "pricing_ok=$m" || echo "pricing_MISSING=$m"
+done
+grep -q "Qwen3-VL-Embedding-8B" "$P3JSON" && echo "DELIST_FAIL=still_listed" || echo "delist_ok=qwen3vl_embedding_8b"
+rm -f "$P3JSON"
+# 异步 TTS 路由应打到透传（未带 key 返回 401 而非 404）
+curl -sS -o /dev/null -w "async_tts_http=%{http_code}\n" -X POST https://www.keyoapi.xyz/v1/async/audio/speech \
+  -H "Content-Type: application/json" -d '{}'
+echo DONE_GITEE_FREE2_DELIST_EMBED8B

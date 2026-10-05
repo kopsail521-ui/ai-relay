@@ -6691,12 +6691,12 @@
       "vi": "Space Bunny Alpha miễn phí: chat tổng quát thử nghiệm."
     }
   },
-  "grok-imagine-video-1.5": {
-    "description": "xAI Grok Imagine Video 1.5：文生 / 单图 / 首尾帧 / 多参考图一个接口全支持，可调时长、分辨率与画幅，内置音频。计费：/usr/bin/bash.3082/次。",
+  "grok-video-1.5": {
+    "description": "xAI Grok Imagine Video 1.5：文生 / 单图 / 首尾帧 / 多参考图一个接口全支持，可调时长、分辨率与画幅，内置音频。计费：$0.3082/次。",
     "descriptions": {
-      "zhCN": "xAI Grok Imagine Video 1.5：文生 / 单图 / 首尾帧 / 多参考图一个接口全支持，可调时长、分辨率与画幅，内置音频。计费：/usr/bin/bash.3082/次。",
-      "zhTW": "xAI Grok Imagine Video 1.5：文生 / 單圖 / 首尾幀 / 多參考圖一個介面全支援，可調時長、解析度與畫幅，內建音訊。計費：/usr/bin/bash.3082/次。",
-      "en": "xAI Grok Imagine Video 1.5 — text / single image / first & last frame / multi-reference in one API, with duration, resolution and aspect-ratio controls and native audio. Pricing: /usr/bin/bash.3082 / request.",
+      "zhCN": "xAI Grok Imagine Video 1.5：文生 / 单图 / 首尾帧 / 多参考图一个接口全支持，可调时长、分辨率与画幅，内置音频。计费：$0.3082/次。",
+      "zhTW": "xAI Grok Imagine Video 1.5：文生 / 單圖 / 首尾幀 / 多參考圖一個介面全支援，可調時長、解析度與畫幅，內建音訊。計費：$0.3082/次。",
+      "en": "xAI Grok Imagine Video 1.5 — text / single image / first & last frame / multi-reference in one API, with duration, resolution and aspect-ratio controls and native audio. Pricing: $0.3082 / request.",
       "fr": "xAI Grok Imagine Video 1.5 — texte / image unique / première et dernière frame / multi-références dans une seule API, avec durée, résolution, ratio et audio natif. Tarif : 0,3082 $ / requête.",
       "ru": "xAI Grok Imagine Video 1.5 — текст / одно изображение / первый и последний кадр / мультиреференс в одном API: длительность, разрешение, соотношение сторон и встроенный звук. Тариф: $0.3082 / запрос.",
       "ja": "xAI Grok Imagine Video 1.5：テキスト／単一画像／最初と最後のフレーム／マルチ参照を 1 つの API で。長さ・解像度・アスペクト比を指定でき、音声付き。料金：$0.3082/ 回。",
@@ -6730,13 +6730,39 @@
       "ja": "リクエストごと",
       "vi": "Mỗi lần gọi"
     },
-    "description_zh": "xAI Grok Imagine Video 1.5：文生 / 单图 / 首尾帧 / 多参考图一个接口全支持，可调时长、分辨率与画幅，内置音频。计费：/usr/bin/bash.3082/次。",
-    "description_en": "xAI Grok Imagine Video 1.5 — text / single image / first & last frame / multi-reference in one API, with duration, resolution and aspect-ratio controls and native audio. Pricing: /usr/bin/bash.3082 / request.",
+    "description_zh": "xAI Grok Imagine Video 1.5：文生 / 单图 / 首尾帧 / 多参考图一个接口全支持，可调时长、分辨率与画幅，内置音频。计费：$0.3082/次。",
+    "description_en": "xAI Grok Imagine Video 1.5 — text / single image / first & last frame / multi-reference in one API, with duration, resolution and aspect-ratio controls and native audio. Pricing: $0.3082 / request.",
     "badge_zh": "按次计费",
     "badge_en": "Per Request",
     "suffix_zh": "/次",
     "suffix_en": "/ request",
     "price_key_zh": "每次请求",
-    "price_key_en": "Per request"
+    "price_key_en": "Per request",
+    "price_table": {
+      "columns": {
+        "zhCN": [
+          "场景",
+          "价格 (/次)"
+        ],
+        "en": [
+          "Scenario",
+          "Price (/req)"
+        ]
+      },
+      "rows": [
+        [
+          "文生 / 单图生视频",
+          "$0.3082"
+        ],
+        [
+          "首尾帧",
+          "$0.3082"
+        ],
+        [
+          "多参考图",
+          "$0.3082"
+        ]
+      ]
+    }
   }
 }

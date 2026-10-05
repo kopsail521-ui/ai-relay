@@ -878,7 +878,7 @@
               </tr>
             </thead>
             <tbody>
-<tr><td class="model"><button type="button" class="model-btn" data-copy="grok-imagine-video-1.5">grok-imagine-video-1.5</button></td><td class="price">$0.3082 <span data-i18n="perVideo"></span></td><td class="note-cell" data-i18n="nGrokVideo"></td></tr>
+<tr><td class="model"><button type="button" class="model-btn" data-copy="grok-video-1.5">grok-video-1.5</button></td><td class="price">$0.3082 <span data-i18n="perVideo"></span></td><td class="note-cell" data-i18n="nGrokVideo"></td></tr>
             </tbody>
           </table>
         </div>
@@ -1202,7 +1202,7 @@
           </article>
 
                     <article class="model-api" id="api-grok-imagine">
-            <h3>grok-imagine-video-1.5</h3>
+            <h3>grok-video-1.5</h3>
             <p class="model-lead" data-i18n="giLead"></p>
             <div class="table-wrap">
               <table class="field-table">
@@ -1223,7 +1223,7 @@
             <div class="code-block" style="margin-top:12px">
               <div class="code-bar"><span class="lang">JSON · chat</span><button type="button" class="btn-copy" data-copy-target="ex-gi" data-i18n="copy"></button></div>
               <pre id="ex-gi"><code>{
-  "model": "grok-imagine-video-1.5",
+  "model": "grok-video-1.5",
   "messages": [{"role": "user", "content": "gentle camera push in"}],
   "image": "https://example.com/still.jpg",
   "aspect_ratio": "16:9",
@@ -1538,7 +1538,7 @@ const I18N = {
     "pitMedia": "Local media → POST /v1/uploads (or /v1/files) first; put returned url into video JSON. No local paths / data:base64 / /v1/assets.",
     "pitMix": "Do not reuse another model's field names (especially MiniMax vs Seedance/Wan).",
     "pit1": "MiniMax-H3: use aspectRatio + images[]/audios[] — not image_with_roles / first_frame_image.",
-    "pit2": "grok-imagine-video-1.5: image / last_frame / reference_images go as top-level chat body fields (official Grok Imagine Video API contract).",
+    "pit2": "grok-video-1.5: image / last_frame / reference_images go as top-level chat body fields (official Grok Imagine Video API contract).",
     "pit3": "seedance: first_frame_image = first-frame; image_urls = reference (even 1 image). Never mix first_frame_image with video_urls/audios.",
     "pit4": "gemini-omni: do not send duration.",
     "pit5": "Poll path: /v1/tasks (video generations) vs /v1/task (TTS async / docs / InfiniteTalk).",
@@ -1727,7 +1727,7 @@ const I18N = {
     "pitMedia": "本机素材先 POST /v1/uploads（或 /v1/files），把返回的 url 填进视频 JSON。禁止本机路径 / data:base64 / /v1/assets。",
     "pitMix": "不要套用其它模型的字段名（尤其 MiniMax 与 Seedance/Wan）。",
     "pit1": "MiniMax-H3：用 aspectRatio + images[]/audios[]，不要用 image_with_roles / first_frame_image。",
-    "pit2": "grok-imagine-video-1.5：image / last_frame / reference_images 直接放在 chat 请求体顶层（字段与官方一致）。",
+    "pit2": "grok-video-1.5：image / last_frame / reference_images 直接放在 chat 请求体顶层（字段与官方一致）。",
     "pit3": "seedance：first_frame_image=首帧；image_urls=参考（单图也是参考）。禁止 first_frame_image 与 video_urls/audios 混用。",
     "pit4": "gemini-omni：不要传 duration。",
     "pit5": "轮询：/v1/tasks（视频 generations）vs /v1/task（TTS 异步 / 文档 / InfiniteTalk）。",
@@ -1915,7 +1915,7 @@ const I18N = {
     "videoHint": "非同步：POST /v1/videos 建立，再 GET /v1/videos/{id} 查詢。扣費以控制台為準。",
     "videoHintGen": "非同步：POST /v1/videos/generations 建立，再 GET /v1/tasks/{task_id}（或 GET /v1/videos/{id}）查詢。扣費以控制台為準。",
     "videoMediaNote": "媒體：只要 JSON + 公網 http(s)。本機檔案先 POST /v1/uploads。禁止本機路徑 / data:base64 / /v1/assets。",
-    "videoImagineNote": "grok-imagine-video-1.5：chat 介面（欄位見 #api-grok-imagine）。",
+    "videoImagineNote": "grok-video-1.5：chat 介面（欄位見 #api-grok-imagine）。",
     "nGrokVideo": "文生 / 單圖 / 首尾幀 / 多參考圖 · 按次",
     "nVeoComponents": "（已下架）",
     "nWanVideo": "480P/720P/1080P · 按秒",
@@ -2055,7 +2055,7 @@ const I18N = {
     "videoHint": "非同期：POST /v1/videos → GET /v1/videos/{id}。課金はコンソール準拠。",
     "videoHintGen": "非同期：POST /v1/videos/generations → GET /v1/tasks/{task_id}（または GET /v1/videos/{id}）。課金はコンソール準拠。",
     "videoMediaNote": "Media: JSON only + public http(s). Local files → POST /v1/uploads first. No local paths / data:base64 / /v1/assets.",
-    "videoImagineNote": "grok-imagine-video-1.5：chat エンドポイント（フィールドは #api-grok-imagine）。",
+    "videoImagineNote": "grok-video-1.5：chat エンドポイント（フィールドは #api-grok-imagine）。",
     "nGrokVideo": "テキスト / 1画像 / 前後フレーム / マルチ参照 · リクエスト課金",
     "nVeoComponents": "約8秒 · リクエスト · 供給は在庫次第",
     "nWanVideo": "480P/720P/1080P · 秒課金",
@@ -2195,7 +2195,7 @@ const I18N = {
     "videoHint": "Async : POST /v1/videos puis GET /v1/videos/{id}. Facturation = console.",
     "videoHintGen": "Async : POST /v1/videos/generations puis GET /v1/tasks/{task_id} (ou GET /v1/videos/{id}). Facturation = console.",
     "videoMediaNote": "Media: JSON only + public http(s). Local files → POST /v1/uploads first. No local paths / data:base64 / /v1/assets.",
-    "videoImagineNote": "grok-imagine-video-1.5 : endpoint chat (champs : #api-grok-imagine).",
+    "videoImagineNote": "grok-video-1.5 : endpoint chat (champs : #api-grok-imagine).",
     "nGrokVideo": "texte / 1 image / première·dernière frame / multi-réf · par requête",
     "nVeoComponents": "~8s · par requête · stock variable",
     "nWanVideo": "480P/720P/1080P · par seconde",
@@ -2335,7 +2335,7 @@ const I18N = {
     "videoHint": "Асинхронно: POST /v1/videos, затем GET /v1/videos/{id}. Списание — по консоли.",
     "videoHintGen": "Асинхронно: POST /v1/videos/generations, затем GET /v1/tasks/{task_id} (или GET /v1/videos/{id}). Списание — по консоли.",
     "videoMediaNote": "Media: JSON only + public http(s). Local files → POST /v1/uploads first. No local paths / data:base64 / /v1/assets.",
-    "videoImagineNote": "grok-imagine-video-1.5: chat-эндпоинт (поля: #api-grok-imagine).",
+    "videoImagineNote": "grok-video-1.5: chat-эндпоинт (поля: #api-grok-imagine).",
     "nGrokVideo": "текст / 1 изображение / первый·последний кадр / мультиреф · за запрос",
     "nVeoComponents": "~8с · за запрос · наличие может меняться",
     "nWanVideo": "480P/720P/1080P · за секунду",
@@ -2475,7 +2475,7 @@ const I18N = {
     "videoHint": "Async: POST /v1/videos rồi GET /v1/videos/{id}. Tính phí theo console.",
     "videoHintGen": "Async: POST /v1/videos/generations rồi GET /v1/tasks/{task_id} (hoặc GET /v1/videos/{id}). Tính phí theo console.",
     "videoMediaNote": "Media: JSON only + public http(s). Local files → POST /v1/uploads first. No local paths / data:base64 / /v1/assets.",
-    "videoImagineNote": "grok-imagine-video-1.5: endpoint chat (trường: #api-grok-imagine).",
+    "videoImagineNote": "grok-video-1.5: endpoint chat (trường: #api-grok-imagine).",
     "nGrokVideo": "văn bản / 1 ảnh / đầu·cuối / đa tham chiếu · theo lần",
     "nVeoComponents": "~8s · theo lần · nguồn có thể thay đổi",
     "nWanVideo": "480P/720P/1080P · theo giây",
@@ -2669,7 +2669,7 @@ function renderSamples(dict) {
 ' +
       '  -H <span class="tok-str">"Content-Type: application/json"</span> \
 ' +
-      '  -d <span class="tok-str">\'{\n    "model": "grok-imagine-video-1.5",\n    "messages": [{"role": "user", "content": "a red paper boat drifting on calm water at sunset"}],\n    "image": "https://example.com/first.jpg",\n    "duration": 10,\n    "resolution": "720p"\n  }\'</span></code>';
+      '  -d <span class="tok-str">\'{\n    "model": "grok-video-1.5",\n    "messages": [{"role": "user", "content": "a red paper boat drifting on calm water at sunset"}],\n    "image": "https://example.com/first.jpg",\n    "duration": 10,\n    "resolution": "720p"\n  }\'</span></code>';
   }
   const grokFlf = document.getElementById('curl-grok-flf');
   if (grokFlf) {
@@ -2679,7 +2679,7 @@ function renderSamples(dict) {
 ' +
       '  -H <span class="tok-str">"Content-Type: application/json"</span> \
 ' +
-      '  -d <span class="tok-str">\'{\n    "model": "grok-imagine-video-1.5",\n    "messages": [{"role": "user", "content": "camera glides from the day scene into the night skyline"}],\n    "image": "https://example.com/first.jpg",\n    "last_frame": "https://example.com/last.jpg"\n  }\'</span></code>';
+      '  -d <span class="tok-str">\'{\n    "model": "grok-video-1.5",\n    "messages": [{"role": "user", "content": "camera glides from the day scene into the night skyline"}],\n    "image": "https://example.com/first.jpg",\n    "last_frame": "https://example.com/last.jpg"\n  }\'</span></code>';
   }
   const grokRef = document.getElementById('curl-grok-ref');
   if (grokRef) {
@@ -2689,7 +2689,7 @@ function renderSamples(dict) {
 ' +
       '  -H <span class="tok-str">"Content-Type: application/json"</span> \
 ' +
-      '  -d <span class="tok-str">\'{\n    "model": "grok-imagine-video-1.5",\n    "messages": [{"role": "user", "content": "the model from <IMAGE_0> wears the shirt from <IMAGE_1> and walks the runway"}],\n    "reference_images": [\n      {"url": "https://example.com/model.jpg"},\n      {"url": "https://example.com/shirt.jpg"}\n    ],\n    "duration": 10,\n    "aspect_ratio": "16:9"\n  }\'</span></code>';
+      '  -d <span class="tok-str">\'{\n    "model": "grok-video-1.5",\n    "messages": [{"role": "user", "content": "the model from <IMAGE_0> wears the shirt from <IMAGE_1> and walks the runway"}],\n    "reference_images": [\n      {"url": "https://example.com/model.jpg"},\n      {"url": "https://example.com/shirt.jpg"}\n    ],\n    "duration": 10,\n    "aspect_ratio": "16:9"\n  }\'</span></code>';
   }
   const curlMm = document.getElementById('curl-mm-h3');
   if (curlMm) {

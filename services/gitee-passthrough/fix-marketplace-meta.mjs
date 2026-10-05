@@ -58,7 +58,7 @@ export const RULES = {
     endpoints: EP.imageProcess,
     icon: "Tencent.Color",
   },
-  UVDoc: { vendor: "其他", tag: "图像处理", endpoints: EP.imageProcess, icon: "Custom" },
+  UVDoc: { vendor: "其他", tag: "OCR", endpoints: JSON.stringify({ "image-generation": { path: "/v1/images/unwarping", method: "POST" } }), icon: "Custom" },
   "RMBG-2.0": {
     vendor: "腾讯",
     tag: "图像处理",
@@ -312,11 +312,17 @@ export const RULES = {
     endpoints: EP.videoGen,
     icon: "Gemini.Color",
   },
-  "grok-imagine-video-1.5": {
+  "grok-video-1.5": {
     vendor: "xAI",
     tag: "视频按次",
     endpoints: EP.chat,
     icon: "XAI",
+  },
+  "gemini-embedding-2-preview": {
+    vendor: "Google",
+    tag: "嵌入模型",
+    endpoints: EP.embed,
+    icon: "Gemini.Color",
   },
   "seedance-2.0-1080p": {
     vendor: "字节跳动",

@@ -283,14 +283,14 @@ Pick model from §1.2.
 
 ## 4. Grok Imagine Video 1.5 (chat)
 
-`POST https://www.keyoapi.xyz/v1/chat/completions` · model=`grok-imagine-video-1.5` · **$0.3082/request**
+`POST https://www.keyoapi.xyz/v1/chat/completions` · model=`grok-video-1.5` · **$0.3082/request**
 
 Text / single image / first & last frame / multi-reference in one endpoint; fields follow the official Grok Imagine Video API and the video link returns in the reply. Optional `duration`, `resolution` (`480p`/`720p`/`1080p`), `aspect_ratio` (e.g. `16:9`).
 
 **Single image (pinned first frame)**
 ```json
 {
-  "model": "grok-imagine-video-1.5",
+  "model": "grok-video-1.5",
   "messages": [{"role": "user", "content": "a red paper boat drifting on calm water at sunset"}],
   "image": "https://example.com/first.jpg",
   "duration": 10,
@@ -301,7 +301,7 @@ Text / single image / first & last frame / multi-reference in one endpoint; fiel
 **First & last frame** (`image` pins the first frame; `last_frame` alone pins only the tail)
 ```json
 {
-  "model": "grok-imagine-video-1.5",
+  "model": "grok-video-1.5",
   "messages": [{"role": "user", "content": "camera glides from the day scene into the night skyline"}],
   "image": "https://example.com/first.jpg",
   "last_frame": "https://example.com/last.jpg"
@@ -311,7 +311,7 @@ Text / single image / first & last frame / multi-reference in one endpoint; fiel
 **Multi-reference** (first frame not locked; reference via `<IMAGE_0>`, `<IMAGE_1>` in the prompt)
 ```json
 {
-  "model": "grok-imagine-video-1.5",
+  "model": "grok-video-1.5",
   "messages": [{"role": "user", "content": "the model from <IMAGE_0> wears the shirt from <IMAGE_1> and walks the runway"}],
   "reference_images": [
     {"url": "https://example.com/model.jpg"},
@@ -605,7 +605,7 @@ If `video_urls` present, omit duration.
 }
 ```
 
-### 5.6 grok-imagine-video-1.5 → moved to the chat endpoint
+### 5.6 grok-video-1.5 → moved to the chat endpoint
 
 Text / single image / first & last frame / multi-reference all go through `POST /v1/chat/completions` (official fields); see §4. Not part of Path B.
 

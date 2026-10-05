@@ -1,0 +1,39 @@
+# VPS：grok 视频改名 grok-video-1.5 + 修广场乱码/分组价格表 + 标签纠错（UVDoc→OCR、gemini-embedding-2-preview→嵌入模型）
+# 前提：本机已 git push
+set -e
+cd /opt/ai-relay
+sudo bash scripts/vps-safe-pull-preserve-blog.sh
+
+# 1) DB：模型改名（渠道/mapping/abilities/定价联动）+ 描述重写 + 标签纠错 + 全量标签审计
+sudo python3 /opt/ai-relay/scripts/vps-grok-video-rename-fix.py /opt/ai-relay/data/new-api/one-api.db
+
+# 2) Gitee 透传 rebuild（RULES：改名 + UVDoc/gemini-embedding 纠错，启动自愈兜底）
+sudo docker build -t keyo-gitee-passthrough ./services/gitee-passthrough
+sudo docker rm -f ai-relay-gitee-passthrough 2>/dev/null || true
+sudo docker run -d --name ai-relay-gitee-passthrough --restart always --network host \
+  --env-file /opt/ai-relay/.env.gitee \
+  -v /opt/ai-relay/data/new-api:/data:rw \
+  -e NEW_API_DB=/data/one-api.db \
+  -e CATALOG=/app/catalog.json \
+  keyo-gitee-passthrough
+sleep 2
+curl -sS http://127.0.0.1:3010/healthz; echo
+
+# 3) moderation：分组价格表 copy 热更新
+MOD=$(sudo docker ps --format '{{.Names}}' | grep -E 'creem|moderation' | head -1 || true)
+if [ -n "$MOD" ]; then
+  sudo docker cp /opt/ai-relay/services/creem-moderation-proxy/marketplace-model-copy.json \
+    "$MOD":/app/marketplace-model-copy.json
+  sudo docker restart "$MOD"
+  echo "moderation_copy_updated=$MOD"
+else
+  echo "WARN: moderation container not found"
+fi
+
+echo "--- smoke ---"
+P3JSON=$(mktemp)
+curl -sS https://www.keyoapi.xyz/api/pricing -o "$P3JSON"
+grep -q "grok-video-1.5" "$P3JSON" && echo "pricing_ok=grok-video-1.5" || echo "pricing_MISSING=grok-video-1.5"
+grep -q "grok-imagine-video-1.5" "$P3JSON" && echo "RENAME_FAIL=old_id_still_listed" || echo "rename_ok=old_id_gone"
+rm -f "$P3JSON"
+echo DONE_GROK_VIDEO_FIX

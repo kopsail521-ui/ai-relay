@@ -294,14 +294,14 @@ curl https://www.keyoapi.xyz/v1/systemone \
 
 ## 4. Grok Imagine Video 1.5（chat 接口）
 
-`POST https://www.keyoapi.xyz/v1/chat/completions` · model=`grok-imagine-video-1.5` · **$0.3082/次**
+`POST https://www.keyoapi.xyz/v1/chat/completions` · model=`grok-video-1.5` · **$0.3082/次**
 
 文生 / 单图 / 首尾帧 / 多参考图同一个接口；字段与官方 Grok Imagine Video API 一致，视频链接随回复返回。可选 `duration`、`resolution`（`480p`/`720p`/`1080p`）、`aspect_ratio`（如 `16:9`）。
 
 **单图（钉首帧）**
 ```json
 {
-  "model": "grok-imagine-video-1.5",
+  "model": "grok-video-1.5",
   "messages": [{"role": "user", "content": "a red paper boat drifting on calm water at sunset"}],
   "image": "https://example.com/first.jpg",
   "duration": 10,
@@ -312,7 +312,7 @@ curl https://www.keyoapi.xyz/v1/systemone \
 **首尾帧**（`image` 钉首帧；只传 `last_frame` 则只钉尾帧）
 ```json
 {
-  "model": "grok-imagine-video-1.5",
+  "model": "grok-video-1.5",
   "messages": [{"role": "user", "content": "camera glides from the day scene into the night skyline"}],
   "image": "https://example.com/first.jpg",
   "last_frame": "https://example.com/last.jpg"
@@ -322,7 +322,7 @@ curl https://www.keyoapi.xyz/v1/systemone \
 **多参考图**（不锁首帧；prompt 里用 `<IMAGE_0>`、`<IMAGE_1>` 引用）
 ```json
 {
-  "model": "grok-imagine-video-1.5",
+  "model": "grok-video-1.5",
   "messages": [{"role": "user", "content": "the model from <IMAGE_0> wears the shirt from <IMAGE_1> and walks the runway"}],
   "reference_images": [
     {"url": "https://example.com/model.jpg"},
@@ -636,7 +636,7 @@ curl https://www.keyoapi.xyz/v1/systemone \
 }
 ```
 
-### 5.6 grok-imagine-video-1.5 → 已改走 chat 接口
+### 5.6 grok-video-1.5 → 已改走 chat 接口
 
 文生 / 单图 / 首尾帧 / 多参考图统一走 `POST /v1/chat/completions`（字段与官方一致），见 §4。不属于 Path B。
 

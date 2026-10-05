@@ -2,15 +2,15 @@
   "_note": "lastmod bumps only when page content hash changes.",
   "entries": {
     "https://www.keyoapi.xyz/": {
-      "hash": "911a356a1992c008",
+      "hash": "32c66228431b021e",
       "lastmod": "2026-10-05"
     },
     "https://www.keyoapi.xyz/compare": {
-      "hash": "b95acebdc75d4690",
+      "hash": "ed81c69f23ec50e9",
       "lastmod": "2026-10-05"
     },
     "https://www.keyoapi.xyz/pricing-list": {
-      "hash": "84856791174b6e4e",
+      "hash": "1d2802c9cc56df78",
       "lastmod": "2026-10-05"
     },
     "https://www.keyoapi.xyz/free-models": {
@@ -18,7 +18,7 @@
       "lastmod": "2026-10-05"
     },
     "https://www.keyoapi.xyz/models": {
-      "hash": "4d15ac353d1749d0",
+      "hash": "cf9a6e1a541667d5",
       "lastmod": "2026-10-05"
     },
     "https://www.keyoapi.xyz/gemini-api-pricing": {
@@ -54,11 +54,11 @@
       "lastmod": "2026-10-05"
     },
     "https://www.keyoapi.xyz/about": {
-      "hash": "c8cdb6d8557d8b24",
+      "hash": "377c7cf78df35d0b",
       "lastmod": "2026-10-05"
     },
     "https://www.keyoapi.xyz/model/whisper-large-v3": {
-      "hash": "8bc985ade40f253c",
+      "hash": "380c2f02109ad21b",
       "lastmod": "2026-10-05"
     },
     "https://www.keyoapi.xyz/model/whisper-large-v3-turbo": {

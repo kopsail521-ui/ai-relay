@@ -6,7 +6,7 @@ Sell = upstream cost x2 (FX 7.3), output free:
   SemIf           cost ¥0.1/M  -> sell $0.027397/M -> ModelRatio=0.013699 CompletionRatio=0
   DiffusionGemma  cost ¥0.3/M  -> sell $0.082192/M -> ModelRatio=0.041096 CompletionRatio=0
   laya            cost ¥0.01/M -> sell $0.00274/M  -> ModelRatio=0.00137  CompletionRatio=0
-Tag: 系统一模型 (single tag). Public copy must NOT name Gitee.
+Tag: 决策模型 (single tag). Public copy must NOT name Gitee.
 Endpoint: POST /v1/systemone (Caddy -> gitee-passthrough :3010).
 Abilities copied from Bespoke-Nimble-9B (gitee channel groups).
 """

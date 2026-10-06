@@ -2,6 +2,7 @@
 Copyright (C) 2023-2026 QuantumNous
 */
 import { Link } from '@tanstack/react-router'
+import { useTranslation } from 'react-i18next'
 
 import { PublicLayout } from '@/components/layout'
 import { usePageMeta } from '@/hooks/use-page-meta'
@@ -15,6 +16,7 @@ type SeoContentPageProps = {
 }
 
 export function SeoContentPage({ page, canonicalPath }: SeoContentPageProps) {
+  const { t } = useTranslation()
   usePageMeta({
     title: page.title,
     description: page.description,
@@ -50,7 +52,7 @@ export function SeoContentPage({ page, canonicalPath }: SeoContentPageProps) {
         {page.relatedLinks.length > 0 ? (
           <nav className='border-border mt-10 border-t pt-6'>
             <h2 className='mb-3 text-sm font-semibold uppercase tracking-wide'>
-              Related
+              {t('Related')}
             </h2>
             <ul className='flex flex-wrap gap-4'>
               {page.relatedLinks.map((link) => (
@@ -79,6 +81,7 @@ export function SeoIndexPage(props: {
   intro: string
   links: Array<{ href: string; label: string; description?: string }>
 }) {
+  const { t } = useTranslation()
   usePageMeta({
     title: props.title,
     description: props.description,
@@ -89,9 +92,9 @@ export function SeoIndexPage(props: {
     <PublicLayout>
       <div className='mx-auto max-w-3xl px-4 py-10'>
         <h1 className='mb-4 text-3xl font-bold tracking-tight'>
-          {props.heading}
+          {t(props.heading)}
         </h1>
-        <p className='text-muted-foreground mb-8 text-lg'>{props.intro}</p>
+        <p className='text-muted-foreground mb-8 text-lg'>{t(props.intro)}</p>
         <ul className='space-y-4'>
           {props.links.map((item) => (
             <li

@@ -18,6 +18,7 @@ For commercial licensing, please contact support@quantumnous.com
 */
 import { useState, useEffect, useCallback, useMemo, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
+import { toast } from 'sonner'
 
 import { SectionPageLayout } from '@/components/layout'
 import { useStatus } from '@/hooks/use-status'
@@ -175,8 +176,19 @@ export function Wallet(props: WalletProps) {
         return
       }
 
-      // Calculate payment amount and show confirmation dialog
-      await calculatePaymentAmount(topupAmount, method.type)
+      // Calculate payment amount and show confirmation dialog.
+      // A failed calculation returns 0 — never open the confirm dialog with
+      // a "pay 0" amount while the server would still charge the real one.
+      const calculatedAmount = await calculatePaymentAmount(
+        topupAmount,
+        method.type
+      )
+      if (!Number.isFinite(calculatedAmount) || calculatedAmount <= 0) {
+        toast.error(
+          t('Failed to calculate the payment amount. Please try again.')
+        )
+        return
+      }
       setConfirmDialogOpen(true)
     } finally {
       setPaymentLoading(null)
@@ -247,7 +259,18 @@ export function Wallet(props: WalletProps) {
     setPaymentLoading(loadingKey)
 
     try {
-      await calculatePaymentAmount(topupAmount, PAYMENT_TYPES.WAFFO)
+      // Same guard as handlePaymentMethodSelect: a failed calculation
+      // returns 0 — never open the confirm dialog with a "pay 0" amount.
+      const calculatedAmount = await calculatePaymentAmount(
+        topupAmount,
+        PAYMENT_TYPES.WAFFO
+      )
+      if (!Number.isFinite(calculatedAmount) || calculatedAmount <= 0) {
+        toast.error(
+          t('Failed to calculate the payment amount. Please try again.')
+        )
+        return
+      }
       setConfirmDialogOpen(true)
     } finally {
       setPaymentLoading(null)

@@ -20,7 +20,6 @@ import { useCallback, useEffect, useMemo, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { PublicLayout } from '@/components/layout'
-import { Footer } from '@/components/layout/components/footer'
 import { RichContent } from '@/components/rich-content'
 import { useTheme } from '@/context/theme-provider'
 import { usePageMeta } from '@/hooks/use-page-meta'
@@ -53,7 +52,7 @@ export function Home() {
   const { resolvedTheme } = useTheme()
   const { auth } = useAuthStore()
   const isAuthenticated = !!auth.user
-  const { content, isLoaded, isUrl } = useHomePageContent()
+  const { content, isUrl } = useHomePageContent()
   const iframeSrc = useMemo(
     () => (isUrl && content ? withLangParam(content, i18n.language) : content),
     [content, isUrl, i18n.language]
@@ -96,20 +95,13 @@ export function Home() {
     return () => window.removeEventListener('message', onMessage)
   }, [isUrl, syncIframePreferences])
 
-  if (!isLoaded) {
-    return (
-      <PublicLayout showMainContainer={false}>
-        <main className='flex min-h-screen items-center justify-center'>
-          <div className='text-muted-foreground'>{t('Loading...')}</div>
-        </main>
-      </PublicLayout>
-    )
-  }
-
+  // While the custom-content request is in flight (or when it fails), fall
+  // through to the default landing sections below so the first paint is never
+  // blocked behind the API call; custom content replaces them once loaded.
   if (content) {
     if (isUrl) {
       return (
-        <PublicLayout showMainContainer={false}>
+        <PublicLayout showMainContainer={false} showFooter={false}>
           {/*
             allow-top-navigation-by-user-activation: the custom home page URL is
             admin-configured (trusted); this lets its target="_top" nav/menu links
@@ -172,7 +164,6 @@ export function Home() {
       <Features />
       <HowItWorks />
       <CTA isAuthenticated={isAuthenticated} />
-      <Footer />
     </PublicLayout>
   )
 }

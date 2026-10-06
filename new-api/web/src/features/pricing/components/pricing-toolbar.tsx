@@ -150,6 +150,25 @@ export function PricingToolbar(props: PricingToolbarProps) {
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false)
   const sortLabels = getSortLabels(t)
 
+  const priceModeOptions: SegmentOption[] = [
+    {
+      value: 'standard',
+      label: t('Standard'),
+      tooltip: t('Standard shows the official USD list price.'),
+    },
+    {
+      value: 'recharge',
+      label: t('Recharge'),
+      tooltip: t(
+        'Recharge shows the price you actually pay after the recharge discount.'
+      ),
+    },
+  ]
+  const tokenUnitOptions: SegmentOption[] = [
+    { value: 'M', label: '/1M' },
+    { value: 'K', label: '/1K' },
+  ]
+
   const handleTokenUnitChange = useCallback(
     (value: string) => props.onTokenUnitChange(value as TokenUnit),
     [props]
@@ -201,19 +220,13 @@ export function PricingToolbar(props: PricingToolbarProps) {
         <div className='flex flex-wrap items-center gap-2'>
           <div className='hidden items-center gap-2 sm:flex'>
             <SegmentedControl
-              options={[
-                { value: 'standard', label: t('Standard') },
-                { value: 'recharge', label: t('Recharge') },
-              ]}
+              options={priceModeOptions}
               value={props.showRechargePrice ? 'recharge' : 'standard'}
               onChange={handleRechargePriceChange}
               ariaLabel={t('Price display mode')}
             />
             <SegmentedControl
-              options={[
-                { value: 'M', label: '/1M' },
-                { value: 'K', label: '/1K' },
-              ]}
+              options={tokenUnitOptions}
               value={props.tokenUnit}
               onChange={handleTokenUnitChange}
               ariaLabel={t('Token unit')}
@@ -250,6 +263,11 @@ export function PricingToolbar(props: PricingToolbarProps) {
                   {label}
                 </DropdownMenuItem>
               ))}
+              <div className='text-muted-foreground px-2 py-1.5 text-[11px] leading-relaxed'>
+                {t(
+                  'Price sorting uses the input price per 1M tokens; per-request models are listed last.'
+                )}
+              </div>
             </DropdownMenuContent>
           </DropdownMenu>
 
@@ -285,6 +303,22 @@ export function PricingToolbar(props: PricingToolbarProps) {
             </SheetDescription>
           </SheetHeader>
           <div className={sideDrawerFormClassName('gap-0')}>
+            {/* Mobile entry for the price-mode / token-unit switches that are
+                hidden below sm in the toolbar row */}
+            <div className='border-border/60 mb-4 flex flex-wrap items-center gap-2 border-b pb-4'>
+              <SegmentedControl
+                options={priceModeOptions}
+                value={props.showRechargePrice ? 'recharge' : 'standard'}
+                onChange={handleRechargePriceChange}
+                ariaLabel={t('Price display mode')}
+              />
+              <SegmentedControl
+                options={tokenUnitOptions}
+                value={props.tokenUnit}
+                onChange={handleTokenUnitChange}
+                ariaLabel={t('Token unit')}
+              />
+            </div>
             <PricingSidebar
               quotaTypeFilter={props.quotaTypeFilter}
               endpointTypeFilter={props.endpointTypeFilter}

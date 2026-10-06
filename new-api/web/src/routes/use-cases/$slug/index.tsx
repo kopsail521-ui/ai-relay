@@ -4,7 +4,7 @@ Copyright (C) 2023-2026 QuantumNous
 import { createFileRoute, notFound } from '@tanstack/react-router'
 
 import { USE_CASE_PAGES, USE_CASE_SLUGS } from '@/features/seo-pages/content'
-import { SeoContentPage, SeoIndexPage } from '@/features/seo-pages'
+import { SeoContentPage } from '@/features/seo-pages'
 
 export const Route = createFileRoute('/use-cases/$slug/')({
   beforeLoad: ({ params }) => {

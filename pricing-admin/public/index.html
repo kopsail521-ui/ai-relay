@@ -11,7 +11,7 @@
     <form id="login-form" class="login-card">
       <h1>价格后台</h1>
       <p>对照：成本 · 售价 · 官方 API 价</p>
-      <label>管理密码</label>
+      <label for="password">管理密码</label>
       <input id="password" type="password" autocomplete="current-password" required />
       <button type="submit">登录</button>
       <p id="login-error" class="error"></p>
@@ -32,12 +32,12 @@
       </div>
     </header>
 
-    <nav class="tabs">
-      <button type="button" class="tab active" data-tab="pricing">模型价格</button>
-      <button type="button" class="tab" data-tab="funnel">转化漏斗</button>
+    <nav class="tabs" role="tablist" aria-label="数据视图">
+      <button type="button" id="tab-btn-pricing" class="tab active" role="tab" aria-selected="true" aria-controls="tab-pricing">模型价格</button>
+      <button type="button" id="tab-btn-funnel" class="tab" role="tab" aria-selected="false" aria-controls="tab-funnel">转化漏斗</button>
     </nav>
 
-    <section id="tab-pricing">
+    <section id="tab-pricing" role="tabpanel" aria-labelledby="tab-btn-pricing">
     <section class="filters">
       <label>
         类型
@@ -78,7 +78,7 @@
     </div>
     </section>
 
-    <section id="tab-funnel" class="hidden">
+    <section id="tab-funnel" class="hidden" role="tabpanel" aria-labelledby="tab-btn-funnel">
       <div class="funnel-toolbar">
         <p class="sub">数据来自 new-api 数据库（服务端记录）· 访问量 / 页面浏览 / 按钮点击等上半段指标需接入站点埋点后才可见</p>
         <button type="button" id="btn-funnel-refresh" class="ghost small">刷新</button>
@@ -105,41 +105,42 @@
       <div id="fields-text" class="grid three">
         <fieldset>
           <legend class="cost">成本</legend>
-          <label>Input<input id="f-cost-in" type="number" step="any" /></label>
-          <label>Output<input id="f-cost-out" type="number" step="any" /></label>
+          <label>Input<input id="f-cost-in" type="number" min="0" step="any" /></label>
+          <label>Output<input id="f-cost-out" type="number" min="0" step="any" /></label>
         </fieldset>
         <fieldset>
           <legend class="sell">售价</legend>
-          <label>Input<input id="f-sell-in" type="number" step="any" /></label>
-          <label>Output<input id="f-sell-out" type="number" step="any" /></label>
+          <label>Input<input id="f-sell-in" type="number" min="0" step="any" /></label>
+          <label>Output<input id="f-sell-out" type="number" min="0" step="any" /></label>
           <button type="button" id="btn-x3-text" class="ghost small">成本×3 填入售价</button>
         </fieldset>
         <fieldset>
           <legend class="official">官方价</legend>
-          <label>Input<input id="f-official-in" type="number" step="any" /></label>
-          <label>Output<input id="f-official-out" type="number" step="any" /></label>
+          <label>Input<input id="f-official-in" type="number" min="0" step="any" /></label>
+          <label>Output<input id="f-official-out" type="number" min="0" step="any" /></label>
         </fieldset>
       </div>
 
       <div id="fields-image" class="grid three hidden">
         <fieldset>
           <legend class="cost">成本 / 次</legend>
-          <label><input id="f-cost-call" type="number" step="any" /></label>
+          <label><input id="f-cost-call" type="number" min="0" step="any" /></label>
         </fieldset>
         <fieldset>
           <legend class="sell">售价 / 次</legend>
-          <label><input id="f-sell-call" type="number" step="any" /></label>
+          <label><input id="f-sell-call" type="number" min="0" step="any" /></label>
           <button type="button" id="btn-x3-image" class="ghost small">成本×3 填入售价</button>
         </fieldset>
         <fieldset>
           <legend class="official">官方价 / 次</legend>
-          <label><input id="f-official-call" type="number" step="any" /></label>
+          <label><input id="f-official-call" type="number" min="0" step="any" /></label>
         </fieldset>
       </div>
 
       <label>备注<textarea id="f-note" rows="2"></textarea></label>
       <label class="check"><input id="f-enabled" type="checkbox" checked /> 启用</label>
 
+      <p id="edit-error" class="error"></p>
       <div class="dialog-actions">
         <button type="button" id="btn-cancel" class="ghost" value="cancel">取消</button>
         <button type="submit" id="btn-save" value="save">保存</button>

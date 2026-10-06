@@ -46,6 +46,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
+import { Skeleton } from '@/components/ui/skeleton'
 import { getFunnelStats } from './api'
 import type {
   FunnelDailyRow,
@@ -54,15 +55,16 @@ import type {
 
 const PAY_SUCCESS_STATUSES = new Set(['success', 'completed', 'paid'])
 
-const PAY_STATUS_LABELS: Record<string, string> = {
-  success: '成功',
-  completed: '成功',
-  paid: '成功',
-  pending: '待支付',
-  failed: '失败',
-  expired: '已超时',
-  canceled: '已取消',
-  cancelled: '已取消',
+// Map raw payment statuses to i18n keys; they go through t() at render time.
+const PAY_STATUS_LABEL_KEYS: Record<string, string> = {
+  success: 'Success',
+  completed: 'Success',
+  paid: 'Success',
+  pending: 'Pending',
+  failed: 'Failed',
+  expired: 'Expired',
+  canceled: 'Cancelled',
+  cancelled: 'Cancelled',
 }
 
 function payStatusTone(status: string): string {
@@ -146,10 +148,10 @@ function DailyTrendTable({ daily }: { daily: FunnelDailyRow[] }) {
       <TableHeader>
         <TableRow>
           <TableHead>{t('Date')}</TableHead>
-          <TableHead>{t('New Users')}</TableHead>
-          <TableHead>{t('Consume Requests')}</TableHead>
-          <TableHead>{t('Top-ups')}</TableHead>
-          <TableHead>{t('Paid Amount')}</TableHead>
+          <TableHead className='text-right'>{t('New Users')}</TableHead>
+          <TableHead className='text-right'>{t('Consume Requests')}</TableHead>
+          <TableHead className='text-right'>{t('Top-ups')}</TableHead>
+          <TableHead className='text-right'>{t('Paid Amount')}</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
@@ -160,7 +162,7 @@ function DailyTrendTable({ daily }: { daily: FunnelDailyRow[] }) {
             <TableRow key={r.date} className={empty ? 'text-muted-foreground' : ''}>
               <TableCell className='tabular-nums'>{r.date}</TableCell>
               <TableCell>
-                <div className='relative min-w-24 tabular-nums'>
+                <div className='relative min-w-24 tabular-nums text-right'>
                   <span
                     className='absolute inset-y-1 left-0 max-w-[calc(100%-40px)] rounded bg-teal-200/70 dark:bg-teal-900/50'
                     style={{ width: `${(r.new_users / maxDaily) * 100}%` }}
@@ -171,7 +173,7 @@ function DailyTrendTable({ daily }: { daily: FunnelDailyRow[] }) {
                 </div>
               </TableCell>
               <TableCell>
-                <div className='relative min-w-24 tabular-nums'>
+                <div className='relative min-w-24 tabular-nums text-right'>
                   <span
                     className='absolute inset-y-1 left-0 max-w-[calc(100%-40px)] rounded bg-amber-200/70 dark:bg-amber-900/50'
                     style={{ width: `${(r.consume_requests / maxDaily) * 100}%` }}
@@ -181,8 +183,8 @@ function DailyTrendTable({ daily }: { daily: FunnelDailyRow[] }) {
                   </span>
                 </div>
               </TableCell>
-              <TableCell className='tabular-nums'>{r.top_ups || ''}</TableCell>
-              <TableCell className='tabular-nums'>
+              <TableCell className='tabular-nums text-right'>{r.top_ups || ''}</TableCell>
+              <TableCell className='tabular-nums text-right'>
                 {r.paid_money ? formatMoney(r.paid_money) : ''}
               </TableCell>
             </TableRow>
@@ -236,7 +238,9 @@ export function Funnel() {
   }
 
   const statusLabel = (status: string) =>
-    PAY_STATUS_LABELS[status] ?? status
+    PAY_STATUS_LABEL_KEYS[status]
+      ? t(PAY_STATUS_LABEL_KEYS[status])
+      : status
 
   return (
     <SectionPageLayout>
@@ -274,6 +278,20 @@ export function Funnel() {
             </Alert>
           ) : null}
 
+          {!funnel && loading && !errorMsg ? (
+            <div className='grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-4'>
+              {Array.from({ length: 4 }).map((_, i) => (
+                <Card key={i}>
+                  <CardContent className='flex flex-col gap-3 pt-6'>
+                    <Skeleton className='h-4 w-24' />
+                    <Skeleton className='h-8 w-16' />
+                    <Skeleton className='h-3 w-32' />
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          ) : null}
+
           {funnel ? (
             <>
               <div className='grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-4'>
@@ -305,7 +323,6 @@ export function Funnel() {
                   hint={`${t('total paid')} ${formatMoney(funnel.paid_money)}`}
                 />
               </div>
-
               {insights.length > 0 ? (
                 <Alert>
                   <TrendingDown className='size-4' />
@@ -333,8 +350,8 @@ export function Funnel() {
                         <TableHeader>
                           <TableRow>
                             <TableHead>{t('Status')}</TableHead>
-                            <TableHead>{t('Orders')}</TableHead>
-                            <TableHead>{t('Amount')}</TableHead>
+                            <TableHead className='text-right'>{t('Orders')}</TableHead>
+                            <TableHead className='text-right'>{t('Amount')}</TableHead>
                           </TableRow>
                         </TableHeader>
                         <TableBody>
@@ -347,10 +364,10 @@ export function Funnel() {
                                   {statusLabel(s.status)}
                                 </span>
                               </TableCell>
-                              <TableCell className='tabular-nums'>
+                              <TableCell className='tabular-nums text-right'>
                                 {formatCount(s.count)}
                               </TableCell>
-                              <TableCell className='tabular-nums'>
+                              <TableCell className='tabular-nums text-right'>
                                 {formatMoney(s.money)}
                               </TableCell>
                             </TableRow>
@@ -381,7 +398,7 @@ export function Funnel() {
                           <TableRow>
                             <TableHead>{t('Time')}</TableHead>
                             <TableHead>{t('User')}</TableHead>
-                            <TableHead>{t('Amount')}</TableHead>
+                            <TableHead className='text-right'>{t('Amount')}</TableHead>
                             <TableHead>{t('Status')}</TableHead>
                             <TableHead>{t('Channel')}</TableHead>
                           </TableRow>
@@ -404,7 +421,7 @@ export function Funnel() {
                                   </div>
                                 ) : null}
                               </TableCell>
-                              <TableCell className='tabular-nums'>
+                              <TableCell className='tabular-nums text-right'>
                                 {formatMoney(topUp.money)}
                               </TableCell>
                               <TableCell>

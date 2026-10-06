@@ -18,10 +18,11 @@ For commercial licensing, please contact support@quantumnous.com
 */
 import { useQueryClient } from '@tanstack/react-query'
 import { type Table } from '@tanstack/react-table'
-import { Power, PowerOff, Tag, Trash2 } from 'lucide-react'
+import { Loader2, Power, PowerOff, Tag, Trash2 } from 'lucide-react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { ConfirmDialog } from '@/components/confirm-dialog'
 import { DataTableBulkActions as BulkActionsToolbar } from '@/components/data-table'
 import { Dialog } from '@/components/dialog'
 import { Button } from '@/components/ui/button'
@@ -59,6 +60,9 @@ export function DataTableBulkActions<TData>({
   const queryClient = useQueryClient()
   const [showTagDialog, setShowTagDialog] = useState(false)
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
+  const [showDisableConfirm, setShowDisableConfirm] = useState(false)
+  const [isDisablingAll, setIsDisablingAll] = useState(false)
+  const [isDeletingAll, setIsDeletingAll] = useState(false)
   const [tagValue, setTagValue] = useState('')
   const currentUser = useAuthStore((s) => s.auth.user)
   const canEditSensitive = hasPermission(
@@ -86,16 +90,27 @@ export function DataTableBulkActions<TData>({
     handleBatchEnable(selectedIds, queryClient, handleClearSelection)
   }
 
-  const handleDisableAll = () => {
-    handleBatchDisable(selectedIds, queryClient, handleClearSelection)
+  const handleConfirmDisableAll = async () => {
+    setIsDisablingAll(true)
+    try {
+      await handleBatchDisable(selectedIds, queryClient, handleClearSelection)
+    } finally {
+      setIsDisablingAll(false)
+      setShowDisableConfirm(false)
+    }
   }
 
-  const handleDeleteAll = () => {
+  const handleDeleteAll = async () => {
     if (!canEditSensitive) return
-    handleBatchDelete(selectedIds, queryClient, () => {
-      setShowDeleteConfirm(false)
-      handleClearSelection()
-    })
+    setIsDeletingAll(true)
+    try {
+      await handleBatchDelete(selectedIds, queryClient, () => {
+        setShowDeleteConfirm(false)
+        handleClearSelection()
+      })
+    } finally {
+      setIsDeletingAll(false)
+    }
   }
 
   const handleSetTag = () => {
@@ -136,7 +151,7 @@ export function DataTableBulkActions<TData>({
               <Button
                 variant='outline'
                 size='icon'
-                onClick={handleDisableAll}
+                onClick={() => setShowDisableConfirm(true)}
                 className='size-8'
                 aria-label={t('Disable selected channels')}
                 title={t('Disable selected channels')}
@@ -256,7 +271,10 @@ export function DataTableBulkActions<TData>({
       {/* Delete Confirmation Dialog */}
       <Dialog
         open={showDeleteConfirm}
-        onOpenChange={setShowDeleteConfirm}
+        onOpenChange={(open) => {
+          if (isDeletingAll) return
+          setShowDeleteConfirm(open)
+        }}
         title={t('Delete Channels?')}
         description={
           <>
@@ -271,21 +289,40 @@ export function DataTableBulkActions<TData>({
             <Button
               variant='outline'
               onClick={() => setShowDeleteConfirm(false)}
+              disabled={isDeletingAll}
             >
               {t('Cancel')}
             </Button>
             <Button
               variant='destructive'
               onClick={handleDeleteAll}
-              disabled={!canEditSensitive}
+              disabled={!canEditSensitive || isDeletingAll}
             >
-              {t('Delete')}
+              {isDeletingAll && <Loader2 className='mr-2 h-4 w-4 animate-spin' />}
+              {isDeletingAll ? t('Deleting...') : t('Delete')}
             </Button>
           </>
         }
       >
         {' '}
       </Dialog>
+
+      {/* Disable Confirmation Dialog */}
+      <ConfirmDialog
+        open={showDisableConfirm}
+        onOpenChange={(open) => {
+          if (isDisablingAll) return
+          setShowDisableConfirm(open)
+        }}
+        title={t('Disable Channels?')}
+        desc={t(
+          'Are you sure you want to disable {{count}} selected channels? They will immediately stop serving requests.',
+          { count: selectedIds.length }
+        )}
+        confirmText={isDisablingAll ? t('Processing...') : t('Disable')}
+        isLoading={isDisablingAll}
+        handleConfirm={handleConfirmDisableAll}
+      />
     </>
   )
 }

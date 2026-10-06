@@ -16,9 +16,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 For commercial licensing, please contact support@quantumnous.com
 */
-import i18next from 'i18next'
 import { useEffect, useState } from 'react'
-import { toast } from 'sonner'
 
 import { isHttpUrl } from '@/lib/content-format'
 
@@ -32,19 +30,21 @@ const STORAGE_KEY = 'home_page_content'
  * Supports both Markdown/HTML content and iframe URLs
  */
 export function useHomePageContent(): HomePageContentResult {
-  const [content, setContent] = useState<string>('')
+  // Initialize lazily from localStorage so returning visitors with a cached
+  // custom home page see it on first paint (no default-hero flash first).
+  const [content, setContent] = useState<string>(() => {
+    try {
+      return localStorage.getItem(STORAGE_KEY) ?? ''
+    } catch {
+      return ''
+    }
+  })
   const [isLoaded, setIsLoaded] = useState(false)
 
   useEffect(() => {
     let mounted = true
 
     const loadContent = async () => {
-      // Load from localStorage first for immediate display
-      const cached = localStorage.getItem(STORAGE_KEY)
-      if (cached && mounted) {
-        setContent(cached)
-      }
-
       try {
         const response = await getHomePageContent()
         const { success, data } = response
@@ -61,9 +61,11 @@ export function useHomePageContent(): HomePageContentResult {
         }
       } catch (error) {
         if (!mounted) return
+        // Fall back to the default landing page silently — the caller renders
+        // the default hero while loading, so a failed request must not block
+        // or nag the visitor with an error toast.
         // eslint-disable-next-line no-console
         console.error('Failed to load home page content:', error)
-        toast.error(i18next.t('Failed to load home page content'))
       } finally {
         if (mounted) {
           setIsLoaded(true)

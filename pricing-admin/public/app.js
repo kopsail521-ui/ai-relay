@@ -56,6 +56,11 @@ function filtered() {
 
 function render() {
   const rows = filtered();
+  if (!rows.length) {
+    tbody.innerHTML =
+      '<tr><td colspan="9" class="muted" style="text-align:center">无匹配模型，试试清除筛选</td></tr>';
+    return;
+  }
   tbody.innerHTML = rows
     .map((m) => {
       const isCall = m.kind === "image" || m.kind === "video";
@@ -101,6 +106,10 @@ function escapeHtml(s) {
 }
 
 async function refresh() {
+  tbody.innerHTML =
+    '<tr><td colspan="9" class="muted" style="text-align:center">加载中…</td></tr>'.repeat(
+      3
+    );
   const data = await api("/api/models");
   models = data.models || [];
   render();
@@ -108,6 +117,7 @@ async function refresh() {
 
 function openEdit(model) {
   editingId = model?.id || null;
+  document.getElementById("edit-error").textContent = "";
   document.getElementById("edit-title").textContent = model ? "编辑模型" : "新增模型";
   document.getElementById("edit-id").value = model?.id || "";
   document.getElementById("f-name").value = model?.name || "";
@@ -127,6 +137,17 @@ function openEdit(model) {
   dialog.showModal();
 }
 
+function readPrice(id, label) {
+  const raw = document.getElementById(id).value.trim();
+  const n = Number(raw);
+  if (raw === "" || Number.isNaN(n) || n < 0) {
+    alert(`「${label}」请填写不小于 0 的数字`);
+    document.getElementById(id).focus();
+    return null;
+  }
+  return n;
+}
+
 function collectForm() {
   const kind = document.getElementById("f-kind").value;
   const base = {
@@ -137,22 +158,31 @@ function collectForm() {
     enabled: document.getElementById("f-enabled").checked,
   };
   if (kind === "image" || kind === "video") {
-    return {
-      ...base,
-      costPerCall: Number(document.getElementById("f-cost-call").value || 0),
-      sellPerCall: Number(document.getElementById("f-sell-call").value || 0),
-      officialPerCall: Number(document.getElementById("f-official-call").value || 0),
-    };
+    const costPerCall = readPrice("f-cost-call", "成本 / 次");
+    const sellPerCall = readPrice("f-sell-call", "售价 / 次");
+    const officialPerCall = readPrice("f-official-call", "官方价 / 次");
+    if (costPerCall == null || sellPerCall == null || officialPerCall == null) {
+      return null;
+    }
+    return { ...base, costPerCall, sellPerCall, officialPerCall };
   }
-  return {
-    ...base,
-    costIn: Number(document.getElementById("f-cost-in").value || 0),
-    costOut: Number(document.getElementById("f-cost-out").value || 0),
-    sellIn: Number(document.getElementById("f-sell-in").value || 0),
-    sellOut: Number(document.getElementById("f-sell-out").value || 0),
-    officialIn: Number(document.getElementById("f-official-in").value || 0),
-    officialOut: Number(document.getElementById("f-official-out").value || 0),
-  };
+  const costIn = readPrice("f-cost-in", "成本 Input");
+  const costOut = readPrice("f-cost-out", "成本 Output");
+  const sellIn = readPrice("f-sell-in", "售价 Input");
+  const sellOut = readPrice("f-sell-out", "售价 Output");
+  const officialIn = readPrice("f-official-in", "官方价 Input");
+  const officialOut = readPrice("f-official-out", "官方价 Output");
+  if (
+    costIn == null ||
+    costOut == null ||
+    sellIn == null ||
+    sellOut == null ||
+    officialIn == null ||
+    officialOut == null
+  ) {
+    return null;
+  }
+  return { ...base, costIn, costOut, sellIn, sellOut, officialIn, officialOut };
 }
 
 document.getElementById("login-form").addEventListener("submit", async (e) => {
@@ -170,15 +200,24 @@ document.getElementById("login-form").addEventListener("submit", async (e) => {
 });
 
 document.getElementById("btn-logout").addEventListener("click", async () => {
-  await api("/api/logout", { method: "POST", body: "{}" });
+  try {
+    await api("/api/logout", { method: "POST", body: "{}" });
+  } catch (ex) {
+    alert(`退出失败：${ex.message}`);
+    return;
+  }
   showLogin(true);
 });
 
 document.getElementById("btn-add").addEventListener("click", () => openEdit(null));
 document.getElementById("btn-seed").addEventListener("click", async () => {
   if (!confirm("用示例数据覆盖当前全部模型？")) return;
-  await api("/api/seed", { method: "POST", body: "{}" });
-  await refresh();
+  try {
+    await api("/api/seed", { method: "POST", body: "{}" });
+    await refresh();
+  } catch (ex) {
+    alert(`恢复示例数据失败：${ex.message}`);
+  }
 });
 
 document.getElementById("filter-kind").addEventListener("change", render);
@@ -201,17 +240,30 @@ document.getElementById("btn-cancel").addEventListener("click", () => dialog.clo
 
 editForm.addEventListener("submit", async (e) => {
   e.preventDefault();
+  const err = document.getElementById("edit-error");
+  err.textContent = "";
   const payload = collectForm();
-  if (editingId) {
-    await api(`/api/models/${editingId}`, {
-      method: "PATCH",
-      body: JSON.stringify(payload),
-    });
-  } else {
-    await api("/api/models", { method: "POST", body: JSON.stringify(payload) });
+  if (payload == null) return;
+  const saveBtn = document.getElementById("btn-save");
+  saveBtn.disabled = true;
+  saveBtn.textContent = "保存中…";
+  try {
+    if (editingId) {
+      await api(`/api/models/${editingId}`, {
+        method: "PATCH",
+        body: JSON.stringify(payload),
+      });
+    } else {
+      await api("/api/models", { method: "POST", body: JSON.stringify(payload) });
+    }
+    dialog.close();
+    await refresh();
+  } catch (ex) {
+    err.textContent = `保存失败：${ex.message}`;
+  } finally {
+    saveBtn.disabled = false;
+    saveBtn.textContent = "保存";
   }
-  dialog.close();
-  await refresh();
 });
 
 tbody.addEventListener("click", async (e) => {
@@ -222,8 +274,12 @@ tbody.addEventListener("click", async (e) => {
   }
   if (delId) {
     if (!confirm("确认删除？")) return;
-    await api(`/api/models/${delId}`, { method: "DELETE" });
-    await refresh();
+    try {
+      await api(`/api/models/${delId}`, { method: "DELETE" });
+      await refresh();
+    } catch (ex) {
+      alert(`删除失败：${ex.message}`);
+    }
   }
 });
 
@@ -234,7 +290,10 @@ document.querySelectorAll(".tab").forEach((btn) => {
   btn.addEventListener("click", () => {
     document
       .querySelectorAll(".tab")
-      .forEach((b) => b.classList.toggle("active", b === btn));
+      .forEach((b) => {
+        b.classList.toggle("active", b === btn);
+        b.setAttribute("aria-selected", b === btn ? "true" : "false");
+      });
     const tab = btn.getAttribute("data-tab");
     document.getElementById("tab-pricing").classList.toggle("hidden", tab !== "pricing");
     document.getElementById("tab-funnel").classList.toggle("hidden", tab !== "funnel");
@@ -371,6 +430,7 @@ function renderFunnel(data) {
 
 async function loadFunnel() {
   const body = document.getElementById("funnel-body");
+  body.innerHTML = '<p class="muted" style="padding: 0 28px">加载中…</p>';
   try {
     const data = await api("/api/analytics/funnel");
     renderFunnel(data);

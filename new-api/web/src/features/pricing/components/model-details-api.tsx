@@ -74,6 +74,9 @@ const LANG_HIGHLIGHT: Record<Lang, BundledLanguage> = {
   javascript: 'javascript',
 }
 
+/** Environment variable all code samples read the API key from */
+const API_KEY_ENV = 'NEW_API_KEY'
+
 type SampleContext = {
   baseUrl: string
   apiKeyEnv: string
@@ -115,11 +118,13 @@ function buildChatSample(lang: Lang, ctx: SampleContext): string {
 
   if (lang === 'python') {
     return [
+      'import os',
+      '',
       'from openai import OpenAI',
       '',
       'client = OpenAI(',
       `    base_url="${ctx.baseUrl}/v1",`,
-      `    api_key="<YOUR_API_KEY>",`,
+      `    api_key=os.environ["${ctx.apiKeyEnv}"],`,
       ')',
       '',
       isResponses
@@ -182,11 +187,13 @@ function buildAnthropicSample(lang: Lang, ctx: SampleContext): string {
   }
   if (lang === 'python') {
     return [
+      'import os',
+      '',
       'import anthropic',
       '',
       'client = anthropic.Anthropic(',
       `    base_url="${ctx.baseUrl}",`,
-      `    api_key="<YOUR_API_KEY>",`,
+      `    api_key=os.environ["${ctx.apiKeyEnv}"],`,
       ')',
       '',
       `message = client.messages.create(`,
@@ -254,9 +261,11 @@ function buildGeminiSample(lang: Lang, ctx: SampleContext): string {
   }
   if (lang === 'python') {
     return [
+      'import os',
+      '',
       'import google.generativeai as genai',
       '',
-      `genai.configure(api_key="<YOUR_API_KEY>")`,
+      `genai.configure(api_key=os.environ["${ctx.apiKeyEnv}"])`,
       '',
       `model = genai.GenerativeModel("${ctx.modelName}")`,
       `response = model.generate_content("${userMessage}")`,
@@ -304,9 +313,11 @@ function buildEmbeddingSample(lang: Lang, ctx: SampleContext): string {
   }
   if (lang === 'python') {
     return [
+      'import os',
+      '',
       'from openai import OpenAI',
       '',
-      `client = OpenAI(base_url="${ctx.baseUrl}/v1", api_key="<YOUR_API_KEY>")`,
+      `client = OpenAI(base_url="${ctx.baseUrl}/v1", api_key=os.environ["${ctx.apiKeyEnv}"])`,
       '',
       'response = client.embeddings.create(',
       `    model="${ctx.modelName}",`,
@@ -370,9 +381,11 @@ function buildImageSample(lang: Lang, ctx: SampleContext): string {
   }
   if (lang === 'python') {
     return [
+      'import os',
+      '',
       'from openai import OpenAI',
       '',
-      `client = OpenAI(base_url="${ctx.baseUrl}/v1", api_key="<YOUR_API_KEY>")`,
+      `client = OpenAI(base_url="${ctx.baseUrl}/v1", api_key=os.environ["${ctx.apiKeyEnv}"])`,
       '',
       'response = client.images.generate(',
       `    model="${ctx.modelName}",`,
@@ -489,11 +502,12 @@ function CodeSamplesSection(props: {
 
   const code = buildSample(lang, activeEndpoint.type, {
     baseUrl,
-    apiKeyEnv: 'NEW_API_KEY',
+    apiKeyEnv: API_KEY_ENV,
     modelName: props.model.model_name || '',
     endpointType: activeEndpoint.type,
     endpointPath: activeEndpoint.path,
   })
+  const ctxEnvName = API_KEY_ENV
 
   return (
     <section>
@@ -537,11 +551,17 @@ function CodeSamplesSection(props: {
         </CodeBlock>
       </div>
 
-      <p className='text-muted-foreground mt-2 text-xs'>
-        {t('Replace')}{' '}
+      <p className='text-muted-foreground mt-2 text-xs leading-relaxed'>
+        {t('Code samples read the API key from the environment variable')}{' '}
         <code className='bg-muted rounded px-1 py-0.5 font-mono text-[11px]'>
-          {'<YOUR_API_KEY>'}
-        </code>{' '}
+          {ctxEnvName}
+        </code>
+        {'. '}
+        {t('Set it before running, e.g.')}{' '}
+        <code className='bg-muted rounded px-1 py-0.5 font-mono text-[11px]'>
+          export {ctxEnvName}=sk-...
+        </code>
+        {' — '}
         {t('with the API key from your token settings.')}
       </p>
     </section>

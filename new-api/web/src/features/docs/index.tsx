@@ -32,9 +32,10 @@ export function Docs() {
   const { resolvedTheme } = useTheme()
 
   usePageMeta({
-    title: 'KeyoAPI Documentation - OpenAI Compatible API',
-    description:
-      'Integration docs for KeyoAPI: authentication, endpoints, model catalog, pricing and SDK setup for Python, Node.js and Cursor.',
+    title: t('KeyoAPI Documentation - OpenAI Compatible API'),
+    description: t(
+      'Integration docs for KeyoAPI: authentication, endpoints, model catalog, pricing and SDK setup for Python, Node.js and Cursor.'
+    ),
     canonical: `${SITE_ORIGIN}/docs`,
   })
 

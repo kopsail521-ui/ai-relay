@@ -16,9 +16,11 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 For commercial licensing, please contact support@quantumnous.com
 */
+import { RotateCcw } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { Button } from '@/components/ui/button'
 import { IconBadge } from '@/components/ui/icon-badge'
 import { Skeleton } from '@/components/ui/skeleton'
 import { getUserQuotaDates } from '@/features/dashboard/api'
@@ -59,7 +61,7 @@ function formatStatNumber(value: number, locale: Intl.LocalesArgument) {
 }
 
 export function LogStatCards(props: LogStatCardsProps) {
-  const { i18n } = useTranslation()
+  const { t, i18n } = useTranslation()
   const statCardsConfig = useModelStatCardsConfig()
   const user = useAuthStore((state) => state.auth.user)
   const isAdmin = !!(user?.role && user.role >= 10)
@@ -72,6 +74,8 @@ export function LogStatCards(props: LogStatCardsProps) {
   const [error, setError] = useState(false)
 
   const [timeRangeMinutes, setTimeRangeMinutes] = useState(0)
+  // Bumped by the retry button to re-run the stats effect after a failure.
+  const [retryToken, setRetryToken] = useState(0)
 
   const { filters, onDataUpdate } = props
 
@@ -113,7 +117,7 @@ export function LogStatCards(props: LogStatCardsProps) {
     return () => {
       abortController.abort()
     }
-  }, [filters, isAdmin, onDataUpdate])
+  }, [filters, isAdmin, onDataUpdate, retryToken])
 
   const adaptedStats = {
     rpm: stats?.totalCount ?? 0,
@@ -161,8 +165,21 @@ export function LogStatCards(props: LogStatCardsProps) {
                 <div className='text-muted-foreground mt-1 font-mono text-base leading-tight font-bold tracking-tight tabular-nums sm:mt-2 sm:text-2xl sm:leading-normal'>
                   --
                 </div>
-                <div className='text-muted-foreground/40 mt-1 hidden text-xs md:block'>
-                  {it.desc}
+                <div className='mt-1 flex flex-col items-start gap-1'>
+                  <span className='text-destructive/80 text-xs'>
+                    {t('Loading failed')}
+                  </span>
+                  {idx === 0 && (
+                    <Button
+                      variant='ghost'
+                      size='sm'
+                      className='text-muted-foreground hover:text-foreground h-6 gap-1 px-1.5 text-xs'
+                      onClick={() => setRetryToken((token) => token + 1)}
+                    >
+                      <RotateCcw data-icon='inline-start' />
+                      {t('Retry')}
+                    </Button>
+                  )}
                 </div>
               </>
             )

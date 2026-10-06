@@ -64,3 +64,8 @@ export const DEFAULT_DISCOUNT_RATE = 1.0
  * Default minimum topup amount
  */
 export const DEFAULT_MIN_TOPUP = 1
+
+/**
+ * Upper bound for custom topup amounts when no server-side cap is configured
+ */
+export const MAX_TOPUP_AMOUNT = 100000

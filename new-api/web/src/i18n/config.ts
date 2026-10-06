@@ -20,7 +20,7 @@ import i18n from 'i18next'
 import LanguageDetector from 'i18next-browser-languagedetector'
 import { initReactI18next } from 'react-i18next'
 
-import { convertDetectedLanguage } from './languages'
+import { toIntlLocale, convertDetectedLanguage } from './languages'
 import en from './locales/en.json'
 import fr from './locales/fr.json'
 import ja from './locales/ja.json'
@@ -60,5 +60,13 @@ i18n
       convertDetectedLanguage,
     },
   })
+
+// Keep <html lang> in sync with the interface language for a11y / SEO.
+function syncDocumentLang(lng: string | undefined) {
+  document.documentElement.lang = toIntlLocale(lng ?? i18n.language) ?? 'en'
+}
+
+i18n.on('languageChanged', syncDocumentLang)
+syncDocumentLang(i18n.language)
 
 export default i18n

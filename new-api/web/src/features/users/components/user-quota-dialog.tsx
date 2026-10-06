@@ -51,6 +51,14 @@ export function UserQuotaDialog(props: UserQuotaDialogProps) {
 
   const amountValue = parseFloat(amount) || 0
   const quotaValue = parseQuotaFromDollars(Math.abs(amountValue))
+  // "add" always grows the quota; only "subtract" and a negative "override"
+  // can drive the resulting quota below zero.
+  const resultNegative =
+    mode === 'subtract'
+      ? props.currentQuota - quotaValue < 0
+      : mode === 'override'
+        ? amountValue < 0
+        : false
 
   const getPreviewText = () => {
     const current = props.currentQuota
@@ -70,8 +78,10 @@ export function UserQuotaDialog(props: UserQuotaDialogProps) {
   }
 
   const handleConfirm = async () => {
+    if (loading) return
     if (!amount && mode !== 'override') return
     if (quotaValue <= 0 && mode !== 'override') return
+    if (resultNegative) return
 
     setLoading(true)
     try {
@@ -119,10 +129,10 @@ export function UserQuotaDialog(props: UserQuotaDialogProps) {
       bodyClassName='space-y-4'
       footer={
         <>
-          <Button variant='outline' onClick={handleCancel}>
+          <Button variant='outline' onClick={handleCancel} disabled={loading}>
             {t('Cancel')}
           </Button>
-          <Button onClick={handleConfirm} disabled={loading}>
+          <Button onClick={handleConfirm} disabled={loading || resultNegative}>
             {loading ? t('Processing...') : t('Confirm')}
           </Button>
         </>
@@ -130,6 +140,11 @@ export function UserQuotaDialog(props: UserQuotaDialogProps) {
     >
       <div className='space-y-4'>
         <div className='text-muted-foreground text-sm'>{getPreviewText()}</div>
+        {resultNegative && (
+          <p className='text-destructive text-sm'>
+            {t('Resulting quota would be negative and cannot be applied')}
+          </p>
+        )}
 
         <div className='space-y-2'>
           <Label>{t('Mode')}</Label>
@@ -166,12 +181,21 @@ export function UserQuotaDialog(props: UserQuotaDialogProps) {
           <Input
             type='number'
             step={tokensOnly ? 1 : 0.000001}
-            min={mode === 'override' ? undefined : 0}
+            min={0}
             placeholder={placeholder}
             value={amount}
-            onChange={(e) => setAmount(e.target.value)}
+            disabled={loading}
+            onChange={(e) => {
+              const next = e.target.value
+              // Reject negative values instead of silently clamping them.
+              if (next !== '' && Number(next) < 0) return
+              setAmount(next)
+            }}
             onKeyDown={(e) => {
-              if (e.key === 'Enter') handleConfirm()
+              if (e.key === 'Enter') {
+                if (loading || resultNegative) return
+                handleConfirm()
+              }
             }}
           />
         </div>

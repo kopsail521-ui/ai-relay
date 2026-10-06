@@ -33,7 +33,8 @@ import { Skeleton } from '@/components/ui/skeleton'
 import { formatLocalCurrencyAmount } from '@/lib/currency'
 
 import { DEFAULT_DISCOUNT_RATE } from '../../constants'
-import { formatCurrency, getPaymentIcon } from '../../lib'
+import { usePaymentUnloadGuard } from '../../hooks'
+import { getPaymentIcon } from '../../lib'
 import type { PaymentMethod } from '../../types'
 
 interface PaymentConfirmDialogProps {
@@ -65,9 +66,25 @@ export function PaymentConfirmDialog({
   const hasDiscount = discountRate > 0 && discountRate < 1 && paymentAmount > 0
   const originalAmount = hasDiscount ? paymentAmount / discountRate : 0
   const discountAmount = hasDiscount ? originalAmount - paymentAmount : 0
+  const hasValidAmount = paymentAmount > 0
+  const amountDisplayOptions = {
+    digitsLarge: 2,
+    digitsSmall: 2,
+    abbreviate: false,
+  } as const
+
+  // Block accidental tab close / refresh while the payment request is in flight
+  usePaymentUnloadGuard(processing)
 
   return (
-    <AlertDialog open={open} onOpenChange={onOpenChange}>
+    <AlertDialog
+      open={open}
+      onOpenChange={(nextOpen) => {
+        // Esc / overlay clicks must not abandon a pending payment request
+        if (processing && !nextOpen) return
+        onOpenChange(nextOpen)
+      }}
+    >
       <AlertDialogContent className='max-sm:w-[calc(100vw-1.5rem)] sm:max-w-md'>
         <AlertDialogHeader>
           <AlertDialogTitle className='text-xl font-semibold'>
@@ -84,11 +101,10 @@ export function PaymentConfirmDialog({
               {t('Topup Amount')}
             </span>
             <span className='text-lg font-semibold'>
-              {formatLocalCurrencyAmount(topupAmount * usdExchangeRate, {
-                digitsLarge: 2,
-                digitsSmall: 2,
-                abbreviate: false,
-              })}
+              {formatLocalCurrencyAmount(
+                topupAmount * usdExchangeRate,
+                amountDisplayOptions
+              )}
             </span>
           </div>
 
@@ -98,14 +114,24 @@ export function PaymentConfirmDialog({
             </span>
             {calculating ? (
               <Skeleton className='h-6 w-24' />
+            ) : !hasValidAmount ? (
+              <span className='text-destructive text-sm' aria-live='polite'>
+                {t('Failed to calculate the payment amount. Please try again.')}
+              </span>
             ) : (
               <div className='flex items-baseline gap-2'>
                 <span className='text-2xl font-semibold'>
-                  {formatCurrency(paymentAmount)}
+                  {formatLocalCurrencyAmount(
+                    paymentAmount,
+                    amountDisplayOptions
+                  )}
                 </span>
                 {hasDiscount && (
                   <span className='text-muted-foreground text-sm line-through'>
-                    {formatCurrency(originalAmount)}
+                    {formatLocalCurrencyAmount(
+                      originalAmount,
+                      amountDisplayOptions
+                    )}
                   </span>
                 )}
               </div>
@@ -117,7 +143,10 @@ export function PaymentConfirmDialog({
               <div className='flex items-center justify-between text-sm'>
                 <span className='text-muted-foreground'>{t('You save')}</span>
                 <span className='font-semibold text-green-600'>
-                  {formatCurrency(discountAmount)}
+                  {formatLocalCurrencyAmount(
+                    discountAmount,
+                    amountDisplayOptions
+                  )}
                 </span>
               </div>
             </div>
@@ -145,7 +174,10 @@ export function PaymentConfirmDialog({
           <AlertDialogCancel disabled={processing}>
             {t('Cancel')}
           </AlertDialogCancel>
-          <AlertDialogAction onClick={onConfirm} disabled={processing}>
+          <AlertDialogAction
+            onClick={onConfirm}
+            disabled={processing || (!calculating && !hasValidAmount)}
+          >
             {processing && <Loader2 className='mr-2 h-4 w-4 animate-spin' />}
             {t('Confirm Payment')}
           </AlertDialogAction>

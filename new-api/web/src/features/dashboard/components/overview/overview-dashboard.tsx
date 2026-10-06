@@ -27,6 +27,8 @@ import {
   Circle,
   Copy,
   CreditCard,
+  Eye,
+  EyeOff,
   FileText,
   KeyRound,
   ListChecks,
@@ -47,6 +49,11 @@ import {
 } from '@/components/page-transition'
 import { Button } from '@/components/ui/button'
 import { IconBadge, type IconBadgeTone } from '@/components/ui/icon-badge'
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from '@/components/ui/tooltip'
 import { createApiKey, fetchTokenKey, getApiKeys } from '@/features/keys/api'
 import {
   STARTER_FREE_MODEL,
@@ -56,7 +63,6 @@ import {
   normalizeEndpoint,
   pickStarterModel,
 } from '@/features/dashboard/lib/starter-curl'
-import type { ApiKey } from '@/features/keys/types'
 import { useCopyToClipboard } from '@/hooks/use-copy-to-clipboard'
 import { getUserModels } from '@/lib/api'
 import { MOTION_TRANSITION } from '@/lib/motion'
@@ -103,6 +109,8 @@ interface StartStep {
   to: DashboardActionPath
   icon: LucideIcon
   completed: boolean
+  /** Optional pill shown next to the title (e.g. "Auto-created"). */
+  note?: string
 }
 
 interface QuickAction {
@@ -229,6 +237,11 @@ function StartStepItem(props: {
                 {props.index + 1}.
               </span>
               <span className='truncate'>{props.step.title}</span>
+              {props.step.note && (
+                <span className='bg-success/10 text-success shrink-0 rounded-md border border-success/30 px-1.5 py-0.5 text-[10px] font-medium'>
+                  {props.step.note}
+                </span>
+              )}
             </span>
             <span className='text-muted-foreground line-clamp-1 text-xs'>
               {props.step.description}
@@ -244,6 +257,9 @@ function StartStepItem(props: {
   )
 }
 
+/** Placeholder shown in the curl preview while the real key is hidden. */
+const MASKED_API_KEY = 'sk-****'
+
 function RequestPreview(props: {
   example: RequestExample
   signals: HeroSignal[]
@@ -252,6 +268,7 @@ function RequestPreview(props: {
   const shouldReduceMotion = useReducedMotion()
   const [isCopying, setIsCopying] = useState(false)
   const [resolvedKey, setResolvedKey] = useState<string | null>(null)
+  const [keyVisible, setKeyVisible] = useState(false)
   const { copyToClipboard } = useCopyToClipboard({ notify: false })
 
   useEffect(() => {
@@ -273,9 +290,11 @@ function RequestPreview(props: {
   }, [props.example.keyId])
 
   const displayApiKey = resolvedKey ?? props.example.displayKey
+  // The preview stays masked by default; the copy button always uses the real key.
+  const previewApiKey = keyVisible ? displayApiKey : MASKED_API_KEY
   const previewCurl = buildCurlCommand({
     endpoint: props.example.endpoint,
-    apiKey: displayApiKey,
+    apiKey: previewApiKey,
     model: props.example.model,
   })
   const previewLines = previewCurl.split('\n')
@@ -371,6 +390,29 @@ function RequestPreview(props: {
           <span className='bg-destructive size-2 rounded-full' />
           <span className='bg-warning size-2 rounded-full' />
           <span className='bg-success size-2 rounded-full' />
+          {props.example.ready && (
+            <Tooltip>
+              <TooltipTrigger
+                render={
+                  <button
+                    type='button'
+                    onClick={() => setKeyVisible((prev) => !prev)}
+                    aria-label={keyVisible ? t('Hide') : t('Show')}
+                    className='text-muted-foreground hover:text-foreground ml-auto rounded-md p-1 transition-colors outline-none focus-visible:ring-2'
+                  />
+                }
+              >
+                {keyVisible ? (
+                  <EyeOff className='size-3.5' />
+                ) : (
+                  <Eye className='size-3.5' />
+                )}
+              </TooltipTrigger>
+              <TooltipContent>
+                {keyVisible ? t('Hide') : t('Show')}
+              </TooltipContent>
+            </Tooltip>
+          )}
         </div>
         <div className='flex flex-col gap-1'>
           {previewLines.map((line, index) => (
@@ -468,6 +510,7 @@ export function OverviewDashboard() {
     boolean | null
   >(() => getSavedSetupGuideExpanded())
   const starterKeyAttemptedRef = useRef(false)
+  const [starterKeyAutoCreated, setStarterKeyAutoCreated] = useState(false)
 
   const requestCount = Number(user?.request_count ?? 0)
   const remainQuota = Number(user?.quota ?? 0)
@@ -511,8 +554,15 @@ export function OverviewDashboard() {
       }),
     onSuccess: (result) => {
       if (result.success) {
+        setStarterKeyAutoCreated(true)
+        toast.success(t('A starter API key has been created for you'))
         void queryClient.invalidateQueries({ queryKey: OVERVIEW_KEYS_QUERY_KEY })
+      } else {
+        toast.error(result.message || t('Failed to create starter API key'))
       }
+    },
+    onError: (error) => {
+      toast.error(error?.message || t('Failed to create starter API key'))
     },
   })
 
@@ -553,15 +603,20 @@ export function OverviewDashboard() {
     () => [
       {
         title: t('Create API Key'),
-        description: t('Create a key for your app or service'),
+        description: starterKeyAutoCreated
+          ? t(
+              'Auto-created with unlimited quota — manage it anytime in API Keys'
+            )
+          : t('Create a key for your app or service'),
         to: '/keys',
         icon: KeyRound,
         completed: Boolean(preferredKey),
+        note: starterKeyAutoCreated ? t('Auto-created') : undefined,
       },
       {
         title: t('Trial ready'),
         description: t(
-          'Free models and gift credits work without a recharge — copy the curl on the right'
+          'Free models need no recharge — top up anytime for more models'
         ),
         to: '/wallet',
         icon: CreditCard,
@@ -575,7 +630,7 @@ export function OverviewDashboard() {
         completed: requestCount > 0,
       },
     ],
-    [preferredKey, requestCount, t, trialReady]
+    [preferredKey, requestCount, starterKeyAutoCreated, t, trialReady]
   )
 
   const quickActions = useMemo<QuickAction[]>(

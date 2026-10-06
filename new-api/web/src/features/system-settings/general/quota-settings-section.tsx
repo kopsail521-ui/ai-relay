@@ -36,7 +36,6 @@ import { Input } from '@/components/ui/input'
 import { Switch } from '@/components/ui/switch'
 import { formatQuota } from '@/lib/format'
 
-import { FormDirtyIndicator } from '../components/form-dirty-indicator'
 import { FormNavigationGuard } from '../components/form-navigation-guard'
 import {
   SettingsForm,
@@ -46,8 +45,13 @@ import {
   SettingsFormGridItem,
 } from '../components/settings-form-layout'
 import { SettingsPageFormActions } from '../components/settings-page-context'
+import { SettingsSaveErrorAlert } from '../components/settings-save-error-alert'
 import { SettingsSection } from '../components/settings-section'
-import { useSettingsForm } from '../hooks/use-settings-form'
+import {
+  SettingsSaveError,
+  useSettingsForm,
+  type SettingsSaveFailure,
+} from '../hooks/use-settings-form'
 import { useUpdateOption } from '../hooks/use-update-option'
 
 const quotaSchema = z.object({
@@ -91,8 +95,14 @@ export function QuotaSettingsSection({
       onChange(Number.isNaN(value) ? '' : value)
     }
 
-  const { form, handleSubmit, isDirty, isSubmitting } =
-    useSettingsForm<QuotaFormValues>({
+  const {
+    form,
+    handleSubmit,
+    isDirty,
+    isSubmitting,
+    saveFailures,
+    dismissSaveFailures,
+  } = useSettingsForm<QuotaFormValues>({
       resolver: zodResolver(quotaSchema) as Resolver<
         QuotaFormValues,
         unknown,
@@ -100,11 +110,22 @@ export function QuotaSettingsSection({
       >,
       defaultValues,
       onSubmit: async (_data, changedFields) => {
+        const failures: SettingsSaveFailure[] = []
         for (const [key, value] of Object.entries(changedFields)) {
-          await updateOption.mutateAsync({
-            key,
-            value: value as string | number | boolean,
-          })
+          try {
+            await updateOption.mutateAsync({
+              key,
+              value: value as string | number | boolean,
+            })
+          } catch (error) {
+            failures.push({
+              key,
+              message: error instanceof Error ? error.message : undefined,
+            })
+          }
+        }
+        if (failures.length > 0) {
+          throw new SettingsSaveError(failures)
         }
       },
     })
@@ -112,6 +133,11 @@ export function QuotaSettingsSection({
   return (
     <SettingsSection title={t('Quota Settings')}>
       <FormNavigationGuard when={isDirty} />
+
+      <SettingsSaveErrorAlert
+        failures={saveFailures}
+        onDismiss={dismissSaveFailures}
+      />
 
       {!complianceConfirmed ? (
         <Alert variant='destructive'>
@@ -128,8 +154,8 @@ export function QuotaSettingsSection({
           <SettingsPageFormActions
             onSave={handleSubmit}
             isSaving={updateOption.isPending || isSubmitting}
+            isDirty={isDirty}
           />
-          <FormDirtyIndicator isDirty={isDirty} />
           <SettingsFormGrid>
             <FormField
               control={form.control}

@@ -33,7 +33,6 @@ import {
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 
-import { FormDirtyIndicator } from '../components/form-dirty-indicator'
 import { FormNavigationGuard } from '../components/form-navigation-guard'
 import {
   SettingsForm,
@@ -41,8 +40,13 @@ import {
   SettingsFormGridItem,
 } from '../components/settings-form-layout'
 import { SettingsPageFormActions } from '../components/settings-page-context'
+import { SettingsSaveErrorAlert } from '../components/settings-save-error-alert'
 import { SettingsSection } from '../components/settings-section'
-import { useSettingsForm } from '../hooks/use-settings-form'
+import {
+  SettingsSaveError,
+  useSettingsForm,
+  type SettingsSaveFailure,
+} from '../hooks/use-settings-form'
 import { useUpdateOption } from '../hooks/use-update-option'
 
 const _systemInfoSchema = z.object({
@@ -101,8 +105,15 @@ export function SystemInfoSection({ defaultValues }: SystemInfoSectionProps) {
     }),
   })
 
-  const { form, handleSubmit, handleReset, isDirty, isSubmitting } =
-    useSettingsForm<SystemInfoFormValues>({
+  const {
+    form,
+    handleSubmit,
+    handleReset,
+    isDirty,
+    isSubmitting,
+    saveFailures,
+    dismissSaveFailures,
+  } = useSettingsForm<SystemInfoFormValues>({
       resolver: zodResolver(systemInfoSchemaWithI18n) as Resolver<
         SystemInfoFormValues,
         unknown,
@@ -110,15 +121,26 @@ export function SystemInfoSection({ defaultValues }: SystemInfoSectionProps) {
       >,
       defaultValues: normalizedDefaults,
       onSubmit: async (_data, changedFields) => {
+        const failures: SettingsSaveFailure[] = []
         for (const [key, value] of Object.entries(changedFields)) {
           let v = normalizeValue(value)
           if (key === 'ServerAddress') {
             v = v.replace(/\/+$/, '')
           }
-          await updateOption.mutateAsync({
-            key,
-            value: v,
-          })
+          try {
+            await updateOption.mutateAsync({
+              key,
+              value: v,
+            })
+          } catch (error) {
+            failures.push({
+              key,
+              message: error instanceof Error ? error.message : undefined,
+            })
+          }
+        }
+        if (failures.length > 0) {
+          throw new SettingsSaveError(failures)
         }
       },
     })
@@ -128,6 +150,10 @@ export function SystemInfoSection({ defaultValues }: SystemInfoSectionProps) {
       <FormNavigationGuard when={isDirty} />
 
       <SettingsSection title={t('System Information')}>
+        <SettingsSaveErrorAlert
+          failures={saveFailures}
+          onDismiss={dismissSaveFailures}
+        />
         <Form {...form}>
           <SettingsForm onSubmit={handleSubmit}>
             <SettingsPageFormActions
@@ -135,8 +161,8 @@ export function SystemInfoSection({ defaultValues }: SystemInfoSectionProps) {
               onReset={handleReset}
               isSaving={isSubmitting || updateOption.isPending}
               isResetDisabled={!isDirty}
+              isDirty={isDirty}
             />
-            <FormDirtyIndicator isDirty={isDirty} />
             <SettingsFormGrid>
               <FormField
                 control={form.control}

@@ -87,6 +87,18 @@ export function PricingTable(props: PricingTableProps) {
     [onModelClick]
   )
 
+  // tr keeps its table semantics (no role override): keyboard users reach the
+  // row via tabIndex and activate it with Enter/Space, mirroring the click.
+  const handleRowKeyDown = useCallback(
+    (event: React.KeyboardEvent<HTMLTableRowElement>, model: PricingModel) => {
+      if (event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault()
+        onModelClick?.(model.model_name)
+      }
+    },
+    [onModelClick]
+  )
+
   return (
     <div className='space-y-4'>
       <DataTableView
@@ -103,8 +115,11 @@ export function PricingTable(props: PricingTableProps) {
           <DataTableRow
             key={row.id}
             row={row}
-            className='hover:bg-muted/30 cursor-pointer transition-colors'
+            className='hover:bg-muted/30 focus-visible:outline-ring cursor-pointer transition-colors focus-visible:outline-2 focus-visible:-outline-offset-2'
             onClick={() => handleRowClick(row.original)}
+            tabIndex={0}
+            aria-label={`${row.original.model_name} — ${t('View details')}`}
+            onKeyDown={(event) => handleRowKeyDown(event, row.original)}
           />
         )}
       />

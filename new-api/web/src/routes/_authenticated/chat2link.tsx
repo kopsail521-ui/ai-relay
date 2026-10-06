@@ -18,10 +18,11 @@ For commercial licensing, please contact support@quantumnous.com
 */
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import { Loader2 } from 'lucide-react'
-import { useEffect, useMemo } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 
+import { ConfirmDialog } from '@/components/confirm-dialog'
 import { useActiveChatKey } from '@/features/chat/hooks/use-active-chat-key'
 import { useChatPresets } from '@/features/chat/hooks/use-chat-presets'
 import { resolveChatUrl } from '@/features/chat/lib/chat-links'
@@ -34,6 +35,7 @@ function Chat2LinkPage() {
   const { t } = useTranslation()
   const navigate = useNavigate()
   const { chatPresets, serverAddress } = useChatPresets()
+  const [pendingUrl, setPendingUrl] = useState<string | null>(null)
 
   const firstWebPreset = useMemo(
     () => chatPresets.find((p) => p.type === 'web'),
@@ -70,8 +72,11 @@ function Chat2LinkPage() {
       serverAddress,
     })
 
+    // The URL carries the plaintext API key: never redirect without an
+    // explicit confirmation, otherwise the key silently lands in the
+    // third-party site's URL, logs and the browser history.
     if (url) {
-      window.location.href = url
+      setPendingUrl(url)
     }
   }, [
     firstWebPreset,
@@ -83,12 +88,41 @@ function Chat2LinkPage() {
     t,
   ])
 
+  const targetHost = useMemo(() => {
+    if (!pendingUrl) return ''
+    try {
+      return new URL(pendingUrl).hostname
+    } catch {
+      return ''
+    }
+  }, [pendingUrl])
+
   return (
-    <div className='flex h-full flex-col items-center justify-center gap-3'>
-      <Loader2 className='text-muted-foreground h-8 w-8 animate-spin' />
-      <p className='text-muted-foreground text-sm'>
-        {t('Redirecting to chat page...')}
-      </p>
-    </div>
+    <>
+      <div className='flex h-full flex-col items-center justify-center gap-3'>
+        <Loader2 className='text-muted-foreground h-8 w-8 animate-spin' />
+        <p className='text-muted-foreground text-sm'>
+          {t('Redirecting to chat page...')}
+        </p>
+      </div>
+      <ConfirmDialog
+        open={!!pendingUrl}
+        onOpenChange={(open) => {
+          if (!open) {
+            setPendingUrl(null)
+            navigate({ to: '/playground' })
+          }
+        }}
+        title={t('Share your API key with this site?')}
+        desc={t(
+          'The chat link contains your API key in plaintext. It will be sent to {{host}} and stored in your browser history. Anyone with this link can spend your quota.',
+          { host: targetHost || t('a third-party site') }
+        )}
+        confirmText={t('Continue')}
+        handleConfirm={() => {
+          if (pendingUrl) window.location.href = pendingUrl
+        }}
+      />
+    </>
   )
 }

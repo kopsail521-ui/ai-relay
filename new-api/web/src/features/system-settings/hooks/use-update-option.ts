@@ -23,6 +23,26 @@ import { toast } from 'sonner'
 import { updateSystemOption } from '../api'
 import type { UpdateOptionRequest } from '../types'
 
+/**
+ * Thrown when the option API responds with success:false, so callers using
+ * mutateAsync can detect the failure and keep their forms marked as unsaved.
+ */
+export class OptionUpdateError extends Error {
+  readonly optionKey: string
+
+  constructor(message: string, key: string) {
+    super(message)
+    this.name = 'OptionUpdateError'
+    this.optionKey = key
+  }
+}
+
+export function isOptionUpdateError(
+  error: unknown
+): error is OptionUpdateError {
+  return error instanceof OptionUpdateError
+}
+
 // Configuration keys that require status refresh
 const STATUS_RELATED_KEYS = new Set([
   'HeaderNavModules',
@@ -43,26 +63,31 @@ export function useUpdateOption() {
   const queryClient = useQueryClient()
 
   return useMutation({
-    mutationFn: (request: UpdateOptionRequest) => updateSystemOption(request),
-    onSuccess: (data, variables) => {
-      if (data.success) {
-        // Always refresh system-options
-        queryClient.invalidateQueries({ queryKey: ['system-options'] })
-
-        // If updating frontend-display-related config, also refresh status
-        if (STATUS_RELATED_KEYS.has(variables.key)) {
-          queryClient.invalidateQueries({ queryKey: ['status'] })
-          try {
-            window.localStorage.removeItem('status')
-          } catch {
-            /* empty */
-          }
-        }
-
-        toast.success(i18next.t('Setting updated successfully'))
-      } else {
-        toast.error(data.message || i18next.t('Failed to update setting'))
+    mutationFn: async (request: UpdateOptionRequest) => {
+      const data = await updateSystemOption(request)
+      if (!data.success) {
+        throw new OptionUpdateError(
+          data.message || i18next.t('Failed to update setting'),
+          request.key
+        )
       }
+      return data
+    },
+    onSuccess: (_data, variables) => {
+      // Always refresh system-options
+      queryClient.invalidateQueries({ queryKey: ['system-options'] })
+
+      // If updating frontend-display-related config, also refresh status
+      if (STATUS_RELATED_KEYS.has(variables.key)) {
+        queryClient.invalidateQueries({ queryKey: ['status'] })
+        try {
+          window.localStorage.removeItem('status')
+        } catch {
+          /* empty */
+        }
+      }
+
+      toast.success(i18next.t('Setting updated successfully'))
     },
     onError: (error: Error) => {
       toast.error(error.message || i18next.t('Failed to update setting'))

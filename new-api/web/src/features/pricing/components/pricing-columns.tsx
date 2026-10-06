@@ -108,9 +108,14 @@ export function usePricingColumns(
     // Price column
     {
       accessorKey: 'price',
-      meta: { label: t('Price') },
+      meta: {
+        label: t('Input / Output (per {{unit}})', { unit: tokenUnitLabel }),
+      },
       header: ({ column }) => (
-        <DataTableColumnHeader column={column} title={t('Price')} />
+        <DataTableColumnHeader
+          column={column}
+          title={t('Input / Output (per {{unit}})', { unit: tokenUnitLabel })}
+        />
       ),
       cell: ({ row }) => {
         const model = row.original
@@ -159,6 +164,9 @@ export function usePricingColumns(
                     {index > 0 && (
                       <span className='text-muted-foreground/40 mx-1'>/</span>
                     )}
+                    <span className='text-muted-foreground/70 text-[10px]'>
+                      {t(entry.shortLabel)}
+                    </span>{' '}
                     {stripTrailingZeros(entry.formatted)}
                   </span>
                 ))}
@@ -203,8 +211,14 @@ export function usePricingColumns(
           return (
             <div className='max-w-full min-w-0'>
               <span className='font-mono text-sm tabular-nums'>
+                <span className='text-muted-foreground/70 text-[10px]'>
+                  {t('Input')}
+                </span>{' '}
                 {inputPrice}
                 <span className='text-muted-foreground/40 mx-1'>/</span>
+                <span className='text-muted-foreground/70 text-[10px]'>
+                  {t('Output')}
+                </span>{' '}
                 {outputPrice}
               </span>
               <div className='text-muted-foreground/50 text-[10px]'>

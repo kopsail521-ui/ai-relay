@@ -24,10 +24,20 @@ import {
   ENDPOINT_TYPES,
 } from '../constants'
 import type { PricingModel } from '../types'
+import { getDynamicPricingTiers } from './dynamic-price'
+import { getDisplayGroupRatio } from './model-helpers'
 
 // ----------------------------------------------------------------------------
 // Filter Utilities
 // ----------------------------------------------------------------------------
+
+/**
+ * Normalize text for fault-tolerant search matching: lowercase and strip
+ * separators (- _ . whitespace) so "gpt4o" matches "gpt-4o".
+ */
+function normalizeForSearch(value: string): string {
+  return value.toLowerCase().replace(/[-_.\s]+/g, '')
+}
 
 /**
  * Filter models by search query
@@ -38,13 +48,13 @@ export function filterBySearch(
 ): PricingModel[] {
   if (!query) return models
 
-  const lowerQuery = query.toLowerCase()
-  return models.filter(
-    (m) =>
-      m.model_name?.toLowerCase().includes(lowerQuery) ||
-      m.description?.toLowerCase().includes(lowerQuery) ||
-      m.tags?.toLowerCase().includes(lowerQuery) ||
-      m.vendor_name?.toLowerCase().includes(lowerQuery)
+  const normalizedQuery = normalizeForSearch(query)
+  if (!normalizedQuery) return models
+
+  return models.filter((m) =>
+    [m.model_name, m.description, m.tags, m.vendor_name].some((target) =>
+      normalizeForSearch(target ?? '').includes(normalizedQuery)
+    )
   )
 }
 
@@ -113,10 +123,30 @@ export function filterByEndpointType(
 }
 
 /**
- * Get model price for sorting
+ * Get the sort key for price sorting: the USD input price per 1M tokens,
+ * derived from the same base as formatPrice (model_ratio × 2 × group ratio,
+ * completion_ratio does not apply to the input price). Dynamic tiered models
+ * use their first tier's input price with the same group ratio.
  */
-function getModelPrice(model: PricingModel): number {
-  return model.quota_type === 0 ? model.model_ratio : model.model_price || 0
+function getModelSortPrice(
+  model: PricingModel,
+  selectedGroup?: string
+): number {
+  const groupRatio = getDisplayGroupRatio(model, selectedGroup)
+
+  const dynamicTiers = getDynamicPricingTiers(model)
+  if (dynamicTiers.length > 0) {
+    const dynamicInput = Number(dynamicTiers[0]?.inputPrice)
+    if (Number.isFinite(dynamicInput) && dynamicInput > 0) {
+      return dynamicInput * groupRatio
+    }
+  }
+
+  const modelRatio = Number(model.model_ratio ?? 0)
+  if (!Number.isFinite(modelRatio)) {
+    return Number.POSITIVE_INFINITY
+  }
+  return modelRatio * 2 * groupRatio
 }
 
 /**
@@ -124,7 +154,8 @@ function getModelPrice(model: PricingModel): number {
  */
 export function sortModels(
   models: PricingModel[],
-  sortBy: string
+  sortBy: string,
+  selectedGroup?: string
 ): PricingModel[] {
   const sorted = [...models]
 
@@ -133,11 +164,26 @@ export function sortModels(
       // 保留 /api/pricing 返回顺序（代理层已按供应商固定序 + 同厂商新→旧）
       break
     case SORT_OPTIONS.PRICE_LOW:
-      sorted.sort((a, b) => getModelPrice(a) - getModelPrice(b))
-      break
-    case SORT_OPTIONS.PRICE_HIGH:
-      sorted.sort((a, b) => getModelPrice(b) - getModelPrice(a))
-      break
+    case SORT_OPTIONS.PRICE_HIGH: {
+      // 按次计费模型与 token 模型价格不可比，固定排在 token 模型之后
+      const tokenModels = sorted.filter(
+        (m) => m.quota_type !== QUOTA_TYPE_VALUES.REQUEST
+      )
+      const requestModels = sorted.filter(
+        (m) => m.quota_type === QUOTA_TYPE_VALUES.REQUEST
+      )
+      // Precompute keys: dynamic tiered models re-parse billing expressions
+      const priceKeys = new Map<PricingModel, number>()
+      for (const model of tokenModels) {
+        priceKeys.set(model, getModelSortPrice(model, selectedGroup))
+      }
+      tokenModels.sort((a, b) => {
+        const diff =
+          (priceKeys.get(a) ?? 0) - (priceKeys.get(b) ?? 0)
+        return sortBy === SORT_OPTIONS.PRICE_LOW ? diff : -diff
+      })
+      return [...tokenModels, ...requestModels]
+    }
   }
 
   return sorted
@@ -164,7 +210,7 @@ export function filterAndSortModels(
   result = filterByQuotaType(result, filters.quotaType)
   result = filterByEndpointType(result, filters.endpointType)
   result = filterByTag(result, filters.tag)
-  result = sortModels(result, filters.sortBy)
+  result = sortModels(result, filters.sortBy, filters.group)
 
   return result
 }

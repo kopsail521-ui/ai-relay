@@ -34,6 +34,7 @@ import {
   deleteDisabledChannels,
   fixChannelAbilities,
   editTagChannels,
+  getChannelTestTask,
   testAllChannels,
   updateAllChannelsBalance,
 } from '../api'
@@ -623,27 +624,128 @@ export async function handleFixAbilities(
 
 /**
  * Test all enabled channels
+ *
+ * The backend enqueues a channel_test system task; poll its progress and keep
+ * a loading toast alive (completed/total) until it settles, then summarize
+ * the success/failure counts and refresh the channel list.
  */
+const TEST_ALL_POLL_INTERVAL_MS = 3000
+const TEST_ALL_POLL_TIMEOUT_MS = 10 * 60 * 1000
+const TEST_ALL_MAX_CONSECUTIVE_POLL_ERRORS = 10
+
 export async function handleTestAllChannels(
   queryClient?: QueryClient,
   onSuccess?: () => void
 ): Promise<void> {
+  let activeToastId: ReturnType<typeof toast.loading> | undefined
   try {
     const response = await testAllChannels()
-    if (response.success) {
+    if (!response.success) {
+      toast.error(
+        response.message || i18next.t('Failed to start testing all channels')
+      )
+      return
+    }
+
+    queryClient?.invalidateQueries({ queryKey: channelsQueryKeys.lists() })
+    onSuccess?.()
+
+    const taskId = response.data?.task_id
+    if (!taskId) {
+      // Backend without a system task: the run is fire-and-forget.
       toast.success(
         i18next.t(
           'Testing all enabled channels started. Please refresh to see results.'
         )
       )
-      queryClient?.invalidateQueries({ queryKey: channelsQueryKeys.lists() })
-      onSuccess?.()
-    } else {
-      toast.error(
-        response.message || i18next.t('Failed to start testing all channels')
-      )
+      return
     }
+
+    const toastId = toast.loading(i18next.t('Testing all channels...'), {
+      description: i18next.t('{{completed}}/{{total}} completed', {
+        completed: 0,
+        total: 0,
+      }),
+    })
+    activeToastId = toastId
+
+    const finishTestAll = () => {
+      toast.dismiss(toastId)
+      queryClient?.invalidateQueries({ queryKey: channelsQueryKeys.lists() })
+    }
+
+    const maxPolls = Math.floor(
+      TEST_ALL_POLL_TIMEOUT_MS / TEST_ALL_POLL_INTERVAL_MS
+    )
+    let consecutiveErrors = 0
+
+    for (let poll = 0; poll < maxPolls; poll++) {
+      await new Promise((resolve) =>
+        window.setTimeout(resolve, TEST_ALL_POLL_INTERVAL_MS)
+      )
+
+      let task: Awaited<ReturnType<typeof getChannelTestTask>>['data'] | null =
+        null
+      try {
+        const taskResponse = await getChannelTestTask(taskId)
+        task = taskResponse.success ? (taskResponse.data ?? null) : null
+        if (!task) {
+          throw new Error(taskResponse.message || 'task not found')
+        }
+        consecutiveErrors = 0
+      } catch {
+        consecutiveErrors += 1
+        if (consecutiveErrors >= TEST_ALL_MAX_CONSECUTIVE_POLL_ERRORS) {
+          finishTestAll()
+          toast.error(i18next.t('Failed to test all channels'))
+          return
+        }
+        continue
+      }
+
+      const processed = task.state?.processed ?? 0
+      const total = task.state?.total ?? 0
+      toast.loading(i18next.t('Testing all channels...'), {
+        id: toastId,
+        description: i18next.t('{{completed}}/{{total}} completed', {
+          completed: processed,
+          total,
+        }),
+      })
+
+      if (task.status === 'succeeded') {
+        const succeeded = task.result?.succeeded ?? 0
+        const failed = task.result?.failed ?? 0
+        finishTestAll()
+        const summary = i18next.t(
+          'All channels tested: {{succeeded}} succeeded, {{failed}} failed',
+          { succeeded, failed }
+        )
+        if (failed > 0) {
+          toast.error(summary)
+        } else {
+          toast.success(summary)
+        }
+        return
+      }
+
+      if (task.status === 'failed') {
+        finishTestAll()
+        toast.error(task.error || i18next.t('Failed to test all channels'))
+        return
+      }
+    }
+
+    finishTestAll()
+    toast.info(
+      i18next.t(
+        'Test all channels is still running in the background. Refresh later to see the results.'
+      )
+    )
   } catch {
+    if (activeToastId !== undefined) {
+      toast.dismiss(activeToastId)
+    }
     toast.error(i18next.t('Failed to test all channels'))
   }
 }

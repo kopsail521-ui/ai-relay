@@ -54,9 +54,10 @@ export function RankingsHero(props: RankingsHeroProps) {
         </p>
       </div>
 
-      {/* Underline tabs for period — clean and unobtrusive. */}
+      {/* Underline toggle group for period — the content below is not a
+          single tabpanel, so expose these as pressed toggles, not tabs. */}
       <div
-        role='tablist'
+        role='group'
         aria-label={t('Period')}
         className='border-border/60 flex items-center border-b'
       >
@@ -65,9 +66,8 @@ export function RankingsHero(props: RankingsHeroProps) {
           return (
             <button
               key={p.id}
-              role='tab'
               type='button'
-              aria-selected={isActive}
+              aria-pressed={isActive}
               onClick={() => props.onPeriodChange(p.id)}
               className={cn(
                 'focus-visible:ring-ring/40 relative -mb-px rounded-sm px-3 py-2 text-sm font-medium transition-colors focus-visible:ring-2 focus-visible:outline-none',

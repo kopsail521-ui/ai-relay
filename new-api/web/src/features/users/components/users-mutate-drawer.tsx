@@ -24,6 +24,7 @@ import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 
+import { ConfirmDialog } from '@/components/confirm-dialog'
 import {
   SideDrawerSection,
   sideDrawerContentClassName,
@@ -110,6 +111,7 @@ export function UsersMutateDrawer({
   const currentUser = useAuthStore((s) => s.auth.user)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [quotaDialogOpen, setQuotaDialogOpen] = useState(false)
+  const [discardConfirmOpen, setDiscardConfirmOpen] = useState(false)
 
   // Fetch groups
   const { data: groupsData } = useQuery({
@@ -211,15 +213,30 @@ export function UsersMutateDrawer({
     triggerRefresh()
   }
 
+  const closeDrawer = () => {
+    onOpenChange(false)
+    form.reset()
+  }
+
   return (
     <>
       <Sheet
         open={open}
         onOpenChange={(v) => {
-          onOpenChange(v)
-          if (!v) {
-            form.reset()
+          if (!v && isSubmitting) {
+            // A save is in flight: never close (and reset) the form mid-request.
+            return
           }
+          if (!v && form.formState.isDirty) {
+            // The form has unsaved changes; ask before discarding them.
+            setDiscardConfirmOpen(true)
+            return
+          }
+          if (!v) {
+            closeDrawer()
+            return
+          }
+          onOpenChange(v)
         }}
       >
         <SheetContent
@@ -594,6 +611,21 @@ export function UsersMutateDrawer({
           onSuccess={refreshUserData}
         />
       )}
+
+      {/* Discard unsaved changes confirmation */}
+      <ConfirmDialog
+        open={discardConfirmOpen}
+        onOpenChange={setDiscardConfirmOpen}
+        title={t('Discard unsaved changes?')}
+        desc={t('You have unsaved changes. Closing now will discard them.')}
+        destructive
+        confirmText={t('Discard')}
+        cancelBtnText={t('Keep editing')}
+        handleConfirm={() => {
+          setDiscardConfirmOpen(false)
+          closeDrawer()
+        }}
+      />
     </>
   )
 }

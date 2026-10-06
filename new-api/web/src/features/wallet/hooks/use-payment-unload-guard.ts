@@ -16,15 +16,31 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 For commercial licensing, please contact support@quantumnous.com
 */
+import { useEffect } from 'react'
+
 // ============================================================================
-// Wallet Hooks Exports
+// Payment Unload Guard Hook
 // ============================================================================
 
-export * from './use-topup-info'
-export * from './use-payment'
-export * from './use-affiliate'
-export * from './use-redemption'
-export * from './use-creem-payment'
-export * from './use-waffo-payment'
-export * from './use-waffo-pancake-payment'
-export * from './use-payment-unload-guard'
+/**
+ * Block accidental page unload while a payment or redemption is in flight.
+ *
+ * Registers a native beforeunload guard while `active` is true and removes it
+ * as soon as the flow settles or the component unmounts, so closing the tab or
+ * refreshing mid-payment prompts the browser confirmation dialog.
+ */
+export function usePaymentUnloadGuard(active: boolean) {
+  useEffect(() => {
+    if (!active) return
+
+    const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+      e.preventDefault()
+      // Modern browsers ignore custom messages and show their own
+      e.returnValue = ''
+      return ''
+    }
+
+    window.addEventListener('beforeunload', handleBeforeUnload)
+    return () => window.removeEventListener('beforeunload', handleBeforeUnload)
+  }, [active])
+}

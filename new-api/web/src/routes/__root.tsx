@@ -81,6 +81,14 @@ function RootComponent() {
           if (currentSID) {
             clearAuthentication(false)
           }
+          // A stale token that fails refresh can re-emit this event on every
+          // boot and turn the hard reload into an infinite loop; only allow
+          // one session-sync reload per short window per tab.
+          const lastReloadAt = Number(
+            sessionStorage.getItem('auth-session-reload-at') || 0
+          )
+          if (Date.now() - lastReloadAt < 10_000) return
+          sessionStorage.setItem('auth-session-reload-at', String(Date.now()))
           window.location.reload()
           return
         }

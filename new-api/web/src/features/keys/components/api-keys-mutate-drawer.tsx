@@ -18,7 +18,7 @@ For commercial licensing, please contact support@quantumnous.com
 */
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useQuery } from '@tanstack/react-query'
-import { ChevronDown, KeyRound, Settings2, WalletCards } from 'lucide-react'
+import { Check, ChevronDown, KeyRound, Settings2, WalletCards } from 'lucide-react'
 import { useEffect, useMemo, useState } from 'react'
 import { useForm, type SubmitErrorHandler } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
@@ -110,6 +110,9 @@ export function ApiKeysMutateDrawer({
   const [initializedTarget, setInitializedTarget] = useState<string | null>(
     null
   )
+  // Number of keys created by the latest submit; non-null switches the drawer
+  // body to the success guide (the create API never returns the plaintext key).
+  const [createdCount, setCreatedCount] = useState<number | null>(null)
   const defaultUseAutoGroup = status?.default_use_auto_group === true
 
   // Fetch models
@@ -202,6 +205,9 @@ export function ApiKeysMutateDrawer({
   useEffect(() => {
     if (!open) {
       setInitializedTarget(null)
+      // Buttons close the drawer via onOpenChange directly, which does not
+      // pass through the Sheet's own close handler — reset here as well.
+      setCreatedCount(null)
       return
     }
     if (
@@ -321,8 +327,11 @@ export function ApiKeysMutateDrawer({
               count: successCount,
             })
           )
-          onOpenChange(false)
+          // Refresh the table behind the drawer, then show the success guide
+          // instead of closing silently — the API never returns the plaintext
+          // key, so point the user at the key column in the table.
           triggerRefresh()
+          setCreatedCount(successCount)
         }
       }
     } catch {
@@ -367,6 +376,7 @@ export function ApiKeysMutateDrawer({
         onOpenChange(v)
         if (!v) {
           form.reset()
+          setCreatedCount(null)
         }
       }}
     >
@@ -383,13 +393,41 @@ export function ApiKeysMutateDrawer({
               : t('Add a new API key by providing necessary info.')}
           </SheetDescription>
         </SheetHeader>
+        {createdCount !== null && (
+          <div className='flex min-h-0 flex-1 flex-col items-center justify-center gap-4 px-6 py-10 text-center'>
+            <span className='bg-success/10 text-success flex size-12 shrink-0 items-center justify-center rounded-full border border-success/30'>
+              <Check className='size-6' aria-hidden='true' />
+            </span>
+            <div className='text-base font-semibold'>
+              {t('Successfully created {{count}} API Key(s)', {
+                count: createdCount,
+              })}
+            </div>
+            <p className='text-muted-foreground max-w-sm text-sm leading-relaxed'>
+              {t(
+                'The full key is not shown here. Click the key column in the table below to view or copy it.'
+              )}
+            </p>
+            <Button
+              variant='outline'
+              onClick={() => onOpenChange(false)}
+              className='w-full sm:w-auto'
+            >
+              <KeyRound data-icon='inline-start' />
+              {t('View in API Keys table')}
+            </Button>
+          </div>
+        )}
         <Form {...form}>
           <form
             id='api-key-form'
             onSubmit={form.handleSubmit(onSubmit, onInvalid)}
             aria-busy={!isFormInitialized}
             inert={!isFormInitialized || isSubmitting ? true : undefined}
-            className={sideDrawerFormClassName('gap-5')}
+            className={cn(
+              sideDrawerFormClassName('gap-5'),
+              createdCount !== null && 'hidden'
+            )}
           >
             <SideDrawerSection>
               <SideDrawerSectionHeader
@@ -751,19 +789,32 @@ export function ApiKeysMutateDrawer({
           </form>
         </Form>
         <SheetFooter className={sideDrawerFooterClassName()}>
-          <SheetClose
-            render={<Button variant='outline' className='w-full sm:w-auto' />}
-          >
-            {t('Close')}
-          </SheetClose>
-          <Button
-            type='button'
-            onClick={form.handleSubmit(onSubmit, onInvalid)}
-            disabled={!isFormInitialized || isSubmitting}
-            className='w-full sm:w-auto'
-          >
-            {isSubmitting ? t('Saving...') : t('Save changes')}
-          </Button>
+          {createdCount !== null ? (
+            <Button
+              onClick={() => onOpenChange(false)}
+              className='w-full sm:w-auto'
+            >
+              {t('Done')}
+            </Button>
+          ) : (
+            <>
+              <SheetClose
+                render={
+                  <Button variant='outline' className='w-full sm:w-auto' />
+                }
+              >
+                {t('Close')}
+              </SheetClose>
+              <Button
+                type='button'
+                onClick={form.handleSubmit(onSubmit, onInvalid)}
+                disabled={!isFormInitialized || isSubmitting}
+                className='w-full sm:w-auto'
+              >
+                {isSubmitting ? t('Saving...') : t('Save changes')}
+              </Button>
+            </>
+          )}
         </SheetFooter>
       </SheetContent>
     </Sheet>

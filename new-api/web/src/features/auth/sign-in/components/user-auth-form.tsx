@@ -373,14 +373,6 @@ export function UserAuthForm({
         className={cn('grid gap-4', className)}
         {...props}
       >
-        <LegalConsent
-          status={status}
-          checked={agreedToLegal}
-          onCheckedChange={setAgreedToLegal}
-        />
-
-        {hasAlternativeLogin && alternativeLoginMethods}
-
         {passwordLoginEnabled && (
           <>
             {/* Username Field */}
@@ -393,6 +385,7 @@ export function UserAuthForm({
                   <FormControl>
                     <Input
                       placeholder={t('Enter your username or email')}
+                      autoComplete='username'
                       {...field}
                     />
                   </FormControl>
@@ -411,6 +404,7 @@ export function UserAuthForm({
                   <FormControl>
                     <PasswordInput
                       placeholder={t('Enter password')}
+                      autoComplete='current-password'
                       {...field}
                     />
                   </FormControl>
@@ -424,7 +418,17 @@ export function UserAuthForm({
                 </FormItem>
               )}
             />
+          </>
+        )}
 
+        <LegalConsent
+          status={status}
+          checked={agreedToLegal}
+          onCheckedChange={setAgreedToLegal}
+        />
+
+        {passwordLoginEnabled && (
+          <>
             {/* Submit Button */}
             <Button
               type='submit'
@@ -434,6 +438,12 @@ export function UserAuthForm({
               {isLoading ? <Loader2 className='animate-spin' /> : <LogIn />}
               {t('Sign in')}
             </Button>
+
+            {requiresLegalConsent && !agreedToLegal && (
+              <p className='text-muted-foreground -mt-2 text-center text-xs'>
+                {t('Please agree to the legal terms first')}
+              </p>
+            )}
 
             {/* Turnstile */}
             {isTurnstileEnabled && (
@@ -448,6 +458,8 @@ export function UserAuthForm({
             )}
           </>
         )}
+
+        {hasAlternativeLogin && alternativeLoginMethods}
       </form>
 
       {hasWeChatLogin && (

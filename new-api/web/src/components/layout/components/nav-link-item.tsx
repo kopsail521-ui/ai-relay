@@ -33,7 +33,7 @@ interface NavLinkItemProps {
  */
 export function NavLinkItem({ link, className }: NavLinkItemProps) {
   const linkClassName = cn(
-    'text-muted-foreground hover:text-foreground transition-colors',
+    'text-muted-foreground hover:text-foreground transition-colors data-[status=active]:text-foreground data-[status=active]:font-medium',
     link.disabled && 'pointer-events-none opacity-50',
     className
   )

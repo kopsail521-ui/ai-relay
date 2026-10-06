@@ -17,7 +17,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 For commercial licensing, please contact support@quantumnous.com
 */
 import i18next from 'i18next'
-import { useEffect, useMemo, useRef } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import {
   useForm,
   type UseFormProps,
@@ -26,9 +26,59 @@ import {
 } from 'react-hook-form'
 import { toast } from 'sonner'
 
+import { isOptionUpdateError } from './use-update-option'
+
 type SettingsFormOptions<T extends FieldValues> = UseFormProps<T> & {
   onSubmit: (data: T, changedFields: Record<string, unknown>) => Promise<void>
   compareValues?: (a: unknown, b: unknown) => boolean
+}
+
+/** One option key that failed to persist, with the API error message. */
+export type SettingsSaveFailure = {
+  key: string
+  message?: string
+}
+
+/**
+ * Aggregate error thrown by an onSubmit loop that keeps iterating after a
+ * failed key, so the form can list every failed item at once.
+ */
+export class SettingsSaveError extends Error {
+  readonly failures: SettingsSaveFailure[]
+
+  constructor(failures: SettingsSaveFailure[]) {
+    super(
+      failures
+        .map((failure) => `${failure.key}: ${failure.message ?? ''}`.trim())
+        .join('\n')
+    )
+    this.name = 'SettingsSaveError'
+    this.failures = failures
+  }
+}
+
+export function isSettingsSaveError(
+  error: unknown
+): error is SettingsSaveError {
+  return error instanceof SettingsSaveError
+}
+
+function toSettingsSaveFailures(error: unknown): SettingsSaveFailure[] {
+  if (isSettingsSaveError(error)) {
+    return error.failures
+  }
+  if (isOptionUpdateError(error)) {
+    return [{ key: error.optionKey, message: error.message }]
+  }
+  return [
+    {
+      key: '',
+      message:
+        error instanceof Error
+          ? error.message
+          : i18next.t('Failed to update setting'),
+    },
+  ]
 }
 
 function isPlainObject(value: unknown): value is Record<string, unknown> {
@@ -195,6 +245,8 @@ export function useSettingsForm<T extends FieldValues>({
 
   const form = useForm<T>({ ...formOptions, defaultValues: expandedDefaults })
 
+  const [saveFailures, setSaveFailures] = useState<SettingsSaveFailure[]>([])
+
   const defaultValuesRef = useRef<T>((expandedDefaults ?? ({} as T)) as T)
   const baselineRef = useRef<Record<string, unknown>>(
     flattenValues((expandedDefaults ?? ({} as T)) as T)
@@ -261,13 +313,26 @@ export function useSettingsForm<T extends FieldValues>({
       {}
     )
 
-    await onSubmit(data, changedFields)
+    try {
+      await onSubmit(data, changedFields)
+    } catch (error) {
+      // Keep the form dirty and the baseline untouched so the failed changes
+      // are still visible as unsaved and can be retried after fixing.
+      setSaveFailures(toSettingsSaveFailures(error))
+      return
+    }
+
+    setSaveFailures([])
 
     const flattenedValues = flattenValues(data)
     baselineRef.current = flattenedValues
     defaultValuesRef.current = data
     serializedDefaultsRef.current = JSON.stringify(flattenedValues)
     form.reset(data)
+  }
+
+  const dismissSaveFailures = () => {
+    setSaveFailures([])
   }
 
   const handleReset = () => {
@@ -282,5 +347,7 @@ export function useSettingsForm<T extends FieldValues>({
     handleReset,
     isDirty: form.formState.isDirty,
     isSubmitting: form.formState.isSubmitting,
+    saveFailures,
+    dismissSaveFailures,
   }
 }

@@ -7,7 +7,7 @@ import {
   INTEGRATION_PAGES,
   INTEGRATION_SLUGS,
 } from '@/features/seo-pages/content'
-import { SeoContentPage, SeoIndexPage } from '@/features/seo-pages'
+import { SeoContentPage } from '@/features/seo-pages'
 
 export const Route = createFileRoute('/integrations/$slug/')({
   beforeLoad: ({ params }) => {

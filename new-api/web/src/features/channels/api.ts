@@ -558,13 +558,52 @@ export async function deleteOllamaModel(params: {
 }
 
 /**
- * Test all enabled channels
+ * Test all enabled channels. The backend enqueues a channel_test system task
+ * and returns its task id so progress can be polled.
  */
-export async function testAllChannels(): Promise<{
+export type TestAllChannelsResponse = {
   success: boolean
   message?: string
-}> {
+  data?: {
+    task_id?: string
+    status?: string
+  }
+}
+
+export async function testAllChannels(): Promise<TestAllChannelsResponse> {
   const res = await api.get('/api/channel/test', channelActionConfig())
+  return res.data
+}
+
+export type ChannelTestTaskResponse = {
+  success: boolean
+  message?: string
+  data?: {
+    task_id?: string
+    status?: string
+    error?: string
+    state?: {
+      processed?: number
+      total?: number
+      progress?: number
+    }
+    result?: {
+      tested?: number
+      succeeded?: number
+      failed?: number
+      disabled?: number
+      enabled?: number
+    }
+  }
+}
+
+/**
+ * Poll a channel_test system task started by testAllChannels
+ */
+export async function getChannelTestTask(
+  taskId: string
+): Promise<ChannelTestTaskResponse> {
+  const res = await api.get(`/api/system-task/${taskId}`, channelActionConfig())
   return res.data
 }
 

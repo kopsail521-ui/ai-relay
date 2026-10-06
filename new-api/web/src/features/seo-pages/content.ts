@@ -89,7 +89,7 @@ const completion = await client.chat.completions.create({
     relatedLinks: [
       { label: 'Python integration', href: '/integrations/python' },
       { label: 'OpenAI SDK guide', href: '/integrations/openai-sdk' },
-      { label: 'Model catalog', href: '/pricing' },
+      { label: 'Browse models', href: '/pricing' },
     ],
   },
   cursor: {
@@ -178,7 +178,7 @@ Authorization: Bearer YOUR_KEYOAPI_KEY`,
     relatedLinks: [
       { label: 'Python', href: '/integrations/python' },
       { label: 'Node.js', href: '/integrations/nodejs' },
-      { label: 'Model catalog', href: '/pricing' },
+      { label: 'Browse models', href: '/pricing' },
     ],
   },
 }

@@ -157,7 +157,9 @@ export function useApiKeysColumns(now: number): ColumnDef<ApiKey>[] {
 
         return (
           <Tooltip>
-            <TooltipTrigger render={<div className='w-[150px] space-y-1' />}>
+            <TooltipTrigger
+              render={<div className='ml-auto w-[150px] space-y-1' />}
+            >
               <div className='flex justify-between text-xs'>
                 <span className='font-medium tabular-nums'>
                   {formatQuota(remaining)}

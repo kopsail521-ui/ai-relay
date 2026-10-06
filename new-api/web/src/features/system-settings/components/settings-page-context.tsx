@@ -110,6 +110,19 @@ type SettingsPageFormActionsProps = {
   resetLabel?: string
   resetVariant?: ComponentProps<typeof Button>['variant']
   saveButtonRef?: RefObject<HTMLButtonElement | null>
+  /** When provided, shows an "Unsaved changes" badge next to the save button. */
+  isDirty?: boolean
+}
+
+function UnsavedChangesBadge() {
+  const { t } = useTranslation()
+
+  return (
+    <span className='inline-flex h-5 items-center gap-1.5 rounded-full bg-warning/10 px-2 text-[11px] font-medium whitespace-nowrap text-warning ring-1 ring-warning/20 ring-inset'>
+      <span className='size-1.5 rounded-full bg-warning' />
+      {t('Unsaved changes')}
+    </span>
+  )
 }
 
 export function SettingsPageFormActions(props: SettingsPageFormActionsProps) {
@@ -120,6 +133,7 @@ export function SettingsPageFormActions(props: SettingsPageFormActionsProps) {
 
   return (
     <SettingsPageActionsPortal>
+      {props.isDirty && <UnsavedChangesBadge />}
       {props.onReset && (
         <Button
           type='button'

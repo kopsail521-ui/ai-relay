@@ -85,6 +85,9 @@ export function DataTableRowActions({ row }: DataTableRowActionsProps) {
   const queryClient = useQueryClient()
   const currentUser = useAuthStore((s) => s.auth.user)
   const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false)
+  const [isDeleting, setIsDeleting] = useState(false)
+  const [disableConfirmOpen, setDisableConfirmOpen] = useState(false)
+  const [isDisabling, setIsDisabling] = useState(false)
   const [isTesting, setIsTesting] = useState(false)
   const [isTogglingStatus, setIsTogglingStatus] = useState(false)
 
@@ -147,11 +150,38 @@ export function DataTableRowActions({ row }: DataTableRowActionsProps) {
     e?: React.MouseEvent<HTMLButtonElement>
   ) => {
     e?.stopPropagation()
+    // Disabling takes the channel out of serving immediately, so confirm it
+    // first. Enabling is a low-risk recovery action and runs directly.
+    if (isEnabled) {
+      setDisableConfirmOpen(true)
+      return
+    }
     setIsTogglingStatus(true)
     try {
       await handleToggleChannelStatus(channel.id, channel.status, queryClient)
     } finally {
       setIsTogglingStatus(false)
+    }
+  }
+
+  const handleConfirmDisable = async () => {
+    setIsDisabling(true)
+    try {
+      await handleToggleChannelStatus(channel.id, channel.status, queryClient)
+      setDisableConfirmOpen(false)
+    } finally {
+      setIsDisabling(false)
+    }
+  }
+
+  const handleConfirmDelete = async () => {
+    if (!canEditSensitive) return
+    setIsDeleting(true)
+    try {
+      await handleDeleteChannel(channel.id, queryClient)
+      setDeleteConfirmOpen(false)
+    } finally {
+      setIsDeleting(false)
     }
   }
 
@@ -384,19 +414,35 @@ export function DataTableRowActions({ row }: DataTableRowActionsProps) {
 
       <ConfirmDialog
         open={deleteConfirmOpen}
-        onOpenChange={setDeleteConfirmOpen}
+        onOpenChange={(open) => {
+          if (isDeleting) return
+          setDeleteConfirmOpen(open)
+        }}
         title={t('Delete Channel')}
         desc={t(
           'Are you sure you want to delete channel "{{name}}"? This action cannot be undone.',
           { name: channel.name }
         )}
-        confirmText={t('Delete')}
+        confirmText={isDeleting ? t('Deleting...') : t('Delete')}
         destructive
-        handleConfirm={() => {
-          if (!canEditSensitive) return
-          handleDeleteChannel(channel.id, queryClient)
-          setDeleteConfirmOpen(false)
+        isLoading={isDeleting}
+        handleConfirm={handleConfirmDelete}
+      />
+
+      <ConfirmDialog
+        open={disableConfirmOpen}
+        onOpenChange={(open) => {
+          if (isDisabling) return
+          setDisableConfirmOpen(open)
         }}
+        title={t('Disable Channel')}
+        desc={t(
+          'Are you sure you want to disable channel "{{name}}"? The channel will immediately stop serving requests.',
+          { name: channel.name }
+        )}
+        confirmText={isDisabling ? t('Processing...') : t('Disable')}
+        isLoading={isDisabling}
+        handleConfirm={handleConfirmDisable}
       />
     </div>
   )

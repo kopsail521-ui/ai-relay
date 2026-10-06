@@ -268,6 +268,12 @@ export function Pricing() {
             </main>
           </div>
 
+          <p className='text-muted-foreground/60 mx-auto mt-4 max-w-2xl text-center text-xs leading-relaxed'>
+            {t(
+              'Displayed price = base price × group ratio. Standard shows the official list price, Recharge shows what you actually pay after the recharge discount.'
+            )}
+          </p>
+
           {selectedModel && (
             <ModelDetailsDrawer
               open={Boolean(selectedModel)}

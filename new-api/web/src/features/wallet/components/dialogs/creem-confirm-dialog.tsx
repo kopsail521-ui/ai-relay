@@ -23,6 +23,7 @@ import { Dialog } from '@/components/dialog'
 import { Button } from '@/components/ui/button'
 import { formatNumber } from '@/lib/format'
 
+import { usePaymentUnloadGuard } from '../../hooks'
 import { formatCreemPrice } from '../../lib/format'
 import type { CreemProduct } from '../../types'
 
@@ -43,12 +44,19 @@ export function CreemConfirmDialog({
 }: CreemConfirmDialogProps) {
   const { t } = useTranslation()
 
+  // Block accidental tab close / refresh while the purchase is in flight
+  usePaymentUnloadGuard(processing)
+
   if (!product) return null
 
   return (
     <Dialog
       open={open}
-      onOpenChange={onOpenChange}
+      onOpenChange={(nextOpen) => {
+        // Esc / overlay clicks must not abandon a pending purchase request
+        if (processing && !nextOpen) return
+        onOpenChange(nextOpen)
+      }}
       title={t('Confirm Creem Purchase')}
       description={t('Review your purchase details before proceeding.')}
       contentClassName='max-sm:w-[calc(100vw-1.5rem)] sm:max-w-[425px]'

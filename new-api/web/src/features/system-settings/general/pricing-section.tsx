@@ -42,7 +42,6 @@ import {
 import { Switch } from '@/components/ui/switch'
 import { DEFAULT_CURRENCY_CONFIG } from '@/stores/system-config-store'
 
-import { FormDirtyIndicator } from '../components/form-dirty-indicator'
 import { FormNavigationGuard } from '../components/form-navigation-guard'
 import {
   SettingsForm,
@@ -50,8 +49,13 @@ import {
   SettingsSwitchItem,
 } from '../components/settings-form-layout'
 import { SettingsPageFormActions } from '../components/settings-page-context'
+import { SettingsSaveErrorAlert } from '../components/settings-save-error-alert'
 import { SettingsSection } from '../components/settings-section'
-import { useSettingsForm } from '../hooks/use-settings-form'
+import {
+  SettingsSaveError,
+  useSettingsForm,
+  type SettingsSaveFailure,
+} from '../hooks/use-settings-form'
 import { useUpdateOption } from '../hooks/use-update-option'
 import { safeNumberFieldProps } from '../utils/numeric-field'
 
@@ -107,8 +111,15 @@ export function PricingSection({ defaultValues }: PricingSectionProps) {
 
   const pricingSchema = createPricingSchema(t)
 
-  const { form, handleSubmit, handleReset, isDirty, isSubmitting } =
-    useSettingsForm<PricingFormValues>({
+  const {
+    form,
+    handleSubmit,
+    handleReset,
+    isDirty,
+    isSubmitting,
+    saveFailures,
+    dismissSaveFailures,
+  } = useSettingsForm<PricingFormValues>({
       resolver: zodResolver(pricingSchema) as Resolver<
         PricingFormValues,
         unknown,
@@ -116,6 +127,7 @@ export function PricingSection({ defaultValues }: PricingSectionProps) {
       >,
       defaultValues,
       onSubmit: async (_data, changedFields) => {
+        const failures: SettingsSaveFailure[] = []
         for (const [key, value] of Object.entries(changedFields)) {
           if (value === undefined || value === null) continue
           if (typeof value === 'object') continue
@@ -128,10 +140,20 @@ export function PricingSection({ defaultValues }: PricingSectionProps) {
             serialized = Number.isFinite(value) ? String(value) : '0'
           }
 
-          await updateOption.mutateAsync({
-            key,
-            value: serialized,
-          })
+          try {
+            await updateOption.mutateAsync({
+              key,
+              value: serialized,
+            })
+          } catch (error) {
+            failures.push({
+              key,
+              message: error instanceof Error ? error.message : undefined,
+            })
+          }
+        }
+        if (failures.length > 0) {
+          throw new SettingsSaveError(failures)
         }
       },
     })
@@ -149,6 +171,10 @@ export function PricingSection({ defaultValues }: PricingSectionProps) {
       <FormNavigationGuard when={isDirty} />
 
       <SettingsSection title={t('Pricing & Display')}>
+        <SettingsSaveErrorAlert
+          failures={saveFailures}
+          onDismiss={dismissSaveFailures}
+        />
         <Form {...form}>
           <SettingsForm onSubmit={handleSubmit}>
             <SettingsPageFormActions
@@ -156,8 +182,8 @@ export function PricingSection({ defaultValues }: PricingSectionProps) {
               onReset={handleReset}
               isSaving={updateOption.isPending || isSubmitting}
               isResetDisabled={!isDirty}
+              isDirty={isDirty}
             />
-            <FormDirtyIndicator isDirty={isDirty} />
             {showQuotaPerUnit && (
               <FormField
                 control={form.control}

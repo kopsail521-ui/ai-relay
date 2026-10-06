@@ -64,6 +64,22 @@ interface DataTableRowActionsProps {
   row: Row<User>
 }
 
+type PendingManageAction = 'disable' | 'promote' | 'demote'
+
+const MANAGE_ACTION_TITLES: Record<PendingManageAction, string> = {
+  disable: 'Disable User',
+  promote: 'Promote User',
+  demote: 'Demote User',
+}
+
+const MANAGE_ACTION_DESCRIPTIONS: Record<PendingManageAction, string> = {
+  disable:
+    'Disable {{username}}? The user will immediately be unable to log in and use the API.',
+  promote:
+    'Promote {{username}} to admin? They will gain administrative privileges.',
+  demote: 'Demote {{username}} to regular user? They will lose administrative privileges.',
+}
+
 export function DataTableRowActions({ row }: DataTableRowActionsProps) {
   const { t } = useTranslation()
   const user = row.original
@@ -72,6 +88,10 @@ export function DataTableRowActions({ row }: DataTableRowActionsProps) {
   const [resetTwoFAOpen, setResetTwoFAOpen] = useState(false)
   const [bindingDialogOpen, setBindingDialogOpen] = useState(false)
   const [subscriptionsDialogOpen, setSubscriptionsDialogOpen] = useState(false)
+  const [pendingAction, setPendingAction] = useState<PendingManageAction | null>(
+    null
+  )
+  const [isManagingAction, setIsManagingAction] = useState(false)
 
   const handleEdit = () => {
     setCurrentRow(user)
@@ -96,6 +116,21 @@ export function DataTableRowActions({ row }: DataTableRowActionsProps) {
       }
     } catch {
       toast.error(t(ERROR_MESSAGES.UNEXPECTED))
+    }
+  }
+
+  const requestManageAction = (action: PendingManageAction) => {
+    setPendingAction(action)
+  }
+
+  const handleConfirmManageAction = async () => {
+    if (!pendingAction || isManagingAction) return
+    setIsManagingAction(true)
+    try {
+      await handleManage(pendingAction)
+    } finally {
+      setIsManagingAction(false)
+      setPendingAction(null)
     }
   }
 
@@ -170,7 +205,7 @@ export function DataTableRowActions({ row }: DataTableRowActionsProps) {
           </DropdownMenuItem>
         ) : (
           <DropdownMenuItem
-            onClick={() => handleManage('disable')}
+            onClick={() => requestManageAction('disable')}
             disabled={isRoot}
           >
             {t('Disable')}
@@ -181,7 +216,7 @@ export function DataTableRowActions({ row }: DataTableRowActionsProps) {
         )}
 
         {isAdmin && !isRoot && (
-          <DropdownMenuItem onClick={() => handleManage('demote')}>
+          <DropdownMenuItem onClick={() => requestManageAction('demote')}>
             {t('Demote')}
             <DropdownMenuShortcut>
               <ArrowDown size={16} />
@@ -190,7 +225,7 @@ export function DataTableRowActions({ row }: DataTableRowActionsProps) {
         )}
 
         {!isAdmin && (
-          <DropdownMenuItem onClick={() => handleManage('promote')}>
+          <DropdownMenuItem onClick={() => requestManageAction('promote')}>
             {t('Promote')}
             <DropdownMenuShortcut>
               <ArrowUp size={16} />
@@ -263,6 +298,34 @@ export function DataTableRowActions({ row }: DataTableRowActionsProps) {
           </DropdownMenuShortcut>
         </DropdownMenuItem>
       </DataTableRowActionMenu>
+
+      <ConfirmDialog
+        open={pendingAction !== null}
+        onOpenChange={(open) => {
+          if (isManagingAction) return
+          if (!open) setPendingAction(null)
+        }}
+        title={pendingAction ? t(MANAGE_ACTION_TITLES[pendingAction]) : ''}
+        desc={
+          pendingAction
+            ? t(MANAGE_ACTION_DESCRIPTIONS[pendingAction], {
+                username: user.username,
+              })
+            : ''
+        }
+        destructive={pendingAction === 'disable'}
+        confirmText={
+          isManagingAction
+            ? t('Processing...')
+            : pendingAction === 'disable'
+              ? t('Disable')
+              : pendingAction === 'promote'
+                ? t('Promote')
+                : t('Demote')
+        }
+        isLoading={isManagingAction}
+        handleConfirm={handleConfirmManageAction}
+      />
 
       <ConfirmDialog
         open={resetPasskeyOpen}

@@ -21,6 +21,11 @@ import { getRouteApi } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
 
 import { Skeleton } from '@/components/ui/skeleton'
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from '@/components/ui/tooltip'
 import { formatLogQuota } from '@/lib/format'
 import { cn } from '@/lib/utils'
 
@@ -35,8 +40,10 @@ function StatBadge(props: {
   label: string
   value: string | number
   accent: string
+  /** Full name shown on hover (e.g. "Requests per minute" for RPM). */
+  tooltip?: string
 }) {
-  return (
+  const badge = (
     <span className='border-border/60 bg-muted/25 inline-flex h-7 items-center gap-2 rounded-md border px-2.5 text-xs shadow-xs'>
       <span className={cn('h-3.5 w-0.5 rounded-full', props.accent)} />
       <span className='text-muted-foreground'>{props.label}</span>
@@ -44,6 +51,17 @@ function StatBadge(props: {
         {props.value}
       </span>
     </span>
+  )
+
+  if (!props.tooltip) return badge
+
+  return (
+    <Tooltip>
+      <TooltipTrigger render={<span className='inline-flex' />}>
+        {badge}
+      </TooltipTrigger>
+      <TooltipContent>{props.tooltip}</TooltipContent>
+    </Tooltip>
   )
 }
 
@@ -91,16 +109,19 @@ export function CommonLogsStats() {
         label={t('Usage')}
         value={sensitiveVisible ? formatLogQuota(stats?.quota || 0) : '••••'}
         accent='bg-sky-500/70'
+        tooltip={t('Spending within the selected time range')}
       />
       <StatBadge
         label={t('RPM')}
         value={stats?.rpm || 0}
         accent='bg-rose-500/65'
+        tooltip={t('Requests per minute')}
       />
       <StatBadge
         label={t('TPM')}
         value={stats?.tpm || 0}
         accent='bg-slate-400/70'
+        tooltip={t('Tokens per minute')}
       />
     </div>
   )

@@ -26,6 +26,7 @@ import { Card, CardContent, CardHeader } from '@/components/ui/card'
 import { IconBadge } from '@/components/ui/icon-badge'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { FormDescription } from '@/components/ui/form'
 import { Skeleton } from '@/components/ui/skeleton'
 import { TitledCard } from '@/components/ui/titled-card'
 import {
@@ -37,6 +38,8 @@ import {
 import { formatNumber } from '@/lib/format'
 import { cn } from '@/lib/utils'
 
+import { MAX_TOPUP_AMOUNT } from '../constants'
+import { usePaymentUnloadGuard } from '../hooks'
 import {
   formatCurrency,
   getDiscountLabel,
@@ -124,7 +127,9 @@ export function RechargeFormCard({
 
   const handleAmountChange = (value: string) => {
     setLocalAmount(value)
-    const numValue = Number.parseInt(value) || 0
+    // Parse as float and keep two decimals — parseInt silently truncates
+    // fractional input (e.g. "10.5" became 10)
+    const numValue = Math.round((Number.parseFloat(value) || 0) * 100) / 100
     if (numValue >= 0) {
       onTopupAmountChange(numValue)
     }
@@ -142,6 +147,21 @@ export function RechargeFormCard({
     Array.isArray(waffoPayMethods) && waffoPayMethods.length > 0
   const minTopup = getMinTopupAmount(topupInfo)
   const redemptionEnabled = topupInfo?.enable_redemption !== false
+
+  // Custom amount bounds — no server-side cap is configured, fall back to a
+  // sane upper limit so typos cannot produce absurd amounts
+  const maxTopup = MAX_TOPUP_AMOUNT
+  const amountError =
+    topupAmount > maxTopup
+      ? t('Amount cannot exceed {{amount}}', { amount: maxTopup })
+      : topupAmount < minTopup
+        ? t('Minimum topup amount: {{amount}}', { amount: minTopup })
+        : ''
+  const amountInvalid = amountError !== ''
+
+  // Block accidental tab close / refresh while a payment or redemption is
+  // in flight
+  usePaymentUnloadGuard(redeeming || !!paymentLoading)
 
   if (loading) {
     return (
@@ -266,11 +286,11 @@ export function RechargeFormCard({
                             )}
                           </div>
                           <div className='text-muted-foreground mt-1.5 w-full text-xs sm:mt-2'>
-                            Pay {formatCurrency(actualPrice)}
+                            {t('Pay')} {formatCurrency(actualPrice)}
                             {hasDiscount && savedAmount > 0 && (
                               <span className='text-green-600'>
                                 {' '}
-                                • Save {formatCurrency(savedAmount)}
+                                • {t('Save')} {formatCurrency(savedAmount)}
                               </span>
                             )}
                           </div>
@@ -295,7 +315,9 @@ export function RechargeFormCard({
                     value={localAmount}
                     onChange={(e) => handleAmountChange(e.target.value)}
                     min={minTopup}
-                    placeholder={`Minimum ${minTopup}`}
+                    max={maxTopup}
+                    step='0.01'
+                    aria-invalid={amountInvalid}
                     className='h-9 text-base sm:h-10 sm:text-lg'
                   />
                   <div className='bg-muted/30 flex min-h-9 items-center justify-between gap-2 rounded-md border px-3 lg:min-w-52'>
@@ -311,6 +333,14 @@ export function RechargeFormCard({
                     )}
                   </div>
                 </div>
+                <FormDescription className='text-muted-foreground text-xs'>
+                  {t('Minimum topup amount: {{amount}}', { amount: minTopup })}
+                </FormDescription>
+                {amountError && (
+                  <p className='text-destructive text-xs' aria-live='polite'>
+                    {amountError}
+                  </p>
+                )}
               </div>
 
               <div className='space-y-2.5 sm:space-y-3'>
@@ -339,7 +369,7 @@ export function RechargeFormCard({
                           key={method.type}
                           variant='outline'
                           onClick={() => onPaymentMethodSelect(method)}
-                          disabled={disabled || !!paymentLoading}
+                          disabled={disabled || amountInvalid || !!paymentLoading}
                           title={disabledReason}
                           aria-label={
                             disabledReason
@@ -437,7 +467,9 @@ export function RechargeFormCard({
                             key={methodKey}
                             variant='outline'
                             onClick={() => onWaffoMethodSelect(method, index)}
-                            disabled={belowMin || !!paymentLoading}
+                            disabled={
+                              belowMin || amountInvalid || !!paymentLoading
+                            }
                             title={disabledReason}
                             aria-label={
                               disabledReason

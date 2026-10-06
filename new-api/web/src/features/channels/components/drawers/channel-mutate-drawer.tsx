@@ -55,6 +55,7 @@ import { type SubmitErrorHandler, useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 
+import { ConfirmDialog } from '@/components/confirm-dialog'
 import {
   sideDrawerContentClassName,
   sideDrawerFooterClassName,
@@ -655,6 +656,7 @@ export function ChannelMutateDrawer({
     useState(false)
   const [clipboardConnectionInfo, setClipboardConnectionInfo] =
     useState<ChannelConnectionInfo | null>(null)
+  const [discardConfirmOpen, setDiscardConfirmOpen] = useState(false)
 
   const isEditing = Boolean(currentRow)
   const channelId = currentRow?.id ?? null
@@ -1847,19 +1849,34 @@ export function ChannelMutateDrawer({
   )
 
   // Handle drawer close
+  const closeDrawer = useCallback(() => {
+    onOpenChange(false)
+    form.reset(CHANNEL_FORM_DEFAULT_VALUES)
+    advancedNavScrollPendingRef.current = false
+    setActiveEditorSectionId(CHANNEL_EDITOR_SECTION_IDS.identity)
+    setExpandedEditorNavItemId(undefined)
+    setAdvancedSettingsOpen(false)
+    setClipboardConnectionInfo(null)
+  }, [onOpenChange, form])
+
   const handleOpenChange = useCallback(
     (v: boolean) => {
-      onOpenChange(v)
-      if (!v) {
-        form.reset(CHANNEL_FORM_DEFAULT_VALUES)
-        advancedNavScrollPendingRef.current = false
-        setActiveEditorSectionId(CHANNEL_EDITOR_SECTION_IDS.identity)
-        setExpandedEditorNavItemId(undefined)
-        setAdvancedSettingsOpen(false)
-        setClipboardConnectionInfo(null)
+      if (!v && isSubmitting) {
+        // A save is in flight: never close (and reset) the form mid-request.
+        return
       }
+      if (!v && form.formState.isDirty) {
+        // The form has unsaved changes; ask before discarding them.
+        setDiscardConfirmOpen(true)
+        return
+      }
+      if (!v) {
+        closeDrawer()
+        return
+      }
+      onOpenChange(v)
     },
-    [onOpenChange, form]
+    [closeDrawer, form, isSubmitting, onOpenChange]
   )
 
   return (
@@ -4869,6 +4886,22 @@ export function ChannelMutateDrawer({
         }}
         detailItems={statusCodeRiskDetailItems}
         onConfirm={() => handleStatusCodeRiskAction(true)}
+      />
+
+      <ConfirmDialog
+        open={discardConfirmOpen}
+        onOpenChange={setDiscardConfirmOpen}
+        title={t('Discard unsaved changes?')}
+        desc={t(
+          'You have unsaved changes. Closing now will discard them.'
+        )}
+        destructive
+        confirmText={t('Discard')}
+        cancelBtnText={t('Keep editing')}
+        handleConfirm={() => {
+          setDiscardConfirmOpen(false)
+          closeDrawer()
+        }}
       />
     </>
   )

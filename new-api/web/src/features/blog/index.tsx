@@ -2,12 +2,14 @@
 Copyright (C) 2023-2026 QuantumNous
 */
 import { Link } from '@tanstack/react-router'
+import { useTranslation } from 'react-i18next'
 
 import { PublicLayout } from '@/components/layout'
 import { usePageMeta } from '@/hooks/use-page-meta'
 import { SITE_ORIGIN } from '@/lib/seo'
 
 export function BlogIndex() {
+  const { t } = useTranslation()
   usePageMeta({
     title: 'KeyoAPI Blog - API Integration Guides',
     description:
@@ -18,14 +20,15 @@ export function BlogIndex() {
   return (
     <PublicLayout>
       <div className='mx-auto max-w-3xl px-4 py-10'>
-        <h1 className='mb-4 text-3xl font-bold'>Blog</h1>
+        <h1 className='mb-4 text-3xl font-bold'>{t('Blog')}</h1>
         <p className='text-muted-foreground mb-8'>
-          Integration tutorials and API guides for global developers.
+          {t('Integration tutorials and API guides for global developers.')}
         </p>
         <ul className='space-y-4'>
           <li className='border-border rounded-lg border p-4'>
             <Link
-              to='/integrations/openai-sdk'
+              to='/integrations/$slug'
+              params={{ slug: 'openai-sdk' }}
               className='text-primary font-medium hover:underline'
             >
               How to change OpenAI base URL
@@ -36,7 +39,8 @@ export function BlogIndex() {
           </li>
           <li className='border-border rounded-lg border p-4'>
             <Link
-              to='/integrations/python'
+              to='/integrations/$slug'
+              params={{ slug: 'python' }}
               className='text-primary font-medium hover:underline'
             >
               How to use OpenAI compatible API in Python
@@ -44,7 +48,8 @@ export function BlogIndex() {
           </li>
           <li className='border-border rounded-lg border p-4'>
             <Link
-              to='/integrations/nodejs'
+              to='/integrations/$slug'
+              params={{ slug: 'nodejs' }}
               className='text-primary font-medium hover:underline'
             >
               How to use OpenAI compatible API in Node.js
@@ -52,7 +57,8 @@ export function BlogIndex() {
           </li>
           <li className='border-border rounded-lg border p-4'>
             <Link
-              to='/integrations/cursor'
+              to='/integrations/$slug'
+              params={{ slug: 'cursor' }}
               className='text-primary font-medium hover:underline'
             >
               Cursor custom API not working — setup guide

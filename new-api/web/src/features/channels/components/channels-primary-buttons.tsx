@@ -26,6 +26,7 @@ import {
   TestTube,
   DollarSign,
   ListChecks,
+  Loader2,
   SortAsc,
   RefreshCw,
   ArrowUpFromLine,
@@ -82,7 +83,9 @@ export function ChannelsPrimaryButtons() {
   const queryClient = useQueryClient()
   const [showDeleteDialog, setShowDeleteDialog] = useState(false)
   const [showConsistencyDialog, setShowConsistencyDialog] = useState(false)
+  const [showApplyAllDialog, setShowApplyAllDialog] = useState(false)
   const [isRepairingConsistency, setIsRepairingConsistency] = useState(false)
+  const [isTestingAll, setIsTestingAll] = useState(false)
   const currentUser = useAuthStore((s) => s.auth.user)
   const canEditSensitive = hasPermission(
     currentUser,
@@ -208,13 +211,26 @@ export function ChannelsPrimaryButtons() {
             <DropdownMenuSeparator className='sm:hidden' />
 
             <DropdownMenuItem
-              onClick={() => {
-                handleTestAllChannels(queryClient)
+              onClick={async () => {
+                if (isTestingAll) return
+                setIsTestingAll(true)
+                try {
+                  await handleTestAllChannels(queryClient)
+                } finally {
+                  setIsTestingAll(false)
+                }
               }}
+              disabled={isTestingAll}
             >
-              {t('Test All Channels')}
+              {isTestingAll
+                ? t('Testing all channels...')
+                : t('Test All Channels')}
               <DropdownMenuShortcut>
-                <TestTube className='h-4 w-4' />
+                {isTestingAll ? (
+                  <Loader2 className='h-4 w-4 animate-spin' />
+                ) : (
+                  <TestTube className='h-4 w-4' />
+                )}
               </DropdownMenuShortcut>
             </DropdownMenuItem>
 
@@ -242,7 +258,10 @@ export function ChannelsPrimaryButtons() {
             </DropdownMenuItem>
 
             <DropdownMenuItem
-              onClick={() => upstream.applyAllUpdates()}
+              onSelect={(e) => {
+                e.preventDefault()
+                setShowApplyAllDialog(true)
+              }}
               disabled={upstream.applyAllLoading}
             >
               {t('Apply All Upstream Updates')}
@@ -300,6 +319,24 @@ export function ChannelsPrimaryButtons() {
             console.log(`Deleted ${_count} channels`)
           })
           setShowDeleteDialog(false)
+        }}
+      />
+
+      <ConfirmDialog
+        open={showApplyAllDialog}
+        onOpenChange={(open) => {
+          if (upstream.applyAllLoading) return
+          setShowApplyAllDialog(open)
+        }}
+        title={t('Apply All Upstream Updates?')}
+        desc={t(
+          'This will apply the detected upstream model changes to every channel with pending updates: new upstream models will be added, and models no longer available upstream will be removed from those channels.'
+        )}
+        confirmText={upstream.applyAllLoading ? t('Processing...') : t('Apply')}
+        isLoading={upstream.applyAllLoading}
+        handleConfirm={async () => {
+          await upstream.applyAllUpdates()
+          setShowApplyAllDialog(false)
         }}
       />
 

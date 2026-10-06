@@ -74,7 +74,7 @@ export function applyPageMeta(meta: PageMeta = {}) {
 }
 
 /** Store default branding title for fallback (console pages use system name only). */
-let defaultBrandingTitle = DEFAULT_SEO.title
+let defaultBrandingTitle: string = DEFAULT_SEO.title
 
 export function setDefaultBrandingTitle(name: string) {
   defaultBrandingTitle = name

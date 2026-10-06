@@ -24,6 +24,7 @@ import {
   Code2,
   FileText,
   HeartPulse,
+  HelpCircle,
   Info,
   Layers,
   Maximize2,
@@ -48,6 +49,11 @@ import {
 } from '@/components/ui/sheet'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from '@/components/ui/tooltip'
 import { usePageMeta } from '@/hooks/use-page-meta'
 import { getPerfMetrics } from '@/features/performance-metrics/api'
 import {
@@ -1064,7 +1070,24 @@ function GroupPricingSection(props: {
           },
           {
             id: 'ratio',
-            header: t('Ratio'),
+            header: (
+              <span className='inline-flex items-center gap-1'>
+                {t('Ratio')}
+                <Tooltip>
+                  <TooltipTrigger
+                    render={
+                      <HelpCircle
+                        aria-label={t('Group ratio explanation')}
+                        className='text-muted-foreground/60 size-3.5 cursor-help'
+                      />
+                    }
+                  />
+                  <TooltipContent side='top' className='text-xs'>
+                    {t('Final price = base price × group ratio')}
+                  </TooltipContent>
+                </Tooltip>
+              </span>
+            ),
             className: thClass,
             cellClassName: 'text-muted-foreground py-2.5 font-mono',
             cell: (group) => `${props.groupRatio[group] || 1}x`,

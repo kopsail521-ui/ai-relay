@@ -327,6 +327,12 @@ export function ApiKeysTable() {
         ],
       }}
       mobile={<ApiKeysMobileList table={table} isLoading={isLoading} />}
+      getColumnClassName={(columnId) =>
+        // Numeric column: right-align header and cells per the shared
+        // numeric alignment convention (text-right on both, static table
+        // numeric cells use the same alignment).
+        columnId === 'quota' ? 'text-right' : undefined
+      }
       getRowClassName={(row) =>
         isDisabledApiKeyRow(row.original) ? DISABLED_ROW_DESKTOP : undefined
       }

@@ -33,14 +33,15 @@ export function useRedemption() {
   const [redeeming, setRedeeming] = useState(false)
 
   const redeemCode = useCallback(async (code: string): Promise<boolean> => {
-    if (!code || code.trim() === '') {
+    const trimmedCode = code.trim()
+    if (!trimmedCode) {
       toast.error(i18next.t('Please enter a redemption code'))
       return false
     }
 
     try {
       setRedeeming(true)
-      const response = await redeemTopupCode({ key: code })
+      const response = await redeemTopupCode({ key: trimmedCode })
 
       if (response.success && response.data) {
         const quotaAdded = response.data
@@ -56,7 +57,11 @@ export function useRedemption() {
       toast.error(response.message || i18next.t('Redemption failed'))
       return false
     } catch (_error) {
-      toast.error(i18next.t('Redemption failed'))
+      toast.error(
+        i18next.t(
+          'Redemption failed. Please check for extra spaces or incorrect capitalization.'
+        )
+      )
       return false
     } finally {
       setRedeeming(false)

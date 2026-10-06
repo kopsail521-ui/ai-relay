@@ -151,7 +151,18 @@ export function ModelCharts(props: ModelChartsProps) {
         </div>
       </div>
 
-      <div className='h-[300px] p-1.5 sm:h-96 sm:p-2'>
+      <div
+        className='h-[300px] p-1.5 sm:h-96 sm:p-2'
+        role='img'
+        aria-label={t(
+          'Model call chart: {{points}} data points, {{count}} total calls, {{quota}} total usage',
+          {
+            points: props.loading ? 0 : props.data.length,
+            count: chartData.totalCountDisplay,
+            quota: chartData.totalQuotaDisplay,
+          }
+        )}
+      >
         {themeReady && spec && (
           <VChart
             key={chartKey}

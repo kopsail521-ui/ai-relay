@@ -1,0 +1,28 @@
+# VPS：UnoRouter 付费模型（Keyo Chat 渠道 13 个）价格全部减半
+# 现价 = 上游成本 ×2（已核）；减半后 = 成本 ×1。CompletionRatio 不动（出入比不变）
+# 前提：本机已 git push
+set -e
+cd /opt/ai-relay
+sudo bash scripts/vps-safe-pull-preserve-blog.sh
+
+# 1) 减半 ModelRatio（带防重复执行标记；二跑会被拒绝）
+sudo python3 /opt/ai-relay/scripts/vps-halve-unorouter-paid.py /opt/ai-relay/data/new-api/one-api.db
+
+# 2) 重启 new-api 刷新定价缓存（不重启 /api/pricing 可能滞后显示旧价）
+sudo docker restart ai-relay-new-api
+sleep 5
+curl -sS -o /dev/null -w "console_http=%{http_code}\n" http://127.0.0.1:3000/api/status
+
+# 3) 品牌/文档静态页（keyo-docs 里的 13 行价目已减半）
+sudo bash /opt/ai-relay/scripts/deploy-brand-static.sh
+
+echo "--- smoke ---"
+P3JSON=$(mktemp)
+curl -sS https://www.keyoapi.xyz/api/pricing -o "$P3JSON"
+node -e "
+const j=JSON.parse(require('fs').readFileSync('$P3JSON','utf8'));
+const m=(j.data||[]).find(x=>x.model_name==='deepseek-v4.1-flash');
+console.log('deepseek-v4.1-flash ratio =', m && m.model_ratio, '(expect ~0.017497)');
+" 2>/dev/null || grep -q "deepseek-v4.1-flash" "$P3JSON" && echo "pricing_ok=deepseek-v4.1-flash"
+rm -f "$P3JSON"
+echo DONE_HALVE_UNOROUTER_PAID

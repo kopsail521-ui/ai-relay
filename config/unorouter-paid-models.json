@@ -1,5 +1,5 @@
 {
-  "note": "UnoRouter paid chat on Keyo Chat. Sell = cost × 8. Public copy must not name the supplier.",
+  "note": "UnoRouter paid chat on Keyo Chat. Sell = cost x1 (halved 2026-10-05; originally x8, then x4, x2). Public copy must not name the supplier.",
   "base_url": "https://api.unorouter.com",
   "channel_name": "Keyo Chat",
   "markup": 8,

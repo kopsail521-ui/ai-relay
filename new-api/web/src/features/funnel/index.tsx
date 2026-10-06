@@ -114,7 +114,7 @@ function FunnelStepCard(props: {
       {props.conversion ? (
         <Badge
           variant='secondary'
-          className='absolute -top-2.5 left-4 tabular-nums'
+          className='absolute right-3 top-3 tabular-nums'
         >
           {props.conversion}
         </Badge>

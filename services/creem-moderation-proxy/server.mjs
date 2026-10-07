@@ -933,6 +933,7 @@ async function handleUploadPost(req, res) {
     });
   }
 
+  let stored = "";
   try {
     ensureUploadDir();
     purgeExpiredUploads();
@@ -952,7 +953,7 @@ async function handleUploadPost(req, res) {
       }
     }
     const id = crypto.randomUUID().replace(/-/g, "");
-    const stored = `${id}${ext}`;
+    stored = `${id}${ext}`;
     const full = path.join(UPLOAD_DIR, stored);
     fs.writeFileSync(full, data);
   } catch (e) {

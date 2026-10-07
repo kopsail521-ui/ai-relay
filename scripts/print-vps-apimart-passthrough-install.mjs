@@ -43,7 +43,7 @@ if [ ! -f /opt/ai-relay/.env.apimart ]; then
 APIMART_BASE_URL=https://api.apimart.ai
 APIMART_API_KEY=REPLACE_ME
 NEW_API_BASE=http://127.0.0.1:3000
-NEW_API_DB=/opt/ai-relay/data/new-api/one-api.db
+NEW_API_DB=/data/new-api/one-api.db
 MARKUP=1.2
 PORT=3011
 LISTEN_HOST=127.0.0.1
@@ -56,8 +56,8 @@ sudo docker build -t keyo-apimart-passthrough ./services/apimart-passthrough
 sudo docker rm -f ai-relay-apimart-passthrough 2>/dev/null || true
 sudo docker run -d --name ai-relay-apimart-passthrough --restart always --network host \\
   --env-file /opt/ai-relay/.env.apimart \\
-  -v /opt/ai-relay/data:/data \\
-  -e NEW_API_DB=/opt/ai-relay/data/new-api/one-api.db \\
+  -v /opt/ai-relay/data:/data:rw \\
+  -e NEW_API_DB=/data/new-api/one-api.db \\
   -e CATALOG=/app/catalog.json \\
   keyo-apimart-passthrough
 

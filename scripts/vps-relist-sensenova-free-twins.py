@@ -179,7 +179,11 @@ def main():
         if cur.execute("SELECT key FROM options WHERE key=?", (k,)).fetchone() is None:
             cur.execute("INSERT INTO options(key,value) VALUES(?,?)", (k, value))
         else:
-            cur.execute("UPDATE options SET value=? WHERE key=?", (value, key))
+            # Must bind k, not `key`: `key` here resolves to main()'s local
+            # (the SenseNova API key), so the UPDATE matched zero rows and every
+            # existing option silently kept its old value. That is why ModelPrice
+            # never gained the free IDs and they fell back to ratio 37.5.
+            cur.execute("UPDATE options SET value=? WHERE key=?", (value, k))
 
     mr = json.loads(get_opt("ModelRatio") or "{}")
     cr = json.loads(get_opt("CompletionRatio") or "{}")

@@ -933,12 +933,39 @@ async function handleUploadPost(req, res) {
     });
   }
 
-  ensureUploadDir();
-  purgeExpiredUploads();
-  const id = crypto.randomUUID().replace(/-/g, "");
-  const stored = `${id}${ext}`;
-  const full = path.join(UPLOAD_DIR, stored);
-  fs.writeFileSync(full, data);
+  try {
+    ensureUploadDir();
+    purgeExpiredUploads();
+    if (typeof fs.statfsSync === "function") {
+      const stfs = fs.statfsSync(UPLOAD_DIR);
+      const freeBytes = Number(stfs.bsize) * Number(stfs.bavail);
+      if (Number.isFinite(freeBytes) && freeBytes < 64 * 1024 * 1024) {
+        console.error("[uploads] low disk, free bytes:", freeBytes);
+        return json(res, 503, {
+          error: {
+            message:
+              "Upload storage is temporarily full. Please retry later or contact support.",
+            type: "server_error",
+            code: "storage_insufficient",
+          },
+        });
+      }
+    }
+    const id = crypto.randomUUID().replace(/-/g, "");
+    const stored = `${id}${ext}`;
+    const full = path.join(UPLOAD_DIR, stored);
+    fs.writeFileSync(full, data);
+  } catch (e) {
+    console.error("[uploads] write failed:", e.message || e);
+    return json(res, 503, {
+      error: {
+        message:
+          "Upload storage is temporarily unavailable. Please retry later or contact support.",
+        type: "server_error",
+        code: "storage_unavailable",
+      },
+    });
+  }
 
   const url = `${UPLOAD_PUBLIC_BASE}/${stored}`;
   const expiresAt = new Date(Date.now() + UPLOAD_TTL_MS).toISOString();

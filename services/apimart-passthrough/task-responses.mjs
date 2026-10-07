@@ -17,6 +17,22 @@ export function extractTaskId(payload) {
   } catch { return ''; }
 }
 
+/** Best-effort extraction of why an upstream task failed, for client-visible errors. */
+function upstreamFailureReason(j, d) {
+  const nodes = [j, d, j && j.error, d && d.error, j && j.data && j.data.error];
+  const keys = ['fail_msg', 'failure_reason', 'fail_reason', 'reason', 'detail', 'message', 'msg'];
+  for (const n of nodes) {
+    if (!n || typeof n !== 'object') continue;
+    for (const k of keys) {
+      const v = n[k];
+      if (typeof v === 'string' && v.trim()) return v.trim();
+      const nested = v && typeof v === 'object' ? v.message || v.msg || v.detail : '';
+      if (typeof nested === 'string' && nested.trim()) return nested.trim();
+    }
+  }
+  return '';
+}
+
 export function normalizeVideoPoll(raw, id, httpStatus = 200) {
   let j;
   try { j = JSON.parse(raw); } catch { return raw; }
@@ -38,6 +54,17 @@ export function normalizeVideoPoll(raw, id, httpStatus = 200) {
   if (typeof url === 'string' && url) {
     j.url = url;
     d.result = { ...d.result, videos: [{ url: [url] }] };
+  }
+  if (status === 'failed' || status === 'cancelled') {
+    const reason = upstreamFailureReason(j, d);
+    const err = {
+      code: status === 'cancelled' ? 'upstream_cancelled' : 'upstream_failed',
+      message:
+        reason ||
+        `Upstream reported this task as ${status} without a failure reason. Contact support with the task ID so the gateway logs can be checked.`,
+    };
+    j.error = err;
+    d.error = err;
   }
   return JSON.stringify({ ...j, id, task_id: id, status, data: d });
 }

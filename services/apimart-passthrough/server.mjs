@@ -610,6 +610,16 @@ function aioneCostUsd(j) {
   return null;
 }
 
+/** Log raw upstream poll bodies for terminal/failed polls so support can answer
+ * "why did my task fail" from docker logs. */
+function logTerminalPoll(model, tid, status, httpStatus, text) {
+  const terminal = ["completed", "failed", "cancelled"].includes(status);
+  if (!terminal && httpStatus < 400) return;
+  console.error(
+    `[poll-terminal] model=${model} task=${tid} status=${status || "unknown"} http=${httpStatus} body=${String(text || "").slice(0, 800)}`
+  );
+}
+
 function normalizeGrsaiSubmitJson(raw) {
   let j = {};
   try {
@@ -844,6 +854,7 @@ const server = http.createServer(async (req, res) => {
         try {
           const j = JSON.parse(text);
           const st = taskStatus(j.status || j.data?.status);
+          logTerminalPoll(pending.model, tid, st, up.status, text);
           const costUsd = grsaiCostUsd(j);
           const done = [
             "completed",
@@ -898,6 +909,18 @@ const server = http.createServer(async (req, res) => {
           return res.end(out.buf);
         }
         const text = up.buf.toString("utf8");
+        try {
+          const jx = JSON.parse(text);
+          logTerminalPoll(
+            pending.model,
+            tid,
+            taskStatus(jx.data?.status ?? jx.status),
+            up.status,
+            text
+          );
+        } catch {
+          logTerminalPoll(pending.model, tid, "", up.status, text);
+        }
         const normalized = Buffer.from(normalizeVideoPoll(text, tid, up.status), "utf8");
         if (up.status >= 200 && up.status < 300) {
           try {
@@ -948,6 +971,7 @@ const server = http.createServer(async (req, res) => {
       try {
         const j = JSON.parse(text);
         const st = taskStatus(j.data?.status || j.status);
+        logTerminalPoll(pending.model, tid, st, up.status, text);
         const cost = j.data?.cost ?? j.cost;
         const done = [
           "completed",

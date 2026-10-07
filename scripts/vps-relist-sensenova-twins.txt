@@ -1,0 +1,45 @@
+# VPS：重新上架 SenseNova 免费孪生 ×4（glm-5.2-free / kimi-k3-free / deepseek-v4-pro-free / deepseek-v4-flash-free）
+# Keyo Free 渠道（token.sensenova.cn），ModelPrice=0；标签只挂大语言模型（免费走价格筛选）
+# 前提：本机已 git push；/opt/ai-relay/.env 已有 SENSENOVA_API_KEY=...
+set -e
+cd /opt/ai-relay
+sudo bash scripts/vps-safe-pull-preserve-blog.sh
+
+if ! sudo grep -q '^SENSENOVA_API_KEY=' /opt/ai-relay/.env 2>/dev/null; then
+  echo "ERROR: add SENSENOVA_API_KEY=... to /opt/ai-relay/.env first" >&2
+  exit 1
+fi
+
+# 0) 上游存活预检：key 失效 / 上游改名则中止，不去碰 DB
+KEY=$(sudo grep '^SENSENOVA_API_KEY=' /opt/ai-relay/.env | head -1 | cut -d= -f2)
+CODE=$(curl -sS -m 30 -o /tmp/sn_precheck.json -w "%{http_code}" -X POST \
+  https://token.sensenova.cn/v1/chat/completions \
+  -H "Authorization: Bearer $KEY" -H "Content-Type: application/json" \
+  -d '{"model":"glm-5.2","messages":[{"role":"user","content":"hi"}],"max_tokens":8}' || echo 000)
+if grep -q '"choices"' /tmp/sn_precheck.json 2>/dev/null; then
+  echo "upstream_ok=$CODE"
+else
+  echo "UPSTREAM_FAIL=$CODE"; head -c 400 /tmp/sn_precheck.json; echo
+  exit 1
+fi
+
+# 1) New API：重建 Keyo Free 渠道 + 4 个免费孪生（ModelPrice=0，广场恢复）
+sudo python3 /opt/ai-relay/scripts/vps-relist-sensenova-free-twins.py /opt/ai-relay/data/new-api/one-api.db
+
+# 2) 重启 new-api 刷新定价缓存
+sudo docker restart ai-relay-new-api
+sleep 5
+curl -sS -o /dev/null -w "console_http=%{http_code}\n" http://127.0.0.1:3000/api/status
+
+# 3) 品牌/SEO 静态页（/free-models 已含 4 个孪生）
+sudo bash /opt/ai-relay/scripts/deploy-brand-static.sh
+
+echo "--- smoke ---"
+P3JSON=$(mktemp)
+curl -sS https://www.keyoapi.xyz/api/pricing -o "$P3JSON"
+for m in glm-5.2-free kimi-k3-free deepseek-v4-pro-free deepseek-v4-flash-free; do
+  grep -q "$m" "$P3JSON" && echo "pricing_ok=$m" || echo "pricing_MISSING=$m"
+done
+rm -f "$P3JSON"
+curl -sS -o /dev/null -w "free_page_http=%{http_code}\n" https://www.keyoapi.xyz/free-models
+echo DONE_RELIST_SENSENOVA_TWINS

@@ -9,8 +9,8 @@ FREE_ICON = "DeepSeek"
 PAID_ICON = "DeepSeek.Color"
 
 FREE = (
-    "deepseek-v4-pro-free",
-    "deepseek-v4-flash-free",
+    "deepseek-v4-pro:free",
+    "deepseek-v4-flash:free",
 )
 PAID = (
     "deepseek-v4-pro",

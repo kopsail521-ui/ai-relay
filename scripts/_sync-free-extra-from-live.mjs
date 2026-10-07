@@ -1,6 +1,6 @@
 /**
  * One-shot: pull /api/pricing and write config/seo/free-models-extra.json
- * (fixed $0 models that are not in Keyo Free *-free list).
+ * (fixed $0 models that are not in the Keyo Free *:free list).
  */
 import fs from "fs";
 import path from "path";
@@ -46,7 +46,7 @@ const extra = data
 
 const payload = {
   _note:
-    "Additional fixed-$0 model IDs from live /api/pricing (quota_type=1, model_price=0), excluding Keyo Free *-free IDs. Refresh with: node scripts/_sync-free-extra-from-live.mjs",
+    "Additional fixed-$0 model IDs from live /api/pricing (quota_type=1, model_price=0), excluding Keyo Free *:free IDs. Refresh with: node scripts/_sync-free-extra-from-live.mjs",
   synced_at: new Date().toISOString().slice(0, 10),
   models: extra,
 };

@@ -165,25 +165,25 @@ export const RULES = {
     icon: "DeepSeek",
   },
   // SenseNova free twins — 免费 moved to the 定价类型 filter (price-based), tag no longer set
-  "deepseek-v4-pro-free": {
+  "deepseek-v4-pro:free": {
     vendor: "DeepSeek",
     tag: "大语言模型",
     endpoints: EP.chat,
     icon: "DeepSeek",
   },
-  "deepseek-v4-flash-free": {
+  "deepseek-v4-flash:free": {
     vendor: "DeepSeek",
     tag: "大语言模型",
     endpoints: EP.chat,
     icon: "DeepSeek",
   },
-  "glm-5.2-free": {
+  "glm-5.2:free": {
     vendor: "智谱",
     tag: "大语言模型",
     endpoints: EP.chat,
     icon: "ChatGLM.Color",
   },
-  "kimi-k3-free": {
+  "kimi-k3:free": {
     vendor: "Moonshot",
     tag: "大语言模型",
     endpoints: EP.chat,

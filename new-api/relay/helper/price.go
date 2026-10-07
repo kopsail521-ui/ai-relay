@@ -74,9 +74,10 @@ func ModelPriceHelper(c *gin.Context, info *relaycommon.RelayInfo, promptTokens 
 	preferGift := model.GiftEligibleModel(info.OriginModelName)
 	billingName := model.BillingModelName(info.OriginModelName)
 	modelPrice, usePrice := ratio_setting.GetModelPrice(billingName, false)
-	if !usePrice && billingName != info.OriginModelName {
-		modelPrice, usePrice = ratio_setting.GetModelPrice(info.OriginModelName, false)
-	}
+	// Free-pool IDs bill their twin only. The origin name carries the $0
+	// display config (ModelPrice=0), so falling back to it would bill every
+	// free call at zero and short-circuit the gift-credit debit; a missing
+	// twin config must error instead (PRD: 无孪生映射拒绝上架).
 
 	groupRatioInfo := HandleGroupRatio(c, info)
 
@@ -104,9 +105,6 @@ func ModelPriceHelper(c *gin.Context, info *relaycommon.RelayInfo, promptTokens 
 		var success bool
 		var matchName string
 		modelRatio, success, matchName = ratio_setting.GetModelRatio(billingName)
-		if !success && billingName != info.OriginModelName {
-			modelRatio, success, matchName = ratio_setting.GetModelRatio(info.OriginModelName)
-		}
 		if !success {
 			acceptUnsetRatio := false
 			if info.UserSetting.AcceptUnsetRatioModel {
@@ -117,9 +115,6 @@ func ModelPriceHelper(c *gin.Context, info *relaycommon.RelayInfo, promptTokens 
 			}
 		}
 		completionRatio = ratio_setting.GetCompletionRatio(billingName)
-		if completionRatio == 0 && billingName != info.OriginModelName {
-			completionRatio = ratio_setting.GetCompletionRatio(info.OriginModelName)
-		}
 		cacheRatio, _ = ratio_setting.GetCacheRatio(billingName)
 		cacheCreationRatio, _ = ratio_setting.GetCreateCacheRatio(billingName)
 		cacheCreationRatio5m = cacheCreationRatio
@@ -206,17 +201,13 @@ func ModelPriceHelperPerCall(c *gin.Context, info *relaycommon.RelayInfo) (hostt
 	billingName := model.BillingModelName(info.OriginModelName)
 
 	modelPrice, success := ratio_setting.GetModelPrice(billingName, true)
-	if !success && billingName != info.OriginModelName {
-		modelPrice, success = ratio_setting.GetModelPrice(info.OriginModelName, true)
-	}
+	// Same free-pool invariant as ModelPriceHelper: the origin name's $0
+	// display config must never become the billing price.
 	usePrice := success
 	var modelRatio float64
 
 	if !success {
 		defaultPrice, ok := ratio_setting.GetDefaultModelPriceMap()[billingName]
-		if !ok {
-			defaultPrice, ok = ratio_setting.GetDefaultModelPriceMap()[info.OriginModelName]
-		}
 		if ok {
 			modelPrice = defaultPrice
 			usePrice = true
@@ -224,9 +215,6 @@ func ModelPriceHelperPerCall(c *gin.Context, info *relaycommon.RelayInfo) (hostt
 			var ratioSuccess bool
 			var matchName string
 			modelRatio, ratioSuccess, matchName = ratio_setting.GetModelRatio(billingName)
-			if !ratioSuccess && billingName != info.OriginModelName {
-				modelRatio, ratioSuccess, matchName = ratio_setting.GetModelRatio(info.OriginModelName)
-			}
 			acceptUnsetRatio := false
 			if info.UserSetting.AcceptUnsetRatioModel {
 				acceptUnsetRatio = true

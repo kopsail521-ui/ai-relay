@@ -123,7 +123,7 @@ Same pattern for other Path B models: upload once, map `url` to that model’s f
 
 ### 1.1 Chat → `POST /v1/chat/completions`
 
-Free (`*-free`): `Atria-dawn-v2`
+Free (`*-free`): `Atria-dawn-v2:free`, `DeepSeek-Prover-V2-7B:free`
 
 There is also a `:free` chat pool (for example `glm-5.3-flash:free`, `nemotron-3-ultra-550b-a55b:free`). The live list is https://www.keyoapi.xyz/free-models — the list changes over time.
 

@@ -2,7 +2,7 @@
   "_note": "lastmod bumps only when page content hash changes.",
   "entries": {
     "https://www.keyoapi.xyz/": {
-      "hash": "3750bcfd19cc9072",
+      "hash": "27a2deaecec02645",
       "lastmod": "2026-10-07"
     },
     "https://www.keyoapi.xyz/compare": {
@@ -10,11 +10,11 @@
       "lastmod": "2026-10-07"
     },
     "https://www.keyoapi.xyz/pricing-list": {
-      "hash": "4ab11057ebfd440c",
+      "hash": "297955feca4b3660",
       "lastmod": "2026-10-07"
     },
     "https://www.keyoapi.xyz/free-models": {
-      "hash": "4e5d77af3ffb4b1e",
+      "hash": "9ba1e70054cf1c5a",
       "lastmod": "2026-10-07"
     },
     "https://www.keyoapi.xyz/models": {
@@ -54,8 +54,8 @@
       "lastmod": "2026-10-05"
     },
     "https://www.keyoapi.xyz/about": {
-      "hash": "377c7cf78df35d0b",
-      "lastmod": "2026-10-05"
+      "hash": "7874d5ff77698c9e",
+      "lastmod": "2026-10-07"
     },
     "https://www.keyoapi.xyz/model/whisper-large-v3": {
       "hash": "20bbdd2ddb1a3826",

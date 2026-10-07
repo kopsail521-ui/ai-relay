@@ -3,12 +3,12 @@
   "synced_at": "2026-10-05",
   "models": [
     {
-      "id": "Atria-dawn-v2",
+      "id": "Atria-dawn-v2:free",
       "family": "Other",
       "note": "Fixed $0 on Keyo catalog (covered by your $10 credit). Availability can change; confirm live on /pricing."
     },
     {
-      "id": "DeepSeek-Prover-V2-7B",
+      "id": "DeepSeek-Prover-V2-7B:free",
       "family": "DeepSeek",
       "twin": null,
       "note": "Fixed $0 on Keyo catalog (covered by your $10 credit). Availability can change; confirm live on /pricing."

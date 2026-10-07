@@ -287,32 +287,35 @@ func Register(c *gin.Context) {
 		common.ApiErrorI18n(c, i18n.MsgUserRegisterFailed)
 		return
 	}
-	// 生成默认令牌
+	// 生成默认令牌（若 finishInsert 已写入 starter，则跳过）
 	if constant.GenerateDefaultToken {
-		key, err := common.GenerateKey()
-		if err != nil {
-			common.ApiErrorI18n(c, i18n.MsgUserDefaultTokenFailed)
-			common.SysLog("failed to generate token key: " + err.Error())
-			return
-		}
-		// 生成默认令牌
-		token := model.Token{
-			UserId:             insertedUser.Id, // 使用插入后的用户ID
-			Name:               cleanUser.Username + "的初始令牌",
-			Key:                key,
-			CreatedTime:        common.GetTimestamp(),
-			AccessedTime:       common.GetTimestamp(),
-			ExpiredTime:        -1,     // 永不过期
-			RemainQuota:        500000, // 示例额度
-			UnlimitedQuota:     true,
-			ModelLimitsEnabled: false,
-		}
-		if setting.DefaultUseAutoGroup {
-			token.Group = "auto"
-		}
-		if err := token.Insert(); err != nil {
-			common.ApiErrorI18n(c, i18n.MsgCreateDefaultTokenErr)
-			return
+		var existing int64
+		_ = model.DB.Model(&model.Token{}).Where("user_id = ?", insertedUser.Id).Count(&existing).Error
+		if existing == 0 {
+			key, err := common.GenerateKey()
+			if err != nil {
+				common.ApiErrorI18n(c, i18n.MsgUserDefaultTokenFailed)
+				common.SysLog("failed to generate token key: " + err.Error())
+				return
+			}
+			token := model.Token{
+				UserId:             insertedUser.Id,
+				Name:               cleanUser.Username + "的初始令牌",
+				Key:                key,
+				CreatedTime:        common.GetTimestamp(),
+				AccessedTime:       common.GetTimestamp(),
+				ExpiredTime:        -1,
+				RemainQuota:        500000,
+				UnlimitedQuota:     true,
+				ModelLimitsEnabled: false,
+			}
+			if setting.DefaultUseAutoGroup {
+				token.Group = "auto"
+			}
+			if err := token.Insert(); err != nil {
+				common.ApiErrorI18n(c, i18n.MsgCreateDefaultTokenErr)
+				return
+			}
 		}
 	}
 

@@ -21,6 +21,9 @@ RENAMES = [
     ("Atria-dawn-v2:free", "Atria-dawn-v2", "Atria", "Custom"),
     ("DeepSeek-Prover-V2-7B:free", "DeepSeek-Prover-V2-7B", "DeepSeek", "DeepSeek"),
 ]
+# Gitee renamed Atria-dawn-v2 -> Atria-Dawn-Preview; the public id stays the same,
+# so the channel maps our name onto whatever the upstream now calls it.
+UPSTREAM_RENAME = {"Atria-dawn-v2": "Atria-Dawn-Preview"}
 UNOROUTER_TWINS = [
     "k2-horizon", "space-bunny-alpha", "nemotron-3-ultra-550b-a55b",
     "gemma-4-26b", "laguna-s-2.1", "qwen3.6-35b-a3b",
@@ -138,6 +141,10 @@ def main():
             if new not in parts:
                 parts.append(new)
             mapping[new] = old
+        # 上游改名映射（裸名 + :free 别名都指到上游现名）
+        for old, upstream in UPSTREAM_RENAME.items():
+            mapping[old] = upstream
+            mapping[old + ":free"] = upstream
         sets = ["models=?", "model_mapping=?"]
         vals = [",".join(parts), json.dumps(mapping, ensure_ascii=False, separators=(",", ":"))]
         if "updated_time" in ch_cols:

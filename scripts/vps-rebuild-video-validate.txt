@@ -1,0 +1,45 @@
+# Rebuild 3011 with video validate/normalize (no paid smoke)
+set -e
+cd /opt/ai-relay
+sudo git pull
+sudo docker build -t keyo-apimart-passthrough ./services/apimart-passthrough
+sudo docker rm -f ai-relay-apimart-passthrough 2>/dev/null || true
+sudo docker run -d --name ai-relay-apimart-passthrough --restart always --network host \
+  --env-file /opt/ai-relay/.env.apimart \
+  -v /opt/ai-relay/data:/data:rw \
+  -e NEW_API_DB=/data/new-api/one-api.db \
+  -e NEW_API_BASE=http://127.0.0.1:3000 \
+  -e CATALOG=/app/catalog.json \
+  -e LISTEN_HOST=127.0.0.1 \
+  -e PORT=3011 \
+  keyo-apimart-passthrough
+sleep 2
+curl -sS http://127.0.0.1:3011/healthz; echo
+# free 400 checks (no upstream bill)
+KEY=$(python3 - <<'PY'
+import sqlite3
+k=sqlite3.connect("/opt/ai-relay/data/new-api/one-api.db").execute(
+  "SELECT key FROM tokens WHERE id=2 AND status=1"
+).fetchone()[0]
+print(k if str(k).startswith("sk-") else "sk-"+k)
+PY
+)
+echo "=== reject first_frame+audio (expect 400) ==="
+curl -sS -o /tmp/v1.json -w "%{http_code}\n" -m 20 \
+  -X POST https://www.keyoapi.xyz/v1/videos/generations \
+  -H "Authorization: Bearer $KEY" -H "Content-Type: application/json" \
+  -d '{"model":"seedance-2.0-720p-mini","prompt":"x","duration":5,"first_frame_image":"https://example.com/a.jpg","audios":["https://example.com/a.mp3"]}'
+head -c 280 /tmp/v1.json; echo
+echo "=== reject gemini duration (expect 400) ==="
+curl -sS -o /tmp/v2.json -w "%{http_code}\n" -m 20 \
+  -X POST https://www.keyoapi.xyz/v1/videos/generations \
+  -H "Authorization: Bearer $KEY" -H "Content-Type: application/json" \
+  -d '{"model":"gemini-omni-1.1-flash","prompt":"x","resolution":"720p","duration":5}'
+head -c 280 /tmp/v2.json; echo
+echo "=== reject local path (expect 400) ==="
+curl -sS -o /tmp/v3.json -w "%{http_code}\n" -m 20 \
+  -X POST https://www.keyoapi.xyz/v1/videos/generations \
+  -H "Authorization: Bearer $KEY" -H "Content-Type: application/json" \
+  -d '{"model":"wan3.0-video","prompt":"x","resolution":"480P","duration":5,"image_urls":["D:\\\\a.png"]}'
+head -c 280 /tmp/v3.json; echo
+echo DONE_VIDEO_VALIDATE_DEPLOY

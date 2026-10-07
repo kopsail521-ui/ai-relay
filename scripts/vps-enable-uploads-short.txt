@@ -1,0 +1,18 @@
+set -euo pipefail
+cd /opt/ai-relay
+sudo git fetch origin main && sudo git checkout main && sudo git pull --ff-only origin main
+sudo mkdir -p /opt/ai-relay/static/uploads && sudo chmod 755 /opt/ai-relay/static/uploads
+sudo docker build -t keyo-creem-moderation ./services/creem-moderation-proxy
+sudo docker rm -f ai-relay-creem-moderation 2>/dev/null || true
+sudo docker run -d --name ai-relay-creem-moderation --restart always --network host \
+  --env-file /opt/ai-relay/.env.moderation \
+  -e UPSTREAM_URL=http://127.0.0.1:3000 -e LISTEN_HOST=127.0.0.1 -e PORT=3001 \
+  -e UPLOAD_DIR=/opt/ai-relay/static/uploads \
+  -e UPLOAD_PUBLIC_BASE=https://www.keyoapi.xyz/uploads \
+  -e UPLOAD_MAX_BYTES=104857600 -e UPLOAD_TTL_HOURS=48 \
+  -v /opt/ai-relay/static/uploads:/opt/ai-relay/static/uploads \
+  keyo-creem-moderation
+sleep 2
+curl -sS -o /tmp/up.json -w "upload_probe=%{http_code}\n" -X POST http://127.0.0.1:3001/v1/uploads -H "Authorization: Bearer sk-invalid" -F "file=@/etc/hosts" || true
+head -c 180 /tmp/up.json; echo
+echo DONE_ENABLE_UPLOADS

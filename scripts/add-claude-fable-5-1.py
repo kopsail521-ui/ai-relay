@@ -7,7 +7,8 @@ import sys
 import time
 
 MODEL = "claude-fable-5-1"
-OUR_MODEL_RATIO = 7.353
+# sell = OpenLux cost ×5 → ~$7.35 / $36.77 per 1M; New API ratio = sell_in / 2
+OUR_MODEL_RATIO = 3.6765
 OUR_COMPLETION_RATIO = 5
 TAG = "大语言模型"
 VENDOR = "Anthropic"

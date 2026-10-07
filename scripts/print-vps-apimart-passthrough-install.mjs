@@ -16,6 +16,7 @@ function b64gz(rel) {
 }
 
 const serverB64 = b64gz("services/apimart-passthrough/server.mjs");
+const taskResponsesB64 = b64gz("services/apimart-passthrough/task-responses.mjs");
 const catalogB64 = b64gz("services/apimart-passthrough/catalog.json");
 const dockerB64 = b64gz("services/apimart-passthrough/Dockerfile");
 const pyB64 = b64gz("scripts/vps-add-apimart-videos.py");
@@ -30,6 +31,7 @@ cd /opt/ai-relay
 
 # --- 写入文件 ---
 echo '${serverB64}' | base64 -d | gunzip | sudo tee /opt/ai-relay/services/apimart-passthrough/server.mjs >/dev/null
+echo '${taskResponsesB64}' | base64 -d | gunzip | sudo tee /opt/ai-relay/services/apimart-passthrough/task-responses.mjs >/dev/null
 echo '${catalogB64}' | base64 -d | gunzip | sudo tee /opt/ai-relay/services/apimart-passthrough/catalog.json >/dev/null
 echo '${dockerB64}' | base64 -d | gunzip | sudo tee /opt/ai-relay/services/apimart-passthrough/Dockerfile >/dev/null
 echo '${pyB64}' | base64 -d | gunzip | sudo tee /opt/ai-relay/scripts/vps-add-apimart-videos.py >/dev/null

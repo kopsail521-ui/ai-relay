@@ -20,6 +20,7 @@ function pack(rel) {
 }
 
 const serverB64 = pack("services/creem-moderation-proxy/server.mjs");
+const routingB64 = pack("services/creem-moderation-proxy/video-routing.mjs");
 const docsB64 = pack("static/brand/keyo-docs.html");
 const refZhB64 = pack("static/brand/keyo-api-ref.md");
 const refEnB64 = pack("static/brand/keyo-api-ref.en.md");
@@ -31,6 +32,7 @@ const lines = [
   "sudo chmod 755 /opt/ai-relay/static/uploads",
   "",
   `echo '${serverB64}' | base64 -d | gunzip | sudo tee /opt/ai-relay/services/creem-moderation-proxy/server.mjs >/dev/null`,
+  `echo '${routingB64}' | base64 -d | gunzip | sudo tee /opt/ai-relay/services/creem-moderation-proxy/video-routing.mjs >/dev/null`,
   `echo '${docsB64}' | base64 -d | gunzip | sudo tee /opt/ai-relay/static/brand/keyo-docs.html >/dev/null`,
   `echo '${refZhB64}' | base64 -d | gunzip | sudo tee /opt/ai-relay/static/brand/keyo-api-ref.md >/dev/null`,
   `echo '${refEnB64}' | base64 -d | gunzip | sudo tee /opt/ai-relay/static/brand/keyo-api-ref.en.md >/dev/null`,

@@ -121,6 +121,14 @@ function ok(name) {
   assert.equal(b.aspectRatio, "portrait");
   ok("minimax aliases image_urls/audio_urls");
 }
+{
+  const err = validateVideoClientBody("MiniMax-H3", {
+    prompt: "x",
+    aspectRatio: "4:3",
+  });
+  assert.ok(err?.param === "aspectRatio");
+  ok("minimax reject unsupported aspect alias");
+}
 
 // --- wan normalize ---
 {

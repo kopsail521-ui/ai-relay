@@ -26,6 +26,9 @@ const serverGz = zlib
     level: 9,
   })
   .toString("base64");
+const routingGz = zlib
+  .gzipSync(fs.readFileSync(path.join(root, "services/creem-moderation-proxy/video-routing.mjs")), { level: 9 })
+  .toString("base64");
 const copyGz = zlib
   .gzipSync(
     fs.readFileSync(
@@ -71,6 +74,10 @@ writeLf(
   `echo '${copyGz}' | sudo tee /tmp/vps-mkt-copy.b64 >/dev/null && echo OK_COPY_B64\n`
 );
 writeLf(
+  path.join(root, "scripts/vps-mkt-routing.txt"),
+  `echo '${routingGz}' | sudo tee /tmp/vps-mkt-routing.b64 >/dev/null && echo OK_ROUTING_B64\n`
+);
+writeLf(
   path.join(root, "scripts/vps-mkt-docker.txt"),
   `echo '${dockerGz}' | sudo tee /tmp/vps-mkt-docker.b64 >/dev/null && echo OK_DOCKER_B64\n`
 );
@@ -84,6 +91,7 @@ writeLf(
   `set -e
 sudo mkdir -p /opt/ai-relay/services/creem-moderation-proxy /opt/ai-relay/config /opt/ai-relay/scripts
 base64 -d /tmp/vps-mkt-mod.b64 | gunzip | sudo tee /opt/ai-relay/services/creem-moderation-proxy/server.mjs >/dev/null
+base64 -d /tmp/vps-mkt-routing.b64 | gunzip | sudo tee /opt/ai-relay/services/creem-moderation-proxy/video-routing.mjs >/dev/null
 base64 -d /tmp/vps-mkt-copy.b64 | gunzip | sudo tee /opt/ai-relay/services/creem-moderation-proxy/marketplace-model-copy.json >/dev/null
 base64 -d /tmp/vps-mkt-copy.b64 | gunzip | sudo tee /opt/ai-relay/config/marketplace-model-copy.json >/dev/null
 base64 -d /tmp/vps-mkt-docker.b64 | gunzip | sudo tee /opt/ai-relay/services/creem-moderation-proxy/Dockerfile >/dev/null

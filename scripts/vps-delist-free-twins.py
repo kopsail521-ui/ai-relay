@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Delist leftover free twins + glm-5.3 (paid ×2 twins already re-listed).
+"""Delist leftover free twins only (paid glm-5.3 is re-listed separately).
 
 Avoids UNIQUE(model_name, deleted_at) by hard-deleting prior soft-deleted rows first.
 """
@@ -12,7 +12,6 @@ import sys
 import time
 
 DELIST = [
-    "glm-5.3",
     "glm-5.2-free",
     "kimi-k3-free",
     "deepseek-v4-flash-free",

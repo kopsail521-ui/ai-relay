@@ -41,10 +41,13 @@ if (!key) {
 }
 
 const serverB64 = Buffer.from(serverSrc).toString("base64");
+const routingB64 = Buffer.from(
+  fs.readFileSync(path.join(root, "services/creem-moderation-proxy/video-routing.mjs"), "utf8")
+).toString("base64");
 const dockerB64 = Buffer.from(dockerfile).toString("base64");
 
 const caddy = caddyFullSite({ gitee: false });
-const cmd = `sudo mkdir -p /opt/ai-relay/services/creem-moderation-proxy && echo '${serverB64}' | base64 -d | sudo tee /opt/ai-relay/services/creem-moderation-proxy/server.mjs >/dev/null && echo '${dockerB64}' | base64 -d | sudo tee /opt/ai-relay/services/creem-moderation-proxy/Dockerfile >/dev/null && printf 'CREEM_API_KEY=${key}\\nCREEM_TEST_MODE=${testMode}\\n' | sudo tee /opt/ai-relay/.env.moderation >/dev/null && cd /opt/ai-relay && sudo docker build -t keyo-creem-moderation ./services/creem-moderation-proxy && sudo docker rm -f ai-relay-creem-moderation 2>/dev/null; sudo docker run -d --name ai-relay-creem-moderation --restart always --network host --env-file /opt/ai-relay/.env.moderation -e UPSTREAM_URL=http://127.0.0.1:3000 -e LISTEN_HOST=127.0.0.1 -e PORT=3001 keyo-creem-moderation && sudo tee /etc/caddy/Caddyfile >/dev/null <<'EOF'
+const cmd = `sudo mkdir -p /opt/ai-relay/services/creem-moderation-proxy && echo '${serverB64}' | base64 -d | sudo tee /opt/ai-relay/services/creem-moderation-proxy/server.mjs >/dev/null && echo '${routingB64}' | base64 -d | sudo tee /opt/ai-relay/services/creem-moderation-proxy/video-routing.mjs >/dev/null && echo '${dockerB64}' | base64 -d | sudo tee /opt/ai-relay/services/creem-moderation-proxy/Dockerfile >/dev/null && printf 'CREEM_API_KEY=${key}\\nCREEM_TEST_MODE=${testMode}\\n' | sudo tee /opt/ai-relay/.env.moderation >/dev/null && cd /opt/ai-relay && sudo docker build -t keyo-creem-moderation ./services/creem-moderation-proxy && sudo docker rm -f ai-relay-creem-moderation 2>/dev/null; sudo docker run -d --name ai-relay-creem-moderation --restart always --network host --env-file /opt/ai-relay/.env.moderation -e UPSTREAM_URL=http://127.0.0.1:3000 -e LISTEN_HOST=127.0.0.1 -e PORT=3001 keyo-creem-moderation && sudo tee /etc/caddy/Caddyfile >/dev/null <<'EOF'
 ${caddy}EOF
 sudo caddy validate --config /etc/caddy/Caddyfile && sudo systemctl reload caddy && curl -sI https://www.keyoapi.xyz/robots.txt | head -n 5 && curl -sI https://www.keyoapi.xyz/ | head -n 5 && sudo docker logs --tail 20 ai-relay-creem-moderation`;
 

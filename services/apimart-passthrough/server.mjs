@@ -17,6 +17,7 @@
  *   MARKUP=1.2
  */
 import http from "http";
+import { extractTaskId, normalizeVideoPoll, taskStatus } from "./task-responses.mjs";
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
@@ -674,133 +675,6 @@ function enrichSubmitTaskIdAliases(raw, publicModelId) {
   }
 }
 
-function normalizeGrsaiPollJson(raw, taskId) {
-  let j = {};
-  try {
-    j = JSON.parse(raw || "{}");
-  } catch {
-    return raw;
-  }
-  const st = String(j.status || j.data?.status || "").toLowerCase();
-  const mapped =
-    st === "succeeded" || st === "success" || st === "completed" || st === "done"
-      ? "completed"
-      : st === "failed" || st === "error" || st === "cancelled" || st === "violation"
-        ? "failed"
-        : st === "pending" || st === "queued" || st === "running" || st === "processing"
-          ? "processing"
-          : st || "processing";
-  const url =
-    j.url ||
-    j.video_url ||
-    j.data?.url ||
-    j.data?.video_url ||
-    (Array.isArray(j.results) && j.results[0]?.url) ||
-    (Array.isArray(j.data?.results) && j.data.results[0]?.url) ||
-    "";
-  const out = {
-    code: 200,
-    id: taskId,
-    task_id: taskId,
-    status: mapped,
-    data: {
-      id: taskId,
-      task_id: taskId,
-      status: mapped,
-      progress:
-        j.progress ?? j.data?.progress ?? (mapped === "completed" ? 100 : 0),
-      result: url
-        ? { videos: [{ url: [url] }] }
-        : j.data?.result || j.result || null,
-    },
-  };
-  if (url) out.url = url;
-  return JSON.stringify(out);
-}
-
-/** Map vendor status words 鈫?processing|completed|failed|cancelled */
-function mapAsyncStatus(raw) {
-  const st = String(raw || "").toLowerCase();
-  if (["succeeded", "success", "completed", "done"].includes(st)) return "completed";
-  if (["failed", "failure", "error"].includes(st)) return "failed";
-  if (["cancelled", "canceled"].includes(st)) return "cancelled";
-  if (
-    [
-      "pending",
-      "queued",
-      "submitted",
-      "running",
-      "processing",
-      "waiting",
-      "in_progress",
-    ].includes(st)
-  ) {
-    return "processing";
-  }
-  return st || "processing";
-}
-
-function firstVideoUrlFromPoll(j) {
-  const videos = j?.data?.result?.videos || j?.result?.videos;
-  if (Array.isArray(videos) && videos[0]) {
-    const u = videos[0].url;
-    if (Array.isArray(u) && u[0]) return String(u[0]);
-    if (typeof u === "string" && u) return u;
-  }
-  return (
-    j?.url ||
-    j?.video_url ||
-    j?.data?.url ||
-    j?.data?.video_url ||
-    ""
-  );
-}
-
-/**
- * APIMart / Openlux Path B poll: keep vendor fields, but make AI-friendly:
- * - top-level id / task_id / status / url
- * - data.status normalized to completed|failed|processing
- * - data.result.videos[0].url always an array when present
- */
-function normalizeApimartPollJson(raw, taskId) {
-  let j = {};
-  try {
-    j = JSON.parse(raw || "{}");
-  } catch {
-    return raw;
-  }
-  const data =
-    j.data && typeof j.data === "object" && !Array.isArray(j.data) ? { ...j.data } : {};
-  const rawSt = data.status || j.status || "";
-  const mapped = mapAsyncStatus(rawSt);
-  let url = firstVideoUrlFromPoll({ ...j, data });
-  if (url) {
-    if (!data.result || typeof data.result !== "object") data.result = {};
-    const videos = Array.isArray(data.result.videos) ? data.result.videos : [];
-    if (!videos[0]) {
-      data.result.videos = [{ url: [url] }];
-    } else {
-      const u0 = videos[0].url;
-      if (typeof u0 === "string") videos[0] = { ...videos[0], url: [u0] };
-      else if (!Array.isArray(u0) || !u0[0]) videos[0] = { ...videos[0], url: [url] };
-      data.result.videos = videos;
-    }
-  }
-  data.id = data.id || taskId;
-  data.task_id = data.task_id || taskId;
-  if (rawSt && String(rawSt).toLowerCase() !== mapped) data.status_raw = rawSt;
-  data.status = mapped;
-  if (mapped === "completed" && data.progress == null) data.progress = 100;
-
-  j.code = j.code ?? 200;
-  j.id = j.id || taskId;
-  j.task_id = j.task_id || taskId;
-  j.status = mapped;
-  j.data = data;
-  if (url) j.url = url;
-  return JSON.stringify(j);
-}
-
 function getPending(taskId) {
   if (!taskId || !fs.existsSync(PENDING_PATH)) return null;
   const db = openDb(PENDING_PATH, true);
@@ -879,17 +753,6 @@ function looksLikeMiss(up) {
   return false;
 }
 
-function extractTaskId(payload) {
-  try {
-    const j = JSON.parse(payload);
-    if (Array.isArray(j.data) && j.data[0]?.task_id) return j.data[0].task_id;
-    if (j.data?.task_id) return j.data.task_id;
-    if (j.data?.id) return j.data.id;
-    if (j.task_id) return j.task_id;
-    if (j.id) return j.id;
-  } catch {}
-  return "";
-}
 
 const server = http.createServer(async (req, res) => {
   if (req.method === "OPTIONS") {
@@ -927,6 +790,9 @@ const server = http.createServer(async (req, res) => {
     });
   }
 
+  if ((isSubmitPath(urlPath) && req.method !== "POST") || (isPollPath(urlPath) && req.method !== "GET")) {
+    return json(res, 405, { error: { message: "Use POST to submit and GET to query tasks.", type: "invalid_request_error" } });
+  }
   const apiKey = extractBearer(req);
   if (!apiKey) {
     return json(res, 401, {
@@ -948,7 +814,16 @@ const server = http.createServer(async (req, res) => {
     if (isPollPath(urlPath)) {
       const tid = pollId(urlPath);
       const pending = getPending(tid);
-      const pendingMeta = pending ? modelMap[pending.model] : null;
+      if (!pending) return json(res, 404, {
+        error: { message: "Task not found. Check the task ID and polling path; contact support for an existing task.", type: "invalid_request_error", code: "task_not_found" },
+      });
+      if (token.skipBill || Number(pending.user_id) !== Number(token.userId)) return json(res, 404, {
+        error: { message: "Task not found for this account.", type: "invalid_request_error", code: "task_not_found" },
+      });
+      const pendingMeta = modelMap[pending.model];
+      if (!pendingMeta) return json(res, 503, {
+        error: { message: "Task configuration unavailable. Contact support with the task ID.", type: "server_error", code: "task_configuration_unavailable" },
+      });
 
       // Grsai docs: GET /v1/api/result?id=  (not POST).
       // While running the body is {id, status:"running", progress}.
@@ -968,7 +843,7 @@ const server = http.createServer(async (req, res) => {
         const text = up.buf.toString("utf8");
         try {
           const j = JSON.parse(text);
-          const st = String(j.status || j.data?.status || "").toLowerCase();
+          const st = taskStatus(j.status || j.data?.status);
           const costUsd = grsaiCostUsd(j);
           const done = [
             "completed",
@@ -978,7 +853,7 @@ const server = http.createServer(async (req, res) => {
             "succeeded",
             "done",
           ].includes(st);
-          if (tid && done) {
+          if (tid && done && up.status >= 200 && up.status < 300 && j.success !== false && !(Number(j.code) >= 400)) {
             settleTask(
               tid,
               costUsd,
@@ -990,7 +865,7 @@ const server = http.createServer(async (req, res) => {
             );
           }
         } catch {}
-        const normalized = Buffer.from(normalizeGrsaiPollJson(text, tid), "utf8");
+        const normalized = Buffer.from(normalizeVideoPoll(text, tid, up.status), "utf8");
         const out = clientUp({
           status: up.status,
           buf: normalized,
@@ -1023,35 +898,15 @@ const server = http.createServer(async (req, res) => {
           return res.end(out.buf);
         }
         const text = up.buf.toString("utf8");
-        let mapped = text;
-        try {
-          const j = JSON.parse(text);
-          const st = String(j.status || "").toLowerCase();
-          const url = j.video_url || j.url || "";
-          const costUsd = aioneCostUsd(j);
-          const done = ["completed", "failed", "cancelled", "success", "succeeded"].includes(st);
-          if (tid && done) {
-            settleTask(
-              tid,
-              costUsd,
-              st === "failed" || st === "cancelled" ? st : st === "completed" || st === "success" || st === "succeeded" ? "completed" : st
-            );
-          }
-          mapped = JSON.stringify({
-            code: 200,
-            id: tid,
-            task_id: tid,
-            status: st,
-            video_url: url,
-            data: {
-              id: tid,
-              task_id: tid,
-              status: st,
-              result: url ? { videos: [{ url: [url] }] } : null,
-            },
-          });
-        } catch {}
-        const normalized = Buffer.from(normalizeApimartPollJson(mapped, tid), "utf8");
+        const normalized = Buffer.from(normalizeVideoPoll(text, tid, up.status), "utf8");
+        if (up.status >= 200 && up.status < 300) {
+          try {
+            const j = JSON.parse(normalized.toString("utf8"));
+            if (["completed", "failed", "cancelled"].includes(j.status)) {
+              settleTask(tid, aioneCostUsd(j), j.status);
+            }
+          } catch { /* non-JSON error remains visible to the client */ }
+        }
         const out = clientUp({
           status: up.status,
           buf: normalized,
@@ -1092,7 +947,7 @@ const server = http.createServer(async (req, res) => {
       const text = up.buf.toString("utf8");
       try {
         const j = JSON.parse(text);
-        const st = String(j.data?.status || j.status || "").toLowerCase();
+        const st = taskStatus(j.data?.status || j.status);
         const cost = j.data?.cost ?? j.cost;
         const done = [
           "completed",
@@ -1102,11 +957,11 @@ const server = http.createServer(async (req, res) => {
           "succeeded",
           "done",
         ].includes(st);
-        if (tid && done) {
+        if (tid && done && up.status >= 200 && up.status < 300 && j.success !== false && !(Number(j.code) >= 400)) {
           settleTask(tid, cost, st === "success" || st === "succeeded" || st === "done" ? "completed" : st);
         }
       } catch {}
-      const normalized = Buffer.from(normalizeApimartPollJson(text, tid), "utf8");
+      const normalized = Buffer.from(normalizeVideoPoll(text, tid, up.status), "utf8");
       const out = clientUp({
         status: up.status,
         buf: normalized,
@@ -1119,6 +974,10 @@ const server = http.createServer(async (req, res) => {
       return res.end(out.buf);
     }
 
+    // Never create an untracked task when the billing DB is unavailable.
+    if (token.skipBill) return json(res, 503, {
+      error: { message: "Task service temporarily unavailable. Please contact support.", type: "server_error", code: "task_storage_unavailable" },
+    });
     // submit
     let body = {};
     try {
@@ -1162,6 +1021,10 @@ const server = http.createServer(async (req, res) => {
       });
     }
 
+    if (!body || typeof body !== "object" || Array.isArray(body)) return json(res, 400, {
+      error: { message: "JSON body must be an object", type: "invalid_request_error" },
+    });
+    req.headers["content-type"] = "application/json";
     // Validate BEFORE precharge — never bill known-bad requests
     const verr = validateVideoClientBody(modelId, body);
     if (verr) {

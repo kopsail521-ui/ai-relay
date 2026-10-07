@@ -35,6 +35,8 @@ function h(string $s): string
     return htmlspecialchars($s, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
 }
 
+require_once $root . '/scripts/geoflow-article-shell.php';
+
 function is_smoke_slug(string $slug): bool
 {
     $s = strtolower($slug);
@@ -157,6 +159,166 @@ function scrub_body_html(string $html): array
     return [$html, $extracted];
 }
 
+/** Strip GEOFlow “materials” scaffolding and self-hedges from article body HTML. */
+function scrub_geoflow_voice(string $html): string
+{
+    $catalog = '<a href="/pricing-list">/pricing-list</a> or <a href="/pricing">/pricing</a>';
+    $claude = '<a href="/pricing-list">/pricing-list</a> or <a href="/claude-api-pricing">/claude-api-pricing</a>';
+
+    $inline = [
+        // Materials scaffolding → direct product voice
+        '/\bThe supplied product materials describe KeyoAPI as\b/iu'
+            => 'KeyoAPI is',
+        '/\bKeyoAPI is described in the provided product materials as\b/iu'
+            => 'KeyoAPI is',
+        '/\bThe available materials indicate that KeyoAPI provides\b/iu'
+            => 'KeyoAPI provides',
+        '/\bThe available materials indicate that\b/iu'
+            => 'KeyoAPI',
+        '/\bThe product materials describe\b/iu'
+            => 'KeyoAPI documents',
+        '/\bThe provided materials show that\b/iu'
+            => '',
+        '/\bFor KeyoAPI, the supplied materials document\b/iu'
+            => 'KeyoAPI documents',
+        '/\bFor KeyoAPI, the supplied materials state that\b/iu'
+            => 'KeyoAPI uses',
+        '/\bThe supplied materials document\b/iu'
+            => 'KeyoAPI documents',
+        '/\bThe supplied materials state that\b/iu'
+            => 'KeyoAPI uses',
+        '/\bthe supplied materials document\b/iu'
+            => 'KeyoAPI documents',
+        '/\bthe materials also document\b/iu'
+            => 'KeyoAPI also documents',
+
+        // “The documented …” endpoint scaffolding (not generic “documented behavior”)
+        '/\bThe documented API base URL is:\s*/iu'
+            => 'The API base URL is: ',
+        '/\bThe documented chat endpoint is:\s*/iu'
+            => 'The chat completions endpoint is: ',
+        '/\bthe documented model-list endpoint\b/iu'
+            => 'the model-list endpoint',
+
+        // Claude capability hedges
+        '/,\s*but it does not assume that KeyoAPI provides Claude models or Claude API compatibility\.?\s*/iu'
+            => '. KeyoAPI serves Claude-class models through an OpenAI-compatible endpoint; confirm current IDs and rates on '
+            . $claude . '. ',
+        '/\bThey do not establish that KeyoAPI supports Claude models[^.]*\./iu'
+            => 'KeyoAPI serves Claude-class models through an OpenAI-compatible endpoint; confirm current IDs and rates on '
+            . $claude . '.',
+        '/\bClaude compatibility should never be assumed without explicit confirmation in the current provider documentation\./iu'
+            => 'Confirm current Claude-class model IDs and rates on ' . $claude . ' before production use.',
+
+        // Image / speech hedges → live catalog
+        '/,\s*but they do not establish a complete image-generation endpoint[^.]*\./iu'
+            => '. Confirm image model IDs, request schemas, and rates in the live catalog at ' . $catalog . '.',
+        '/\bbut they do not verify a specific speech-to-text endpoint[^.]*\./iu'
+            => 'Confirm speech-to-text model IDs, audio limits, and response schemas in the live catalog at ' . $catalog . '.',
+        '/\bThat pricing information does not establish that KeyoAPI offers[^.]*\./iu'
+            => 'Confirm whether this workload is listed in the live model catalog at ' . $catalog . '.',
+
+        // Drop-in / candidate-gateway hedges
+        '/\btreat KeyoAPI as a candidate gateway to evaluate, not as a drop-in Claude replacement\.?\s*/iu'
+            => 'Use KeyoAPI as an OpenAI-compatible gateway; confirm Claude-class model IDs on ' . $claude . '. ',
+        '/\bnot as a drop-in Claude replacement\b/iu'
+            => 'after confirming Claude-class model IDs on ' . $claude,
+        '/\bcandidate gateway to evaluate\b/iu'
+            => 'OpenAI-compatible multi-model gateway',
+        '/\btreat image generation as an unverified integration[^.]*\./iu'
+            => 'Confirm image-generation models and endpoints in the live catalog at ' . $catalog . '.',
+
+        // Affirmative gateway statement (when buried in materials phrasing)
+        '/\bKeyoAPI can be evaluated as an independent multi-model gateway using its current documentation and live \/v1\/models catalog\.[^.]*\./iu'
+            => 'KeyoAPI is an independent OpenAI-compatible multi-model gateway with one API key and one base URL. '
+            . 'Confirm model IDs, rates, and capabilities on ' . $catalog . ' and via GET /v1/models.',
+    ];
+
+    $deleteNorm = [
+        '/^Therefore,\s*treat KeyoAPI as a candidate gateway to evaluate,\s*not as a drop-in Claude replacement\.?$/iu',
+        '/^That means image generation should be treated as an unverified integration until[^.]*\.?$/iu',
+        '/^That pricing information does not establish that KeyoAPI offers an InfiniteTalk[^.]*\.?$/iu',
+    ];
+
+    $rewriteNorm = [
+        '/^This article presents a verification-first migration workflow using KeyoAPI as the example gateway\.\s*It distinguishes documented integration facts from details that must be checked in the live documentation and model catalog\.?$/iu'
+            => 'This article presents a verification-first migration workflow using KeyoAPI as an OpenAI-compatible multi-model gateway. '
+            . 'Confirm model IDs, endpoints, and rates in the live catalog at ' . $catalog . ' before production use.',
+        '/^This article presents a practical migration and evaluation workflow\.\s*It uses KeyoAPI as an example of a separately operated, OpenAI-compatible multi-model gateway,[^.]*\.\s*Verify the current model catalog and documentation before selecting it as a fallback\.?$/iu'
+            => 'This article presents a practical migration and evaluation workflow using KeyoAPI, an independent OpenAI-compatible multi-model gateway. '
+            . 'KeyoAPI serves Claude-class and other models through one endpoint; confirm current IDs and rates on ' . $claude . ' before selecting fallbacks.',
+    ];
+
+    $html = preg_replace_callback(
+        '/<p([^>]*)>([\s\S]*?)<\/p>/iu',
+        static function (array $m) use ($inline, $deleteNorm, $rewriteNorm): string {
+            $attrs = $m[1];
+            $inner = $m[2];
+            $plain = html_entity_decode(strip_tags($inner), ENT_QUOTES | ENT_HTML5, 'UTF-8');
+            $norm = preg_replace('/\s+/u', ' ', trim($plain)) ?? '';
+
+            if ($norm === '') {
+                return '';
+            }
+
+            foreach ($deleteNorm as $re) {
+                if (preg_match($re, $norm) === 1) {
+                    return '';
+                }
+            }
+
+            foreach ($rewriteNorm as $re => $replacement) {
+                if (preg_match($re, $norm) === 1) {
+                    return '<p' . $attrs . '>' . $replacement . '</p>';
+                }
+            }
+
+            // Skip paragraphs that are mostly code/pre (curl blocks stored as <p> on some articles)
+            if (preg_match('/^\s*(?:curl|GET|POST|Authorization:|import |from |client\s*=)/iu', $norm) === 1) {
+                return $m[0];
+            }
+
+            $out = $inner;
+            foreach ($inline as $pattern => $replacement) {
+                $next = preg_replace($pattern, $replacement, $out);
+                if (is_string($next)) {
+                    $out = $next;
+                }
+            }
+
+            // Collapse double spaces left by empty replacements
+            $out = preg_replace('/  +/', ' ', $out) ?? $out;
+            $out = preg_replace('/\.\s+\./u', '.', $out) ?? $out;
+
+            if (trim(strip_tags($out)) === '') {
+                return '';
+            }
+
+            return '<p' . $attrs . '>' . $out . '</p>';
+        },
+        $html
+    ) ?? $html;
+
+    // Same voice scrub on list items (short material leaks in bullets)
+    $html = preg_replace_callback(
+        '/<li([^>]*)>([\s\S]*?)<\/li>/iu',
+        static function (array $m) use ($inline): string {
+            $out = $m[2];
+            foreach ($inline as $pattern => $replacement) {
+                $next = preg_replace($pattern, $replacement, $out);
+                if (is_string($next)) {
+                    $out = $next;
+                }
+            }
+            return '<li' . $m[1] . '>' . $out . '</li>';
+        },
+        $html
+    ) ?? $html;
+
+    $html = preg_replace("/\n{3,}/", "\n\n", $html) ?? $html;
+    return $html;
+}
+
 function first_body_sentence(string $html): string
 {
     if (!preg_match('/<p[^>]*>([\s\S]*?)<\/p>/i', $html, $m)) {
@@ -195,7 +357,7 @@ function load_gate(string $dataDir): array
     return $gate;
 }
 
-function rewrite_article_html(string $blogDir, string $slug, array &$row, bool $isDraft): void
+function rewrite_article_html(string $blogDir, string $site, string $slug, array &$row, bool $isDraft): void
 {
     $path = $blogDir . '/article/' . $slug . '/index.html';
     if (!is_file($path)) {
@@ -207,14 +369,14 @@ function rewrite_article_html(string $blogDir, string $slug, array &$row, bool $
         $title = trim(html_entity_decode(strip_tags($m[1]), ENT_QUOTES | ENT_HTML5, 'UTF-8'));
         $row['title'] = $title;
     }
-
-    $body = '';
-    if (preg_match('/<article class="geoflow-body">([\s\S]*?)<\/article>/i', $html, $m)) {
-        $body = $m[1];
-    } else {
-        $body = $html;
+    if ($title === '') {
+        $title = $slug;
+        $row['title'] = $title;
     }
+
+    $body = geoflow_extract_body($html);
     [$body, $fromTemplate] = scrub_body_html($body);
+    $body = scrub_geoflow_voice($body);
 
     $candidates = [
         $fromTemplate,
@@ -255,51 +417,9 @@ function rewrite_article_html(string $blogDir, string $slug, array &$row, bool $
         $row['meta_description_full'] = clean_meta_text($fromTemplate, $title, 0);
     }
 
-    $html = preg_replace(
-        '/<meta name="description" content="[^"]*"\s*\/?>/i',
-        '<meta name="description" content="' . h($descAttr) . '" />',
-        $html,
-        1
-    ) ?? $html;
-
-    if ($isDraft || is_smoke_slug($slug)) {
-        if (!preg_match('/name="robots"/i', $html)) {
-            $html = preg_replace(
-                '/(<meta name="description"[^>]*>)/i',
-                '$1' . "\n" . '<meta name="robots" content="noindex,nofollow" />',
-                $html,
-                1
-            ) ?? $html;
-        }
-    } else {
-        $html = preg_replace('/\s*<meta name="robots" content="noindex[^"]*"\s*\/?>/i', '', $html) ?? $html;
-    }
-
-    if (preg_match('/<p class="sub">/i', $html)) {
-        $html = preg_replace(
-            '/<p class="sub">[\s\S]*?<\/p>/i',
-            '<p class="sub">' . h($excerpt) . '</p>',
-            $html,
-            1
-        ) ?? $html;
-    } elseif ($excerpt !== '') {
-        $html = preg_replace(
-            '/(<h1[^>]*>[\s\S]*?<\/h1>)/i',
-            '$1' . "\n" . '    <p class="sub">' . h($excerpt) . '</p>',
-            $html,
-            1
-        ) ?? $html;
-    }
-
-    if (preg_match('/<article class="geoflow-body">/i', $html)) {
-        $html = preg_replace(
-            '/<article class="geoflow-body">[\s\S]*?<\/article>/i',
-            '<article class="geoflow-body">' . "\n" . $body . "\n" . '    </article>',
-            $html,
-            1
-        ) ?? $html;
-    }
-
+    $canonical = $site . '/brand/blog/article/' . rawurlencode($slug) . '/';
+    $published = (string)($row['published_at'] ?? '');
+    $html = geoflow_wrap_article($title, $descAttr, $excerpt, $body, $canonical, $published, $isDraft);
     file_put_contents($path, $html);
 }
 
@@ -354,23 +474,7 @@ function rebuild(string $blogDir, string $site, array $catalog, array $gate): vo
 <link rel="stylesheet" href="/brand/keyo-theme.css" />
 </head>
 <body>
-  <header class="k-nav">
-    <a class="k-wordmark" href="/">
-      <img src="/brand/logo.svg" alt="" width="22" height="22" />
-      KeyoAPI
-    </a>
-    <nav aria-label="Primary">
-      <a href="/pricing-list">Pricing list</a>
-      <a href="/pricing">Model Square</a>
-      <a href="/models">Models</a>
-      <a href="/free-models">Free models</a>
-      <a href="/brand/keyo-docs.html">Docs</a>
-      <a href="/brand/faq.html">FAQ</a>
-      <a href="/sign-in">Sign in</a>
-      <a class="k-nav-cta" href="/sign-up">Get started</a>
-    </nav>
-  </header>
-  <div class="k-page">
+' . geoflow_public_nav() . '  <div class="k-page">
     <h1>Blog</h1>
     <p class="sub">Guides for OpenAI-compatible APIs, custom base URLs, and multi-model gateways.</p>
 ' . implode("\n", $cards) . '
@@ -427,28 +531,51 @@ if (isset($opts['delete-smoke'])) {
     }
 }
 
-if (isset($opts['sanitize-all'])) {
-    foreach ($catalog as $slug => &$row) {
-        if (!is_array($row)) {
+function wrap_articles_on_disk(string $blogDir, string $site, array &$catalog): void
+{
+    $ok = 0;
+    $fail = 0;
+    foreach (glob($blogDir . '/article/*/index.html') ?: [] as $path) {
+        $slug = basename(dirname($path));
+        if ($slug === '' || is_smoke_slug($slug)) {
             continue;
         }
-        if (is_smoke_slug((string)$slug)) {
-            $row['status'] = 'draft';
-        } elseif (!isset($row['status']) || $row['status'] === '') {
+        if (!isset($catalog[$slug]) || !is_array($catalog[$slug])) {
+            $catalog[$slug] = [
+                'slug' => $slug,
+                'title' => $slug,
+                'path' => '/brand/blog/article/' . $slug . '/',
+                'status' => 'published',
+            ];
+        }
+        $row = &$catalog[$slug];
+        if (!isset($row['status']) || $row['status'] === '') {
             $row['status'] = 'published';
         }
-        $isDraft = ($row['status'] ?? 'draft') !== 'published' || is_smoke_slug((string)$slug);
-        rewrite_article_html($blogDir, (string)$slug, $row, $isDraft);
-        echo "sanitized $slug\n";
+        $isDraft = ($row['status'] ?? 'draft') !== 'published';
+        rewrite_article_html($blogDir, $site, $slug, $row, $isDraft);
+        unset($row);
+        $start = ltrim((string)file_get_contents($path, false, null, 0, 64));
+        if (str_starts_with($start, '<!DOCTYPE')) {
+            echo "WRAP_OK $slug\n";
+            $ok++;
+        } else {
+            echo "WRAP_FAIL $slug " . json_encode(substr($start, 0, 40)) . "\n";
+            $fail++;
+        }
     }
-    unset($row);
+    echo "WRAP_COUNT ok={$ok} fail={$fail}\n";
+}
+
+if (isset($opts['sanitize-all'])) {
+    wrap_articles_on_disk($blogDir, $site, $catalog);
 }
 
 if (!empty($opts['rewrite-html'])) {
     $slug = (string)$opts['rewrite-html'];
     if (isset($catalog[$slug]) && is_array($catalog[$slug])) {
         $isDraft = ($catalog[$slug]['status'] ?? 'draft') !== 'published';
-        rewrite_article_html($blogDir, $slug, $catalog[$slug], $isDraft);
+        rewrite_article_html($blogDir, $site, $slug, $catalog[$slug], $isDraft);
         echo "rewrote $slug\n";
     }
 }

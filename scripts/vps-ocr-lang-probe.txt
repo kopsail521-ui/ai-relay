@@ -1,0 +1,236 @@
+# OCR zh/ar/en probe on VPS (no git pull). Paste whole block.
+# Uses a live token from one-api.db (prefers user_id=3), downloads Noto fonts, calls MinerU + Unlimited-OCR.
+
+cd /opt/ai-relay && python3 <<'PY'
+import base64, json, os, sqlite3, time, urllib.request
+from pathlib import Path
+
+DB = "/opt/ai-relay/data/new-api/one-api.db"
+BASE = "https://www.keyoapi.xyz"
+WORKDIR = Path("/tmp/keyo-ocr-probe")
+WORKDIR.mkdir(parents=True, exist_ok=True)
+
+def get_key():
+    c = sqlite3.connect(f"file:{DB}?mode=ro", uri=True)
+    rows = c.execute(
+        "SELECT user_id, key, name FROM tokens WHERE status=1 AND deleted_at IS NULL "
+        "ORDER BY CASE WHEN user_id=3 THEN 0 ELSE 1 END, id DESC LIMIT 20"
+    ).fetchall()
+    if not rows:
+        raise SystemExit("NO_TOKEN")
+    uid, key, name = rows[0]
+    key = key if str(key).startswith("sk-") else "sk-" + key
+    print("using_token", {"user_id": uid, "name": name, "key_prefix": key[:10] + "..."})
+    return key
+
+def fetch(url, dest):
+    if dest.exists() and dest.stat().st_size > 1000:
+        return dest
+    print("download", url)
+    urllib.request.urlretrieve(url, dest)
+    return dest
+
+def make_png(path, lines, font_path, size=36):
+    from PIL import Image, ImageDraw, ImageFont
+    font = ImageFont.truetype(str(font_path), size)
+    pad, gap = 48, 28
+    tmp = Image.new("RGB", (10, 10), "white")
+    d0 = ImageDraw.Draw(tmp)
+    widths, heights = [], []
+    for line in lines:
+        b = d0.textbbox((0, 0), line, font=font)
+        widths.append(b[2] - b[0]); heights.append(b[3] - b[1])
+    w = max(max(widths) + pad * 2, 720)
+    h = max(pad * 2 + sum(heights) + gap * (len(lines) - 1), 400)
+    img = Image.new("RGB", (w, h), "white")
+    draw = ImageDraw.Draw(img)
+    y = pad
+    for i, line in enumerate(lines):
+        draw.text((pad, y), line, fill=(20, 20, 20), font=font)
+        y += heights[i] + gap
+    img.save(path)
+    print("wrote", path, img.size)
+
+# fonts (prefer apt packages — no multi‑MB download)
+os.system(
+    "sudo apt-get install -y python3-pil fonts-noto-cjk fonts-noto-core fonts-dejavu-core >/dev/null 2>&1"
+)
+from PIL import Image  # noqa
+
+def pick_font(candidates):
+    for p in candidates:
+        if Path(p).exists():
+            return Path(p)
+    raise SystemExit("NO_FONT " + " | ".join(candidates))
+
+noto_sc = pick_font(
+    [
+        "/usr/share/fonts/opentype/noto/NotoSansCJK-Regular.ttc",
+        "/usr/share/fonts/opentype/noto/NotoSansCJKsc-Regular.otf",
+        "/usr/share/fonts/truetype/noto/NotoSansCJK-Regular.ttc",
+    ]
+)
+noto_ar = pick_font(
+    [
+        "/usr/share/fonts/truetype/noto/NotoNaskhArabic-Regular.ttf",
+        "/usr/share/fonts/truetype/noto/NotoSansArabic-Regular.ttf",
+        "/usr/share/fonts/opentype/noto/NotoNaskhArabic-Regular.otf",
+    ]
+)
+en_font = pick_font(
+    [
+        "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf",
+        "/usr/share/fonts/truetype/liberation/LiberationSans-Regular.ttf",
+        str(noto_ar),
+    ]
+)
+print("fonts", {"zh": str(noto_sc), "ar": str(noto_ar), "en": str(en_font)})
+
+fixtures = {
+    "zh-complex.png": (
+        noto_sc,
+        [
+            "KeyoAPI OCR 中文测试页",
+            "发票号：INV-2026-1004",
+            "金额：人民币 壹仟贰佰叁拾肆元整",
+            "MARKER_ZH_OK_矿石文档",
+        ],
+        ["MARKER_ZH_OK", "发票号", "壹仟"],
+    ),
+    "ar-simple.png": (
+        noto_ar,
+        [
+            "اختبار التعرف الضوئي",
+            "KeyoAPI OCR Arabic",
+            "رقم الفاتورة: INV-AR-77",
+            "MARKER_AR_OK_مرحبا",
+        ],
+        ["MARKER_AR_OK", "اختبار", "الفاتورة"],
+    ),
+    "en-control.png": (
+        en_font,
+        [
+            "KeyoAPI OCR English control page",
+            "Invoice: INV-EN-42",
+            "MARKER_EN_OK_HELLO",
+        ],
+        ["MARKER_EN_OK", "Invoice", "HELLO"],
+    ),
+}
+
+for name, (font, lines, _) in fixtures.items():
+    make_png(WORKDIR / name, lines, font)
+
+KEY = get_key()
+
+def req(method, url, data=None, headers=None, form=None):
+    h = {"Authorization": f"Bearer {KEY}"}
+    if headers:
+        h.update(headers)
+    if form is not None:
+        # multipart via curl for reliability
+        import subprocess, tempfile
+        cmd = ["curl", "-sS", "-X", method, url, "-H", f"Authorization: Bearer {KEY}"]
+        for k, v in form.items():
+            if k == "file":
+                cmd += ["-F", f"file=@{v};type=image/png"]
+            else:
+                cmd += ["-F", f"{k}={v}"]
+        out = subprocess.check_output(cmd, timeout=180)
+        return 200, out
+    body = None
+    if data is not None:
+        body = json.dumps(data).encode()
+        h["Content-Type"] = "application/json"
+    r = urllib.request.Request(url, data=body, headers=h, method=method)
+    try:
+        with urllib.request.urlopen(r, timeout=180) as resp:
+            return resp.status, resp.read()
+    except urllib.error.HTTPError as e:
+        return e.code, e.read()
+
+def flatten(obj):
+    return json.dumps(obj, ensure_ascii=False)
+
+report = []
+for name, (_, _, markers) in fixtures.items():
+    fp = WORKDIR / name
+    print("\n== MinerU", name, "==")
+    st, raw = req("POST", f"{BASE}/v1/async/documents/parse", form={"model": "MinerU2.5-Pro", "file": str(fp)})
+    try:
+        j = json.loads(raw)
+    except Exception:
+        j = {"raw": raw[:400].decode("utf-8", "replace")}
+    print("submit", st, flatten(j)[:400])
+    task = (j.get("data") or {}).get("id") or (j.get("data") or {}).get("task_id") or j.get("id") or j.get("task_id")
+    miner_blob = flatten(j)
+    if task:
+        for _ in range(40):
+            time.sleep(3)
+            pst, praw = req("GET", f"{BASE}/v1/task/{task}")
+            try:
+                pj = json.loads(praw)
+            except Exception:
+                pj = {"raw": praw[:400].decode("utf-8", "replace")}
+            miner_blob = flatten(pj)
+            status = str((pj.get("data") or {}).get("status") or pj.get("status") or "").lower()
+            print("poll", pst, status, miner_blob[:300])
+            if status in ("success", "succeeded", "completed", "failed", "error") or "MARKER_" in miner_blob:
+                break
+    m_hits = [m for m in markers if m in miner_blob]
+    print("miner_hits", m_hits)
+
+    print("== Unlimited-OCR", name, "==")
+    b64 = base64.b64encode(fp.read_bytes()).decode()
+    data_url = f"data:image/png;base64,{b64}"
+    ust, uraw = req(
+        "POST",
+        f"{BASE}/v1/chat/completions",
+        data={
+            "model": "Unlimited-OCR",
+            "messages": [
+                {
+                    "role": "user",
+                    "content": [
+                        {"type": "text", "text": "Extract all visible text exactly. Keep original language."},
+                        {"type": "image_url", "image_url": {"url": data_url}},
+                    ],
+                }
+            ],
+        },
+    )
+    try:
+        uj = json.loads(uraw)
+    except Exception:
+        uj = {"raw": uraw[:500].decode("utf-8", "replace")}
+    content = (
+        (((uj.get("choices") or [{}])[0].get("message") or {}).get("content"))
+        or flatten(uj)
+    )
+    print("chat", ust, str(content)[:500])
+    u_hits = [m for m in markers if m in str(content)]
+    print("uno_hits", u_hits)
+    report.append(
+        {
+            "file": name,
+            "mineru_ok": len(m_hits) >= min(2, len(markers)),
+            "mineru_hits": m_hits,
+            "uno_ok": len(u_hits) >= min(2, len(markers)),
+            "uno_hits": u_hits,
+            "task": task,
+        }
+    )
+
+print("\n== SUMMARY ==")
+print(json.dumps(report, ensure_ascii=False, indent=2))
+zh = next(r for r in report if r["file"] == "zh-complex.png")
+ar = next(r for r in report if r["file"] == "ar-simple.png")
+print(
+    "VERDICT",
+    f"zh_mineru={'PASS' if zh['mineru_ok'] else 'FAIL'}",
+    f"zh_uno={'PASS' if zh['uno_ok'] else 'FAIL'}",
+    f"ar_mineru={'PASS' if ar['mineru_ok'] else 'FAIL'}",
+    f"ar_uno={'PASS' if ar['uno_ok'] else 'FAIL'}",
+)
+print("DONE_OCR_LANG_PROBE")
+PY

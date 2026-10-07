@@ -209,6 +209,12 @@ function validateVideoClientBody(modelId, body) {
         message: "MiniMax-H3 aspectRatio is landscape or portrait only (upstream has no square / 1:1)",
       };
     }
+    if (ar && !["landscape", "portrait", "16:9", "9:16", "horizontal", "vertical"].includes(ar)) {
+      return {
+        param: "aspectRatio",
+        message: "MiniMax-H3 aspectRatio must be landscape or portrait (aliases: 16:9 / 9:16)",
+      };
+    }
     const dur = body.duration ?? body.seconds;
     if (dur != null) {
       const n = Number(dur);

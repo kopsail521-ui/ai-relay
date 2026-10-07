@@ -500,6 +500,101 @@ async function prepareInfiniteTalkRequest(bodyBuf, contentType) {
   };
 }
 
+function duixSellUsdPerSecond(durationSec, want1080) {
+  const over15 = Number(durationSec) > 15;
+  if (want1080) return over15 ? 0.20548 : 0.10274;
+  return over15 ? 0.13699 : 0.06849;
+}
+
+function formLooks1080(form) {
+  for (const key of ["resolution", "output_resolution", "size"]) {
+    const v = form.get(key);
+    if (v != null && /1080/i.test(String(v))) return true;
+  }
+  return false;
+}
+
+async function prepareDuixAvatarRequest(bodyBuf, contentType) {
+  if (!/multipart\/form-data/i.test(String(contentType || ""))) {
+    return {
+      error:
+        "Duix-Avatar requires multipart/form-data with file fields ref_audio and ref_video (JSON URLs are not accepted)",
+      code: "invalid_duix_content_type",
+    };
+  }
+  let form;
+  try {
+    form = await new Request("http://localhost/", {
+      method: "POST",
+      headers: { "content-type": contentType },
+      body: bodyBuf,
+    }).formData();
+  } catch {
+    return { error: "Invalid multipart body", code: "invalid_multipart_body" };
+  }
+  let changed = false;
+  for (const [legacy, current] of [
+    ["audio", "ref_audio"],
+    ["video", "ref_video"],
+    ["audio_url", "ref_audio"],
+    ["video_url", "ref_video"],
+  ]) {
+    if (!form.has(current) && form.has(legacy)) {
+      form.set(current, form.get(legacy));
+      changed = true;
+    }
+  }
+  if (String(form.get("model") || "Duix-Avatar") !== "Duix-Avatar") {
+    return { error: "Invalid model for this endpoint", code: "invalid_model" };
+  }
+  const audio = form.get("ref_audio");
+  const video = form.get("ref_video");
+  if (!(audio instanceof Blob) || !(video instanceof Blob)) {
+    return {
+      error: "Duix-Avatar requires uploaded files ref_audio and ref_video",
+      code: "missing_duix_files",
+    };
+  }
+  let duration;
+  try {
+    duration = await audioDurationSeconds(
+      Buffer.from(await audio.arrayBuffer()),
+      audio.name
+    );
+  } catch (e) {
+    console.warn("[gitee-passthrough] duix audio probe failed:", e.message || e);
+    return {
+      error: "Unable to read ref_audio duration; upload a valid audio file",
+      code: "invalid_duix_audio",
+    };
+  }
+  if (duration > 60) {
+    return {
+      error: `Duix-Avatar audio must be 60 seconds or shorter (received ${duration.toFixed(2)} seconds)`,
+      code: "duix_audio_too_long",
+    };
+  }
+  const want1080 = formLooks1080(form);
+  const seconds = Math.max(1, Math.ceil(duration));
+  const priceUsd = Number((duixSellUsdPerSecond(duration, want1080) * seconds).toFixed(6));
+  if (!form.has("model")) {
+    form.set("model", "Duix-Avatar");
+    changed = true;
+  }
+  if (!changed) {
+    return { body: bodyBuf, contentType, duration, seconds, want1080, priceUsd };
+  }
+  const request = new Request("http://localhost/", { method: "POST", body: form });
+  return {
+    body: Buffer.from(await request.arrayBuffer()),
+    contentType: request.headers.get("content-type"),
+    duration,
+    seconds,
+    want1080,
+    priceUsd,
+  };
+}
+
 async function audioDurationSeconds(audioBuf, fileName) {
   const tempDir = await fs.promises.mkdtemp(path.join(os.tmpdir(), "keyo-audio-"));
   const extension = path.extname(fileName || "").toLowerCase();
@@ -836,27 +931,31 @@ const server = http.createServer(async (req, res) => {
       forwardBuf = Buffer.from(JSON.stringify(body), "utf8");
     } catch {}
   }
-  // Duix-Avatar upstream requires ref_audio / ref_video (normalize common aliases).
-  if (
-    urlPath.includes("/async/videos/audio-video-to-video") &&
-    bodyBuf.length &&
-    String(req.headers["content-type"] || "").includes("json")
-  ) {
-    try {
-      const body = JSON.parse(bodyBuf.toString("utf8") || "{}");
-      if (!body.ref_audio && (body.audio_url || body.audio)) {
-        body.ref_audio = body.audio_url || body.audio;
-      }
-      if (!body.ref_video && (body.video_url || body.video)) {
-        body.ref_video = body.video_url || body.video;
-      }
-      forwardBuf = Buffer.from(JSON.stringify(body), "utf8");
-    } catch {}
+  let duixBillUsd = null;
+  if (urlPath.includes("/async/videos/audio-video-to-video")) {
+    const prepared = await prepareDuixAvatarRequest(
+      bodyBuf,
+      req.headers["content-type"]
+    );
+    if (prepared.error) {
+      return json(res, 400, {
+        error: {
+          message: prepared.error,
+          type: "invalid_request_error",
+          code: prepared.code,
+        },
+      });
+    }
+    forwardBuf = prepared.body;
+    req.headers["content-type"] = prepared.contentType;
+    duixBillUsd = prepared.priceUsd;
   }
 
   const modelId = urlPath === "/v1/async/videos/image-to-video"
     ? "InfiniteTalk"
-    : extractModel(req.url || "", forwardBuf, req.headers["content-type"]);
+    : urlPath.includes("/async/videos/audio-video-to-video")
+      ? "Duix-Avatar"
+      : extractModel(req.url || "", forwardBuf, req.headers["content-type"]);
   if (!modelId || !modelMap[modelId]) {
     return json(res, 400, {
       error: {
@@ -866,7 +965,8 @@ const server = http.createServer(async (req, res) => {
     });
   }
 
-  const priceUsd = priceUsdForModel(modelId);
+  let priceUsd = priceUsdForModel(modelId);
+  if (modelId === "Duix-Avatar" && duixBillUsd != null) priceUsd = duixBillUsd;
   if (priceUsd == null) {
     return json(res, 400, {
       error: {
@@ -877,9 +977,9 @@ const server = http.createServer(async (req, res) => {
   }
 
   const usageBill = urlPath === "/v1/systemone" && !!sellUsdPerM(modelId);
-  // InfiniteTalk: bill only after upstream returns a pollable task_id (avoids
-  // 504 submission_status_unknown keeping a precharge with nothing to poll).
-  const billAfterTaskId = modelId === "InfiniteTalk";
+  // InfiniteTalk / Duix-Avatar: bill only after a pollable task_id.
+  const billAfterTaskId =
+    modelId === "InfiniteTalk" || modelId === "Duix-Avatar";
   const infinitetalkTimeoutMs = Number(
     process.env.INFINITETALK_SUBMIT_TIMEOUT_MS || 600000
   );

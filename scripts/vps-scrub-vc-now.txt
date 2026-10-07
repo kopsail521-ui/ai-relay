@@ -1,0 +1,24 @@
+# 立刻清公开痕迹（不依赖 git push）：去掉 video-capabilities 里的供应商字段
+python3 - <<'PY'
+import json
+paths=[
+  '/opt/ai-relay/static/brand/video-capabilities.json',
+  '/opt/ai-relay/data/new-api/brand/video-capabilities.json',
+  '/opt/ai-relay/new-api/web/public/brand/video-capabilities.json',
+]
+for p in paths:
+  try:
+    j=json.load(open(p,encoding='utf-8'))
+  except Exception as e:
+    print('skip',p,e); continue
+  n=0
+  for m in (j.get('models') or {}).values():
+    if isinstance(m,dict) and 'upstream_style' in m:
+      del m['upstream_style']; n+=1
+  open(p,'w',encoding='utf-8').write(json.dumps(j,ensure_ascii=False,indent=2)+'\n')
+  print('scrubbed',n,p)
+PY
+# 若容器内还有一份，一并覆盖
+sudo docker cp /opt/ai-relay/static/brand/video-capabilities.json ai-relay-new-api:/app/web/dist/brand/video-capabilities.json 2>/dev/null || true
+sudo docker cp /opt/ai-relay/static/brand/video-capabilities.json ai-relay-new-api:/app/web/public/brand/video-capabilities.json 2>/dev/null || true
+curl -fsS https://www.keyoapi.xyz/brand/video-capabilities.json | grep -qiE 'apimart|grsai|openlux|upstream_style' && echo LEAK || echo OK_SCRUB

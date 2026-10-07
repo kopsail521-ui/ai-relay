@@ -87,6 +87,12 @@ function h(string $s): string
     return htmlspecialchars($s, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
 }
 
+$geoflowShell = dirname(__DIR__, 4) . '/scripts/geoflow-article-shell.php';
+if (!is_file($geoflowShell)) {
+    $geoflowShell = '/opt/ai-relay/scripts/geoflow-article-shell.php';
+}
+require_once $geoflowShell;
+
 function is_smoke_slug(string $slug): bool
 {
     $s = strtolower($slug);
@@ -313,46 +319,15 @@ function render_article_html(array $article, string $site, string $canonical, bo
     }
 
     $published = (string)($article['published_at'] ?? '');
-    $robots = $isDraft
-        ? '<meta name="robots" content="noindex,nofollow" />' . "\n"
-        : '';
-
-    return '<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>' . h($title) . ' — KeyoAPI</title>
-<meta name="description" content="' . h($desc) . '" />
-' . $robots . '<link rel="canonical" href="' . h($canonical) . '" />
-<link rel="icon" href="/brand/logo.svg" type="image/svg+xml" />
-<link rel="stylesheet" href="/brand/keyo-theme.css" />
-</head>
-<body>
-  <header class="k-nav">
-    <a class="k-wordmark" href="/"><img src="/brand/logo.svg" alt="" width="22" height="22" />KeyoAPI</a>
-    <nav aria-label="Primary">
-      <a href="/pricing-list">Pricing list</a>
-      <a href="/pricing">Model Square</a>
-      <a href="/brand/keyo-docs.html">Docs</a>
-      <a href="/brand/blog/">Blog</a>
-      <a href="/brand/faq.html">FAQ</a>
-      <a href="/sign-in">Sign in</a>
-      <a class="k-nav-cta" href="/sign-up">Get started</a>
-    </nav>
-  </header>
-  <div class="k-page">
-    <p class="meta"><a href="/brand/blog/">← Blog</a>' . ($published !== '' ? ' · <time datetime="' . h($published) . '">' . h(substr($published, 0, 10)) . '</time>' : '') . ($isDraft ? ' · <span>Draft</span>' : '') . '</p>
-    <h1>' . h($title) . '</h1>
-    ' . ($excerpt !== '' ? '<p class="sub">' . h($excerpt) . '</p>' : '') . '
-    <article class="geoflow-body">
-' . $html . '
-    </article>
-    <p class="k-foot"><a href="/brand/blog/">← Blog</a> · <a href="/">Home</a> · <a href="/brand/keyo-docs.html">Docs</a></p>
-  </div>
-</body>
-</html>
-';
+    return geoflow_wrap_article(
+        $title,
+        $desc,
+        $excerpt,
+        geoflow_extract_body($html),
+        $canonical,
+        $published,
+        $isDraft
+    );
 }
 
 function rebuild_index_and_sitemap(string $blogDir, string $site, array $catalog, array $gate): void
@@ -409,23 +384,7 @@ function rebuild_index_and_sitemap(string $blogDir, string $site, array $catalog
 <link rel="stylesheet" href="/brand/keyo-theme.css" />
 </head>
 <body>
-  <header class="k-nav">
-    <a class="k-wordmark" href="/">
-      <img src="/brand/logo.svg" alt="" width="22" height="22" />
-      KeyoAPI
-    </a>
-    <nav aria-label="Primary">
-      <a href="/pricing-list">Pricing list</a>
-      <a href="/pricing">Model Square</a>
-      <a href="/models">Models</a>
-      <a href="/free-models">Free models</a>
-      <a href="/brand/keyo-docs.html">Docs</a>
-      <a href="/brand/faq.html">FAQ</a>
-      <a href="/sign-in">Sign in</a>
-      <a class="k-nav-cta" href="/sign-up">Get started</a>
-    </nav>
-  </header>
-  <div class="k-page">
+' . geoflow_public_nav() . '  <div class="k-page">
     <h1>Blog</h1>
     <p class="sub">Guides for OpenAI-compatible APIs, custom base URLs, and multi-model gateways.</p>
 ' . implode("\n", $cards) . '

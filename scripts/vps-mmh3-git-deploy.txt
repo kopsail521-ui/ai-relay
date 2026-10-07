@@ -1,9 +1,19 @@
-# MiniMax-H3：Git 发版后 VPS 执行（整段粘贴）
+# 重连后执行：丢掉与本次发版冲突的本地改动，再 pull + 重建
 set -e
 cd /opt/ai-relay
+
+# 只还原会被覆盖的那几个文件（保留 .env / data）
+sudo git checkout -- \
+  config/apimart-selected-models.json \
+  config/marketplace-model-copy.json \
+  services/apimart-passthrough/catalog.json \
+  services/apimart-passthrough/server.mjs \
+  services/creem-moderation-proxy/marketplace-model-copy.json \
+  || true
+
 sudo git pull
 
-# 把 inventory-C 密钥写入视频容器环境（从根 .env 拷，不打印）
+# 密钥：从根 .env 拷到视频容器环境
 sudo touch /opt/ai-relay/.env.apimart
 if ! sudo grep -q '^GRSAI_API_KEY=.' /opt/ai-relay/.env.apimart 2>/dev/null; then
   sudo grep -E '^GRSAI_(API_KEY|BASE_URL)=' /opt/ai-relay/.env 2>/dev/null | sudo tee -a /opt/ai-relay/.env.apimart >/dev/null || true
@@ -13,7 +23,6 @@ if ! sudo grep -q '^GRSAI_BASE_URL=' /opt/ai-relay/.env.apimart 2>/dev/null; the
 fi
 echo "inventory_c_key=$(sudo grep -c '^GRSAI_API_KEY=.' /opt/ai-relay/.env.apimart || true)"
 
-# 重建 3011（镜像 COPY 源码，必须 build）
 sudo docker build -t keyo-apimart-passthrough ./services/apimart-passthrough
 sudo docker rm -f ai-relay-apimart-passthrough 2>/dev/null || true
 sudo docker run -d --name ai-relay-apimart-passthrough --restart always --network host \
@@ -28,10 +37,8 @@ sudo docker run -d --name ai-relay-apimart-passthrough --restart always --networ
 sleep 2
 curl -sS http://127.0.0.1:3011/healthz; echo
 
-# 更新 ModelPrice / 广场
 sudo python3 /opt/ai-relay/scripts/vps-add-apimart-videos.py /opt/ai-relay/data/new-api/one-api.db
 
-# 同步广场文案到 moderation（若容器在跑）
 if sudo docker ps --format '{{.Names}}' | grep -q '^ai-relay-creem-moderation$'; then
   sudo docker cp /opt/ai-relay/services/creem-moderation-proxy/marketplace-model-copy.json \
     ai-relay-creem-moderation:/app/marketplace-model-copy.json 2>/dev/null || true
@@ -59,12 +66,5 @@ import re
 t=open("/tmp/mmh3.json","r",encoding="utf-8",errors="ignore").read()
 t=re.sub(r"(?i)grsai|dakka|apimart|openlux|gitee|moark","provider",t)
 print(t[:400])
-PY
-python3 - <<'PY'
-import json,sqlite3
-con=sqlite3.connect("/opt/ai-relay/data/new-api/one-api.db")
-mp=json.loads(con.execute("SELECT value FROM options WHERE key='ModelPrice'").fetchone()[0] or "{}")
-print("MiniMax-H3 ModelPrice", mp.get("MiniMax-H3"))
-con.close()
 PY
 echo DONE_SWITCH_MINIMAX_H3

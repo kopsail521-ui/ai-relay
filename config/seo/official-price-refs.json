@@ -56,6 +56,13 @@
       "note": "Drop-in chat completions via Keyo relay"
     },
     {
+      "capability": "Image generation (Nano Banana 2.1)",
+      "official": "Google Gemini image list — confirm on official Google pages",
+      "keyo_model": "nano-banana-2.1",
+      "keyo_price": "~$0.0123 / request",
+      "note": "OpenAI-compatible /v1/images/generations; family: nano-banana-2, nano-banana-pro"
+},
+    {
       "capability": "Background removal",
       "official": "Typical SaaS remove.bg API often $0.05–0.20 / image",
       "keyo_model": "RMBG-2.0",

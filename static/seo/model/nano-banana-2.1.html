@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Nano Banana 2.1 API — Pricing &amp; Quick Start | KeyoAPI</title>
+<meta name="description" content="Nano Banana 2.1 API on KeyoAPI: generate images via POST /v1/images/generations at $0.0123 per image. Same OpenAI-compatible key you use for chat." />
+<link rel="canonical" href="https://www.keyoapi.xyz/model/nano-banana-2.1" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://www.keyoapi.xyz/model/nano-banana-2.1" />
+<meta property="og:title" content="Nano Banana 2.1 API — Pricing &amp; Quick Start | KeyoAPI" />
+<meta property="og:description" content="Nano Banana 2.1 API on KeyoAPI: generate images via POST /v1/images/generations at $0.0123 per image. Same OpenAI-compatible key you use for chat." />
+<meta property="og:image" content="https://www.keyoapi.xyz/brand/logo.svg" />
+<link rel="icon" href="/brand/logo.svg" type="image/svg+xml" />
+<link rel="stylesheet" href="/brand/keyo-theme.css" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Nano Banana 2.1 API — Pricing &amp; Quick Start | KeyoAPI" />
+<meta name="twitter:description" content="Nano Banana 2.1 API on KeyoAPI: generate images via POST /v1/images/generations at $0.0123 per image. Same OpenAI-compatible key you use for chat." />
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"SoftwareApplication","name":"KeyoAPI nano-banana-2.1","applicationCategory":"DeveloperApplication","url":"https://www.keyoapi.xyz/model/nano-banana-2.1","description":"Nano Banana 2.1 API on KeyoAPI: generate images via POST /v1/images/generations at $0.0123 per image. Same OpenAI-compatible key you use for chat.","offers":{"@type":"Offer","priceCurrency":"USD","description":"$0.0123 / image"}}</script>
+<style>.wrap{max-width:880px;margin:0 auto;padding:28px 24px 48px}
+.footer{display:flex;flex-wrap:wrap;gap:10px 16px;max-width:1080px;margin:0 auto;padding:24px 24px 40px;border-top:1px solid var(--line);font-size:13px;color:var(--muted)}
+.footer a{color:var(--ink-2);text-decoration:none}
+.footer a:hover{color:var(--ink)}
+h1{font-size:clamp(1.7rem,3.1vw,2.35rem);line-height:1.18;letter-spacing:-.035em;margin:0 0 14px;font-weight:600;text-wrap:balance}
+h2{font-size:1.15rem;margin:28px 0 10px;letter-spacing:-.02em}
+p{margin:0 0 14px;color:var(--ink)}
+.lead{font-size:1.02rem;color:var(--ink-2);line-height:1.55;text-wrap:pretty}
+.meta{font-size:14px;color:var(--muted);margin:0 0 18px}
+.btnrow{display:flex;flex-wrap:wrap;gap:10px;margin:18px 0 28px}
+.btn,.k-btn{display:inline-block;padding:10px 16px;border-radius:var(--radius);font-weight:600;font-size:14px;text-decoration:none;line-height:1.2}
+.btn-primary,.k-btn-primary{background:var(--ink);color:#f6f5f1}
+.btn-primary:hover,.k-btn-primary:hover{background:#000;color:#f6f5f1;text-decoration:none}
+.btn-secondary,.k-btn-secondary{background:transparent;color:var(--ink);border:1px solid var(--line-strong,#c9c4b8)}
+.btn-secondary:hover,.k-btn-secondary:hover{border-color:var(--ink);text-decoration:none}
+.btn-link,.k-btn-link{background:transparent;color:var(--link);padding-inline:8px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:16px 18px;margin:16px 0}
+pre,code{font-family:var(--mono)}
+pre{background:var(--panel);color:var(--panel-ink);padding:14px 16px;border-radius:var(--radius);overflow:auto;font-size:13px}
+pre code{background:transparent;padding:0;color:inherit;font-size:inherit;border-radius:0}
+table{width:100%;border-collapse:collapse;font-size:14px;background:var(--surface)}
+th,td{border:1px solid var(--line);padding:10px 12px;text-align:left;vertical-align:top}
+th{background:color-mix(in srgb,var(--line) 40%,var(--surface));font-weight:600}
+.ok{color:var(--ok);font-weight:600}
+.grid{display:grid;gap:10px;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));margin:16px 0}
+.grid a{display:flex;flex-direction:column;justify-content:center;gap:4px;min-height:4.5rem;padding:12px 14px;border:1px solid var(--line);border-radius:var(--radius);background:var(--surface);color:var(--ink);text-decoration:none;font-weight:500;line-height:1.35}
+.grid a:hover{border-color:var(--ink)}
+.grid a .grid-title{font-weight:600;overflow-wrap:anywhere}
+.grid a .grid-meta{color:var(--muted);font-size:13px;font-weight:500}
+.grid a code{font-size:12.5px;background:transparent;padding:0}
+ul{margin:0 0 14px;padding-left:1.2em}
+.faq details{border:1px solid var(--line);border-radius:var(--radius);padding:12px 14px;margin:0 0 10px;background:var(--surface)}
+.faq summary{cursor:pointer;font-weight:600}
+.surfaces{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));margin:16px 0 8px}
+.surf{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:14px 16px;font-size:14px}
+.surf h3{font-size:15px;margin:0 0 8px}
+.surf ul{margin:0;padding-left:1.15em;color:var(--muted)}
+.panel{background:var(--panel);color:var(--panel-ink);border-radius:var(--radius);padding:18px;text-align:left;font-family:var(--mono);font-size:12.5px;overflow:auto;border:1px solid #2a2924}
+.panel .label{color:#b9b6ab;margin-bottom:5px;font-size:11px;letter-spacing:.06em;text-transform:uppercase}
+.panel .label+.label{margin-top:14px}</style>
+</head>
+<body>
+<header class="k-nav">
+  <a class="k-wordmark" href="/"><img src="/brand/logo.svg" alt="" width="22" height="22" />KeyoAPI</a>
+  <nav aria-label="Primary">
+    <a href="/pricing">Pricing</a>
+    <a href="/models">Models</a>
+    <a href="/compare">Compare</a>
+    <a href="/brand/keyo-docs.html">Docs</a>
+    <a href="/brand/blog/">Blog</a>
+    <a href="/brand/faq.html">FAQ</a>
+    <a href="/console">Console</a>
+    <a href="/sign-in">Sign in</a>
+    <a class="k-nav-cta" href="/sign-up">Get started</a>
+  </nav>
+</header>
+<main class="wrap">
+<h1>Nano Banana 2.1 API — How to Call Google's Image Model</h1>
+
+<p class="lead">Nano Banana 2.1 is Google's next-gen image model on KeyoAPI's OpenAI-compatible /v1/images/generations endpoint — same Bearer key as chat, about $0.0123 per image, no Google Cloud setup.</p>
+<p class="meta">Listed price: <span class="ok">$0.0123 / image</span> · Live catalog: <a href="/pricing">Model Square</a> · Static list: <a href="/pricing-list">pricing list</a>.</p>
+<div class="btnrow">
+  <a class="btn btn-primary" href="/sign-up">Get API key</a>
+  <a class="btn btn-secondary" href="/pricing">Open Model Square</a>
+  <a class="btn btn-secondary" href="/compare">Compare API prices</a>
+</div>
+<h2>Overview</h2>
+<p>Nano Banana 2.1 is Google's next-generation image model, served on KeyoAPI through the OpenAI-compatible /v1/images/generations endpoint. If you already call chat, Whisper, or OCR with a KeyoAPI key, you can generate images with the same Bearer token — no Google Cloud project, no AI Studio key, and no billing setup on Google's side.</p>
+<p>How to call it. Point your HTTP client or OpenAI SDK at https://www.keyoapi.xyz/v1, set model=nano-banana-2.1, and POST a JSON body with a prompt to /v1/images/generations. The prompt field is required; n (up to 128), size, quality, and response_format follow the OpenAI images schema and stay optional. Responses return a generated image URL (or base64 when you request it), so most OpenAI-compatible client code works after changing the base URL and model string.</p>
+<p>Pricing. Nano Banana 2.1 is metered per generated image at about $0.0123 — confirm live on <a href="/pricing-list">/pricing-list</a> or the Model Square page <a href="/model/nano-banana-2.1">/model/nano-banana-2.1</a> before you budget. The same endpoint also serves the wider family: nano-banana-2 (~$0.0205/image) when a pipeline was validated on the previous generation, and nano-banana-pro (~$0.0274/image) when the job leans on stronger prompt adherence and text-in-image accuracy.</p>
+<p>Worked cost example (indicative). Generating 500 product mockups a month at $0.0123 is roughly $6.15 before retries; the same volume on nano-banana-pro is about $13.70. Batch jobs that tolerate the cheaper model should default to 2.1 and escalate per image when quality gates fail — the same split-lane pattern KeyoAPI recommends for chat models.</p>
+<p>Integration steps. (1) Sign up at <a href="/sign-up">/sign-up</a> and mint an API key. (2) Point your client at https://www.keyoapi.xyz/v1 with Bearer auth. (3) POST /v1/images/generations with model=nano-banana-2.1 and a prompt. (4) Log each returned image URL next to the Wallet ledger entry so finance sees actuals, not guesses. (5) Try interactively at <a href="/model/nano-banana-2.1">/model/nano-banana-2.1</a> — the Model Square try/buy page for this ID.</p>
+<p>When to choose which family member. Use 2.1 for volume: mockups, ad variants, storyboards, and batch hero images. Use pro when typography, layout accuracy, or dense prompt following decides success. Keep nano-banana-2 for pipelines already validated on the previous generation — switching mid-flight costs more in QA than it saves per image.</p>
+<p>Prompting notes. Generated images track prompt detail: state subject, style, and composition explicitly. For text inside images, prefer pro and spell the text out in quotes. Respect platform usage policies around real people's likenesses and sensitive content.</p>
+<p>Related reading on the same site. Background removal for generated art: <a href="/model/RMBG-2.0">/model/RMBG-2.0</a>. Open-vocabulary segmentation: <a href="/model/sam3">/model/sam3</a>. Upscaling before print: <a href="/model/Real-ESRGAN">/model/Real-ESRGAN</a>. Full model guide index: <a href="/models">/models</a>. Docs: /brand/keyo-docs.html.</p>
+
+<h2>Quick start</h2>
+<div class="card">
+<p>Base URL: <code>https://www.keyoapi.xyz/v1</code></p>
+<p>Endpoint: <code>POST /v1/images/generations</code></p>
+<p>Model: <code>model=nano-banana-2.1 · prompt required · n/size/quality/response_format optional (n max 128)</code></p>
+<pre><code>curl https://www.keyoapi.xyz/v1/images/generations \
+  -H &quot;Authorization: Bearer YOUR_API_KEY&quot; \
+  -H &quot;Content-Type: application/json&quot; \
+  -d '{&quot;model&quot;:&quot;nano-banana-2.1&quot;,&quot;prompt&quot;:&quot;a red paper boat on calm water at sunset&quot;}'</code></pre>
+<p>Auth uses the same Bearer API key as chat. Full notes: <a href="/brand/keyo-docs.html">Keyo docs</a>.</p>
+</div>
+<h2>FAQ</h2>
+<div class="faq"><details><summary>How do I call the Nano Banana 2.1 API?</summary><p>Use your KeyoAPI Bearer key and POST to /v1/images/generations with model=nano-banana-2.1 and a prompt. The endpoint is OpenAI-compatible, so existing images client code works after changing the base URL and model.</p></details>
+<details><summary>How much does Nano Banana 2.1 cost?</summary><p>About $0.0123 per generated image on KeyoAPI. The same endpoint serves nano-banana-2 (~$0.0205) and nano-banana-pro (~$0.0274). Confirm live rates on <a href="/pricing-list">/pricing-list</a>.</p></details>
+<details><summary>Is Nano Banana 2.1 better than Nano Banana Pro?</summary><p>They trade places by job. 2.1 is the cheaper high-volume lane; pro leans on stronger prompt adherence and text-in-image accuracy. Route bulk generation to 2.1 and escalate per image when quality gates fail.</p></details>
+<details><summary>Do I need a Google AI Studio key?</summary><p>No. KeyoAPI hosts the model; the same key you use for chat and Whisper calls it.</p></details>
+<details><summary>How do I try it before committing volume?</summary><p>Create an account at <a href="/sign-up">/sign-up</a>, mint a key, and test in the Model Square at <a href="/model/nano-banana-2.1">/model/nano-banana-2.1</a>.</p></details></div>
+<h2>Related models</h2>
+<div class="grid"><a href="/model/RMBG-2.0">RMBG-2.0 API</a>
+<a href="/model/sam3">SAM 3 API</a>
+<a href="/model/Real-ESRGAN">Real-ESRGAN API</a></div>
+<p class="meta">Guide for <strong>nano-banana-2.1</strong>. Catalog: <a href="/pricing">/pricing</a> · Rates: <a href="/pricing-list">/pricing-list</a>.</p>
+
+</main>
+<footer class="footer">
+  <a href="/">Home</a>
+  <a href="/pricing">Pricing</a>
+  <a href="/pricing-list">Pricing list</a>
+  <a href="/models">Model guides</a>
+  <a href="/compare">Compare</a>
+  <a href="/free-models">Free models</a>
+  <a href="/brand/blog/">Blog</a>
+  <a href="/gemini-api-pricing">Gemini pricing</a>
+  <a href="/deepseek-api-pricing">DeepSeek pricing</a>
+  <a href="/claude-api-pricing">Claude pricing</a>
+  <a href="/openai-api-pricing">OpenAI pricing</a>
+  <a href="/remove-bg-api-alternative">remove.bg API</a>
+  <a href="/tts-api">Text to Speech</a>
+  <a href="/voice-cloning-api">Voice clone API</a>
+  <a href="/ai-avatar-video-generator">Avatar video API</a>
+  <a href="/grok-api-pricing">Grok pricing</a>
+  <a href="/openai-api-alternative">OpenAI alternative</a>
+  <a href="/brand/keyo-docs.html">Docs</a>
+  <a href="/brand/faq.html">FAQ</a>
+  <a href="/brand/privacy.html">Privacy</a>
+  <a href="/brand/terms.html">Terms</a>
+  <a href="/sign-in">Sign in</a>
+</footer>
+</body>
+</html>

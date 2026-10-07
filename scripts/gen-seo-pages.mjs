@@ -817,7 +817,7 @@ function renderPricing() {
   <a class="btn btn-secondary" href="/compare">AI API price comparison</a>
   <a class="btn btn-secondary" href="/brand/keyo-docs.html">Docs</a>
 </div>
-<h2>Free models ($0, fair-use)</h2>
+<h2>Free models ($0 — covered by your $10 credit)</h2>
 <p class="meta">Fixed $0 catalog IDs. Rules and curl examples: <a href="/free-models">/free-models</a>.</p>
 <table>
 <thead><tr><th>Model ID</th><th>Category</th><th>Listed price</th><th>Endpoint</th><th>Links</th></tr></thead>
@@ -877,7 +877,7 @@ function renderFreeModels() {
     freeAll[0]?.id ||
     "glm-5.3-flash:free";
   const bodyHtml = `
-<p class="lead">KeyoAPI publishes a <strong>free AI API</strong> catalog: fixed <strong>$0</strong> model IDs, no credit card to start, fair-use limits. Register a key and set <code>model</code> to any ID in the table below.</p>
+<p class="lead">KeyoAPI publishes a <strong>free AI API</strong> catalog: fixed <strong>$0</strong> model IDs, no credit card to start. Calls draw down your $10 welcome credit — top up to unlock paid models on the same key. Fair-use rate limits apply. Register a key and set <code>model</code> to any ID in the table below.</p>
 <p class="meta">Built for prototypes, demos, CI smoke tests, and eval harnesses. For production QPS, switch to metered (paid) model IDs on the same base URL.</p>
 <div class="btnrow">
   <a class="btn btn-primary" href="/sign-up">Get a free API key</a>
@@ -895,7 +895,7 @@ ${rows}
 </table>
 <p>Call the free ID exactly as listed (including <code>-free</code> or <code>:free</code> suffixes). Free catalog membership can change — confirm live availability on <a href="/pricing">/pricing</a>.</p>
 <h2>Free by family</h2>
-<p>Browse by family in the table above (${[...new Set(freeAll.map((m) => m.family).filter(Boolean))].join(", ") || "listed vendors"}). Start with a free API key and a fixed $0 model ID; move to metered IDs when you outgrow fair-use limits.</p>
+<p>Browse by family in the table above (${[...new Set(freeAll.map((m) => m.family).filter(Boolean))].join(", ") || "listed vendors"}). Start with a free API key and a fixed $0 model ID; move to metered IDs when you outgrow your welcome credit or fair-use rate limits.</p>
 <h2>Quick start (curl)</h2>
 <pre>curl https://www.keyoapi.xyz/v1/chat/completions \\
   -H "Authorization: Bearer $KEYO_API_KEY" \\
@@ -907,6 +907,7 @@ ${rows}
 <h2>Free rules (read before you ship)</h2>
 <ul>
   <li><strong>Price:</strong> listed free IDs use fixed <strong>$0</strong> ModelPrice — not a timed coupon that flips to paid overnight.</li>
+  <li><strong>Welcome credit:</strong> calls on free IDs draw down your <strong>$10 signup credit</strong>. When it runs out, top up to keep calling free IDs and unlock paid IDs on the same key.</li>
   <li><strong>Fair use:</strong> free traffic has <strong>rate / concurrency limits</strong>. Limits can tighten under abuse. Do not treat free IDs as an unlimited production SLA.</li>
   <li><strong>Availability:</strong> some <code>:free</code> IDs may be added or removed from the free catalog. Check <a href="/pricing">Model Square</a> before hard-coding.</li>
   <li><strong>Catch (honest):</strong> you get real capability at $0; you do <em>not</em> get paid-tier priority or guaranteed throughput.</li>
@@ -915,7 +916,7 @@ ${rows}
 <h2>FAQ</h2>
 <details open>
   <summary>Is it really free?</summary>
-  <p>Yes for the <code>$0</code> IDs listed above: no credit card required to start. Create an account, mint an API key, and set <code>model</code> to a free ID.</p>
+  <p>Yes — the listed price is <code>$0</code> and no credit card is required to start. Calls draw down your $10 welcome credit; fair-use rate limits apply.</p>
 </details>
 <details>
   <summary>What's the catch?</summary>
@@ -923,7 +924,7 @@ ${rows}
 </details>
 <details>
   <summary>Free vs paid?</summary>
-  <p>Free IDs are $0 with fair-use limits. Paid IDs are token- or request-metered with higher priority — preferred for production.</p>
+  <p>Free IDs are listed at $0 — calls draw down your $10 welcome credit, with fair-use rate limits. Paid IDs are token- or request-metered with higher priority — preferred for production.</p>
 </details>
 <details>
   <summary>Can I use it in production?</summary>
@@ -948,7 +949,7 @@ ${rows}
   return layout({
     title: "Free AI API — $0 Models, No Credit Card | KeyoAPI",
     description:
-      "Free AI API / free LLM API on KeyoAPI: fixed $0 model IDs, no credit card. Fair-use limits. Get a free API key and call OpenAI-compatible chat completions.",
+      "Free AI API / free LLM API on KeyoAPI: fixed $0 model IDs, no credit card. Calls draw down your $10 welcome credit; fair-use rate limits apply. Get a free API key and call OpenAI-compatible chat completions.",
     canonical: `${site}/free-models`,
     h1: "Free AI API — $0 Models, No Credit Card",
     bodyHtml,

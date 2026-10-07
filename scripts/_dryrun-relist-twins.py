@@ -14,7 +14,7 @@ CREATE TABLE abilities ("group" TEXT, model TEXT, channel_id INTEGER, enabled IN
 now = 1759700000
 # simulate delist aftermath: soft-deleted rows, no channel, option leftovers cleaned
 cur.execute("INSERT INTO vendors(id,name,icon,status,created_time,updated_time) VALUES (1,'智谱','Zhipu.Color',1,?,?)", (now, now))
-for name in ["glm-5.2-free", "kimi-k3-free", "deepseek-v4-pro-free", "deepseek-v4-flash-free"]:
+for name in ["glm-5.2:free", "kimi-k3:free", "deepseek-v4-pro:free", "deepseek-v4-flash:free"]:
     cur.execute("INSERT INTO models(model_name,description,icon,tags,vendor_id,endpoints,status,sync_official,created_time,updated_time,deleted_at) VALUES (?, 'x','Custom','大语言模型',1,'{}',0,0,?,?,1759600000)", (name, now, now))
 c.commit(); c.close()
 

@@ -104,14 +104,14 @@ ul{margin:0 0 14px;padding-left:1.2em}
   <td><a href="/sign-up">Get key</a></td>
 </tr>
 <tr>
-  <td><code>deepseek-v4-flash-free</code></td>
+  <td><code>deepseek-v4-flash:free</code></td>
   <td><a href="/model/deepseek-v4-flash"><code>deepseek-v4-flash</code></a></td>
   <td class="ok">$0</td>
   <td>DeepSeek</td>
   <td><a href="/sign-up">Get key</a></td>
 </tr>
 <tr>
-  <td><code>deepseek-v4-pro-free</code></td>
+  <td><code>deepseek-v4-pro:free</code></td>
   <td><a href="/pricing-list"><code>deepseek-v4-pro</code></a></td>
   <td class="ok">$0</td>
   <td>DeepSeek</td>
@@ -146,7 +146,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
   <td><a href="/sign-up">Get key</a></td>
 </tr>
 <tr>
-  <td><code>glm-5.2-free</code></td>
+  <td><code>glm-5.2:free</code></td>
   <td><a href="/model/glm-5.2"><code>glm-5.2</code></a></td>
   <td class="ok">$0</td>
   <td>GLM</td>
@@ -188,7 +188,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
   <td><a href="/sign-up">Get key</a></td>
 </tr>
 <tr>
-  <td><code>kimi-k3-free</code></td>
+  <td><code>kimi-k3:free</code></td>
   <td><a href="/model/kimi-k3"><code>kimi-k3</code></a></td>
   <td class="ok">$0</td>
   <td>Moonshot</td>
@@ -280,7 +280,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
 </tr>
 </tbody>
 </table>
-<p>Call the free ID exactly as listed (including <code>-free</code> or <code>:free</code> suffixes). Free catalog membership can change — confirm live availability on <a href="/pricing">/pricing</a>.</p>
+<p>Call the free ID exactly as listed (including the <code>:free</code> suffix). Free catalog membership can change — confirm live availability on <a href="/pricing">/pricing</a>.</p>
 <h2>Free by family</h2>
 <p>Browse by family in the table above (Other, DeepSeek, Google, GLM, Moonshot, Ant Group, Mistral, NVIDIA, Qwen, StepFun). Start with a free API key and a fixed $0 model ID; move to metered IDs when you outgrow your welcome credit or fair-use rate limits.</p>
 <h2>Quick start (curl)</h2>
@@ -288,7 +288,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
   -H "Authorization: Bearer $KEYO_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
-    "model": "deepseek-v4-flash-free",
+    "model": "deepseek-v4-flash:free",
     "messages": [{"role":"user","content":"Hello"}]
   }'</pre>
 <h2>Free rules (read before you ship)</h2>

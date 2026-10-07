@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Hotfix: free *-free stay ModelPrice=0; paid bare get OpenLux×5 ratios (clear ModelPrice)."""
+"""Hotfix: free *:free stay ModelPrice=0; paid bare get OpenLux×5 ratios (clear ModelPrice)."""
 import json
 import os
 import sqlite3
@@ -16,10 +16,10 @@ PAID = {
     "kimi-k3": (3.75, 5.0),  # $7.5 / $37.5
 }
 FREE = [
-    "deepseek-v4-pro-free",
-    "deepseek-v4-flash-free",
-    "glm-5.2-free",
-    "kimi-k3-free",
+    "deepseek-v4-pro:free",
+    "deepseek-v4-flash:free",
+    "glm-5.2:free",
+    "kimi-k3:free",
 ]
 
 

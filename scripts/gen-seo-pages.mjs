@@ -51,7 +51,7 @@ function allFreeModels() {
   const keyo = (freeCfg.models || []).map((m) => ({
     id: m.id,
     family: m.vendor || "Keyo Free",
-    twin: m.upstream || String(m.id).replace(/-free$/, ""),
+    twin: m.upstream || String(m.id).replace(/:free$/, ""),
     source: "keyo-free",
   }));
   const extra = (freeExtra.models || []).map((m) => ({
@@ -70,12 +70,16 @@ function allFreeModels() {
   return out.sort((a, b) => a.id.localeCompare(b.id));
 }
 
+/** Free IDs use the ":free" suffix (new-api FreeModelTwin convention). */
+function isFreeId(id) {
+  return String(id).endsWith(":free");
+}
+
 /** Crawlable catalog link: guide page > free hub > pricing-list. */
 function catalogHref(id) {
   const guideIds = new Set(pages.models.map((m) => m.id));
   if (guideIds.has(id)) return `/model/${encodeURIComponent(id)}`;
-  const s = String(id);
-  if (s.endsWith(":free") || s.endsWith("-free")) return "/free-models";
+  if (isFreeId(id)) return "/free-models";
   return "/pricing-list";
 }
 
@@ -313,7 +317,7 @@ function freeTierBlock(m) {
 <h2>Free tier available</h2>
 <div class="card">
 <p>Same model family on KeyoAPI: use <code>${esc(freeId)}</code> for permanent <span class="ok">$0</span> fair-use calls (${esc(channel)} channel), or <code>${esc(paid)}</code> for token-metered production traffic.</p>
-<p>Rules: free = <code>*-free</code> suffix; paid = bare ID. Fair-use rate/concurrency limits apply on free — see <a href="/free-models">/free-models</a>.</p>
+<p>Rules: free = <code>:free</code> suffix; paid = bare ID. Fair-use rate/concurrency limits apply on free — see <a href="/free-models">/free-models</a>.</p>
 <p><strong>Free curl</strong></p>
 <pre><code>curl https://www.keyoapi.xyz/v1/chat/completions \\
   -H "Authorization: Bearer YOUR_API_KEY" \\
@@ -873,7 +877,7 @@ function renderFreeModels() {
     .join("\n");
   const exampleFree =
     freeAll.find((m) => m.id.includes("flash") && m.id.includes("free"))?.id ||
-    freeAll.find((m) => m.id.endsWith("-free"))?.id ||
+    freeAll.find((m) => m.id.endsWith(":free"))?.id ||
     freeAll[0]?.id ||
     "glm-5.3-flash:free";
   const bodyHtml = `
@@ -893,7 +897,7 @@ function renderFreeModels() {
 ${rows}
 </tbody>
 </table>
-<p>Call the free ID exactly as listed (including <code>-free</code> or <code>:free</code> suffixes). Free catalog membership can change — confirm live availability on <a href="/pricing">/pricing</a>.</p>
+<p>Call the free ID exactly as listed (including the <code>:free</code> suffix). Free catalog membership can change — confirm live availability on <a href="/pricing">/pricing</a>.</p>
 <h2>Free by family</h2>
 <p>Browse by family in the table above (${[...new Set(freeAll.map((m) => m.family).filter(Boolean))].join(", ") || "listed vendors"}). Start with a free API key and a fixed $0 model ID; move to metered IDs when you outgrow your welcome credit or fair-use rate limits.</p>
 <h2>Quick start (curl)</h2>
@@ -1019,7 +1023,7 @@ function renderPricingLanding(p) {
     )
     .join("\n");
   const defaultModel =
-    p.rows.find((r) => !String(r.model).endsWith("-free"))?.model ||
+    p.rows.find((r) => !isFreeId(r.model))?.model ||
     p.rows[0].model;
   const curlBlock = p.curlExample
     ? `<pre>${esc(p.curlExample)}</pre>`

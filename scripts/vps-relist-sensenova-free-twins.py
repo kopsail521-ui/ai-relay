@@ -1,10 +1,15 @@
 #!/usr/bin/env python3
 """Relist the 4 SenseNova free twins on the Keyo Free channel (ModelPrice=0).
 
-  glm-5.2-free          -> glm-5.2        (智谱 / ChatGLM.Color)
-  kimi-k3-free          -> kimi-k3        (Moonshot / Moonshot)
-  deepseek-v4-pro-free  -> deepseek-v4-pro   (DeepSeek / DeepSeek)
-  deepseek-v4-flash-free -> deepseek-v4-flash (DeepSeek / DeepSeek)
+  glm-5.2:free          -> glm-5.2        (智谱 / ChatGLM.Color)
+  kimi-k3:free          -> kimi-k3        (Moonshot / Moonshot)
+  deepseek-v4-pro:free  -> deepseek-v4-pro   (DeepSeek / DeepSeek)
+  deepseek-v4-flash:free -> deepseek-v4-flash (DeepSeek / DeepSeek)
+
+The ":free" suffix is required: new-api's FreeModelTwin (model/gift_models.go)
+only strips ":free" to find the paid twin, which is what routes these IDs into
+the gift-credit billing path. A "-free" suffix is not recognised. Any legacy
+"-free" rows are retired by this script (see LEGACY_FREE).
 
 Tags follow the new convention: 大语言模型 only (free = price-based filter).
 Key: SENSENOVA_API_KEY / SENSENOVA_TOKEN in env or /opt/ai-relay/.env, or argv[2].
@@ -23,6 +28,17 @@ CFG = os.path.join(ROOT, "config", "sensenova-free-models.json")
 CHANNEL_NAME = "Keyo Free"
 FREE_BASE = "https://token.sensenova.cn"
 ENDPOINTS = json.dumps({"openai": "/v1/chat/completions"}, separators=(",", ":"))
+
+# The 2026-10-06 relist used a "-free" suffix, which new-api's FreeModelTwin
+# (model/gift_models.go) does not recognise -- it only strips ":free". Those IDs
+# were billed off the 37.5 fallback ratio and never entered the gift-credit path.
+# They are retired here so the ":free" IDs are the only free entries in the DB.
+LEGACY_FREE = [
+    "glm-5.2-free",
+    "kimi-k3-free",
+    "deepseek-v4-pro-free",
+    "deepseek-v4-flash-free",
+]
 
 
 def cols(cur, table):
@@ -136,6 +152,8 @@ def main():
     else:
         cid, cname, models_s = free_ch
         parts = [p.strip() for p in models_s.split(",") if p.strip()]
+        dropped = [p for p in parts if p in LEGACY_FREE]
+        parts = [p for p in parts if p not in LEGACY_FREE]
         for mid in ids:
             if mid not in parts:
                 parts.append(mid)
@@ -150,6 +168,8 @@ def main():
         vals.append(cid)
         cur.execute("UPDATE channels SET %s WHERE id=?" % ",".join(sets), vals)
         print("channel updated", cid, cname, "models", len(parts))
+        if dropped:
+            print("legacy dropped from channel:", ",".join(dropped))
 
     def get_opt(k):
         row = cur.execute("SELECT value FROM options WHERE key=?", (k,)).fetchone()
@@ -164,6 +184,22 @@ def main():
     mr = json.loads(get_opt("ModelRatio") or "{}")
     cr = json.loads(get_opt("CompletionRatio") or "{}")
     mp = json.loads(get_opt("ModelPrice") or "{}")
+
+    # Retire the legacy "-free" IDs: abilities, marketplace rows, ratio/price entries.
+    for legacy in LEGACY_FREE:
+        cur.execute("DELETE FROM abilities WHERE model=?", (legacy,))
+        if "deleted_at" in m_cols:
+            cur.execute("DELETE FROM models WHERE model_name=? AND deleted_at IS NOT NULL", (legacy,))
+            cur.execute(
+                "UPDATE models SET deleted_at=? WHERE model_name=? AND deleted_at IS NULL",
+                (now, legacy),
+            )
+        else:
+            cur.execute("DELETE FROM models WHERE model_name=?", (legacy,))
+        mr.pop(legacy, None)
+        cr.pop(legacy, None)
+        mp.pop(legacy, None)
+        print("legacy retired", legacy)
 
     for m in models:
         mid = m["id"]

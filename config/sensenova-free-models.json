@@ -1,10 +1,10 @@
 {
-  "note": "免费线对外 ID 带 -free；渠道 model_mapping 映射到上游裸名。对外勿写 SenseNova。2026-10-06 重新上架 4 个免费孪生（此前 2026-09-23 下架）；标签按新约定只挂大语言模型，免费走价格筛选。",
+  "note": "免费线对外 ID 用 :free 后缀（new-api 孪生剥离只认 :free，见 new-api/model/gift_models.go FreeModelTwin）；渠道 model_mapping 映射到上游裸名。对外勿写 SenseNova。2026-10-06 重新上架 4 个免费孪生（此前 2026-09-23 下架）；2026-10-08 由 -free 改为 :free 以接入赠送金孪生计费；标签按新约定只挂大语言模型，免费走价格筛选。",
   "base_url": "https://token.sensenova.cn",
   "channel_name": "Keyo Free",
   "models": [
     {
-      "id": "glm-5.2-free",
+      "id": "glm-5.2:free",
       "upstream": "glm-5.2",
       "vendor": "GLM",
       "icon": "ChatGLM.Color",
@@ -13,7 +13,7 @@
       "desc_en": "GLM 5.2 free tier (distinct from paid glm-5.2)."
     },
     {
-      "id": "kimi-k3-free",
+      "id": "kimi-k3:free",
       "upstream": "kimi-k3",
       "vendor": "Moonshot",
       "icon": "Moonshot",
@@ -22,7 +22,7 @@
       "desc_en": "Kimi K3 free tier (distinct from paid kimi-k3)."
     },
     {
-      "id": "deepseek-v4-pro-free",
+      "id": "deepseek-v4-pro:free",
       "upstream": "deepseek-v4-pro",
       "vendor": "DeepSeek",
       "icon": "DeepSeek",
@@ -31,7 +31,7 @@
       "desc_en": "DeepSeek V4 Pro free tier (distinct from paid deepseek-v4-pro)."
     },
     {
-      "id": "deepseek-v4-flash-free",
+      "id": "deepseek-v4-flash:free",
       "upstream": "deepseek-v4-flash",
       "vendor": "DeepSeek",
       "icon": "DeepSeek",

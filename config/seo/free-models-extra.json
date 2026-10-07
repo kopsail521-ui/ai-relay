@@ -1,5 +1,5 @@
 {
-  "_note": "Additional fixed-$0 model IDs from live /api/pricing (quota_type=1, model_price=0), excluding Keyo Free *-free IDs. Refresh with: node scripts/_sync-free-extra-from-live.mjs",
+  "_note": "Additional fixed-$0 model IDs from live /api/pricing (quota_type=1, model_price=0), excluding Keyo Free *:free IDs. Refresh with: node scripts/_sync-free-extra-from-live.mjs",
   "synced_at": "2026-10-05",
   "models": [
     {

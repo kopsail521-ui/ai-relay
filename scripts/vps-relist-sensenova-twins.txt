@@ -1,5 +1,11 @@
-# VPS：重新上架 SenseNova 免费孪生 ×4（glm-5.2-free / kimi-k3-free / deepseek-v4-pro-free / deepseek-v4-flash-free）
+# VPS：重新上架 SenseNova 免费孪生 ×4（glm-5.2:free / kimi-k3:free / deepseek-v4-pro:free / deepseek-v4-flash:free）
 # Keyo Free 渠道（token.sensenova.cn），ModelPrice=0；标签只挂大语言模型（免费走价格筛选）
+#
+# 为什么是 :free 而不是 -free：new-api 的孪生剥离（new-api/model/gift_models.go
+# FreeModelTwin）只认 ":free" 后缀，靠它找到收费孪生、把调用接入赠送金计费。
+# 2026-10-06 曾用 "-free" 上架，结果既没进赠送金路径、也没被广场的"免费"筛选认出来
+# （quota_type=0 + 兜底 ratio 37.5，见下）。本脚本会把遗留的 "-free" 行一并下架。
+#
 # 前提：本机已 git push；/opt/ai-relay/.env 已有 SENSENOVA_API_KEY=...
 set -e
 cd /opt/ai-relay
@@ -23,7 +29,8 @@ else
   exit 1
 fi
 
-# 1) New API：重建 Keyo Free 渠道 + 4 个免费孪生（ModelPrice=0，广场恢复）
+# 1) New API：重建 Keyo Free 渠道 + 4 个 :free 孪生（ModelPrice=0，广场恢复）
+#    同时下架遗留的 "-free" 行（abilities / models / ModelRatio / ModelPrice）
 sudo python3 /opt/ai-relay/scripts/vps-relist-sensenova-free-twins.py /opt/ai-relay/data/new-api/one-api.db
 
 # 2) 重启 new-api 刷新定价缓存
@@ -34,12 +41,35 @@ curl -sS -o /dev/null -w "console_http=%{http_code}\n" http://127.0.0.1:3000/api
 # 3) 品牌/SEO 静态页（/free-models 已含 4 个孪生）
 sudo bash /opt/ai-relay/scripts/deploy-brand-static.sh
 
+# 4) smoke：必须验证"免费判定"，不能只 grep 存在性。
+#    广场"免费"筛选的判定是 quota_type=1 && model_price==0（web/src/features/pricing/lib/filters.ts）。
+#    只写 ModelPrice 而没生效时，模型会退化成 quota_type=0 + 兜底 model_ratio=37.5：
+#    既不在免费筛选里，调用也会因"模型未配置倍率"被拒。上一次就是这么漏过去的。
 echo "--- smoke ---"
 P3JSON=$(mktemp)
 curl -sS https://www.keyoapi.xyz/api/pricing -o "$P3JSON"
-for m in glm-5.2-free kimi-k3-free deepseek-v4-pro-free deepseek-v4-flash-free; do
-  grep -q "$m" "$P3JSON" && echo "pricing_ok=$m" || echo "pricing_MISSING=$m"
-done
+python3 - "$P3JSON" <<'PY'
+import json, sys
+ids = ["glm-5.2:free", "kimi-k3:free", "deepseek-v4-pro:free", "deepseek-v4-flash:free"]
+legacy = ["glm-5.2-free", "kimi-k3-free", "deepseek-v4-pro-free", "deepseek-v4-flash-free"]
+data = json.load(open(sys.argv[1], encoding="utf-8"))
+rows = {r.get("model_name"): r for r in data.get("data", [])}
+bad = 0
+for mid in ids:
+    r = rows.get(mid)
+    if r is None:
+        print("pricing_MISSING=%s" % mid); bad += 1; continue
+    ok = r.get("quota_type") == 1 and float(r.get("model_price") or 0) == 0
+    print("%s=%s quota_type=%s model_price=%s model_ratio=%s" % (
+        "pricing_ok" if ok else "pricing_BAD", mid,
+        r.get("quota_type"), r.get("model_price"), r.get("model_ratio")))
+    if not ok:
+        bad += 1
+for mid in legacy:
+    if mid in rows:
+        print("legacy_STILL_LISTED=%s" % mid); bad += 1
+print("SMOKE_%s" % ("PASS" if bad == 0 else "FAIL(%d)" % bad))
+PY
 rm -f "$P3JSON"
 curl -sS -o /dev/null -w "free_page_http=%{http_code}\n" https://www.keyoapi.xyz/free-models
 echo DONE_RELIST_SENSENOVA_TWINS

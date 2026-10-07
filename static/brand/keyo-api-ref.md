@@ -134,7 +134,7 @@ curl https://www.keyoapi.xyz/v1/videos/generations \
 
 ### 1.1 文本对话 → `POST /v1/chat/completions`
 
-免费（`*-free`）：`Atria-dawn-v2:free`、`DeepSeek-Prover-V2-7B:free`
+免费（`:free` 后缀）：`Atria-dawn-v2:free`、`DeepSeek-Prover-V2-7B:free`
 
 另有一批 `:free` 对话模型（例如 `glm-5.3-flash:free`、`nemotron-3-ultra-550b-a55b:free`）。完整名单以 https://www.keyoapi.xyz/free-models 为准，免费模型会动态调整。
 

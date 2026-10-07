@@ -1,0 +1,23 @@
+---
+description: Local Clash proxy for GitHub / outbound HTTPS when pushes fail
+alwaysApply: true
+---
+
+# Network proxy (Clash Verge)
+
+Owner machine runs **Clash Verge** (Mihomo). When `git push` / `git pull` to GitHub fails with `443 Connection was reset` or `Could not connect`, use this proxy for that shell session only — do **not** permanently rewrite `git config`.
+
+- **HTTP/HTTPS/mixed**: `http://127.0.0.1:7890`
+- **App**: Clash Verge · system proxy `127.0.0.1:7890` · mixed port `7890`
+- **OS**: Windows 11
+
+## How to push
+
+```powershell
+$env:HTTP_PROXY = "http://127.0.0.1:7890"
+$env:HTTPS_PROXY = "http://127.0.0.1:7890"
+$env:ALL_PROXY = "http://127.0.0.1:7890"
+git push origin HEAD
+```
+
+If Clash is off or push still fails: keep using **b64 VPS short commands** (no GitHub pull required). Do not print or commit proxy credentials (none here — local only).

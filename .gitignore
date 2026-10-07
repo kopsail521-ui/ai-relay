@@ -34,3 +34,5 @@ scripts/_*.txt
 # GEO auto-published CMS articles (VPS-only; do not wipe on git reset)
 static/brand/blog/article/*
 !static/brand/blog/article/.gitkeep
+# Cursor chat history export (local archive)
+.cursor-history/

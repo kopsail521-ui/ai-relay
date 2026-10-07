@@ -9,26 +9,26 @@
   Syncs with New API shell via postMessage { lang } when embedded.
 -->
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Source+Sans+3:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Noto+Sans+SC:wght@400;500;600;700&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Noto+Sans+SC:wght@400;500;600;700&display=swap');
 
   :root {
-    --bg: #f6f7f9;
-    --surface: #ffffff;
-    --ink: #0f172a;
-    --ink-2: #334155;
-    --muted: #64748b;
-    --line: #e2e8f0;
-    --line-strong: #cbd5e1;
-    --accent: #2563eb;
-    --accent-soft: #eff6ff;
-    --accent-ink: #1d4ed8;
-    --code-bg: #0f172a;
-    --code-ink: #e2e8f0;
-    --code-muted: #94a3b8;
-    --ok: #059669;
-    --radius: 10px;
-    --shadow: 0 1px 2px rgba(15, 23, 42, 0.04), 0 8px 24px rgba(15, 23, 42, 0.04);
-    --font: 'Source Sans 3', 'Noto Sans SC', system-ui, sans-serif;
+    --bg: #f6f5f1;
+    --surface: #fffcf7;
+    --ink: #1c1c19;
+    --ink-2: #3f3f38;
+    --muted: #6b6b63;
+    --line: #ddd9d0;
+    --line-strong: #c9c4b8;
+    --accent: #1c1c19;
+    --accent-soft: #eceae4;
+    --accent-ink: #21564b;
+    --code-bg: #161614;
+    --code-ink: #eceae4;
+    --code-muted: #9a978c;
+    --ok: #21564b;
+    --radius: 3px;
+    --shadow: none;
+    --font: 'IBM Plex Sans', 'Noto Sans SC', system-ui, sans-serif;
     --mono: 'IBM Plex Mono', ui-monospace, monospace;
   }
 
@@ -38,10 +38,7 @@
     margin: 0;
     font-family: var(--font);
     color: var(--ink);
-    background:
-      radial-gradient(1200px 500px at 10% -10%, #dbeafe 0%, transparent 55%),
-      radial-gradient(900px 400px at 100% 0%, #f1f5f9 0%, transparent 50%),
-      var(--bg);
+    background: var(--bg);
     line-height: 1.6;
     text-wrap: pretty;
   }
@@ -126,16 +123,19 @@
   }
   .hero h1 {
     margin: 0 0 12px;
-    font-size: clamp(28px, 4vw, 36px);
-    line-height: 1.15;
-    letter-spacing: -0.03em;
-    font-weight: 700;
+    font-size: clamp(1.7rem, 3.1vw, 2.35rem);
+    line-height: 1.18;
+    letter-spacing: -0.035em;
+    font-weight: 600;
+    text-wrap: balance;
   }
   .hero p {
     margin: 0;
-    max-width: 52ch;
+    max-width: none;
     color: var(--ink-2);
-    font-size: 16.5px;
+    font-size: clamp(0.95rem, 1.35vw, 1.02rem);
+    line-height: 1.55;
+    text-wrap: pretty;
   }
 
   section {
@@ -363,6 +363,91 @@
     margin: 0;
   }
 
+  .api-ref {
+    margin-top: 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+  }
+  .model-api {
+    padding: 18px 18px 16px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: var(--surface);
+  }
+  .model-api > h3 {
+    margin: 0 0 6px;
+    font-size: 16px;
+    letter-spacing: -0.02em;
+  }
+  .model-api .model-lead {
+    margin: 0 0 14px;
+    font-size: 13.5px;
+    color: var(--ink-2);
+  }
+  .model-api .field-table th:first-child,
+  .model-api .field-table td:first-child {
+    font-family: var(--mono);
+    font-size: 12.5px;
+    white-space: nowrap;
+  }
+  .model-api .req {
+    color: #a33;
+    font-size: 11px;
+    font-weight: 600;
+    margin-left: 4px;
+  }
+  .model-api .opt {
+    color: var(--muted);
+    font-size: 11px;
+    margin-left: 4px;
+  }
+  .model-jump {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 12px 0 4px;
+  }
+  .model-jump a {
+    font-size: 12.5px;
+    font-family: var(--mono);
+    padding: 4px 8px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    color: var(--ink-2);
+    text-decoration: none;
+    background: #fff;
+  }
+  .model-jump a:hover {
+    border-color: var(--line-strong);
+    color: var(--accent-ink);
+  }
+  .doc-rules {
+    margin: 14px 0 0;
+    padding: 12px 14px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: var(--surface);
+    list-style: none;
+  }
+  .doc-rules li {
+    margin: 0 0 8px;
+    padding: 0 0 8px;
+    border-bottom: 1px dashed var(--line);
+    font-size: 13.5px;
+    color: var(--ink-2);
+    line-height: 1.5;
+  }
+  .doc-rules li:last-child {
+    margin: 0;
+    padding: 0;
+    border-bottom: none;
+  }
+  .doc-rules code {
+    font-family: var(--mono);
+    font-size: 12px;
+  }
+
   .client-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -450,7 +535,7 @@
       font-size: 12.5px;
       padding: 5px 10px;
     }
-    .toc a.active { border-color: #bfdbfe; }
+    .toc a.active { border-color: var(--line-strong); }
     .cred {
       grid-template-columns: 1fr auto;
       grid-template-rows: auto auto;
@@ -558,31 +643,20 @@
 <tr><td class="model"><button type="button" class="model-btn" data-copy="gpt-5.6-luna">gpt-5.6-luna</button></td><td class="price">~$0.10</td><td class="price">~$0.62</td><td class="note-cell" data-i18n="nLuna"></td></tr>
 <tr><td class="model"><button type="button" class="model-btn" data-copy="gpt-5.6-terra">gpt-5.6-terra</button></td><td class="price">~$0.37</td><td class="price">~$2.21</td><td class="note-cell" data-i18n="nTerra"></td></tr>
 <tr><td class="model"><button type="button" class="model-btn" data-copy="gpt-5.6-sol">gpt-5.6-sol</button></td><td class="price">~$0.92</td><td class="price">~$5.52</td><td class="note-cell" data-i18n="nSol"></td></tr>
-<tr><td class="model"><button type="button" class="model-btn" data-copy="gpt-6-luna">gpt-6-luna</button></td><td class="price">~$0.03</td><td class="price">~$0.15</td><td class="note-cell">GPT-6 Luna</td></tr>
-<tr><td class="model"><button type="button" class="model-btn" data-copy="gpt-6-sol">gpt-6-sol</button></td><td class="price">~$0.37</td><td class="price">~$1.84</td><td class="note-cell">GPT-6 Sol</td></tr>
-<tr><td class="model"><button type="button" class="model-btn" data-copy="gpt-6.1-sol">gpt-6.1-sol</button></td><td class="price">~$0.37</td><td class="price">~$1.84</td><td class="note-cell">GPT-6.1 Sol</td></tr>
-<tr><td class="model"><button type="button" class="model-btn" data-copy="gpt-6-astra">gpt-6-astra</button></td><td class="price">~$1.84</td><td class="price">~$9.19</td><td class="note-cell">GPT-6 Astra</td></tr>
 <tr><td class="model"><button type="button" class="model-btn" data-copy="claude-sonnet-5">claude-sonnet-5</button></td><td class="price">~$0.88</td><td class="price">~$4.41</td><td class="note-cell" data-i18n="nClaudeBal"></td></tr>
-<tr><td class="model"><button type="button" class="model-btn" data-copy="claude-opus-5">claude-opus-5</button></td><td class="price">~$1.10</td><td class="price">~$5.52</td><td class="note-cell" data-i18n="nClaudeStrong"></td></tr>
-<tr><td class="model"><button type="button" class="model-btn" data-copy="claude-opus-5-5">claude-opus-5-5</button></td><td class="price">~$1.76</td><td class="price">~$8.82</td><td class="note-cell">Claude Opus 5.5</td></tr>
+<tr><td class="model"><button type="button" class="model-btn" data-copy="claude-opus-5">claude-opus-5</button></td><td class="price">~$2.21</td><td class="price">~$11.03</td><td class="note-cell" data-i18n="nClaudeStrong"></td></tr>
 <tr><td class="model"><button type="button" class="model-btn" data-copy="claude-fable-5">claude-fable-5</button></td><td class="price">~$8.82</td><td class="price">~$44.12</td><td class="note-cell" data-i18n="nClaudeFlag"></td></tr>
 <tr><td class="model"><button type="button" class="model-btn" data-copy="claude-fable-5-1">claude-fable-5-1</button></td><td class="price">~$14.71</td><td class="price">~$73.53</td><td class="note-cell" data-i18n="nClaudeFlag51"></td></tr>
 <tr><td class="model"><button type="button" class="model-btn" data-copy="gemini-3.7-flash">gemini-3.7-flash</button></td><td class="price">~$0.28</td><td class="price">~$1.38</td><td class="note-cell" data-i18n="nGemFast"></td></tr>
+<tr><td class="model"><button type="button" class="model-btn" data-copy="gemini-3.8-flash">gemini-3.8-flash</button></td><td class="price">~$0.28</td><td class="price">~$1.38</td><td class="note-cell" data-i18n="nGemFast38"></td></tr>
+<tr><td class="model"><button type="button" class="model-btn" data-copy="deepseek-v4.1-flash">deepseek-v4.1-flash</button></td><td class="price">~$0.30</td><td class="price">~$1.20</td><td class="note-cell" data-i18n="nDsFast41"></td></tr>
+<tr><td class="model"><button type="button" class="model-btn" data-copy="deepseek-v4-flash">deepseek-v4-flash</button></td><td class="price">~$0.44</td><td class="price">~$1.32</td><td class="note-cell" data-i18n="nDsFast"></td></tr>
+<tr><td class="model"><button type="button" class="model-btn" data-copy="deepseek-v4-pro-0813">deepseek-v4-pro-0813</button></td><td class="price">~$1.32</td><td class="price">~$3.96</td><td class="note-cell" data-i18n="nDsStrong"></td></tr>
+<tr><td class="model"><button type="button" class="model-btn" data-copy="kimi-k3">kimi-k3</button></td><td class="price">~$3.00</td><td class="price">~$15.00</td><td class="note-cell" data-i18n="nKimi"></td></tr>
 <tr><td class="model"><button type="button" class="model-btn" data-copy="grok-4.6">grok-4.6</button></td><td class="price">~$0.74</td><td class="price">~$2.21</td><td class="note-cell" data-i18n="nGrok"></td></tr>
-<tr><td class="model"><button type="button" class="model-btn" data-copy="glm-5.3-flash">glm-5.3-flash</button></td><td class="price">~$0.07</td><td class="price">~$0.24</td><td class="note-cell">GLM 5.3 Flash</td></tr>
-<tr><td class="model"><button type="button" class="model-btn" data-copy="glm-5.2">glm-5.2</button></td><td class="price">~$0.96</td><td class="price">~$3.02</td><td class="note-cell">GLM 5.2</td></tr>
-<tr><td class="model"><button type="button" class="model-btn" data-copy="deepseek-v4.1-flash">deepseek-v4.1-flash</button></td><td class="price">~$0.0096</td><td class="price">~$0.04</td><td class="note-cell">deepseek-v4.1-flash</td></tr>
-<tr><td class="model"><button type="button" class="model-btn" data-copy="deepseek-v4-pro-0813">deepseek-v4-pro-0813</button></td><td class="price">~$0.07</td><td class="price">~$0.14</td><td class="note-cell">deepseek-v4-pro-0813</td></tr>
-<tr><td class="model"><button type="button" class="model-btn" data-copy="deepseek-v4-flash-0731">deepseek-v4-flash-0731</button></td><td class="price">~$0.04</td><td class="price">~$0.07</td><td class="note-cell">deepseek-v4-flash-0731</td></tr>
-<tr><td class="model"><button type="button" class="model-btn" data-copy="deepseek-v4-pro">deepseek-v4-pro</button></td><td class="price">~$0.07</td><td class="price">~$0.14</td><td class="note-cell">deepseek-v4-pro</td></tr>
-<tr><td class="model"><button type="button" class="model-btn" data-copy="deepseek-v4-flash">deepseek-v4-flash</button></td><td class="price">~$0.09</td><td class="price">~$0.17</td><td class="note-cell">deepseek-v4-flash</td></tr>
-<tr><td class="model"><button type="button" class="model-btn" data-copy="kimi-k3">kimi-k3</button></td><td class="price">~$0.20</td><td class="price">~$1.02</td><td class="note-cell">Kimi K3</td></tr>
-<tr><td class="model"><button type="button" class="model-btn" data-copy="kimi-k2.7-code">kimi-k2.7-code</button></td><td class="price">~$0.03</td><td class="price">~$0.14</td><td class="note-cell">Kimi K2.7 Code</td></tr>
-<tr><td class="model"><button type="button" class="model-btn" data-copy="mimo-v2.6-pro">mimo-v2.6-pro</button></td><td class="price">~$0.24</td><td class="price">~$0.48</td><td class="note-cell">MiMo V2.6 Pro</td></tr>
-<tr><td class="model"><button type="button" class="model-btn" data-copy="mimo-v2.6-flash">mimo-v2.6-flash</button></td><td class="price">~$0.15</td><td class="price">~$0.30</td><td class="note-cell">MiMo V2.6 Flash</td></tr>
-<tr><td class="model"><button type="button" class="model-btn" data-copy="qwen3.8-flash">qwen3.8-flash</button></td><td class="price">~$0.05</td><td class="price">~$0.17</td><td class="note-cell">Qwen 3.8 Flash</td></tr>
 <tr><td class="model"><button type="button" class="model-btn" data-copy="minimax-m3">minimax-m3</button></td><td class="price">~$0.12</td><td class="price">~$0.48</td><td class="note-cell" data-i18n="nMinimax"></td></tr>
-</tbody>
+<tr><td class="model"><button type="button" class="model-btn" data-copy="glm-5.3">glm-5.3</button></td><td class="price">~$1.40</td><td class="price">~$4.40</td><td class="note-cell" data-i18n="nGlm"></td></tr>
+            </tbody>
           </table>
         </div>
         <p class="hint" data-i18n="chatHint"></p>
@@ -616,10 +690,14 @@
               </tr>
             </thead>
             <tbody>
-<tr><td class="model"><button type="button" class="model-btn" data-copy="gpt-image-2">gpt-image-2</button></td><td class="price">¥0.05 <span data-i18n="perImage"></span></td></tr>
-<tr><td class="model"><button type="button" class="model-btn" data-copy="gpt-image-2-vip">gpt-image-2-vip</button></td><td class="price">¥0.20 <span data-i18n="perImage"></span></td></tr>
-<tr><td class="model"><button type="button" class="model-btn" data-copy="nano-banana-2">nano-banana-2</button></td><td class="price">¥0.15 <span data-i18n="perImage"></span></td></tr>
-<tr><td class="model"><button type="button" class="model-btn" data-copy="nano-banana-pro">nano-banana-pro</button></td><td class="price">¥0.20 <span data-i18n="perImage"></span></td></tr>
+<tr><td class="model"><button type="button" class="model-btn" data-copy="gpt-image-2.5">gpt-image-2.5</button></td><td class="price">~$0.0062 <span data-i18n="perImage"></span></td></tr>
+<tr><td class="model"><button type="button" class="model-btn" data-copy="gpt-image-2.5-flare">gpt-image-2.5-flare</button></td><td class="price">~$0.0205 <span data-i18n="perImage"></span></td></tr>
+<tr><td class="model"><button type="button" class="model-btn" data-copy="gpt-image-2.5-sunburst">gpt-image-2.5-sunburst</button></td><td class="price">~$0.0247 <span data-i18n="perImage"></span></td></tr>
+<tr><td class="model"><button type="button" class="model-btn" data-copy="gpt-image-2">gpt-image-2</button></td><td class="price">~$0.0068 <span data-i18n="perImage"></span></td></tr>
+<tr><td class="model"><button type="button" class="model-btn" data-copy="gpt-image-2-vip">gpt-image-2-vip</button></td><td class="price">~$0.0274 <span data-i18n="perImage"></span></td></tr>
+<tr><td class="model"><button type="button" class="model-btn" data-copy="nano-banana-2.1">nano-banana-2.1</button></td><td class="price">~$0.0123 <span data-i18n="perImage"></span></td></tr>
+<tr><td class="model"><button type="button" class="model-btn" data-copy="nano-banana-2">nano-banana-2</button></td><td class="price">~$0.0205 <span data-i18n="perImage"></span></td></tr>
+<tr><td class="model"><button type="button" class="model-btn" data-copy="nano-banana-pro">nano-banana-pro</button></td><td class="price">~$0.0274 <span data-i18n="perImage"></span></td></tr>
             </tbody>
           </table>
         </div>
@@ -722,8 +800,11 @@ const I18N = {
     "nClaudeBal": "Claude balanced",
     "nClaudeStrong": "Claude strong",
     "nClaudeFlag": "Claude flagship",
+    "nClaudeFlag51": "Claude flagship 5.1",
     "nGemFast": "Gemini fast",
+    "nGemFast38": "Gemini 3.8 fast",
     "nDsFast": "DeepSeek fast",
+    "nDsFast41": "DeepSeek V4.1 fast",
     "nDsStrong": "DeepSeek strong",
     "nKimi": "Kimi",
     "nGrok": "Grok",
@@ -781,8 +862,11 @@ const I18N = {
     "nClaudeBal": "Claude 均衡",
     "nClaudeStrong": "Claude 强档",
     "nClaudeFlag": "Claude 旗舰",
+    "nClaudeFlag51": "Claude 旗舰 5.1",
     "nGemFast": "Gemini 快",
+    "nGemFast38": "Gemini 3.8 快",
     "nDsFast": "DeepSeek 快",
+    "nDsFast41": "DeepSeek V4.1 快",
     "nDsStrong": "DeepSeek 强",
     "nKimi": "Kimi",
     "nGrok": "Grok",
@@ -840,8 +924,11 @@ const I18N = {
     "nClaudeBal": "Claude 均衡",
     "nClaudeStrong": "Claude 強檔",
     "nClaudeFlag": "Claude 旗艦",
+    "nClaudeFlag51": "Claude 旗艦 5.1",
     "nGemFast": "Gemini 快",
+    "nGemFast38": "Gemini 3.8 快",
     "nDsFast": "DeepSeek 快",
+    "nDsFast41": "DeepSeek V4.1 快",
     "nDsStrong": "DeepSeek 強",
     "nKimi": "Kimi",
     "nGrok": "Grok",
@@ -899,8 +986,11 @@ const I18N = {
     "nClaudeBal": "Claude バランス",
     "nClaudeStrong": "Claude 強",
     "nClaudeFlag": "Claude 旗艦",
+    "nClaudeFlag51": "Claude 旗艦 5.1",
     "nGemFast": "Gemini 高速",
+    "nGemFast38": "Gemini 3.8 高速",
     "nDsFast": "DeepSeek 高速",
+    "nDsFast41": "DeepSeek V4.1 高速",
     "nDsStrong": "DeepSeek 強",
     "nKimi": "Kimi",
     "nGrok": "Grok",
@@ -958,8 +1048,11 @@ const I18N = {
     "nClaudeBal": "Claude équilibré",
     "nClaudeStrong": "Claude fort",
     "nClaudeFlag": "Claude phare",
+    "nClaudeFlag51": "Claude phare 5.1",
     "nGemFast": "Gemini rapide",
+    "nGemFast38": "Gemini 3.8 rapide",
     "nDsFast": "DeepSeek rapide",
+    "nDsFast41": "DeepSeek V4.1 rapide",
     "nDsStrong": "DeepSeek fort",
     "nKimi": "Kimi",
     "nGrok": "Grok",
@@ -1017,8 +1110,11 @@ const I18N = {
     "nClaudeBal": "Claude баланс",
     "nClaudeStrong": "Claude сильный",
     "nClaudeFlag": "Claude флагман",
+    "nClaudeFlag51": "Claude флагман 5.1",
     "nGemFast": "Gemini быстрый",
+    "nGemFast38": "Gemini 3.8 быстрый",
     "nDsFast": "DeepSeek быстрый",
+    "nDsFast41": "DeepSeek V4.1 быстрый",
     "nDsStrong": "DeepSeek сильный",
     "nKimi": "Kimi",
     "nGrok": "Grok",
@@ -1076,8 +1172,11 @@ const I18N = {
     "nClaudeBal": "Claude cân bằng",
     "nClaudeStrong": "Claude mạnh",
     "nClaudeFlag": "Claude flagship",
+    "nClaudeFlag51": "Claude flagship 5.1",
     "nGemFast": "Gemini nhanh",
+    "nGemFast38": "Gemini 3.8 nhanh",
     "nDsFast": "DeepSeek nhanh",
+    "nDsFast41": "DeepSeek V4.1 nhanh",
     "nDsStrong": "DeepSeek mạnh",
     "nKimi": "Kimi",
     "nGrok": "Grok",

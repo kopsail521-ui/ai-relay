@@ -63,6 +63,20 @@
       "note": "OpenAI-compatible /v1/images/generations; family: nano-banana-2, nano-banana-pro"
 },
     {
+      "capability": "Image generation (Nano Banana 2)",
+      "official": "Google Gemini image list — confirm on official Google pages",
+      "keyo_model": "nano-banana-2",
+      "keyo_price": "~$0.0205 / request",
+      "note": "OpenAI-compatible /v1/images/generations; previous generation"
+},
+    {
+      "capability": "Image generation (Nano Banana Pro)",
+      "official": "Google Gemini image list — confirm on official Google pages",
+      "keyo_model": "nano-banana-pro",
+      "keyo_price": "~$0.0274 / request",
+      "note": "OpenAI-compatible /v1/images/generations; strongest prompt adherence"
+},
+    {
       "capability": "Background removal",
       "official": "Typical SaaS remove.bg API often $0.05–0.20 / image",
       "keyo_model": "RMBG-2.0",

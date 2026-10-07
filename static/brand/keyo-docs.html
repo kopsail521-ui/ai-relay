@@ -4,8 +4,6 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>KeyoAPI Docs</title>
-<link rel="icon" href="/brand/logo.svg" type="image/svg+xml" />
-<link rel="stylesheet" href="/brand/keyo-theme.css" />
 <!--
   Multilingual brand docs (en / zhCN / zhTW / ja / fr / ru / vi).
   Syncs with New API shell via postMessage { lang } when embedded.
@@ -568,20 +566,6 @@
   <div class="lang-bar" id="langBar">
     <select id="langSelect" aria-label="Language"></select>
   </div>
-  <header class="k-nav">
-    <a class="k-wordmark" href="/" target="_top">
-      <img src="/brand/logo.svg" alt="" width="22" height="22" />
-      KeyoAPI
-    </a>
-    <nav aria-label="Primary">
-      <a href="/pricing" target="_top">Pricing</a>
-      <a href="/brand/keyo-docs.html" target="_top">Docs</a>
-      <a href="/brand/blog/" target="_top">Blog</a>
-      <a href="/faq" target="_top">FAQ</a>
-      <a href="/sign-in" target="_top">Sign in</a>
-      <a class="k-nav-cta" href="/sign-up" target="_top">Get started</a>
-    </nav>
-  </header>
   <div class="wrap">
     <aside class="toc">
       <div class="brand">Keyo<span>API</span></div>
@@ -589,13 +573,6 @@
         <a href="#access" data-i18n="tocAccess"></a>
         <a href="#chat" data-i18n="tocChat"></a>
         <a href="#image" data-i18n="tocImage"></a>
-        <a href="#video" data-i18n="tocVideo"></a>
-        <a href="#video-gen" data-i18n="tocVideoGen"></a>
-        <a href="#grok-video" data-i18n="tocGrok"></a>
-        <a href="#video-api" data-i18n="tocVideoApi"></a>
-        <a href="#pitfalls" data-i18n="tocPitfalls"></a>
-        <a href="#speech" data-i18n="tocSpeech"></a>
-        <a href="#more" data-i18n="tocMore"></a>
         <a href="#clients" data-i18n="tocClients"></a>
         <a href="#support" data-i18n="tocSupport"></a>
       </nav>
@@ -606,8 +583,6 @@
         <div class="eyebrow">Documentation</div>
         <h1 data-i18n="docTitle"></h1>
         <p data-i18n="heroSub"></p>
-        <p class="hint" style="margin-top:12px"><a href="/brand/keyo-api-ref.html" data-i18n="aiRefLink"></a></p>
-        <p class="hint" style="margin-top:8px"><a href="/brand/blog/" target="_top">Blog — OpenAI-compatible guides (Python, Node.js, Cursor)</a></p>
       </header>
 
       <section id="access">
@@ -668,36 +643,19 @@
 <tr><td class="model"><button type="button" class="model-btn" data-copy="gpt-5.6-luna">gpt-5.6-luna</button></td><td class="price">~$0.10</td><td class="price">~$0.62</td><td class="note-cell" data-i18n="nLuna"></td></tr>
 <tr><td class="model"><button type="button" class="model-btn" data-copy="gpt-5.6-terra">gpt-5.6-terra</button></td><td class="price">~$0.37</td><td class="price">~$2.21</td><td class="note-cell" data-i18n="nTerra"></td></tr>
 <tr><td class="model"><button type="button" class="model-btn" data-copy="gpt-5.6-sol">gpt-5.6-sol</button></td><td class="price">~$0.92</td><td class="price">~$5.52</td><td class="note-cell" data-i18n="nSol"></td></tr>
-<tr><td class="model"><button type="button" class="model-btn" data-copy="gpt-6-luna">gpt-6-luna</button></td><td class="price">~$0.03</td><td class="price">~$0.15</td><td class="note-cell">GPT-6 Luna</td></tr>
-<tr><td class="model"><button type="button" class="model-btn" data-copy="gpt-6-sol">gpt-6-sol</button></td><td class="price">~$0.37</td><td class="price">~$1.84</td><td class="note-cell">GPT-6 Sol</td></tr>
-<tr><td class="model"><button type="button" class="model-btn" data-copy="gpt-6.1-sol">gpt-6.1-sol</button></td><td class="price">~$0.37</td><td class="price">~$1.84</td><td class="note-cell">GPT-6.1 Sol</td></tr>
-<tr><td class="model"><button type="button" class="model-btn" data-copy="gpt-6-astra">gpt-6-astra</button></td><td class="price">~$1.84</td><td class="price">~$9.19</td><td class="note-cell">GPT-6 Astra</td></tr>
 <tr><td class="model"><button type="button" class="model-btn" data-copy="claude-sonnet-5">claude-sonnet-5</button></td><td class="price">~$0.88</td><td class="price">~$4.41</td><td class="note-cell" data-i18n="nClaudeBal"></td></tr>
-<tr><td class="model"><button type="button" class="model-btn" data-copy="claude-sonnet-5-5">claude-sonnet-5-5</button></td><td class="price">~$0.88</td><td class="price">~$4.41</td><td class="note-cell">Claude Sonnet 5.5</td></tr>
-<tr><td class="model"><button type="button" class="model-btn" data-copy="claude-opus-5">claude-opus-5</button></td><td class="price">~$1.10</td><td class="price">~$5.52</td><td class="note-cell" data-i18n="nClaudeStrong"></td></tr>
-<tr><td class="model"><button type="button" class="model-btn" data-copy="claude-opus-5-5">claude-opus-5-5</button></td><td class="price">~$1.76</td><td class="price">~$8.82</td><td class="note-cell">Claude Opus 5.5</td></tr>
+<tr><td class="model"><button type="button" class="model-btn" data-copy="claude-opus-5">claude-opus-5</button></td><td class="price">~$2.21</td><td class="price">~$11.03</td><td class="note-cell" data-i18n="nClaudeStrong"></td></tr>
 <tr><td class="model"><button type="button" class="model-btn" data-copy="claude-fable-5">claude-fable-5</button></td><td class="price">~$8.82</td><td class="price">~$44.12</td><td class="note-cell" data-i18n="nClaudeFlag"></td></tr>
-<tr><td class="model"><button type="button" class="model-btn" data-copy="claude-fable-5-1">claude-fable-5-1</button></td><td class="price">~$7.35</td><td class="price">~$36.77</td><td class="note-cell" data-i18n="nClaudeFlag51"></td></tr>
+<tr><td class="model"><button type="button" class="model-btn" data-copy="claude-fable-5-1">claude-fable-5-1</button></td><td class="price">~$14.71</td><td class="price">~$73.53</td><td class="note-cell" data-i18n="nClaudeFlag51"></td></tr>
 <tr><td class="model"><button type="button" class="model-btn" data-copy="gemini-3.7-flash">gemini-3.7-flash</button></td><td class="price">~$0.28</td><td class="price">~$1.38</td><td class="note-cell" data-i18n="nGemFast"></td></tr>
-<tr><td class="model"><button type="button" class="model-btn" data-copy="gemini-3.8-flash">gemini-3.8-flash</button></td><td class="price">~$0.28</td><td class="price">~$1.38</td><td class="note-cell" data-i18n="nGem38"></td></tr>
-<tr><td class="model"><button type="button" class="model-btn" data-copy="grok-4.7">grok-4.7</button></td><td class="price">~$0.74</td><td class="price">~$2.21</td><td class="note-cell" data-i18n="nGrok47"></td></tr>
+<tr><td class="model"><button type="button" class="model-btn" data-copy="gemini-3.8-flash">gemini-3.8-flash</button></td><td class="price">~$0.28</td><td class="price">~$1.38</td><td class="note-cell" data-i18n="nGemFast38"></td></tr>
+<tr><td class="model"><button type="button" class="model-btn" data-copy="deepseek-v4.1-flash">deepseek-v4.1-flash</button></td><td class="price">~$0.30</td><td class="price">~$1.20</td><td class="note-cell" data-i18n="nDsFast41"></td></tr>
+<tr><td class="model"><button type="button" class="model-btn" data-copy="deepseek-v4-flash">deepseek-v4-flash</button></td><td class="price">~$0.44</td><td class="price">~$1.32</td><td class="note-cell" data-i18n="nDsFast"></td></tr>
+<tr><td class="model"><button type="button" class="model-btn" data-copy="deepseek-v4-pro-0813">deepseek-v4-pro-0813</button></td><td class="price">~$1.32</td><td class="price">~$3.96</td><td class="note-cell" data-i18n="nDsStrong"></td></tr>
+<tr><td class="model"><button type="button" class="model-btn" data-copy="kimi-k3">kimi-k3</button></td><td class="price">~$3.00</td><td class="price">~$15.00</td><td class="note-cell" data-i18n="nKimi"></td></tr>
 <tr><td class="model"><button type="button" class="model-btn" data-copy="grok-4.6">grok-4.6</button></td><td class="price">~$0.74</td><td class="price">~$2.21</td><td class="note-cell" data-i18n="nGrok"></td></tr>
-<tr><td class="model"><button type="button" class="model-btn" data-copy="glm-5.3-flash">glm-5.3-flash</button></td><td class="price">~$0.22</td><td class="price">~$0.72</td><td class="note-cell">GLM 5.3 Flash</td></tr>
-<tr><td class="model"><button type="button" class="model-btn" data-copy="glm-5.3">glm-5.3</button></td><td class="price">~$0.24</td><td class="price">~$0.77</td><td class="note-cell">GLM 5.3</td></tr>
-<tr><td class="model"><button type="button" class="model-btn" data-copy="glm-5.2">glm-5.2</button></td><td class="price">~$1.40</td><td class="price">~$4.40</td><td class="note-cell">GLM 5.2</td></tr>
-<tr><td class="model"><button type="button" class="model-btn" data-copy="deepseek-v4.1-flash">deepseek-v4.1-flash</button></td><td class="price">~$0.14</td><td class="price">~$0.56</td><td class="note-cell">deepseek-v4.1-flash</td></tr>
-<tr><td class="model"><button type="button" class="model-btn" data-copy="deepseek-v4-pro-0813">deepseek-v4-pro-0813</button></td><td class="price">~$0.14</td><td class="price">~$0.29</td><td class="note-cell">deepseek-v4-pro-0813</td></tr>
-<tr><td class="model"><button type="button" class="model-btn" data-copy="deepseek-v4-flash-0731">deepseek-v4-flash-0731</button></td><td class="price">~$0.086</td><td class="price">~$0.17</td><td class="note-cell">deepseek-v4-flash-0731</td></tr>
-<tr><td class="model"><button type="button" class="model-btn" data-copy="deepseek-v4-pro">deepseek-v4-pro</button></td><td class="price">~$0.14</td><td class="price">~$0.29</td><td class="note-cell">deepseek-v4-pro</td></tr>
-<tr><td class="model"><button type="button" class="model-btn" data-copy="deepseek-v4-flash">deepseek-v4-flash</button></td><td class="price">~$0.44</td><td class="price">~$1.32</td><td class="note-cell">deepseek-v4-flash</td></tr>
-<tr><td class="model"><button type="button" class="model-btn" data-copy="kimi-k3">kimi-k3</button></td><td class="price">~$0.41</td><td class="price">~$2.04</td><td class="note-cell">Kimi K3</td></tr>
-<tr><td class="model"><button type="button" class="model-btn" data-copy="kimi-k2.7-code">kimi-k2.7-code</button></td><td class="price">~$0.24</td><td class="price">~$1.03</td><td class="note-cell">Kimi K2.7 Code</td></tr>
-<tr><td class="model"><button type="button" class="model-btn" data-copy="qwen3.8-flash">qwen3.8-flash</button></td><td class="price">~$0.038</td><td class="price">~$0.12</td><td class="note-cell">Qwen 3.8 Flash</td></tr>
-<tr><td class="model"><button type="button" class="model-btn" data-copy="minimax-m3">minimax-m3</button></td><td class="price">~$0.24</td><td class="price">~$0.96</td><td class="note-cell">MiniMax M3</td></tr>
-<tr><td class="model"><button type="button" class="model-btn" data-copy="hy4-preview">hy4-preview</button></td><td class="price">~$0.21</td><td class="price">~$0.62</td><td class="note-cell">混元 hy4-preview</td></tr>
-<tr><td class="model"><button type="button" class="model-btn" data-copy="mimo-v2.6-pro">mimo-v2.6-pro</button></td><td class="price">~$0.31</td><td class="price">~$0.61</td><td class="note-cell">MiMo V2.6 Pro</td></tr>
-<tr><td class="model"><button type="button" class="model-btn" data-copy="mimo-v2.6-flash">mimo-v2.6-flash</button></td><td class="price">~$0.077</td><td class="price">~$0.15</td><td class="note-cell">MiMo V2.6 Flash</td></tr>
-<tr><td class="model"><button type="button" class="model-btn" data-copy="qwen3.8-max-0902">qwen3.8-max-0902</button></td><td class="price">~$1.50</td><td class="price">~$4.50</td><td class="note-cell" data-i18n="nQwen38Max"></td></tr>
+<tr><td class="model"><button type="button" class="model-btn" data-copy="minimax-m3">minimax-m3</button></td><td class="price">~$0.12</td><td class="price">~$0.48</td><td class="note-cell" data-i18n="nMinimax"></td></tr>
+<tr><td class="model"><button type="button" class="model-btn" data-copy="glm-5.3">glm-5.3</button></td><td class="price">~$1.40</td><td class="price">~$4.40</td><td class="note-cell" data-i18n="nGlm"></td></tr>
             </tbody>
           </table>
         </div>
@@ -737,716 +695,17 @@
 <tr><td class="model"><button type="button" class="model-btn" data-copy="gpt-image-2.5-sunburst">gpt-image-2.5-sunburst</button></td><td class="price">~$0.0247 <span data-i18n="perImage"></span></td></tr>
 <tr><td class="model"><button type="button" class="model-btn" data-copy="gpt-image-2">gpt-image-2</button></td><td class="price">~$0.0068 <span data-i18n="perImage"></span></td></tr>
 <tr><td class="model"><button type="button" class="model-btn" data-copy="gpt-image-2-vip">gpt-image-2-vip</button></td><td class="price">~$0.0274 <span data-i18n="perImage"></span></td></tr>
+<tr><td class="model"><button type="button" class="model-btn" data-copy="nano-banana-2.1">nano-banana-2.1</button></td><td class="price">~$0.0123 <span data-i18n="perImage"></span></td></tr>
 <tr><td class="model"><button type="button" class="model-btn" data-copy="nano-banana-2">nano-banana-2</button></td><td class="price">~$0.0205 <span data-i18n="perImage"></span></td></tr>
 <tr><td class="model"><button type="button" class="model-btn" data-copy="nano-banana-pro">nano-banana-pro</button></td><td class="price">~$0.0274 <span data-i18n="perImage"></span></td></tr>
-<tr><td class="model"><button type="button" class="model-btn" data-copy="nano-banana-2.1">nano-banana-2.1</button></td><td class="price">$0.0123 <span data-i18n="perImage"></span></td></tr>
             </tbody>
           </table>
         </div>
-      </section>
-
-
-      <section id="video">
-        <div class="sec-head">
-          <span class="num">04</span>
-          <h2 data-i18n="videoTitle"></h2>
-        </div>
-        <p class="sec-desc" data-i18n="videoIntroA"></p>
-        <div class="endpoint">
-          <span class="method">POST</span>
-          <span class="path">/v1/videos</span>
-          <button type="button" class="btn-copy" data-copy="https://www.keyoapi.xyz/v1/videos" data-i18n="copyUrl"></button>
-        </div>
-
-        <div class="code-block">
-          <div class="code-bar">
-            <span class="lang">cURL</span>
-            <button type="button" class="btn-copy" data-copy-target="curl-video" data-i18n="copy"></button>
-          </div>
-          <pre id="curl-video"></pre>
-        </div>
-
-        
-        <p class="hint" data-i18n="videoHint"></p>
-      </section>
-
-      <section id="video-gen">
-        <div class="sec-head">
-          <span class="num">04b</span>
-          <h2 data-i18n="videoTitleGen"></h2>
-        </div>
-        <p class="sec-desc" data-i18n="videoIntroB"></p>
-        <div class="endpoint">
-          <span class="method">POST</span>
-          <span class="path">/v1/videos/generations</span>
-          <button type="button" class="btn-copy" data-copy="https://www.keyoapi.xyz/v1/videos/generations" data-i18n="copyUrl"></button>
-        </div>
-
-        <div class="code-block">
-          <div class="code-bar">
-            <span class="lang">cURL</span>
-            <button type="button" class="btn-copy" data-copy-target="curl-video-gen" data-i18n="copy"></button>
-          </div>
-          <pre id="curl-video-gen"></pre>
-        </div>
-
-        <div class="table-wrap">
-          <table>
-            <thead>
-              <tr>
-                <th data-i18n="thModel"></th>
-                <th data-i18n="thPrice"></th>
-                <th data-i18n="thNote"></th>
-              </tr>
-            </thead>
-            <tbody>
-<tr><td class="model"><button type="button" class="model-btn" data-copy="wan3.0-video">wan3.0-video</button></td><td class="price">$0.0412+ <span data-i18n="perSecond"></span></td><td class="note-cell"><a href="#api-wan" data-i18n="nWanVideo"></a></td></tr>
-<tr><td class="model"><button type="button" class="model-btn" data-copy="seedance-2.0-1080p">seedance-2.0-1080p</button></td><td class="price">$0.100599 <span data-i18n="perSecond"></span></td><td class="note-cell"><a href="#api-seedance" data-i18n="nSeedance"></a></td></tr>
-<tr><td class="model"><button type="button" class="model-btn" data-copy="seedance-2.0-1080p-fast">seedance-2.0-1080p-fast</button></td><td class="price">$0.0754 <span data-i18n="perSecond"></span></td><td class="note-cell"><a href="#api-seedance" data-i18n="nSeedance"></a></td></tr>
-<tr><td class="model"><button type="button" class="model-btn" data-copy="seedance-2.0-1080p-mini">seedance-2.0-1080p-mini</button></td><td class="price">$0.050112 <span data-i18n="perSecond"></span></td><td class="note-cell"><a href="#api-seedance" data-i18n="nSeedance"></a></td></tr>
-<tr><td class="model"><button type="button" class="model-btn" data-copy="seedance-2.5-1080p">seedance-2.5-1080p</button></td><td class="price">$0.137996 <span data-i18n="perSecond"></span></td><td class="note-cell"><a href="#api-seedance" data-i18n="nSeedance"></a></td></tr>
-<tr><td class="model"><button type="button" class="model-btn" data-copy="seedance-2.0-720p">seedance-2.0-720p</button></td><td class="price">$0.096165 <span data-i18n="perSecond"></span></td><td class="note-cell"><a href="#api-seedance" data-i18n="nSeedance"></a></td></tr>
-<tr><td class="model"><button type="button" class="model-btn" data-copy="seedance-2.0-720p-fast">seedance-2.0-720p-fast</button></td><td class="price">$0.074794 <span data-i18n="perSecond"></span></td><td class="note-cell"><a href="#api-seedance" data-i18n="nSeedance"></a></td></tr>
-<tr><td class="model"><button type="button" class="model-btn" data-copy="seedance-2.0-720p-mini">seedance-2.0-720p-mini</button></td><td class="price">$0.049863 <span data-i18n="perSecond"></span></td><td class="note-cell"><a href="#api-seedance" data-i18n="nSeedance"></a></td></tr>
-<tr><td class="model"><button type="button" class="model-btn" data-copy="seedance-2.5-720p">seedance-2.5-720p</button></td><td class="price">$0.133562 <span data-i18n="perSecond"></span></td><td class="note-cell"><a href="#api-seedance" data-i18n="nSeedance"></a></td></tr>
-<tr><td class="model"><button type="button" class="model-btn" data-copy="flux-3-video">flux-3-video</button></td><td class="price">$0.0576–$0.5088 <span data-i18n="perSecond"></span></td><td class="note-cell"><a href="#api-flux" data-i18n="nFluxVideo"></a></td></tr>
-<tr><td class="model"><button type="button" class="model-btn" data-copy="MiniMax-H3">MiniMax-H3</button></td><td class="price">$0.02055 / $0.02877 / $0.04110 <span data-i18n="perSecond"></span></td><td class="note-cell"><a href="#api-minimax-h3" data-i18n="nMinimaxVideo"></a></td></tr>
-<tr><td class="model"><button type="button" class="model-btn" data-copy="gemini-omni-1.1-flash">gemini-omni-1.1-flash</button></td><td class="price">$0.1056 <span data-i18n="perSecond"></span></td><td class="note-cell"><a href="#api-gemini-omni" data-i18n="nGemOmni"></a></td></tr>
-<tr><td class="model"><button type="button" class="model-btn" data-copy="gemini-omni-1.1-flash-ext">gemini-omni-1.1-flash-ext</button></td><td class="price">$0.42 <span data-i18n="perVideo"></span> / $0.096 <span data-i18n="perSecond"></span></td><td class="note-cell"><a href="#api-gemini-omni" data-i18n="nGemOmniExt"></a></td></tr>
-            </tbody>
-          </table>
-        </div>
-        <ul class="doc-rules">
-          <li data-i18n="videoRuleAsync">异步：POST /v1/videos/generations 创建 → GET /v1/tasks/{task_id} 轮询。</li>
-          <li data-i18n="videoRuleMedia">媒体：只要 JSON；公网 http(s)。本机文件先 POST /v1/uploads。禁止路径 / data:base64 / /v1/assets。</li>
-          <li data-i18n="videoRuleParams">各模型字段不同（文生 / 图生 / 首尾帧 / 参考）。点表格备注或下方芯片进入对应小节，不要套用其它模型的 body。</li>
-        </ul>
-        <div class="model-jump">
-          <a href="#api-minimax-h3">MiniMax-H3</a>
-          <a href="#api-wan">wan</a>
-          <a href="#api-flux">flux-3-video</a>
-          <a href="#api-gemini-omni">gemini-omni</a>
-          <a href="#api-grok-imagine">grok-imagine</a>
-        </div>
-      </section>
-
-            <section id="grok-video">
-        <div class="sec-head">
-          <span class="num">04c</span>
-          <h2 data-i18n="grokTitle"></h2>
-        </div>
-        <p class="sec-desc" data-i18n="grokIntro"></p>
-        <div class="endpoint">
-          <span class="method">POST</span>
-          <span class="path">/v1/chat/completions</span>
-          <button type="button" class="btn-copy" data-copy="https://www.keyoapi.xyz/v1/chat/completions" data-i18n="copyUrl"></button>
-        </div>
-
-        <div class="code-block">
-          <div class="code-bar">
-            <span class="lang">cURL</span>
-            <span data-i18n="grokMode1"></span>
-            <button type="button" class="btn-copy" data-copy-target="curl-grok-i2v" data-i18n="copy"></button>
-          </div>
-          <pre id="curl-grok-i2v"></pre>
-        </div>
-
-        <div class="code-block">
-          <div class="code-bar">
-            <span class="lang">cURL</span>
-            <span data-i18n="grokMode2"></span>
-            <button type="button" class="btn-copy" data-copy-target="curl-grok-flf" data-i18n="copy"></button>
-          </div>
-          <pre id="curl-grok-flf"></pre>
-        </div>
-
-        <div class="code-block">
-          <div class="code-bar">
-            <span class="lang">cURL</span>
-            <span data-i18n="grokMode3"></span>
-            <button type="button" class="btn-copy" data-copy-target="curl-grok-ref" data-i18n="copy"></button>
-          </div>
-          <pre id="curl-grok-ref"></pre>
-        </div>
-
-        <div class="table-wrap">
-          <table>
-            <thead>
-              <tr>
-                <th data-i18n="thModel"></th>
-                <th data-i18n="thPrice"></th>
-                <th data-i18n="thNote"></th>
-              </tr>
-            </thead>
-            <tbody>
-<tr><td class="model"><button type="button" class="model-btn" data-copy="grok-video-1.5">grok-video-1.5</button></td><td class="price">$0.3082 <span data-i18n="perVideo"></span></td><td class="note-cell" data-i18n="nGrokVideo"></td></tr>
-            </tbody>
-          </table>
-        </div>
-        <p class="hint" data-i18n="grokHint"></p>
-      </section>
-
-<section id="video-api">
-        <div class="sec-head">
-          <span class="num">04c</span>
-          <h2 data-i18n="videoApiTitle"></h2>
-        </div>
-        <p class="sec-desc" data-i18n="videoApiIntro"></p>
-        <div class="endpoint">
-          <span class="method">POST</span>
-          <span class="path">/v1/videos/generations</span>
-          <button type="button" class="btn-copy" data-copy="https://www.keyoapi.xyz/v1/videos/generations" data-i18n="copyUrl"></button>
-        </div>
-        <div class="endpoint" style="margin-top:8px">
-          <span class="method">GET</span>
-          <span class="path">/v1/tasks/{task_id}</span>
-          <button type="button" class="btn-copy" data-copy="https://www.keyoapi.xyz/v1/tasks/" data-i18n="copyUrl"></button>
-        </div>
-        <div class="endpoint" style="margin-top:8px">
-          <span class="method">POST</span>
-          <span class="path">/v1/uploads</span>
-          <button type="button" class="btn-copy" data-copy="https://www.keyoapi.xyz/v1/uploads" data-i18n="copyUrl"></button>
-        </div>
-        <p class="sec-desc" style="margin-top:12px" data-i18n="uploadIntro"></p>
-        <div class="code-block">
-          <div class="code-bar"><span class="lang">cURL · upload</span><button type="button" class="btn-copy" data-copy-target="curl-upload" data-i18n="copy"></button></div>
-          <pre id="curl-upload"><code>curl https://www.keyoapi.xyz/v1/uploads \
-  -H "Authorization: Bearer sk-..." \
-  -F file=@./still.jpg
-# → { "url": "https://www.keyoapi.xyz/uploads/....jpg", "expires_at": "..." }
-# Put url into image_urls / images / video_urls / audios / image.url</code></pre>
-        </div>
-        <div class="model-jump">
-          <a href="#api-minimax-h3">MiniMax-H3</a>
-          <a href="#api-wan">wan</a>
-          <a href="#api-flux">flux-3-video</a>
-          <a href="#api-gemini-omni">gemini-omni</a>
-          <a href="#api-grok-imagine">grok-imagine</a>
-        </div>
-        <ul class="doc-rules" style="margin-top:16px">
-          <li data-i18n="pitPollVideo"></li>
-          <li data-i18n="pitMedia"></li>
-          <li data-i18n="pitMix"></li>
-        </ul>
-
-        <div class="api-ref">
-          <article class="model-api" id="api-minimax-h3">
-            <h3>MiniMax-H3</h3>
-            <p class="model-lead" data-i18n="mmLead"></p>
-            <div class="table-wrap">
-              <table class="field-table">
-                <thead>
-                  <tr>
-                    <th data-i18n="thField"></th>
-                    <th data-i18n="thType"></th>
-                    <th data-i18n="thDesc"></th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr><td>model<span class="req">*</span></td><td>string</td><td><code>MiniMax-H3</code></td></tr>
-                  <tr><td>prompt<span class="req">*</span></td><td>string</td><td data-i18n="mmPrompt"></td></tr>
-                  <tr><td>aspectRatio<span class="req">*</span></td><td>string</td><td><code>landscape</code> / <code>portrait</code>（亦接受 <code>16:9</code>/<code>9:16</code>；不支持 <code>square</code>/<code>1:1</code>）</td></tr>
-                  <tr><td>resolution<span class="req">*</span></td><td>string</td><td><code>480p</code> / <code>768p</code> / <code>1080p</code></td></tr>
-                  <tr><td>duration<span class="req">*</span></td><td>integer</td><td>1–15 秒；1080p 最长 10 秒</td></tr>
-                  <tr><td>images<span class="opt">可选</span></td><td>string[]</td><td data-i18n="mmImages"></td></tr>
-                  <tr><td>audios<span class="opt">可选</span></td><td>string[]</td><td data-i18n="mmAudios"></td></tr>
-                  <tr><td>seed<span class="opt">可选</span></td><td>integer</td><td data-i18n="mmSeed"></td></tr>
-                </tbody>
-              </table>
-            </div>
-            <p class="hint" data-i18n="mmAlias"></p>
-            <div class="code-block" style="margin-top:12px">
-              <div class="code-bar"><span class="lang">JSON · 文生</span><button type="button" class="btn-copy" data-copy-target="ex-mm-t2v" data-i18n="copy"></button></div>
-              <pre id="ex-mm-t2v"><code>{
-  "model": "MiniMax-H3",
-  "prompt": "一只红气球在蓝天缓缓上升，电影感，自然光",
-  "aspectRatio": "landscape",
-  "resolution": "480p",
-  "duration": 5
-}</code></pre>
-            </div>
-            <div class="code-block">
-              <div class="code-bar"><span class="lang">JSON · 参考图+音频</span><button type="button" class="btn-copy" data-copy-target="ex-mm-ref" data-i18n="copy"></button></div>
-              <pre id="ex-mm-ref"><code>{
-  "model": "MiniMax-H3",
-  "prompt": "人物按参考音色说话，镜头缓慢推进",
-  "aspectRatio": "portrait",
-  "resolution": "768p",
-  "duration": 8,
-  "images": ["https://example.com/char.png"],
-  "audios": ["https://example.com/voice.mp3"]
-}</code></pre>
-            </div>
-            <div class="code-block">
-              <div class="code-bar"><span class="lang">cURL</span><button type="button" class="btn-copy" data-copy-target="curl-mm-h3" data-i18n="copy"></button></div>
-              <pre id="curl-mm-h3"></pre>
-            </div>
-          </article>
-
-          <article class="model-api" id="api-seedance">
-            <h3>seedance-*-720p / *-1080p</h3>
-            <p class="model-lead" data-i18n="sdLead"></p>
-            <p class="hint">给 AI：复制 <a href="/brand/keyo-api-ref.html"><code>/brand/keyo-api-ref.html</code></a> 全文（视频字段在 §4/§5）</p>
-            <div class="table-wrap">
-              <table class="field-table">
-                <thead>
-                  <tr><th data-i18n="thField"></th><th data-i18n="thType"></th><th data-i18n="thDesc"></th></tr>
-                </thead>
-                <tbody>
-                  <tr><td>model<span class="req">*</span></td><td>string</td><td data-i18n="sdModel"></td></tr>
-                  <tr><td>prompt<span class="req">*</span></td><td>string</td><td data-i18n="sdPrompt"></td></tr>
-                  <tr><td>duration / seconds</td><td>int</td><td data-i18n="sdDuration"></td></tr>
-                  <tr><td>first_frame_image</td><td>string</td><td>首帧模式（公网 https）。勿与 video_urls/audios 混用</td></tr>
-                  <tr><td>image_with_roles</td><td>object[]</td><td>首尾帧：role=<code>first_frame</code>+<code>last_frame</code></td></tr>
-                  <tr><td>image_urls / images</td><td>string[]</td><td><b>参考生</b>（单图也可）。不要用它当「默认首帧」</td></tr>
-                  <tr><td>generation_type</td><td>string</td><td><code>reference</code> 强制参考生；<code>first_frame</code> 强制首帧</td></tr>
-                  <tr><td>video_urls</td><td>string[]</td><td>参考视频（https）</td></tr>
-                  <tr><td>audios / audio_urls</td><td>string[]</td><td>参考音频（https；须同时有图或视频）</td></tr>
-                </tbody>
-              </table>
-            </div>
-            <div class="code-block" style="margin-top:12px">
-              <div class="code-bar"><span class="lang">JSON · 文生</span><button type="button" class="btn-copy" data-copy-target="ex-sd-t2v" data-i18n="copy"></button></div>
-              <pre id="ex-sd-t2v"><code>{
-  "model": "seedance-2.0-720p-mini",
-  "prompt": "夕阳下红色纸船漂在平静水面上，镜头缓慢推进",
-  "duration": 5
-}</code></pre>
-            </div>
-            <div class="code-block">
-              <div class="code-bar"><span class="lang">JSON · 首帧</span><button type="button" class="btn-copy" data-copy-target="ex-sd-first" data-i18n="copy"></button></div>
-              <pre id="ex-sd-first"><code>{
-  "model": "seedance-2.0-1080p-fast",
-  "prompt": "人物抬头并向前走，动作自然",
-  "duration": 5,
-  "first_frame_image": "https://example.com/first.jpg"
-}</code></pre>
-            </div>
-            <div class="code-block">
-              <div class="code-bar"><span class="lang">JSON · 参考图+音频</span><button type="button" class="btn-copy" data-copy-target="ex-sd-ref-audio" data-i18n="copy"></button></div>
-              <pre id="ex-sd-ref-audio"><code>{
-  "model": "seedance-2.0-720p-mini",
-  "prompt": "人物按参考音色说话，镜头缓慢推进",
-  "duration": 5,
-  "image_urls": ["https://example.com/char.jpg"],
-  "audios": ["https://example.com/voice.mp3"]
-}</code></pre>
-            </div>
-            <ul class="doc-rules">
-              <li data-i18n="pit3"></li>
-              <li data-i18n="sdRuleUrl"></li>
-              <li data-i18n="sdOldIds"></li>
-            </ul>
-          </article>
-
-          <article class="model-api" id="api-wan">
-            <h3>wan3.0-video</h3>
-            <p class="model-lead" data-i18n="wanLead"></p>
-            <div class="table-wrap">
-              <table class="field-table">
-                <thead>
-                  <tr><th data-i18n="thField"></th><th data-i18n="thType"></th><th data-i18n="thDesc"></th></tr>
-                </thead>
-                <tbody>
-                  <tr><td>prompt<span class="req">*</span></td><td>string</td><td>文案</td></tr>
-                  <tr><td>resolution / duration</td><td>string / int</td><td>如 <code>720P</code> + 秒数</td></tr>
-                  <tr><td>image_urls</td><td>string[]</td><td>1 张=首帧；2 张=首+尾；或多图参考</td></tr>
-                  <tr><td>image_with_roles</td><td>object[]</td><td>首尾帧：<code>first_frame</code>+<code>last_frame</code></td></tr>
-                  <tr><td>generation_type</td><td>string</td><td>参考生时用 <code>reference</code>，配合 image/video/audio URLs</td></tr>
-                  <tr><td>video_urls / audio_urls</td><td>string[]</td><td>参考视频 / 音频（勿与首尾帧混用）</td></tr>
-                </tbody>
-              </table>
-            </div>
-            <div class="code-block" style="margin-top:12px">
-              <div class="code-bar"><span class="lang">JSON · 文生</span><button type="button" class="btn-copy" data-copy-target="ex-wan-t2v" data-i18n="copy"></button></div>
-              <pre id="ex-wan-t2v"><code>{
-  "model": "wan3.0-video",
-  "prompt": "A kitten running on a moonlit rooftop",
-  "resolution": "720P",
-  "duration": 5
-}</code></pre>
-            </div>
-            <div class="code-block">
-              <div class="code-bar"><span class="lang">JSON · 首尾帧</span><button type="button" class="btn-copy" data-copy-target="ex-wan-fl" data-i18n="copy"></button></div>
-              <pre id="ex-wan-fl"><code>{
-  "model": "wan3.0-video",
-  "prompt": "Morph between the two frames",
-  "resolution": "720P",
-  "duration": 5,
-  "image_with_roles": [
-    {"url": "https://example.com/a.jpg", "role": "first_frame"},
-    {"url": "https://example.com/b.jpg", "role": "last_frame"}
-  ]
-}</code></pre>
-            </div>
-            <div class="code-block">
-              <div class="code-bar"><span class="lang">JSON · 参考生</span><button type="button" class="btn-copy" data-copy-target="ex-wan-ref" data-i18n="copy"></button></div>
-              <pre id="ex-wan-ref"><code>{
-  "model": "wan3.0-video",
-  "prompt": "Keep identity of the reference subject",
-  "resolution": "720P",
-  "duration": 5,
-  "generation_type": "reference",
-  "image_urls": ["https://example.com/subject.jpg"],
-  "video_urls": ["https://example.com/motion.mp4"]
-}</code></pre>
-            </div>
-          </article>
-
-          <article class="model-api" id="api-flux">
-            <h3>flux-3-video</h3>
-            <p class="model-lead" data-i18n="fluxLead"></p>
-            <div class="table-wrap">
-              <table class="field-table">
-                <thead>
-                  <tr><th data-i18n="thField"></th><th data-i18n="thType"></th><th data-i18n="thDesc"></th></tr>
-                </thead>
-                <tbody>
-                  <tr><td>prompt<span class="req">*</span></td><td>string</td><td>文案</td></tr>
-                  <tr><td>duration</td><td>integer</td><td>5–20</td></tr>
-                  <tr><td>resolution / tier</td><td>string</td><td><code>hd</code>/<code>fhd</code> 或 <code>DRAFT</code>/<code>HD</code>/<code>FHD</code></td></tr>
-                  <tr><td>image_urls</td><td>string[]</td><td>1=首帧；2=首+尾；3–10=关键帧</td></tr>
-                  <tr><td>video_url(s)</td><td>string / string[]</td><td>视频续写（优先于图）</td></tr>
-                  <tr><td>draft / draft_from_task_id</td><td>bool / string</td><td>草稿与成片</td></tr>
-                </tbody>
-              </table>
-            </div>
-            <div class="code-block" style="margin-top:12px">
-              <div class="code-bar"><span class="lang">JSON · 文生</span><button type="button" class="btn-copy" data-copy-target="ex-flux-t2v" data-i18n="copy"></button></div>
-              <pre id="ex-flux-t2v"><code>{
-  "model": "flux-3-video",
-  "prompt": "Slow push-in as a flower opens",
-  "duration": 5,
-  "resolution": "hd"
-}</code></pre>
-            </div>
-            <div class="code-block">
-              <div class="code-bar"><span class="lang">JSON · 关键帧</span><button type="button" class="btn-copy" data-copy-target="ex-flux-kf" data-i18n="copy"></button></div>
-              <pre id="ex-flux-kf"><code>{
-  "model": "flux-3-video",
-  "prompt": "Slow push-in as a flower opens",
-  "image_urls": [
-    "https://example.com/bud.jpg",
-    "https://example.com/bloom.jpg"
-  ],
-  "duration": 5,
-  "resolution": "hd"
-}</code></pre>
-            </div>
-            <div class="code-block">
-              <div class="code-bar"><span class="lang">JSON · 续写</span><button type="button" class="btn-copy" data-copy-target="ex-flux-v2v" data-i18n="copy"></button></div>
-              <pre id="ex-flux-v2v"><code>{
-  "model": "flux-3-video",
-  "prompt": "Continue the motion",
-  "video_url": "https://example.com/clip.mp4",
-  "duration": 5,
-  "resolution": "hd"
-}</code></pre>
-            </div>
-          </article>
-
-          <article class="model-api" id="api-gemini-omni">
-            <h3>gemini-omni-1.1-flash / -ext</h3>
-            <p class="model-lead" data-i18n="omniLead"></p>
-            <div class="table-wrap">
-              <table class="field-table">
-                <thead>
-                  <tr><th data-i18n="thField"></th><th data-i18n="thType"></th><th data-i18n="thDesc"></th></tr>
-                </thead>
-                <tbody>
-                  <tr><td>prompt<span class="req">*</span></td><td>string</td><td>文案</td></tr>
-                  <tr><td>resolution</td><td>string</td><td><code>360p</code>/<code>720p</code>/<code>1080p</code>/<code>4k</code></td></tr>
-                  <tr><td>aspect_ratio</td><td>string</td><td><code>16:9</code> / <code>9:16</code></td></tr>
-                  <tr><td>first_frame_image / last_frame_image</td><td>string</td><td>仅 <code>gemini-omni-1.1-flash</code>；或用 image_with_roles</td></tr>
-                  <tr><td>image_urls</td><td>string[]</td><td>flash：多主体参考。ext：只能 0/1/3 张（禁止 2 张）</td></tr>
-                  <tr><td>duration</td><td>int</td><td><b>flash 禁止</b>；ext 仅 4/6/8/10</td></tr>
-                  <tr><td>generation_type</td><td>string</td><td>仅 ext：<code>frame</code>（必须 1 图）/ <code>reference</code></td></tr>
-                  <tr><td>video_urls</td><td>string[]</td><td>≤1 段；ext 有视频时不要传 duration</td></tr>
-                </tbody>
-              </table>
-            </div>
-            <p class="hint"><code>gemini-omni-1.1-flash</code> 无 duration。给 AI：复制 <a href="/brand/keyo-api-ref.html">keyo-api-ref.html</a> 全文（§5）</p>
-            <div class="code-block" style="margin-top:12px">
-              <div class="code-bar"><span class="lang">JSON · flash 文生</span><button type="button" class="btn-copy" data-copy-target="ex-omni-t2v" data-i18n="copy"></button></div>
-              <pre id="ex-omni-t2v"><code>{
-  "model": "gemini-omni-1.1-flash",
-  "prompt": "A calm ocean at sunrise",
-  "resolution": "720p",
-  "aspect_ratio": "16:9"
-}</code></pre>
-            </div>
-            <div class="code-block">
-              <div class="code-bar"><span class="lang">JSON · flash 首尾帧</span><button type="button" class="btn-copy" data-copy-target="ex-omni-fl" data-i18n="copy"></button></div>
-              <pre id="ex-omni-fl"><code>{
-  "model": "gemini-omni-1.1-flash",
-  "prompt": "smooth transition, camera slowly pushes in",
-  "first_frame_image": "https://example.com/start.jpg",
-  "last_frame_image": "https://example.com/end.jpg",
-  "resolution": "720p"
-}</code></pre>
-            </div>
-            <div class="code-block">
-              <div class="code-bar"><span class="lang">JSON · ext 参考（3 图）</span><button type="button" class="btn-copy" data-copy-target="ex-omni-ext" data-i18n="copy"></button></div>
-              <pre id="ex-omni-ext"><code>{
-  "model": "gemini-omni-1.1-flash-ext",
-  "prompt": "Keep all three subjects consistent",
-  "generation_type": "reference",
-  "image_urls": [
-    "https://example.com/a.jpg",
-    "https://example.com/b.jpg",
-    "https://example.com/c.jpg"
-  ],
-  "resolution": "720p",
-  "duration": 8
-}</code></pre>
-            </div>
-          </article>
-
-                    <article class="model-api" id="api-grok-imagine">
-            <h3>grok-video-1.5</h3>
-            <p class="model-lead" data-i18n="giLead"></p>
-            <div class="table-wrap">
-              <table class="field-table">
-                <thead>
-                  <tr><th data-i18n="thField"></th><th data-i18n="thType"></th><th data-i18n="thDesc"></th></tr>
-                </thead>
-                <tbody>
-                  <tr><td>messages</td><td>array</td><td>chat 消息；prompt 写在 content（可用 <code>&lt;IMAGE_0&gt;</code> 引用参考图）</td></tr>
-                  <tr><td>image</td><td>string</td><td>单图 URL/base64/file_id，钉首帧；与 last_frame 同传 = 首尾帧</td></tr>
-                  <tr><td>last_frame</td><td>string</td><td>钉尾帧；也可只传此字段</td></tr>
-                  <tr><td>reference_images</td><td>array</td><td><code>[{"url":"https://..."}]</code> 多参考图，不锁首帧</td></tr>
-                  <tr><td>duration</td><td>integer</td><td>秒</td></tr>
-                  <tr><td>resolution</td><td>string</td><td><code>480p</code> / <code>720p</code> / <code>1080p</code></td></tr>
-                  <tr><td>aspect_ratio</td><td>string</td><td>如 <code>16:9</code></td></tr>
-                </tbody>
-              </table>
-            </div>
-            <div class="code-block" style="margin-top:12px">
-              <div class="code-bar"><span class="lang">JSON · chat</span><button type="button" class="btn-copy" data-copy-target="ex-gi" data-i18n="copy"></button></div>
-              <pre id="ex-gi"><code>{
-  "model": "grok-video-1.5",
-  "messages": [{"role": "user", "content": "gentle camera push in"}],
-  "image": "https://example.com/still.jpg",
-  "aspect_ratio": "16:9",
-  "resolution": "720p",
-  "duration": 10
-}</code></pre>
-            </div>
-          </article>
-        </div>
-      </section>
-
-      <section id="pitfalls">
-        <div class="sec-head">
-          <span class="num">04d</span>
-          <h2 data-i18n="pitfallsTitle"></h2>
-        </div>
-        <p class="sec-desc" data-i18n="pitfallsIntro"></p>
-        <ul class="doc-rules">
-          <li data-i18n="pit1"></li>
-          <li data-i18n="pit2"></li>
-          <li data-i18n="pit3"></li>
-          <li data-i18n="pit4"></li>
-          <li data-i18n="pit5"></li>
-          <li data-i18n="pit6"></li>
-        </ul>
-        <p class="hint"><a href="/brand/keyo-api-ref.html" data-i18n="aiRefLink"></a></p>
-      </section>
-
-      <section id="speech">
-        <div class="sec-head">
-          <span class="num">05</span>
-          <h2 data-i18n="speechTitle"></h2>
-        </div>
-        <p class="sec-desc" data-i18n="speechDesc"></p>
-        <ul class="doc-rules">
-          <li data-i18n="speechRuleSync"></li>
-          <li data-i18n="speechRuleAsync"></li>
-        </ul>
-
-        <h3 style="font-size:15px;margin:18px 0 10px;letter-spacing:-0.01em;" data-i18n="asrTitle"></h3>
-        <div class="endpoint">
-          <span class="method">POST</span>
-          <span class="path">/v1/audio/transcriptions</span>
-          <button type="button" class="btn-copy" data-copy="https://www.keyoapi.xyz/v1/audio/transcriptions" data-i18n="copyUrl"></button>
-        </div>
-        <div class="code-block">
-          <div class="code-bar">
-            <span class="lang">cURL · ASR</span>
-            <button type="button" class="btn-copy" data-copy-target="curl-asr" data-i18n="copy"></button>
-          </div>
-          <pre id="curl-asr"></pre>
-        </div>
-        <div class="table-wrap">
-          <table>
-            <thead>
-              <tr>
-                <th data-i18n="thModel"></th>
-                <th data-i18n="thNote"></th>
-              </tr>
-            </thead>
-            <tbody>
-<tr><td class="model"><button type="button" class="model-btn" data-copy="whisper-large-v3-turbo">whisper-large-v3-turbo</button></td><td class="note-cell" data-i18n="nWhisperTurbo"></td></tr>
-<tr><td class="model"><button type="button" class="model-btn" data-copy="whisper-large-v3">whisper-large-v3</button></td><td class="note-cell" data-i18n="nWhisper"></td></tr>
-<tr><td class="model"><button type="button" class="model-btn" data-copy="GLM-ASR">GLM-ASR</button></td><td class="note-cell" data-i18n="nGlmAsr"></td></tr>
-<tr><td class="model"><button type="button" class="model-btn" data-copy="MOSS-Audio-8B-Thinking">MOSS-Audio-8B-Thinking</button></td><td class="note-cell" data-i18n="nMossAsr"></td></tr>
-            </tbody>
-          </table>
-        </div>
-
-        <h3 style="font-size:15px;margin:28px 0 10px;letter-spacing:-0.01em;" data-i18n="ttsSyncTitle"></h3>
-        <div class="endpoint">
-          <span class="method">POST</span>
-          <span class="path">/v1/audio/speech</span>
-          <button type="button" class="btn-copy" data-copy="https://www.keyoapi.xyz/v1/audio/speech" data-i18n="copyUrl"></button>
-        </div>
-        <div class="code-block">
-          <div class="code-bar">
-            <span class="lang">cURL · TTS sync</span>
-            <button type="button" class="btn-copy" data-copy-target="curl-tts" data-i18n="copy"></button>
-          </div>
-          <pre id="curl-tts"></pre>
-        </div>
-        <div class="table-wrap">
-          <table>
-            <thead>
-              <tr>
-                <th data-i18n="thModel"></th>
-                <th data-i18n="thNote"></th>
-              </tr>
-            </thead>
-            <tbody>
-<tr><td class="model"><button type="button" class="model-btn" data-copy="GLM-TTS">GLM-TTS</button></td><td class="note-cell" data-i18n="nGlmTts"></td></tr>
-<tr><td class="model"><button type="button" class="model-btn" data-copy="Step-Audio-TTS-3B">Step-Audio-TTS-3B</button></td><td class="note-cell" data-i18n="nStepTts"></td></tr>
-<tr><td class="model"><button type="button" class="model-btn" data-copy="IndexTTS-2">IndexTTS-2</button></td><td class="note-cell" data-i18n="nIndexTts"></td></tr>
-<tr><td class="model"><button type="button" class="model-btn" data-copy="gemini-3.1-flash-tts-preview">gemini-3.1-flash-tts-preview</button></td><td class="note-cell">Gemini Flash TTS</td></tr>
-            </tbody>
-          </table>
-        </div>
-
-        <h3 style="font-size:15px;margin:28px 0 10px;letter-spacing:-0.01em;">Music</h3>
-<div class="endpoint"><span class="method">POST</span><span class="path">/suno/submit/MUSIC</span><button type="button" class="btn-copy" data-copy="https://www.keyoapi.xyz/suno/submit/MUSIC">Copy</button></div>
-<p class="sec-desc">Suno song generation. Model id <code>suno_music_open</code>. Poll the returned task id.</p>
-<div class="table-wrap"><table><thead><tr><th>Model</th><th>Note</th></tr></thead><tbody>
-<tr><td class="model"><button type="button" class="model-btn" data-copy="suno_music_open">suno_music_open</button></td><td class="note-cell">Suno music · ~$0.0039 / request</td></tr>
-</tbody></table></div>
-<h3 style="font-size:15px;margin:28px 0 10px;letter-spacing:-0.01em;" data-i18n="ttsAsyncTitle"></h3>
-        <div class="endpoint">
-          <span class="method">POST</span>
-          <span class="path">/v1/async/audio/speech</span>
-          <button type="button" class="btn-copy" data-copy="https://www.keyoapi.xyz/v1/async/audio/speech" data-i18n="copyUrl"></button>
-        </div>
-        <p class="sec-desc" data-i18n="ttsAsyncDesc"></p>
-        <div class="code-block">
-          <div class="code-bar">
-            <span class="lang">cURL · TTS async</span>
-            <button type="button" class="btn-copy" data-copy-target="curl-tts-async" data-i18n="copy"></button>
-          </div>
-          <pre id="curl-tts-async"></pre>
-        </div>
-        <div class="table-wrap">
-          <table>
-            <thead>
-              <tr>
-                <th data-i18n="thModel"></th>
-                <th data-i18n="thNote"></th>
-              </tr>
-            </thead>
-            <tbody>
-<tr><td class="model"><button type="button" class="model-btn" data-copy="Qwen3-TTS">Qwen3-TTS</button></td><td class="note-cell" data-i18n="nQwenTts"></td></tr>
-<tr><td class="model"><button type="button" class="model-btn" data-copy="CosyVoice3">CosyVoice3</button></td><td class="note-cell" data-i18n="nCosyTts"></td></tr>
-            </tbody>
-          </table>
-        </div>
-        <p class="hint" data-i18n="speechHint"></p>
-      </section>
-
-      <section id="more">
-        <div class="sec-head">
-          <span class="num">06</span>
-          <h2 data-i18n="moreTitle"></h2>
-        </div>
-        <p class="sec-desc" data-i18n="moreDesc"></p>
-        <div class="table-wrap">
-          <table>
-            <thead>
-              <tr>
-                <th data-i18n="thCapability"></th>
-                <th data-i18n="thPath"></th>
-                <th data-i18n="thModel"></th>
-              </tr>
-            </thead>
-            <tbody>
-<tr><td class="note-cell" data-i18n="capOcr"></td><td class="price">POST /v1/chat/completions</td><td class="model"><button type="button" class="model-btn" data-copy="Unlimited-OCR">Unlimited-OCR</button></td></tr>
-<tr><td class="note-cell" data-i18n="capDoc"></td><td class="price">POST /v1/async/documents/parse → GET /v1/task/{id}</td><td class="model"><button type="button" class="model-btn" data-copy="MinerU2.5-Pro">MinerU2.5-Pro</button></td></tr>
-<tr><td class="note-cell" data-i18n="capMatting"></td><td class="price">POST /v1/images/mattings</td><td class="model"><button type="button" class="model-btn" data-copy="RMBG-2.0">RMBG-2.0</button></td></tr>
-<tr><td class="note-cell" data-i18n="capUpscale"></td><td class="price">POST /v1/images/upscaling</td><td class="model"><button type="button" class="model-btn" data-copy="Real-ESRGAN">Real-ESRGAN</button> · <button type="button" class="model-btn" data-copy="AnimeSharp">AnimeSharp</button></td></tr>
-<tr><td class="note-cell" data-i18n="capUnwarp"></td><td class="price">POST /v1/images/unwarping</td><td class="model"><button type="button" class="model-btn" data-copy="UVDoc">UVDoc</button></td></tr>
-<tr><td class="note-cell" data-i18n="capDetect"></td><td class="price">POST /v1/images/object-detection</td><td class="model"><button type="button" class="model-btn" data-copy="VajraV1">VajraV1</button> · <button type="button" class="model-btn" data-copy="sam3">sam3</button></td></tr>
-<tr><td class="note-cell" data-i18n="capSeg"></td><td class="price">POST /v1/images/segmentation</td><td class="model"><button type="button" class="model-btn" data-copy="VajraV1">VajraV1</button> · <button type="button" class="model-btn" data-copy="sam3">sam3</button></td></tr>
-<tr><td class="note-cell" data-i18n="capPose"></td><td class="price">POST /v1/images/pose-detection</td><td class="model"><button type="button" class="model-btn" data-copy="VajraV1">VajraV1</button></td></tr>
-<tr><td class="note-cell" data-i18n="capInfinite"></td><td class="price">POST /v1/async/videos/image-to-video → GET /v1/task/{id}</td><td class="model"><button type="button" class="model-btn" data-copy="InfiniteTalk">InfiniteTalk</button></td></tr>
-<tr><td class="note-cell" data-i18n="capSubtitleErase"></td><td class="price">POST /v1/async/videos/subtitle-erase → GET /v1/task/{id}</td><td class="model"><button type="button" class="model-btn" data-copy="subtitle-erase-pro">subtitle-erase-pro</button></td></tr>
-<tr><td class="note-cell" data-i18n="capVideoEnhance"></td><td class="price">POST /v1/async/videos/enhance → GET /v1/task/{id}</td><td class="model"><button type="button" class="model-btn" data-copy="video-enhance-pro">video-enhance-pro</button></td></tr>
-<tr><td class="note-cell" data-i18n="capSystemOne"></td><td class="price">POST /v1/systemone · ~$0.032 / $0</td><td class="model"><button type="button" class="model-btn" data-copy="Bespoke-Nimble-9B">Bespoke-Nimble-9B</button></td></tr>
-<tr><td class="note-cell">Embeddings</td><td class="price">POST /v1/embeddings · ~$0.18 / $0.71</td><td class="model"><button type="button" class="model-btn" data-copy="gemini-embedding-2-preview">gemini-embedding-2-preview</button></td></tr>
-<tr><td class="note-cell" data-i18n="capMod"></td><td class="price">POST /v1/moderations</td><td class="model"><button type="button" class="model-btn" data-copy="nonescape-v0">nonescape-v0</button> · <button type="button" class="model-btn" data-copy="keyo-text-moderation">keyo-text-moderation</button> · <button type="button" class="model-btn" data-copy="Security-semantic-filtering">Security-semantic-filtering</button> · <button type="button" class="model-btn" data-copy="nsfw-classifier">nsfw-classifier</button></td></tr>
-            </tbody>
-          </table>
-        </div>
-        <ul class="doc-rules">
-          <li data-i18n="moreRulePoll"></li>
-          <li data-i18n="moreRuleMp"></li>
-        </ul>
-        <div class="code-block">
-          <div class="code-bar">
-            <span class="lang">cURL · matting</span>
-            <button type="button" class="btn-copy" data-copy-target="curl-matting" data-i18n="copy"></button>
-          </div>
-          <pre id="curl-matting"></pre>
-        </div>
-        <div class="code-block">
-          <div class="code-bar">
-            <span class="lang">cURL · upscale</span>
-            <button type="button" class="btn-copy" data-copy-target="curl-upscale" data-i18n="copy"></button>
-          </div>
-          <pre id="curl-upscale"></pre>
-        </div>
-        <div class="code-block">
-          <div class="code-bar">
-            <span class="lang">cURL · InfiniteTalk</span>
-            <button type="button" class="btn-copy" data-copy-target="curl-infinite" data-i18n="copy"></button>
-          </div>
-          <pre id="curl-infinite"></pre>
-          <p class="hint" data-i18n="infiniteLimit"></p>
-        </div>
-        <div class="code-block">
-          <div class="code-bar">
-            <span class="lang">cURL · System One</span>
-            <button type="button" class="btn-copy" data-copy-target="curl-systemone" data-i18n="copy"></button>
-          </div>
-          <pre id="curl-systemone"></pre>
-        </div>
-        <div class="code-block">
-          <div class="code-bar">
-            <span class="lang">cURL · MinerU</span>
-            <button type="button" class="btn-copy" data-copy-target="curl-mineru" data-i18n="copy"></button>
-          </div>
-          <pre id="curl-mineru"></pre>
-        </div>
-        <div class="code-block">
-          <div class="code-bar">
-            <span class="lang">cURL · Unlimited-OCR</span>
-            <button type="button" class="btn-copy" data-copy-target="curl-ocr" data-i18n="copy"></button>
-          </div>
-          <pre id="curl-ocr"></pre>
-        </div>
-        <p class="hint" data-i18n-html="moreHint"></p>
       </section>
 
       <section id="clients">
         <div class="sec-head">
-          <span class="num">07</span>
+          <span class="num">04</span>
           <h2 data-i18n="clientsTitle"></h2>
         </div>
         <p class="sec-desc" data-i18n="clientsDesc"></p>
@@ -1498,7 +757,7 @@
 
       <section id="support">
         <div class="sec-head">
-          <span class="num">08</span>
+          <span class="num">05</span>
           <h2 data-i18n="supportTitle"></h2>
         </div>
         <div class="footer-note" data-i18n-html="supportBody"></div>
@@ -1516,92 +775,10 @@ const I18N = {
   "en": {
     "title": "KeyoAPI Docs",
     "docTitle": "KeyoAPI Integration Docs",
-    "heroSub": "One Base URL + one API Key. OpenAI-compatible chat/images/speech — plus OCR, vision tools and more.",
+    "heroSub": "One Base URL + one API Key. OpenAI-compatible — works with Cursor, ChatBox, and official SDKs.",
     "tocAccess": "Connection",
     "tocChat": "Chat",
     "tocImage": "Images",
-    "tocVideo": "Video A",
-    "tocVideoGen": "Video B",
-    "tocGrok": "Grok video",
-    "grokTitle": "Grok Imagine Video 1.5 — chat",
-    "grokIntro": "Text / single image / first & last frame / multi-reference in one chat endpoint. Fields follow the official Grok Imagine Video API; the video link comes back in the reply.",
-    "grokMode1": "Single image (pinned first frame)",
-    "grokMode2": "First & last frame",
-    "grokMode3": "Multi-reference",
-    "grokHint": "Also accepts prompt, duration, resolution (480p/720p/1080p) and aspect_ratio. Pricing: $0.3082 per request.",
-    "tocVideoApi": "Video params",
-    "tocPitfalls": "Avoid errors",
-    "aiRefLink": "Copy to AI handbook (all models + one-click copy) → /brand/keyo-api-ref.html",
-    "pitfallsTitle": "Avoid these request errors",
-    "pitfallsIntro": "Most 4xx on video/speech come from wrong fields or wrong poll path.",
-    "pitPollVideo": "Video Path B poll: GET /v1/tasks/{id} (plural). TTS/docs/InfiniteTalk: GET /v1/task/{id} (singular).",
-    "pitMedia": "Local media → POST /v1/uploads (or /v1/files) first; put returned url into video JSON. No local paths / data:base64 / /v1/assets.",
-    "pitMix": "Do not reuse another model's field names (especially MiniMax vs Seedance/Wan).",
-    "pit1": "MiniMax-H3: use aspectRatio + images[]/audios[] — not image_with_roles / first_frame_image.",
-    "pit2": "grok-video-1.5: image / last_frame / reference_images go as top-level chat body fields (official Grok Imagine Video API contract).",
-    "pit3": "seedance: first_frame_image = first-frame; image_urls = reference (even 1 image). Never mix first_frame_image with video_urls/audios.",
-    "pit4": "gemini-omni: do not send duration.",
-    "pit5": "Poll path: /v1/tasks (video generations) vs /v1/task (TTS async / docs / InfiniteTalk).",
-    "pit6": "Local path or data:base64 in video JSON — upload via POST /v1/uploads first.",
-    "speechRuleSync": "TTS sync → POST /v1/audio/speech (returns audio). Models: GLM-TTS, Step-Audio-TTS-3B, IndexTTS-2, gemini-3.1-flash-tts-preview.",
-    "speechRuleAsync": "TTS async → POST /v1/async/audio/speech then GET /v1/task/{id} (singular). Models: Qwen3-TTS, CosyVoice3.",
-    "moreRulePoll": "Async vision/docs: poll GET /v1/task/{id} (singular) — not /v1/tasks.",
-    "moreRuleMp": "Matting/upscale/InfiniteTalk/MinerU: multipart form fields, not JSON (except Unlimited-OCR chat).",
-    "videoTitle": "Video — /v1/videos",
-    "videoTitleGen": "Video — /v1/videos/generations",
-    "videoApiTitle": "Video model parameters",
-    "videoApiIntro": "Same Keyo path for all models below. Submit POST /v1/videos/generations, then poll GET /v1/tasks/{task_id}. Field names differ by model — do not mix MiniMax with Seedance/Wan. For Cursor/Codex: copy the AI handbook at /brand/keyo-api-ref.html (video rules are in §4/§5).",
-    "uploadIntro": "Local image/audio/video: POST /v1/uploads (alias /v1/files) with -F file=@… → use returned url in Path B JSON. Max ~100MB, ~48h TTL. ASR/matting/InfiniteTalk already accept multipart directly.",
-    "infiniteLimit": "InfiniteTalk requires prompt, cond_video (a portrait image works directly) and cond_audio. Audio must be 15 seconds or shorter per job. Resolutions: 480P / 720P.",
-    "thField": "Field",
-    "thType": "Type",
-    "thDesc": "Description",
-    "mmLead": "MiniMax-H3 uses its own field set (not image_urls / image_with_roles). Prompt quality matters.",
-    "mmPrompt": "Required. Spell out duration, shots, dialogue, and negative prompts when needed.",
-    "mmImages": "Reference images, max 9. Public https (local → /v1/uploads first).",
-    "mmAudios": "Reference audio, max 3. Public https (local → /v1/uploads first).",
-    "mmSeed": "Optional random seed.",
-    "mmAlias": "Aliases mapped automatically: image_urls→images, audio_urls→audios, aspect_ratio→aspectRatio.",
-    "sdDelisted": "Old ids seedance-2.0 and seedance-2.5 are delisted. Call the resolution SKUs below.",
-    "sdLead": "Resolution is in the model id. POST /v1/videos/generations, then poll GET /v1/tasks/{id}. Do not call seedance-2.0 or seedance-2.5.",
-    "sdModel": "One of: seedance-2.0-1080p, seedance-2.0-1080p-fast, seedance-2.0-1080p-mini, seedance-2.5-1080p, seedance-2.0-720p, seedance-2.0-720p-fast, seedance-2.0-720p-mini, seedance-2.5-720p.",
-    "sdPrompt": "Required prompt.",
-    "sdDuration": "Integer seconds 4–15 only. Default 5 if omitted. Alias: seconds. Values outside 4–15 are rejected.",
-    "sdFirst": "Optional first-frame public https URL. Local files: POST /v1/uploads first.",
-    "sdRoles": "Optional first/last frames: {url, role:first_frame|last_frame}. Public https only.",
-    "sdOldIds": "Do not call seedance-2.0 or seedance-2.5. Those ids are delisted.",
-    "nSeedance": "by resolution · per second",
-    "sdRuleJson": "Body must be JSON — never multipart or -F file=@ on the Seedance generate endpoint.",
-    "sdRuleUrl": "image_urls / video_urls / audio_urls must be public https. Local files: POST /v1/uploads first, then paste url (or omit image_urls for text-to-video).",
-    "sdRulePoll": "Poll GET /v1/tasks/{id} (plural). Do not use TTS /v1/task/.",
-    "sdRuleNoAssets": "There is no POST /v1/assets and no asset://. Use POST /v1/uploads (or /v1/files).",
-    "wanLead": "Text, i2v, first-last, or multimodal refs. Public https media (local → /v1/uploads).",
-    "fluxLead": "Text, keyframe images, or video continuation. draft for HD preview.",
-    "omniLead": "No duration. Supports first/last frame, multi-subject refs, and short video edit.",
-    "giLead": "Text / single image / first & last frame / multi-reference. Chat endpoint — the video link returns in the reply.",
-    "videoIntroA": "Auto-forward: wan / Seedance / FLUX / MiniMax / Gemini Omni sent here are auto-forwarded.",
-    "videoIntroB": "Recommended path for wan / Seedance / FLUX / MiniMax / Gemini Omni. POST /v1/videos also works (auto-forward).",
-    "videoHint": "Async: POST /v1/videos, then poll GET /v1/videos/{id}. Billing follows the console.",
-    "videoHintGen": "Async: POST /v1/videos/generations, then poll GET /v1/tasks/{task_id} (or GET /v1/videos/{id}). Billing follows the console.",
-    "videoMediaNote": "Media: JSON only + public http(s). Local files → POST /v1/uploads first. No local paths / data:base64 / /v1/assets / asset://.",
-    "videoRuleAsync": "Async: POST /v1/videos/generations → poll GET /v1/tasks/{task_id}.",
-    "videoRuleMedia": "Media: JSON only; public http(s). Local files → POST /v1/uploads. No paths / data:base64 / /v1/assets.",
-    "videoRuleParams": "Each model has different fields (t2v / i2v / frames / refs). Use the links below — do not reuse another model's body.",
-    "videoImagineNote": "Per-model field tables → Video params (#video-api).",
-    "nGrokVideo": "text / 1 image / first·last / multi-ref · per request",
-    "nVeoComponents": "(delisted)",
-    "nWanVideo": "t2v / first·last / multimodal ref · /s",
-    "nSeedance25": "by resolution · per second",
-    "nSeedance20": "by resolution · per second",
-    "nFluxVideo": "t2v / keyframes / v2v / draft · /s",
-    "nMinimaxVideo": "480p/768p/1080p · images[]/audios[] · aspectRatio",
-    "nGemOmni": "t2v / refs / first·last · no duration",
-    "nGemOmniExt": "packs + ref video · /s",
-    "perVideo": "/ request",
-    "perSecond": "/ second",
-    "nGrokImagineVideo": "image→video only · image:{url} · 480p/720p",
-    "tocSpeech": "Speech",
-    "tocMore": "More APIs",
     "tocClients": "Clients",
     "tocSupport": "Billing & support",
     "accessTitle": "Connection",
@@ -1623,67 +800,22 @@ const I18N = {
     "nClaudeBal": "Claude balanced",
     "nClaudeStrong": "Claude strong",
     "nClaudeFlag": "Claude flagship",
+    "nClaudeFlag51": "Claude flagship 5.1",
     "nGemFast": "Gemini fast",
+    "nGemFast38": "Gemini 3.8 fast",
     "nDsFast": "DeepSeek fast",
     "nDsFast41": "DeepSeek V4.1 fast",
-    "nDsFast0731": "DeepSeek V4 Flash 0731",
-    "nGrok47": "Grok 4.7",
     "nDsStrong": "DeepSeek strong",
     "nKimi": "Kimi",
     "nGrok": "Grok",
     "nMinimax": "MiniMax",
     "nGlm": "Zhipu GLM",
-    "nClaudeFlag51": "Claude flagship 5.1",
-    "nGem38": "Gemini 3.8 fast",
-    "nGemma": "Multimodal chat — see /pricing",
-    "nQwen38Max": "Qwen3.8 Max (0902)",
-    "nFreeGlm": "Free · vs paid glm-5.2",
-    "nGlm52": "GLM 5.2 paid",
-    "nFreeKimi": "Free · vs paid kimi-k3",
-    "chatHint": "Click a model name to copy. IDs ending in -free are $0 (shared free quota; distinct from paid bare names). More $0 chat IDs use a :free suffix; the live list is /free-models. Paid models bill by token (console is source of truth).",
+    "chatHint": "Click a model name to copy. Billed by token usage (console is source of truth). Top up when quota runs out.",
     "imageTitle": "Images",
     "thPrice": "Approx. price",
     "perImage": "/ image",
-    "perMTok": "/ MTok in·out",
-    "speechTitle": "Speech",
-    "speechDesc": "Speech-to-text (ASR) and text-to-speech (TTS). Same Base URL and API Key.",
-    "asrTitle": "Speech recognition (ASR)",
-    "ttsSyncTitle": "Text-to-speech — sync",
-    "ttsAsyncTitle": "Text-to-speech — async",
-    "ttsAsyncDesc": "Create a task, then poll GET /v1/task/{id} until the audio is ready.",
-    "speechHint": "Click a model name to copy. Prices are on /pricing. Some TTS models only support async.",
-    "nWhisperTurbo": "Faster multilingual Whisper",
-    "nWhisper": "High-accuracy Whisper",
-    "nFunAsr": "Lightweight multilingual ASR",
-    "nGlmAsr": "Lightweight Chinese ASR",
-    "nMossAsr": "Audio understanding / meetings",
-    "nGlmTts": "Sync TTS",
-    "nStepTts": "Sync TTS",
-    "nIndexTts": "Sync or async",
-    "nQwenTts": "Async TTS",
-    "nCosyTts": "Async TTS",
-    "moreTitle": "More APIs",
-    "moreDesc": "These appear on /pricing but are not one-click in ChatBox/Cursor. Call the path below with your KeyoAPI key.",
-    "thCapability": "Capability",
-    "thPath": "Path",
-    "capOcr": "OCR via chat",
-    "capDoc": "Document parse (async)",
-    "capMatting": "Background removal",
-    "capUpscale": "Upscaling",
-    "capDetect": "Object detection",
-    "capSeg": "Segmentation",
-    "capDigital": "Digital human / video (async)",
-    "capMod": "Moderation",
-    "capUnwarp": "Document unwarping",
-    "capPose": "Pose detection",
-    "capDuix": "Digital human (audio+video → video, max 60s)",
-    "capInfinite": "Talking video (image → video)",
-    "capSubtitleErase": "Hard-subtitle erase (refined)",
-    "capVideoEnhance": "Video quality enhance (pro)",
-    "capSystemOne": "Jev / Open-Jev System One (typed decisions)",
-    "moreHint": "Full catalog and live prices: <a href=\"https://www.keyoapi.xyz/pricing\" target=\"_top\">/pricing</a>. Model names must match exactly. Video Path B poll <code>GET /v1/tasks/{id}</code> (plural); TTS/docs/InfiniteTalk poll <code>GET /v1/task/{id}</code> (singular).",
     "clientsTitle": "Clients",
-    "clientsDesc": "Chat tools mainly cover text (and sometimes images). For speech / OCR / vision tools, use the curl samples above or an HTTP client.",
+    "clientsDesc": "Fill these in common tools. Model names must match the table exactly.",
     "clientsTools": "ChatBox / Cursor etc.",
     "apiAddress": "API base",
     "modelLabel": "Model",
@@ -1692,7 +824,7 @@ const I18N = {
     "listModels": "List models",
     "copyCurl": "Copy curl",
     "supportTitle": "Billing & support",
-    "supportBody": "<strong>Console</strong>: <a href=\"https://www.keyoapi.xyz\" target=\"_blank\" rel=\"noopener noreferrer\">https://www.keyoapi.xyz</a> — check usage; keep tokens private.<br /><strong>Top-up</strong>: Wallet → Waffo checkout (prepaid credits).<br /><strong>Blog</strong>: <a href=\"/brand/blog/\" target=\"_top\">OpenAI-compatible guides</a> (Python, Node.js, Cursor).<br /><strong>Support</strong>: <a href=\"mailto:kopsail521@gmail.com\">kopsail521@gmail.com</a> (we aim to reply within 3 business days).<br /><strong>Legal</strong>: <a href=\"https://www.keyoapi.xyz/privacy-policy\" target=\"_top\">Privacy Policy</a> · <a href=\"https://www.keyoapi.xyz/user-agreement\" target=\"_top\">Terms</a> · <a href=\"https://www.keyoapi.xyz/brand/aup.html\" target=\"_top\">Acceptable Use</a>.<br /><strong>Common errors</strong>: wrong model name, invalid key, insufficient balance.",
+    "supportBody": "<strong>Console</strong>: <a href=\"https://www.keyoapi.xyz\" target=\"_blank\" rel=\"noopener noreferrer\">https://www.keyoapi.xyz</a> — check usage; keep tokens private.<br /><strong>Top-up</strong>: pay as agreed, then an admin adds quota (online payments may follow).<br /><strong>Common errors</strong>: wrong model name, invalid key, insufficient balance.",
     "footA": "KeyoAPI · One endpoint, many models",
     "footB": "OpenAI-compatible · usage-based billing",
     "copied": "Copied",
@@ -1705,92 +837,10 @@ const I18N = {
   "zhCN": {
     "title": "KeyoAPI 接入文档",
     "docTitle": "KeyoAPI 接入文档",
-    "heroSub": "一个 Base URL + 一把 API Key。兼容 OpenAI 协议：对话 / 图片 / 语音，以及 OCR、视觉工具等。",
+    "heroSub": "一个 Base URL + 一把 API Key，兼容 OpenAI 协议。可直接用于 Cursor、ChatBox 与官方 SDK。",
     "tocAccess": "接入信息",
     "tocChat": "文本对话",
     "tocImage": "图片生成",
-    "tocVideo": "视频 A",
-    "tocVideoGen": "视频 B",
-    "tocGrok": "Grok 视频",
-    "grokTitle": "Grok Imagine Video 1.5 — chat 接口",
-    "grokIntro": "文生 / 单图 / 首尾帧 / 多参考图同一个 chat 接口。字段与官方 Grok Imagine Video API 一致，视频链接随回复返回。",
-    "grokMode1": "单图（钉首帧）",
-    "grokMode2": "首尾帧",
-    "grokMode3": "多参考图",
-    "grokHint": "另支持 prompt、duration、resolution（480p/720p/1080p）与 aspect_ratio。计费：$0.3082/次。",
-    "tocVideoApi": "视频参数",
-    "tocPitfalls": "易错点",
-    "aiRefLink": "给小白：完整手册 + 一键复制给 AI → /brand/keyo-api-ref.html",
-    "pitfallsTitle": "易错点（先看这里）",
-    "pitfallsIntro": "视频/语音 4xx 多数是字段抄错或轮询路径写错。",
-    "pitPollVideo": "视频 Path B 轮询：GET /v1/tasks/{id}（复数 tasks）。TTS/文档/InfiniteTalk：GET /v1/task/{id}（单数 task）。",
-    "pitMedia": "本机素材先 POST /v1/uploads（或 /v1/files），把返回的 url 填进视频 JSON。禁止本机路径 / data:base64 / /v1/assets。",
-    "pitMix": "不要套用其它模型的字段名（尤其 MiniMax 与 Seedance/Wan）。",
-    "pit1": "MiniMax-H3：用 aspectRatio + images[]/audios[]，不要用 image_with_roles / first_frame_image。",
-    "pit2": "grok-video-1.5：image / last_frame / reference_images 直接放在 chat 请求体顶层（字段与官方一致）。",
-    "pit3": "seedance：first_frame_image=首帧；image_urls=参考（单图也是参考）。禁止 first_frame_image 与 video_urls/audios 混用。",
-    "pit4": "gemini-omni：不要传 duration。",
-    "pit5": "轮询：/v1/tasks（视频 generations）vs /v1/task（TTS 异步 / 文档 / InfiniteTalk）。",
-    "pit6": "视频 JSON 禁止本机路径与 data:base64——先 POST /v1/uploads。",
-    "speechRuleSync": "TTS 同步 → POST /v1/audio/speech（直接返回音频）。模型：GLM-TTS、Step-Audio-TTS-3B、IndexTTS-2、gemini-3.1-flash-tts-preview。",
-    "speechRuleAsync": "TTS 异步 → POST /v1/async/audio/speech，再 GET /v1/task/{id}（单数）。模型：Qwen3-TTS、CosyVoice3。",
-    "moreRulePoll": "扩展异步接口轮询：GET /v1/task/{id}（单数），不是 /v1/tasks。",
-    "moreRuleMp": "抠图/超分/InfiniteTalk/MinerU：multipart 表单，不是 JSON（Unlimited-OCR 除外，走 chat）。",
-    "videoTitle": "视频 — /v1/videos",
-    "videoTitleGen": "视频 — /v1/videos/generations",
-    "videoApiTitle": "视频模型参数（按模型）",
-    "videoApiIntro": "下列模型统一走 Keyo：POST /v1/videos/generations 提交，GET /v1/tasks/{task_id} 轮询。各模型字段不同——MiniMax 不要套 Seedance/Wan。给 Cursor/Codex：复制 /brand/keyo-api-ref.html 全文（视频规则在 §4/§5）。",
-    "uploadIntro": "本机图/音/视频：POST /v1/uploads（别名 /v1/files）用 -F file=@… → 把返回的 url 填进 Path B JSON。约 100MB 上限、约 48 小时过期。ASR/抠图/InfiniteTalk 可直接 multipart，不必先上传。",
-    "infiniteLimit": "InfiniteTalk 必填 prompt、cond_video（可直接传人物图片）和 cond_audio。单任务音频最长 15 秒。分辨率：480P / 720P。",
-    "thField": "字段",
-    "thType": "类型",
-    "thDesc": "说明",
-    "mmLead": "MiniMax-H3 字段独立（不要用 image_urls / image_with_roles / first_frame_image）。提示词门槛较高，建议写清时长、镜头、对白与负面提示。",
-    "mmPrompt": "必填。建议写清时长、镜头、对白与负面提示。",
-    "mmImages": "参考图数组，最多 9；公网 https（本机先 /v1/uploads）。",
-    "mmAudios": "参考音频数组，最多 3；公网 https（本机先 /v1/uploads）。",
-    "mmSeed": "可选随机种子。",
-    "mmAlias": "兼容别名（自动映射）：image_urls→images，audio_urls→audios，aspect_ratio→aspectRatio。",
-    "sdDelisted": "旧 ID seedance-2.0 / seedance-2.5 已下架。请调用下面带分辨率的 SKU。",
-    "sdLead": "分辨率写在 model id 里。POST /v1/videos/generations 提交，GET /v1/tasks/{id} 轮询。不要再调 seedance-2.0 或 seedance-2.5。",
-    "sdModel": "只能是：seedance-2.0-1080p、seedance-2.0-1080p-fast、seedance-2.0-1080p-mini、seedance-2.5-1080p、seedance-2.0-720p、seedance-2.0-720p-fast、seedance-2.0-720p-mini、seedance-2.5-720p。",
-    "sdPrompt": "必填提示词。",
-    "sdDuration": "秒数只能是整数 4–15，不传默认 5。别名 seconds。小于 4 或大于 15 会被拒绝。",
-    "sdFirst": "可选首帧，公网 https。本机文件先 POST /v1/uploads。",
-    "sdRoles": "可选首尾帧：{url, role:first_frame|last_frame}，必须公网 https。",
-    "sdOldIds": "不要调用 seedance-2.0 或 seedance-2.5，这两个旧 ID 已下架。",
-    "nSeedance": "按分辨率 · 按秒",
-    "sdRuleJson": "请求体必须是 JSON —— Seedance 生成口不要用 multipart 或 -F file=@。",
-    "sdRuleUrl": "image_urls / video_urls / audio_urls 必须是公网 https。本机文件先 POST /v1/uploads 再填 url；不需要参考图就走文生（不传 image_urls）。",
-    "sdRulePoll": "轮询 GET /v1/tasks/{id}（复数）。不要用 TTS 的 /v1/task/。",
-    "sdRuleNoAssets": "本站没有 POST /v1/assets，也没有 asset://。请用 POST /v1/uploads（或 /v1/files）。",
-    "wanLead": "文生、图生、首尾帧或多模态参考。媒体须公网 https（本机先 /v1/uploads）。",
-    "fluxLead": "文生、关键帧图或视频续写；draft 可出 hd 草稿。",
-    "omniLead": "无 duration。支持首尾帧、多主体参考与短视频编辑。",
-    "giLead": "文生 / 单图 / 首尾帧 / 多参考图。chat 接口，视频链接随回复返回。",
-    "videoIntroA": "自动转发路径：wan / Seedance / FLUX / MiniMax / Gemini Omni 打到这里也会自动转发。",
-    "videoIntroB": "wan / Seedance / FLUX / MiniMax / Gemini Omni 推荐本路径。POST /v1/videos 也会自动转发。",
-    "videoHint": "异步：POST /v1/videos 创建，再 GET /v1/videos/{id} 查询。扣费以控制台为准。",
-    "videoHintGen": "异步：POST /v1/videos/generations 创建，再 GET /v1/tasks/{task_id}（或 GET /v1/videos/{id}）查询。扣费以控制台为准。",
-    "videoMediaNote": "媒体：只要 JSON + 公网 http(s)。本机文件先 POST /v1/uploads。禁止本机路径 / data:base64 / /v1/assets / asset://。",
-    "videoRuleAsync": "异步：POST /v1/videos/generations 创建 → GET /v1/tasks/{task_id} 轮询。",
-    "videoRuleMedia": "媒体：只要 JSON；公网 http(s)。本机文件先 POST /v1/uploads。禁止路径 / data:base64 / /v1/assets。",
-    "videoRuleParams": "各模型字段不同（文生 / 图生 / 首尾帧 / 参考）。点表格备注或下方芯片进入对应小节，不要套用其它模型的 body。",
-    "videoImagineNote": "各模型字段表与示例 → 见「视频参数」。",
-    "nGrokVideo": "文生 / 单图 / 首尾帧 / 多参考图 · 按次",
-    "nVeoComponents": "（已下架）",
-    "nWanVideo": "文生/首尾帧/多模态参考 · 按秒",
-    "nSeedance25": "按分辨率 · 按秒",
-    "nSeedance20": "按分辨率 · 按秒",
-    "nFluxVideo": "文生/关键帧/续写/草稿 · 按秒",
-    "nMinimaxVideo": "480p/768p/1080p · images[]/audios[] · aspectRatio",
-    "nGemOmni": "文生/参考/首尾帧 · 无 duration",
-    "nGemOmniExt": "档位包 + 参考视频 · 按秒",
-    "perVideo": "/次",
-    "perSecond": "/秒",
-    "nGrokImagineVideo": "仅图生 · image:{url} · 480p/720p",
-    "tocSpeech": "语音",
-    "tocMore": "扩展能力",
     "tocClients": "客户端接入",
     "tocSupport": "充值与支持",
     "accessTitle": "接入信息",
@@ -1812,67 +862,22 @@ const I18N = {
     "nClaudeBal": "Claude 均衡",
     "nClaudeStrong": "Claude 强档",
     "nClaudeFlag": "Claude 旗舰",
+    "nClaudeFlag51": "Claude 旗舰 5.1",
     "nGemFast": "Gemini 快",
+    "nGemFast38": "Gemini 3.8 快",
     "nDsFast": "DeepSeek 快",
     "nDsFast41": "DeepSeek V4.1 快",
-    "nDsFast0731": "DeepSeek V4 Flash 0731",
-    "nGrok47": "Grok 4.7",
     "nDsStrong": "DeepSeek 强",
     "nKimi": "Kimi",
     "nGrok": "Grok",
     "nMinimax": "MiniMax",
     "nGlm": "智谱",
-    "nClaudeFlag51": "Claude 旗舰 5.1",
-    "nGem38": "Gemini 3.8 快",
-    "nGemma": "多模态对话 · 价格见 /pricing",
-    "nQwen38Max": "Qwen3.8 Max（0902）",
-    "nFreeGlm": "免费 · 对照收费 glm-5.2",
-    "nGlm52": "GLM 5.2 收费",
-    "nFreeKimi": "免费 · 对照收费 kimi-k3",
-    "chatHint": "点击模型名即可复制。带 -free 后缀的为免费模型（$0，与裸名收费版不是同一个 model）。另有 :free 后缀的 $0 对话模型，完整名单见 /free-models。收费模型按 token 计费，以控制台为准。",
+    "chatHint": "点击模型名即可复制。计费按 token 用量，以控制台实时扣费为准；额度用完需充值。",
     "imageTitle": "图片生成",
     "thPrice": "约价",
     "perImage": "/ 张",
-    "perMTok": "/ 百万 tokens 输入·输出",
-    "speechTitle": "语音",
-    "speechDesc": "语音识别（ASR）与语音合成（TTS），仍用同一 Base URL 与 API Key。",
-    "asrTitle": "语音识别（ASR）",
-    "ttsSyncTitle": "语音合成 — 同步",
-    "ttsAsyncTitle": "语音合成 — 异步",
-    "ttsAsyncDesc": "先创建任务，再轮询 GET /v1/task/{id} 取结果。",
-    "speechHint": "点击模型名即可复制。价格见 /pricing。部分 TTS 仅支持异步接口。",
-    "nWhisperTurbo": "更快的多语种 Whisper",
-    "nWhisper": "高精度 Whisper",
-    "nFunAsr": "轻量多语种",
-    "nGlmAsr": "轻量中文",
-    "nMossAsr": "语音理解 / 会议",
-    "nGlmTts": "同步 TTS",
-    "nStepTts": "同步 TTS",
-    "nIndexTts": "同步或异步",
-    "nQwenTts": "异步 TTS",
-    "nCosyTts": "异步 TTS",
-    "moreTitle": "扩展能力",
-    "moreDesc": "这些模型在 /pricing 可见，但不能指望 ChatBox/Cursor 一键调用；请按路径用 HTTP 请求。",
-    "thCapability": "能力",
-    "thPath": "路径",
-    "capOcr": "OCR（对话接口）",
-    "capDoc": "文档解析（异步）",
-    "capMatting": "抠图",
-    "capUpscale": "超分",
-    "capDetect": "目标检测",
-    "capSeg": "图像分割",
-    "capDigital": "数字人 / 视频（异步）",
-    "capMod": "内容风控",
-    "capUnwarp": "文档展平",
-    "capPose": "人体关键点",
-    "capDuix": "数字人（音频+视频→视频，最长 60 秒）",
-    "capInfinite": "说话视频（图→视频）",
-    "capSubtitleErase": "硬字幕擦除（精细化）",
-    "capVideoEnhance": "视频画质增强（Pro）",
-    "capSystemOne": "Jev / Open-Jev 系统一决策（类型化判别）",
-    "moreHint": "完整目录与实时价格见 <a href=\"https://www.keyoapi.xyz/pricing\" target=\"_top\">/pricing</a>。模型名必须完全一致。视频 Path B 轮询 <code>GET /v1/tasks/{id}</code>（复数）；TTS/文档/InfiniteTalk 轮询 <code>GET /v1/task/{id}</code>（单数）。",
     "clientsTitle": "客户端接入",
-    "clientsDesc": "聊天类工具主要覆盖文本（部分支持图片）。语音 / OCR / 视觉工具请用上方 curl 或 HTTP 客户端。",
+    "clientsDesc": "在常见工具里这样填；模型名必须与上表完全一致。",
     "clientsTools": "ChatBox / Cursor 等",
     "apiAddress": "API 地址",
     "modelLabel": "模型",
@@ -1881,7 +886,7 @@ const I18N = {
     "listModels": "查可用模型",
     "copyCurl": "复制 curl",
     "supportTitle": "充值与支持",
-    "supportBody": "<strong>控制台</strong>：<a href=\"https://www.keyoapi.xyz\" target=\"_blank\" rel=\"noopener noreferrer\">https://www.keyoapi.xyz</a> · 可查看用量，令牌请自行保管。<br /><strong>充值</strong>：钱包 → Waffo 在线支付（预付额度）。<br /><strong>客服</strong>：<a href=\"mailto:kopsail521@gmail.com\">kopsail521@gmail.com</a>（通常 3 个工作日内回复）。<br /><strong>法律</strong>：<a href=\"https://www.keyoapi.xyz/privacy-policy\" target=\"_top\">隐私政策</a> · <a href=\"https://www.keyoapi.xyz/user-agreement\" target=\"_top\">服务条款</a> · <a href=\"https://www.keyoapi.xyz/brand/aup.html\" target=\"_top\">可接受使用政策</a>。<br /><strong>常见报错</strong>：模型名写错、Key 无效、余额不足。",
+    "supportBody": "<strong>控制台</strong>：<a href=\"https://www.keyoapi.xyz\" target=\"_blank\" rel=\"noopener noreferrer\">https://www.keyoapi.xyz</a> · 可查看用量，令牌请自行保管。<br /><strong>充值</strong>：按约定付款后由管理员加额度（或后续开通在线支付）。<br /><strong>常见报错</strong>：模型名写错、Key 无效、余额不足。",
     "footA": "KeyoAPI · 一个地址，多模型",
     "footB": "OpenAI 兼容 · 按量计费",
     "copied": "已复制",
@@ -1894,43 +899,10 @@ const I18N = {
   "zhTW": {
     "title": "KeyoAPI 接入文件",
     "docTitle": "KeyoAPI 接入文件",
-    "heroSub": "一個 Base URL + 一把 API Key，相容 OpenAI：對話 / 圖片 / 語音，以及 OCR、視覺工具等。",
+    "heroSub": "一個 Base URL + 一把 API Key，相容 OpenAI 協定。可直接用於 Cursor、ChatBox 與官方 SDK。",
     "tocAccess": "接入資訊",
     "tocChat": "文字對話",
     "tocImage": "圖片生成",
-    "tocVideo": "影片 A",
-    "tocVideoGen": "影片 B",
-    "tocGrok": "Grok 影片",
-    "grokTitle": "Grok Imagine Video 1.5 — chat 介面",
-    "grokIntro": "文生 / 單圖 / 首尾幀 / 多參考圖同一個 chat 介面。欄位與官方 Grok Imagine Video API 一致，影片連結隨回覆返回。",
-    "grokMode1": "單圖（釘首幀）",
-    "grokMode2": "首尾幀",
-    "grokMode3": "多參考圖",
-    "grokHint": "另支援 prompt、duration、resolution（480p/720p/1080p）與 aspect_ratio。計費：$0.3082/次。",
-    "tocVideoApi": "影片參數",
-    "videoTitle": "影片 — /v1/videos",
-    "videoTitleGen": "影片 — /v1/videos/generations",
-    "videoIntroA": "自動轉發路徑：wan / Seedance / FLUX / MiniMax / Gemini Omni 打到這裡也會自動轉發。",
-    "videoIntroB": "wan / Seedance / FLUX / MiniMax / Gemini Omni 建議本路徑。POST /v1/videos 也會自動轉發。",
-    "videoHint": "非同步：POST /v1/videos 建立，再 GET /v1/videos/{id} 查詢。扣費以控制台為準。",
-    "videoHintGen": "非同步：POST /v1/videos/generations 建立，再 GET /v1/tasks/{task_id}（或 GET /v1/videos/{id}）查詢。扣費以控制台為準。",
-    "videoMediaNote": "媒體：只要 JSON + 公網 http(s)。本機檔案先 POST /v1/uploads。禁止本機路徑 / data:base64 / /v1/assets。",
-    "videoImagineNote": "grok-video-1.5：chat 介面（欄位見 #api-grok-imagine）。",
-    "nGrokVideo": "文生 / 單圖 / 首尾幀 / 多參考圖 · 按次",
-    "nVeoComponents": "（已下架）",
-    "nWanVideo": "480P/720P/1080P · 按秒",
-    "nSeedance25": "按解析度 · 按秒",
-    "nSeedance20": "按解析度 · 按秒",
-    "nSeedance": "按解析度 · 按秒",
-    "nFluxVideo": "DRAFT/HD/FHD · 按秒",
-    "nMinimaxVideo": "768P / 2K · 按秒",
-    "nGemOmni": "按秒",
-    "nGemOmniExt": "檔位或參考按秒",
-    "perVideo": "/次",
-    "perSecond": "/秒",
-    "nGrokImagineVideo": "Grok Imagine · image-to-video · image.url required · $0.08825/s 480p · $0.1545/s 720p",
-    "tocSpeech": "語音",
-    "tocMore": "擴充能力",
     "tocClients": "客戶端接入",
     "tocSupport": "儲值與支援",
     "accessTitle": "接入資訊",
@@ -1952,67 +924,22 @@ const I18N = {
     "nClaudeBal": "Claude 均衡",
     "nClaudeStrong": "Claude 強檔",
     "nClaudeFlag": "Claude 旗艦",
+    "nClaudeFlag51": "Claude 旗艦 5.1",
     "nGemFast": "Gemini 快",
+    "nGemFast38": "Gemini 3.8 快",
     "nDsFast": "DeepSeek 快",
     "nDsFast41": "DeepSeek V4.1 快",
-    "nDsFast0731": "DeepSeek V4 Flash 0731",
-    "nGrok47": "Grok 4.7",
     "nDsStrong": "DeepSeek 強",
     "nKimi": "Kimi",
     "nGrok": "Grok",
     "nMinimax": "MiniMax",
     "nGlm": "智譜",
-    "nClaudeFlag51": "Claude 旗艦 5.1",
-    "nGem38": "Gemini 3.8 快",
-    "nGemma": "多模態對話 · 價格見 /pricing",
-    "nQwen38Max": "Qwen3.8 Max（0902）",
-    "nFreeGlm": "免費 · 對照收費 glm-5.2",
-    "nGlm52": "GLM 5.2 收費",
-    "nFreeKimi": "免費 · 對照收費 kimi-k3",
-    "chatHint": "點擊模型名即可複製。帶 -free 後綴為免費模型（$0，與裸名收費版不同）。另有 :free 後綴的 $0 對話模型，完整名單見 /free-models。收費模型依 token 計費，以控制台為準。",
+    "chatHint": "點擊模型名即可複製。計費依 token 用量，以控制台即時扣費為準；額度用完需儲值。",
     "imageTitle": "圖片生成",
     "thPrice": "約價",
     "perImage": "/ 張",
-    "perMTok": "/ 百萬 tokens 輸入·輸出",
-    "speechTitle": "語音",
-    "speechDesc": "語音識別（ASR）與語音合成（TTS），仍用同一 Base URL 與 API Key。",
-    "asrTitle": "語音識別（ASR）",
-    "ttsSyncTitle": "語音合成 — 同步",
-    "ttsAsyncTitle": "語音合成 — 非同步",
-    "ttsAsyncDesc": "先建立任務，再輪詢 GET /v1/task/{id} 取結果。",
-    "speechHint": "點擊模型名即可複製。價格見 /pricing。部分 TTS 僅支援非同步接口。",
-    "nWhisperTurbo": "更快的多語種 Whisper",
-    "nWhisper": "高精度 Whisper",
-    "nFunAsr": "輕量多語種",
-    "nGlmAsr": "輕量中文",
-    "nMossAsr": "語音理解 / 會議",
-    "nGlmTts": "同步 TTS",
-    "nStepTts": "同步 TTS",
-    "nIndexTts": "同步或非同步",
-    "nQwenTts": "非同步 TTS",
-    "nCosyTts": "非同步 TTS",
-    "moreTitle": "擴充能力",
-    "moreDesc": "這些模型在 /pricing 可見，但不能指望 ChatBox/Cursor 一鍵呼叫；請依路徑用 HTTP 請求。",
-    "thCapability": "能力",
-    "thPath": "路徑",
-    "capOcr": "OCR（對話接口）",
-    "capDoc": "文件解析（非同步）",
-    "capMatting": "去背",
-    "capUpscale": "超解析",
-    "capDetect": "目標偵測",
-    "capSeg": "影像分割",
-    "capDigital": "數位人 / 影片（非同步）",
-    "capMod": "內容風控",
-    "capUnwarp": "文件展平",
-    "capPose": "人體關節點",
-    "capDuix": "數位人（音訊視訊→影片）",
-    "capInfinite": "說話影片（圖→影片）",
-    "capSubtitleErase": "硬字幕擦除（精細化）",
-    "capVideoEnhance": "影片畫質增強（Pro）",
-    "capSystemOne": "Jev / Open-Jev 系統一決策（類型化判別）",
-    "moreHint": "完整目錄與即時價格見 <a href=\"https://www.keyoapi.xyz/pricing\" target=\"_top\">/pricing</a>。模型名必須完全一致。影片 Path B 輪詢 <code>GET /v1/tasks/{id}</code>（複數）；TTS/文件/InfiniteTalk 輪詢 <code>GET /v1/task/{id}</code>（單數）。",
     "clientsTitle": "客戶端接入",
-    "clientsDesc": "聊天類工具主要涵蓋文字（部分支援圖片）。語音 / OCR / 視覺工具請用上方 curl 或 HTTP 客戶端。",
+    "clientsDesc": "在常見工具裡這樣填；模型名必須與上表完全一致。",
     "clientsTools": "ChatBox / Cursor 等",
     "apiAddress": "API 位址",
     "modelLabel": "模型",
@@ -2021,7 +948,7 @@ const I18N = {
     "listModels": "查可用模型",
     "copyCurl": "複製 curl",
     "supportTitle": "儲值與支援",
-    "supportBody": "<strong>控制台</strong>：<a href=\"https://www.keyoapi.xyz\" target=\"_blank\" rel=\"noopener noreferrer\">https://www.keyoapi.xyz</a> · 可查看用量，令牌請自行保管。<br /><strong>儲值</strong>：錢包 → Waffo 線上支付。<br /><strong>客服</strong>：<a href=\"mailto:kopsail521@gmail.com\">kopsail521@gmail.com</a>。<br /><strong>法律</strong>：<a href=\"https://www.keyoapi.xyz/privacy-policy\" target=\"_top\">隱私權政策</a> · <a href=\"https://www.keyoapi.xyz/user-agreement\" target=\"_top\">服務條款</a> · <a href=\"https://www.keyoapi.xyz/brand/aup.html\" target=\"_top\">可接受使用政策</a>。<br /><strong>常見錯誤</strong>：模型名寫錯、Key 無效、餘額不足。",
+    "supportBody": "<strong>控制台</strong>：<a href=\"https://www.keyoapi.xyz\" target=\"_blank\" rel=\"noopener noreferrer\">https://www.keyoapi.xyz</a> · 可查看用量，令牌請自行保管。<br /><strong>儲值</strong>：依約定付款後由管理員加額度（或後續開通線上支付）。<br /><strong>常見錯誤</strong>：模型名寫錯、Key 無效、餘額不足。",
     "footA": "KeyoAPI · 一個位址，多模型",
     "footB": "OpenAI 相容 · 按量計費",
     "copied": "已複製",
@@ -2034,43 +961,10 @@ const I18N = {
   "ja": {
     "title": "KeyoAPI ドキュメント",
     "docTitle": "KeyoAPI 連携ドキュメント",
-    "heroSub": "1つの Base URL と 1つの API Key。OpenAI 互換のチャット/画像/音声に加え、OCR やビジョン API も利用可能。",
+    "heroSub": "1つの Base URL と 1つの API Key。OpenAI 互換で Cursor / ChatBox / 公式 SDK にそのまま使えます。",
     "tocAccess": "接続情報",
     "tocChat": "チャット",
     "tocImage": "画像生成",
-    "tocVideo": "動画 A",
-    "tocVideoGen": "動画 B",
-    "tocGrok": "Grok 動画",
-    "grokTitle": "Grok Imagine Video 1.5 — chat",
-    "grokIntro": "テキスト／単一画像／最初と最後のフレーム／マルチ参照を 1 つの chat で。フィールドは公式 Grok Imagine Video API 準拠、動画リンクは応答で返却。",
-    "grokMode1": "単一画像（先頭フレーム固定）",
-    "grokMode2": "最初と最後のフレーム",
-    "grokMode3": "マルチ参照",
-    "grokHint": "prompt、duration、resolution（480p/720p/1080p）、aspect_ratio にも対応。料金：$0.3082/回。",
-    "tocVideoApi": "動画パラメータ",
-    "videoTitle": "動画 — /v1/videos",
-    "videoTitleGen": "動画 — /v1/videos/generations",
-    "videoIntroA": "自動転送パス：wan / Seedance / FLUX / MiniMax / Gemini Omni も自動転送されます。",
-    "videoIntroB": "wan / Seedance / FLUX / MiniMax / Gemini Omni 推奨パス。POST /v1/videos でも自動転送。",
-    "videoHint": "非同期：POST /v1/videos → GET /v1/videos/{id}。課金はコンソール準拠。",
-    "videoHintGen": "非同期：POST /v1/videos/generations → GET /v1/tasks/{task_id}（または GET /v1/videos/{id}）。課金はコンソール準拠。",
-    "videoMediaNote": "Media: JSON only + public http(s). Local files → POST /v1/uploads first. No local paths / data:base64 / /v1/assets.",
-    "videoImagineNote": "grok-video-1.5：chat エンドポイント（フィールドは #api-grok-imagine）。",
-    "nGrokVideo": "テキスト / 1画像 / 前後フレーム / マルチ参照 · リクエスト課金",
-    "nVeoComponents": "約8秒 · リクエスト · 供給は在庫次第",
-    "nWanVideo": "480P/720P/1080P · 秒課金",
-    "nSeedance25": "解像度別 · 秒課金",
-    "nSeedance20": "解像度別 · 秒課金",
-    "nSeedance": "解像度別 · 秒課金",
-    "nFluxVideo": "DRAFT/HD/FHD · 秒課金",
-    "nMinimaxVideo": "768P / 2K · 秒課金",
-    "nGemOmni": "秒課金",
-    "nGemOmniExt": "パックまたは参照/秒",
-    "perVideo": "/ 回",
-    "perSecond": "/ 秒",
-    "nGrokImagineVideo": "Grok Imagine · 秒課金 480p/720p",
-    "tocSpeech": "音声",
-    "tocMore": "その他 API",
     "tocClients": "クライアント",
     "tocSupport": "課金とサポート",
     "accessTitle": "接続情報",
@@ -2092,67 +986,22 @@ const I18N = {
     "nClaudeBal": "Claude バランス",
     "nClaudeStrong": "Claude 強",
     "nClaudeFlag": "Claude 旗艦",
+    "nClaudeFlag51": "Claude 旗艦 5.1",
     "nGemFast": "Gemini 高速",
+    "nGemFast38": "Gemini 3.8 高速",
     "nDsFast": "DeepSeek 高速",
     "nDsFast41": "DeepSeek V4.1 高速",
-    "nDsFast0731": "DeepSeek V4 Flash 0731",
-    "nGrok47": "Grok 4.7",
     "nDsStrong": "DeepSeek 強",
     "nKimi": "Kimi",
     "nGrok": "Grok",
     "nMinimax": "MiniMax",
     "nGlm": "Zhipu GLM",
-    "nClaudeFlag51": "Claude 旗艦 5.1",
-    "nGem38": "Gemini 3.8 高速",
-    "nGemma": "マルチモーダル · 料金は /pricing",
-    "nQwen38Max": "Qwen3.8 Max（0902）",
-    "nFreeGlm": "無料 · 有料 glm-5.2 と別ID",
-    "nGlm52": "GLM 5.2 有料",
-    "nFreeKimi": "無料 · 有料 kimi-k3 と別ID",
-    "chatHint": "モデル名をクリックでコピー。-free 付きは無料（$0、有料の裸名とは別モデル）。:free 付きの無料チャットは /free-models の一覧が正。有料はトークン課金（コンソールが正）。",
+    "chatHint": "モデル名をクリックでコピー。課金はトークン使用量（コンソールが正）。残高不足時はチャージ。",
     "imageTitle": "画像生成",
     "thPrice": "目安価格",
     "perImage": "/ 枚",
-    "perMTok": "/ 百万トークン 入力·出力",
-    "speechTitle": "音声",
-    "speechDesc": "音声認識（ASR）と音声合成（TTS）。同じ Base URL / API Key を使います。",
-    "asrTitle": "音声認識（ASR）",
-    "ttsSyncTitle": "音声合成 — 同期",
-    "ttsAsyncTitle": "音声合成 — 非同期",
-    "ttsAsyncDesc": "タスク作成後、GET /v1/task/{id} をポーリングして結果を取得。",
-    "speechHint": "モデル名クリックでコピー。価格は /pricing。一部 TTS は非同期のみ。",
-    "nWhisperTurbo": "高速多言語 Whisper",
-    "nWhisper": "高精度 Whisper",
-    "nFunAsr": "軽量多言語 ASR",
-    "nGlmAsr": "軽量中国語 ASR",
-    "nMossAsr": "音声理解 / 会議",
-    "nGlmTts": "同期 TTS",
-    "nStepTts": "同期 TTS",
-    "nIndexTts": "同期または非同期",
-    "nQwenTts": "非同期 TTS",
-    "nCosyTts": "非同期 TTS",
-    "moreTitle": "その他 API",
-    "moreDesc": "/pricing に表示されますが ChatBox/Cursor のワンクリック対象外。下のパスで HTTP 呼び出し。",
-    "thCapability": "機能",
-    "thPath": "パス",
-    "capOcr": "OCR（チャット）",
-    "capDoc": "文書解析（非同期）",
-    "capMatting": "背景除去",
-    "capUpscale": "超解像",
-    "capDetect": "物体検出",
-    "capSeg": "セグメンテーション",
-    "capDigital": "デジタルヒューマン / 動画（非同期）",
-    "capMod": "モデレーション",
-    "capUnwarp": "書類歪み補正",
-    "capPose": "姿勢検出",
-    "capDuix": "デジタルヒューマン（音声+映像→動画）",
-    "capInfinite": "トーキング動画（画像→動画）",
-    "capSubtitleErase": "ハード字幕消去（精細）",
-    "capVideoEnhance": "動画画質強化（Pro）",
-    "capSystemOne": "Jev / Open-Jev System One（型付き判定）",
-    "moreHint": "全モデルと料金は <a href=\"https://www.keyoapi.xyz/pricing\" target=\"_top\">/pricing</a>。モデル名は完全一致。動画 Path B は <code>GET /v1/tasks/{id}</code>（複数）；TTS/文書/InfiniteTalk は <code>GET /v1/task/{id}</code>（単数）。",
     "clientsTitle": "クライアント",
-    "clientsDesc": "チャットツールは主にテキスト向け。音声 / OCR / ビジョンは上の curl か HTTP クライアントを使用。",
+    "clientsDesc": "よく使うツールではこう設定。モデル名は表と完全一致させてください。",
     "clientsTools": "ChatBox / Cursor など",
     "apiAddress": "API ベース",
     "modelLabel": "モデル",
@@ -2161,7 +1010,7 @@ const I18N = {
     "listModels": "利用可能モデル",
     "copyCurl": "curl をコピー",
     "supportTitle": "課金とサポート",
-    "supportBody": "<strong>コンソール</strong>：<a href=\"https://www.keyoapi.xyz\" target=\"_blank\" rel=\"noopener noreferrer\">https://www.keyoapi.xyz</a> — 使用量を確認。トークンは厳重に。<br /><strong>チャージ</strong>：ウォレット → Waffo でオンライン前払い。<br /><strong>サポート</strong>：<a href=\"mailto:kopsail521@gmail.com\">kopsail521@gmail.com</a>。<br /><strong>よくあるエラー</strong>：モデル名ミス、無効キー、残高不足。",
+    "supportBody": "<strong>コンソール</strong>：<a href=\"https://www.keyoapi.xyz\" target=\"_blank\" rel=\"noopener noreferrer\">https://www.keyoapi.xyz</a> — 使用量を確認。トークンは厳重に。<br /><strong>チャージ</strong>：合意どおり支払い後、管理者が枠を追加（オンライン決済は後日）。<br /><strong>よくあるエラー</strong>：モデル名ミス、無効キー、残高不足。",
     "footA": "KeyoAPI · ひとつのエンドポイントで多モデル",
     "footB": "OpenAI 互換 · 従量課金",
     "copied": "コピー済み",
@@ -2174,43 +1023,10 @@ const I18N = {
   "fr": {
     "title": "Docs KeyoAPI",
     "docTitle": "Documentation d’intégration KeyoAPI",
-    "heroSub": "Une Base URL + une clé API. Chat / images / parole compatibles OpenAI, plus OCR et vision.",
+    "heroSub": "Une Base URL + une clé API. Compatible OpenAI — Cursor, ChatBox et SDK officiels.",
     "tocAccess": "Connexion",
     "tocChat": "Chat",
     "tocImage": "Images",
-    "tocVideo": "Vidéo A",
-    "tocVideoGen": "Vidéo B",
-    "tocGrok": "Grok vidéo",
-    "grokTitle": "Grok Imagine Video 1.5 — chat",
-    "grokIntro": "Texte / image unique / première et dernière frame / multi-références dans un seul endpoint chat. Champs conformes à l\u0027API officielle Grok Imagine Video ; le lien vidéo arrive dans la réponse.",
-    "grokMode1": "Image unique (première frame épinglée)",
-    "grokMode2": "Première et dernière frame",
-    "grokMode3": "Multi-références",
-    "grokHint": "Accepte aussi prompt, duration, resolution (480p/720p/1080p) et aspect_ratio. Tarif : 0,3082 $ / requête.",
-    "tocVideoApi": "Params vidéo",
-    "videoTitle": "Vidéo — /v1/videos",
-    "videoTitleGen": "Vidéo — /v1/videos/generations",
-    "videoIntroA": "Chemin de transfert : wan / Seedance / FLUX / MiniMax / Gemini Omni envoyés ici sont redirigés.",
-    "videoIntroB": "Chemin recommandé pour wan / Seedance / FLUX / MiniMax / Gemini Omni. POST /v1/videos est aussi redirigé.",
-    "videoHint": "Async : POST /v1/videos puis GET /v1/videos/{id}. Facturation = console.",
-    "videoHintGen": "Async : POST /v1/videos/generations puis GET /v1/tasks/{task_id} (ou GET /v1/videos/{id}). Facturation = console.",
-    "videoMediaNote": "Media: JSON only + public http(s). Local files → POST /v1/uploads first. No local paths / data:base64 / /v1/assets.",
-    "videoImagineNote": "grok-video-1.5 : endpoint chat (champs : #api-grok-imagine).",
-    "nGrokVideo": "texte / 1 image / première·dernière frame / multi-réf · par requête",
-    "nVeoComponents": "~8s · par requête · stock variable",
-    "nWanVideo": "480P/720P/1080P · par seconde",
-    "nSeedance25": "par résolution · /s",
-    "nSeedance20": "par résolution · /s",
-    "nSeedance": "par résolution · /s",
-    "nFluxVideo": "DRAFT/HD/FHD · /s",
-    "nMinimaxVideo": "768P / 2K · /s",
-    "nGemOmni": "par seconde",
-    "nGemOmniExt": "pack ou réf /s",
-    "perVideo": "/ requête",
-    "perSecond": "/ seconde",
-    "nGrokImagineVideo": "Grok Imagine · à la seconde",
-    "tocSpeech": "Parole",
-    "tocMore": "Autres API",
     "tocClients": "Clients",
     "tocSupport": "Paiement & support",
     "accessTitle": "Connexion",
@@ -2232,67 +1048,22 @@ const I18N = {
     "nClaudeBal": "Claude équilibré",
     "nClaudeStrong": "Claude fort",
     "nClaudeFlag": "Claude phare",
+    "nClaudeFlag51": "Claude phare 5.1",
     "nGemFast": "Gemini rapide",
+    "nGemFast38": "Gemini 3.8 rapide",
     "nDsFast": "DeepSeek rapide",
     "nDsFast41": "DeepSeek V4.1 rapide",
-    "nDsFast0731": "DeepSeek V4 Flash 0731",
-    "nGrok47": "Grok 4.7",
     "nDsStrong": "DeepSeek fort",
     "nKimi": "Kimi",
     "nGrok": "Grok",
     "nMinimax": "MiniMax",
     "nGlm": "Zhipu GLM",
-    "nClaudeFlag51": "Claude phare 5.1",
-    "nGem38": "Gemini 3.8 rapide",
-    "nGemma": "Chat multimodal — voir /pricing",
-    "nQwen38Max": "Qwen3.8 Max (0902)",
-    "nFreeGlm": "Gratuit · vs glm-5.2 payant",
-    "nGlm52": "GLM 5.2 payant",
-    "nFreeKimi": "Gratuit · vs kimi-k3 payant",
-    "chatHint": "Cliquez un modèle pour copier. Les IDs en -free sont à $0 (distincts des noms payants sans suffixe). D'autres IDs chat à $0 se terminent par :free ; la liste à jour est /free-models. Les modèles payants facturent au token (console = référence).",
+    "chatHint": "Cliquez un modèle pour copier. Facturation au token (console = référence). Rechargez si le quota est épuisé.",
     "imageTitle": "Images",
     "thPrice": "Prix approx.",
     "perImage": "/ image",
-    "perMTok": "/ MTok in·out",
-    "speechTitle": "Parole",
-    "speechDesc": "Reconnaissance (ASR) et synthèse (TTS). Même Base URL et clé.",
-    "asrTitle": "Reconnaissance vocale (ASR)",
-    "ttsSyncTitle": "Synthèse — synchrone",
-    "ttsAsyncTitle": "Synthèse — asynchrone",
-    "ttsAsyncDesc": "Créer une tâche, puis interroger GET /v1/task/{id}.",
-    "speechHint": "Cliquez un modèle pour copier. Prix sur /pricing. Certains TTS sont async uniquement.",
-    "nWhisperTurbo": "Whisper multilingue rapide",
-    "nWhisper": "Whisper haute précision",
-    "nFunAsr": "ASR léger multilingue",
-    "nGlmAsr": "ASR chinois léger",
-    "nMossAsr": "Compréhension audio / réunions",
-    "nGlmTts": "TTS sync",
-    "nStepTts": "TTS sync",
-    "nIndexTts": "Sync ou async",
-    "nQwenTts": "TTS async",
-    "nCosyTts": "TTS async",
-    "moreTitle": "Autres API",
-    "moreDesc": "Visibles sur /pricing, pas en un clic dans ChatBox/Cursor. Appelez le chemin ci-dessous.",
-    "thCapability": "Capacité",
-    "thPath": "Chemin",
-    "capOcr": "OCR via chat",
-    "capDoc": "Parse document (async)",
-    "capMatting": "Détourage",
-    "capUpscale": "Upscaling",
-    "capDetect": "Détection d’objets",
-    "capSeg": "Segmentation",
-    "capDigital": "Humain digital / vidéo (async)",
-    "capMod": "Modération",
-    "capUnwarp": "Redressement document",
-    "capPose": "Détection de pose",
-    "capDuix": "Humain digital (audio+vidéo → vidéo)",
-    "capInfinite": "Vidéo parlante (image → vidéo)",
-    "capSubtitleErase": "Effacement de sous-titres (raffiné)",
-    "capVideoEnhance": "Amélioration vidéo (pro)",
-    "capSystemOne": "Jev / Open-Jev System One (décisions typées)",
-    "moreHint": "Catalogue et prix : <a href=\"https://www.keyoapi.xyz/pricing\" target=\"_top\">/pricing</a>. Noms de modèles exacts. Vidéo Path B : <code>GET /v1/tasks/{id}</code> (pluriel) ; TTS/docs/InfiniteTalk : <code>GET /v1/task/{id}</code> (singulier).",
     "clientsTitle": "Clients",
-    "clientsDesc": "Les outils de chat couvrent surtout le texte. Pour parole / OCR / vision, utilisez les curl ci-dessus.",
+    "clientsDesc": "Remplissez ainsi dans vos outils. Les noms de modèles doivent correspondre exactement.",
     "clientsTools": "ChatBox / Cursor etc.",
     "apiAddress": "Base API",
     "modelLabel": "Modèle",
@@ -2301,7 +1072,7 @@ const I18N = {
     "listModels": "Lister les modèles",
     "copyCurl": "Copier curl",
     "supportTitle": "Paiement & support",
-    "supportBody": "<strong>Console</strong> : <a href=\"https://www.keyoapi.xyz\" target=\"_blank\" rel=\"noopener noreferrer\">https://www.keyoapi.xyz</a> — usage ; gardez les jetons privés.<br /><strong>Recharge</strong> : Wallet → paiement Waffo (crédits prépayés).<br /><strong>Support</strong> : <a href=\"mailto:kopsail521@gmail.com\">kopsail521@gmail.com</a>.<br /><strong>Erreurs fréquentes</strong> : mauvais modèle, clé invalide, solde insuffisant.",
+    "supportBody": "<strong>Console</strong> : <a href=\"https://www.keyoapi.xyz\" target=\"_blank\" rel=\"noopener noreferrer\">https://www.keyoapi.xyz</a> — usage ; gardez les jetons privés.<br /><strong>Recharge</strong> : paiement convenu, puis quota ajouté par un admin.<br /><strong>Erreurs fréquentes</strong> : mauvais modèle, clé invalide, solde insuffisant.",
     "footA": "KeyoAPI · Un endpoint, plusieurs modèles",
     "footB": "Compatible OpenAI · facturation à l’usage",
     "copied": "Copié",
@@ -2314,43 +1085,10 @@ const I18N = {
   "ru": {
     "title": "Документация KeyoAPI",
     "docTitle": "Документация по подключению KeyoAPI",
-    "heroSub": "Один Base URL + один API Key. Чат / изображения / речь (OpenAI-совместимо), плюс OCR и vision.",
+    "heroSub": "Один Base URL + один API Key. Совместимо с OpenAI — Cursor, ChatBox и официальные SDK.",
     "tocAccess": "Подключение",
     "tocChat": "Чат",
     "tocImage": "Изображения",
-    "tocVideo": "Видео A",
-    "tocVideoGen": "Видео B",
-    "tocGrok": "Grok видео",
-    "grokTitle": "Grok Imagine Video 1.5 — chat",
-    "grokIntro": "Текст / одно изображение / первый и последний кадр / мультиреференс в одном chat-эндпоинте. Поля как в официальном Grok Imagine Video API; ссылка на видео придёт в ответе.",
-    "grokMode1": "Одно изображение (первый кадр)",
-    "grokMode2": "Первый и последний кадр",
-    "grokMode3": "Мультиреференс",
-    "grokHint": "Также принимает prompt, duration, resolution (480p/720p/1080p) и aspect_ratio. Тариф: $0.3082 / запрос.",
-    "tocVideoApi": "Параметры видео",
-    "videoTitle": "Видео — /v1/videos",
-    "videoTitleGen": "Видео — /v1/videos/generations",
-    "videoIntroA": "Путь перенаправления: wan / Seedance / FLUX / MiniMax / Gemini Omni сюда — автоперенаправление.",
-    "videoIntroB": "Рекомендуемый путь для wan / Seedance / FLUX / MiniMax / Gemini Omni. POST /v1/videos тоже перенаправляется.",
-    "videoHint": "Асинхронно: POST /v1/videos, затем GET /v1/videos/{id}. Списание — по консоли.",
-    "videoHintGen": "Асинхронно: POST /v1/videos/generations, затем GET /v1/tasks/{task_id} (или GET /v1/videos/{id}). Списание — по консоли.",
-    "videoMediaNote": "Media: JSON only + public http(s). Local files → POST /v1/uploads first. No local paths / data:base64 / /v1/assets.",
-    "videoImagineNote": "grok-video-1.5: chat-эндпоинт (поля: #api-grok-imagine).",
-    "nGrokVideo": "текст / 1 изображение / первый·последний кадр / мультиреф · за запрос",
-    "nVeoComponents": "~8с · за запрос · наличие может меняться",
-    "nWanVideo": "480P/720P/1080P · за секунду",
-    "nSeedance25": "по разрешению · /с",
-    "nSeedance20": "по разрешению · /с",
-    "nSeedance": "по разрешению · /с",
-    "nFluxVideo": "DRAFT/HD/FHD · /с",
-    "nMinimaxVideo": "768P / 2K · /с",
-    "nGemOmni": "за секунду",
-    "nGemOmniExt": "пакет или реф /с",
-    "perVideo": "/ запрос",
-    "perSecond": "/ сек",
-    "nGrokImagineVideo": "Grok Imagine · за секунду",
-    "tocSpeech": "Речь",
-    "tocMore": "Другие API",
     "tocClients": "Клиенты",
     "tocSupport": "Оплата и поддержка",
     "accessTitle": "Подключение",
@@ -2372,67 +1110,22 @@ const I18N = {
     "nClaudeBal": "Claude баланс",
     "nClaudeStrong": "Claude сильный",
     "nClaudeFlag": "Claude флагман",
+    "nClaudeFlag51": "Claude флагман 5.1",
     "nGemFast": "Gemini быстрый",
+    "nGemFast38": "Gemini 3.8 быстрый",
     "nDsFast": "DeepSeek быстрый",
     "nDsFast41": "DeepSeek V4.1 быстрый",
-    "nDsFast0731": "DeepSeek V4 Flash 0731",
-    "nGrok47": "Grok 4.7",
     "nDsStrong": "DeepSeek сильный",
     "nKimi": "Kimi",
     "nGrok": "Grok",
     "nMinimax": "MiniMax",
     "nGlm": "Zhipu GLM",
-    "nClaudeFlag51": "Claude флагман 5.1",
-    "nGem38": "Gemini 3.8 быстрый",
-    "nGemma": "Мультимодальный чат — /pricing",
-    "nQwen38Max": "Qwen3.8 Max (0902)",
-    "nFreeGlm": "Бесплатно · vs платный glm-5.2",
-    "nGlm52": "GLM 5.2 платный",
-    "nFreeKimi": "Бесплатно · vs платный kimi-k3",
-    "chatHint": "Клик по модели — копировать. IDs с -free — $0 (отдельные от платных без суффикса). Другие бесплатные chat ID с суффиксом :free — актуальный список на /free-models. Платные — по токенам (консоль источник истины).",
+    "chatHint": "Клик по модели — копировать. Оплата по токенам (консоль источник истины). Пополняйте при нулевом балансе.",
     "imageTitle": "Изображения",
     "thPrice": "Примерно",
     "perImage": "/ изобр.",
-    "perMTok": "/ млн токенов вх·вых",
-    "speechTitle": "Речь",
-    "speechDesc": "Распознавание (ASR) и синтез (TTS). Тот же Base URL и ключ.",
-    "asrTitle": "Распознавание речи (ASR)",
-    "ttsSyncTitle": "Синтез — sync",
-    "ttsAsyncTitle": "Синтез — async",
-    "ttsAsyncDesc": "Создайте задачу, затем опрашивайте GET /v1/task/{id}.",
-    "speechHint": "Клик по модели — копировать. Цены на /pricing. Часть TTS только async.",
-    "nWhisperTurbo": "Быстрый Whisper",
-    "nWhisper": "Точный Whisper",
-    "nFunAsr": "Лёгкий ASR",
-    "nGlmAsr": "Китайский ASR",
-    "nMossAsr": "Аудио-понимание / встречи",
-    "nGlmTts": "Sync TTS",
-    "nStepTts": "Sync TTS",
-    "nIndexTts": "Sync или async",
-    "nQwenTts": "Async TTS",
-    "nCosyTts": "Async TTS",
-    "moreTitle": "Другие API",
-    "moreDesc": "Есть на /pricing, но не в один клик в ChatBox/Cursor. Вызывайте путь ниже.",
-    "thCapability": "Возможность",
-    "thPath": "Путь",
-    "capOcr": "OCR через chat",
-    "capDoc": "Разбор документов (async)",
-    "capMatting": "Удаление фона",
-    "capUpscale": "Апскейл",
-    "capDetect": "Детекция объектов",
-    "capSeg": "Сегментация",
-    "capDigital": "Цифровой человек / видео (async)",
-    "capMod": "Модерация",
-    "capUnwarp": "Выравнивание документа",
-    "capPose": "Детекция позы",
-    "capDuix": "Цифровой человек (аудио+видео → видео)",
-    "capInfinite": "Говорящее видео (изображение → видео)",
-    "capSubtitleErase": "Стирание субтитров (тонкое)",
-    "capVideoEnhance": "Улучшение видео (pro)",
-    "capSystemOne": "Jev / Open-Jev System One (типизированные решения)",
-    "moreHint": "Каталог и цены: <a href=\"https://www.keyoapi.xyz/pricing\" target=\"_top\">/pricing</a>. Имена моделей — точно. Video Path B: <code>GET /v1/tasks/{id}</code> (мн.); TTS/docs/InfiniteTalk: <code>GET /v1/task/{id}</code> (ед.).",
     "clientsTitle": "Клиенты",
-    "clientsDesc": "Чат-клиенты в основном для текста. Для речи / OCR / vision используйте curl выше.",
+    "clientsDesc": "Так заполняйте в инструментах. Имена моделей — точно как в таблице.",
     "clientsTools": "ChatBox / Cursor и др.",
     "apiAddress": "API base",
     "modelLabel": "Модель",
@@ -2441,7 +1134,7 @@ const I18N = {
     "listModels": "Список моделей",
     "copyCurl": "Копировать curl",
     "supportTitle": "Оплата и поддержка",
-    "supportBody": "<strong>Консоль</strong>: <a href=\"https://www.keyoapi.xyz\" target=\"_blank\" rel=\"noopener noreferrer\">https://www.keyoapi.xyz</a> — расход; храните токены.<br /><strong>Пополнение</strong>: Wallet → онлайн-оплата Waffo (предоплата).<br /><strong>Поддержка</strong>: <a href=\"mailto:kopsail521@gmail.com\">kopsail521@gmail.com</a>.<br /><strong>Частые ошибки</strong>: неверная модель, неверный ключ, мало баланса.",
+    "supportBody": "<strong>Консоль</strong>: <a href=\"https://www.keyoapi.xyz\" target=\"_blank\" rel=\"noopener noreferrer\">https://www.keyoapi.xyz</a> — расход; храните токены.<br /><strong>Пополнение</strong>: оплата по договорённости, админ добавляет квоту.<br /><strong>Частые ошибки</strong>: неверная модель, неверный ключ, мало баланса.",
     "footA": "KeyoAPI · Один endpoint — много моделей",
     "footB": "Совместимо с OpenAI · оплата по использованию",
     "copied": "Скопировано",
@@ -2454,43 +1147,10 @@ const I18N = {
   "vi": {
     "title": "Tài liệu KeyoAPI",
     "docTitle": "Tài liệu tích hợp KeyoAPI",
-    "heroSub": "Một Base URL + một API Key. Chat / ảnh / giọng nói tương thích OpenAI, kèm OCR và vision.",
+    "heroSub": "Một Base URL + một API Key. Tương thích OpenAI — dùng với Cursor, ChatBox và SDK chính thức.",
     "tocAccess": "Kết nối",
     "tocChat": "Chat",
     "tocImage": "Ảnh",
-    "tocVideo": "Video A",
-    "tocVideoGen": "Video B",
-    "tocGrok": "Grok video",
-    "grokTitle": "Grok Imagine Video 1.5 — chat",
-    "grokIntro": "Văn bản / một ảnh / khung đầu & cuối / đa tham chiếu trong một endpoint chat. Trường theo API chính thức Grok Imagine Video; liên kết video trả về trong phản hồi.",
-    "grokMode1": "Một ảnh (cố định khung đầu)",
-    "grokMode2": "Khung đầu & cuối",
-    "grokMode3": "Đa tham chiếu",
-    "grokHint": "Hỗ trợ thêm prompt, duration, resolution (480p/720p/1080p) và aspect_ratio. Giá: $0.3082/ lần.",
-    "tocVideoApi": "Tham số video",
-    "videoTitle": "Video — /v1/videos",
-    "videoTitleGen": "Video — /v1/videos/generations",
-    "videoIntroA": "Path chuyển tiếp: wan / Seedance / FLUX / MiniMax / Gemini Omni gửi vào đây sẽ được chuyển tự động.",
-    "videoIntroB": "Path khuyến nghị cho wan / Seedance / FLUX / MiniMax / Gemini Omni. POST /v1/videos cũng được chuyển tự động.",
-    "videoHint": "Async: POST /v1/videos rồi GET /v1/videos/{id}. Tính phí theo console.",
-    "videoHintGen": "Async: POST /v1/videos/generations rồi GET /v1/tasks/{task_id} (hoặc GET /v1/videos/{id}). Tính phí theo console.",
-    "videoMediaNote": "Media: JSON only + public http(s). Local files → POST /v1/uploads first. No local paths / data:base64 / /v1/assets.",
-    "videoImagineNote": "grok-video-1.5: endpoint chat (trường: #api-grok-imagine).",
-    "nGrokVideo": "văn bản / 1 ảnh / đầu·cuối / đa tham chiếu · theo lần",
-    "nVeoComponents": "~8s · theo lần · nguồn có thể thay đổi",
-    "nWanVideo": "480P/720P/1080P · theo giây",
-    "nSeedance25": "theo độ phân giải · /s",
-    "nSeedance20": "theo độ phân giải · /s",
-    "nSeedance": "theo độ phân giải · /s",
-    "nFluxVideo": "DRAFT/HD/FHD · /s",
-    "nMinimaxVideo": "768P / 2K · /s",
-    "nGemOmni": "theo giây",
-    "nGemOmniExt": "gói hoặc ref /s",
-    "perVideo": "/ lần",
-    "perSecond": "/ giây",
-    "nGrokImagineVideo": "Grok Imagine · theo giây",
-    "tocSpeech": "Giọng nói",
-    "tocMore": "API khác",
     "tocClients": "Client",
     "tocSupport": "Nạp tiền & hỗ trợ",
     "accessTitle": "Kết nối",
@@ -2512,67 +1172,22 @@ const I18N = {
     "nClaudeBal": "Claude cân bằng",
     "nClaudeStrong": "Claude mạnh",
     "nClaudeFlag": "Claude flagship",
+    "nClaudeFlag51": "Claude flagship 5.1",
     "nGemFast": "Gemini nhanh",
+    "nGemFast38": "Gemini 3.8 nhanh",
     "nDsFast": "DeepSeek nhanh",
     "nDsFast41": "DeepSeek V4.1 nhanh",
-    "nDsFast0731": "DeepSeek V4 Flash 0731",
-    "nGrok47": "Grok 4.7",
     "nDsStrong": "DeepSeek mạnh",
     "nKimi": "Kimi",
     "nGrok": "Grok",
     "nMinimax": "MiniMax",
     "nGlm": "Zhipu GLM",
-    "nClaudeFlag51": "Claude flagship 5.1",
-    "nGem38": "Gemini 3.8 nhanh",
-    "nGemma": "Chat đa phương thức — xem /pricing",
-    "nQwen38Max": "Qwen3.8 Max (0902)",
-    "nFreeGlm": "Miễn phí · khác glm-5.2 trả phí",
-    "nGlm52": "GLM 5.2 trả phí",
-    "nFreeKimi": "Miễn phí · khác kimi-k3 trả phí",
-    "chatHint": "Bấm tên model để sao chép. ID kết thúc -free là $0 (khác bản trả phí không hậu tố). Các ID chat $0 khác có hậu tố :free; danh sách mới nhất ở /free-models. Model trả phí tính theo token (console là chuẩn).",
+    "chatHint": "Bấm tên model để sao chép. Tính theo token (console là chuẩn). Hết hạn mức thì nạp thêm.",
     "imageTitle": "Ảnh",
     "thPrice": "Giá ước tính",
     "perImage": "/ ảnh",
-    "perMTok": "/ MTok vào·ra",
-    "speechTitle": "Giọng nói",
-    "speechDesc": "Nhận dạng (ASR) và tổng hợp (TTS). Cùng Base URL và API Key.",
-    "asrTitle": "Nhận dạng giọng nói (ASR)",
-    "ttsSyncTitle": "TTS — đồng bộ",
-    "ttsAsyncTitle": "TTS — bất đồng bộ",
-    "ttsAsyncDesc": "Tạo task rồi poll GET /v1/task/{id}.",
-    "speechHint": "Bấm tên model để sao chép. Giá trên /pricing. Một số TTS chỉ async.",
-    "nWhisperTurbo": "Whisper đa ngữ nhanh",
-    "nWhisper": "Whisper độ chính xác cao",
-    "nFunAsr": "ASR nhẹ đa ngữ",
-    "nGlmAsr": "ASR tiếng Trung nhẹ",
-    "nMossAsr": "Hiểu audio / họp",
-    "nGlmTts": "TTS sync",
-    "nStepTts": "TTS sync",
-    "nIndexTts": "Sync hoặc async",
-    "nQwenTts": "TTS async",
-    "nCosyTts": "TTS async",
-    "moreTitle": "API khác",
-    "moreDesc": "Có trên /pricing nhưng không one-click trong ChatBox/Cursor. Gọi đúng path bên dưới.",
-    "thCapability": "Khả năng",
-    "thPath": "Path",
-    "capOcr": "OCR qua chat",
-    "capDoc": "Parse tài liệu (async)",
-    "capMatting": "Tách nền",
-    "capUpscale": "Upscale",
-    "capDetect": "Object detection",
-    "capSeg": "Segmentation",
-    "capDigital": "Digital human / video (async)",
-    "capMod": "Moderation",
-    "capUnwarp": "Làm phẳng tài liệu",
-    "capPose": "Nhận dạng tư thế",
-    "capDuix": "Người số (audio+video → video)",
-    "capInfinite": "Video nói (ảnh → video)",
-    "capSubtitleErase": "Xóa phụ đề cứng (tinh chỉnh)",
-    "capVideoEnhance": "Tăng cường chất lượng video (pro)",
-    "capSystemOne": "Jev / Open-Jev System One (quyết định có kiểu)",
-    "moreHint": "Danh mục & giá: <a href=\"https://www.keyoapi.xyz/pricing\" target=\"_top\">/pricing</a>. Tên model phải khớp. Video Path B poll <code>GET /v1/tasks/{id}</code> (số nhiều); TTS/docs/InfiniteTalk poll <code>GET /v1/task/{id}</code> (số ít).",
     "clientsTitle": "Client",
-    "clientsDesc": "Công cụ chat chủ yếu cho text. Với speech / OCR / vision hãy dùng curl phía trên.",
+    "clientsDesc": "Điền như sau trong công cụ. Tên model phải khớp bảng.",
     "clientsTools": "ChatBox / Cursor v.v.",
     "apiAddress": "API base",
     "modelLabel": "Model",
@@ -2581,7 +1196,7 @@ const I18N = {
     "listModels": "Liệt kê model",
     "copyCurl": "Sao chép curl",
     "supportTitle": "Nạp tiền & hỗ trợ",
-    "supportBody": "<strong>Console</strong>: <a href=\"https://www.keyoapi.xyz\" target=\"_blank\" rel=\"noopener noreferrer\">https://www.keyoapi.xyz</a> — xem usage; giữ token riêng.<br /><strong>Nạp tiền</strong>: Wallet → thanh toán Waffo (trả trước).<br /><strong>Hỗ trợ</strong>: <a href=\"mailto:kopsail521@gmail.com\">kopsail521@gmail.com</a>.<br /><strong>Lỗi thường gặp</strong>: sai model, key lỗi, hết số dư.",
+    "supportBody": "<strong>Console</strong>: <a href=\"https://www.keyoapi.xyz\" target=\"_blank\" rel=\"noopener noreferrer\">https://www.keyoapi.xyz</a> — xem usage; giữ token riêng.<br /><strong>Nạp tiền</strong>: thanh toán theo thỏa thuận, admin cộng hạn mức.<br /><strong>Lỗi thường gặp</strong>: sai model, key lỗi, hết số dư.",
     "footA": "KeyoAPI · Một endpoint, nhiều mô hình",
     "footB": "Tương thích OpenAI · tính theo usage",
     "copied": "Đã sao chép",
@@ -2629,11 +1244,6 @@ function renderSamples(dict) {
   const hello = dict.hello || 'Hello';
   const chat = document.getElementById('curl-chat');
   const image = document.getElementById('curl-image');
-  const video = document.getElementById('curl-video');
-  const asr = document.getElementById('curl-asr');
-  const tts = document.getElementById('curl-tts');
-  const ttsAsync = document.getElementById('curl-tts-async');
-  const matting = document.getElementById('curl-matting');
   const models = document.getElementById('curl-models');
   const py = document.getElementById('py-sdk');
   if (chat) {
@@ -2647,123 +1257,6 @@ function renderSamples(dict) {
       '  -H <span class="tok-str">"Authorization: Bearer ' + escapeHtml(key) + '"</span> \\\n' +
       '  -H <span class="tok-str">"Content-Type: application/json"</span> \\\n' +
       '  -d <span class="tok-str">\'{\n    "model": "nano-banana-2",\n    "prompt": "a red circle on white background",\n    "size": "1024x1024"\n  }\'</span></code>';
-  }
-  if (video) {
-    video.innerHTML = '<code><span class="tok-cmd">curl</span> https://www.keyoapi.xyz/v1/videos \\\n' +
-      '  -H <span class="tok-str">"Authorization: Bearer ' + escapeHtml(key) + '"</span> \\\n' +
-      '  -H <span class="tok-str">"Content-Type: application/json"</span> \\\n' +
-      '  -d <span class="tok-str">\'{\n    "model": "wan3.0-video",\n    "prompt": "A red paper boat floating on calm water at sunset"\n  }\'</span></code>';
-  }
-  const videoGen = document.getElementById('curl-video-gen');
-  if (videoGen) {
-    videoGen.innerHTML = '<code><span class="tok-cmd">curl</span> https://www.keyoapi.xyz/v1/videos/generations \\\n' +
-      '  -H <span class="tok-str">"Authorization: Bearer ' + escapeHtml(key) + '"</span> \\\n' +
-      '  -H <span class="tok-str">"Content-Type: application/json"</span> \\\n' +
-      '  -d <span class="tok-str">\'{\n    "model": "wan3.0-video",\n    "prompt": "A kitten running on a moonlit rooftop",\n    "resolution": "720P",\n    "duration": 5\n  }\'</span></code>';
-  }
-  const grokI2v = document.getElementById('curl-grok-i2v');
-  if (grokI2v) {
-    grokI2v.innerHTML = '<code><span class="tok-cmd">curl</span> https://www.keyoapi.xyz/v1/chat/completions \
-' +
-      '  -H <span class="tok-str">"Authorization: Bearer ' + escapeHtml(key) + '"</span> \
-' +
-      '  -H <span class="tok-str">"Content-Type: application/json"</span> \
-' +
-      '  -d <span class="tok-str">\'{\n    "model": "grok-video-1.5",\n    "messages": [{"role": "user", "content": "a red paper boat drifting on calm water at sunset"}],\n    "image": "https://example.com/first.jpg",\n    "duration": 10,\n    "resolution": "720p"\n  }\'</span></code>';
-  }
-  const grokFlf = document.getElementById('curl-grok-flf');
-  if (grokFlf) {
-    grokFlf.innerHTML = '<code><span class="tok-cmd">curl</span> https://www.keyoapi.xyz/v1/chat/completions \
-' +
-      '  -H <span class="tok-str">"Authorization: Bearer ' + escapeHtml(key) + '"</span> \
-' +
-      '  -H <span class="tok-str">"Content-Type: application/json"</span> \
-' +
-      '  -d <span class="tok-str">\'{\n    "model": "grok-video-1.5",\n    "messages": [{"role": "user", "content": "camera glides from the day scene into the night skyline"}],\n    "image": "https://example.com/first.jpg",\n    "last_frame": "https://example.com/last.jpg"\n  }\'</span></code>';
-  }
-  const grokRef = document.getElementById('curl-grok-ref');
-  if (grokRef) {
-    grokRef.innerHTML = '<code><span class="tok-cmd">curl</span> https://www.keyoapi.xyz/v1/chat/completions \
-' +
-      '  -H <span class="tok-str">"Authorization: Bearer ' + escapeHtml(key) + '"</span> \
-' +
-      '  -H <span class="tok-str">"Content-Type: application/json"</span> \
-' +
-      '  -d <span class="tok-str">\'{\n    "model": "grok-video-1.5",\n    "messages": [{"role": "user", "content": "the model from <IMAGE_0> wears the shirt from <IMAGE_1> and walks the runway"}],\n    "reference_images": [\n      {"url": "https://example.com/model.jpg"},\n      {"url": "https://example.com/shirt.jpg"}\n    ],\n    "duration": 10,\n    "aspect_ratio": "16:9"\n  }\'</span></code>';
-  }
-  const curlMm = document.getElementById('curl-mm-h3');
-  if (curlMm) {
-    curlMm.innerHTML = '<code><span class="tok-cmd">curl</span> https://www.keyoapi.xyz/v1/videos/generations \\\n' +
-      '  -H <span class="tok-str">"Authorization: Bearer ' + escapeHtml(key) + '"</span> \\\n' +
-      '  -H <span class="tok-str">"Content-Type: application/json"</span> \\\n' +
-      '  -d <span class="tok-str">\'{\n    "model": "MiniMax-H3",\n    "prompt": "a red balloon rising in a blue sky",\n    "aspectRatio": "landscape",\n    "resolution": "480p",\n    "duration": 5\n  }\'</span></code>';
-  }
-  if (asr) {
-    asr.innerHTML = '<code><span class="tok-cmd">curl</span> https://www.keyoapi.xyz/v1/audio/transcriptions \\\n' +
-      '  -H <span class="tok-str">"Authorization: Bearer ' + escapeHtml(key) + '"</span> \\\n' +
-      '  -F <span class="tok-str">model=whisper-large-v3-turbo</span> \\\n' +
-      '  -F <span class="tok-str">language=zh</span> \\\n' +
-      '  -F <span class="tok-str">file=@./sample.wav</span></code>';
-  }
-  if (tts) {
-    tts.innerHTML = '<code><span class="tok-cmd">curl</span> https://www.keyoapi.xyz/v1/audio/speech \\\n' +
-      '  -H <span class="tok-str">"Authorization: Bearer ' + escapeHtml(key) + '"</span> \\\n' +
-      '  -H <span class="tok-str">"Content-Type: application/json"</span> \\\n' +
-      '  -d <span class="tok-str">\'{\n    "model": "GLM-TTS",\n    "input": "' + escapeHtml(hello) + '",\n    "voice": "alloy"\n  }\'</span> \\\n' +
-      '  --output speech.wav</code>';
-  }
-  if (ttsAsync) {
-    ttsAsync.innerHTML = '<code><span class="tok-cmd">curl</span> https://www.keyoapi.xyz/v1/async/audio/speech \\\n' +
-      '  -H <span class="tok-str">"Authorization: Bearer ' + escapeHtml(key) + '"</span> \\\n' +
-      '  -H <span class="tok-str">"Content-Type: application/json"</span> \\\n' +
-      '  -d <span class="tok-str">\'{"model":"Qwen3-TTS","inputs":"' + escapeHtml(hello) + '"}\'</span>\n\n' +
-      '<span class="tok-cmd">curl</span> https://www.keyoapi.xyz/v1/task/TASK_ID \\\n' +
-      '  -H <span class="tok-str">"Authorization: Bearer ' + escapeHtml(key) + '"</span></code>';
-  }
-  if (matting) {
-    matting.innerHTML = '<code><span class="tok-cmd">curl</span> https://www.keyoapi.xyz/v1/images/mattings \\\n' +
-      '  -H <span class="tok-str">"Authorization: Bearer ' + escapeHtml(key) + '"</span> \\\n' +
-      '  -F <span class="tok-str">model=RMBG-2.0</span> \\\n' +
-      '  -F <span class="tok-str">image=@photo.png</span></code>';
-  }
-  const upscale = document.getElementById('curl-upscale');
-  if (upscale) {
-    upscale.innerHTML = '<code><span class="tok-cmd">curl</span> https://www.keyoapi.xyz/v1/images/upscaling \\\n' +
-      '  -H <span class="tok-str">"Authorization: Bearer ' + escapeHtml(key) + '"</span> \\\n' +
-      '  -F <span class="tok-str">model=Real-ESRGAN</span> \\\n' +
-      '  -F <span class="tok-str">image=@photo.png</span></code>';
-  }
-  const infinite = document.getElementById('curl-infinite');
-  if (infinite) {
-    infinite.innerHTML = '<code><span class="tok-cmd">curl</span> https://www.keyoapi.xyz/v1/async/videos/image-to-video \\\n' +
-      '  -H <span class="tok-str">"Authorization: Bearer ' + escapeHtml(key) + '"</span> \\\n' +
-      '  -F <span class="tok-str">model=InfiniteTalk</span> \\\n' +
-      '  -F <span class="tok-str">prompt=natural talking-head delivery</span> \\\n' +
-      '  -F <span class="tok-str">cond_video=@face.png</span> \\\n' +
-      '  -F <span class="tok-str">cond_audio=@speech.wav</span>\n\n' +
-      '<span class="tok-cmd">curl</span> https://www.keyoapi.xyz/v1/task/TASK_ID \\\n' +
-      '  -H <span class="tok-str">"Authorization: Bearer ' + escapeHtml(key) + '"</span></code>';
-  }
-  const systemone = document.getElementById('curl-systemone');
-  if (systemone) {
-    systemone.innerHTML = '<code><span class="tok-cmd">curl</span> https://www.keyoapi.xyz/v1/systemone \\\n' +
-      '  -H <span class="tok-str">"Authorization: Bearer ' + escapeHtml(key) + '"</span> \\\n' +
-      '  -H <span class="tok-str">"Content-Type: application/json"</span> \\\n' +
-      '  -d <span class="tok-str">\'{\n    "model": "Bespoke-Nimble-9B",\n    "state": "Customer was charged twice and asks for a refund.",\n    "questions": {\n      "refund": {"type":"noul","instructions":"Does the customer request a refund?"},\n      "dept": {"type":"choice","instructions":"Which department should handle this?","criteria":{"billing":"Charges and refunds","tech":"Bugs and outages"}}\n    }\n  }\'</span></code>';
-  }
-  const mineru = document.getElementById('curl-mineru');
-  if (mineru) {
-    mineru.innerHTML = '<code><span class="tok-cmd">curl</span> https://www.keyoapi.xyz/v1/async/documents/parse \\\n' +
-      '  -H <span class="tok-str">"Authorization: Bearer ' + escapeHtml(key) + '"</span> \\\n' +
-      '  -F <span class="tok-str">model=MinerU2.5-Pro</span> \\\n' +
-      '  -F <span class="tok-str">file=@doc.pdf</span></code>';
-  }
-  const ocr = document.getElementById('curl-ocr');
-  if (ocr) {
-    ocr.innerHTML = '<code><span class="tok-cmd">curl</span> https://www.keyoapi.xyz/v1/chat/completions \\\n' +
-      '  -H <span class="tok-str">"Authorization: Bearer ' + escapeHtml(key) + '"</span> \\\n' +
-      '  -H <span class="tok-str">"Content-Type: application/json"</span> \\\n' +
-      '  -d <span class="tok-str">\'{\n    "model": "Unlimited-OCR",\n    "messages": [{"role":"user","content":[{"type":"text","text":"Extract text"},{"type":"image_url","image_url":{"url":"https://example.com/page.png"}}]}]\n  }\'</span></code>';
   }
   if (models) {
     models.textContent = 'curl https://www.keyoapi.xyz/v1/models \\\n  -H "Authorization: Bearer ' + key + '"';
@@ -2791,7 +1284,6 @@ function applyLang(raw) {
   document.querySelectorAll('[data-i18n]').forEach((el) => {
     const key = el.getAttribute('data-i18n');
     if (dict[key] != null) el.textContent = dict[key];
-    else if (I18N.en[key] != null) el.textContent = I18N.en[key];
   });
   document.querySelectorAll('[data-i18n-html]').forEach((el) => {
     const key = el.getAttribute('data-i18n-html');
@@ -2808,10 +1300,6 @@ function applyLang(raw) {
 
 function readStoredLang() {
   try { return localStorage.getItem('i18nextLng') || ''; } catch { return ''; }
-}
-
-function readQueryLang() {
-  try { return new URLSearchParams(location.search).get('lang') || ''; } catch { return ''; }
 }
 
 function signalReady() {
@@ -2843,11 +1331,7 @@ function signalReady() {
     if (event.key === 'i18nextLng') applyLang(event.newValue || 'en');
   });
 
-  // Embedded: ignore navigator.language — shell language arrives via ?lang= / postMessage.
-  const initialLang = embedded
-    ? (readQueryLang() || 'en')
-    : (readQueryLang() || readStoredLang() || navigator.language || 'en');
-  applyLang(initialLang);
+  applyLang(readStoredLang() || navigator.language || 'en');
   signalReady();
   if (embedded) {
     let n = 0;
@@ -2857,7 +1341,6 @@ function signalReady() {
     }, 250);
   }
   setInterval(() => {
-    if (embedded) return;
     const lang = readStoredLang();
     if (lang && normalizeLang(lang) !== current) applyLang(lang);
   }, 800);

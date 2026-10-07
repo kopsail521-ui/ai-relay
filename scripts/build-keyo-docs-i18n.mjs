@@ -501,6 +501,7 @@ const imageModels = [
   ["gpt-image-2.5-sunburst", "~$0.0247"],
   ["gpt-image-2", "~$0.0068"],
   ["gpt-image-2-vip", "~$0.0274"],
+  ["nano-banana-2.1", "~$0.0123"],
   ["nano-banana-2", "~$0.0205"],
   ["nano-banana-pro", "~$0.0274"],
 ];

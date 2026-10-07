@@ -85,7 +85,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
 </div>
 <h2>Overview</h2>
 <p>Nano Banana 2.1 is Google's next-generation image model, served on KeyoAPI through the OpenAI-compatible /v1/images/generations endpoint. If you already call chat, Whisper, or OCR with a KeyoAPI key, you can generate images with the same Bearer token — no Google Cloud project, no AI Studio key, and no billing setup on Google's side.</p>
-<p>How to call it. Point your HTTP client or OpenAI SDK at https://www.keyoapi.xyz/v1, set model=nano-banana-2.1, and POST a JSON body with a prompt to /v1/images/generations. The prompt field is required; n (up to 128), size, quality, and response_format follow the OpenAI images schema and stay optional. Responses return a generated image URL (or base64 when you request it), so most OpenAI-compatible client code works after changing the base URL and model string.</p>
+<p>How to call it. Point your HTTP client or OpenAI SDK at https://www.keyoapi.xyz/v1, set model=nano-banana-2.1, and POST a JSON body with a prompt to /v1/images/generations. The prompt field is required; size (for example 1024x1024) is optional. Responses return a generated image URL, so most OpenAI-compatible client code works after changing the base URL and model string.</p>
 <p>Pricing. Nano Banana 2.1 is metered per generated image at about $0.0123 — confirm live on <a href="/pricing-list">/pricing-list</a> or the Model Square page <a href="/model/nano-banana-2.1">/model/nano-banana-2.1</a> before you budget. The same endpoint also serves the wider family: nano-banana-2 (~$0.0205/image) when a pipeline was validated on the previous generation, and nano-banana-pro (~$0.0274/image) when the job leans on stronger prompt adherence and text-in-image accuracy.</p>
 <p>Worked cost example (indicative). Generating 500 product mockups a month at $0.0123 is roughly $6.15 before retries; the same volume on nano-banana-pro is about $13.70. Batch jobs that tolerate the cheaper model should default to 2.1 and escalate per image when quality gates fail — the same split-lane pattern KeyoAPI recommends for chat models.</p>
 <p>Integration steps. (1) Sign up at <a href="/sign-up">/sign-up</a> and mint an API key. (2) Point your client at https://www.keyoapi.xyz/v1 with Bearer auth. (3) POST /v1/images/generations with model=nano-banana-2.1 and a prompt. (4) Log each returned image URL next to the Wallet ledger entry so finance sees actuals, not guesses. (5) Try interactively at <a href="/model/nano-banana-2.1">/model/nano-banana-2.1</a> — the Model Square try/buy page for this ID.</p>
@@ -97,7 +97,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
 <div class="card">
 <p>Base URL: <code>https://www.keyoapi.xyz/v1</code></p>
 <p>Endpoint: <code>POST /v1/images/generations</code></p>
-<p>Model: <code>model=nano-banana-2.1 · prompt required · n/size/quality/response_format optional (n max 128)</code></p>
+<p>Model: <code>model=nano-banana-2.1 · prompt required · size optional (e.g. 1024x1024)</code></p>
 <pre><code>curl https://www.keyoapi.xyz/v1/images/generations \
   -H &quot;Authorization: Bearer YOUR_API_KEY&quot; \
   -H &quot;Content-Type: application/json&quot; \

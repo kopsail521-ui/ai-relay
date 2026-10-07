@@ -144,7 +144,7 @@ curl https://www.keyoapi.xyz/v1/videos/generations \
 
 ### 1.2 文生图 → `POST /v1/images/generations`
 
-`gpt-image-2.5` · `gpt-image-2.5-flare` · `gpt-image-2.5-sunburst` · `gpt-image-2` · `gpt-image-2-vip` · `nano-banana-2` · `nano-banana-pro`
+`gpt-image-2.5` · `gpt-image-2.5-flare` · `gpt-image-2.5-sunburst` · `gpt-image-2` · `gpt-image-2-vip` · `nano-banana-2.1` · `nano-banana-2` · `nano-banana-pro`
 
 ### 1.3 视频 Path A → `POST /v1/videos`（仅自动转发）
 

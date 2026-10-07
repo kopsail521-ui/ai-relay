@@ -133,7 +133,7 @@ Paid: `gpt-5.6-luna` · `gpt-5.6-terra` · `gpt-5.6-sol` · `gpt-6-luna` · `gpt
 
 ### 1.2 Images → `POST /v1/images/generations`
 
-`gpt-image-2.5` · `gpt-image-2.5-flare` · `gpt-image-2.5-sunburst` · `gpt-image-2` · `gpt-image-2-vip` · `nano-banana-2` · `nano-banana-pro`
+`gpt-image-2.5` · `gpt-image-2.5-flare` · `gpt-image-2.5-sunburst` · `gpt-image-2` · `gpt-image-2-vip` · `nano-banana-2.1` · `nano-banana-2` · `nano-banana-pro`
 
 ### 1.3 Video Path A → `POST /v1/videos` (forward only)
 

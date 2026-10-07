@@ -265,6 +265,7 @@ export const RULES = {
   "gpt-image-2-vip": { vendor: "OpenAI", tag: "图片", endpoints: EP.image },
   "nano-banana-pro": { vendor: "Google", tag: "图片", endpoints: EP.image },
   "nano-banana-2": { vendor: "Google", tag: "图片", endpoints: EP.image },
+  "nano-banana-2.1": { vendor: "Google", tag: "图片", endpoints: EP.image, icon: "Gemini.Color" },
   "gpt-5.6-sol": { vendor: "OpenAI", tag: "大语言模型", endpoints: EP.chat },
   "gpt-5.6-terra": { vendor: "OpenAI", tag: "大语言模型", endpoints: EP.chat },
   "gpt-5.6-luna": { vendor: "OpenAI", tag: "大语言模型", endpoints: EP.chat },

@@ -1,0 +1,37 @@
+# VPS：上架 Grsai nano-banana-2.1（Keyo Images 渠道，图片，按张）
+# 定价：成本 ¥0.06/张 ×1.5 ÷7.3 = $0.012329/次（ModelPrice）
+# 前提：本机已 git push
+set -e
+cd /opt/ai-relay
+sudo bash scripts/vps-safe-pull-preserve-blog.sh
+
+# 1) New API：渠道 + ModelPrice + 广场（图片/Google）
+sudo python3 /opt/ai-relay/scripts/vps-add-grsai-nano-banana-21.py /opt/ai-relay/data/new-api/one-api.db
+
+# 2) 重启 new-api 刷新定价缓存
+sudo docker restart ai-relay-new-api
+sleep 5
+curl -sS -o /dev/null -w "console_http=%{http_code}\n" http://127.0.0.1:3000/api/status
+
+# 3) moderation：广场 copy 热更新
+MOD=$(sudo docker ps --format '{{.Names}}' | grep -E 'creem|moderation' | head -1 || true)
+if [ -n "$MOD" ]; then
+  sudo docker cp /opt/ai-relay/services/creem-moderation-proxy/marketplace-model-copy.json \
+    "$MOD":/app/marketplace-model-copy.json
+  sudo docker restart "$MOD"
+  echo "moderation_copy_updated=$MOD"
+else
+  echo "WARN: moderation container not found"
+fi
+
+# 4) 品牌/文档静态页（图片价目表加了 nano-banana-2.1 行）
+sudo bash /opt/ai-relay/scripts/deploy-brand-static.sh
+
+echo "--- smoke ---"
+P3JSON=$(mktemp)
+curl -sS https://www.keyoapi.xyz/api/pricing -o "$P3JSON"
+grep -q "nano-banana-2.1" "$P3JSON" && echo "pricing_ok=nano-banana-2.1" || echo "pricing_MISSING=nano-banana-2.1"
+rm -f "$P3JSON"
+curl -sS -o /dev/null -w "img_http=%{http_code}\n" -X POST https://www.keyoapi.xyz/v1/images/generations \
+  -H "Content-Type: application/json" -d '{"model":"nano-banana-2.1","prompt":"a red circle"}'
+echo DONE_ADD_GRSAI_NANO21

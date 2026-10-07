@@ -19,8 +19,8 @@ export function extractTaskId(payload) {
 
 /** Best-effort extraction of why an upstream task failed, for client-visible errors. */
 function upstreamFailureReason(j, d) {
-  const nodes = [j, d, j && j.error, d && d.error, j && j.data && j.data.error];
-  const keys = ['fail_msg', 'failure_reason', 'fail_reason', 'reason', 'detail', 'message', 'msg'];
+  const nodes = [j, d];
+  const keys = ['error', 'fail_msg', 'failure_reason', 'fail_reason', 'reason', 'detail', 'message', 'msg'];
   for (const n of nodes) {
     if (!n || typeof n !== 'object') continue;
     for (const k of keys) {

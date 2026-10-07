@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-"""Migrate free models to *-free IDs + ensure paid bare IDs on OpenLux.
+"""Migrate free models to *:free IDs + ensure paid bare IDs on OpenLux.
 
 Free (Keyo Free / Token Plan):
-  deepseek-v4-pro-free  --map--> deepseek-v4-pro   ModelPrice=0
+  deepseek-v4-pro:free  --map--> deepseek-v4-pro   ModelPrice=0
 Paid (Keyo Primary / OpenLux):
   deepseek-v4-pro  ModelRatio from openlux-chat-catalog (×5 sell)
 Same for flash / glm-5.2 / kimi-k3.
@@ -273,12 +273,12 @@ def main():
         raise SystemExit("paid OpenLux / Keyo Primary channel not found")
     paid_id = paid_ch["id"]
     paid_parts = [p.strip() for p in (paid_ch["models"] or "").split(",") if p.strip()]
-    # ensure bare paid IDs on paid channel; remove accidental *-free
+    # ensure bare paid IDs on paid channel; remove accidental free twins
     for bare in LEGACY_BARE:
         if bare not in paid_parts:
             paid_parts.insert(0, bare)
-    paid_parts = [p for p in paid_parts if not p.endswith("-free")]
-    # remove bare IDs from being ONLY on free — already free channel only has *-free
+    paid_parts = [p for p in paid_parts if not p.endswith("-free") and not p.endswith(":free")]
+    # remove bare IDs from being ONLY on free — already free channel only has free twins
     paid_merged = ",".join(paid_parts)
     paid_sets = ["models=?", "name=?"]
     paid_vals = [paid_merged, PAID_CHANNEL]

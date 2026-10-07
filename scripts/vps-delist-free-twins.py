@@ -1,6 +1,10 @@
 #!/usr/bin/env python3
 """Delist leftover free twins only (paid glm-5.3 is re-listed separately).
 
+Covers both the current ":free" IDs and the legacy "-free" ones, so it is correct
+whether it runs before or after the 2026-10-08 ":free" rename (new-api's
+FreeModelTwin only recognises ":free").
+
 Avoids UNIQUE(model_name, deleted_at) by hard-deleting prior soft-deleted rows first.
 """
 from __future__ import annotations
@@ -11,12 +15,13 @@ import sqlite3
 import sys
 import time
 
-DELIST = [
-    "glm-5.2-free",
-    "kimi-k3-free",
-    "deepseek-v4-flash-free",
-    "deepseek-v4-pro-free",
+_BASE = [
+    "glm-5.2",
+    "kimi-k3",
+    "deepseek-v4-flash",
+    "deepseek-v4-pro",
 ]
+DELIST = [b + ":free" for b in _BASE] + [b + "-free" for b in _BASE]
 
 
 def get_opt(cur, key):

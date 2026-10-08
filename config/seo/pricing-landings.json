@@ -41,8 +41,8 @@
         }
       ],
       "freeKiller": {
-        "title": "The $0 row competitors cannot match",
-        "body": "Google Gemini free tiers are usually quota- or trial-shaped. On the same Keyo key you can call gemini-robotics-er-2-preview:free and other fixed $0 catalog IDs on /free-models — fair-use limited, ModelPrice stays $0. Prototype there, then meter paid Gemini-class traffic."
+        "title": "A $0 prototyping lane on the same key",
+        "body": "Google Gemini free tiers are usually quota- or trial-shaped. On the same Keyo key you can call gemini-robotics-er-2-preview:free and other fixed $0 catalog IDs on /free-models — $0 model IDs whose calls draw down your $10 welcome credit (fair-use rate limits apply). Prototype there, then meter paid Gemini-class traffic."
       },
       "body": [
         "Engineers comparing Gemini API pricing usually already want Google-class models with clearer unit economics — or one prepaid balance across Gemini-class IDs plus DeepSeek, GLM, Whisper, OCR, and TTS. Official Google surfaces win on brand trust; KeyoAPI wins when you want that stack without five invoices.",
@@ -57,7 +57,7 @@
         },
         {
           "q": "Do you offer a free Gemini model?",
-          "a": "Yes — gemini-robotics-er-2-preview:free is a fixed $0 catalog ID (fair-use). Other free IDs on /free-models sit on the same API key beside paid Gemini traffic."
+          "a": "Yes — gemini-robotics-er-2-preview:free is a fixed $0 catalog ID covered by your $10 welcome credit (fair-use). Other free IDs on /free-models sit on the same API key beside paid Gemini traffic."
         }
       ]
     },
@@ -97,11 +97,17 @@
           "official": "Official deepseek-v4-pro → V4-Pro-0813 — verify on api-docs.deepseek.com",
           "keyo": "~$0.07 / $0.14 per 1M in/out",
           "note": "Separate Pro ID — not an auto-upgrade from Flash"
+        },
+        {
+          "model": "deepseek-v4-pro",
+          "official": "DeepSeek V4 Pro (base) — verify on api-docs.deepseek.com",
+          "keyo": "~$0.14 / $0.29 per 1M in/out",
+          "note": "Paid twin of deepseek-v4-pro:free on /free-models"
         }
       ],
       "freeKiller": {
         "title": "Prototype free, then meter DeepSeek on the same key",
-        "body": "For $0 prototyping on the same key, use catalog free IDs on /free-models (fair-use) — including DeepSeek-Prover-V2-7B. When you meter DeepSeek chat, switch model= to deepseek-v4.1-flash, deepseek-v4-flash, or deepseek-v4-pro-0813 without changing base URL or auth — those are separate IDs, not one upgrade ladder. Free-path vs pricing detail for Flash: /model/deepseek-v4-flash."
+        "body": "For $0 prototyping on the same key, use catalog free IDs on /free-models — $0 model IDs whose calls draw down your $10 welcome credit (fair-use rate limits) — including DeepSeek-Prover-V2-7B. When you meter DeepSeek chat, switch model= to deepseek-v4.1-flash, deepseek-v4-flash, or deepseek-v4-pro-0813 without changing base URL or auth — those are separate IDs, not one upgrade ladder. Free-path vs pricing detail for Flash: /model/deepseek-v4-flash."
       },
       "body": [
         "Compare DeepSeek rates across official platforms, aggregators, and a multi-model API. KeyoAPI is the third option — OpenAI-compatible base URL, prepaid balance, and Gemini/Whisper/OCR on the same key when DeepSeek is only part of the stack.",
@@ -162,7 +168,7 @@
       ],
       "freeKiller": {
         "title": "Prototype free, then promote to Claude",
-        "body": "Keyo does not ship Anthropic-branded free Claude IDs. For $0 prototyping on the same API key, use fixed free catalog IDs on /free-models (fair-use limits). When quality gates pass, switch model= to claude-sonnet-5 or another Claude ID without changing base URL or auth."
+        "body": "Keyo does not ship Anthropic-branded free Claude IDs. For $0 prototyping on the same API key, use fixed free catalog IDs on /free-models — $0 model IDs whose calls draw down your $10 welcome credit (fair-use rate limits). When quality gates pass, switch model= to claude-sonnet-5 or another Claude ID without changing base URL or auth."
       },
       "body": [
         "Anthropic API pricing at a glance: the table above lists indicative Keyo sell rates for Claude-class IDs next to typical Anthropic public list bands. Teams comparing Anthropic API pricing (and Claude API pricing) usually already want Anthropic-class chat or agents with clearer unit economics — or one prepaid balance across Claude-class IDs plus GPT-class, DeepSeek, Whisper, OCR, and TTS. Official Anthropic surfaces win on brand trust; KeyoAPI wins when you want that stack without five invoices.",
@@ -237,7 +243,7 @@
       ],
       "freeKiller": {
         "title": "Prototype free, then promote to GPT-class",
-        "body": "For $0 prototyping on the same API key, use free catalog IDs on /free-models (fair-use limits). When quality gates pass, switch model= to gpt-6-astra, gpt-5.6-luna, deepseek-v4.1-flash, or kimi-k3 without changing base URL or auth. Guides: /model/gpt-6-astra, /model/deepseek-v4-flash, /model/kimi-k3."
+        "body": "For $0 prototyping on the same API key, use free catalog IDs on /free-models — $0 model IDs whose calls draw down your $10 welcome credit (fair-use rate limits). When quality gates pass, switch model= to gpt-6-astra, gpt-5.6-luna, deepseek-v4.1-flash, or kimi-k3 without changing base URL or auth. Guides: /model/gpt-6-astra, /model/deepseek-v4-flash, /model/kimi-k3."
       },
       "body": [
         "Teams that search ChatGPT API pricing, OpenAI API pricing, or OpenAI API costs usually need GPT-class chat inside an OpenAI SDK with clearer unit economics — or one prepaid balance that also covers Claude, DeepSeek, Whisper, OCR, and TTS. Official OpenAI / ChatGPT surfaces win on brand trust and first-party product UI. KeyoAPI is for when you want that stack without five invoices and without rewriting clients when you swap models.",
@@ -389,7 +395,7 @@
       ],
       "freeKiller": {
         "title": "Prototype chat free, then meter TTS",
-        "body": "Permanent $0 chat twins (Atria-dawn-v2 / :free catalog IDs, …) sit on the same key for script drafting. TTS rows above are metered — confirm live rates on Model Square. Guides: /model/IndexTTS-2, /model/CosyVoice3, /model/Qwen3-TTS."
+        "body": "$0 chat twins (Atria-dawn-v2:free and other :free catalog IDs, covered by your $10 welcome credit) sit on the same key for script drafting. TTS rows above are metered — confirm live rates on Model Square. Guides: /model/IndexTTS-2, /model/CosyVoice3, /model/Qwen3-TTS."
       },
       "body": [
         "Teams call a text to speech API for IVR, voice agents, course narration, and avatar pipelines. Keyo keeps STT (Whisper) and TTS on one prepaid balance so you are not juggling three vendor consoles.",
@@ -571,7 +577,7 @@
       ],
       "freeKiller": {
         "title": "Prototype free, then call Grok",
-        "body": "Keyo does not ship an xAI-branded free Grok ID. For $0 prototyping on the same API key, use fixed free catalog IDs on /free-models (fair-use), then switch model= to grok-4.7 without changing base URL or auth."
+        "body": "Keyo does not ship an xAI-branded free Grok ID. For $0 prototyping on the same API key, use fixed free catalog IDs on /free-models — $0 model IDs whose calls draw down your $10 welcome credit (fair-use rate limits) — then switch model= to grok-4.7 without changing base URL or auth."
       },
       "body": [
         "Teams comparing Grok API pricing usually want xAI-class chat with clearer unit economics — or one prepaid balance that also covers GPT-class, Claude, DeepSeek, Whisper, and vision. Official xAI surfaces win on brand-first features; KeyoAPI wins when you want that model string on an OpenAI-compatible client without a second vendor stack.",
@@ -630,11 +636,17 @@
           "official": "Anthropic Claude Sonnet list (confirm platform.claude.com)",
           "keyo": "~$0.88 / $4.41 per 1M in/out",
           "note": "Claude-class on OpenAI-compatible chat · /model/claude-sonnet-5"
+        },
+        {
+          "model": "glm-5.3-flash",
+          "official": "Zhipu GLM 5.3 Flash — verify on open.bigmodel.cn",
+          "keyo": "~$0.22 / $0.72 per 1M in/out",
+          "note": "Paid twin of glm-5.3-flash:free on /free-models"
         }
       ],
       "freeKiller": {
         "title": "Prototype for $0 before you commit volume",
-        "body": "Official OpenAI free tiers are usually trial- or quota-shaped. On Keyo, fixed $0 catalog IDs on /free-models (fair-use) share the same API key as paid GPT-class traffic — prototype there, then switch model= to gpt-6-astra or deepseek-v4.1-flash without changing base URL."
+        "body": "Official OpenAI free tiers are usually trial- or quota-shaped. On Keyo, fixed $0 catalog IDs on /free-models — covered by your $10 welcome credit, fair-use — share the same API key as paid GPT-class traffic. Prototype there, then switch model= to gpt-6-astra or deepseek-v4.1-flash without changing base URL."
       },
       "body": [
         "Why teams look for an OpenAI API alternative: lower sell rates on high-volume paths, one prepaid wallet across GPT-class plus DeepSeek/Claude/speech/vision, or payment and access friction on first-party billing. Official OpenAI wins on first-party product features and brand trust. KeyoAPI is for when you want OpenAI SDK shape plus multi-model routing without five invoices.",
@@ -658,7 +670,7 @@
         },
         {
           "q": "Can I prototype without a credit card?",
-          "a": "Use fixed $0 IDs on /free-models (fair-use), then promote to metered models on the same key."
+          "a": "Use fixed $0 IDs on /free-models — covered by your $10 welcome credit, fair-use — then promote to metered models on the same key."
         }
       ]
     }

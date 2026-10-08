@@ -112,10 +112,16 @@ ul{margin:0 0 14px;padding-left:1.2em}
   <td class="ok">~$0.88 / $4.41 per 1M in/out</td>
   <td>Claude-class on OpenAI-compatible chat · <a href="/model/claude-sonnet-5">/model/claude-sonnet-5</a></td>
 </tr>
+<tr>
+  <td><a href="/pricing-list"><code>glm-5.3-flash</code></a></td>
+  <td>Zhipu GLM 5.3 Flash — verify on open.bigmodel.cn</td>
+  <td class="ok">~$0.22 / $0.72 per 1M in/out</td>
+  <td>Paid twin of glm-5.3-flash:free on <a href="/free-models">/free-models</a></td>
+</tr>
 </tbody>
 </table>
 <h2>Prototype for $0 before you commit volume</h2>
-<p>Official OpenAI free tiers are usually trial- or quota-shaped. On Keyo, fixed $0 catalog IDs on <a href="/free-models">/free-models</a> (fair-use) share the same API key as paid GPT-class traffic — prototype there, then switch model= to gpt-6-astra or deepseek-v4.1-flash without changing base URL.</p>
+<p>Official OpenAI free tiers are usually trial- or quota-shaped. On Keyo, fixed $0 catalog IDs on <a href="/free-models">/free-models</a> — covered by your $10 welcome credit, fair-use — share the same API key as paid GPT-class traffic. Prototype there, then switch model= to gpt-6-astra or deepseek-v4.1-flash without changing base URL.</p>
 <h2>Why switch, how to switch, what to watch</h2>
 <p>Why teams look for an OpenAI API alternative: lower sell rates on high-volume paths, one prepaid wallet across GPT-class plus DeepSeek/Claude/speech/vision, or payment and access friction on first-party billing. Official OpenAI wins on first-party product features and brand trust. KeyoAPI is for when you want OpenAI SDK shape plus multi-model routing without five invoices.</p>
 <p>How to switch (two lines): set OPENAI_BASE_URL=https://www.keyoapi.xyz/v1 (or sdk base_url), use your Keyo API key as Authorization Bearer, keep POST /v1/chat/completions. Then pass model=gpt-6-astra for flagship chat, or deepseek-v4.1-flash / gpt-5.6-luna for cheaper bulk. Full price planning table: <a href="/compare">/compare</a>. OpenAI-side unit economics: <a href="/openai-api-pricing">/openai-api-pricing</a>.</p>
@@ -129,7 +135,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
 <div class="faq"><details><summary>Is KeyoAPI a drop-in OpenAI API alternative?</summary><p>For OpenAI-compatible chat / image / speech clients: yes for base_url + key + model id. Not every OpenAI first-party product surface is mirrored. Confirm live model IDs and features on <a href="/pricing-list">/pricing-list</a> before production.</p></details>
 <details><summary>Do I keep my OpenAI Python or Node SDK?</summary><p>Yes. Point base_url to https://www.keyoapi.xyz/v1 and use your Keyo key. Start with model=gpt-6-astra or a cheaper twin such as deepseek-v4.1-flash.</p></details>
 <details><summary>Where is the full LLM API pricing comparison?</summary><p>Side-by-side planning table: <a href="/compare">/compare</a>. OpenAI-focused rates: <a href="/openai-api-pricing">/openai-api-pricing</a>.</p></details>
-<details><summary>Can I prototype without a credit card?</summary><p>Use fixed $0 IDs on <a href="/free-models">/free-models</a> (fair-use), then promote to metered models on the same key.</p></details></div>
+<details><summary>Can I prototype without a credit card?</summary><p>Use fixed $0 IDs on <a href="/free-models">/free-models</a> — covered by your $10 welcome credit, fair-use — then promote to metered models on the same key.</p></details></div>
 <p class="meta">Also see <a href="/compare">/compare</a>, <a href="/free-models">/free-models</a>, <a href="/pricing-list">/pricing-list</a>, and <a href="/openai-api-pricing">OpenAI API pricing</a> · <a href="/model/gpt-6-astra">gpt-6-astra</a> · <a href="/model/deepseek-v4.1-flash">deepseek-v4.1-flash</a>.</p>
 
 </main>

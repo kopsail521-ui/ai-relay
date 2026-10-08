@@ -746,7 +746,7 @@ function renderCompare() {
 <ul>
   <li><a href="/openai-api-alternative"><strong>OpenAI API alternative</strong></a> — why switch, two-line migration, price table</li>
   <li><a href="/openai-api-pricing">OpenAI / ChatGPT API pricing</a> · <a href="/claude-api-pricing">Claude API pricing</a> · <a href="/deepseek-api-pricing">DeepSeek API pricing</a></li>
-  <li><a href="/free-models">Free AI API</a> — fixed $0 catalog IDs for prototyping</li>
+  <li><a href="/free-models">Free AI API</a> — $0 catalog IDs covered by your $10 welcome credit</li>
   <li><a href="/model/CosyVoice3">CosyVoice3 API</a> · <a href="/tts-api">Text to Speech API</a> · <a href="/model/Duix-Avatar">Duix Avatar</a></li>
 </ul>
 <h2>Modality pages</h2>
@@ -823,7 +823,7 @@ function renderPricing() {
   <a class="btn btn-secondary" href="/brand/keyo-docs.html">Docs</a>
 </div>
 <h2>Free models ($0 — covered by your $10 credit)</h2>
-<p class="meta">Fixed $0 catalog IDs. Rules and curl examples: <a href="/free-models">/free-models</a>.</p>
+<p class="meta">$0 catalog IDs whose calls draw down your $10 welcome credit (fair-use). Rules and curl examples: <a href="/free-models">/free-models</a>.</p>
 <table>
 <thead><tr><th>Model ID</th><th>Category</th><th>Listed price</th><th>Endpoint</th><th>Links</th></tr></thead>
 <tbody>${freeRows}</tbody>

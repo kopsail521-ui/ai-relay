@@ -669,7 +669,7 @@ ${priceSample}
 </table>
 <p>Full list: <a href="/compare">/compare</a> · <a href="/pricing-list">/pricing-list</a> · deep dives: ${landingDeepDiveHtml()}</p>
 <h2>Free models at $0</h2>
-<p>Call a free ID from the catalog at <strong>$0</strong> with fair-use limits. Metered twins stay available for production. Rules: <a href="/free-models">/free-models</a></p>
+<p>Call a free ID from the catalog at <strong>$0</strong> — $0 fixed-ID calls that draw down your $10 welcome credit (fair-use rate limits). Metered twins stay available for production. Rules: <a href="/free-models">/free-models</a></p>
 <div class="grid">
 ${freeCards}
 </div>
@@ -696,7 +696,7 @@ ${freeCards}
   return layout({
     title: "About KeyoAPI — One Key for Chat, Speech, OCR & Digital Humans",
     description:
-      "KeyoAPI is an AI API relay: chat, image and speech are OpenAI-compatible; OCR, vision, TTS-async and digital-human models use dedicated REST paths — same key, same prepaid balance, with fixed $0 free model IDs.",
+      "KeyoAPI is an AI API relay: chat, image and speech are OpenAI-compatible; OCR, vision, TTS-async and digital-human models use dedicated REST paths — same key, same prepaid balance, with $0 free IDs covered by your $10 welcome credit.",
     canonical: `${site}/about`,
     h1: "One key for chat, speech, OCR & digital humans",
     bodyHtml,
@@ -965,7 +965,7 @@ ${rows}
       name: "Free AI API — KeyoAPI",
       url: `${site}/free-models`,
       description:
-        "Fixed $0 free LLM API models on KeyoAPI with OpenAI-compatible chat completions.",
+        "Fixed $0 free LLM API models on KeyoAPI: calls draw down your $10 welcome credit (fair-use), [OI]-compatible chat completions.",
     },
   });
 }

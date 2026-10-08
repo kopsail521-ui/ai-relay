@@ -21,13 +21,44 @@ PATH = re.compile(r'/free-models')
 flagged = []
 clean_with_claim = 0
 scanned = 0
-for f in sorted(glob.glob('static/seo/model/*.html')):
+# Scope: every generated page, not just model guides — hub/about/landing
+# pages carry $0 copy too and were a blind spot (caught on /about 2026-10-09).
+page_files = sorted(glob.glob('static/seo/model/*.html'))
+page_files += [p for p in (
+    'static/seo/about.html',
+    'static/seo/compare.html',
+    'static/seo/free-models.html',
+    'static/seo/pricing.html',
+    'static/seo/models.html',
+    'static/seo/index.html',
+    'static/brand/blog/index.html',
+    'static/brand/blog/openai-compatible-api-python.html',
+    'static/brand/blog/openai-compatible-api-nodejs.html',
+    'static/brand/blog/openai-compatible-api-cursor.html',
+) if __import__('os').path.exists(p)]
+for f in page_files:
     scanned += 1
     src = open(f, encoding='utf-8').read()
-    text = re.sub(r'<[^>]+>', ' ', src)
+    # Keep only <body> content; <title>/meta/JSON-LD are not body copy and
+    # card grids are link labels, not sentences.
+    body = re.search(r'<body[^>]*>([\s\S]*)</body>', src)
+    text = re.sub(r'<[^>]+>', ' ', body.group(1) if body else src)
+    # Drop JSON-LD blocks embedded in the body
+    text = re.sub(r'\{"@context".*?\}\s*', ' ', text, flags=re.S)
     # sentence split
     sents = re.split(r'(?<=[.!?])\s+', text)
     for s in sents:
+        # Card grids, code comments and link lists get flattened into
+        # punctuation-less fragments; a real body sentence ends with a
+        # terminator and has some length. Fragments are adjudicated by the
+        # sentence that introduces their section, which the split already
+        # covers separately.
+        if not s.rstrip().endswith(('.', '!', '?')) or len(s.split()) < 8:
+            continue
+        # A flattened card grid stacks many "$0" price tags into one run;
+        # real copy never has more than two $0 mentions in a sentence.
+        if len(FREE_CLAIM.findall(s)) > 2:
+            continue
         if not (FREE_CLAIM.search(s) or re.search(r'\bfree\b', s, re.I)):
             continue
         if not PATH.search(s):

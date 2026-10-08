@@ -29,6 +29,24 @@ CHANNEL_NAME = "Keyo Free"
 FREE_BASE = "https://token.sensenova.cn"
 ENDPOINTS = json.dumps({"openai": "/v1/chat/completions"}, separators=(",", ":"))
 
+# The DB lives at data/new-api/one-api.db on the host but at /data/one-api.db
+# inside the container, so probe both before giving up. argv[1] still overrides.
+DB_CANDIDATES = [
+    os.path.join(ROOT, "data", "new-api", "one-api.db"),
+    "/opt/ai-relay/data/new-api/one-api.db",
+    "/data/one-api.db",
+]
+
+
+def resolve_db_path():
+    if len(sys.argv) > 1 and sys.argv[1].strip():
+        return sys.argv[1].strip()
+    for p in DB_CANDIDATES:
+        if os.path.exists(p):
+            return p
+    raise SystemExit("DB not found; tried: " + ", ".join(DB_CANDIDATES))
+
+
 # The 2026-10-06 relist used a "-free" suffix, which new-api's FreeModelTwin
 # (model/gift_models.go) does not recognise -- it only strips ":free". Those IDs
 # were billed off the 37.5 fallback ratio and never entered the gift-credit path.
@@ -100,9 +118,7 @@ def main():
     free_base = (cfg.get("base_url") or FREE_BASE).rstrip("/")
     if free_base.endswith("/v1"):
         free_base = free_base[: -len("/v1")]
-    db_path = sys.argv[1] if len(sys.argv) > 1 else "/data/one-api.db"
-    if not os.path.exists(db_path):
-        raise SystemExit("DB not found: " + db_path)
+    db_path = resolve_db_path()
 
     conn = sqlite3.connect(db_path)
     cur = conn.cursor()

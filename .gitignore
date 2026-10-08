@@ -20,6 +20,9 @@ credentials
 # OS
 .DS_Store
 
+# python bytecode
+__pycache__/
+
 # binaries
 bin/*.exe
 bin/*.exe.*

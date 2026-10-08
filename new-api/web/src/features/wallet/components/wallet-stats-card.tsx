@@ -63,7 +63,7 @@ export function WalletStatsCard(props: WalletStatsCardProps) {
     {
       label: t('Gift Credits'),
       value: formatQuota(props.user?.gift_quota ?? 0),
-      description: t('Free models only; twin sell price billed'),
+      description: t('Free models only (fair-use); twin sell price billed'),
       icon: Gift,
       tone: 'chart-3',
     },

@@ -196,7 +196,7 @@ export function GiftWelcomeDialog() {
         {giftQuota > 0 ? (
           <p className='text-muted-foreground mt-2 text-xs leading-relaxed'>
             {t(
-              'Gift credits are for free models only. Paid models use your recharge balance.'
+              'Gift credits are for free models only (fair-use limits). Paid models use your recharge balance.'
             )}
           </p>
         ) : null}

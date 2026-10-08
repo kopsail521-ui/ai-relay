@@ -360,7 +360,7 @@ function RequestPreview(props: {
             <div className='text-muted-foreground truncate text-xs'>
               {props.example.ready
                 ? props.example.isFreeModel
-                  ? t('Paste in a terminal — free model, no recharge needed')
+                  ? t('Paste in a terminal — free model (fair-use), no recharge needed')
                   : props.example.keyName
                 : t('Create an API key to unlock the real request')}
             </div>
@@ -616,7 +616,7 @@ export function OverviewDashboard() {
       {
         title: t('Trial ready'),
         description: t(
-          'Free models need no recharge — top up anytime for more models'
+          'Free models (fair-use) need no recharge — top up anytime for more models'
         ),
         to: '/wallet',
         icon: CreditCard,
@@ -757,7 +757,7 @@ export function OverviewDashboard() {
                       <p className='text-muted-foreground max-w-xl text-sm leading-relaxed'>
                         {isFirstRunUnused
                           ? t(
-                              'Copy the curl on the right — your API key and a free model are already filled in. Paste into a terminal and press Enter.'
+                              'Copy the curl on the right — your API key and a free model (fair-use) are already filled in. Paste into a terminal and press Enter.'
                             )
                           : t(
                               'A focused home for keys, balance, routing, and service health.'

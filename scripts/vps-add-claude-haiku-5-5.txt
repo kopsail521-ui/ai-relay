@@ -1,0 +1,58 @@
+# VPS：上架 OpenLux claude-haiku-5-5（成本 × 2.5；default / Claude-Code-2 / AWS-Bedrock-2 三组）
+#
+# 定价（OpenLux 2026-10-08 目录：model_ratio 0.05 · comp 5 · 成本基线组 = Claude-Code-2，
+# 该模型没有 Claude-Code-1 分组）：
+#   成本    $0.029412 / $0.14706  每 1M
+#   售价×2.5 $0.07353  / $0.36765  → ModelRatio 0.036765 · CompletionRatio 5
+#   Claude-Code-2 组 = ×1.666686 → $0.122551 / $0.612757
+#   AWS-Bedrock-2 组 = ×3.333371 → $0.245103 / $1.225514
+# 对外文案不得出现供应商名（OpenLux）。
+set -e
+cd /opt/ai-relay
+sudo bash scripts/vps-safe-pull-preserve-blog.sh
+
+sudo docker run --rm \
+  -v /opt/ai-relay:/opt/ai-relay:ro \
+  -v /opt/ai-relay/data/new-api:/data \
+  -w /opt/ai-relay python:3.12-alpine \
+  python scripts/vps-add-claude-haiku-5-5.py /data/one-api.db
+
+sudo docker run --rm \
+  -v /opt/ai-relay:/opt/ai-relay:ro \
+  -v /opt/ai-relay/data/new-api:/data \
+  -w /opt/ai-relay python:3.12-alpine \
+  python scripts/vps-update-marketplace-copy.py /data/one-api.db /opt/ai-relay/config/marketplace-model-copy.json \
+  || echo COPY_SKIP
+
+sudo docker cp /opt/ai-relay/services/creem-moderation-proxy/marketplace-model-copy.json \
+  ai-relay-creem-moderation:/app/marketplace-model-copy.json 2>/dev/null \
+  || sudo docker cp /opt/ai-relay/config/marketplace-model-copy.json \
+       ai-relay-creem-moderation:/app/marketplace-model-copy.json || true
+sudo docker restart ai-relay-creem-moderation ai-relay-new-api >/dev/null
+sleep 5
+curl -sS -o /dev/null -w "console_http=%{http_code}\n" http://127.0.0.1:3000/api/status
+
+# smoke：断言计费与三组，并检查无供应商名泄漏（不能只 grep 模型名存在）
+curl -sS https://www.keyoapi.xyz/api/pricing -o /tmp/p_haiku.json
+python3 - <<'PY'
+import json
+j = json.load(open("/tmp/p_haiku.json"))
+m = next((x for x in (j.get("data") or []) if x.get("model_name") == "claude-haiku-5-5"), None)
+if m is None:
+    raise SystemExit("SMOKE_FAIL: claude-haiku-5-5 missing from /api/pricing")
+ok = m.get("quota_type") == 0 and abs(m.get("model_ratio", 0) - 0.036765) < 1e-6 and m.get("completion_ratio") == 5
+groups = m.get("enable_groups") or []
+three = all(g in groups for g in ("default", "Claude-Code-2", "AWS-Bedrock-2"))
+leak = "openlux" in (m.get("description") or "").lower()
+print("haiku ratio=%s comp=%s groups=%s" % (m.get("model_ratio"), m.get("completion_ratio"), groups))
+print("leak_openlux", leak)
+if not ok:
+    raise SystemExit("SMOKE_FAIL: billing wrong (expect quota_type=0 ratio=0.036765 comp=5)")
+if not three:
+    raise SystemExit("SMOKE_FAIL: enable_groups missing one of default/Claude-Code-2/AWS-Bedrock-2")
+if leak:
+    raise SystemExit("SMOKE_FAIL: supplier name leaked in description")
+print("SMOKE_PASS")
+PY
+rm -f /tmp/p_haiku.json
+echo DONE_ADD_CLAUDE_HAIKU_5_5

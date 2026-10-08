@@ -6248,6 +6248,100 @@
       ]
     }
   },
+  "claude-haiku-5-5": {
+    "description": "Claude Haiku 5.5：5.5 系列中最快最省的轻量模型，1M 上下文，适合分类、提取与批量子任务。",
+    "descriptions": {
+      "zhCN": "Claude Haiku 5.5：5.5 系列中最快最省的轻量模型，1M 上下文，适合分类、提取与批量子任务。",
+      "zhTW": "Claude Haiku 5.5：5.5 系列中最快最省的輕量模型，1M 上下文，適合分類、提取與批次子任務。",
+      "en": "Claude Haiku 5.5: fastest, cheapest lightweight model in the 5.5 family, 1M context, for classification, extraction and batch subtasks.",
+      "fr": "Claude Haiku 5.5: fastest, cheapest lightweight model in the 5.5 family, 1M context, for classification, extraction and batch subtasks.",
+      "ru": "Claude Haiku 5.5: fastest, cheapest lightweight model in the 5.5 family, 1M context, for classification, extraction and batch subtasks.",
+      "ja": "Claude Haiku 5.5：5.5 系列中最快最省的轻量模型，1M 上下文，适合分类、提取与批量子任务。",
+      "vi": "Claude Haiku 5.5: fastest, cheapest lightweight model in the 5.5 family, 1M context, for classification, extraction and batch subtasks."
+    },
+    "unit": "token",
+    "badge": {
+      "zhCN": "按 Token 计费",
+      "zhTW": "按 Token 計費",
+      "en": "Token-based",
+      "fr": "Au token",
+      "ru": "По токенам",
+      "ja": "Token 課金",
+      "vi": "Theo token"
+    },
+    "suffix": {
+      "zhCN": "",
+      "zhTW": "",
+      "en": "",
+      "fr": "",
+      "ru": "",
+      "ja": "",
+      "vi": ""
+    },
+    "price_key": {
+      "zhCN": "",
+      "zhTW": "",
+      "en": "",
+      "fr": "",
+      "ru": "",
+      "ja": "",
+      "vi": ""
+    },
+    "description_zh": "Claude Haiku 5.5：5.5 系列中最快最省的轻量模型，1M 上下文，适合分类、提取与批量子任务。",
+    "description_en": "Claude Haiku 5.5: fastest, cheapest lightweight model in the 5.5 family, 1M context, for classification, extraction and batch subtasks.",
+    "badge_zh": "按 Token 计费",
+    "badge_en": "Token-based",
+    "suffix_zh": "",
+    "suffix_en": "",
+    "price_key_zh": "",
+    "price_key_en": "",
+    "price_table": {
+      "columns": {
+        "zhCN": [
+          "分组",
+          "输入 / 输出 · 每 1M"
+        ],
+        "zhTW": [
+          "分組",
+          "輸入 / 輸出 · 每 1M"
+        ],
+        "en": [
+          "Group",
+          "In / Out per 1M"
+        ],
+        "fr": [
+          "Groupe",
+          "Entrée / sortie / 1M"
+        ],
+        "ru": [
+          "Группа",
+          "Вход / выход / 1M"
+        ],
+        "ja": [
+          "グループ",
+          "入力 / 出力 · 1M"
+        ],
+        "vi": [
+          "Nhóm",
+          "Vào / ra / 1M"
+        ]
+      },
+      "rows": [
+        [
+          "default",
+          "$0.07353 / $0.36765"
+        ],
+        [
+          "Claude-Code-2",
+          "$0.122551 / $0.612757"
+        ],
+        [
+          "AWS-Bedrock-2",
+          "$0.245103 / $1.225514"
+        ]
+      ]
+    }
+  },
   "SemIf-OpenJev-4B": {
     "description": "SemIf-OpenJev-4B：SemIf（原 OpenJev）项目的 4B 语义决策模型（System One，底座 Qwen3.5-4B，128K 上下文）。输入上下文 + 决策条件 + 候选选项，直接读取候选选项 Logits 概率返回结构化决策，不生成自然语言回答、无需 JSON 解析，适合 Agent 路由、分类、重试与完成判断等高频语义 if/else。计费：输入 $0.0274 / 输出 $0（每百万 tokens）。",
     "descriptions": {

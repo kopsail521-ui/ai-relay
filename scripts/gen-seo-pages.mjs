@@ -560,6 +560,7 @@ export OPENAI_API_KEY=sk-...
     <a href="/pricing">Model Square</a>
     <a href="/pricing-list">Pricing list</a>
     <a href="/models">All model guides</a>
+    <a href="https://launchtory.com/projects/keyoapi-xyz">KeyoAPI on Launchtory</a>
     <a href="/compare">Compare</a>
     <a href="/free-models">Free AI API</a>
     <a href="/brand/blog/">Blog</a>

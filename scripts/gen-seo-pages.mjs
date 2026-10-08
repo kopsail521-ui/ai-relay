@@ -1090,6 +1090,7 @@ Allow: /about
 
 Sitemap: ${site}/sitemap.xml
 Sitemap: ${site}/brand/blog/sitemap.txt
+Sitemap: ${site}/brand/blog/sitemap.xml
 
 # Exact /pricing is Model Square SPA (served with noindex). /pricing/{id} stay blocked.
 Disallow: /pricing/

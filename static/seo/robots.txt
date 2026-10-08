@@ -20,6 +20,7 @@ Allow: /about
 
 Sitemap: https://www.keyoapi.xyz/sitemap.xml
 Sitemap: https://www.keyoapi.xyz/brand/blog/sitemap.txt
+Sitemap: https://www.keyoapi.xyz/brand/blog/sitemap.xml
 
 # Exact /pricing is Model Square SPA (served with noindex). /pricing/{id} stay blocked.
 Disallow: /pricing/

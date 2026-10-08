@@ -102,7 +102,10 @@ jobs:
             "${USER}@${HOST}" "sudo -n true && bash -s" <<EOF
           set -euo pipefail
           cd /opt/ai-relay
-          sudo git pull --ff-only origin main
+          # Preserve the GEO blog (bare git pull would reset index/sitemap
+          # and orphan published articles), then rebuild from the catalog.
+          sudo bash /opt/ai-relay/scripts/vps-safe-pull-preserve-blog.sh
+          sudo php /opt/ai-relay/scripts/geoflow-rebuild-blog.php || true
           echo "${GH_TOKEN}" | sudo docker login ghcr.io -u "${ACTOR}" --password-stdin
           sudo docker pull "${IMAGE}"
           sudo docker logout ghcr.io || true

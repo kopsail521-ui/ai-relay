@@ -123,6 +123,19 @@ ${DOMAIN} {
 		root * ${ROOT}/static/seo
 		file_server
 	}
+	# Brand favicon: the console SPA (<link rel="icon" href="/logo.png"> and
+	# /favicon.ico) must show the KeyoAPI mark, not the new-api stock icons.
+	# Regenerate the assets with: py scripts/gen-brand-icons.py
+	handle /logo.png {
+		root * ${ROOT}/static/brand
+		header Content-Type image/png
+		file_server
+	}
+	handle /favicon.ico {
+		root * ${ROOT}/static/brand
+		header Content-Type image/vnd.microsoft.icon
+		file_server
+	}
 	handle / {
 		root * ${ROOT}/static/seo
 		rewrite * /index.html
@@ -255,6 +268,12 @@ caddy validate --config /etc/caddy/Caddyfile
 systemctl reload caddy
 
 echo "==> Check"
+echo -n "brand_logo_png_magic="
+curl -s "https://${DOMAIN}/logo.png" | head -c 8 | od -An -tx1 | tr -d ' \n'; echo " (expect 89504e470d0a1a0a)"
+echo -n "brand_favicon_ico_magic="
+curl -s "https://${DOMAIN}/favicon.ico" | head -c 4 | od -An -tx1 | tr -d ' \n'; echo " (expect 00000100)"
+echo -n "brand_logo_png_type="
+curl -sI "https://${DOMAIN}/logo.png" | grep -i '^content-type' | tr -d '\r' || echo FAIL
 echo -n "direct_spa_shell_bytes="
 curl -s "https://${DOMAIN}/spa-shell.html" | wc -c
 echo -n "direct_spa_shell_noindex="

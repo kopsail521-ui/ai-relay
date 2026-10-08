@@ -967,6 +967,7 @@ const headOpen = `<!DOCTYPE html>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>KeyoAPI Docs</title>
+<link rel="icon" href="/brand/logo.svg" type="image/svg+xml" />
 <!--
   Multilingual brand docs (en / zhCN / zhTW / ja / fr / ru / vi).
   Syncs with New API shell via postMessage { lang } when embedded.

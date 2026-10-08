@@ -6,7 +6,7 @@
       "navLabel": "Gemini pricing",
       "h1": "Gemini API Pricing — KeyoAPI vs Typical Google List Rates",
       "title": "Gemini API Pricing Comparison | KeyoAPI",
-      "metaDescription": "Gemini API pricing on KeyoAPI: gemini-3.8-flash ~$0.28/$1.38, gemini-3.7-flash same band, plus Omni request IDs. OpenAI-compatible.",
+      "metaDescription": "Gemini API pricing on KeyoAPI: gemini-3.8-flash ~$0.28/$1.38, gemini-3.7-flash same band, plus Omni request IDs. OpenAI-compatible. Gemini 4 Argon: announced, not yet listed.",
       "targetKeywords": [
         "google gemini api pricing",
         "gemini api pricing",
@@ -58,8 +58,20 @@
         {
           "q": "Do you offer a free Gemini model?",
           "a": "Yes — gemini-robotics-er-2-preview:free is a fixed $0 catalog ID covered by your $10 welcome credit (fair-use). Other free IDs on /free-models sit on the same API key beside paid Gemini traffic."
+        },
+        {
+          "q": "Is Gemini 4 Argon available on KeyoAPI?",
+          "a": "Not yet. Google announced Argon on 30 Sep 2026 with introductory API pricing around $2 / $10 per 1M in/out and limited access via Google AI Studio, but the ID is not in the Keyo catalog. This page lists what Keyo currently sells; Argon will be added here once it is listed."
         }
-      ]
+      ],
+      "announcedNote": {
+        "title": "Gemini 4 Argon — announced, not yet listed on KeyoAPI",
+        "body": [
+          "Google announced Gemini 4 Argon on 30 Sep 2026 with introductory API pricing of about $2 / $10 per 1M input / output tokens, published as a limited-time rate. Access is currently limited testing — one provider is listed so far, Google AI Studio, with a 1M-token output ceiling.",
+          "KeyoAPI does not carry this ID yet, so there is no Keyo rate to compare here. The rows in the table above are the Gemini-class IDs Keyo currently lists. When Argon is added to the catalog it will appear in Model Square and on /pricing-list, and this section will be replaced with the live Keyo rate.",
+          "Until then, don't plan volume against Argon here: the numbers above are Google's published list rate, not ours, and they are described as introductory."
+        ]
+      }
     },
     {
       "slug": "deepseek-api-pricing",

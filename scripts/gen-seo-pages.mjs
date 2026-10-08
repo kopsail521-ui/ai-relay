@@ -1048,6 +1048,12 @@ function renderPricingLanding(p) {
 ${rows}
 </tbody>
 </table>
+${p.announcedNote
+  ? `<h2>${esc(p.announcedNote.title)}</h2>
+${(p.announcedNote.body || [])
+  .map((t) => `<p>${linkifySitePaths(t)}</p>`)
+  .join("\n")}`
+  : ""}
 <h2>${esc(p.freeKiller.title)}</h2>
 <p>${linkifySitePaths(p.freeKiller.body)}</p>
 <h2>${esc(bodyHeading)}</h2>

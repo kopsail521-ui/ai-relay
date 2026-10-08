@@ -4,19 +4,19 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Gemini API Pricing Comparison | KeyoAPI</title>
-<meta name="description" content="Gemini API pricing on KeyoAPI: gemini-3.8-flash ~$0.28/$1.38, gemini-3.7-flash same band, plus Omni request IDs. OpenAI-compatible." />
+<meta name="description" content="Gemini API pricing on KeyoAPI: gemini-3.8-flash ~$0.28/$1.38, gemini-3.7-flash same band, plus Omni request IDs. OpenAI-compatible. Gemini 4 Argon: announced, not yet listed." />
 <link rel="canonical" href="https://www.keyoapi.xyz/gemini-api-pricing" />
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://www.keyoapi.xyz/gemini-api-pricing" />
 <meta property="og:title" content="Gemini API Pricing Comparison | KeyoAPI" />
-<meta property="og:description" content="Gemini API pricing on KeyoAPI: gemini-3.8-flash ~$0.28/$1.38, gemini-3.7-flash same band, plus Omni request IDs. OpenAI-compatible." />
+<meta property="og:description" content="Gemini API pricing on KeyoAPI: gemini-3.8-flash ~$0.28/$1.38, gemini-3.7-flash same band, plus Omni request IDs. OpenAI-compatible. Gemini 4 Argon: announced, not yet listed." />
 <meta property="og:image" content="https://www.keyoapi.xyz/brand/logo.svg" />
 <link rel="icon" href="/brand/logo.svg" type="image/svg+xml" />
 <link rel="stylesheet" href="/brand/keyo-theme.css" />
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content="Gemini API Pricing Comparison | KeyoAPI" />
-<meta name="twitter:description" content="Gemini API pricing on KeyoAPI: gemini-3.8-flash ~$0.28/$1.38, gemini-3.7-flash same band, plus Omni request IDs. OpenAI-compatible." />
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebPage","name":"Gemini API Pricing Comparison | KeyoAPI","url":"https://www.keyoapi.xyz/gemini-api-pricing","description":"Gemini API pricing on KeyoAPI: gemini-3.8-flash ~$0.28/$1.38, gemini-3.7-flash same band, plus Omni request IDs. OpenAI-compatible."}</script>
+<meta name="twitter:description" content="Gemini API pricing on KeyoAPI: gemini-3.8-flash ~$0.28/$1.38, gemini-3.7-flash same band, plus Omni request IDs. OpenAI-compatible. Gemini 4 Argon: announced, not yet listed." />
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebPage","name":"Gemini API Pricing Comparison | KeyoAPI","url":"https://www.keyoapi.xyz/gemini-api-pricing","description":"Gemini API pricing on KeyoAPI: gemini-3.8-flash ~$0.28/$1.38, gemini-3.7-flash same band, plus Omni request IDs. OpenAI-compatible. Gemini 4 Argon: announced, not yet listed."}</script>
 <style>.wrap{max-width:880px;margin:0 auto;padding:28px 24px 48px}
 .footer{display:flex;flex-wrap:wrap;gap:10px 16px;max-width:1080px;margin:0 auto;padding:24px 24px 40px;border-top:1px solid var(--line);font-size:13px;color:var(--muted)}
 .footer a{color:var(--ink-2);text-decoration:none}
@@ -114,6 +114,10 @@ ul{margin:0 0 14px;padding-left:1.2em}
 </tr>
 </tbody>
 </table>
+<h2>Gemini 4 Argon — announced, not yet listed on KeyoAPI</h2>
+<p>Google announced Gemini 4 Argon on 30 Sep 2026 with introductory API pricing of about $2 / $10 per 1M input / output tokens, published as a limited-time rate. Access is currently limited testing — one provider is listed so far, Google AI Studio, with a 1M-token output ceiling.</p>
+<p>KeyoAPI does not carry this ID yet, so there is no Keyo rate to compare here. The rows in the table above are the Gemini-class IDs Keyo currently lists. When Argon is added to the catalog it will appear in Model Square and on <a href="/pricing-list">/pricing-list</a>, and this section will be replaced with the live Keyo rate.</p>
+<p>Until then, don't plan volume against Argon here: the numbers above are Google's published list rate, not ours, and they are described as introductory.</p>
 <h2>A $0 prototyping lane on the same key</h2>
 <p>Google Gemini free tiers are usually quota- or trial-shaped. On the same Keyo key you can call gemini-robotics-er-2-preview:free and other fixed $0 catalog IDs on <a href="/free-models">/free-models</a> — $0 model IDs whose calls draw down your $10 welcome credit (fair-use rate limits apply). Prototype there, then meter paid Gemini-class traffic.</p>
 <h2>Rates and how to call</h2>
@@ -127,7 +131,8 @@ ul{margin:0 0 14px;padding-left:1.2em}
   -d '{"model":"gemini-3.8-flash","messages":[{"role":"user","content":"Hello"}]}'</pre>
 <h2>FAQ</h2>
 <div class="faq"><details><summary>Is Keyo cheaper than Google Gemini API pricing?</summary><p>Often on the Flash/Omni rows we list — but Google’s public list, context tiers, and batch discounts change. Treat this table as a planning snapshot and verify both sides before you commit.</p></details>
-<details><summary>Do you offer a free Gemini model?</summary><p>Yes — gemini-robotics-er-2-preview:free is a fixed $0 catalog ID covered by your $10 welcome credit (fair-use). Other free IDs on <a href="/free-models">/free-models</a> sit on the same API key beside paid Gemini traffic.</p></details></div>
+<details><summary>Do you offer a free Gemini model?</summary><p>Yes — gemini-robotics-er-2-preview:free is a fixed $0 catalog ID covered by your $10 welcome credit (fair-use). Other free IDs on <a href="/free-models">/free-models</a> sit on the same API key beside paid Gemini traffic.</p></details>
+<details><summary>Is Gemini 4 Argon available on KeyoAPI?</summary><p>Not yet. Google announced Argon on 30 Sep 2026 with introductory API pricing around $2 / $10 per 1M in/out and limited access via Google AI Studio, but the ID is not in the Keyo catalog. This page lists what Keyo currently sells; Argon will be added here once it is listed.</p></details></div>
 <p class="meta">Also see <a href="/compare">/compare</a>, <a href="/free-models">/free-models</a>, <a href="/pricing-list">/pricing-list</a>, and <a href="/model/gemini-3.8-flash">gemini-3.8-flash</a> · <a href="/model/gemini-3.7-flash">gemini-3.7-flash</a>.</p>
 
 </main>

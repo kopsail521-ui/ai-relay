@@ -22,6 +22,10 @@ sudo chown -R "$(whoami):$(whoami)" "$STASH" 2>/dev/null || true
 echo "==> preserved article/ + index/sitemap -> $STASH"
 
 sudo chown -R "$(whoami):$(whoami)" "$ROOT" 2>/dev/null || true
+# Stash tracked changes (index/sitemap) as a backup for this run; it is
+# dropped again at the end once the /tmp restore has succeeded, so repeated
+# pulls do not pile up stash entries.
+stash_before=$(git stash list 2>/dev/null | wc -l)
 git stash push -u -m "wb-preserve-$(date +%s)" 2>/dev/null || true
 git fetch origin
 git reset --hard origin/main
@@ -45,6 +49,13 @@ sudo chmod -R g+rwX "$BLOG" 2>/dev/null || true
 
 echo "HEAD=$(git rev-parse --short HEAD)"
 echo "blog_files=$(find "$BLOG" -type f | wc -l)"
+
+# Restore succeeded — this run's stash is no longer needed. Keep it if the
+# script never got here (it is the recovery path for a failed restore).
+stash_after=$(git stash list 2>/dev/null | wc -l)
+if [ "$stash_after" -gt "$stash_before" ]; then
+  git stash drop 'stash@{0}' 2>/dev/null || true
+fi
 
 if [[ "${RELOAD_CADDY:-0}" == "1" ]]; then
   sudo bash "$ROOT/scripts/deploy-brand-static.sh"

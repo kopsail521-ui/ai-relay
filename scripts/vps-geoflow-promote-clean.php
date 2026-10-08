@@ -65,7 +65,7 @@ function has_scaffolding(string $s): bool
 
 // --- audit -------------------------------------------------------------
 
-$published = $drafts = $broken = [];
+$published = $drafts = $broken = $missingFile = [];
 foreach ($catalog as $slug => $row) {
     $slug = (string)$slug;
     if (is_smoke_slug($slug)) {
@@ -74,7 +74,14 @@ foreach ($catalog as $slug => $row) {
     $status = (string)($row['status'] ?? 'draft');
     $file = $blogDir . '/article/' . $slug . '/index.html';
     if ($status === 'published') {
-        $published[] = $slug;
+        if (is_file($file)) {
+            $published[] = $slug;
+        } else {
+            // Published in the catalog but the page is gone; listing it would
+            // put a 404 on the blog index and in the sitemap. Demote to draft
+            // (GEOFlow can re-push the same slug later to restore it).
+            $missingFile[] = $slug;
+        }
         continue;
     }
     $reasons = [];
@@ -101,7 +108,16 @@ foreach ($catalog as $slug => $row) {
     }
 }
 
-printf("audit: %d published, %d clean drafts, %d blocked\n", count($published), count($drafts), count($broken));
+printf(
+    "audit: %d published (on disk), %d missing files, %d clean drafts, %d blocked\n",
+    count($published),
+    count($missingFile),
+    count($drafts),
+    count($broken)
+);
+foreach ($missingFile as $slug) {
+    echo "  MISSING $slug — published but page is 404, demoting to draft\n";
+}
 foreach ($broken as $slug => $reasons) {
     echo "  BLOCKED $slug\n";
     foreach ($reasons as $r) {
@@ -114,6 +130,19 @@ foreach ($drafts as $slug) {
 if ($dry) {
     echo "dry run: nothing changed\n";
     exit(0);
+}
+
+// --- demote published entries whose pages are gone ---------------------
+
+if ($missingFile && !$dry) {
+    foreach ($missingFile as $slug) {
+        $catalog[$slug]['status'] = 'draft';
+    }
+    file_put_contents(
+        $catalogPath,
+        json_encode($catalog, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) . "\n"
+    );
+    printf("demoted %d missing-page article(s) back to draft\n", count($missingFile));
 }
 
 // --- promote -----------------------------------------------------------

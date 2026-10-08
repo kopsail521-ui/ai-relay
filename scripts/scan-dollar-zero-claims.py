@@ -36,9 +36,15 @@ page_files += [p for p in (
     'static/brand/blog/openai-compatible-api-nodejs.html',
     'static/brand/blog/openai-compatible-api-cursor.html',
 ) if __import__('os').path.exists(p)]
+# Brand static pages (multilingual FAQ etc.) — caught there 2026-10-09
+page_files += [p for p in sorted(glob.glob('static/brand/*.html'))]
 for f in page_files:
     scanned += 1
     src = open(f, encoding='utf-8').read()
+    # Strip <script> blocks FIRST — the tag-stripper below would otherwise
+    # unwrap their contents (multilingual JS string dictionaries) into the
+    # text. The static DOM carries the default-language copy.
+    src = re.sub(r'<script[\s\S]*?</script>', ' ', src)
     # Keep only <body> content; <title>/meta/JSON-LD are not body copy and
     # card grids are link labels, not sentences.
     body = re.search(r'<body[^>]*>([\s\S]*)</body>', src)

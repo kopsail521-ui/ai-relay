@@ -1229,18 +1229,8 @@ function writeSitemap() {
       priority: "0.4",
       changefreq: "monthly",
     },
-    {
-      loc: `${site}/brand/privacy.html`,
-      file: path.join(root, "static/brand/privacy.html"),
-      priority: "0.2",
-      changefreq: "yearly",
-    },
-    {
-      loc: `${site}/brand/terms.html`,
-      file: path.join(root, "static/brand/terms.html"),
-      priority: "0.2",
-      changefreq: "yearly",
-    },
+    // privacy/terms/aup are noindex legal pages — kept out of the sitemap
+    // so we never declare a URL the page itself refuses.
   ];
   const body = urls
     .map((u) => {

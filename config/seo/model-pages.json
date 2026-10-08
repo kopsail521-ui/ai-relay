@@ -1055,14 +1055,52 @@
       "uniqueBlurb": "CosyVoice3 is async TTS on /v1/async/audio/speech—poll the task for audio; use IndexTTS-2 when you want sync /v1/audio/speech."
     },
     {
+      "id": "nano-banana-2",
+      "category": "vision",
+      "targetKeywords": [
+        "nano banana 2 api",
+        "nano banana 2",
+        "nano banana image api",
+        "nano banana 2 pricing"
+      ],
+      "h1": "Nano Banana 2 API — Google's Image Model on KeyoAPI",
+      "title": "Nano Banana 2 API — Pricing & Quick Start | KeyoAPI",
+      "metaDescription": "Nano Banana 2 API on KeyoAPI: generate images via POST /v1/images/generations at $0.0205 per image. Same OpenAI-compatible key as chat.",
+      "priceLabel": "$0.0205 / image",
+      "priceUnit": "per_call",
+      "related": [
+        "nano-banana-2.1",
+        "sam3",
+        "RMBG-2.0"
+      ],
+      "endpoint": "POST /v1/images/generations",
+      "codeHint": "model=nano-banana-2 · prompt required · size optional (e.g. 1024x1024)",
+      "faqs": [
+        {
+          "q": "How do I call the Nano Banana 2 API?",
+          "a": "Use your KeyoAPI Bearer key and POST to /v1/images/generations with model=nano-banana-2 and a prompt. The endpoint is OpenAI-compatible, so existing image clients work with a base URL change."
+        },
+        {
+          "q": "Nano Banana 2 vs 2.1 vs Pro — which one?",
+          "a": "nano-banana-2 is the base lane at $0.0205 per image; nano-banana-2.1 is the newer release at $0.0123 per image; nano-banana-pro is the top tier at $0.0274. All three run on the same key — see /model/nano-banana-2.1 and /pricing-list."
+        }
+      ],
+      "sections": {
+        "intro": "Nano Banana 2 is Google's image generation model served on KeyoAPI's OpenAI-compatible /v1/images/generations endpoint — same Bearer key as chat, $0.0205 per image, no Google Cloud setup."
+      },
+      "body": "Nano Banana 2 is Google's image generation model, served on KeyoAPI through the OpenAI-compatible /v1/images/generations endpoint. If you already call chat, Whisper, or OCR with a KeyoAPI key, image generation is one more model string — no Google Cloud project, no second credential.\n\nPricing is simple: $0.0205 per generated image. It sits between nano-banana-2.1 ($0.0123, the newer release) and nano-banana-pro ($0.0274, the top tier) — all three on the same key, so A/B testing a prompt across tiers is a model-string change.\n\nCall it with POST /v1/images/generations, model=nano-banana-2, and a prompt. size is optional (1024x1024 by default). Responses come back in the OpenAI images shape, so existing clients and SDKs work after pointing base_url at https://www.keyoapi.xyz/v1.\n\nWhen to pick this lane: keep nano-banana-2 where your stack pins the base generation, prefer 2.1 for newer-release quality at a lower per-image price, and escalate to pro when fidelity dominates. Confirm live rates on /pricing-list before volume work.",
+      "curlExample": "curl https://www.keyoapi.xyz/v1/images/generations \\\n  -H \"Authorization: Bearer YOUR_API_KEY\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\"model\":\"nano-banana-2\",\"prompt\":\"a mug of coffee on a desk, studio light\",\"size\":\"1024x1024\"}'",
+      "uniqueBlurb": "nano-banana-2 is hosted image generation on /v1/images/generations at $0.0205 per image — one Bearer key covers it beside chat, TTS, and OCR; prefer nano-banana-2.1 for the newer release at a lower rate."
+    },
+    {
       "id": "nano-banana-2.1",
       "category": "vision",
       "targetKeywords": [
-            "nano banana 2.1 api",
-            "nano banana 2.1",
-            "nano banana api pricing",
-            "nano banana 2.1 pricing",
-            "nano banana image api"
+        "nano banana 2.1 api",
+        "nano banana 2.1",
+        "nano banana api pricing",
+        "nano banana 2.1 pricing",
+        "nano banana image api"
       ],
       "h1": "Nano Banana 2.1 API — How to Call Google's Image Model",
       "title": "Nano Banana 2.1 API — Pricing & Quick Start | KeyoAPI",
@@ -1070,45 +1108,45 @@
       "priceLabel": "$0.0123 / image",
       "priceUnit": "per_call",
       "related": [
-            "RMBG-2.0",
-            "sam3",
-            "Real-ESRGAN"
+        "RMBG-2.0",
+        "sam3",
+        "Real-ESRGAN"
       ],
       "endpoint": "POST /v1/images/generations",
       "codeHint": "model=nano-banana-2.1 · prompt required · size optional (e.g. 1024x1024)",
       "faqs": [
-            {
-                  "q": "How do I call the Nano Banana 2.1 API?",
-                  "a": "Use your KeyoAPI Bearer key and POST to /v1/images/generations with model=nano-banana-2.1 and a prompt. The endpoint is OpenAI-compatible, so existing images client code works after changing the base URL and model."
-            },
-            {
-                  "q": "How much does Nano Banana 2.1 cost?",
-                  "a": "About $0.0123 per generated image on KeyoAPI. The same endpoint serves nano-banana-2 (~$0.0205) and nano-banana-pro (~$0.0274). Confirm live rates on /pricing-list."
-            },
-            {
-                  "q": "Is Nano Banana 2.1 better than Nano Banana Pro?",
-                  "a": "They trade places by job. 2.1 is the cheaper high-volume lane; pro leans on stronger prompt adherence and text-in-image accuracy. Route bulk generation to 2.1 and escalate per image when quality gates fail."
-            },
-            {
-                  "q": "Do I need a Google AI Studio key?",
-                  "a": "No. KeyoAPI hosts the model; the same key you use for chat and Whisper calls it."
-            },
-            {
-                  "q": "How do I try it before committing volume?",
-                  "a": "Create an account at /sign-up, mint a key, and test in the Model Square at /pricing/nano-banana-2.1."
-            }
+        {
+          "q": "How do I call the Nano Banana 2.1 API?",
+          "a": "Use your KeyoAPI Bearer key and POST to /v1/images/generations with model=nano-banana-2.1 and a prompt. The endpoint is OpenAI-compatible, so existing images client code works after changing the base URL and model."
+        },
+        {
+          "q": "How much does Nano Banana 2.1 cost?",
+          "a": "About $0.0123 per generated image on KeyoAPI. The same endpoint serves nano-banana-2 (~$0.0205) and nano-banana-pro (~$0.0274). Confirm live rates on /pricing-list."
+        },
+        {
+          "q": "Is Nano Banana 2.1 better than Nano Banana Pro?",
+          "a": "They trade places by job. 2.1 is the cheaper high-volume lane; pro leans on stronger prompt adherence and text-in-image accuracy. Route bulk generation to 2.1 and escalate per image when quality gates fail."
+        },
+        {
+          "q": "Do I need a Google AI Studio key?",
+          "a": "No. KeyoAPI hosts the model; the same key you use for chat and Whisper calls it."
+        },
+        {
+          "q": "How do I try it before committing volume?",
+          "a": "Create an account at /sign-up, mint a key, and test in the Model Square at /pricing/nano-banana-2.1."
+        }
       ],
       "sections": {
-            "intro": "Nano Banana 2.1 is Google's next-gen image model on KeyoAPI's OpenAI-compatible /v1/images/generations endpoint — same Bearer key as chat, about $0.0123 per image, no Google Cloud setup.",
-            "about": "The high-volume image-generation lane of the Nano Banana family. Escalate to nano-banana-pro when text rendering and prompt adherence dominate the job.",
-            "pricing": "About $0.0123 per generated image. Family: nano-banana-2 ~$0.0205, nano-banana-pro ~$0.0274 per image. Confirm live on /pricing-list.",
-            "useCases": "Product mockups, ad variants, blog art, storyboards, and batch hero images where unit cost per image matters more than peak fidelity.",
-            "integrate": "Set base URL https://www.keyoapi.xyz/v1, POST /v1/images/generations with model=nano-banana-2.1 and a prompt; size (e.g. 1024x1024) is optional."
+        "intro": "Nano Banana 2.1 is Google's next-gen image model on KeyoAPI's OpenAI-compatible /v1/images/generations endpoint — same Bearer key as chat, about $0.0123 per image, no Google Cloud setup.",
+        "about": "The high-volume image-generation lane of the Nano Banana family. Escalate to nano-banana-pro when text rendering and prompt adherence dominate the job.",
+        "pricing": "About $0.0123 per generated image. Family: nano-banana-2 ~$0.0205, nano-banana-pro ~$0.0274 per image. Confirm live on /pricing-list.",
+        "useCases": "Product mockups, ad variants, blog art, storyboards, and batch hero images where unit cost per image matters more than peak fidelity.",
+        "integrate": "Set base URL https://www.keyoapi.xyz/v1, POST /v1/images/generations with model=nano-banana-2.1 and a prompt; size (e.g. 1024x1024) is optional."
       },
       "body": "Nano Banana 2.1 is Google's next-generation image model, served on KeyoAPI through the OpenAI-compatible /v1/images/generations endpoint. If you already call chat, Whisper, or OCR with a KeyoAPI key, you can generate images with the same Bearer token — no Google Cloud project, no AI Studio key, and no billing setup on Google's side.\n\nHow to call it. Point your HTTP client or OpenAI SDK at https://www.keyoapi.xyz/v1, set model=nano-banana-2.1, and POST a JSON body with a prompt to /v1/images/generations. The prompt field is required; size (for example 1024x1024) is optional. Responses return a generated image URL, so most OpenAI-compatible client code works after changing the base URL and model string.\n\nPricing. Nano Banana 2.1 is metered per generated image at about $0.0123 — confirm live on /pricing-list or the Model Square page /pricing/nano-banana-2.1 before you budget. The same endpoint also serves the wider family: nano-banana-2 (~$0.0205/image) when a pipeline was validated on the previous generation, and nano-banana-pro (~$0.0274/image) when the job leans on stronger prompt adherence and text-in-image accuracy.\n\nWorked cost example (indicative). Generating 500 product mockups a month at $0.0123 is roughly $6.15 before retries; the same volume on nano-banana-pro is about $13.70. Batch jobs that tolerate the cheaper model should default to 2.1 and escalate per image when quality gates fail — the same split-lane pattern KeyoAPI recommends for chat models.\n\nIntegration steps. (1) Sign up at /sign-up and mint an API key. (2) Point your client at https://www.keyoapi.xyz/v1 with Bearer auth. (3) POST /v1/images/generations with model=nano-banana-2.1 and a prompt. (4) Log each returned image URL next to the Wallet ledger entry so finance sees actuals, not guesses. (5) Try interactively at /pricing/nano-banana-2.1 — the Model Square try/buy page for this ID.\n\nWhen to choose which family member. Use 2.1 for volume: mockups, ad variants, storyboards, and batch hero images. Use pro when typography, layout accuracy, or dense prompt following decides success. Keep nano-banana-2 for pipelines already validated on the previous generation — switching mid-flight costs more in QA than it saves per image.\n\nPrompting notes. Generated images track prompt detail: state subject, style, and composition explicitly. For text inside images, prefer pro and spell the text out in quotes. Respect platform usage policies around real people's likenesses and sensitive content.\n\nRelated reading on the same site. Background removal for generated art: /model/RMBG-2.0. Open-vocabulary segmentation: /model/sam3. Upscaling before print: /model/Real-ESRGAN. Full model guide index: /models. Docs: /brand/keyo-docs.html.",
       "bodyWordCount": 420,
       "curlExample": "curl https://www.keyoapi.xyz/v1/images/generations \\\n  -H \"Authorization: Bearer YOUR_API_KEY\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\"model\":\"nano-banana-2.1\",\"prompt\":\"a red paper boat on calm water at sunset\"}'",
       "uniqueBlurb": "Nano Banana 2.1 is hosted image generation on /v1/images/generations — one Bearer key covers it beside chat, TTS, and OCR; escalate to nano-banana-pro when text-in-image accuracy dominates."
-}
+    }
   ]
 }

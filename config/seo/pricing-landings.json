@@ -139,6 +139,65 @@
       ]
     },
     {
+      "slug": "glm-api-pricing",
+      "navLabel": "GLM pricing",
+      "h1": "GLM API Pricing — KeyoAPI Rates & Zhipu Context",
+      "title": "GLM API Pricing Comparison | KeyoAPI",
+      "metaDescription": "GLM API pricing on KeyoAPI: glm-5.3 ~$0.24/$0.77, glm-5.3-flash ~$0.22/$0.72, glm-5.2 ~$1.40/$4.40 per 1M, plus GLM ASR & TTS on one OpenAI-compatible key.",
+      "targetKeywords": [
+        "glm api pricing",
+        "glm api",
+        "zhipu api pricing",
+        "glm-5.3 api price"
+      ],
+      "lead": "This page puts current KeyoAPI sell rates for the Zhipu GLM 5.x chat family next to official Zhipu context, with GLM ASR and TTS on the same key.",
+      "rows": [
+        {
+          "model": "glm-5.3",
+          "official": "Zhipu GLM 5.3 — verify on open.bigmodel.cn",
+          "keyo": "~$0.24 / $0.77 per 1M in/out",
+          "note": "Current-generation everyday GLM lane"
+        },
+        {
+          "model": "glm-5.3-flash",
+          "official": "Zhipu GLM 5.3 Flash — verify on open.bigmodel.cn",
+          "keyo": "~$0.22 / $0.72 per 1M in/out",
+          "note": "Cheapest GLM chat lane on Keyo"
+        },
+        {
+          "model": "glm-5.2",
+          "official": "Zhipu GLM 5.2 — verify on open.bigmodel.cn",
+          "keyo": "~$1.40 / $4.40 per 1M in/out",
+          "note": "Own band; paid twin of glm-5.2:free"
+        }
+      ],
+      "freeKiller": {
+        "title": "Prototype free, then meter GLM on the same key",
+        "body": "For $0 prototyping on the same key, use glm-5.2:free from /free-models — a $0 fixed-ID twin whose calls draw down your $10 welcome credit (fair-use rate limits). When you meter GLM traffic, switch model= to glm-5.3-flash or glm-5.3 without changing base URL or auth."
+      },
+      "body": [
+        "The GLM family on KeyoAPI covers three chat lanes and two speech lanes on one OpenAI-compatible key: glm-5.3 and glm-5.3-flash for chat, glm-5.2 at its own band, plus GLM-ASR (~$0.007 per request) and GLM-TTS (~$0.014 per request). No separate Zhipu account, no second invoice.",
+        "Routing pattern: put glm-5.3-flash under high-volume classification, drafts, and summarization; use glm-5.3 as the everyday product lane; keep glm-5.2 where your stack already pins that exact ID. Rates above are indicative sell prices — confirm live rows on /pricing-list before volume contracts.",
+        "How to call: keep your OpenAI SDK and set the base URL to https://www.keyoapi.xyz/v1, then pass model=glm-5.3-flash (or any lane above) to POST /v1/chat/completions with your Bearer key. Read usage.prompt_tokens and usage.completion_tokens from each response to reconcile spend against the table above.",
+        "For broader planning: compare GLM rates against OpenAI-class dollars on /openai-api-pricing, DeepSeek on /deepseek-api-pricing, and Claude on /claude-api-pricing — all on the same prepaid wallet. Side-by-side planning: /compare."
+      ],
+      "curlExample": "curl https://www.keyoapi.xyz/v1/chat/completions \\\n  -H \"Authorization: Bearer $KEYO_API_KEY\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\"model\":\"glm-5.3-flash\",\"messages\":[{\"role\":\"user\",\"content\":\"Hello\"}]}'",
+      "faqs": [
+        {
+          "q": "How do I call the GLM API on KeyoAPI?",
+          "a": "Set baseURL to https://www.keyoapi.xyz/v1, Authorization: Bearer YOUR_KEY, and model=glm-5.3, glm-5.3-flash, or glm-5.2 on POST /v1/chat/completions."
+        },
+        {
+          "q": "Is there a free GLM tier?",
+          "a": "Yes — glm-5.2:free is a fixed $0 catalog ID on /free-models, covered by your $10 welcome credit with fair-use rate limits. Switch model= to a metered GLM lane on the same key when you outgrow it."
+        },
+        {
+          "q": "Do you carry GLM ASR and TTS?",
+          "a": "Yes. GLM-ASR (~$0.007 per request) and GLM-TTS (~$0.014 per request) run on the same Keyo key — see /brand/keyo-docs.html for their request shapes."
+        }
+      ]
+    },
+    {
       "slug": "claude-api-pricing",
       "navLabel": "Claude pricing",
       "h1": "Anthropic / Claude API Pricing — KeyoAPI vs Typical List Rates",

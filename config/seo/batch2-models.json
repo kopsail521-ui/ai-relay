@@ -12,8 +12,8 @@
       ],
       "h1": "GLM 5.2 API — Call Zhipu GLM on KeyoAPI (OpenAI-Compatible)",
       "title": "GLM 5.2 API Pricing | KeyoAPI",
-      "metaDescription": "Use GLM 5.2 API via KeyoAPI: OpenAI-compatible chat ~$0.96/$3.02 per 1M. One key for glm api workloads.",
-      "priceLabel": "~$0.96 / $3.02 per 1M in/out",
+      "metaDescription": "Use GLM 5.2 API via KeyoAPI: OpenAI-compatible chat ~$1.40/$4.40 per 1M. One key for glm api workloads.",
+      "priceLabel": "~$1.40 / $4.40 per 1M in/out",
       "priceUnit": "per_1m_tokens",
       "related": [
         "deepseek-v4-flash",
@@ -29,10 +29,10 @@
         },
         {
           "q": "Where is live pricing?",
-          "a": "Confirm on /pricing/glm-5.2. Indicative Keyo rates are about $0.96 / $3.02 per 1M in/out."
+          "a": "Confirm on /pricing/glm-5.2. Indicative Keyo rates are about $1.40 / $4.40 per 1M in/out."
         }
       ],
-      "body": "GLM 5.2 on KeyoAPI is an OpenAI-compatible chat model for general product copilots, bilingual support, and tool loops. Indicative rates are about $0.96 / $3.02 per 1M in/out — confirm live on /pricing/glm-5.2. Call POST /v1/chat/completions at https://www.keyoapi.xyz/v1 with Bearer auth and model=glm-5.2. Same key as GPT-class, Claude-class, and vision models.",
+      "body": "GLM 5.2 on KeyoAPI is an OpenAI-compatible chat model for general product copilots, bilingual support, and tool loops. Indicative rates are about $1.40 / $4.40 per 1M in/out — confirm live on /pricing/glm-5.2. Call POST /v1/chat/completions at https://www.keyoapi.xyz/v1 with Bearer auth and model=glm-5.2. Same key as GPT-class, Claude-class, and vision models.",
       "curlExample": "curl https://www.keyoapi.xyz/v1/chat/completions \\\n  -H \"Authorization: Bearer YOUR_API_KEY\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\"model\":\"glm-5.2\",\"messages\":[{\"role\":\"user\",\"content\":\"Summarize GLM 5.2 API pricing on KeyoAPI\"}]}'",
       "uniqueBlurb": "Paid glm-5.2 on Keyo — OpenAI-shaped client, confirm live rates on /pricing."
     },

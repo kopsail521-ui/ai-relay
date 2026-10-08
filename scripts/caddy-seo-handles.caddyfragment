@@ -43,6 +43,11 @@
 		rewrite * /deepseek-api-pricing.html
 		file_server
 	}
+	handle /glm-api-pricing {
+		root * /opt/ai-relay/static/seo
+		rewrite * /glm-api-pricing.html
+		file_server
+	}
 	handle /claude-api-pricing {
 		root * /opt/ai-relay/static/seo
 		rewrite * /claude-api-pricing.html

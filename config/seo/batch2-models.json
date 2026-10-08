@@ -288,7 +288,7 @@
           "a": "No. Prefer deepseek-v4.1-flash (~$0.01 / $0.04) for cheaper high-volume paid Flash. Confirm all IDs on /pricing."
         }
       ],
-      "body": "Looking up DeepSeek V4 Flash pricing or a free path on an OpenAI-compatible relay? On KeyoAPI, deepseek-v4-flash is a metered catalog ID at indicative ~$0.09 / $0.17 per 1M in/out — confirm live on /pricing/deepseek-v4-flash. It is not the same row as deepseek-v4.1-flash (~$0.01 / $0.04) or deepseek-v4-flash-0731 (~$0.04 / $0.07). Prefer deepseek-v4.1-flash for cheaper high-volume paid Flash; keep deepseek-v4-flash when your stack already pins this exact model string. For DeepSeek V4 Flash free prototyping on the same API key, use fixed $0 IDs on /free-models (fair-use), then switch model= to a metered Flash ID without changing base URL or auth. deepseek-v4-pro-0813 (~$0.07 / $0.14) is a separate Pro model. Family table: /deepseek-api-pricing. Call POST /v1/chat/completions with Bearer auth and model=deepseek-v4-flash.",
+      "body": "Looking up DeepSeek V4 Flash pricing or a free path on an OpenAI-compatible relay? On KeyoAPI, deepseek-v4-flash is a metered catalog ID at indicative ~$0.09 / $0.17 per 1M in/out — confirm live on /pricing/deepseek-v4-flash. It is not the same row as deepseek-v4.1-flash (~$0.01 / $0.04) or deepseek-v4-flash-0731 (~$0.04 / $0.07). Prefer deepseek-v4.1-flash for cheaper high-volume paid Flash; keep deepseek-v4-flash when your stack already pins this exact model string. For DeepSeek V4 Flash free prototyping on the same API key, use fixed $0 IDs on /free-models — $0 fixed-ID twins whose calls draw down your $10 welcome credit (fair-use rate limits), then switch model= to a metered Flash ID without changing base URL or auth. deepseek-v4-pro-0813 (~$0.07 / $0.14) is a separate Pro model. Family table: /deepseek-api-pricing. Call POST /v1/chat/completions with Bearer auth and model=deepseek-v4-flash.",
       "curlExample": "curl https://www.keyoapi.xyz/v1/chat/completions \\\n  -H \"Authorization: Bearer YOUR_API_KEY\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\"model\":\"deepseek-v4-flash\",\"messages\":[{\"role\":\"user\",\"content\":\"Hello from DeepSeek V4 Flash\"}]}'",
       "uniqueBlurb": "Flash catalog ID with its own sell rate — distinct from deepseek-v4.1-flash."
     },
@@ -356,14 +356,14 @@
         },
         {
           "q": "Is there a Kimi K3 API key free path?",
-          "a": "Mint a Keyo key (no credit card required to start). For $0 calls, use fixed free catalog IDs on /free-models with fair-use limits, then switch model= to kimi-k3 for this paid Moonshot-family ID on the same key."
+          "a": "Mint a Keyo key (no credit card required to start). For $0 calls, use fixed $0 catalog IDs on /free-models — $0 fixed-ID twins whose calls draw down your $10 welcome credit (fair-use rate limits), then switch model= to kimi-k3 for this paid Moonshot-family ID on the same key."
         },
         {
           "q": "Where is live pricing?",
           "a": "See /pricing/kimi-k3. Indicative rates ~$0.20 / $1.02 per 1M in/out."
         }
       ],
-      "body": "Need a Kimi K3 API key with a free prototyping path? On KeyoAPI, kimi-k3 is the metered Moonshot-family chat ID (~$0.20 / $1.02 per 1M in/out — confirm on /pricing/kimi-k3). Create a key at /sign-up, set base URL to https://www.keyoapi.xyz/v1, and call POST /v1/chat/completions with Bearer auth. For a free API key workflow before you meter Kimi traffic: use fixed $0 catalog IDs on /free-models (fair-use), then flip model= to kimi-k3 without changing auth or base URL. This page is not the Kimi consumer app — it is an OpenAI-compatible relay ID for product backends and agents. Prefer glm-5.2 or deepseek-v4.1-flash nearby when you need a different cost/quality band on the same wallet.",
+      "body": "Need a Kimi K3 API key with a free prototyping path? On KeyoAPI, kimi-k3 is the metered Moonshot-family chat ID (~$0.20 / $1.02 per 1M in/out — confirm on /pricing/kimi-k3). Create a key at /sign-up, set base URL to https://www.keyoapi.xyz/v1, and call POST /v1/chat/completions with Bearer auth. For a free API key workflow before you meter Kimi traffic: use fixed $0 catalog IDs on /free-models — $0 fixed-ID twins whose calls draw down your $10 welcome credit (fair-use rate limits), then flip model= to kimi-k3 without changing auth or base URL. This page is not the Kimi consumer app — it is an OpenAI-compatible relay ID for product backends and agents. Prefer glm-5.2 or deepseek-v4.1-flash nearby when you need a different cost/quality band on the same wallet.",
       "curlExample": "curl https://www.keyoapi.xyz/v1/chat/completions \\\n  -H \"Authorization: Bearer YOUR_API_KEY\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\"model\":\"kimi-k3\",\"messages\":[{\"role\":\"user\",\"content\":\"Hello from Kimi K3\"}]}'",
       "uniqueBlurb": "Short catalog page for kimi-k3 with live Keyo sell rates."
     },

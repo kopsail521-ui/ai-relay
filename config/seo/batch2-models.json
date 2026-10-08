@@ -107,7 +107,7 @@
           "a": "See /gemini-api-pricing and confirm live rates on /pricing/gemini-3.8-flash."
         }
       ],
-      "body": "gemini-3.8-flash is a current KeyoAPI Gemini-class Flash chat ID — OpenAI-compatible on https://www.keyoapi.xyz/v1. Indicative sell rates are about $0.28 / $1.38 per 1M in/out; confirm /pricing/gemini-3.8-flash before volume. Family table: /gemini-api-pricing. For $0 prototyping on the same key, see gemini-robotics-er-2-preview:free on /free-models.",
+      "body": "gemini-3.8-flash is a current KeyoAPI Gemini-class Flash chat ID — OpenAI-compatible on https://www.keyoapi.xyz/v1. Indicative sell rates are about $0.28 / $1.38 per 1M in/out; confirm /pricing/gemini-3.8-flash before volume. Family table: /gemini-api-pricing. For $0 prototyping on the same key, use gemini-robotics-er-2-preview:free on /free-models — $0 fixed-ID twins whose calls draw down your $10 welcome credit (fair-use rate limits).",
       "curlExample": "curl https://www.keyoapi.xyz/v1/chat/completions \\\n  -H \"Authorization: Bearer YOUR_API_KEY\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\"model\":\"gemini-3.8-flash\",\"messages\":[{\"role\":\"user\",\"content\":\"Summarize Gemini Flash pricing on KeyoAPI\"}]}'",
       "uniqueBlurb": "Live gemini-3.8-flash ID with current Keyo sell rates."
     },
@@ -177,7 +177,7 @@
           "a": "Confirm on /pricing/grok-4.7 or the family table at /grok-api-pricing."
         }
       ],
-      "body": "grok-4.7 is KeyoAPI’s featured Grok-class chat ID — OpenAI-compatible on https://www.keyoapi.xyz/v1. Indicative sell rates are about $0.74 / $2.21 per 1M in/out; confirm /pricing/grok-4.7 before volume. Family table: /grok-api-pricing. For $0 prototyping on the same key, use fixed free IDs on /free-models, then switch model= to grok-4.7.",
+      "body": "grok-4.7 is KeyoAPI’s featured Grok-class chat ID — OpenAI-compatible on https://www.keyoapi.xyz/v1. Indicative sell rates are about $0.74 / $2.21 per 1M in/out; confirm /pricing/grok-4.7 before volume. Family table: /grok-api-pricing. For $0 prototyping on the same key, use fixed free IDs on /free-models — $0 fixed-ID twins whose calls draw down your $10 welcome credit (fair-use rate limits) — then switch model= to grok-4.7.",
       "curlExample": "curl https://www.keyoapi.xyz/v1/chat/completions \\\n  -H \"Authorization: Bearer YOUR_API_KEY\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\"model\":\"grok-4.7\",\"messages\":[{\"role\":\"user\",\"content\":\"Summarize Grok API pricing on KeyoAPI\"}]}'",
       "uniqueBlurb": "Live grok-4.7 with current Keyo sell rates."
     },
@@ -281,7 +281,7 @@
         },
         {
           "q": "Is there a free DeepSeek V4 Flash?",
-          "a": "This ID is metered. For $0 prototyping on the same key, use fixed free catalog IDs on /free-models (including DeepSeek-Prover-V2-7B), then switch model= to deepseek-v4-flash or deepseek-v4.1-flash when you need this Flash band."
+          "a": "This ID is metered. For $0 prototyping on the same key, use fixed free catalog IDs on /free-models — $0 fixed-ID twins whose calls draw down your $10 welcome credit (fair-use rate limits) (including DeepSeek-Prover-V2-7B), then switch model= to deepseek-v4-flash or deepseek-v4.1-flash when you need this Flash band."
         },
         {
           "q": "Is this the cheapest DeepSeek Flash?",

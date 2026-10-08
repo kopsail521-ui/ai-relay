@@ -2390,13 +2390,22 @@
       "vi": "Free"
     },
     "视频按秒": {
-      "zhCN": "视频按秒",
-      "zhTW": "影片按秒",
-      "en": "VideoSec",
-      "fr": "VideoSec",
-      "ru": "VideoSec",
-      "ja": "動画秒課金",
-      "vi": "VideoSec"
+      "zhCN": "视频模型",
+      "zhTW": "影片模型",
+      "en": "Video",
+      "fr": "Video",
+      "ru": "Video",
+      "ja": "動画モデル",
+      "vi": "Video"
+    },
+    "视频模型": {
+      "zhCN": "视频模型",
+      "zhTW": "影片模型",
+      "en": "Video",
+      "fr": "Video",
+      "ru": "Video",
+      "ja": "動画モデル",
+      "vi": "Video"
     },
     "视频按次": {
       "zhCN": "视频按次",
@@ -3398,6 +3407,42 @@
       "ru": "Alibaba",
       "ja": "Alibaba",
       "vi": "Alibaba"
+    },
+    "小米": {
+      "zhCN": "小米",
+      "zhTW": "小米",
+      "en": "Xiaomi",
+      "fr": "Xiaomi",
+      "ru": "Xiaomi",
+      "ja": "Xiaomi",
+      "vi": "Xiaomi"
+    },
+    "Xiaomi": {
+      "zhCN": "小米",
+      "zhTW": "小米",
+      "en": "Xiaomi",
+      "fr": "Xiaomi",
+      "ru": "Xiaomi",
+      "ja": "Xiaomi",
+      "vi": "Xiaomi"
+    },
+    "小红书": {
+      "zhCN": "小红书",
+      "zhTW": "小紅書",
+      "en": "RED",
+      "fr": "RED",
+      "ru": "RED",
+      "ja": "RED",
+      "vi": "RED"
+    },
+    "Dots": {
+      "zhCN": "小红书",
+      "zhTW": "小紅書",
+      "en": "RED",
+      "fr": "RED",
+      "ru": "RED",
+      "ja": "RED",
+      "vi": "RED"
     },
     "Alibaba": {
       "zhCN": "阿里巴巴",
@@ -5503,31 +5548,31 @@
     }
   },
   "ling-3.0-flash-fin:free": {
-    "description": "InclusionAI Ling 3.0 Flash Fin 免费额度：面向金融等垂直场景优化的高速对话模型，适合行业问答试用。",
-    "description_zh": "InclusionAI Ling 3.0 Flash Fin 免费额度：面向金融等垂直场景优化的高速对话模型，适合行业问答试用。",
-    "description_en": "Free InclusionAI Ling 3.0 Flash Fin: fast chat tuned for finance-style vertical Q&A trials.",
+    "description": "Ling 3.0 Flash Fin 免费额度：面向金融等垂直场景优化的高速对话模型，适合行业问答试用。",
+    "description_zh": "Ling 3.0 Flash Fin 免费额度：面向金融等垂直场景优化的高速对话模型，适合行业问答试用。",
+    "description_en": "Free Ling 3.0 Flash Fin: fast chat tuned for finance-style vertical Q&A trials.",
     "descriptions": {
-      "zhCN": "InclusionAI Ling 3.0 Flash Fin 免费额度：面向金融等垂直场景优化的高速对话模型，适合行业问答试用。",
-      "zhTW": "InclusionAI Ling 3.0 Flash Fin 免费额度：面向金融等垂直场景优化的高速对话模型，适合行业问答试用。",
-      "en": "Free InclusionAI Ling 3.0 Flash Fin: fast chat tuned for finance-style vertical Q&A trials.",
-      "fr": "Free InclusionAI Ling 3.0 Flash Fin: fast chat tuned for finance-style vertical Q&A trials.",
-      "ru": "Free InclusionAI Ling 3.0 Flash Fin: fast chat tuned for finance-style vertical Q&A trials.",
-      "ja": "Free InclusionAI Ling 3.0 Flash Fin: fast chat tuned for finance-style vertical Q&A trials.",
-      "vi": "Free InclusionAI Ling 3.0 Flash Fin: fast chat tuned for finance-style vertical Q&A trials."
+      "zhCN": "Ling 3.0 Flash Fin 免费额度：面向金融等垂直场景优化的高速对话模型，适合行业问答试用。",
+      "zhTW": "Ling 3.0 Flash Fin 免费额度：面向金融等垂直场景优化的高速对话模型，适合行业问答试用。",
+      "en": "Free Ling 3.0 Flash Fin: fast chat tuned for finance-style vertical Q&A trials.",
+      "fr": "Free Ling 3.0 Flash Fin: fast chat tuned for finance-style vertical Q&A trials.",
+      "ru": "Free Ling 3.0 Flash Fin: fast chat tuned for finance-style vertical Q&A trials.",
+      "ja": "Free Ling 3.0 Flash Fin: fast chat tuned for finance-style vertical Q&A trials.",
+      "vi": "Free Ling 3.0 Flash Fin: fast chat tuned for finance-style vertical Q&A trials."
     }
   },
   "laguna-s-2.1:free": {
-    "description": "Poolside Laguna S 2.1 免费额度：面向软件工程与代码助手的对话模型，适合编程问答与补全试用。",
-    "description_zh": "Poolside Laguna S 2.1 免费额度：面向软件工程与代码助手的对话模型，适合编程问答与补全试用。",
-    "description_en": "Free Poolside Laguna S 2.1: software-engineering oriented chat for coding Q&A and completion trials.",
+    "description": "Laguna S 2.1 免费额度：面向软件工程与代码助手的对话模型，适合编程问答与补全试用。",
+    "description_zh": "Laguna S 2.1 免费额度：面向软件工程与代码助手的对话模型，适合编程问答与补全试用。",
+    "description_en": "Free Laguna S 2.1: software-engineering oriented chat for coding Q&A and completion trials.",
     "descriptions": {
-      "zhCN": "Poolside Laguna S 2.1 免费额度：面向软件工程与代码助手的对话模型，适合编程问答与补全试用。",
-      "zhTW": "Poolside Laguna S 2.1 免费额度：面向软件工程与代码助手的对话模型，适合编程问答与补全试用。",
-      "en": "Free Poolside Laguna S 2.1: software-engineering oriented chat for coding Q&A and completion trials.",
-      "fr": "Free Poolside Laguna S 2.1: software-engineering oriented chat for coding Q&A and completion trials.",
-      "ru": "Free Poolside Laguna S 2.1: software-engineering oriented chat for coding Q&A and completion trials.",
-      "ja": "Free Poolside Laguna S 2.1: software-engineering oriented chat for coding Q&A and completion trials.",
-      "vi": "Free Poolside Laguna S 2.1: software-engineering oriented chat for coding Q&A and completion trials."
+      "zhCN": "Laguna S 2.1 免费额度：面向软件工程与代码助手的对话模型，适合编程问答与补全试用。",
+      "zhTW": "Laguna S 2.1 免费额度：面向软件工程与代码助手的对话模型，适合编程问答与补全试用。",
+      "en": "Free Laguna S 2.1: software-engineering oriented chat for coding Q&A and completion trials.",
+      "fr": "Free Laguna S 2.1: software-engineering oriented chat for coding Q&A and completion trials.",
+      "ru": "Free Laguna S 2.1: software-engineering oriented chat for coding Q&A and completion trials.",
+      "ja": "Free Laguna S 2.1: software-engineering oriented chat for coding Q&A and completion trials.",
+      "vi": "Free Laguna S 2.1: software-engineering oriented chat for coding Q&A and completion trials."
     }
   },
   "dots-3-note-preview:free": {
@@ -5815,17 +5860,17 @@
     "price_key_en": ""
   },
   "subtitle-erase-pro": {
-    "description": "视频压制字幕无痕擦除（精细化），适合短剧出海与二创去硬字幕。 计费：.018265/秒。",
-    "description_zh": "视频压制字幕无痕擦除（精细化），适合短剧出海与二创去硬字幕。 计费：.018265/秒。",
-    "description_en": "Refined hard-subtitle erasure for short drama export and remix. Billing: .018265/sec.",
+    "description": "视频压制字幕无痕擦除（精细化），适合短剧出海与二创去硬字幕。 计费：0.018265/秒。",
+    "description_zh": "视频压制字幕无痕擦除（精细化），适合短剧出海与二创去硬字幕。 计费：0.018265/秒。",
+    "description_en": "Refined hard-subtitle erasure for short drama export and remix. Billing: 0.018265/sec.",
     "descriptions": {
-      "zhCN": "视频压制字幕无痕擦除（精细化），适合短剧出海与二创去硬字幕。 计费：.018265/秒。",
-      "zhTW": "视频压制字幕无痕擦除（精细化），适合短剧出海与二创去硬字幕。 计费：.018265/秒。",
-      "en": "Refined hard-subtitle erasure for short drama export and remix. Billing: .018265/sec.",
-      "fr": "Refined hard-subtitle erasure for short drama export and remix. Billing: .018265/sec.",
-      "ru": "Refined hard-subtitle erasure for short drama export and remix. Billing: .018265/sec.",
-      "ja": "Refined hard-subtitle erasure for short drama export and remix. Billing: .018265/sec.",
-      "vi": "Refined hard-subtitle erasure for short drama export and remix. Billing: .018265/sec."
+      "zhCN": "视频压制字幕无痕擦除（精细化），适合短剧出海与二创去硬字幕。 计费：0.018265/秒。",
+      "zhTW": "视频压制字幕无痕擦除（精细化），适合短剧出海与二创去硬字幕。 计费：0.018265/秒。",
+      "en": "Refined hard-subtitle erasure for short drama export and remix. Billing: 0.018265/sec.",
+      "fr": "Refined hard-subtitle erasure for short drama export and remix. Billing: 0.018265/sec.",
+      "ru": "Refined hard-subtitle erasure for short drama export and remix. Billing: 0.018265/sec.",
+      "ja": "Refined hard-subtitle erasure for short drama export and remix. Billing: 0.018265/sec.",
+      "vi": "Refined hard-subtitle erasure for short drama export and remix. Billing: 0.018265/sec."
     },
     "unit": "second",
     "badge": {
@@ -5878,23 +5923,23 @@
         [
           "standard",
           "精细化字幕擦除",
-          ".018265"
+          "0.018265"
         ]
       ]
     }
   },
   "video-enhance-pro": {
-    "description": "视频画质增强（大模型），按输出分辨率档位按秒计费。 计费：720p .034247/秒；1080p .068493/秒；2K .136986/秒。",
-    "description_zh": "视频画质增强（大模型），按输出分辨率档位按秒计费。 计费：720p .034247/秒；1080p .068493/秒；2K .136986/秒。",
-    "description_en": "Large-model video quality enhance; billed per second by output resolution. Billing: 720p .034247/sec; 1080p .068493/sec; 2K .136986/sec.",
+    "description": "视频画质增强（大模型），按输出分辨率档位按秒计费。 计费：720p 0.034247/秒；1080p 0.068493/秒；2K 0.136986/秒。",
+    "description_zh": "视频画质增强（大模型），按输出分辨率档位按秒计费。 计费：720p 0.034247/秒；1080p 0.068493/秒；2K 0.136986/秒。",
+    "description_en": "Large-model video quality enhance; billed per second by output resolution. Billing: 720p 0.034247/sec; 1080p 0.068493/sec; 2K 0.136986/sec.",
     "descriptions": {
-      "zhCN": "视频画质增强（大模型），按输出分辨率档位按秒计费。 计费：720p .034247/秒；1080p .068493/秒；2K .136986/秒。",
-      "zhTW": "视频画质增强（大模型），按输出分辨率档位按秒计费。 计费：720p .034247/秒；1080p .068493/秒；2K .136986/秒。",
-      "en": "Large-model video quality enhance; billed per second by output resolution. Billing: 720p .034247/sec; 1080p .068493/sec; 2K .136986/sec.",
-      "fr": "Large-model video quality enhance; billed per second by output resolution. Billing: 720p .034247/sec; 1080p .068493/sec; 2K .136986/sec.",
-      "ru": "Large-model video quality enhance; billed per second by output resolution. Billing: 720p .034247/sec; 1080p .068493/sec; 2K .136986/sec.",
-      "ja": "Large-model video quality enhance; billed per second by output resolution. Billing: 720p .034247/sec; 1080p .068493/sec; 2K .136986/sec.",
-      "vi": "Large-model video quality enhance; billed per second by output resolution. Billing: 720p .034247/sec; 1080p .068493/sec; 2K .136986/sec."
+      "zhCN": "视频画质增强（大模型），按输出分辨率档位按秒计费。 计费：720p 0.034247/秒；1080p 0.068493/秒；2K 0.136986/秒。",
+      "zhTW": "视频画质增强（大模型），按输出分辨率档位按秒计费。 计费：720p 0.034247/秒；1080p 0.068493/秒；2K 0.136986/秒。",
+      "en": "Large-model video quality enhance; billed per second by output resolution. Billing: 720p 0.034247/sec; 1080p 0.068493/sec; 2K 0.136986/sec.",
+      "fr": "Large-model video quality enhance; billed per second by output resolution. Billing: 720p 0.034247/sec; 1080p 0.068493/sec; 2K 0.136986/sec.",
+      "ru": "Large-model video quality enhance; billed per second by output resolution. Billing: 720p 0.034247/sec; 1080p 0.068493/sec; 2K 0.136986/sec.",
+      "ja": "Large-model video quality enhance; billed per second by output resolution. Billing: 720p 0.034247/sec; 1080p 0.068493/sec; 2K 0.136986/sec.",
+      "vi": "Large-model video quality enhance; billed per second by output resolution. Billing: 720p 0.034247/sec; 1080p 0.068493/sec; 2K 0.136986/sec."
     },
     "unit": "second",
     "badge": {
@@ -5947,17 +5992,335 @@
         [
           "720p",
           "标准输出",
-          ".034247"
+          "0.034247"
         ],
         [
           "1080p",
           "标准输出",
-          ".068493"
+          "0.068493"
         ],
         [
           "2K",
           "标准输出",
-          ".136986"
+          "0.136986"
+        ]
+      ]
+    }
+  },
+  "tags": {
+    "视频处理": {
+      "zhCN": "视频处理",
+      "zhTW": "影片處理",
+      "en": "VideoProc",
+      "fr": "VideoProc",
+      "ru": "VideoProc",
+      "ja": "動画処理",
+      "vi": "VideoProc"
+    },
+    "VideoProc": {
+      "zhCN": "视频处理",
+      "zhTW": "影片處理",
+      "en": "VideoProc",
+      "fr": "VideoProc",
+      "ru": "VideoProc",
+      "ja": "動画処理",
+      "vi": "VideoProc"
+    },
+    "视频模型": {
+      "zhCN": "视频模型",
+      "zhTW": "影片模型",
+      "en": "Video",
+      "fr": "Video",
+      "ru": "Video",
+      "ja": "動画モデル",
+      "vi": "Video"
+    },
+    "VideoModel": {
+      "zhCN": "视频模型",
+      "zhTW": "影片模型",
+      "en": "Video",
+      "fr": "Video",
+      "ru": "Video",
+      "ja": "動画モデル",
+      "vi": "Video"
+    },
+    "视频按秒": {
+      "zhCN": "视频模型",
+      "zhTW": "影片模型",
+      "en": "Video",
+      "fr": "Video",
+      "ru": "Video",
+      "ja": "動画モデル",
+      "vi": "Video"
+    },
+    "VideoSec": {
+      "zhCN": "视频模型",
+      "zhTW": "影片模型",
+      "en": "Video",
+      "fr": "Video",
+      "ru": "Video",
+      "ja": "動画モデル",
+      "vi": "Video"
+    },
+    "per": {
+      "zhCN": "视频模型",
+      "zhTW": "影片模型",
+      "en": "Video",
+      "fr": "Video",
+      "ru": "Video",
+      "ja": "動画モデル",
+      "vi": "Video"
+    },
+    "second": {
+      "zhCN": "视频模型",
+      "zhTW": "影片模型",
+      "en": "Video",
+      "fr": "Video",
+      "ru": "Video",
+      "ja": "動画モデル",
+      "vi": "Video"
+    }
+  },
+  "vendors": {
+    "小米": {
+      "zhCN": "小米",
+      "zhTW": "小米",
+      "en": "Xiaomi",
+      "fr": "Xiaomi",
+      "ru": "Xiaomi",
+      "ja": "Xiaomi",
+      "vi": "Xiaomi"
+    },
+    "Xiaomi": {
+      "zhCN": "小米",
+      "zhTW": "小米",
+      "en": "Xiaomi",
+      "fr": "Xiaomi",
+      "ru": "Xiaomi",
+      "ja": "Xiaomi",
+      "vi": "Xiaomi"
+    },
+    "XiaomiMiMo": {
+      "zhCN": "小米",
+      "zhTW": "小米",
+      "en": "Xiaomi",
+      "fr": "Xiaomi",
+      "ru": "Xiaomi",
+      "ja": "Xiaomi",
+      "vi": "Xiaomi"
+    },
+    "小红书": {
+      "zhCN": "小红书",
+      "zhTW": "小紅書",
+      "en": "RED",
+      "fr": "RED",
+      "ru": "RED",
+      "ja": "RED",
+      "vi": "RED"
+    },
+    "Dots": {
+      "zhCN": "小红书",
+      "zhTW": "小紅書",
+      "en": "RED",
+      "fr": "RED",
+      "ru": "RED",
+      "ja": "RED",
+      "vi": "RED"
+    },
+    "Dots Studio": {
+      "zhCN": "小红书",
+      "zhTW": "小紅書",
+      "en": "RED",
+      "fr": "RED",
+      "ru": "RED",
+      "ja": "RED",
+      "vi": "RED"
+    }
+  },
+  "claude-sonnet-5-5": {
+    "description": "Claude Sonnet 5.5：均衡编程与推理，适合日常开发与 Agent。",
+    "descriptions": {
+      "zhCN": "Claude Sonnet 5.5：均衡编程与推理，适合日常开发与 Agent。",
+      "zhTW": "Claude Sonnet 5.5：均衡編程與推理，適合日常開發與 Agent。",
+      "en": "Claude Sonnet 5.5 balanced coding and reasoning for everyday development and agents.",
+      "fr": "Claude Sonnet 5.5 balanced coding and reasoning for everyday development and agents.",
+      "ru": "Claude Sonnet 5.5 balanced coding and reasoning for everyday development and agents.",
+      "ja": "Claude Sonnet 5.5：均衡编程与推理，适合日常开发与 Agent。",
+      "vi": "Claude Sonnet 5.5 balanced coding and reasoning for everyday development and agents."
+    },
+    "unit": "token",
+    "badge": {
+      "zhCN": "按 Token 计费",
+      "zhTW": "按 Token 計費",
+      "en": "Token-based",
+      "fr": "Au token",
+      "ru": "По токенам",
+      "ja": "Token 課金",
+      "vi": "Theo token"
+    },
+    "suffix": {
+      "zhCN": "",
+      "zhTW": "",
+      "en": "",
+      "fr": "",
+      "ru": "",
+      "ja": "",
+      "vi": ""
+    },
+    "price_key": {
+      "zhCN": "",
+      "zhTW": "",
+      "en": "",
+      "fr": "",
+      "ru": "",
+      "ja": "",
+      "vi": ""
+    },
+    "description_zh": "Claude Sonnet 5.5：均衡编程与推理，适合日常开发与 Agent。",
+    "description_en": "Claude Sonnet 5.5 balanced coding and reasoning for everyday development and agents.",
+    "badge_zh": "按 Token 计费",
+    "badge_en": "Token-based",
+    "suffix_zh": "",
+    "suffix_en": "",
+    "price_key_zh": "",
+    "price_key_en": "",
+    "price_table": {
+      "columns": {
+        "zhCN": [
+          "分组",
+          "输入 / 输出 · 每 1M"
+        ],
+        "zhTW": [
+          "分組",
+          "輸入 / 輸出 · 每 1M"
+        ],
+        "en": [
+          "Group",
+          "In / Out per 1M"
+        ],
+        "fr": [
+          "Groupe",
+          "Entrée / sortie / 1M"
+        ],
+        "ru": [
+          "Группа",
+          "Вход / выход / 1M"
+        ],
+        "ja": [
+          "グループ",
+          "入力 / 出力 · 1M"
+        ],
+        "vi": [
+          "Nhóm",
+          "Vào / ra / 1M"
+        ]
+      },
+      "rows": [
+        [
+          "default",
+          "$0.88235 / $4.41175"
+        ],
+        [
+          "Claude-Code-2",
+          "$1.4706 / $7.353"
+        ],
+        [
+          "AWS-Bedrock-2",
+          "$2.9412 / $14.706"
+        ]
+      ]
+    }
+  },
+  "claude-haiku-5-5": {
+    "description": "Claude Haiku 5.5：5.5 系列中最快最省的轻量模型，1M 上下文，适合分类、提取与批量子任务。",
+    "descriptions": {
+      "zhCN": "Claude Haiku 5.5：5.5 系列中最快最省的轻量模型，1M 上下文，适合分类、提取与批量子任务。",
+      "zhTW": "Claude Haiku 5.5：5.5 系列中最快最省的輕量模型，1M 上下文，適合分類、提取與批次子任務。",
+      "en": "Claude Haiku 5.5: fastest, cheapest lightweight model in the 5.5 family, 1M context, for classification, extraction and batch subtasks.",
+      "fr": "Claude Haiku 5.5: fastest, cheapest lightweight model in the 5.5 family, 1M context, for classification, extraction and batch subtasks.",
+      "ru": "Claude Haiku 5.5: fastest, cheapest lightweight model in the 5.5 family, 1M context, for classification, extraction and batch subtasks.",
+      "ja": "Claude Haiku 5.5：5.5 系列中最快最省的轻量模型，1M 上下文，适合分类、提取与批量子任务。",
+      "vi": "Claude Haiku 5.5: fastest, cheapest lightweight model in the 5.5 family, 1M context, for classification, extraction and batch subtasks."
+    },
+    "unit": "token",
+    "badge": {
+      "zhCN": "按 Token 计费",
+      "zhTW": "按 Token 計費",
+      "en": "Token-based",
+      "fr": "Au token",
+      "ru": "По токенам",
+      "ja": "Token 課金",
+      "vi": "Theo token"
+    },
+    "suffix": {
+      "zhCN": "",
+      "zhTW": "",
+      "en": "",
+      "fr": "",
+      "ru": "",
+      "ja": "",
+      "vi": ""
+    },
+    "price_key": {
+      "zhCN": "",
+      "zhTW": "",
+      "en": "",
+      "fr": "",
+      "ru": "",
+      "ja": "",
+      "vi": ""
+    },
+    "description_zh": "Claude Haiku 5.5：5.5 系列中最快最省的轻量模型，1M 上下文，适合分类、提取与批量子任务。",
+    "description_en": "Claude Haiku 5.5: fastest, cheapest lightweight model in the 5.5 family, 1M context, for classification, extraction and batch subtasks.",
+    "badge_zh": "按 Token 计费",
+    "badge_en": "Token-based",
+    "suffix_zh": "",
+    "suffix_en": "",
+    "price_key_zh": "",
+    "price_key_en": "",
+    "price_table": {
+      "columns": {
+        "zhCN": [
+          "分组",
+          "输入 / 输出 · 每 1M"
+        ],
+        "zhTW": [
+          "分組",
+          "輸入 / 輸出 · 每 1M"
+        ],
+        "en": [
+          "Group",
+          "In / Out per 1M"
+        ],
+        "fr": [
+          "Groupe",
+          "Entrée / sortie / 1M"
+        ],
+        "ru": [
+          "Группа",
+          "Вход / выход / 1M"
+        ],
+        "ja": [
+          "グループ",
+          "入力 / 出力 · 1M"
+        ],
+        "vi": [
+          "Nhóm",
+          "Vào / ra / 1M"
+        ]
+      },
+      "rows": [
+        [
+          "default",
+          "$0.07353 / $0.36765"
+        ],
+        [
+          "Claude-Code-2",
+          "$0.122551 / $0.612757"
+        ],
+        [
+          "AWS-Bedrock-2",
+          "$0.245103 / $1.225514"
         ]
       ]
     }
@@ -6153,194 +6516,6 @@
     "suffix_en": "",
     "price_key_zh": "",
     "price_key_en": ""
-  },
-  "claude-sonnet-5-5": {
-    "description": "Claude Sonnet 5.5：均衡编程与推理，适合日常开发与 Agent。",
-    "descriptions": {
-      "zhCN": "Claude Sonnet 5.5：均衡编程与推理，适合日常开发与 Agent。",
-      "zhTW": "Claude Sonnet 5.5：均衡編程與推理，適合日常開發與 Agent。",
-      "en": "Claude Sonnet 5.5 balanced coding and reasoning for everyday development and agents.",
-      "fr": "Claude Sonnet 5.5 balanced coding and reasoning for everyday development and agents.",
-      "ru": "Claude Sonnet 5.5 balanced coding and reasoning for everyday development and agents.",
-      "ja": "Claude Sonnet 5.5：均衡编程与推理，适合日常开发与 Agent。",
-      "vi": "Claude Sonnet 5.5 balanced coding and reasoning for everyday development and agents."
-    },
-    "unit": "token",
-    "badge": {
-      "zhCN": "按 Token 计费",
-      "zhTW": "按 Token 計費",
-      "en": "Token-based",
-      "fr": "Au token",
-      "ru": "По токенам",
-      "ja": "Token 課金",
-      "vi": "Theo token"
-    },
-    "suffix": {
-      "zhCN": "",
-      "zhTW": "",
-      "en": "",
-      "fr": "",
-      "ru": "",
-      "ja": "",
-      "vi": ""
-    },
-    "price_key": {
-      "zhCN": "",
-      "zhTW": "",
-      "en": "",
-      "fr": "",
-      "ru": "",
-      "ja": "",
-      "vi": ""
-    },
-    "description_zh": "Claude Sonnet 5.5：均衡编程与推理，适合日常开发与 Agent。",
-    "description_en": "Claude Sonnet 5.5 balanced coding and reasoning for everyday development and agents.",
-    "badge_zh": "按 Token 计费",
-    "badge_en": "Token-based",
-    "suffix_zh": "",
-    "suffix_en": "",
-    "price_key_zh": "",
-    "price_key_en": "",
-    "price_table": {
-      "columns": {
-        "zhCN": [
-          "分组",
-          "输入 / 输出 · 每 1M"
-        ],
-        "zhTW": [
-          "分組",
-          "輸入 / 輸出 · 每 1M"
-        ],
-        "en": [
-          "Group",
-          "In / Out per 1M"
-        ],
-        "fr": [
-          "Groupe",
-          "Entrée / sortie / 1M"
-        ],
-        "ru": [
-          "Группа",
-          "Вход / выход / 1M"
-        ],
-        "ja": [
-          "グループ",
-          "入力 / 出力 · 1M"
-        ],
-        "vi": [
-          "Nhóm",
-          "Vào / ra / 1M"
-        ]
-      },
-      "rows": [
-        [
-          "default",
-          "$0.88235 / $4.41175"
-        ],
-        [
-          "Claude-Code-2",
-          "$1.4706 / $7.353"
-        ],
-        [
-          "AWS-Bedrock-2",
-          "$2.9412 / $14.706"
-        ]
-      ]
-    }
-  },
-  "claude-haiku-5-5": {
-    "description": "Claude Haiku 5.5：5.5 系列中最快最省的轻量模型，1M 上下文，适合分类、提取与批量子任务。",
-    "descriptions": {
-      "zhCN": "Claude Haiku 5.5：5.5 系列中最快最省的轻量模型，1M 上下文，适合分类、提取与批量子任务。",
-      "zhTW": "Claude Haiku 5.5：5.5 系列中最快最省的輕量模型，1M 上下文，適合分類、提取與批次子任務。",
-      "en": "Claude Haiku 5.5: fastest, cheapest lightweight model in the 5.5 family, 1M context, for classification, extraction and batch subtasks.",
-      "fr": "Claude Haiku 5.5: fastest, cheapest lightweight model in the 5.5 family, 1M context, for classification, extraction and batch subtasks.",
-      "ru": "Claude Haiku 5.5: fastest, cheapest lightweight model in the 5.5 family, 1M context, for classification, extraction and batch subtasks.",
-      "ja": "Claude Haiku 5.5：5.5 系列中最快最省的轻量模型，1M 上下文，适合分类、提取与批量子任务。",
-      "vi": "Claude Haiku 5.5: fastest, cheapest lightweight model in the 5.5 family, 1M context, for classification, extraction and batch subtasks."
-    },
-    "unit": "token",
-    "badge": {
-      "zhCN": "按 Token 计费",
-      "zhTW": "按 Token 計費",
-      "en": "Token-based",
-      "fr": "Au token",
-      "ru": "По токенам",
-      "ja": "Token 課金",
-      "vi": "Theo token"
-    },
-    "suffix": {
-      "zhCN": "",
-      "zhTW": "",
-      "en": "",
-      "fr": "",
-      "ru": "",
-      "ja": "",
-      "vi": ""
-    },
-    "price_key": {
-      "zhCN": "",
-      "zhTW": "",
-      "en": "",
-      "fr": "",
-      "ru": "",
-      "ja": "",
-      "vi": ""
-    },
-    "description_zh": "Claude Haiku 5.5：5.5 系列中最快最省的轻量模型，1M 上下文，适合分类、提取与批量子任务。",
-    "description_en": "Claude Haiku 5.5: fastest, cheapest lightweight model in the 5.5 family, 1M context, for classification, extraction and batch subtasks.",
-    "badge_zh": "按 Token 计费",
-    "badge_en": "Token-based",
-    "suffix_zh": "",
-    "suffix_en": "",
-    "price_key_zh": "",
-    "price_key_en": "",
-    "price_table": {
-      "columns": {
-        "zhCN": [
-          "分组",
-          "输入 / 输出 · 每 1M"
-        ],
-        "zhTW": [
-          "分組",
-          "輸入 / 輸出 · 每 1M"
-        ],
-        "en": [
-          "Group",
-          "In / Out per 1M"
-        ],
-        "fr": [
-          "Groupe",
-          "Entrée / sortie / 1M"
-        ],
-        "ru": [
-          "Группа",
-          "Вход / выход / 1M"
-        ],
-        "ja": [
-          "グループ",
-          "入力 / 出力 · 1M"
-        ],
-        "vi": [
-          "Nhóm",
-          "Vào / ra / 1M"
-        ]
-      },
-      "rows": [
-        [
-          "default",
-          "$0.07353 / $0.36765"
-        ],
-        [
-          "Claude-Code-2",
-          "$0.122551 / $0.612757"
-        ],
-        [
-          "AWS-Bedrock-2",
-          "$0.245103 / $1.225514"
-        ]
-      ]
-    }
   },
   "SemIf-OpenJev-4B": {
     "description": "SemIf-OpenJev-4B：SemIf（原 OpenJev）项目的 4B 语义决策模型（System One，底座 Qwen3.5-4B，128K 上下文）。输入上下文 + 决策条件 + 候选选项，直接读取候选选项 Logits 概率返回结构化决策，不生成自然语言回答、无需 JSON 解析，适合 Agent 路由、分类、重试与完成判断等高频语义 if/else。计费：输入 $0.0274 / 输出 $0（每百万 tokens）。",

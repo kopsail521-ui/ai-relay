@@ -24,13 +24,42 @@ sudo docker run --rm \
   python scripts/vps-update-marketplace-copy.py /data/one-api.db /opt/ai-relay/config/marketplace-model-copy.json \
   || echo COPY_SKIP
 
-sudo docker cp /opt/ai-relay/services/creem-moderation-proxy/marketplace-model-copy.json \
-  ai-relay-creem-moderation:/app/marketplace-model-copy.json 2>/dev/null \
-  || sudo docker cp /opt/ai-relay/config/marketplace-model-copy.json \
-       ai-relay-creem-moderation:/app/marketplace-model-copy.json || true
+# creem inject: per .cursor/rules/marketplace-pricing-inject.mdc, always sync ALL
+# THREE files into the container, then restart. Missing any one of them silently
+# regresses the pricing card to new-api's native "按分组定价" list — which is exactly
+# what happened to the first  deploy (the injected copy lacked its price_table).
+CREEM=/opt/ai-relay/services/creem-moderation-proxy
+for f in server.mjs billing-unit-inject.js marketplace-model-copy.json; do
+  sudo docker cp "$CREEM/$f" "ai-relay-creem-moderation:/app/$f"
+  echo "creem_cp=$f"
+done
 sudo docker restart ai-relay-creem-moderation ai-relay-new-api >/dev/null
-sleep 5
+sleep 6
 curl -sS -o /dev/null -w "console_http=%{http_code}\n" http://127.0.0.1:3000/api/status
+
+# injected copy must contain the model's 3-group price table
+curl -sS -H "Accept: text/html" https://www.keyoapi.xyz/pricing -o /tmp/shell.html
+python3 - <<'PY2'
+import json, re
+h = open("/tmp/shell.html", encoding="utf-8", errors="ignore").read()
+i = h.find("__KEYO_MKT_COPY=")
+j = h.find("{", i)
+depth = 0; end = None
+for k in range(j, len(h)):
+    if h[k] == "{": depth += 1
+    elif h[k] == "}":
+        depth -= 1
+        if depth == 0:
+            end = k + 1; break
+copy = json.loads(h[j:end])
+e = copy.get("") or {}
+rows = (e.get("price_table") or {}).get("rows") or []
+print("injected_copy_entries=%d  price_table_rows=%d" % (len(copy), len(rows)))
+if len(rows) != 3:
+    raise SystemExit("SMOKE_FAIL: injected price_table has %d rows (expect 3) - creem cp incomplete" % len(rows))
+print("INJECT_OK")
+PY2
+rm -f /tmp/shell.html
 
 # smoke：断言计费与三组，并检查无供应商名泄漏（不能只 grep 模型名存在）
 curl -sS https://www.keyoapi.xyz/api/pricing -o /tmp/p_haiku.json

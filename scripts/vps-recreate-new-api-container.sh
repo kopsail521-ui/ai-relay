@@ -7,9 +7,29 @@ python3 - <<'PY'
 import json, os, re, shlex, subprocess
 
 name, img = os.environ["CONTAINER"], os.environ["IMAGE"]
-info = json.loads(subprocess.check_output(["docker", "inspect", name], text=True))[0]
-cfg, host = info["Config"], info["HostConfig"]
-tmp = name + "-next"
+exists = subprocess.call(["docker", "inspect", name],
+                         stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL) == 0
+if exists:
+    info = json.loads(subprocess.check_output(["docker", "inspect", name], text=True))[0]
+    cfg, host = info["Config"], info["HostConfig"]
+else:
+    # Container is gone (removed by hand, or an earlier run died mid-swap).
+    # Rebuild from the known-good defaults instead of aborting with no service.
+    print(f"INSPECT_FAILED: {name} missing; recreating from defaults", flush=True)
+    cfg = {
+        "Env": ["TZ=Asia/Shanghai", "ERROR_LOG_ENABLED=true", "BATCH_UPDATE_ENABLED=true"],
+        "Cmd": ["--log-dir", "/app/logs"],
+    }
+    host = {
+        "RestartPolicy": {"Name": "always"},
+        "NetworkMode": "ai-relay_default",
+        "PortBindings": {"3000/tcp": [{"HostPort": "3000"}]},
+        "Binds": [
+            "/opt/ai-relay/data/new-api:/data:rw",
+            "/opt/ai-relay/data/logs:/app/logs:rw",
+        ],
+    }
+tmp = name if not exists else name + "-next"
 subprocess.call(["docker", "rm", "-f", tmp], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
 cmd = ["docker", "run", "-d", "--name", tmp]
@@ -49,20 +69,24 @@ if cfg.get("Cmd"):
     cmd += list(cfg["Cmd"])
 
 print("RUN:", " ".join(shlex.quote(x) for x in cmd), flush=True)
-# The old container still owns published ports (3000). Stop it first.
-# restart=always would bring it back immediately, so turn that off until swap.
-subprocess.call(["docker", "update", "--restart=no", name], stdout=subprocess.DEVNULL)
-subprocess.check_call(["docker", "stop", name])
+if exists:
+    # The old container still owns published ports (3000). Stop it first.
+    # restart=always would bring it back immediately, so turn that off until swap.
+    subprocess.call(["docker", "update", "--restart=no", name], stdout=subprocess.DEVNULL)
+    subprocess.check_call(["docker", "stop", name])
 try:
     subprocess.check_call(cmd)
 except subprocess.CalledProcessError as exc:
-    print("DOCKER_RUN_FAILED", exc.returncode, "restoring", name, flush=True)
-    subprocess.call(["docker", "start", name])
-    if rp and rp != "no":
-        subprocess.call(["docker", "update", "--restart=" + rp, name])
+    print("DOCKER_RUN_FAILED", exc.returncode, flush=True)
+    if exists:
+        print("restoring", name, flush=True)
+        subprocess.call(["docker", "start", name])
+        if rp and rp != "no":
+            subprocess.call(["docker", "update", "--restart=" + rp, name])
     raise SystemExit(exc.returncode)
 
-subprocess.check_call(["docker", "rm", "-f", name])
-subprocess.check_call(["docker", "rename", tmp, name])
+if exists:
+    subprocess.check_call(["docker", "rm", "-f", name])
+    subprocess.check_call(["docker", "rename", tmp, name])
 print("OK_RECREATED", name, "->", img, flush=True)
 PY

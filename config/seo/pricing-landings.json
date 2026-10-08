@@ -190,7 +190,7 @@
         },
         {
           "q": "Do you offer a free Claude model?",
-          "a": "Not as an Anthropic-branded free ID. Use Keyo’s permanent $0 GLM/Kimi free twins to prototype on the same key, then promote to paid Claude IDs when you need that quality band."
+          "a": "Not as an Anthropic-branded free ID. Use Keyo’s $0 fixed-ID twins on /free-models (covered by your $10 welcome credit, fair-use) to prototype on the same key, then promote to paid Claude IDs when you need that quality band."
         },
         {
           "q": "How do I try Claude on Keyo?",
@@ -266,7 +266,7 @@
         },
         {
           "q": "Do you offer a free OpenAI / GPT model?",
-          "a": "Not as a free gpt-6-astra ID. Use Keyo’s permanent $0 catalog twins on /free-models to prototype on the same key, then promote to paid GPT-class IDs when you need that quality band."
+          "a": "Not as a free gpt-6-astra ID. Use Keyo’s $0 fixed-ID twins on /free-models (covered by your $10 welcome credit, fair-use) to prototype on the same key, then promote to paid GPT-class IDs when you need that quality band."
         },
         {
           "q": "How do I try GPT-class models on Keyo?",

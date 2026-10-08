@@ -316,7 +316,7 @@ function freeTierBlock(m) {
   return `
 <h2>Free tier available</h2>
 <div class="card">
-<p>Same model family on KeyoAPI: use <code>${esc(freeId)}</code> for permanent <span class="ok">$0</span> fair-use calls (${esc(channel)} channel), or <code>${esc(paid)}</code> for token-metered production traffic.</p>
+<p>Same model family on KeyoAPI: use <code>${esc(freeId)}</code> for <span class="ok">$0</span> calls billed to your $10 welcome credit (fair-use, ${esc(channel)} channel), or <code>${esc(paid)}</code> for token-metered production traffic.</p>
 <p>Rules: free = <code>:free</code> suffix; paid = bare ID. Fair-use rate/concurrency limits apply on free — see <a href="/free-models">/free-models</a>.</p>
 <p><strong>Free curl</strong></p>
 <pre><code>curl https://www.keyoapi.xyz/v1/chat/completions \\
@@ -537,8 +537,8 @@ ${headlineRows}
 </tbody>
 </table>
 <p class="compare-jump"><a href="/compare">See the full comparison page →</a></p>
-<h2>Free models — $0 (fair-use)</h2>
-<p class="meta">Fixed $0 catalog IDs for prototyping. Full list + rules: <a href="/free-models">/free-models</a>.</p>
+<h2>Free models — $0 (covered by your $10 credit)</h2>
+<p class="meta">Fixed $0 catalog IDs for prototyping, billed against the $10 welcome credit at fair-use limits. Full list + rules: <a href="/free-models">/free-models</a>.</p>
 <div class="grid">
 ${freeCards}
 </div>
@@ -552,7 +552,7 @@ ${featured}
 <pre><code>export OPENAI_BASE_URL=https://www.keyoapi.xyz/v1
 export OPENAI_API_KEY=sk-...
 # chat (OpenAI SDK): model=gpt-6-astra | claude-fable-5-1 | deepseek-v4.1-flash
-# free: model=glm-5.3-flash:free | Atria-dawn-v2 (see /free-models)
+# free: model=glm-5.3-flash:free | Atria-dawn-v2:free (see /free-models)
 # speech / vision / video: IndexTTS-2 · sam3 · RMBG-2.0 · MiniMax-H3 — see Docs</code></pre>
 </div>
 <footer class="foot">
@@ -657,7 +657,7 @@ function renderAbout() {
   <li><strong>OpenAI-compatible paths:</strong> <code>/v1/chat/completions</code>, <code>/v1/images/generations</code>, <code>/v1/audio/transcriptions</code>, <code>/v1/audio/speech</code>.</li>
   <li><strong>Dedicated REST:</strong> OCR, CV tools, async TTS/video, digital humans — billed per page / request / second / characters.</li>
   <li><strong>One key, one balance:</strong> no per-vendor accounts or credits to manage.</li>
-  <li><strong>A free tier:</strong> fixed <code>$0</code> model IDs for prototyping (fair-use limits apply — see <a href="/free-models">/free-models</a>).</li>
+  <li><strong>A free tier:</strong> fixed <code>$0</code> model IDs for prototyping, covered by your $10 welcome credit with fair-use limits — see <a href="/free-models">/free-models</a>.</li>
 </ul>
 <h2>Pricing philosophy</h2>
 <p>We publish rates openly, model by model. Sample indicative Keyo sell rates:</p>

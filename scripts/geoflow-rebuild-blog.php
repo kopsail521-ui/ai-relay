@@ -485,11 +485,27 @@ function rebuild(string $blogDir, string $site, array $catalog, array $gate): vo
 ';
     file_put_contents($blogDir . '/index.html', $index);
 
+    // Guide pages change via git; their last content change is the honest
+    // lastmod (file mtime resets on every checkout, so don't use it).
+    $guideDate = static function (string $file) use ($root): ?string {
+        $rel = 'static/brand/blog/' . basename($file);
+        @exec(
+            'git -C ' . escapeshellarg($root) . ' log -1 --format=%as -- '
+                . escapeshellarg($rel) . ' 2>/dev/null',
+            $out,
+            $code
+        );
+        if ($code === 0 && isset($out[0]) && preg_match('/^\d{4}-\d{2}-\d{2}$/', $out[0])) {
+            return $out[0];
+        }
+        return null;
+    };
+
     $entries = [
         [$site . '/brand/blog/', null],
-        [$site . '/brand/blog/openai-compatible-api-python.html', null],
-        [$site . '/brand/blog/openai-compatible-api-nodejs.html', null],
-        [$site . '/brand/blog/openai-compatible-api-cursor.html', null],
+        [$site . '/brand/blog/openai-compatible-api-python.html', $guideDate($blogDir . '/openai-compatible-api-python.html')],
+        [$site . '/brand/blog/openai-compatible-api-nodejs.html', $guideDate($blogDir . '/openai-compatible-api-nodejs.html')],
+        [$site . '/brand/blog/openai-compatible-api-cursor.html', $guideDate($blogDir . '/openai-compatible-api-cursor.html')],
     ];
     if (!empty($gate['sitemap_include_articles'])) {
         foreach ($geo as $item) {
@@ -502,6 +518,11 @@ function rebuild(string $blogDir, string $site, array $catalog, array $gate): vo
         }
     }
     $entries = array_values(array_unique($entries, SORT_REGULAR));
+    // Blog homepage changes whenever the newest listed entry changes.
+    $dates = array_filter(array_column($entries, 1));
+    if ($dates) {
+        $entries[0][1] = max($dates);
+    }
     file_put_contents($blogDir . '/sitemap.txt', implode("\n", array_column($entries, 0)) . "\n");
 
     // XML twin carrying lastmod per article — the plain-text sitemap cannot

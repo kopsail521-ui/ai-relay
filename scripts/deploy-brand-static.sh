@@ -268,12 +268,16 @@ caddy validate --config /etc/caddy/Caddyfile
 systemctl reload caddy
 
 echo "==> Check"
-echo -n "brand_logo_png_magic="
-curl -s "https://${DOMAIN}/logo.png" | head -c 8 | od -An -tx1 | tr -d ' \n'; echo " (expect 89504e470d0a1a0a)"
-echo -n "brand_favicon_ico_magic="
-curl -s "https://${DOMAIN}/favicon.ico" | head -c 4 | od -An -tx1 | tr -d ' \n'; echo " (expect 00000100)"
-echo -n "brand_logo_png_type="
-curl -sI "https://${DOMAIN}/logo.png" | grep -i '^content-type' | tr -d '\r' || echo FAIL
+# NB: write to temp files, never `curl | head -c N` — head closes the pipe,
+# curl dies on SIGPIPE and `set -o pipefail` aborts the whole script.
+TMP_LOGO=$(mktemp); TMP_FAV=$(mktemp); trap 'rm -f "$TMP_LOGO" "$TMP_FAV"' EXIT
+curl -fsS "https://${DOMAIN}/logo.png" -o "$TMP_LOGO"
+curl -fsS "https://${DOMAIN}/favicon.ico" -o "$TMP_FAV"
+echo "brand_logo_png_magic=$(od -An -tx1 -N8 "$TMP_LOGO" | tr -d ' \n') expect=89504e470d0a1a0a bytes=$(wc -c < "$TMP_LOGO")"
+echo "brand_favicon_ico_magic=$(od -An -tx1 -N4 "$TMP_FAV" | tr -d ' \n') expect=00000100 bytes=$(wc -c < "$TMP_FAV")"
+cmp -s "$TMP_LOGO" "${ROOT}/static/brand/logo.png" && echo "brand_logo_png=match" || echo "brand_logo_png=MISMATCH"
+cmp -s "$TMP_FAV" "${ROOT}/static/brand/favicon.ico" && echo "brand_favicon_ico=match" || echo "brand_favicon_ico=MISMATCH"
+rm -f "$TMP_LOGO" "$TMP_FAV"; trap - EXIT
 echo -n "direct_spa_shell_bytes="
 curl -s "https://${DOMAIN}/spa-shell.html" | wc -c
 echo -n "direct_spa_shell_noindex="

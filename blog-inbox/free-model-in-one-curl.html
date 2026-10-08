@@ -1,0 +1,15 @@
+<!-- TITLE: How to call a free model on KeyoAPI in one curl -->
+<!-- EXCERPT: Register, mint a key, and run your first fair-use free model call in under a minute. -->
+<h2>The whole path in three steps</h2>
+<p>Every new KeyoAPI account starts with a $10 gift credit. Free catalog IDs (the ones ending in <code>:free</code>) bill against that credit at fair-use limits, so you can prototype before you ever top up.</p>
+<ol>
+<li>Create an account and mint an API key in the console.</li>
+<li>Point your client at <code>https://www.keyoapi.xyz/v1</code>.</li>
+<li>Call any <code>:free</code> model ID — for example <code>gemma-4-26b:free</code>.</li>
+</ol>
+<h2>One curl</h2>
+<pre><code>curl https://www.keyoapi.xyz/v1/chat/completions \
+  -H "Authorization: Bearer YOUR_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"model":"gemma-4-26b:free","messages":[{"role":"user","content":"hi"}]}'</code></pre>
+<p>The full list of fixed-$0 IDs lives on <a href="/free-models">/free-models</a>; fair-use rate limits apply per model. When you outgrow them, switch <code>model=</code> to a metered ID on the same key — no other change is needed.</p>

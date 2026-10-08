@@ -1,0 +1,52 @@
+name: Publish blog inbox
+
+# Blog-only deploy: no image build, just SSH to the VPS and run the sync
+# script (safe pull + publish everything waiting in blog-inbox/).
+# Requires the same repo variable/secret as the console deploy:
+#   vars.KEYO_VPS_HOST (+ optional vars.KEYO_VPS_USER)
+#   secrets.KEYO_VPS_SSH_KEY
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "blog-inbox/**"
+      - "scripts/blog-self-publish.php"
+      - "scripts/blog-publish-inbox.sh"
+      - "scripts/vps-blog-sync.sh"
+  workflow_dispatch:
+
+concurrency:
+  group: keyo-blog-inbox
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    name: Sync blog on VPS
+    if: vars.KEYO_VPS_HOST != ''
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run vps-blog-sync over SSH
+        env:
+          HOST: ${{ vars.KEYO_VPS_HOST }}
+          USER: ${{ vars.KEYO_VPS_USER }}
+          KEY: ${{ secrets.KEYO_VPS_SSH_KEY }}
+        run: |
+          set -euo pipefail
+          if [ -z "${HOST}" ]; then
+            echo "KEYO_VPS_HOST is empty; skip deploy"
+            exit 0
+          fi
+          if [ -z "${USER}" ]; then USER=admin; fi
+          if [ -z "${KEY}" ]; then
+            echo "KEYO_VPS_SSH_KEY is empty; skip deploy"
+            exit 0
+          fi
+          install -m 700 -d "${HOME}/.ssh"
+          printf '%s\n' "${KEY}" > "${HOME}/.ssh/keyo_vps"
+          chmod 600 "${HOME}/.ssh/keyo_vps"
+          ssh -i "${HOME}/.ssh/keyo_vps" -o StrictHostKeyChecking=accept-new \
+            "${USER}@${HOST}" "sudo -n true && sudo bash /opt/ai-relay/scripts/vps-blog-sync.sh"

@@ -62,6 +62,10 @@
         {
           "q": "Is Gemini 4 Argon available on KeyoAPI?",
           "a": "Not yet. Google announced Argon on 30 Sep 2026 with introductory API pricing around $2 / $10 per 1M in/out and limited access via Google AI Studio, but the ID is not in the Keyo catalog. This page lists what Keyo currently sells; Argon will be added here once it is listed."
+        },
+        {
+          "q": "KeyoAPI vs OpenRouter for gemini-3.8-flash and Omni request IDs?",
+          "a": "Both put many model providers behind one API key with an [OI]-shaped chat endpoint, so switching is a base_url + key change. KeyoAPI bills a prepaid wallet on one invoice and puts fixed-$0 prototyping IDs (covered by your $10 welcome credit, fair-use) on the same key beside gemini-3.8-flash and Omni request IDs; OpenRouter is credit-based with per-model free tiers where offered. Compare the specific rates on this page against OpenRouter's live card before volume decisions."
         }
       ],
       "announcedNote": {
@@ -135,6 +139,10 @@
         {
           "q": "Which DeepSeek ID should I start with?",
           "a": "Start with deepseek-v4.1-flash for high-volume chat. Use deepseek-v4-flash when your stack already pins that catalog string — see /model/deepseek-v4-flash for free-path and pricing context. Use deepseek-v4-pro-0813 when you specifically want the Pro ID. Confirm live rates on /pricing before volume."
+        },
+        {
+          "q": "KeyoAPI vs OpenRouter for deepseek-v4.1-flash and V4 Pro lanes?",
+          "a": "Both put many model providers behind one API key with an [OI]-shaped chat endpoint, so switching is a base_url + key change. KeyoAPI bills a prepaid wallet on one invoice and puts fixed-$0 prototyping IDs (covered by your $10 welcome credit, fair-use) on the same key beside deepseek-v4.1-flash and V4 Pro lanes; OpenRouter is credit-based with per-model free tiers where offered. Compare the specific rates on this page against OpenRouter's live card before volume decisions."
         }
       ]
     },
@@ -194,6 +202,10 @@
         {
           "q": "Do you carry GLM ASR and TTS?",
           "a": "Yes. GLM-ASR (~$0.007 per request) and GLM-TTS (~$0.014 per request) run on the same Keyo key — see /brand/keyo-docs.html for their request shapes."
+        },
+        {
+          "q": "KeyoAPI vs OpenRouter for the GLM 5.x family?",
+          "a": "Both put many model providers behind one API key with an [OI]-shaped chat endpoint, so switching is a base_url + key change. KeyoAPI bills a prepaid wallet on one invoice and puts fixed-$0 prototyping IDs (covered by your $10 welcome credit, fair-use) on the same key beside the GLM 5.x family; OpenRouter is credit-based with per-model free tiers where offered. Compare the specific rates on this page against OpenRouter's live card before volume decisions."
         }
       ]
     },
@@ -272,6 +284,10 @@
         {
           "q": "How do I try Claude on Keyo?",
           "a": "Create a key at /sign-up, then open /pricing/claude-sonnet-5 (or another Claude ID) for interactive try/buy. There is no separate upload playground — Model Square is the try path."
+        },
+        {
+          "q": "KeyoAPI vs OpenRouter for Claude-class IDs?",
+          "a": "Both put many model providers behind one API key with an [OI]-shaped chat endpoint, so switching is a base_url + key change. KeyoAPI bills a prepaid wallet on one invoice and puts fixed-$0 prototyping IDs (covered by your $10 welcome credit, fair-use) on the same key beside Claude-class IDs; OpenRouter is credit-based with per-model free tiers where offered. Compare the specific rates on this page against OpenRouter's live card before volume decisions."
         }
       ],
       "bodyHeading": "Anthropic API pricing at a glance"
@@ -360,6 +376,10 @@
         {
           "q": "How do I estimate OpenAI API costs on Keyo?",
           "a": "Multiply expected millions of input/output tokens by the live /pricing/{model} rates (for example gpt-6-astra or gpt-5.6-luna), add retries, then confirm on Model Square. A worked example is on this page; for a side-by-side catalog see /compare."
+        },
+        {
+          "q": "KeyoAPI vs OpenRouter for gpt-6-astra and gpt-5.6 lanes?",
+          "a": "Both put many model providers behind one API key with an [OI]-shaped chat endpoint, so switching is a base_url + key change. KeyoAPI bills a prepaid wallet on one invoice and puts fixed-$0 prototyping IDs (covered by your $10 welcome credit, fair-use) on the same key beside gpt-6-astra and gpt-5.6 lanes; OpenRouter is credit-based with per-model free tiers where offered. Compare the specific rates on this page against OpenRouter's live card before volume decisions."
         }
       ],
       "curlExample": "# cURL — OpenAI gpt-6-astra on Keyo\ncurl https://www.keyoapi.xyz/v1/chat/completions \\\n  -H \"Authorization: Bearer $KEYO_API_KEY\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\"model\":\"gpt-6-astra\",\"messages\":[{\"role\":\"user\",\"content\":\"Hello from GPT-6 Astra\"}]}'\n\n# Python — OpenAI SDK pointed at Keyo\nfrom openai import OpenAI\nclient = OpenAI(base_url=\"https://www.keyoapi.xyz/v1\", api_key=\"YOUR_KEYO_API_KEY\")\nr = client.chat.completions.create(\n    model=\"gpt-6-astra\",\n    messages=[{\"role\": \"user\", \"content\": \"Summarize this log line in one sentence.\"}],\n)\nprint(r.choices[0].message.content)"
@@ -664,6 +684,10 @@
         {
           "q": "How do I try Grok on Keyo?",
           "a": "Create a key at /sign-up, then open /pricing/grok-4.7 for interactive try/buy. Model Square is the try path."
+        },
+        {
+          "q": "KeyoAPI vs OpenRouter for grok-4.7?",
+          "a": "Both put many model providers behind one API key with an [OI]-shaped chat endpoint, so switching is a base_url + key change. KeyoAPI bills a prepaid wallet on one invoice and puts fixed-$0 prototyping IDs (covered by your $10 welcome credit, fair-use) on the same key beside grok-4.7; OpenRouter is credit-based with per-model free tiers where offered. Compare the specific rates on this page against OpenRouter's live card before volume decisions."
         }
       ]
     },

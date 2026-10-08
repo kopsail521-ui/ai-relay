@@ -487,10 +487,11 @@ function rebuild(string $blogDir, string $site, array $catalog, array $gate): vo
 
     // Guide pages change via git; their last content change is the honest
     // lastmod (file mtime resets on every checkout, so don't use it).
-    $guideDate = static function (string $file) use ($root): ?string {
+    // repo root = dirname($blogDir, 3): <root>/static/brand/blog
+    $guideDate = static function (string $file) use ($blogDir): ?string {
         $rel = 'static/brand/blog/' . basename($file);
         @exec(
-            'git -C ' . escapeshellarg($root) . ' log -1 --format=%as -- '
+            'git -C ' . escapeshellarg(dirname($blogDir, 3)) . ' log -1 --format=%as -- '
                 . escapeshellarg($rel) . ' 2>/dev/null',
             $out,
             $code

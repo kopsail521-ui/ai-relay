@@ -485,11 +485,11 @@ function rebuild(string $blogDir, string $site, array $catalog, array $gate): vo
 ';
     file_put_contents($blogDir . '/index.html', $index);
 
-    $lines = [
-        $site . '/brand/blog/',
-        $site . '/brand/blog/openai-compatible-api-python.html',
-        $site . '/brand/blog/openai-compatible-api-nodejs.html',
-        $site . '/brand/blog/openai-compatible-api-cursor.html',
+    $entries = [
+        [$site . '/brand/blog/', null],
+        [$site . '/brand/blog/openai-compatible-api-python.html', null],
+        [$site . '/brand/blog/openai-compatible-api-nodejs.html', null],
+        [$site . '/brand/blog/openai-compatible-api-cursor.html', null],
     ];
     if (!empty($gate['sitemap_include_articles'])) {
         foreach ($geo as $item) {
@@ -497,10 +497,24 @@ function rebuild(string $blogDir, string $site, array $catalog, array $gate): vo
             if (is_smoke_slug($slug) || ($item['status'] ?? '') !== 'published') {
                 continue;
             }
-            $lines[] = $site . $item['path'];
+            $lastmod = substr((string)($item['published_at'] ?? ''), 0, 10);
+            $entries[] = [$site . $item['path'], $lastmod !== '' ? $lastmod : null];
         }
     }
-    file_put_contents($blogDir . '/sitemap.txt', implode("\n", array_values(array_unique($lines))) . "\n");
+    $entries = array_values(array_unique($entries, SORT_REGULAR));
+    file_put_contents($blogDir . '/sitemap.txt', implode("\n", array_column($entries, 0)) . "\n");
+
+    // XML twin carrying lastmod per article — the plain-text sitemap cannot
+    // signal freshness, which is what Google needs to re-evaluate the batch.
+    $xml = '<?xml version="1.0" encoding="UTF-8"?>' . "\n"
+        . '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' . "\n";
+    foreach ($entries as [$url, $lastmod]) {
+        $xml .= '  <url><loc>' . h($url) . '</loc>'
+            . ($lastmod !== null ? '<lastmod>' . h($lastmod) . '</lastmod>' : '')
+            . "</url>\n";
+    }
+    $xml .= "</urlset>\n";
+    file_put_contents($blogDir . '/sitemap.xml', $xml);
 }
 
 $gate = load_gate($dataDir);

@@ -398,12 +398,13 @@ function rebuild_index_and_sitemap(string $blogDir, string $site, array $catalog
         fail(500, 'article_storage_not_writable');
     }
 
-    // Sitemap: guides only until gate allows articles (after meta repair).
-    $lines = [
-        $site . '/brand/blog/',
-        $site . '/brand/blog/openai-compatible-api-python.html',
-        $site . '/brand/blog/openai-compatible-api-nodejs.html',
-        $site . '/brand/blog/openai-compatible-api-cursor.html',
+    // Sitemap: guides + published articles; txt kept for GSC continuity,
+    // XML twin carries per-article lastmod the txt format cannot express.
+    $entries = [
+        [$site . '/brand/blog/', null],
+        [$site . '/brand/blog/openai-compatible-api-python.html', null],
+        [$site . '/brand/blog/openai-compatible-api-nodejs.html', null],
+        [$site . '/brand/blog/openai-compatible-api-cursor.html', null],
     ];
     if (!empty($gate['sitemap_include_articles'])) {
         foreach ($geo as $item) {
@@ -414,11 +415,25 @@ function rebuild_index_and_sitemap(string $blogDir, string $site, array $catalog
             if (($item['status'] ?? 'draft') !== 'published') {
                 continue;
             }
-            $lines[] = $site . $item['path'];
+            $lastmod = substr((string)($item['published_at'] ?? ''), 0, 10);
+            $entries[] = [$site . $item['path'], $lastmod !== '' ? $lastmod : null];
         }
     }
-    $lines = array_values(array_unique($lines));
-    if (file_put_contents($blogDir . '/sitemap.txt', implode("\n", $lines) . "\n") === false) {
+    $entries = array_values(array_unique($entries, SORT_REGULAR));
+    if (file_put_contents($blogDir . '/sitemap.txt', implode("\n", array_column($entries, 0)) . "\n") === false) {
+        fail(500, 'article_storage_not_writable');
+    }
+
+    // XML twin carrying lastmod per article (the txt format cannot).
+    $xml = '<?xml version="1.0" encoding="UTF-8"?>' . "\n"
+        . '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' . "\n";
+    foreach ($entries as [$url, $lastmod]) {
+        $xml .= '  <url><loc>' . h($url) . '</loc>'
+            . ($lastmod !== null ? '<lastmod>' . h($lastmod) . '</lastmod>' : '')
+            . "</url>\n";
+    }
+    $xml .= "</urlset>\n";
+    if (file_put_contents($blogDir . '/sitemap.xml', $xml) === false) {
         fail(500, 'article_storage_not_writable');
     }
 }

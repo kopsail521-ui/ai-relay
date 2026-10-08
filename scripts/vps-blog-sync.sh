@@ -9,7 +9,10 @@
 set -euo pipefail
 ROOT="${ROOT:-/opt/ai-relay}"
 
-sudo bash "$ROOT/scripts/vps-safe-pull-preserve-blog.sh"
+# RELOAD_CADDY must be passed explicitly: the inner sudo strips it from the
+# environment, so a plain `sudo -E` on this script is not enough to reach
+# safe-pull's Caddy reload step.
+sudo RELOAD_CADDY="${RELOAD_CADDY:-0}" bash "$ROOT/scripts/vps-safe-pull-preserve-blog.sh"
 sudo bash "$ROOT/scripts/blog-publish-inbox.sh"
 sudo php "$ROOT/scripts/geoflow-rebuild-blog.php"
 echo DONE_BLOG_SYNC

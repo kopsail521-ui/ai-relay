@@ -175,6 +175,9 @@ ${LANDING_HANDLES}
 	}
 	redir /free /free-models permanent
 	redir /free/ /free-models permanent
+	# Alias stub: real 301 so GSC files it under redirects instead of
+	# crawled-not-indexed (the meta-refresh stub page stays as fallback).
+	redir /model/deepseek-v4-pro /model/deepseek-v4-pro-0813 permanent
 	@seo_model path /model /model/*
 	handle @seo_model {
 		root * ${ROOT}/static/seo

@@ -46,9 +46,12 @@ for f in page_files:
     # text. The static DOM carries the default-language copy.
     src = re.sub(r'<script[\s\S]*?</script>', ' ', src)
     # Keep only <body> content; <title>/meta/JSON-LD are not body copy and
-    # card grids are link labels, not sentences.
+    # card grids are link labels, not sentences. H2/H3 headings stay in the
+    # text flow: a section's subtitle is adjudicated together with its
+    # heading (the heading usually carries the mechanism sentence).
     body = re.search(r'<body[^>]*>([\s\S]*)</body>', src)
     text = re.sub(r'<[^>]+>', ' ', body.group(1) if body else src)
+    text = text.replace('. ', '.\n')
     # Drop JSON-LD blocks embedded in the body
     text = re.sub(r'\{"@context".*?\}\s*', ' ', text, flags=re.S)
     # sentence split

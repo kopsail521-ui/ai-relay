@@ -65,7 +65,7 @@
         },
         {
           "q": "KeyoAPI vs OpenRouter for gemini-3.8-flash and Omni request IDs?",
-          "a": "Both put many model providers behind one API key with an [OI]-shaped chat endpoint, so switching is a base_url + key change. KeyoAPI bills a prepaid wallet on one invoice and puts fixed-$0 prototyping IDs (covered by your $10 welcome credit, fair-use) on the same key beside gemini-3.8-flash and Omni request IDs; OpenRouter is credit-based with per-model free tiers where offered. Compare the specific rates on this page against OpenRouter's live card before volume decisions."
+          "a": "Both put many model providers behind one API key with an OpenAI-compatible chat endpoint, so switching is a base_url + key change. KeyoAPI bills a prepaid wallet on one invoice and puts fixed-$0 prototyping IDs (covered by your $10 welcome credit, fair-use) on the same key beside gemini-3.8-flash and Omni request IDs; OpenRouter is credit-based with per-model free tiers where offered. Compare the specific rates on this page against OpenRouter's live card before volume decisions."
         }
       ],
       "announcedNote": {
@@ -142,7 +142,7 @@
         },
         {
           "q": "KeyoAPI vs OpenRouter for deepseek-v4.1-flash and V4 Pro lanes?",
-          "a": "Both put many model providers behind one API key with an [OI]-shaped chat endpoint, so switching is a base_url + key change. KeyoAPI bills a prepaid wallet on one invoice and puts fixed-$0 prototyping IDs (covered by your $10 welcome credit, fair-use) on the same key beside deepseek-v4.1-flash and V4 Pro lanes; OpenRouter is credit-based with per-model free tiers where offered. Compare the specific rates on this page against OpenRouter's live card before volume decisions."
+          "a": "Both put many model providers behind one API key with an OpenAI-compatible chat endpoint, so switching is a base_url + key change. KeyoAPI bills a prepaid wallet on one invoice and puts fixed-$0 prototyping IDs (covered by your $10 welcome credit, fair-use) on the same key beside deepseek-v4.1-flash and V4 Pro lanes; OpenRouter is credit-based with per-model free tiers where offered. Compare the specific rates on this page against OpenRouter's live card before volume decisions."
         }
       ]
     },
@@ -205,7 +205,7 @@
         },
         {
           "q": "KeyoAPI vs OpenRouter for the GLM 5.x family?",
-          "a": "Both put many model providers behind one API key with an [OI]-shaped chat endpoint, so switching is a base_url + key change. KeyoAPI bills a prepaid wallet on one invoice and puts fixed-$0 prototyping IDs (covered by your $10 welcome credit, fair-use) on the same key beside the GLM 5.x family; OpenRouter is credit-based with per-model free tiers where offered. Compare the specific rates on this page against OpenRouter's live card before volume decisions."
+          "a": "Both put many model providers behind one API key with an OpenAI-compatible chat endpoint, so switching is a base_url + key change. KeyoAPI bills a prepaid wallet on one invoice and puts fixed-$0 prototyping IDs (covered by your $10 welcome credit, fair-use) on the same key beside the GLM 5.x family; OpenRouter is credit-based with per-model free tiers where offered. Compare the specific rates on this page against OpenRouter's live card before volume decisions."
         }
       ]
     },
@@ -287,7 +287,7 @@
         },
         {
           "q": "KeyoAPI vs OpenRouter for Claude-class IDs?",
-          "a": "Both put many model providers behind one API key with an [OI]-shaped chat endpoint, so switching is a base_url + key change. KeyoAPI bills a prepaid wallet on one invoice and puts fixed-$0 prototyping IDs (covered by your $10 welcome credit, fair-use) on the same key beside Claude-class IDs; OpenRouter is credit-based with per-model free tiers where offered. Compare the specific rates on this page against OpenRouter's live card before volume decisions."
+          "a": "Both put many model providers behind one API key with an OpenAI-compatible chat endpoint, so switching is a base_url + key change. KeyoAPI bills a prepaid wallet on one invoice and puts fixed-$0 prototyping IDs (covered by your $10 welcome credit, fair-use) on the same key beside Claude-class IDs; OpenRouter is credit-based with per-model free tiers where offered. Compare the specific rates on this page against OpenRouter's live card before volume decisions."
         }
       ],
       "bodyHeading": "Anthropic API pricing at a glance"
@@ -379,7 +379,7 @@
         },
         {
           "q": "KeyoAPI vs OpenRouter for gpt-6-astra and gpt-5.6 lanes?",
-          "a": "Both put many model providers behind one API key with an [OI]-shaped chat endpoint, so switching is a base_url + key change. KeyoAPI bills a prepaid wallet on one invoice and puts fixed-$0 prototyping IDs (covered by your $10 welcome credit, fair-use) on the same key beside gpt-6-astra and gpt-5.6 lanes; OpenRouter is credit-based with per-model free tiers where offered. Compare the specific rates on this page against OpenRouter's live card before volume decisions."
+          "a": "Both put many model providers behind one API key with an OpenAI-compatible chat endpoint, so switching is a base_url + key change. KeyoAPI bills a prepaid wallet on one invoice and puts fixed-$0 prototyping IDs (covered by your $10 welcome credit, fair-use) on the same key beside gpt-6-astra and gpt-5.6 lanes; OpenRouter is credit-based with per-model free tiers where offered. Compare the specific rates on this page against OpenRouter's live card before volume decisions."
         }
       ],
       "curlExample": "# cURL — OpenAI gpt-6-astra on Keyo\ncurl https://www.keyoapi.xyz/v1/chat/completions \\\n  -H \"Authorization: Bearer $KEYO_API_KEY\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\"model\":\"gpt-6-astra\",\"messages\":[{\"role\":\"user\",\"content\":\"Hello from GPT-6 Astra\"}]}'\n\n# Python — OpenAI SDK pointed at Keyo\nfrom openai import OpenAI\nclient = OpenAI(base_url=\"https://www.keyoapi.xyz/v1\", api_key=\"YOUR_KEYO_API_KEY\")\nr = client.chat.completions.create(\n    model=\"gpt-6-astra\",\n    messages=[{\"role\": \"user\", \"content\": \"Summarize this log line in one sentence.\"}],\n)\nprint(r.choices[0].message.content)"
@@ -687,7 +687,7 @@
         },
         {
           "q": "KeyoAPI vs OpenRouter for grok-4.7?",
-          "a": "Both put many model providers behind one API key with an [OI]-shaped chat endpoint, so switching is a base_url + key change. KeyoAPI bills a prepaid wallet on one invoice and puts fixed-$0 prototyping IDs (covered by your $10 welcome credit, fair-use) on the same key beside grok-4.7; OpenRouter is credit-based with per-model free tiers where offered. Compare the specific rates on this page against OpenRouter's live card before volume decisions."
+          "a": "Both put many model providers behind one API key with an OpenAI-compatible chat endpoint, so switching is a base_url + key change. KeyoAPI bills a prepaid wallet on one invoice and puts fixed-$0 prototyping IDs (covered by your $10 welcome credit, fair-use) on the same key beside grok-4.7; OpenRouter is credit-based with per-model free tiers where offered. Compare the specific rates on this page against OpenRouter's live card before volume decisions."
         }
       ]
     },

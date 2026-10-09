@@ -599,10 +599,7 @@ function renderModelsIndex() {
   <a class="btn btn-secondary" href="/free-models">Free models</a>
 </div>
 <h2>Headline price anchors</h2>
-<table>
-<thead><tr><th>Capability</th><th>Typical official list</th><th>KeyoAPI</th><th>Notes</th></tr></thead>
-<tbody>${compareTableRows()}</tbody>
-</table>
+<p class="meta">Full headline comparison (official list vs Keyo rates for every lane) lives on <a href="/compare">/compare</a> — this index lists the guides themselves.</p>
 <h2>All model guides</h2>
 <table>
 <thead><tr><th>Model ID</th><th>Category</th><th>Listed price</th><th>Links</th></tr></thead>
@@ -740,9 +737,9 @@ function renderCompare() {
 <h2>How to estimate API costs (no calculator app required)</h2>
 <p>For token-metered chat IDs: expected cost ≈ (input millions × input $/1M) + (output millions × output $/1M), then add retries. Pull the $/1M figures from live <a href="/pricing">/pricing</a> or the rows on this page — do not hard-code a spreadsheet forever. Worked OpenAI-side example: <a href="/openai-api-pricing">/openai-api-pricing</a>. Brand hubs: <a href="/claude-api-pricing">Claude / Anthropic</a>, <a href="/grok-api-pricing">Grok</a>, <a href="/gemini-api-pricing">Gemini</a>, <a href="/deepseek-api-pricing">DeepSeek</a>.</p>
 <h2>How to use this comparison</h2>
-<p>One [OI]-compatible SDK, one prepaid balance, and multimodal add-ons on one invoice. Swap <code>base_url</code> + key; keep your existing client for chat / image / speech paths.</p>
-<p>Recommended rollout: start with <a href="${featuredHref("deepseek-v4.1-flash")}"><code>deepseek-v4.1-flash</code></a> on high-volume paths, <a href="${featuredHref("gpt-6-astra")}"><code>gpt-6-astra</code></a> or <a href="/model/"></a> as default chat, escalate to <a href="/model/"></a> when you need denser reasoning.</p>
-<p>Evaluating KeyoAPI as an OpenRouter alternative? The short version: both aggregate many model providers behind one API key and an [OI]-shaped chat endpoint, so migration is the same two-line change (<code>base_url</code> + key). KeyoAPI is prepaid-wallet billing on one invoice with fixed-$0 prototyping IDs (covered by your $10 welcome credit, fair-use) on the same key; OpenRouter is credit-based with per-model free tiers where offered. Compare specific lanes above before volume decisions, and confirm live rates on <a href="/pricing">Model Square</a> either way.</p>
+<p>One OpenAI-compatible SDK, one prepaid balance, and multimodal add-ons on one invoice. Swap <code>base_url</code> + key; keep your existing client for chat / image / speech paths.</p>
+<p>Recommended rollout: start with <a href="${featuredHref("deepseek-v4.1-flash")}"><code>deepseek-v4.1-flash</code></a> on high-volume paths, <a href="${featuredHref("gpt-6-astra")}"><code>gpt-6-astra</code></a> or <a href="${featuredHref("gpt-5.6-terra")}"><code>gpt-5.6-terra</code></a> as default chat, escalate to <a href="${featuredHref("grok-4.7")}"><code>grok-4.7</code></a> or Claude-class lanes when you need denser reasoning.</p>
+<p>Evaluating KeyoAPI as an OpenRouter alternative? The short version: both aggregate many model providers behind one API key and an OpenAI-compatible chat endpoint, so migration is the same two-line change (<code>base_url</code> + key). KeyoAPI is prepaid-wallet billing on one invoice with fixed-$0 prototyping IDs (covered by your $10 welcome credit, fair-use) on the same key; OpenRouter is credit-based with per-model free tiers where offered. Compare specific lanes above before volume decisions, and confirm live rates on <a href="/pricing">Model Square</a> either way.</p>
 <h2>Related guides</h2>
 <ul>
   <li><a href="/openai-api-alternative"><strong>OpenAI API alternative</strong></a> — why switch, two-line migration, price table</li>
@@ -772,17 +769,6 @@ ${relatedLinks(["CosyVoice3", "whisper-large-v3", "Qwen3-TTS", "IndexTTS-2", "Du
 }
 
 function renderPricing() {
-  const freeRows = allFreeModels()
-    .map(
-      (m) => `<tr>
-  <td><a href="/free-models"><code>${esc(m.id)}</code></a></td>
-  <td>free</td>
-  <td class="ok">$0</td>
-  <td><code>POST /v1/chat/completions</code></td>
-  <td><a href="/free-models">Free hub</a> · <a href="/sign-up">Get key</a></td>
-</tr>`
-    )
-    .join("\n");
   const seenIds = new Set(pages.models.map((m) => m.id));
   const landingExtra = [];
   for (const p of pricingLandings.pages || []) {
@@ -824,21 +810,14 @@ function renderPricing() {
   <a class="btn btn-secondary" href="/brand/keyo-docs.html">Docs</a>
 </div>
 <h2>Free models ($0 — covered by your $10 credit)</h2>
-<p class="meta">$0 catalog IDs whose calls draw down your $10 welcome credit (fair-use). Rules and curl examples: <a href="/free-models">/free-models</a>.</p>
-<table>
-<thead><tr><th>Model ID</th><th>Category</th><th>Listed price</th><th>Endpoint</th><th>Links</th></tr></thead>
-<tbody>${freeRows}</tbody>
-</table>
+<p class="meta">Free IDs: see <a href="/free-models">/free-models</a> — the full list of $0 catalog IDs, their paid twins and curl examples. The tables below cover the metered catalog.</p>
 <h2>Guided model price table</h2>
 <table>
 <thead><tr><th>Model ID</th><th>Category</th><th>Listed price</th><th>Endpoint</th><th>Links</th></tr></thead>
 <tbody>${rows}</tbody>
 </table>
 <h2>Headline vs official list</h2>
-<table>
-<thead><tr><th>Capability</th><th>Typical official</th><th>Keyo</th><th>Notes</th></tr></thead>
-<tbody>${compareTableRows()}</tbody>
-</table>
+<p class="meta">The headline comparison (typical official list vs Keyo rates for every lane) lives on <a href="/compare">/compare</a> — this page is the full static price list.</p>
 <h2>How billing works</h2>
 <p>KeyoAPI is a prepaid <strong>ai api relay</strong>: one balance covers chat, Whisper, OCR, vision, TTS, and digital humans. LLM rows are usually token-metered; many vision/speech models are per-request or async-task metered.</p>
 <p>Open interactive catalog at <a href="/pricing">/pricing</a> after login. Model explainers are at <code>/model/{modelId}</code>.</p>
@@ -965,7 +944,7 @@ ${rows}
       name: "Free AI API — KeyoAPI",
       url: `${site}/free-models`,
       description:
-        "Fixed $0 free LLM API models on KeyoAPI: calls draw down your $10 welcome credit (fair-use), [OI]-compatible chat completions.",
+        "Fixed $0 free LLM API models on KeyoAPI: calls draw down your $10 welcome credit (fair-use), OpenAI-compatible chat completions.",
     },
   });
 }

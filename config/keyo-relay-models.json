@@ -1,0 +1,15 @@
+{
+  "note": "Keyo Relay：UnoRouter 免费模型接力池。单模型限流/断流自动换下一个免费模型并续写。2026-10-09 取代直连免费线。",
+  "channel_name": "Keyo Relay",
+  "base_url": "http://127.0.0.1:3020",
+  "channel_key_env": "POOL_API_KEYS",
+  "models": [
+    {
+      "id": "keyo-flash:free",
+      "vendor": "Keyo",
+      "icon": "Custom",
+      "tags": "大语言模型,免费",
+      "desc_zh": "Keyo Flash 免费额度：多免费模型自动接力池，单模型限流或断流时自动切换下一个模型并续写不中断，适合日常问答与轻量任务。"
+    }
+  ]
+}

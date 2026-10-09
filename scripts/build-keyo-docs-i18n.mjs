@@ -38,8 +38,6 @@ const I18N = {
     copyUrl: "Copy full URL",
     chatTitle: "Chat",
     thModel: "Model",
-    thIn: "Input / MTok",
-    thOut: "Output / MTok",
     thNote: "Notes",
     nLuna: "Budget default",
     nTerra: "Daily coding / chat",
@@ -60,8 +58,6 @@ const I18N = {
     chatHint:
       "Click a model name to copy. Billed by token usage (console is source of truth). Top up when quota runs out.",
     imageTitle: "Images",
-    thPrice: "Approx. price",
-    perImage: "/ image",
     clientsTitle: "Clients",
     clientsDesc: "Fill these in common tools. Model names must match the table exactly.",
     clientsTools: "ChatBox / Cursor etc.",
@@ -83,7 +79,35 @@ const I18N = {
       "Auto-copy failed. Select the text below and press Ctrl+C / ⌘C.",
     close: "Close",
     hello: "Hello",
-  },
+
+    nClaudeHaiku: "Claude fast lightweight",
+    allModelsHint: "Above are starter picks. All 100+ models with live per-token pricing: <a href=\"https://www.keyoapi.xyz/pricing\" target=\"_blank\" rel=\"noopener noreferrer\">Model Square</a>.",
+    tocCaps: "All capabilities",
+    capsTitle: "All capabilities",
+    capsDesc: "One API key covers every capability below. Each card opens the matching handbook section with request formats and models.",
+    capVideo: "Video generation",
+    capVideoSub: "Text/image to video, dubbing, subtitle erase",
+    capAsr: "Speech recognition",
+    capAsrSub: "Audio to text (multipart upload)",
+    capTts: "Speech synthesis",
+    capTtsSub: "Sync & async voice generation",
+    capOcr: "OCR & document parsing",
+    capOcrSub: "Images and files to structured text",
+    capVision: "Vision tools",
+    capVisionSub: "Background removal, upscale, detect, segment",
+    capAvatar: "Talking avatar",
+    capAvatarSub: "Portrait photo + audio to talking video",
+    capDecision: "Decision models",
+    capDecisionSub: "Structured choice / extraction outputs",
+    capModeration: "Content moderation",
+    capModerationSub: "Text safety classification",
+    capEmbed: "Embeddings",
+    capEmbedSub: "Vectors for retrieval",
+    capMusic: "Music generation",
+    capMusicSub: "Lyrics to full songs",
+    manualTitle: "Full AI handbook (copy to any AI)",
+    manualSub: "Every endpoint, field and limit in one page — paste it to an AI assistant and it calls correctly.",
+    manualCta: "Open handbook →",  },
   zhCN: {
     title: "KeyoAPI 接入文档",
     docTitle: "KeyoAPI 接入文档",
@@ -104,8 +128,6 @@ const I18N = {
     copyUrl: "复制完整 URL",
     chatTitle: "文本对话",
     thModel: "模型",
-    thIn: "输入 / MTok",
-    thOut: "输出 / MTok",
     thNote: "说明",
     nLuna: "便宜主力",
     nTerra: "日常编程 / 对话",
@@ -126,8 +148,6 @@ const I18N = {
     chatHint:
       "点击模型名即可复制。计费按 token 用量，以控制台实时扣费为准；额度用完需充值。",
     imageTitle: "图片生成",
-    thPrice: "约价",
-    perImage: "/ 张",
     clientsTitle: "客户端接入",
     clientsDesc: "在常见工具里这样填；模型名必须与上表完全一致。",
     clientsTools: "ChatBox / Cursor 等",
@@ -148,7 +168,35 @@ const I18N = {
     manualCopyHint: "自动复制未成功，请选中下方内容后 Ctrl+C / ⌘C。",
     close: "关闭",
     hello: "你好",
-  },
+
+    nClaudeHaiku: "Claude 轻量快",
+    allModelsHint: "以上为推荐起步模型。全部 100+ 模型与实时价格见 <a href=\"https://www.keyoapi.xyz/pricing\" target=\"_blank\" rel=\"noopener noreferrer\">模型广场</a>。",
+    tocCaps: "全部能力",
+    capsTitle: "全部能力",
+    capsDesc: "同一把 API Key 即可调用以下全部能力。每张卡片跳到完整手册对应章节，含请求格式与模型清单。",
+    capVideo: "视频生成",
+    capVideoSub: "文/图生视频、配音、字幕擦除",
+    capAsr: "语音识别",
+    capAsrSub: "音频转文字（multipart 上传）",
+    capTts: "语音合成",
+    capTtsSub: "同步与异步语音生成",
+    capOcr: "OCR 与文档解析",
+    capOcrSub: "图片、文件转结构化文本",
+    capVision: "视觉处理",
+    capVisionSub: "抠图、超分、检测、分割",
+    capAvatar: "数字人",
+    capAvatarSub: "肖像照 + 音频生成说话视频",
+    capDecision: "决策模型",
+    capDecisionSub: "结构化选择与字段抽取",
+    capModeration: "内容审核",
+    capModerationSub: "文本安全分类",
+    capEmbed: "向量（Embeddings）",
+    capEmbedSub: "检索用向量化",
+    capMusic: "音乐生成",
+    capMusicSub: "歌词生成完整歌曲",
+    manualTitle: "完整调用手册（复制给 AI 用）",
+    manualSub: "全部端点、字段与限制集中一页 — 整页复制给任意 AI 助手即可正确调用。",
+    manualCta: "打开手册 →",  },
   zhTW: {
     title: "KeyoAPI 接入文件",
     docTitle: "KeyoAPI 接入文件",
@@ -169,8 +217,6 @@ const I18N = {
     copyUrl: "複製完整 URL",
     chatTitle: "文字對話",
     thModel: "模型",
-    thIn: "輸入 / MTok",
-    thOut: "輸出 / MTok",
     thNote: "說明",
     nLuna: "便宜主力",
     nTerra: "日常程式／對話",
@@ -191,8 +237,6 @@ const I18N = {
     chatHint:
       "點擊模型名即可複製。計費依 token 用量，以控制台即時扣費為準；額度用完需儲值。",
     imageTitle: "圖片生成",
-    thPrice: "約價",
-    perImage: "/ 張",
     clientsTitle: "客戶端接入",
     clientsDesc: "在常見工具裡這樣填；模型名必須與上表完全一致。",
     clientsTools: "ChatBox / Cursor 等",
@@ -213,7 +257,35 @@ const I18N = {
     manualCopyHint: "自動複製未成功，請選取下方內容後 Ctrl+C / ⌘C。",
     close: "關閉",
     hello: "你好",
-  },
+
+    nClaudeHaiku: "Claude 輕量快",
+    allModelsHint: "以上為推薦起步模型。全部 100+ 模型與即時價格見 <a href=\"https://www.keyoapi.xyz/pricing\" target=\"_blank\" rel=\"noopener noreferrer\">模型廣場</a>。",
+    tocCaps: "全部能力",
+    capsTitle: "全部能力",
+    capsDesc: "同一把 API Key 即可呼叫以下全部能力。每張卡片連到完整手冊對應章節，含請求格式與模型清單。",
+    capVideo: "影片生成",
+    capVideoSub: "文/圖生影片、配音、字幕擦除",
+    capAsr: "語音辨識",
+    capAsrSub: "音訊轉文字（multipart 上傳）",
+    capTts: "語音合成",
+    capTtsSub: "同步與非同步語音生成",
+    capOcr: "OCR 與文件解析",
+    capOcrSub: "圖片、檔案轉結構化文字",
+    capVision: "視覺處理",
+    capVisionSub: "去背、超解析、偵測、分割",
+    capAvatar: "數位人",
+    capAvatarSub: "肖像照 + 音訊生成說話影片",
+    capDecision: "決策模型",
+    capDecisionSub: "結構化選擇與欄位抽取",
+    capModeration: "內容審核",
+    capModerationSub: "文字安全分類",
+    capEmbed: "向量（Embeddings）",
+    capEmbedSub: "檢索用向量化",
+    capMusic: "音樂生成",
+    capMusicSub: "歌詞生成完整歌曲",
+    manualTitle: "完整呼叫手冊（複製給 AI 用）",
+    manualSub: "全部端點、欄位與限制集中一頁 — 整頁複製給任意 AI 助手即可正確呼叫。",
+    manualCta: "開啟手冊 →",  },
   ja: {
     title: "KeyoAPI ドキュメント",
     docTitle: "KeyoAPI 連携ドキュメント",
@@ -234,8 +306,6 @@ const I18N = {
     copyUrl: "URL をコピー",
     chatTitle: "チャット",
     thModel: "モデル",
-    thIn: "入力 / MTok",
-    thOut: "出力 / MTok",
     thNote: "メモ",
     nLuna: "コスパ定番",
     nTerra: "日常コーディング / 会話",
@@ -256,8 +326,6 @@ const I18N = {
     chatHint:
       "モデル名をクリックでコピー。課金はトークン使用量（コンソールが正）。残高不足時はチャージ。",
     imageTitle: "画像生成",
-    thPrice: "目安価格",
-    perImage: "/ 枚",
     clientsTitle: "クライアント",
     clientsDesc: "よく使うツールではこう設定。モデル名は表と完全一致させてください。",
     clientsTools: "ChatBox / Cursor など",
@@ -278,7 +346,35 @@ const I18N = {
     manualCopyHint: "自動コピーに失敗しました。下の文字を選んで Ctrl+C / ⌘C。",
     close: "閉じる",
     hello: "こんにちは",
-  },
+
+    nClaudeHaiku: "Claude 軽量・高速",
+    allModelsHint: "上記はスターター向けです。100 以上の全モデルとリアルタイム価格は <a href=\"https://www.keyoapi.xyz/pricing\" target=\"_blank\" rel=\"noopener noreferrer\">モデル広場</a> を参照。",
+    tocCaps: "すべての機能",
+    capsTitle: "すべての機能",
+    capsDesc: "同じ API Key で以下すべての機能を呼び出せます。各カードは完全ハンドブックの該当セクション（リクエスト形式・モデル一覧つき）へリンクします。",
+    capVideo: "動画生成",
+    capVideoSub: "テキスト/画像から動画・吹き替え・字幕消去",
+    capAsr: "音声認識",
+    capAsrSub: "音声をテキスト化（multipart）",
+    capTts: "音声合成",
+    capTtsSub: "同期・非同期の音声生成",
+    capOcr: "OCR・ドキュメント解析",
+    capOcrSub: "画像やファイルを構造化テキストに",
+    capVision: "画像ツール",
+    capVisionSub: "背景除去・超解像・検出・分割",
+    capAvatar: "アバター動画",
+    capAvatarSub: "肖像写真＋音声から話す動画を生成",
+    capDecision: "意思決定モデル",
+    capDecisionSub: "構造化選択・フィールド抽出",
+    capModeration: "コンテンツ審査",
+    capModerationSub: "テキスト安全分類",
+    capEmbed: "エンベディング",
+    capEmbedSub: "検索用ベクトル化",
+    capMusic: "音楽生成",
+    capMusicSub: "歌詞から完全な楽曲を生成",
+    manualTitle: "完全呼び出しハンドブック（AI にコピー）",
+    manualSub: "全エンドポイント・フィールド・制限を 1 ページに集約。AI アシスタントに貼り付けるだけで正しく呼び出せます。",
+    manualCta: "ハンドブックを開く →",  },
   fr: {
     title: "Docs KeyoAPI",
     docTitle: "Documentation d’intégration KeyoAPI",
@@ -299,8 +395,6 @@ const I18N = {
     copyUrl: "Copier l’URL",
     chatTitle: "Chat",
     thModel: "Modèle",
-    thIn: "Entrée / MTok",
-    thOut: "Sortie / MTok",
     thNote: "Notes",
     nLuna: "Économique",
     nTerra: "Code / chat quotidien",
@@ -321,8 +415,6 @@ const I18N = {
     chatHint:
       "Cliquez un modèle pour copier. Facturation au token (console = référence). Rechargez si le quota est épuisé.",
     imageTitle: "Images",
-    thPrice: "Prix approx.",
-    perImage: "/ image",
     clientsTitle: "Clients",
     clientsDesc: "Remplissez ainsi dans vos outils. Les noms de modèles doivent correspondre exactement.",
     clientsTools: "ChatBox / Cursor etc.",
@@ -343,7 +435,35 @@ const I18N = {
     manualCopyHint: "Échec de la copie auto. Sélectionnez le texte puis Ctrl+C / ⌘C.",
     close: "Fermer",
     hello: "Bonjour",
-  },
+
+    nClaudeHaiku: "Claude léger et rapide",
+    allModelsHint: "Ci-dessus, une sélection de départ. Les 100+ modèles et les prix en direct : <a href=\"https://www.keyoapi.xyz/pricing\" target=\"_blank\" rel=\"noopener noreferrer\">place des modèles</a>.",
+    tocCaps: "Toutes les capacités",
+    capsTitle: "Toutes les capacités",
+    capsDesc: "Une seule clé API pour toutes les capacités ci-dessous. Chaque carte ouvre la section correspondante du manuel complet (formats et modèles inclus).",
+    capVideo: "Génération vidéo",
+    capVideoSub: "Texte/image vers vidéo, doublage, effacement de sous-titres",
+    capAsr: "Reconnaissance vocale",
+    capAsrSub: "Audio vers texte (multipart)",
+    capTts: "Synthèse vocale",
+    capTtsSub: "Génération de voix synchrone et asynchrone",
+    capOcr: "OCR et analyse de documents",
+    capOcrSub: "Images et fichiers vers texte structuré",
+    capVision: "Outils de vision",
+    capVisionSub: "détourage, upscale, détection, segmentation",
+    capAvatar: "Avatar parlant",
+    capAvatarSub: "Photo portrait + audio vers vidéo parlante",
+    capDecision: "Modèles de décision",
+    capDecisionSub: "Choix structuré et extraction de champs",
+    capModeration: "Modération",
+    capModerationSub: "Classification de sécurité du texte",
+    capEmbed: "Embeddings",
+    capEmbedSub: "Vectorisation pour la recherche",
+    capMusic: "Génération musicale",
+    capMusicSub: "Paroles vers chansons complètes",
+    manualTitle: "Manuel complet (à copier à une IA)",
+    manualSub: "Tous les endpoints, champs et limites sur une page — collez-la à un assistant IA pour des appels corrects.",
+    manualCta: "Ouvrir le manuel →",  },
   ru: {
     title: "Документация KeyoAPI",
     docTitle: "Документация по подключению KeyoAPI",
@@ -364,8 +484,6 @@ const I18N = {
     copyUrl: "Копировать URL",
     chatTitle: "Чат",
     thModel: "Модель",
-    thIn: "Вход / MTok",
-    thOut: "Выход / MTok",
     thNote: "Заметки",
     nLuna: "Бюджетный",
     nTerra: "Код / чат ежедневно",
@@ -386,8 +504,6 @@ const I18N = {
     chatHint:
       "Клик по модели — копировать. Оплата по токенам (консоль источник истины). Пополняйте при нулевом балансе.",
     imageTitle: "Изображения",
-    thPrice: "Примерно",
-    perImage: "/ изобр.",
     clientsTitle: "Клиенты",
     clientsDesc: "Так заполняйте в инструментах. Имена моделей — точно как в таблице.",
     clientsTools: "ChatBox / Cursor и др.",
@@ -408,7 +524,35 @@ const I18N = {
     manualCopyHint: "Автокопирование не удалось. Выделите текст и Ctrl+C / ⌘C.",
     close: "Закрыть",
     hello: "Привет",
-  },
+
+    nClaudeHaiku: "Claude быстрый лёгкий",
+    allModelsHint: "Выше — стартовый подбор. Все 100+ моделей и актуальные цены: <a href=\"https://www.keyoapi.xyz/pricing\" target=\"_blank\" rel=\"noopener noreferrer\">площадка моделей</a>.",
+    tocCaps: "Все возможности",
+    capsTitle: "Все возможности",
+    capsDesc: "Один API-ключ открывает все возможности ниже. Каждая карточка ведёт в нужный раздел полного справочника (форматы запросов и списки моделей).",
+    capVideo: "Генерация видео",
+    capVideoSub: "Текст/картинка в видео, озвучка, удаление субтитров",
+    capAsr: "Распознавание речи",
+    capAsrSub: "Аудио в текст (multipart)",
+    capTts: "Синтез речи",
+    capTtsSub: "Синхронная и асинхронная озвучка",
+    capOcr: "OCR и разбор документов",
+    capOcrSub: "Картинки и файлы в структурированный текст",
+    capVision: "Инструменты зрения",
+    capVisionSub: "удаление фона, апскейл, детекция, сегментация",
+    capAvatar: "Говорящий аватар",
+    capAvatarSub: "Фото + аудио в говорящее видео",
+    capDecision: "Модели решений",
+    capDecisionSub: "Структурированный выбор и извлечение полей",
+    capModeration: "Модерация",
+    capModerationSub: "Классификация безопасности текста",
+    capEmbed: "Эмбеддинги",
+    capEmbedSub: "Векторы для поиска",
+    capMusic: "Генерация музыки",
+    capMusicSub: "Текст песни в готовый трек",
+    manualTitle: "Полный справочник (скопируйте ИИ)",
+    manualSub: "Все эндпоинты, поля и лимиты на одной странице — вставьте ассистенту ИИ, и он вызовет всё верно.",
+    manualCta: "Открыть справочник →",  },
   vi: {
     title: "Tài liệu KeyoAPI",
     docTitle: "Tài liệu tích hợp KeyoAPI",
@@ -429,8 +573,6 @@ const I18N = {
     copyUrl: "Sao chép URL",
     chatTitle: "Chat",
     thModel: "Model",
-    thIn: "Input / MTok",
-    thOut: "Output / MTok",
     thNote: "Ghi chú",
     nLuna: "Rẻ, mặc định",
     nTerra: "Code / chat hàng ngày",
@@ -451,8 +593,6 @@ const I18N = {
     chatHint:
       "Bấm tên model để sao chép. Tính theo token (console là chuẩn). Hết hạn mức thì nạp thêm.",
     imageTitle: "Ảnh",
-    thPrice: "Giá ước tính",
-    perImage: "/ ảnh",
     clientsTitle: "Client",
     clientsDesc: "Điền như sau trong công cụ. Tên model phải khớp bảng.",
     clientsTools: "ChatBox / Cursor v.v.",
@@ -473,55 +613,131 @@ const I18N = {
     manualCopyHint: "Tự sao chép thất bại. Chọn chữ bên dưới rồi Ctrl+C / ⌘C.",
     close: "Đóng",
     hello: "Xin chào",
-  },
+
+    nClaudeHaiku: "Claude nhẹ, nhanh",
+    allModelsHint: "Trên đây là các mẫu khởi đầu. Toàn bộ 100+ mô hình và giá theo thời gian thực: <a href=\"https://www.keyoapi.xyz/pricing\" target=\"_blank\" rel=\"noopener noreferrer\">quảng trường mô hình</a>.",
+    tocCaps: "Tất cả năng lực",
+    capsTitle: "Tất cả năng lực",
+    capsDesc: "Một API Key dùng cho mọi năng lực dưới đây. Mỗi thẻ mở đúng mục trong sổ tay đầy đủ (kèm định dạng và danh sách mô hình).",
+    capVideo: "Tạo video",
+    capVideoSub: "Chữ/ảnh thành video, lồng tiếng, xoá phụ đề",
+    capAsr: "Nhận diện giọng nói",
+    capAsrSub: "Âm thanh thành văn bản (multipart)",
+    capTts: "Tổng giọng nói",
+    capTtsSub: "Đồng bộ và bất đồng bộ",
+    capOcr: "OCR & phân tích tài liệu",
+    capOcrSub: "Ảnh, tệp thành văn bản cấu trúc",
+    capVision: "Xử lý thị giác",
+    capVisionSub: "Xóa nền, siêu phân, nhận diện, phân đoạn",
+    capAvatar: "Avatar nói chuyện",
+    capAvatarSub: "Ảnh chân dung + âm thanh thành video nói",
+    capDecision: "Mô hình quyết định",
+    capDecisionSub: "Lựa chọn cấu trúc, trích xuất trường",
+    capModeration: "Kiểm duyệt nội dung",
+    capModerationSub: "Phân loại an toàn văn bản",
+    capEmbed: "Embeddings",
+    capEmbedSub: "Vector hóa cho truy xuất",
+    capMusic: "Tạo nhạc",
+    capMusicSub: "Lời ca thành bài hát hoàn chỉnh",
+    manualTitle: "Sổ tay đầy đủ (copy cho AI)",
+    manualSub: "Toàn bộ endpoint, trường và giới hạn trong một trang — dán vào trợ lý AI là gọi đúng.",
+    manualCta: "Mở sổ tay →",  },
 };
 
+// Starter chat models. Prices are NOT listed here on purpose: they go stale
+// every time a ratio changes (five of the twelve drifted 2-9x before this
+// change). The console /pricing page is the single source of truth.
 const chatModels = [
-  ["gpt-5.6-luna", "~$0.10", "~$0.62", "nLuna"],
-  ["gpt-5.6-terra", "~$0.37", "~$2.21", "nTerra"],
-  ["gpt-5.6-sol", "~$0.92", "~$5.52", "nSol"],
-  ["claude-sonnet-5", "~$0.88", "~$4.41", "nClaudeBal"],
-  ["claude-opus-5", "~$2.21", "~$11.03", "nClaudeStrong"],
-  ["claude-fable-5", "~$8.82", "~$44.12", "nClaudeFlag"],
-  ["claude-fable-5-1", "~$14.71", "~$73.53", "nClaudeFlag51"],
-  ["gemini-3.7-flash", "~$0.28", "~$1.38", "nGemFast"],
-  ["gemini-3.8-flash", "~$0.28", "~$1.38", "nGemFast38"],
-  ["deepseek-v4.1-flash", "~$0.30", "~$1.20", "nDsFast41"],
-  ["deepseek-v4-flash", "~$0.44", "~$1.32", "nDsFast"],
-  ["deepseek-v4-pro-0813", "~$1.32", "~$3.96", "nDsStrong"],
-  ["kimi-k3", "~$3.00", "~$15.00", "nKimi"],
-  ["grok-4.6", "~$0.74", "~$2.21", "nGrok"],
-  ["minimax-m3", "~$0.12", "~$0.48", "nMinimax"],
-  ["glm-5.3", "~$1.40", "~$4.40", "nGlm"],
+  ["gpt-5.6-luna", "nLuna"],
+  ["gpt-5.6-terra", "nTerra"],
+  ["gpt-5.6-sol", "nSol"],
+  ["claude-sonnet-5-5", "nClaudeBal"],
+  ["claude-opus-5-5", "nClaudeStrong"],
+  ["claude-fable-5-1", "nClaudeFlag51"],
+  ["claude-haiku-5-5", "nClaudeHaiku"],
+  ["gemini-3.7-flash", "nGemFast"],
+  ["gemini-3.8-flash", "nGemFast38"],
+  ["deepseek-v4.1-flash", "nDsFast41"],
+  ["deepseek-v4-flash", "nDsFast"],
+  ["deepseek-v4-pro", "nDsStrong"],
+  ["kimi-k3", "nKimi"],
+  ["grok-4.7", "nGrok"],
+  ["minimax-m3", "nMinimax"],
+  ["glm-5.2", "nGlm"],
 ];
 
+// Starter image models (same policy: no prices here — see /pricing).
 const imageModels = [
-  ["gpt-image-2.5", "~$0.0062"],
-  ["gpt-image-2.5-flare", "~$0.0205"],
-  ["gpt-image-2.5-sunburst", "~$0.0247"],
-  ["gpt-image-2", "~$0.0068"],
-  ["gpt-image-2-vip", "~$0.0274"],
-  ["nano-banana-2.1", "~$0.0123"],
-  ["nano-banana-2", "~$0.0205"],
-  ["nano-banana-pro", "~$0.0274"],
+  "gpt-image-2.5",
+  "gpt-image-2.5-flare",
+  "gpt-image-2.5-sunburst",
+  "gpt-image-2",
+  "gpt-image-2-vip",
+  "nano-banana-2.1",
+  "nano-banana-2",
+  "nano-banana-pro",
 ];
 
 const chatRows = chatModels
   .map(
-    ([id, a, b, note]) =>
-      `<tr><td class="model"><button type="button" class="model-btn" data-copy="${id}">${id}</button></td><td class="price">${a}</td><td class="price">${b}</td><td class="note-cell" data-i18n="${note}"></td></tr>`
+    ([id, note]) =>
+      `<tr><td class="model"><button type="button" class="model-btn" data-copy="${id}">${id}</button></td><td class="note-cell" data-i18n="${note}"></td></tr>`
   )
   .join("\n");
 
 const imageRows = imageModels
   .map(
-    ([id, price]) =>
-      `<tr><td class="model"><button type="button" class="model-btn" data-copy="${id}">${id}</button></td><td class="price">${price} <span data-i18n="perImage"></span></td></tr>`
+    (id) =>
+      `<tr><td class="model"><button type="button" class="model-btn" data-copy="${id}">${id}</button></td></tr>`
   )
   .join("\n");
 
 const body = `
 <style>
+  .manual-banner {
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 0 0 28px;
+    padding: 14px 18px;
+    border: 1px solid var(--line-strong);
+    border-left: 3px solid var(--ink);
+    border-radius: 12px;
+    text-decoration: none;
+    background: var(--surface);
+  }
+  .manual-banner:hover { border-left-color: var(--accent-ink); }
+  .manual-title { font-weight: 650; font-size: 14px; color: var(--ink); }
+  .manual-sub { font-size: 12.5px; opacity: .7; }
+  .manual-cta {
+    margin-left: auto;
+    font-size: 12.5px;
+    font-weight: 600;
+    color: var(--accent-ink);
+  }
+  .cap-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 10px;
+    margin-top: 14px;
+  }
+  .cap-card {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 13px 15px;
+    border: 1px solid var(--line-strong);
+    border-radius: 12px;
+    text-decoration: none;
+    background: var(--surface);
+  }
+  .cap-card:hover { border-color: var(--accent-ink); }
+  .cap-name { font-weight: 650; font-size: 13.5px; color: var(--ink); }
+  .cap-sub { font-size: 12px; opacity: .65; line-height: 1.45; }
+  @media (max-width: 900px) {
+    .manual-cta { margin-left: 0; }
+  }
   .lang-bar {
     position: fixed;
     top: 12px;
@@ -550,6 +766,7 @@ const body = `
         <a href="#access" data-i18n="tocAccess"></a>
         <a href="#chat" data-i18n="tocChat"></a>
         <a href="#image" data-i18n="tocImage"></a>
+        <a href="#capabilities" data-i18n="tocCaps"></a>
         <a href="#clients" data-i18n="tocClients"></a>
         <a href="#support" data-i18n="tocSupport"></a>
       </nav>
@@ -561,6 +778,12 @@ const body = `
         <h1 data-i18n="docTitle"></h1>
         <p data-i18n="heroSub"></p>
       </header>
+
+      <a class="manual-banner" href="/brand/keyo-api-ref.html" target="_blank" rel="noopener noreferrer">
+        <span class="manual-title" data-i18n="manualTitle"></span>
+        <span class="manual-sub" data-i18n="manualSub"></span>
+        <span class="manual-cta" data-i18n="manualCta"></span>
+      </a>
 
       <section id="access">
         <div class="sec-head">
@@ -611,8 +834,6 @@ const body = `
             <thead>
               <tr>
                 <th data-i18n="thModel"></th>
-                <th data-i18n="thIn"></th>
-                <th data-i18n="thOut"></th>
                 <th data-i18n="thNote"></th>
               </tr>
             </thead>
@@ -621,7 +842,8 @@ ${chatRows}
             </tbody>
           </table>
         </div>
-        <p class="hint" data-i18n="chatHint"></p>
+        <p class="hint" data-i18n-html="allModelsHint"></p>
+        <p class="hint" data-i18n-html="chatHint"></p>
       </section>
 
       <section id="image">
@@ -648,7 +870,6 @@ ${chatRows}
             <thead>
               <tr>
                 <th data-i18n="thModel"></th>
-                <th data-i18n="thPrice"></th>
               </tr>
             </thead>
             <tbody>
@@ -658,9 +879,59 @@ ${imageRows}
         </div>
       </section>
 
-      <section id="clients">
+      <section id="capabilities">
         <div class="sec-head">
           <span class="num">04</span>
+          <h2 data-i18n="capsTitle"></h2>
+        </div>
+        <p class="sec-desc" data-i18n="capsDesc"></p>
+        <div class="cap-grid">
+          <a class="cap-card" href="/brand/keyo-api-ref.html" target="_blank" rel="noopener noreferrer">
+            <span class="cap-name" data-i18n="capVideo"></span>
+            <span class="cap-sub" data-i18n="capVideoSub"></span>
+          </a>
+          <a class="cap-card" href="/brand/keyo-api-ref.html" target="_blank" rel="noopener noreferrer">
+            <span class="cap-name" data-i18n="capAsr"></span>
+            <span class="cap-sub" data-i18n="capAsrSub"></span>
+          </a>
+          <a class="cap-card" href="/brand/keyo-api-ref.html" target="_blank" rel="noopener noreferrer">
+            <span class="cap-name" data-i18n="capTts"></span>
+            <span class="cap-sub" data-i18n="capTtsSub"></span>
+          </a>
+          <a class="cap-card" href="/brand/keyo-api-ref.html" target="_blank" rel="noopener noreferrer">
+            <span class="cap-name" data-i18n="capOcr"></span>
+            <span class="cap-sub" data-i18n="capOcrSub"></span>
+          </a>
+          <a class="cap-card" href="/brand/keyo-api-ref.html" target="_blank" rel="noopener noreferrer">
+            <span class="cap-name" data-i18n="capVision"></span>
+            <span class="cap-sub" data-i18n="capVisionSub"></span>
+          </a>
+          <a class="cap-card" href="/brand/keyo-api-ref.html" target="_blank" rel="noopener noreferrer">
+            <span class="cap-name" data-i18n="capAvatar"></span>
+            <span class="cap-sub" data-i18n="capAvatarSub"></span>
+          </a>
+          <a class="cap-card" href="/brand/keyo-api-ref.html" target="_blank" rel="noopener noreferrer">
+            <span class="cap-name" data-i18n="capDecision"></span>
+            <span class="cap-sub" data-i18n="capDecisionSub"></span>
+          </a>
+          <a class="cap-card" href="/brand/keyo-api-ref.html" target="_blank" rel="noopener noreferrer">
+            <span class="cap-name" data-i18n="capModeration"></span>
+            <span class="cap-sub" data-i18n="capModerationSub"></span>
+          </a>
+          <a class="cap-card" href="/brand/keyo-api-ref.html" target="_blank" rel="noopener noreferrer">
+            <span class="cap-name" data-i18n="capEmbed"></span>
+            <span class="cap-sub" data-i18n="capEmbedSub"></span>
+          </a>
+          <a class="cap-card" href="/brand/keyo-api-ref.html" target="_blank" rel="noopener noreferrer">
+            <span class="cap-name" data-i18n="capMusic"></span>
+            <span class="cap-sub" data-i18n="capMusicSub"></span>
+          </a>
+        </div>
+      </section>
+
+      <section id="clients">
+        <div class="sec-head">
+          <span class="num">05</span>
           <h2 data-i18n="clientsTitle"></h2>
         </div>
         <p class="sec-desc" data-i18n="clientsDesc"></p>
@@ -712,7 +983,7 @@ ${imageRows}
 
       <section id="support">
         <div class="sec-head">
-          <span class="num">05</span>
+          <span class="num">06</span>
           <h2 data-i18n="supportTitle"></h2>
         </div>
         <div class="footer-note" data-i18n-html="supportBody"></div>

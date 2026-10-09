@@ -149,7 +149,7 @@ Path A has no own models: wan / Seedance / FLUX / MiniMax / Gemini Omni posted h
 
 ### 1.5 ASR → `POST /v1/audio/transcriptions` (multipart)
 
-`whisper-large-v3-turbo` · `whisper-large-v3` · `GLM-ASR` · `MOSS-Audio-8B-Thinking`
+`whisper-large-v3-turbo` · `whisper-large-v3` · `SenseVoiceSmall` · `GLM-ASR` · `MOSS-Audio-8B-Thinking`
 
 ### 1.6 TTS sync → `POST /v1/audio/speech` (audio bytes)
 
@@ -219,12 +219,11 @@ curl https://www.keyoapi.xyz/v1/systemone \
 
 `nonescape-v0` · `keyo-text-moderation` · `Security-semantic-filtering` · `nsfw-classifier`
 
-### 1.13 Embeddings and reranking
+### 1.13 Embeddings
 
 | Capability | Path | Models |
 |---|---|---|
-| Embeddings | `POST /v1/embeddings` | `WeMM-Embedding-9B` · `WeMM-Embedding-4B` · `WeMM-Embedding-2B` · `Qwen3-VL-Embedding-8B` |
-| Reranking | `POST /v1/rerank` | `Qwen3-VL-Reranker-2B` · `Qwen3-VL-Reranker-8B` |
+| Embeddings | `POST /v1/embeddings` | `WeMM-Embedding-9B` · `WeMM-Embedding-4B` · `WeMM-Embedding-2B` · `gemini-embedding-2-preview` |
 
 Embedding example:
 
@@ -232,16 +231,6 @@ Embedding example:
 {
   "model": "WeMM-Embedding-9B",
   "input": ["text to retrieve"]
-}
-```
-
-Reranking example:
-
-```json
-{
-  "model": "Qwen3-VL-Reranker-2B",
-  "query": "user question",
-  "documents": ["candidate document one", "candidate document two"]
 }
 ```
 

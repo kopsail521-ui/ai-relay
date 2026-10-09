@@ -160,7 +160,7 @@ Path A 已无独立模型：打到这里的 wan / Seedance / FLUX / MiniMax / Ge
 
 ### 1.5 语音识别 ASR → `POST /v1/audio/transcriptions`（multipart）
 
-`whisper-large-v3-turbo` · `whisper-large-v3` · `GLM-ASR` · `MOSS-Audio-8B-Thinking`
+`whisper-large-v3-turbo` · `whisper-large-v3` · `SenseVoiceSmall` · `GLM-ASR` · `MOSS-Audio-8B-Thinking`
 
 ### 1.6 TTS 同步 → `POST /v1/audio/speech`（返回音频字节）
 
@@ -230,12 +230,11 @@ curl https://www.keyoapi.xyz/v1/systemone \
 
 `nonescape-v0` · `keyo-text-moderation` · `Security-semantic-filtering` · `nsfw-classifier`
 
-### 1.13 向量与重排
+### 1.13 向量（Embeddings）
 
 | 能力 | 路径 | 模型 |
 |------|------|------|
-| 向量 | `POST /v1/embeddings` | `WeMM-Embedding-9B` · `WeMM-Embedding-4B` · `WeMM-Embedding-2B` · `Qwen3-VL-Embedding-8B` |
-| 重排 | `POST /v1/rerank` | `Qwen3-VL-Reranker-2B` · `Qwen3-VL-Reranker-8B` |
+| 向量 | `POST /v1/embeddings` | `WeMM-Embedding-9B` · `WeMM-Embedding-4B` · `WeMM-Embedding-2B` · `gemini-embedding-2-preview` |
 
 向量示例：
 
@@ -246,15 +245,6 @@ curl https://www.keyoapi.xyz/v1/systemone \
 }
 ```
 
-重排示例：
-
-```json
-{
-  "model": "Qwen3-VL-Reranker-2B",
-  "query": "用户问题",
-  "documents": ["候选文档一", "候选文档二"]
-}
-```
 
 ---
 

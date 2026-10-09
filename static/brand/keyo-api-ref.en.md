@@ -125,9 +125,7 @@ Same pattern for other Path B models: upload once, map `url` to that model’s f
 
 Free (the `:free` suffix): `Atria-dawn-v2:free`, `DeepSeek-Prover-V2-7B:free`
 
-There is also a `:free` chat pool (for example `glm-5.3-flash:free`, `nemotron-3-ultra-550b-a55b:free`). The live list is https://www.keyoapi.xyz/free-models — the list changes over time.
-
-`nemotron-3-ultra-550b-a55b:free` does not accept `enable_thinking`; disable that option in your client. A successful connection test only confirms the test request. For streaming chat, verify that `choices[].delta.content` arrives and the stream ends with `[DONE]`. If one paid model reports insufficient balance, check your account balance; if funds remain, keep the request id and contact support instead of retrying repeatedly.
+There is also a `:free` chat pool (for example `glm-5.3-flash:free`). The live list is https://www.keyoapi.xyz/free-models — the list changes over time.
 
 Paid: `gpt-5.6-luna` · `gpt-5.6-terra` · `gpt-5.6-sol` · `gpt-6-luna` · `gpt-6-sol` · `gpt-6-astra` · `claude-sonnet-5` · `claude-sonnet-5-5` · `claude-opus-5` · `claude-opus-5-5` · `claude-fable-5` · `claude-fable-5-1` · `gemini-3.7-flash` · `gemini-3.8-flash` · `grok-4.7` · `grok-4.6` · `minimax-m3` · `glm-5.3` · `glm-5.3-flash` · `glm-5.2` · `deepseek-v4.1-flash` · `deepseek-v4-pro-0813` · `deepseek-v4-flash-0731` · `deepseek-v4-pro` · `deepseek-v4-flash` · `kimi-k3` · `kimi-k2.7-code` · `qwen3.8-flash` · `hy4-preview` · `mimo-v2.6-pro` · `mimo-v2.6-flash` · `qwen3.8-max-0902`
 

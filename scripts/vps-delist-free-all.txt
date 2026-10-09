@@ -1,0 +1,48 @@
+# VPS：下架 SenseNova + UnoRouter 全部免费模型（共 21 个 :free ID）
+#
+# SenseNova (Keyo Free): glm-5.2:free / kimi-k3:free / deepseek-v4-pro:free / deepseek-v4-flash:free
+# UnoRouter (Keyo Chat Free): k2-horizon:free / space-bunny-alpha:free / nemotron-3-* / gemma-4-* / 等 17 个
+#
+# 不受影响：Atria-dawn-v2:free / DeepSeek-Prover-V2-7B:free（其他渠道的免费模型，不在本次范围）
+set -e
+cd /opt/ai-relay
+sudo bash scripts/vps-safe-pull-preserve-blog.sh
+
+sudo docker run --rm \
+  -v /opt/ai-relay:/opt/ai-relay:ro \
+  -v /opt/ai-relay/data/new-api:/data \
+  -w /opt/ai-relay python:3.12-alpine \
+  python scripts/vps-delist-free-all.py /data/one-api.db
+
+sudo docker restart ai-relay-new-api
+sleep 6
+curl -sS -o /dev/null -w "console_http=%{http_code}\n" http://127.0.0.1:3000/api/status
+
+# smoke：确认 21 个全部从 /api/pricing 消失
+curl -sS https://www.keyoapi.xyz/api/pricing -o /tmp/p_delist.json
+python3 - <<'PY'
+import json
+targets = [
+    "glm-5.2:free","kimi-k3:free","deepseek-v4-pro:free","deepseek-v4-flash:free",
+    "k2-horizon:free","space-bunny-alpha:free","nemotron-3-ultra-550b-a55b:free",
+    "gemma-4-26b:free","laguna-s-2.1:free","qwen3.6-35b-a3b:free",
+    "nemotron-3-super-120b-a12b:free","ling-3.0-flash-fin:free","qwen3.8-27b:free",
+    "nemotron-3.5-lightning-30b-a3b:free","gemini-robotics-er-2-preview:free",
+    "nemotron-3.5-lightning:free","dots-3-note-preview:free","gemma-4-31b-it:free",
+    "step-3.7-flash:free","mistral-large-3-675b:free","muse-glimmer-30b:free",
+]
+j = json.load(open("/tmp/p_delist.json"))
+rows = {r["model_name"] for r in j.get("data", [])}
+still = [t for t in targets if t in rows]
+print("still_listed:", len(still))
+if still:
+    for s in still:
+        print("  STILL_LISTED:", s)
+    raise SystemExit("SMOKE_FAIL: %d models still listed" % len(still))
+print("SMOKE_PASS: all 21 delisted")
+PY
+rm -f /tmp/p_delist.json
+
+# 品牌/SEO 静态页（free-models 页面会自动反映 config 变化）
+sudo bash scripts/deploy-brand-static.sh
+echo DONE_DELIST_FREE_ALL

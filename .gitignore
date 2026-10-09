@@ -39,3 +39,4 @@ static/brand/blog/article/*
 !static/brand/blog/article/.gitkeep
 # Cursor chat history export (local archive)
 .cursor-history/
+*.exe~

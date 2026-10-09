@@ -3,6 +3,12 @@
   "synced_at": "2026-10-05",
   "models": [
     {
+      "id": "keyo-flash:free",
+      "family": "Keyo",
+      "twin": null,
+      "note": "Keyo Relay pool: multi free-model auto-relay. Fixed $0 on catalog (billed against gift credits)."
+    },
+    {
       "id": "Atria-dawn-v2:free",
       "family": "Other",
       "note": "Fixed $0 on Keyo catalog (covered by your $10 credit). Availability can change; confirm live on /pricing."

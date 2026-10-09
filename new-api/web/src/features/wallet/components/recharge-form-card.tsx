@@ -26,7 +26,6 @@ import { Card, CardContent, CardHeader } from '@/components/ui/card'
 import { IconBadge } from '@/components/ui/icon-badge'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { FormDescription } from '@/components/ui/form'
 import { Skeleton } from '@/components/ui/skeleton'
 import { TitledCard } from '@/components/ui/titled-card'
 import {
@@ -333,9 +332,12 @@ export function RechargeFormCard({
                     )}
                   </div>
                 </div>
-                <FormDescription className='text-muted-foreground text-xs'>
+                <p
+                  data-slot='form-description'
+                  className='text-muted-foreground text-xs'
+                >
                   {t('Minimum topup amount: {{amount}}', { amount: minTopup })}
-                </FormDescription>
+                </p>
                 {amountError && (
                   <p className='text-destructive text-xs' aria-live='polite'>
                     {amountError}

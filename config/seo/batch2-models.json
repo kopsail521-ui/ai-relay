@@ -48,7 +48,7 @@
       ],
       "h1": "DeepSeek V4 Pro on KeyoAPI",
       "title": "DeepSeek V4 Pro API Guide | KeyoAPI",
-      "metaDescription": "DeepSeek V4 Pro on KeyoAPI: deepseek-v4-pro-0813 ~$0.07/$0.14. Separate from deepseek-v4.1-flash.",
+      "metaDescription": "DeepSeek V4 Pro on KeyoAPI: deepseek-v4-pro-0813 ~$0.14/$0.29. Separate from deepseek-v4.1-flash.",
       "priceLabel": "~$0.14 / $0.29 per 1M in/out",
       "priceUnit": "per_1m_tokens",
       "related": [
@@ -302,7 +302,7 @@
       ],
       "h1": "DeepSeek V4 Flash 0731 on KeyoAPI — Catalog Snapshot ID",
       "title": "DeepSeek V4 Flash 0731 API Guide & Pricing | KeyoAPI",
-      "metaDescription": "Call deepseek-v4-flash-0731 on KeyoAPI ~$0.04/$0.07 per 1M. Separate from deepseek-v4.1-flash and deepseek-v4-flash.",
+      "metaDescription": "Call deepseek-v4-flash-0731 on KeyoAPI ~$0.09/$0.17 per 1M. Separate from deepseek-v4.1-flash and deepseek-v4-flash.",
       "priceLabel": "~$0.09 / $0.17 per 1M in/out",
       "priceUnit": "per_1m_tokens",
       "related": [

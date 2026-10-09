@@ -42,7 +42,7 @@
       ],
       "freeKiller": {
         "title": "A $0 prototyping lane on the same key",
-        "body": "Google Gemini free tiers are usually quota- or trial-shaped. On the same Keyo key you can call gemini-robotics-er-2-preview:free and other fixed $0 catalog IDs on /free-models — $0 model IDs whose calls draw down your $10 welcome credit (fair-use rate limits apply). Prototype there, then meter paid Gemini-class traffic."
+        "body": "Google Gemini free tiers are usually quota- or trial-shaped. On the same Keyo key you can call Atria-dawn-v2:free and other fixed $0 catalog IDs on /free-models — $0 model IDs whose calls draw down your $10 welcome credit (fair-use rate limits apply). Prototype there, then meter paid Gemini-class traffic."
       },
       "body": [
         "Engineers comparing Gemini API pricing usually already want Google-class models with clearer unit economics — or one prepaid balance across Gemini-class IDs plus DeepSeek, GLM, Whisper, OCR, and TTS. Official Google surfaces win on brand trust; KeyoAPI wins when you want that stack without five invoices.",
@@ -57,7 +57,7 @@
         },
         {
           "q": "Do you offer a free Gemini model?",
-          "a": "Yes — gemini-robotics-er-2-preview:free is a fixed $0 catalog ID covered by your $10 welcome credit (fair-use). Other free IDs on /free-models sit on the same API key beside paid Gemini traffic."
+          "a": "Yes — Atria-dawn-v2:free is a fixed $0 catalog ID covered by your $10 welcome credit (fair-use). Other free IDs on /free-models sit on the same API key beside paid Gemini traffic."
         },
         {
           "q": "Is Gemini 4 Argon available on KeyoAPI?",
@@ -118,7 +118,7 @@
           "model": "deepseek-v4-pro",
           "official": "DeepSeek V4 Pro (base) — verify on api-docs.deepseek.com",
           "keyo": "~$0.14 / $0.29 per 1M in/out",
-          "note": "Same catalog rates as deepseek-v4-pro-0813; alias redirects there — the paid twin of deepseek-v4-pro:free on /free-models"
+          "note": "Same catalog rates as deepseek-v4-pro-0813; alias redirects there — the paid twin of Atria-dawn-v2:free on /free-models"
         }
       ],
       "freeKiller": {
@@ -184,12 +184,12 @@
           "model": "glm-5.2",
           "official": "Zhipu GLM 5.2 — verify on open.bigmodel.cn",
           "keyo": "~$1.40 / $4.40 per 1M in/out",
-          "note": "Own band; paid twin of glm-5.2:free"
+          "note": "Own band; paid twin of Atria-dawn-v2:free"
         }
       ],
       "freeKiller": {
         "title": "Prototype free, then meter GLM on the same key",
-        "body": "For $0 prototyping on the same key, use glm-5.2:free from /free-models — a $0 fixed-ID twin whose calls draw down your $10 welcome credit (fair-use rate limits). When you meter GLM traffic, switch model= to glm-5.3-flash or glm-5.3 without changing base URL or auth."
+        "body": "For $0 prototyping on the same key, use Atria-dawn-v2:free from /free-models — a $0 fixed-ID twin whose calls draw down your $10 welcome credit (fair-use rate limits). When you meter GLM traffic, switch model= to glm-5.3-flash or glm-5.3 without changing base URL or auth."
       },
       "body": [
         "The GLM family on KeyoAPI covers three chat lanes and two speech lanes on one OpenAI-compatible key: glm-5.3 and glm-5.3-flash for chat, glm-5.2 at its own band, plus GLM-ASR (~$0.007 per request) and GLM-TTS (~$0.014 per request). No separate Zhipu account, no second invoice.",
@@ -205,7 +205,7 @@
         },
         {
           "q": "Is there a free GLM tier?",
-          "a": "Yes — glm-5.2:free is a fixed $0 catalog ID on /free-models, covered by your $10 welcome credit with fair-use rate limits. Switch model= to a metered GLM lane on the same key when you outgrow it."
+          "a": "Yes — Atria-dawn-v2:free is a fixed $0 catalog ID on /free-models, covered by your $10 welcome credit with fair-use rate limits. Switch model= to a metered GLM lane on the same key when you outgrow it."
         },
         {
           "q": "Do you carry GLM ASR and TTS?",
@@ -316,7 +316,7 @@
         "body": [
           "The cheapest Claude-class lane we list is claude-haiku-5-5 at ~$0.07 / $0.37 per 1M in/out — the fastest, cheapest Claude 5.5 lane — and it is the row to start on if you searched for a cheap Claude API. For balanced coding work, claude-sonnet-5 (~$0.44 / $2.21) is the everyday lane.",
           "Above it, by task rather than by tier: claude-opus-5 ~$1.10 / $5.52 for hard agent and coding escalations; claude-fable-5 ~$8.82 / $44.12 and claude-fable-5-1 ~$7.35 / $36.77 for flagship chat. Cheaper than all of them and still on the same key: gpt-6-luna and deepseek-v4.1-flash (~$0.14 / $0.56) if the task does not actually need Claude reasoning.",
-          "Cost math: 10M input + 2M output tokens/month on claude-sonnet-5 ≈ $8.80 + $8.82 ≈ $17.62. The same mix on claude-fable-5 ≈ $88.20 + $88.24 ≈ $176.44. Confirm live rates on /model/claude-sonnet-5 before you commit volume."
+          "Cost math: 10M input + 2M output tokens/month on claude-sonnet-5 ≈ $4.40 + $4.42 ≈ $8.82. The same mix on claude-fable-5 ≈ $88.20 + $88.24 ≈ $176.44. Confirm live rates on /model/claude-sonnet-5 before you commit volume."
         ]
       }
     },
@@ -776,7 +776,7 @@
           "model": "glm-5.3-flash",
           "official": "Zhipu GLM 5.3 Flash — verify on open.bigmodel.cn",
           "keyo": "~$0.22 / $0.72 per 1M in/out",
-          "note": "Paid twin of glm-5.3-flash:free on /free-models"
+          "note": "Paid twin of Atria-dawn-v2:free on /free-models"
         }
       ],
       "freeKiller": {

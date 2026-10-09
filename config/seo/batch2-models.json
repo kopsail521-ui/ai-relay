@@ -107,7 +107,7 @@
           "a": "See /gemini-api-pricing and confirm live rates on /pricing/gemini-3.8-flash."
         }
       ],
-      "body": "gemini-3.8-flash is a current KeyoAPI Gemini-class Flash chat ID — OpenAI-compatible on https://www.keyoapi.xyz/v1. Indicative sell rates are about $0.28 / $1.38 per 1M in/out; confirm /pricing/gemini-3.8-flash before volume. Family table: /gemini-api-pricing. For $0 prototyping on the same key, use gemini-robotics-er-2-preview:free on /free-models — $0 fixed-ID twins whose calls draw down your $10 welcome credit (fair-use rate limits).",
+      "body": "gemini-3.8-flash is a current KeyoAPI Gemini-class Flash chat ID — OpenAI-compatible on https://www.keyoapi.xyz/v1. Indicative sell rates are about $0.28 / $1.38 per 1M in/out; confirm /pricing/gemini-3.8-flash before volume. Family table: /gemini-api-pricing. For $0 prototyping on the same key, use Atria-dawn-v2:free on /free-models — $0 fixed-ID twins whose calls draw down your $10 welcome credit (fair-use rate limits).",
       "curlExample": "curl https://www.keyoapi.xyz/v1/chat/completions \\\n  -H \"Authorization: Bearer YOUR_API_KEY\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\"model\":\"gemini-3.8-flash\",\"messages\":[{\"role\":\"user\",\"content\":\"Summarize Gemini Flash pricing on KeyoAPI\"}]}'",
       "uniqueBlurb": "Live gemini-3.8-flash ID with current Keyo sell rates."
     },

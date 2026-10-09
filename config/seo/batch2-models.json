@@ -49,7 +49,7 @@
       "h1": "DeepSeek V4 Pro on KeyoAPI",
       "title": "DeepSeek V4 Pro API Guide | KeyoAPI",
       "metaDescription": "DeepSeek V4 Pro on KeyoAPI: deepseek-v4-pro-0813 ~$0.07/$0.14. Separate from deepseek-v4.1-flash.",
-      "priceLabel": "~$0.07 / $0.14 per 1M in/out",
+      "priceLabel": "~$0.14 / $0.29 per 1M in/out",
       "priceUnit": "per_1m_tokens",
       "related": [
         "deepseek-v4.1-flash",
@@ -72,7 +72,7 @@
           "a": "The canonical Keyo catalog ID for Pro is deepseek-v4-pro-0813. Use that string in production; confirm live on /pricing-list."
         }
       ],
-      "body": "DeepSeek V4 Pro on KeyoAPI is the paid ID deepseek-v4-pro-0813 — OpenAI-compatible chat on https://www.keyoapi.xyz/v1. Indicative sell rates are about $0.07 per 1M input and $0.14 per 1M output; confirm /pricing/deepseek-v4-pro-0813 before you quote. deepseek-v4.1-flash (~$0.01 / $0.04) is a separate Flash ID for high-volume paths. See /deepseek-api-pricing for the family table.",
+      "body": "DeepSeek V4 Pro on KeyoAPI is the paid ID deepseek-v4-pro-0813 — OpenAI-compatible chat on https://www.keyoapi.xyz/v1. Indicative sell rates are about $0.14 per 1M input and $0.29 per 1M output; confirm /pricing/deepseek-v4-pro-0813 before you quote. deepseek-v4.1-flash (~$0.14 / $0.56) is a separate Flash ID for high-volume paths. See /deepseek-api-pricing for the family table.",
       "curlExample": "curl https://www.keyoapi.xyz/v1/chat/completions \\\n  -H \"Authorization: Bearer YOUR_API_KEY\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\"model\":\"deepseek-v4-pro-0813\",\"messages\":[{\"role\":\"user\",\"content\":\"Explain DeepSeek V4 Pro vs Flash\"}]}'",
       "uniqueBlurb": "Pro page points to the live deepseek-v4-pro-0813 ID and current Keyo sell rates."
     },
@@ -227,8 +227,8 @@
       ],
       "h1": "DeepSeek V4.1 Flash on KeyoAPI — Cheap High-Volume ID",
       "title": "DeepSeek V4.1 Flash API Guide & Pricing | KeyoAPI",
-      "metaDescription": "Call deepseek-v4.1-flash on KeyoAPI ~$0.01/$0.04 per 1M. Separate from deepseek-v4-flash and deepseek-v4-pro-0813.",
-      "priceLabel": "~$0.01 / $0.04 per 1M in/out",
+      "metaDescription": "Call deepseek-v4.1-flash on KeyoAPI ~$0.14/$0.56 per 1M. Separate from deepseek-v4-flash and deepseek-v4-pro-0813.",
+      "priceLabel": "~$0.14 / $0.56 per 1M in/out",
       "priceUnit": "per_1m_tokens",
       "related": [
         "deepseek-v4-flash",
@@ -240,14 +240,14 @@
       "faqs": [
         {
           "q": "Which Flash ID is cheapest?",
-          "a": "deepseek-v4.1-flash (~$0.01 / $0.04 per 1M indicative). deepseek-v4-flash (~$0.09 / $0.17) and deepseek-v4-flash-0731 (~$0.04 / $0.07) are separate catalog IDs — confirm on /pricing."
+          "a": "deepseek-v4.1-flash (~$0.14 / $0.56 per 1M indicative). deepseek-v4-flash (~$0.44 / $1.32) and deepseek-v4-flash-0731 (~$0.09 / $0.17) are separate catalog IDs — confirm on /pricing."
         },
         {
           "q": "How do I call it?",
           "a": "POST /v1/chat/completions with model=deepseek-v4.1-flash at https://www.keyoapi.xyz/v1."
         }
       ],
-      "body": "deepseek-v4.1-flash is KeyoAPI’s low-cost DeepSeek Flash ID for chat widgets, classification, and high-volume rewrites — indicative ~$0.01 / $0.04 per 1M in/out. It is not the same catalog row as deepseek-v4-flash (~$0.09 / $0.17) or deepseek-v4-flash-0731 (~$0.04 / $0.07). deepseek-v4-pro-0813 (~$0.07 / $0.14) is a separate Pro ID. Confirm interactive /pricing before volume. Family table: /deepseek-api-pricing.",
+      "body": "deepseek-v4.1-flash is KeyoAPI’s low-cost DeepSeek Flash ID for chat widgets, classification, and high-volume rewrites — indicative ~$0.14 / $0.56 per 1M in/out. It is not the same catalog row as deepseek-v4-flash (~$0.44 / $1.32) or deepseek-v4-flash-0731 (~$0.09 / $0.17). deepseek-v4-pro-0813 (~$0.14 / $0.29) is a separate Pro ID. Confirm interactive /pricing before volume. Family table: /deepseek-api-pricing.",
       "curlExample": "curl https://www.keyoapi.xyz/v1/chat/completions \\\n  -H \"Authorization: Bearer YOUR_API_KEY\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\"model\":\"deepseek-v4.1-flash\",\"messages\":[{\"role\":\"user\",\"content\":\"Hello from DeepSeek V4.1 Flash\"}]}'",
       "uniqueBlurb": "Primary cheap DeepSeek Flash ID matching live Model Square rates."
     },
@@ -264,8 +264,8 @@
       ],
       "h1": "DeepSeek V4 Flash API — Pricing & Free Prototype Path",
       "title": "DeepSeek V4 Flash Pricing & Free Options | KeyoAPI",
-      "metaDescription": "deepseek-v4-flash pricing ~$0.09/$0.17 on KeyoAPI. Compare Flash IDs and $0 free catalog models on the same key.",
-      "priceLabel": "~$0.09 / $0.17 per 1M in/out",
+      "metaDescription": "deepseek-v4-flash pricing ~$0.44/$1.32 on KeyoAPI. Compare Flash IDs and $0 free catalog models on the same key.",
+      "priceLabel": "~$0.44 / $1.32 per 1M in/out",
       "priceUnit": "per_1m_tokens",
       "related": [
         "deepseek-v4.1-flash",
@@ -277,7 +277,7 @@
       "faqs": [
         {
           "q": "What is deepseek-v4-flash pricing on Keyo?",
-          "a": "Indicative ~$0.09 / $0.17 per 1M in/out. Confirm live on /pricing/deepseek-v4-flash. Family table: /deepseek-api-pricing."
+          "a": "Indicative ~$0.44 / $1.32 per 1M in/out. Confirm live on /pricing/deepseek-v4-flash. Family table: /deepseek-api-pricing."
         },
         {
           "q": "Is there a free DeepSeek V4 Flash?",
@@ -285,10 +285,10 @@
         },
         {
           "q": "Is this the cheapest DeepSeek Flash?",
-          "a": "No. Prefer deepseek-v4.1-flash (~$0.01 / $0.04) for cheaper high-volume paid Flash. Confirm all IDs on /pricing."
+          "a": "No. Prefer deepseek-v4.1-flash (~$0.14 / $0.56) for the newer Flash lane. Confirm all IDs on /pricing."
         }
       ],
-      "body": "Looking up DeepSeek V4 Flash pricing or a free path on an OpenAI-compatible relay? On KeyoAPI, deepseek-v4-flash is a metered catalog ID at indicative ~$0.09 / $0.17 per 1M in/out — confirm live on /pricing/deepseek-v4-flash. It is not the same row as deepseek-v4.1-flash (~$0.01 / $0.04) or deepseek-v4-flash-0731 (~$0.04 / $0.07). Prefer deepseek-v4.1-flash for cheaper high-volume paid Flash; keep deepseek-v4-flash when your stack already pins this exact model string. For DeepSeek V4 Flash free prototyping on the same API key, use fixed $0 IDs on /free-models — $0 fixed-ID twins whose calls draw down your $10 welcome credit (fair-use rate limits), then switch model= to a metered Flash ID without changing base URL or auth. deepseek-v4-pro-0813 (~$0.07 / $0.14) is a separate Pro model. Family table: /deepseek-api-pricing. Call POST /v1/chat/completions with Bearer auth and model=deepseek-v4-flash.",
+      "body": "Looking up DeepSeek V4 Flash pricing or a free path on an OpenAI-compatible relay? On KeyoAPI, deepseek-v4-flash is a metered catalog ID at indicative ~$0.44 / $1.32 per 1M in/out — confirm live on /pricing/deepseek-v4-flash. It is not the same row as deepseek-v4.1-flash (~$0.14 / $0.56) or deepseek-v4-flash-0731 (~$0.09 / $0.17). Prefer deepseek-v4.1-flash for cheaper high-volume paid Flash; keep deepseek-v4-flash when your stack already pins this exact model string. For DeepSeek V4 Flash free prototyping on the same API key, use fixed $0 IDs on /free-models — $0 fixed-ID twins whose calls draw down your $10 welcome credit (fair-use rate limits), then switch model= to a metered Flash ID without changing base URL or auth. deepseek-v4-pro-0813 (~$0.14 / $0.29) is a separate Pro model. Family table: /deepseek-api-pricing. Call POST /v1/chat/completions with Bearer auth and model=deepseek-v4-flash.",
       "curlExample": "curl https://www.keyoapi.xyz/v1/chat/completions \\\n  -H \"Authorization: Bearer YOUR_API_KEY\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\"model\":\"deepseek-v4-flash\",\"messages\":[{\"role\":\"user\",\"content\":\"Hello from DeepSeek V4 Flash\"}]}'",
       "uniqueBlurb": "Flash catalog ID with its own sell rate — distinct from deepseek-v4.1-flash."
     },
@@ -303,7 +303,7 @@
       "h1": "DeepSeek V4 Flash 0731 on KeyoAPI — Catalog Snapshot ID",
       "title": "DeepSeek V4 Flash 0731 API Guide & Pricing | KeyoAPI",
       "metaDescription": "Call deepseek-v4-flash-0731 on KeyoAPI ~$0.04/$0.07 per 1M. Separate from deepseek-v4.1-flash and deepseek-v4-flash.",
-      "priceLabel": "~$0.04 / $0.07 per 1M in/out",
+      "priceLabel": "~$0.09 / $0.17 per 1M in/out",
       "priceUnit": "per_1m_tokens",
       "related": [
         "deepseek-v4.1-flash",
@@ -315,14 +315,14 @@
       "faqs": [
         {
           "q": "How does 0731 compare to other Flash IDs?",
-          "a": "deepseek-v4-flash-0731 is ~$0.04 / $0.07 per 1M indicative. Prefer deepseek-v4.1-flash (~$0.01 / $0.04) for cheapest high-volume Flash. Confirm live rates on /pricing."
+          "a": "deepseek-v4-flash-0731 is ~$0.04 / $0.07 per 1M indicative. Prefer deepseek-v4.1-flash (~$0.14 / $0.56) for cheapest high-volume Flash. Confirm live rates on /pricing."
         },
         {
           "q": "How do I call it?",
           "a": "POST https://www.keyoapi.xyz/v1/chat/completions with model=deepseek-v4-flash-0731 and your Keyo API key."
         }
       ],
-      "body": "deepseek-v4-flash-0731 is a Keyo catalog snapshot ID at indicative ~$0.04 / $0.07 per 1M in/out. It is separate from deepseek-v4.1-flash (~$0.01 / $0.04) and deepseek-v4-flash (~$0.09 / $0.17). Confirm interactive /pricing before volume. Family table: /deepseek-api-pricing.",
+      "body": "deepseek-v4-flash-0731 is a Keyo catalog snapshot ID at indicative ~$0.09 / $0.17 per 1M in/out. It is separate from deepseek-v4.1-flash (~$0.14 / $0.56) and deepseek-v4-flash (~$0.44 / $1.32). Confirm interactive /pricing before volume. Family table: /deepseek-api-pricing.",
       "curlExample": "curl https://www.keyoapi.xyz/v1/chat/completions \\\n  -H \"Authorization: Bearer YOUR_API_KEY\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\"model\":\"deepseek-v4-flash-0731\",\"messages\":[{\"role\":\"user\",\"content\":\"Hello from DeepSeek V4 Flash 0731\"}]}'",
       "uniqueBlurb": "Catalog snapshot Flash ID listed alongside v4.1-flash and v4-flash."
     },

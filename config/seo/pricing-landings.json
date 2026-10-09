@@ -82,7 +82,7 @@
       "navLabel": "DeepSeek pricing",
       "h1": "DeepSeek API Pricing — KeyoAPI Rates & Official Context",
       "title": "DeepSeek API Pricing Comparison | KeyoAPI",
-      "metaDescription": "DeepSeek API pricing on KeyoAPI: deepseek-v4.1-flash ~$0.01/$0.04, deepseek-v4-flash ~$0.09/$0.17, deepseek-v4-pro-0813 ~$0.07/$0.14 per 1M. OpenAI-compatible.",
+      "metaDescription": "DeepSeek API pricing on KeyoAPI: deepseek-v4.1-flash ~$0.14/$0.56, deepseek-v4-flash ~$0.44/$1.32, deepseek-v4-pro-0813 ~$0.07/$0.14 per 1M. OpenAI-compatible.",
       "targetKeywords": [
         "deepseek api pricing",
         "deepseek api price",
@@ -93,13 +93,13 @@
         {
           "model": "deepseek-v4.1-flash",
           "official": "Official deepseek-flash / V4.1-Flash peak list — verify on api-docs.deepseek.com",
-          "keyo": "~$0.01 / $0.04 per 1M in/out",
+          "keyo": "~$0.14 / $0.56 per 1M in/out",
           "note": "Preferred high-volume Flash"
         },
         {
           "model": "deepseek-v4-flash",
           "official": "Official legacy deepseek-v4-flash name routes to V4.1-Flash — verify on api-docs.deepseek.com",
-          "keyo": "~$0.09 / $0.17 per 1M in/out",
+          "keyo": "~$0.44 / $1.32 per 1M in/out",
           "note": "Separate Keyo catalog ID — confirm /pricing"
         },
         {
@@ -111,13 +111,13 @@
         {
           "model": "deepseek-v4-pro-0813",
           "official": "Official deepseek-v4-pro → V4-Pro-0813 — verify on api-docs.deepseek.com",
-          "keyo": "~$0.07 / $0.14 per 1M in/out",
+          "keyo": "~$0.14 / $0.29 per 1M in/out",
           "note": "Separate Pro ID — not an auto-upgrade from Flash"
         },
         {
           "model": "deepseek-v4-pro",
           "official": "DeepSeek V4 Pro (base) — verify on api-docs.deepseek.com",
-          "keyo": "~$0.07 / $0.14 per 1M in/out",
+          "keyo": "~$0.14 / $0.29 per 1M in/out",
           "note": "Same catalog rates as deepseek-v4-pro-0813; alias redirects there — the paid twin of deepseek-v4-pro:free on /free-models"
         }
       ],
@@ -148,8 +148,8 @@
       "cheapestNote": {
         "title": "Cheapest DeepSeek API rate on Keyo",
         "body": [
-          "If you are hunting for a cheap DeepSeek API, the lowest row on Keyo is deepseek-v4.1-flash at ~$0.01 / $0.04 per 1M in/out — the high-volume Flash lane, and the one to start on for batch or classification work.",
-          "The other rows are separate products, not rungs on a ladder: deepseek-v4-flash ~$0.09 / $0.17 (legacy catalog string), and deepseek-v4-pro-0813 with its alias deepseek-v4-pro at ~$0.07 / $0.14 each. So \"cheap\" here is a task choice, not a tier you upgrade through.",
+          "If you are hunting for a cheap DeepSeek API, the lowest DeepSeek row on Keyo is deepseek-v4.1-flash at ~$0.14 / $0.56 per 1M in/out — the newest Flash lane, and the one to start on for batch or classification work.",
+          "The other rows are separate products, not rungs on a ladder: deepseek-v4-flash ~$0.44 / $1.32 (legacy catalog string), and deepseek-v4-pro-0813 with its alias deepseek-v4-pro at ~$0.14 / $0.29 each. So \"cheap\" here is a task choice, not a tier you upgrade through.",
           "Cost math: 50M input + 10M output tokens/month on deepseek-v4.1-flash ≈ $0.50 + $0.40 ≈ $0.90. The same mix on deepseek-v4-flash ≈ $4.50 + $1.70 ≈ $6.20. Confirm live rates on /pricing-list."
         ]
       }
@@ -315,7 +315,7 @@
         "title": "Cheapest Claude API rate on Keyo",
         "body": [
           "The cheapest Claude-class lane we list is claude-haiku-5-5 at ~$0.07 / $0.37 per 1M in/out — the fastest, cheapest Claude 5.5 lane — and it is the row to start on if you searched for a cheap Claude API. For balanced coding work, claude-sonnet-5 (~$0.44 / $2.21) is the everyday lane.",
-          "Above it, by task rather than by tier: claude-opus-5 ~$1.10 / $5.52 for hard agent and coding escalations; claude-fable-5 ~$8.82 / $44.12 and claude-fable-5-1 ~$7.35 / $36.77 for flagship chat. Cheaper than all of them and still on the same key: gpt-5.6-luna and deepseek-v4.1-flash (~$0.01 / $0.04) if the task does not actually need Claude reasoning.",
+          "Above it, by task rather than by tier: claude-opus-5 ~$1.10 / $5.52 for hard agent and coding escalations; claude-fable-5 ~$8.82 / $44.12 and claude-fable-5-1 ~$7.35 / $36.77 for flagship chat. Cheaper than all of them and still on the same key: gpt-6-luna and deepseek-v4.1-flash (~$0.14 / $0.56) if the task does not actually need Claude reasoning.",
           "Cost math: 10M input + 2M output tokens/month on claude-sonnet-5 ≈ $8.80 + $8.82 ≈ $17.62. The same mix on claude-fable-5 ≈ $88.20 + $88.24 ≈ $176.44. Confirm live rates on /model/claude-sonnet-5 before you commit volume."
         ]
       }
@@ -325,7 +325,7 @@
       "navLabel": "OpenAI pricing",
       "h1": "OpenAI / ChatGPT API Pricing — KeyoAPI Rates & Costs",
       "title": "OpenAI & ChatGPT API Pricing | KeyoAPI",
-      "metaDescription": "ChatGPT API pricing and OpenAI API costs on KeyoAPI: gpt-6-astra (OpenAI) ~$1.84/$9.19, deepseek-v4.1-flash ~$0.01/$0.04, gpt-5.6-luna ~$0.10/$0.62 per 1M — one prepaid key.",
+      "metaDescription": "ChatGPT API pricing and OpenAI API costs on KeyoAPI: gpt-6-astra (OpenAI) ~$1.84/$9.19, deepseek-v4.1-flash ~$0.14/$0.56, gpt-5.6-luna ~$0.10/$0.62 per 1M — one prepaid key.",
       "targetKeywords": [
         "chatgpt api pricing",
         "openai api pricing",
@@ -340,7 +340,7 @@
         {
           "model": "deepseek-v4.1-flash",
           "official": "DeepSeek official Flash-class list often ~$0.14–$0.28 / $0.28–$1.10 per 1M in/out (confirm on platform.deepseek.com; not an OpenAI GPT mini equivalent)",
-          "keyo": "~$0.01 / $0.04 per 1M in/out",
+          "keyo": "~$0.14 / $0.56 per 1M in/out",
           "note": "High-volume / batch · /model/deepseek-v4.1-flash"
         },
         {
@@ -411,14 +411,14 @@
         },
         {
           "q": "Cheapest OpenAI-compatible option on Keyo?",
-          "a": "The lowest-priced lane on the same key is deepseek-v4.1-flash (~$0.01 / $0.04 per 1M in/out). The cheapest GPT-class twin is gpt-5.6-luna (~$0.10 / $0.62). Neither needs a base_url or SDK change."
+          "a": "The lowest-priced chat lane on the same key is gpt-6-luna (~$0.03 / $0.15 per 1M in/out). The cheapest GPT-class twin is gpt-5.6-luna (~$0.10 / $0.62). Neither needs a base_url or SDK change."
         }
       ],
       "curlExample": "# cURL — OpenAI gpt-6-astra on Keyo\ncurl https://www.keyoapi.xyz/v1/chat/completions \\\n  -H \"Authorization: Bearer $KEYO_API_KEY\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\"model\":\"gpt-6-astra\",\"messages\":[{\"role\":\"user\",\"content\":\"Hello from GPT-6 Astra\"}]}'\n\n# Python — OpenAI SDK pointed at Keyo\nfrom openai import OpenAI\nclient = OpenAI(base_url=\"https://www.keyoapi.xyz/v1\", api_key=\"YOUR_KEYO_API_KEY\")\nr = client.chat.completions.create(\n    model=\"gpt-6-astra\",\n    messages=[{\"role\": \"user\", \"content\": \"Summarize this log line in one sentence.\"}],\n)\nprint(r.choices[0].message.content)",
       "cheapestNote": {
         "title": "Cheapest OpenAI-class API on Keyo — and the cheapest chat lane overall",
         "body": [
-          "If you searched for a cheap OpenAI API, two different questions are hiding in there. (1) The cheapest GPT-class lane on Keyo is gpt-5.6-luna at ~$0.10 / $0.62 per 1M in/out — GPT-5-class twins under the same OpenAI-compatible base URL. (2) The cheapest chat lane of any brand on that same key is deepseek-v4.1-flash at ~$0.01 / $0.04 per 1M in/out — not an OpenAI GPT-mini equivalent, but the lowest row we sell.",
+          "If you searched for a cheap OpenAI API, two different questions are hiding in there. (1) The cheapest GPT-class lane on Keyo is gpt-5.6-luna at ~$0.10 / $0.62 per 1M in/out — GPT-5-class twins under the same OpenAI-compatible base URL. (2) The cheapest chat lane of any brand on that same key is gpt-6-luna at ~$0.03 / $0.15 per 1M in/out — already named above; deepseek-v4.1-flash (~$0.14 / $0.56) is the DeepSeek lane when you want that family instead.",
           "Both ride one key, one base URL and one prepaid wallet, so the cheapest way to test OpenAI-shaped code is usually to prototype on a $0 ID from /free-models, then move only the traffic that needs GPT-class quality onto luna.",
           "Cost math: 50M input + 10M output tokens/month on luna ≈ $5.00 in + $6.20 out ≈ $11.20. The same mix on gpt-6-astra at ~$1.84 / $9.19 ≈ $92.00 + $91.90 ≈ $183.90. Confirm live Keyo rates on /pricing-list before you budget."
         ]
@@ -763,7 +763,7 @@
         {
           "model": "deepseek-v4.1-flash",
           "official": "Not an OpenAI model — often used as bulk chat substitute",
-          "keyo": "~$0.01 / $0.04 per 1M in/out",
+          "keyo": "~$0.14 / $0.56 per 1M in/out",
           "note": "High-volume lane on the same key · /model/deepseek-v4.1-flash"
         },
         {

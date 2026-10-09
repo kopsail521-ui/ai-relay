@@ -45,7 +45,7 @@
       "capability": "High-volume budget LLM",
       "official": "DeepSeek official Flash-class list often ~$0.14–$0.28 / $0.28–$1.10 per 1M in/out (confirm on platform.deepseek.com; not an OpenAI GPT mini equivalent)",
       "keyo_model": "deepseek-v4.1-flash",
-      "keyo_price": "~$0.01 / $0.04 per 1M in/out",
+      "keyo_price": "~$0.14 / $0.56 per 1M in/out",
       "note": "Same-family budget Flash lane on Keyo — confirm live /pricing"
     },
     {

@@ -1,0 +1,16 @@
+# 把这段合并进 ai-relay/docker-compose.yml 的 services: 下
+# （或在 docker-compose.yml 里 `include:` 本文件，Docker Compose v2.20+）
+  unofree-pool:
+    build: ./services/unofree-pool
+    container_name: ai-relay-unofree
+    restart: always
+    ports:
+      - "3020:3020"
+    environment:
+      - PORT=3020
+      - LISTEN_HOST=0.0.0.0
+      - TZ=Asia/Shanghai
+      # 多个 key 逗号分隔，免费额度按 key 叠加
+      - UNO_API_KEYS=${UNO_API_KEYS}
+      # 下游密钥：配到 New API 渠道里（与 .env 的 CHANNEL_FREE_API_KEY 一致）
+      - POOL_API_KEYS=${CHANNEL_FREE_API_KEY}

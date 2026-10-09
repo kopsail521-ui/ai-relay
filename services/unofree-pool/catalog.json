@@ -1,0 +1,16 @@
+{
+  "description": "UnoRouter 免费模型池目录：供 /v1/models 与 New API 渠道同步使用",
+  "pool_alias": "keyo-flash:free",
+  "models": [
+    { "id": "agnes-3.0-flash:free", "provider": "Agnes AI", "context": 1048576 },
+    { "id": "gemma-4-26b:free", "provider": "Google", "context": 131072 },
+    { "id": "glm-4.7-flash:free", "provider": "Zhipu", "context": 131072 },
+    { "id": "minimax-m2.7:free", "provider": "MiniMax", "context": 262144 },
+    { "id": "nemotron-3-super-120b-a12b:free", "provider": "NVIDIA", "context": 131072 },
+    { "id": "k2-horizon:free", "provider": "Moonshot", "context": 524288 },
+    { "id": "nemotron-3.5-lightning-30b-a3b:free", "provider": "NVIDIA", "context": 131072 },
+    { "id": "nemotron-3.5-lightning:free", "provider": "NVIDIA", "context": 131072 },
+    { "id": "mistral-7b-instruct:free", "provider": "Mistral", "context": 32768 },
+    { "id": "diffusiongemma-26b-a4b-it:free", "provider": "Google", "context": 131072 }
+  ]
+}

@@ -810,7 +810,7 @@ function renderPricing() {
   <a class="btn btn-secondary" href="/brand/keyo-docs.html">Docs</a>
 </div>
 <h2>Free models ($0 — covered by your $10 credit)</h2>
-<p class="meta">Free IDs: see <a href="/free-models">/free-models</a> — the full list of $0 catalog IDs, their paid twins and curl examples. The tables below cover the metered catalog.</p>
+<p class="meta">Free IDs ($0 catalog IDs whose calls draw down your $10 welcome credit, fair-use): see <a href="/free-models">/free-models</a> for the full list, paid twins and curl examples. The tables below cover the metered catalog.</p>
 <h2>Guided model price table</h2>
 <table>
 <thead><tr><th>Model ID</th><th>Category</th><th>Listed price</th><th>Endpoint</th><th>Links</th></tr></thead>

@@ -1,0 +1,29 @@
+<!-- TITLE: Claude Haiku 5.5 vs GPT-6 Luna: 2.5x, and When It's Worth It -->
+<!-- EXCERPT: Haiku 5.5 costs 2.5x Luna 6 on KeyoAPI — ~$0.07/$0.37 vs ~$0.03/$0.15 per 1M. What the gap buys, and when to pay it. -->
+<h2>The short answer</h2>
+<p>Default to <code>gpt-6-luna</code> and move work to <code>claude-haiku-5-5</code> where Claude-style instruction following changes the output. Luna 6 is ~$0.03 / $0.15 per 1M in/out; Haiku 5.5 is ~$0.07 / $0.37 — <strong>about 2.5x</strong> on both input and output. Both take a 1M-token context window and both are one <code>model=</code> change apart on the same OpenAI-compatible key, so the decision is not integration, it is unit cost against output quality.</p>
+<h2>Side by side</h2>
+<table>
+<thead><tr><th>Model ID</th><th>Input / output per 1M</th><th>Context</th><th>Family position</th></tr></thead>
+<tbody>
+<tr><td><code>gpt-6-luna</code></td><td>~$0.03 / $0.15</td><td>1M</td><td>Cheapest GPT-class chat row on Keyo</td></tr>
+<tr><td><code>claude-haiku-5-5</code></td><td>~$0.07 / $0.37</td><td>1M</td><td>Cheapest Claude-class row on Keyo</td></tr>
+</tbody>
+</table>
+<p>Neither is the only option below them. On the same key, <code>deepseek-v4-flash-0731</code> sits at ~$0.09 / $0.17 and <code>claude-sonnet-5</code> at ~$0.44 / $2.21 — so Haiku 5.5 is also the cheaper way into the Claude family than Sonnet 5. Rates are indicative sell prices; confirm live on <a href="/pricing-list">/pricing-list</a>.</p>
+<h2>What the 2.5x buys</h2>
+<p>Run a month of realistic bulk traffic — 10M input and 2M output tokens:</p>
+<pre><code>gpt-6-luna        10M in × $0.0294 = $0.294
+                   2M out × $0.1471 = $0.294   ≈ $0.59 / month
+
+claude-haiku-5-5  10M in × $0.0735 = $0.735
+                   2M out × $0.3677 = $0.735   ≈ $1.47 / month</code></pre>
+<p>That is <strong>about $0.88 more per month</strong> at this volume — the absolute gap stays small until the volume is large. At 10x that traffic (100M in / 20M out) the difference becomes roughly $8.80 per month, and at 100x roughly $88. The practical read: at low volume the 2.5x is noise and you should pick on output quality; at high volume the gap is real and you should split the traffic.</p>
+<p>The split that usually works: keep classification, extraction, routing and bulk drafting on <code>gpt-6-luna</code>, and route the steps where you have seen Luna miss — long instruction chains, structured output that must follow a schema, or Claude-specific writing style — to <code>claude-haiku-5-5</code>.</p>
+<h2>Which to pick when</h2>
+<ul>
+<li><strong>Pick Luna 6</strong> when unit cost decides: high-volume classification, triage, tagging, first-pass drafting, anything you run millions of times and sample instead of read.</li>
+<li><strong>Pick Haiku 5.5</strong> when instruction following decides: multi-step extraction from long documents, schema-bound JSON output, or bulk work where you have to trust every row rather than spot-check it.</li>
+<li><strong>Neither</strong> if you have not measured yet — prototype on the fixed $0 catalog IDs first (see <a href="/free-models">/free-models</a>), then promote only the traffic that actually fails your evaluation.</li>
+</ul>
+<p>Both rows and the rest of their families are listed on <a href="/claude-api-pricing">/claude-api-pricing</a> (Claude side) and <a href="/model/gpt-6-luna">/model/gpt-6-luna</a> (Luna side, with <code>gpt-6-sol</code> and <code>gpt-6-astra</code> above it). For the per-token math behind any single request, see the worked example on <a href="/brand/blog/article/zxeywzwx/">Claude API Pricing per Token</a>.</p>

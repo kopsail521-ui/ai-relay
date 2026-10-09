@@ -2,15 +2,15 @@
   "_note": "lastmod bumps only when page content hash changes.",
   "entries": {
     "https://www.keyoapi.xyz/": {
-      "hash": "ed6cac709c2bf6c6",
+      "hash": "9a087abb2c1c11fb",
       "lastmod": "2026-10-09"
     },
     "https://www.keyoapi.xyz/compare": {
-      "hash": "6bb0b6c6ef7bf69d",
+      "hash": "9e5c83c364f43d4d",
       "lastmod": "2026-10-09"
     },
     "https://www.keyoapi.xyz/pricing-list": {
-      "hash": "ec7957f938102210",
+      "hash": "4634a3726bef832e",
       "lastmod": "2026-10-09"
     },
     "https://www.keyoapi.xyz/free-models": {
@@ -18,7 +18,7 @@
       "lastmod": "2026-10-09"
     },
     "https://www.keyoapi.xyz/models": {
-      "hash": "1d94968b1f212fe0",
+      "hash": "11fa1ac44d328478",
       "lastmod": "2026-10-09"
     },
     "https://www.keyoapi.xyz/gemini-api-pricing": {
@@ -30,7 +30,7 @@
       "lastmod": "2026-10-09"
     },
     "https://www.keyoapi.xyz/claude-api-pricing": {
-      "hash": "443c1bf3aacbf18f",
+      "hash": "ea77bb41509ba290",
       "lastmod": "2026-10-09"
     },
     "https://www.keyoapi.xyz/openai-api-pricing": {
@@ -244,6 +244,14 @@
     "https://www.keyoapi.xyz/model/nano-banana-2": {
       "hash": "cf7893bf95cb6eee",
       "lastmod": "2026-10-08"
+    },
+    "https://www.keyoapi.xyz/model/claude-haiku-5-5": {
+      "hash": "383a45f9568319e5",
+      "lastmod": "2026-10-09"
+    },
+    "https://www.keyoapi.xyz/model/claude-sonnet-5-5": {
+      "hash": "ee8cf008603f49e0",
+      "lastmod": "2026-10-09"
     }
   },
   "https://www.keyoapi.xyz/model/gpt-6.1-sol": {

@@ -557,6 +557,81 @@
       "body": "Looking for a GPT-6 Astra API? On KeyoAPI, gpt-6-astra is OpenAI’s gpt-6-astra model ID on an OpenAI-compatible gateway (~$1.84 / $9.19 per 1M in/out — confirm on /pricing/gpt-6-astra). Create a key at /sign-up, set base URL to https://www.keyoapi.xyz/v1, and call POST /v1/chat/completions with model=gpt-6-astra — same string as OpenAI’s API docs, prepaid on a Keyo wallet that also covers Whisper, Claude-class, and TTS.\n\nGPT-6 Astra price vs nearby Keyo lanes (indicative): gpt-6-luna ~$0.03 / $0.15 per 1M, gpt-6-sol ~$0.37 / $1.84, gpt-6-astra ~$1.84 / $9.19. Astra is roughly 5× Sol on output dollars — worth it when Sol fails quality gates and you need OpenAI’s flagship band; not worth it as the default for every classification job. Confirm live rows on /pricing/gpt-6-astra, /pricing/gpt-6-sol, and /pricing/gpt-6-luna.\n\nHow to use GPT-6 Astra: (1) register at /sign-up and top up Wallet; (2) mint an API key in console; (3) set OPENAI_BASE_URL or sdk base_url to https://www.keyoapi.xyz/v1; (4) POST /v1/chat/completions with Authorization: Bearer YOUR_KEY and model=gpt-6-astra; (5) read usage from the response and re-check /pricing/gpt-6-astra before volume contracts. Keep the OpenAI Python/Node SDK — only swap base_url, key, and model string.\n\ngpt 6 astra free / lowest-cost trial: Keyo does not ship a permanent $0 Astra ID. Draft and smoke-test on /free-models ($0 IDs covered by your $10 welcome credit, fair-use), run production defaults on gpt-6-sol or gpt-6.1-sol, and escalate only failing slices to gpt-6-astra so you only pay flagship rates where quality needs it. Broader OpenAI / ChatGPT API pricing context: /openai-api-pricing. Side-by-side planning: /compare.",
       "curlExample": "curl https://www.keyoapi.xyz/v1/chat/completions \\\n  -H \"Authorization: Bearer YOUR_API_KEY\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\"model\":\"gpt-6-astra\",\"messages\":[{\"role\":\"user\",\"content\":\"Hello from GPT-6 Astra\"}]}'",
       "uniqueBlurb": "OpenAI gpt-6-astra on Keyo — escalate from Luna/Sol only when quality needs it; live rates on /pricing/gpt-6-astra."
+    },
+    {
+      "id": "claude-haiku-5-5",
+      "category": "llm",
+      "batch": 2,
+      "targetKeywords": [
+        "claude haiku 5.5 api",
+        "claude haiku 5.5",
+        "claude haiku api pricing",
+        "cheapest claude api"
+      ],
+      "h1": "Claude Haiku 5.5 API — Cheapest Claude Lane on KeyoAPI",
+      "title": "Claude Haiku 5.5 API Pricing | KeyoAPI",
+      "metaDescription": "Call claude-haiku-5-5 on KeyoAPI (~$0.07/$0.37 per 1M). OpenAI-compatible Haiku-class chat for classification, extraction and batch subtasks.",
+      "priceLabel": "~$0.07 / $0.37 per 1M in/out",
+      "priceUnit": "per_1m_tokens",
+      "related": [
+        "claude-sonnet-5",
+        "claude-opus-5-5",
+        "gpt-6-luna"
+      ],
+      "endpoint": "POST /v1/chat/completions",
+      "codeHint": "model=claude-haiku-5-5",
+      "faqs": [
+        {
+          "q": "Is Haiku 5.5 the cheapest Claude model on Keyo?",
+          "a": "Yes. At ~$0.07 / $0.37 per 1M in/out it is the lowest Claude-class row we list — below claude-sonnet-5 (~$0.44 / $2.21), claude-opus-5 (~$1.10 / $5.52), claude-opus-5-5 (~$1.76 / $8.82) and the Fable tiers. Confirm live on /pricing-list."
+        },
+        {
+          "q": "Haiku 5.5 vs Luna 6 — which is cheaper?",
+          "a": "gpt-6-luna is still cheaper on the same key (~$0.03 / $0.15 per 1M in/out). Pick Haiku 5.5 when you want Claude-style instruction following and a 1M context window; pick Luna 6 when unit cost is the deciding factor. Side-by-side: /model/gpt-6-luna."
+        },
+        {
+          "q": "How do I integrate?",
+          "a": "Keep your OpenAI SDK, set baseURL to https://www.keyoapi.xyz/v1, and use model=claude-haiku-5-5."
+        }
+      ],
+      "body": "Claude Haiku 5.5 on KeyoAPI is the fastest, cheapest lane in the Claude 5.5 family — classification, extraction and high-volume batch subtasks with a 1M-token context window.\n\nIndicative rates are about $0.07 / $0.37 per 1M in/out — confirm live on /pricing-list. It is the lowest-priced Claude-class row on the platform: roughly a sixth of claude-sonnet-5 input (~$0.44 / $2.21) and a twenty-fifth of claude-opus-5-5 (~$1.76 / $8.82). The 1M-token context window makes it usable for long-document extraction, not only short prompts.\n\nHow to call: keep your OpenAI SDK and set the base URL to https://www.keyoapi.xyz/v1, then pass model=claude-haiku-5-5 to POST /v1/chat/completions with your Bearer key. Same endpoint, same key, same invoice as every other chat model on KeyoAPI.\n\nWhen to pick this lane: high-volume classification, extraction, routing and batch subtasks where you want Claude-quality instruction following without the per-token cost of Sonnet or Opus. If the step does not need Claude at all, gpt-6-luna (~$0.03 / $0.15) is cheaper on the same key. Prototype on the $0 free catalog IDs first (covered by your $10 welcome credit, fair-use) — see /free-models.\n\nThe full Claude comparison lives on /claude-api-pricing. All metered rows: /pricing-list.",
+      "curlExample": "curl https://www.keyoapi.xyz/v1/chat/completions \\\n  -H \"Authorization: Bearer YOUR_API_KEY\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\"model\":\"claude-haiku-5-5\",\"messages\":[{\"role\":\"user\",\"content\":\"Classify this support ticket: ...\"}]}'",
+      "uniqueBlurb": "Cheapest Claude lane on Keyo — ~$0.07/$0.37 per 1M, 1M context, for classification and batch extraction."
+    },
+    {
+      "id": "claude-sonnet-5-5",
+      "category": "llm",
+      "batch": 2,
+      "targetKeywords": [
+        "claude sonnet 5.5 api",
+        "claude sonnet 5.5",
+        "claude sonnet 5.5 api pricing"
+      ],
+      "h1": "Claude Sonnet 5.5 API — Balanced Coding Lane on KeyoAPI",
+      "title": "Claude Sonnet 5.5 API Pricing | KeyoAPI",
+      "metaDescription": "Call claude-sonnet-5-5 on KeyoAPI (~$0.88/$4.41 per 1M). OpenAI-compatible Sonnet-class chat balanced for coding and reasoning.",
+      "priceLabel": "~$0.88 / $4.41 per 1M in/out",
+      "priceUnit": "per_1m_tokens",
+      "related": [
+        "claude-haiku-5-5",
+        "claude-opus-5-5",
+        "claude-sonnet-5"
+      ],
+      "endpoint": "POST /v1/chat/completions",
+      "codeHint": "model=claude-sonnet-5-5",
+      "faqs": [
+        {
+          "q": "Sonnet 5.5 vs Sonnet 5?",
+          "a": "claude-sonnet-5 is the earlier Sonnet row at ~$0.44 / $2.21 per 1M in/out; claude-sonnet-5-5 is the newer 5.5-gen row at ~$0.88 / $4.41. Start on Sonnet 5 and step up only where its failures are measurable. Confirm live on /pricing-list."
+        },
+        {
+          "q": "How do I integrate?",
+          "a": "Keep your OpenAI SDK, set baseURL to https://www.keyoapi.xyz/v1, and use model=claude-sonnet-5-5."
+        }
+      ],
+      "body": "Claude Sonnet 5.5 on KeyoAPI is the balanced lane of the Claude 5.5 family — coding and reasoning for everyday development and agent loops.\n\nIndicative rates are about $0.88 / $4.41 per 1M in/out — confirm live on /pricing-list. For most agent loops and code generation the balance lands here: strong enough on multi-step reasoning, still far below the Opus and Fable tiers (~$1.76 / $8.82 and ~$7.35 / $36.77). If a step does not need Sonnet-class reasoning, route it to claude-haiku-5-5 (~$0.07 / $0.37) or gpt-6-luna (~$0.03 / $0.15) on the same key.\n\nHow to call: keep your OpenAI SDK and set the base URL to https://www.keyoapi.xyz/v1, then pass model=claude-sonnet-5-5 to POST /v1/chat/completions with your Bearer key.\n\nThe full Claude comparison lives on /claude-api-pricing. All metered rows: /pricing-list.",
+      "curlExample": "curl https://www.keyoapi.xyz/v1/chat/completions \\\n  -H \"Authorization: Bearer YOUR_API_KEY\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\"model\":\"claude-sonnet-5-5\",\"messages\":[{\"role\":\"user\",\"content\":\"Refactor this function for readability\"}]}'",
+      "uniqueBlurb": "Balanced Claude 5.5 lane — ~$0.88/$4.41 per 1M, coding and reasoning for everyday development."
     }
   ]
 }

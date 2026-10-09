@@ -115,13 +115,22 @@ if (strlen($body) < 200) {
 }
 $plain = trim(strip_tags($body));
 $plain = preg_replace('/\s+/u', ' ', $plain) ?? $plain;
+// Meta description / card excerpt need a real sentence: hard-truncating
+// raw body text starts with a leaked H2 heading and ends mid-word.
+function first_sentence(string $text, int $max): string
+{
+    if (preg_match('/^(.{20,' . $max . '}?)\.\s/su', $text, $m)) {
+        return $m[1] . '.';
+    }
+    return mb_substr($text, 0, $max);
+}
 $excerpt = trim((string)($opts['excerpt'] ?? ''));
 if ($excerpt === '') {
-    $excerpt = mb_substr($plain, 0, 140);
+    $excerpt = first_sentence($plain, 140);
 }
 $desc = trim((string)($opts['desc'] ?? ''));
 if ($desc === '') {
-    $desc = mb_substr($plain, 0, 155);
+    $desc = first_sentence($plain, 155);
 }
 $isDraft = isset($opts['draft']);
 $publishedAt = date('c');

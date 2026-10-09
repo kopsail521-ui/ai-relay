@@ -1,0 +1,33 @@
+<!-- TITLE: Claude API Pricing per Token -->
+<!-- EXCERPT: What a Claude request actually costs: per-token math for all four Keyo lanes, worked examples, and how to check the bill before you send. -->
+<h2>Per token, not per request</h2>
+<p>Claude-class APIs bill on tokens — roughly three-quarters of a word each. Rates are quoted per million tokens, so the per-token price is just that number divided by a million. On KeyoAPI the four Claude lanes cost:</p>
+<table>
+<tr><th>Model ID</th><th>Input / output per 1M</th><th>Per 1K tokens in / out</th><th>Best for</th></tr>
+<tr><td><code>claude-sonnet-5</code></td><td>~$0.44 / $2.21</td><td>$0.00044 / $0.00221</td><td>Everyday production chat</td></tr>
+<tr><td><code>claude-opus-5</code></td><td>~$1.10 / $5.52</td><td>$0.0011 / $0.00552</td><td>Hard agent and coding escalations</td></tr>
+<tr><td><code>claude-fable-5-1</code></td><td>~$7.35 / $36.77</td><td>$0.00735 / $0.03677</td><td>Planner-tier flagship work</td></tr>
+<tr><td><code>claude-fable-5</code></td><td>~$8.82 / $44.12</td><td>$0.00882 / $0.04412</td><td>Flagship chat / agent twin</td></tr>
+</table>
+<p>Rates are indicative sell prices from the live catalog — confirm the interactive rows on <a href="/pricing/claude-sonnet-5">/pricing/claude-sonnet-5</a>, <a href="/pricing/claude-opus-5">/pricing/claude-opus-5</a>, <a href="/pricing/claude-fable-5">/pricing/claude-fable-5</a> and <a href="/pricing/claude-fable-5-1">/pricing/claude-fable-5-1</a> before contracting volume. The full comparison table lives on <a href="/claude-api-pricing">/claude-api-pricing</a>.</p>
+<h2>A worked example</h2>
+<p>Say a support bot sends a 2,000-token prompt and gets a 400-token answer on <code>claude-sonnet-5</code>:</p>
+<pre><code>input:  2,000 / 1,000,000 × $0.88  = $0.00176
+output:   400 / 1,000,000 × $4.41  = $0.00176
+                                     ---------
+total per conversation             ≈ $0.0035</code></pre>
+<p>Ten thousand such conversations ≈ $35. The same conversation on <code>claude-fable-5</code> would run ≈ $0.036 — ten times the cost for flagship quality you may not need on every turn. That ratio, not the headline price, is what per-token budgeting is about: route the routine 90% of traffic to the cheap lane and escalate only the hard cases.</p>
+<h2>Check the math on real traffic</h2>
+<p>Every response carries a <code>usage</code> object — read <code>prompt_tokens</code> and <code>completion_tokens</code> and multiply by the table above. Point any OpenAI SDK at the relay and pass a Claude model string:</p>
+<pre><code>curl https://www.keyoapi.xyz/v1/chat/completions \
+  -H "Authorization: Bearer YOUR_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"model":"claude-sonnet-5","messages":[{"role":"user","content":"hi"}]}'</code></pre>
+<h2>Cutting the bill</h2>
+<ul>
+<li><strong>Escalate, don't default.</strong> Run drafts and classification on <code>claude-sonnet-5</code>; promote only failing slices to <code>claude-opus-5</code> or the Fable lanes.</li>
+<li><strong>Shift bulk work off Claude entirely.</strong> High-volume drafts and classifiers often do fine on <code>gpt-6-luna</code> or <code>deepseek-v4.1-flash</code> on the same key — see <a href="/openai-api-pricing">/openai-api-pricing</a> and <a href="/deepseek-api-pricing">/deepseek-api-pricing</a>.</li>
+<li><strong>Prototype for free.</strong> Fixed $0 catalog IDs ending in <code>:free</code> bill against your signup gift credit at fair-use limits — draft and smoke-test there, then switch <code>model=</code> to a Claude lane: <a href="/free-models">/free-models</a>.</li>
+<li><strong>Retry around overload, don't re-send.</strong> Claude occasionally returns HTTP 529 overloaded; the retry and fallback playbook at <a href="/brand/blog/article/ncx234u2/">/brand/blog/article/ncx234u2/</a> keeps those from double-billing you.</li>
+</ul>
+<p>One prepaid balance covers every lane above plus GPT-class, DeepSeek, OCR and TTS — no separate Anthropic invoice. Base URL: <code>https://www.keyoapi.xyz/v1</code>.</p>

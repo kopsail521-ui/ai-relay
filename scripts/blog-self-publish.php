@@ -113,10 +113,12 @@ if (strlen($body) < 200) {
     fwrite(STDERR, "Refuse: body too small (" . strlen($body) . " bytes) — write real content\n");
     exit(2);
 }
-$plain = trim(strip_tags($body));
+// Meta description / card excerpt need a real sentence: strip heading
+// elements entirely (tag + text) before strip_tags, so "The short answer"
+// doesn't prefix the description.
+$bodyNoHead = preg_replace('/<h[1-6][^>]*>[\s\S]*?<\/h[1-6]>/i', '', $body) ?? $body;
+$plain = trim(strip_tags($bodyNoHead));
 $plain = preg_replace('/\s+/u', ' ', $plain) ?? $plain;
-// Meta description / card excerpt need a real sentence: hard-truncating
-// raw body text starts with a leaked H2 heading and ends mid-word.
 function first_sentence(string $text, int $max): string
 {
     if (preg_match('/^(.{20,' . $max . '}?)\.\s/su', $text, $m)) {

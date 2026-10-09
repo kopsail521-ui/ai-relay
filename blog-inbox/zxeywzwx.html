@@ -12,11 +12,11 @@
 <p>Rates are indicative sell prices from the live catalog — confirm the interactive rows on <a href="/pricing/claude-sonnet-5">/pricing/claude-sonnet-5</a>, <a href="/pricing/claude-opus-5">/pricing/claude-opus-5</a>, <a href="/pricing/claude-fable-5">/pricing/claude-fable-5</a> and <a href="/pricing/claude-fable-5-1">/pricing/claude-fable-5-1</a> before contracting volume. The full comparison table lives on <a href="/claude-api-pricing">/claude-api-pricing</a>.</p>
 <h2>A worked example</h2>
 <p>Say a support bot sends a 2,000-token prompt and gets a 400-token answer on <code>claude-sonnet-5</code>:</p>
-<pre><code>input:  2,000 / 1,000,000 × $0.88  = $0.00176
-output:   400 / 1,000,000 × $4.41  = $0.00176
+<pre><code>input:  2,000 / 1,000,000 × $0.44  = $0.00088
+output:   400 / 1,000,000 × $2.21  = $0.00088
                                      ---------
-total per conversation             ≈ $0.0035</code></pre>
-<p>Ten thousand such conversations ≈ $35. The same conversation on <code>claude-fable-5</code> would run ≈ $0.036 — ten times the cost for flagship quality you may not need on every turn. That ratio, not the headline price, is what per-token budgeting is about: route the routine 90% of traffic to the cheap lane and escalate only the hard cases.</p>
+total per conversation             ≈ $0.0018</code></pre>
+<p>Ten thousand such conversations ≈ $18. The same conversation on <code>claude-fable-5</code> would run ≈ $0.018 — ten times the cost for flagship quality you may not need on every turn. That ratio, not the headline price, is what per-token budgeting is about: route the routine 90% of traffic to the cheap lane and escalate only the hard cases.</p>
 <h2>Check the math on real traffic</h2>
 <p>Every response carries a <code>usage</code> object — read <code>prompt_tokens</code> and <code>completion_tokens</code> and multiply by the table above. Point any OpenAI SDK at the relay and pass a Claude model string:</p>
 <pre><code>curl https://www.keyoapi.xyz/v1/chat/completions \

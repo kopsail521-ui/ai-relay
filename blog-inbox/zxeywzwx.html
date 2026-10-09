@@ -16,7 +16,7 @@
 output:   400 / 1,000,000 × $2.21  = $0.00088
                                      ---------
 total per conversation             ≈ $0.0018</code></pre>
-<p>Ten thousand such conversations ≈ $18. The same conversation on <code>claude-fable-5</code> would run ≈ $0.018 — ten times the cost for flagship quality you may not need on every turn. That ratio, not the headline price, is what per-token budgeting is about: route the routine 90% of traffic to the cheap lane and escalate only the hard cases.</p>
+<p>Ten thousand such conversations ≈ $18. The same conversation on <code>claude-fable-5</code> would run ≈ $0.035 — twenty times the cost for flagship quality you may not need on every turn. That ratio, not the headline price, is what per-token budgeting is about: route the routine 90% of traffic to the cheap lane and escalate only the hard cases.</p>
 <h2>Check the math on real traffic</h2>
 <p>Every response carries a <code>usage</code> object — read <code>prompt_tokens</code> and <code>completion_tokens</code> and multiply by the table above. Point any OpenAI SDK at the relay and pass a Claude model string:</p>
 <pre><code>curl https://www.keyoapi.xyz/v1/chat/completions \

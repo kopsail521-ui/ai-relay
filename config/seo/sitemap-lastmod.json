@@ -2,7 +2,7 @@
   "_note": "lastmod bumps only when page content hash changes.",
   "entries": {
     "https://www.keyoapi.xyz/": {
-      "hash": "228374efe49012bd",
+      "hash": "ed6cac709c2bf6c6",
       "lastmod": "2026-10-09"
     },
     "https://www.keyoapi.xyz/compare": {
@@ -14,7 +14,7 @@
       "lastmod": "2026-10-09"
     },
     "https://www.keyoapi.xyz/free-models": {
-      "hash": "3b4a2276500af7a2",
+      "hash": "b11526097273ce15",
       "lastmod": "2026-10-09"
     },
     "https://www.keyoapi.xyz/models": {
@@ -22,15 +22,15 @@
       "lastmod": "2026-10-09"
     },
     "https://www.keyoapi.xyz/gemini-api-pricing": {
-      "hash": "110abff4eb624dcc",
+      "hash": "68a9759f0d48db6a",
       "lastmod": "2026-10-09"
     },
     "https://www.keyoapi.xyz/deepseek-api-pricing": {
-      "hash": "1fc00e58b052aba3",
+      "hash": "5a93eb9e97222cc5",
       "lastmod": "2026-10-09"
     },
     "https://www.keyoapi.xyz/claude-api-pricing": {
-      "hash": "d02a553e416ae2e1",
+      "hash": "443c1bf3aacbf18f",
       "lastmod": "2026-10-09"
     },
     "https://www.keyoapi.xyz/openai-api-pricing": {
@@ -54,7 +54,7 @@
       "lastmod": "2026-10-09"
     },
     "https://www.keyoapi.xyz/about": {
-      "hash": "f11397795ab59737",
+      "hash": "8fca1a9d5228a78e",
       "lastmod": "2026-10-09"
     },
     "https://www.keyoapi.xyz/model/whisper-large-v3": {
@@ -210,8 +210,8 @@
       "lastmod": "2026-10-09"
     },
     "https://www.keyoapi.xyz/model/gemini-3.8-flash": {
-      "hash": "debc4443f54513fc",
-      "lastmod": "2026-10-08"
+      "hash": "cd74119adde208da",
+      "lastmod": "2026-10-09"
     },
     "https://www.keyoapi.xyz/model/gemini-3.7-flash": {
       "hash": "8b0bea81dcb06f60",
@@ -226,7 +226,7 @@
       "lastmod": "2026-10-08"
     },
     "https://www.keyoapi.xyz/openai-api-alternative": {
-      "hash": "05a8bb7af2e30d25",
+      "hash": "87e6372fcc2086c2",
       "lastmod": "2026-10-09"
     },
     "https://www.keyoapi.xyz/model/gpt-6.1-sol": {
@@ -238,7 +238,7 @@
       "lastmod": "2026-10-08"
     },
     "https://www.keyoapi.xyz/glm-api-pricing": {
-      "hash": "ae359d3c1d633bf7",
+      "hash": "f6f56565ab7d62bf",
       "lastmod": "2026-10-09"
     },
     "https://www.keyoapi.xyz/model/nano-banana-2": {

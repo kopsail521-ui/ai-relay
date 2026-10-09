@@ -103,17 +103,24 @@ ul{margin:0 0 14px;padding-left:1.2em}
   <td>DeepSeek</td>
   <td><a href="/sign-up">Get key</a></td>
 </tr>
+<tr>
+  <td><code>keyo-flash:free</code></td>
+  <td>—</td>
+  <td class="ok">$0</td>
+  <td>Keyo</td>
+  <td><a href="/sign-up">Get key</a></td>
+</tr>
 </tbody>
 </table>
 <p>Call the free ID exactly as listed (including the <code>:free</code> suffix). Free catalog membership can change — confirm live availability on <a href="/pricing">/pricing</a>.</p>
 <h2>Free by family</h2>
-<p>Browse by family in the table above (Other, DeepSeek). Start with a free API key and a fixed $0 model ID; move to metered IDs when you outgrow your welcome credit or fair-use rate limits.</p>
+<p>Browse by family in the table above (Other, DeepSeek, Keyo). Start with a free API key and a fixed $0 model ID; move to metered IDs when you outgrow your welcome credit or fair-use rate limits.</p>
 <h2>Quick start (curl)</h2>
 <pre>curl https://www.keyoapi.xyz/v1/chat/completions \
   -H "Authorization: Bearer $KEYO_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
-    "model": "Atria-dawn-v2:free",
+    "model": "keyo-flash:free",
     "messages": [{"role":"user","content":"Hello"}]
   }'</pre>
 <h2>Free rules (read before you ship)</h2>

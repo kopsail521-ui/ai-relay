@@ -46,7 +46,7 @@
       "official": "DeepSeek official Flash-class list often ~$0.14–$0.28 / $0.28–$1.10 per 1M in/out (confirm on platform.deepseek.com; not an OpenAI GPT mini equivalent)",
       "keyo_model": "deepseek-v4.1-flash",
       "keyo_price": "~$0.01 / $0.04 per 1M in/out",
-      "note": "Same-family cheap Flash lane on Keyo — confirm live /pricing"
+      "note": "Same-family budget Flash lane on Keyo — confirm live /pricing"
     },
     {
       "capability": "Claude-class flagship",
@@ -61,21 +61,21 @@
       "keyo_model": "nano-banana-2.1",
       "keyo_price": "~$0.0123 / request",
       "note": "OpenAI-compatible /v1/images/generations; family: nano-banana-2, nano-banana-pro"
-},
+    },
     {
       "capability": "Image generation (Nano Banana 2)",
       "official": "Google Gemini image list — confirm on official Google pages",
       "keyo_model": "nano-banana-2",
       "keyo_price": "~$0.0205 / request",
       "note": "OpenAI-compatible /v1/images/generations; previous generation"
-},
+    },
     {
       "capability": "Image generation (Nano Banana Pro)",
       "official": "Google Gemini image list — confirm on official Google pages",
       "keyo_model": "nano-banana-pro",
       "keyo_price": "~$0.0274 / request",
       "note": "OpenAI-compatible /v1/images/generations; strongest prompt adherence"
-},
+    },
     {
       "capability": "Background removal",
       "official": "Typical SaaS remove.bg API often $0.05–0.20 / image",

@@ -2,15 +2,15 @@
   "_note": "lastmod bumps only when page content hash changes.",
   "entries": {
     "https://www.keyoapi.xyz/": {
-      "hash": "7af9b8a42b4f9775",
-      "lastmod": "2026-10-08"
+      "hash": "e04b8a662befcd9f",
+      "lastmod": "2026-10-09"
     },
     "https://www.keyoapi.xyz/compare": {
-      "hash": "82c9228ce4f92a4d",
+      "hash": "11f6264fcfd0707d",
       "lastmod": "2026-10-09"
     },
     "https://www.keyoapi.xyz/pricing-list": {
-      "hash": "ebe2bfc7ed04bd06",
+      "hash": "9d13f9c6f70c0d0b",
       "lastmod": "2026-10-09"
     },
     "https://www.keyoapi.xyz/free-models": {
@@ -26,7 +26,7 @@
       "lastmod": "2026-10-09"
     },
     "https://www.keyoapi.xyz/deepseek-api-pricing": {
-      "hash": "5db90fb8d220a737",
+      "hash": "87217635d914aacb",
       "lastmod": "2026-10-09"
     },
     "https://www.keyoapi.xyz/claude-api-pricing": {
@@ -186,7 +186,7 @@
       "lastmod": "2026-10-09"
     },
     "https://www.keyoapi.xyz/brand/faq.html": {
-      "hash": "398de57a88cc6d0e",
+      "hash": "69460640e1c6f5ae",
       "lastmod": "2026-10-09"
     },
     "https://www.keyoapi.xyz/brand/privacy.html": {

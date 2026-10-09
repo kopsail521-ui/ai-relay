@@ -117,8 +117,8 @@
         {
           "model": "deepseek-v4-pro",
           "official": "DeepSeek V4 Pro (base) — verify on api-docs.deepseek.com",
-          "keyo": "~$0.14 / $0.29 per 1M in/out",
-          "note": "Paid twin of deepseek-v4-pro:free on /free-models"
+          "keyo": "~$0.07 / $0.14 per 1M in/out",
+          "note": "Same catalog rates as deepseek-v4-pro-0813; alias redirects there — the paid twin of deepseek-v4-pro:free on /free-models"
         }
       ],
       "freeKiller": {

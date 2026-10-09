@@ -787,12 +787,17 @@ function renderPricing() {
   }
   const rows = [...pages.models, ...landingExtra]
     .map((m) => {
-      const guide = m.guide === false
-        ? `<a href="/pricing-list">List</a>`
-        : `<a href="/model/${encodeURIComponent(m.id)}">Guide</a>`;
-      const modelHref = catalogHref(m.id);
+      const hasGuide = m.guide !== false;
+      // No guide page -> the model name is plain text. Linking it through
+      // catalogHref would put /pricing-list (this very page) as its own href.
+      const modelCell = hasGuide
+        ? `<a href="/model/${encodeURIComponent(m.id)}"><code>${esc(m.id)}</code></a>`
+        : `<code>${esc(m.id)}</code>`;
+      const guide = hasGuide
+        ? `<a href="/model/${encodeURIComponent(m.id)}">Guide</a>`
+        : `List`;
       return `<tr>
-  <td><a href="${modelHref}"><code>${esc(m.id)}</code></a></td>
+  <td>${modelCell}</td>
   <td>${esc(m.category)}</td>
   <td class="ok">${esc(m.priceLabel)}</td>
   <td><code>${esc(m.endpoint)}</code></td>

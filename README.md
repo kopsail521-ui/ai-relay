@@ -12,6 +12,7 @@ OpenAI-compatible multi-model API for text, image, speech, video, OCR and more.
 |-----------|------|---------|
 | New API | API gateway, tokens, billing | http://localhost:3000 |
 | pricing-admin | Internal price workbook | http://localhost:3100 |
+| unofree-pool | Free-model pool (UnoRouter `:free` models, auto failover + continuation) | http://localhost:3020 |
 
 ### Pricing admin
 
@@ -44,7 +45,7 @@ ai-relay/
   pricing-admin/
   static/brand/           # Public brand pages
   static/seo/             # SEO landings
-  services/               # Edge proxies (Creem moderation, media helpers)
+  services/               # Edge proxies (Creem moderation, media helpers, unofree-pool)
   scripts/                # Deploy / ops helpers
   data/
 ```

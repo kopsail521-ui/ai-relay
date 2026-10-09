@@ -81,8 +81,15 @@ if [ -n "\$MOD" ]; then
   sudo docker restart "\$MOD" && echo "moderation_copy_updated=\$MOD"
 fi
 
-# 4) 重生 /free-models 静态页 + 部署
-sudo node /opt/ai-relay/scripts/gen-seo-pages.mjs
+# 4) 重生 /free-models 静态页 + 部署（VPS 无 node 时自动安装，装不上则跳过该步）
+if ! command -v node >/dev/null 2>&1 && ! sudo command -v node >/dev/null 2>&1; then
+  sudo apt-get install -y nodejs >/dev/null 2>&1 || sudo apt install -y nodejs >/dev/null 2>&1 || true
+fi
+if sudo command -v node >/dev/null 2>&1; then
+  sudo node /opt/ai-relay/scripts/gen-seo-pages.mjs
+else
+  echo "WARN: VPS 无 node，/free-models 静态页未重生（其余步骤不受影响，可稍后补）"
+fi
 sudo bash /opt/ai-relay/scripts/deploy-brand-static.sh
 
 # 5) 重启 new-api 生效（约 3 秒中断）

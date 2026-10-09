@@ -75,7 +75,9 @@ const mock = http.createServer((req, res) => {
       // 如果是续写请求，最后一条 user 消息里会有续写指令
       const msgs = j.messages || [];
       const isCont = msgs.length > 0 && msgs[msgs.length - 1].role === "user" && /继续|断开|Continue/.test(String(msgs[msgs.length - 1].content));
-      const text = isCont ? "世界！这是续写。" : "这是完整的回答。";
+      const text = isCont
+        ? "世界！这是续写的内容，凑够五十个字以上以免被判定为不完整而再次触发接力。"
+        : "这是完整的回答，内容足够长不会触发不完整检测，超过五十个字就可以正常结束返回给调用方了。";
       sse(res, chunk(model, { role: "assistant" }));
       for (const piece of [text.slice(0, 5), text.slice(5)]) {
         sse(res, chunk(model, { content: piece }));
@@ -227,7 +229,7 @@ async function main() {
   r = await chat({ model: "keyo-flash:free", stream: false, messages: [{ role: "user", content: "写一段中文" }] });
   j = await r.json();
   const content = j.choices?.[0]?.message?.content || "";
-  check("接力合并出完整内容", r.status === 200 && content === "你好，世界！这是续写。", `status=${r.status} content=${JSON.stringify(content)}`);
+  check("接力合并出完整内容", r.status === 200 && content.startsWith("你好，世界！这是续写"), `status=${r.status} content=${JSON.stringify(content).slice(0,80)}`);
   check("finish_reason=stop", j.choices?.[0]?.finish_reason === "stop");
   check("usage 汇总", (j.usage?.total_tokens || 0) >= 18, JSON.stringify(j.usage));
 
@@ -238,7 +240,7 @@ async function main() {
   r = await chat({ model: "keyo-flash:free", stream: true, stream_options: { include_usage: true }, messages: [{ role: "user", content: "写一段中文" }] });
   const s = await readSSE(r);
   check("流式 200 且收到 [DONE]", r.status === 200 && s.sawDone);
-  check("流式内容合并", s.content === "你好，世界！这是续写。", `content=${JSON.stringify(s.content)}`);
+  check("流式内容合并", s.content.startsWith("你好，世界！这是续写"), `content=${JSON.stringify(s.content).slice(0,80)}`);
   check("流式 finish_reason=stop", s.finish === "stop");
   check("流式 include_usage 透传", !!s.usage);
   check("所有 chunk 的 model 都是对外的 keyo-flash:free", s.events.every((e) => e.model === "keyo-flash:free"));
@@ -246,7 +248,7 @@ async function main() {
   console.log("== 直连模式 & 错误透传 ==");
   r = await chat({ model: "direct-ok:free", stream: false, messages: [{ role: "user", content: "直接回答" }] });
   j = await r.json();
-  check("直连指定模型成功", r.status === 200 && j.choices?.[0]?.message?.content === "这是完整的回答。", JSON.stringify(j).slice(0, 200));
+  check("直连指定模型成功", r.status === 200 && j.choices?.[0]?.message?.content?.startsWith("这是完整的回答"), JSON.stringify(j).slice(0, 200));
   r = await chat({ model: "neterr:free", stream: false, messages: [{ role: "user", content: "x" }] });
   check("直连网络错误返回 502", r.status === 502);
   r = await chat({ model: "not-exist:free", stream: false, messages: [{ role: "user", content: "x" }] });

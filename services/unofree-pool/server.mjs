@@ -65,6 +65,8 @@ const ERR_COOLDOWN_MS = Number(process.env.ERR_COOLDOWN_MS || 15000);
 const BAD_MODEL_COOLDOWN_MS = Number(process.env.BAD_MODEL_COOLDOWN_MS || 300000);
 const KEY_DEAD_MS = Number(process.env.KEY_DEAD_MS || 600000);
 const MAX_CONT_CHARS = Number(process.env.MAX_CONTINUATION_CHARS || 32000);
+const MIN_OUTPUT_CHARS = Number(process.env.MIN_OUTPUT_CHARS || 50);
+const INCOMPLETE_KEYWORDS = (process.env.INCOMPLETE_KEYWORDS || "").split(",").map(s=>s.trim().toLowerCase()).filter(Boolean);
 
 const CONT_ZH = "刚才的回答在输出中途断开了。下面 assistant 消息是已生成的内容。请从中断处继续写：只输出续写内容本身，不要重复已写内容，不要任何开场白或确认语。";
 const CONT_EN = "The previous answer was cut off mid-output. The assistant message below is what was already generated. Continue exactly from where it stopped: output only the continuation itself, no repetition, no preamble.";
@@ -256,6 +258,17 @@ function buildContinuation(base, partial) {
 function sumUsage(a, b) { if (!b) return a || null; if (!a) return b; return { prompt_tokens: (a.prompt_tokens || 0) + (b.prompt_tokens || 0), completion_tokens: (a.completion_tokens || 0) + (b.completion_tokens || 0), total_tokens: (a.total_tokens || 0) + (b.total_tokens || 0) }; }
 function describeFailure(r) { if (!r) return "未知"; if (r.kind === "http") return `HTTP ${r.status} ${String(r.body).slice(0, 200)}`; if (r.kind === "timeout") return `超时(${r.why})`; if (r.kind === "neterr") return `网络错误: ${r.message}`; if (r.kind === "truncated") return "输出中途断流"; if (r.kind === "upstream") return `上游错误: ${String(r.body).slice(0, 200)}`; return r.kind; }
 
+// 判断"stop 但内容不完整"是否应触发续写接力
+function isIncomplete(partial, askedModel) {
+  if (partial.length >= MIN_OUTPUT_CHARS) return false;
+  const p = partial.trimEnd();
+  if (INCOMPLETE_KEYWORDS.length && INCOMPLETE_KEYWORDS.some(k => p.toLowerCase().includes(k))) return false;
+  if (!p) return true;
+  // 明显的拒绝/免责前缀，属于"能答但不愿答"
+  if (/^(i can(?:no|')?t|i am not able|i don't have|as an ai|i cannot|对不起|抱歉|我无法|我不能|作为)/i.test(p)) return true;
+  return true;
+}
+
 function makeClientAbort(res) { const ctrl = new AbortController(); res.on("close", () => { if (!res.writableEnded) ctrl.abort(); }); return ctrl; }
 
 async function handleChat(req, res, body) {
@@ -295,12 +308,16 @@ async function handlePool(req, res, body, pool) {
 
   const fwd = { ...body }; delete fwd.model; delete fwd.messages; delete fwd.stream; delete fwd.stream_options; delete fwd.n;
   let partial = "", msgs = baseMessages, attemptsUsed = [], lastErr = null, usageTotal = null;
+  let switching = false; // 不完整→换模型从头答（不是续写）
 
   for (let i = 0; i < cands.length; i++) {
     const { ei, ki, entry, model } = cands[i];
     attemptsUsed.push(`${model}@${entry.upstream}`);
-    const cont = i > 0 && partial.length > 0;
+    // cont = 续写模式（断流续写）；switching = 不完整换模型从头答（清空 partial）
+    const cont = i > 0 && partial.length > 0 && !switching;
     if (cont) { msgs = buildContinuation(baseMessages, partial); pool.stats.continuations++; }
+    else { msgs = baseMessages; }
+    if (switching) { partial = ""; switching = false; }
     const upBody = { ...fwd, model, messages: msgs, stream: true, stream_options: { include_usage: true } };
     const trim = cont ? new OverlapTrimmer(partial) : null;
     const r = await callUpstream({
@@ -316,7 +333,15 @@ async function handlePool(req, res, body, pool) {
       if (trim) { const out = trim.flush(); if (out) { partial += out; emit(out, false); } }
       const finishReason = r.finishReason || "stop";
       usageTotal = sumUsage(usageTotal, r.usage);
-      pool.stats.ok++; pool.stats.charsOut += partial.length;
+      pool.stats.ok++;
+      // "stop 但内容太短/不完整" → 只在首次尝试（非续写）时判断，避免续写后反复跳模型
+      if (finishReason === "stop" && !cont && i < cands.length - 1 && isIncomplete(partial, askedModel)) {
+        console.log(`[${pool.alias}] incomplete ${id} model=${model}@${entry.upstream} chars=${partial.length} → switching model`);
+        lastErr = { kind: "incomplete", model };
+        switching = true;
+        continue; // 不计 failover（不是失败），换下一个模型从头答
+      }
+      pool.stats.charsOut += partial.length;
       console.log(`[${pool.alias}] ok ${id} models=${attemptsUsed.join("→")} cont=${cont ? 1 : 0} chars=${partial.length}`);
       if (wantStream) {
         sse.send({ id, object: "chat.completion.chunk", created, model: askedModel, choices: [{ index: 0, delta: {}, finish_reason: finishReason }] });

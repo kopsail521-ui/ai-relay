@@ -315,7 +315,7 @@
       "faqs": [
         {
           "q": "How does 0731 compare to other Flash IDs?",
-          "a": "deepseek-v4-flash-0731 is ~$0.04 / $0.07 per 1M indicative. Prefer deepseek-v4.1-flash (~$0.14 / $0.56) for cheapest high-volume Flash. Confirm live rates on /pricing."
+          "a": "deepseek-v4-flash-0731 is ~$0.09 / $0.17 per 1M indicative. Prefer deepseek-v4.1-flash (~$0.14 / $0.56) for cheapest high-volume Flash. Confirm live rates on /pricing."
         },
         {
           "q": "How do I call it?",

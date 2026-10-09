@@ -105,7 +105,7 @@
         {
           "model": "deepseek-v4-flash-0731",
           "official": "Not on current official model list — confirm Keyo /pricing before use",
-          "keyo": "~$0.04 / $0.07 per 1M in/out",
+          "keyo": "~$0.09 / $0.17 per 1M in/out",
           "note": "Keyo catalog snapshot ID"
         },
         {

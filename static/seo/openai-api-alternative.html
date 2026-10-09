@@ -123,6 +123,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
 
 <h2>Prototype for $0 before you commit volume</h2>
 <p>Official OpenAI free tiers are usually trial- or quota-shaped. On Keyo, fixed $0 catalog IDs on <a href="/free-models">/free-models</a> — covered by your $10 welcome credit, fair-use — share the same API key as paid GPT-class traffic. Prototype there, then switch model= to gpt-6-astra or deepseek-v4.1-flash without changing base URL.</p>
+
 <h2>Why switch, how to switch, what to watch</h2>
 <p>Why teams look for an OpenAI API alternative: lower sell rates on high-volume paths, one prepaid wallet across GPT-class plus DeepSeek/Claude/speech/vision, or payment and access friction on first-party billing. Official OpenAI wins on first-party product features and brand trust. KeyoAPI is for when you want OpenAI SDK shape plus multi-model routing without five invoices.</p>
 <p>How to switch (two lines): set OPENAI_BASE_URL=https://www.keyoapi.xyz/v1 (or sdk base_url), use your Keyo API key as Authorization Bearer, keep POST /v1/chat/completions. Then pass model=gpt-6-astra for flagship chat, or deepseek-v4.1-flash / gpt-5.6-luna for cheaper bulk. Full price planning table: <a href="/compare">/compare</a>. OpenAI-side unit economics: <a href="/openai-api-pricing">/openai-api-pricing</a>.</p>

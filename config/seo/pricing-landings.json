@@ -144,7 +144,15 @@
           "q": "KeyoAPI vs OpenRouter for deepseek-v4.1-flash and V4 Pro lanes?",
           "a": "Both put many model providers behind one API key with an OpenAI-compatible chat endpoint, so switching is a base_url + key change. KeyoAPI bills a prepaid wallet on one invoice and puts fixed-$0 prototyping IDs (covered by your $10 welcome credit, fair-use) on the same key beside deepseek-v4.1-flash and V4 Pro lanes; OpenRouter is credit-based with per-model free tiers where offered. Compare the specific rates on this page against OpenRouter's live card before volume decisions."
         }
-      ]
+      ],
+      "cheapestNote": {
+        "title": "Cheapest DeepSeek API rate on Keyo",
+        "body": [
+          "If you are hunting for a cheap DeepSeek API, the lowest row on Keyo is deepseek-v4.1-flash at ~$0.01 / $0.04 per 1M in/out — the high-volume Flash lane, and the one to start on for batch or classification work.",
+          "The other rows are separate products, not rungs on a ladder: deepseek-v4-flash ~$0.09 / $0.17 (legacy catalog string), and deepseek-v4-pro-0813 with its alias deepseek-v4-pro at ~$0.07 / $0.14 each. So \"cheap\" here is a task choice, not a tier you upgrade through.",
+          "Cost math: 50M input + 10M output tokens/month on deepseek-v4.1-flash ≈ $0.50 + $0.40 ≈ $0.90. The same mix on deepseek-v4-flash ≈ $4.50 + $1.70 ≈ $6.20. Confirm live rates on /pricing-list."
+        ]
+      }
     },
     {
       "slug": "glm-api-pricing",
@@ -275,7 +283,7 @@
         },
         {
           "q": "Is Keyo cheaper than Anthropic Claude API pricing?",
-          "a": "Often on the Sonnet/Opus rows we list — but Anthropic’s public list, prompt caching, and batch discounts change. Treat this table as a planning snapshot and verify both sides before you commit."
+          "a": "The cheapest Claude-class lane here is claude-sonnet-5 at ~$0.88 / $4.41 per 1M in/out — roughly a quarter of the commonly cited Sonnet list band. Anthropic's list, prompt caching, and batch discounts change; treat official figures as planning context and confirm live rows on /pricing-list before volume."
         },
         {
           "q": "Do you offer a free Claude model?",
@@ -290,7 +298,15 @@
           "a": "Both put many model providers behind one API key with an OpenAI-compatible chat endpoint, so switching is a base_url + key change. KeyoAPI bills a prepaid wallet on one invoice and puts fixed-$0 prototyping IDs (covered by your $10 welcome credit, fair-use) on the same key beside Claude-class IDs; OpenRouter is credit-based with per-model free tiers where offered. Compare the specific rates on this page against OpenRouter's live card before volume decisions."
         }
       ],
-      "bodyHeading": "Anthropic API pricing at a glance"
+      "bodyHeading": "Anthropic API pricing at a glance",
+      "cheapestNote": {
+        "title": "Cheapest Claude API rate on Keyo",
+        "body": [
+          "The cheapest Claude-class lane we list is claude-sonnet-5 at ~$0.88 / $4.41 per 1M in/out — roughly a quarter of the commonly cited Sonnet list band (~$3 / $15) — and it is the row to start on if you searched for a cheap Claude API.",
+          "Above it, by task rather than by tier: claude-opus-5 ~$1.10 / $5.52 for hard agent and coding escalations; claude-fable-5 ~$8.82 / $44.12 and claude-fable-5-1 ~$7.35 / $36.77 for flagship chat. Cheaper than all of them and still on the same key: gpt-5.6-luna and deepseek-v4.1-flash (~$0.01 / $0.04) if the task does not actually need Claude reasoning.",
+          "Cost math: 10M input + 2M output tokens/month on claude-sonnet-5 ≈ $8.80 + $8.82 ≈ $17.62. The same mix on claude-fable-5 ≈ $88.20 + $88.24 ≈ $176.44. Confirm live rates on /model/claude-sonnet-5 before you commit volume."
+        ]
+      }
     },
     {
       "slug": "openai-api-pricing",
@@ -380,9 +396,21 @@
         {
           "q": "KeyoAPI vs OpenRouter for gpt-6-astra and gpt-5.6 lanes?",
           "a": "Both put many model providers behind one API key with an OpenAI-compatible chat endpoint, so switching is a base_url + key change. KeyoAPI bills a prepaid wallet on one invoice and puts fixed-$0 prototyping IDs (covered by your $10 welcome credit, fair-use) on the same key beside gpt-6-astra and gpt-5.6 lanes; OpenRouter is credit-based with per-model free tiers where offered. Compare the specific rates on this page against OpenRouter's live card before volume decisions."
+        },
+        {
+          "q": "Cheapest OpenAI-compatible option on Keyo?",
+          "a": "The lowest-priced lane on the same key is deepseek-v4.1-flash (~$0.01 / $0.04 per 1M in/out). The cheapest GPT-class twin is gpt-5.6-luna (~$0.10 / $0.62). Neither needs a base_url or SDK change."
         }
       ],
-      "curlExample": "# cURL — OpenAI gpt-6-astra on Keyo\ncurl https://www.keyoapi.xyz/v1/chat/completions \\\n  -H \"Authorization: Bearer $KEYO_API_KEY\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\"model\":\"gpt-6-astra\",\"messages\":[{\"role\":\"user\",\"content\":\"Hello from GPT-6 Astra\"}]}'\n\n# Python — OpenAI SDK pointed at Keyo\nfrom openai import OpenAI\nclient = OpenAI(base_url=\"https://www.keyoapi.xyz/v1\", api_key=\"YOUR_KEYO_API_KEY\")\nr = client.chat.completions.create(\n    model=\"gpt-6-astra\",\n    messages=[{\"role\": \"user\", \"content\": \"Summarize this log line in one sentence.\"}],\n)\nprint(r.choices[0].message.content)"
+      "curlExample": "# cURL — OpenAI gpt-6-astra on Keyo\ncurl https://www.keyoapi.xyz/v1/chat/completions \\\n  -H \"Authorization: Bearer $KEYO_API_KEY\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\"model\":\"gpt-6-astra\",\"messages\":[{\"role\":\"user\",\"content\":\"Hello from GPT-6 Astra\"}]}'\n\n# Python — OpenAI SDK pointed at Keyo\nfrom openai import OpenAI\nclient = OpenAI(base_url=\"https://www.keyoapi.xyz/v1\", api_key=\"YOUR_KEYO_API_KEY\")\nr = client.chat.completions.create(\n    model=\"gpt-6-astra\",\n    messages=[{\"role\": \"user\", \"content\": \"Summarize this log line in one sentence.\"}],\n)\nprint(r.choices[0].message.content)",
+      "cheapestNote": {
+        "title": "Cheapest OpenAI-class API on Keyo — and the cheapest chat lane overall",
+        "body": [
+          "If you searched for a cheap OpenAI API, two different questions are hiding in there. (1) The cheapest GPT-class lane on Keyo is gpt-5.6-luna at ~$0.10 / $0.62 per 1M in/out — GPT-5-class twins under the same OpenAI-compatible base URL. (2) The cheapest chat lane of any brand on that same key is deepseek-v4.1-flash at ~$0.01 / $0.04 per 1M in/out — not an OpenAI GPT-mini equivalent, but the lowest row we sell.",
+          "Both ride one key, one base URL and one prepaid wallet, so the cheapest way to test OpenAI-shaped code is usually to prototype on a $0 ID from /free-models, then move only the traffic that needs GPT-class quality onto luna.",
+          "Cost math: 50M input + 10M output tokens/month on luna ≈ $5.00 in + $6.20 out ≈ $11.20. The same mix on gpt-6-astra at ~$1.84 / $9.19 ≈ $92.00 + $91.90 ≈ $183.90. Confirm live Keyo rates on /pricing-list before you budget."
+        ]
+      }
     },
     {
       "slug": "remove-bg-api-alternative",

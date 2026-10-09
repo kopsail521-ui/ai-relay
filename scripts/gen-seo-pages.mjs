@@ -1041,6 +1041,12 @@ ${(p.announcedNote.body || [])
   : ""}
 <h2>${esc(p.freeKiller.title)}</h2>
 <p>${linkifySitePaths(p.freeKiller.body)}</p>
+${p.cheapestNote
+  ? `<h2>${esc(p.cheapestNote.title)}</h2>
+${(p.cheapestNote.body || [])
+  .map((t) => `<p>${linkifySitePaths(t)}</p>`)
+  .join("\n")}`
+  : ""}
 <h2>${esc(bodyHeading)}</h2>
 ${bodyParas}
 ${curlBlock}

@@ -83,9 +83,12 @@ ${landingBlocks}
 		rewrite * /about.html
 		file_server
 	}
-	redir /free /free-models permanent
-	redir /free/ /free-models permanent
-	@seo_model path /model /model/*
+		redir /free /free-models permanent
+		redir /free/ /free-models permanent
+		# Alias stub: send a real 301 so it lands in GSC's "redirect" class
+		# instead of lingering in crawled-not-indexed as a meta-refresh stub.
+		redir /model/deepseek-v4-pro /model/deepseek-v4-pro-0813 permanent
+		@seo_model path /model /model/*
 	handle @seo_model {
 		root * ${root}
 		try_files {path}.html {path}/index.html {path}

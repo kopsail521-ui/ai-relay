@@ -243,7 +243,7 @@
       "h1": "Claude Sonnet 5 API — Balanced Quality & Cost",
       "title": "Claude Sonnet 5 API | Affordable Claude on KeyoAPI",
       "metaDescription": "Claude Sonnet 5 on KeyoAPI: balanced long-context chat with competitive Claude API pricing via an OpenAI-compatible API.",
-      "priceLabel": "~$0.88 / $4.41 per 1M in/out",
+      "priceLabel": "~$0.44 / $2.21 per 1M in/out",
       "priceUnit": "per_1m_tokens",
       "related": [
         "claude-opus-5",

@@ -1,0 +1,66 @@
+<!-- TITLE: OpenAI API Rate Limits: Measuring and Scheduling Production Traffic -->
+<!-- EXCERPT: Learn how to estimate safe API concurrency from request and token limits, handle throttling, and evaluate OpenAI-compatible alternatives without assuming their quotas match. -->
+<!-- DESC: Learn how to estimate safe API concurrency from request and token limits, handle throttling, and evaluate OpenAI-compatible alternatives without assuming their quotas match. -->
+<p>Rate limits are not a concurrency setting. They are throughput constraints that interact with request size, response length, latency, and traffic bursts. A system that works at low volume can start returning throttling errors when several workers send large requests at once.</p>
+<p>Plan against the limits of the specific account, model, and endpoint you will use. Treat published limits as ceilings, not targets, and measure real traffic before increasing concurrency.</p>
+<h2>Understand the limits that shape throughput</h2>
+<p>Rate limits commonly include requests per minute (RPM) and tokens per minute (TPM). Some services also apply daily quotas, concurrent-request limits, or separate limits for particular models and endpoints. The exact limits and how tokens are counted depend on the provider and account.</p>
+<p>A request can fit within the RPM limit but exceed the TPM budget. For example, a workload with long prompts and large completions may reach its token limit before it sends many requests. Conversely, short requests can hit the RPM limit while using relatively few tokens.</p>
+<p>Use the current limits shown for your account and the documentation for the endpoint you call. Do not assume that limits are shared across models or that switching models preserves the same quota.</p>
+<h2>Estimate a safe starting concurrency</h2>
+<p>A rough throughput estimate starts with the smallest relevant limit:</p>
+<pre><code class="language-text">request_budget_per_second = RPM / 60
+token_budget_per_second = TPM / 60 estimated_token_rate = request_budget_per_second * average_tokens_per_request estimated_request_rate = token_budget_per_second / average_tokens_per_request safe_request_rate = min(request_budget_per_second, estimated_request_rate)
+</code></pre>
+<p>This is an average-rate estimate, not a guarantee. Providers may count input and output tokens differently, and actual token use varies by request. Use measured usage where possible, and leave headroom for variation and bursts.</p>
+<p>Concurrency also depends on latency. A useful initial estimate is:</p>
+<pre><code class="language-text">in_flight_requests = target_requests_per_second * average_latency_seconds
+</code></pre>
+<p>For instance, if a service is sustaining two requests per second and average latency is three seconds, roughly six requests may be in flight on average. This estimate does not mean six is a safe fixed limit: latency spikes, uneven request sizes, and provider-side burst rules can change the result. Start below the estimated ceiling, observe behavior, and adjust gradually.</p>
+<h3>Account for output size and traffic shape</h3>
+<p>Estimate tokens per request using representative traffic, not only short test prompts. Include expected prompt length, retrieved context, tool or structured-output overhead where applicable, and typical completion length. Track high-percentile request sizes as well as averages; a small number of very large requests can consume a disproportionate share of capacity.</p>
+<p>Also consider whether traffic arrives steadily or in bursts. A queue can smooth bursts by releasing work at a controlled rate. Without one, a sudden batch of requests may exceed a per-minute limit even when the daily average looks modest.</p>
+<h2>Implement a measured rollout</h2>
+<p>A reliable rollout turns rate limits into explicit application controls:</p>
+<ol>
+<li><strong>Inspect the current limits.</strong> Check the provider’s live account and model documentation. Record which dimensions apply to the endpoint and model you intend to use.</li>
+<li><strong>Measure representative requests.</strong> Capture latency, input and output token usage, status codes, and retry counts. Avoid logging prompts or secrets by default.</li>
+<li><strong>Set a starting rate below the estimated ceiling.</strong> Use a bounded worker pool and a queue or rate limiter. Limit both requests and token volume if your workload varies significantly in size.</li>
+<li><strong>Run a gradual load test.</strong> Increase traffic in steps. Watch for throttling, rising latency, growing queue depth, and unexpected cost.</li>
+<li><strong>Tune from production data.</strong> Re-estimate after prompt changes, model changes, or traffic growth. Rate limits and model availability can change, so treat configuration as something to validate continuously.</li>
+</ol>
+<p>Keep limits configurable rather than embedding assumptions throughout the application. Separate per-model settings when the provider applies different quotas, and ensure a model change does not silently inherit an unsuitable concurrency target.</p>
+<h2>Handle throttling and other failures safely</h2>
+<p>A rate-limit response should reduce pressure on the service, not trigger an immediate retry storm. When a request is throttled, honor any retry guidance returned by the service. Otherwise, use exponential backoff with random jitter and a maximum retry count.</p>
+<pre><code class="language-text">for attempt in 1..maximum_attempts: result = send_request() if result succeeded: return result if result is throttled or transient: wait using bounded exponential backoff with jitter continue fail without retrying return a retryable failure to the caller or queue
+</code></pre>
+<p>Retry only when the error is plausibly temporary. Authentication failures, invalid parameters, unsupported models, and other client errors generally need correction, not repetition. For requests that may have side effects, check whether the operation is safe to repeat or whether the provider supports an idempotency mechanism before retrying.</p>
+<p>Set timeouts, cap retries, and use a circuit breaker or temporary load shedding when failures persist. Otherwise, retries can consume more capacity while delaying healthy work. For queued jobs, preserve the original request context and avoid retrying indefinitely.</p>
+<h2>Evaluate an OpenAI-compatible alternative carefully</h2>
+<p>An OpenAI-compatible interface can reduce the amount of client integration work when evaluating another API gateway, but compatible request shapes do not establish identical limits, model behavior, error handling, or availability. Validate the parts your application depends on.</p>
+<p>KeyoAPI is an OpenAI-compatible gateway with Bearer authentication, a <code>/v1</code> base URL, and a live model list at <code>GET /v1/models</code>. Check live docs and account info for current limits, supported models, endpoint behavior, and pricing on <a href="/pricing-list">/pricing-list</a> before planning production capacity.</p>
+<p>A migration evaluation should include:</p>
+<ul>
+<li>Confirming that the required model ID appears in the live model catalog.</li>
+<li>Testing representative prompts and response formats against the target integration.</li>
+<li>Measuring latency, token usage, throttling responses, and error behavior under controlled load.</li>
+<li>Reviewing the current pricing and estimating cost from observed usage.</li>
+<li>Verifying authentication, timeout, retry, and logging behavior in your own client.</li>
+<li>Repeating the evaluation before deployment if model availability or provider configuration changes.</li>
+</ul>
+<p>For a KeyoAPI integration, docs show Bearer authentication and examples using the OpenAI Python and JavaScript SDKs with the KeyoAPI base URL. Use the live model catalog rather than relying on a model ID copied from an old example. Store API keys in environment variables or a secret manager; never expose them in browser code, public repositories, screenshots, or logs.</p>
+<h2>Monitor cost and availability alongside throughput</h2>
+<p>Higher concurrency can improve throughput only while downstream capacity and rate limits allow it. It can also raise spend more quickly by allowing more requests to run at once. Track request volume, token usage, estimated cost, latency percentiles, throttling, retries, and queue depth together.</p>
+<p>Keep a fallback plan for unavailable models or providers, but do not switch automatically unless the alternative has been tested for quality, output compatibility, and cost. Recheck the live model catalog and current pricing during deployment planning; neither availability nor pricing should be inferred from an old integration example.</p>
+<h2>Practical checklist</h2>
+<ul>
+<li>Identify the applicable request, token, and concurrency limits for the account, model, and endpoint.</li>
+<li>Estimate throughput from both RPM and TPM, using representative token usage.</li>
+<li>Start below the estimated ceiling and account for latency and bursty traffic.</li>
+<li>Bound in-flight work and smooth bursts with a queue or rate limiter.</li>
+<li>Retry only transient failures, with bounded exponential backoff and jitter.</li>
+<li>Track throttling, latency, token usage, queue depth, and cost.</li>
+<li>Keep API keys server-side and out of source control and logs.</li>
+<li>Verify model availability, limits, endpoint behavior, and pricing in live documentation before a migration or rollout.</li>
+</ul>
+<p>Safe concurrency comes from measured limits, controlled traffic, and feedback from production behavior. Revisit the estimate whenever the workload, model, or provider changes. Live rates are on the <a href="/openai-api-pricing">OpenAI API pricing page</a>.</p>

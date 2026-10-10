@@ -1,0 +1,88 @@
+<!-- TITLE: Claude API Tool Use: Input Validation and Portable Tool Design -->
+<!-- EXCERPT: Learn how to validate Claude tool inputs, keep tool execution secure, and design a provider-neutral tool layer that can be evaluated when migrating to another API. -->
+<!-- DESC: Learn how to validate Claude tool inputs, keep tool execution secure, and design a provider-neutral tool layer that can be evaluated when migrating to another API. -->
+<p>Claude tool use lets a model request that your application run a function, but the model does not execute that function itself. Your application receives the request, validates it, applies its own authorization and business rules, and decides whether to run it. That boundary is the key to reliable tool use and to a migration that does not bind application logic to one provider’s message format.</p>
+<p>This guide focuses on the practical design decision: keep tool definitions and execution in your application, and treat each model provider’s tool-call format as an adapter. When evaluating alternatives to the Claude API, verify tool-calling support, request and response formats, and model availability in the provider’s current documentation.</p>
+<h2>Separate Tool Intent From Tool Execution</h2>
+<p>A tool call is a model-generated request, not a trusted instruction. The model might propose an action, but your application remains responsible for deciding whether it is valid and permitted.</p>
+<p>A robust flow looks like this:</p>
+<ol>
+<li>Send the user’s request and the available tool descriptions to the model.</li>
+<li>Parse the response according to the provider’s documented format.</li>
+<li>If the response requests a tool, validate its name and arguments.</li>
+<li>Check user permissions and application-specific constraints.</li>
+<li>Execute the tool in your own service.</li>
+<li>Return a bounded result to the model, or provide a final answer if no tool was requested.</li>
+</ol>
+<p>Keep the tool’s actual implementation out of prompts and model responses. The model should never receive credentials or direct access to databases, internal networks, or privileged services.</p>
+<h2>Define Portable Tools</h2>
+<p>A portable tool definition describes an application capability independently of any model provider. It should include:</p>
+<ul>
+<li>A stable tool name.</li>
+<li>A short description of what the tool does and when to use it.</li>
+<li>A structured argument schema.</li>
+<li>Application-side validation and authorization rules.</li>
+<li>A predictable result shape.</li>
+</ul>
+<p>For example, an application might define a <code>lookup_order</code> capability with an order identifier as input. The application can translate that definition into the format required by a provider. The implementation of order lookup should not depend on whether a provider represents the request as a <code>tool_use</code> block, a function call, or another documented structure.</p>
+<p>Avoid exposing internal service interfaces as tools wholesale. Narrow operations are easier to validate and authorize than broad tools such as “run a query” or “make an HTTP request.”</p>
+<h2>Validate Every Tool Request</h2>
+<p>A schema included in a model request helps guide generation; it is not a security boundary. Validate the returned arguments again on your server before executing anything.</p>
+<p>A language-neutral validation flow can be expressed as:</p>
+<pre><code class="language-text">receive provider response
+if response is not a tool request: handle the normal response tool = find tool by exact registered name
+if tool does not exist: reject the request arguments = parse tool arguments
+if parsing fails: reject the request validate arguments against the application's schema
+if validation fails: reject the request authorize the current user for this operation
+enforce business limits and resource ownership
+execute the tool with bounded inputs
+return a minimal, safe result
+</code></pre>
+<p>Validation should cover more than data types. Check required fields, allowed values, string length, numeric ranges, date formats, and cross-field constraints. Reject unknown fields where practical, particularly for tools that trigger consequential actions.</p>
+<p>Authorization must use the authenticated user and trusted application state, not a user ID or permission claim supplied by the model. For example, if a request contains an order identifier, look up whether the current user can access that order before returning any details.</p>
+<p>For actions with external effects, use additional controls such as confirmation, idempotency keys, rate limits, and audit logging. A valid schema does not mean the action is appropriate.</p>
+<h2>Keep Provider Formats at the Boundary</h2>
+<p>Claude’s tool-use flow and other providers’ function or tool-calling formats can differ in how tools are declared, how calls are represented, and how results are returned. Avoid spreading those differences through business logic.</p>
+<p>A provider adapter should handle tasks such as:</p>
+<ul>
+<li>Converting portable tool definitions into the provider’s documented request format.</li>
+<li>Recognizing and parsing provider-specific tool requests.</li>
+<li>Mapping tool results back into the provider’s expected continuation format.</li>
+<li>Normalizing errors and usage metadata where the provider makes them available.</li>
+</ul>
+<p>The application’s tool registry and execution layer should not need to know how a particular provider encodes a tool call. This separation makes it easier to compare providers and contain migration work, but it does not guarantee that their behavior or capabilities are equivalent. Test each provider’s semantics before switching.</p>
+<h2>Evaluate an Alternative Before Migrating</h2>
+<p>Treat migration as a compatibility evaluation, not a model-name substitution. Build a small test set from real application tasks, including valid calls, malformed arguments, ambiguous requests, denied actions, and cases where the model should answer without using a tool.</p>
+<p>Compare providers on:</p>
+<ul>
+<li>Whether the required tool-calling workflow is documented and available for the intended model.</li>
+<li>How reliably the model selects the right tool and produces valid arguments.</li>
+<li>Whether the API supports the response and continuation patterns your application requires.</li>
+<li>Latency, failure behavior, usage reporting, and operational limits relevant to your workload.</li>
+<li>Model availability and current pricing in the live catalog or documentation.</li>
+<li>The amount of provider-specific code needed in the adapter.</li>
+</ul>
+<p>An OpenAI-compatible chat endpoint does not by itself prove tool-use parity. Confirm tool-calling features and model IDs for your workload in live docs and on <a href="/pricing-list">/pricing-list</a> (Claude-class: <a href="/claude-api-pricing">/claude-api-pricing</a>).</p>
+<p>KeyoAPI serves Claude-class model IDs through an OpenAI-compatible endpoint. Confirm current IDs, limits, and rates on <a href="/claude-api-pricing">/claude-api-pricing</a> and <a href="/pricing-list">/pricing-list</a> — Anthropic-native schemas may still differ from OpenAI-compatible chat completions, so verify tool/vision/streaming needs against live docs before migration.</p>
+<h2>Handle Failures and Retries Deliberately</h2>
+<p>Tool workflows can fail at more than one layer: the model request, response parsing, validation, authorization, the tool itself, or the follow-up model request. Record these separately so operators can tell which boundary failed.</p>
+<p>Retry only when the failure is plausibly transient, such as a temporary network or service error. Use bounded retries with backoff and an overall deadline. Do not retry validation or authorization failures as though they were transient.</p>
+<p>Be especially careful when a tool changes state. A timeout can occur after the external action succeeded but before your application received confirmation. Use idempotency or a status-check flow rather than blindly repeating the action. Keep retry policy in application code; do not assume that a provider will retry tool execution safely on your behalf.</p>
+<h2>Protect Secrets, Data, and Cost</h2>
+<p>Store API keys in server-side environment variables or a secrets manager. Never put them in browser code, public repositories, logs, or screenshots. Authenticate users to your application separately from authenticating your server to a model provider.</p>
+<p>Treat both user input and model output as untrusted. Limit tool arguments and results, redact sensitive fields, and avoid returning raw database records or internal errors to the model. Restrict network access and tool permissions to what each operation actually needs.</p>
+<p>Tool loops can multiply latency and model usage. Set a maximum number of tool turns, enforce request and execution timeouts, and cap the size of tool results. Track usage and costs using the provider’s current reporting mechanisms, and verify current pricing rather than relying on old estimates. Model availability and catalog entries can change, so check the live catalog before deployment and have an operational plan for unavailable models.</p>
+<h2>Migration Checklist</h2>
+<ul>
+<li>Keep tool definitions, authorization, and execution in application-owned code.</li>
+<li>Validate every model-generated tool name and argument server-side.</li>
+<li>Enforce permissions using trusted application state.</li>
+<li>Require confirmation or idempotency protections for consequential actions.</li>
+<li>Isolate provider-specific formats in adapters.</li>
+<li>Test tool selection, malformed inputs, denied actions, and provider failures.</li>
+<li>Verify tool support and model availability in current documentation and catalogs.</li>
+<li>Store credentials server-side and redact sensitive data from logs and tool results.</li>
+<li>Bound retries, tool turns, execution time, output size, and usage.</li>
+<li>Monitor errors, latency, and cost after rollout, with a way to change or disable a provider.</li>
+</ul>
+<p>Portable tool design does not make providers interchangeable by itself. It gives you a stable application boundary so you can evaluate alternatives, identify differences in behavior, and migrate with evidence rather than assumptions. Confirm Claude model availability and rates on the <a href="/claude-api-pricing">Claude API pricing page</a> and the <a href="/model/claude-sonnet-5">claude-sonnet-5 model page</a>.</p>

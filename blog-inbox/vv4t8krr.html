@@ -1,0 +1,266 @@
+<!-- TITLE: OpenAI API Rate Limit: What It Means and How to Respond -->
+<!-- EXCERPT: Learn how to handle OpenAI API rate limits with exponential backoff, bounded retries, durable queues, model discovery, authentication, and production-safe migration patterns. -->
+<!-- DESC: Learn how to handle OpenAI API rate limits with exponential backoff, bounded retries, durable queues, model discovery, authentication, and production-safe migration patterns. -->
+<p>Rate-limit errors are rarely solved by adding a longer timeout or retrying immediately. A reliable integration treats rate limits as a scheduling problem: requests must be retried carefully, work must be queued when demand exceeds capacity, and the system must remain useful when a model or upstream service is unavailable.</p>
+<p>This article presents a provider-neutral design for handling rate limits and explains how the same approach applies when migrating an application to an OpenAI-compatible API gateway such as KeyoAPI.</p>
+<h2>What a Rate Limit Error Means</h2>
+<p>A rate-limit response usually indicates that the service is temporarily refusing additional work. Common causes include:</p>
+<ul>
+<li>Too many requests in a short period</li>
+<li>Too many tokens or large payloads over a time window</li>
+<li>Account quota exhaustion</li>
+<li>Insufficient prepaid balance</li>
+<li>Temporary upstream capacity limits</li>
+</ul>
+<p>These causes require different responses. A short-lived request burst may recover after a delay. An exhausted account balance will not be fixed by retrying. Your application should therefore distinguish between transient failures and configuration or billing failures.</p>
+<p>A useful error classification is:</p>
+<div class="article-table-wrap"><table class="article-table">
+<thead>
+<tr>
+<th>Error category</th>
+<th align="right">Retry?</th>
+<th>Application action</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Temporary rate limit</td>
+<td align="right">Yes, with bounded backoff</td>
+<td>Delay and retry</td>
+</tr>
+<tr>
+<td>Temporary upstream failure</td>
+<td align="right">Usually</td>
+<td>Retry with jitter</td>
+</tr>
+<tr>
+<td>Request timeout</td>
+<td align="right">Usually</td>
+<td>Retry with a reasonable timeout</td>
+</tr>
+<tr>
+<td>Invalid authentication</td>
+<td align="right">No</td>
+<td>Fix credentials or configuration</td>
+</tr>
+<tr>
+<td>Account quota or balance exhausted</td>
+<td align="right">No until resolved</td>
+<td>Alert and stop unnecessary retries</td>
+</tr>
+<tr>
+<td>Model unavailable</td>
+<td align="right">No with the same model</td>
+<td>Discover available models and select a supported one</td>
+</tr>
+<tr>
+<td>Invalid request</td>
+<td align="right">No</td>
+<td>Fix the request before retrying</td>
+</tr>
+</tbody>
+</table></div>
+<p>Do not assume that every error containing the words “rate limit” has the same cause. Inspect the response status, error body, request metadata, and account usage information.</p>
+<h2>Retry With Exponential Backoff</h2>
+<p>Immediate retries amplify the original traffic spike. If hundreds of workers retry at the same time, the service can remain overloaded even after the initial limit window ends.</p>
+<p>Exponential backoff increases the delay after each failed attempt:</p>
+<pre><code class="language-text">delay = min(max_delay, base_delay * 2^attempt) + random_jitter
+</code></pre>
+<p>For example, a client might wait approximately 1 second, then 2, then 4, then 8 seconds. The random component prevents multiple workers from retrying simultaneously.</p>
+<h3>Use Full Jitter</h3>
+<p>A practical strategy is full jitter:</p>
+<pre><code class="language-text">exponential_delay = min(max_delay, base_delay * 2^attempt)
+delay = random_number_between(0, exponential_delay)
+</code></pre>
+<p>If the server provides a retry delay, prefer that value when it is valid and within your configured safety limit. Otherwise, use your own exponential-backoff policy.</p>
+<h3>Bound the Number of Attempts</h3>
+<p>Retries need a hard limit. A request that can retry indefinitely may consume worker capacity, increase cost, and create a backlog that never clears.</p>
+<p>A language-neutral retry loop looks like this:</p>
+<pre><code class="language-text">for attempt from 0 through max_retries: response = send_request() if response succeeded: return response if response is a permanent error: fail immediately if response is transient: if attempt == max_retries: fail and record the exhausted retry delay = server_retry_hint_or_exponential_backoff(attempt) sleep(delay) raise retry_exhausted_error
+</code></pre>
+<p>Set the retry limit according to the operation. Interactive requests generally need a short budget so users are not left waiting. Background jobs can tolerate longer delays, provided the queue and worker limits are controlled.</p>
+<h3>Do Not Retry Every Failure</h3>
+<p>Retry only when the failure is plausibly temporary. Retrying an invalid model name, malformed request, invalid API key, or exhausted account balance wastes time and may produce additional charges.</p>
+<p>For timeout errors, retrying can be appropriate when the operation is safe to repeat. Use a reasonable client timeout and distinguish connection failures from a response that confirms the request was accepted but took too long to complete.</p>
+<h2>Add a Queue for Bursty Work</h2>
+<p>Backoff helps one request recover. A queue manages many requests competing for limited capacity.</p>
+<p>A production queue should separate request acceptance from provider execution:</p>
+<ol>
+<li>The application validates and records a job.</li>
+<li>A worker takes a job from the queue.</li>
+<li>The worker sends the API request under a concurrency limit.</li>
+<li>Transient failures return the job to the queue with a scheduled retry time.</li>
+<li>Permanent failures move to a dead-letter queue or terminal-error state.</li>
+<li>Completed results are stored and made available to the caller.</li>
+</ol>
+<p>A queue record should normally include:</p>
+<ul>
+<li>A unique job ID</li>
+<li>An idempotency or deduplication key</li>
+<li>Request type and model ID</li>
+<li>Payload reference, rather than unnecessarily duplicating large content</li>
+<li>Attempt count</li>
+<li>Next eligible retry time</li>
+<li>Creation and expiration timestamps</li>
+<li>Current status</li>
+<li>Error classification and last error message</li>
+</ul>
+<h3>Control Concurrency</h3>
+<p>A queue without a worker limit simply moves the burst from the web tier to the worker tier. Start with a conservative concurrency value and increase it only after observing successful throughput, latency, error rates, and account usage.</p>
+<p>Useful controls include:</p>
+<ul>
+<li>Maximum active requests per model</li>
+<li>Maximum total provider concurrency</li>
+<li>Maximum jobs per tenant</li>
+<li>Maximum token or payload budget per time window</li>
+<li>Queue age limits</li>
+<li>Separate priority queues for interactive and batch work</li>
+</ul>
+<p>A token-aware limiter is often more accurate than a request-count limiter because one large prompt can consume substantially more capacity than one small prompt.</p>
+<h3>Apply Backpressure</h3>
+<p>When the queue grows beyond a safe size, the system must stop accepting unlimited work. Options include:</p>
+<ul>
+<li>Return a temporary “try again later” response</li>
+<li>Accept the job but provide a status endpoint</li>
+<li>Reduce optional work such as summarization or enrichment</li>
+<li>Defer low-priority jobs</li>
+<li>Reject requests that exceed a tenant’s quota</li>
+<li>Serve cached or previously generated results where appropriate</li>
+</ul>
+<p>Backpressure is a product decision as well as an infrastructure decision. Make the behavior explicit instead of allowing memory usage and retry latency to grow without limit.</p>
+<h2>Design for Duplicate Requests</h2>
+<p>Retries can create duplicate provider requests when the client times out after the provider has accepted the request. This is especially important for operations that incur usage charges or trigger side effects.</p>
+<p>Use an idempotency strategy appropriate to the provider and operation:</p>
+<ul>
+<li>Generate a stable job ID before the first attempt.</li>
+<li>Store the request and result in your database.</li>
+<li>Check whether a completed result already exists before sending work.</li>
+<li>Ensure that a worker lease can expire and be safely reclaimed.</li>
+<li>Keep result writes atomic with the job state transition.</li>
+<li>Do not assume that a network timeout means the provider did not process the request.</li>
+</ul>
+<p>If the provider supports an idempotency mechanism, verify its behavior in the live documentation before depending on it. Otherwise, enforce deduplication within your own job system.</p>
+<h2>Migrate Through an OpenAI-Compatible Interface</h2>
+<p>An OpenAI-compatible API can reduce application changes because the request shape and authentication pattern may resemble an existing integration. Compatibility should still be treated as an interface claim to verify, not as a guarantee that every model, parameter, response field, streaming mode, or error behavior is identical.</p>
+<p>A safe migration workflow is:</p>
+<ol>
+<li>Isolate the provider base URL in configuration.</li>
+<li>Keep the API key in a secret manager.</li>
+<li>Replace hard-coded model assumptions with configuration or discovery.</li>
+<li>Run contract tests against the new service.</li>
+<li>Compare output shape, latency, error behavior, and usage.</li>
+<li>Roll out gradually with clear rollback controls.</li>
+</ol>
+<p>For KeyoAPI, the documented base URL is:</p>
+<pre><code class="language-text">https://www.keyoapi.xyz/v1
+</code></pre>
+<p>Requests use Bearer-token authentication. The API key should remain server-side and must not be placed in browser code, public articles, screenshots, or source repositories.</p>
+<p>A documented chat request uses this endpoint:</p>
+<pre><code class="language-bash">curl https://www.keyoapi.xyz/v1/chat/completions \
+  -H &quot;Authorization: Bearer YOUR_API_KEY&quot; \
+  -H &quot;Content-Type: application/json&quot; \
+  -d '{ &quot;model&quot;: &quot;MODEL_ID_FROM_LIVE_CATALOG&quot;, &quot;messages&quot;: [ { &quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;Hello&quot; } ] }'
+</code></pre>
+<p>The model value in this example is intentionally a placeholder. Do not copy a model name from an old integration and assume that it is available on the new service.</p>
+<h2>Discover Models at Runtime</h2>
+<p>Model availability can change. A model may be renamed, removed, restricted, or unavailable for a particular account. Applications should not silently assume that a model is permanently supported.</p>
+<p>KeyoAPI documents a model discovery endpoint:</p>
+<pre><code class="language-bash">curl https://www.keyoapi.xyz/v1/models \
+  -H &quot;Authorization: Bearer YOUR_API_KEY&quot;
+</code></pre>
+<p>Use an exact model ID returned by the live response. The current model catalog and pricing information are available at:</p>
+<ul>
+<li><a href="https://www.keyoapi.xyz/brand/keyo-docs.html">KeyoAPI documentation</a></li>
+<li><a href="/pricing-list">KeyoAPI model catalog and pricing</a></li>
+</ul>
+<p>A robust deployment can validate its configured model during startup, deployment checks, or a scheduled health check. For request-time fallback, use a predefined policy that has been tested for quality and cost. Do not automatically select an arbitrary model merely because it appears in the catalog.</p>
+<p>When model discovery fails, treat that as a dependency or authentication problem rather than repeatedly retrying every application request.</p>
+<h2>Authentication and Security</h2>
+<p>Rate-limit handling must not weaken security controls.</p>
+<p>Follow these practices:</p>
+<ul>
+<li>Store API keys in a secret manager or protected environment configuration.</li>
+<li>Send keys only over HTTPS.</li>
+<li>Never log the <code>Authorization</code> header.</li>
+<li>Redact prompts and generated content when they may contain personal or confidential data.</li>
+<li>Restrict access to queue payloads and stored results.</li>
+<li>Rotate keys according to your operational policy.</li>
+<li>Use separate credentials for development, staging, and production where supported.</li>
+<li>Apply tenant-level authorization before enqueueing work.</li>
+<li>Avoid placing provider keys in client-side JavaScript.</li>
+</ul>
+<p>Be careful with retry logs. Logging the full request body on every failed attempt can expose sensitive content and multiply storage costs. Prefer request IDs, model IDs, status categories, latency, attempt count, and a redacted error summary.</p>
+<h2>Error Handling and Observability</h2>
+<p>A useful error-handling layer should return stable internal error categories even when providers use different response formats.</p>
+<p>Recommended categories include:</p>
+<ul>
+<li><code>authentication_error</code></li>
+<li><code>invalid_request</code></li>
+<li><code>model_unavailable</code></li>
+<li><code>rate_limited</code></li>
+<li><code>quota_exhausted</code></li>
+<li><code>timeout</code></li>
+<li><code>upstream_unavailable</code></li>
+<li><code>retry_exhausted</code></li>
+<li><code>unknown_provider_error</code></li>
+</ul>
+<p>Record metrics such as:</p>
+<ul>
+<li>Requests attempted and completed</li>
+<li>Retry count by error category</li>
+<li>Queue depth and oldest job age</li>
+<li>Success rate after retry</li>
+<li>Provider latency</li>
+<li>Timeout rate</li>
+<li>Token or usage estimates</li>
+<li>Cost by tenant, model, and feature</li>
+<li>Number of jobs sent to the dead-letter queue</li>
+</ul>
+<p>Alert on sustained queue growth, repeated quota failures, increasing retry rates, and model discovery failures. A single rate-limit response is usually not an incident; a backlog that continues to grow is.</p>
+<h2>Cost and Capacity Controls</h2>
+<p>Retries consume resources. A timeout followed by a successful retry may represent two provider requests, depending on when the original request was processed. Track usage across attempts and include retry costs in feature-level budgets.</p>
+<p>Practical controls include:</p>
+<ul>
+<li>Maximum attempts per job</li>
+<li>Maximum wall-clock age for a job</li>
+<li>Per-tenant daily or monthly budgets</li>
+<li>Maximum prompt and output sizes</li>
+<li>Lower-cost models for non-critical work, after quality testing</li>
+<li>Caching for deterministic or repeatable requests</li>
+<li>Sampling or batching for offline workloads</li>
+<li>Separate budgets for interactive and background traffic</li>
+</ul>
+<p>Do not describe a provider’s price, quota, or service guarantee unless it is confirmed in the current pricing and documentation pages. Pricing and availability can change, so operational configuration should be reviewed against the live catalog before deployment.</p>
+<h2>A Production Evaluation Workflow</h2>
+<p>Before migrating a live workload or changing retry behavior, test the full path:</p>
+<h3>1. Validate the contract</h3>
+<p>Confirm the base URL, authentication method, model discovery endpoint, request format, response format, and supported parameters in the live documentation.</p>
+<h3>2. Test failure classification</h3>
+<p>Simulate or capture representative cases for rate limits, timeouts, invalid credentials, unavailable models, malformed requests, and quota exhaustion. Verify that permanent errors do not enter an endless retry loop.</p>
+<h3>3. Test queue behavior</h3>
+<p>Measure throughput and queue age under normal load, short bursts, sustained overload, and provider recovery. Verify that backpressure activates before worker memory or database capacity is exhausted.</p>
+<h3>4. Test duplicate protection</h3>
+<p>Force a client timeout after request submission and confirm that the resulting job does not create an unintended duplicate result.</p>
+<h3>5. Compare quality and cost</h3>
+<p>Use a representative evaluation set. Compare output quality, latency, retry frequency, model availability, and total cost per completed task rather than comparing only the successful response time.</p>
+<h3>6. Roll out gradually</h3>
+<p>Start with a small traffic percentage or an internal workload. Keep the provider configuration switchable and define rollback conditions before increasing traffic.</p>
+<h2>Practical Checklist</h2>
+<ul>
+<li><span aria-hidden="true">☐</span> Classify rate limits, timeouts, quota failures, and permanent request errors separately.</li>
+<li><span aria-hidden="true">☐</span> Use exponential backoff with jitter.</li>
+<li><span aria-hidden="true">☐</span> Honor a valid server retry hint when appropriate.</li>
+<li><span aria-hidden="true">☐</span> Set a maximum retry count and wall-clock retry budget.</li>
+<li><span aria-hidden="true">☐</span> Limit worker concurrency and request rates.</li>
+<li><span aria-hidden="true">☐</span> Use a durable queue for bursty or background work.</li>
+<li><span aria-hidden="true">☐</span> Add backpressure when queue depth or age exceeds safe limits.</li>
+<li><span aria-hidden="true">☐</span> Track job IDs and protect against duplicate processing.</li>
+<li><span aria-hidden="true">☐</span> Keep API keys server-side and redact them from logs.</li>
+<li><span aria-hidden="true">☐</span> Discover live model IDs instead of relying on hard-coded assumptions.</li>
+<li><span aria-hidden="true">☐</span> Verify compatibility for parameters, responses, streaming, and errors.</li>
+<li><span aria-hidden="true">☐</span> Monitor queue age, retry rates, latency, usage, and cost.</li>
+<li><span aria-hidden="true">☐</span> Stop retrying when the account quota or prepaid balance is exhausted.</li>
+<li><span aria-hidden="true">☐</span> Review the current documentation, model catalog, and pricing before deployment.</li>
+<li><span aria-hidden="true">☐</span> Roll out changes gradually with a tested rollback path.</li>
+</ul>
+<p>A reliable API integration does more than retry failed requests. It controls admission, schedules work, identifies permanent failures, protects credentials, measures cost, and adapts to changing model availability. That combination keeps rate limits from becoming an outage while giving developers a clear path for evaluating or migrating to an OpenAI-compatible service. Confirm live rates on the <a href="/openai-api-pricing">OpenAI API pricing page</a>.</p>

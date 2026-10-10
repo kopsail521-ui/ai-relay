@@ -1,0 +1,324 @@
+<!-- TITLE: Gemini Video Generation Model API: What to Verify Before Integration -->
+<!-- EXCERPT: Learn how to evaluate a Gemini video generation API integration, compare alternatives safely, and design a provider-agnostic production workflow covering models, jobs, security, retries, cost, and migration. -->
+<!-- DESC: Learn how to evaluate a Gemini video generation API integration, compare alternatives safely, and design a provider-agnostic production workflow covering models, jobs, security, retries, cost, and migration. -->
+<p>Integrating a video generation API is not just a matter of replacing one model name with another. Video workloads introduce asynchronous processing, large media files, variable generation times, content policy concerns, and potentially significant usage costs.</p>
+<p>If you are evaluating Gemini or migrating to another provider, verify the complete operational contract before writing application code. This includes model availability, request semantics, job status behavior, output delivery, authentication, quotas, error handling, and commercial terms.</p>
+<p>A provider-agnostic adapter can reduce migration risk, but only if it represents the real differences between providers instead of hiding them behind an overly simple interface.</p>
+<h2>Start With Capability Verification</h2>
+<p>Before comparing providers, define the exact capability your application requires.</p>
+<p>A “video generation API” may mean very different things:</p>
+<ul>
+<li>Text-to-video generation</li>
+<li>Image-to-video animation</li>
+<li>Video extension or continuation</li>
+<li>Video transformation or editing</li>
+<li>Audio generation or synchronization</li>
+<li>Reference-image conditioning</li>
+<li>Fixed or selectable aspect ratios</li>
+<li>Multiple output resolutions</li>
+<li>Synchronous responses or asynchronous jobs</li>
+<li>Downloadable files, object-storage URLs, or temporary URLs</li>
+</ul>
+<p>Do not assume that a provider supports a feature because another provider does. Verify each requirement against the provider’s current documentation and model catalog.</p>
+<p>For Gemini, consult the current official API documentation and model catalog for:</p>
+<ol>
+<li>The exact video-capable model identifier</li>
+<li>Supported input modalities</li>
+<li>Accepted generation parameters</li>
+<li>Maximum prompt, image, or video sizes</li>
+<li>Output formats and resolutions</li>
+<li>Whether generation is synchronous or asynchronous</li>
+<li>Job polling or callback behavior</li>
+<li>Retention and expiration rules for generated media</li>
+<li>Regional, account, or access restrictions</li>
+<li>Current pricing and quota rules</li>
+</ol>
+<p>Confirm image or video generation endpoints, request schemas, and model IDs in current docs and on <a href="/pricing-list">/pricing-list</a> before production — OpenAI-compatible text chat does not by itself prove every modality.</p>
+<h2>Define a Provider-Neutral Contract</h2>
+<p>A useful abstraction should describe what your application needs without pretending that all vendors behave identically.</p>
+<p>A minimal internal contract might look like this:</p>
+<pre><code class="language-text">create_video(request) -&gt; GenerationHandle
+get_generation(handle) -&gt; GenerationStatus
+cancel_generation(handle) -&gt; CancellationResult
+download_output(handle) -&gt; MediaReference
+</code></pre>
+<p>The request object could contain:</p>
+<pre><code class="language-text">{ prompt, input_image?, duration?, aspect_ratio?, resolution?, seed?, safety_options?, metadata?
+}
+</code></pre>
+<p>The response should preserve provider-specific information where it matters:</p>
+<pre><code class="language-text">{ provider, model, external_job_id, status, output_reference?, error_code?, error_message?, provider_metadata?
+}
+</code></pre>
+<p>Avoid reducing every provider to a single function such as <code>generate(prompt)</code>. That design usually fails when one provider returns a completed file while another returns a long-running job.</p>
+<h3>Model provider capabilities explicitly</h3>
+<p>Your adapter should expose capability information separately from the generation request:</p>
+<pre><code class="language-text">capabilities(provider, model) -&gt; { supports_text_to_video, supports_image_to_video, supports_async_jobs, supported_resolutions, supported_aspect_ratios, maximum_duration, output_formats
+}
+</code></pre>
+<p>Populate these values from live documentation or a controlled configuration file. Do not infer them from a model name.</p>
+<h2>Build a Verification Workflow Before Migration</h2>
+<p>A small evaluation harness is more valuable than an early production integration.</p>
+<h3>1. Inventory the current Gemini integration</h3>
+<p>Record:</p>
+<ul>
+<li>Request and response formats</li>
+<li>Model identifiers</li>
+<li>Authentication method</li>
+<li>Timeout settings</li>
+<li>Polling intervals</li>
+<li>Retry behavior</li>
+<li>Output URL handling</li>
+<li>Error mappings</li>
+<li>Content filtering behavior</li>
+<li>Quota and billing assumptions</li>
+<li>Logging and tracing fields</li>
+</ul>
+<p>Also record application-level expectations. For example, your product may assume that a request returns within a few seconds, even though the underlying provider actually performs a long-running operation.</p>
+<h3>2. Create a representative test set</h3>
+<p>Use a fixed set of prompts and inputs that reflect real traffic:</p>
+<ul>
+<li>Short and long prompts</li>
+<li>Different visual styles</li>
+<li>Multiple aspect ratios</li>
+<li>Portrait and landscape inputs</li>
+<li>Image-conditioned requests</li>
+<li>Requests near maximum duration or resolution</li>
+<li>Prompts that may trigger safety controls</li>
+<li>Invalid parameters</li>
+<li>Repeated requests for determinism testing</li>
+</ul>
+<p>Do not evaluate only successful, simple prompts. API migration failures often appear in validation, moderation, timeouts, or media retrieval.</p>
+<h3>3. Normalize measurements</h3>
+<p>For each provider and model, record:</p>
+<ul>
+<li>Request acceptance time</li>
+<li>Queue or processing duration</li>
+<li>Total completion time</li>
+<li>Success and failure rate</li>
+<li>Error category</li>
+<li>Output resolution and format</li>
+<li>File size</li>
+<li>Output URL lifetime</li>
+<li>Retry count</li>
+<li>Estimated cost</li>
+<li>Human or automated quality score</li>
+</ul>
+<p>Keep provider-native values as well as normalized values. A normalized <code>latency_seconds</code> field is useful, but the original job status and error code may be essential for debugging.</p>
+<h3>4. Compare semantics, not only visual quality</h3>
+<p>A migration can produce visually acceptable output while still breaking the product.</p>
+<p>Evaluate:</p>
+<ul>
+<li>Prompt adherence</li>
+<li>Subject consistency</li>
+<li>Motion quality</li>
+<li>Temporal stability</li>
+<li>Text rendering</li>
+<li>Image-to-video fidelity</li>
+<li>Safety behavior</li>
+<li>Output availability</li>
+<li>Processing-time predictability</li>
+<li>Reproducibility where supported</li>
+</ul>
+<p>Document differences instead of forcing them into a pass/fail result. A provider may be suitable for one workflow and unsuitable for another.</p>
+<h2>Handle Asynchronous Video Jobs Correctly</h2>
+<p>Video generation commonly takes longer than ordinary text or image requests. Even when an API supports a synchronous call, production code should assume that the operation may be delayed or interrupted.</p>
+<p>A robust lifecycle is:</p>
+<ol>
+<li>Validate the request locally.</li>
+<li>Submit the generation request.</li>
+<li>Persist the provider, model, request ID, and external job ID.</li>
+<li>Return an internal job ID to the caller.</li>
+<li>Poll or receive a callback according to the provider’s documented workflow.</li>
+<li>Store the output in application-controlled storage when permitted.</li>
+<li>Mark the job as completed, failed, or expired.</li>
+<li>Expose a stable status to the frontend or downstream service.</li>
+</ol>
+<p>Use an internal state machine such as:</p>
+<pre><code class="language-text">queued -&gt; running -&gt; completed
+queued -&gt; failed
+running -&gt; failed
+queued -&gt; cancelled
+running -&gt; cancelled
+completed -&gt; expired
+</code></pre>
+<p>Do not expose provider-specific states directly to clients unless there is a strong reason to do so.</p>
+<h3>Make polling bounded</h3>
+<p>Polling should have:</p>
+<ul>
+<li>An initial delay</li>
+<li>Exponential backoff</li>
+<li>A maximum polling interval</li>
+<li>A total deadline</li>
+<li>A limit on concurrent polls</li>
+<li>A clear expired or timed-out state</li>
+</ul>
+<p>If the provider supports callbacks, validate callback authenticity and make callback processing idempotent. If callbacks are not available, use a background worker rather than holding an HTTP request open indefinitely.</p>
+<h2>Authentication and Secret Management</h2>
+<p>Keep provider credentials on the server side. Never place them in browser JavaScript, mobile application bundles, public repositories, or generated media URLs that are intended to be private.</p>
+<p>Use:</p>
+<ul>
+<li>Environment variables or a managed secret store</li>
+<li>Separate credentials for development, staging, and production</li>
+<li>Least-privilege project or account permissions where available</li>
+<li>Key rotation procedures</li>
+<li>Audit logs for key usage</li>
+<li>Redaction of authorization headers in logs</li>
+</ul>
+<p>For an OpenAI-compatible service such as KeyoAPI, the documented authentication format uses a bearer token:</p>
+<pre><code class="language-text">Authorization: Bearer YOUR_API_KEY
+</code></pre>
+<p>current documentation specify <code>https://www.keyoapi.xyz/v1</code> as the base URL for documented OpenAI-compatible requests and advise checking <code>GET /v1/models</code> before production use. That model check does not establish video support; it only helps confirm which model identifiers are currently exposed.</p>
+<p>A model discovery request can be tested without assuming a video model:</p>
+<pre><code class="language-bash">curl https://www.keyoapi.xyz/v1/models \
+  -H &quot;Authorization: Bearer YOUR_API_KEY&quot;
+</code></pre>
+<p>Select a model only after confirming its capabilities and accepted parameters in the live documentation.</p>
+<h2>Error Handling and Retries</h2>
+<p>Classify failures before deciding whether to retry.</p>
+<h3>Usually non-retryable</h3>
+<ul>
+<li>Invalid API key</li>
+<li>Unsupported model</li>
+<li>Invalid parameter</li>
+<li>Malformed input</li>
+<li>Content-policy rejection</li>
+<li>Request too large</li>
+<li>Unsupported media format</li>
+</ul>
+<p>For KeyoAPI, documented examples include <code>401 Unauthorized</code> for missing or invalid authentication and “Model Not Found” for an unavailable or incorrect model ID. The documented remedy for the latter is to query <code>GET /v1/models</code> and use an exact returned identifier.</p>
+<h3>Potentially retryable</h3>
+<ul>
+<li>Temporary upstream failures</li>
+<li>Network connection failures</li>
+<li>Request timeouts</li>
+<li>Rate limiting</li>
+<li>Provider overload</li>
+</ul>
+<p>Use exponential backoff with jitter. Respect any provider-supplied retry guidance. Set both:</p>
+<ul>
+<li>A client-side request timeout</li>
+<li>An overall generation deadline</li>
+</ul>
+<p>KeyoAPI docs identify <code>429 Too Many Requests</code> as potentially related to rate limits, exhausted quota, or insufficient prepaid balance. These causes require different operational responses, so log the provider response carefully while removing secrets and sensitive prompt content.</p>
+<p>Do not blindly retry video creation requests. A retry may create a second paid generation. Prefer an idempotency mechanism if the provider documents one. Otherwise, store a client-generated request key and reconcile uncertain outcomes before submitting another job.</p>
+<h2>Protect Prompts, Inputs, and Outputs</h2>
+<p>Video prompts and source media may contain confidential business information or personal data.</p>
+<p>Review:</p>
+<ul>
+<li>Provider data-retention policies</li>
+<li>Training-use policies</li>
+<li>Regional processing requirements</li>
+<li>Access controls for generated files</li>
+<li>URL expiration behavior</li>
+<li>Deletion procedures</li>
+<li>Content moderation responsibilities</li>
+<li>User consent for uploaded images or video</li>
+</ul>
+<p>Do not put sensitive prompts, raw media, or permanent provider URLs into ordinary application logs. Store references and metadata separately from content where possible.</p>
+<p>If the provider returns a temporary media URL, download the result into controlled storage before the URL expires, provided the provider’s terms permit this. Apply your own authorization checks before allowing users to access the stored file.</p>
+<p>Validate downloaded content rather than trusting a filename or URL. Check the response type, size limits, and expected media format before processing it.</p>
+<h2>Cost and Quota Planning</h2>
+<p>Video generation costs can vary with duration, resolution, model, input modality, and retry behavior. Before launch, determine:</p>
+<ul>
+<li>The billing unit</li>
+<li>Whether failed requests incur charges</li>
+<li>Whether polling is billed</li>
+<li>Whether storage or media transfer costs apply</li>
+<li>Quota dimensions</li>
+<li>Account-level and project-level limits</li>
+<li>How prepaid balances or usage limits behave</li>
+<li>Whether prices differ by model or output settings</li>
+</ul>
+<p>Do not hard-code prices in application logic or documentation. Retrieve current terms from the provider’s live pricing page and model catalog.</p>
+<p>Model availability and pricing may change. Check the KeyoAPI model catalog for current information.</p>
+<p>Implement budget controls independently of the provider:</p>
+<ul>
+<li>Per-user daily limits</li>
+<li>Per-project monthly budgets</li>
+<li>Maximum duration and resolution</li>
+<li>Approval for expensive configurations</li>
+<li>Duplicate-request detection</li>
+<li>Usage dashboards</li>
+<li>Alerts for unusual generation volume</li>
+<li>A kill switch for runaway workers</li>
+</ul>
+<p>A migration test should estimate cost using the same prompt distribution and retry policy expected in production. Comparing only the nominal price of one successful request is misleading.</p>
+<h2>Model Availability and Fallbacks</h2>
+<p>Model names are not stable contracts. Providers may add, rename, restrict, or remove models. Check availability at deployment time and periodically afterward.</p>
+<p>A safe startup process is:</p>
+<ol>
+<li>Query the provider’s model catalog.</li>
+<li>Verify the configured model exists.</li>
+<li>Confirm required capabilities.</li>
+<li>Confirm required parameters.</li>
+<li>Fail deployment or disable the feature if validation fails.</li>
+</ol>
+<p>Do not silently substitute a different model with unknown behavior. If you need fallback models, define them explicitly and test each one.</p>
+<p>Fallbacks should also account for:</p>
+<ul>
+<li>Different output quality</li>
+<li>Different safety behavior</li>
+<li>Different latency</li>
+<li>Different cost</li>
+<li>Different legal or regional constraints</li>
+<li>Different output formats</li>
+</ul>
+<p>A fallback that changes the visual result or user-facing terms may require product approval rather than an automatic switch.</p>
+<h2>A Safer Migration Strategy</h2>
+<p>Use a staged migration instead of replacing the provider in one release.</p>
+<h3>Stage 1: Adapter implementation</h3>
+<p>Implement the provider-neutral contract and preserve the existing Gemini adapter. Add the candidate provider behind a feature flag.</p>
+<h3>Stage 2: Offline evaluation</h3>
+<p>Run the fixed test set against both providers. Store outputs securely and compare operational and quality metrics.</p>
+<h3>Stage 3: Shadow traffic</h3>
+<p>Where permitted, duplicate a limited set of requests for evaluation without exposing the alternative output to users. Confirm that the additional cost and data handling are acceptable.</p>
+<h3>Stage 4: Controlled rollout</h3>
+<p>Route a small percentage of eligible traffic to the new adapter. Monitor:</p>
+<ul>
+<li>Completion rate</li>
+<li>Generation duration</li>
+<li>Retry rate</li>
+<li>Output retrieval failures</li>
+<li>Cost per successful result</li>
+<li>User feedback</li>
+<li>Safety incidents</li>
+</ul>
+<h3>Stage 5: Rollback readiness</h3>
+<p>Keep the previous provider path available until the new integration has met predefined thresholds over a representative period. Rollback should be a configuration change, not an emergency code rewrite.</p>
+<h2>Practical Checklist</h2>
+<p>Before integrating or migrating a video generation API, confirm:</p>
+<ul>
+<li><span aria-hidden="true">☐</span> The exact video capability is documented by the provider.</li>
+<li><span aria-hidden="true">☐</span> The model identifier is verified in the current model catalog.</li>
+<li><span aria-hidden="true">☐</span> Input types, duration, resolution, and aspect-ratio limits are known.</li>
+<li><span aria-hidden="true">☐</span> Synchronous and asynchronous behavior is understood.</li>
+<li><span aria-hidden="true">☐</span> Job polling, callbacks, expiration, and cancellation are documented.</li>
+<li><span aria-hidden="true">☐</span> Output URLs, formats, and retention periods are understood.</li>
+<li><span aria-hidden="true">☐</span> Authentication is server-side and secrets are stored securely.</li>
+<li><span aria-hidden="true">☐</span> Non-retryable and retryable errors are classified.</li>
+<li><span aria-hidden="true">☐</span> Retries use backoff, jitter, deadlines, and duplicate-request protection.</li>
+<li><span aria-hidden="true">☐</span> Rate limits, quota rules, and account balance behavior are understood.</li>
+<li><span aria-hidden="true">☐</span> Current pricing has been checked without hard-coding assumptions.</li>
+<li><span aria-hidden="true">☐</span> Prompts, source media, and generated files have an appropriate data policy.</li>
+<li><span aria-hidden="true">☐</span> A representative evaluation set exists.</li>
+<li><span aria-hidden="true">☐</span> Quality, latency, reliability, and cost are measured together.</li>
+<li><span aria-hidden="true">☐</span> The integration uses a provider-neutral contract.</li>
+<li><span aria-hidden="true">☐</span> Fallback models and rollback behavior are explicitly tested.</li>
+<li><span aria-hidden="true">☐</span> Model availability is checked before production deployment.</li>
+</ul>
+<h2>Conclusion</h2>
+<p>The main risk in a Gemini video API integration is not writing the first request. It is assuming that model names, request formats, output delivery, pricing, and availability will remain interchangeable across providers.</p>
+<p>Verify the live capability first, build an adapter around the actual job lifecycle, and test the migration with representative workloads. Treat model catalogs and pricing as changing inputs, not permanent application constants. This approach keeps your video-generation feature portable without making unsupported compatibility claims or hiding important provider differences.</p>
+<h2>Editorial scope and verification</h2>
+<p>“Video generation API” is not a complete capability description. Before building an adapter, verify the exact model, endpoint, supported inputs, output format, job lifecycle, regional availability, authentication, pricing, and usage limits in current official documentation. Do not infer video support from a text or image model name.</p>
+<h2>Integration acceptance checklist</h2>
+<ul>
+<li>Confirm the live model catalog and required permissions.</li>
+<li>Submit a small test job and record job ID, status transitions, latency, and output metadata.</li>
+<li>Use asynchronous queues for long-running renders and poll with backoff or verify authenticated webhooks.</li>
+<li>Validate duration, resolution, codec, frame rate, audio, and download integrity.</li>
+<li>Define cancellation, timeout, retry, retention, and cost limits before production.</li>
+<li>Test regional and account restrictions with the actual deployment account.</li>
+</ul>
+<p>Treat model names, pricing, quotas, and availability as time-sensitive facts. The safe implementation is a verified adapter with explicit fallbacks, not a promise that any similarly named API will generate video. See the <a href="/gemini-api-pricing">Gemini API pricing page</a> for live rates and model availability.</p>

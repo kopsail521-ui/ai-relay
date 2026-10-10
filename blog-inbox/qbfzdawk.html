@@ -1,0 +1,266 @@
+<!-- TITLE: OpenAI API 401 Error: Incorrect API Key Troubleshooting -->
+<!-- EXCERPT: Learn how to diagnose OpenAI API 401 errors, verify Bearer authentication, migrate to an OpenAI-compatible endpoint, and build reliable production checks for API keys and model availability. -->
+<!-- DESC: Learn how to diagnose OpenAI API 401 errors, verify Bearer authentication, migrate to an OpenAI-compatible endpoint, and build reliable production checks for API keys and model availability. -->
+<p>A <code>401 Unauthorized</code> response means the API did not accept the credentials attached to the request. In most cases, the problem is not the model, prompt, or request body. It is an authentication issue: the API key is missing, malformed, invalid, revoked, or being sent to the wrong service.</p>
+<p>This guide provides a repeatable way to troubleshoot the error, migrate an existing OpenAI-compatible integration when appropriate, and prevent authentication failures from becoming recurring production incidents.</p>
+<h2>What a 401 Error Means</h2>
+<p>HTTP status <code>401</code> indicates that the server could not authenticate the request. Common causes include:</p>
+<ul>
+<li>No <code>Authorization</code> header</li>
+<li>Incorrect Bearer token syntax</li>
+<li>Invalid API key</li>
+<li>Revoked or expired key</li>
+<li>Environment variable not loaded</li>
+<li>Key sent to the wrong API base URL</li>
+<li>Accidental whitespace or quotation marks in the key</li>
+<li>A proxy or middleware removing the header</li>
+</ul>
+<p>The required authentication format is:</p>
+<pre><code class="language-http">Authorization: Bearer YOUR_API_KEY
+</code></pre>
+<p>The word <code>Bearer</code>, the space after it, and the key itself are all significant. These examples are incorrect:</p>
+<pre><code class="language-http">Authorization: YOUR_API_KEY
+Authorization: Bearer: YOUR_API_KEY
+Authorization: Bearer &quot;YOUR_API_KEY&quot;
+</code></pre>
+<p>The last form may work in some manually constructed tools only if the quotes are removed before transmission. In an actual HTTP request, quotation marks usually become part of the token and can cause authentication to fail.</p>
+<h2>A Structured Troubleshooting Workflow</h2>
+<h3>1. Confirm the request URL</h3>
+<p>First check that the request is being sent to the intended provider and API base URL. A valid key for one service will not normally authenticate against another service.</p>
+<p>When migrating to an OpenAI-compatible gateway, update the base URL as well as the key. For example, the verified KeyoAPI base URL is:</p>
+<pre><code class="language-text">https://www.keyoapi.xyz/v1
+</code></pre>
+<p>Check the current documentation and model catalog before implementing an integration because supported models, parameters, and prices may change.</p>
+<h3>2. Confirm that the key exists at runtime</h3>
+<p>A common failure is that the key exists in a local <code>.env</code> file but is missing from the process that sends the request.</p>
+<p>Add a temporary diagnostic that checks whether the variable is present without printing its value:</p>
+<pre><code class="language-text">if API_KEY is missing or empty: fail with &quot;API key is not configured&quot;
+</code></pre>
+<p>Do not log the complete key. A safe diagnostic can report:</p>
+<ul>
+<li>Whether the variable exists</li>
+<li>The key length</li>
+<li>A short, non-sensitive identifier such as a hash</li>
+<li>Which deployment or environment produced the request</li>
+</ul>
+<p>Avoid printing even a partial key in shared logs unless your security policy explicitly allows it.</p>
+<h3>3. Check the header format</h3>
+<p>Use a minimal request before testing the full application. For KeyoAPI, the current model-list endpoint is:</p>
+<pre><code class="language-bash">curl https://www.keyoapi.xyz/v1/models \
+  -H &quot;Authorization: Bearer YOUR_API_KEY&quot;
+</code></pre>
+<p>Replace <code>YOUR_API_KEY</code> locally. Do not commit a real key to a repository, shell history, screenshot, or support ticket.</p>
+<p>If the minimal request returns <code>401</code>, focus on the key and header. If it succeeds but the application still returns <code>401</code>, compare the application’s outgoing request with the working test.</p>
+<h3>4. Inspect environment and deployment configuration</h3>
+<p>Verify the secret in the environment where the error occurs:</p>
+<ul>
+<li>Local development shell</li>
+<li>Container or Kubernetes secret</li>
+<li>CI/CD environment</li>
+<li>Staging deployment</li>
+<li>Production secret manager</li>
+<li>Serverless function configuration</li>
+</ul>
+<p>Typical mistakes include:</p>
+<ul>
+<li>Using <code>OPENAI_API_KEY</code> locally but reading a different variable in production</li>
+<li>Updating a secret without restarting the service</li>
+<li>Configuring the key in the build environment but not the runtime environment</li>
+<li>Injecting an empty variable because of a naming mismatch</li>
+<li>Including a trailing newline when copying a key</li>
+<li>Loading a <code>.env</code> file in development but not in production</li>
+</ul>
+<p>The application should fail during startup when a required key is absent, rather than allowing every request to fail later.</p>
+<h3>5. Determine whether the key was revoked</h3>
+<p>If the header is correctly formed and the runtime value is present, the key may be invalid or revoked. Create a new key through the provider’s dashboard or token-management interface, update the secret store, restart the affected service, and retest the minimal request.</p>
+<p>Treat a key replacement as a security event if the old key may have been exposed. Search logs, repositories, issue trackers, browser code, and build artifacts for accidental disclosure.</p>
+<h2>Migrating an OpenAI-Compatible Integration</h2>
+<p>An OpenAI-compatible API can reduce application changes because many clients separate the API base URL, API key, model ID, and request logic.</p>
+<p>The migration still requires an explicit compatibility check. Do not assume that every provider supports the same models, parameters, response fields, streaming behavior, or error format.</p>
+<p>A practical migration sequence is:</p>
+<ol>
+<li>Identify every location where the existing base URL is configured.</li>
+<li>Replace the API key through the deployment secret mechanism.</li>
+<li>Query the target provider’s live model catalog.</li>
+<li>Select a model ID returned by that catalog.</li>
+<li>Run a minimal authenticated request.</li>
+<li>Test the application’s actual request shape.</li>
+<li>Validate error handling, timeouts, retries, and output quality.</li>
+<li>Roll out gradually with monitoring.</li>
+</ol>
+<p>KeyoAPI provides a current model-list endpoint:</p>
+<pre><code class="language-http">GET https://www.keyoapi.xyz/v1/models
+</code></pre>
+<p>Applications should use a model ID returned by that endpoint instead of hard-coding an assumed model name. A model identifier shown in an old example may no longer be available.</p>
+<p>For text chat, the documented KeyoAPI endpoint is:</p>
+<pre><code class="language-http">POST https://www.keyoapi.xyz/v1/chat/completions
+</code></pre>
+<p>A minimal request has this structure:</p>
+<pre><code class="language-bash">curl https://www.keyoapi.xyz/v1/chat/completions \
+  -H &quot;Authorization: Bearer YOUR_API_KEY&quot; \
+  -H &quot;Content-Type: application/json&quot; \
+  -d '{ &quot;model&quot;: &quot;MODEL_ID_FROM_LIVE_CATALOG&quot;, &quot;messages&quot;: [ { &quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;Hello&quot; } ] }'
+</code></pre>
+<p>Use a real model ID from the live catalog in place of <code>MODEL_ID_FROM_LIVE_CATALOG</code>. Do not assume that a model name from another provider is supported.</p>
+<h2>Separating Authentication From Request Failures</h2>
+<p>Not every failed request is an authentication problem. Classify responses before changing code.</p>
+<div class="article-table-wrap"><table class="article-table">
+<thead>
+<tr>
+<th>Status</th>
+<th>Typical interpretation</th>
+<th>First action</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>400</code></td>
+<td>Invalid request or unsupported parameter</td>
+<td>Validate the JSON and model-specific parameters</td>
+</tr>
+<tr>
+<td><code>401</code></td>
+<td>Authentication failed</td>
+<td>Check the key, header, base URL, and key status</td>
+</tr>
+<tr>
+<td><code>403</code></td>
+<td>Request refused by authorization policy</td>
+<td>Check account permissions and service policy</td>
+</tr>
+<tr>
+<td><code>404</code></td>
+<td>Incorrect endpoint or unavailable resource</td>
+<td>Confirm the URL and current documentation</td>
+</tr>
+<tr>
+<td><code>429</code></td>
+<td>Rate limit or quota issue</td>
+<td>Apply bounded backoff and inspect usage limits</td>
+</tr>
+<tr>
+<td><code>5xx</code></td>
+<td>Provider-side or gateway failure</td>
+<td>Retry selectively and monitor availability</td>
+</tr>
+</tbody>
+</table></div>
+<p>The exact response body and provider documentation should take precedence over this general classification.</p>
+<h2>Production Authentication Practices</h2>
+<h3>Keep keys on the server</h3>
+<p>API keys must not be embedded in:</p>
+<ul>
+<li>Browser JavaScript</li>
+<li>Mobile application binaries</li>
+<li>Public repositories</li>
+<li>Screenshots</li>
+<li>Client-side configuration</li>
+<li>Frontend environment variables that are exposed to users</li>
+</ul>
+<p>Route requests through a backend service or other controlled server-side component. The backend can authenticate with the provider while applying application-level authorization, rate limits, and audit logging.</p>
+<h3>Use secret management</h3>
+<p>Store keys in a secret manager or protected deployment configuration. Avoid hard-coding them in source code.</p>
+<p>Use separate credentials for:</p>
+<ul>
+<li>Development</li>
+<li>Testing</li>
+<li>Staging</li>
+<li>Production</li>
+<li>Different services or tenants</li>
+</ul>
+<p>This limits the impact of a single compromised key and makes rotation easier.</p>
+<h3>Rotate keys deliberately</h3>
+<p>A reliable rotation process should:</p>
+<ol>
+<li>Create a replacement key.</li>
+<li>Store it in the secret manager.</li>
+<li>Deploy the new configuration.</li>
+<li>Confirm successful authenticated requests.</li>
+<li>Revoke the old key.</li>
+<li>Monitor for failures caused by stale processes.</li>
+</ol>
+<p>Support overlapping credentials during rotation when the provider permits it. Do not revoke the old key before the replacement has been deployed and tested.</p>
+<h2>Error Handling and Retries</h2>
+<p>A <code>401</code> should not be retried indefinitely. Repeating the same invalid credential only adds latency and can increase operational noise.</p>
+<p>Use different handling for different classes of errors:</p>
+<ul>
+<li><code>401</code>: stop retries, alert the owning team, and check configuration or key status.</li>
+<li><code>400</code>: log the validation failure and correct the request.</li>
+<li><code>429</code>: use bounded exponential backoff with jitter, subject to provider limits.</li>
+<li>Transient <code>5xx</code> or network failures: retry a small number of times with a request timeout.</li>
+<li>Timeouts: retry only when the request can be safely repeated.</li>
+</ul>
+<p>For non-idempotent operations, repeated retries can produce duplicate effects. Where supported, use an idempotency mechanism or design the application so duplicate processing is safe. Confirm the target provider’s support for any such mechanism before relying on it.</p>
+<p>A language-neutral retry policy might look like this:</p>
+<pre><code class="language-text">send request if response is 401: record sanitized authentication error do not retry alert or fail the operation else if response is 429 or a transient 5xx: retry up to a small configured limit wait with exponential backoff and jitter else: handle according to the response status
+</code></pre>
+<p>Never include the API key in error messages, traces, exception payloads, or customer-visible responses.</p>
+<h2>Model Availability and Configuration Drift</h2>
+<p>An authentication fix does not guarantee that the requested model or parameters are available. Model catalogs change, and an integration can fail after a successful key test if it uses a stale model ID.</p>
+<p>At deployment or startup, consider validating:</p>
+<ul>
+<li>The configured model exists in the live catalog</li>
+<li>The model supports the required task</li>
+<li>The request parameters are accepted</li>
+<li>The expected response shape is available</li>
+<li>The service can reach the configured endpoint</li>
+</ul>
+<p>Avoid silently switching to an untested model when the configured model is unavailable. An explicit deployment failure is easier to diagnose than an unnoticed change in output quality, latency, or cost.</p>
+<p>The same principle applies during migration: test representative prompts and application workflows, not only a successful HTTP response.</p>
+<h2>Cost and Operational Controls</h2>
+<p>Authentication failures do not generally consume the same resources as successful model requests, but retries and misconfigured services can still create operational cost. Build controls around the entire integration:</p>
+<ul>
+<li>Set request timeouts.</li>
+<li>Limit retry counts.</li>
+<li>Apply application-level rate limits.</li>
+<li>Track request volume, latency, and response status.</li>
+<li>Set usage alerts where the provider supports them.</li>
+<li>Separate production and non-production credentials.</li>
+<li>Review the live pricing page before estimating costs.</li>
+<li>Record the model ID used for each request.</li>
+</ul>
+<p>For KeyoAPI, pricing and availability should be checked in the live model catalog and <a href="/pricing-list">pricing list</a> rather than hard-coded in application documentation.</p>
+<p>Model availability and pricing may change. Check the KeyoAPI model catalog for current information.</p>
+<h2>A Practical Verification Test</h2>
+<p>Before deploying a migration or authentication change, run tests in this order:</p>
+<h3>Configuration test</h3>
+<p>Confirm that the service sees a non-empty key and the intended base URL without exposing the secret.</p>
+<h3>Authentication test</h3>
+<p>Send a minimal authenticated request to the current model-list endpoint or another documented low-risk endpoint.</p>
+<h3>Capability test</h3>
+<p>Choose a model from the live catalog and send the smallest valid request for the required task.</p>
+<h3>Application test</h3>
+<p>Run a representative workflow using the same SDK, middleware, timeouts, and request parameters as production.</p>
+<h3>Failure test</h3>
+<p>Verify that the application:</p>
+<ul>
+<li>Stops retrying on <code>401</code></li>
+<li>Redacts credentials from logs</li>
+<li>Handles rate limits with bounded backoff</li>
+<li>Reports unavailable models clearly</li>
+<li>Returns a safe error to the caller</li>
+<li>Emits enough telemetry for operators to diagnose the issue</li>
+</ul>
+<h2>Troubleshooting Checklist</h2>
+<p>Before closing an OpenAI API 401 incident, verify:</p>
+<ul>
+<li><span aria-hidden="true">☐</span> The request is sent to the intended API base URL.</li>
+<li><span aria-hidden="true">☐</span> The <code>Authorization</code> header is present.</li>
+<li><span aria-hidden="true">☐</span> The header uses <code>Bearer YOUR_API_KEY</code>.</li>
+<li><span aria-hidden="true">☐</span> The runtime environment contains the expected key.</li>
+<li><span aria-hidden="true">☐</span> The key has no accidental quotes, spaces, or newline characters.</li>
+<li><span aria-hidden="true">☐</span> The key has not been revoked.</li>
+<li><span aria-hidden="true">☐</span> The service was restarted after secret changes when required.</li>
+<li><span aria-hidden="true">☐</span> The key is not exposed in frontend code, source control, logs, or screenshots.</li>
+<li><span aria-hidden="true">☐</span> A minimal authenticated request succeeds.</li>
+<li><span aria-hidden="true">☐</span> The model ID comes from the provider’s current model catalog.</li>
+<li><span aria-hidden="true">☐</span> Unsupported parameters have been removed or validated.</li>
+<li><span aria-hidden="true">☐</span> <code>401</code> responses are not retried indefinitely.</li>
+<li><span aria-hidden="true">☐</span> Rate limits and transient failures use bounded retries.</li>
+<li><span aria-hidden="true">☐</span> Request timeouts and application-level rate limits are configured.</li>
+<li><span aria-hidden="true">☐</span> Pricing and model availability were checked in current documentation.</li>
+<li><span aria-hidden="true">☐</span> Monitoring records status codes, latency, model IDs, and sanitized error details.</li>
+</ul>
+<h2>Conclusion</h2>
+<p>An OpenAI API 401 error is usually resolved by isolating authentication from the rest of the request: verify the base URL, confirm the runtime secret, inspect the Bearer header, and test with a minimal documented request. When migrating to an OpenAI-compatible service, treat the live model catalog and current documentation as part of the integration contract.</p>
+<p>A production-ready implementation also needs server-side key storage, deliberate rotation, redacted logging, status-aware retries, bounded timeouts, and model availability checks. These controls turn a one-time key fix into a reliable integration that remains diagnosable as credentials, models, endpoints, and service policies change. Confirm live rates on the <a href="/openai-api-pricing">OpenAI API pricing page</a>.</p>

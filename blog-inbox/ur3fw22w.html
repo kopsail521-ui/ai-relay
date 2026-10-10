@@ -1,0 +1,285 @@
+<!-- TITLE: Bulk Background Removal API for E-Commerce Product Catalogs -->
+<!-- EXCERPT: Learn how to run bulk background removal on e-commerce product catalogs: batching, alpha output validation, retries, cost control, and pipeline design. -->
+<!-- DESC: Learn how to run bulk background removal on e-commerce product catalogs: batching, alpha output validation, retries, cost control, and pipeline design. -->
+<h2>Key Takeaways</h2>
+<ul>
+<li>A bulk background removal API can automate product-image preparation across large catalogs, reducing manual editing and improving consistency across marketplace listings.</li>
+<li>The most reliable workflow separates image ingestion, background removal, validation, storage, and catalog publishing instead of treating the API call as the entire pipeline.</li>
+<li>KeyoAPI provides an OpenAI-compatible API gateway with Bearer-token authentication. For background removal, use the documented multipart endpoint and confirm the current model catalog before deployment.</li>
+<li>Production systems should handle authentication failures, rate-limit responses, malformed files, transparent outputs, retries, and manual review for difficult images.</li>
+<li>Create a KeyoAPI API key in the dashboard, keep it on the server, and check the current documentation and pricing before integrating.</li>
+</ul>
+<h2>1. Introduction: Why Catalog Teams Need Bulk Background Removal</h2>
+<p>E-commerce catalogs often contain thousands of product images collected from different suppliers, studios, and internal teams. Some images use white backgrounds, while others contain shadows, furniture, packaging materials, inconsistent lighting, or visible parts of the original studio setup. When these images are published together, the catalog can look inconsistent even when the product data is accurate.</p>
+<p>Manual background removal is possible for a small collection, but it becomes difficult to manage at scale. A team may need to edit hundreds or thousands of images before a seasonal launch, supplier migration, marketplace submission, or catalog redesign. Manual work also introduces quality variation: one editor may preserve fine edges, while another may remove straps, handles, transparent parts, or product details.</p>
+<p>A bulk background removal API addresses this specific operational problem. Instead of opening each image in an editor, an application sends product images to an image-processing endpoint, receives the processed result, validates the output, and stores it for later use.</p>
+<p>The important distinction is that an API does not automatically solve every catalog-image problem. It automates a repeatable transformation, but the surrounding workflow still needs to decide:</p>
+<ul>
+<li>Which images should be processed</li>
+<li>Which file formats are accepted</li>
+<li>Whether the output should be transparent or placed on a solid background</li>
+<li>How failed requests should be retried</li>
+<li>How results should be reviewed before publication</li>
+<li>How API keys and customer images should be protected</li>
+</ul>
+<p>This article explains how to design that workflow with a bulk background removal API and how to connect it to KeyoAPI using a server-side integration.</p>
+<h2>2. How a Bulk Background Removal Workflow Works</h2>
+<p>The core conclusion is straightforward: bulk processing is most reliable when it is designed as a pipeline rather than a loop of untracked API calls.</p>
+<p>A typical workflow contains six stages:</p>
+<ol>
+<li><strong>Collect input images</strong></li>
+<li><strong>Validate image files and metadata</strong></li>
+<li><strong>Submit multipart requests to the background removal endpoint</strong></li>
+<li><strong>Receive and store the processed output</strong></li>
+<li><strong>Run quality checks</strong></li>
+<li><strong>Publish or route exceptions for review</strong></li>
+</ol>
+<h3>Input collection and validation</h3>
+<p>Before sending an image, the application should confirm that the file exists, can be decoded, and belongs to the expected product record. Useful metadata includes:</p>
+<ul>
+<li>Product identifier</li>
+<li>Original file name</li>
+<li>Source location</li>
+<li>Image width and height</li>
+<li>File type</li>
+<li>Processing status</li>
+<li>Attempt count</li>
+<li>Timestamp</li>
+<li>Output location</li>
+</ul>
+<p>This metadata makes the workflow restartable. If a process stops after 3,000 of 5,000 images, the application can resume from the remaining records instead of repeating completed work.</p>
+<p>Validation should also reject obvious problems early, such as missing files, unsupported extensions, zero-byte uploads, or files that cannot be opened as images. Early validation saves API usage and makes error reporting easier.</p>
+<h3>Multipart upload</h3>
+<p>Background removal requests generally need the image file itself, so the request should use <code>multipart/form-data</code>. The model identifier should be supplied according to the current KeyoAPI documentation. The API key belongs in the <code>Authorization</code> header using the Bearer format:</p>
+<pre><code class="language-http">Authorization: Bearer YOUR_API_KEY
+</code></pre>
+<p>The API key should remain on a backend server, worker, or secure integration service. It should not be placed in browser JavaScript, a mobile application bundle, a public repository, or a client-side image-processing tool.</p>
+<h3>Output handling</h3>
+<p>The application should treat the API response as a file-processing result, not merely as a successful HTTP status. It should verify that:</p>
+<ul>
+<li>The response contains usable image data</li>
+<li>The output can be opened by an image library</li>
+<li>The product record is still associated with the correct output</li>
+<li>The output is stored under a deterministic or traceable name</li>
+<li>The original image remains available for rollback</li>
+</ul>
+<p>A practical naming pattern might include a product identifier, processing version, and output format. Keeping the original file prevents irreversible catalog changes and supports later reprocessing.</p>
+<h3>Scenario: supplier catalog migration</h3>
+<p>Suppose a retailer receives 20,000 product images from a new supplier. The files use inconsistent backgrounds and naming conventions. A robust workflow first maps each image to a product identifier, validates the files, processes them in controlled batches, stores the results separately, and publishes only images that pass validation.</p>
+<p>If a subset contains complex edges or unexpected output, those records can be routed to a review queue without blocking the entire migration.</p>
+<h2>3. Connecting to KeyoAPI</h2>
+<p>KeyoAPI is an independent, OpenAI-compatible multi-model API gateway. It provides a common API base URL for supported services, including image-related models. It is not an official service of OpenAI, Anthropic, Google, DeepSeek, or other model providers.</p>
+<p>For the background removal use case, the relevant endpoint is:</p>
+<pre><code class="language-text">POST https://www.keyoapi.xyz/v1/images/mattings
+</code></pre>
+<p>The background removal model specified for this integration is:</p>
+<pre><code class="language-text">RMBG-2.0
+</code></pre>
+<p>Model availability and request parameters can change. Before building or deploying an integration, check the current KeyoAPI documentation and retrieve the live model catalog where appropriate.</p>
+<h3>Basic curl example</h3>
+<p>The following example demonstrates the request pattern for a local image file:</p>
+<pre><code class="language-bash">curl -X POST &quot;https://www.keyoapi.xyz/v1/images/mattings&quot; \
+  -H &quot;Authorization: Bearer YOUR_API_KEY&quot; \
+  -F &quot;model=RMBG-2.0&quot; \
+  -F &quot;image=@./product-shoe.jpg&quot; \
+  --output./product-shoe-removed.png
+</code></pre>
+<p>The exact multipart field names should be confirmed against the current endpoint documentation before production deployment. The <code>image</code> field shown here represents the uploaded product image, while the output file is written locally by curl.</p>
+<p>The command uses a placeholder API key intentionally. Replace <code>YOUR_API_KEY</code> with a key created in the KeyoAPI dashboard, but do not commit the key to source control or expose it in client-side code.</p>
+<h3>Server-side request pattern</h3>
+<p>A production application typically performs this operation from a backend worker:</p>
+<pre><code class="language-text">Read catalog record -&gt; Open original image -&gt; Validate file and product ID -&gt; Send multipart request with Bearer token -&gt; Check HTTP status and response body -&gt; Validate returned image -&gt; Store output -&gt; Update processing status
+</code></pre>
+<p>This structure makes the integration observable. A catalog administrator can see whether an image is pending, completed, failed, or awaiting manual review.</p>
+<h3>Model discovery</h3>
+<p>Applications should not permanently assume that a model will remain available. KeyoAPI documents the following endpoint for checking the current model list:</p>
+<pre><code class="language-bash">curl &quot;https://www.keyoapi.xyz/v1/models&quot; \
+  -H &quot;Authorization: Bearer YOUR_API_KEY&quot;
+</code></pre>
+<p>Use a model ID returned by the live endpoint and the current documentation when configuring a deployment. For a controlled production system, it is useful to store the selected model ID in configuration rather than scattering it through application code.</p>
+<h2>4. Designing Bulk Processing for Reliability</h2>
+<p>The key production decision is how to control work volume and recover from partial failure. A simple loop may work for a small test, but catalog-scale processing needs explicit job states and error handling.</p>
+<h3>Use a queue or worker model</h3>
+<p>A queue-based architecture is usually easier to monitor than a single long-running request process. Each image becomes a job with a status such as:</p>
+<div class="article-table-wrap"><table class="article-table">
+<thead>
+<tr>
+<th>Status</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>pending</code></td>
+<td>Waiting to be processed</td>
+</tr>
+<tr>
+<td><code>processing</code></td>
+<td>Assigned to a worker</td>
+</tr>
+<tr>
+<td><code>completed</code></td>
+<td>Output stored and validated</td>
+</tr>
+<tr>
+<td><code>retryable_error</code></td>
+<td>Temporary failure; eligible for another attempt</td>
+</tr>
+<tr>
+<td><code>failed</code></td>
+<td>Requires investigation or manual action</td>
+</tr>
+<tr>
+<td><code>review</code></td>
+<td>Output exists but needs human inspection</td>
+</tr>
+</tbody>
+</table></div>
+<p>A worker can claim a limited number of jobs, send requests, and update the status after each result. This prevents one failed image from terminating the entire batch.</p>
+<h3>Handle common HTTP failures</h3>
+<p>KeyoAPI documentation identifies several common request failures:</p>
+<ul>
+<li><strong>401 Unauthorized</strong>: The Authorization header may be missing, malformed, invalid, or associated with a revoked key.</li>
+<li><strong>429 Too Many Requests</strong>: The application is sending requests too quickly or has reached a service limit. The worker should pause according to its retry policy rather than immediately repeating the request.</li>
+<li><strong>Other non-success responses</strong>: Record the status code and response body in a protected log, then classify the error before retrying.</li>
+</ul>
+<p>Not every failure should be retried. A malformed image, invalid parameter, or incorrect endpoint configuration will usually fail again until the input or configuration changes. Temporary service or network failures may be suitable for bounded retries.</p>
+<p>A conservative retry policy should include:</p>
+<ul>
+<li>A maximum attempt count</li>
+<li>Increasing delays between attempts</li>
+<li>A separate status for permanently failed jobs</li>
+<li>Logging that excludes API keys and sensitive image content</li>
+<li>An operator-visible report of failed product IDs</li>
+</ul>
+<h3>Preserve idempotency</h3>
+<p>Bulk jobs are often interrupted. To avoid creating inconsistent records, calculate a stable processing identity from the product ID, source image version, and selected model configuration. Before submitting a new request, check whether a valid output already exists for that identity.</p>
+<p>This avoids unnecessary repeat processing when a worker restarts after successfully storing an output but before updating the catalog database.</p>
+<h3>Separate processing from publishing</h3>
+<p>Background removal should not automatically overwrite the live catalog image without validation. Store the processed image in a staging location first. After quality checks, the catalog system can promote it to the published asset.</p>
+<p>This separation is especially important for:</p>
+<ul>
+<li>High-value products</li>
+<li>Images with transparent packaging</li>
+<li>Jewelry and fine details</li>
+<li>Apparel with thin straps or loose fabric</li>
+<li>Products with reflective surfaces</li>
+<li>Images containing multiple objects</li>
+</ul>
+<p>The API can automate the initial transformation, while a review step protects customer-facing quality.</p>
+<h2>5. Output Expectations and Quality Control</h2>
+<p>A background removal result should be treated as a new image asset whose dimensions, format, and transparency need to be verified. Do not assume that every output is immediately suitable for every marketplace or storefront.</p>
+<h3>What to validate</h3>
+<p>After receiving the result, inspect:</p>
+<ul>
+<li>Whether the response is a valid image</li>
+<li>Image dimensions</li>
+<li>Color mode</li>
+<li>Presence of an alpha channel, if transparency is expected</li>
+<li>Whether the main product remains visible</li>
+<li>Whether important edges have been removed</li>
+<li>Whether unrelated objects remain in the image</li>
+<li>Whether the output matches the source product record</li>
+</ul>
+<p>An automated check can flag unusual cases. For example, an output with an extremely small non-transparent area may indicate that the product was incorrectly removed. An output with almost the entire canvas marked as foreground may indicate that the original background was not separated as expected. These checks should be used as review signals, not as unsupported claims about model accuracy.</p>
+<h3>Input categories that deserve review</h3>
+<p>Some images are naturally more difficult than a simple product centered on a plain background. Add a manual-review path for images containing:</p>
+<ul>
+<li>Transparent or semi-transparent materials</li>
+<li>Fine hair, fur, threads, or mesh</li>
+<li>Similar colors between product and background</li>
+<li>Multiple products in one photograph</li>
+<li>Strong reflections or shadows</li>
+<li>Product parts that extend beyond the frame</li>
+<li>Text or labels close to the edge</li>
+</ul>
+<p>The right operational goal is not to force every result into automatic publication. It is to process routine images efficiently while making difficult cases visible.</p>
+<h3>Format and publishing decisions</h3>
+<p>A transparent result may be useful for storefront composition, marketplace templates, or consistent product-card backgrounds. Other destinations may require a solid background or a specific file format. Those transformations should be handled as explicit downstream steps, because “background removed” and “ready for every channel” are different requirements.</p>
+<p>Keep the original image and processed image as separate assets. This supports:</p>
+<ul>
+<li>Reprocessing with a different model or configuration</li>
+<li>Comparing before and after</li>
+<li>Reverting a poor result</li>
+<li>Generating channel-specific derivatives</li>
+<li>Auditing which version was published</li>
+</ul>
+<h2>6. Comparison: Manual Editing, Batch Tools, and APIs</h2>
+<p>Different catalog teams need different operating models. The right choice depends on volume, integration requirements, and the amount of human review required.</p>
+<div class="article-table-wrap"><table class="article-table">
+<thead>
+<tr>
+<th>Approach</th>
+<th>Best fit</th>
+<th>Main strength</th>
+<th>Main limitation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Manual editing</td>
+<td>Small batches or highly art-directed images</td>
+<td>Direct visual control</td>
+<td>Slow and difficult to standardize</td>
+</tr>
+<tr>
+<td>Desktop batch processing</td>
+<td>Recurring jobs managed by a creative team</td>
+<td>Familiar workflow for non-developers</td>
+<td>Less integrated with catalog systems</td>
+</tr>
+<tr>
+<td>Background removal API</td>
+<td>Automated catalog pipelines and supplier imports</td>
+<td>Programmatic processing and status tracking</td>
+<td>Requires engineering, monitoring, and quality checks</td>
+</tr>
+<tr>
+<td>Hybrid workflow</td>
+<td>Large catalogs with difficult exceptions</td>
+<td>Automation for routine images plus human review</td>
+<td>Requires clear routing and operational ownership</td>
+</tr>
+</tbody>
+</table></div>
+<p>A bulk background removal API is a strong fit when the image operation is part of a larger system. For example, a product-information-management platform can trigger processing when a new supplier image arrives. An e-commerce platform can process only images missing a standardized asset. A migration script can create staged outputs before a catalog launch.</p>
+<p>An API is less suitable when every image requires extensive artistic retouching, compositing, color correction, or layout-specific adjustments. Background removal can be one step in a creative workflow, but it should not be presented as a complete replacement for professional image editing in every scenario.</p>
+<h3>Cost and operational planning</h3>
+<p>Usage-based image processing should be measured against the number of images, reprocessing frequency, and failure rate. Do not hard-code prices in application documentation because model availability and pricing can change.</p>
+<p>Model availability and pricing may change. Check the KeyoAPI model catalog for current information.</p>
+<p>A practical cost-control strategy is to validate files before submission, avoid duplicate jobs, process only changed source images, and monitor retries separately from successful requests.</p>
+<h2>7. Production Checklist</h2>
+<p>Before enabling bulk processing for a live catalog, verify the following:</p>
+<ul>
+<li>The API key is stored in a server-side secret manager or protected environment variable.</li>
+<li>Requests use <code>Authorization: Bearer YOUR_API_KEY</code>.</li>
+<li>The application uses the current KeyoAPI base URL and endpoint documentation.</li>
+<li>Multipart upload fields match the live API specification.</li>
+<li>The selected model is confirmed against the current model catalog.</li>
+<li>Original images are retained.</li>
+<li>Outputs are stored separately before publication.</li>
+<li>Each job has a durable status.</li>
+<li>401 and 429 responses are classified correctly.</li>
+<li>Retry behavior is bounded and observable.</li>
+<li>Returned files are validated as images.</li>
+<li>Difficult images can be routed to human review.</li>
+<li>Logs do not expose API keys or unnecessary customer data.</li>
+<li>Current pricing is checked on the official pricing page.</li>
+<li>The integration has been tested with representative catalog images, not only ideal samples.</li>
+</ul>
+<h2>8. FAQ</h2>
+<h3>What is a bulk background removal API?</h3>
+<p>A bulk background removal API is a programmatic image-processing service that accepts product images and returns processed results with the background removed. It allows an application to process catalog images from a script, queue, import workflow, or product-information-management system.</p>
+<h3>How should I authenticate requests to KeyoAPI?</h3>
+<p>Use a Bearer token in the <code>Authorization</code> header:</p>
+<pre><code class="language-http">Authorization: Bearer YOUR_API_KEY
+</code></pre>
+<p>Create the API key in the KeyoAPI dashboard and keep it on the server. Never expose it in browser code, mobile application packages, public repositories, or screenshots.</p>
+<h3>Should every processed image be published automatically?</h3>
+<p>No. Routine images may pass automated validation, but difficult subjects can require human review. A safer workflow stores the result in staging, validates the file and product association, and publishes it only after the configured quality checks pass.</p>
+<h3>What should I do if a request returns 401 or 429?</h3>
+<p>For a 401 response, check that the Bearer token is present, correctly formatted, valid, and not revoked. For a 429 response, slow the worker, apply bounded retry delays, and inspect the current service documentation. Do not respond to either error by exposing the API key or retrying indefinitely.</p>
+<h2>9. Conclusion</h2>
+<p>A bulk background removal API is most valuable when it is integrated into a controlled catalog workflow. The API request is only one part of the solution: reliable results also require input validation, server-side authentication, durable job states, output verification, retry handling, staged publishing, and a review path for complex images.</p>
+<p>KeyoAPI provides an API gateway approach for developers who want to connect image-processing capabilities through a consistent endpoint and Bearer-token authentication. For the background removal workflow described here, use the documented <code>POST /v1/images/mattings</code> endpoint with the <code>RMBG-2.0</code> model configuration, then confirm current availability and parameters through the live documentation and model catalog.</p>
+<p>To begin, create a KeyoAPI API key, test the multipart request with a small set of representative product images, and measure the complete workflow before scheduling a large catalog batch. See the <a href="/model/RMBG-2.0">RMBG-2.0 model page</a> and the <a href="/remove-bg-api-alternative">remove.bg API alternative</a> for current details.</p>

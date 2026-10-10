@@ -1,0 +1,78 @@
+<!-- TITLE: Gemini API Key Error 429: Diagnosis and Retry Strategy -->
+<!-- EXCERPT: A 429 response means a request was rejected because some limit or quota was reached, but it does not identify the cause by itself. -->
+<!-- DESC: A 429 response means a request was rejected because some limit or quota was reached, but it does not identify the cause by itself. -->
+<p>A 429 response means a request was rejected because some limit or quota was reached, but it does not identify the cause by itself. With the Gemini API, the right response depends on the error details and the applicable limits for the project, model, and account. Retrying every 429 immediately can increase load and prolong an outage.</p>
+<p>This guide covers a practical diagnosis workflow, a safe retry strategy, and production patterns that keep application code adaptable if you later evaluate another provider.</p>
+<h2>Diagnose Before Retrying</h2>
+<p>Start with the response body and headers, not just the HTTP status. Record the endpoint, model, request time, status, and provider error details. Redact API keys and sensitive prompt or response content from logs.</p>
+<p>Check these likely causes:</p>
+<ul>
+<li><strong>Rate limit:</strong> The request rate or concurrency exceeded a limit.</li>
+<li><strong>Quota exhausted:</strong> The project or account has used its available quota for the relevant period.</li>
+<li><strong>Billing or account state:</strong> Billing is not configured as expected, or the account has a usage restriction.</li>
+<li><strong>Model-specific limit:</strong> A particular model may have different limits from other models.</li>
+<li><strong>Temporary service or capacity issue:</strong> The provider may be unable to handle the request temporarily; verify this against current provider status information rather than assuming every 429 is transient.</li>
+</ul>
+<p>Consult the current Gemini API documentation and the project’s usage or quota view to interpret the specific error. Limits and account settings can change, so avoid encoding a single assumed quota into application logic.</p>
+<h3>Classify the response</h3>
+<p>Treat the provider’s structured error code and message as diagnostic input, not as a durable interface unless the provider documents it as such. If the error indicates exhausted quota or a billing problem, repeated retries will not resolve it. Surface an actionable alert and direct the operator to check account usage and billing.</p>
+<p>For a rate-limit response that appears temporary, retry only when the request is safe to repeat and the retry budget has not been exhausted.</p>
+<h2>Implement a Bounded Retry Strategy</h2>
+<p>Use exponential backoff with jitter, a maximum number of attempts, and an overall deadline. If the response includes a documented retry delay, honor it within your application’s deadline. Otherwise, use a bounded backoff policy.</p>
+<p>Language-neutral pseudocode:</p>
+<pre><code class="language-text">for attempt from 1 to max_attempts: response = send_request() if response is successful: return response if response is not a retryable rate-limit error: return handle_error(response) if attempt == max_attempts or deadline_would_be_exceeded(): return report_retry_exhausted(response) delay = documented_retry_delay(response) or exponential_backoff_with_jitter(attempt) sleep(min(delay, remaining_deadline))
+</code></pre>
+<p>The exact retryable conditions should be based on the provider’s current documentation and the error details. Do not retry authentication failures, malformed requests, unavailable model IDs, or account-level quota exhaustion as if they were transient rate limits.</p>
+<h3>Keep retries bounded</h3>
+<p>Set both an attempt limit and a total time budget. Retries consume latency and may add cost if the provider receives and processes a request before rejecting or timing out. Avoid stacking retries at multiple layers: a client library, application service, and job queue can otherwise multiply the number of attempts.</p>
+<p>For queued work, prefer delayed re-enqueueing over holding a worker idle while it sleeps. Keep the attempt count and next eligible time with the job so a deployment or worker restart does not reset the retry policy.</p>
+<h2>Reduce 429s at the Source</h2>
+<p>Retries help with short-lived throttling; they do not increase capacity. Reduce unnecessary requests and smooth bursts:</p>
+<ul>
+<li>Apply a per-project or per-model concurrency limit in your application.</li>
+<li>Use a queue to absorb bursts and process requests at a controlled rate.</li>
+<li>Cache results where reuse is valid for your product.</li>
+<li>Debounce repeated user actions and avoid duplicate submissions.</li>
+<li>Track request volume and error rates by model and workload.</li>
+<li>Review the provider’s current quota settings and request a limit adjustment through its documented process when appropriate.</li>
+</ul>
+<p>Use separate limits for different models or workloads when their documented limits differ. A single global concurrency setting may still overload one constrained model while leaving other capacity unused.</p>
+<h2>Build Provider-Agnostic Recovery</h2>
+<p>Provider-agnostic code does not mean assuming providers share endpoints, model names, error formats, or quota rules. Keep provider-specific request construction and error parsing behind an adapter, while exposing a small internal result type to the rest of your application.</p>
+<p>For example, normalize errors into categories such as:</p>
+<ul>
+<li><code>rate_limited</code></li>
+<li><code>quota_exhausted</code></li>
+<li><code>authentication_failed</code></li>
+<li><code>invalid_request</code></li>
+<li><code>model_unavailable</code></li>
+<li><code>timeout</code></li>
+<li><code>provider_error</code></li>
+</ul>
+<p>Include the provider’s original status and a redacted diagnostic message for observability. Let the adapter decide whether a response is retryable based on that provider’s documented behavior.</p>
+<p>Verify the exact model ID, rate limits, and error semantics in the live catalog rather than assuming every OpenAI-compatible gateway matches Gemini quotas 1:1. On KeyoAPI, confirm Gemini-class IDs and rates on <a href="/gemini-api-pricing">/gemini-api-pricing</a> and <a href="/pricing-list">/pricing-list</a>.</p>
+<h2>Production Concerns</h2>
+<h3>Authentication and key handling</h3>
+<p>Store API keys in a secret manager or protected deployment configuration. Do not commit keys, expose them in browser code, or include them in logs. Rotate compromised keys and verify that the application sends credentials using the authentication format required by the provider’s current documentation.</p>
+<p>An authentication failure is not a rate limit. Alert on it and fix the credential or access configuration instead of retrying.</p>
+<h3>Error handling and observability</h3>
+<p>Capture request IDs or other provider diagnostic identifiers when available, along with the model, status, attempt number, latency, and normalized error category. Redact secrets and avoid logging full prompts or outputs unless your data-handling policy explicitly permits it.</p>
+<p>Monitor 429s separately from other failures. A rising rate may indicate a burst, changed quota, exhausted account allowance, or a workload shift. Alerts should distinguish a temporary rate-limit pattern from quota exhaustion that requires operator action.</p>
+<h3>Timeouts and idempotency</h3>
+<p>Set a reasonable request timeout and an overall deadline that includes retries. A timeout does not prove the provider failed to process the request. For operations with side effects, use application-level idempotency or deduplication before retrying, where your system can support it.</p>
+<h3>Cost and model availability</h3>
+<p>Retries can increase request volume, and fallback models may have different costs or behavior. Set a retry budget and define explicit fallback rules rather than switching models silently. Before deployment, verify the exact model IDs, supported request parameters, and current pricing in the provider’s live documentation or model catalog.</p>
+<h2>Practical Checklist</h2>
+<ul>
+<li><span aria-hidden="true">☐</span> Inspect the response body and documented error details before retrying.</li>
+<li><span aria-hidden="true">☐</span> Check project usage, quota, billing, and model-specific limits.</li>
+<li><span aria-hidden="true">☐</span> Retry only errors confirmed to be transient and safe to repeat.</li>
+<li><span aria-hidden="true">☐</span> Use exponential backoff with jitter, an attempt cap, and a total deadline.</li>
+<li><span aria-hidden="true">☐</span> Honor a documented retry delay when provided.</li>
+<li><span aria-hidden="true">☐</span> Avoid multiplying retries across clients, services, and queues.</li>
+<li><span aria-hidden="true">☐</span> Control concurrency and smooth bursts with a queue or rate limiter.</li>
+<li><span aria-hidden="true">☐</span> Protect API keys and redact credentials and sensitive content from logs.</li>
+<li><span aria-hidden="true">☐</span> Track 429s by model and distinguish rate limits from exhausted quota.</li>
+<li><span aria-hidden="true">☐</span> Validate model availability, parameters, and pricing before changing providers.</li>
+</ul>
+<p>A reliable 429 strategy begins with classification: temporary throttling calls for bounded backoff, while exhausted quota or billing issues call for operator action. Keep provider-specific rules at the integration boundary, measure the results in production, and verify current limits and model availability before changing traffic patterns. Check the <a href="/gemini-api-pricing">Gemini API pricing page</a> and the <a href="/model/gemini-3.8-flash">gemini-3.8-flash model page</a> for current rates and limits.</p>

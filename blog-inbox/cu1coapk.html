@@ -1,0 +1,384 @@
+<!-- TITLE: Claude API Prompt Caching: When It Helps and What to Verify -->
+<!-- EXCERPT: Learn when Claude API prompt caching reduces latency and cost, how to evaluate its real-world impact, and what to verify before migrating to another AI API. -->
+<!-- DESC: Learn when Claude API prompt caching reduces latency and cost, how to evaluate its real-world impact, and what to verify before migrating to another AI API. -->
+<p>Prompt caching can improve the economics and latency of AI applications that repeatedly send the same large context. It is most useful when system instructions, tool definitions, documentation, or few-shot examples remain stable across many requests.</p>
+<p>However, caching is not automatically beneficial. Cache writes may have different pricing from cache reads, cache entries may expire, and small changes to the prompt may prevent reuse. When evaluating a Claude API alternative, prompt caching should be treated as a measurable provider feature—not as an assumption that transfers between APIs.</p>
+<p>This article presents a practical evaluation workflow for Claude prompt caching and a migration framework for comparing another provider without claiming unverified compatibility.</p>
+<h2>What Prompt Caching Changes</h2>
+<p>A normal request sends the entire prompt every time:</p>
+<pre><code class="language-text">Stable instructions
+Tool definitions
+Reference documentation
+Conversation-specific user input
+</code></pre>
+<p>With prompt caching, the provider may reuse a stable prefix from an earlier request:</p>
+<pre><code class="language-text">Cached: Stable instructions Tool definitions Reference documentation Dynamic: Conversation-specific user input
+</code></pre>
+<p>The application still sends a request, but the provider can avoid fully reprocessing the repeated portion when the cache matches.</p>
+<p>The exact behavior depends on the provider and model. Before relying on it, verify:</p>
+<ul>
+<li>How the cacheable portion is marked</li>
+<li>Whether only a prefix can be cached</li>
+<li>The minimum number of tokens required</li>
+<li>How long entries remain available</li>
+<li>What invalidates an entry</li>
+<li>Whether cache scope is per request, API key, organization, or region</li>
+<li>How cache reads and cache writes appear in usage metadata</li>
+<li>Whether tools, images, streaming, and structured outputs are supported</li>
+</ul>
+<p>A semantically similar prompt is not necessarily a cache hit. Formatting, ordering, tool schemas, version strings, and small instruction changes may affect cache reuse.</p>
+<h2>When Prompt Caching Helps</h2>
+<h3>Large stable prompts</h3>
+<p>Caching is most valuable when a large portion of every request is identical. Common examples include:</p>
+<ul>
+<li>Long system instructions</li>
+<li>Product manuals or internal documentation</li>
+<li>Repeated legal or policy references</li>
+<li>Large tool definitions</li>
+<li>Few-shot examples</li>
+<li>Fixed schemas for structured output</li>
+</ul>
+<p>If the stable prefix is only a few hundred tokens, the operational complexity may outweigh the savings.</p>
+<h3>High request repetition</h3>
+<p>Caching works best when the same prefix is reused frequently. A support assistant receiving thousands of requests with the same product documentation is a stronger candidate than an internal tool used a few times per day.</p>
+<p>The important variable is not only prompt size, but also reuse frequency:</p>
+<pre><code class="language-text">Potential benefit ≈ reusable tokens × cache reuse count
+</code></pre>
+<p>This is only a planning estimate. The real result depends on cache pricing, hit rate, expiry, and provider-specific behavior.</p>
+<h3>Latency-sensitive applications</h3>
+<p>If a large prompt is repeatedly processed, a cache hit may reduce time spent handling the input context. This can improve:</p>
+<ul>
+<li>Interactive chat responsiveness</li>
+<li>Agent tool loops</li>
+<li>Batch evaluation throughput</li>
+<li>Retrieval-augmented generation workflows</li>
+<li>Multi-turn workflows with stable instructions</li>
+</ul>
+<p>Measure both median and tail latency. A cache may improve p50 latency while leaving p95 latency unchanged if cache misses, expiry, or upstream queueing remain common.</p>
+<h3>Development and evaluation loops</h3>
+<p>Prompt caching can be useful during automated evaluations where the same rubric, examples, or reference documents are sent repeatedly. It can reduce the cost of regression testing and speed up repeated experiments.</p>
+<p>Keep evaluation results comparable by recording whether each request was a cache hit or miss. Otherwise, a cached run may appear cheaper or faster simply because its request mix differed from the baseline.</p>
+<h2>When Prompt Caching Does Not Help</h2>
+<p>Caching may provide little value when:</p>
+<ul>
+<li>Most of the prompt changes on every request</li>
+<li>Requests are too infrequent for reuse</li>
+<li>The stable prefix is below the provider’s minimum threshold</li>
+<li>Cache entries expire before they are reused</li>
+<li>The workload is dominated by output tokens</li>
+<li>Cache writes cost more than expected</li>
+<li>Security requirements prevent sharing context across users or tenants</li>
+<li>Prompt changes are frequent because instructions are under active development</li>
+</ul>
+<p>Personalized data also requires care. User-specific information should not be placed in a shared cacheable prefix unless the provider’s isolation and invalidation behavior are clearly understood.</p>
+<h2>What to Verify in Claude’s Current Documentation</h2>
+<p>Claude prompt caching details can change by model, API surface, and account configuration. Verify the following in the current official documentation before implementing:</p>
+<h3>Feature availability</h3>
+<p>Confirm that prompt caching is available for:</p>
+<ul>
+<li>The specific Claude model you plan to use</li>
+<li>The API endpoint or SDK path used by your application</li>
+<li>Streaming requests, if applicable</li>
+<li>Tool use and tool schemas</li>
+<li>Multimodal inputs, if applicable</li>
+<li>Your account, organization, or region</li>
+</ul>
+<p>Do not assume that a feature shown in an SDK example is available for every model or plan.</p>
+<h3>Cache boundaries</h3>
+<p>Determine exactly what can be cached. Important questions include:</p>
+<ul>
+<li>Must cached content appear at the beginning of the request?</li>
+<li>Can multiple cache points exist?</li>
+<li>Can system instructions and tools be cached together?</li>
+<li>Are message roles and ordering significant?</li>
+<li>Do attachments or images participate in the cache key?</li>
+<li>Does changing a single character invalidate the entire cached segment?</li>
+</ul>
+<p>These details affect how you structure prompts and version stable content.</p>
+<h3>Expiration and invalidation</h3>
+<p>Verify the cache lifetime and invalidation rules. A cache may expire after a fixed period, after inactivity, or when the prompt changes.</p>
+<p>Your application should have a predictable behavior when a cache entry is unavailable. A cache miss should normally degrade to a regular request rather than break the user workflow.</p>
+<h3>Usage and billing</h3>
+<p>Check how the provider reports:</p>
+<ul>
+<li>Regular input tokens</li>
+<li>Cache-write tokens</li>
+<li>Cache-read tokens</li>
+<li>Output tokens</li>
+<li>Cache misses</li>
+<li>Other request-level charges</li>
+</ul>
+<p>Use current provider documentation for pricing. Avoid relying on old blog posts or copied examples because cache pricing and model pricing can change independently.</p>
+<p>A useful comparison model is:</p>
+<pre><code class="language-text">Total request cost = regular input cost + cache-write cost + cache-read cost + output cost
+</code></pre>
+<p>The actual rates must come from the live pricing documentation for the model and account you are evaluating.</p>
+<h3>Limits and concurrency</h3>
+<p>Verify whether caching has limits related to:</p>
+<ul>
+<li>Maximum cached context size</li>
+<li>Number of simultaneous cache writes</li>
+<li>Requests per minute</li>
+<li>Organization-wide quotas</li>
+<li>Cache storage or retention</li>
+<li>Regional routing</li>
+</ul>
+<p>A design that works in a local test may behave differently under concurrent production traffic.</p>
+<h2>A Practical Evaluation Workflow</h2>
+<h3>1. Capture a baseline</h3>
+<p>Run the existing Claude integration without caching. Record at least:</p>
+<ul>
+<li>Input token count</li>
+<li>Output token count</li>
+<li>Request latency</li>
+<li>p50 and p95 latency</li>
+<li>Error rate</li>
+<li>Cost per successful task</li>
+<li>Output quality</li>
+<li>Tool-call success rate</li>
+<li>Rate-limit frequency</li>
+</ul>
+<p>Use a representative request corpus rather than a single manually selected prompt.</p>
+<h3>2. Classify prompt content</h3>
+<p>Divide each request into three categories:</p>
+<div class="article-table-wrap"><table class="article-table">
+<thead>
+<tr>
+<th>Prompt segment</th>
+<th>Typical treatment</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Stable instructions</td>
+<td>Candidate for caching</td>
+</tr>
+<tr>
+<td>Shared reference material</td>
+<td>Candidate for caching</td>
+</tr>
+<tr>
+<td>User or request-specific data</td>
+<td>Usually dynamic</td>
+</tr>
+<tr>
+<td>Current tool results</td>
+<td>Usually dynamic</td>
+</tr>
+<tr>
+<td>Tenant-specific secrets or personal data</td>
+<td>Handle cautiously</td>
+</tr>
+</tbody>
+</table></div>
+<p>Do not cache content merely because it is large. It must also be reused safely and frequently.</p>
+<h3>3. Create a controlled treatment</h3>
+<p>Build a second version of the request that marks only the verified stable prefix as cacheable.</p>
+<p>Keep these variables unchanged between baseline and treatment:</p>
+<ul>
+<li>Model</li>
+<li>Output limits</li>
+<li>Temperature or equivalent sampling settings</li>
+<li>Tool definitions</li>
+<li>User inputs</li>
+<li>Retry policy</li>
+<li>Timeout</li>
+<li>Concurrency</li>
+<li>Evaluation dataset</li>
+</ul>
+<p>Only change the caching behavior.</p>
+<p>Use provider-specific syntax only after confirming it in the current documentation. If the syntax or SDK method is not verified, use language-neutral pseudocode during design:</p>
+<pre><code class="language-text">stable_prefix = system_instructions + shared_tools + reference_documents
+dynamic_suffix = user_message + current_context
+baseline_response = call_model( stable_prefix + dynamic_suffix
+)
+cached_response = call_model( cacheable(stable_prefix) + dynamic_suffix
+)
+record( latency, input_tokens, output_tokens, cache_status, total_cost, quality_score
+)
+</code></pre>
+<h3>4. Replay realistic traffic</h3>
+<p>Run the test against:</p>
+<ul>
+<li>Repeated requests from the same workflow</li>
+<li>Requests from multiple users</li>
+<li>Prompt versions before and after an instruction change</li>
+<li>Cache expiry windows</li>
+<li>Concurrent requests</li>
+<li>Error and timeout conditions</li>
+<li>Tool-use conversations</li>
+<li>Long and short prompts</li>
+</ul>
+<p>A cache can look effective in a sequential test but fail to produce enough hits under real concurrency or multi-tenant traffic.</p>
+<h3>5. Compare unit economics</h3>
+<p>Calculate cost per successful task, not only cost per API call.</p>
+<p>Include:</p>
+<ul>
+<li>Cache writes</li>
+<li>Cache reads</li>
+<li>Cache misses</li>
+<li>Retries</li>
+<li>Failed requests</li>
+<li>Output generation</li>
+<li>Storage or observability costs</li>
+<li>Engineering and operational complexity</li>
+</ul>
+<p>A feature can reduce input-token cost while increasing total cost if it causes more retries, cache writes, or complex invalidation behavior.</p>
+<h3>6. Set a go/no-go threshold</h3>
+<p>Define the decision before reviewing the results. For example:</p>
+<ul>
+<li>Minimum cache hit rate</li>
+<li>Maximum acceptable p95 latency</li>
+<li>Minimum cost reduction</li>
+<li>No material quality regression</li>
+<li>No unacceptable cross-tenant data risk</li>
+<li>No increase in tool-call failures</li>
+</ul>
+<p>If caching does not meet the threshold, keep the simpler non-cached design.</p>
+<h2>Evaluating a Claude API Alternative</h2>
+<p>A migration should separate two questions:</p>
+<ol>
+<li>Can the alternative reproduce the application’s required model behavior?</li>
+<li>Does the alternative provide an equivalent prompt-caching workflow?</li>
+</ol>
+<p>An OpenAI-compatible request format does not prove compatibility with Claude prompt caching. It may simplify message transport while leaving model behavior, tool calling, token accounting, and caching semantics different.</p>
+<h3>What KeyoAPI currently documents</h3>
+<p>KeyoAPI is an OpenAI-compatible multi-model API gateway. One account gives you:</p>
+<ul>
+<li>An API base URL: <code>https://www.keyoapi.xyz/v1</code></li>
+<li>Bearer-token authentication</li>
+<li>A live model-list endpoint</li>
+<li>A chat completions endpoint</li>
+<li>Official documentation</li>
+<li>A model catalog and current pricing page</li>
+</ul>
+<p>The official documentation is available at <a href="https://www.keyoapi.xyz/brand/keyo-docs.html">KeyoAPI documentation</a>, and current model availability and pricing should be checked at the <a href="/pricing-list">KeyoAPI pricing page</a>.</p>
+<p>The current documentation does <strong>not</strong> verify that KeyoAPI supports:</p>
+<ul>
+<li>Claude prompt caching</li>
+<li>Anthropic-specific request formats</li>
+<li>Claude model access</li>
+<li>Claude-compatible cache controls</li>
+<li>Equivalent cache billing</li>
+<li>Equivalent cache lifetime or invalidation behavior</li>
+<li>Equivalent tool-use or streaming semantics</li>
+</ul>
+<p>Treat those as open verification items rather than migration assumptions.</p>
+<h3>Check model availability first</h3>
+<p>Model availability can change. Retrieve the live model list and use an exact returned model ID:</p>
+<pre><code class="language-bash">curl https://www.keyoapi.xyz/v1/models \
+  -H &quot;Authorization: Bearer YOUR_API_KEY&quot;
+</code></pre>
+<p>Do not hardcode a model name copied from an old article or example. The application should either validate the configured model during deployment or fail clearly when the model is unavailable.</p>
+<h3>Test the chat surface separately</h3>
+<p>Once a valid model ID has been retrieved, test the documented chat completions surface:</p>
+<pre><code class="language-bash">curl https://www.keyoapi.xyz/v1/chat/completions \
+  -H &quot;Authorization: Bearer YOUR_API_KEY&quot; \
+  -H &quot;Content-Type: application/json&quot; \
+  -d '{ &quot;model&quot;: &quot;MODEL_ID_FROM_MODELS_ENDPOINT&quot;, &quot;messages&quot;: [ { &quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;Return a short health check response.&quot; } ] }'
+</code></pre>
+<p>This confirms basic request and response behavior. It does not confirm prompt caching or Claude-level behavioral equivalence.</p>
+<p>For migration testing, build a provider adapter with a stable internal interface:</p>
+<pre><code class="language-text">generate( messages, tools, model, response_options
+) -&gt; { text, tool_calls, usage, provider_metadata
+}
+</code></pre>
+<p>Keep provider-specific request construction and error parsing inside the adapter. This allows you to compare providers without rewriting application logic for every experiment.</p>
+<h2>Production Concerns</h2>
+<h3>Authentication</h3>
+<p>Keep API keys on the server side or in a managed secret store. Do not place them in:</p>
+<ul>
+<li>Browser JavaScript</li>
+<li>Mobile applications</li>
+<li>Public repositories</li>
+<li>Screenshots</li>
+<li>Client-side source code</li>
+<li>Logs or error messages</li>
+</ul>
+<p>KeyoAPI requests use a Bearer token in the <code>Authorization</code> header. Follow the target provider’s current authentication instructions for Claude or any other service.</p>
+<p>Use separate credentials for development, staging, and production when supported. Rotate keys after suspected exposure.</p>
+<h3>Error handling</h3>
+<p>Handle errors by category rather than treating every failure as retryable.</p>
+<p>Typical categories include:</p>
+<ul>
+<li>Authentication or permission failures</li>
+<li>Invalid request formats</li>
+<li>Model not found</li>
+<li>Rate limits</li>
+<li>Quota or balance exhaustion</li>
+<li>Upstream service errors</li>
+<li>Client-side timeouts</li>
+</ul>
+<p>A missing model should be fixed by checking the live model list, not by retrying indefinitely. Rate-limit, quota, and prepaid-balance failures require usage or account review rather than blind retries.</p>
+<h3>Retries and timeouts</h3>
+<p>For temporary upstream latency or request timeouts:</p>
+<ul>
+<li>Set a reasonable client timeout</li>
+<li>Retry only a limited number of times</li>
+<li>Use exponential backoff</li>
+<li>Add jitter to reduce synchronized retries</li>
+<li>Respect provider retry guidance</li>
+<li>Record retry counts in metrics</li>
+</ul>
+<p>Be careful with tool-calling workflows. Retrying a request can duplicate an external side effect if the model already generated a tool call that your application executed. Use idempotency controls around payments, database writes, emails, and other non-repeatable actions.</p>
+<h3>Security and cache isolation</h3>
+<p>Prompt caches can contain sensitive context. Verify:</p>
+<ul>
+<li>Tenant isolation</li>
+<li>Cache-key construction</li>
+<li>Retention period</li>
+<li>Deletion or invalidation controls</li>
+<li>Logging behavior</li>
+<li>Data residency requirements</li>
+<li>Provider handling of personal or regulated data</li>
+</ul>
+<p>Do not place secrets, access tokens, passwords, or unnecessary personal information in a cacheable prefix.</p>
+<p>Version stable prompts explicitly. A version identifier can make it easier to invalidate old instructions intentionally and to investigate unexpected cache misses.</p>
+<h3>Cost monitoring</h3>
+<p>Track cost by:</p>
+<ul>
+<li>Provider</li>
+<li>Model</li>
+<li>Prompt version</li>
+<li>Cache status</li>
+<li>Tenant</li>
+<li>Workflow</li>
+<li>Retry count</li>
+</ul>
+<p>Use the current pricing page for each provider. For KeyoAPI, pricing and model availability are published through its current model catalog and pricing page. Do not infer that a model’s availability or price is permanent.</p>
+<h3>Model availability</h3>
+<p>Model catalogs change. Production systems should:</p>
+<ul>
+<li>Validate configured model IDs</li>
+<li>Monitor model-not-found errors</li>
+<li>Keep a documented fallback policy</li>
+<li>Test fallback models for quality and tool behavior</li>
+<li>Avoid silently switching to a different model</li>
+<li>Record the selected model in request metadata</li>
+</ul>
+<p>A fallback is only safe if the application can tolerate changes in quality, context limits, output format, and cost.</p>
+<h2>Practical Checklist</h2>
+<p>Before enabling Claude prompt caching or migrating to an alternative, confirm:</p>
+<ul>
+<li><span aria-hidden="true">☐</span> The target model supports prompt caching.</li>
+<li><span aria-hidden="true">☐</span> The target API surface supports the required caching behavior.</li>
+<li><span aria-hidden="true">☐</span> The stable prompt prefix is large enough to justify caching.</li>
+<li><span aria-hidden="true">☐</span> The prefix is reused often enough to produce meaningful savings.</li>
+<li><span aria-hidden="true">☐</span> Cache lifetime and invalidation rules are documented.</li>
+<li><span aria-hidden="true">☐</span> Cache reads, writes, misses, and token usage are observable.</li>
+<li><span aria-hidden="true">☐</span> Cache pricing is verified from current provider documentation.</li>
+<li><span aria-hidden="true">☐</span> Tenant and user data cannot leak through shared cache entries.</li>
+<li><span aria-hidden="true">☐</span> Baseline and cached runs use the same evaluation corpus.</li>
+<li><span aria-hidden="true">☐</span> Latency is measured at p50 and p95, not only by average.</li>
+<li><span aria-hidden="true">☐</span> Retries cannot duplicate external side effects.</li>
+<li><span aria-hidden="true">☐</span> API keys remain server-side and are rotated safely.</li>
+<li><span aria-hidden="true">☐</span> The alternative provider’s live model list has been checked.</li>
+<li><span aria-hidden="true">☐</span> Model IDs are validated before production deployment.</li>
+<li><span aria-hidden="true">☐</span> Chat, tools, streaming, structured output, and error behavior are tested separately.</li>
+<li><span aria-hidden="true">☐</span> Prompt caching compatibility is explicitly verified rather than inferred from API shape.</li>
+<li><span aria-hidden="true">☐</span> The migration has a rollback path.</li>
+</ul>
+<h2>Conclusion</h2>
+<p>Claude prompt caching is worth evaluating when your application repeatedly sends a large, stable context. The right decision depends on measured cache hits, latency, quality, security, and total cost—not on the existence of a cache feature alone.</p>
+<p>For a migration, preserve a provider-neutral application interface and isolate provider-specific behavior behind an adapter. Validate model availability through the live catalog, test the actual request surface, and treat prompt caching as a separate capability that must be verified independently.</p>
+<p>If an alternative provider’s documentation does not explicitly confirm Claude-compatible caching semantics, assume only the capabilities that are documented and test everything else before committing to the migration. For live Claude rates and availability, see the <a href="/claude-api-pricing">Claude API pricing page</a> and the <a href="/model/claude-sonnet-5">claude-sonnet-5 model page</a>.</p>

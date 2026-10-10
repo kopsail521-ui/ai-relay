@@ -1,0 +1,390 @@
+<!-- TITLE: Gemini API Rate Limit Exceeded: Queue and Backoff Design -->
+<!-- EXCERPT: Learn how to handle Gemini API rate limits with queues, exponential backoff, jitter, bounded retries, authentication, observability, and provider-agnostic migration patterns. -->
+<!-- DESC: Learn how to handle Gemini API rate limits with queues, exponential backoff, jitter, bounded retries, authentication, observability, and provider-agnostic migration patterns. -->
+<p>Rate-limit errors are rarely solved by adding a longer timeout or retrying immediately. A production client needs to control concurrency, delay retries, preserve request ordering where necessary, and distinguish temporary throttling from permanent failures such as invalid credentials, exhausted account quota, or an unavailable model.</p>
+<p>This article presents a provider-agnostic design for handling Gemini API rate limits and explains how the same architecture can support an alternative API gateway such as KeyoAPI. The examples avoid assuming compatibility between providers. Before migrating, verify the target provider's current endpoint, model catalog, request schema, limits, and pricing in its live documentation.</p>
+<h2>What a Rate Limit Error Means</h2>
+<p>A rate-limit response generally means that the service is temporarily refusing additional work. The cause may be:</p>
+<ul>
+<li>Too many requests in a short period</li>
+<li>Too many concurrent requests</li>
+<li>Token or input-volume limits</li>
+<li>Account quota exhaustion</li>
+<li>Insufficient prepaid balance</li>
+<li>A provider-side capacity constraint</li>
+</ul>
+<p>These cases do not all have the same remedy.</p>
+<p>A temporary rate limit may succeed after a delay. Account quota exhaustion may require an account or billing change. Insufficient balance cannot be fixed by retrying. An invalid model ID or authentication failure should fail immediately rather than enter a retry loop.</p>
+<p>Your client should therefore classify failures before deciding whether to retry.</p>
+<h2>The Core Design: Queue, Limit, Retry</h2>
+<p>A reliable request path has four stages:</p>
+<ol>
+<li><strong>Accept work into a bounded queue.</strong></li>
+<li><strong>Control the number of active requests.</strong></li>
+<li><strong>Retry only transient failures.</strong></li>
+<li><strong>Apply exponential backoff with jitter.</strong></li>
+</ol>
+<p>The queue protects the upstream API from traffic bursts. The concurrency limit controls in-flight requests. Backoff spreads retries over time. Jitter prevents many workers from retrying simultaneously after receiving the same error.</p>
+<p>A simplified flow looks like this:</p>
+<pre><code class="language-text">application request | v
+bounded work queue | v
+worker pool with concurrency limit | v
+provider request | +--&gt; success | +--&gt; transient error --&gt; delayed retry | +--&gt; permanent error --&gt; fail and report
+</code></pre>
+<h3>Why a queue is better than direct retries</h3>
+<p>Suppose 1,000 application requests arrive at once and every request immediately calls the provider. If the provider rejects most of them, the application may generate another burst when all clients retry together.</p>
+<p>A queue changes the traffic shape:</p>
+<ul>
+<li>The application absorbs a controlled amount of pending work.</li>
+<li>Workers process requests at a known rate.</li>
+<li>Retry delays reduce pressure during an incident.</li>
+<li>The queue can reject excess work before memory usage grows without bound.</li>
+</ul>
+<p>A queue does not increase your quota. It gives your system a way to respect the quota consistently.</p>
+<h2>Choose the Queue Boundary</h2>
+<p>The correct queue boundary depends on your workload.</p>
+<h3>In-process queue</h3>
+<p>An in-process queue is appropriate for:</p>
+<ul>
+<li>A single service instance</li>
+<li>Short-lived requests</li>
+<li>Best-effort background work</li>
+<li>Low operational complexity</li>
+</ul>
+<p>Its main limitation is durability. Queued work disappears when the process restarts unless the application can safely recreate it.</p>
+<h3>Durable queue</h3>
+<p>Use a durable queue when:</p>
+<ul>
+<li>Requests must survive deployments or crashes</li>
+<li>Processing may take minutes</li>
+<li>You need multiple consumers</li>
+<li>You need visibility into pending, delayed, and dead-lettered work</li>
+<li>The producer and worker need to scale independently</li>
+</ul>
+<p>The queue should store enough information to reconstruct the request, including a request ID, model identifier, input reference, attempt count, and deadline. Avoid storing sensitive prompts or outputs unless the data-handling policy permits it.</p>
+<h3>Bounded admission</h3>
+<p>Every queue needs a capacity policy. When the queue is full, choose explicitly among:</p>
+<ul>
+<li>Rejecting the request with a retryable application error</li>
+<li>Returning an accepted status and processing asynchronously</li>
+<li>Dropping low-priority work</li>
+<li>Applying backpressure to the caller</li>
+</ul>
+<p>An unbounded queue only moves the failure from the provider to your own memory and latency budget.</p>
+<h2>Use Exponential Backoff With Jitter</h2>
+<p>A typical retry delay is:</p>
+<pre><code class="language-text">delay = min(max_delay, base_delay * 2^attempt) + random(0, jitter_window)
+</code></pre>
+<p>For example, a service might use:</p>
+<ul>
+<li>A small base delay</li>
+<li>A maximum delay of tens of seconds</li>
+<li>A small random jitter window</li>
+<li>A maximum retry count or overall deadline</li>
+</ul>
+<p>The exact values should be measured against the provider's documented limits and your application's latency requirements. Do not assume that a particular delay is appropriate for every provider.</p>
+<h3>Honor server guidance</h3>
+<p>When the response includes a <code>Retry-After</code> value, treat it as the primary delay signal unless your operational policy imposes a stricter maximum. If the value is absent, use your exponential backoff policy.</p>
+<p>Do not retry immediately because the previous request failed quickly. A fast failure is still a signal that the upstream service is refusing work.</p>
+<h3>Avoid synchronized retries</h3>
+<p>Without jitter, workers often follow this pattern:</p>
+<pre><code class="language-text">request fails at 10:00:00
+all workers retry at 10:00:02
+all workers fail again
+all workers retry at 10:00:06
+</code></pre>
+<p>Jitter spreads those retries across a time window and reduces synchronized load.</p>
+<h2>Classify Errors Before Retrying</h2>
+<p>Your retry policy should be based on error semantics, not only on an HTTP status code.</p>
+<h3>Usually retryable</h3>
+<p>These failures may be temporary:</p>
+<ul>
+<li>Rate-limit responses</li>
+<li>Temporary upstream overload</li>
+<li>Gateway or service-unavailable responses</li>
+<li>Network connection resets</li>
+<li>Request timeouts, when the operation is safe to retry</li>
+</ul>
+<p>A timeout needs special treatment. The provider may have completed the request even though the client did not receive the response. Retrying a non-idempotent operation can create duplicate side effects. For text generation, duplicate work may increase cost even if the application result is eventually correct.</p>
+<h3>Usually not retryable</h3>
+<p>Fail fast for:</p>
+<ul>
+<li>Invalid API keys</li>
+<li>Permission failures</li>
+<li>Malformed request bodies</li>
+<li>Invalid model IDs</li>
+<li>Unsupported parameters</li>
+<li>Content-policy failures that will not change on retry</li>
+<li>Account quota exhaustion</li>
+<li>Insufficient prepaid balance</li>
+</ul>
+<p>KeyoAPI returns rate limits, exhausted account quota, and insufficient prepaid balance as separate error conditions. Reduce request frequency and check your account usage and balance before retrying. A retry loop should not treat those conditions as interchangeable.</p>
+<h3>Model availability is a separate concern</h3>
+<p>Model identifiers can change. If a provider returns a model-not-found error, do not guess a replacement model name. Query the provider's current model catalog and use an exact identifier returned by that API.</p>
+<p>For KeyoAPI, the documented model discovery request is:</p>
+<pre><code class="language-bash">curl &quot;$KEYOAPI_BASE_URL/models&quot; \
+  -H &quot;Authorization: Bearer $KEYOAPI_API_KEY&quot;
+</code></pre>
+<p>Set <code>KEYOAPI_BASE_URL</code> to:</p>
+<pre><code class="language-text">https://www.keyoapi.xyz/v1
+</code></pre>
+<p>The response should be treated as live configuration. Applications should not assume that a model remains available indefinitely.</p>
+<h2>A Provider-Agnostic Retry Algorithm</h2>
+<p>The following pseudocode illustrates the control flow without depending on a particular SDK or provider response format:</p>
+<pre><code class="language-text">function process(job): deadline = now + job.maximum_duration attempt = 0 while now &lt; deadline and attempt &lt; job.maximum_attempts: response = send_request(job) if response.success: return response.result classification = classify(response) if classification == permanent_failure: record_failure(job, response) return failure if classification == quota_or_balance_failure: alert_and_stop(job, response) return failure delay = retry_after(response) if delay is missing: delay = exponential_backoff_with_jitter(attempt) if now + delay &gt;= deadline: break sleep(delay) attempt += 1 move_to_dead_letter_or_retry_queue(job) return failure
+</code></pre>
+<p>Several details matter:</p>
+<ul>
+<li>The retry budget has both an attempt limit and a time limit.</li>
+<li>Permanent failures do not consume unnecessary retries.</li>
+<li>Quota and balance failures trigger operational action.</li>
+<li>A final failure is recorded with enough context to investigate.</li>
+<li>The queue or dead-letter system preserves the original request ID.</li>
+</ul>
+<h2>Controlling Concurrency</h2>
+<p>Retry logic cannot compensate for excessive concurrency. Start with a conservative worker count and measure:</p>
+<ul>
+<li>Requests per second</li>
+<li>Tokens or input volume per minute</li>
+<li>Successful completion rate</li>
+<li>Rate-limit rate</li>
+<li>Queue wait time</li>
+<li>Provider latency</li>
+<li>Retry count</li>
+<li>Cost per completed request</li>
+</ul>
+<p>A useful control loop is:</p>
+<pre><code class="language-text">if rate_limit_rate increases: reduce concurrency increase admission delay
+elif queue latency is high and rate_limit_rate is low: increase concurrency gradually
+</code></pre>
+<p>Use gradual changes rather than continuously adjusting concurrency on every response. Otherwise, the system can oscillate between overload and underutilization.</p>
+<p>You may also need separate limits for:</p>
+<ul>
+<li>Different models</li>
+<li>Different tenants</li>
+<li>Interactive versus batch traffic</li>
+<li>Input-heavy versus output-heavy requests</li>
+<li>High-priority versus low-priority jobs</li>
+</ul>
+<p>A single global semaphore is often too coarse for a multi-tenant service.</p>
+<h2>Authentication and Secret Handling</h2>
+<p>Provider migration frequently exposes authentication mistakes because each provider may use different credentials, headers, or account scopes.</p>
+<p>For KeyoAPI, the documented authentication format is Bearer token authentication against the API base URL. A request to the chat endpoint has this general shape:</p>
+<pre><code class="language-bash">curl &quot;$KEYOAPI_BASE_URL/chat/completions&quot; \
+  -H &quot;Authorization: Bearer $KEYOAPI_API_KEY&quot; \
+  -H &quot;Content-Type: application/json&quot; \
+  -d '{ &quot;model&quot;: &quot;MODEL_ID_FROM_LIVE_CATALOG&quot;, &quot;messages&quot;: [ { &quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;Return a short status summary.&quot; } ] }'
+</code></pre>
+<p>The model identifier must come from the current <code>/models</code> response. The request schema and supported models should be confirmed in the <a href="https://www.keyoapi.xyz/brand/keyo-docs.html">KeyoAPI documentation</a> before production use.</p>
+<p>Protect API keys by:</p>
+<ul>
+<li>Storing them in a secret manager or environment configuration</li>
+<li>Keeping them out of source repositories and logs</li>
+<li>Never embedding them in browser code</li>
+<li>Rotating them when personnel or deployment boundaries change</li>
+<li>Using separate keys or accounts for environments where supported</li>
+<li>Redacting authorization headers from request traces</li>
+</ul>
+<p>Do not log full prompts, outputs, or authorization headers by default. These may contain personal, proprietary, or regulated data.</p>
+<h2>Timeouts, Idempotency, and Duplicate Work</h2>
+<p>Set a client timeout that reflects the model and request type. A timeout that is too short can create unnecessary retries; one that is too long can consume worker capacity while the queue grows.</p>
+<p>Use separate limits for:</p>
+<ul>
+<li>Connection establishment</li>
+<li>Request transmission</li>
+<li>Time to first response</li>
+<li>Total request duration</li>
+</ul>
+<p>When retrying after a timeout, ask whether duplicate work is acceptable. If the provider supports idempotency keys, use them according to its documentation. If it does not, assign an internal request ID and deduplicate results in your own system.</p>
+<p>A practical pattern is:</p>
+<pre><code class="language-text">request_id -&gt; pending | running | succeeded | failed
+</code></pre>
+<p>Before starting a retry, check whether the request already has a successful result. This is particularly important when the client timed out after the provider may have completed the operation.</p>
+<h2>Error Handling at the Application Boundary</h2>
+<p>Do not expose raw provider errors directly to end users. Convert them into stable application-level categories:</p>
+<div class="article-table-wrap"><table class="article-table">
+<thead>
+<tr>
+<th>Internal category</th>
+<th>Typical client behavior</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>temporary_overload</code></td>
+<td>Retry asynchronously</td>
+</tr>
+<tr>
+<td><code>rate_limited</code></td>
+<td>Queue or retry after delay</td>
+</tr>
+<tr>
+<td><code>quota_exhausted</code></td>
+<td>Show an operational or billing message</td>
+</tr>
+<tr>
+<td><code>insufficient_balance</code></td>
+<td>Stop retries and notify an administrator</td>
+</tr>
+<tr>
+<td><code>invalid_model</code></td>
+<td>Refresh model configuration and fail the request</td>
+</tr>
+<tr>
+<td><code>authentication_failed</code></td>
+<td>Alert and require credential correction</td>
+</tr>
+<tr>
+<td><code>request_invalid</code></td>
+<td>Return a validation error</td>
+</tr>
+<tr>
+<td><code>deadline_exceeded</code></td>
+<td>Return a timeout and preserve job state</td>
+</tr>
+</tbody>
+</table></div>
+<p>Include a correlation ID in the application response and logs. Store the upstream status and a sanitized error category for debugging, but avoid making your application contract depend on provider-specific wording.</p>
+<h2>Observability for Rate-Limit Incidents</h2>
+<p>At minimum, measure these metrics:</p>
+<ul>
+<li>Queue depth</li>
+<li>Queue age</li>
+<li>Active worker count</li>
+<li>Request rate</li>
+<li>Success rate</li>
+<li>Rate-limit count</li>
+<li>Retry count by attempt number</li>
+<li>Retry delay</li>
+<li>Timeout count</li>
+<li>Permanent failure count</li>
+<li>Dead-letter count</li>
+<li>Estimated cost</li>
+<li>Usage by tenant and model</li>
+</ul>
+<p>Useful alerts include:</p>
+<ul>
+<li>Queue age exceeds the user-facing latency objective</li>
+<li>Rate-limit responses exceed a normal baseline</li>
+<li>Retry volume grows faster than successful completions</li>
+<li>A model suddenly returns unavailable errors</li>
+<li>Balance or quota errors begin appearing</li>
+<li>Dead-letter volume increases</li>
+<li>Authentication failures occur across multiple workers</li>
+</ul>
+<p>Log structured fields such as:</p>
+<pre><code class="language-text">request_id
+provider
+model_id
+attempt
+error_category
+http_status
+retry_delay_ms
+queue_wait_ms
+total_duration_ms
+tenant_id
+</code></pre>
+<p>Do not log sensitive request contents merely to make an incident easier to investigate.</p>
+<h2>Cost Controls</h2>
+<p>Retries consume resources. A badly tuned retry loop can increase cost while reducing reliability.</p>
+<p>Use these controls:</p>
+<ul>
+<li>Limit maximum attempts</li>
+<li>Set an overall deadline</li>
+<li>Avoid retrying permanent failures</li>
+<li>Cap queue retention</li>
+<li>Set per-tenant budgets</li>
+<li>Separate interactive and batch workloads</li>
+<li>Track usage by model and request type</li>
+<li>Prefer smaller or faster models only when quality requirements permit</li>
+<li>Alert on unusual retry-related usage</li>
+</ul>
+<p>When evaluating a migration, compare total cost per successful result, not only the nominal request price. Include queue delay, failed attempts, repeated generation, operational overhead, and the cost of fallback processing.</p>
+<p>For current KeyoAPI pricing, consult the <a href="/pricing-list">live pricing and model catalog</a>. Pricing and model availability can change, so do not hard-code those values into an article, service, or deployment decision without checking the current page.</p>
+<h2>Migrating Behind a Provider Adapter</h2>
+<p>A provider adapter keeps application code independent from provider-specific request formats and error details.</p>
+<p>Define an internal interface around your actual business needs:</p>
+<pre><code class="language-text">generate_text( model, messages, timeout, request_id
+) -&gt; result
+</code></pre>
+<p>The adapter should handle:</p>
+<ul>
+<li>Authentication headers</li>
+<li>Endpoint construction</li>
+<li>Request serialization</li>
+<li>Response parsing</li>
+<li>Error classification</li>
+<li>Provider-specific retry hints</li>
+<li>Model catalog validation</li>
+</ul>
+<p>The queue and retry layer should call the adapter rather than constructing provider requests throughout the application.</p>
+<p>A migration workflow can then proceed in stages:</p>
+<h3>1. Inventory current behavior</h3>
+<p>Record:</p>
+<ul>
+<li>Models currently used</li>
+<li>Maximum prompt and output sizes</li>
+<li>Streaming requirements</li>
+<li>Tool or structured-output requirements</li>
+<li>Timeout behavior</li>
+<li>Error handling</li>
+<li>Rate and concurrency assumptions</li>
+<li>Data residency and retention requirements</li>
+<li>Current cost per successful result</li>
+</ul>
+<h3>2. Verify the target provider</h3>
+<p>Check the live documentation and model catalog for:</p>
+<ul>
+<li>Authentication format</li>
+<li>Base URL</li>
+<li>Supported models</li>
+<li>Request and response schema</li>
+<li>Streaming behavior</li>
+<li>Error format</li>
+<li>Rate limits</li>
+<li>Quota behavior</li>
+<li>Timeout guidance</li>
+<li>Pricing</li>
+<li>Data handling terms</li>
+</ul>
+<p>Do not infer Gemini feature parity merely because two services expose a similar-looking endpoint. KeyoAPI documents an OpenAI-compatible gateway and chat completions — confirm any Gemini-class model, endpoint, or behavior in the current documentation and model catalog before production.</p>
+<h3>3. Implement the adapter</h3>
+<p>Keep provider-specific details inside one module. The rest of the system should see normalized results and error categories.</p>
+<h3>4. Replay representative traffic</h3>
+<p>Use sanitized production-like requests to compare:</p>
+<ul>
+<li>Output quality</li>
+<li>Latency distribution</li>
+<li>Error rates</li>
+<li>Rate-limit behavior</li>
+<li>Token or usage accounting</li>
+<li>Retry frequency</li>
+<li>Total cost</li>
+</ul>
+<p>Do not rely on a single successful request as evidence of production compatibility.</p>
+<h3>5. Run a controlled rollout</h3>
+<p>Start with a small percentage of traffic. Keep rollback available, and compare the new path against the existing path using the same queue and observability controls.</p>
+<h2>Production Checklist</h2>
+<p>Before deploying a rate-limit-aware integration, verify:</p>
+<ul>
+<li><span aria-hidden="true">☐</span> Requests enter a bounded queue or have explicit admission control.</li>
+<li><span aria-hidden="true">☐</span> Worker concurrency is limited and configurable.</li>
+<li><span aria-hidden="true">☐</span> Retries use exponential backoff and jitter.</li>
+<li><span aria-hidden="true">☐</span> <code>Retry-After</code> is honored when present.</li>
+<li><span aria-hidden="true">☐</span> Maximum attempts and an overall deadline are enforced.</li>
+<li><span aria-hidden="true">☐</span> Permanent failures are not retried.</li>
+<li><span aria-hidden="true">☐</span> Quota and balance errors trigger operational action.</li>
+<li><span aria-hidden="true">☐</span> Model IDs are validated against the provider's current catalog.</li>
+<li><span aria-hidden="true">☐</span> Authentication headers are stored and transmitted securely.</li>
+<li><span aria-hidden="true">☐</span> API keys are absent from source code, browser code, and logs.</li>
+<li><span aria-hidden="true">☐</span> Timeouts are configured for connection and total request duration.</li>
+<li><span aria-hidden="true">☐</span> Duplicate work after timeouts is addressed.</li>
+<li><span aria-hidden="true">☐</span> Queue depth, age, retries, failures, and costs are observable.</li>
+<li><span aria-hidden="true">☐</span> Dead-letter handling exists for jobs that exceed their retry budget.</li>
+<li><span aria-hidden="true">☐</span> Per-tenant or per-workload limits prevent noisy neighbors.</li>
+<li><span aria-hidden="true">☐</span> Migration tests cover schema, model behavior, latency, errors, and cost.</li>
+<li><span aria-hidden="true">☐</span> Current provider documentation, model availability, and pricing have been checked.</li>
+</ul>
+<h2>Conclusion</h2>
+<p>Handling Gemini API rate limits is a traffic-management problem, not just a retry problem. A bounded queue controls admission, a concurrency limit controls pressure, and exponential backoff with jitter prevents synchronized retries. Correct error classification prevents the system from wasting time on invalid credentials, unavailable models, exhausted quotas, or insufficient balance.</p>
+<p>The same design supports provider migration because the queue, retry policy, observability, and application error contract can remain stable while provider-specific authentication and request handling live behind an adapter. Verify every target capability against the provider's current documentation and model catalog before treating an alternative as production-compatible. Live Gemini rates and model availability are on the <a href="/gemini-api-pricing">Gemini API pricing page</a> and the <a href="/model/gemini-3.8-flash">gemini-3.8-flash model page</a>.</p>

@@ -1,0 +1,425 @@
+<!-- TITLE: AI Avatar Video Generator API: Queue, Retry, and Webhook Design -->
+<!-- EXCERPT: Learn how to build a reliable AI avatar video generator API workflow with asynchronous queues, retries, signed webhooks, idempotency, error handling, and production cost controls. -->
+<!-- DESC: Learn how to build a reliable AI avatar video generator API workflow with asynchronous queues, retries, signed webhooks, idempotency, error handling, and production cost controls. -->
+<p>AI avatar video generation is rarely a good fit for a synchronous HTTP request. Rendering a talking avatar, synchronizing speech with facial movement, and producing a downloadable video can take much longer than a normal API timeout.</p>
+<p>A production-ready integration should therefore treat video generation as an asynchronous job:</p>
+<ol>
+<li>Accept and validate a request.</li>
+<li>Create a durable job record.</li>
+<li>Enqueue the work.</li>
+<li>Submit the job to an avatar or video provider.</li>
+<li>Track provider status.</li>
+<li>Retry only when safe.</li>
+<li>Process a webhook or poll for completion.</li>
+<li>Store the result and notify the client.</li>
+</ol>
+<p>This article presents a provider-neutral architecture. It does not assume that a particular API supports avatar video, lip-sync, or talking-head generation. Always verify the provider’s current documentation, model catalog, API limits, and webhook behavior before implementation.</p>
+<h2>Why avatar video generation should be asynchronous</h2>
+<p>A typical avatar-video request may involve:</p>
+<ul>
+<li>Text-to-speech generation</li>
+<li>Voice selection and audio processing</li>
+<li>Face or avatar animation</li>
+<li>Lip-sync alignment</li>
+<li>Video rendering and encoding</li>
+<li>Temporary asset storage</li>
+<li>Content moderation</li>
+<li>Uploading the final file to object storage</li>
+</ul>
+<p>These stages introduce variable latency. A short script may complete quickly, while a longer script, high-resolution output, or busy provider queue may take substantially longer.</p>
+<p>A synchronous endpoint creates several problems:</p>
+<ul>
+<li>Client and reverse-proxy timeouts</li>
+<li>Duplicate submissions when clients retry</li>
+<li>Poor visibility into provider progress</li>
+<li>Difficult recovery after process restarts</li>
+<li>Long-lived server connections</li>
+<li>Unclear billing when a request times out after the provider accepted it</li>
+</ul>
+<p>Instead, return a job identifier immediately:</p>
+<pre><code class="language-text">POST /avatar-videos
+→ 202 Accepted
+{ &quot;job_id&quot;: &quot;job_123&quot;, &quot;status&quot;: &quot;queued&quot;
+}
+</code></pre>
+<p>The client can then retrieve status or receive a webhook when the job changes state.</p>
+<h2>Reference architecture</h2>
+<p>A robust design separates your public API from the provider integration.</p>
+<pre><code class="language-text">Client │ ▼
+Your API ├── Validate request ├── Authenticate caller ├── Create idempotent job └── Publish queue message │ ▼ Worker ├── Submit generation request ├── Store provider job ID ├── Poll or receive webhook ├── Download result └── Update job state │ ▼ Database + Object Storage │ ▼ Client webhook/status API
+</code></pre>
+<h3>Recommended components</h3>
+<p><strong>API service</strong></p>
+<ul>
+<li>Authenticates users</li>
+<li>Validates scripts, assets, voice settings, and output options</li>
+<li>Creates jobs</li>
+<li>Returns status endpoints</li>
+<li>Enforces quotas and request limits</li>
+</ul>
+<p><strong>Database</strong></p>
+<p>Stores the durable state of each generation job, including:</p>
+<ul>
+<li>Internal job ID</li>
+<li>Idempotency key</li>
+<li>Provider name</li>
+<li>Provider job ID</li>
+<li>Current state</li>
+<li>Attempt count</li>
+<li>Error category</li>
+<li>Output location</li>
+<li>Timestamps</li>
+<li>Billing or usage metadata</li>
+</ul>
+<p><strong>Queue</strong></p>
+<p>Decouples request intake from expensive work. The queue should support delayed messages or scheduled retries.</p>
+<p><strong>Worker</strong></p>
+<p>Submits jobs to the provider, handles status transitions, downloads outputs, and performs cleanup.</p>
+<p><strong>Object storage</strong></p>
+<p>Stores the final video and, if required, intermediate audio or subtitle files. Prefer private objects with time-limited download URLs.</p>
+<p><strong>Webhook receiver</strong></p>
+<p>Accepts provider callbacks, verifies authenticity, and updates jobs idempotently.</p>
+<h2>Design a durable job state machine</h2>
+<p>Avoid representing a job with only <code>pending</code> and <code>complete</code>. More precise states make retries and operations easier.</p>
+<p>A practical state model is:</p>
+<pre><code class="language-text">queued
+submitted
+processing
+succeeded
+failed
+cancelled
+expired
+</code></pre>
+<p>You may also use a separate retry state, but it is often simpler to keep the business state as <code>queued</code> or <code>processing</code> and store retry metadata separately.</p>
+<h3>Important state transitions</h3>
+<pre><code class="language-text">queued → submitted
+submitted → processing
+processing → succeeded
+processing → failed
+queued → cancelled
+processing → cancelled
+processing → expired
+</code></pre>
+<p>Every transition should be validated. For example, a late webhook must not move a <code>succeeded</code> job back to <code>processing</code>.</p>
+<p>Use an optimistic concurrency check or a database transaction:</p>
+<pre><code class="language-text">UPDATE avatar_jobs
+SET status = &quot;succeeded&quot;, output_url = ?
+WHERE id = ? AND status IN (&quot;submitted&quot;, &quot;processing&quot;)
+</code></pre>
+<p>If the update affects zero rows, the event may be stale or already processed.</p>
+<h2>Accept requests safely</h2>
+<p>The public API should validate inputs before placing work on the queue.</p>
+<p>Validate at least:</p>
+<ul>
+<li>Script length and character set</li>
+<li>Voice or language identifier</li>
+<li>Avatar identifier</li>
+<li>Source image or video format</li>
+<li>Maximum file size</li>
+<li>Output resolution and duration</li>
+<li>Requested format</li>
+<li>Callback URL, if supported</li>
+<li>User quota and account status</li>
+</ul>
+<p>Do not trust client-supplied URLs. If remote assets are allowed, protect the downloader against server-side request forgery by restricting schemes, private IP ranges, redirects, and destination hosts.</p>
+<p>A successful submission should return a stable internal job ID:</p>
+<pre><code class="language-json">{ &quot;job_id&quot;: &quot;job_123&quot;, &quot;status&quot;: &quot;queued&quot;, &quot;created_at&quot;: &quot;2025-01-01T12:00:00Z&quot;, &quot;status_url&quot;: &quot;/avatar-videos/job_123&quot;
+}
+</code></pre>
+<p>The API should normally return <code>202 Accepted</code>, not <code>200 OK</code>, because the video is not ready yet.</p>
+<h2>Use idempotency to prevent duplicate videos</h2>
+<p>Network failures are common. A client may submit a request successfully, lose the response, and retry. Without idempotency, the retry can create and charge for a second video.</p>
+<p>Require an idempotency key for creation requests:</p>
+<pre><code class="language-text">Idempotency-Key: customer-unique-request-456
+</code></pre>
+<p>Store the key together with a request fingerprint and the resulting job ID.</p>
+<p>Recommended behavior:</p>
+<ul>
+<li>Same key and same request body: return the original job.</li>
+<li>Same key and different request body: return a conflict.</li>
+<li>Expired key: define and document a retention period.</li>
+<li>Concurrent requests with the same key: serialize them using a unique database constraint.</li>
+</ul>
+<p>Do not rely solely on an in-memory cache. Idempotency records must survive process restarts and deployments.</p>
+<h2>Submit work to the provider</h2>
+<p>Use a provider adapter rather than spreading provider-specific logic throughout your application.</p>
+<pre><code class="language-text">provider.submit(request)
+provider.get_status(provider_job_id)
+provider.cancel(provider_job_id)
+provider.download_result(provider_job_id)
+provider.verify_webhook(request)
+</code></pre>
+<p>The adapter should normalize provider responses into your internal format:</p>
+<pre><code class="language-text">{ provider_job_id, status, output_url, retryable, error_code, error_message
+}
+</code></pre>
+<p>This design makes it easier to change providers, compare services, or support different avatar and lip-sync engines without changing your public API.</p>
+<p>Do not hard-code unverified endpoints, model IDs, SDK methods, or capabilities. Before selecting an integration, confirm:</p>
+<ul>
+<li>Whether the provider supports asynchronous video generation</li>
+<li>Whether it supports talking avatars or lip-sync specifically</li>
+<li>Whether webhooks are available</li>
+<li>How provider job IDs are scoped</li>
+<li>How long result URLs remain valid</li>
+<li>Whether failed requests are billable</li>
+<li>Which formats, resolutions, durations, and voices are supported</li>
+</ul>
+<h2>Webhook design</h2>
+<p>Webhooks are usually more efficient than frequent polling, but they must be treated as untrusted, repeatable network input.</p>
+<h3>Verify webhook authenticity</h3>
+<p>If the provider supports signed webhooks:</p>
+<ol>
+<li>Read the raw request body.</li>
+<li>Retrieve the signature header.</li>
+<li>Compute the expected signature using the shared secret.</li>
+<li>Compare signatures using a constant-time comparison.</li>
+<li>Validate the timestamp to prevent replay attacks.</li>
+<li>Reject invalid or stale requests.</li>
+</ol>
+<p>Do not parse and reserialize JSON before signature verification if the provider signs the raw body.</p>
+<p>If a provider does not offer signatures, use additional controls:</p>
+<ul>
+<li>Allow-list documented provider IP ranges where practical</li>
+<li>Require an unpredictable callback path</li>
+<li>Validate the provider job ID</li>
+<li>Require an expected event structure</li>
+<li>Make the handler idempotent</li>
+<li>Avoid trusting arbitrary output URLs</li>
+</ul>
+<h3>Acknowledge quickly</h3>
+<p>The webhook endpoint should do minimal work before responding:</p>
+<pre><code class="language-text">receive event
+→ verify signature
+→ validate schema
+→ store event or update job
+→ return 2xx
+</code></pre>
+<p>Do not download a large video or run post-processing inside the webhook request. Queue that work instead.</p>
+<h3>Handle duplicate and out-of-order events</h3>
+<p>Providers may deliver the same event more than once. They may also deliver events out of order.</p>
+<p>Store an event ID if one is provided. Otherwise, derive a deduplication key from stable fields such as:</p>
+<pre><code class="language-text">provider + provider_job_id + event_type + event_timestamp
+</code></pre>
+<p>Apply only valid state transitions. A terminal state such as <code>succeeded</code>, <code>failed</code>, or <code>cancelled</code> should generally not be overwritten by a later non-terminal event.</p>
+<h2>Polling as a fallback</h2>
+<p>Polling is useful when:</p>
+<ul>
+<li>The provider has no webhook support</li>
+<li>Webhook delivery is delayed</li>
+<li>You need reconciliation after an outage</li>
+<li>A webhook was rejected or lost</li>
+</ul>
+<p>Use scheduled polling rather than a tight loop:</p>
+<pre><code class="language-text">poll after 15 seconds
+then 30 seconds
+then 60 seconds
+then 2 minutes
+</code></pre>
+<p>Stop polling when:</p>
+<ul>
+<li>The job reaches a terminal state</li>
+<li>The provider job no longer exists</li>
+<li>The maximum age is exceeded</li>
+<li>The account or project is disabled</li>
+</ul>
+<p>A periodic reconciliation task should find jobs stuck in <code>submitted</code> or <code>processing</code> and query the provider again. This protects against worker crashes and missed callbacks.</p>
+<h2>Retry policy</h2>
+<p>Retries should distinguish temporary failures from permanent failures.</p>
+<h3>Usually retryable</h3>
+<ul>
+<li>Connection reset</li>
+<li>DNS or transient network failure</li>
+<li>HTTP 408 timeout</li>
+<li>HTTP 429 rate limit</li>
+<li>HTTP 500, 502, 503, or 504</li>
+<li>Temporary provider maintenance</li>
+<li>A client timeout where the provider’s acceptance is unknown, followed by status reconciliation</li>
+</ul>
+<h3>Usually not retryable</h3>
+<ul>
+<li>Invalid API credentials</li>
+<li>Unsupported avatar or voice</li>
+<li>Malformed input</li>
+<li>File too large</li>
+<li>Content-policy rejection</li>
+<li>Insufficient account quota</li>
+<li>Unknown model or asset identifier</li>
+<li>A completed job that already has a result</li>
+</ul>
+<p>Use exponential backoff with jitter:</p>
+<pre><code class="language-text">delay = min(max_delay, base_delay × 2^attempt) + random_jitter
+</code></pre>
+<p>Set a maximum attempt count and maximum job age. Infinite retries can create uncontrolled cost and queue growth.</p>
+<h3>The ambiguous timeout problem</h3>
+<p>The most dangerous case is a timeout after the provider may have accepted the request. Retrying the submission immediately can create duplicate work.</p>
+<p>Use this sequence:</p>
+<ol>
+<li>Generate and persist an internal submission attempt ID.</li>
+<li>Submit with a provider-supported idempotency key if available.</li>
+<li>If the request times out, query the provider or reconcile using the attempt ID.</li>
+<li>Submit again only when you have evidence that the first request was not accepted.</li>
+</ol>
+<p>If the provider has no idempotency mechanism and no lookup method, document the risk and use conservative reconciliation rules.</p>
+<h2>Authentication and authorization</h2>
+<p>Protect both your API and your provider credentials.</p>
+<h3>Client authentication</h3>
+<p>Use one of:</p>
+<ul>
+<li>OAuth access tokens</li>
+<li>Short-lived signed tokens</li>
+<li>Session authentication for dashboard users</li>
+<li>API keys with scoped permissions</li>
+</ul>
+<p>Authorize every job lookup. A user must not be able to access another user’s job by guessing its ID.</p>
+<h3>Provider authentication</h3>
+<p>Keep provider keys on the server. Never expose them in:</p>
+<ul>
+<li>Browser JavaScript</li>
+<li>Mobile application bundles</li>
+<li>Public repositories</li>
+<li>Screenshots</li>
+<li>Client-side video-generation requests</li>
+</ul>
+<p>Planning an adjacent text, image, speech, OCR, or multimodal workflow on the same account? Authentication is a Bearer token against the published base URL <code>https://www.keyoapi.xyz/v1</code>, and avatar-video and talking-avatar models (Duix-Avatar, InfiniteTalk) run on the same key and balance. Check the live documentation and model catalog before designing an avatar integration around it. The documented model discovery endpoint is:</p>
+<pre><code class="language-text">GET https://www.keyoapi.xyz/v1/models
+</code></pre>
+<p>Use only model identifiers returned by the live catalog. Do not infer avatar-video support from the presence of general multimodal or speech models.</p>
+<h2>Error handling and observability</h2>
+<p>Expose stable, application-level errors rather than leaking provider internals.</p>
+<p>Example error categories:</p>
+<pre><code class="language-text">invalid_request
+authentication_failed
+quota_exceeded
+provider_rate_limited
+provider_unavailable
+content_rejected
+asset_unavailable
+generation_failed
+generation_expired
+</code></pre>
+<p>Store the detailed provider response internally, subject to privacy requirements.</p>
+<p>Track metrics such as:</p>
+<ul>
+<li>Jobs created per minute</li>
+<li>Queue wait time</li>
+<li>Provider submission latency</li>
+<li>Generation duration</li>
+<li>Success and failure rates</li>
+<li>Retry counts</li>
+<li>Webhook verification failures</li>
+<li>Duplicate webhook events</li>
+<li>Time spent in each state</li>
+<li>Output download failures</li>
+<li>Cost per completed video</li>
+</ul>
+<p>Include a correlation ID in API responses, logs, queue messages, and provider requests where supported. Never log API keys, signed webhook secrets, private asset URLs, or complete user scripts unless necessary and protected.</p>
+<h2>Cost controls</h2>
+<p>Avatar video can be expensive because cost may depend on duration, resolution, rendering time, voice usage, or failed attempts.</p>
+<p>Control costs with:</p>
+<ul>
+<li>Maximum script length</li>
+<li>Maximum output duration</li>
+<li>Resolution and frame-rate limits</li>
+<li>Per-user daily and monthly quotas</li>
+<li>Preflight validation before submission</li>
+<li>Duplicate detection</li>
+<li>Cancellation of abandoned jobs</li>
+<li>Automatic expiration of incomplete jobs</li>
+<li>Cleanup of intermediate files</li>
+<li>Budget alerts</li>
+<li>Provider-specific usage reconciliation</li>
+</ul>
+<p>Do not assume that a failed HTTP request means no charge was incurred. Record provider usage when available and reconcile it against your internal billing system.</p>
+<p>Cache only when the request is semantically identical and the content is safe to reuse. A cache key may include:</p>
+<pre><code class="language-text">avatar + voice + normalized_script + output_settings + provider_version
+</code></pre>
+<p>Avoid caching private or personalized videos across users.</p>
+<h2>Model and provider availability</h2>
+<p>Availability changes over time. A model or feature that exists during development may later be renamed, restricted, or removed.</p>
+<p>At deployment time, verify:</p>
+<ul>
+<li>The model or engine identifier</li>
+<li>Supported input and output formats</li>
+<li>Region availability</li>
+<li>Account permissions</li>
+<li>Rate limits</li>
+<li>Webhook behavior</li>
+<li>Maximum duration</li>
+<li>Current pricing</li>
+<li>Data retention terms</li>
+</ul>
+<p>Run a small health check that confirms configuration without generating unnecessary billable video. Treat an unavailable model as a configuration or capability error, not as a reason to retry indefinitely.</p>
+<h2>Practical implementation workflow</h2>
+<p>A reliable implementation can be built in this order:</p>
+<ol>
+<li>Define the internal job schema and state machine.</li>
+<li>Implement authenticated job creation with validation.</li>
+<li>Add durable idempotency records.</li>
+<li>Add a queue and worker.</li>
+<li>Build a provider adapter with normalized statuses.</li>
+<li>Add bounded retries and delayed queue messages.</li>
+<li>Implement webhook verification and deduplication.</li>
+<li>Add polling reconciliation.</li>
+<li>Store completed videos in private object storage.</li>
+<li>Add quotas, metrics, alerts, and cost reconciliation.</li>
+<li>Test worker crashes, duplicate requests, duplicate webhooks, timeouts, and stale events.</li>
+<li>Verify the provider’s live capabilities before production launch.</li>
+</ol>
+<h2>Production checklist</h2>
+<h3>API and jobs</h3>
+<ul>
+<li><span aria-hidden="true">☐</span> Job creation returns <code>202 Accepted</code>.</li>
+<li><span aria-hidden="true">☐</span> Every job has a durable internal ID.</li>
+<li><span aria-hidden="true">☐</span> Input validation occurs before queue submission.</li>
+<li><span aria-hidden="true">☐</span> Job status transitions are explicit and transactional.</li>
+<li><span aria-hidden="true">☐</span> Idempotency keys prevent duplicate generation.</li>
+</ul>
+<h3>Queue and retries</h3>
+<ul>
+<li><span aria-hidden="true">☐</span> Queue messages are durable.</li>
+<li><span aria-hidden="true">☐</span> Retries use exponential backoff and jitter.</li>
+<li><span aria-hidden="true">☐</span> Permanent errors are not retried.</li>
+<li><span aria-hidden="true">☐</span> Ambiguous timeouts trigger reconciliation before resubmission.</li>
+<li><span aria-hidden="true">☐</span> Maximum attempts and job age are enforced.</li>
+</ul>
+<h3>Webhooks</h3>
+<ul>
+<li><span aria-hidden="true">☐</span> Signatures are verified against the raw request body.</li>
+<li><span aria-hidden="true">☐</span> Replay protection is enabled when timestamps are available.</li>
+<li><span aria-hidden="true">☐</span> Duplicate events are harmless.</li>
+<li><span aria-hidden="true">☐</span> Out-of-order events cannot corrupt terminal states.</li>
+<li><span aria-hidden="true">☐</span> Webhook processing is quick and asynchronous.</li>
+</ul>
+<h3>Security</h3>
+<ul>
+<li><span aria-hidden="true">☐</span> Provider credentials remain server-side.</li>
+<li><span aria-hidden="true">☐</span> Job access is authorized per user or tenant.</li>
+<li><span aria-hidden="true">☐</span> Remote asset downloads are protected against SSRF.</li>
+<li><span aria-hidden="true">☐</span> Output files use private storage and expiring URLs.</li>
+<li><span aria-hidden="true">☐</span> Logs do not contain secrets or sensitive content.</li>
+</ul>
+<h3>Operations and cost</h3>
+<ul>
+<li><span aria-hidden="true">☐</span> Queue depth and generation latency are monitored.</li>
+<li><span aria-hidden="true">☐</span> Provider errors are categorized.</li>
+<li><span aria-hidden="true">☐</span> Quotas and duration limits are enforced.</li>
+<li><span aria-hidden="true">☐</span> Intermediate assets are cleaned up.</li>
+<li><span aria-hidden="true">☐</span> Current provider capability, pricing, and availability are verified.</li>
+<li><span aria-hidden="true">☐</span> A reconciliation process handles missed webhooks and stuck jobs.</li>
+</ul>
+<h2>Conclusion</h2>
+<p>A dependable AI avatar video generator integration is primarily a workflow and reliability problem, not just an API-call problem. Durable jobs, idempotency, bounded retries, verified webhooks, reconciliation, and strict cost controls prevent the most common production failures.</p>
+<p>Keep the provider-specific implementation behind an adapter, verify capabilities against live documentation, and design your public API around asynchronous completion. That approach lets you support talking avatars, lip-sync, and other video-generation workflows without coupling your application to undocumented endpoints or fragile assumptions.</p>
+<h2>Editorial scope and verification</h2>
+<p>An avatar-video feature is a media job system, not a single synchronous request. Verify the provider’s current contract for avatar inputs, voices, languages, duration, output format, webhooks, storage, pricing, and consent requirements. A text or speech API does not automatically provide avatar rendering or lip-sync.</p>
+<h2>Production acceptance checklist</h2>
+<ul>
+<li>Create a durable job record before submitting work.</li>
+<li>Use an idempotency key and reconcile uncertain provider states before retrying.</li>
+<li>Authenticate and verify webhook signatures; keep polling as a recovery path.</li>
+<li>Validate video duration, codec, audio, lip-sync, and file integrity.</li>
+<li>Use private storage and short-lived download URLs.</li>
+<li>Define consent, impersonation, retention, deletion, moderation, and human-review rules.</li>
+<li>Apply limits for duration, resolution, concurrency, and spend.</li>
+</ul>
+<p>Choose a provider only after a representative test set measures completion rate, latency, quality, retry behavior, and cost per successful video. Keep provider-specific calls behind an adapter so the workflow remains replaceable. For the supported models and a production checklist, see the <a href="/ai-avatar-video-generator">AI avatar video generator API guide</a> and the <a href="/model/Duix-Avatar">Duix-Avatar model page</a>.</p>

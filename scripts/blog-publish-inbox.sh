@@ -26,12 +26,14 @@ for f in "${files[@]}"; do
   base=$(basename "$f" .html)
   title=$(sed -n 's/^<!--[[:space:]]*TITLE:[[:space:]]*\(.*\)[[:space:]]*-->$/\1/p' "$f" | head -1)
   excerpt=$(sed -n 's/^<!--[[:space:]]*EXCERPT:[[:space:]]*\(.*\)[[:space:]]*-->$/\1/p' "$f" | head -1)
+  desc=$(sed -n 's/^<!--[[:space:]]*DESC:[[:space:]]*\(.*\)[[:space:]]*-->$/\1/p' "$f" | head -1)
   if [ -z "$title" ]; then
     echo "SKIP $base: first line must be <!-- TITLE: ... -->"
     continue
   fi
   args=(--slug="$base" --title="$title" --file="$f")
   [ -n "$excerpt" ] && args+=(--excerpt="$excerpt")
+  [ -n "$desc" ] && args+=(--desc="$desc")
   echo "==> publishing $base"
   php "$ROOT/scripts/blog-self-publish.php" "${args[@]}" || { echo "FAILED $base"; exit 1; }
 done

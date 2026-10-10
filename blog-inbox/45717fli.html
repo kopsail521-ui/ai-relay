@@ -1,0 +1,389 @@
+<!-- TITLE: Claude API Connection Closed Mid-Response: Detecting and Recovering Incomplete Output -->
+<!-- EXCERPT: Learn how to detect incomplete Claude API responses, safely retry or resume generation, preserve partial output, and evaluate migration alternatives without corrupting production data. -->
+<!-- DESC: Learn how to detect incomplete Claude API responses, safely retry or resume generation, preserve partial output, and evaluate migration alternatives without corrupting production data. -->
+<p>A connection closing during a Claude response is not the same as a completed generation. The request may have reached the model, the server may have generated only part of the answer, or an intermediary may have terminated the stream. If your application stores or publishes the partial text as if it were final, users can receive truncated code, malformed JSON, incomplete reports, or unsafe workflow decisions.</p>
+<p>This article presents a provider-neutral handling strategy and a practical migration workflow for teams evaluating Claude API alternatives. It also shows how to determine whether another gateway or model is suitable without assuming endpoint, model, streaming, or compatibility support.</p>
+<h2>Why a Response Can End Incompletely</h2>
+<p>A mid-response disconnect can occur at several layers:</p>
+<ul>
+<li>The client-side timeout expires.</li>
+<li>A reverse proxy or load balancer closes an idle or long-lived connection.</li>
+<li>The provider terminates the request.</li>
+<li>The network drops while tokens are streaming.</li>
+<li>The application process crashes or cancels the request.</li>
+<li>A gateway returns an upstream error after some output has already arrived.</li>
+<li>The generated content exceeds an application or provider limit.</li>
+</ul>
+<p>A successful TCP or HTTP connection does not necessarily mean the model completed its response. Likewise, receiving text does not prove that the text is valid or complete.</p>
+<p>Treat response completion as an explicit state that your application verifies.</p>
+<h2>Distinguish Complete, Incomplete, and Unknown Results</h2>
+<p>Your response handler should classify every request into one of three states:</p>
+<ol>
+<li><strong>Complete</strong> — the provider supplied a normal completion signal and the content passed validation.</li>
+<li><strong>Incomplete</strong> — the provider explicitly reported truncation, cancellation, an output limit, or another non-success termination.</li>
+<li><strong>Unknown</strong> — the connection ended before your client received enough metadata to determine whether generation completed.</li>
+</ol>
+<p>The unknown state is important. A network failure after the provider finished generating may look identical to a failure during generation. Retrying blindly can therefore produce duplicate work or duplicate side effects.</p>
+<p>A useful internal record includes:</p>
+<pre><code class="language-text">request_id
+provider_request_id, if available
+conversation_or_job_id
+model_identifier
+attempt_number
+received_text
+completion_status
+termination_reason
+validation_status
+error_class
+latency
+input_and_output_token_usage, if available
+</code></pre>
+<p>Do not mark a request as successful merely because <code>received_text</code> is non-empty.</p>
+<h2>Validate Before Persisting or Publishing</h2>
+<p>The correct validation depends on the output format.</p>
+<h3>Plain text</h3>
+<p>For ordinary prose, validate at least:</p>
+<ul>
+<li>The response has the expected minimum structure.</li>
+<li>Required sections or markers are present.</li>
+<li>The final sentence is not obviously cut off.</li>
+<li>The response includes a completion footer or application-defined terminator when appropriate.</li>
+</ul>
+<p>A heuristic such as “the final character is punctuation” can help identify suspicious output, but it is not proof of completion.</p>
+<h3>JSON</h3>
+<p>Never parse partial JSON as if it were valid output. Require:</p>
+<ul>
+<li>A successful parse.</li>
+<li>The expected top-level type.</li>
+<li>Required fields.</li>
+<li>Correct field types.</li>
+<li>Application-level constraints.</li>
+</ul>
+<p>If parsing fails, retain the raw partial response for diagnosis, but do not send it to downstream systems.</p>
+<h3>Code</h3>
+<p>For generated code, consider:</p>
+<ul>
+<li>Syntax parsing or compilation.</li>
+<li>Tests for critical paths.</li>
+<li>Required function, class, or module boundaries.</li>
+<li>A complete fenced code block when your application expects Markdown code.</li>
+</ul>
+<p>A syntactically valid fragment can still be logically incomplete, so validation should not be limited to parsing.</p>
+<h3>Structured tool calls</h3>
+<p>Treat tool arguments as untrusted input. Validate the schema and authorization boundaries before executing anything. A partially received tool call must never be executed because it appears to contain enough fields.</p>
+<h2>Streaming Requires an Explicit Completion Protocol</h2>
+<p>Streaming improves time to first token, but it also makes incomplete output easier to expose. Your stream consumer should track:</p>
+<ul>
+<li>Whether an initial response was received.</li>
+<li>Whether content events arrived in order.</li>
+<li>Whether a terminal event was received.</li>
+<li>Whether the provider reported a normal stop.</li>
+<li>Whether usage and request metadata arrived.</li>
+<li>Whether the transport ended with an error or an unexpected close.</li>
+</ul>
+<p>The exact event names and termination fields differ between APIs. Consult the live documentation for the provider you use rather than assuming that one streaming protocol is interchangeable with another.</p>
+<p>A language-neutral consumer might look like this:</p>
+<pre><code class="language-text">buffer = &quot;&quot;
+saw_terminal_event = false
+termination_reason = null for event in response_stream: if event contains text: buffer += event.text optionally_save_checkpoint(buffer) if event contains terminal metadata: saw_terminal_event = true termination_reason = event.termination_reason if transport_failed: status = &quot;unknown&quot;
+else if not saw_terminal_event: status = &quot;incomplete&quot;
+else if termination_reason is not a normal completion: status = &quot;incomplete&quot;
+else if not validate(buffer): status = &quot;incomplete&quot;
+else: status = &quot;complete&quot;
+</code></pre>
+<p>Do not infer successful completion solely from end-of-stream. A clean stream close without a provider terminal event should remain unknown or incomplete according to your application’s risk policy.</p>
+<h2>Preserve Partial Output Safely</h2>
+<p>Partial output is valuable for debugging and recovery, but it should not be treated as final output.</p>
+<p>Store it with:</p>
+<ul>
+<li>An attempt identifier.</li>
+<li>A timestamp.</li>
+<li>The request or job identifier.</li>
+<li>The provider and model identifier.</li>
+<li>The completion state.</li>
+<li>The last received event or sequence number, if available.</li>
+<li>A checksum or content hash when deduplication matters.</li>
+</ul>
+<p>Avoid displaying raw partial content in user interfaces that imply completion. Instead, show a clear state such as “Generation interrupted” and offer a retry or recovery action.</p>
+<p>For sensitive prompts and responses, apply your normal retention, encryption, access-control, and redaction policies. A partial response can contain the same secrets or personal data as a completed response.</p>
+<h2>Retry Without Duplicating Work</h2>
+<p>A retry strategy depends on whether the request is safe to repeat.</p>
+<h3>Safe-to-retry requests</h3>
+<p>Retries are generally easier for:</p>
+<ul>
+<li>Read-only summarization.</li>
+<li>Draft generation.</li>
+<li>Classification.</li>
+<li>Embedding or analysis jobs whose results are replaceable.</li>
+</ul>
+<p>Even then, use an idempotency or job key if the provider supports one. If the API does not provide idempotency, create an application-level operation ID and deduplicate results yourself.</p>
+<h3>Requests with side effects</h3>
+<p>Be more cautious when model output can:</p>
+<ul>
+<li>Send an email.</li>
+<li>Create a ticket.</li>
+<li>Modify a record.</li>
+<li>Trigger a deployment.</li>
+<li>Make a purchase.</li>
+<li>Call an external tool.</li>
+</ul>
+<p>A connection failure does not prove that the side effect failed. Before retrying, query the downstream system using your operation ID or another idempotent key. Separate generation from execution:</p>
+<ol>
+<li>Generate a proposed action.</li>
+<li>Validate the structured action.</li>
+<li>Ask for explicit application approval when required.</li>
+<li>Execute it once with an idempotent operation key.</li>
+<li>Record the result independently of the model response.</li>
+</ol>
+<h3>Backoff and retry limits</h3>
+<p>Use bounded exponential backoff with jitter. Classify errors before retrying:</p>
+<ul>
+<li>Retry transient transport failures and selected server overload responses.</li>
+<li>Do not retry authentication failures without fixing credentials.</li>
+<li>Do not retry invalid request schemas unchanged.</li>
+<li>Do not retry policy or authorization failures automatically.</li>
+<li>Stop after a small, configured attempt limit.</li>
+</ul>
+<p>A retry should create a new attempt record, not overwrite the failed attempt.</p>
+<h2>Resuming Versus Regenerating</h2>
+<p>Many teams assume they can continue from the exact point where a stream disconnected. That is not universally supported.</p>
+<p>Before implementing continuation, verify in the live documentation whether the selected API supports:</p>
+<ul>
+<li>Resuming a stream by request or event ID.</li>
+<li>Reconnecting to an active generation.</li>
+<li>Supplying previously generated text as context.</li>
+<li>Assistant-prefill or continuation patterns.</li>
+<li>Stable request deduplication.</li>
+<li>Partial-output checkpoints.</li>
+</ul>
+<p>If native resumption is unavailable, the fallback is regeneration. Include the partial output only when it is safe and useful:</p>
+<pre><code class="language-text">The previous generation was interrupted. Partial output:
+&lt;partial text&gt; Continue from the last complete boundary. Do not repeat content that is already complete.
+</code></pre>
+<p>This approach can repeat text, introduce inconsistencies, or consume additional tokens. For long documents, prefer application-defined sections or chunks so that only the failed section needs regeneration.</p>
+<p>Do not use continuation prompts to “repair” output that may have contained an incomplete command, tool call, or security-sensitive instruction without revalidating the entire result.</p>
+<h2>Configure Timeouts at Every Layer</h2>
+<p>A single client timeout is rarely enough. Review:</p>
+<ul>
+<li>DNS and connection timeout.</li>
+<li>TLS handshake timeout.</li>
+<li>Time to first byte.</li>
+<li>Read timeout between stream events.</li>
+<li>Total request deadline.</li>
+<li>Reverse-proxy timeout.</li>
+<li>Load-balancer idle timeout.</li>
+<li>Serverless function execution limit.</li>
+<li>Browser or mobile background execution limits.</li>
+</ul>
+<p>Set the read timeout according to the expected gap between events, not merely the average response duration. A long total generation may be healthy if events arrive regularly; an unexpectedly silent connection may indicate failure.</p>
+<p>Avoid overly aggressive read timeouts for large outputs, but also avoid allowing abandoned requests to consume resources indefinitely. Record which timeout actually ended the request.</p>
+<h2>Authentication and Credential Handling</h2>
+<p>A migration is incomplete if the new integration works only in a local test with credentials embedded in source code.</p>
+<p>Use:</p>
+<ul>
+<li>Server-side authentication.</li>
+<li>Environment variables or a secret manager.</li>
+<li>Separate keys for development, staging, and production.</li>
+<li>Least-privilege access where supported.</li>
+<li>Key rotation and revocation procedures.</li>
+<li>Redacted logs that never include authorization headers.</li>
+</ul>
+<p>KeyoAPI serves Claude-class model IDs through an OpenAI-compatible endpoint. Confirm current IDs, limits, and rates on <a href="/claude-api-pricing">/claude-api-pricing</a> and <a href="/pricing-list">/pricing-list</a> — Anthropic-native schemas may still differ from OpenAI-compatible chat completions, so verify tool/vision/streaming needs against live docs before migration.</p>
+<h2>Evaluating a Claude API Alternative</h2>
+<p>The right alternative is not necessarily the provider with the most similar marketing description. It is the one that meets your application’s reliability, output, security, and operational requirements.</p>
+<p>Build a comparison matrix covering:</p>
+<div class="article-table-wrap"><table class="article-table">
+<thead>
+<tr>
+<th>Capability</th>
+<th>Questions to verify</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Authentication</td>
+<td>Which credential type and header are required?</td>
+</tr>
+<tr>
+<td>Request format</td>
+<td>Can your messages, system instructions, and content blocks be represented?</td>
+</tr>
+<tr>
+<td>Streaming</td>
+<td>Is streaming supported, and what terminal event indicates completion?</td>
+</tr>
+<tr>
+<td>Error model</td>
+<td>Are transport, rate-limit, validation, and provider errors distinguishable?</td>
+</tr>
+<tr>
+<td>Retry support</td>
+<td>Are idempotency keys or request identifiers available?</td>
+</tr>
+<tr>
+<td>Model catalog</td>
+<td>Which model IDs are currently available?</td>
+</tr>
+<tr>
+<td>Context and output limits</td>
+<td>What are the documented limits for the target model?</td>
+</tr>
+<tr>
+<td>Structured output</td>
+<td>Are schemas, tool calls, or JSON constraints supported?</td>
+</tr>
+<tr>
+<td>Safety behavior</td>
+<td>How are refusals and policy-related stops represented?</td>
+</tr>
+<tr>
+<td>Data handling</td>
+<td>What retention, regional, and logging controls apply?</td>
+</tr>
+<tr>
+<td>Cost</td>
+<td>How are input, output, cached, image, or tool-related units billed?</td>
+</tr>
+<tr>
+<td>Availability</td>
+<td>What happens when a model is unavailable or removed?</td>
+</tr>
+</tbody>
+</table></div>
+<p>Do not assume that an OpenAI-compatible interface provides Claude compatibility. Similar request shapes may still differ in:</p>
+<ul>
+<li>Message roles.</li>
+<li>System prompt handling.</li>
+<li>Content block formats.</li>
+<li>Tool-call schemas.</li>
+<li>Streaming events.</li>
+<li>Stop-reason semantics.</li>
+<li>Token accounting.</li>
+<li>Error codes.</li>
+<li>Model behavior.</li>
+</ul>
+<p>For any candidate service, test the exact model and endpoint shown in its live catalog and documentation. Model availability can change, so production configuration should not rely solely on a model name copied from an old article or example.</p>
+<h2>A Practical Migration Evaluation Workflow</h2>
+<h3>1. Capture a representative test set</h3>
+<p>Include:</p>
+<ul>
+<li>Short and long prompts.</li>
+<li>Streaming and non-streaming requests.</li>
+<li>JSON and code generation.</li>
+<li>Multilingual inputs if relevant.</li>
+<li>Tool or function-call scenarios.</li>
+<li>Prompts near your normal context limit.</li>
+<li>Cases that previously experienced disconnects.</li>
+</ul>
+<p>Remove secrets and personal data, or replace them with controlled fixtures.</p>
+<h3>2. Build a provider adapter</h3>
+<p>Keep provider-specific logic behind a small interface:</p>
+<pre><code class="language-text">generate(request) -&gt; normalized_result
+stream(request) -&gt; normalized_events
+classify_error(error) -&gt; retry_policy
+validate(result, expected_schema) -&gt; validation_result
+</code></pre>
+<p>The rest of the application should consume normalized statuses such as <code>complete</code>, <code>incomplete</code>, <code>refused</code>, <code>rate_limited</code>, and <code>unknown</code>.</p>
+<h3>3. Test failure injection</h3>
+<p>Simulate:</p>
+<ul>
+<li>Disconnect before the first token.</li>
+<li>Disconnect halfway through output.</li>
+<li>Missing terminal event.</li>
+<li>Delayed events.</li>
+<li>Duplicate events.</li>
+<li>Rate limiting.</li>
+<li>Invalid credentials.</li>
+<li>Malformed structured output.</li>
+<li>Provider-side model unavailability.</li>
+<li>Application cancellation.</li>
+</ul>
+<p>Verify that each case produces the intended status, retry behavior, logging, and user experience.</p>
+<h3>4. Compare quality and operational behavior</h3>
+<p>Measure more than answer quality:</p>
+<ul>
+<li>Completion rate.</li>
+<li>Incomplete-stream rate.</li>
+<li>Validation failure rate.</li>
+<li>Retry rate.</li>
+<li>Time to first token.</li>
+<li>Total latency.</li>
+<li>Output length.</li>
+<li>Cost per successful result.</li>
+<li>Duplicate or repeated output after retry.</li>
+<li>Error distribution by model and region.</li>
+</ul>
+<p>Run enough tests to identify variance. A small successful demo cannot establish production reliability.</p>
+<h3>5. Use shadow or canary traffic</h3>
+<p>During migration, send a controlled subset of traffic to the candidate while keeping the current provider as the source of truth. Do not execute side effects from shadow responses. Compare normalized outputs and failure states, then gradually increase traffic.</p>
+<h2>Cost and Availability Considerations</h2>
+<p>A retry can double or multiply consumption. Track cost at the operation level, including failed and abandoned attempts when the provider bills generated output.</p>
+<p>Useful controls include:</p>
+<ul>
+<li>Maximum output limits appropriate to the task.</li>
+<li>Per-request and per-user budgets.</li>
+<li>Retry budgets separate from normal request budgets.</li>
+<li>Cancellation of abandoned streams.</li>
+<li>Deduplication of repeated jobs.</li>
+<li>Alerts for sudden incomplete-output or retry-rate increases.</li>
+</ul>
+<p>For availability, decide what your application does when the preferred model is unavailable:</p>
+<ul>
+<li>Queue the job.</li>
+<li>Use a preapproved fallback model.</li>
+<li>Return a controlled error.</li>
+<li>Serve a cached result.</li>
+<li>Degrade to a simpler workflow.</li>
+</ul>
+<p>Only configure fallback models that you have tested for the same task and whose availability is confirmed in the live model catalog. Do not silently switch to an unverified model because its identifier appears in an old configuration file.</p>
+<h2>Security and Data Integrity</h2>
+<p>Incomplete output handling is also a security concern.</p>
+<p>Apply these rules:</p>
+<ul>
+<li>Never execute partial tool calls.</li>
+<li>Validate all structured output against a strict schema.</li>
+<li>Treat generated URLs, commands, SQL, and file paths as untrusted.</li>
+<li>Keep authorization decisions outside the model.</li>
+<li>Prevent prompt data from entering logs unnecessarily.</li>
+<li>Encrypt stored partial responses where required.</li>
+<li>Restrict access to failed-attempt records.</li>
+<li>Redact credentials and sensitive fields before retries.</li>
+<li>Preserve audit records for actions triggered by model output.</li>
+</ul>
+<p>If a partial response may contain a secret, handle it according to the same incident and retention rules as a complete response.</p>
+<h2>Production Checklist</h2>
+<p>Before deploying Claude response recovery or an alternative provider, confirm:</p>
+<ul>
+<li><span aria-hidden="true">☐</span> The application distinguishes complete, incomplete, and unknown responses.</li>
+<li><span aria-hidden="true">☐</span> Streaming logic requires an explicit completion signal.</li>
+<li><span aria-hidden="true">☐</span> Partial output is stored separately from final output.</li>
+<li><span aria-hidden="true">☐</span> JSON, code, and tool-call results are validated before use.</li>
+<li><span aria-hidden="true">☐</span> Retries use bounded exponential backoff with jitter.</li>
+<li><span aria-hidden="true">☐</span> Non-idempotent operations have application-level deduplication.</li>
+<li><span aria-hidden="true">☐</span> Side effects are separated from generation and execution.</li>
+<li><span aria-hidden="true">☐</span> Timeouts are configured for connection, read, total request, and proxy layers.</li>
+<li><span aria-hidden="true">☐</span> Authentication secrets are server-side and stored securely.</li>
+<li><span aria-hidden="true">☐</span> Logs include request and attempt identifiers without exposing sensitive content.</li>
+<li><span aria-hidden="true">☐</span> Retry and incomplete-output rates are monitored.</li>
+<li><span aria-hidden="true">☐</span> Cost accounting includes retries and abandoned generations.</li>
+<li><span aria-hidden="true">☐</span> Candidate models and endpoints were verified in current documentation.</li>
+<li><span aria-hidden="true">☐</span> Fallback behavior was tested rather than assumed.</li>
+<li><span aria-hidden="true">☐</span> Failure injection tests cover missing terminal events and mid-stream disconnects.</li>
+<li><span aria-hidden="true">☐</span> A canary or shadow rollout is available for migration.</li>
+</ul>
+<h2>Conclusion</h2>
+<p>A connection closed during generation should be treated as an incomplete transaction, not as a successful response with slightly less text. Reliable applications verify terminal state, validate content, preserve partial output for recovery, and retry only when the operation is safe to repeat.</p>
+<p>When evaluating Claude API alternatives, compare the complete integration contract: authentication, streaming events, error semantics, model availability, structured output, cost, and operational behavior. Provider documentation and live model catalogs should be the source of truth for compatibility. A careful adapter, failure-injection test suite, and controlled rollout will reveal whether a candidate can replace your current integration without turning transient network failures into corrupted data or duplicated side effects.</p>
+<h2>Editorial scope and verification</h2>
+<p>A closed connection does not prove that generation completed or failed. This guide describes a provider-neutral recovery design. Event names, terminal signals, model limits, continuation support, and retry semantics must be verified against the current provider documentation rather than assumed from a compatible-looking API.</p>
+<h2>Required completion states</h2>
+<p>Track at least three states: complete, incomplete, and unknown. Require a documented terminal event and validate the final content before publishing it. Preserve partial output separately with an attempt ID, timestamp, model, and error class.</p>
+<h2>Safe recovery rules</h2>
+<ul>
+<li>Retry drafts and read-only analysis only when the operation is safe to repeat.</li>
+<li>Check downstream state before retrying requests that may have caused side effects.</li>
+<li>Use bounded backoff and an application-level idempotency key.</li>
+<li>Never execute a partial tool call or treat partial JSON as valid.</li>
+<li>Compare alternatives on streaming events, errors, context limits, cost, and data handling—not only on answer quality.</li>
+</ul>
+<p>The key decision is whether the result is proven complete, not whether some text was received. Confirm current Claude rates and model availability on the <a href="/claude-api-pricing">Claude API pricing page</a> and the <a href="/model/claude-sonnet-5">claude-sonnet-5 model page</a>.</p>

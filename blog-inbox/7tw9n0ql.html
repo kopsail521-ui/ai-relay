@@ -1,0 +1,409 @@
+<!-- TITLE: Gemini API Rate Limits Tier 1: Capacity Planning Without Assumptions -->
+<!-- EXCERPT: Learn how to plan around Gemini API Tier 1 rate limits using measured traffic, explicit backpressure, retries, provider-agnostic interfaces, and production capacity tests. -->
+<!-- DESC: Learn how to plan around Gemini API Tier 1 rate limits using measured traffic, explicit backpressure, retries, provider-agnostic interfaces, and production capacity tests. -->
+<p>Gemini API Tier 1 is often treated as a fixed capacity level. That is a risky assumption. Rate limits can vary by model, project, region, account configuration, quota metric, and Google’s current documentation. They may also change over time.</p>
+<p>A reliable migration or capacity plan should therefore avoid building around a remembered quota number. Instead, measure your workload, identify the limits that actually govern it, and design your application to remain stable when capacity is lower than expected.</p>
+<p>This article presents a provider-agnostic workflow for evaluating Gemini API Tier 1 and alternatives such as an OpenAI-compatible gateway. It focuses on one practical problem: moving from assumed provider capacity to measured, production-ready capacity.</p>
+<h2>What “Tier 1” Does Not Tell You</h2>
+<p>A tier name is not, by itself, a complete capacity specification. Before using Gemini API Tier 1 in production, verify the current quota documentation and project-level settings for:</p>
+<ul>
+<li>Requests per minute</li>
+<li>Tokens or characters per minute</li>
+<li>Requests per day</li>
+<li>Input and output token limits</li>
+<li>Per-model differences</li>
+<li>Batch or asynchronous quotas</li>
+<li>Regional restrictions</li>
+<li>Quota increase procedures</li>
+<li>Whether limits are enforced per project, organization, user, or API key</li>
+</ul>
+<p>Do not use a blog post, an old benchmark, or another project’s quota as your system limit. The live provider documentation and the quota dashboard are the authoritative sources for the account being deployed.</p>
+<p>The same principle applies when evaluating an alternative provider. A product may advertise access to multiple models, but model availability, request limits, pricing, and compatibility must be checked in its current documentation and model catalog.</p>
+<h2>Start With Workload Capacity, Not Provider Limits</h2>
+<p>Capacity planning begins with the application’s traffic model.</p>
+<p>Record at least these values:</p>
+<div class="article-table-wrap"><table class="article-table">
+<thead>
+<tr>
+<th>Variable</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>R_peak</code></td>
+<td>Peak requests per second</td>
+</tr>
+<tr>
+<td><code>R_burst</code></td>
+<td>Largest short-term burst</td>
+</tr>
+<tr>
+<td><code>T_in</code></td>
+<td>Average input tokens per request</td>
+</tr>
+<tr>
+<td><code>T_out</code></td>
+<td>Average output tokens per request</td>
+</tr>
+<tr>
+<td><code>L_target</code></td>
+<td>Target latency</td>
+</tr>
+<tr>
+<td><code>C_max</code></td>
+<td>Maximum concurrent requests</td>
+</tr>
+<tr>
+<td><code>E</code></td>
+<td>Expected retry or error multiplier</td>
+</tr>
+</tbody>
+</table></div>
+<p>For token-based capacity, the approximate required token rate is:</p>
+<pre><code class="language-text">tokens_per_minute = requests_per_minute × (average_input_tokens + average_output_tokens)
+</code></pre>
+<p>For request-based capacity:</p>
+<pre><code class="language-text">requests_per_minute = requests_per_second × 60
+</code></pre>
+<p>Include peak traffic rather than only daily averages. A workload that averages 100 requests per minute may still require capacity for a 10-second burst of 100 requests.</p>
+<h3>Include retries in the estimate</h3>
+<p>Retries consume quota. If 5% of requests are retried once, the expected request volume is approximately:</p>
+<pre><code class="language-text">effective_requests = original_requests × 1.05
+</code></pre>
+<p>This is only an estimate. During an outage or throttling event, poorly controlled retries can multiply traffic rapidly. Capacity planning should model both normal retries and retry storms.</p>
+<h3>Separate traffic classes</h3>
+<p>Do not place every request in one undifferentiated pool. At minimum, distinguish:</p>
+<ul>
+<li>Interactive user requests</li>
+<li>Background jobs</li>
+<li>Scheduled batch work</li>
+<li>Administrative or evaluation traffic</li>
+<li>Retry traffic</li>
+</ul>
+<p>Interactive traffic usually deserves a latency target and reserved capacity. Batch work can often tolerate queueing, delayed execution, or a lower-cost model.</p>
+<h2>Measure Before Choosing a Migration Target</h2>
+<p>A migration should begin with an inventory of the current workload, not with a model-name substitution.</p>
+<p>Capture the following for a representative period:</p>
+<ul>
+<li>Requests per minute and per second</li>
+<li>Input and output token distributions</li>
+<li>P50, P95, and P99 latency</li>
+<li>Timeout frequency</li>
+<li>HTTP status codes</li>
+<li>Retry counts</li>
+<li>Concurrent requests</li>
+<li>Prompt and response size</li>
+<li>Model-specific usage</li>
+<li>Cost per request</li>
+<li>User-visible failure rate</li>
+</ul>
+<p>Use percentiles rather than averages for prompt size and latency. A small number of very large requests can exhaust a token quota or produce long tail latency even when the average appears safe.</p>
+<p>A useful evaluation table looks like this:</p>
+<div class="article-table-wrap"><table class="article-table">
+<thead>
+<tr>
+<th>Test case</th>
+<th align="right">Input size</th>
+<th align="right">Output target</th>
+<th align="right">Concurrency</th>
+<th align="right">Success rate</th>
+<th align="right">P95 latency</th>
+<th align="right">Retry rate</th>
+<th align="right">Cost</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Short interactive request</td>
+<td align="right">Small</td>
+<td align="right">Short</td>
+<td align="right">Low</td>
+<td align="right">Measure</td>
+<td align="right">Measure</td>
+<td align="right">Measure</td>
+<td align="right">Measure</td>
+</tr>
+<tr>
+<td>Long context request</td>
+<td align="right">Large</td>
+<td align="right">Medium</td>
+<td align="right">Medium</td>
+<td align="right">Measure</td>
+<td align="right">Measure</td>
+<td align="right">Measure</td>
+<td align="right">Measure</td>
+</tr>
+<tr>
+<td>Burst traffic</td>
+<td align="right">Mixed</td>
+<td align="right">Mixed</td>
+<td align="right">High</td>
+<td align="right">Measure</td>
+<td align="right">Measure</td>
+<td align="right">Measure</td>
+<td align="right">Measure</td>
+</tr>
+<tr>
+<td>Background batch</td>
+<td align="right">Mixed</td>
+<td align="right">Long</td>
+<td align="right">Queue-based</td>
+<td align="right">Measure</td>
+<td align="right">Measure</td>
+<td align="right">Measure</td>
+<td align="right">Measure</td>
+</tr>
+</tbody>
+</table></div>
+<p>Do not infer capacity or feature parity from similar model names alone — confirm the live model ID, tier limits, and rates on <a href="/pricing-list">/pricing-list</a> (Gemini-class: <a href="/gemini-api-pricing">/gemini-api-pricing</a>) before production sizing.</p>
+<h2>Use a Provider-Agnostic Application Boundary</h2>
+<p>Your application should depend on a small internal interface rather than on provider-specific request construction throughout the codebase.</p>
+<p>A language-neutral interface might look like this:</p>
+<pre><code class="language-text">generate(request): validate request select provider and model apply timeout and retry policy send request normalize response record metrics return result
+</code></pre>
+<p>The interface should make these properties explicit:</p>
+<ul>
+<li>Provider name</li>
+<li>Model identifier</li>
+<li>Request timeout</li>
+<li>Maximum output size</li>
+<li>Retry policy</li>
+<li>Idempotency behavior</li>
+<li>Usage metadata</li>
+<li>Error category</li>
+<li>Request correlation ID</li>
+</ul>
+<p>Keep provider adapters separate from business logic. This makes it possible to compare Gemini with another provider without rewriting queueing, authentication boundaries, observability, or user-facing error handling.</p>
+<h3>Do not assume API compatibility</h3>
+<p>An alternative provider may expose an OpenAI-compatible interface, but that does not guarantee identical behavior. Verify:</p>
+<ul>
+<li>Message format</li>
+<li>Tool-calling support</li>
+<li>Streaming behavior</li>
+<li>Structured output behavior</li>
+<li>Token counting</li>
+<li>Safety settings</li>
+<li>Error formats</li>
+<li>Timeout behavior</li>
+<li>Model naming</li>
+<li>Context limits</li>
+<li>Usage reporting</li>
+</ul>
+<p>For example, KeyoAPI documents an OpenAI-compatible multi-model API gateway with a base URL of <code>https://www.keyoapi.xyz/v1</code>. Its documented text chat endpoint is:</p>
+<pre><code class="language-text">POST https://www.keyoapi.xyz/v1/chat/completions
+</code></pre>
+<p>That is an integration option to evaluate, not proof that it supports a particular Gemini model, endpoint, compatibility level, quota, or performance profile. Verify the current documentation and live model catalog before selecting it.</p>
+<h2>Verify Model Availability at Runtime</h2>
+<p>Model identifiers should not be hard-coded from an old migration guide or copied from an unrelated provider.</p>
+<p>KeyoAPI docs cover this model discovery request:</p>
+<pre><code class="language-bash">curl https://www.keyoapi.xyz/v1/models \
+  -H &quot;Authorization: Bearer YOUR_API_KEY&quot;
+</code></pre>
+<p>Use an exact model ID returned by the live response. Availability can change, and an incorrect or unavailable model ID produces a model-not-found failure.</p>
+<p>For Gemini, use the current Google documentation and project-specific model list or quota interface. The model identifier, capability, context size, and quota behavior should all be confirmed before a production deployment.</p>
+<p>A startup or deployment validation step can:</p>
+<ol>
+<li>Retrieve the configured provider’s current model list.</li>
+<li>Confirm that the configured model exists.</li>
+<li>Check required capabilities.</li>
+<li>Fail deployment if the model is unavailable.</li>
+<li>Record the selected model and provider version in configuration metadata.</li>
+</ol>
+<p>Do not silently replace a missing model with another model unless the application has explicitly tested that fallback.</p>
+<h2>Design Rate Limiting and Backpressure</h2>
+<p>Client-side rate limiting protects both your application and the upstream provider.</p>
+<p>A token bucket or leaky bucket can control request admission:</p>
+<pre><code class="language-text">on request: estimate request cost if bucket has capacity: consume capacity send request else: queue or reject with a controlled response
+</code></pre>
+<p>For token-based workloads, request cost should reflect estimated input and output tokens rather than counting every request equally.</p>
+<p>Use separate budgets where possible:</p>
+<ul>
+<li>A reserved budget for interactive traffic</li>
+<li>A lower-priority budget for background jobs</li>
+<li>A bounded retry budget</li>
+<li>A small evaluation budget</li>
+</ul>
+<p>A queue is usually better than uncontrolled concurrency for batch work. Set a maximum queue size. Once the queue is full, reject or defer new work rather than allowing memory usage and latency to grow without bound.</p>
+<h3>Avoid synchronized bursts</h3>
+<p>Scheduled workers can accidentally send thousands of requests at the same time. Add jitter to scheduled tasks and distribute work across time windows.</p>
+<p>For example:</p>
+<pre><code class="language-text">scheduled_time = base_time + random_jitter
+</code></pre>
+<p>The jitter range should be large enough to spread the workload meaningfully, while remaining consistent with the job’s freshness requirements.</p>
+<h2>Handle Errors by Category</h2>
+<p>A production integration should distinguish between errors that are safe to retry and errors that require correction.</p>
+<h3>Rate-limit and quota errors</h3>
+<p>A rate-limit response usually indicates that the application must reduce request frequency, concurrency, or token volume. Apply backoff, honor any server-provided retry delay, and prevent all workers from retrying simultaneously.</p>
+<p>Do not respond to every rate-limit error by increasing concurrency. That usually increases pressure and extends the incident.</p>
+<h3>Authentication errors</h3>
+<p>Authentication failures are generally not transient. Check:</p>
+<ul>
+<li>API key validity</li>
+<li>Authorization header formatting</li>
+<li>Secret injection</li>
+<li>Key scope or project association</li>
+<li>Environment selection</li>
+<li>Secret rotation state</li>
+</ul>
+<p>For KeyoAPI, requests use Bearer authentication:</p>
+<pre><code class="language-text">Authorization: Bearer YOUR_API_KEY
+</code></pre>
+<p>Keep credentials on the server. Do not embed them in browser code, public repositories, screenshots, or client-side applications.</p>
+<h3>Model-not-found errors</h3>
+<p>A model-not-found response should trigger configuration diagnosis, not repeated retries. Confirm the exact model ID against the provider’s current model catalog.</p>
+<h3>Timeout errors</h3>
+<p>Timeouts can result from temporary upstream latency, slow model responses, or an overly short client timeout. Use a reasonable timeout, record the elapsed time, and retry only when the operation is safe to repeat.</p>
+<h3>Validation and content errors</h3>
+<p>Invalid request parameters, unsupported features, malformed messages, and policy-related responses usually require code or input changes. Retrying the same request wastes quota and may increase cost.</p>
+<p>Normalize provider errors into application-level categories such as:</p>
+<pre><code class="language-text">AuthenticationFailure
+RateLimited
+QuotaExhausted
+ModelUnavailable
+InvalidRequest
+UpstreamTimeout
+UpstreamFailure
+</code></pre>
+<p>The user-facing message should be clear without exposing provider credentials, raw prompts, internal request headers, or sensitive upstream details.</p>
+<h2>Implement Exponential Backoff Carefully</h2>
+<p>A typical retry delay uses exponential growth with jitter:</p>
+<pre><code class="language-text">delay = min(max_delay, initial_delay × 2^attempt)
+wait = random(0, delay)
+</code></pre>
+<p>Use a small, bounded number of retries. The exact values depend on the workload and provider guidance, so they should be configuration rather than constants hidden in application code.</p>
+<p>Retry only when all of the following are true:</p>
+<ul>
+<li>The error is classified as transient.</li>
+<li>The request is safe to repeat or has idempotency protection.</li>
+<li>The retry budget has not been exhausted.</li>
+<li>The request deadline has not passed.</li>
+<li>The retry will not violate the application’s own rate limit.</li>
+</ul>
+<p>For streaming responses, define what happens when a connection fails after partial output. Blindly restarting may duplicate content or charge for work that already completed. Consider checkpointing, response reconciliation, or treating interrupted streams as non-retryable unless the operation is explicitly idempotent.</p>
+<h2>Plan for Cost and Balance Constraints</h2>
+<p>Capacity and cost are connected. A request that fits the request-per-minute limit may still be too expensive or consume too many tokens for the application’s budget.</p>
+<p>Track:</p>
+<ul>
+<li>Input tokens</li>
+<li>Output tokens</li>
+<li>Total tokens</li>
+<li>Requests by model</li>
+<li>Retries</li>
+<li>Failed requests that still incur usage</li>
+<li>Cost by tenant or feature</li>
+<li>Daily and monthly budget consumption</li>
+</ul>
+<p>Set application-level budgets even when the provider exposes account-level limits. Useful controls include:</p>
+<ul>
+<li>Maximum input size</li>
+<li>Maximum output tokens</li>
+<li>Per-user quotas</li>
+<li>Per-tenant quotas</li>
+<li>Daily spend alerts</li>
+<li>Hard limits for background jobs</li>
+<li>Sampling or truncation policies for oversized inputs</li>
+</ul>
+<p>If using a gateway, consult its current pricing page before estimating cost. KeyoAPI publishes its model catalog and current pricing at <code>https://www.keyoapi.xyz/pricing</code>. Do not copy prices into application logic or assume that a model’s availability or price remains unchanged.</p>
+<p>current documentation also identify account quota exhaustion and insufficient prepaid balance as possible failure conditions. Treat these as operational states requiring account or usage checks, not as transient upstream failures.</p>
+<h2>Protect Secrets and User Data</h2>
+<p>Rate-limit work is also security work because retries and observability can amplify data exposure.</p>
+<p>Use these controls:</p>
+<ul>
+<li>Store API keys in a secret manager or protected environment variable.</li>
+<li>Never expose provider keys to browser clients.</li>
+<li>Rotate credentials without requiring a code release.</li>
+<li>Restrict logs containing prompts and responses.</li>
+<li>Redact authorization headers and personal data.</li>
+<li>Encrypt traffic using HTTPS.</li>
+<li>Apply tenant isolation to queues and usage records.</li>
+<li>Enforce request-size limits before sending data upstream.</li>
+<li>Review provider data-retention and training policies before handling sensitive information.</li>
+<li>Avoid logging full model responses by default.</li>
+</ul>
+<p>A provider-agnostic adapter should not become a data-exfiltration path. Validate the selected provider and model through controlled configuration, and require review before enabling a new external destination.</p>
+<h2>Account for Model and Provider Availability</h2>
+<p>No model catalog should be treated as permanent. Availability can change because of:</p>
+<ul>
+<li>Provider retirement</li>
+<li>Regional restrictions</li>
+<li>Capacity incidents</li>
+<li>Account-level access changes</li>
+<li>Model version changes</li>
+<li>Gateway catalog updates</li>
+<li>Temporary quota reductions</li>
+</ul>
+<p>Use a controlled fallback policy:</p>
+<ol>
+<li>Select a primary model based on tested requirements.</li>
+<li>Define an explicitly tested fallback.</li>
+<li>Verify fallback availability before enabling it.</li>
+<li>Record which model produced each result.</li>
+<li>Compare quality and cost after failover.</li>
+<li>Avoid fallback loops across providers.</li>
+</ol>
+<p>A fallback should not be selected solely because its name looks similar. Test output quality, structured response behavior, latency, safety behavior, token usage, and application correctness.</p>
+<h2>A Practical Capacity Test</h2>
+<p>Before production rollout, run a staged load test using representative prompts and sanitized data.</p>
+<h3>Stage 1: Baseline</h3>
+<p>Run one request at a time and record latency, token usage, response validity, and error behavior.</p>
+<h3>Stage 2: Sustained load</h3>
+<p>Apply the expected steady-state request rate for long enough to observe quota behavior and connection stability.</p>
+<h3>Stage 3: Burst load</h3>
+<p>Apply short bursts matching the expected peak. Verify that admission control, queueing, and user-facing errors behave as designed.</p>
+<h3>Stage 4: Failure injection</h3>
+<p>Simulate:</p>
+<ul>
+<li>Rate-limit responses</li>
+<li>Timeout responses</li>
+<li>Authentication failures</li>
+<li>Missing model IDs</li>
+<li>Provider unavailability</li>
+<li>Exhausted queue capacity</li>
+</ul>
+<p>Confirm that retries are bounded and that workers do not create a retry storm.</p>
+<h3>Stage 5: Fallback validation</h3>
+<p>Temporarily make the primary provider or model unavailable. Verify that fallback behavior is intentional, observable, and acceptable to the product.</p>
+<p>Do not use production user data in load tests unless the data is approved for that purpose. Keep test traffic and credentials separated from production resources.</p>
+<h2>Migration Workflow</h2>
+<p>A disciplined migration can follow this sequence:</p>
+<ol>
+<li>Inventory current Gemini usage, model identifiers, prompt sizes, quotas, and error rates.</li>
+<li>Confirm current Tier 1 limits in the official Google documentation and project dashboard.</li>
+<li>Define application-level request, token, concurrency, and cost budgets.</li>
+<li>Create a provider adapter with normalized requests and errors.</li>
+<li>Verify the candidate provider’s documentation, pricing, authentication, model catalog, and supported features.</li>
+<li>Retrieve live model availability where the provider supports model discovery.</li>
+<li>Run functional tests against representative prompts.</li>
+<li>Run latency, burst, retry, and failure tests.</li>
+<li>Deploy behind a feature flag or limited traffic percentage.</li>
+<li>Compare quality, latency, reliability, token use, and cost.</li>
+<li>Expand traffic only after the measured results meet the application’s acceptance criteria.</li>
+</ol>
+<p>This approach keeps the migration decision tied to evidence from your workload rather than to a generic tier label.</p>
+<h2>Production Checklist</h2>
+<p>Before relying on Gemini API Tier 1 or migrating to another provider, verify:</p>
+<ul>
+<li><span aria-hidden="true">☐</span> Current quotas were checked in the official documentation and account dashboard.</li>
+<li><span aria-hidden="true">☐</span> Request-per-minute and token-per-minute requirements were calculated from peak traffic.</li>
+<li><span aria-hidden="true">☐</span> Retry traffic was included in capacity estimates.</li>
+<li><span aria-hidden="true">☐</span> Interactive and background workloads have separate controls.</li>
+<li><span aria-hidden="true">☐</span> Concurrency and queue sizes are bounded.</li>
+<li><span aria-hidden="true">☐</span> Rate-limit responses trigger backoff and jitter.</li>
+<li><span aria-hidden="true">☐</span> Retries are limited to transient, repeatable operations.</li>
+<li><span aria-hidden="true">☐</span> Authentication failures are not retried indefinitely.</li>
+<li><span aria-hidden="true">☐</span> Model IDs are validated against the live model catalog.</li>
+<li><span aria-hidden="true">☐</span> Model capabilities were tested rather than inferred from names.</li>
+<li><span aria-hidden="true">☐</span> Timeouts and partial streaming failures have defined behavior.</li>
+<li><span aria-hidden="true">☐</span> Provider errors are normalized and observable.</li>
+<li><span aria-hidden="true">☐</span> API keys remain server-side and are redacted from logs.</li>
+<li><span aria-hidden="true">☐</span> Input and output size limits are enforced.</li>
+<li><span aria-hidden="true">☐</span> Usage, token counts, retries, latency, and cost are monitored.</li>
+<li><span aria-hidden="true">☐</span> Account balance and quota exhaustion have operational alerts.</li>
+<li><span aria-hidden="true">☐</span> Pricing was checked on the current provider pricing page.</li>
+<li><span aria-hidden="true">☐</span> A tested fallback exists, or the system fails clearly without one.</li>
+<li><span aria-hidden="true">☐</span> A staged load test was completed before full rollout.</li>
+</ul>
+<h2>Conclusion</h2>
+<p>Gemini API Tier 1 should be treated as an account-specific operating condition, not as a universal capacity guarantee. The durable solution is to measure your workload, budget requests and tokens explicitly, apply backpressure, classify errors, and validate every model and provider assumption against current documentation.</p>
+<p>A provider-agnostic adapter makes migration easier, but it does not remove the need for functional testing. Compatibility claims, model availability, pricing, quotas, and performance should all be verified before production use. With measured limits and controlled failure behavior, changing providers becomes an operational decision rather than an emergency rewrite. Confirm live rates on the <a href="/gemini-api-pricing">Gemini API pricing page</a> and check the <a href="/model/gemini-3.8-flash">gemini-3.8-flash model page</a> for availability.</p>

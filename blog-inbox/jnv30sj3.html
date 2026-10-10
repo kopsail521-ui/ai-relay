@@ -1,0 +1,380 @@
+<!-- TITLE: OpenAI API Image Generation and Speech-to-Text: What to Verify Before Production -->
+<!-- EXCERPT: A practical guide to evaluating OpenAI-compatible image generation and speech-to-text APIs, with migration steps, live model discovery, reliability controls, security checks, and production readiness criteria. -->
+<!-- DESC: A practical guide to evaluating OpenAI-compatible image generation and speech-to-text APIs, with migration steps, live model discovery, reliability controls, security checks, and production readiness criteria. -->
+<p>Moving an application from a direct OpenAI integration to an OpenAI-compatible API can be straightforward for text generation. Image generation and speech-to-text are different: compatibility often stops at authentication and client-library conventions.</p>
+<p>Before production, verify the exact model IDs, endpoints, request formats, response schemas, limits, error behavior, and availability guarantees for every modality you plan to use. A gateway may advertise support for text, image, speech, OCR, or multimodal models without exposing identical APIs for each capability.</p>
+<p>This article presents a verification-first migration workflow using KeyoAPI as an OpenAI-compatible multi-model gateway. Confirm model IDs, endpoints, and rates in the live catalog at <a href="/pricing-list">/pricing-list</a> or <a href="/pricing">/pricing</a> before production use.</p>
+<h2>Start With the Compatibility Boundary</h2>
+<p>KeyoAPI is an independent, OpenAI-compatible multi-model API gateway. The API base URL is: </p>
+<pre><code class="language-text">https://www.keyoapi.xyz/v1
+</code></pre>
+<p>Requests use Bearer-token authentication:</p>
+<pre><code class="language-http">Authorization: Bearer YOUR_API_KEY
+</code></pre>
+<p>Documentation also covers a model discovery endpoint:</p>
+<pre><code class="language-http">GET https://www.keyoapi.xyz/v1/models
+</code></pre>
+<p>That endpoint should be the starting point for production integration. Do not assume that a model name, modality, or endpoint remains available simply because it appeared in an example or earlier test.</p>
+<p>OpenAI compatibility can mean several different things:</p>
+<ul>
+<li>The provider accepts the OpenAI SDK configuration.</li>
+<li>The provider uses similar authentication headers.</li>
+<li>The provider supports some familiar request and response structures.</li>
+<li>The provider exposes equivalent endpoint paths.</li>
+<li>The provider supports equivalent model capabilities and operational limits.</li>
+</ul>
+<p>Only the first two should be assumed without testing. The remaining points must be verified for the specific image and speech workflows you intend to deploy.</p>
+<h2>Verify Live Model Availability</h2>
+<p>Model availability may change. Before selecting a model, query the live catalog with a test or staging API key:</p>
+<pre><code class="language-bash">curl https://www.keyoapi.xyz/v1/models \
+  -H &quot;Authorization: Bearer YOUR_API_KEY&quot;
+</code></pre>
+<p>Then verify all of the following:</p>
+<ol>
+<li>The model ID is returned by the live catalog.</li>
+<li>The model is intended for your required modality.</li>
+<li>The model is available in the environment or account type you will use.</li>
+<li>The model supports the input and output formats your application expects.</li>
+<li>The model has documented limits suitable for production traffic.</li>
+<li>The model is not merely listed as experimental or unavailable for general use.</li>
+</ol>
+<p>Do not hardcode a model ID from a blog post, code sample, or cached configuration without checking it against the current catalog.</p>
+<p>A safer discovery workflow is:</p>
+<pre><code class="language-text">fetch the live model catalog
+filter for the required capability
+validate input and output requirements
+select an approved model
+store the selected model in configuration
+run a smoke test before enabling production traffic
+</code></pre>
+<p>If the catalog does not clearly expose modality metadata, inspect the live documentation or contact the provider before relying on a model for image or speech processing.</p>
+<h2>Image Generation: What to Confirm</h2>
+<p>KeyoAPI lists image-generation models in the live catalog. Confirm the exact endpoint, request schema, model ID, and response format in current docs and on <a href="/pricing-list">/pricing-list</a> before production.</p>
+<p>Treat image generation as production-ready only after you confirm the live model ID and request shape against current documentation and <a href="/pricing-list">/pricing-list</a>.</p>
+<h3>Confirm the endpoint and operation</h3>
+<p>Do not assume that image generation uses the same operation as text chat. Verify whether the provider documents:</p>
+<ul>
+<li>A dedicated image-generation endpoint</li>
+<li>A request method and path</li>
+<li>The required model field</li>
+<li>Prompt and negative-prompt support</li>
+<li>Image dimensions or aspect-ratio controls</li>
+<li>Quality, style, or output-format parameters</li>
+<li>Image URL, binary, or Base64 response formats</li>
+<li>Synchronous or asynchronous processing</li>
+<li>Content-policy or moderation responses</li>
+</ul>
+<p>Avoid writing a production client around an assumed path such as an image-specific endpoint unless that path is present in the live documentation.</p>
+<p>Use language-neutral pseudocode until the provider confirms the actual request format:</p>
+<pre><code class="language-text">discover available models
+select a model documented for image generation send an authenticated request using
+the documented image-generation operation validate the response
+store or stream the returned image according to its format record request ID, model ID, latency, and outcome
+</code></pre>
+<h3>Test output handling</h3>
+<p>Image APIs commonly differ in how they return results. A response may contain a temporary URL, encoded image data, a job identifier, or another provider-specific structure.</p>
+<p>Your integration should explicitly test:</p>
+<ul>
+<li>Whether returned URLs expire</li>
+<li>Whether the response contains one image or multiple images</li>
+<li>Whether the image is returned inline or must be downloaded</li>
+<li>Whether content type and file size are predictable</li>
+<li>Whether retries can safely repeat generation</li>
+<li>Whether the provider supports deterministic seeds or reproducible outputs</li>
+<li>Whether generated assets require separate storage and access control</li>
+</ul>
+<p>Do not persist temporary URLs as permanent asset references unless the documentation guarantees their lifetime.</p>
+<h2>Speech-to-Text: What to Confirm</h2>
+<p>KeyoAPI documents speech capabilities at a high level. Confirm the specific speech-to-text endpoint, model ID, SDK method, audio limits, and response schema in current docs (and related guides such as <a href="/model/CosyVoice3">/model/CosyVoice3</a>) before migrating a transcription workload.</p>
+<p>Before migrating a transcription workload, verify the complete audio contract.</p>
+<h3>Input requirements</h3>
+<p>Check the accepted:</p>
+<ul>
+<li>Audio file types</li>
+<li>MIME types</li>
+<li>Maximum file size</li>
+<li>Maximum duration</li>
+<li>Sample-rate requirements</li>
+<li>Channel layout</li>
+<li>Streaming support</li>
+<li>Multipart versus Base64 submission</li>
+<li>URL-based audio input, if supported</li>
+</ul>
+<p>Also determine whether the service accepts recorded files only or supports live microphone and streaming scenarios.</p>
+<h3>Output requirements</h3>
+<p>Confirm whether transcription responses include:</p>
+<ul>
+<li>Plain text</li>
+<li>Segment-level timestamps</li>
+<li>Word-level timestamps</li>
+<li>Speaker labels</li>
+<li>Language detection</li>
+<li>Confidence information</li>
+<li>Moderation or safety annotations</li>
+<li>Structured JSON</li>
+<li>Partial results for streaming requests</li>
+</ul>
+<p>If your application depends on timestamps or diarization, do not infer support from a generic “speech” capability label. Test the exact response fields using the live documentation and a representative audio corpus.</p>
+<p>Use pseudocode for the unverified portion:</p>
+<pre><code class="language-text">discover a currently available speech-to-text model prepare audio in a documented format
+send the request using the documented transcription operation validate text and optional metadata
+persist the result with the source file identifier record model, duration, latency, and error category
+</code></pre>
+<h3>Build a representative test set</h3>
+<p>A single clean audio file is not enough. Test recordings that include:</p>
+<ul>
+<li>Background noise</li>
+<li>Multiple speakers</li>
+<li>Accents and regional pronunciation</li>
+<li>Code, product names, and technical vocabulary</li>
+<li>Long pauses</li>
+<li>Overlapping speech</li>
+<li>Variable microphone quality</li>
+<li>Different audio durations</li>
+<li>Different languages, if required by the product</li>
+</ul>
+<p>Compare more than the transcript text. Measure word or segment accuracy, timestamp quality, latency, failure rates, and output consistency.</p>
+<h2>Use an OpenAI-Compatible Client Carefully</h2>
+<p>the standard OpenAI Python and JavaScript SDKs can be configured with a custom base URL for documented compatible operations.</p>
+<p>A generic Python configuration pattern is:</p>
+<pre><code class="language-python">from openai import OpenAI client = OpenAI( base_url=&quot;https://www.keyoapi.xyz/v1&quot; api_key=&quot;YOUR_API_KEY&quot;
+)
+</code></pre>
+<p>The API key should come from an environment variable in real applications:</p>
+<pre><code class="language-python">import os
+from openai import OpenAI client = OpenAI( base_url=&quot;https://www.keyoapi.xyz/v1&quot; api_key=os.environ[&quot;KEYO_API_KEY&quot;],
+)
+</code></pre>
+<p>This configuration shows that the client can point at a compatible base URL. Still verify that each SDK method you need maps to a supported provider operation, especially for image and speech workflows.</p>
+<p>For image and speech operations, verify:</p>
+<ul>
+<li>Whether the SDK method maps to a supported provider operation</li>
+<li>Whether the generated HTTP request matches the provider’s documentation</li>
+<li>Whether multipart uploads work through the SDK</li>
+<li>Whether response objects contain the fields your application expects</li>
+<li>Whether streaming, polling, or asynchronous jobs require provider-specific handling</li>
+</ul>
+<p>If SDK compatibility is incomplete, use a direct HTTP client for the documented operation rather than forcing an SDK method that only partially matches the provider.</p>
+<h2>Design for Authentication and Secret Safety</h2>
+<p>API keys must remain server-side. Do not place them in:</p>
+<ul>
+<li>Browser JavaScript</li>
+<li>Mobile application binaries</li>
+<li>Public repositories</li>
+<li>Screenshots</li>
+<li>Client-side configuration files</li>
+<li>Public articles or documentation</li>
+</ul>
+<p>Use environment variables or a managed secret store:</p>
+<pre><code class="language-text">KEYO_API_KEY=stored outside source control
+</code></pre>
+<p>Recommended controls include:</p>
+<ul>
+<li>Separate keys for development, staging, and production</li>
+<li>Least-privilege access where supported</li>
+<li>Key rotation procedures</li>
+<li>Usage monitoring</li>
+<li>Secret scanning in CI</li>
+<li>Redaction of authorization headers from logs</li>
+<li>Restricted outbound network access from application servers</li>
+<li>Separate storage permissions for generated images and uploaded audio</li>
+</ul>
+<p>For speech workloads, treat uploaded audio and transcripts as potentially sensitive data. Define retention, deletion, access, and audit policies before enabling production traffic.</p>
+<h2>Add Explicit Error Handling</h2>
+<p>Your client should distinguish between request failures, authentication failures, capacity issues, unsupported capabilities, and invalid media.</p>
+<p>A useful error taxonomy is:</p>
+<pre><code class="language-text">authentication failure
+authorization or quota failure
+invalid request
+unsupported model or modality
+invalid audio or image parameters
+rate limit
+temporary upstream failure
+timeout
+malformed or incomplete response
+</code></pre>
+<p>Do not retry every error. For example:</p>
+<ul>
+<li>Authentication errors usually require configuration changes.</li>
+<li>Invalid media requires input correction.</li>
+<li>Unsupported model errors require model discovery or configuration changes.</li>
+<li>Rate limits may be retryable with backoff.</li>
+<li>Timeouts and temporary upstream failures may be retryable if the operation is safe.</li>
+</ul>
+<p>Capture the provider’s request ID, status code, selected model, operation type, latency, and sanitized error category. Never log API keys, raw authorization headers, or sensitive audio and image content by default.</p>
+<h2>Make Retries Safe</h2>
+<p>Retries can be dangerous for image generation because a repeated request may create duplicate assets or incur additional usage. They can also produce different outputs unless the provider documents deterministic behavior.</p>
+<p>Before adding automatic retries, verify:</p>
+<ul>
+<li>Whether the operation is idempotent</li>
+<li>Whether an idempotency key is supported</li>
+<li>Whether the provider exposes job status or request status</li>
+<li>Whether a timeout means the request failed or merely has an unknown result</li>
+<li>Whether repeating a request can create duplicate charges or assets</li>
+</ul>
+<p>Use bounded exponential backoff with jitter for retryable failures:</p>
+<pre><code class="language-text">for attempt in 1 through maximum_attempts: send request if success: return response if error is not retryable: fail immediately wait using exponential backoff plus jitter
+</code></pre>
+<p>For transcription, retrying a failed upload may be reasonable if the request did not reach the provider. For image generation, use a durable request record and a deduplication key where possible.</p>
+<h2>Control Cost and Capacity</h2>
+<p>Do not publish pricing or capacity assumptions based on a static article or example. Current pricing and availability should be checked in the live model catalog and pricing documentation before deployment.</p>
+<p>Track usage by:</p>
+<ul>
+<li>Model</li>
+<li>Operation</li>
+<li>Customer or tenant</li>
+<li>Image count and dimensions, where applicable</li>
+<li>Audio duration and file size</li>
+<li>Retry count</li>
+<li>Successful versus failed requests</li>
+<li>Average and percentile latency</li>
+</ul>
+<p>Set operational controls such as:</p>
+<ul>
+<li>Per-user quotas</li>
+<li>Maximum upload size</li>
+<li>Maximum audio duration</li>
+<li>Maximum image dimensions</li>
+<li>Request timeouts</li>
+<li>Concurrency limits</li>
+<li>Queue depth limits</li>
+<li>Budget alerts</li>
+<li>Circuit breakers for repeated upstream failures</li>
+</ul>
+<p>For expensive or asynchronous operations, place requests behind a queue. This allows the application to absorb bursts and prevents a provider slowdown from exhausting web-server resources.</p>
+<h2>Verify Model Availability in Deployment</h2>
+<p>A model that works in development may not be available in production. Add a deployment-time smoke test that:</p>
+<ol>
+<li>Authenticates with the production key.</li>
+<li>Fetches the live model catalog.</li>
+<li>Confirms each required model ID exists.</li>
+<li>Confirms the expected modality is documented.</li>
+<li>Runs a minimal request for each critical operation.</li>
+<li>Fails deployment if a required capability is missing.</li>
+</ol>
+<p>Do not silently fall back to an unapproved model. If fallback is required, define an explicit allowlist and verify that each fallback meets your quality, privacy, latency, and cost requirements.</p>
+<p>Monitor availability continuously after deployment. A periodic catalog check can detect model removal or changes, but it should not automatically switch models without an approval policy.</p>
+<h2>Build a Migration Evaluation Workflow</h2>
+<p>A reliable migration is more than changing the base URL.</p>
+<h3>Phase 1: Inventory the existing integration</h3>
+<p>Record:</p>
+<ul>
+<li>Current endpoints</li>
+<li>Model IDs</li>
+<li>Authentication method</li>
+<li>Request schemas</li>
+<li>Response fields</li>
+<li>Timeouts</li>
+<li>Retry behavior</li>
+<li>File-upload behavior</li>
+<li>Logging and tracing</li>
+<li>Cost controls</li>
+</ul>
+<p>Separate text, image, and speech operations. Do not assume that compatibility for one modality proves compatibility for another.</p>
+<h3>Phase 2: Discover and map capabilities</h3>
+<p>Query the live model catalog and review the current documentation. Build a capability matrix:</p>
+<div class="article-table-wrap"><table class="article-table">
+<thead>
+<tr>
+<th>Requirement</th>
+<th align="right">Verified?</th>
+<th>Evidence to collect</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Image-generation model exists</td>
+<td align="right">Pending verification</td>
+<td>Live model catalog</td>
+</tr>
+<tr>
+<td>Image endpoint and schema</td>
+<td align="right">Pending verification</td>
+<td>Current API documentation</td>
+</tr>
+<tr>
+<td>Speech-to-text model exists</td>
+<td align="right">Pending verification</td>
+<td>Live model catalog</td>
+</tr>
+<tr>
+<td>Audio upload format</td>
+<td align="right">Pending verification</td>
+<td>Current API documentation</td>
+</tr>
+<tr>
+<td>Timestamps or diarization</td>
+<td align="right">Pending verification</td>
+<td>Response schema</td>
+</tr>
+<tr>
+<td>Rate-limit behavior</td>
+<td align="right">Pending verification</td>
+<td>Documentation and load test</td>
+</tr>
+<tr>
+<td>Retry or idempotency support</td>
+<td align="right">Pending verification</td>
+<td>API documentation</td>
+</tr>
+<tr>
+<td>Production availability</td>
+<td align="right">Pending verification</td>
+<td>Provider commitments and monitoring</td>
+</tr>
+</tbody>
+</table></div>
+<h3>Phase 3: Run controlled tests</h3>
+<p>Use a fixed evaluation set and compare:</p>
+<ul>
+<li>Functional correctness</li>
+<li>Output quality</li>
+<li>Latency</li>
+<li>Error rate</li>
+<li>Retry behavior</li>
+<li>Cost</li>
+<li>Data handling</li>
+<li>Model availability</li>
+</ul>
+<p>Keep the original integration available during the migration so that failures can be compared and rolled back.</p>
+<h3>Phase 4: Introduce a provider adapter</h3>
+<p>Instead of scattering provider-specific details throughout the application, isolate them behind an internal interface:</p>
+<pre><code class="language-text">generate_image(request) -&gt; image_result
+transcribe_audio(request) -&gt; transcript_result
+list_available_models() -&gt; model_catalog
+</code></pre>
+<p>The adapter should own:</p>
+<ul>
+<li>Base URL</li>
+<li>Authentication</li>
+<li>Model selection</li>
+<li>Request serialization</li>
+<li>Response normalization</li>
+<li>Error classification</li>
+<li>Retry rules</li>
+<li>Observability</li>
+</ul>
+<p>This makes it easier to switch providers or restore the original integration without rewriting business logic.</p>
+<h2>Production Checklist</h2>
+<p>Before enabling image generation or speech-to-text in production, confirm:</p>
+<ul>
+<li><span aria-hidden="true">☐</span> The production API base URL is configured explicitly.</li>
+<li><span aria-hidden="true">☐</span> API keys are stored outside source control and client-side code.</li>
+<li><span aria-hidden="true">☐</span> Required model IDs are returned by the live model catalog.</li>
+<li><span aria-hidden="true">☐</span> Image-generation endpoints and parameters are verified in current documentation.</li>
+<li><span aria-hidden="true">☐</span> Speech-to-text endpoints, audio formats, and limits are verified.</li>
+<li><span aria-hidden="true">☐</span> Response schemas are tested against representative inputs.</li>
+<li><span aria-hidden="true">☐</span> Temporary image URLs, if used, are handled with the correct retention policy.</li>
+<li><span aria-hidden="true">☐</span> Audio, transcripts, and generated images have defined privacy controls.</li>
+<li><span aria-hidden="true">☐</span> Errors are classified into retryable and non-retryable categories.</li>
+<li><span aria-hidden="true">☐</span> Retries use bounded backoff and do not duplicate unsafe operations.</li>
+<li><span aria-hidden="true">☐</span> Timeouts, quotas, concurrency limits, and circuit breakers are configured.</li>
+<li><span aria-hidden="true">☐</span> Usage and cost are tracked by model and operation.</li>
+<li><span aria-hidden="true">☐</span> Deployment smoke tests validate live model availability.</li>
+<li><span aria-hidden="true">☐</span> A rollback path to the previous provider or implementation exists.</li>
+<li><span aria-hidden="true">☐</span> Monitoring detects model removal, elevated failures, and latency regressions.</li>
+</ul>
+<h2>Conclusion</h2>
+<p>OpenAI-compatible integration can reduce migration effort, but compatibility is not a guarantee that image generation and speech-to-text work exactly like their counterparts elsewhere.</p>
+<p>The safest approach is to verify each modality independently. Start with the documented base URL and Bearer authentication, query the live model catalog, confirm the exact operation and schema in current documentation, and validate behavior with representative production-like inputs.</p>
+<p>Treat model availability, pricing, limits, retries, and response formats as live integration concerns rather than permanent assumptions. A small provider adapter, explicit capability matrix, controlled evaluation set, and deployment smoke test will make the migration easier to operate—and easier to reverse if the verified production behavior changes. Confirm live rates on the <a href="/openai-api-pricing">OpenAI API pricing page</a> before committing volume.</p>

@@ -13,9 +13,11 @@ sudo docker run --rm \
   -w /opt/ai-relay python:3.12-alpine \
   python scripts/vps-fix-tags-20261010.py /data/one-api.db
 
-# 2) 重启 new-api 刷新；rebuild moderation-proxy（标签归一化代码进了镜像）
+# 2) 重启 new-api 刷新；moderation-proxy 用 docker cp 热更新（本机无 compose 服务定义）
 sudo docker restart ai-relay-new-api
-sudo docker compose up -d --build creem-moderation-proxy
+sudo docker cp /opt/ai-relay/services/creem-moderation-proxy/server.mjs ai-relay-creem-moderation:/app/server.mjs
+sudo docker cp /opt/ai-relay/services/creem-moderation-proxy/marketplace-model-copy.json ai-relay-creem-moderation:/app/marketplace-model-copy.json
+sudo docker restart ai-relay-creem-moderation
 sleep 8
 curl -sS -o /dev/null -w "console_http=%{http_code}\n" http://127.0.0.1:3000/api/status
 curl -sS -o /dev/null -w "proxy_http=%{http_code}\n" http://127.0.0.1:3001/api/status

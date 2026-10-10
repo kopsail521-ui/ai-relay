@@ -1,9 +1,14 @@
 #!/usr/bin/env python3
 """List OpenLux model gemini-3.8-flash-tts on Keyo at cost x 2.
 
-Token-billed TTS on Keyo Primary (OpenAI-compatible /v1/audio/speech).
-Upstream cheapest group Aistudio-Gemini-2: cost_in 0.132355 / cost_out 2.38239 per 1M.
-Sell = cost x 2 -> 0.26471 / 4.76478. ModelRatio=sell_in/2, CompletionRatio=18.
+Token-billed TTS on Keyo Primary. Upstream serves it ONLY via OpenAI-compatible
+chat completions with modalities=["text","audio"] (POST /v1/audio/speech is
+rejected upstream with protocol_unsupported). Audio comes back inline in the
+chat response; usage bills audio output as completion tokens.
+
+Upstream site display (account group Aistudio-Gemini-3, 2026-10-10):
+  cost_in 0.2206 / cost_out 4.4120 per 1M (completion x20).
+Sell = cost x 2 -> 0.4412 / 8.824. ModelRatio=sell_in/2=0.2206, CompletionRatio=20.
 Public copy must NOT mention the supplier.
 """
 from __future__ import annotations
@@ -18,16 +23,16 @@ MODEL = "gemini-3.8-flash-tts"
 ABILITY_SRC = "gemini-3.1-flash-tts-preview"
 
 MARKUP = 2.0
-COST_IN, COST_OUT = 0.132355, 2.38239
-SELL_IN = round(COST_IN * MARKUP, 6)   # 0.26471
-SELL_OUT = round(COST_OUT * MARKUP, 6)  # 4.76478
-RATIO = round(SELL_IN / 2.0, 6)         # 0.132355
-COMP = round(SELL_OUT / SELL_IN, 6)     # 18
+COST_IN, COST_OUT = 0.2206, 4.4120
+SELL_IN = round(COST_IN * MARKUP, 6)   # 0.4412
+SELL_OUT = round(COST_OUT * MARKUP, 6)  # 8.824
+RATIO = round(SELL_IN / 2.0, 6)         # 0.2206
+COMP = round(SELL_OUT / SELL_IN, 6)     # 20
 
 TAG = "语音合成"
 VENDOR = "Google"
 ICON = "Gemini.Color"
-ENDPOINTS = json.dumps({"openai": "/v1/audio/speech"}, separators=(",", ":"))
+ENDPOINTS = json.dumps({"openai": "/v1/chat/completions"}, separators=(",", ":"))
 DESC = "Gemini 3.8 Flash TTS · 低延迟可控语音合成"
 
 TOKEN_BADGE = {

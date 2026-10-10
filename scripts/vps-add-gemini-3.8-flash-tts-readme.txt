@@ -1,25 +1,27 @@
-# 上架 gemini-3.8-flash-tts（OpenLux 上游，售价=成本×2）
-# Keyo Primary · 语音合成 · Token 计费
+# 上架 gemini-3.8-flash-tts（售价=成本×2）
+# Keyo Primary · 语音合成 · Token 计费 · OpenAI chat+audio 协议
 
-上游定价（最便宜组 Aistudio-Gemini-2，2026-10-10 探测）：
-- 成本 输入 $0.132355 / M · 输出 $2.38239 / M
-- 售价 输入 $0.26471 / M · 输出 $4.76478 / M
-- ModelRatio=0.132355 CompletionRatio=18
+上游成本（账号组显示，2026-10-10）：
+协议：上游拒绝 /v1/audio/speech（protocol_unsupported）；仅 /v1/chat/completions
+  + modalities=["text","audio"]，音频内联返回在 chat 响应中。
+- 成本 输入 $0.2206 / M · 输出 $4.4120 / M（补全 ×20）
+- 售价 输入 $0.4412 / M · 输出 $8.8240 / M
+- ModelRatio=0.2206 CompletionRatio=20
 
 粘贴：scripts/vps-add-gemini-3.8-flash-tts-short.txt（一整行）
 期望：
   primary <id> Keyo Primary
   channel <id> Keyo Primary add ['gemini-3.8-flash-tts']
-  pricing token gemini-3.8-flash-tts 0.26471 / 4.76478 ratio 0.132355 comp 18.0
+  pricing token gemini-3.8-flash-tts 0.4412 / 8.824 ratio 0.2206 comp 20.0
   marketplace created gemini-3.8-flash-tts
   abilities copied gemini-3.8-flash-tts from gemini-3.1-flash-tts-preview
   copy_merged ...marketplace-model-copy.json
-  SELL_IN_USD 0.26471
-  SELL_OUT_USD 4.76478
+  SELL_IN_USD 0.4412
+  SELL_OUT_USD 8.824
   DONE_ADD_GEMINI_3_8_FLASH_TTS
 
 然后验证输出：
-  gemini-3.8-flash-tts sell 0.26471 / 4.76478 tags 语音合成
+  gemini-3.8-flash-tts sell 0.4412 / 8.824 tags 语音合成
   public_leak False
   model_page True
   DONE_ADD_GEMINI_3_8_FLASH_TTS

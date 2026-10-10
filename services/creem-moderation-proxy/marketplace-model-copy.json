@@ -6549,5 +6549,53 @@
     "suffix_en": "/ request",
     "price_key_zh": "每次请求",
     "price_key_en": "Per request"
+  },
+  "gemini-3.8-flash-tts": {
+    "description": "Gemini 3.8 Flash TTS：低延迟可控语音合成，适合产品旁白与语音助手。",
+    "descriptions": {
+      "zhCN": "Gemini 3.8 Flash TTS：低延迟可控语音合成，适合产品旁白与语音助手。",
+      "zhTW": "Gemini 3.8 Flash TTS：低延遲可控語音合成，適合產品旁白與語音助手。",
+      "en": "Gemini 3.8 Flash TTS — low-latency controllable speech for product voice and assistants.",
+      "fr": "Gemini 3.8 Flash TTS — low-latency controllable speech for product voice and assistants.",
+      "ru": "Gemini 3.8 Flash TTS — low-latency controllable speech for product voice and assistants.",
+      "ja": "Gemini 3.8 Flash TTS。低遅延で制御可能な音声合成。",
+      "vi": "Gemini 3.8 Flash TTS — TTS độ trễ thấp, kiểm soát được."
+    },
+    "unit": "token",
+    "badge": {
+      "zhCN": "按 Token 计费",
+      "zhTW": "按 Token 計費",
+      "en": "Token-based",
+      "fr": "Au token",
+      "ru": "По токенам",
+      "ja": "Token 課金",
+      "vi": "Theo token"
+    },
+    "suffix": {
+      "zhCN": "",
+      "zhTW": "",
+      "en": "",
+      "fr": "",
+      "ru": "",
+      "ja": "",
+      "vi": ""
+    },
+    "price_key": {
+      "zhCN": "",
+      "zhTW": "",
+      "en": "",
+      "fr": "",
+      "ru": "",
+      "ja": "",
+      "vi": ""
+    },
+    "description_zh": "Gemini 3.8 Flash TTS：低延迟可控语音合成，适合产品旁白与语音助手。",
+    "description_en": "Gemini 3.8 Flash TTS — low-latency controllable speech for product voice and assistants.",
+    "badge_zh": "按 Token 计费",
+    "badge_en": "Token-based",
+    "suffix_zh": "",
+    "suffix_en": "",
+    "price_key_zh": "",
+    "price_key_en": ""
   }
 }

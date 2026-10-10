@@ -10,7 +10,7 @@
 <tr><td><a href="/model/claude-haiku-5-5"><code>claude-haiku-5-5</code></a></td><td>~$0.07 / $0.37</td><td>1M</td><td>Cheapest Claude-class row on Keyo</td></tr>
 </tbody>
 </table>
-<p>Neither is the only option below them. On the same key, <code>deepseek-v4-flash-0731</code> sits at ~$0.09 / $0.17 and <code>claude-sonnet-5</code> at ~$0.44 / $2.21 — so Haiku 5.5 is also the cheaper way into the Claude family than Sonnet 5. Rates are indicative sell prices; confirm live on <a href="/pricing-list">/pricing-list</a>.</p>
+<p>Neither is the only option below them. On the same key, <code>deepseek-v4-flash-0731</code> sits at ~$0.09 / $0.17 and <code>claude-sonnet-5</code> at ~$0.44 / $2.21 — so Haiku 5.5 is also the cheaper way into the Claude family than Sonnet 5. Rates are indicative sell prices; confirm live on <a href="/pricing-list">KeyoAPI pricing list</a>.</p>
 <h2>What the 2.5x buys</h2>
 <p>Run a month of realistic bulk traffic — 10M input and 2M output tokens:</p>
 <pre><code>gpt-6-luna        10M in × $0.0294 = $0.294
@@ -24,6 +24,6 @@ claude-haiku-5-5  10M in × $0.0735 = $0.735
 <ul>
 <li><strong>Pick Luna 6</strong> when unit cost decides: high-volume classification, triage, tagging, first-pass drafting, anything you run millions of times and sample instead of read.</li>
 <li><strong>Pick Haiku 5.5</strong> when instruction following decides: multi-step extraction from long documents, schema-bound JSON output, or bulk work where you have to trust every row rather than spot-check it.</li>
-<li><strong>Neither</strong> if you have not measured yet — prototype on the fixed $0 catalog IDs first (see <a href="/free-models">/free-models</a>), then promote only the traffic that actually fails your evaluation.</li>
+<li><strong>Neither</strong> if you have not measured yet — prototype on the fixed $0 catalog IDs first (see <a href="/free-models">free models list</a>), then promote only the traffic that actually fails your evaluation.</li>
 </ul>
-<p>Both rows and the rest of their families are listed on <a href="/claude-api-pricing">/claude-api-pricing</a> (Claude side) and <a href="/model/gpt-6-luna">/model/gpt-6-luna</a> (Luna side, with <code>gpt-6-sol</code> and <code>gpt-6-astra</code> above it). For the per-token math behind any single request, see the worked example on <a href="/brand/blog/article/zxeywzwx/">Claude API Pricing per Token</a>.</p>
+<p>Both rows and the rest of their families are listed on <a href="/claude-api-pricing">Claude API pricing page</a> (Claude side) and <a href="/model/gpt-6-luna">gpt-6-luna model page</a> (Luna side, with <code>gpt-6-sol</code> and <code>gpt-6-astra</code> above it). For the per-token math behind any single request, see the worked example on <a href="/brand/blog/article/zxeywzwx/">Claude API Pricing per Token</a>.</p>

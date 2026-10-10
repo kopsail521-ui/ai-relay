@@ -3,7 +3,7 @@
 <!-- DESC: A practical guide to evaluating OpenAI-compatible image generation and speech-to-text APIs, with migration steps, live model discovery, reliability controls, security checks, and production readiness criteria. -->
 <p>Moving an application from a direct OpenAI integration to an OpenAI-compatible API can be straightforward for text generation. Image generation and speech-to-text are different: compatibility often stops at authentication and client-library conventions.</p>
 <p>Before production, verify the exact model IDs, endpoints, request formats, response schemas, limits, error behavior, and availability guarantees for every modality you plan to use. A gateway may advertise support for text, image, speech, OCR, or multimodal models without exposing identical APIs for each capability.</p>
-<p>This article presents a verification-first migration workflow using KeyoAPI as an OpenAI-compatible multi-model gateway. Confirm model IDs, endpoints, and rates in the live catalog at <a href="/pricing-list">/pricing-list</a> or <a href="/pricing">/pricing</a> before production use.</p>
+<p>This article presents a verification-first migration workflow using KeyoAPI as an OpenAI-compatible multi-model gateway. Confirm model IDs, endpoints, and rates in the live catalog at <a href="/pricing-list">KeyoAPI pricing list</a> or <a href="/pricing">KeyoAPI pricing page</a> before production use.</p>
 <h2>Start With the Compatibility Boundary</h2>
 <p>KeyoAPI is an independent, OpenAI-compatible multi-model API gateway. The API base URL is: </p>
 <pre><code class="language-text">https://www.keyoapi.xyz/v1
@@ -49,8 +49,8 @@ run a smoke test before enabling production traffic
 </code></pre>
 <p>If the catalog does not clearly expose modality metadata, inspect the live documentation or contact the provider before relying on a model for image or speech processing.</p>
 <h2>Image Generation: What to Confirm</h2>
-<p>KeyoAPI lists image-generation models in the live catalog. Confirm the exact endpoint, request schema, model ID, and response format in current docs and on <a href="/pricing-list">/pricing-list</a> before production.</p>
-<p>Treat image generation as production-ready only after you confirm the live model ID and request shape against current documentation and <a href="/pricing-list">/pricing-list</a>.</p>
+<p>KeyoAPI lists image-generation models in the live catalog. Confirm the exact endpoint, request schema, model ID, and response format in current docs and on <a href="/pricing-list">KeyoAPI pricing list</a> before production.</p>
+<p>Treat image generation as production-ready only after you confirm the live model ID and request shape against current documentation and <a href="/pricing-list">KeyoAPI pricing list</a>.</p>
 <h3>Confirm the endpoint and operation</h3>
 <p>Do not assume that image generation uses the same operation as text chat. Verify whether the provider documents:</p>
 <ul>
@@ -85,7 +85,7 @@ store or stream the returned image according to its format record request ID, mo
 </ul>
 <p>Do not persist temporary URLs as permanent asset references unless the documentation guarantees their lifetime.</p>
 <h2>Speech-to-Text: What to Confirm</h2>
-<p>KeyoAPI documents speech capabilities at a high level. Confirm the specific speech-to-text endpoint, model ID, SDK method, audio limits, and response schema in current docs (and related guides such as <a href="/model/CosyVoice3">/model/CosyVoice3</a>) before migrating a transcription workload.</p>
+<p>KeyoAPI documents speech capabilities at a high level. Confirm the specific speech-to-text endpoint, model ID, SDK method, audio limits, and response schema in current docs (and related guides such as <a href="/model/CosyVoice3">CosyVoice3 model page</a>) before migrating a transcription workload.</p>
 <p>Before migrating a transcription workload, verify the complete audio contract.</p>
 <h3>Input requirements</h3>
 <p>Check the accepted:</p>

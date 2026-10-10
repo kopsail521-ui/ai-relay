@@ -1,7 +1,7 @@
 <!-- TITLE: Gemini API Key Error 429: Diagnosis and Retry Strategy -->
 <!-- EXCERPT: A 429 response means a request was rejected because some limit or quota was reached, but it does not identify the cause by itself. -->
 <!-- DESC: A 429 response means a request was rejected because some limit or quota was reached, but it does not identify the cause by itself. -->
-<p>A 429 response means a request was rejected because some limit or quota was reached, but it does not identify the cause by itself. With the Gemini API, the right response depends on the error details and the applicable limits for the project, model, and account. Retrying every 429 immediately can increase load and prolong an outage.</p>
+<p>When the Gemini API returns HTTP 429, a request was rejected because some limit or quota was reached — but the response alone does not identify the cause. With the Gemini API, the right response depends on the error details and the applicable limits for the project, model, and account. Retrying every 429 immediately can increase load and prolong an outage.</p>
 <p>This guide covers a practical diagnosis workflow, a safe retry strategy, and production patterns that keep application code adaptable if you later evaluate another provider.</p>
 <h2>Diagnose Before Retrying</h2>
 <p>Start with the response body and headers, not just the HTTP status. Record the endpoint, model, request time, status, and provider error details. Redact API keys and sensitive prompt or response content from logs.</p>
@@ -50,7 +50,7 @@
 <li><code>provider_error</code></li>
 </ul>
 <p>Include the provider’s original status and a redacted diagnostic message for observability. Let the adapter decide whether a response is retryable based on that provider’s documented behavior.</p>
-<p>Verify the exact model ID, rate limits, and error semantics in the live catalog rather than assuming every OpenAI-compatible gateway matches Gemini quotas 1:1. On KeyoAPI, confirm Gemini-class IDs and rates on <a href="/gemini-api-pricing">/gemini-api-pricing</a> and <a href="/pricing-list">/pricing-list</a>.</p>
+<p>Verify the exact model ID, rate limits, and error semantics in the live catalog rather than assuming every OpenAI-compatible gateway matches Gemini quotas 1:1. On KeyoAPI, confirm Gemini-class IDs and rates on <a href="/gemini-api-pricing">the Gemini API pricing page</a> and <a href="/pricing-list">the KeyoAPI pricing list</a>.</p>
 <h2>Production Concerns</h2>
 <h3>Authentication and key handling</h3>
 <p>Store API keys in a secret manager or protected deployment configuration. Do not commit keys, expose them in browser code, or include them in logs. Rotate compromised keys and verify that the application sends credentials using the authentication format required by the provider’s current documentation.</p>

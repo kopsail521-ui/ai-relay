@@ -38,7 +38,7 @@ token_budget_per_second = TPM / 60 estimated_token_rate = request_budget_per_sec
 <p>Set timeouts, cap retries, and use a circuit breaker or temporary load shedding when failures persist. Otherwise, retries can consume more capacity while delaying healthy work. For queued jobs, preserve the original request context and avoid retrying indefinitely.</p>
 <h2>Evaluate an OpenAI-compatible alternative carefully</h2>
 <p>An OpenAI-compatible interface can reduce the amount of client integration work when evaluating another API gateway, but compatible request shapes do not establish identical limits, model behavior, error handling, or availability. Validate the parts your application depends on.</p>
-<p>KeyoAPI is an OpenAI-compatible gateway with Bearer authentication, a <code>/v1</code> base URL, and a live model list at <code>GET /v1/models</code>. Check live docs and account info for current limits, supported models, endpoint behavior, and pricing on <a href="/pricing-list">/pricing-list</a> before planning production capacity.</p>
+<p>KeyoAPI is an OpenAI-compatible gateway with Bearer authentication, a <code>/v1</code> base URL, and a live model list at <code>GET /v1/models</code>. Check live docs and account info for current limits, supported models, endpoint behavior, and pricing on <a href="/pricing-list">KeyoAPI pricing list</a> before planning production capacity.</p>
 <p>A migration evaluation should include:</p>
 <ul>
 <li>Confirming that the required model ID appears in the live model catalog.</li>

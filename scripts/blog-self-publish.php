@@ -135,7 +135,7 @@ if ($desc === '') {
     $desc = first_sentence($plain, 155);
 }
 $isDraft = isset($opts['draft']);
-$publishedAt = date('c');
+$publishedAt = $catalog[$slug]['published_at'] ?? date('c');
 $canonical = $site . '/brand/blog/article/' . $slug . '/';
 
 $html = geoflow_wrap_article($title, $desc, $excerpt, $body, $canonical, $publishedAt, $isDraft);

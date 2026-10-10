@@ -26,11 +26,11 @@ claude-fable-5-1   10M in × $7.35  = $73.50
 <li><code>claude-opus-5</code> — ~$1.10 / $5.52, the earlier Opus row, still listed</li>
 <li><code>gpt-6-luna</code> — ~$0.03 / $0.15, high-volume drafting and classifiers</li>
 </ul>
-<p>Prototype on a fixed $0 catalog ID (the <code>:free</code> suffix) first — those calls draw down your $10 welcome credit at fair-use limits. See <a href="/free-models">/free-models</a>.</p>
+<p>Prototype on a fixed $0 catalog ID (the <code>:free</code> suffix) first — those calls draw down your $10 welcome credit at fair-use limits. See <a href="/free-models">free models list</a>.</p>
 <h2>Check the bill on your own traffic</h2>
 <p>Every response carries a <code>usage</code> object — read <code>prompt_tokens</code> and <code>completion_tokens</code> and multiply by the table above. Both rows take the same call:</p>
 <pre><code>curl https://www.keyoapi.xyz/v1/chat/completions \
   -H "Authorization: Bearer YOUR_KEY" \
   -H "Content-Type: application/json" \
   -d '{"model":"claude-opus-5-5","messages":[{"role":"user","content":"hi"}]}'</code></pre>
-<p>Swap <code>model</code> to <code>claude-fable-5-1</code> to compare the two on the same prompt. Rates here are indicative sell prices — confirm the live rows on <a href="/model/claude-opus-5-5">/model/claude-opus-5-5</a> and <a href="/model/claude-fable-5-1">/model/claude-fable-5-1</a> before you commit volume. The full Claude comparison sits on <a href="/claude-api-pricing">/claude-api-pricing</a>, and the per-token walkthrough on <a href="/brand/blog/article/zxeywzwx/">Claude API Pricing per Token</a>.</p>
+<p>Swap <code>model</code> to <code>claude-fable-5-1</code> to compare the two on the same prompt. Rates here are indicative sell prices — confirm the live rows on <a href="/model/claude-opus-5-5">claude-opus-5-5 model page</a> and <a href="/model/claude-fable-5-1">claude-fable-5-1 model page</a> before you commit volume. The full Claude comparison sits on <a href="/claude-api-pricing">Claude API pricing page</a>, and the per-token walkthrough on <a href="/brand/blog/article/zxeywzwx/">Claude API Pricing per Token</a>.</p>

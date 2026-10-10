@@ -62,8 +62,8 @@ return a minimal, safe result
 <li>Model availability and current pricing in the live catalog or documentation.</li>
 <li>The amount of provider-specific code needed in the adapter.</li>
 </ul>
-<p>An OpenAI-compatible chat endpoint does not by itself prove tool-use parity. Confirm tool-calling features and model IDs for your workload in live docs and on <a href="/pricing-list">/pricing-list</a> (Claude-class: <a href="/claude-api-pricing">/claude-api-pricing</a>).</p>
-<p>KeyoAPI serves Claude-class model IDs through an OpenAI-compatible endpoint. Confirm current IDs, limits, and rates on <a href="/claude-api-pricing">/claude-api-pricing</a> and <a href="/pricing-list">/pricing-list</a> — Anthropic-native schemas may still differ from OpenAI-compatible chat completions, so verify tool/vision/streaming needs against live docs before migration.</p>
+<p>An OpenAI-compatible chat endpoint does not by itself prove tool-use parity. Confirm tool-calling features and model IDs for your workload in live docs and on <a href="/pricing-list">KeyoAPI pricing list</a> (Claude-class: <a href="/claude-api-pricing">Claude API pricing page</a>).</p>
+<p>KeyoAPI serves Claude-class model IDs through an OpenAI-compatible endpoint. Confirm current IDs, limits, and rates on <a href="/claude-api-pricing">Claude API pricing page</a> and <a href="/pricing-list">KeyoAPI pricing list</a> — Anthropic-native schemas may still differ from OpenAI-compatible chat completions, so verify tool/vision/streaming needs against live docs before migration.</p>
 <h2>Handle Failures and Retries Deliberately</h2>
 <p>Tool workflows can fail at more than one layer: the model request, response parsing, validation, authorization, the tool itself, or the follow-up model request. Record these separately so operators can tell which boundary failed.</p>
 <p>Retry only when the failure is plausibly transient, such as a temporary network or service error. Use bounded retries with backoff and an overall deadline. Do not retry validation or authorization failures as though they were transient.</p>

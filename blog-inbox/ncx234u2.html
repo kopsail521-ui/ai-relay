@@ -1,0 +1,366 @@
+<!-- TITLE: Claude API Error 529 Overloaded: Retry and Fallback Strategy -->
+<!-- EXCERPT: Learn how to handle Claude API HTTP 529 overload errors with bounded retries, backoff, circuit breakers, and a carefully evaluated fallback provider such as KeyoAPI. -->
+<!-- DESC: Learn how to handle Claude API HTTP 529 overload errors with bounded retries, backoff, circuit breakers, and a carefully evaluated fallback provider such as KeyoAPI. -->
+<p>A Claude API HTTP 529 response indicates that the service is temporarily overloaded. Treating it as a permanent application error can create unnecessary outages, while retrying aggressively can increase load and delay recovery.</p>
+<p>A reliable implementation combines three controls:</p>
+<ol>
+<li>Retry transient overloads with exponential backoff and jitter.</li>
+<li>Stop retrying after a bounded time or attempt count.</li>
+<li>Fall back to another provider only after evaluating model behavior, availability, security, and cost.</li>
+</ol>
+<p>This article presents a practical migration and evaluation workflow. KeyoAPI is an OpenAI-compatible multi-model gateway that serves Claude-class model IDs (for example <code>claude-sonnet-5</code> and sibling Opus/Fable IDs) through the same <code>/v1/chat/completions</code> surface as other catalog models. Confirm current IDs and rates on <a href="/claude-api-pricing">the Claude API pricing page</a> and <a href="/pricing-list">the full pricing list</a> before selecting it as a fallback.</p>
+<h2>What HTTP 529 Means</h2>
+<p>When the Claude API returns HTTP 529, the immediate interpretation is that the upstream service is overloaded. This is generally a transient condition, but transient does not mean that every request should be retried indefinitely.</p>
+<p>A 529 response should normally be handled differently from:</p>
+<ul>
+<li><code>400</code>-class validation errors, which usually require changing the request</li>
+<li>authentication failures, which require correcting credentials</li>
+<li>model-not-found errors, which require selecting a valid model</li>
+<li>quota or billing errors, which require an account or configuration change</li>
+<li>request timeouts, which may or may not be caused by upstream overload</li>
+</ul>
+<p>Your client should classify errors by retryability rather than retrying all non-success responses.</p>
+<p>A useful policy is:</p>
+<div class="article-table-wrap"><table class="article-table">
+<thead>
+<tr>
+<th>Condition</th>
+<th align="right">Retry?</th>
+<th>Typical action</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>HTTP 529 overload</td>
+<td align="right">Yes, with limits</td>
+<td>Exponential backoff and jitter</td>
+</tr>
+<tr>
+<td>HTTP 429 rate limit</td>
+<td align="right">Usually</td>
+<td>Respect <code>Retry-After</code> when provided</td>
+</tr>
+<tr>
+<td>Network connection failure</td>
+<td align="right">Usually</td>
+<td>Retry a small number of times</td>
+</tr>
+<tr>
+<td>Request timeout</td>
+<td align="right">Usually</td>
+<td>Retry with a bounded timeout</td>
+</tr>
+<tr>
+<td>HTTP 401 or 403</td>
+<td align="right">No</td>
+<td>Fix authentication or permissions</td>
+</tr>
+<tr>
+<td>HTTP 400</td>
+<td align="right">No</td>
+<td>Fix request validation</td>
+</tr>
+<tr>
+<td>Model not found</td>
+<td align="right">No</td>
+<td>Load a current model ID</td>
+</tr>
+<tr>
+<td>Quota or balance failure</td>
+<td align="right">No</td>
+<td>Check usage and account status</td>
+</tr>
+<tr>
+<td>Persistent 5xx errors</td>
+<td align="right">Maybe</td>
+<td>Use a circuit breaker and fallback</td>
+</tr>
+</tbody>
+</table></div>
+<p>The exact response body and headers should still be logged and inspected. Do not assume that every provider uses identical error schemas or retry headers.</p>
+<h2>Build a Bounded Retry Policy</h2>
+<h3>Use exponential backoff with jitter</h3>
+<p>A basic exponential backoff schedule might wait approximately:</p>
+<pre><code class="language-text">delay = min(max_delay, base_delay * 2^attempt)
+sleep = random value between 0 and delay
+</code></pre>
+<p>For example, with a one-second base delay and a 30-second maximum, retry delays could fall around:</p>
+<pre><code class="language-text">0.5-1 second
+1-2 seconds
+2-4 seconds
+4-8 seconds
+8-16 seconds
+</code></pre>
+<p>The random component, known as jitter, prevents many workers from retrying simultaneously.</p>
+<p>Use both an attempt limit and a total time budget. An attempt limit alone can still produce unacceptable latency if individual requests are slow.</p>
+<h3>Language-neutral retry pseudocode</h3>
+<pre><code class="language-text">function call_with_retry(request):
+    deadline = current_time + 30 seconds
+    for attempt from 0 through 4:
+        try:
+            response = send(request, timeout=10 seconds)
+            if response.status is successful:
+                return response
+            if response.status is not retryable:
+                raise NonRetryableError(response)
+            if current_time &gt;= deadline:
+                raise RetryBudgetExceeded(response)
+            delay = min(16 seconds, 1 second * 2^attempt)
+            sleep(random_between(0, delay))
+        catch network_error or timeout:
+            if current_time &gt;= deadline:
+                raise RetryBudgetExceeded()
+            delay = min(16 seconds, 1 second * 2^attempt)
+            sleep(random_between(0, delay))
+    raise RetryBudgetExceeded()
+</code></pre>
+<p>In production code, make the retry classifier provider-aware. A Claude 529 response and a gateway timeout may both be retryable, but their observability and fallback behavior may differ.</p>
+<h3>Respect idempotency concerns</h3>
+<p>A retry can cause duplicate work if the request has side effects outside the model call. For example, a workflow that charges a payment method, sends an email, or mutates a database must not assume that retrying the complete workflow is safe.</p>
+<p>Separate the model request from downstream side effects:</p>
+<ol>
+<li>Assign an internal request ID.</li>
+<li>Retry only the model operation where possible.</li>
+<li>Persist the model result before performing irreversible actions.</li>
+<li>Use idempotency keys for side-effecting operations supported by your own application.</li>
+</ol>
+<p>For ordinary text generation, duplicate model execution is usually a cost and latency concern rather than a data-integrity concern. It still needs to be tracked.</p>
+<h2>Add a Fallback Provider Carefully</h2>
+<p>A fallback is not simply “send the same request to another endpoint.” Different providers can vary in:</p>
+<ul>
+<li>Model IDs</li>
+<li>Message schemas</li>
+<li>System instruction handling</li>
+<li>Tool-calling formats</li>
+<li>Token limits</li>
+<li>Streaming behavior</li>
+<li>Safety behavior</li>
+<li>Structured output support</li>
+<li>Error formats</li>
+<li>Regional availability</li>
+<li>Retention and data-processing policies</li>
+</ul>
+<p>The safest design places a provider-neutral interface inside your application.</p>
+<pre><code class="language-text">generate_answer(input, policy):
+    primary_result = call_claude_with_retry(input)
+    if primary_result succeeds:
+        return normalize(primary_result, provider=&quot;claude&quot;)
+    if failure is eligible for fallback:
+        fallback_result = call_fallback_with_retry(input)
+        return normalize(fallback_result, provider=&quot;fallback&quot;)
+    raise primary_result.error
+</code></pre>
+<p>Do not use fallback for every failure. Authentication errors, malformed prompts, invalid model IDs, and application bugs will usually fail in the same way on both providers.</p>
+<h3>Define fallback eligibility</h3>
+<p>A practical fallback policy might allow fallback after:</p>
+<ul>
+<li>A Claude HTTP 529 response exhausts the retry budget</li>
+<li>A provider timeout exceeds the request deadline</li>
+<li>A short-lived provider outage is detected by health monitoring</li>
+<li>The primary circuit breaker is open</li>
+</ul>
+<p>It might prohibit fallback after:</p>
+<ul>
+<li>Invalid user input</li>
+<li>Authentication failure</li>
+<li>Policy rejection</li>
+<li>Unsupported request features</li>
+<li>A known prompt or schema validation error</li>
+</ul>
+<p>The fallback should also have its own timeout and retry budget. Otherwise, a failed primary request followed by an unbounded fallback can turn a short outage into a long request stall.</p>
+<h2>Evaluate KeyoAPI as a Candidate</h2>
+<p>KeyoAPI lists Claude-class model IDs in the live catalog with one API endpoint and one API key for supported models. Confirm exact IDs, limits, and rates on <a href="/claude-api-pricing">current Claude API pricing</a> and <a href="/pricing-list">the live pricing list</a> — Anthropic-native request schemas may still differ from OpenAI-compatible chat completions.</p>
+<p>Use KeyoAPI as an OpenAI-compatible gateway for Claude-class IDs alongside GPT-class and other models on one key; verify live IDs on <a href="/pricing-list">the pricing list</a> before production.</p>
+<p>Before writing an adapter, inspect the live model catalog:</p>
+<pre><code class="language-bash">curl https://www.keyoapi.xyz/v1/models \
+  -H &quot;Authorization: Bearer YOUR_API_KEY&quot;
+</code></pre>
+<p>Use an exact model ID returned by the live <code>/v1/models</code> response. Model availability can change, so do not permanently hard-code an assumed model ID based on an article or an old deployment.</p>
+<p>The chat completions endpoint is: </p>
+<pre><code class="language-bash">curl https://www.keyoapi.xyz/v1/chat/completions \
+  -H &quot;Authorization: Bearer YOUR_API_KEY&quot; \
+  -H &quot;Content-Type: application/json&quot; \
+  -d '{ &quot;model&quot;: &quot;MODEL_ID_FROM_LIVE_CATALOG&quot;, &quot;messages&quot;: [ { &quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;Return a concise summary of this text.&quot; } ] }'
+</code></pre>
+<p>Replace <code>MODEL_ID_FROM_LIVE_CATALOG</code> with an actual ID returned by the current model-list endpoint. Do not assume that the example model IDs in documentation remain available.</p>
+<p>KeyoAPI documentation is available at <a href="/brand/keyo-docs.html">the KeyoAPI documentation</a>. The current model catalog and pricing information are available at <a href="/pricing-list">the current pricing page</a>. Confirm current availability, limits, model behavior, and prices there before making a production decision.</p>
+<h2>Keep Provider Adapters Separate</h2>
+<p>A provider adapter should translate your internal request into the provider’s API format and normalize the response back into your application’s format.</p>
+<pre><code class="language-text">InternalRequest:
+    input_messages
+    temperature
+    max_output_tokens
+    tools
+    response_format
+    deadline
+InternalResponse:
+    text
+    tool_calls
+    finish_reason
+    usage
+    provider
+    model
+    request_id
+</code></pre>
+<p>The Claude adapter should contain Claude-specific authentication, request formatting, response parsing, and error classification. A fallback adapter should contain the fallback provider’s equivalent logic.</p>
+<p>Avoid scattering provider checks throughout business code:</p>
+<pre><code class="language-text">if provider == &quot;claude&quot;:
+    ...
+else if provider == &quot;fallback&quot;:
+    ...
+</code></pre>
+<p>Centralized adapters make it possible to test providers independently and change the fallback without rewriting the application.</p>
+<p>Do not pass unsupported features through silently. If your application requires tools, structured output, vision, or streaming, the adapter should either implement that feature or return an explicit unsupported-capability error.</p>
+<h2>Run an Evaluation Before Migration</h2>
+<p>A fallback provider should be evaluated against your actual workload, not just a successful hello-world request.</p>
+<h3>Build a representative test set</h3>
+<p>Include examples covering:</p>
+<ul>
+<li>Short and long prompts</li>
+<li>System instructions</li>
+<li>Multi-turn conversations</li>
+<li>JSON or schema-constrained responses</li>
+<li>Tool calls, if your application uses them</li>
+<li>Sensitive-data handling</li>
+<li>Malformed input</li>
+<li>High-concurrency traffic</li>
+<li>Requests near your normal output limit</li>
+<li>Expected refusal or safety cases</li>
+</ul>
+<p>Store expected properties rather than relying only on exact text matches. Depending on the application, evaluate:</p>
+<ul>
+<li>Required fields present</li>
+<li>Valid JSON</li>
+<li>Correct tool name and arguments</li>
+<li>Factual or business-rule checks</li>
+<li>Refusal behavior</li>
+<li>Maximum latency</li>
+<li>Token or usage reporting</li>
+<li>Failure classification</li>
+<li>Output length</li>
+</ul>
+<h3>Compare operational behavior</h3>
+<p>Run the primary and fallback providers under similar conditions and record:</p>
+<pre><code class="language-text">provider
+model
+request_id
+timestamp
+success/failure
+HTTP status
+latency
+time to first token, if streaming
+input and output usage
+retry count
+fallback reason
+application outcome
+</code></pre>
+<p>Do not log complete prompts or responses by default if they may contain personal, confidential, or regulated information. Use redaction, hashing, sampling, or a separate controlled trace store.</p>
+<h3>Test degraded conditions</h3>
+<p>A fallback is valuable only when it behaves predictably during failure. Test:</p>
+<ul>
+<li>Simulated Claude 529 responses</li>
+<li>Connection resets</li>
+<li>DNS or TLS failures</li>
+<li>Slow responses</li>
+<li>Invalid fallback credentials</li>
+<li>An unavailable fallback model</li>
+<li>Exceeded request budgets</li>
+<li>Partial streaming failures</li>
+<li>Concurrent traffic spikes</li>
+</ul>
+<p>Confirm that the system:</p>
+<ul>
+<li>Stops retrying at the configured deadline</li>
+<li>Opens the circuit breaker when appropriate</li>
+<li>Selects a valid fallback model</li>
+<li>Does not call both providers unnecessarily</li>
+<li>Preserves the request correlation ID</li>
+<li>Returns a clear error when both providers fail</li>
+</ul>
+<h2>Authentication and Security</h2>
+<p>Store provider keys in a secret manager or protected environment configuration. Never include API keys in browser JavaScript, public repositories, screenshots, client-side applications, or published examples.</p>
+<p>For KeyoAPI, requests use Bearer token authentication:</p>
+<pre><code class="language-text">Authorization: Bearer YOUR_API_KEY
+</code></pre>
+<p>Use separate keys for development, staging, and production where supported. Restrict access to the smallest practical set of services and rotate keys on a schedule or after suspected exposure.</p>
+<p>Other production controls include:</p>
+<ul>
+<li>TLS certificate validation</li>
+<li>Egress restrictions for server-side workloads</li>
+<li>Request and response redaction</li>
+<li>Access-controlled logs</li>
+<li>Prompt-injection defenses for retrieved content</li>
+<li>Explicit data-retention review</li>
+<li>Provider terms and regional-processing review</li>
+<li>Protection against user-controlled URLs or tool arguments</li>
+<li>Maximum prompt and output limits</li>
+</ul>
+<p>A fallback can change where application data is processed. Review that change with your security, privacy, and compliance owners before enabling automatic failover.</p>
+<h2>Control Cost and Retry Amplification</h2>
+<p>Retries increase cost when the provider processes a request before returning an overload or timeout response. They also increase traffic during a service incident.</p>
+<p>Track cost drivers separately:</p>
+<ul>
+<li>Primary attempts</li>
+<li>Retry attempts</li>
+<li>Fallback attempts</li>
+<li>Successful requests</li>
+<li>Failed requests</li>
+<li>Input and output usage</li>
+<li>Requests routed by circuit-breaker policy</li>
+</ul>
+<p>Use a total request deadline and a maximum attempt count. Consider a retry budget per service or tenant so that one traffic spike cannot consume all available capacity.</p>
+<p>A useful policy is to reserve fallback for requests where availability is more important than strict provider consistency. For batch jobs, delaying and retrying later may be cheaper than immediately invoking a second provider. For interactive requests, a fast fallback may be preferable, provided the quality and privacy requirements are met.</p>
+<p>When comparing prices, use the current provider documentation and pricing pages. Do not copy historical prices into application logic or assume that a model remains available at a particular rate.</p>
+<h2>Model Availability and Configuration</h2>
+<p>Model IDs are configuration, not permanent facts. At deployment time or during controlled startup, verify that the configured fallback model exists in the provider’s current catalog.</p>
+<p>For KeyoAPI, retrieve available models from:</p>
+<pre><code class="language-text">GET https://www.keyoapi.xyz/v1/models
+</code></pre>
+<p>Then validate the configured model ID against the response. Handle these cases explicitly:</p>
+<ul>
+<li>The configured model is missing</li>
+<li>The catalog request fails</li>
+<li>The model exists but lacks a required capability</li>
+<li>The model has changed limits or behavior</li>
+<li>The provider returns a temporary availability error</li>
+</ul>
+<p>Do not automatically select an arbitrary model just because it appears in the catalog. Select based on a reviewed capability and evaluation record.</p>
+<h2>Observability and Incident Response</h2>
+<p>Expose metrics that distinguish overload from application defects:</p>
+<ul>
+<li>Count of Claude 529 responses</li>
+<li>Retry attempts by reason</li>
+<li>Retry exhaustion rate</li>
+<li>Fallback activation rate</li>
+<li>Fallback success rate</li>
+<li>End-to-end latency</li>
+<li>Provider-specific error rates</li>
+<li>Circuit-breaker state</li>
+<li>Usage and estimated cost</li>
+<li>Requests that failed on both providers</li>
+</ul>
+<p>Alert on sustained increases rather than a single 529. A temporary spike may recover through normal backoff, while a persistent rise indicates capacity, traffic, configuration, or provider availability concerns.</p>
+<p>Include a correlation ID in application logs and pass it through internal provider calls where possible. Avoid exposing provider error bodies directly to end users when they may contain sensitive implementation details.</p>
+<h2>A Practical Migration Checklist</h2>
+<ul>
+<li><span aria-hidden="true">☐</span> Classify HTTP 529 as a transient overload condition.</li>
+<li><span aria-hidden="true">☐</span> Implement exponential backoff with jitter.</li>
+<li><span aria-hidden="true">☐</span> Set maximum attempts and an overall request deadline.</li>
+<li><span aria-hidden="true">☐</span> Respect provider retry headers when available.</li>
+<li><span aria-hidden="true">☐</span> Avoid retrying authentication, validation, and model-selection errors.</li>
+<li><span aria-hidden="true">☐</span> Separate provider adapters from application business logic.</li>
+<li><span aria-hidden="true">☐</span> Define exactly which failures activate fallback.</li>
+<li><span aria-hidden="true">☐</span> Add a circuit breaker for persistent primary failures.</li>
+<li><span aria-hidden="true">☐</span> Confirm fallback model availability from the provider’s live catalog.</li>
+<li><span aria-hidden="true">☐</span> Verify required capabilities such as tools, streaming, structured output, and vision.</li>
+<li><span aria-hidden="true">☐</span> Evaluate quality, latency, reliability, usage, and cost on representative traffic.</li>
+<li><span aria-hidden="true">☐</span> Test overloads, timeouts, invalid credentials, and both-provider failure.</li>
+<li><span aria-hidden="true">☐</span> Keep API keys server-side and out of source control and browser code.</li>
+<li><span aria-hidden="true">☐</span> Redact sensitive prompts and responses from logs.</li>
+<li><span aria-hidden="true">☐</span> Monitor retry amplification and fallback usage.</li>
+<li><span aria-hidden="true">☐</span> Review data processing, retention, regional, and compliance implications.</li>
+<li><span aria-hidden="true">☐</span> Recheck live documentation, model availability, and pricing before production rollout.</li>
+</ul>
+<h2>Conclusion</h2>
+<p>A Claude HTTP 529 error should trigger controlled recovery, not an unlimited retry loop. Exponential backoff, jitter, deadlines, circuit breakers, and clear error classification provide the foundation. A second provider can improve availability, but only after a real evaluation confirms that its model behavior, API features, security posture, availability, and cost fit the application.</p>
+<p>KeyoAPI can be evaluated as an independent multi-model gateway using its current documentation and live <code>/v1/models</code> catalog. Confirm the Claude-class model ID and rates you need on <a href="/claude-api-pricing">the Claude pricing page</a> (and <a href="/pricing-list">current pricing</a>) before enabling automatic failover.</p>

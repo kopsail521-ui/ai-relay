@@ -1,0 +1,395 @@
+<!-- TITLE: InfiniteTalk API: Questions Developers Should Verify Before Integration -->
+<!-- EXCERPT: A practical checklist for evaluating an InfiniteTalk API integration, including avatar capabilities, lip-sync quality, authentication, retries, security, cost, and production readiness. -->
+<!-- DESC: A practical checklist for evaluating an InfiniteTalk API integration, including avatar capabilities, lip-sync quality, authentication, retries, security, cost, and production readiness. -->
+<p>Adding a talking avatar to an application involves more than sending text to a video endpoint. A production integration must coordinate voice generation, facial animation, video rendering, asynchronous jobs, media storage, access control, and failure recovery.</p>
+<p>Before integrating an InfiniteTalk API, verify the provider's actual API contract and operational behavior. KeyoAPI lists InfiniteTalk in the live catalog — confirm the request contract, limits, and rates on <a href="/model/InfiniteTalk">the InfiniteTalk model page</a> and <a href="/ai-avatar-video-generator">the avatar video generator page</a> before production (do not infer every avatar-video feature from market norms alone).</p>
+<p>This guide presents a verification workflow for developers evaluating InfiniteTalk or a compatible API. It also explains what to check when considering a gateway or alternative integration path.</p>
+<h2>1. What Does “InfiniteTalk API” Actually Provide?</h2>
+<p>Start by defining the capability you need. “Talking avatar API” can describe several different products:</p>
+<ul>
+<li>A text-to-speech API that returns audio only</li>
+<li>An audio-driven lip-sync API</li>
+<li>A text-to-video avatar endpoint</li>
+<li>A video-to-video face animation service</li>
+<li>A full digital-human platform with rendering, streaming, and interaction APIs</li>
+<li>A model endpoint exposed through a general-purpose AI gateway</li>
+</ul>
+<p>These are not interchangeable. An API that generates speech may not animate a face. A lip-sync model may require a source portrait and an audio file. A video-generation model may return a completed video asynchronously rather than stream frames.</p>
+<p>Before writing integration code, answer these questions from the live documentation:</p>
+<ol>
+<li>Is InfiniteTalk available as a public API, or only through a hosted application?</li>
+<li>Is the API synchronous, asynchronous, or both?</li>
+<li>Does it accept text, audio, video, an image, or a combination?</li>
+<li>Does it create a new avatar, animate a supplied face, or use predefined digital humans?</li>
+<li>Which output formats and resolutions are supported?</li>
+<li>Does it support streaming, or only downloadable rendered videos?</li>
+<li>Is the service available in the regions where your application operates?</li>
+<li>Are commercial use, user-generated content, and biometric or likeness use covered by the provider's terms?</li>
+</ol>
+<p>Do not proceed until the answers are specific enough to translate into an API contract.</p>
+<h2>2. Is the Endpoint and Model Availability Verified?</h2>
+<p>The first integration risk is building against an endpoint or model that is not actually available.</p>
+<p>A reliable evaluation should confirm:</p>
+<ul>
+<li>The exact base URL</li>
+<li>The HTTP method and path</li>
+<li>Required headers</li>
+<li>Request and response schemas</li>
+<li>Model or workflow identifiers</li>
+<li>Maximum media size and duration</li>
+<li>Supported audio, image, and video formats</li>
+<li>Job status values</li>
+<li>Error response structure</li>
+<li>Retention and deletion behavior</li>
+</ul>
+<p>On KeyoAPI, avatar / lip-sync models are in the live catalog — start from <a href="/ai-avatar-video-generator">the AI avatar video generator hub</a> and confirm InfiniteTalk request fields on <a href="/model/InfiniteTalk">InfiniteTalk&rsquo;s model page</a>. Do not infer avatar support from unrelated model categories alone.</p>
+<p>KeyoAPI hosts talking-avatar / lip-sync models in the live catalog — including <code>Duix-Avatar</code> and <code>InfiniteTalk</code>. Start from <a href="/ai-avatar-video-generator">the AI avatar video generator page</a>, then confirm guides at <a href="/model/Duix-Avatar">the Duix-Avatar model page</a>, <a href="/model/InfiniteTalk">the InfiniteTalk model guide</a>, and <a href="/pricing-list">the full pricing list</a>.</p>
+<p>A discovery request might look like this when using the documented KeyoAPI base URL:</p>
+<pre><code class="language-bash">curl https://www.keyoapi.xyz/v1/models \
+  -H &quot;Authorization: Bearer YOUR_API_KEY&quot;
+</code></pre>
+<p>Use the exact model ID returned by the live API. Do not hard-code an ID copied from an old example or assume that a model name is available in every account or region.</p>
+<p>If InfiniteTalk is missing from your account model list, stop and confirm availability on <a href="/model/InfiniteTalk">the live InfiniteTalk model page</a> and <a href="/pricing-list">the pricing list</a> before writing client code. Changing the request body will not unlock an unlisted model.</p>
+<h2>3. What Is the Media Input and Output Contract?</h2>
+<p>Talking-avatar integrations often fail because developers validate only the text prompt and ignore media constraints.</p>
+<p>Document the complete media contract:</p>
+<h3>Input questions</h3>
+<ul>
+<li>Is the face input an image, a video, or a provider-hosted avatar ID?</li>
+<li>Are transparent images supported?</li>
+<li>What image dimensions and aspect ratios are accepted?</li>
+<li>Is the source face required to be frontal?</li>
+<li>Are multiple faces rejected or selected automatically?</li>
+<li>Is audio uploaded directly or referenced by URL?</li>
+<li>What audio codecs, sample rates, and channel layouts are supported?</li>
+<li>Are subtitles or phoneme data accepted?</li>
+<li>What is the maximum duration per request?</li>
+</ul>
+<h3>Output questions</h3>
+<ul>
+<li>Is the result MP4, WebM, a live stream, or another format?</li>
+<li>Is the audio included in the output?</li>
+<li>What video and audio codecs are used?</li>
+<li>Is the output resolution fixed or configurable?</li>
+<li>Are captions, thumbnails, or duration metadata returned?</li>
+<li>Does the response contain a temporary URL or a permanent asset reference?</li>
+<li>How long does the output remain available?</li>
+</ul>
+<p>Represent these constraints explicitly in your application instead of allowing arbitrary user input to reach the provider.</p>
+<p>For example, a job record might contain:</p>
+<pre><code class="language-text">avatar_id
+audio_asset_id
+requested_duration
+requested_aspect_ratio
+provider_job_id
+status
+output_url
+expires_at
+error_code
+</code></pre>
+<p>This makes it possible to validate requests before submission and to handle expired output URLs without confusing them with failed generation jobs.</p>
+<h2>4. Does the API Use Asynchronous Jobs?</h2>
+<p>Video rendering is commonly too slow for a request that waits indefinitely for a final response. If the API is asynchronous, the workflow will usually resemble:</p>
+<pre><code class="language-text">1. Validate the avatar, audio, and output settings.
+2. Submit a render job.
+3. Store the provider job ID.
+4. Poll the status endpoint or consume a webhook.
+5. Retrieve the completed media.
+6. Copy it to application-controlled storage.
+7. Mark the job complete.
+</code></pre>
+<p>Verify the provider's actual job states. Typical states may include submitted, queued, processing, completed, failed, and canceled, but you must use the states defined by the live API.</p>
+<p>A production worker should enforce:</p>
+<ul>
+<li>A maximum polling duration</li>
+<li>A polling interval with backoff</li>
+<li>A terminal failure state</li>
+<li>A cancellation path</li>
+<li>Idempotent completion handling</li>
+<li>Output URL expiration handling</li>
+<li>Cleanup for abandoned jobs</li>
+</ul>
+<p>Do not poll aggressively. Excessive polling can create rate-limit failures and unnecessary cost. If webhooks are supported, verify webhook authenticity and make the handler idempotent because delivery may be duplicated.</p>
+<h2>5. How Will You Evaluate Lip-Sync Quality?</h2>
+<p>A successful HTTP response does not mean the result is usable. Lip-sync quality should be evaluated with representative material before committing to a provider.</p>
+<p>Create a small test set covering:</p>
+<ul>
+<li>Short and long sentences</li>
+<li>Fast and slow speech</li>
+<li>Plosive sounds such as “p,” “b,” and “m”</li>
+<li>Sibilants such as “s” and “sh”</li>
+<li>Numbers, names, and technical vocabulary</li>
+<li>Different accents and speaking styles</li>
+<li>Pauses and emotional delivery</li>
+<li>Low-quality and high-quality source images</li>
+<li>Different face angles and lighting conditions</li>
+</ul>
+<p>Measure more than visual synchronization. Also review:</p>
+<ul>
+<li>Mouth shape accuracy</li>
+<li>Eye and head movement</li>
+<li>Facial stability between frames</li>
+<li>Teeth, jaw, and tongue artifacts</li>
+<li>Boundary quality around hair and shoulders</li>
+<li>Temporal consistency</li>
+<li>Audio preservation</li>
+<li>Rendering duration</li>
+<li>Output resolution and compression</li>
+<li>Failure rate for difficult inputs</li>
+</ul>
+<p>A practical evaluation workflow is:</p>
+<pre><code class="language-text">For each test case:
+    submit the same input to every candidate integration
+    record request duration, queue duration, and render duration
+    save the output with its request metadata
+    score lip-sync, visual artifacts, and audio quality
+    record failures and retry behavior
+    compare cost per successful minute of output
+</code></pre>
+<p>Keep the original inputs and generated outputs under controlled access. Test data may contain personal likenesses or sensitive speech, so the evaluation itself requires a privacy review.</p>
+<h2>6. How Is Authentication Implemented?</h2>
+<p>Use the authentication scheme described by the provider's current documentation. Do not assume that an avatar endpoint uses the same authentication method as another product from the same company.</p>
+<p>For KeyoAPI, docs cover Bearer-token authentication and show the base URL <code>https://www.keyoapi.xyz/v1</code> for compatible API usage:</p>
+<pre><code class="language-text">Authorization: Bearer YOUR_API_KEY
+</code></pre>
+<p>Store credentials in environment variables or a managed secret store. Do not commit API keys to Git, include them in browser bundles, or place them in client-side JavaScript.</p>
+<p>A secure architecture generally looks like this:</p>
+<pre><code class="language-text">Browser or mobile app
+  |
+  | authenticated application request
+  v
+Your backend
+  |
+  | provider API key
+  v
+Avatar or media API
+</code></pre>
+<p>The browser should upload media to storage using short-lived, scoped upload credentials or an application-controlled upload endpoint. The provider credential should remain on the server.</p>
+<p>For every provider, confirm:</p>
+<ul>
+<li>Whether keys can be scoped</li>
+<li>Whether keys can be rotated</li>
+<li>Whether separate test and production credentials exist</li>
+<li>Whether usage can be limited by project or account</li>
+<li>Whether requests can be audited</li>
+<li>Whether a compromised key can be revoked quickly</li>
+</ul>
+<p>A <code>401 Unauthorized</code> response usually indicates a missing or invalid credential, an incorrect Bearer-token format, or a revoked key. Log the status and a sanitized error category, but never log the complete token.</p>
+<h2>7. What Errors Should the Integration Handle?</h2>
+<p>Treat provider errors as part of the API contract, not as exceptional text to display directly to users.</p>
+<p>Classify errors into four groups:</p>
+<h3>Client validation errors</h3>
+<p>Examples include unsupported formats, missing fields, invalid dimensions, and media that exceeds the allowed duration. These should normally be rejected before the provider request.</p>
+<h3>Authentication and authorization errors</h3>
+<p>A <code>401</code> response should trigger credential inspection or rotation, not an automatic retry with the same key. Permission failures should be visible to operators while keeping sensitive details out of user-facing messages.</p>
+<h3>Rate and quota errors</h3>
+<p>A <code>429</code> response may mean that requests are arriving too quickly, the account quota is exhausted, or prepaid balance is insufficient. Reduce request frequency, inspect usage and account balance, and apply queue-level throttling.</p>
+<h3>Provider or network failures</h3>
+<p>Timeouts, connection failures, temporary server errors, and upstream rendering failures may be retryable. The retry decision should depend on the operation's idempotency and the provider's documented behavior.</p>
+<p>Store structured error information such as:</p>
+<pre><code class="language-text">provider
+http_status
+provider_error_code
+operation
+attempt
+retryable
+request_id
+created_at
+</code></pre>
+<p>Avoid storing raw media or full request bodies in logs unless there is a documented retention and access policy.</p>
+<h2>8. How Should Retries and Idempotency Work?</h2>
+<p>Retries can duplicate expensive video jobs. Before adding them, determine whether the provider supports an idempotency key or client-generated request ID.</p>
+<p>A robust submission strategy is:</p>
+<pre><code class="language-text">create a stable application job ID
+validate and persist the job before submission
+submit with the provider's idempotency mechanism, if documented
+retry only transient failures
+record the provider job ID
+never submit a second render merely because the first status check timed out
+</code></pre>
+<p>Use exponential backoff with jitter for transient failures. A simple policy can increase the delay after each attempt while imposing both a maximum delay and a total deadline.</p>
+<p>Do not retry automatically for:</p>
+<ul>
+<li>Invalid input</li>
+<li>Unsupported models</li>
+<li>Authentication failures</li>
+<li>Insufficient quota or balance</li>
+<li>Policy violations</li>
+<li>Permanent media-processing errors</li>
+</ul>
+<p>A request timeout is ambiguous: the provider may have accepted the job even though your client did not receive the response. Resolve the job by checking its status using the application job ID or provider job ID before deciding to submit again.</p>
+<h2>9. What Security and Privacy Risks Apply?</h2>
+<p>A digital-human application can process faces, voices, personal likenesses, and user-generated speech. These inputs may be sensitive even when the output is fictional.</p>
+<p>Review the provider's current terms and data-handling documentation for:</p>
+<ul>
+<li>Storage duration</li>
+<li>Training or model-improvement use</li>
+<li>Data residency</li>
+<li>Subprocessors</li>
+<li>Deletion guarantees</li>
+<li>Biometric-data handling</li>
+<li>User consent requirements</li>
+<li>Commercial likeness rights</li>
+<li>Watermarking or provenance requirements</li>
+<li>Restrictions on impersonation and deceptive content</li>
+</ul>
+<p>Application-level controls should include:</p>
+<ul>
+<li>Consent records for uploaded faces and voices</li>
+<li>Authentication for asset access</li>
+<li>Authorization checks on every job and output</li>
+<li>Signed, expiring media URLs</li>
+<li>Malware scanning for uploaded files</li>
+<li>MIME-type and file-signature validation</li>
+<li>Size and duration limits</li>
+<li>Abuse monitoring</li>
+<li>Rate limits per user and tenant</li>
+<li>Deletion workflows for source and generated media</li>
+</ul>
+<p>Never expose a provider's raw output URL if it grants longer access than your application intends. Copy the result into controlled storage when appropriate, then serve it through an authorization layer.</p>
+<p>Also define acceptable-use rules. A technically successful lip-sync pipeline can still create legal, reputational, or safety problems if it is used to impersonate a real person without permission.</p>
+<h2>10. How Should Cost Be Estimated?</h2>
+<p>Do not estimate cost from request count alone. Avatar-video workloads may depend on duration, resolution, frame rate, audio processing, queue priority, storage, and failed or repeated jobs.</p>
+<p>Track these dimensions during evaluation:</p>
+<ul>
+<li>Input duration</li>
+<li>Output duration</li>
+<li>Resolution</li>
+<li>Number of render attempts</li>
+<li>Retry count</li>
+<li>Successful output minutes</li>
+<li>Failed output minutes</li>
+<li>Storage and delivery volume</li>
+<li>Time spent in queue</li>
+<li>Time spent rendering</li>
+</ul>
+<p>A useful internal metric is:</p>
+<pre><code class="language-text">cost per successful minute
+=
+provider usage cost
+/
+minutes of output accepted by quality checks
+</code></pre>
+<p>Include failed jobs and retries in the numerator. Otherwise, a provider with frequent rendering failures may appear cheaper than it is.</p>
+<p>For KeyoAPI, pricing uses prepaid credits and usage-based billing, and direct readers to the current pricing page:</p>
+<p><a href="/pricing-list">KeyoAPI&rsquo;s pricing page</a></p>
+<p>Model availability and pricing may change. Check the KeyoAPI model catalog for current information.</p> <h2>11. What Happens When a Model Is Unavailable?</h2>
+<p>Model availability can change because of account permissions, regional restrictions, deprecation, capacity, or catalog changes.</p>
+<p>Build a startup or deployment check that confirms:</p>
+<ul>
+<li>The required model or workflow exists</li>
+<li>The account is authorized to use it</li>
+<li>The expected input modality is supported</li>
+<li>The required output settings are accepted</li>
+<li>A small health-check request can complete successfully</li>
+</ul>
+<p>Do not make the health check an expensive full-length render. Use the smallest valid request allowed by the provider, or rely on documented metadata and a controlled integration test.</p>
+<p>If a model disappears from the catalog, fail clearly and preserve the existing jobs. Do not silently substitute a different model for production video generation because output quality, licensing, latency, and cost may change.</p>
+<p>A fallback should be explicit:</p>
+<pre><code class="language-text">if preferred model is unavailable:
+    mark the job as requiring operator review
+    optionally select a preapproved fallback
+    record the selected model
+    notify the caller that output characteristics may differ
+</code></pre>
+<p>A fallback model must be evaluated in advance. Availability alone is not enough.</p>
+<h2>12. How Do You Compare InfiniteTalk With Another Integration?</h2>
+<p>Comparison should be based on the workflow your application needs, not on product labels.</p>
+<p>Create a requirements table with fields such as:</p>
+<div class="article-table-wrap"><table class="article-table">
+<thead>
+<tr>
+<th>Requirement</th>
+<th>Must verify</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Input type</td>
+<td>Text, audio, image, video, or avatar ID</td>
+</tr>
+<tr>
+<td>Output type</td>
+<td>File, stream, or hosted asset</td>
+</tr>
+<tr>
+<td>Lip-sync</td>
+<td>Supported languages, timing quality, and failure behavior</td>
+</tr>
+<tr>
+<td>Rendering</td>
+<td>Synchronous or asynchronous</td>
+</tr>
+<tr>
+<td>Media limits</td>
+<td>Duration, size, resolution, and aspect ratio</td>
+</tr>
+<tr>
+<td>Authentication</td>
+<td>Key, OAuth, signed request, or project credential</td>
+</tr>
+<tr>
+<td>Reliability</td>
+<td>Timeouts, rate limits, retries, and status recovery</td>
+</tr>
+<tr>
+<td>Privacy</td>
+<td>Retention, training use, deletion, and data residency</td>
+</tr>
+<tr>
+<td>Cost</td>
+<td>Billing unit, failed-job treatment, and storage charges</td>
+</tr>
+<tr>
+<td>Availability</td>
+<td>Regions, model catalog, and deprecation policy</td>
+</tr>
+</tbody>
+</table></div>
+<p>Run the same test set through each candidate and record the results. Keep separate scores for:</p>
+<ul>
+<li>Visual quality</li>
+<li>Audio quality</li>
+<li>Lip-sync quality</li>
+<li>Latency</li>
+<li>Reliability</li>
+<li>Integration complexity</li>
+<li>Operational cost</li>
+<li>Policy and privacy fit</li>
+</ul>
+<p>Do not describe an integration as compatible merely because two systems both accept JSON or expose OpenAI-style interfaces. Compatibility requires matching input modalities, endpoint behavior, authentication, response semantics, and operational guarantees.</p>
+<h2>Practical Integration Checklist</h2>
+<p>Before committing to an InfiniteTalk API integration, verify the following:</p>
+<ul>
+<li><span aria-hidden="true">☐</span> The provider has a documented public API for the required avatar workflow.</li>
+<li><span aria-hidden="true">☐</span> The exact endpoint, model, and request schema are confirmed in current documentation.</li>
+<li><span aria-hidden="true">☐</span> Text, audio, image, and video requirements are documented.</li>
+<li><span aria-hidden="true">☐</span> Output format, resolution, retention, and URL expiration are understood.</li>
+<li><span aria-hidden="true">☐</span> The integration supports asynchronous jobs if rendering is not immediate.</li>
+<li><span aria-hidden="true">☐</span> Job status handling, cancellation, and recovery are implemented.</li>
+<li><span aria-hidden="true">☐</span> Authentication is server-side and credentials are stored securely.</li>
+<li><span aria-hidden="true">☐</span> Client uploads are validated for type, size, duration, and authorization.</li>
+<li><span aria-hidden="true">☐</span> <code>401</code>, <code>429</code>, timeout, validation, and provider errors have distinct handling.</li>
+<li><span aria-hidden="true">☐</span> Retries use exponential backoff and do not duplicate expensive jobs.</li>
+<li><span aria-hidden="true">☐</span> Idempotency or duplicate-submission recovery is defined.</li>
+<li><span aria-hidden="true">☐</span> Consent and likeness rights are recorded where required.</li>
+<li><span aria-hidden="true">☐</span> Generated media is protected with authorization and expiring URLs.</li>
+<li><span aria-hidden="true">☐</span> Cost is measured per successful minute, including retries and failures.</li>
+<li><span aria-hidden="true">☐</span> Model availability is checked through the current catalog or documented discovery endpoint.</li>
+<li><span aria-hidden="true">☐</span> A fallback model has been tested rather than assumed.</li>
+<li><span aria-hidden="true">☐</span> A representative lip-sync quality evaluation has been completed.</li>
+<li><span aria-hidden="true">☐</span> Production monitoring records latency, queue time, failure rate, and output acceptance rate.</li>
+</ul>
+<h2>Minimal request example</h2>
+<p>Submit an InfiniteTalk job with a Keyo API key. Audio input should stay within the published limit (≤ 15 seconds). Confirm live fields on <a href="/model/InfiniteTalk">the model page for InfiniteTalk</a> before production:</p>
+<pre><code>curl https://www.keyoapi.xyz/v1/async/videos/image-to-video \
+  -H "Authorization: Bearer YOUR_KEYO_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"model":"InfiniteTalk","prompt":"Say hello","image_url":"https://example.com/face.jpg","audio_url":"https://example.com/clip.mp3"}'
+
+# Poll: GET https://www.keyoapi.xyz/v1/task/{task_id}
+</code></pre>
+<p>Hub: <a href="/ai-avatar-video-generator">the avatar video generator hub</a> · rates: <a href="/pricing-list">current pricing</a>.</p>
+<h2>Conclusion</h2>
+<p>The main integration question is not whether an API can produce a talking face in a demo. It is whether the provider offers the exact input, output, job, authentication, privacy, reliability, and billing behavior your application requires.</p>
+<p>Verify the live API contract before writing production code. Treat model availability and pricing as changeable. Keep provider credentials on the server, design for asynchronous rendering and ambiguous timeouts, and evaluate lip-sync quality with realistic media. If a gateway or alternative platform does not explicitly document avatar-video support, do not assume that general model access includes it.</p>

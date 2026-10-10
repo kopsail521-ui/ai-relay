@@ -1,0 +1,474 @@
+<!-- TITLE: AI Avatar API Node.js Example: Upload, Job Status, and Retry Patterns -->
+<!-- EXCERPT: Learn how to design a production-ready Node.js workflow for AI avatar APIs, including media upload, asynchronous job polling, retries, authentication, error handling, security, cost controls, and provider capability checks. -->
+<!-- DESC: Learn how to design a production-ready Node.js workflow for AI avatar APIs, including media upload, asynchronous job polling, retries, authentication, error handling, security, cost controls, and provider capability checks. -->
+<p>Building a talking avatar feature usually involves more than sending text to a model. A production workflow may need to:</p>
+<ol>
+<li>Upload an image, video, or audio asset.</li>
+<li>Create an asynchronous avatar-generation job.</li>
+<li>Track job status.</li>
+<li>Download or store the completed video.</li>
+<li>Retry temporary failures without duplicating work.</li>
+</ol>
+<p>The difficult part is that avatar APIs do not share a universal upload format, job schema, or status endpoint. Before writing integration code, confirm the provider's current documentation and API catalog.</p>
+<p>KeyoAPI hosts talking-avatar / lip-sync models in the live catalog — including <code>Duix-Avatar</code> and <code>InfiniteTalk</code>. Start from <a href="/ai-avatar-video-generator">the AI avatar video generator API</a>, then confirm interactive rates on <a href="/model/Duix-Avatar">the Duix-Avatar model page</a>, <a href="/model/InfiniteTalk">the InfiniteTalk model page</a>, and <a href="/pricing-list">the full pricing list</a>.</p>
+<h2>Start With a Capability Check</h2>
+<p>An OpenAI-compatible chat API is not automatically an avatar-video API. These are separate capabilities:</p>
+<ul>
+<li>Text generation produces text.</li>
+<li>Speech generation produces audio.</li>
+<li>Image generation produces images.</li>
+<li>Lip-sync or talking-avatar generation combines media assets, audio, and video processing.</li>
+<li>Job APIs usually process the request asynchronously because rendering can take longer than a normal HTTP request.</li>
+</ul>
+<p>The KeyoAPI base URL is:</p>
+<pre><code class="language-text">https://www.keyoapi.xyz/v1
+</code></pre>
+<p>Authentication uses Bearer tokens, and you can check available model IDs with:</p>
+<pre><code class="language-http">GET /v1/models
+</code></pre> <ul>
+<li>Whether the current documentation describes avatar-video or lip-sync operations.</li>
+<li>Whether media upload is supported.</li>
+<li>Whether the service accepts image, audio, or video inputs for that operation.</li>
+<li>Whether the operation returns a job ID.</li>
+<li>Which status values and failure fields are returned.</li>
+<li>How completed output files are retrieved.</li>
+<li>Whether the required model appears in the live model catalog.</li>
+</ul> <h2>Use an Adapter Boundary</h2>
+<p>Keep provider-specific behavior behind a small interface. Your application should understand the workflow, while the adapter owns the provider's actual upload and job API.</p>
+<p>A useful interface looks like this:</p>
+<pre><code class="language-js">class AvatarProvider {
+  async uploadAsset(file) {
+    throw new Error(&quot;Implement with the provider's documented upload API&quot;);
+  }
+  async createJob(input) {
+    throw new Error(&quot;Implement with the provider's documented job API&quot;);
+  }
+  async getJob(jobId) {
+    throw new Error(&quot;Implement with the provider's documented status API&quot;);
+  }
+  async downloadResult(job) {
+    throw new Error(&quot;Implement with the provider's documented result API&quot;);
+  }
+}
+</code></pre>
+<p>This design has several advantages:</p>
+<ul>
+<li>Provider changes are isolated.</li>
+<li>Tests can use a fake provider.</li>
+<li>Unsupported assumptions are visible in one place.</li>
+<li>Job orchestration can be reused if you later change providers.</li>
+<li>Credentials and transport details do not spread throughout the application.</li>
+</ul>
+<p>Do not replace these methods with guessed paths such as <code>/uploads</code>, <code>/avatar/jobs</code>, or <code>/videos/{id}</code> unless the provider's current documentation explicitly defines them.</p>
+<h2>Node.js Workflow With Dependency Injection</h2>
+<p>The following example implements the application-side workflow. The provider adapter remains intentionally abstract because live docs must confirm avatar-specific endpoints.</p>
+<pre><code class="language-js">const sleep = (ms) =&gt; new Promise((resolve) =&gt; setTimeout(resolve, ms));
+
+function isRetryableError(error) {
+  return (
+    error?.retryable === true ||
+    error?.status === 408 ||
+    error?.status === 429 ||
+    error?.status &gt;= 500
+  );
+}
+
+async function withExponentialBackoff(
+  operation,
+  {
+    attempts = 4,
+    baseDelayMs = 500,
+    maxDelayMs = 10_000,
+    shouldRetry = isRetryableError,
+  } = {},
+) {
+  let lastError;
+  for (let attempt = 0; attempt &lt; attempts; attempt += 1) {
+    try {
+      return await operation(attempt);
+    } catch (error) {
+      lastError = error;
+      if (attempt === attempts - 1 || !shouldRetry(error)) {
+        throw error;
+      }
+      const exponentialDelay = Math.min(
+        maxDelayMs,
+        baseDelayMs * 2 ** attempt,
+      );
+      const jitter = Math.floor(Math.random() * 250);
+      await sleep(exponentialDelay + jitter);
+    }
+  }
+  throw lastError;
+}
+
+async function renderAvatar({
+  provider,
+  sourceImage,
+  speechAudio,
+  script,
+  idempotencyKey,
+  pollIntervalMs = 2_000,
+  maxPolls = 90,
+}) {
+  const image = await withExponentialBackoff(
+    () =&gt; provider.uploadAsset(sourceImage),
+  );
+  const audio = await withExponentialBackoff(
+    () =&gt; provider.uploadAsset(speechAudio),
+  );
+  const job = await withExponentialBackoff(
+    () =&gt;
+      provider.createJob({
+        imageAssetId: image.id,
+        audioAssetId: audio.id,
+        script,
+        idempotencyKey,
+      }),
+  );
+  for (let poll = 0; poll &lt; maxPolls; poll += 1) {
+    const currentJob = await withExponentialBackoff(
+      () =&gt; provider.getJob(job.id),
+    );
+    if (currentJob.status === &quot;completed&quot;) {
+      return provider.downloadResult(currentJob);
+    }
+    if (currentJob.status === &quot;failed&quot; || currentJob.status === &quot;cancelled&quot;) {
+      const error = new Error(
+        currentJob.error?.message || `Avatar job ${currentJob.status}`,
+      );
+      error.retryable = false;
+      throw error;
+    }
+    await sleep(pollIntervalMs);
+  }
+  const timeout = new Error(&quot;Avatar job did not finish before the polling limit&quot;);
+  timeout.retryable = false;
+  throw timeout;
+}
+</code></pre>
+<p>The orchestration code assumes only a small normalized result shape:</p>
+<pre><code class="language-js">{
+  id: &quot;provider-job-id&quot;,
+  status: &quot;queued&quot; | &quot;processing&quot; | &quot;completed&quot; | &quot;failed&quot; | &quot;cancelled&quot;,
+  error: {
+    message: &quot;optional provider error&quot;,
+  },
+}
+</code></pre>
+<p>Those status names are application-level conventions. Map the provider's actual values to them inside the adapter.</p>
+<h2>Implement the Provider Adapter From Documentation</h2>
+<p>A real adapter should be written only after confirming the provider contract. Its responsibilities typically include:</p>
+<h3>Uploading assets</h3>
+<p>The adapter should verify:</p>
+<ul>
+<li>Accepted MIME types.</li>
+<li>Maximum file size.</li>
+<li>Whether uploads use multipart form data, signed URLs, or JSON references.</li>
+<li>Whether the provider stores uploaded files permanently or temporarily.</li>
+<li>Whether an upload returns an asset ID, URL, or both.</li>
+</ul>
+<p>Do not log raw image, audio, or video payloads. Store only the provider's asset identifier and the metadata needed to resume the workflow.</p>
+<h3>Creating the job</h3>
+<p>The job request may require some combination of:</p>
+<ul>
+<li>Source image or avatar identifier.</li>
+<li>Audio asset identifier.</li>
+<li>Text or speech configuration.</li>
+<li>Voice or language selection.</li>
+<li>Resolution or format.</li>
+<li>Webhook configuration.</li>
+<li>An idempotency key.</li>
+</ul>
+<p>Only send fields documented by the provider. Unsupported fields can cause validation errors or, worse, silently change behavior.</p>
+<h3>Reading job status</h3>
+<p>The adapter should translate provider responses into a stable internal form:</p>
+<pre><code class="language-js">function normalizeJob(providerJob) {
+  return {
+    id: providerJob.id,
+    status: mapProviderStatus(providerJob.status),
+    progress: providerJob.progress ?? null,
+    error: providerJob.error
+      ? {
+          code: providerJob.error.code,
+          message: providerJob.error.message,
+        }
+      : null,
+  };
+}
+</code></pre>
+<p>Keep the original provider response available in structured logs when it does not contain sensitive content. This makes troubleshooting easier when the provider changes response fields.</p>
+<h3>Downloading the result</h3>
+<p>A completed job may return:</p>
+<ul>
+<li>A direct file URL.</li>
+<li>A temporary signed URL.</li>
+<li>An output asset ID that requires another request.</li>
+<li>Multiple renditions.</li>
+</ul>
+<p>The adapter should download the result to application-controlled storage rather than relying indefinitely on a temporary provider URL. Validate the response content type and size before storing it.</p>
+<h2>Authentication and Key Management</h2>
+<p>For documented KeyoAPI requests, authentication uses a Bearer token:</p>
+<pre><code class="language-http">Authorization: Bearer YOUR_API_KEY
+</code></pre>
+<p>A Node.js client configuration uses an environment variable:</p>
+<pre><code class="language-js">const apiKey = process.env.KEYO_API_KEY;
+if (!apiKey) {
+  throw new Error(&quot;KEYO_API_KEY is required&quot;);
+}
+</code></pre>
+<p>Do not commit API keys to Git, include them in browser code, or expose them in client-side logs. For a web application:</p>
+<ol>
+<li>The browser sends a request to your backend.</li>
+<li>Your backend authenticates the user.</li>
+<li>Your backend calls the external API.</li>
+<li>The browser receives only the job identifier or application-specific result.</li>
+</ol>
+<p>Use separate credentials for development, staging, and production when the provider supports that arrangement. Restrict access to secret-management systems, rotate credentials periodically, and redact authorization headers from request logs.</p>
+<p>The official KeyoAPI documentation lives at <a href="/brand/keyo-docs.html">the KeyoAPI documentation</a>. Check that documentation for current authentication requirements before implementing a provider adapter.</p>
+<h2>Retry Only Temporary Failures</h2>
+<p>Retries are appropriate for transient conditions such as:</p>
+<ul>
+<li>Network connection resets.</li>
+<li>Request timeouts.</li>
+<li>HTTP 408.</li>
+<li>Rate limits such as HTTP 429.</li>
+<li>Temporary server failures in the 5xx range.</li>
+<li>Provider-specific temporary processing errors.</li>
+</ul>
+<p>KeyoAPI returns rate limits, exhausted account quota, insufficient prepaid balance, unavailable model IDs, and request timeouts as distinct failure conditions. These should not all be handled in the same way:</p>
+<div class="article-table-wrap"><table class="article-table">
+<thead>
+<tr>
+<th>Failure</th>
+<th>Recommended handling</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Timeout</td>
+<td>Retry with exponential backoff if the request may be safely repeated</td>
+</tr>
+<tr>
+<td>Rate limit</td>
+<td>Respect <code>Retry-After</code> when available and slow down</td>
+</tr>
+<tr>
+<td>Server error</td>
+<td>Retry a limited number of times</td>
+</tr>
+<tr>
+<td>Account quota exhausted</td>
+<td>Stop retrying and notify operations</td>
+</tr>
+<tr>
+<td>Insufficient balance</td>
+<td>Stop retrying and check account status</td>
+</tr>
+<tr>
+<td>Model not found</td>
+<td>Stop retrying and query the current model catalog</td>
+</tr>
+<tr>
+<td>Invalid input</td>
+<td>Fix the request rather than retrying</td>
+</tr>
+</tbody>
+</table></div>
+<p>For job creation, use an idempotency key if the provider documents support for it. Without idempotency, a timeout after submission creates an ambiguity: the request may have succeeded even though the client did not receive the response. Blindly retrying may create duplicate video jobs.</p>
+<p>A stable idempotency key can be derived from your internal render request:</p>
+<pre><code class="language-js">import crypto from &quot;node:crypto&quot;;
+
+function createIdempotencyKey(renderRequestId) {
+  return crypto
+    .createHash(&quot;sha256&quot;)
+    .update(`avatar-render:${renderRequestId}`)
+    .digest(&quot;hex&quot;);
+}
+</code></pre>
+<p>This key is useful only if the provider actually supports idempotency semantics. Otherwise, store the submission attempt and reconcile the result using the provider's documented lookup mechanism.</p>
+<h2>Polling Versus Webhooks</h2>
+<p>Polling is straightforward and works when the provider offers a status endpoint. It also creates additional requests and can become expensive at scale.</p>
+<p>Use bounded polling:</p>
+<ul>
+<li>Set a maximum number of polls.</li>
+<li>Use a delay between requests.</li>
+<li>Increase the interval for long-running jobs.</li>
+<li>Stop when the job reaches a terminal state.</li>
+<li>Record the last observed status.</li>
+<li>Treat polling timeout separately from render failure.</li>
+</ul>
+<p>A production system can use a database record similar to:</p>
+<pre><code class="language-text">render_request_id
+provider_job_id
+status
+attempt_count
+last_polled_at
+next_poll_at
+result_location
+failure_code
+created_at
+updated_at
+</code></pre>
+<p>Prefer webhooks when the provider documents signed webhook delivery. A webhook handler should:</p>
+<ol>
+<li>Verify the signature before parsing the event as trusted.</li>
+<li>Reject old or duplicated events using event IDs or timestamps.</li>
+<li>Update the job only when the transition is valid.</li>
+<li>Return a fast success response.</li>
+<li>Process downloads and heavier work asynchronously.</li>
+</ol>
+<p>Do not accept an arbitrary callback URL from an untrusted client. Store approved webhook destinations on the server and validate event ownership before updating a render request.</p>
+<h2>Error Handling at the Application Boundary</h2>
+<p>Convert provider-specific errors into stable application errors. A client should not need to understand every provider status code.</p>
+<p>For example:</p>
+<pre><code class="language-js">function toApplicationError(error) {
+  if (error.status === 429) {
+    return {
+      code: &quot;RATE_LIMITED&quot;,
+      retryable: true,
+      message: &quot;The rendering service is temporarily rate-limited.&quot;,
+    };
+  }
+  if (error.status &gt;= 500) {
+    return {
+      code: &quot;UPSTREAM_UNAVAILABLE&quot;,
+      retryable: true,
+      message: &quot;The rendering service is temporarily unavailable.&quot;,
+    };
+  }
+  return {
+    code: &quot;AVATAR_REQUEST_FAILED&quot;,
+    retryable: false,
+    message: &quot;The avatar request could not be completed.&quot;,
+  };
+}
+</code></pre>
+<p>Return useful information to the user without exposing:</p>
+<ul>
+<li>API keys.</li>
+<li>Internal provider responses.</li>
+<li>Signed download URLs after they expire.</li>
+<li>Full media URLs containing sensitive tokens.</li>
+<li>Stack traces from the server.</li>
+</ul>
+<p>Log a correlation ID, internal render ID, provider job ID, normalized error code, and timing information. Avoid logging source media, scripts containing personal information, or raw authorization headers.</p>
+<h2>Security and Media Validation</h2>
+<p>Avatar systems process user-controlled files and often produce publicly shareable media. Apply security controls before sending data upstream:</p>
+<ul>
+<li>Validate file type using content inspection, not only the filename extension.</li>
+<li>Enforce file-size and duration limits.</li>
+<li>Reject unsupported codecs and malformed media.</li>
+<li>Scan uploads for malware where appropriate.</li>
+<li>Store files outside the application server's executable paths.</li>
+<li>Use private object storage by default.</li>
+<li>Generate short-lived download URLs.</li>
+<li>Apply access control to both source assets and generated videos.</li>
+<li>Delete temporary assets according to a documented retention policy.</li>
+<li>Obtain the necessary rights and consent for faces, voices, and scripts.</li>
+</ul>
+<p>If a user can provide a remote URL, protect the upload worker against server-side request forgery. Permit only approved schemes, block private network ranges, limit redirects, and impose response-size and timeout limits.</p>
+<p>For face and voice workflows, add product-level controls as well as technical controls. A successful API request does not establish that the requester has permission to use a person's likeness or voice.</p>
+<h2>Cost and Capacity Controls</h2>
+<p>Avatar video rendering can consume more resources than ordinary text requests. Cost controls should be part of the design:</p>
+<ul>
+<li>Enforce per-user quotas.</li>
+<li>Limit input duration and output resolution.</li>
+<li>Deduplicate identical render requests.</li>
+<li>Avoid retrying permanent failures.</li>
+<li>Reuse uploaded assets when the provider permits it.</li>
+<li>Rate-limit job creation separately from status polling.</li>
+<li>Expire abandoned jobs.</li>
+<li>Track processing time, output size, and retry count.</li>
+<li>Alert on unusual increases in volume or failure rates.</li>
+</ul>
+<p>When using KeyoAPI for supported model workflows, consult the current <a href="/pricing-list">pricing page</a> rather than embedding prices in application code or documentation. Pricing and model availability can change; confirm avatar-video rates on <a href="/ai-avatar-video-generator">the avatar video generator page</a> and <a href="/pricing-list">current pricing</a> before production.</p>
+<p>A cost record should distinguish at least:</p>
+<pre><code class="language-text">application_request_id
+provider
+model_or_operation
+input_duration_or_size
+output_duration_or_size
+provider_job_id
+retry_count
+estimated_cost
+actual_cost_if_available
+</code></pre>
+<p>Do not report an estimated cost as a confirmed charge unless the provider exposes billing data that supports it.</p>
+<h2>Model and Feature Availability</h2>
+<p>Availability must be checked at integration time and periodically in production.</p>
+<p>For KeyoAPI's documented model-based interface, docs recommend querying:</p>
+<pre><code class="language-http">GET https://www.keyoapi.xyz/v1/models
+</code></pre>
+<p>Use the exact model ID returned by the live response. A hard-coded model name may become unavailable or may not be enabled for the account.</p>
+<p>For avatar and video features, a model catalog alone may not be enough. Confirm the complete operation contract in the live documentation, including:</p>
+<ul>
+<li>Input media formats.</li>
+<li>Supported generation modes.</li>
+<li>Maximum duration.</li>
+<li>Output formats.</li>
+<li>Asynchronous job behavior.</li>
+<li>Regional or account restrictions.</li>
+<li>Retention and deletion behavior.</li>
+<li>Error and retry semantics.</li>
+</ul> <h2>Testing the Workflow</h2>
+<p>Test the orchestration separately from the provider adapter.</p>
+<p>A fake provider can exercise state transitions without uploading real media:</p>
+<pre><code class="language-js">function createFakeProvider() {
+  let polls = 0;
+  return {
+    async uploadAsset(file) {
+      return { id: `asset-${file.name}` };
+    },
+    async createJob(input) {
+      return { id: &quot;job-123&quot;, input };
+    },
+    async getJob() {
+      polls += 1;
+      if (polls &lt; 3) {
+        return { id: &quot;job-123&quot;, status: &quot;processing&quot; };
+      }
+      return { id: &quot;job-123&quot;, status: &quot;completed&quot; };
+    },
+    async downloadResult() {
+      return { location: &quot;private://rendered-video/job-123.mp4&quot; };
+    },
+  };
+}
+</code></pre>
+<p>Cover these cases:</p>
+<ul>
+<li>Upload failure followed by a successful retry.</li>
+<li>Rate limiting during job creation.</li>
+<li>A timeout after a job may already have been created.</li>
+<li>A failed job with a permanent input error.</li>
+<li>A job that never leaves the processing state.</li>
+<li>Duplicate webhook delivery.</li>
+<li>An expired result URL.</li>
+<li>A provider response with an unknown status.</li>
+<li>Unauthorized access to another user's job.</li>
+<li>Oversized or invalid media input.</li>
+</ul>
+<p>Contract tests should run against a provider's documented test environment when one exists. Keep them separate from unit tests so changes in external availability do not make the entire test suite unreliable.</p>
+<h2>Practical Checklist</h2>
+<p>Before shipping an AI avatar integration, verify:</p>
+<ul>
+<li><span aria-hidden="true">☐</span> The provider explicitly documents the avatar, lip-sync, or video operation.</li>
+<li><span aria-hidden="true">☐</span> Upload fields, media limits, and accepted formats are confirmed.</li>
+<li><span aria-hidden="true">☐</span> Job creation and status schemas come from current documentation.</li>
+<li><span aria-hidden="true">☐</span> Provider-specific paths are isolated in an adapter.</li>
+<li><span aria-hidden="true">☐</span> API keys are stored server-side in environment variables or a secret manager.</li>
+<li><span aria-hidden="true">☐</span> Uploads and generated videos use private storage by default.</li>
+<li><span aria-hidden="true">☐</span> File type, size, duration, and content are validated.</li>
+<li><span aria-hidden="true">☐</span> Job creation uses documented idempotency support or a reconciliation strategy.</li>
+<li><span aria-hidden="true">☐</span> Retries use exponential backoff and jitter.</li>
+<li><span aria-hidden="true">☐</span> Rate limits, quota failures, and invalid requests are not retried indefinitely.</li>
+<li><span aria-hidden="true">☐</span> Polling has a maximum duration and request limit.</li>
+<li><span aria-hidden="true">☐</span> Webhook signatures and duplicate events are handled when webhooks are available.</li>
+<li><span aria-hidden="true">☐</span> Logs contain correlation IDs but exclude keys and sensitive media.</li>
+<li><span aria-hidden="true">☐</span> Per-user quotas and output limits control cost.</li>
+<li><span aria-hidden="true">☐</span> Model and feature availability are checked against current documentation.</li>
+<li><span aria-hidden="true">☐</span> The application does not assume that an OpenAI-compatible API includes avatar-video support.</li>
+</ul>
+<h2>Conclusion</h2>
+<p>A reliable Node.js avatar integration is a workflow and state-management problem — start from <a href="/ai-avatar-video-generator">the AI avatar video generator page</a>, pick a live avatar ID on <a href="/pricing-list">the pricing list</a>, then verify one end-to-end render before scaling concurrency. Uploads, asynchronous jobs, retries, result storage, authentication, and media security must work together.</p>

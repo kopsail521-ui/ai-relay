@@ -1,0 +1,329 @@
+<!-- TITLE: RMBG-2.0 API for Product Photos: A Practical Integration Guide -->
+<!-- EXCERPT: A developer-focused guide to server-side multipart uploads, output validation, production limits, and safe ecommerce image workflows. -->
+<!-- DESC: A developer-focused guide to server-side multipart uploads, output validation, production limits, and safe ecommerce image workflows. -->
+<h2>Key Takeaways</h2>
+<ul>
+<li>The RMBG-2.0 API can help developers automate product-photo background removal in catalog, marketplace, and media workflows.</li>
+<li>A practical integration should treat background removal as a pipeline: validate the input, upload the image as multipart form data, process the response, and store the resulting asset securely.</li>
+<li>KeyoAPI provides an OpenAI-compatible gateway with Bearer-token authentication. The background removal request uses <code>POST https://www.keyoapi.xyz/v1/images/mattings</code>.</li>
+<li>Use model ID <code>RMBG-2.0</code> via <code>POST /v1/images/mattings</code>; confirm the live rate on <a href="/pricing/RMBG-2.0">the RMBG-2.0 pricing page</a> and the guide at <a href="/model/RMBG-2.0">the RMBG-2.0 model page</a>.</li>
+<li>API keys belong on the server side, never in browser code, public repositories, mobile applications, or client-side screenshots.</li>
+</ul>
+<h2>1. Introduction</h2>
+<p>Product photography is often created in inconsistent environments. A retailer may receive images from multiple suppliers, each using a different background, lighting setup, camera angle, or file format. Before those images can appear in a catalog or marketplace, a developer may need to isolate the product, place it on a neutral background, or prepare it for a standardized design template.</p>
+<p>Manual editing does not scale well when a catalog contains hundreds or thousands of images. A background removal API provides a way to add this operation to an existing upload, catalog, or media-processing workflow.</p>
+<p>This guide explains how to integrate the <strong>RMBG-2.0 API for product photos</strong> through KeyoAPI. It focuses on the concrete developer problem: sending a product image through a server-side API request and handling the result safely in production.</p>
+<p>The article covers:</p>
+<ol>
+<li>How to confirm model availability and authenticate requests.</li>
+<li>How to submit a product image using multipart upload.</li>
+<li>What to expect from the input and output workflow.</li>
+<li>How to handle common errors and production risks.</li>
+<li>When this approach is appropriate for an ecommerce or catalog pipeline.</li>
+</ol>
+<h2>2. How the RMBG-2.0 API Fits a Product-Image Workflow</h2>
+<h3>Core conclusion</h3>
+<p>The API should be treated as one processing step in a larger image pipeline, not as a complete product-content system. The most reliable implementations validate images before upload, call the API from a protected backend, inspect the returned media, and then save the processed asset with its own metadata.</p>
+<p>A typical product-photo workflow looks like this:</p>
+<pre><code class="language-text">Supplier or user upload ↓
+Input validation and file-size checks ↓
+Server-side multipart request ↓
+RMBG-2.0 background removal ↓
+Output validation ↓
+Object storage or media service ↓
+Catalog, marketplace, or design workflow
+</code></pre>
+<p>This separation is useful because background removal and catalog management have different responsibilities. The API processes the image; your application decides where the result is stored, how it is named, whether it requires review, and which storefront uses it.</p>
+<h3>Common product-photo scenarios</h3>
+<p>The RMBG-2.0 API may be useful in scenarios such as:</p>
+<ul>
+<li>Removing a studio or household background from supplier photos.</li>
+<li>Preparing product cutouts for a marketplace listing.</li>
+<li>Generating transparent product assets for marketing templates.</li>
+<li>Standardizing images before placing them on a branded background.</li>
+<li>Processing user-submitted product images in an internal catalog tool.</li>
+</ul>
+<p>The correct result depends on the source image. A product photographed against a high-contrast, uncluttered background is generally easier to process than a product with fine hair, transparent materials, reflective surfaces, or strong visual overlap with the background.</p>
+<h3>Recommended architecture</h3>
+<p>Use a backend service to manage the request:</p>
+<ul>
+<li>The browser uploads the original image to your application.</li>
+<li>Your application validates the file.</li>
+<li>Your backend sends the image to the RMBG-2.0 API.</li>
+<li>Your backend receives and validates the result.</li>
+<li>Your application stores the processed output and returns only the necessary asset reference to the client.</li>
+</ul>
+<p>This architecture keeps the API key private and makes it easier to add retries, logging, moderation, file cleanup, and human review later.</p>
+<h2>3. Authentication and Model Availability</h2>
+<h3>Core conclusion</h3>
+<p>Do not hard-code assumptions about model availability. Confirm the current model catalog before deploying an integration, and keep the API key in a server-side environment variable.</p>
+<p>KeyoAPI uses Bearer-token authentication. The request header follows this format:</p>
+<pre><code class="language-http">Authorization: Bearer YOUR_API_KEY
+</code></pre>
+<p>Create the key from the KeyoAPI dashboard and store it in a secret manager or environment variable. Do not place it in:</p>
+<ul>
+<li>Browser JavaScript</li>
+<li>Mobile application binaries</li>
+<li>Public Git repositories</li>
+<li>Screenshots</li>
+<li>Frontend configuration files</li>
+<li>Public documentation examples containing a real credential</li>
+</ul>
+<h3>Check the live model catalog</h3>
+<p>Model availability can change. Before using <code>RMBG-2.0</code>, check the current model list:</p>
+<pre><code class="language-bash">curl https://www.keyoapi.xyz/v1/models \
+  -H &quot;Authorization: Bearer YOUR_API_KEY&quot;
+</code></pre>
+<p>Use a model ID returned by the live endpoint or listed in the current KeyoAPI documentation. If <code>RMBG-2.0</code> is not currently available, do not assume that the request will work simply because an older integration used that model.</p>
+<h3>Environment configuration</h3>
+<p>A server-side environment might include:</p>
+<pre><code class="language-bash">export KEYOAPI_API_KEY=&quot;YOUR_API_KEY&quot;
+</code></pre>
+<p>In a real deployment, use the secret-management facilities provided by your hosting platform rather than committing this value to a configuration file.</p>
+<h2>4. Sending a Product Image with Multipart Upload</h2>
+<h3>Core conclusion</h3>
+<p>For a local product image, use a multipart form upload and include the model identifier in the request. The background removal endpoint is:</p>
+<pre><code class="language-text">POST https://www.keyoapi.xyz/v1/images/mattings
+</code></pre>
+<p>A <code>curl</code> request provides a simple integration test:</p>
+<pre><code class="language-bash">curl -X POST &quot;https://www.keyoapi.xyz/v1/images/mattings&quot; \
+  -H &quot;Authorization: Bearer YOUR_API_KEY&quot; \
+  -F &quot;model=RMBG-2.0&quot; \
+  -F &quot;image=@product-photo.jpg&quot;
+</code></pre>
+<p>Replace <code>YOUR_API_KEY</code> with a valid server-side key and replace <code>product-photo.jpg</code> with the path to the source image.</p>
+<h3>Why multipart matters</h3>
+<p>Multipart form data sends the image as a file part rather than embedding the binary file into a JSON request. This is a natural format for server-side upload workflows and allows the request to carry both:</p>
+<ul>
+<li>The model selection</li>
+<li>The image file</li>
+</ul>
+<p>When using <code>curl</code>, the <code>-F</code> options construct the multipart request automatically. When using an HTTP library, ensure that the library creates the multipart boundary correctly. Do not manually set an incorrect <code>Content-Type</code> boundary.</p>
+<h3>Input expectations</h3>
+<p>Before sending a product image, your application should check:</p>
+<ul>
+<li>The file exists and can be opened.</li>
+<li>The detected MIME type matches an allowed image type.</li>
+<li>The file is not unexpectedly large for your workflow.</li>
+<li>The upload is not empty or corrupted.</li>
+<li>The image belongs to the expected product or catalog item.</li>
+<li>The original file is preserved if the processed output needs review.</li>
+</ul>
+<p>The exact supported formats, limits, and response behavior should be confirmed in the current KeyoAPI documentation. Avoid building a production system around undocumented assumptions.</p>
+<h3>Output handling</h3>
+<p>The API response should be handled as a media-processing result rather than blindly written to storage. Depending on the current endpoint behavior, your application may need to process returned image data or another documented response representation.</p>
+<p>A robust implementation should:</p>
+<ol>
+<li>Check the HTTP status code.</li>
+<li>Inspect the response <code>Content-Type</code>.</li>
+<li>Confirm that the response body is not empty.</li>
+<li>Validate that the resulting file can be opened as an image.</li>
+<li>Store it with a new filename or object key.</li>
+<li>Preserve a link to the original image for comparison and reprocessing.</li>
+</ol>
+<p>For example, do not overwrite the original supplier photo immediately. A safer naming pattern is:</p>
+<pre><code class="language-text">products/1234/source/product-photo.jpg
+products/1234/processed/product-photo-rmbg.png
+</code></pre>
+<p>The final extension should match the actual returned media format. If the API documentation specifies a particular response format, follow that specification rather than assuming that every response is PNG or that transparency is always represented in the same way.</p>
+<h2>5. Production Error Handling and Operational Cautions</h2>
+<h3>Core conclusion</h3>
+<p>A successful prototype is not enough for a catalog pipeline. Production code must distinguish authentication errors, temporary request failures, invalid input, and output-validation failures.</p>
+<h3>Common errors</h3>
+<h4><code>401 Unauthorized</code></h4>
+<p>This usually indicates an authentication problem, such as:</p>
+<ul>
+<li>Missing <code>Authorization</code> header</li>
+<li>Invalid API key</li>
+<li>Revoked API key</li>
+<li>Incorrect Bearer-token syntax</li>
+</ul>
+<p>Check that the request contains:</p>
+<pre><code class="language-http">Authorization: Bearer YOUR_API_KEY
+</code></pre>
+<p>Do not solve a <code>401</code> by repeatedly retrying the same request. First verify the environment variable, key status, endpoint, and header format.</p>
+<h4><code>429 Too Many Requests</code></h4>
+<p>A <code>429</code> response indicates that the request cannot be processed at that moment because of request-volume or service constraints. Your application should:</p>
+<ul>
+<li>Record the event in logs.</li>
+<li>Apply controlled retry behavior where appropriate.</li>
+<li>Avoid immediate tight-loop retries.</li>
+<li>Preserve the original job so it can be retried safely.</li>
+<li>Surface a useful status to the user or queue system.</li>
+</ul>
+<p>Do not assume a fixed rate limit or promise a specific retry time unless the current documentation defines it.</p>
+<h4>Other unsuccessful responses</h4>
+<p>For other non-success responses, log enough information to diagnose the problem without exposing the API key or sensitive product data. Useful fields include:</p>
+<ul>
+<li>Request identifier, if returned</li>
+<li>Internal product or job ID</li>
+<li>HTTP status code</li>
+<li>Response content type</li>
+<li>Processing timestamp</li>
+<li>File metadata such as size and detected MIME type</li>
+</ul>
+<p>Avoid logging the full image or embedding secret headers in application logs.</p>
+<h3>Add idempotent job tracking</h3>
+<p>Catalog systems frequently retry jobs after a timeout. Without job tracking, one source image may produce several duplicate assets.</p>
+<p>Use an internal record containing fields such as:</p>
+<div class="article-table-wrap"><table class="article-table">
+<thead>
+<tr>
+<th>Field</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>job_id</code></td>
+<td>Identifies the processing request</td>
+</tr>
+<tr>
+<td><code>product_id</code></td>
+<td>Links the image to a catalog item</td>
+</tr>
+<tr>
+<td><code>source_hash</code></td>
+<td>Detects whether the source image changed</td>
+</tr>
+<tr>
+<td><code>status</code></td>
+<td>Tracks queued, processing, completed, or failed state</td>
+</tr>
+<tr>
+<td><code>attempt_count</code></td>
+<td>Prevents unlimited retries</td>
+</tr>
+<tr>
+<td><code>output_key</code></td>
+<td>Stores the processed asset location</td>
+</tr>
+<tr>
+<td><code>error_code</code></td>
+<td>Supports operational diagnosis</td>
+</tr>
+</tbody>
+</table></div>
+<p>This approach also makes it easier to reprocess only the images affected by a model or workflow change.</p>
+<h3>Quality review is still necessary</h3>
+<p>Background removal is not the same as product-quality assurance. Add review rules for images containing:</p>
+<ul>
+<li>Transparent packaging</li>
+<li>Glass or reflective surfaces</li>
+<li>Fine wires or thin accessories</li>
+<li>Hair, fur, or fabric fringe</li>
+<li>Products with internal holes</li>
+<li>Dark products against dark backgrounds</li>
+<li>Multiple objects in one frame</li>
+<li>Shadows that are part of the desired presentation</li>
+</ul>
+<p>For high-value listings, compare the processed result with the original before publishing. A human review step may be appropriate when a cutout directly affects customer trust or marketplace compliance.</p>
+<h2>6. Integration Decision Guide</h2>
+<p>The following table summarizes practical decisions for a product-photo implementation:</p>
+<div class="article-table-wrap"><table class="article-table">
+<thead>
+<tr>
+<th>Decision area</th>
+<th>Recommended approach</th>
+<th>Why it matters</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>API location</td>
+<td>Call from a protected backend</td>
+<td>Prevents API-key exposure</td>
+</tr>
+<tr>
+<td>Authentication</td>
+<td>Bearer token in a secret environment variable</td>
+<td>Keeps credentials outside public code</td>
+</tr>
+<tr>
+<td>Upload method</td>
+<td>Multipart form data</td>
+<td>Sends the image and model parameter together</td>
+</tr>
+<tr>
+<td>Model selection</td>
+<td>Confirm <code>RMBG-2.0</code> in the live model catalog</td>
+<td>Availability can change</td>
+</tr>
+<tr>
+<td>Original image</td>
+<td>Preserve it separately</td>
+<td>Enables review and reprocessing</td>
+</tr>
+<tr>
+<td>Output validation</td>
+<td>Check status, content type, and image readability</td>
+<td>Prevents corrupted assets entering the catalog</td>
+</tr>
+<tr>
+<td>Retry behavior</td>
+<td>Use bounded, logged retries</td>
+<td>Reduces duplicate jobs and retry storms</td>
+</tr>
+<tr>
+<td>Quality control</td>
+<td>Add automated checks and human review where needed</td>
+<td>Handles difficult product categories</td>
+</tr>
+<tr>
+<td>Cost control</td>
+<td>Monitor usage and consult live pricing</td>
+<td>Prevents outdated assumptions</td>
+</tr>
+</tbody>
+</table></div>
+<h3>When to use a queue</h3>
+<p>A queue is useful when image processing is not required to complete during the user’s upload request. For example:</p>
+<ol>
+<li>Accept the product image.</li>
+<li>Create a processing job.</li>
+<li>Return a pending status.</li>
+<li>Process the image asynchronously.</li>
+<li>Notify the catalog service when the output is ready.</li>
+</ol>
+<p>This design protects the upload endpoint from long-running work and makes retry handling more predictable.</p>
+<p>For small internal tools, a synchronous request may be adequate. For supplier feeds or bulk catalog imports, asynchronous processing is usually easier to operate.</p>
+<h3>Pricing and model availability</h3>
+<p>KeyoAPI uses prepaid API credits and usage-based billing. Model availability and pricing may change. Check the KeyoAPI model catalog for current information.</p>
+<p>Review the current pricing page before estimating catalog-processing costs:</p>
+<p><a href="/pricing-list">the full pricing list</a></p>
+<p>Do not place a fixed price in application documentation unless it is maintained from the live source. A useful internal estimate should account for the number of source images, reprocessing jobs, failed attempts, and manual-review workflows.</p>
+<h2>7. FAQ</h2>
+<h3>Is the RMBG-2.0 API suitable for ecommerce product images?</h3>
+<p>It can be suitable for automating background-removal steps in ecommerce workflows, especially when product images are consistently framed and reasonably separated from their backgrounds. Difficult materials and complex scenes should be tested before full catalog migration.</p>
+<h3>Which endpoint should developers use?</h3>
+<p>The integration endpoint is:</p>
+<pre><code class="language-text">POST https://www.keyoapi.xyz/v1/images/mattings
+</code></pre>
+<p>Send the request with Bearer-token authentication and multipart form data, including the <code>RMBG-2.0</code> model identifier and the product image file.</p>
+<h3>Can I put the API key in frontend code?</h3>
+<p>No. Keep the API key on your server. Browser code, mobile applications, public repositories, and screenshots can expose credentials and allow unauthorized use.</p>
+<h3>How do I know whether RMBG-2.0 is currently available?</h3>
+<p>Query the live model list:</p>
+<pre><code class="language-bash">curl https://www.keyoapi.xyz/v1/models \
+  -H &quot;Authorization: Bearer YOUR_API_KEY&quot;
+</code></pre>
+<p>Use the model ID returned by the current endpoint or documented in the current model catalog.</p>
+<h2>8. Conclusion</h2>
+<p>The RMBG-2.0 API can provide a practical background-removal step for product-photo pipelines, but the quality of the integration depends on more than one API request. Developers should validate source files, use multipart uploads, protect the Bearer token, confirm model availability, validate the returned media, and preserve the original asset.</p>
+<p>For a quick server-side test, call:</p>
+<pre><code class="language-text">POST https://www.keyoapi.xyz/v1/images/mattings
+</code></pre>
+<p>with <code>model=RMBG-2.0</code> and a multipart image upload. For production, add job tracking, bounded retries, output checks, and review rules for difficult product categories.</p>
+<p>To begin, create a KeyoAPI account and generate an API key from the dashboard. Then review the current documentation, model catalog, and pricing before connecting the RMBG-2.0 workflow to your product-image pipeline.</p>
+<h2>Editorial scope and verification</h2>
+<p>This guide is for developers building a product-image workflow, not a claim that every image will produce a perfect cutout. The integration contract, model availability, supported formats, response type, limits, and pricing must be checked against the current provider documentation before deployment. The examples below show the application boundary and validation responsibilities; they do not replace a live endpoint test.</p>
+<h2>What to verify before shipping</h2>
+<ul>
+<li>Confirm that the model ID is present in the live model catalog.</li>
+<li>Test representative images, including transparent packaging, reflective surfaces, hair, thin edges, and multiple objects.</li>
+<li>Verify the response content type and decode the output as an image before storing it.</li>
+<li>Preserve the source image and record a job ID, source hash, attempt count, and output key.</li>
+<li>Keep the API key on the server and redact it from logs.</li>
+</ul>
+<h2>Decision rule</h2>
+<p>Use this API when background removal is one controlled step in a larger catalog pipeline. Add human review for high-value listings or difficult source images. Do not publish a processed asset merely because the HTTP request succeeded; validate the pixels and the business result first.</p>

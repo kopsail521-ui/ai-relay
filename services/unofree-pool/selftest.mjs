@@ -7,6 +7,7 @@
  * 运行：node selftest.mjs   （退出码 0 = 全部通过）
  */
 import http from "http";
+import net from "net";
 import { spawn } from "child_process";
 import path from "path";
 import { fileURLToPath } from "url";
@@ -16,6 +17,8 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const MOCK_PORT = 3999;
 const POOL_PORT = 3998;
 const POOL2_PORT = 3997;
+const POOL3_PORT = 3996;
+const HANG_PORT = 3995;
 const BASE = `http://127.0.0.1:${POOL_PORT}`;
 const KEY = "fan-key-1";
 
@@ -92,6 +95,12 @@ const mock = http.createServer((req, res) => {
     // 走不到这里：未知模型在上方已提前返回
     res.destroy();
   });
+});
+
+// ---------------------------------------------------------------------------
+// 挂起上游：接受 TCP 连接但永不返回 HTTP 响应头（模拟免费上游半开连接）
+const hangServer = net.createServer((socket) => {
+  socket.on("error", () => {}); // 清理时挂起连接被 reset，忽略即可
 });
 
 // ---------------------------------------------------------------------------
@@ -175,11 +184,13 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
 // ---------------------------------------------------------------------------
 async function main() {
-  let pool, pool2;
+  let pool, pool2, pool3;
   const cleanup = () => {
     try { pool?.kill(); } catch {}
     try { pool2?.kill(); } catch {}
+    try { pool3?.kill(); } catch {}
     try { mock.close(); } catch {}
+    try { hangServer.close(); } catch {}
   };
   process.on("exit", cleanup);
   process.on("uncaughtException", (e) => { console.error("uncaught:", e); cleanup(); process.exit(1); });
@@ -262,6 +273,24 @@ async function main() {
   check("返回 Retry-After 头", (r.headers.get("retry-after") || "") !== "");
   r = await chat({ model: "keyo-flash:free", stream: false, messages: [{ role: "user", content: "x" }] }, KEY, POOL2_PORT);
   check("冷却中直接 429（不再打上游）", r.status === 429);
+
+  console.log("== 上游连接挂起（不返回响应头）→ 连接超时兜底 ==");
+  await new Promise((r0) => hangServer.listen(HANG_PORT, "127.0.0.1", r0));
+  pool3 = spawnServer(POOL3_PORT, {
+    POOL_2_ALIAS: "hang-test:free",
+    POOL_2_UPSTREAMS: "",
+    POOL_2_BASE_URL: `http://127.0.0.1:${HANG_PORT}/v1`,
+    POOL_2_API_KEYS: "sk-test-1",
+    POOL_2_MODELS: "hang:free",
+    CONNECT_TIMEOUT_MS: "800",
+    ERR_COOLDOWN_MS: "200",
+  });
+  await waitListening(`http://127.0.0.1:${POOL3_PORT}/health`);
+  const hangStart = Date.now();
+  r = await chat({ model: "hang-test:free", stream: false, messages: [{ role: "user", content: "x" }] }, KEY, POOL3_PORT);
+  const hangElapsed = Date.now() - hangStart;
+  check("连接挂起在超时内返回（未无限等待）", hangElapsed < 8000, `elapsed=${hangElapsed}ms`);
+  check("连接超时返回 502", r.status === 502, `status=${r.status} body=${JSON.stringify(await r.json().catch(() => ({}))).slice(0, 150)}`);
 
   console.log("== /health ==");
   r = await fetch(`${BASE}/health`);

@@ -57,6 +57,7 @@ const PORT = Number(process.env.PORT || 3020);
 const HOST = process.env.LISTEN_HOST || "127.0.0.1";
 const POOL_KEYS = splitList(process.env.POOL_API_KEYS || "");
 const MAX_ATTEMPTS = Number(process.env.MAX_ATTEMPTS || 6);
+const CONNECT_TIMEOUT_MS = Number(process.env.CONNECT_TIMEOUT_MS || 30000);
 const FIRST_TOKEN_TIMEOUT_MS = Number(process.env.FIRST_TOKEN_TIMEOUT_MS || 30000);
 const IDLE_TIMEOUT_MS = Number(process.env.IDLE_TIMEOUT_MS || 25000);
 const ATTEMPT_TOTAL_TIMEOUT_MS = Number(process.env.ATTEMPT_TOTAL_TIMEOUT_MS || 180000);
@@ -161,11 +162,15 @@ async function callUpstream({ pool, ei, ki, entry, body, clientSignal, onDelta }
   const ctrl = new AbortController();
   const onClientAbort = () => ctrl.abort(new Error("client-abort"));
   clientSignal?.addEventListener("abort", onClientAbort, { once: true });
-  let firstTimer = null, idleTimer = null, totalTimer = null;
-  const clearTimers = () => { if (firstTimer) clearTimeout(firstTimer); if (idleTimer) clearTimeout(idleTimer); if (totalTimer) clearTimeout(totalTimer); };
+  let firstTimer = null, idleTimer = null, totalTimer = null, connectTimer = null;
+  const clearTimers = () => { if (connectTimer) clearTimeout(connectTimer); if (firstTimer) clearTimeout(firstTimer); if (idleTimer) clearTimeout(idleTimer); if (totalTimer) clearTimeout(totalTimer); };
   const bumpIdle = () => { if (idleTimer) clearTimeout(idleTimer); idleTimer = setTimeout(() => ctrl.abort(new Error("idle-timeout")), IDLE_TIMEOUT_MS); };
+  // 连接阶段超时：上游接受 TCP 连接但迟迟不返回 HTTP 响应头时，fetch 会无限期挂起。
+  // 这是唯一没有流式保护可以覆盖的窗口，必须单独兜底。
+  connectTimer = setTimeout(() => ctrl.abort(new Error("connect-timeout")), CONNECT_TIMEOUT_MS);
   try {
     const res = await fetch(`${entry.origin}/v1/chat/completions`, { method: "POST", headers: { "Content-Type": "application/json", Authorization: `Bearer ${key}` }, body: JSON.stringify(body), signal: ctrl.signal });
+    if (connectTimer) { clearTimeout(connectTimer); connectTimer = null; }
     if (res.status !== 200) {
       const text = await res.text().catch(() => "");
       const ra = Number(res.headers.get("retry-after"));
@@ -210,7 +215,7 @@ async function callUpstream({ pool, ei, ki, entry, body, clientSignal, onDelta }
     if (e instanceof UpstreamError) return { kind: "upstream", status: 502, body: JSON.stringify({ error: e.info }), ei, ki, model: entry.id };
     if (clientSignal?.aborted) return { kind: "aborted" };
     const why = ctrl.signal.aborted ? String(ctrl.signal.reason?.message || "") : "";
-    if (["first-token-timeout", "idle-timeout", "attempt-total-timeout"].includes(why)) return { kind: "timeout", why, ei, ki, model: entry.id };
+    if (["first-token-timeout", "idle-timeout", "attempt-total-timeout", "connect-timeout"].includes(why)) return { kind: "timeout", why, ei, ki, model: entry.id };
     return { kind: "neterr", message: String(e?.message || e), ei, ki, model: entry.id };
   } finally {
     clearTimers();

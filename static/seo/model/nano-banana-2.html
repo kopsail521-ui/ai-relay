@@ -87,7 +87,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
 <p>Nano Banana 2 is Google's image generation model, served on KeyoAPI through the OpenAI-compatible /v1/images/generations endpoint. If you already call chat, Whisper, or OCR with a KeyoAPI key, image generation is one more model string — no Google Cloud project, no second credential.</p>
 <p>Pricing is simple: $0.0205 per generated image. It sits between nano-banana-2.1 ($0.0123, the newer release) and nano-banana-pro ($0.0274, the top tier) — all three on the same key, so A/B testing a prompt across tiers is a model-string change.</p>
 <p>Call it with POST /v1/images/generations, model=nano-banana-2, and a prompt. size is optional (1024x1024 by default). Responses come back in the OpenAI images shape, so existing clients and SDKs work after pointing base_url at https://www.keyoapi.xyz/v1.</p>
-<p>When to pick this lane: keep nano-banana-2 where your stack pins the base generation, prefer 2.1 for newer-release quality at a lower per-image price, and escalate to pro when fidelity dominates. Confirm live rates on <a href="/pricing-list">/pricing-list</a> before volume work.</p>
+<p>When to pick this lane: keep nano-banana-2 where your stack pins the base generation, prefer 2.1 for newer-release quality at a lower per-image price, and escalate to pro when fidelity dominates. Confirm live rates on <a href="/pricing-list">the full pricing list</a> before volume work.</p>
 
 <h2>Quick start</h2>
 <div class="card">
@@ -102,12 +102,12 @@ ul{margin:0 0 14px;padding-left:1.2em}
 </div>
 <h2>FAQ</h2>
 <div class="faq"><details><summary>How do I call the Nano Banana 2 API?</summary><p>Use your KeyoAPI Bearer key and POST to /v1/images/generations with model=nano-banana-2 and a prompt. The endpoint is OpenAI-compatible, so existing image clients work with a base URL change.</p></details>
-<details><summary>Nano Banana 2 vs 2.1 vs Pro — which one?</summary><p>nano-banana-2 is the base lane at $0.0205 per image; nano-banana-2.1 is the newer release at $0.0123 per image; nano-banana-pro is the top tier at $0.0274. All three run on the same key — see <a href="/model/nano-banana-2.1">/model/nano-banana-2.1</a> and <a href="/pricing-list">/pricing-list</a>.</p></details></div>
+<details><summary>Nano Banana 2 vs 2.1 vs Pro — which one?</summary><p>nano-banana-2 is the base lane at $0.0205 per image; nano-banana-2.1 is the newer release at $0.0123 per image; nano-banana-pro is the top tier at $0.0274. All three run on the same key — see <a href="/model/nano-banana-2.1">the nano-banana-2.1 model page</a> and <a href="/pricing-list">the full pricing list</a>.</p></details></div>
 <h2>Related models</h2>
 <div class="grid"><a href="/model/nano-banana-2.1">Nano Banana 2.1 API</a>
 <a href="/model/sam3">SAM 3 API</a>
 <a href="/model/RMBG-2.0">RMBG-2.0 API</a></div>
-<p class="meta">Guide for <strong>nano-banana-2</strong>. Catalog: <a href="/pricing">/pricing</a> · Rates: <a href="/pricing-list">/pricing-list</a>.</p>
+<p class="meta">Guide for <strong>nano-banana-2</strong>. Catalog: <a href="/pricing">the pricing page</a> · Rates: <a href="/pricing-list">the full pricing list</a>.</p>
 
 </main>
 <footer class="footer">

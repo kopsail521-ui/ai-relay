@@ -127,8 +127,48 @@ function linkifySitePaths(raw) {
   );
   return s.replace(re, (m) => {
     const href = rewritePricingIdPath(m);
-    return `<a href="${href}">${href}</a>`;
+    return `<a href="${href}">${esc(pathLabel(href))}</a>`;
   });
+}
+
+/** Natural-word anchor text for internal links (never the bare path). */
+function pathLabel(href) {
+  const fixed = {
+    "/pricing": "the pricing page",
+    "/pricing-list": "the full pricing list",
+    "/models": "the model guides page",
+    "/free-models": "the free models page",
+    "/compare": "the model comparison page",
+    "/sign-up": "the sign-up page",
+    "/sign-in": "the sign-in page",
+    "/about": "the about page",
+  };
+  if (fixed[href]) return fixed[href];
+  let m = href.match(/^\/model\/([^/]+)$/);
+  if (m) return `the ${m[1]} model page`;
+  m = href.match(/^\/brand\/blog\/article\/[^/]+\/?$/);
+  if (m) return "our blog guide";
+  for (const p of pricingLandings.pages || []) {
+    if (href === `/${p.slug}`) return landingPathLabel(p.slug);
+  }
+  return href;
+}
+
+function landingPathLabel(slug) {
+  const labels = {
+    "gemini-api-pricing": "the Gemini API pricing page",
+    "deepseek-api-pricing": "the DeepSeek API pricing page",
+    "glm-api-pricing": "the GLM API pricing page",
+    "claude-api-pricing": "the Claude API pricing page",
+    "openai-api-pricing": "the OpenAI API pricing page",
+    "grok-api-pricing": "the Grok API pricing page",
+    "remove-bg-api-alternative": "the Remove.bg alternative guide",
+    "openai-api-alternative": "the OpenAI API alternative guide",
+    "tts-api": "the TTS API guide",
+    "voice-cloning-api": "the voice cloning API guide",
+    "ai-avatar-video-generator": "the AI avatar video generator page",
+  };
+  return labels[slug] || `the ${slug.replace(/-/g, " ")} page`;
 }
 
 /** Crawlers cannot fetch /pricing/{id} (robots Disallow: /pricing/). */
@@ -317,7 +357,7 @@ function freeTierBlock(m) {
 <h2>Free tier available</h2>
 <div class="card">
 <p>Same model family on KeyoAPI: use <code>${esc(freeId)}</code> for <span class="ok">$0</span> calls billed to your $10 welcome credit (fair-use, ${esc(channel)} channel), or <code>${esc(paid)}</code> for token-metered production traffic.</p>
-<p>Rules: free = <code>:free</code> suffix; paid = bare ID. Fair-use rate/concurrency limits apply on free — see <a href="/free-models">/free-models</a>.</p>
+<p>Rules: free = <code>:free</code> suffix; paid = bare ID. Fair-use rate/concurrency limits apply on free — see <a href="/free-models">the free models page</a>.</p>
 <p><strong>Free curl</strong></p>
 <pre><code>curl https://www.keyoapi.xyz/v1/chat/completions \\
   -H "Authorization: Bearer YOUR_API_KEY" \\
@@ -370,7 +410,7 @@ ${freeTierBlock(m)}
 <div class="faq">${faqs}</div>
 <h2>Related models</h2>
 ${relatedLinks(m.related)}
-<p class="meta">Guide for <strong>${esc(m.id)}</strong>. Catalog: <a href="/pricing">/pricing</a> · Rates: <a href="/pricing-list">/pricing-list</a>.</p>
+<p class="meta">Guide for <strong>${esc(m.id)}</strong>. Catalog: <a href="/pricing">the pricing page</a> · Rates: <a href="/pricing-list">the full pricing list</a>.</p>
 `;
   return layout({
     title: m.title,
@@ -529,7 +569,7 @@ ${nav()}
   </div>
 </div>
 <h2>Headline prices</h2>
-<p class="meta">Indicative KeyoAPI sell rates for planning. Full table on <a href="/compare">/compare</a> · live list on <a href="/pricing-list">/pricing-list</a>.</p>
+<p class="meta">Indicative KeyoAPI sell rates for planning. Full table on <a href="/compare">the model comparison page</a> · live list on <a href="/pricing-list">the full pricing list</a>.</p>
 <table>
 <thead><tr><th>Capability</th><th>Typical official list</th><th>KeyoAPI</th><th>Notes</th></tr></thead>
 <tbody>
@@ -538,7 +578,7 @@ ${headlineRows}
 </table>
 <p class="compare-jump"><a href="/compare">See the full comparison page →</a></p>
 <h2>Free models — $0 (covered by your $10 credit)</h2>
-<p class="meta">Fixed $0 catalog IDs for prototyping, billed against the $10 welcome credit at fair-use limits. Full list + rules: <a href="/free-models">/free-models</a>.</p>
+<p class="meta">Fixed $0 catalog IDs for prototyping, billed against the $10 welcome credit at fair-use limits. Full list + rules: <a href="/free-models">the free models page</a>.</p>
 <div class="grid">
 ${freeCards}
 </div>
@@ -599,7 +639,7 @@ function renderModelsIndex() {
   <a class="btn btn-secondary" href="/free-models">Free models</a>
 </div>
 <h2>Headline price anchors</h2>
-<p class="meta">Full headline comparison (official list vs Keyo rates for every lane) lives on <a href="/compare">/compare</a> — this index lists the guides themselves.</p>
+<p class="meta">Full headline comparison (official list vs Keyo rates for every lane) lives on <a href="/compare">the model comparison page</a> — this index lists the guides themselves.</p>
 <h2>All model guides</h2>
 <table>
 <thead><tr><th>Model ID</th><th>Category</th><th>Listed price</th><th>Links</th></tr></thead>
@@ -654,7 +694,7 @@ function renderAbout() {
   <li><strong>OpenAI-compatible paths:</strong> <code>/v1/chat/completions</code>, <code>/v1/images/generations</code>, <code>/v1/audio/transcriptions</code>, <code>/v1/audio/speech</code>.</li>
   <li><strong>Dedicated REST:</strong> OCR, CV tools, async TTS/video, digital humans — billed per page / request / second / characters.</li>
   <li><strong>One key, one balance:</strong> no per-vendor accounts or credits to manage.</li>
-  <li><strong>A free tier:</strong> fixed <code>$0</code> model IDs for prototyping, covered by your $10 welcome credit with fair-use limits — see <a href="/free-models">/free-models</a>.</li>
+  <li><strong>A free tier:</strong> fixed <code>$0</code> model IDs for prototyping, covered by your $10 welcome credit with fair-use limits — see <a href="/free-models">the free models page</a>.</li>
 </ul>
 <h2>Pricing philosophy</h2>
 <p>We publish rates openly, model by model. Sample indicative Keyo sell rates:</p>
@@ -664,9 +704,9 @@ function renderAbout() {
 ${priceSample}
 </tbody>
 </table>
-<p>Full list: <a href="/compare">/compare</a> · <a href="/pricing-list">/pricing-list</a> · deep dives: ${landingDeepDiveHtml()}</p>
+<p>Full list: <a href="/compare">the model comparison page</a> · <a href="/pricing-list">the full pricing list</a> · deep dives: ${landingDeepDiveHtml()}</p>
 <h2>Free models at $0</h2>
-<p>Call a free ID from the catalog at <strong>$0</strong> — $0 fixed-ID calls that draw down your $10 welcome credit (fair-use rate limits). Metered twins stay available for production. Rules: <a href="/free-models">/free-models</a></p>
+<p>Call a free ID from the catalog at <strong>$0</strong> — $0 fixed-ID calls that draw down your $10 welcome credit (fair-use rate limits). Metered twins stay available for production. Rules: <a href="/free-models">the free models page</a></p>
 <div class="grid">
 ${freeCards}
 </div>
@@ -735,7 +775,7 @@ function renderCompare() {
 <tbody>${llmRows}</tbody>
 </table>
 <h2>How to estimate API costs (no calculator app required)</h2>
-<p>For token-metered chat IDs: expected cost ≈ (input millions × input $/1M) + (output millions × output $/1M), then add retries. Pull the $/1M figures from live <a href="/pricing">/pricing</a> or the rows on this page — do not hard-code a spreadsheet forever. Worked OpenAI-side example: <a href="/openai-api-pricing">/openai-api-pricing</a>. Brand hubs: <a href="/claude-api-pricing">Claude / Anthropic</a>, <a href="/grok-api-pricing">Grok</a>, <a href="/gemini-api-pricing">Gemini</a>, <a href="/deepseek-api-pricing">DeepSeek</a>.</p>
+<p>For token-metered chat IDs: expected cost ≈ (input millions × input $/1M) + (output millions × output $/1M), then add retries. Pull the $/1M figures from live <a href="/pricing">the pricing page</a> or the rows on this page — do not hard-code a spreadsheet forever. Worked OpenAI-side example: <a href="/openai-api-pricing">the OpenAI API pricing page</a>. Brand hubs: <a href="/claude-api-pricing">Claude / Anthropic</a>, <a href="/grok-api-pricing">Grok</a>, <a href="/gemini-api-pricing">Gemini</a>, <a href="/deepseek-api-pricing">DeepSeek</a>.</p>
 <h2>How to use this comparison</h2>
 <p>One OpenAI-compatible SDK, one prepaid balance, and multimodal add-ons on one invoice. Swap <code>base_url</code> + key; keep your existing client for chat / image / speech paths.</p>
 <p>Recommended rollout: start with <a href="${featuredHref("deepseek-v4.1-flash")}"><code>deepseek-v4.1-flash</code></a> on high-volume paths, <a href="${featuredHref("gpt-6-astra")}"><code>gpt-6-astra</code></a> or <a href="${featuredHref("gpt-5.6-terra")}"><code>gpt-5.6-terra</code></a> as default chat, escalate to <a href="${featuredHref("grok-4.7")}"><code>grok-4.7</code></a> or Claude-class lanes when you need denser reasoning.</p>
@@ -815,17 +855,17 @@ function renderPricing() {
   <a class="btn btn-secondary" href="/brand/keyo-docs.html">Docs</a>
 </div>
 <h2>Free models ($0 — covered by your $10 credit)</h2>
-<p class="meta">Free IDs ($0 catalog IDs whose calls draw down your $10 welcome credit, fair-use): see <a href="/free-models">/free-models</a> for the full list, paid twins and curl examples. The tables below cover the metered catalog.</p>
+<p class="meta">Free IDs ($0 catalog IDs whose calls draw down your $10 welcome credit, fair-use): see <a href="/free-models">the free models page</a> for the full list, paid twins and curl examples. The tables below cover the metered catalog.</p>
 <h2>Guided model price table</h2>
 <table>
 <thead><tr><th>Model ID</th><th>Category</th><th>Listed price</th><th>Endpoint</th><th>Links</th></tr></thead>
 <tbody>${rows}</tbody>
 </table>
 <h2>Headline vs official list</h2>
-<p class="meta">The headline comparison (typical official list vs Keyo rates for every lane) lives on <a href="/compare">/compare</a> — this page is the full static price list.</p>
+<p class="meta">The headline comparison (typical official list vs Keyo rates for every lane) lives on <a href="/compare">the model comparison page</a> — this page is the full static price list.</p>
 <h2>How billing works</h2>
 <p>KeyoAPI is a prepaid <strong>ai api relay</strong>: one balance covers chat, Whisper, OCR, vision, TTS, and digital humans. LLM rows are usually token-metered; many vision/speech models are per-request or async-task metered.</p>
-<p>Open interactive catalog at <a href="/pricing">/pricing</a> after login. Model explainers are at <code>/model/{modelId}</code>.</p>
+<p>Open interactive catalog at <a href="/pricing">the pricing page</a> after login. Model explainers are at <code>/model/{modelId}</code>.</p>
 `;
   return layout({
     title: "AI API Pricing List - KeyoAPI Models & Rates",
@@ -883,7 +923,7 @@ function renderFreeModels() {
 ${rows}
 </tbody>
 </table>
-<p>Call the free ID exactly as listed (including the <code>:free</code> suffix). Free catalog membership can change — confirm live availability on <a href="/pricing">/pricing</a>.</p>
+<p>Call the free ID exactly as listed (including the <code>:free</code> suffix). Free catalog membership can change — confirm live availability on <a href="/pricing">the pricing page</a>.</p>
 <h2>Free by family</h2>
 <p>Browse by family in the table above (${[...new Set(freeAll.map((m) => m.family).filter(Boolean))].join(", ") || "listed vendors"}). Start with a free API key and a fixed $0 model ID; move to metered IDs when you outgrow your welcome credit or fair-use rate limits.</p>
 <h2>Quick start (curl)</h2>
@@ -934,7 +974,7 @@ ${rows}
   <li><a href="/model/kimi-k3"><strong>Kimi K3 API key (free path)</strong></a> — draft on free IDs, then <code>kimi-k3</code></li>
   <li><a href="/model/Duix-Avatar"><strong>Duix Avatar API</strong></a> — talking-face after TTS · <a href="/compare">Compare rates</a></li>
 </ul>
-<p class="meta">Also see the interactive catalog on <a href="/pricing">/pricing</a> (filter Free) and the OpenAI-compatible docs.</p>
+<p class="meta">Also see the interactive catalog on <a href="/pricing">the pricing page</a> (filter Free) and the OpenAI-compatible docs.</p>
 `;
   return layout({
     title: "Free AI API — $0 Models, No Credit Card | KeyoAPI",
@@ -957,7 +997,7 @@ ${rows}
 /** Brand-aware related links — avoid one TTS boilerplate on every LLM hub. */
 function landingRelatedLinks(slug) {
   const base =
-    '<a href="/compare">/compare</a>, <a href="/free-models">/free-models</a>, <a href="/pricing-list">/pricing-list</a>';
+    '<a href="/compare">the model comparison page</a>, <a href="/free-models">the free models page</a>, <a href="/pricing-list">the full pricing list</a>';
   const bySlug = {
     "tts-api":
       `${base}, and <a href="/model/CosyVoice3">CosyVoice3 API</a> · <a href="/voice-cloning-api">Voice cloning</a> · <a href="/model/IndexTTS-2">IndexTTS-2</a>`,

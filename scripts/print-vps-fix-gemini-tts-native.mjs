@@ -21,8 +21,9 @@ const py = fs.readFileSync(path.join(__dirname, "vps-fix-gemini-tts-native.py"))
 const pyB64 = zlib.gzipSync(py, { level: 9 }).toString("base64");
 
 const checkPy = `#!/usr/bin/env python3
-import json, sqlite3, urllib.request
-key = "sk-" + sqlite3.connect("/data/one-api.db").execute(
+import json, os, sqlite3, urllib.request
+db = next(p for p in ("/opt/ai-relay/data/new-api/one-api.db", "/data/one-api.db") if os.path.exists(p))
+key = "sk-" + sqlite3.connect(db).execute(
     "SELECT key FROM tokens WHERE status=1 LIMIT 1").fetchone()[0]
 body = json.dumps({
     "contents": [{"parts": [{"text": "Say hi."}]}],

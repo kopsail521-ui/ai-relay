@@ -43,7 +43,16 @@ n_mount=0
 while IFS= read -r m; do
   [ -z "$m" ] && continue
   ARGS+=(-v "$m"); n_mount=$((n_mount + 1))
-done < <(sudo docker inspect "$NAME" --format '{{range .HostConfig.Mounts}}{{if eq .Type "volume"}}{{.Name}}:{{.Destination}}{{else}}{{.Source}}:{{.Destination}}{{if not .RW}}:ro{{end}}{{end}}{{println}}{{end}}')
+done < <({
+  # docker run -v 创建的容器挂载在 Binds（形如 /host:/dest[:rw]）；compose
+  # 创建的才在 Mounts。先读 Binds，为空再读 Mounts。
+  binds=$(sudo docker inspect "$NAME" --format '{{range .HostConfig.Binds}}{{println .}}{{end}}' 2>/dev/null)
+  if [ -n "$binds" ]; then
+    printf '%s\n' "$binds"
+  else
+    sudo docker inspect "$NAME" --format '{{range .HostConfig.Mounts}}{{if eq .Type "volume"}}{{.Name}}:{{.Destination}}{{else}}{{.Source}}:{{.Destination}}{{if not .RW}}:ro{{end}}{{end}}{{println}}{{end}}' 2>/dev/null
+  fi
+})
 if [ "$n_mount" -lt 1 ]; then
   say "ABORT: 未读到任何挂载，拒绝重建"
   sudo docker inspect "$NAME" --format '{{json .HostConfig.Mounts}}' || true

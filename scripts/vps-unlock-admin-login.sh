@@ -27,7 +27,16 @@ BAKED="${BAKED:-keyo-baked}"
 say() { echo "[unlock] $*"; }
 
 container_env() { sudo docker inspect "$1" --format '{{range .Config.Env}}{{println .}}{{end}}' 2>/dev/null; }
-container_mounts() { sudo docker inspect "$1" --format '{{range .HostConfig.Mounts}}{{if eq .Type "volume"}}{{.Name}}:{{.Destination}}{{else}}{{.Source}}:{{.Destination}}{{if not .RW}}:ro{{end}}{{end}}{{println}}{{end}}' 2>/dev/null; }
+container_mounts() {
+  # docker run -v 创建的容器挂载在 Binds；compose 创建的才在 Mounts。先 Binds 后 Mounts。
+  local binds
+  binds=$(sudo docker inspect "$1" --format '{{range .HostConfig.Binds}}{{println .}}{{end}}' 2>/dev/null)
+  if [ -n "$binds" ]; then
+    printf '%s\n' "$binds"
+  else
+    sudo docker inspect "$1" --format '{{range .HostConfig.Mounts}}{{if eq .Type "volume"}}{{.Name}}:{{.Destination}}{{else}}{{.Source}}:{{.Destination}}{{if not .RW}}:ro{{end}}{{end}}{{println}}{{end}}' 2>/dev/null
+  fi
+}
 
 show_limit() {
   local env

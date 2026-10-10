@@ -76,7 +76,18 @@ delay = random_number_between(0, exponential_delay)
 <h3>Bound the Number of Attempts</h3>
 <p>Retries need a hard limit. A request that can retry indefinitely may consume worker capacity, increase cost, and create a backlog that never clears.</p>
 <p>A language-neutral retry loop looks like this:</p>
-<pre><code class="language-text">for attempt from 0 through max_retries: response = send_request() if response succeeded: return response if response is a permanent error: fail immediately if response is transient: if attempt == max_retries: fail and record the exhausted retry delay = server_retry_hint_or_exponential_backoff(attempt) sleep(delay) raise retry_exhausted_error
+<pre><code class="language-text">for attempt from 0 through max_retries:
+    response = send_request()
+    if response succeeded:
+        return response
+    if response is a permanent error:
+        fail immediately
+    if response is transient:
+        if attempt == max_retries:
+            fail and record the exhausted retry
+        delay = server_retry_hint_or_exponential_backoff(attempt)
+        sleep(delay)
+raise retry_exhausted_error
 </code></pre>
 <p>Set the retry limit according to the operation. Interactive requests generally need a short budget so users are not left waiting. Background jobs can tolerate longer delays, provided the queue and worker limits are controlled.</p>
 <h3>Do Not Retry Every Failure</h3>

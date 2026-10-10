@@ -39,14 +39,36 @@
 <p>Instead, return a job identifier immediately:</p>
 <pre><code class="language-text">POST /avatar-videos
 → 202 Accepted
-{ &quot;job_id&quot;: &quot;job_123&quot;, &quot;status&quot;: &quot;queued&quot;
+{
+    &quot;job_id&quot;: &quot;job_123&quot;,
+    &quot;status&quot;: &quot;queued&quot;
 }
 </code></pre>
 <p>The client can then retrieve status or receive a webhook when the job changes state.</p>
 <h2>Reference architecture</h2>
 <p>A robust design separates your public API from the provider integration.</p>
-<pre><code class="language-text">Client │ ▼
-Your API ├── Validate request ├── Authenticate caller ├── Create idempotent job └── Publish queue message │ ▼ Worker ├── Submit generation request ├── Store provider job ID ├── Poll or receive webhook ├── Download result └── Update job state │ ▼ Database + Object Storage │ ▼ Client webhook/status API
+<pre><code class="language-text">Client
+  │
+  ▼
+Your API
+  ├── Validate request
+  ├── Authenticate caller
+  ├── Create idempotent job
+  └── Publish queue message
+  │
+  ▼
+Worker
+  ├── Submit generation request
+  ├── Store provider job ID
+  ├── Poll or receive webhook
+  ├── Download result
+  └── Update job state
+  │
+  ▼
+Database + Object Storage
+  │
+  ▼
+Client webhook/status API
 </code></pre>
 <h3>Recommended components</h3>
 <p><strong>API service</strong></p>
@@ -123,7 +145,11 @@ WHERE id = ? AND status IN (&quot;submitted&quot;, &quot;processing&quot;)
 </ul>
 <p>Do not trust client-supplied URLs. If remote assets are allowed, protect the downloader against server-side request forgery by restricting schemes, private IP ranges, redirects, and destination hosts.</p>
 <p>A successful submission should return a stable internal job ID:</p>
-<pre><code class="language-json">{ &quot;job_id&quot;: &quot;job_123&quot;, &quot;status&quot;: &quot;queued&quot;, &quot;created_at&quot;: &quot;2025-01-01T12:00:00Z&quot;, &quot;status_url&quot;: &quot;/avatar-videos/job_123&quot;
+<pre><code class="language-json">{
+    &quot;job_id&quot;: &quot;job_123&quot;,
+    &quot;status&quot;: &quot;queued&quot;,
+    &quot;created_at&quot;: &quot;2025-01-01T12:00:00Z&quot;,
+    &quot;status_url&quot;: &quot;/avatar-videos/job_123&quot;
 }
 </code></pre>
 <p>The API should normally return <code>202 Accepted</code>, not <code>200 OK</code>, because the video is not ready yet.</p>

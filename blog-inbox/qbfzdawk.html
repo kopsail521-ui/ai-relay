@@ -34,7 +34,8 @@ Authorization: Bearer &quot;YOUR_API_KEY&quot;
 <h3>2. Confirm that the key exists at runtime</h3>
 <p>A common failure is that the key exists in a local <code>.env</code> file but is missing from the process that sends the request.</p>
 <p>Add a temporary diagnostic that checks whether the variable is present without printing its value:</p>
-<pre><code class="language-text">if API_KEY is missing or empty: fail with &quot;API key is not configured&quot;
+<pre><code class="language-text">if API_KEY is missing or empty:
+    fail with &quot;API key is not configured&quot;
 </code></pre>
 <p>Do not log the complete key. A safe diagnostic can report:</p>
 <ul>
@@ -192,7 +193,16 @@ Authorization: Bearer &quot;YOUR_API_KEY&quot;
 </ul>
 <p>For non-idempotent operations, repeated retries can produce duplicate effects. Where supported, use an idempotency mechanism or design the application so duplicate processing is safe. Confirm the target provider’s support for any such mechanism before relying on it.</p>
 <p>A language-neutral retry policy might look like this:</p>
-<pre><code class="language-text">send request if response is 401: record sanitized authentication error do not retry alert or fail the operation else if response is 429 or a transient 5xx: retry up to a small configured limit wait with exponential backoff and jitter else: handle according to the response status
+<pre><code class="language-text">send request
+if response is 401:
+    record sanitized authentication error
+    do not retry
+    alert or fail the operation
+else if response is 429 or a transient 5xx:
+    retry up to a small configured limit
+    wait with exponential backoff and jitter
+else:
+    handle according to the response status
 </code></pre>
 <p>Never include the API key in error messages, traces, exception payloads, or customer-visible responses.</p>
 <h2>Model Availability and Configuration Drift</h2>

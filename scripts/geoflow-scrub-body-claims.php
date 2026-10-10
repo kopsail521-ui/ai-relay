@@ -41,6 +41,35 @@ function a(string $path, ?string $label = null): string
 }
 
 /**
+ * Replace every <pre>…</pre> block with a placeholder so whitespace
+ * normalization below (preg_replace('/\s{2,}/u', ' ', …)) cannot collapse
+ * indented code into one line. restore_pre_blocks() puts them back verbatim.
+ */
+function tokenize_pre_blocks(string $html, array &$blocks): string
+{
+    return preg_replace_callback(
+        '/<pre\b[^>]*>[\s\S]*?<\/pre>/iu',
+        static function ($m) use (&$blocks): string {
+            $blocks[] = $m[0];
+            return '@@GEOFLOW_PRE_' . (count($blocks) - 1) . '@@';
+        },
+        $html
+    ) ?? $html;
+}
+
+function restore_pre_blocks(string $html, array $blocks): string
+{
+    return preg_replace_callback(
+        '/@@GEOFLOW_PRE_(\d+)@@/',
+        static function ($m) use ($blocks): string {
+            $idx = (int)$m[1];
+            return $blocks[$idx] ?? $m[0];
+        },
+        $html
+    ) ?? $html;
+}
+
+/**
  * Count scaffold / hedge tokens — KeyoAPI docs scaffolding only
  * (not physical "packaging materials" / "transparent materials",
  * and not generic "A does not establish B" engineering prose).
@@ -71,6 +100,10 @@ function scrub_claims_html(string $html, string $title = ''): array
 {
     $notes = [];
     $orig = $html;
+
+    // Protect <pre> code blocks from the whitespace collapse below.
+    $preBlocks = [];
+    $html = tokenize_pre_blocks($html, $preBlocks);
     $isClaude = (bool)preg_match('/\bClaude\b/i', $title);
     $isAvatar = (bool)preg_match('/\b(?:Avatar|InfiniteTalk|lip-?sync|talking-?head|digital-?human)\b/i', $title);
     $isVideo = (bool)preg_match('/\b(?:Video Generation|avatar-video|Text-to-Avatar)\b/i', $title);
@@ -419,6 +452,10 @@ function scrub_claims_html(string $html, string $title = ''): array
         }
     }
 
+    // Re-tokenize code blocks injected above so the punctuation/whitespace
+    // cleanup below cannot flatten them either.
+    $html = tokenize_pre_blocks($html, $preBlocks);
+
     // Last-pass: any remaining "KeyoAPI … materials" noun phrases → docs
     $html2 = preg_replace(
         '/\b(?:the\s+)?(?:available|supplied|provided|published|official|current)\s+KeyoAPI\s+materials\b/iu',
@@ -500,7 +537,8 @@ function scrub_claims_html(string $html, string $title = ''): array
         $html = $html2;
     }
 
-    return [$html, $html !== $orig, array_values(array_unique($notes))];
+    $finalHtml = restore_pre_blocks($html, $preBlocks);
+    return [$finalHtml, $finalHtml !== $orig, array_values(array_unique($notes))];
 }
 
 $articleRoot = $blogDir . '/article';

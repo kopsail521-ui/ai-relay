@@ -47,7 +47,9 @@ else: stop retrying and surface the error
 <h3>Exponential Backoff With Jitter</h3>
 <p>A common delay calculation is:</p>
 <pre><code class="language-text">base_delay = 1 second
-maximum_delay = 30 seconds exponential_delay = min(maximum_delay, base_delay * 2^(attempt - 1))
+maximum_delay = 30 seconds
+
+exponential_delay = min(maximum_delay, base_delay * 2^(attempt - 1))
 random_delay = a random value between 0 and exponential_delay
 </code></pre>
 <p>The random component matters when many workers receive a rate-limit response at the same time. Without jitter, they may all retry on the same schedule and create another traffic spike.</p>
@@ -57,7 +59,28 @@ random_delay = a random value between 0 and exponential_delay
 <p>The exact parsing rules depend on the provider. Keep that logic behind a small adapter so the rest of the application can remain provider-neutral.</p>
 <h2>Pseudocode for Safe Retries</h2>
 <p>The following language-neutral pseudocode illustrates the decision flow without assuming a provider-specific SDK:</p>
-<pre><code class="language-text">function call_model(request, deadline): for attempt in 1.MAX_ATTEMPTS: response = send_request(request, timeout=remaining(deadline)) if response succeeded: return response category = classify_error(response) if category is authentication_error: raise permanent_error(&quot;Check credentials&quot;) if category is invalid_request: raise permanent_error(&quot;Fix request parameters&quot;) if category is model_unavailable: raise permanent_error(&quot;Select a model from the live model catalog&quot;) if category is quota_exhausted: raise non_retryable_error(&quot;Check usage limits or account balance&quot;) if category is temporary_rate_limit or timeout or upstream_unavailable: if attempt == MAX_ATTEMPTS: raise retry_exhausted(response) server_delay = extract_retry_delay(response) delay = choose_bounded_delay(server_delay, attempt) sleep(delay) continue raise unexpected_error(response)
+<pre><code class="language-text">function call_model(request, deadline):
+    for attempt in 1.MAX_ATTEMPTS:
+        response = send_request(request, timeout=remaining(deadline))
+        if response succeeded:
+            return response
+        category = classify_error(response)
+        if category is authentication_error:
+            raise permanent_error(&quot;Check credentials&quot;)
+        if category is invalid_request:
+            raise permanent_error(&quot;Fix request parameters&quot;)
+        if category is model_unavailable:
+            raise permanent_error(&quot;Select a model from the live model catalog&quot;)
+        if category is quota_exhausted:
+            raise non_retryable_error(&quot;Check usage limits or account balance&quot;)
+        if category is temporary_rate_limit or timeout or upstream_unavailable:
+            if attempt == MAX_ATTEMPTS:
+                raise retry_exhausted(response)
+            server_delay = extract_retry_delay(response)
+            delay = choose_bounded_delay(server_delay, attempt)
+            sleep(delay)
+            continue
+        raise unexpected_error(response)
 </code></pre>
 <p>The important part is the classification boundary. Do not retry every non-success response. Retries are useful only when another attempt has a reasonable chance of succeeding.</p>
 <h2>Respect Request Deadlines</h2>
@@ -140,7 +163,11 @@ invalid_request
 <p>When moving from a direct Gemini integration to another provider or gateway, separate the migration into interfaces.</p>
 <h3>1. Define an Internal Client Contract</h3>
 <p>Your application should depend on an internal interface such as:</p>
-<pre><code class="language-text">generate( messages, logical_model, timeout, metadata
+<pre><code class="language-text">generate(
+    messages,
+    logical_model,
+    timeout,
+    metadata
 ) -&gt; generated_response
 </code></pre>
 <p>The interface should expose normalized failures, for example:</p>

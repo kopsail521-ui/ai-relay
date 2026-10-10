@@ -20,7 +20,16 @@
 <h2>Implement a Bounded Retry Strategy</h2>
 <p>Use exponential backoff with jitter, a maximum number of attempts, and an overall deadline. If the response includes a documented retry delay, honor it within your application’s deadline. Otherwise, use a bounded backoff policy.</p>
 <p>Language-neutral pseudocode:</p>
-<pre><code class="language-text">for attempt from 1 to max_attempts: response = send_request() if response is successful: return response if response is not a retryable rate-limit error: return handle_error(response) if attempt == max_attempts or deadline_would_be_exceeded(): return report_retry_exhausted(response) delay = documented_retry_delay(response) or exponential_backoff_with_jitter(attempt) sleep(min(delay, remaining_deadline))
+<pre><code class="language-text">for attempt from 1 to max_attempts:
+    response = send_request()
+    if response is successful:
+        return response
+    if response is not a retryable rate-limit error:
+        return handle_error(response)
+    if attempt == max_attempts or deadline_would_be_exceeded():
+        return report_retry_exhausted(response)
+    delay = documented_retry_delay(response) or exponential_backoff_with_jitter(attempt)
+    sleep(min(delay, remaining_deadline))
 </code></pre>
 <p>The exact retryable conditions should be based on the provider’s current documentation and the error details. Do not retry authentication failures, malformed requests, unavailable model IDs, or account-level quota exhaustion as if they were transient rate limits.</p>
 <h3>Keep retries bounded</h3>

@@ -30,8 +30,14 @@
 <p>Start with a contract that is minimal enough for a model to satisfy consistently and strict enough for your backend to consume safely.</p>
 <p>For example, consider a support-ticket classification service. The model should return a category, urgency, short summary, and whether human review is needed.</p>
 <pre><code class="language-python">from dataclasses import dataclass
-from typing import Literal @dataclass
-class TicketClassification: category: Literal[&quot;billing&quot;, &quot;technical&quot;, &quot;account&quot;, &quot;other&quot;] urgency: Literal[&quot;low&quot;, &quot;medium&quot;, &quot;high&quot;] summary: str requires_human_review: bool
+from typing import Literal
+
+@dataclass
+class TicketClassification:
+    category: Literal[&quot;billing&quot;, &quot;technical&quot;, &quot;account&quot;, &quot;other&quot;]
+    urgency: Literal[&quot;low&quot;, &quot;medium&quot;, &quot;high&quot;]
+    summary: str
+    requires_human_review: bool
 </code></pre>
 <p>This is only the shape of the data. A production backend also needs rules such as:</p>
 <ul>
@@ -46,29 +52,54 @@ class TicketClassification: category: Literal[&quot;billing&quot;, &quot;technic
 <p>Python’s standard library can parse JSON, but parsing is not validation. Use a schema validation library such as Pydantic, Marshmallow, or JSON Schema tooling to turn untrusted JSON into a trusted domain object.</p>
 <p>Here is a Pydantic-style example:</p>
 <pre><code class="language-python">from typing import Literal
-from pydantic import BaseModel, Field, field_validator class TicketClassification(BaseModel): category: Literal[&quot;billing&quot;, &quot;technical&quot;, &quot;account&quot;, &quot;other&quot;] urgency: Literal[&quot;low&quot;, &quot;medium&quot;, &quot;high&quot;] summary: str = Field(min_length=1, max_length=280) requires_human_review: bool @field_validator(&quot;summary&quot;) @classmethod def reject_control_characters(cls, value: str) -&gt; str: if any(ord(char) &lt; 32 and char not in &quot;\n\t&quot; for char in value): raise ValueError(&quot;summary contains unsupported control characters&quot;) return value.strip()
+from pydantic import BaseModel, Field, field_validator
+
+class TicketClassification(BaseModel):
+    category: Literal[&quot;billing&quot;, &quot;technical&quot;, &quot;account&quot;, &quot;other&quot;]
+    urgency: Literal[&quot;low&quot;, &quot;medium&quot;, &quot;high&quot;]
+    summary: str = Field(min_length=1, max_length=280)
+    requires_human_review: bool
+
+    @field_validator(&quot;summary&quot;)
+    @classmethod
+    def reject_control_characters(cls, value: str) -&gt; str:
+        if any(ord(char) &lt; 32 and char not in &quot;\n\t&quot; for char in value):
+            raise ValueError(&quot;summary contains unsupported control characters&quot;)
+        return value.strip()
 </code></pre>
 <p>The important outcome is that downstream code receives a validated object rather than a raw dictionary.</p>
-<pre><code class="language-python">classification = TicketClassification.model_validate(parsed_json) if classification.requires_human_review: queue_for_review(classification)
-else: route_ticket(classification)
+<pre><code class="language-python">classification = TicketClassification.model_validate(parsed_json)
+if classification.requires_human_review:
+    queue_for_review(classification)
+else:
+    route_ticket(classification)
 </code></pre>
 <p>Do not let arbitrary dictionaries flow through the rest of your application. That pattern spreads validation responsibility across controllers, queues, workers, and database code.</p>
 <h2>Separate Parsing, Schema Validation, and Business Validation</h2>
 <p>A robust structured-output pipeline has three distinct stages.</p>
 <h3>1. Parse the response</h3>
 <p>The parser answers one question: is this syntactically valid JSON?</p>
-<pre><code class="language-python">import json def parse_json_object(text: str) -&gt; dict: value = json.loads(text) if not isinstance(value, dict): raise ValueError(&quot;Expected a JSON object&quot;) return value
+<pre><code class="language-python">import json
+
+def parse_json_object(text: str) -&gt; dict:
+    value = json.loads(text)
+    if not isinstance(value, dict):
+        raise ValueError(&quot;Expected a JSON object&quot;)
+    return value
 </code></pre>
 <p>Do not “fix” malformed JSON with broad string replacements in production. Replacing quotes, removing commas, or extracting text between braces can turn ambiguous model output into incorrect data.</p>
 <p>If you implement limited recovery, make it explicit, measurable, and safe. For example, you may remove a known Markdown code fence only if your own prompt requested fenced JSON and you can reliably identify it. Otherwise, reject and retry.</p>
 <h3>2. Validate the schema</h3>
 <p>The schema validator answers: does the object have the expected fields and types?</p>
-<pre><code class="language-python">def validate_schema(data: dict) -&gt; TicketClassification: return TicketClassification.model_validate(data)
+<pre><code class="language-python">def validate_schema(data: dict) -&gt; TicketClassification:
+    return TicketClassification.model_validate(data)
 </code></pre>
 <p>Configure your schema to reject unknown fields when possible. Ignoring unexpected keys can hide prompt-injection artifacts, version mismatches, or model regressions.</p>
 <h3>3. Validate business rules</h3>
 <p>Schema-valid data can still be operationally wrong.</p>
-<pre><code class="language-python">def validate_business_rules(result: TicketClassification) -&gt; None: if result.urgency == &quot;high&quot; and not result.requires_human_review: raise ValueError(&quot;High-urgency tickets require human review&quot;)
+<pre><code class="language-python">def validate_business_rules(result: TicketClassification) -&gt; None:
+    if result.urgency == &quot;high&quot; and not result.requires_human_review:
+        raise ValueError(&quot;High-urgency tickets require human review&quot;)
 </code></pre>
 <p>Business validation belongs in your domain layer, not solely in the prompt. Prompts are guidance; backend rules are enforcement.</p>
 <h2>Design Prompts for Validation, Not Just Readability</h2>
@@ -149,7 +180,29 @@ the customer message. Do not add fields or Markdown. &lt;CustomerMessage&gt;.
 </tbody>
 </table></div>
 <h3>Language-neutral repair flow</h3>
-<pre><code class="language-text">attempt = 0 while attempt &lt; maximum_attempts: response = call_model() if response is a transient transport or service failure: wait using exponential backoff with jitter attempt += 1 continue text = extract_model_text(response) try: parsed = parse_json(text) result = validate_schema(parsed) validate_business_rules(result) return result except ValidationError as error: if attempt has no remaining repair attempts: send_to_fallback_workflow(error) stop call_model_again_with: - the original task - the required output contract - a short explanation of the validation failure - no private logs, secrets, or unrelated customer data attempt += 1
+<pre><code class="language-text">attempt = 0
+while attempt &lt; maximum_attempts:
+    response = call_model()
+    if response is a transient transport or service failure:
+        wait using exponential backoff with jitter
+        attempt += 1
+        continue
+    text = extract_model_text(response)
+    try:
+        parsed = parse_json(text)
+        result = validate_schema(parsed)
+        validate_business_rules(result)
+        return result
+    except ValidationError as error:
+        if attempt has no remaining repair attempts:
+            send_to_fallback_workflow(error)
+            stop
+        call_model_again_with:
+            - the original task
+            - the required output contract
+            - a short explanation of the validation failure
+            - no private logs, secrets, or unrelated customer data
+        attempt += 1
 </code></pre>
 <p>A repair request should be narrowly scoped. Do not paste an entire stack trace, database record, or internal policy into a model prompt.</p>
 <h2>Make Retries Safe With Idempotency</h2>
@@ -309,7 +362,20 @@ the customer message. Do not add fields or Markdown. &lt;CustomerMessage&gt;.
 <p>Do not hard-code pricing assumptions into routing logic. Retrieve current information from the provider’s published catalog and evaluate total cost alongside validation success rate, latency, and operational reliability.</p>
 <h2>A Production Backend Reference Flow</h2>
 <p>A reliable request path typically looks like this:</p>
-<pre><code class="language-text">HTTP request -&gt; authenticate caller -&gt; authorize requested operation -&gt; validate user input -&gt; create idempotency key and job record -&gt; select an approved, currently available model -&gt; call the model with timeout and retry policy -&gt; parse response -&gt; validate schema -&gt; validate business rules -&gt; persist validated result -&gt; execute safe downstream workflow -&gt; emit metrics and audit metadata -&gt; return result or review-required status
+<pre><code class="language-text">HTTP request
+  -&gt; authenticate caller
+  -&gt; authorize requested operation
+  -&gt; validate user input
+  -&gt; create idempotency key and job record
+  -&gt; select an approved, currently available model
+  -&gt; call the model with timeout and retry policy
+  -&gt; parse response
+  -&gt; validate schema
+  -&gt; validate business rules
+  -&gt; persist validated result
+  -&gt; execute safe downstream workflow
+  -&gt; emit metrics and audit metadata
+  -&gt; return result or review-required status
 </code></pre>
 <p>The model is one component in this pipeline. The backend—not the prompt—owns correctness, security, and side effects.</p>
 <h2>Practical Checklist</h2>

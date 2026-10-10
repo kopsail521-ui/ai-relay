@@ -28,7 +28,51 @@
 <p>Return your application’s job ID to the client. Avoid exposing provider credentials or relying on a provider job ID as the only record of the request.</p>
 <h2>Python Job-Polling Structure</h2>
 <p>The following is language-neutral pseudocode written in a Python-like style. Names such as <code>provider.submit_job</code> and <code>provider.get_job</code> are placeholders, not documented SDK methods or endpoints. Replace them only with operations confirmed by the provider’s live documentation.</p>
-<pre><code class="language-python">def create_avatar_job(user, request): validate_request(request) enforce_user_limits(user) job = store.create_job( user_id=user.id, status=&quot;queued&quot; request_summary=safe_summary(request), ) queue.enqueue(&quot;submit_avatar_job&quot; job.id) return {&quot;job_id&quot;: job.id, &quot;status&quot;: job.status} def submit_avatar_job(job_id): job = store.get_job(job_id) try: result = provider.submit_job( validated_payload=load_payload(job_id), idempotency_key=job.id, ) except ProviderError as error: handle_submission_error(job, error) return store.update_job( job_id, status=&quot;submitted&quot; provider_job_id=result.job_id, ) queue.enqueue(&quot;poll_avatar_job&quot; job_id, delay_seconds=2) def poll_avatar_job(job_id): job = store.get_job(job_id) try: result = provider.get_job(job.provider_job_id) except ProviderError as error: handle_poll_error(job, error) return if result.status in documented_success_states(): store.mark_succeeded(job_id, result_reference=result.output) elif result.status in documented_failure_states(): store.mark_failed(job_id, safe_error(result)) else: queue.enqueue( &quot;poll_avatar_job&quot; job_id, delay_seconds=next_poll_delay(job.poll_attempts), )
+<pre><code class="language-python">def create_avatar_job(user, request):
+    validate_request(request)
+    enforce_user_limits(user)
+    job = store.create_job(
+        user_id=user.id,
+        status=&quot;queued&quot;,
+        request_summary=safe_summary(request),
+    )
+    queue.enqueue(&quot;submit_avatar_job&quot;, job.id)
+    return {&quot;job_id&quot;: job.id, &quot;status&quot;: job.status}
+
+def submit_avatar_job(job_id):
+    job = store.get_job(job_id)
+    try:
+        result = provider.submit_job(
+            validated_payload=load_payload(job_id),
+            idempotency_key=job.id,
+        )
+    except ProviderError as error:
+        handle_submission_error(job, error)
+        return
+    store.update_job(
+        job_id,
+        status=&quot;submitted&quot;,
+        provider_job_id=result.job_id,
+    )
+    queue.enqueue(&quot;poll_avatar_job&quot;, job_id, delay_seconds=2)
+
+def poll_avatar_job(job_id):
+    job = store.get_job(job_id)
+    try:
+        result = provider.get_job(job.provider_job_id)
+    except ProviderError as error:
+        handle_poll_error(job, error)
+        return
+    if result.status in documented_success_states():
+        store.mark_succeeded(job_id, result_reference=result.output)
+    elif result.status in documented_failure_states():
+        store.mark_failed(job_id, safe_error(result))
+    else:
+        queue.enqueue(
+            &quot;poll_avatar_job&quot;,
+            job_id,
+            delay_seconds=next_poll_delay(job.poll_attempts),
+        )
 </code></pre>
 <p>This structure separates user-facing requests from long-running provider calls. It also gives your application a place to track retries, enforce deadlines, and return a stable status even if the provider’s response format changes.</p>
 <h2>Polling, Timeouts, and Retries</h2>

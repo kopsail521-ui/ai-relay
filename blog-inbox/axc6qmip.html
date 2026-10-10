@@ -10,7 +10,11 @@
 <h2>Estimate a safe starting concurrency</h2>
 <p>A rough throughput estimate starts with the smallest relevant limit:</p>
 <pre><code class="language-text">request_budget_per_second = RPM / 60
-token_budget_per_second = TPM / 60 estimated_token_rate = request_budget_per_second * average_tokens_per_request estimated_request_rate = token_budget_per_second / average_tokens_per_request safe_request_rate = min(request_budget_per_second, estimated_request_rate)
+token_budget_per_second = TPM / 60
+
+estimated_token_rate = request_budget_per_second * average_tokens_per_request
+estimated_request_rate = token_budget_per_second / average_tokens_per_request
+safe_request_rate = min(request_budget_per_second, estimated_request_rate)
 </code></pre>
 <p>This is an average-rate estimate, not a guarantee. Providers may count input and output tokens differently, and actual token use varies by request. Use measured usage where possible, and leave headroom for variation and bursts.</p>
 <p>Concurrency also depends on latency. A useful initial estimate is:</p>
@@ -32,7 +36,15 @@ token_budget_per_second = TPM / 60 estimated_token_rate = request_budget_per_sec
 <p>Keep limits configurable rather than embedding assumptions throughout the application. Separate per-model settings when the provider applies different quotas, and ensure a model change does not silently inherit an unsuitable concurrency target.</p>
 <h2>Handle throttling and other failures safely</h2>
 <p>A rate-limit response should reduce pressure on the service, not trigger an immediate retry storm. When a request is throttled, honor any retry guidance returned by the service. Otherwise, use exponential backoff with random jitter and a maximum retry count.</p>
-<pre><code class="language-text">for attempt in 1..maximum_attempts: result = send_request() if result succeeded: return result if result is throttled or transient: wait using bounded exponential backoff with jitter continue fail without retrying return a retryable failure to the caller or queue
+<pre><code class="language-text">for attempt in 1..maximum_attempts:
+    result = send_request()
+    if result succeeded:
+        return result
+    if result is throttled or transient:
+        wait using bounded exponential backoff with jitter
+        continue
+    fail without retrying
+return a retryable failure to the caller or queue
 </code></pre>
 <p>Retry only when the error is plausibly temporary. Authentication failures, invalid parameters, unsupported models, and other client errors generally need correction, not repetition. For requests that may have side effects, check whether the operation is safe to repeat or whether the provider supports an idempotency mechanism before retrying.</p>
 <p>Set timeouts, cap retries, and use a circuit breaker or temporary load shedding when failures persist. Otherwise, retries can consume more capacity while delaying healthy work. For queued jobs, preserve the original request context and avoid retrying indefinitely.</p>

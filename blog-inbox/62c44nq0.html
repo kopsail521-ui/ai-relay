@@ -26,10 +26,19 @@
 </ol>
 <p>The queue protects the upstream API from traffic bursts. The concurrency limit controls in-flight requests. Backoff spreads retries over time. Jitter prevents many workers from retrying simultaneously after receiving the same error.</p>
 <p>A simplified flow looks like this:</p>
-<pre><code class="language-text">application request | v
-bounded work queue | v
-worker pool with concurrency limit | v
-provider request | +--&gt; success | +--&gt; transient error --&gt; delayed retry | +--&gt; permanent error --&gt; fail and report
+<pre><code class="language-text">application request
+  |
+  v
+bounded work queue
+  |
+  v
+worker pool with concurrency limit
+  |
+  v
+provider request
+  +--&gt; success
+  +--&gt; transient error --&gt; delayed retry
+  +--&gt; permanent error --&gt; fail and report
 </code></pre>
 <h3>Why a queue is better than direct retries</h3>
 <p>Suppose 1,000 application requests arrive at once and every request immediately calls the provider. If the provider rejects most of them, the application may generate another burst when all clients retry together.</p>
@@ -131,7 +140,29 @@ all workers retry at 10:00:06
 <p>The response should be treated as live configuration. Applications should not assume that a model remains available indefinitely.</p>
 <h2>A Provider-Agnostic Retry Algorithm</h2>
 <p>The following pseudocode illustrates the control flow without depending on a particular SDK or provider response format:</p>
-<pre><code class="language-text">function process(job): deadline = now + job.maximum_duration attempt = 0 while now &lt; deadline and attempt &lt; job.maximum_attempts: response = send_request(job) if response.success: return response.result classification = classify(response) if classification == permanent_failure: record_failure(job, response) return failure if classification == quota_or_balance_failure: alert_and_stop(job, response) return failure delay = retry_after(response) if delay is missing: delay = exponential_backoff_with_jitter(attempt) if now + delay &gt;= deadline: break sleep(delay) attempt += 1 move_to_dead_letter_or_retry_queue(job) return failure
+<pre><code class="language-text">function process(job):
+    deadline = now + job.maximum_duration
+    attempt = 0
+    while now &lt; deadline and attempt &lt; job.maximum_attempts:
+        response = send_request(job)
+        if response.success:
+            return response.result
+        classification = classify(response)
+        if classification == permanent_failure:
+            record_failure(job, response)
+            return failure
+        if classification == quota_or_balance_failure:
+            alert_and_stop(job, response)
+            return failure
+        delay = retry_after(response)
+        if delay is missing:
+            delay = exponential_backoff_with_jitter(attempt)
+        if now + delay &gt;= deadline:
+            break
+        sleep(delay)
+        attempt += 1
+    move_to_dead_letter_or_retry_queue(job)
+    return failure
 </code></pre>
 <p>Several details matter:</p>
 <ul>
@@ -154,8 +185,11 @@ all workers retry at 10:00:06
 <li>Cost per completed request</li>
 </ul>
 <p>A useful control loop is:</p>
-<pre><code class="language-text">if rate_limit_rate increases: reduce concurrency increase admission delay
-elif queue latency is high and rate_limit_rate is low: increase concurrency gradually
+<pre><code class="language-text">if rate_limit_rate increases:
+    reduce concurrency
+    increase admission delay
+elif queue latency is high and rate_limit_rate is low:
+    increase concurrency gradually
 </code></pre>
 <p>Use gradual changes rather than continuously adjusting concurrency on every response. Otherwise, the system can oscillate between overload and underutilization.</p>
 <p>You may also need separate limits for:</p>
@@ -304,7 +338,11 @@ tenant_id
 <h2>Migrating Behind a Provider Adapter</h2>
 <p>A provider adapter keeps application code independent from provider-specific request formats and error details.</p>
 <p>Define an internal interface around your actual business needs:</p>
-<pre><code class="language-text">generate_text( model, messages, timeout, request_id
+<pre><code class="language-text">generate_text(
+    model,
+    messages,
+    timeout,
+    request_id
 ) -&gt; result
 </code></pre>
 <p>The adapter should handle:</p>

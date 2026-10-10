@@ -137,12 +137,20 @@ persist the result with the source file identifier record model, duration, laten
 <h2>Use an OpenAI-Compatible Client Carefully</h2>
 <p>the standard OpenAI Python and JavaScript SDKs can be configured with a custom base URL for documented compatible operations.</p>
 <p>A generic Python configuration pattern is:</p>
-<pre><code class="language-python">from openai import OpenAI client = OpenAI( base_url=&quot;https://www.keyoapi.xyz/v1&quot; api_key=&quot;YOUR_API_KEY&quot;
+<pre><code class="language-python">from openai import OpenAI
+
+client = OpenAI(
+    base_url=&quot;https://www.keyoapi.xyz/v1&quot;,
+    api_key=&quot;YOUR_API_KEY&quot;,
 )
 </code></pre>
 <p>The API key should come from an environment variable in real applications:</p>
 <pre><code class="language-python">import os
-from openai import OpenAI client = OpenAI( base_url=&quot;https://www.keyoapi.xyz/v1&quot; api_key=os.environ[&quot;KEYO_API_KEY&quot;],
+from openai import OpenAI
+
+client = OpenAI(
+    base_url=&quot;https://www.keyoapi.xyz/v1&quot;,
+    api_key=os.environ[&quot;KEYO_API_KEY&quot;],
 )
 </code></pre>
 <p>This configuration shows that the client can point at a compatible base URL. Still verify that each SDK method you need maps to a supported provider operation, especially for image and speech workflows.</p>
@@ -213,7 +221,13 @@ malformed or incomplete response
 <li>Whether repeating a request can create duplicate charges or assets</li>
 </ul>
 <p>Use bounded exponential backoff with jitter for retryable failures:</p>
-<pre><code class="language-text">for attempt in 1 through maximum_attempts: send request if success: return response if error is not retryable: fail immediately wait using exponential backoff plus jitter
+<pre><code class="language-text">for attempt in 1 through maximum_attempts:
+    send request
+    if success:
+        return response
+    if error is not retryable:
+        fail immediately
+    wait using exponential backoff plus jitter
 </code></pre>
 <p>For transcription, retrying a failed upload may be reasonable if the request did not reach the provider. For image generation, use a durable request record and a deduplication key where possible.</p>
 <h2>Control Cost and Capacity</h2>

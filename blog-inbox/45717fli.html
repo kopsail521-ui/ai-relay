@@ -85,11 +85,26 @@ input_and_output_token_usage, if available
 <p>A language-neutral consumer might look like this:</p>
 <pre><code class="language-text">buffer = &quot;&quot;
 saw_terminal_event = false
-termination_reason = null for event in response_stream: if event contains text: buffer += event.text optionally_save_checkpoint(buffer) if event contains terminal metadata: saw_terminal_event = true termination_reason = event.termination_reason if transport_failed: status = &quot;unknown&quot;
-else if not saw_terminal_event: status = &quot;incomplete&quot;
-else if termination_reason is not a normal completion: status = &quot;incomplete&quot;
-else if not validate(buffer): status = &quot;incomplete&quot;
-else: status = &quot;complete&quot;
+termination_reason = null
+
+for event in response_stream:
+    if event contains text:
+        buffer += event.text
+        optionally_save_checkpoint(buffer)
+    if event contains terminal metadata:
+        saw_terminal_event = true
+        termination_reason = event.termination_reason
+
+if transport_failed:
+    status = &quot;unknown&quot;
+else if not saw_terminal_event:
+    status = &quot;incomplete&quot;
+else if termination_reason is not a normal completion:
+    status = &quot;incomplete&quot;
+else if not validate(buffer):
+    status = &quot;incomplete&quot;
+else:
+    status = &quot;complete&quot;
 </code></pre>
 <p>Do not infer successful completion solely from end-of-stream. A clean stream close without a provider terminal event should remain unknown or incomplete according to your application’s risk policy.</p>
 <h2>Preserve Partial Output Safely</h2>

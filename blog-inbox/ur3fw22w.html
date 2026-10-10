@@ -82,13 +82,20 @@
   -H &quot;Authorization: Bearer YOUR_API_KEY&quot; \
   -F &quot;model=RMBG-2.0&quot; \
   -F &quot;image=@./product-shoe.jpg&quot; \
-  --output./product-shoe-removed.png
+  --output ./product-shoe-removed.png
 </code></pre>
 <p>The exact multipart field names should be confirmed against the current endpoint documentation before production deployment. The <code>image</code> field shown here represents the uploaded product image, while the output file is written locally by curl.</p>
 <p>The command uses a placeholder API key intentionally. Replace <code>YOUR_API_KEY</code> with a key created in the KeyoAPI dashboard, but do not commit the key to source control or expose it in client-side code.</p>
 <h3>Server-side request pattern</h3>
 <p>A production application typically performs this operation from a backend worker:</p>
-<pre><code class="language-text">Read catalog record -&gt; Open original image -&gt; Validate file and product ID -&gt; Send multipart request with Bearer token -&gt; Check HTTP status and response body -&gt; Validate returned image -&gt; Store output -&gt; Update processing status
+<pre><code class="language-text">Read catalog record
+  -&gt; Open original image
+  -&gt; Validate file and product ID
+  -&gt; Send multipart request with Bearer token
+  -&gt; Check HTTP status and response body
+  -&gt; Validate returned image
+  -&gt; Store output
+  -&gt; Update processing status
 </code></pre>
 <p>This structure makes the integration observable. A catalog administrator can see whether an image is pending, completed, failed, or awaiting manual review.</p>
 <h3>Model discovery</h3>

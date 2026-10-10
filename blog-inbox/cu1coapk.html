@@ -12,7 +12,13 @@ Reference documentation
 Conversation-specific user input
 </code></pre>
 <p>With prompt caching, the provider may reuse a stable prefix from an earlier request:</p>
-<pre><code class="language-text">Cached: Stable instructions Tool definitions Reference documentation Dynamic: Conversation-specific user input
+<pre><code class="language-text">Cached:
+    Stable instructions
+    Tool definitions
+    Reference documentation
+
+Dynamic:
+    Conversation-specific user input
 </code></pre>
 <p>The application still sends a request, but the provider can avoid fully reprocessing the repeated portion when the cache matches.</p>
 <p>The exact behavior depends on the provider and model. Before relying on it, verify:</p>

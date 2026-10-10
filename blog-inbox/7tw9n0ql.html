@@ -160,7 +160,14 @@
 <h2>Use a Provider-Agnostic Application Boundary</h2>
 <p>Your application should depend on a small internal interface rather than on provider-specific request construction throughout the codebase.</p>
 <p>A language-neutral interface might look like this:</p>
-<pre><code class="language-text">generate(request): validate request select provider and model apply timeout and retry policy send request normalize response record metrics return result
+<pre><code class="language-text">generate(request):
+    validate request
+    select provider and model
+    apply timeout and retry policy
+    send request
+    normalize response
+    record metrics
+    return result
 </code></pre>
 <p>The interface should make these properties explicit:</p>
 <ul>
@@ -214,7 +221,13 @@
 <h2>Design Rate Limiting and Backpressure</h2>
 <p>Client-side rate limiting protects both your application and the upstream provider.</p>
 <p>A token bucket or leaky bucket can control request admission:</p>
-<pre><code class="language-text">on request: estimate request cost if bucket has capacity: consume capacity send request else: queue or reject with a controlled response
+<pre><code class="language-text">on request:
+    estimate request cost
+    if bucket has capacity:
+        consume capacity
+        send request
+    else:
+        queue or reject with a controlled response
 </code></pre>
 <p>For token-based workloads, request cost should reflect estimated input and output tokens rather than counting every request equally.</p>
 <p>Use separate budgets where possible:</p>

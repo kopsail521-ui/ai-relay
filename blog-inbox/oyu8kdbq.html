@@ -40,7 +40,8 @@
   --form &quot;image=@./product.jpg&quot;
 </code></pre>
 <p>This example assumes that <code>product.jpg</code> exists on the local machine and that <code>YOUR_API_KEY</code> is replaced at runtime with a valid secret. Keeping the key in an environment variable is safer:</p>
-<pre><code class="language-bash">export KEYOAPI_API_KEY=&quot;YOUR_API_KEY&quot; curl --request POST \
+<pre><code class="language-bash">export KEYOAPI_API_KEY=&quot;YOUR_API_KEY&quot;
+curl --request POST \
   --url https://www.keyoapi.xyz/v1/images/mattings \
   --header &quot;Authorization: Bearer ${KEYOAPI_API_KEY}&quot; \
   --form &quot;model=RMBG-2.0&quot; \

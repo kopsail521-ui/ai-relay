@@ -315,7 +315,7 @@ export const RULES = {
   },
   "grok-video-1.5": {
     vendor: "xAI",
-    tag: "视频按次",
+    tag: "视频模型",
     endpoints: EP.chat,
     icon: "XAI",
   },

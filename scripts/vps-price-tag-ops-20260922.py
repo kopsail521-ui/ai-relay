@@ -4,7 +4,7 @@ Keyo ops 2026-09-22:
 1) Delist all DeepSeek-series models
 2) glm-5.2 / glm-5.3 sell = cost × 1.2
 3) kimi-k3 / MiniMax-M3 sell = cost × 1.5
-4) Fix tags: gpt-image-2.5* → 图片; grok-1.5-video → 视频按次; Qwen3-VL-Embedding-8B → rag
+4) Fix tags: gpt-image-2.5* → 图片; grok-1.5-video → 视频模型; Qwen3-VL-Embedding-8B → rag
 
 New API: sell_usd_in = model_ratio × 2; sell_usd_out = sell_in × completion_ratio
 """
@@ -43,7 +43,7 @@ TAGS = {
     "gpt-image-2.5": "图片",
     "gpt-image-2.5-flare": "图片",
     "gpt-image-2.5-sunburst": "图片",
-    "grok-1.5-video": "视频按次",
+    "grok-1.5-video": "视频模型",
     "Qwen3-VL-Embedding-8B": "rag",
 }
 

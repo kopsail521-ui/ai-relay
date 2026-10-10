@@ -439,17 +439,15 @@ function normalizeTagToken(tag) {
   if (!t || /^[·.•\-—_/|]+$/.test(t)) return "";
   const map = {
     "视频·按秒": "视频模型",
-    "视频·按次": "视频按次",
+    "视频·按次": "视频模型",
     "影片·按秒": "视频模型",
-    "影片·按次": "视频按次",
+    "影片·按次": "视频模型",
     "Video · per second": "视频模型",
-    "Video · per request": "视频按次",
+    "Video · per request": "视频模型",
     VideoSec: "视频模型",
-    VideoReq: "视频按次",
+    VideoReq: "视频模型",
     DigitalHuman: "数字人",
     ImageProc: "图像处理",
-    Free: "免费",
-    free: "免费",
     rag: "嵌入模型",
     RAG: "嵌入模型",
     Embedding: "嵌入模型",
@@ -457,7 +455,7 @@ function normalizeTagToken(tag) {
     嵌入模型: "嵌入模型",
     per: "视频模型",
     second: "视频模型",
-    request: "视频按次",
+    request: "视频模型",
     processing: "图像处理",
     digital: "数字人",
     human: "数字人",
@@ -471,14 +469,19 @@ function normalizeTagToken(tag) {
     VideoProc: "视频处理",
     "视频处理": "视频处理",
     "视频按秒": "视频模型",
+    "视频按次": "视频模型",
     "视频模型": "视频模型",
     VideoModel: "视频模型",
+    Free: "",
+    free: "",
+    "免费": "",
+    "免費": "",
   };
-  if (map[t]) return map[t];
+  if (map[t] !== undefined) return map[t];
   if (t.includes("·")) {
     const flat = t.replace(/·/g, "");
     if (flat === "视频按秒" || flat === "影片按秒") return "视频模型";
-    if (flat === "视频按次" || flat === "影片按次") return "视频按次";
+    if (flat === "视频按次" || flat === "影片按次") return "视频模型";
     if (flat === "视频处理" || flat === "影片處理") return "视频处理";
     if (flat === "视频模型" || flat === "影片模型") return "视频模型";
     t = flat;

@@ -1,0 +1,48 @@
+# VPS：下线「免费」「视频按次」标签；视频按次模型归入「视频模型」
+#   keyo-flash:free:  免费 -> 大语言模型
+#   grok-video-1.5:   视频按次 -> 视频模型
+# 同时更新 moderation-proxy 的标签归一化（server.mjs，需 rebuild 生效）。
+set -e
+cd /opt/ai-relay
+sudo bash scripts/vps-safe-pull-preserve-blog.sh
+
+# 1) DB 重打标签（幂等，自检通过才 commit）
+sudo docker run --rm \
+  -v /opt/ai-relay:/opt/ai-relay:ro \
+  -v /opt/ai-relay/data/new-api:/data \
+  -w /opt/ai-relay python:3.12-alpine \
+  python scripts/vps-fix-tags-20261010.py /data/one-api.db
+
+# 2) 重启 new-api 刷新；rebuild moderation-proxy（标签归一化代码进了镜像）
+sudo docker restart ai-relay-new-api
+sudo docker compose up -d --build creem-moderation-proxy
+sleep 8
+curl -sS -o /dev/null -w "console_http=%{http_code}\n" http://127.0.0.1:3000/api/status
+curl -sS -o /dev/null -w "proxy_http=%{http_code}\n" http://127.0.0.1:3001/api/status
+
+# 3) smoke：标签聚合里不再有 免费 / 视频按次；归类正确
+curl -sS https://www.keyoapi.xyz/api/pricing -o /tmp/p_tags.json
+python3 - <<'PY'
+import json
+from collections import Counter
+j = json.load(open("/tmp/p_tags.json"))
+rows = {r["model_name"]: r for r in j.get("data", [])}
+c = Counter()
+for r in rows.values():
+    for p in str(r.get("tags") or "").split(","):
+        if p.strip():
+            c[p.strip()] += 1
+assert "免费" not in c, "免费 tag still present"
+assert "视频按次" not in c, "视频按次 tag still present"
+grok = rows.get("grok-video-1.5") or rows.get("grok-1.5-video")
+assert grok is not None, "grok video model missing"
+assert "视频模型" in str(grok.get("tags") or ""), "grok not in 视频模型: %r" % grok.get("tags")
+kf = rows.get("keyo-flash:free")
+if kf is not None:
+    assert "免费" not in str(kf.get("tags") or ""), "keyo-flash:free still tagged 免费"
+print("tags:", dict(c.most_common()))
+print("grok tags:", grok.get("tags"), "| keyo-flash:free tags:", (kf or {}).get("tags"))
+print("SMOKE_PASS")
+PY
+rm -f /tmp/p_tags.json
+echo DONE_FIX_TAGS_20261010_RUNBOOK

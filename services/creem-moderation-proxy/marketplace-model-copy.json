@@ -2299,15 +2299,6 @@
       "ja": "動画秒課金",
       "vi": "VideoSec"
     },
-    "视频·按次": {
-      "zhCN": "视频按次",
-      "zhTW": "影片按次",
-      "en": "VideoReq",
-      "fr": "VideoReq",
-      "ru": "VideoReq",
-      "ja": "動画回課金",
-      "vi": "VideoReq"
-    },
     "asr": {
       "zhCN": "语音识别",
       "zhTW": "語音辨識",
@@ -2371,24 +2362,6 @@
       "ja": "動画",
       "vi": "Video"
     },
-    "免费": {
-      "zhCN": "免费",
-      "zhTW": "免費",
-      "en": "Free",
-      "fr": "Free",
-      "ru": "Free",
-      "ja": "無料",
-      "vi": "Free"
-    },
-    "Free": {
-      "zhCN": "免费",
-      "zhTW": "免費",
-      "en": "Free",
-      "fr": "Free",
-      "ru": "Free",
-      "ja": "無料",
-      "vi": "Free"
-    },
     "视频按秒": {
       "zhCN": "视频模型",
       "zhTW": "影片模型",
@@ -2406,24 +2379,6 @@
       "ru": "Video",
       "ja": "動画モデル",
       "vi": "Video"
-    },
-    "视频按次": {
-      "zhCN": "视频按次",
-      "zhTW": "影片按次",
-      "en": "VideoReq",
-      "fr": "VideoReq",
-      "ru": "VideoReq",
-      "ja": "動画回課金",
-      "vi": "VideoReq"
-    },
-    "free": {
-      "zhCN": "免费",
-      "zhTW": "免費",
-      "en": "Free",
-      "fr": "Free",
-      "ru": "Free",
-      "ja": "無料",
-      "vi": "Free"
     },
     "moderation": {
       "zhCN": "内容风控",
@@ -2470,15 +2425,6 @@
       "ja": "動画秒課金",
       "vi": "VideoSec"
     },
-    "request": {
-      "zhCN": "视频按次",
-      "zhTW": "影片按次",
-      "en": "VideoReq",
-      "fr": "VideoReq",
-      "ru": "VideoReq",
-      "ja": "動画回課金",
-      "vi": "VideoReq"
-    },
     "VideoSec": {
       "zhCN": "视频按秒",
       "zhTW": "影片按秒",
@@ -2487,15 +2433,6 @@
       "ru": "VideoSec",
       "ja": "動画秒課金",
       "vi": "VideoSec"
-    },
-    "VideoReq": {
-      "zhCN": "视频按次",
-      "zhTW": "影片按次",
-      "en": "VideoReq",
-      "fr": "VideoReq",
-      "ru": "VideoReq",
-      "ja": "動画回課金",
-      "vi": "VideoReq"
     },
     "DigitalHuman": {
       "zhCN": "数字人",

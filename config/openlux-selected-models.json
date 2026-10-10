@@ -30,7 +30,7 @@
       "id": "grok-1.5-video",
       "vendor": "xAI",
       "icon": "Grok",
-      "tag": "视频按次",
+      "tag": "视频模型",
       "billing": "per_request",
         "group": "Cli-Grok-1",
       "upstream_endpoint": "POST /v1/videos",

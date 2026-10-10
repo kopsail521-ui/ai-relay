@@ -95,8 +95,8 @@ const FIXES = {
 
   // —— 大语言模型 ——
   "gemma-4-26B-A4B-it": { vendorName: "Google", icon: "Gemini.Color", tag: "大语言模型", endpoints: EP.chat },
-  "Atria-dawn-v2": { vendorName: "其他", icon: "Custom", tag: "大语言模型,免费", endpoints: EP.chat },
-  "DeepSeek-Prover-V2-7B": { vendorName: "DeepSeek", icon: "DeepSeek", tag: "大语言模型,免费", endpoints: EP.chat },
+  "Atria-dawn-v2": { vendorName: "其他", icon: "Custom", tag: "大语言模型", endpoints: EP.chat },
+  "DeepSeek-Prover-V2-7B": { vendorName: "DeepSeek", icon: "DeepSeek", tag: "大语言模型", endpoints: EP.chat },
 
   // —— RAG（向量化 / 重排）——
   "WeMM-Embedding-9B": { vendorName: "腾讯", icon: "Tencent.Color", tag: "嵌入模型", endpoints: EP.embed },
@@ -138,7 +138,7 @@ const FIXES = {
 
   // —— OpenLux 视频 ——
   "grok-imagine-video-1.5-preview": { vendorName: "xAI", icon: "XAI", tag: "视频", endpoints: EP.apimartVideo },
-  "grok-1.5-video": { vendorName: "xAI", icon: "XAI", tag: "视频按次", endpoints: EP.openaiVideo },
+  "grok-1.5-video": { vendorName: "xAI", icon: "XAI", tag: "视频模型", endpoints: EP.openaiVideo },
   "veo_3_1-components": { vendorName: "Google", icon: "Gemini.Color", tag: "视频", endpoints: EP.openaiVideo },
 
   // —— APIMart 视频 ——

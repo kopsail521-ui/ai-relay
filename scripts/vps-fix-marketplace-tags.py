@@ -7,12 +7,19 @@ import time
 DB = sys.argv[1] if len(sys.argv) > 1 else "/opt/ai-relay/data/new-api/one-api.db"
 
 REPL = {
-    "视频·按秒": "视频按秒",
-    "视频·按次": "视频按次",
-    "影片·按秒": "视频按秒",
-    "影片·按次": "视频按次",
-    "Video · per second": "视频按秒",
-    "Video · per request": "视频按次",
+    "视频·按秒": "视频模型",
+    "视频·按次": "视频模型",
+    "影片·按秒": "视频模型",
+    "影片·按次": "视频模型",
+    "Video · per second": "视频模型",
+    "Video · per request": "视频模型",
+    "视频按秒": "视频模型",
+    "视频按次": "视频模型",
+    # 免费 is price-based (free pool), not a tag — drop it
+    "Free": None,
+    "free": None,
+    "免费": None,
+    "免費": None,
 }
 
 
@@ -25,10 +32,8 @@ def norm_tag(t):
     # collapse middle-dot variants
     if "·" in t:
         t2 = t.replace("·", "")
-        if t2 in ("视频按秒", "影片按秒"):
-            return "视频按秒"
-        if t2 in ("视频按次", "影片按次"):
-            return "视频按次"
+        if t2 in ("视频按秒", "影片按秒", "视频按次", "影片按次"):
+            return "视频模型"
         t = t2
     return t
 
@@ -48,7 +53,7 @@ def norm_tags(raw):
         out.append(n)
     # drop lone fragments when paired junk
     junk = {"per", "second", "request", "processing", "digital", "human", "Video", "video"}
-    if any(x in ("视频按秒", "视频按次", "数字人", "图像处理") for x in out):
+    if any(x in ("视频模型", "数字人", "图像处理") for x in out):
         out = [x for x in out if x not in junk]
     return ",".join(out)
 

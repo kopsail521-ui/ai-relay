@@ -14,7 +14,7 @@ CREATE TABLE abilities ("group" TEXT, model TEXT, channel_id INTEGER, enabled IN
 now = 1759700000
 cur.execute("INSERT INTO channels(id,type,key,name,base_url,models,\"group\",model_mapping,status,updated_time) VALUES (10,1,'sk-x','Keyo Video','https://api.aicopy.top','grok-imagine-video-1.5','default','{\"grok-imagine-video-1.5\":\"grok-1.5-官转接口\"}',1,?)", (now,))
 cur.execute("INSERT INTO vendors(id,name,icon,status,created_time,updated_time) VALUES (1,'xAI','XAI',1,?,?),(2,'其他','Custom',1,?,?)", (now, now, now, now))
-cur.execute("INSERT INTO models(model_name,description,icon,tags,vendor_id,endpoints,status,sync_official,created_time,updated_time,deleted_at) VALUES ('grok-imagine-video-1.5','旧描述 $0.3082','XAI','视频按次',1,'{}',1,0,?,?,0)", (now, now))
+cur.execute("INSERT INTO models(model_name,description,icon,tags,vendor_id,endpoints,status,sync_official,created_time,updated_time,deleted_at) VALUES ('grok-imagine-video-1.5','旧描述 $0.3082','XAI','视频模型',1,'{}',1,0,?,?,0)", (now, now))
 cur.execute("INSERT INTO models(model_name,description,icon,tags,vendor_id,endpoints,status,sync_official,created_time,updated_time,deleted_at) VALUES ('UVDoc','x','Custom','图像处理',2,'{}',1,0,?,?,0)", (now, now))
 cur.execute("INSERT INTO models(model_name,description,icon,tags,vendor_id,endpoints,status,sync_official,created_time,updated_time,deleted_at) VALUES ('gemini-embedding-2-preview','x','Gemini.Color','大语言模型',NULL,'{}',1,0,?,?,0)", (now, now))
 cur.execute("INSERT INTO models(model_name,description,icon,tags,vendor_id,endpoints,status,sync_official,created_time,updated_time,deleted_at) VALUES ('wan3.0-video','x','Qwen.Color','视频按秒',2,'{}',1,0,?,?,0)", (now, now))

@@ -24,7 +24,7 @@ CHANNEL_NAME = "Keyo Video"
 BASE_URL = "https://api.aicopy.top"
 SELL_USD = 0.30822  # CNY 0.9 x2.5 = 2.25 / 7.3
 OLD_IDS = ["grok-1.5-video", "grok-imagine-video-1.5-preview"]
-TAG = "视频按次"
+TAG = "视频模型"
 VENDOR = "xAI"
 ICON = "XAI"
 EP_CHAT = json.dumps(

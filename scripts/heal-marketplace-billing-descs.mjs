@@ -11,7 +11,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.join(__dirname, "..");
 
 const TAG_FIX = {
-  "grok-1.5-video": "视频按次",
+  "grok-1.5-video": "视频模型",
   "gpt-image-2.5": "图片",
   "gpt-image-2.5-flare": "图片",
   "gpt-image-2.5-sunburst": "图片",

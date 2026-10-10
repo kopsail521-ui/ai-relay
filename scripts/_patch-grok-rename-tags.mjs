@@ -57,13 +57,13 @@ const rulesPath = "services/gitee-passthrough/fix-marketplace-meta.mjs";
 let m = read(rulesPath);
 const oldRule = `  "${OLD_ID}": {
     vendor: "xAI",
-    tag: "视频按次",
+    tag: "视频模型",
     endpoints: EP.chat,
     icon: "XAI",
   },`;
 const newRule = `  "${NEW_ID}": {
     vendor: "xAI",
-    tag: "视频按次",
+    tag: "视频模型",
     endpoints: EP.chat,
     icon: "XAI",
   },

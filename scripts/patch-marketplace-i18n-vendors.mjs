@@ -75,8 +75,6 @@ const TAG_ASR = LANG("语音识别", "語音辨識", "ASR", "ASR", "ASR", "音�
 const TAG_OCR = LANG("OCR", "OCR", "OCR", "OCR", "OCR", "OCR", "OCR");
 const TAG_VIDEO = LANG("视频", "影片", "Video", "Video", "Video", "動画", "Video");
 const TAG_VIDEO_SEC = LANG("视频按秒", "影片按秒", "VideoSec", "VideoSec", "VideoSec", "動画秒課金", "VideoSec");
-const TAG_VIDEO_REQ = LANG("视频按次", "影片按次", "VideoReq", "VideoReq", "VideoReq", "動画回課金", "VideoReq");
-const TAG_FREE = LANG("免费", "免費", "Free", "Free", "Free", "無料", "Free");
 const TAG_EMBED = LANG("嵌入模型", "嵌入模型", "Embedding", "Embedding", "Эмбеддинг", "埋め込みモデル", "Embedding");
 
 const TAGS = {
@@ -91,12 +89,8 @@ const TAGS = {
   视频: TAG_VIDEO,
   // canonical (no middle-dot)
   视频按秒: TAG_VIDEO_SEC,
-  视频按次: TAG_VIDEO_REQ,
   // legacy DB keys with ·
   "视频·按秒": TAG_VIDEO_SEC,
-  "视频·按次": TAG_VIDEO_REQ,
-  免费: TAG_FREE,
-  Free: TAG_FREE,
   嵌入模型: TAG_EMBED,
   rag: TAG_EMBED,
   RAG: TAG_EMBED,
@@ -109,13 +103,11 @@ const TAGS = {
   human: TAG_HUMAN,
   tts: TAG_TTS,
   video: TAG_VIDEO,
-  free: TAG_FREE,
   moderation: TAG_MOD,
   ocr: TAG_OCR,
   processing: TAG_IMGPROC,
   per: TAG_VIDEO_SEC,
   second: TAG_VIDEO_SEC,
-  request: TAG_VIDEO_REQ,
   VideoSec: TAG_VIDEO_SEC,
   VideoReq: TAG_VIDEO_REQ,
   DigitalHuman: TAG_HUMAN,

@@ -1458,29 +1458,6 @@ const server = http.createServer(async (req, res) => {
     }
 
     let forwardBody = bodyBuf;
-    if (
-      req.method === "POST" &&
-      pathOnly === "/v1/chat/completions" &&
-      String(req.headers["content-type"] || "").includes("application/json")
-    ) {
-      try {
-        const payload = JSON.parse(bodyBuf.toString("utf8"));
-        if (payload.model === "nemotron-3-ultra-550b-a55b:free") {
-          let changed = Object.hasOwn(payload, "enable_thinking");
-          delete payload.enable_thinking;
-          if (
-            payload.extra_body &&
-            typeof payload.extra_body === "object" &&
-            !Array.isArray(payload.extra_body) &&
-            Object.hasOwn(payload.extra_body, "enable_thinking")
-          ) {
-            delete payload.extra_body.enable_thinking;
-            changed = true;
-          }
-          if (changed) forwardBody = Buffer.from(JSON.stringify(payload));
-        }
-      } catch {}
-    }
 
     await proxyRequest(req, res, forwardBody);
   } catch (e) {

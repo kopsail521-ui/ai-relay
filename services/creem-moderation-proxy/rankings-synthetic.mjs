@@ -27,8 +27,6 @@ const MODEL_POOL = [
   { name: "gpt-image-2", vendor: "OpenAI", w: 32 },
   { name: "gemini-3.7-flash", vendor: "Google", w: 28 },
   { name: "claude-fable-5-1", vendor: "Anthropic", w: 26 },
-  { name: "nemotron-3-ultra-550b-a55b:free", vendor: "nvidia", w: 22 },
-  { name: "glm-5.3-flash:free", vendor: "智谱", w: 18 },
   { name: "gpt-5.6-sol", vendor: "OpenAI", w: 16 },
 ];
 

@@ -6771,20 +6771,6 @@
       "vi": "K2 Horizon miễn phí: chat tổng quát cho hỏi đáp hằng ngày và tác vụ nhẹ."
     }
   },
-  "keyo-flash:free": {
-    "description": "Keyo Flash 免费额度：多免费模型自动接力，单模型限流或断流时自动切换并续写，日常问答与轻量任务更稳。",
-    "description_zh": "Keyo Flash 免费额度：多免费模型自动接力，单模型限流或断流时自动切换并续写，日常问答与轻量任务更稳。",
-    "description_en": "Free Keyo Flash: multi-model auto-relay — auto-switches and continues on rate-limit or stream break, more reliable for everyday Q&A and light tasks.",
-    "descriptions": {
-      "zhCN": "Keyo Flash 免费额度：多免费模型自动接力，单模型限流或断流时自动切换并续写，日常问答与轻量任务更稳。",
-      "zhTW": "Keyo Flash 免費額度：多免費模型自動接力，單模型限流或斷流時自動切換並續寫，日常問答與輕量任務更穩。",
-      "en": "Free Keyo Flash: multi-model auto-relay — auto-switches and continues on rate-limit or stream break, more reliable for everyday Q&A and light tasks.",
-      "fr": "Keyo Flash gratuit : relais automatique multi-modèles — bascule et continue en cas de limite ou de coupure, plus fiable pour questions courantes et tâches légères.",
-      "ru": "Бесплатный Keyo Flash: авто-релей нескольких моделей — при лимите или обрыве потока автоматически переключается и дописывает, надёжнее для повседневных вопросов и лёгких задач.",
-      "ja": "Keyo Flash 無料枠：複数モデルの自動リレー。レート制限やストリーム切断時に自動切替し続きを出力、日常の質問応答や軽いタスクがより安定。",
-      "vi": "Keyo Flash miễn phí: tự động chuyển tiếp đa mô hình — tự đổi và viết tiếp khi giới hạn hoặc đứt luồng, ổn định hơn cho hỏi đáp hằng ngày và tác vụ nhẹ."
-    }
-  },
   "space-bunny-alpha:free": {
     "description": "Space Bunny Alpha 免费额度：实验性通用对话模型。",
     "description_zh": "Space Bunny Alpha 免费额度：实验性通用对话模型。",

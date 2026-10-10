@@ -61,6 +61,17 @@ const mock = http.createServer((req, res) => {
       res.destroy();
       return;
     }
+    if (model === "halluc:free") {
+      // 幻觉输出：复读 agent 工具调用协议标记（模拟免费模型被客户端提示带偏）
+      res.writeHead(200, { "Content-Type": "text/event-stream" });
+      sse(res, chunk(model, { role: "assistant" }));
+      sse(res, chunk(model, { content: "<ifm|tool_calls>" }));
+      sse(res, chunk(model, { content: "<ifm|tool_call>Read E:\\some\\path</ifm|tool_call>" }));
+      sse(res, chunk(model, {}, "stop"));
+      res.write("data: [DONE]\n\n");
+      res.end();
+      return;
+    }
     if (model !== "half:free" && model !== "good:free" && model !== "direct-ok:free") {
       res.writeHead(400, { "Content-Type": "application/json" });
       res.end(JSON.stringify({ error: { message: `unknown model ${model}` } }));
@@ -132,7 +143,7 @@ function spawnServer(port, extraEnv) {
   env.POOL_1_UPSTREAMS = ""; // 阻断 .env 泄漏的多上游配置，强制走单上游简写
   env.POOL_1_BASE_URL = `http://127.0.0.1:${MOCK_PORT}/v1`;
   env.POOL_1_API_KEYS = "sk-test-1";
-  env.POOL_1_MODELS = "bad-429:free,half:free,good:free,direct-ok:free,neterr:free,not-exist:free";
+  env.POOL_1_MODELS = "bad-429:free,half:free,halluc:free,good:free,direct-ok:free,neterr:free,not-exist:free";
   env.POOL_2_ALIAS = ""; // 停在第 1 池，避免加载真实 pro 池
   env.POOL_API_KEYS = KEY;
   env.FIRST_TOKEN_TIMEOUT_MS = "3000";
@@ -242,6 +253,7 @@ async function main() {
   j = await r.json();
   const content = j.choices?.[0]?.message?.content || "";
   check("接力合并出完整内容", r.status === 200 && content.includes("星系") && content.includes("星际旅行"), `status=${r.status} content=${JSON.stringify(content).slice(0,80)}`);
+  check("工具调用幻觉文本已被拦截丢弃", !content.includes("<ifm|") && !content.includes("tool_call"), `content=${JSON.stringify(content).slice(0,120)}`);
   check("finish_reason=stop", j.choices?.[0]?.finish_reason === "stop");
   check("usage 汇总", (j.usage?.total_tokens || 0) >= 18, JSON.stringify(j.usage));
 
@@ -296,7 +308,7 @@ async function main() {
   r = await fetch(`${BASE}/health`);
   j = await r.json();
   const p0 = j.pools?.[0];
-  check("health 含统计与模型冷却", j.ok === true && Array.isArray(p0?.entries) && p0.entries.length === 6 && typeof p0.stats?.failovers === "number", JSON.stringify(j).slice(0, 200));
+  check("health 含统计与模型冷却", j.ok === true && Array.isArray(p0?.entries) && p0.entries.length === 7 && typeof p0.stats?.failovers === "number", JSON.stringify(j).slice(0, 200));
   check("统计里有成功和接力", p0.stats.ok >= 2 && p0.stats.continuations >= 1, JSON.stringify(p0.stats));
 
   // 清理

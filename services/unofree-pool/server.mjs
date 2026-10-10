@@ -68,6 +68,9 @@ const KEY_DEAD_MS = Number(process.env.KEY_DEAD_MS || 600000);
 const MAX_CONT_CHARS = Number(process.env.MAX_CONTINUATION_CHARS || 32000);
 const MIN_OUTPUT_CHARS = Number(process.env.MIN_OUTPUT_CHARS || 200);
 const INCOMPLETE_KEYWORDS = (process.env.INCOMPLETE_KEYWORDS || "").split(",").map(s=>s.trim().toLowerCase()).filter(Boolean);
+// agent 工具调用协议标记：免费模型看到客户端系统提示/历史里的 ifm/tool_call 格式后会幻觉模仿。
+// 若某次输出包含这些标记，判定为无效输出，丢弃该次增量并切换下一个模型重新回答。
+const TOOL_CALL_MARKERS = (process.env.TOOL_CALL_MARKERS || "<ifm|,<ifm|tool_call>,<ifm|tool_calls>,<tool_call>,<tool_calls>,<function_call>,<function_calls>").split(",").map(s=>s.trim()).filter(Boolean);
 
 const CONT_ZH = "上面的回答还没写完。下面 assistant 消息是已经写好的内容。请紧接最后一句继续往下写，只输出后续内容，不要重复已写内容，不要任何开场白。请尽量写完整、写充分。";
 const CONT_EN = "The answer above is not finished yet. The assistant message below is what has already been written. Continue exactly from where it stopped — output only the continuation, no repetition, no preamble. Write as much as needed to complete the answer fully.";
@@ -261,7 +264,12 @@ function buildContinuation(base, partial) {
   return [...base, { role: "assistant", content: clipped }, { role: "user", content: zh ? CONT_ZH : CONT_EN }];
 }
 function sumUsage(a, b) { if (!b) return a || null; if (!a) return b; return { prompt_tokens: (a.prompt_tokens || 0) + (b.prompt_tokens || 0), completion_tokens: (a.completion_tokens || 0) + (b.completion_tokens || 0), total_tokens: (a.total_tokens || 0) + (b.total_tokens || 0) }; }
-function describeFailure(r) { if (!r) return "未知"; if (r.kind === "http") return `HTTP ${r.status} ${String(r.body).slice(0, 200)}`; if (r.kind === "timeout") return `超时(${r.why})`; if (r.kind === "neterr") return `网络错误: ${r.message}`; if (r.kind === "truncated") return "输出中途断流"; if (r.kind === "upstream") return `上游错误: ${String(r.body).slice(0, 200)}`; return r.kind; }
+function describeFailure(r) { if (!r) return "未知"; if (r.kind === "http") return `HTTP ${r.status} ${String(r.body).slice(0, 200)}`; if (r.kind === "timeout") return `超时(${r.why})`; if (r.kind === "neterr") return `网络错误: ${r.message}`; if (r.kind === "truncated") return "输出中途断流"; if (r.kind === "upstream") return `上游错误: ${String(r.body).slice(0, 200)}`; if (r.kind === "hallucination") return "输出含工具调用幻觉已丢弃"; return r.kind; }
+
+// 判断输出中是否混入 agent 工具调用协议文本（幻觉复读客户端提示/历史格式）
+function hasToolCallMarker(text) {
+  return TOOL_CALL_MARKERS.some((m) => text.includes(m));
+}
 
 // 判断"stop 但内容不完整"是否应触发续写接力
 function isIncomplete(partial, askedModel) {
@@ -318,6 +326,7 @@ async function handlePool(req, res, body, pool) {
   for (let i = 0; i < cands.length; i++) {
     const { ei, ki, entry, model } = cands[i];
     attemptsUsed.push(`${model}@${entry.upstream}`);
+    const attemptStart = partial;
     const cont = i > 0 && partial.length > 0;
     if (cont) { msgs = buildContinuation(baseMessages, partial); pool.stats.continuations++; }
     const upBody = { ...fwd, model, messages: msgs, stream: true, stream_options: { include_usage: true } };
@@ -335,6 +344,16 @@ async function handlePool(req, res, body, pool) {
       if (trim) { const out = trim.flush(); if (out) { partial += out; emit(out, false); } }
       const finishReason = r.finishReason || "stop";
       usageTotal = sumUsage(usageTotal, r.usage);
+      // 工具调用幻觉检测：输出混入 agent 协议标记（如 <ifm|tool_call>）→ 丢弃该次增量，
+      // 回滚到 attempt 起点，换下一个模型重新回答。非流式下游不会泄露脏文本。
+      if (hasToolCallMarker(partial)) {
+        console.log(`[${pool.alias}] toolcall-hallucination ${id} model=${model}@${entry.upstream} chars=${partial.length} → drop & next`);
+        partial = attemptStart;
+        agg = attemptStart; // 非流式下 agg 与 partial 同步累积，必须一起回滚
+        pool.stats.failovers++;
+        lastErr = { kind: "hallucination", model };
+        continue;
+      }
       pool.stats.ok++;
       // stop 但内容太短 → 换下一个模型续写（不是从头答，是接着已写内容往下写）
       // 只在首次回答时判断；续写过的不再判（已接过力，内容只会越续越多）

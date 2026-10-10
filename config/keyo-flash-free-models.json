@@ -7,7 +7,7 @@
       "id": "keyo-flash2:free",
       "twin": "keyo-flash2",
       "upstream": "u2-flash",
-      "vendor": "其他",
+      "vendor": "Keyo",
       "icon": "Custom",
       "tags": "大语言模型",
       "desc_zh": "Keyo Flash 2：轻量快速对话模型，当前免费档（受 fair-use 限额约束）。",

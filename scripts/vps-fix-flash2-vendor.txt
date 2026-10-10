@@ -1,0 +1,35 @@
+# VPS：把 keyo-flash2:free（及隐藏孪生 keyo-flash2）的供应商从「其他」改为「Keyo」
+set -e
+cd /opt/ai-relay
+sudo bash scripts/vps-safe-pull-preserve-blog.sh
+
+sudo docker run --rm \
+  -v /opt/ai-relay:/opt/ai-relay:ro \
+  -v /opt/ai-relay/data/new-api:/data \
+  -w /opt/ai-relay python:3.12-alpine \
+  python scripts/vps-fix-flash2-vendor.py /data/one-api.db
+
+sudo docker restart ai-relay-new-api
+sleep 6
+curl -sS -o /dev/null -w "console_http=%{http_code}\n" http://127.0.0.1:3000/api/status
+
+# smoke：供应商=Keyo、仍是免费、孪生仍隐藏
+curl -sS https://www.keyoapi.xyz/api/pricing -o /tmp/p_vendor.json
+python3 - <<'PY'
+import json
+j = json.load(open("/tmp/p_vendor.json"))
+rows = {r["model_name"]: r for r in j.get("data", [])}
+m = rows.get("keyo-flash2:free")
+if m is None:
+    raise SystemExit("SMOKE_FAIL: keyo-flash2:free missing")
+if m.get("vendor_name") != "Keyo":
+    raise SystemExit("SMOKE_FAIL: vendor is %r (expect Keyo)" % m.get("vendor_name"))
+if not (m.get("quota_type") == 1 and float(m.get("model_price") or 0) == 0):
+    raise SystemExit("SMOKE_FAIL: no longer flagged free")
+if "keyo-flash2" in rows:
+    raise SystemExit("SMOKE_FAIL: hidden twin visible")
+print("vendor:", m.get("vendor_name"), "| qt:", m.get("quota_type"), "| price:", m.get("model_price"), "| twin hidden: True")
+print("SMOKE_PASS")
+PY
+rm -f /tmp/p_vendor.json
+echo DONE_FIX_FLASH2_VENDOR_RUNBOOK

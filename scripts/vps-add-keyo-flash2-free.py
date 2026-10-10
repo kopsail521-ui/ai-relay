@@ -217,7 +217,7 @@ def main():
     put_opt(cur, "CompletionRatio", json.dumps(cr, ensure_ascii=False, separators=(",", ":")))
 
     # 3) marketplace rows: public id visible, twin soft-deleted (absent from square)
-    vid = ensure_vendor(cur, v_cols, "其他", "Custom", now)
+    vid = ensure_vendor(cur, v_cols, "Keyo", "Custom", now)
     upsert_marketplace(
         cur, m_cols, PUBLIC,
         "Keyo Flash 2：轻量快速对话模型，当前免费档（受 fair-use 限额约束）。",

@@ -1,0 +1,17 @@
+{
+  "note": "Keyo Flash（云知声 U2 线）免费档：对外 keyo-flash2:free（ModelPrice=0，广场免费池），实际扣费走隐藏孪生 keyo-flash2（ratio 0.005/compo 5 = $0.01/$0.05 每 1M）。2026-10-10 上架。对外勿写供应商名。",
+  "base_url": "https://maas-api.unisound.com",
+  "channel_name": "Keyo Flash",
+  "models": [
+    {
+      "id": "keyo-flash2:free",
+      "twin": "keyo-flash2",
+      "upstream": "u2-flash",
+      "vendor": "其他",
+      "icon": "Custom",
+      "tags": "大语言模型",
+      "desc_zh": "Keyo Flash 2：轻量快速对话模型，当前免费档（受 fair-use 限额约束）。",
+      "desc_en": "Keyo Flash 2: lightweight fast chat, current free tier (fair-use limits apply)."
+    }
+  ]
+}

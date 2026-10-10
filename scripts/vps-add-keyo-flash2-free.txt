@@ -1,0 +1,71 @@
+# VPS：上架 keyo-flash2:free（云知声 U2 线；显示 $0，实际扣赠送金 $0.01/$0.05 每 1M）
+#
+# 上游（已实测）：POST https://maas-api.unisound.com/v1/chat/completions，model=u2-flash，
+# OpenAI 兼容、支持流式；推理模型（content 与 reasoning_content 分离）。
+#
+# 模式与 Atria-dawn-v2:free 相同：
+#   keyo-flash2:free → ModelPrice=0（广场免费池显示 $0）
+#   计费时 BillingModelName 剥 :free → 隐藏孪生 keyo-flash2（ratio 0.005 / comp 5）→ 扣 $0.01/$0.05
+#   渠道 model_mapping: keyo-flash2:free → u2-flash
+set -e
+cd /opt/ai-relay
+sudo bash scripts/vps-safe-pull-preserve-blog.sh
+
+if ! sudo grep -q '^UNISOUND_API_KEY=' /opt/ai-relay/.env 2>/dev/null; then
+  echo "ERROR: add UNISOUND_API_KEY=... to /opt/ai-relay/.env first" >&2
+  exit 1
+fi
+
+# 0) 上游存活预检
+KEY=$(sudo grep '^UNISOUND_API_KEY=' /opt/ai-relay/.env | head -1 | cut -d= -f2)
+CODE=$(curl -sS -m 30 -o /tmp/uni_precheck.json -w "%{http_code}" -X POST \
+  https://maas-api.unisound.com/v1/chat/completions \
+  -H "Authorization: Bearer $KEY" -H "Content-Type: application/json" \
+  -d '{"model":"u2-flash","messages":[{"role":"user","content":"hi"}],"max_tokens":8}' || echo 000)
+if grep -q '"choices"' /tmp/uni_precheck.json 2>/dev/null; then
+  echo "upstream_ok=$CODE"
+else
+  echo "UPSTREAM_FAIL=$CODE"; head -c 400 /tmp/uni_precheck.json; echo
+  exit 1
+fi
+
+# 1) 建渠道 + 免费 id + 隐藏孪生（脚本 commit 前自检）
+sudo docker run --rm \
+  -v /opt/ai-relay:/opt/ai-relay:ro \
+  -v /opt/ai-relay/data/new-api:/data \
+  -w /opt/ai-relay python:3.12-alpine \
+  python scripts/vps-add-keyo-flash2-free.py /data/one-api.db
+
+# 2) 重启刷新定价缓存
+sudo docker restart ai-relay-new-api
+sleep 6
+curl -sS -o /dev/null -w "console_http=%{http_code}\n" http://127.0.0.1:3000/api/status
+
+# 3) 品牌/SEO 静态页（free-models 等由 gen-seo-pages 生成，已含 flash2）
+sudo bash scripts/deploy-brand-static.sh
+
+# 4) smoke：免费判定 + 孪生计费 + 无供应商泄漏
+curl -sS https://www.keyoapi.xyz/api/pricing -o /tmp/p_flash2.json
+python3 - <<'PY'
+import json
+j = json.load(open("/tmp/p_flash2.json"))
+rows = {r["model_name"]: r for r in j.get("data", [])}
+m = rows.get("keyo-flash2:free")
+if m is None:
+    raise SystemExit("SMOKE_FAIL: keyo-flash2:free missing from /api/pricing")
+ok_free = m.get("quota_type") == 1 and float(m.get("model_price") or 0) == 0
+hidden = "keyo-flash2" not in rows
+desc = (m.get("description") or "").lower()
+leak = "unisound" in desc or "云知声" in desc
+print("public: qt=%s price=%s (expect qt=1 price=0)" % (m.get("quota_type"), m.get("model_price")))
+print("twin hidden:", hidden, "| leak:", leak)
+if not ok_free:
+    raise SystemExit("SMOKE_FAIL: not flagged free")
+if not hidden:
+    raise SystemExit("SMOKE_FAIL: hidden twin 'keyo-flash2' is visible in the square")
+if leak:
+    raise SystemExit("SMOKE_FAIL: supplier name leaked")
+print("SMOKE_PASS")
+PY
+rm -f /tmp/p_flash2.json /tmp/uni_precheck.json
+echo DONE_ADD_KEYO_FLASH2_FREE

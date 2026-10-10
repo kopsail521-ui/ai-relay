@@ -125,7 +125,7 @@ Same pattern for other Path B models: upload once, map `url` to that model’s f
 
 Free (the `:free` suffix): `Atria-dawn-v2:free`, `DeepSeek-Prover-V2-7B:free`
 
-The free pool currently has `Atria-dawn-v2:free`, `DeepSeek-Prover-V2-7B:free` (chat), `Spark-TTS-0.5B` and `SenseVoiceSmall` (voice, $0/request). The live list is https://www.keyoapi.xyz/free-models — it changes over time.
+The free pool currently has `Atria-dawn-v2:free`, `DeepSeek-Prover-V2-7B:free`, `keyo-flash2:free` (chat), `Spark-TTS-0.5B` and `SenseVoiceSmall` (voice, $0/request). The live list is https://www.keyoapi.xyz/free-models — it changes over time.
 
 Paid: `gpt-5.6-luna` · `gpt-5.6-terra` · `gpt-5.6-sol` · `gpt-6-luna` · `gpt-6-sol` · `gpt-6-astra` · `claude-sonnet-5` · `claude-sonnet-5-5` · `claude-opus-5` · `claude-opus-5-5` · `claude-fable-5` · `claude-fable-5-1` · `gemini-3.7-flash` · `gemini-3.8-flash` · `grok-4.7` · `grok-4.6` · `minimax-m3` · `glm-5.3` · `glm-5.3-flash` · `glm-5.2` · `deepseek-v4.1-flash` · `deepseek-v4-pro-0813` · `deepseek-v4-flash-0731` · `deepseek-v4-pro` · `deepseek-v4-flash` · `kimi-k3` · `kimi-k2.7-code` · `qwen3.8-flash` · `hy4-preview` · `mimo-v2.6-pro` · `mimo-v2.6-flash` · `qwen3.8-max-0902`
 

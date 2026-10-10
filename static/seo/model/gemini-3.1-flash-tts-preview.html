@@ -4,19 +4,19 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Gemini Flash TTS API on KeyoAPI | Speech</title>
-<meta name="description" content="Call gemini-3.1-flash-tts-preview on KeyoAPI (~$0.40 / $8.00 per 1M). Sync OpenAI-compatible text-to-speech." />
+<meta name="description" content="Call gemini-3.1-flash-tts-preview on KeyoAPI (~$0.40 / $8.00 per 1M). Gemini-style generateContent returns inline WAV audio." />
 <link rel="canonical" href="https://www.keyoapi.xyz/model/gemini-3.1-flash-tts-preview" />
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://www.keyoapi.xyz/model/gemini-3.1-flash-tts-preview" />
 <meta property="og:title" content="Gemini Flash TTS API on KeyoAPI | Speech" />
-<meta property="og:description" content="Call gemini-3.1-flash-tts-preview on KeyoAPI (~$0.40 / $8.00 per 1M). Sync OpenAI-compatible text-to-speech." />
+<meta property="og:description" content="Call gemini-3.1-flash-tts-preview on KeyoAPI (~$0.40 / $8.00 per 1M). Gemini-style generateContent returns inline WAV audio." />
 <meta property="og:image" content="https://www.keyoapi.xyz/brand/logo.svg" />
 <link rel="icon" href="/brand/logo.svg" type="image/svg+xml" />
 <link rel="stylesheet" href="/brand/keyo-theme.css" />
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content="Gemini Flash TTS API on KeyoAPI | Speech" />
-<meta name="twitter:description" content="Call gemini-3.1-flash-tts-preview on KeyoAPI (~$0.40 / $8.00 per 1M). Sync OpenAI-compatible text-to-speech." />
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"SoftwareApplication","name":"KeyoAPI gemini-3.1-flash-tts-preview","applicationCategory":"DeveloperApplication","url":"https://www.keyoapi.xyz/model/gemini-3.1-flash-tts-preview","description":"Call gemini-3.1-flash-tts-preview on KeyoAPI (~$0.40 / $8.00 per 1M). Sync OpenAI-compatible text-to-speech.","offers":{"@type":"Offer","priceCurrency":"USD","description":"~$0.40 / $8.00 per 1M in/out"}}</script>
+<meta name="twitter:description" content="Call gemini-3.1-flash-tts-preview on KeyoAPI (~$0.40 / $8.00 per 1M). Gemini-style generateContent returns inline WAV audio." />
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"SoftwareApplication","name":"KeyoAPI gemini-3.1-flash-tts-preview","applicationCategory":"DeveloperApplication","url":"https://www.keyoapi.xyz/model/gemini-3.1-flash-tts-preview","description":"Call gemini-3.1-flash-tts-preview on KeyoAPI (~$0.40 / $8.00 per 1M). Gemini-style generateContent returns inline WAV audio.","offers":{"@type":"Offer","priceCurrency":"USD","description":"~$0.40 / $8.00 per 1M in/out"}}</script>
 <style>.wrap{max-width:880px;margin:0 auto;padding:28px 24px 48px}
 .footer{display:flex;flex-wrap:wrap;gap:10px 16px;max-width:1080px;margin:0 auto;padding:24px 24px 40px;border-top:1px solid var(--line);font-size:13px;color:var(--muted)}
 .footer a{color:var(--ink-2);text-decoration:none}
@@ -82,21 +82,20 @@ ul{margin:0 0 14px;padding-left:1.2em}
   <a class="btn btn-secondary" href="/sign-up">Create account</a>
 </div>
 <h2>Overview</h2>
-<p>gemini-3.1-flash-tts-preview is Gemini Flash text-to-speech on KeyoAPI. Indicative rates about $0.40 / $8.00 per 1M in/out — confirm live on <a href="/pricing/gemini-3.1-flash-tts-preview">/pricing/gemini-3.1-flash-tts-preview</a>. Call POST /v1/audio/speech at https://www.keyoapi.xyz/v1 and receive audio in the same response (sync). Use IndexTTS-2 or CosyVoice3 when you already run async TTS jobs.</p>
+<p>gemini-3.1-flash-tts-preview is Gemini Flash text-to-speech on KeyoAPI. Indicative rates about $0.40 / $8.00 per 1M in/out — confirm live on <a href="/pricing/gemini-3.1-flash-tts-preview">/pricing/gemini-3.1-flash-tts-preview</a>. Call POST /v1beta/models/gemini-3.1-flash-tts-preview:generateContent with responseModalities ["AUDIO"] and receive WAV audio inline (base64) in the same response. Use IndexTTS-2 or CosyVoice3 when you already run async TTS jobs.</p>
 <h2>Quick start</h2>
 <div class="card">
 <p>Base URL: <code>https://www.keyoapi.xyz/v1</code></p>
-<p>Endpoint: <code>POST /v1/audio/speech</code></p>
+<p>Endpoint: <code>POST /v1beta/models/gemini-3.1-flash-tts-preview:generateContent</code></p>
 <p>Model: <code>model=gemini-3.1-flash-tts-preview</code></p>
-<pre><code>curl https://www.keyoapi.xyz/v1/audio/speech \
+<pre><code>curl https://www.keyoapi.xyz/v1beta/models/gemini-3.1-flash-tts-preview:generateContent \
   -H "Authorization: Bearer YOUR_API_KEY" \
   -H "Content-Type: application/json" \
-  -d '{"model":"gemini-3.1-flash-tts-preview","input":"Hello from Gemini Flash TTS.","voice":"Kore"}' \
-  --output speech.wav</code></pre>
+  -d '{"contents":[{"parts":[{"text":"Hello from Gemini 3.1 Flash TTS."}]}],"generationConfig":{"responseModalities":["AUDIO"],"speechConfig":{"voiceConfig":{"prebuiltVoiceConfig":{"voiceName":"Kore"}}}}}'</code></pre>
 <p>Auth uses the same Bearer API key as chat. Full notes: <a href="/brand/keyo-docs.html">Keyo docs</a>.</p>
 </div>
 <h2>FAQ</h2>
-<div class="faq"><details><summary>Sync or async?</summary><p>Sync: POST /v1/audio/speech returns audio. Async TTS on Keyo remains Qwen3-TTS / CosyVoice3.</p></details>
+<div class="faq"><details><summary>Sync or async?</summary><p>Sync: the generateContent response carries inline WAV audio (base64) in candidates[0].content.parts. Async TTS on Keyo remains Qwen3-TTS / CosyVoice3.</p></details>
 <details><summary>Where is live pricing?</summary><p>See /pricing/gemini-3.1-flash-tts-preview. Indicative ~$0.40 / $8.00 per 1M in/out.</p></details></div>
 <h2>Related models</h2>
 <div class="grid"><a href="/model/IndexTTS-2">IndexTTS-2 API</a>

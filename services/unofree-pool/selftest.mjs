@@ -65,9 +65,10 @@ const mock = http.createServer((req, res) => {
     }
     res.writeHead(200, { "Content-Type": "text/event-stream" });
     if (model === "half:free") {
-      // 写两个字然后连接直接断掉（无 DONE、无 finish_reason）
+      // 写一段话然后连接直接断掉（无 DONE、无 finish_reason）
+      const half = "在一个遥远的星系中，存在着一个被遗忘的文明，他们的科技已经发展到了令人难以想象的高度，";
       sse(res, chunk(model, { role: "assistant" }));
-      sse(res, chunk(model, { content: "你好，" }));
+      for (const p of [half.slice(0,10), half.slice(10)]) sse(res, chunk(model, { content: p }));
       setTimeout(() => res.destroy(), 50);
       return;
     }
@@ -76,8 +77,8 @@ const mock = http.createServer((req, res) => {
       const msgs = j.messages || [];
       const isCont = msgs.length > 0 && msgs[msgs.length - 1].role === "user" && /继续|断开|Continue/.test(String(msgs[msgs.length - 1].content));
       const text = isCont
-        ? "世界！这是续写的内容，凑够五十个字以上以免被判定为不完整而再次触发接力。"
-        : "这是完整的回答，内容足够长不会触发不完整检测，超过五十个字就可以正常结束返回给调用方了。";
+        ? "他们掌握了星际旅行的技术，能够穿越虫洞到达宇宙的尽头。这个文明的历史可以追溯到数十亿年前，当时宇宙还处于婴儿期，他们的祖先就已经开始记录星辰的运行轨迹。随着时间推移，他们建立了横跨多个星系的联盟，发展出了超越物质形态的纯能量生命体，最终实现了与宇宙本身的融合。这个文明的遗产至今仍在影响着整个宇宙的演化进程。"
+        : "这是完整的回答，内容足够长不会触发不完整检测，超过两百个字就可以正常结束返回给调用方了，这里再补充一些内容确保长度确实超过了阈值不会触发续写逻辑这样测试就能通过了，继续补充内容直到超过两百字的阈值，再加更多内容确保万无一失。";
       sse(res, chunk(model, { role: "assistant" }));
       for (const piece of [text.slice(0, 5), text.slice(5)]) {
         sse(res, chunk(model, { content: piece }));
@@ -203,7 +204,7 @@ async function main() {
   check("OverlapTrimmer 内容不足缓冲上限时 flush 全量返回", flushed === "内容很短", `got=${flushed}`);
 
   const cont = buildContinuation([{ role: "user", content: "写一段中文" }], "已经写了一半");
-  check("buildContinuation 中文对话用中文续写指令", /继续写/.test(cont[cont.length - 1].content) && cont[1].role === "assistant" && cont[1].content === "已经写了一半");
+  check("buildContinuation 中文对话用中文续写指令", /还没写完|继续往下写/.test(cont[cont.length - 1].content) && cont[1].role === "assistant" && cont[1].content === "已经写了一半");
 
   const contEn = buildContinuation([{ role: "user", content: "write something in english" }], "half done");
   check("buildContinuation 英文对话用英文续写指令", /Continue/.test(contEn[contEn.length - 1].content));
@@ -229,7 +230,7 @@ async function main() {
   r = await chat({ model: "keyo-flash:free", stream: false, messages: [{ role: "user", content: "写一段中文" }] });
   j = await r.json();
   const content = j.choices?.[0]?.message?.content || "";
-  check("接力合并出完整内容", r.status === 200 && content.startsWith("你好，世界！这是续写"), `status=${r.status} content=${JSON.stringify(content).slice(0,80)}`);
+  check("接力合并出完整内容", r.status === 200 && content.includes("星系") && content.includes("星际旅行"), `status=${r.status} content=${JSON.stringify(content).slice(0,80)}`);
   check("finish_reason=stop", j.choices?.[0]?.finish_reason === "stop");
   check("usage 汇总", (j.usage?.total_tokens || 0) >= 18, JSON.stringify(j.usage));
 
@@ -240,7 +241,7 @@ async function main() {
   r = await chat({ model: "keyo-flash:free", stream: true, stream_options: { include_usage: true }, messages: [{ role: "user", content: "写一段中文" }] });
   const s = await readSSE(r);
   check("流式 200 且收到 [DONE]", r.status === 200 && s.sawDone);
-  check("流式内容合并", s.content.startsWith("你好，世界！这是续写"), `content=${JSON.stringify(s.content).slice(0,80)}`);
+  check("流式内容合并", s.content.includes("星系") && s.content.includes("星际旅行"), `content=${JSON.stringify(s.content).slice(0,80)}`);
   check("流式 finish_reason=stop", s.finish === "stop");
   check("流式 include_usage 透传", !!s.usage);
   check("所有 chunk 的 model 都是对外的 keyo-flash:free", s.events.every((e) => e.model === "keyo-flash:free"));

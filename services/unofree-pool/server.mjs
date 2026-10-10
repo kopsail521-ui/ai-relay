@@ -65,11 +65,11 @@ const ERR_COOLDOWN_MS = Number(process.env.ERR_COOLDOWN_MS || 15000);
 const BAD_MODEL_COOLDOWN_MS = Number(process.env.BAD_MODEL_COOLDOWN_MS || 300000);
 const KEY_DEAD_MS = Number(process.env.KEY_DEAD_MS || 600000);
 const MAX_CONT_CHARS = Number(process.env.MAX_CONTINUATION_CHARS || 32000);
-const MIN_OUTPUT_CHARS = Number(process.env.MIN_OUTPUT_CHARS || 50);
+const MIN_OUTPUT_CHARS = Number(process.env.MIN_OUTPUT_CHARS || 200);
 const INCOMPLETE_KEYWORDS = (process.env.INCOMPLETE_KEYWORDS || "").split(",").map(s=>s.trim().toLowerCase()).filter(Boolean);
 
-const CONT_ZH = "刚才的回答在输出中途断开了。下面 assistant 消息是已生成的内容。请从中断处继续写：只输出续写内容本身，不要重复已写内容，不要任何开场白或确认语。";
-const CONT_EN = "The previous answer was cut off mid-output. The assistant message below is what was already generated. Continue exactly from where it stopped: output only the continuation itself, no repetition, no preamble.";
+const CONT_ZH = "上面的回答还没写完。下面 assistant 消息是已经写好的内容。请紧接最后一句继续往下写，只输出后续内容，不要重复已写内容，不要任何开场白。请尽量写完整、写充分。";
+const CONT_EN = "The answer above is not finished yet. The assistant message below is what has already been written. Continue exactly from where it stopped — output only the continuation, no repetition, no preamble. Write as much as needed to complete the answer fully.";
 
 // 模型条目：一个具体模型 + 它的上游 origin + 可用密钥 keys
 class Entry {
@@ -307,17 +307,14 @@ async function handlePool(req, res, body, pool) {
   }
 
   const fwd = { ...body }; delete fwd.model; delete fwd.messages; delete fwd.stream; delete fwd.stream_options; delete fwd.n;
+  console.log(`[${pool.alias}] req ${id} stream=${wantStream} max_tokens=${body.max_tokens ?? "unset"} temperature=${body.temperature ?? "unset"} msgs=${baseMessages.length} last_msg_len=${textOf(baseMessages[baseMessages.length-1]).length}`);
   let partial = "", msgs = baseMessages, attemptsUsed = [], lastErr = null, usageTotal = null;
-  let switching = false; // 不完整→换模型从头答（不是续写）
 
   for (let i = 0; i < cands.length; i++) {
     const { ei, ki, entry, model } = cands[i];
     attemptsUsed.push(`${model}@${entry.upstream}`);
-    // cont = 续写模式（断流续写）；switching = 不完整换模型从头答（清空 partial）
-    const cont = i > 0 && partial.length > 0 && !switching;
+    const cont = i > 0 && partial.length > 0;
     if (cont) { msgs = buildContinuation(baseMessages, partial); pool.stats.continuations++; }
-    else { msgs = baseMessages; }
-    if (switching) { partial = ""; switching = false; }
     const upBody = { ...fwd, model, messages: msgs, stream: true, stream_options: { include_usage: true } };
     const trim = cont ? new OverlapTrimmer(partial) : null;
     const r = await callUpstream({
@@ -334,12 +331,12 @@ async function handlePool(req, res, body, pool) {
       const finishReason = r.finishReason || "stop";
       usageTotal = sumUsage(usageTotal, r.usage);
       pool.stats.ok++;
-      // "stop 但内容太短/不完整" → 只在首次尝试（非续写）时判断，避免续写后反复跳模型
+      // stop 但内容太短 → 换下一个模型续写（不是从头答，是接着已写内容往下写）
+      // 只在首次回答时判断；续写过的不再判（已接过力，内容只会越续越多）
       if (finishReason === "stop" && !cont && i < cands.length - 1 && isIncomplete(partial, askedModel)) {
-        console.log(`[${pool.alias}] incomplete ${id} model=${model}@${entry.upstream} chars=${partial.length} → switching model`);
+        console.log(`[${pool.alias}] incomplete ${id} model=${model}@${entry.upstream} chars=${partial.length} → continuing (续写)`);
         lastErr = { kind: "incomplete", model };
-        switching = true;
-        continue; // 不计 failover（不是失败），换下一个模型从头答
+        continue;
       }
       pool.stats.charsOut += partial.length;
       console.log(`[${pool.alias}] ok ${id} models=${attemptsUsed.join("→")} cont=${cont ? 1 : 0} chars=${partial.length}`);

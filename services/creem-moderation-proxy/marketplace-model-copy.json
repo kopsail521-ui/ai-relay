@@ -6606,5 +6606,437 @@
     "suffix_en": "",
     "price_key_zh": "",
     "price_key_en": ""
+  },
+  "keyo-super-resolution-1080p": {
+    "description": "Keyo 大模型视频超分：AI 视频超分至 1080P。",
+    "descriptions": {
+      "zhCN": "Keyo 大模型视频超分：AI 视频超分至 1080P。",
+      "zhTW": "Keyo 大模型视频超分：AI 视频超分至 1080P。",
+      "en": "Keyo video super-resolution up to 1080P.",
+      "fr": "Keyo video super-resolution up to 1080P.",
+      "ru": "Keyo video super-resolution up to 1080P.",
+      "ja": "Keyo video super-resolution up to 1080P.",
+      "vi": "Keyo video super-resolution up to 1080P."
+    },
+    "unit": "request",
+    "badge": {
+      "zhCN": "按次计费",
+      "zhTW": "按次計費",
+      "en": "Per Request",
+      "fr": "Par requête",
+      "ru": "За запрос",
+      "ja": "リクエスト課金",
+      "vi": "Theo lần gọi"
+    },
+    "suffix": {
+      "zhCN": "/次",
+      "zhTW": "/次",
+      "en": "/ request",
+      "fr": "/ requête",
+      "ru": "/ запрос",
+      "ja": "/ 回",
+      "vi": "/ lần"
+    },
+    "price_key": {
+      "zhCN": "每次请求",
+      "zhTW": "每次請求",
+      "en": "Per request",
+      "fr": "Par requête",
+      "ru": "За запрос",
+      "ja": "リクエストごと",
+      "vi": "Mỗi lần gọi"
+    },
+    "description_zh": "Keyo 大模型视频超分：AI 视频超分至 1080P。",
+    "description_en": "Keyo video super-resolution up to 1080P.",
+    "badge_zh": "按次计费",
+    "badge_en": "Per Request",
+    "suffix_zh": "/次",
+    "suffix_en": "/ request",
+    "price_key_zh": "每次请求",
+    "price_key_en": "Per request"
+  },
+  "keyo-super-resolution-2k": {
+    "description": "Keyo 大模型视频超分：AI 视频超分至 2K。",
+    "descriptions": {
+      "zhCN": "Keyo 大模型视频超分：AI 视频超分至 2K。",
+      "zhTW": "Keyo 大模型视频超分：AI 视频超分至 2K。",
+      "en": "Keyo video super-resolution up to 2K.",
+      "fr": "Keyo video super-resolution up to 2K.",
+      "ru": "Keyo video super-resolution up to 2K.",
+      "ja": "Keyo video super-resolution up to 2K.",
+      "vi": "Keyo video super-resolution up to 2K."
+    },
+    "unit": "request",
+    "badge": {
+      "zhCN": "按次计费",
+      "zhTW": "按次計費",
+      "en": "Per Request",
+      "fr": "Par requête",
+      "ru": "За запрос",
+      "ja": "リクエスト課金",
+      "vi": "Theo lần gọi"
+    },
+    "suffix": {
+      "zhCN": "/次",
+      "zhTW": "/次",
+      "en": "/ request",
+      "fr": "/ requête",
+      "ru": "/ запрос",
+      "ja": "/ 回",
+      "vi": "/ lần"
+    },
+    "price_key": {
+      "zhCN": "每次请求",
+      "zhTW": "每次請求",
+      "en": "Per request",
+      "fr": "Par requête",
+      "ru": "За запрос",
+      "ja": "リクエストごと",
+      "vi": "Mỗi lần gọi"
+    },
+    "description_zh": "Keyo 大模型视频超分：AI 视频超分至 2K。",
+    "description_en": "Keyo video super-resolution up to 2K.",
+    "badge_zh": "按次计费",
+    "badge_en": "Per Request",
+    "suffix_zh": "/次",
+    "suffix_en": "/ request",
+    "price_key_zh": "每次请求",
+    "price_key_en": "Per request"
+  },
+  "keyo-super-resolution-4k": {
+    "description": "Keyo 大模型视频超分：AI 视频超分至 4K。",
+    "descriptions": {
+      "zhCN": "Keyo 大模型视频超分：AI 视频超分至 4K。",
+      "zhTW": "Keyo 大模型视频超分：AI 视频超分至 4K。",
+      "en": "Keyo video super-resolution up to 4K.",
+      "fr": "Keyo video super-resolution up to 4K.",
+      "ru": "Keyo video super-resolution up to 4K.",
+      "ja": "Keyo video super-resolution up to 4K.",
+      "vi": "Keyo video super-resolution up to 4K."
+    },
+    "unit": "request",
+    "badge": {
+      "zhCN": "按次计费",
+      "zhTW": "按次計費",
+      "en": "Per Request",
+      "fr": "Par requête",
+      "ru": "За запрос",
+      "ja": "リクエスト課金",
+      "vi": "Theo lần gọi"
+    },
+    "suffix": {
+      "zhCN": "/次",
+      "zhTW": "/次",
+      "en": "/ request",
+      "fr": "/ requête",
+      "ru": "/ запрос",
+      "ja": "/ 回",
+      "vi": "/ lần"
+    },
+    "price_key": {
+      "zhCN": "每次请求",
+      "zhTW": "每次請求",
+      "en": "Per request",
+      "fr": "Par requête",
+      "ru": "За запрос",
+      "ja": "リクエストごと",
+      "vi": "Mỗi lần gọi"
+    },
+    "description_zh": "Keyo 大模型视频超分：AI 视频超分至 4K。",
+    "description_en": "Keyo video super-resolution up to 4K.",
+    "badge_zh": "按次计费",
+    "badge_en": "Per Request",
+    "suffix_zh": "/次",
+    "suffix_en": "/ request",
+    "price_key_zh": "每次请求",
+    "price_key_en": "Per request"
+  },
+  "keyo-video-subtitle-removal": {
+    "description": "Keyo 视频去字幕：AI 智能去除视频内嵌字幕。",
+    "descriptions": {
+      "zhCN": "Keyo 视频去字幕：AI 智能去除视频内嵌字幕。",
+      "zhTW": "Keyo 视频去字幕：AI 智能去除视频内嵌字幕。",
+      "en": "Keyo AI subtitle removal for videos.",
+      "fr": "Keyo AI subtitle removal for videos.",
+      "ru": "Keyo AI subtitle removal for videos.",
+      "ja": "Keyo AI subtitle removal for videos.",
+      "vi": "Keyo AI subtitle removal for videos."
+    },
+    "unit": "request",
+    "badge": {
+      "zhCN": "按次计费",
+      "zhTW": "按次計費",
+      "en": "Per Request",
+      "fr": "Par requête",
+      "ru": "За запрос",
+      "ja": "リクエスト課金",
+      "vi": "Theo lần gọi"
+    },
+    "suffix": {
+      "zhCN": "/次",
+      "zhTW": "/次",
+      "en": "/ request",
+      "fr": "/ requête",
+      "ru": "/ запрос",
+      "ja": "/ 回",
+      "vi": "/ lần"
+    },
+    "price_key": {
+      "zhCN": "每次请求",
+      "zhTW": "每次請求",
+      "en": "Per request",
+      "fr": "Par requête",
+      "ru": "За запрос",
+      "ja": "リクエストごと",
+      "vi": "Mỗi lần gọi"
+    },
+    "description_zh": "Keyo 视频去字幕：AI 智能去除视频内嵌字幕。",
+    "description_en": "Keyo AI subtitle removal for videos.",
+    "badge_zh": "按次计费",
+    "badge_en": "Per Request",
+    "suffix_zh": "/次",
+    "suffix_en": "/ request",
+    "price_key_zh": "每次请求",
+    "price_key_en": "Per request"
+  },
+  "grok-image-2.0": {
+    "description": "xAI Grok Image 2.0：图片生成。",
+    "descriptions": {
+      "zhCN": "xAI Grok Image 2.0：图片生成。",
+      "zhTW": "xAI Grok Image 2.0：图片生成。",
+      "en": "xAI Grok Image 2.0 — image generation.",
+      "fr": "xAI Grok Image 2.0 — image generation.",
+      "ru": "xAI Grok Image 2.0 — image generation.",
+      "ja": "xAI Grok Image 2.0 — image generation.",
+      "vi": "xAI Grok Image 2.0 — image generation."
+    },
+    "unit": "request",
+    "badge": {
+      "zhCN": "按次计费",
+      "zhTW": "按次計費",
+      "en": "Per Request",
+      "fr": "Par requête",
+      "ru": "За запрос",
+      "ja": "リクエスト課金",
+      "vi": "Theo lần gọi"
+    },
+    "suffix": {
+      "zhCN": "/次",
+      "zhTW": "/次",
+      "en": "/ request",
+      "fr": "/ requête",
+      "ru": "/ запрос",
+      "ja": "/ 回",
+      "vi": "/ lần"
+    },
+    "price_key": {
+      "zhCN": "每次请求",
+      "zhTW": "每次請求",
+      "en": "Per request",
+      "fr": "Par requête",
+      "ru": "За запрос",
+      "ja": "リクエストごと",
+      "vi": "Mỗi lần gọi"
+    },
+    "description_zh": "xAI Grok Image 2.0：图片生成。",
+    "description_en": "xAI Grok Image 2.0 — image generation.",
+    "badge_zh": "按次计费",
+    "badge_en": "Per Request",
+    "suffix_zh": "/次",
+    "suffix_en": "/ request",
+    "price_key_zh": "每次请求",
+    "price_key_en": "Per request"
+  },
+  "keyo-voice-clone": {
+    "description": "Keyo 音色复刻：用音频样本克隆专属音色。",
+    "descriptions": {
+      "zhCN": "Keyo 音色复刻：用音频样本克隆专属音色。",
+      "zhTW": "Keyo 音色复刻：用音频样本克隆专属音色。",
+      "en": "Keyo voice cloning from audio samples.",
+      "fr": "Keyo voice cloning from audio samples.",
+      "ru": "Keyo voice cloning from audio samples.",
+      "ja": "Keyo voice cloning from audio samples.",
+      "vi": "Keyo voice cloning from audio samples."
+    },
+    "unit": "request",
+    "badge": {
+      "zhCN": "按次计费",
+      "zhTW": "按次計費",
+      "en": "Per Request",
+      "fr": "Par requête",
+      "ru": "За запрос",
+      "ja": "リクエスト課金",
+      "vi": "Theo lần gọi"
+    },
+    "suffix": {
+      "zhCN": "/次",
+      "zhTW": "/次",
+      "en": "/ request",
+      "fr": "/ requête",
+      "ru": "/ запрос",
+      "ja": "/ 回",
+      "vi": "/ lần"
+    },
+    "price_key": {
+      "zhCN": "每次请求",
+      "zhTW": "每次請求",
+      "en": "Per request",
+      "fr": "Par requête",
+      "ru": "За запрос",
+      "ja": "リクエストごと",
+      "vi": "Mỗi lần gọi"
+    },
+    "description_zh": "Keyo 音色复刻：用音频样本克隆专属音色。",
+    "description_en": "Keyo voice cloning from audio samples.",
+    "badge_zh": "按次计费",
+    "badge_en": "Per Request",
+    "suffix_zh": "/次",
+    "suffix_en": "/ request",
+    "price_key_zh": "每次请求",
+    "price_key_en": "Per request"
+  },
+  "keyo-tts": {
+    "description": "Keyo 文字转语音：文本转高质量语音。",
+    "descriptions": {
+      "zhCN": "Keyo 文字转语音：文本转高质量语音。",
+      "zhTW": "Keyo 文字转语音：文本转高质量语音。",
+      "en": "Keyo text-to-speech.",
+      "fr": "Keyo text-to-speech.",
+      "ru": "Keyo text-to-speech.",
+      "ja": "Keyo text-to-speech.",
+      "vi": "Keyo text-to-speech."
+    },
+    "unit": "request",
+    "badge": {
+      "zhCN": "按次计费",
+      "zhTW": "按次計費",
+      "en": "Per Request",
+      "fr": "Par requête",
+      "ru": "За запрос",
+      "ja": "リクエスト課金",
+      "vi": "Theo lần gọi"
+    },
+    "suffix": {
+      "zhCN": "/次",
+      "zhTW": "/次",
+      "en": "/ request",
+      "fr": "/ requête",
+      "ru": "/ запрос",
+      "ja": "/ 回",
+      "vi": "/ lần"
+    },
+    "price_key": {
+      "zhCN": "每次请求",
+      "zhTW": "每次請求",
+      "en": "Per request",
+      "fr": "Par requête",
+      "ru": "За запрос",
+      "ja": "リクエストごと",
+      "vi": "Mỗi lần gọi"
+    },
+    "description_zh": "Keyo 文字转语音：文本转高质量语音。",
+    "description_en": "Keyo text-to-speech.",
+    "badge_zh": "按次计费",
+    "badge_en": "Per Request",
+    "suffix_zh": "/次",
+    "suffix_en": "/ request",
+    "price_key_zh": "每次请求",
+    "price_key_en": "Per request"
+  },
+  "keyo-song": {
+    "description": "Keyo 歌曲生成：从文字创作完整歌曲。",
+    "descriptions": {
+      "zhCN": "Keyo 歌曲生成：从文字创作完整歌曲。",
+      "zhTW": "Keyo 歌曲生成：从文字创作完整歌曲。",
+      "en": "Keyo song generation from text.",
+      "fr": "Keyo song generation from text.",
+      "ru": "Keyo song generation from text.",
+      "ja": "Keyo song generation from text.",
+      "vi": "Keyo song generation from text."
+    },
+    "unit": "request",
+    "badge": {
+      "zhCN": "按次计费",
+      "zhTW": "按次計費",
+      "en": "Per Request",
+      "fr": "Par requête",
+      "ru": "За запрос",
+      "ja": "リクエスト課金",
+      "vi": "Theo lần gọi"
+    },
+    "suffix": {
+      "zhCN": "/次",
+      "zhTW": "/次",
+      "en": "/ request",
+      "fr": "/ requête",
+      "ru": "/ запрос",
+      "ja": "/ 回",
+      "vi": "/ lần"
+    },
+    "price_key": {
+      "zhCN": "每次请求",
+      "zhTW": "每次請求",
+      "en": "Per request",
+      "fr": "Par requête",
+      "ru": "За запрос",
+      "ja": "リクエストごと",
+      "vi": "Mỗi lần gọi"
+    },
+    "description_zh": "Keyo 歌曲生成：从文字创作完整歌曲。",
+    "description_en": "Keyo song generation from text.",
+    "badge_zh": "按次计费",
+    "badge_en": "Per Request",
+    "suffix_zh": "/次",
+    "suffix_en": "/ request",
+    "price_key_zh": "每次请求",
+    "price_key_en": "Per request"
+  },
+  "keyo-asr": {
+    "description": "Keyo 语音转文字：音频精准转写。",
+    "descriptions": {
+      "zhCN": "Keyo 语音转文字：音频精准转写。",
+      "zhTW": "Keyo 语音转文字：音频精准转写。",
+      "en": "Keyo speech-to-text transcription.",
+      "fr": "Keyo speech-to-text transcription.",
+      "ru": "Keyo speech-to-text transcription.",
+      "ja": "Keyo speech-to-text transcription.",
+      "vi": "Keyo speech-to-text transcription."
+    },
+    "unit": "request",
+    "badge": {
+      "zhCN": "按次计费",
+      "zhTW": "按次計費",
+      "en": "Per Request",
+      "fr": "Par requête",
+      "ru": "За запрос",
+      "ja": "リクエスト課金",
+      "vi": "Theo lần gọi"
+    },
+    "suffix": {
+      "zhCN": "/次",
+      "zhTW": "/次",
+      "en": "/ request",
+      "fr": "/ requête",
+      "ru": "/ запрос",
+      "ja": "/ 回",
+      "vi": "/ lần"
+    },
+    "price_key": {
+      "zhCN": "每次请求",
+      "zhTW": "每次請求",
+      "en": "Per request",
+      "fr": "Par requête",
+      "ru": "За запрос",
+      "ja": "リクエストごと",
+      "vi": "Mỗi lần gọi"
+    },
+    "description_zh": "Keyo 语音转文字：音频精准转写。",
+    "description_en": "Keyo speech-to-text transcription.",
+    "badge_zh": "按次计费",
+    "badge_en": "Per Request",
+    "suffix_zh": "/次",
+    "suffix_en": "/ request",
+    "price_key_zh": "每次请求",
+    "price_key_en": "Per request"
   }
 }

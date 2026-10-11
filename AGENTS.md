@@ -29,7 +29,9 @@ ai-relay（品牌 **keyoapi** / keyoapi.xyz）：面向出海用户的 AI API �
   （纯 bash，inspect 现有容器保参重建，失败自动回滚；挂载读 `HostConfig.Binds` 优先）。
 - **VPS 环境**：Ubuntu 22.04，容器 `ai-relay-new-api`（自定义网络 `ai-relay_default`，
   -p 3000:3000，bind mount `/opt/ai-relay/data/new-api:/data`，4 个环境变量，
-  CMD `--log-dir /app/logs`）。Workbench 粘贴多行易断连，优先给单行短命令。
+  CMD `--log-dir /app/logs`）。内存 894MB + 4GB swap（/swapfile，2026-10-11 启用——
+  此前 swap 未挂载，大文件上传缓冲会直接 OOM，是 MinerU 大 PDF 提交超时的根因）。
+  Workbench 粘贴多行易断连，优先给单行短命令。
 - **git 推送**：本仓库 `http.sslBackend` 固定为 `openssl`（schannel 会间歇性
   `Failed to connect to github.com port 443`）。
 - **钱包上限**：用户 `quota` 硬上限 `MaxQuota = MaxInt32 = 2147483647`，充值前校验

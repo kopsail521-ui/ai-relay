@@ -76,9 +76,18 @@ function isFreeId(id) {
 }
 
 /** Crawlable catalog link: guide page > free hub > pricing-list. */
+/** Hand-maintained model pages outside config (regeneration does not cover them). */
+const HAND_MAINTAINED_GUIDES = new Set([
+  "gemini-3.8-flash-tts",
+  "gemini-3.1-flash-tts-preview",
+  "suno_music_open",
+  "deepseek-v4-pro",
+  "gemini-embedding-2-preview",
+]);
+
 function catalogHref(id) {
   const guideIds = new Set(pages.models.map((m) => m.id));
-  if (guideIds.has(id)) return `/model/${encodeURIComponent(id)}`;
+  if (guideIds.has(id) || HAND_MAINTAINED_GUIDES.has(id)) return `/model/${encodeURIComponent(id)}`;
   if (isFreeId(id)) return "/free-models";
   return "/pricing-list";
 }

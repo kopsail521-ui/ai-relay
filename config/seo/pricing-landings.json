@@ -776,7 +776,7 @@
           "model": "glm-5.3-flash",
           "official": "Zhipu GLM 5.3 Flash — verify on open.bigmodel.cn",
           "keyo": "~$0.22 / $0.72 per 1M in/out",
-          "note": "Paid twin of Atria-dawn-v2:free on /free-models"
+          "note": "Budget GLM lane · /pricing-list"
         }
       ],
       "freeKiller": {
@@ -786,7 +786,7 @@
       "body": [
         "Why teams look for an OpenAI API alternative: lower sell rates on high-volume paths, one prepaid wallet across GPT-class plus DeepSeek/Claude/speech/vision, or payment and access friction on first-party billing. Official OpenAI wins on first-party product features and brand trust. KeyoAPI is for when you want OpenAI SDK shape plus multi-model routing without five invoices.",
         "How to switch (two lines): set OPENAI_BASE_URL=https://www.keyoapi.xyz/v1 (or sdk base_url), use your Keyo API key as Authorization Bearer, keep POST /v1/chat/completions. Then pass model=gpt-6-astra for flagship chat, or deepseek-v4.1-flash / gpt-5.6-luna for cheaper bulk. Full price planning table: /compare. OpenAI-side unit economics: /openai-api-pricing.",
-        "Migration notes that actually break builds: (1) tool-calling / vision / streaming parity is not 1:1 with every OpenAI first-party feature — verify against live docs for your workload; (2) Keyo gpt-5.6-* IDs are GPT-class twins, not OpenAI first-party GPT-5 names; (3) OCR, some vision, and avatar jobs use dedicated REST paths — see /pricing-list; (4) rates above are indicative — confirm interactive /pricing/{id} before volume.",
+        "Migration notes that actually break builds: (1) tool-calling / vision / streaming parity is not 1:1 with every OpenAI first-party feature — verify against live docs for your workload; (2) Keyo gpt-5.6-* IDs are GPT-class twins, not OpenAI first-party GPT-5 names; (3) visual processing, async video, digital-human and document-parsing jobs use dedicated REST paths — see /pricing-list; (4) rates above are indicative — confirm interactive /pricing/{id} before volume.",
         "When to stay on official OpenAI: you need first-party Assistants, specific OpenAI product surfaces, or enterprise contracts that require OpenAI as the contracting party. When Keyo fits: you already speak OpenAI SDK, want cheaper bulk lanes or multi-vendor IDs on one key, and can accept prepaid credits instead of OpenAI billing."
       ],
       "curlExample": "curl https://www.keyoapi.xyz/v1/chat/completions \\\n  -H \"Authorization: Bearer $KEYO_API_KEY\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\"model\":\"gpt-6-astra\",\"messages\":[{\"role\":\"user\",\"content\":\"Hello from an OpenAI API alternative\"}]}'",

@@ -86,7 +86,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
 
 <h2>OpenAI-compatible API: what works on one base URL</h2>
 <p>Yes — the official OpenAI SDKs work against KeyoAPI as a drop-in for most calls. Set <code>base_url</code> to <code>https://www.keyoapi.xyz/v1</code>, send your Keyo API key as <code>Authorization: Bearer</code>, and keep <code>client.chat.completions.create()</code>. Chat, model listing, embeddings, image generation, OCR and speech-to-text all run on OpenAI-shaped paths. Text-to-speech is OpenAI-shaped for part of the catalog and asynchronous or vendor-native for the rest. Visual processing, video, digital-human, document parsing and the decision endpoint use dedicated REST paths — same key, same prepaid balance, different URL shape.</p>
-<p class="meta">Endpoint status below mirrors the live contract in <a href="/brand/keyo-api-ref.html">the API endpoint reference</a>. For per-model sell rates see <a href="/pricing-list">the full pricing list</a>.</p>
+<p class="meta">Endpoint status below mirrors the live contract in <a href="/brand/keyo-api-ref.html">the API endpoint reference</a>. For per-model sell rates see <a href="/pricing-list">the full pricing list</a>. Local media for video Path B and OCR goes up first via a separate multipart upload (<code>POST /v1/uploads</code>) that returns a public URL.</p>
 <table>
 <thead><tr><th>Path</th><th>OpenAI-shaped</th><th>What runs on it</th><th>Notes</th></tr></thead>
 <tbody>
@@ -117,7 +117,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
 <tr>
   <td><code>POST /v1/embeddings</code></td>
   <td class="ok">Yes</td>
-  <td><code>WeMM-Embedding</code> 9B / 4B / 2B, <code>gemini-embedding-2-preview</code></td>
+  <td><code>WeMM-Embedding-9B</code>, <code>WeMM-Embedding-4B</code>, <code>WeMM-Embedding-2B</code>, <code>gemini-embedding-2-preview</code></td>
   <td>OpenAI-shaped <code>model</code> + <code>input</code> body · <a href="/brand/keyo-api-ref.html">the API endpoint reference</a></td>
 </tr>
 <tr>
@@ -139,10 +139,16 @@ ul{margin:0 0 14px;padding-left:1.2em}
   <td>Deliberately not OpenAI-shaped · <a href="/remove-bg-api-alternative">the remove.bg API alternative page</a></td>
 </tr>
 <tr>
-  <td><code>POST /v1/videos/generations</code> · <code>/v1/async/videos/image-to-video</code> · <code>/v1/async/documents/parse</code> · <code>/v1/systemone</code> · <code>/v1/moderations</code></td>
+  <td><code>POST /v1/videos/generations</code> · <code>/v1/async/videos/image-to-video</code> · <code>/v1/async/documents/parse</code> · <code>/v1/systemone</code></td>
   <td>No</td>
-  <td>Video Path B, digital human (InfiniteTalk), MinerU parsing, System One decisions, moderation</td>
+  <td>Video Path B, digital human (InfiniteTalk), MinerU parsing, System One decisions</td>
   <td>One balance across every shape · <a href="/ai-avatar-video-generator">the avatar video API page</a></td>
+</tr>
+<tr>
+  <td><code>POST /v1/moderations</code></td>
+  <td>Partial</td>
+  <td>Text moderation — <code>keyo-text-moderation</code> and related filter IDs</td>
+  <td>OpenAI-shaped request (<code>model</code> + <code>input</code>); response contract in <a href="/brand/keyo-api-ref.html">the API endpoint reference</a></td>
 </tr>
 </tbody>
 </table>

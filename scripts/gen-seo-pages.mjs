@@ -1032,7 +1032,7 @@ function landingRelatedLinks(slug) {
 const LANDING_EXTRA_SECTIONS = {
   "openai-api-alternative": `
 <h2>OpenAI-compatible API: what works on one base URL</h2>
-<p>Yes — the official OpenAI SDKs work against KeyoAPI as a drop-in for most calls. Set <code>base_url</code> to <code>https://www.keyoapi.xyz/v1</code>, send your Keyo API key as <code>Authorization: Bearer</code>, and keep <code>client.chat.completions.create()</code>. Chat, model listing, image generation and speech-to-text run on OpenAI-shaped paths. Text-to-speech is OpenAI-shaped for some models and vendor-native for others. OCR, vision, async video and digital-human jobs use dedicated REST paths — same key, same prepaid balance, different URL shape.</p>
+<p>Yes — the official OpenAI SDKs work against KeyoAPI as a drop-in for most calls. Set <code>base_url</code> to <code>https://www.keyoapi.xyz/v1</code>, send your Keyo API key as <code>Authorization: Bearer</code>, and keep <code>client.chat.completions.create()</code>. Chat, model listing, embeddings, image generation, OCR and speech-to-text all run on OpenAI-shaped paths. Text-to-speech is OpenAI-shaped for part of the catalog and asynchronous or vendor-native for the rest. Visual processing, video, digital-human, document parsing and the decision endpoint use dedicated REST paths — same key, same prepaid balance, different URL shape.</p>
 <p class="meta">Endpoint status below mirrors the live contract in <a href="/brand/keyo-api-ref.html">the API endpoint reference</a>. For per-model sell rates see <a href="/pricing-list">the full pricing list</a>.</p>
 <table>
 <thead><tr><th>Path</th><th>OpenAI-shaped</th><th>What runs on it</th><th>Notes</th></tr></thead>
@@ -1040,26 +1040,32 @@ const LANDING_EXTRA_SECTIONS = {
 <tr>
   <td><code>POST /v1/chat/completions</code></td>
   <td class="ok">Yes</td>
-  <td>GPT-class, DeepSeek, Claude-class, Gemini chat, GLM, Grok, Kimi</td>
+  <td>Text chat across GPT-class, Claude-class, DeepSeek, Gemini chat, GLM, Grok, Kimi, Qwen, MiniMax · plus OCR (<code>Unlimited-OCR</code>) via multimodal messages · Grok video (<code>grok-video-1.5</code>)</td>
   <td>Only the <code>model=</code> string changes · <a href="/models">the model guides</a></td>
 </tr>
 <tr>
   <td><code>GET /v1/models</code></td>
   <td class="ok">Yes</td>
   <td>Live catalog for the key</td>
-  <td>Use it to confirm IDs before a bulk run · <a href="/free-models">the free models page</a></td>
+  <td>Confirm IDs before a bulk run · <a href="/free-models">the free models page</a></td>
 </tr>
 <tr>
   <td><code>POST /v1/images/generations</code></td>
   <td class="ok">Yes</td>
-  <td>Image IDs including <code>nano-banana-2</code> and <code>nano-banana-2.1</code></td>
+  <td>Image IDs — <code>gpt-image-2.5</code> family and <code>nano-banana-2</code>, <code>nano-banana-2.1</code>, <code>nano-banana-pro</code></td>
   <td>Same request shape as OpenAI images · <a href="/compare">the model comparison page</a></td>
 </tr>
 <tr>
   <td><code>POST /v1/audio/transcriptions</code></td>
   <td class="ok">Yes</td>
-  <td><code>whisper-large-v3</code>, <code>whisper-large-v3-turbo</code></td>
-  <td>Multipart upload, <code>model=</code> picks the variant · <a href="/tts-api">the text to speech API page</a></td>
+  <td><code>whisper-large-v3</code>, <code>whisper-large-v3-turbo</code>, <code>SenseVoiceSmall</code>, <code>GLM-ASR</code>, <code>MOSS-Audio-8B-Thinking</code></td>
+  <td>Multipart upload, <code>model=</code> picks the variant · <a href="/pricing-list">the full pricing list</a></td>
+</tr>
+<tr>
+  <td><code>POST /v1/embeddings</code></td>
+  <td class="ok">Yes</td>
+  <td><code>WeMM-Embedding</code> 9B / 4B / 2B, <code>gemini-embedding-2-preview</code></td>
+  <td>OpenAI-shaped <code>model</code> + <code>input</code> body · <a href="/brand/keyo-api-ref.html">the API endpoint reference</a></td>
 </tr>
 <tr>
   <td><code>POST /v1/audio/speech</code></td>
@@ -1068,10 +1074,22 @@ const LANDING_EXTRA_SECTIONS = {
   <td><strong>Not</strong> all TTS IDs: <code>gemini-3.8-flash-tts</code> and <code>gemini-3.1-flash-tts-preview</code> call Gemini-native <code>generateContent</code> instead · <a href="/gemini-api-pricing">the Gemini pricing page</a></td>
 </tr>
 <tr>
-  <td>OCR · vision · async video · digital human</td>
+  <td><code>POST /v1/async/audio/speech</code></td>
   <td>No</td>
-  <td>Dedicated REST on the same key</td>
-  <td>Deliberately not OpenAI-shaped — separate paths, one balance · <a href="/ai-avatar-video-generator">the avatar video API page</a></td>
+  <td><code>Qwen3-TTS</code>, <code>CosyVoice3</code> — poll <code>GET /v1/task/{id}</code></td>
+  <td>Asynchronous speech shares the key, not the OpenAI shape · <a href="/tts-api">the text to speech API page</a></td>
+</tr>
+<tr>
+  <td><code>POST /v1/images/mattings</code> · <code>upscaling</code> · <code>unwarping</code> · <code>object-detection</code> · <code>segmentation</code> · <code>pose-detection</code></td>
+  <td>No</td>
+  <td>Matting, upscaling, doc unwarping, detection, segmentation, pose — all multipart</td>
+  <td>Deliberately not OpenAI-shaped · <a href="/remove-bg-api-alternative">the remove.bg API alternative page</a></td>
+</tr>
+<tr>
+  <td><code>POST /v1/videos/generations</code> · <code>/v1/async/videos/image-to-video</code> · <code>/v1/async/documents/parse</code> · <code>/v1/systemone</code> · <code>/v1/moderations</code></td>
+  <td>No</td>
+  <td>Video Path B, digital human (InfiniteTalk), MinerU parsing, System One decisions, moderation</td>
+  <td>One balance across every shape · <a href="/ai-avatar-video-generator">the avatar video API page</a></td>
 </tr>
 </tbody>
 </table>

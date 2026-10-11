@@ -793,11 +793,11 @@
       "faqs": [
         {
           "q": "Is KeyoAPI a drop-in OpenAI API alternative?",
-          "a": "For OpenAI-compatible chat / image / speech clients: yes for base_url + key + model id. Not every OpenAI first-party product surface is mirrored. Confirm live model IDs and features on /pricing-list before production."
+          "a": "Yes for the paths in the table above: point the official OpenAI SDK at https://www.keyoapi.xyz/v1 with your Keyo key. Chat, model listing, embeddings, image generation, OCR and speech-to-text take OpenAI-shaped requests."
         },
         {
           "q": "Do I keep my OpenAI Python or Node SDK?",
-          "a": "Yes. Point base_url to https://www.keyoapi.xyz/v1 and use your Keyo key. Start with model=gpt-6-astra or a cheaper twin such as deepseek-v4.1-flash."
+          "a": "/v1/audio/speech covers only part of the TTS catalog — Gemini TTS IDs use Gemini-native generateContent, and Qwen3-TTS / CosyVoice3 run on /v1/async/audio/speech. Visual processing, video, digital-human and document parsing jobs run on dedicated REST paths. Same key and balance, different URL shape; the live contract is in /brand/keyo-api-ref.html."
         },
         {
           "q": "Where is the full LLM API pricing comparison?",

@@ -88,19 +88,19 @@ def M(pid, up, cny, tag, vendor, icon, ep, zh, en):
 
 
 MODELS = [
-    M("keyo-super-resolution-1080p", "小裴-大模型超分-1080分辨率", 0.2, "视频模型", "Keyo", "Custom",
+    M("keyo-super-resolution-1080p", "小裴-大模型超分-1080分辨率", 0.2, "视频处理", "Keyo", "Custom",
       EP_VIDEO,
       "Keyo 大模型视频超分：AI 视频超分至 1080P。",
       "Keyo video super-resolution up to 1080P."),
-    M("keyo-super-resolution-2k", "小裴-大模型超分-2k分辨率", 0.4, "视频模型", "Keyo", "Custom",
+    M("keyo-super-resolution-2k", "小裴-大模型超分-2k分辨率", 0.4, "视频处理", "Keyo", "Custom",
       EP_VIDEO,
       "Keyo 大模型视频超分：AI 视频超分至 2K。",
       "Keyo video super-resolution up to 2K."),
-    M("keyo-super-resolution-4k", "小裴-大模型超分-4k分辨率", 0.8, "视频模型", "Keyo", "Custom",
+    M("keyo-super-resolution-4k", "小裴-大模型超分-4k分辨率", 0.8, "视频处理", "Keyo", "Custom",
       EP_VIDEO,
       "Keyo 大模型视频超分：AI 视频超分至 4K。",
       "Keyo video super-resolution up to 4K."),
-    M("keyo-video-subtitle-removal", "小裴-视频去字幕", 0.05, "视频模型", "Keyo", "Custom",
+    M("keyo-video-subtitle-removal", "小裴-视频去字幕", 0.05, "视频处理", "Keyo", "Custom",
       EP_VIDEO,
       "Keyo 视频去字幕：AI 智能去除视频内嵌字幕。",
       "Keyo AI subtitle removal for videos."),

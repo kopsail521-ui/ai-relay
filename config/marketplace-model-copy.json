@@ -2496,6 +2496,15 @@
       "ru": "Модель принятия решений",
       "ja": "意思決定モデル",
       "vi": "Mô hình quyết định"
+    },
+    "视频处理": {
+      "zhCN": "视频处理",
+      "zhTW": "影片處理",
+      "en": "Video Processing",
+      "fr": "Traitement vidéo",
+      "ru": "Обработка видео",
+      "ja": "動画処理",
+      "vi": "Xử lý video"
     }
   },
   "qwen3.8-max-0902": {

@@ -55,6 +55,12 @@ const UPLOAD_PUBLIC_BASE = (
 const UPLOAD_MAX_BYTES = Number(process.env.UPLOAD_MAX_BYTES || 104857600);
 const UPLOAD_TTL_MS =
   Number(process.env.UPLOAD_TTL_HOURS || 48) * 3600 * 1000;
+// Cap for ALL proxied request bodies (chat, multipart document parse, ASR...).
+// Unbounded buffering OOM-stalls the 1GB VPS on large PDF uploads: the client
+// sees a hang/timeout with no task id instead of a clean error.
+const PROXY_MAX_BODY_BYTES = Number(
+  process.env.PROXY_MAX_BODY_BYTES || 134217728
+);
 
 const UPLOAD_EXT_MIME = {
   ".jpg": "image/jpeg",
@@ -673,12 +679,6 @@ function json(res, status, body) {
   res.end(data);
 }
 
-async function readBody(req) {
-  const chunks = [];
-  for await (const chunk of req) chunks.push(chunk);
-  return Buffer.concat(chunks);
-}
-
 async function readBodyLimited(req, maxBytes) {
   const declared = Number(req.headers["content-length"] || 0);
   if (declared > maxBytes) {
@@ -943,12 +943,19 @@ async function handleUploadPost(req, res) {
     if (typeof fs.statfsSync === "function") {
       const stfs = fs.statfsSync(UPLOAD_DIR);
       const freeBytes = Number(stfs.bsize) * Number(stfs.bavail);
-      if (Number.isFinite(freeBytes) && freeBytes < 64 * 1024 * 1024) {
-        console.error("[uploads] low disk, free bytes:", freeBytes);
+      // Reserve room for THIS file plus a 64MB margin: a 100MB PDF must be
+      // rejected up front, not fail with ENOSPC halfway through the write.
+      const needBytes = data.length + 64 * 1024 * 1024;
+      if (Number.isFinite(freeBytes) && freeBytes < needBytes) {
+        console.error(
+          "[uploads] low disk, free bytes:",
+          freeBytes,
+          "need bytes:",
+          needBytes
+        );
         return json(res, 503, {
           error: {
-            message:
-              "Upload storage is temporarily full. Please retry later or contact support.",
+            message: `Upload storage is temporarily full (free ${(freeBytes / 1048576).toFixed(0)}MB, need ${(needBytes / 1048576).toFixed(0)}MB). Please retry later or contact support.`,
             type: "server_error",
             code: "storage_insufficient",
           },
@@ -960,7 +967,17 @@ async function handleUploadPost(req, res) {
     const full = path.join(UPLOAD_DIR, stored);
     fs.writeFileSync(full, data);
   } catch (e) {
-    console.error("[uploads] write failed:", e.message || e);
+    console.error("[uploads] write failed:", e.code || "", e.message || e);
+    if (e.code === "ENOSPC" || e.code === "EDQUOT") {
+      return json(res, 503, {
+        error: {
+          message:
+            "Upload storage is temporarily full. Please retry later or contact support.",
+          type: "server_error",
+          code: "storage_insufficient",
+        },
+      });
+    }
     return json(res, 503, {
       error: {
         message:
@@ -1353,9 +1370,23 @@ const server = http.createServer(async (req, res) => {
       return;
     }
 
-    const bodyBuf = ["GET", "HEAD"].includes(req.method || "")
-      ? Buffer.alloc(0)
-      : await readBody(req);
+    let bodyBuf;
+    try {
+      bodyBuf = ["GET", "HEAD"].includes(req.method || "")
+        ? Buffer.alloc(0)
+        : await readBodyLimited(req, PROXY_MAX_BODY_BYTES);
+    } catch (e) {
+      if (e.code === "payload_too_large") {
+        return json(res, 413, {
+          error: {
+            message: `Request body too large (max ${PROXY_MAX_BODY_BYTES} bytes). Split or compress the file, or upload via /v1/uploads and pass the URL.`,
+            type: "invalid_request_error",
+            code: "payload_too_large",
+          },
+        });
+      }
+      throw e;
+    }
 
     if (req.method === "POST" && IMAGE_PATHS.has(pathOnly)) {
       let payload;

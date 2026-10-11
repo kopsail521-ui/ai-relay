@@ -806,6 +806,18 @@
         {
           "q": "Can I prototype without a credit card?",
           "a": "Use fixed $0 IDs on /free-models — covered by your $10 welcome credit, fair-use — then promote to metered models on the same key."
+        },
+        {
+          "q": "Is KeyoAPI's API OpenAI-compatible?",
+          "a": "Yes for the paths in the table above: point the official OpenAI SDK at https://www.keyoapi.xyz/v1 with your Keyo key. Chat, /v1/models, image generation and speech-to-text take OpenAI-shaped requests."
+        },
+        {
+          "q": "Which endpoints are not OpenAI-compatible?",
+          "a": "/v1/audio/speech covers only part of the TTS catalog — Gemini TTS IDs use Gemini-native generateContent. OCR, vision, async video and digital-human jobs run on dedicated REST paths. Same key and balance, different URL shape; the live contract is in /brand/keyo-api-ref.html."
+        },
+        {
+          "q": "Do the native REST paths need a different API key?",
+          "a": "No. One prepaid key and one balance cover OpenAI-shaped calls and dedicated REST alike — see /free-models for the $0 IDs you can test with."
         }
       ]
     }

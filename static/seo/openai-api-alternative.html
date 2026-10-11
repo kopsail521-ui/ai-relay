@@ -83,6 +83,80 @@ ul{margin:0 0 14px;padding-left:1.2em}
   <a class="btn btn-secondary" href="/pricing-list">Full pricing list</a>
   <a class="btn btn-secondary" href="/free-models">Free models</a>
 </div>
+
+<h2>OpenAI-compatible API: what works on one base URL</h2>
+<p>Yes — the official OpenAI SDKs work against KeyoAPI as a drop-in for most calls. Set <code>base_url</code> to <code>https://www.keyoapi.xyz/v1</code>, send your Keyo API key as <code>Authorization: Bearer</code>, and keep <code>client.chat.completions.create()</code>. Chat, model listing, image generation and speech-to-text run on OpenAI-shaped paths. Text-to-speech is OpenAI-shaped for some models and vendor-native for others. OCR, vision, async video and digital-human jobs use dedicated REST paths — same key, same prepaid balance, different URL shape.</p>
+<p class="meta">Endpoint status below mirrors the live contract in <a href="/brand/keyo-api-ref.html">the API endpoint reference</a>. For per-model sell rates see <a href="/pricing-list">the full pricing list</a>.</p>
+<table>
+<thead><tr><th>Path</th><th>OpenAI-shaped</th><th>What runs on it</th><th>Notes</th></tr></thead>
+<tbody>
+<tr>
+  <td><code>POST /v1/chat/completions</code></td>
+  <td class="ok">Yes</td>
+  <td>GPT-class, DeepSeek, Claude-class, Gemini chat, GLM, Grok, Kimi</td>
+  <td>Only the <code>model=</code> string changes · <a href="/models">the model guides</a></td>
+</tr>
+<tr>
+  <td><code>GET /v1/models</code></td>
+  <td class="ok">Yes</td>
+  <td>Live catalog for the key</td>
+  <td>Use it to confirm IDs before a bulk run · <a href="/free-models">the free models page</a></td>
+</tr>
+<tr>
+  <td><code>POST /v1/images/generations</code></td>
+  <td class="ok">Yes</td>
+  <td>Image IDs including <code>nano-banana-2</code> and <code>nano-banana-2.1</code></td>
+  <td>Same request shape as OpenAI images · <a href="/compare">the model comparison page</a></td>
+</tr>
+<tr>
+  <td><code>POST /v1/audio/transcriptions</code></td>
+  <td class="ok">Yes</td>
+  <td><code>whisper-large-v3</code>, <code>whisper-large-v3-turbo</code></td>
+  <td>Multipart upload, <code>model=</code> picks the variant · <a href="/tts-api">the text to speech API page</a></td>
+</tr>
+<tr>
+  <td><code>POST /v1/audio/speech</code></td>
+  <td>Partial</td>
+  <td><code>GLM-TTS</code>, <code>Step-Audio-TTS-3B</code>, <code>IndexTTS-2</code></td>
+  <td><strong>Not</strong> all TTS IDs: <code>gemini-3.8-flash-tts</code> and <code>gemini-3.1-flash-tts-preview</code> call Gemini-native <code>generateContent</code> instead · <a href="/gemini-api-pricing">the Gemini pricing page</a></td>
+</tr>
+<tr>
+  <td>OCR · vision · async video · digital human</td>
+  <td>No</td>
+  <td>Dedicated REST on the same key</td>
+  <td>Deliberately not OpenAI-shaped — separate paths, one balance · <a href="/ai-avatar-video-generator">the avatar video API page</a></td>
+</tr>
+</tbody>
+</table>
+
+<h2>Same call, two SDKs</h2>
+<p>Python and Node, both on the official OpenAI SDK. Only <code>base_url</code> and the key differ from an OpenAI setup:</p>
+<pre>from openai import OpenAI
+
+client = OpenAI(
+    base_url=&quot;https://www.keyoapi.xyz/v1&quot;,
+    api_key=&quot;YOUR_KEYO_API_KEY&quot;,
+)
+
+r = client.chat.completions.create(
+    model=&quot;gpt-6-astra&quot;,
+    messages=[{&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;Hello from an OpenAI-compatible endpoint&quot;}],
+)
+print(r.choices[0].message.content)</pre>
+<pre>import OpenAI from &quot;openai&quot;;
+
+const client = new OpenAI({
+  baseURL: &quot;https://www.keyoapi.xyz/v1&quot;,
+  apiKey: process.env.KEYO_API_KEY,
+});
+
+const r = await client.chat.completions.create({
+  model: &quot;deepseek-v4.1-flash&quot;,
+  messages: [{ role: &quot;user&quot;, content: &quot;Hello from an OpenAI-compatible endpoint&quot; }],
+});
+console.log(r.choices[0].message.content);</pre>
+<p>Swap <code>model=</code> for any ID on <a href="/pricing-list">the full pricing list</a> — no second client, no second billing relationship. OpenAI-side unit economics are on <a href="/openai-api-pricing">the OpenAI API pricing page</a>.</p>
+
 <h2>What you keep vs what changes</h2>
 <p class="meta">Indicative figures for planning. Confirm live Keyo sell rates on interactive <a href="/pricing">Model Square</a> or the static <a href="/pricing-list">pricing list</a>.</p>
 <table>
@@ -137,7 +211,10 @@ ul{margin:0 0 14px;padding-left:1.2em}
 <div class="faq"><details><summary>Is KeyoAPI a drop-in OpenAI API alternative?</summary><p>For OpenAI-compatible chat / image / speech clients: yes for base_url + key + model id. Not every OpenAI first-party product surface is mirrored. Confirm live model IDs and features on <a href="/pricing-list">the full pricing list</a> before production.</p></details>
 <details><summary>Do I keep my OpenAI Python or Node SDK?</summary><p>Yes. Point base_url to https://www.keyoapi.xyz/v1 and use your Keyo key. Start with model=gpt-6-astra or a cheaper twin such as deepseek-v4.1-flash.</p></details>
 <details><summary>Where is the full LLM API pricing comparison?</summary><p>Side-by-side planning table: <a href="/compare">the model comparison page</a>. OpenAI-focused rates: <a href="/openai-api-pricing">the OpenAI API pricing page</a>.</p></details>
-<details><summary>Can I prototype without a credit card?</summary><p>Use fixed $0 IDs on <a href="/free-models">the free models page</a> — covered by your $10 welcome credit, fair-use — then promote to metered models on the same key.</p></details></div>
+<details><summary>Can I prototype without a credit card?</summary><p>Use fixed $0 IDs on <a href="/free-models">the free models page</a> — covered by your $10 welcome credit, fair-use — then promote to metered models on the same key.</p></details>
+<details><summary>Is KeyoAPI's API OpenAI-compatible?</summary><p>Yes for the paths in the table above: point the official OpenAI SDK at https://www.keyoapi.xyz/v1 with your Keyo key. Chat, /v1<a href="/models">the model guides page</a>, image generation and speech-to-text take OpenAI-shaped requests.</p></details>
+<details><summary>Which endpoints are not OpenAI-compatible?</summary><p>/v1/audio/speech covers only part of the TTS catalog — Gemini TTS IDs use Gemini-native generateContent. OCR, vision, async video and digital-human jobs run on dedicated REST paths. Same key and balance, different URL shape; the live contract is in <a href="/brand/keyo-api-ref.html">the API endpoint reference</a>.</p></details>
+<details><summary>Do the native REST paths need a different API key?</summary><p>No. One prepaid key and one balance cover OpenAI-shaped calls and dedicated REST alike — see <a href="/free-models">the free models page</a> for the $0 IDs you can test with.</p></details></div>
 <p class="meta">Also see <a href="/compare">the model comparison page</a>, <a href="/free-models">the free models page</a>, <a href="/pricing-list">the full pricing list</a>, and <a href="/openai-api-pricing">OpenAI API pricing</a> · <a href="/model/gpt-6-astra">gpt-6-astra</a> · <a href="/model/deepseek-v4.1-flash">deepseek-v4.1-flash</a>.</p>
 
 </main>

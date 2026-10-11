@@ -112,6 +112,7 @@ function linkifySitePaths(raw) {
     .concat([
       "/pricing-list",
       "/free-models",
+      "/brand/keyo-api-ref.html",
       "/sign-up",
       "/sign-in",
       "/compare",
@@ -139,6 +140,7 @@ function pathLabel(href) {
     "/models": "the model guides page",
     "/free-models": "the free models page",
     "/compare": "the model comparison page",
+    "/brand/keyo-api-ref.html": "the API endpoint reference",
     "/sign-up": "the sign-up page",
     "/sign-in": "the sign-in page",
     "/about": "the about page",
@@ -1026,6 +1028,84 @@ function landingRelatedLinks(slug) {
   return `<p class="meta">Also see ${links}.</p>`;
 }
 
+/** Per-landing raw HTML sections rendered right after the CTA row. */
+const LANDING_EXTRA_SECTIONS = {
+  "openai-api-alternative": `
+<h2>OpenAI-compatible API: what works on one base URL</h2>
+<p>Yes — the official OpenAI SDKs work against KeyoAPI as a drop-in for most calls. Set <code>base_url</code> to <code>https://www.keyoapi.xyz/v1</code>, send your Keyo API key as <code>Authorization: Bearer</code>, and keep <code>client.chat.completions.create()</code>. Chat, model listing, image generation and speech-to-text run on OpenAI-shaped paths. Text-to-speech is OpenAI-shaped for some models and vendor-native for others. OCR, vision, async video and digital-human jobs use dedicated REST paths — same key, same prepaid balance, different URL shape.</p>
+<p class="meta">Endpoint status below mirrors the live contract in <a href="/brand/keyo-api-ref.html">the API endpoint reference</a>. For per-model sell rates see <a href="/pricing-list">the full pricing list</a>.</p>
+<table>
+<thead><tr><th>Path</th><th>OpenAI-shaped</th><th>What runs on it</th><th>Notes</th></tr></thead>
+<tbody>
+<tr>
+  <td><code>POST /v1/chat/completions</code></td>
+  <td class="ok">Yes</td>
+  <td>GPT-class, DeepSeek, Claude-class, Gemini chat, GLM, Grok, Kimi</td>
+  <td>Only the <code>model=</code> string changes · <a href="/models">the model guides</a></td>
+</tr>
+<tr>
+  <td><code>GET /v1/models</code></td>
+  <td class="ok">Yes</td>
+  <td>Live catalog for the key</td>
+  <td>Use it to confirm IDs before a bulk run · <a href="/free-models">the free models page</a></td>
+</tr>
+<tr>
+  <td><code>POST /v1/images/generations</code></td>
+  <td class="ok">Yes</td>
+  <td>Image IDs including <code>nano-banana-2</code> and <code>nano-banana-2.1</code></td>
+  <td>Same request shape as OpenAI images · <a href="/compare">the model comparison page</a></td>
+</tr>
+<tr>
+  <td><code>POST /v1/audio/transcriptions</code></td>
+  <td class="ok">Yes</td>
+  <td><code>whisper-large-v3</code>, <code>whisper-large-v3-turbo</code></td>
+  <td>Multipart upload, <code>model=</code> picks the variant · <a href="/tts-api">the text to speech API page</a></td>
+</tr>
+<tr>
+  <td><code>POST /v1/audio/speech</code></td>
+  <td>Partial</td>
+  <td><code>GLM-TTS</code>, <code>Step-Audio-TTS-3B</code>, <code>IndexTTS-2</code></td>
+  <td><strong>Not</strong> all TTS IDs: <code>gemini-3.8-flash-tts</code> and <code>gemini-3.1-flash-tts-preview</code> call Gemini-native <code>generateContent</code> instead · <a href="/gemini-api-pricing">the Gemini pricing page</a></td>
+</tr>
+<tr>
+  <td>OCR · vision · async video · digital human</td>
+  <td>No</td>
+  <td>Dedicated REST on the same key</td>
+  <td>Deliberately not OpenAI-shaped — separate paths, one balance · <a href="/ai-avatar-video-generator">the avatar video API page</a></td>
+</tr>
+</tbody>
+</table>
+
+<h2>Same call, two SDKs</h2>
+<p>Python and Node, both on the official OpenAI SDK. Only <code>base_url</code> and the key differ from an OpenAI setup:</p>
+<pre>from openai import OpenAI
+
+client = OpenAI(
+    base_url=&quot;https://www.keyoapi.xyz/v1&quot;,
+    api_key=&quot;YOUR_KEYO_API_KEY&quot;,
+)
+
+r = client.chat.completions.create(
+    model=&quot;gpt-6-astra&quot;,
+    messages=[{&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;Hello from an OpenAI-compatible endpoint&quot;}],
+)
+print(r.choices[0].message.content)</pre>
+<pre>import OpenAI from &quot;openai&quot;;
+
+const client = new OpenAI({
+  baseURL: &quot;https://www.keyoapi.xyz/v1&quot;,
+  apiKey: process.env.KEYO_API_KEY,
+});
+
+const r = await client.chat.completions.create({
+  model: &quot;deepseek-v4.1-flash&quot;,
+  messages: [{ role: &quot;user&quot;, content: &quot;Hello from an OpenAI-compatible endpoint&quot; }],
+});
+console.log(r.choices[0].message.content);</pre>
+<p>Swap <code>model=</code> for any ID on <a href="/pricing-list">the full pricing list</a> — no second client, no second billing relationship. OpenAI-side unit economics are on <a href="/openai-api-pricing">the OpenAI API pricing page</a>.</p>
+`,
+};
+
 function renderPricingLanding(p) {
   const canonical = `${site}/${p.slug}`;
   const tableHeading = p.tableHeading || "Price comparison table";
@@ -1067,6 +1147,7 @@ function renderPricingLanding(p) {
   <a class="btn btn-secondary" href="/pricing-list">Full pricing list</a>
   <a class="btn btn-secondary" href="/free-models">Free models</a>
 </div>
+${LANDING_EXTRA_SECTIONS[p.slug] || ""}
 <h2>${esc(tableHeading)}</h2>
 <p class="meta">Indicative figures for planning. Confirm live Keyo sell rates on interactive <a href="/pricing">Model Square</a> or the static <a href="/pricing-list">pricing list</a>.</p>
 <table>

@@ -27,9 +27,9 @@
 
 | Shape | Used for | Example paths |
 |------|-----------|----------|
-| OpenAI-compatible | Text chat, model list, image generation, ASR, OCR | `POST /v1/chat/completions` · `GET /v1/models` · `POST /v1/images/generations` · `POST /v1/audio/transcriptions` |
-| OpenAI-shaped (partial) | Sync TTS | `POST /v1/audio/speech` — covers only `GLM-TTS` / `Step-Audio-TTS-3B` / `IndexTTS-2` (see §1.6 / §7). Other TTS runs async (§1.7 / §8) |
-| Dedicated REST | Visual processing, async video, digital human | Matting / upscale / unwarp / detect / segment / pose (§1.10) · Path B video (§5) · InfiniteTalk (§12) — different paths, same key and balance |
+| OpenAI-compatible | Text chat, model list, embeddings, image generation, ASR, OCR | `POST /v1/chat/completions` · `GET /v1/models` · `POST /v1/embeddings` · `POST /v1/images/generations` · `POST /v1/audio/transcriptions` |
+| OpenAI-shaped (partial) | Sync TTS, content moderation | `POST /v1/audio/speech` — covers only `GLM-TTS` / `Step-Audio-TTS-3B` / `IndexTTS-2` (see §1.6 / §7), other TTS runs async (§1.7 / §8); `POST /v1/moderations` — `model` + `input` matches OpenAI, response contract in §13 |
+| Dedicated REST | Visual processing, async video, digital human, document parsing, System One decisions, video tools | Matting / upscale / unwarp / detect / segment / pose (§1.10) · Path B video (§5) · InfiniteTalk (§12) · MinerU document parsing (§1.9 / §10) · System One decisions (§1.11b) · video tools (§1.11a) — different paths, same key and balance |
 
 Rule: switch models by changing `model`; change the path only when the capability itself is not OpenAI-shaped.
 

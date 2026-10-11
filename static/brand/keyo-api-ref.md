@@ -27,9 +27,9 @@
 
 | 形态 | 用在什么上 | 路径示例 |
 |------|-----------|----------|
-| OpenAI 兼容 | 文本对话、模型列表、文生图、语音识别、OCR | `POST /v1/chat/completions` · `GET /v1/models` · `POST /v1/images/generations` · `POST /v1/audio/transcriptions` |
-| OpenAI 形状（部分模型） | TTS 同步 | `POST /v1/audio/speech`——只覆盖 `GLM-TTS` / `Step-Audio-TTS-3B` / `IndexTTS-2`（见 §1.6 / §7）。其它 TTS 走异步（§1.7 / §8） |
-| 专属 REST | 视觉处理、异步视频、数字人 | 抠图/超分/展平/检测/分割/姿态（§1.10）· Path B 视频（§5）· InfiniteTalk（§12）——路径不同，Key 和余额相同 |
+| OpenAI 兼容 | 文本对话、模型列表、向量、文生图、语音识别、OCR | `POST /v1/chat/completions` · `GET /v1/models` · `POST /v1/embeddings` · `POST /v1/images/generations` · `POST /v1/audio/transcriptions` |
+| OpenAI 形状（部分覆盖） | TTS 同步、内容审核 | `POST /v1/audio/speech`——只覆盖 `GLM-TTS` / `Step-Audio-TTS-3B` / `IndexTTS-2`（见 §1.6 / §7），其它 TTS 走异步（§1.7 / §8）；`POST /v1/moderations`——`model` + `input` 与 OpenAI 同形，响应契约见 §13 |
+| 专属 REST | 视觉处理、异步视频、数字人、文档解析、系统一决策、视频工具 | 抠图/超分/展平/检测/分割/姿态（§1.10）· Path B 视频（§5）· InfiniteTalk（§12）· 文档解析 MinerU（§1.9 / §10）· 系统一决策（§1.11b）· 视频工具（§1.11a）——路径不同，Key 和余额相同 |
 
 规则：换模型只改 `model`；只有能力本身不是 OpenAI 形状时，才换路径。
 

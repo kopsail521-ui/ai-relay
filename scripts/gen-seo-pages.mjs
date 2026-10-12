@@ -42,7 +42,7 @@ const HAND_MAINTAINED_META = [
     id: "gemini-3.8-flash-tts",
     category: "speech",
     priceLabel: "~$0.44 / $8.82 per 1M in/out",
-    endpoint: "POST /v1/audio/speech",
+    endpoint: "POST /v1beta/models/gemini-3.8-flash-tts:generateContent",
   },
 ];
 pages.models = [...pages.models, ...HAND_MAINTAINED_META];
@@ -847,9 +847,9 @@ function renderPricing() {
       seenIds.add(id);
       landingExtra.push({
         id,
-        category: "llm",
+        category: r.category || "llm",
         priceLabel: r.keyo,
-        endpoint: "POST /v1/chat/completions",
+        endpoint: r.endpoint || "POST /v1/chat/completions",
         guide: false,
       });
     }

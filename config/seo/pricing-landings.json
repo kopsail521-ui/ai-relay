@@ -185,6 +185,22 @@
           "official": "Zhipu GLM 5.2 — verify on open.bigmodel.cn",
           "keyo": "~$1.40 / $4.40 per 1M in/out",
           "note": "Own band; independent of the free catalog IDs"
+        },
+        {
+          "model": "GLM-ASR",
+          "official": "Zhipu GLM ASR — verify on open.bigmodel.cn",
+          "keyo": "~$0.007 per request",
+          "note": "GLM speech lane — POST /v1/audio/transcriptions",
+          "category": "speech",
+          "endpoint": "POST /v1/audio/transcriptions"
+        },
+        {
+          "model": "GLM-TTS",
+          "official": "Zhipu GLM TTS — verify on open.bigmodel.cn",
+          "keyo": "~$0.014 per request",
+          "note": "GLM speech lane — POST /v1/audio/speech",
+          "category": "speech",
+          "endpoint": "POST /v1/audio/speech"
         }
       ],
       "freeKiller": {

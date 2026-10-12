@@ -281,6 +281,29 @@ Streaming: add `"stream": true` if needed.
 
 Pick model from §1.2.
 
+### 3.1 Allowed `size` values (gpt-image-2 family — strict tables)
+
+The two variants accept **different** formats; a wrong value returns upstream `generate failed`:
+
+- **`gpt-image-2`**: 1K only. Accepts ratio strings (`auto` / `16:9` / `9:16` / `4:3` / `3:4` / `3:2` / `2:3` / `5:4` / `4:5` / `21:9` / `9:21` / `1:2` / `2:1`) or 1K pixel sizes.
+  Pixels per ratio: 1:1 `1024x1024` · 16:9 `1672x941` · 9:16 `941x1672` · 4:3 `1443x1090` · 3:4 `1090x1443` · 3:2 `1536x1024` · 2:3 `1024x1536` · 5:4 `1408x1120` · 4:5 `1120x1408` · 21:9 `1920x832` · 9:21 `832x1920` · 1:2 `896x1792` · 2:1 `1792x896`
+- **`gpt-image-2-vip`**: 1K–4K pixel sizes, **no ratio strings**. Custom pixels must satisfy: longest edge ≤ 3840, both edges multiples of 16, aspect ratio ≤ 3:1, total pixels between 655,360 and 8,294,400. **4K is NOT `4096x4096`** (always rejected) — use the table:
+  - 1:1: `1024x1024` · `2048x2048` · `2880x2880`
+  - 16:9: `1280x720` · `2048x1152` · `3840x2160`
+  - 9:16: `720x1280` · `1152x2048` · `2160x3840`
+  - 4:3: `1152x864` · `2304x1728` · `3264x2448`
+  - 3:4: `864x1152` · `1728x2304` · `2448x3264`
+  - 3:2: `1536x1024` · `2048x1360` · `3504x2336`
+  - 2:3: `1024x1536` · `1360x2048` · `2336x3504`
+  - 5:4: `1120x896` · `2240x1792` · `3200x2560`
+  - 4:5: `896x1120` · `1792x2240` · `2560x3200`
+  - 21:9: `1456x624` · `2912x1248` · `3840x1648`
+  - 9:21: `624x1456` · `1248x2912` · `1648x3840`
+
+Troubleshooting: a 4K request failing with `generate failed` almost always means `size` is off-table (e.g. `4096x4096` is 16.7M pixels — double the cap). Pick the matching row above.
+
+**Reference images (image-to-image) are not supported yet**: `images` / `image_url` fields on `/v1/images/generations` are ignored (output will not follow the reference), and `/v1/images/edits` is not exposed on this gateway. Describe the reference in `prompt` instead.
+
 ---
 
 ## 4. Grok Imagine Video 1.5 (chat)

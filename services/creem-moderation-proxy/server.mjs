@@ -1482,10 +1482,15 @@ const server = http.createServer(async (req, res) => {
       // 纯文本请求继续走 New API 兼容面。审核已在上方 IMAGE_PATHS 完成。
       try {
         const payload = JSON.parse(bodyBuf.toString("utf8") || "{}");
+        const refOf = (v) =>
+          (typeof v === "string" && v) ||
+          (v && typeof v === "object" && typeof v.url === "string" && v.url) ||
+          null;
         const hasRef =
           (Array.isArray(payload.images) && payload.images.length > 0) ||
           (Array.isArray(payload.image_urls) && payload.image_urls.length > 0) ||
-          typeof payload.image_url === "string";
+          !!refOf(payload.image_url) ||
+          !!refOf(payload.image);
         if (hasRef && IMAGE_GEN_MODELS.has(String(payload.model || ""))) {
           writeProxy(
             res,

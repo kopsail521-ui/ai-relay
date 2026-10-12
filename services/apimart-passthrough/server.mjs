@@ -785,6 +785,9 @@ function extractImageRefs(body) {
   if (Array.isArray(body.images)) for (const u of body.images) push(u);
   if (Array.isArray(body.image_urls)) for (const u of body.image_urls) push(u);
   if (typeof body.image_url === "string") push(body.image_url);
+  if (body.image_url && typeof body.image_url === "object") push(body.image_url);
+  if (typeof body.image === "string") push(body.image);
+  if (body.image && typeof body.image === "object") push(body.image);
   return [...new Set(urls)].filter((u) => /^https?:\/\//i.test(u)).slice(0, 9);
 }
 

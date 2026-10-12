@@ -72,7 +72,7 @@
 
 ## Session 签发限额与保留策略
 
-服务端在所有登录方式的统一 Session 签发出口执行两级账户限制：
+服务端在所有登录方式的统一 Session 签发出口对普通用户执行两级账户限制。管理员与超级管理员（role ≥ 10）豁免活跃 Session 数和窗口内签发数量上限，已积累的会话不会阻止新登录；账户禁用、鉴权版本、会话过期与撤销、登录接口防刷限制仍然生效。角色以服务端用户记录为准，不接受客户端指定。降级为普通用户后恢复以下限制：
 
 - `USER_SESSION_ACTIVE_LIMIT`（默认 `50`）：单用户未过期且状态为 active 的 Session 上限。达到上限时新登录返回 `409 AUTH_SESSION_LIMIT`。
 - `USER_SESSION_ISSUANCE_LIMIT`（默认 `100`）和 `USER_SESSION_ISSUANCE_WINDOW_SECONDS`（默认 `86400`）：统计窗口内该用户创建的所有 Session，包含已撤销和旧鉴权版本的记录。达到上限时返回 `429 AUTH_SESSION_ISSUANCE_LIMIT`。

@@ -1,14 +1,13 @@
 /**
- * Print a VPS one-liner that installs the Creem moderation proxy + points Caddy to :3001
- * Usage:
- *   set CREEM_API_KEY=creem_test_xxx
- *   set CREEM_TEST_MODE=true
- *   node scripts/print-vps-moderation-install.mjs
+ * Print a VPS command that updates an existing configured Creem moderation proxy
+ * and points Caddy to :3001. Existing container, secrets and brand pages required.
+ * Usage: node scripts/print-vps-moderation-install.mjs
  */
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
 import { caddyFullSite } from "./caddy-seo-shared.mjs";
+import { imageDeployCommand } from "./print-vps-image-fixes.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.join(__dirname, "..");
@@ -21,24 +20,10 @@ const dockerfile = fs.readFileSync(
   "utf8"
 );
 
-function loadEnv() {
-  const env = {};
-  for (const line of fs.readFileSync(path.join(root, ".env"), "utf8").split(/\r?\n/)) {
-    const t = line.trim();
-    if (!t || t.startsWith("#")) continue;
-    const i = t.indexOf("=");
-    env[t.slice(0, i).trim()] = t.slice(i + 1).trim();
-  }
-  return env;
-}
-
-const env = loadEnv();
-const key = process.env.CREEM_API_KEY || env.CREEM_API_KEY || "";
-const testMode = process.env.CREEM_TEST_MODE || env.CREEM_TEST_MODE || "true";
-if (!key) {
-  console.error("Missing CREEM_API_KEY in env or .env");
-  process.exit(1);
-}
+// SECURITY/BEHAVIOR CHANGE: this is now an existing-install update only.
+// It intentionally does not read or create .env/API keys. Fresh installs must
+// provision the moderation secret and container configuration separately first.
+// Existing Caddy content is still replaced below as this script historically did.
 
 const serverB64 = Buffer.from(serverSrc).toString("base64");
 const routingB64 = Buffer.from(
@@ -47,7 +32,8 @@ const routingB64 = Buffer.from(
 const dockerB64 = Buffer.from(dockerfile).toString("base64");
 
 const caddy = caddyFullSite({ gitee: false });
-const cmd = `sudo mkdir -p /opt/ai-relay/services/creem-moderation-proxy && echo '${serverB64}' | base64 -d | sudo tee /opt/ai-relay/services/creem-moderation-proxy/server.mjs >/dev/null && echo '${routingB64}' | base64 -d | sudo tee /opt/ai-relay/services/creem-moderation-proxy/video-routing.mjs >/dev/null && echo '${dockerB64}' | base64 -d | sudo tee /opt/ai-relay/services/creem-moderation-proxy/Dockerfile >/dev/null && printf 'CREEM_API_KEY=${key}\\nCREEM_TEST_MODE=${testMode}\\n' | sudo tee /opt/ai-relay/.env.moderation >/dev/null && cd /opt/ai-relay && sudo docker build -t keyo-creem-moderation ./services/creem-moderation-proxy && sudo docker rm -f ai-relay-creem-moderation 2>/dev/null; sudo docker run -d --name ai-relay-creem-moderation --restart always --network host --env-file /opt/ai-relay/.env.moderation -e UPSTREAM_URL=http://127.0.0.1:3000 -e LISTEN_HOST=127.0.0.1 -e PORT=3001 keyo-creem-moderation && sudo tee /etc/caddy/Caddyfile >/dev/null <<'EOF'
+const cmd = `${imageDeployCommand("moderation")}
+sudo tee /etc/caddy/Caddyfile >/dev/null <<'EOF'
 ${caddy}EOF
 sudo caddy validate --config /etc/caddy/Caddyfile && sudo systemctl reload caddy && curl -sI https://www.keyoapi.xyz/robots.txt | head -n 5 && curl -sI https://www.keyoapi.xyz/ | head -n 5 && sudo docker logs --tail 20 ai-relay-creem-moderation`;
 

@@ -6,6 +6,7 @@ import fs from "fs";
 import path from "path";
 import zlib from "zlib";
 import { fileURLToPath } from "url";
+import { imageDeployCommand } from "./print-vps-image-fixes.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.join(__dirname, "..");
@@ -36,13 +37,7 @@ for (const rel of files) {
   );
 }
 
-lines.push(
-  "sudo docker build -t keyo-creem-moderation ./services/creem-moderation-proxy"
-);
-lines.push("sudo docker rm -f ai-relay-creem-moderation 2>/dev/null || true");
-lines.push(
-  "sudo docker run -d --name ai-relay-creem-moderation --restart always --network host --env-file /opt/ai-relay/.env.moderation -e UPSTREAM_URL=http://127.0.0.1:3000 -e LISTEN_HOST=127.0.0.1 -e PORT=3001 keyo-creem-moderation"
-);
+lines.push(imageDeployCommand("moderation"));
 lines.push("sleep 2");
 lines.push(
   "curl -sS http://127.0.0.1:3001/api/pricing | python3 -c \"import sys,json;j=json.load(sys.stdin);vs=[v for v in j.get('vendors',[]) if v.get('id')==21 or 'Byte' in (v.get('name') or '') or '\\u5b57\\u8282' in (v.get('name') or '')];print('vendors',[(v.get('id'),v.get('name'),v.get('icon')) for v in vs]);ms=[(m['model_name'],m.get('icon'),m.get('vendor_id')) for m in j['data'] if m['model_name'] in ('Unlimited-OCR','IndexTTS-2','seedance-2.5','seedance-2.0')];print('models',ms)\""

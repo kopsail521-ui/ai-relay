@@ -9,6 +9,7 @@ import fs from "fs";
 import path from "path";
 import zlib from "zlib";
 import { fileURLToPath } from "url";
+import { imageDeployCommand } from "./print-vps-image-fixes.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.join(__dirname, "..");
@@ -22,19 +23,7 @@ const serverB64 = b64gz("services/creem-moderation-proxy/server.mjs");
 const cmd = `set -e
 cd /opt/ai-relay
 echo '${serverB64}' | base64 -d | gunzip | sudo tee services/creem-moderation-proxy/server.mjs >/dev/null
-sudo docker build -t keyo-creem-moderation ./services/creem-moderation-proxy
-sudo docker rm -f ai-relay-creem-moderation 2>/dev/null || true
-sudo docker run -d --name ai-relay-creem-moderation --restart always --network host \\
-  --env-file /opt/ai-relay/.env.moderation \\
-  -e UPSTREAM_URL=http://127.0.0.1:3000 \\
-  -e LISTEN_HOST=127.0.0.1 \\
-  -e PORT=3001 \\
-  -e UPLOAD_DIR=/opt/ai-relay/static/uploads \\
-  -e UPLOAD_PUBLIC_BASE=https://www.keyoapi.xyz/uploads \\
-  -e UPLOAD_MAX_BYTES=104857600 \\
-  -e UPLOAD_TTL_HOURS=48 \\
-  -v /opt/ai-relay/static/uploads:/opt/ai-relay/static/uploads \\
-  keyo-creem-moderation
+${imageDeployCommand("moderation")}
 sleep 2
 echo '--- disk usage (root cause check for the 502s) ---'
 df -h / || true

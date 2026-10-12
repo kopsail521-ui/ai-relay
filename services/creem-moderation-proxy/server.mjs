@@ -20,6 +20,7 @@
  */
 import http from "http";
 import { looksLikeMissingVideo } from "./video-routing.mjs";
+import { parseMultipart, parseImageBody, validateUploadAuth, checkStorageSpace, checkUploadStorage, storageErrorCode, decodeBase64Upload } from "./media-input.mjs";
 import {
   rankingsSyntheticEnabled,
   buildSyntheticRankings,
@@ -46,9 +47,10 @@ const TEST_MODE = String(process.env.CREEM_TEST_MODE || "true").toLowerCase() !=
 const CREEM_BASE = TEST_MODE ? "https://test-api.creem.io" : "https://api.creem.io";
 const TIMEOUT_MS = Number(process.env.CREEM_MODERATION_TIMEOUT_MS || 5000);
 
-const UPLOAD_DIR =
+const UPLOAD_DIR = path.resolve(
   process.env.UPLOAD_DIR ||
-  path.join(path.dirname(fileURLToPath(import.meta.url)), "../../static/uploads");
+  path.join(path.dirname(fileURLToPath(import.meta.url)), "../../static/uploads")
+);
 const UPLOAD_PUBLIC_BASE = (
   process.env.UPLOAD_PUBLIC_BASE || "https://www.keyoapi.xyz/uploads"
 ).replace(/\/$/, "");
@@ -203,7 +205,12 @@ function qsOf(url) {
   return i >= 0 ? s.slice(i) : "";
 }
 
-async function proxyRaw(targetUrl, req, bodyBuf) {
+// Native sync waits can outlast one polling window; always bound the entire
+// request including response body. Async clients receive their task immediately.
+const IMAGE_FORWARD_TIMEOUT_MS = Math.min(600000, Math.max(1000, Number(process.env.IMAGE_FORWARD_TIMEOUT_MS) || 360000));
+const UPLOAD_AUTH_TIMEOUT_MS = Math.min(30000, Math.max(100, Number(process.env.UPLOAD_AUTH_TIMEOUT_MS) || 5000));
+
+async function proxyRaw(targetUrl, req, bodyBuf, timeoutMs = IMAGE_FORWARD_TIMEOUT_MS) {
   const target = new URL(targetUrl);
   const headers = { ...req.headers, host: target.host };
   delete headers["content-length"];
@@ -213,6 +220,7 @@ async function proxyRaw(targetUrl, req, bodyBuf) {
     headers,
     body: ["GET", "HEAD"].includes(req.method || "") ? undefined : bodyBuf,
     redirect: "manual",
+    signal: AbortSignal.timeout(timeoutMs),
   });
   const outHeaders = {};
   upstreamRes.headers.forEach((v, k) => {
@@ -227,6 +235,8 @@ function writeProxy(res, packed) {
   const headers = { ...packed.outHeaders };
   headers["content-length"] = String(packed.buf.length);
   delete headers["Content-Length"];
+  const exposed = headers["access-control-expose-headers"] || "";
+  headers["access-control-expose-headers"] = [...new Set([...exposed.split(",").map((s) => s.trim()).filter(Boolean), "X-Image-Task-Id", "Location", "Retry-After", "Idempotency-Key"])].join(", ");
   res.writeHead(packed.status, headers);
   res.end(packed.buf);
 }
@@ -762,72 +772,19 @@ function extFromMime(mime) {
 }
 
 function parseMultipartFile(buf, contentType) {
-  const bm = /boundary=(?:"([^"]+)"|([^;,\s]+))/i.exec(String(contentType || ""));
-  const boundary = bm && (bm[1] || bm[2]);
-  if (!boundary) return null;
-  const sep = Buffer.from(`--${boundary}`);
-  let start = buf.indexOf(sep);
-  if (start < 0) return null;
-  start += sep.length;
-  if (buf[start] === 0x0d && buf[start + 1] === 0x0a) start += 2;
-  while (start < buf.length) {
-    if (buf[start] === 0x2d && buf[start + 1] === 0x2d) break;
-    const next = buf.indexOf(sep, start);
-    if (next < 0) break;
-    let partEnd = next;
-    if (partEnd >= 2 && buf[partEnd - 2] === 0x0d && buf[partEnd - 1] === 0x0a) {
-      partEnd -= 2;
-    }
-    const part = buf.subarray(start, partEnd);
-    const headerEnd = part.indexOf("\r\n\r\n");
-    if (headerEnd >= 0) {
-      const header = part.subarray(0, headerEnd).toString("utf8");
-      const body = part.subarray(headerEnd + 4);
-      const nameM = /name="([^"]+)"/i.exec(header);
-      const fileM = /filename="([^"]*)"/i.exec(header);
-      const typeM = /Content-Type:\s*([^\r\n]+)/i.exec(header);
-      const field = (nameM && nameM[1]) || "";
-      if (fileM || /^(file|image|audio|video|media)$/i.test(field)) {
-        return {
-          field,
-          filename: (fileM && fileM[1]) || field || "upload.bin",
-          contentType: (typeM && typeM[1].trim()) || "application/octet-stream",
-          data: body,
-        };
-      }
-    }
-    start = next + sep.length;
-    if (buf[start] === 0x0d && buf[start + 1] === 0x0a) start += 2;
-  }
-  return null;
+  const parts = parseMultipart(buf, contentType, {
+    maxParts: 32,
+    maxFiles: 4,
+    maxFileBytes: UPLOAD_MAX_BYTES,
+    maxTextBytes: 64 * 1024,
+    maxTotalBytes: UPLOAD_MAX_BYTES,
+  });
+  const part = parts.find((p) => p.filename !== undefined || /^(?:file|image|audio|video|media)$/i.test(p.field));
+  return part ? { ...part, filename: part.filename || part.field || "upload.bin" } : null;
 }
 
 async function assertBearerKey(req) {
-  const auth = String(req.headers.authorization || "");
-  if (!/^Bearer\s+\S+/i.test(auth)) {
-    const err = new Error("Missing Authorization: Bearer <api_key>");
-    err.status = 401;
-    err.code = "invalid_api_key";
-    throw err;
-  }
-  try {
-    const r = await fetch(`${UPSTREAM}/v1/models`, {
-      method: "GET",
-      headers: {
-        authorization: auth,
-        accept: "application/json",
-      },
-    });
-    if (r.status === 401 || r.status === 403) {
-      const err = new Error("Invalid API key");
-      err.status = 401;
-      err.code = "invalid_api_key";
-      throw err;
-    }
-  } catch (e) {
-    if (e.status) throw e;
-    console.error("[uploads] key check failed", e.message || e);
-  }
+  await validateUploadAuth(String(req.headers.authorization || ""), UPSTREAM, { timeoutMs: UPLOAD_AUTH_TIMEOUT_MS });
 }
 
 function purgeExpiredUploads() {
@@ -854,10 +811,11 @@ async function handleUploadPost(req, res) {
   try {
     await assertBearerKey(req);
   } catch (e) {
+    if (e.status === 503) console.error(`[uploads] auth unavailable id=${crypto.randomUUID()} reason=${e.message}`);
     return json(res, e.status || 401, {
       error: {
-        message: e.message || "Unauthorized",
-        type: "invalid_request_error",
+        message: e.status === 503 ? "API key validation is temporarily unavailable. Please retry." : (e.message || "Unauthorized"),
+        type: e.status === 503 ? "api_error" : "invalid_request_error",
         code: e.code || "invalid_api_key",
       },
     });
@@ -885,7 +843,11 @@ async function handleUploadPost(req, res) {
   let data = null;
 
   if (/multipart\/form-data/i.test(ct)) {
-    const part = parseMultipartFile(bodyBuf, ct);
+    let part;
+    try { part = parseMultipartFile(bodyBuf, ct); }
+    catch (e) {
+      return json(res, e.status || 400, { error: { message: e.message, type: "invalid_request_error", code: e.code || "invalid_multipart" } });
+    }
     if (!part || !part.data || !part.data.length) {
       return json(res, 400, {
         error: {
@@ -922,13 +884,13 @@ async function handleUploadPost(req, res) {
       });
     }
     try {
-      data = Buffer.from(b64, "base64");
-    } catch {
+      data = decodeBase64Upload(String(payload.file_base64 || payload.data || payload.content || ""));
+    } catch (e) {
       return json(res, 400, {
         error: {
-          message: "Invalid base64",
+          message: e.message || "Invalid base64",
           type: "invalid_request_error",
-          code: "invalid_base64",
+          code: e.code || "invalid_base64",
         },
       });
     }
@@ -977,52 +939,23 @@ async function handleUploadPost(req, res) {
 
   let stored = "";
   try {
-    ensureUploadDir();
+    fs.mkdirSync(UPLOAD_DIR, { recursive: true });
     purgeExpiredUploads();
-    if (typeof fs.statfsSync === "function") {
-      const stfs = fs.statfsSync(UPLOAD_DIR);
-      const freeBytes = Number(stfs.bsize) * Number(stfs.bavail);
-      // Reserve room for THIS file plus a 64MB margin: a 100MB PDF must be
-      // rejected up front, not fail with ENOSPC halfway through the write.
-      const needBytes = data.length + 64 * 1024 * 1024;
-      if (Number.isFinite(freeBytes) && freeBytes < needBytes) {
-        console.error(
-          "[uploads] low disk, free bytes:",
-          freeBytes,
-          "need bytes:",
-          needBytes
-        );
-        return json(res, 503, {
-          error: {
-            message: `Upload storage is temporarily full (free ${(freeBytes / 1048576).toFixed(0)}MB, need ${(needBytes / 1048576).toFixed(0)}MB). Please retry later or contact support.`,
-            type: "server_error",
-            code: "storage_insufficient",
-          },
-        });
-      }
-    }
+    checkStorageSpace(UPLOAD_DIR, data.length);
     const id = crypto.randomUUID().replace(/-/g, "");
     stored = `${id}${ext}`;
     const full = path.join(UPLOAD_DIR, stored);
     fs.writeFileSync(full, data);
   } catch (e) {
-    console.error("[uploads] write failed:", e.code || "", e.message || e);
-    if (e.code === "ENOSPC" || e.code === "EDQUOT") {
-      return json(res, 503, {
-        error: {
-          message:
-            "Upload storage is temporarily full. Please retry later or contact support.",
-          type: "server_error",
-          code: "storage_insufficient",
-        },
-      });
-    }
+    const requestId = crypto.randomUUID();
+    const code = storageErrorCode(e);
+    console.error(`[uploads] storage failure id=${requestId} code=${e.code || "unknown"} message=${e.message || e}`);
     return json(res, 503, {
       error: {
-        message:
-          "Upload storage is temporarily unavailable. Please retry later or contact support.",
+        message: code === "storage_insufficient" ? "Upload storage is temporarily full. Please retry later or contact support." : "Upload storage is temporarily unavailable. Please retry later or contact support.",
         type: "server_error",
-        code: "storage_unavailable",
+        code,
+        request_id: requestId,
       },
     });
   }
@@ -1046,8 +979,10 @@ function handleUploadGet(req, res, pathOnly) {
       error: { message: "Not found", type: "invalid_request_error", code: "not_found" },
     });
   }
-  const full = path.join(UPLOAD_DIR, name);
-  if (!full.startsWith(path.resolve(UPLOAD_DIR))) {
+  const uploadRoot = path.resolve(UPLOAD_DIR);
+  const full = path.resolve(uploadRoot, name);
+  const relative = path.relative(uploadRoot, full);
+  if (relative.startsWith("..") || path.isAbsolute(relative)) {
     return json(res, 404, {
       error: { message: "Not found", type: "invalid_request_error", code: "not_found" },
     });
@@ -1367,12 +1302,35 @@ function redirectPublicPaths(req, res) {
 }
 
 ensureUploadDir();
+const uploadStorageHealth = checkUploadStorage(UPLOAD_DIR);
+if (!uploadStorageHealth.ok) {
+  console.error(`[uploads] startup storage check failed code=${uploadStorageHealth.code} reason=${uploadStorageHealth.reason}`);
+} else {
+  console.log("[uploads] startup storage read/write check passed");
+}
 setInterval(purgeExpiredUploads, 60 * 60 * 1000).unref?.();
 
 const server = http.createServer(async (req, res) => {
   try {
     const pathOnly = (req.url || "/").split("?")[0];
     if (redirectPublicPaths(req, res)) return;
+    if (IMAGE_PATHS.has(pathOnly) || /^\/v1\/images\/tasks\/[^/]+$/.test(pathOnly)) {
+      res.setHeader("Access-Control-Allow-Origin", "*");
+      res.setHeader("Access-Control-Expose-Headers", "X-Image-Task-Id, Location, Retry-After, Idempotency-Key");
+      if (req.method === "OPTIONS") {
+        res.writeHead(204, {
+          "Access-Control-Allow-Methods": "POST, GET, OPTIONS",
+          "Access-Control-Allow-Headers": "Authorization, Content-Type, Idempotency-Key",
+          "Access-Control-Max-Age": "600",
+        });
+        res.end();
+        return;
+      }
+    }
+    if (req.method === "GET" && pathOnly === "/healthz") {
+      // Startup result is immutable here: read-only diagnostics never write.
+      return json(res, uploadStorageHealth.ok ? 200 : 503, { ok: uploadStorageHealth.ok, storage: uploadStorageHealth.ok ? "ready" : uploadStorageHealth.code });
+    }
     if (pathOnly === "/chat/completions") {
       return json(res, 404, {
         error: {
@@ -1427,13 +1385,15 @@ const server = http.createServer(async (req, res) => {
       throw e;
     }
 
+    let imagePayload;
     if (req.method === "POST" && IMAGE_PATHS.has(pathOnly)) {
       let payload;
       try {
-        payload = JSON.parse(bodyBuf.toString("utf8") || "{}");
-      } catch {
-        return json(res, 400, {
-          error: { message: "Invalid JSON body", type: "invalid_request_error" },
+        ({ payload } = parseImageBody(bodyBuf, String(req.headers["content-type"] || "")));
+        imagePayload = payload;
+      } catch (e) {
+        return json(res, e.status || 400, {
+          error: { message: e.message, code: e.code || "invalid_image_request", type: "invalid_request_error" },
         });
       }
       const prompt = extractPrompt(payload).trim();
@@ -1449,11 +1409,7 @@ const server = http.createServer(async (req, res) => {
 
       let moderation;
       try {
-        const auth = String(req.headers.authorization || "").slice(0, 24);
-        moderation = await screenPrompt(
-          prompt,
-          `keyo:${Date.now()}:${auth || "anon"}`
-        );
+        moderation = await screenPrompt(prompt, `keyo:${crypto.randomUUID()}`);
       } catch (e) {
         console.error("[creem-moderation]", e.message || e);
         return json(res, 503, {
@@ -1487,34 +1443,38 @@ const server = http.createServer(async (req, res) => {
       }
     }
 
-    if (req.method === "POST" && pathOnly === "/v1/images/generations") {
-      // 带参考图的请求 → 透传(:3011)原生路径（真正采纳参考图）；
-      // 纯文本请求继续走 New API 兼容面。审核已在上方 IMAGE_PATHS 完成。
+    if (imagePayload && IMAGE_GEN_MODELS.has(String(imagePayload.model || "")) && pathOnly === "/v1/images/variations") {
+      return json(res, 400, { error: { message: "Native image variations are unsupported; use images/edits with a screened prompt", type: "invalid_request_error", code: "unsupported_image_operation" } });
+    }
+
+    if (imagePayload && IMAGE_GEN_MODELS.has(String(imagePayload.model || "")) &&
+        ["/v1/images/generations", "/v1/images/edits"].includes(pathOnly)) {
+      // Text and reference requests share one native contract. Screening above
+      // must finish before any submission. A transport failure may already have
+      // created a task, so never resubmit through another contract.
       try {
-        const payload = JSON.parse(bodyBuf.toString("utf8") || "{}");
-        const refOf = (v) =>
-          (typeof v === "string" && v) ||
-          (v && typeof v === "object" && typeof v.url === "string" && v.url) ||
-          null;
-        const hasRef =
-          (Array.isArray(payload.images) && payload.images.length > 0) ||
-          (Array.isArray(payload.image_urls) && payload.image_urls.length > 0) ||
-          !!refOf(payload.image_url) ||
-          !!refOf(payload.image);
-        if (hasRef && IMAGE_GEN_MODELS.has(String(payload.model || ""))) {
-          writeProxy(
-            res,
-            await proxyRaw(
-              `${VIDEO_GEN}/v1/images/generations${qsOf(req.url)}`,
-              req,
-              bodyBuf
-            )
-          );
-          return;
-        }
-      } catch {
-        /* invalid JSON → New API */
+        const normalizedReq = { method: req.method, headers: { ...req.headers, "content-type": "application/json" } };
+        delete normalizedReq.headers["content-encoding"];
+        writeProxy(res, await proxyRaw(`${VIDEO_GEN}/v1/images/generations${qsOf(req.url)}`, normalizedReq, Buffer.from(JSON.stringify(imagePayload))));
+      } catch (e) {
+        const requestId = crypto.randomUUID();
+        console.error(`[native-image] forwarding failed id=${requestId} reason=${e.name || "transport_error"}`);
+        return json(res, 502, { error: {
+          message: "Image service response unavailable. A task may have been created; retry with the same Idempotency-Key or query its task ID.",
+          type: "api_error", code: "image_forwarding_failed", request_id: requestId,
+        } });
       }
+      return;
+    }
+
+    if (req.method === "GET" && /^\/v1\/images\/tasks\/[^/]+$/.test(pathOnly)) {
+      try { writeProxy(res, await proxyRaw(`${VIDEO_GEN}${req.url}`, req, bodyBuf, 15000)); }
+      catch (e) {
+        const requestId = crypto.randomUUID();
+        console.error(`[native-image] task query failed id=${requestId} reason=${e.name || "transport_error"}`);
+        return json(res, 502, { error: { message: "Image task query temporarily unavailable", type: "api_error", code: "image_task_unavailable", request_id: requestId } });
+      }
+      return;
     }
 
     if (req.method === "POST" && pathOnly === "/v1/videos") {

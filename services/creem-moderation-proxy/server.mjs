@@ -464,7 +464,7 @@ function sanitizeDescription(desc) {
     .replace(/上游(?:成本|进货价|标价|渠道|供应商)?/g, "")
     .replace(/透传|二道贩子?|中转站|转卖/g, "")
     .replace(
-      /模力方舟|MoArk|moark|APIMart|Apimart|apimart|OpenLux|openlux|UnoRouter|unorouter|Gitee(?:\s*AI)?|gitee|Grsai|grsai|SenseNova|sensenova|商汤|SenseTime|Sorux|soruxgpt|InclusionAI|Poolside|Dots Studio|volcengine|Volcengine|MediaKit|火山引擎|passthrough/gi,
+      /模力方舟|MoArk|moark|APIMart|Apimart|apimart|OpenLux|openlux|UnoRouter|unorouter|Gitee(?:\s*AI)?|gitee|Grsai|grsai|SenseNova|sensenova|商汤|SenseTime|Sorux|soruxgpt|InclusionAI|Poolside|Dots Studio|volcengine|Volcengine|MediaKit|火山引擎|OpenRouter|openrouter|passthrough/gi,
       ""
     )
     .replace(/¥[\d.]+/g, "")
@@ -479,7 +479,7 @@ function scrubVendorName(name) {
   const n = String(name || "").trim();
   if (!n) return n;
   if (
-    /模力方舟|MoArk|moark|APIMart|Apimart|apimart|OpenLux|openlux|UnoRouter|unorouter|Gitee|gitee|Grsai|grsai|SenseNova|sensenova|商汤|SenseTime|Sorux|InclusionAI|Poolside|中转|上游|透传/i.test(
+    /模力方舟|MoArk|moark|APIMart|Apimart|apimart|OpenLux|openlux|UnoRouter|unorouter|Gitee|gitee|Grsai|grsai|SenseNova|sensenova|商汤|SenseTime|Sorux|InclusionAI|Poolside|OpenRouter|openrouter|中转|上游|透传/i.test(
       n
     )
   ) {

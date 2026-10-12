@@ -2017,15 +2017,15 @@
     "price_key_en": ""
   },
   "gpt-image-2": {
-    "description": "文生图 / 图生图，约 1K 画质，按张计费。 计费：$0.006849/次。",
+    "description": "文生图 / 图生图（images 传参考图 URL），约 1K 画质（16:9 等比例或 1K 像素值），按张计费。 计费：$0.006849/次。",
     "descriptions": {
-      "zhCN": "文生图 / 图生图，约 1K 画质，按张计费。 计费：$0.006849/次。",
-      "zhTW": "文生圖 / 圖生圖，約 1K 畫質，按張計費。 計費：$0.006849/次。",
-      "en": "Text-to-image / image-to-image around 1K quality. Billed per image. Pricing: $0.006849 / request.",
-      "fr": "Texte→image / image→image (~1K). Facturé par image. Tarif : $0.006849 / requête.",
-      "ru": "Текст→изображение / изображение→изображение (~1K). Оплата за изображение. Тариф: $0.006849 / запрос.",
-      "ja": "文生図／図生図（約 1K）。画像ごとに課金。 料金：$0.006849/ 回。",
-      "vi": "Text-to-image / image-to-image (~1K). Tính phí theo ảnh. Giá: $0.006849/ lần."
+      "zhCN": "文生图 / 图生图（images 传参考图 URL），约 1K 画质（16:9 等比例或 1K 像素值），按张计费。 计费：$0.006849/次。",
+      "zhTW": "文生圖 / 圖生圖（images 傳參考圖 URL），約 1K 畫質（16:9 等比例或 1K 像素值），按張計費。 計費：$0.006849/次。",
+      "en": "Text-to-image and image-to-image (pass reference URLs in images), ~1K (ratio strings like 16:9 or 1K pixel sizes). Billed per image. Pricing: $0.006849 / request.",
+      "fr": "Texte-vers-image et image-vers-image (URLs de référence dans images), ~1K (ratios ou pixels 1K). Facturé par image. Tarif : $0.006849 / requête.",
+      "ru": "Текст-в-изображение и изображение-в-изображение (URL референсов в images), ~1K. Оплата за изображение. Тариф: $0.006849 / запрос.",
+      "ja": "テキストから画像・画像から画像（images に参照画像 URL）、約1K。画像ごとに課金。 料金：$0.006849/回。",
+      "vi": "Sinh ảnh từ văn bản và từ ảnh tham chiếu (URL trong images), ~1K. Tính phí theo ảnh. Giá: $0.006849 / lần."
     },
     "unit": "request",
     "badge": {
@@ -2065,15 +2065,15 @@
     "price_key_en": "Per request"
   },
   "gpt-image-2-vip": {
-    "description": "高清画图，支持 1K/2K/4K，按张计费。 计费：$0.0274/次。",
+    "description": "高清画图，1K/2K/4K 像素档（16:9 4K=3840x2160，不支持比例串）；支持参考图（图生图），按张计费。 计费：$0.0274/次。",
     "descriptions": {
-      "zhCN": "高清画图，支持 1K/2K/4K，按张计费。 计费：$0.0274/次。",
-      "zhTW": "高清畫圖，支援 1K/2K/4K，按張計費。 計費：$0.0274/次。",
-      "en": "HD image generation with 1K/2K/4K. Billed per image. Pricing: $0.0274 / request.",
-      "fr": "Génération HD 1K/2K/4K. Facturé par image. Tarif : $0.0274 / requête.",
-      "ru": "HD‑генерация 1K/2K/4K. Оплата за изображение. Тариф: $0.0274 / запрос.",
-      "ja": "高精細画像生成（1K/2K/4K）。画像ごとに課金。 料金：$0.0274/ 回。",
-      "vi": "Sinh ảnh HD 1K/2K/4K. Tính phí theo ảnh. Giá: $0.0274/ lần."
+      "zhCN": "高清画图，1K/2K/4K 像素档（16:9 4K=3840x2160，不支持比例串）；支持参考图（图生图），按张计费。 计费：$0.0274/次。",
+      "zhTW": "高清晰度畫圖，1K/2K/4K 像素檔（16:9 4K=3840x2160，不支援比例字串）；支援參考圖（圖生圖），按張計費。 計費：$0.0274/次。",
+      "en": "HD images at 1K/2K/4K pixel sizes (16:9 4K = 3840x2160; ratio strings not accepted); reference-image (image-to-image) supported. Billed per image. Pricing: $0.0274 / request.",
+      "fr": "Images HD 1K/2K/4K en pixels (16:9 4K = 3840x2160) ; images de référence prises en charge. Facturé par image. Tarif : $0.0274 / requête.",
+      "ru": "HD-изображения 1K/2K/4K в пикселях (16:9 4K = 3840x2160); поддерживаются референсы. Оплата за изображение. Тариф: $0.0274 / запрос.",
+      "ja": "高精細画像生成、1K/2K/4K ピクセル指定（16:9 4K=3840x2160）；参照画像に対応。画像ごとに課金。 料金：$0.0274/回。",
+      "vi": "Sinh ảnh HD 1K/2K/4K theo pixel (16:9 4K = 3840x2160); hỗ trợ ảnh tham chiếu. Tính phí theo ảnh. Giá: $0.0274 / lần."
     },
     "unit": "request",
     "badge": {
@@ -7038,5 +7038,101 @@
     "suffix_en": "/ request",
     "price_key_zh": "每次请求",
     "price_key_en": "Per request"
+  },
+  "keyo-eleven-v4": {
+    "description": "Keyo Eleven V4：高保真 AI 语音合成，自然表达、角色演绎。按输入字符计费：$80 / 百万字符，输出音频不另收费。",
+    "descriptions": {
+      "zhCN": "Keyo Eleven V4：高保真 AI 语音合成，自然表达、角色演绎。按输入字符计费：$80 / 百万字符，输出音频不另收费。",
+      "zhTW": "Keyo Eleven V4：高保真 AI 語音合成。按輸入字元計費：$80 / 百萬字元，輸出音訊不另收費。",
+      "en": "Keyo Eleven V4 — high-fidelity AI speech. $80 per million input characters; no additional audio output charge.",
+      "fr": "Keyo Eleven V4 — high-fidelity AI speech. $80 per million input characters; no additional audio output charge.",
+      "ru": "Keyo Eleven V4 — high-fidelity AI speech. $80 per million input characters; no additional audio output charge.",
+      "ja": "Keyo Eleven V4。高忠実度の AI 音声合成。入力100万文字あたり$80、音声出力の追加料金なし。",
+      "vi": "Keyo Eleven V4 — giọng nói AI trung thực cao. $80 / triệu ký tự đầu vào; không tính thêm phí âm thanh đầu ra."
+    },
+    "unit": "token",
+    "badge": {
+      "zhCN": "按 Token 计费",
+      "zhTW": "按 Token 計費",
+      "en": "Token-based",
+      "fr": "Au token",
+      "ru": "По токенам",
+      "ja": "Token 課金",
+      "vi": "Theo token"
+    },
+    "suffix": {
+      "zhCN": "",
+      "zhTW": "",
+      "en": "",
+      "fr": "",
+      "ru": "",
+      "ja": "",
+      "vi": ""
+    },
+    "price_key": {
+      "zhCN": "",
+      "zhTW": "",
+      "en": "",
+      "fr": "",
+      "ru": "",
+      "ja": "",
+      "vi": ""
+    },
+    "description_zh": "Keyo Eleven V4：高保真 AI 语音合成，自然表达、角色演绎。按输入字符计费：$80 / 百万字符，输出音频不另收费。",
+    "description_en": "Keyo Eleven V4 — high-fidelity AI speech. $80 per million input characters; no additional audio output charge.",
+    "badge_zh": "按 Token 计费",
+    "badge_en": "Token-based",
+    "suffix_zh": "",
+    "suffix_en": "",
+    "price_key_zh": "",
+    "price_key_en": ""
+  },
+  "keyo-eleven-v4-turbo": {
+    "description": "Keyo Eleven V4 Turbo：快速 AI 语音合成，适合实时交互。按输入字符计费：$40 / 百万字符，输出音频不另收费。",
+    "descriptions": {
+      "zhCN": "Keyo Eleven V4 Turbo：快速 AI 语音合成，适合实时交互。按输入字符计费：$40 / 百万字符，输出音频不另收费。",
+      "zhTW": "Keyo Eleven V4 Turbo：快速 AI 語音合成。按輸入字元計費：$40 / 百萬字元，輸出音訊不另收費。",
+      "en": "Keyo Eleven V4 Turbo — fast AI speech. $40 per million input characters; no additional audio output charge.",
+      "fr": "Keyo Eleven V4 Turbo — fast AI speech. $40 per million input characters; no additional audio output charge.",
+      "ru": "Keyo Eleven V4 Turbo — fast AI speech. $40 per million input characters; no additional audio output charge.",
+      "ja": "Keyo Eleven V4 Turbo。低遅延の高速 AI 音声合成。入力100万文字あたり$40、音声出力の追加料金なし。",
+      "vi": "Keyo Eleven V4 Turbo — TTS nhanh. $40 / triệu ký tự đầu vào; không tính thêm phí âm thanh đầu ra."
+    },
+    "unit": "token",
+    "badge": {
+      "zhCN": "按 Token 计费",
+      "zhTW": "按 Token 計費",
+      "en": "Token-based",
+      "fr": "Au token",
+      "ru": "По токенам",
+      "ja": "Token 課金",
+      "vi": "Theo token"
+    },
+    "suffix": {
+      "zhCN": "",
+      "zhTW": "",
+      "en": "",
+      "fr": "",
+      "ru": "",
+      "ja": "",
+      "vi": ""
+    },
+    "price_key": {
+      "zhCN": "",
+      "zhTW": "",
+      "en": "",
+      "fr": "",
+      "ru": "",
+      "ja": "",
+      "vi": ""
+    },
+    "description_zh": "Keyo Eleven V4 Turbo：快速 AI 语音合成，适合实时交互。按输入字符计费：$40 / 百万字符，输出音频不另收费。",
+    "description_en": "Keyo Eleven V4 Turbo — fast AI speech. $40 per million input characters; no additional audio output charge.",
+    "badge_zh": "按 Token 计费",
+    "badge_en": "Token-based",
+    "suffix_zh": "",
+    "suffix_en": "",
+    "price_key_zh": "",
+    "price_key_en": ""
   }
 }

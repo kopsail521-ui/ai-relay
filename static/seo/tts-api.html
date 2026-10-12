@@ -113,7 +113,17 @@ ul{margin:0 0 14px;padding-left:1.2em}
   <td class="ok">~$0.44 / $8.82 per 1M in/out</td>
   <td>Gemini-native POST /v1beta/models/gemini-3.8-flash-tts:generateContent · not on /v1/audio/speech · guide <a href="/model/gemini-3.8-flash-tts">the gemini-3.8-flash-tts model page</a></td>
 </tr>
-</tbody>
+<tr>
+  <td><a href="/model/keyo-eleven-v4"><code>keyo-eleven-v4</code></a></td>
+  <td>Sync high-fidelity TTS — token-billed per input character</td>
+  <td class="ok">~$80 / 1M characters</td>
+  <td>POST /v1/audio/speech · guide <a href="/model/keyo-eleven-v4">the keyo-eleven-v4 model page</a></td>
+</tr><tr>
+  <td><a href="/model/keyo-eleven-v4-turbo"><code>keyo-eleven-v4-turbo</code></a></td>
+  <td>Sync low-latency TTS — token-billed per input character</td>
+  <td class="ok">~$40 / 1M characters</td>
+  <td>POST /v1/audio/speech · guide <a href="/model/keyo-eleven-v4-turbo">the keyo-eleven-v4-turbo model page</a></td>
+</tr></tbody>
 </table>
 
 <h2>Prototype chat free, then meter TTS</h2>
@@ -121,7 +131,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
 
 <h2>Rates and endpoints</h2>
 <p>Teams call a text to speech API for IVR, voice agents, course narration, and avatar pipelines. Keyo keeps STT (Whisper) and TTS on one prepaid balance so you are not juggling three vendor consoles.</p>
-<p>Indicative rates above come from the live Keyo catalog — confirm <a href="/model/IndexTTS-2">the IndexTTS-2 model page</a>, <a href="/model/CosyVoice3">the CosyVoice3 model page</a>, <a href="/model/Qwen3-TTS">the Qwen3-TTS model page</a>, and <a href="/model/gemini-3.8-flash-tts">the gemini-3.8-flash-tts model page</a> (live rates on <a href="/pricing">the pricing page</a>). Prefer IndexTTS-2 when the product needs audio inside one request; prefer CosyVoice3 or Qwen3-TTS when jobs are already async. Gemini 3.8 Flash TTS bills per token, not per 10K characters — it is not covered by the ~$0.548–$1.37 / 10K characters range above, and it calls a Gemini-native endpoint rather than the OpenAI-compatible /v1/audio/speech.</p>
+<p>Indicative rates above come from the live Keyo catalog — confirm <a href="/model/IndexTTS-2">the IndexTTS-2 model page</a>, <a href="/model/CosyVoice3">the CosyVoice3 model page</a>, <a href="/model/Qwen3-TTS">the Qwen3-TTS model page</a>, the <a href="/model/keyo-eleven-v4">keyo-eleven-v4 model page</a>, <a href="/model/keyo-eleven-v4-turbo">the keyo-eleven-v4-turbo model page</a>, the <a href="/model/keyo-eleven-v4">keyo-eleven-v4 model page</a>, <a href="/model/keyo-eleven-v4-turbo">the keyo-eleven-v4-turbo model page</a>, the <a href="/model/keyo-eleven-v4">keyo-eleven-v4 model page</a>, <a href="/model/keyo-eleven-v4-turbo">the keyo-eleven-v4-turbo model page</a>, and <a href="/model/gemini-3.8-flash-tts">the gemini-3.8-flash-tts model page</a> (live rates on <a href="/pricing">the pricing page</a>). Prefer IndexTTS-2 when the product needs audio inside one request; prefer CosyVoice3 or Qwen3-TTS when jobs are already async. Gemini 3.8 Flash TTS bills per token, not per 10K characters — it is not covered by the ~$0.548–$1.37 / 10K characters range above, and it calls a Gemini-native endpoint rather than the OpenAI-compatible /v1/audio/speech.</p>
 <p>How to call CosyVoice3 API (and siblings): set base URL https://www.keyoapi.xyz/v1, authenticate with your Keyo key, pass the model id. Full CosyVoice3 walkthrough: <a href="/model/CosyVoice3">the CosyVoice3 model page</a>. Also <a href="/model/IndexTTS-2">the IndexTTS-2 model page</a>, <a href="/model/Qwen3-TTS">the Qwen3-TTS model page</a>. Voice clone angle: <a href="/voice-cloning-api">the voice cloning API guide</a>. Talking video: <a href="/ai-avatar-video-generator">the AI avatar video generator page</a>.</p>
 <p>Create a key at <a href="/sign-up">the sign-up page</a>, then open Model Square (<a href="/pricing">the pricing page</a>) for interactive try/buy.</p>
 <pre>curl https://www.keyoapi.xyz/v1/audio/speech \

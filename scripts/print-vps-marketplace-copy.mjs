@@ -6,6 +6,7 @@ import path from "path";
 import zlib from "zlib";
 import { spawnSync } from "child_process";
 import { fileURLToPath } from "url";
+import { imageDeployCommand } from "./print-vps-image-fixes.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.join(__dirname, "..");
@@ -98,14 +99,7 @@ base64 -d /tmp/vps-mkt-docker.b64 | gunzip | sudo tee /opt/ai-relay/services/cre
 base64 -d /tmp/vps-mkt-py.b64 | gunzip | sudo tee /opt/ai-relay/scripts/vps-update-marketplace-copy.py >/dev/null
 sudo python3 /opt/ai-relay/scripts/vps-update-marketplace-copy.py /opt/ai-relay/data/new-api/one-api.db /opt/ai-relay/config/marketplace-model-copy.json
 cd /opt/ai-relay
-sudo docker build -t keyo-creem-moderation ./services/creem-moderation-proxy
-sudo docker rm -f ai-relay-creem-moderation 2>/dev/null || true
-sudo docker run -d --name ai-relay-creem-moderation --restart always --network host \\
-  --env-file /opt/ai-relay/.env.moderation \\
-  -e UPSTREAM_URL=http://127.0.0.1:3000 \\
-  -e LISTEN_HOST=127.0.0.1 \\
-  -e PORT=3001 \\
-  keyo-creem-moderation
+${imageDeployCommand("moderation")}
 sleep 2
 curl -sS http://127.0.0.1:3001/api/pricing | python3 -c "import sys,json;d=json.load(sys.stdin);m=next(x for x in d['data'] if x['model_name']=='gemma-4-26B-A4B-it');print((m.get('description') or '')[:160])"
 echo

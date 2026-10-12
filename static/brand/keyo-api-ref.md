@@ -10,12 +10,12 @@
 > - Base URL: `https://www.keyoapi.xyz/v1`  
 > - Header: `Authorization: Bearer <用户提供的 key>`  
 > - 先根据模型名找到所属「能力族」，再套用该族模板；视频模型必须用对应小节的字段，禁止混用。  
-> - 异步任务必须轮询直到完成或失败，再把结果 URL/文本交给用户。  
-> - 视频 Path B **只收 JSON**；图/视频/音频必须是**公网 `http(s)` URL**。  
+> - 异步任务按能力族判断终态：图片成功是 HTTP 200 + `status:"succeeded"` + 非空 `data[].url`（§3）；视频 / TTS / 文档解析 / InfiniteTalk 成功是 `completed`（§0.6）。尚未完成时轮询，再把结果 URL/文本交给用户。
+> - 视频 Path B **只收 JSON**；其中的图/视频/音频必须是**公网 `http(s)` URL**。
 > - 视频各模型的字段、模式、禁止项以本手册 **§4 / §5** 为准（用户复制本页给你即可，不必另找文档）。  
 > - 用户只有本机文件时：**先** `POST /v1/uploads`（别名 `/v1/files`）拿到 `url`，再填进 Path B / OCR 的 JSON。  
-> - **禁止**：本机路径、`data:base64`、对 Path B 直接 multipart、臆造的 `POST /v1/assets` / `asset://`。  
-> - ASR / 抠图 / 超分 / MinerU / InfiniteTalk 等 multipart 接口可直接 `-F file=@` / `-F image=@`，不必先上传。  
+> - **禁止**：JSON 中的本机路径、视频 Path B 的 `data:base64` 或直接 multipart、臆造的 `POST /v1/assets` / `asset://`；图片参考图支持 base64（§3）。
+> - 图片 `/v1/images/edits` / ASR / 抠图 / 超分 / MinerU / InfiniteTalk 等 multipart 接口可直接 `-F file=@` / `-F image=@`（按各接口字段），不必先上传。
 > - 完整模型列表以本手册为准；也可用 `GET /v1/models` 校验是否在售。
 
 ---
@@ -42,18 +42,20 @@
 | 视频 Path B（`/v1/videos/generations`） | `GET /v1/tasks/{id}`（**复数 tasks**） |
 | 视频 Path A（`/v1/videos`） | `GET /v1/videos/{id}` |
 | TTS 异步 / 文档解析 / InfiniteTalk | `GET /v1/task/{id}`（**单数 task**） |
+| 图片任务 | `GET /v1/images/tasks/{task_id}`（图片专用路径） |
 
 ---
 
 ## 0.6 AI 读结果契约（所有异步统一习惯）
 
-异步任务：**提交 → 拿到 id → 按族轮询 → 读 url/文本**。不要混轮询路径。
+异步任务：**提交 → 拿到 id → 尚未完成时按族轮询 → 读 url/文本**。提交已返回成功结果或任务终态错误时直接处理；不要混轮询路径。
 
-**统一状态词（网关已归一）：** `processing` | `completed` | `failed` | `cancelled`  
-（接口可能仍带 `status_raw`，如 `succeeded` / `success` / `waiting`——以归一后的 `status` 为准。）
+**图片任务（§3）：** 进行中返回 HTTP 202，`status` 为 `reserved` / `submitting` / `running`；成功为 HTTP 200 + `status:"succeeded"` + 非空 `data[].url`。已记录的任务终态错误返回 HTTP 502，含 `error.task_id`；临时查询错误不代表任务失败，应重试同一任务的 GET（详见 §3.3）。
+**视频 / TTS / 文档解析 / InfiniteTalk 的归一状态：** `processing` | `completed` | `failed` | `cancelled`。这些接口可能仍带 `status_raw`（如 `succeeded` / `success` / `waiting`），以归一后的 `status` 为准；此规则不适用于图片任务。
 
 | 能力族 | 提交后取 id | 轮询直到 | 结果怎么拿 |
 |--------|-------------|---------|------------|
+| 图片 | `id` 或 `task_id` | HTTP 200 + `status:"succeeded"` + 非空 `data[].url`；任务终态错误见 §3.3 | `data[].url` |
 | 视频 Path B | `id` 或 `task_id` 或 `data[0].task_id` | `status`/`data.status` = `completed` | **`url`** 或 `data.result.videos[0].url[0]` |
 | TTS 异步 / InfiniteTalk | `id` 或 `task_id` | `status` = `completed` | **`url`** 或 `output.file_url` |
 | MinerU | `id` 或 `task_id` | `status` = `completed` | **`text`** 或 `output.segments[].content` |
@@ -279,53 +281,135 @@ curl https://www.keyoapi.xyz/v1/systemone \
 
 ---
 
-## 3. 文生图（全模型共用模板）
+## 3. 图片生成与参考图（按型号选参数）
 
-`POST https://www.keyoapi.xyz/v1/images/generations`
+文生图：`POST https://www.keyoapi.xyz/v1/images/generations`，JSON。
+图生图：同一接口加 `images`；本地文件可直接 `POST /v1/images/edits`，multipart。
+八个型号的文生图与图生图使用同一套生成契约；参考图不会让输出尺寸字段失效。
 
 ```json
 {
   "model": "nano-banana-2",
   "prompt": "一只橘猫坐在窗台上，阳光",
-  "size": "1024x1024"
+  "aspectRatio": "1:1",
+  "imageSize": "2K",
+  "n": 1,
+  "response_format": "url",
+  "replyType": "async"
 }
 ```
 
-模型从 §1.2 选取。
+### 3.1 逐型号能力
 
-### 3.1 `size` 取值（gpt-image-2 系列，严格按表）
+下表中的字段均为可选；只传该型号支持的值。`mask` 是蒙版输入，与上传参考图的 `image` 文件不同。
 
-两个型号接受的写法**不同**，写错会收到上游 `generate failed`：
+| model | 尺寸字段 | quality | background | mask |
+|-------|----------|---------|------------|------|
+| `gpt-image-2` | `size`：比例或表内 1K 像素 | `auto` | 不支持 | HTTP(S) URL |
+| `gpt-image-2.5` | `size`：比例或表内 1K 像素 | `auto` | 不支持 | HTTP(S) URL |
+| `gpt-image-2-vip` | `size`：约束内 1K–4K 像素或 `auto` | `medium` | `transparent` | HTTP(S) URL |
+| `gpt-image-2.5-flare` | `size`：表内 1K/2K/4K 像素或 `auto` | `low` / `medium` / `high` | `transparent` | HTTP(S) URL |
+| `gpt-image-2.5-sunburst` | `size`：表内 1K/2K/4K 像素或 `auto` | `low` / `medium` / `high` / `xhigh` / `max` | `transparent` | HTTP(S) URL |
+| `nano-banana-2` | `aspectRatio` + `imageSize`：`1K` / `2K` / `4K` | 不支持 | 不支持 | 不支持 |
+| `nano-banana-2.1` | `aspectRatio` + `imageSize`：`1K` / `2K` / `4K` | 不支持 | 不支持 | 不支持 |
+| `nano-banana-pro` | `aspectRatio` + `imageSize`：`1K` / `2K` / `4K` | 不支持 | 不支持 | 不支持 |
 
-- **`gpt-image-2`**：只到 1K。接受比例串（`auto` / `16:9` / `9:16` / `4:3` / `3:4` / `3:2` / `2:3` / `5:4` / `4:5` / `21:9` / `9:21` / `1:2` / `2:1`）或 1K 像素值。
-  各比例对应像素：1:1 `1024x1024` · 16:9 `1672x941` · 9:16 `941x1672` · 4:3 `1443x1090` · 3:4 `1090x1443` · 3:2 `1536x1024` · 2:3 `1024x1536` · 5:4 `1408x1120` · 4:5 `1120x1408` · 21:9 `1920x832` · 9:21 `832x1920` · 1:2 `896x1792` · 2:1 `1792x896`
-- **`gpt-image-2-vip`**：1K–4K 像素值，**不接受比例串**。自定义像素值须满足：最长边 ≤ 3840、两边都是 16 的倍数、长宽比 ≤ 3:1、总像素在 655,360–8,294,400 之间。**4K 不是 `4096x4096`**（超限必拒），各比例的 1K/2K/4K 档：
-  - 1:1：`1024x1024` · `2048x2048` · `2880x2880`
-  - 16:9：`1280x720` · `2048x1152` · `3840x2160`
-  - 9:16：`720x1280` · `1152x2048` · `2160x3840`
-  - 4:3：`1152x864` · `2304x1728` · `3264x2448`
-  - 3:4：`864x1152` · `1728x2304` · `2448x3264`
-  - 3:2：`1536x1024` · `2048x1360` · `3504x2336`
-  - 2:3：`1024x1536` · `1360x2048` · `2336x3504`
-  - 5:4：`1120x896` · `2240x1792` · `3200x2560`
-  - 4:5：`896x1120` · `1792x2240` · `2560x3200`
-  - 21:9：`1456x624` · `2912x1248` · `3840x1648`
-  - 9:21：`624x1456` · `1248x2912` · `1648x3840`
+**Nano 原生分辨率：** 用 `imageSize` 选 `1K` / `2K` / `4K`，用 `aspectRatio` 选画幅；不要套 GPT 的 `1024x1024` / `3840x2160` 像素写法。
+Nano 的公共比例：`auto` / `1:1` / `16:9` / `9:16` / `4:3` / `3:4` / `3:2` / `2:3` / `5:4` / `4:5` / `21:9`；`nano-banana-2` 和 `nano-banana-2.1` 另支持 `1:4` / `4:1` / `1:8` / `8:1`，Pro 不支持这些极宽/极高比例。
 
-排错：请求 4K 报 `generate failed` → 九成是 `size` 不在上表（如 `4096x4096` 总像素 16.7M，超上限一倍）；换表内对应档位即可。
+**GPT 基础版（`gpt-image-2` / `gpt-image-2.5`）：** 比例为 `auto` / `1:1` / `16:9` / `9:16` / `4:3` / `3:4` / `3:2` / `2:3` / `5:4` / `4:5` / `21:9` / `9:21` / `1:2` / `2:1`。1K 像素值为：
+`1024x1024` · `1672x941` · `941x1672` · `1443x1090` · `1090x1443` · `1536x1024` · `1024x1536` · `1408x1120` · `1120x1408` · `1920x832` · `832x1920` · `896x1792` · `1792x896`。
 
-**参考图（图生图）**：`images` 数组传公网可达的图片 URL（别名 `image_urls` / `image_url` / `image`）。带参考图的请求由网关走原生生成通道，输出会跟随参考图；`size` 同样生效（严格按 §3.1 表，16:9 的 4K 就是 `3840x2160`）。参考图须为 `http(s)` URL，本地图先 `POST /v1/uploads` 换取 URL。
+**GPT VIP / flare / sunburst：** 使用像素值（或 `auto`），不要传 `16:9` 等比例串。三者共同支持的档位如下：
+
+| 画幅 | 1K | 2K | 4K |
+|------|----|----|----|
+| 1:1 | `1024x1024` | `2048x2048` | `2880x2880` |
+| 16:9 | `1280x720` | `2048x1152` | `3840x2160` |
+| 9:16 | `720x1280` | `1152x2048` | `2160x3840` |
+| 4:3 | `1152x864` | `2304x1728` | `3264x2448` |
+| 3:4 | `864x1152` | `1728x2304` | `2448x3264` |
+| 3:2 | `1536x1024` | `2048x1360` | `3504x2336` |
+| 2:3 | `1024x1536` | `1360x2048` | `2336x3504` |
+| 5:4 | `1120x896` | `2240x1792` | `3200x2560` |
+| 4:5 | `896x1120` | `1792x2240` | `2560x3200` |
+| 21:9 | `1456x624` | `2912x1248` | `3840x1648` |
+| 9:21 | `624x1456` | `1248x2912` | `1648x3840` |
+
+另支持 `688x2048` / `1280x3840` / `2048x688` / `3840x1280` / `1536x768` / `3072x1536` / `3840x1920` / `768x1536` / `1536x3072` / `1920x3840`。
+VIP 还支持满足全部约束的自定义像素：最长边 ≤ 3840、两边为 16 的倍数、长宽比 ≤ 3:1、总像素 655,360–8,294,400。flare / sunburst 只接受列出的像素值。`4096x4096` 不受支持。
+
+### 3.2 URL、base64 与本地文件
+
+JSON 的 `images` 数组支持 HTTP(S) 图片 URL、`data:image/png;base64,...` 等图片 data URL，以及有效图片的原始 base64；别名为 `image_urls` / `image_url` / `image`。不要把本机路径写进 JSON。
 
 ```json
 {
   "model": "gpt-image-2-vip",
   "prompt": "参考图中的角色抱着一只狗",
-  "images": ["https://www.keyoapi.xyz/uploads/xxxx.png"],
-  "size": "3840x2160"
+  "images": ["https://example.com/reference.png"],
+  "size": "3840x2160",
+  "quality": "medium",
+  "replyType": "async"
 }
 ```
 
-可选 `quality`（`auto`/`low`/`medium`/`high`/`xhigh`/`max`，因模型而异）。纯文生图（不带 `images`）走标准通道，`size` 同样按 §3.1 表生效。
+本地图直接上传（不要手动设置 multipart 的 Content-Type，curl 会生成 boundary）：
+
+```bash
+curl https://www.keyoapi.xyz/v1/images/edits \
+  -H "Authorization: Bearer sk-..." \
+  -H "Idempotency-Key: cat-edit-001" \
+  -F model=nano-banana-2 \
+  -F 'prompt=保持人物身份，改为水彩画风' \
+  -F image=@./reference.png \
+  -F aspectRatio=16:9 \
+  -F imageSize=2K \
+  -F n=1 \
+  -F response_format=url \
+  -F replyType=async
+```
+
+参考图文件会转换为 base64 输入。**这不代表支持二进制蒙版：** GPT 的 `mask` 只收 HTTP(S) URL；base64 mask 和 `-F mask=@...` 均未支持。Nano 完全不支持 `mask`。所有图片型号只接受 `n=1`、`response_format=url`；不支持 `b64_json` 输出模式和 `stream=true`。
+
+### 3.3 任务查询与安全重放
+
+`replyType:"async"` 在任务尚未完成时返回 **HTTP 202**，含 `id` / `task_id`、任务 `status`、`result_url` 和 `billing`；已有终态（如幂等重放）可直接返回 HTTP 200（成功）或 HTTP 502（任务失败 / 提交结果不确定）。`replyType:"json"`（默认）等待结果：完成返回 HTTP 200；同步等待超时且任务尚未完成时返回同一任务的 HTTP 202，任务继续运行。图片任务查询专用路径为 `GET /v1/images/tasks/{task_id}`，使用提交时同一把 API Key；不要混用视频或 TTS 的查询路径。
+
+HTTP 202 示例（`reserved` / `submitting` / `running` 都表示尚未交付）：
+
+```json
+{
+  "id": "img_00000000-0000-4000-8000-000000000001",
+  "task_id": "img_00000000-0000-4000-8000-000000000001",
+  "status": "running",
+  "result_url": "/v1/images/tasks/img_00000000-0000-4000-8000-000000000001",
+  "billing": { "charged": false, "reserved_quota": 10000, "reservation_expires_at": 1791800600 }
+}
+```
+
+GET 进行中返回 202；完成返回 **HTTP 200**，以图片接口的 `status:"succeeded"` 和非空 `data[].url` 判断成功（不同于视频的 `completed`）：
+
+```json
+{
+  "created": 1791800000,
+  "id": "img_00000000-0000-4000-8000-000000000001",
+  "task_id": "img_00000000-0000-4000-8000-000000000001",
+  "status": "succeeded",
+  "data": [{ "url": "https://example.com/generated.png" }],
+  "billing": { "quota": 10000, "charged": true }
+}
+```
+
+`billing` 的数值是额度单位，示例不代表售价。提交时预留额度；结果响应交付时结算一次。首次成功响应的 `billing.charged` 可能仍为 `false`（它是结算前的快照），**不表示免费**。结果持久化，GET 或幂等 POST 可取回，已结算任务不会再次收费。失败或缺少有效图片结果时不结算图片费用并释放预留；额度预留默认 600 秒后释放，但保留任务与结果，此后取回未结算结果仍需足够余额。余额或结算有疑问时保留 `task_id` 联系支持，不要把此契约当成历史扣费已退款的证明。
+
+已记录的任务终态错误返回 HTTP 502，错误体含 `error.code`、`error.message`、`error.task_id`。代码可为 `image_generation_failed` / `image_result_missing` / `image_policy_rejected` / `image_submission_rejected` / `image_submission_unknown`。`image_submission_unknown` 表示提交结果不确定：保留任务 ID 联系支持，不要重新生成。
+
+临时查询错误 `image_task_unavailable` 也返回 HTTP 502，可仅含 `request_id` 而无 `task_id`，不代表任务失败；用已保存的同一任务 ID 重试 GET。提交转发错误 `image_forwarding_failed` 也可能无 `task_id`：有 ID 就查询原任务，无 ID 就用原 `Idempotency-Key` 和相同参数重放。参数、鉴权、余额、幂等冲突或服务不可用等错误按实际 HTTP 状态（如 400 / 401 / 403 / 409 / 503）和 `error.code` 处理；不能把所有错误都当成带 `task_id` 的任务终态失败。
+
+发送 `Idempotency-Key`（1–128 个可见 ASCII 字符）可标识一次图片生成：同一把 Key、相同幂等键及相同生成参数重放时取原任务/结果，不新生成。幂等键对应不同参数时返回 409。每个有意新建的任务使用新的幂等键。
+
+同步等待超时或连接中断时保留原任务：拿到 `task_id` 就查询该任务；没有收到响应时，用原 `Idempotency-Key` 和相同参数重放。不要为取回图片更换幂等键、修改参数或再次新建生成任务。
 
 ---
 
@@ -831,7 +915,7 @@ curl https://www.keyoapi.xyz/v1/models \
 2. 选对路径（对话 / 图 / 视频 A / 视频 B / ASR / TTS 同步或异步 / 扩展）。  
 3. 若是视频 Path B：打开 §5 对应小节，**不要**套其它模型字段。  
 4. 用户要传本机图/音/视频给 Path B 或 OCR：先 §0.5 上传再填 `url`。  
-5. 异步：用对 `tasks` vs `task`，轮询到归一后的 `completed` / `failed` / `cancelled`。进行中是 `processing`，不要把 `succeeded` 当成完成条件。  
+5. 异步按族处理：图片用 `/v1/images/tasks/{task_id}`，HTTP 200 + `status:"succeeded"` + 非空 `data[].url` 为成功，202 继续查；临时查询错误重试同一任务，任务终态错误按 §3.3 处理。其它异步用对应 `tasks` / `task` 路径，进行中是 `processing`，终态为 `completed` / `failed` / `cancelled`。提交已返回终态时直接处理。
 6. 把结果（文本、图片 URL、视频 URL、错误信息）用中文简单告诉用户。  
 7. 不要编造本手册没有的字段名（含 `/v1/assets`、`asset://`）。
 
@@ -844,7 +928,7 @@ curl https://www.keyoapi.xyz/v1/models \
 | MiniMax 用了 `image_with_roles` / `first_frame_image` | 改用 `images` / `audios` / `aspectRatio` |
 | grok-imagine 只传 prompt | 必须加 `image:{"url":"https://..."}`（本机图先 §0.5） |
 | 视频 JSON 塞了本机路径或 base64 | 先 `POST /v1/uploads`，把返回的 `url` 填进 JSON；或改文生 |
-| 对 Path B 用 multipart / `-F file=@` | 先 uploads，再 JSON + `image_urls` 等；multipart 只给 ASR/抠图/InfiniteTalk |
+| 对 Path B 用 multipart / `-F file=@` | Path B 先 uploads，再 JSON + `image_urls` 等；图片 `/v1/images/edits`、ASR/抠图/超分/MinerU/InfiniteTalk 等接口可按各自字段直接 multipart |
 | 调用 `POST /v1/assets` 或 `asset://` | **没有**；用 `POST /v1/uploads`（或 `/v1/files`） |
 | 视频轮询写成 `/v1/task/` | Path B 用 `/v1/tasks/` |
 | TTS 异步轮询写成 `/v1/tasks/` | 用 `/v1/task/` |

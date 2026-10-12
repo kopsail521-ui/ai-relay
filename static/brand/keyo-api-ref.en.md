@@ -10,12 +10,12 @@
 > - Base URL: `https://www.keyoapi.xyz/v1`  
 > - Header: `Authorization: Bearer <user key>`  
 > - Find the capability family for the model, then apply that template. Video models must use their own section — never mix fields.  
-> - For async jobs, poll until a terminal status, then return the result URL/text.  
-> - Video Path B accepts **JSON only**; media must be **public `http(s)` URLs**.  
+> - Identify async completion by family: image success is HTTP 200 + `status:"succeeded"` + nonempty `data[].url` (§3); video / TTS / document parsing / InfiniteTalk success is `completed` (§0.6). Poll while pending, then return the result URL/text.
+> - Video Path B accepts **JSON only**; its media must be **public `http(s)` URLs**.
 > - Per-model video fields / modes / forbidden rules are in **§4 / §5 of this handbook** (user pastes this page — do not require other docs).  
 > - Local files only: **first** `POST /v1/uploads` (alias `/v1/files`) → use returned `url` in Path B / OCR JSON.  
-> - **Forbidden:** local paths, `data:base64`, multipart on Path B, invented `POST /v1/assets` / `asset://`.  
-> - ASR / matting / upscale / MinerU / InfiniteTalk already accept multipart `-F file=@` / `-F image=@` (no prior upload needed).  
+> - **Forbidden:** local paths in JSON, `data:base64` or direct multipart on Video Path B, invented `POST /v1/assets` / `asset://`; image references accept base64 (§3).
+> - Images at `/v1/images/edits` / ASR / matting / upscale / MinerU / InfiniteTalk accept multipart `-F file=@` / `-F image=@` using the field required by each endpoint (no prior upload needed).
 > - Model list in this handbook is authoritative; you may also `GET /v1/models`.
 
 ---
@@ -42,18 +42,20 @@ Rule: switch models by changing `model`; change the path only when the capabilit
 | Video Path B (`/v1/videos/generations`) | `GET /v1/tasks/{id}` (**plural tasks**) |
 | Video Path A (`/v1/videos`) | `GET /v1/videos/{id}` |
 | TTS async / docs / InfiniteTalk | `GET /v1/task/{id}` (**singular task**) |
+| Image tasks | `GET /v1/images/tasks/{task_id}` (image-specific path) |
 
 ---
 
 ## 0.6 AI result contract (all async)
 
-Async flow: **submit → read id → poll by family → read url/text**. Never mix poll paths.
+Async flow: **submit → read id → poll by family while pending → read url/text**. Handle a success result or terminal task error returned at submission directly. Never mix poll paths.
 
-**Normalized status:** `processing` | `completed` | `failed` | `cancelled`  
-(The response may keep `status_raw` like `succeeded` / `success` / `waiting` — use normalized `status`.)
+**Image tasks (§3):** pending responses are HTTP 202 with `status` = `reserved` / `submitting` / `running`; success is HTTP 200 + `status:"succeeded"` + nonempty `data[].url`. Recorded terminal task errors return HTTP 502 with `error.task_id`; temporary query errors do not mean the task failed — retry GET for the same task (§3.3).
+**Normalized status for video / TTS / document parsing / InfiniteTalk:** `processing` | `completed` | `failed` | `cancelled`. These responses may keep `status_raw` such as `succeeded` / `success` / `waiting`; use normalized `status` for these families. This rule does not apply to image tasks.
 
 | Family | Submit id | Poll until | Result |
 |--------|-----------|------------|--------|
+| Images | `id` \| `task_id` | HTTP 200 + `status:"succeeded"` + nonempty `data[].url`; terminal task errors: §3.3 | `data[].url` |
 | Video Path B | `id` \| `task_id` \| `data[0].task_id` | `status`/`data.status` = `completed` | **`url`** or `data.result.videos[0].url[0]` |
 | TTS async / InfiniteTalk | `id` \| `task_id` | `status` = `completed` | **`url`** or `output.file_url` |
 | MinerU | `id` \| `task_id` | `status` = `completed` | **`text`** or `output.segments[].content` |
@@ -267,53 +269,135 @@ Streaming: add `"stream": true` if needed.
 
 ---
 
-## 3. Image generation (shared template)
+## 3. Image generation and references (model-specific parameters)
 
-`POST https://www.keyoapi.xyz/v1/images/generations`
+Text-to-image: `POST https://www.keyoapi.xyz/v1/images/generations`, JSON.
+Image-to-image: add `images` to the same endpoint, or upload local files directly to `POST /v1/images/edits` using multipart.
+All eight models use the same generation contract for text and reference images; references do not disable the output size fields.
 
 ```json
 {
   "model": "nano-banana-2",
   "prompt": "an orange cat on a sunny windowsill",
-  "size": "1024x1024"
+  "aspectRatio": "1:1",
+  "imageSize": "2K",
+  "n": 1,
+  "response_format": "url",
+  "replyType": "async"
 }
 ```
 
-Pick model from §1.2.
+### 3.1 Capabilities by model
 
-### 3.1 Allowed `size` values (gpt-image-2 family — strict tables)
+These fields are optional. Use only values supported by the selected model. A `mask` is a mask input, separate from the reference `image` file.
 
-The two variants accept **different** formats; a wrong value returns upstream `generate failed`:
+| model | Size fields | quality | background | mask |
+|-------|-------------|---------|------------|------|
+| `gpt-image-2` | `size`: ratio or listed 1K pixels | `auto` | Unsupported | HTTP(S) URL |
+| `gpt-image-2.5` | `size`: ratio or listed 1K pixels | `auto` | Unsupported | HTTP(S) URL |
+| `gpt-image-2-vip` | `size`: constrained 1K–4K pixels or `auto` | `medium` | `transparent` | HTTP(S) URL |
+| `gpt-image-2.5-flare` | `size`: listed 1K/2K/4K pixels or `auto` | `low` / `medium` / `high` | `transparent` | HTTP(S) URL |
+| `gpt-image-2.5-sunburst` | `size`: listed 1K/2K/4K pixels or `auto` | `low` / `medium` / `high` / `xhigh` / `max` | `transparent` | HTTP(S) URL |
+| `nano-banana-2` | `aspectRatio` + `imageSize`: `1K` / `2K` / `4K` | Unsupported | Unsupported | Unsupported |
+| `nano-banana-2.1` | `aspectRatio` + `imageSize`: `1K` / `2K` / `4K` | Unsupported | Unsupported | Unsupported |
+| `nano-banana-pro` | `aspectRatio` + `imageSize`: `1K` / `2K` / `4K` | Unsupported | Unsupported | Unsupported |
 
-- **`gpt-image-2`**: 1K only. Accepts ratio strings (`auto` / `16:9` / `9:16` / `4:3` / `3:4` / `3:2` / `2:3` / `5:4` / `4:5` / `21:9` / `9:21` / `1:2` / `2:1`) or 1K pixel sizes.
-  Pixels per ratio: 1:1 `1024x1024` · 16:9 `1672x941` · 9:16 `941x1672` · 4:3 `1443x1090` · 3:4 `1090x1443` · 3:2 `1536x1024` · 2:3 `1024x1536` · 5:4 `1408x1120` · 4:5 `1120x1408` · 21:9 `1920x832` · 9:21 `832x1920` · 1:2 `896x1792` · 2:1 `1792x896`
-- **`gpt-image-2-vip`**: 1K–4K pixel sizes, **no ratio strings**. Custom pixels must satisfy: longest edge ≤ 3840, both edges multiples of 16, aspect ratio ≤ 3:1, total pixels between 655,360 and 8,294,400. **4K is NOT `4096x4096`** (always rejected) — use the table:
-  - 1:1: `1024x1024` · `2048x2048` · `2880x2880`
-  - 16:9: `1280x720` · `2048x1152` · `3840x2160`
-  - 9:16: `720x1280` · `1152x2048` · `2160x3840`
-  - 4:3: `1152x864` · `2304x1728` · `3264x2448`
-  - 3:4: `864x1152` · `1728x2304` · `2448x3264`
-  - 3:2: `1536x1024` · `2048x1360` · `3504x2336`
-  - 2:3: `1024x1536` · `1360x2048` · `2336x3504`
-  - 5:4: `1120x896` · `2240x1792` · `3200x2560`
-  - 4:5: `896x1120` · `1792x2240` · `2560x3200`
-  - 21:9: `1456x624` · `2912x1248` · `3840x1648`
-  - 9:21: `624x1456` · `1248x2912` · `1648x3840`
+**Nano native resolution:** select `1K` / `2K` / `4K` with `imageSize` and the frame shape with `aspectRatio`. GPT pixel values such as `1024x1024` / `3840x2160` are not valid for Nano.
+Common Nano ratios: `auto` / `1:1` / `16:9` / `9:16` / `4:3` / `3:4` / `3:2` / `2:3` / `5:4` / `4:5` / `21:9`. `nano-banana-2` and `nano-banana-2.1` also support `1:4` / `4:1` / `1:8` / `8:1`; Pro does not support these extreme ratios.
 
-Troubleshooting: a 4K request failing with `generate failed` almost always means `size` is off-table (e.g. `4096x4096` is 16.7M pixels — double the cap). Pick the matching row above.
+**GPT base models (`gpt-image-2` / `gpt-image-2.5`):** ratios are `auto` / `1:1` / `16:9` / `9:16` / `4:3` / `3:4` / `3:2` / `2:3` / `5:4` / `4:5` / `21:9` / `9:21` / `1:2` / `2:1`. Supported 1K pixels:
+`1024x1024` · `1672x941` · `941x1672` · `1443x1090` · `1090x1443` · `1536x1024` · `1024x1536` · `1408x1120` · `1120x1408` · `1920x832` · `832x1920` · `896x1792` · `1792x896`.
 
-**Reference images (image-to-image)**: pass publicly reachable image URLs in the `images` array (aliases: `image_urls` / `image_url` / `image`). Requests with references are routed to the native generation channel and the output follows the reference. `size` works there too — strictly per the §3.1 tables (16:9 4K is `3840x2160`). References must be `http(s)` URLs — upload local files via `POST /v1/uploads` first.
+**GPT VIP / flare / sunburst:** use pixels (or `auto`), not ratio strings such as `16:9`. All three accept these sizes:
+
+| Ratio | 1K | 2K | 4K |
+|-------|----|----|----|
+| 1:1 | `1024x1024` | `2048x2048` | `2880x2880` |
+| 16:9 | `1280x720` | `2048x1152` | `3840x2160` |
+| 9:16 | `720x1280` | `1152x2048` | `2160x3840` |
+| 4:3 | `1152x864` | `2304x1728` | `3264x2448` |
+| 3:4 | `864x1152` | `1728x2304` | `2448x3264` |
+| 3:2 | `1536x1024` | `2048x1360` | `3504x2336` |
+| 2:3 | `1024x1536` | `1360x2048` | `2336x3504` |
+| 5:4 | `1120x896` | `2240x1792` | `3200x2560` |
+| 4:5 | `896x1120` | `1792x2240` | `2560x3200` |
+| 21:9 | `1456x624` | `2912x1248` | `3840x1648` |
+| 9:21 | `624x1456` | `1248x2912` | `1648x3840` |
+
+Also supported: `688x2048` / `1280x3840` / `2048x688` / `3840x1280` / `1536x768` / `3072x1536` / `3840x1920` / `768x1536` / `1536x3072` / `1920x3840`.
+VIP additionally accepts custom pixels satisfying every constraint: longest edge ≤ 3840, both edges multiples of 16, ratio ≤ 3:1, and 655,360–8,294,400 total pixels. flare / sunburst only accept the listed pixels. `4096x4096` is unsupported.
+
+### 3.2 URLs, base64 and local files
+
+The JSON `images` array accepts HTTP(S) image URLs, image data URLs such as `data:image/png;base64,...`, and valid raw image base64. Aliases: `image_urls` / `image_url` / `image`. Never put a local filesystem path in JSON.
 
 ```json
 {
   "model": "gpt-image-2-vip",
   "prompt": "the character from the reference holding a dog",
-  "images": ["https://www.keyoapi.xyz/uploads/xxxx.png"],
-  "size": "3840x2160"
+  "images": ["https://example.com/reference.png"],
+  "size": "3840x2160",
+  "quality": "medium",
+  "replyType": "async"
 }
 ```
 
-Optional `quality` (`auto`/`low`/`medium`/`high`/`xhigh`/`max`, model-dependent). Text-only generation (no `images`) uses the standard channel where `size` follows the same §3.1 tables.
+Upload a local reference directly (let curl set the multipart Content-Type and boundary):
+
+```bash
+curl https://www.keyoapi.xyz/v1/images/edits \
+  -H "Authorization: Bearer sk-..." \
+  -H "Idempotency-Key: cat-edit-001" \
+  -F model=nano-banana-2 \
+  -F 'prompt=Preserve the identity and use a watercolor style' \
+  -F image=@./reference.png \
+  -F aspectRatio=16:9 \
+  -F imageSize=2K \
+  -F n=1 \
+  -F response_format=url \
+  -F replyType=async
+```
+
+Reference files are converted to base64 input. **Binary masks remain unsupported:** GPT `mask` only accepts an HTTP(S) URL; base64 masks and `-F mask=@...` are unsupported. Nano does not support `mask` at all. All image models only accept `n=1` and `response_format=url`; `b64_json` output mode and `stream=true` are unsupported.
+
+### 3.3 Task queries and safe replay
+
+`replyType:"async"` returns **HTTP 202** while pending, with `id` / `task_id`, task `status`, `result_url` and `billing`. An existing terminal task (for example, on idempotent replay) can return HTTP 200 (success) or HTTP 502 (task failure / unknown submission outcome) directly. `replyType:"json"` (default) waits for the result: HTTP 200 on completion, or HTTP 202 for the same task if the synchronous wait expires while it is still pending; generation continues. Query `GET /v1/images/tasks/{task_id}` with the same API Key used to submit. Do not use the video or TTS polling paths.
+
+HTTP 202 example (`reserved` / `submitting` / `running` indicate the result has not been delivered):
+
+```json
+{
+  "id": "img_00000000-0000-4000-8000-000000000001",
+  "task_id": "img_00000000-0000-4000-8000-000000000001",
+  "status": "running",
+  "result_url": "/v1/images/tasks/img_00000000-0000-4000-8000-000000000001",
+  "billing": { "charged": false, "reserved_quota": 10000, "reservation_expires_at": 1791800600 }
+}
+```
+
+GET returns 202 while pending and **HTTP 200** on completion. For images, success means `status:"succeeded"` and nonempty `data[].url` (unlike video's `completed`):
+
+```json
+{
+  "created": 1791800000,
+  "id": "img_00000000-0000-4000-8000-000000000001",
+  "task_id": "img_00000000-0000-4000-8000-000000000001",
+  "status": "succeeded",
+  "data": [{ "url": "https://example.com/generated.png" }],
+  "billing": { "quota": 10000, "charged": true }
+}
+```
+
+Billing numbers are quota units; the example is not a price quote. Quota is reserved at submission and settled once when the result response is delivered. The first successful response may show `billing.charged:false` as a snapshot before settlement; **this does not mean the image is free**. Stored results can be retrieved by GET or an idempotent POST without charging an already settled task again. A failed generation or missing valid image result is not settled and releases its reservation. Reservations expire after 600 seconds by default, while the task and result remain; retrieving an unsettled result later still requires sufficient balance. For billing questions, retain the `task_id` and contact support; this contract is not evidence that any historical charge has been refunded.
+
+Recorded terminal task errors return HTTP 502 with `error.code`, `error.message` and `error.task_id`. Codes include `image_generation_failed` / `image_result_missing` / `image_policy_rejected` / `image_submission_rejected` / `image_submission_unknown`. For `image_submission_unknown`, retain the task ID and contact support; do not submit a new generation.
+
+A temporary query error, `image_task_unavailable`, also returns HTTP 502 and may contain only `request_id`, without `task_id`. It does not mean the task failed: retry GET using the same saved task ID. Submission forwarding errors (`image_forwarding_failed`) may also omit `task_id`: query the original task if you have its ID; otherwise replay the original `Idempotency-Key` and parameters. Handle parameter, authentication, balance, idempotency conflict and service availability errors by their actual HTTP status (such as 400 / 401 / 403 / 409 / 503) and `error.code`; not every error is a terminal task failure with a `task_id`.
+
+Send `Idempotency-Key` (1–128 visible ASCII characters) to identify one generation. With the same API Key, idempotency key and generation parameters, a replay retrieves the original task/result without generating a new image. Different parameters under the same key return 409. Use a fresh key only for an intentional new task.
+
+On a synchronous timeout or disconnect, keep the original task: query it if you have `task_id`; otherwise replay the same parameters with the original `Idempotency-Key`. Do not change the key or parameters or create another generation just to recover an image.
 
 ---
 
@@ -793,7 +877,7 @@ curl https://www.keyoapi.xyz/v1/models \
 2. Pick the correct path (chat / image / video A / video B / ASR / TTS sync|async / vision).  
 3. If Video Path B: open the matching §5 subsection — do not reuse another model’s fields.  
 4. Local media for Path B or OCR: §0.5 upload first, then paste `url`.  
-5. Async: use correct `tasks` vs `task`; poll to a terminal status.  
+5. Handle async by family: images use `/v1/images/tasks/{task_id}`; HTTP 200 + `status:"succeeded"` + nonempty `data[].url` means success, and 202 means keep polling. Retry temporary query errors on the same task; handle terminal task errors per §3.3. Other async families use their `tasks` / `task` path, with `processing` while pending and `completed` / `failed` / `cancelled` at termination. Handle terminal responses returned at submission directly.
 6. Return results simply to the user.  
 7. Do not invent field names (incl. `/v1/assets`, `asset://`).
 
@@ -806,7 +890,7 @@ curl https://www.keyoapi.xyz/v1/models \
 | MiniMax with `image_with_roles` / `first_frame_image` | Use `images` / `audios` / `aspectRatio` |
 | grok-imagine prompt only | Add `image:{"url":"https://..."}` (local file → §0.5 first) |
 | Local path or base64 in video JSON | `POST /v1/uploads`, put returned `url` in JSON; or text-to-video |
-| Multipart / `-F file=@` for Path B | Upload first, then JSON + `image_urls` etc.; multipart only for ASR / matting / InfiniteTalk |
+| Multipart / `-F file=@` for Path B | For Path B, upload first, then JSON + `image_urls` etc.; images at `/v1/images/edits`, ASR / matting / upscale / MinerU / InfiniteTalk and similar endpoints accept direct multipart using their own fields |
 | Calling `POST /v1/assets` or `asset://` | **None** — use `POST /v1/uploads` (or `/v1/files`) |
 | Video poll `/v1/task/` | Path B uses `/v1/tasks/` |
 | TTS async poll `/v1/tasks/` | Use `/v1/task/` |

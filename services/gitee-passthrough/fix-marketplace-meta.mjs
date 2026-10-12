@@ -60,10 +60,10 @@ export const RULES = {
   },
   UVDoc: { vendor: "其他", tag: "OCR", endpoints: JSON.stringify({ "image-generation": { path: "/v1/images/unwarping", method: "POST" } }), icon: "Custom" },
   "RMBG-2.0": {
-    vendor: "腾讯",
+    vendor: "BRIA",
     tag: "图像处理",
-    endpoints: EP.imageProcess,
-    icon: "Tencent.Color",
+    endpoints: JSON.stringify({ "image-generation": { path: "/v1/images/mattings", method: "POST" } }),
+    icon: "Custom",
   },
   "MinerU2.5-Pro": { vendor: "其他", tag: "OCR", endpoints: EP.docAsync, icon: "Custom" },
   "Unlimited-OCR": {
@@ -263,6 +263,9 @@ export const RULES = {
   },
   "gpt-image-2": { vendor: "OpenAI", tag: "图片", endpoints: EP.image },
   "gpt-image-2-vip": { vendor: "OpenAI", tag: "图片", endpoints: EP.image },
+  "gpt-image-2.5": { vendor: "OpenAI", tag: "图片", endpoints: EP.image },
+  "gpt-image-2.5-flare": { vendor: "OpenAI", tag: "图片", endpoints: EP.image },
+  "gpt-image-2.5-sunburst": { vendor: "OpenAI", tag: "图片", endpoints: EP.image },
   "nano-banana-pro": { vendor: "Google", tag: "图片", endpoints: EP.image },
   "nano-banana-2": { vendor: "Google", tag: "图片", endpoints: EP.image },
   "nano-banana-2.1": { vendor: "Google", tag: "图片", endpoints: EP.image, icon: "Gemini.Color" },

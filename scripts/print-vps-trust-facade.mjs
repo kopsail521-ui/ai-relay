@@ -5,6 +5,7 @@ import fs from "fs";
 import path from "path";
 import zlib from "zlib";
 import { fileURLToPath } from "url";
+import { imageDeployCommand } from "./print-vps-image-fixes.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.join(__dirname, "..");
@@ -74,14 +75,7 @@ if sudo docker inspect ai-relay-new-api >/dev/null 2>&1; then
 fi
 sudo python3 /opt/ai-relay/scripts/vps-update-trust-facade.py /opt/ai-relay/data/new-api/one-api.db
 cd /opt/ai-relay
-sudo docker build -t keyo-creem-moderation ./services/creem-moderation-proxy
-sudo docker rm -f ai-relay-creem-moderation 2>/dev/null || true
-sudo docker run -d --name ai-relay-creem-moderation --restart always --network host \\
-  --env-file /opt/ai-relay/.env.moderation \\
-  -e UPSTREAM_URL=http://127.0.0.1:3000 \\
-  -e LISTEN_HOST=127.0.0.1 \\
-  -e PORT=3001 \\
-  keyo-creem-moderation
+${imageDeployCommand("moderation")}
 sudo docker restart ai-relay-new-api 2>/dev/null || true
 sleep 3
 echo "status=$(curl -sS -o /dev/null -w '%{http_code}' -L --max-redirs 0 http://127.0.0.1:3001/status || true)"

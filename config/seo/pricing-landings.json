@@ -293,7 +293,7 @@
         },
         {
           "q": "How much does the Anthropic API cost on Keyo?",
-          "a": "Indicative Keyo rows: Claude Sonnet ~$0.44/$2.21, Opus ~$1.10/$5.52, Fable tiers higher — all per 1M in/out. Confirm live on /pricing/claude-sonnet-5 (and sibling IDs). Anthropic’s own list bands change; treat official figures as planning context."
+          "a": "Indicative Keyo rows: Claude Sonnet ~$0.44/$2.21, Opus 5.5 ~$1.76/$8.82 (Opus 5 ~$1.10/$5.52), Fable tiers higher — all per 1M in/out. Confirm live on /pricing/claude-sonnet-5 (and sibling IDs). Anthropic’s own list bands change; treat official figures as planning context."
         },
         {
           "q": "What should I do on Claude API 529 overloaded?",
@@ -321,7 +321,7 @@
         "title": "Cheapest Claude API rate on Keyo",
         "body": [
           "The cheapest Claude-class lane we list is claude-haiku-5-5 at ~$0.07 / $0.37 per 1M in/out — the fastest, cheapest Claude 5.5 lane — and it is the row to start on if you searched for a cheap Claude API. For balanced coding work, claude-sonnet-5 (~$0.44 / $2.21) is the everyday lane.",
-          "Above it, by task rather than by tier: claude-opus-5 ~$1.10 / $5.52 for hard agent and coding escalations; claude-fable-5 ~$8.82 / $44.12 and claude-fable-5-1 ~$7.35 / $36.77 for flagship chat. Cheaper than all of them and still on the same key: gpt-6-luna (~$0.03 / $0.15) for high-volume drafting, or deepseek-v4.1-flash (~$0.14 / $0.56) if the task does not actually need Claude reasoning.",
+          "Above it, by task rather than by tier: claude-opus-5 ~$1.10 / $5.52 for hard agent and coding escalations — the current Opus generation, claude-opus-5-5, sits at ~$1.76 / $8.82 for the hardest agent loops; claude-fable-5 ~$8.82 / $44.12 and claude-fable-5-1 ~$7.35 / $36.77 for flagship chat. Cheaper than all of them and still on the same key: gpt-6-luna (~$0.03 / $0.15) for high-volume drafting, or deepseek-v4.1-flash (~$0.14 / $0.56) if the task does not actually need Claude reasoning.",
           "Cost math: 10M input + 2M output tokens/month on claude-sonnet-5 ≈ $4.40 + $4.42 ≈ $8.82. The same mix on claude-fable-5 ≈ $88.20 + $88.24 ≈ $176.44. Confirm live rates on /model/claude-sonnet-5 before you commit volume."
         ]
       }
@@ -542,7 +542,7 @@
       },
       "body": [
         "Teams call a text to speech API for IVR, voice agents, course narration, and avatar pipelines. Keyo keeps STT (Whisper) and TTS on one prepaid balance so you are not juggling three vendor consoles.",
-        "Indicative rates above come from the live Keyo catalog — confirm /model/IndexTTS-2, /model/CosyVoice3, and /model/Qwen3-TTS (live rates on /pricing). Prefer IndexTTS-2 when the product needs audio inside one request; prefer CosyVoice3 or Qwen3-TTS when jobs are already async.",
+        "Indicative rates above come from the live Keyo catalog — confirm /model/IndexTTS-2, /model/CosyVoice3, /model/Qwen3-TTS, and /model/gemini-3.8-flash-tts (live rates on /pricing). Prefer IndexTTS-2 when the product needs audio inside one request; prefer CosyVoice3 or Qwen3-TTS when jobs are already async. Gemini 3.8 Flash TTS bills per token, not per 10K characters — it is not covered by the ~$0.548–$1.37 / 10K characters range above, and it calls a Gemini-native endpoint rather than the OpenAI-compatible /v1/audio/speech.",
         "How to call CosyVoice3 API (and siblings): set base URL https://www.keyoapi.xyz/v1, authenticate with your Keyo key, pass the model id. Full CosyVoice3 walkthrough: /model/CosyVoice3. Also /model/IndexTTS-2, /model/Qwen3-TTS. Voice clone angle: /voice-cloning-api. Talking video: /ai-avatar-video-generator.",
         "Create a key at /sign-up, then open Model Square (/pricing) for interactive try/buy."
       ],

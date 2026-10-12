@@ -314,7 +314,7 @@ curl https://www.keyoapi.xyz/v1/systemone \
 
 排错：请求 4K 报 `generate failed` → 九成是 `size` 不在上表（如 `4096x4096` 总像素 16.7M，超上限一倍）；换表内对应档位即可。
 
-**参考图（图生图）**：`images` 数组传公网可达的图片 URL（别名 `image_urls` / `image_url`）。带参考图的请求由网关走原生生成通道，输出会跟随参考图。输出尺寸跟随参考图比例（`size` 仅作尽力提示）。参考图须为 `http(s)` URL，本地图先 `POST /v1/uploads` 换取 URL。
+**参考图（图生图）**：`images` 数组传公网可达的图片 URL（别名 `image_urls` / `image_url` / `image`）。带参考图的请求由网关走原生生成通道，输出会跟随参考图；`size` 同样生效（严格按 §3.1 表，16:9 的 4K 就是 `3840x2160`）。参考图须为 `http(s)` URL，本地图先 `POST /v1/uploads` 换取 URL。
 
 ```json
 {
@@ -325,7 +325,7 @@ curl https://www.keyoapi.xyz/v1/systemone \
 }
 ```
 
-注意：**不带** `images` 的纯文生图走标准通道，`size` 严格按 §3.1 表格生效。
+可选 `quality`（`auto`/`low`/`medium`/`high`/`xhigh`/`max`，因模型而异）。纯文生图（不带 `images`）走标准通道，`size` 同样按 §3.1 表生效。
 
 ---
 

@@ -862,7 +862,18 @@ async function handleImageSubmit(req, res, token, meta, body) {
     images,
     replyType: "async",
   };
-  if (typeof body.size === "string" && body.size) native.size = body.size;
+  // 上游原生面的尺寸旋钮叫 aspectRatio（接受像素值如 "3840x2160"，
+  // gpt-image-2 也接受比例串）——2026-10-12 实测：参考图模式下同样生效。
+  // 把 OpenAI 风格的 size / aspectRatio / aspect_ratio 都映射到它。
+  const sizeHint =
+    (typeof body.size === "string" && body.size) ||
+    (typeof body.aspectRatio === "string" && body.aspectRatio) ||
+    (typeof body.aspect_ratio === "string" && body.aspect_ratio) ||
+    "";
+  if (sizeHint) native.aspectRatio = sizeHint;
+  if (typeof body.quality === "string" && body.quality) {
+    native.quality = body.quality;
+  }
 
   let submit;
   try {

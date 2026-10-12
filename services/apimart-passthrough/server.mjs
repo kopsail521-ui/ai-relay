@@ -830,6 +830,43 @@ async function handleImageSubmit(req, res, token, meta, body) {
     });
   }
 
+  // 上游原生面的尺寸旋钮叫 aspectRatio（接受像素值如 "3840x2160"，
+  // gpt-image-2 也接受比例串）——2026-10-12 实测：参考图模式下同样生效。
+  // 把 OpenAI 风格的 size / aspectRatio / aspect_ratio 都映射到它。
+  const sizeHint =
+    (typeof body.size === "string" && body.size) ||
+    (typeof body.aspectRatio === "string" && body.aspectRatio) ||
+    (typeof body.aspect_ratio === "string" && body.aspect_ratio) ||
+    "";
+
+  // vip 家族像素值约束预校验（上游只报笼统 generate failed，这里提前拦）
+  if (sizeHint && /^gpt-image-2-(vip|flare|sunburst)/.test(meta.id)) {
+    const m = /^(\d{3,4})x(\d{3,4})$/i.exec(sizeHint.trim());
+    if (m) {
+      const w = Number(m[1]);
+      const h = Number(m[2]);
+      const why =
+        Math.max(w, h) > 3840
+          ? `longest edge ${Math.max(w, h)} exceeds 3840`
+          : w % 16 || h % 16
+            ? "both edges must be multiples of 16"
+            : Math.max(w, h) / Math.min(w, h) > 3
+              ? "aspect ratio must be <= 3:1"
+              : w * h < 655360 || w * h > 8294400
+                ? `total pixels ${w * h} outside 655,360-8,294,400 (16:9 4K = 3840x2160; 1:1 4K = 2880x2880)`
+                : "";
+      if (why) {
+        return json(res, 400, {
+          error: {
+            message: `Invalid size "${sizeHint}": ${why}. See the size table in the API reference (16:9 → 1280x720 / 2048x1152 / 3840x2160; 1:1 → 1024x1024 / 2048x2048 / 2880x2880).`,
+            type: "invalid_request_error",
+            param: "size",
+          },
+        });
+      }
+    }
+  }
+
   // 按张固定计费：预扣=最终价（目录 fixed cost × markup 1 = 牌价）
   const costEst = estimateCostUsd(meta, body);
   const preSell = sellUsd(costEst, meta);
@@ -862,14 +899,6 @@ async function handleImageSubmit(req, res, token, meta, body) {
     images,
     replyType: "async",
   };
-  // 上游原生面的尺寸旋钮叫 aspectRatio（接受像素值如 "3840x2160"，
-  // gpt-image-2 也接受比例串）——2026-10-12 实测：参考图模式下同样生效。
-  // 把 OpenAI 风格的 size / aspectRatio / aspect_ratio 都映射到它。
-  const sizeHint =
-    (typeof body.size === "string" && body.size) ||
-    (typeof body.aspectRatio === "string" && body.aspectRatio) ||
-    (typeof body.aspect_ratio === "string" && body.aspect_ratio) ||
-    "";
   if (sizeHint) native.aspectRatio = sizeHint;
   if (typeof body.quality === "string" && body.quality) {
     native.quality = body.quality;
@@ -906,69 +935,100 @@ async function handleImageSubmit(req, res, token, meta, body) {
     });
   }
 
-  const deadline = Date.now() + IMAGE_POLL_MAX_MS;
+  // 上游图片任务存在间歇性 "generate failed"（2026-10-12 实测：相同请求
+  // 三连发一成二败，失败集中在同一上游队列）。据此做自动重试：任务失败且
+  // 预算未尽 → 换任务号重提，客户无感；预算用尽或重试次数用完才报错退款。
+  const totalDeadline = Date.now() + IMAGE_POLL_MAX_MS;
+  const MAX_ATTEMPTS = Number(process.env.IMAGE_MAX_ATTEMPTS || 3);
   let lastText = "";
-  while (Date.now() < deadline) {
-    await new Promise((r) => setTimeout(r, IMAGE_POLL_INTERVAL_MS));
-    let poll = null;
-    try {
-      poll = await proxyOrigin(
-        GRSAI_ORIGIN,
-        GRSAI_KEY,
-        { ...req, method: "GET", headers: { ...req.headers } },
-        Buffer.alloc(0),
-        `/v1/api/result?id=${encodeURIComponent(tid)}`
-      );
-    } catch (e) {
-      lastText = String(e.message || e);
-      continue; // 瞬时轮询错误 → 继续等
+  let lastFailReason = "";
+  let lastTid = tid;
+  for (let attempt = 1; attempt <= MAX_ATTEMPTS; attempt++) {
+    if (attempt > 1) {
+      // 上一任务已终态失败 → 重提一个新任务
+      try {
+        const retry = await proxyOrigin(
+          GRSAI_ORIGIN,
+          GRSAI_KEY,
+          { ...req, method: "POST", headers: { ...req.headers, "content-type": "application/json" } },
+          Buffer.from(JSON.stringify(native), "utf8"),
+          "/v1/api/generate"
+        );
+        const rt = retry.buf.toString("utf8");
+        let ntid = "";
+        try {
+          ntid = String(JSON.parse(rt).id || "");
+        } catch {}
+        if (!ntid || retry.status >= 400) {
+          lastFailReason = lastFailReason || rt.slice(0, 240);
+          continue;
+        }
+        lastTid = tid = ntid;
+      } catch (e) {
+        lastFailReason = lastFailReason || String(e.message || e);
+        continue;
+      }
     }
-    lastText = poll.buf.toString("utf8");
-    let j = null;
-    try {
-      j = JSON.parse(lastText);
-    } catch {}
-    const st = taskStatus(j?.status || j?.data?.status || "");
-    if (["completed", "success", "succeeded", "done"].includes(st)) {
-      const raw = [];
-      collectImageUrls(j?.results || j?.result || j?.data || j?.output, raw);
-      let imgs = [...new Set(raw)].filter((u) => /\.(png|jpe?g|webp)([?#]|$)/i.test(u));
-      if (!imgs.length) imgs = [...new Set(raw)];
-      if (!imgs.length) {
-        refund();
-        return json(res, 502, {
-          error: {
-            message: `Upstream finished without image URLs: ${lastText.slice(0, 240)}`,
-            type: "server_error",
-            code: "missing_result",
-          },
+    const attemptDeadline = Math.min(totalDeadline, Date.now() + 100000);
+    while (Date.now() < attemptDeadline) {
+      await new Promise((r) => setTimeout(r, IMAGE_POLL_INTERVAL_MS));
+      let poll = null;
+      try {
+        poll = await proxyOrigin(
+          GRSAI_ORIGIN,
+          GRSAI_KEY,
+          { ...req, method: "GET", headers: { ...req.headers } },
+          Buffer.alloc(0),
+          `/v1/api/result?id=${encodeURIComponent(tid)}`
+        );
+      } catch (e) {
+        lastText = String(e.message || e);
+        continue; // 瞬时轮询错误 → 继续等
+      }
+      lastText = poll.buf.toString("utf8");
+      let j = null;
+      try {
+        j = JSON.parse(lastText);
+      } catch {}
+      const st = taskStatus(j?.status || j?.data?.status || "");
+      if (["completed", "success", "succeeded", "done"].includes(st)) {
+        const raw = [];
+        collectImageUrls(j?.results || j?.result || j?.data || j?.output, raw);
+        let imgs = [...new Set(raw)].filter((u) => /\.(png|jpe?g|webp)([?#]|$)/i.test(u));
+        if (!imgs.length) imgs = [...new Set(raw)];
+        if (!imgs.length) {
+          lastFailReason = `Upstream finished without image URLs: ${lastText.slice(0, 240)}`;
+          break; // 换下一轮重试
+        }
+        const want = Math.max(1, Math.min(4, Number(body.n) || 1));
+        return json(res, 200, {
+          created: Math.floor(Date.now() / 1000),
+          data: imgs.slice(0, want).map((u) => ({ url: u })),
         });
       }
-      const want = Math.max(1, Math.min(4, Number(body.n) || 1));
-      return json(res, 200, {
-        created: Math.floor(Date.now() / 1000),
-        data: imgs.slice(0, want).map((u) => ({ url: u })),
-      });
+      if (["failed", "cancelled", "error"].includes(st)) {
+        lastFailReason =
+          String(j?.error?.message || j?.message || j?.fail_reason || lastText.slice(0, 240));
+        break; // 本任务失败 → 外层重试
+      }
+      // running / pending → 继续轮询
     }
-    if (["failed", "cancelled", "error"].includes(st)) {
-      refund();
-      const reason =
-        j?.error?.message || j?.message || j?.fail_reason || lastText.slice(0, 240);
-      return json(res, 502, {
-        error: { message: String(reason), type: "server_error", code: "upstream_failed" },
-      });
-    }
-    // running / pending → 继续轮询
+    if (Date.now() >= totalDeadline) break;
   }
   refund();
+  if (lastFailReason) {
+    return json(res, 502, {
+      error: { message: lastFailReason, type: "server_error", code: "upstream_failed" },
+    });
+  }
   return json(res, 504, {
     error: {
       message: `Image generation still running after ${Math.round(
         IMAGE_POLL_MAX_MS / 1000
-      )}s; the pre-charge was refunded. Retry or contact support with task id ${tid}.`,
+      )}s; the pre-charge was refunded. Retry or contact support with task id ${lastTid}.`,
       type: "server_error",
       code: "generation_timeout",
-      task_id: tid,
+      task_id: lastTid,
     },
   });
 }

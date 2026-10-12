@@ -159,6 +159,16 @@ function loadVideoGenModels() {
 const VIDEO_GEN_MODELS = loadVideoGenModels();
 
 // 参考图生图模型集：与透传目录(kind=image)自动同源
+const IMAGE_GEN_FALLBACK = [
+  "gpt-image-2",
+  "gpt-image-2-vip",
+  "gpt-image-2.5",
+  "gpt-image-2.5-flare",
+  "gpt-image-2.5-sunburst",
+  "nano-banana-2",
+  "nano-banana-2.1",
+  "nano-banana-pro",
+];
 function loadImageGenModels() {
   const candidates = [
     process.env.VIDEO_CATALOG,
@@ -182,8 +192,8 @@ function loadImageGenModels() {
       console.warn("[creem] image catalog load failed", p, e.message || e);
     }
   }
-  console.warn("[creem] IMAGE_GEN_MODELS empty — reference-image requests go to New API");
-  return new Set();
+  console.warn("[creem] IMAGE_GEN_MODELS fallback hardcoded", IMAGE_GEN_FALLBACK.length);
+  return new Set(IMAGE_GEN_FALLBACK);
 }
 const IMAGE_GEN_MODELS = loadImageGenModels();
 

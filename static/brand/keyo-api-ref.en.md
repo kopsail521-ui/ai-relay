@@ -302,7 +302,18 @@ The two variants accept **different** formats; a wrong value returns upstream `g
 
 Troubleshooting: a 4K request failing with `generate failed` almost always means `size` is off-table (e.g. `4096x4096` is 16.7M pixels — double the cap). Pick the matching row above.
 
-**Reference images (image-to-image) are not supported yet**: `images` / `image_url` fields on `/v1/images/generations` are ignored (output will not follow the reference), and `/v1/images/edits` is not exposed on this gateway. Describe the reference in `prompt` instead.
+**Reference images (image-to-image)**: pass publicly reachable image URLs in the `images` array (aliases: `image_urls` / `image_url`). Requests with references are routed to the native generation channel and the output follows the reference. Output size follows the reference aspect (`size` is best-effort only). References must be `http(s)` URLs — upload local files via `POST /v1/uploads` first.
+
+```json
+{
+  "model": "gpt-image-2-vip",
+  "prompt": "the character from the reference holding a dog",
+  "images": ["https://www.keyoapi.xyz/uploads/xxxx.png"],
+  "size": "3840x2160"
+}
+```
+
+Note: text-only generation (no `images`) uses the standard channel where `size` follows the §3.1 tables strictly.
 
 ---
 

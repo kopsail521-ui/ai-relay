@@ -538,7 +538,11 @@ function settleTask(taskId, upstreamCostUsd, status) {
 }
 
 function isSubmitPath(p) {
-  return p === "/v1/videos/generations" || p === "/v1/videos";
+  return (
+    p === "/v1/videos/generations" ||
+    p === "/v1/videos" ||
+    p === "/v1/images/generations"
+  );
 }
 
 function isPollPath(p) {
@@ -763,6 +767,197 @@ function looksLikeMiss(up) {
   return false;
 }
 
+
+// ===== 图片生成（参考图 / 图生图）=====
+// 原生面探测结论（2026-10-11）：兼容面 /v1/images/generations 会忽略 images 字段
+// （上游返回"对话中没有可用的参考图"）；原生面 /v1/api/generate + images 数组
+// 真正采纳参考图（纯品红参考 → 输出平均色 RGB(248,4,250)）。因此带参考图的
+// 请求走原生异步任务，透传内部轮询，最终以 OpenAI images 同步形状返回。
+const IMAGE_POLL_INTERVAL_MS = Number(process.env.IMAGE_POLL_INTERVAL_MS || 5000);
+const IMAGE_POLL_MAX_MS = Number(process.env.IMAGE_POLL_MAX_MS || 180000);
+
+function extractImageRefs(body) {
+  const urls = [];
+  const push = (u) => {
+    if (typeof u === "string" && u) urls.push(u);
+    else if (u && typeof u === "object" && u.url) urls.push(String(u.url));
+  };
+  if (Array.isArray(body.images)) for (const u of body.images) push(u);
+  if (Array.isArray(body.image_urls)) for (const u of body.image_urls) push(u);
+  if (typeof body.image_url === "string") push(body.image_url);
+  return [...new Set(urls)].filter((u) => /^https?:\/\//i.test(u)).slice(0, 9);
+}
+
+function collectImageUrls(x, out) {
+  if (!x) return;
+  if (typeof x === "string") {
+    if (/^https?:\/\//i.test(x)) out.push(x);
+  } else if (Array.isArray(x)) {
+    for (const it of x) collectImageUrls(it, out);
+  } else if (typeof x === "object") {
+    if (x.url && typeof x.url === "string") out.push(x.url);
+    for (const v of Object.values(x)) collectImageUrls(v, out);
+  }
+}
+
+async function handleImageSubmit(req, res, token, meta, body) {
+  if (!isGrsaiMeta(meta)) {
+    return json(res, 400, {
+      error: {
+        message: `Model ${meta.id} does not support reference-image generation on this gateway.`,
+        type: "invalid_request_error",
+      },
+    });
+  }
+  const prompt = String(body.prompt || body.text || "").trim();
+  if (!prompt) {
+    return json(res, 400, {
+      error: { message: "prompt is required", type: "invalid_request_error", param: "prompt" },
+    });
+  }
+  const images = extractImageRefs(body);
+  if (!images.length) {
+    return json(res, 400, {
+      error: {
+        message:
+          'Reference-image generation needs images: ["https://..."] (aliases: image_urls / image_url). Text-only generation goes through the standard endpoint without the images field.',
+        type: "invalid_request_error",
+        param: "images",
+      },
+    });
+  }
+
+  // 按张固定计费：预扣=最终价（目录 fixed cost × markup 1 = 牌价）
+  const costEst = estimateCostUsd(meta, body);
+  const preSell = sellUsd(costEst, meta);
+  if (!token.skipBill) {
+    const bill = adjustQuota(
+      token.userId,
+      token.tokenId,
+      meta.id,
+      preSell,
+      `image precharge model=${meta.id}`
+    );
+    if (!bill.ok) {
+      return json(res, 403, {
+        error: {
+          message: bill.error === "insufficient_quota" ? "额度不足" : bill.error,
+          type: "billing_error",
+        },
+      });
+    }
+  }
+  const refund = () => {
+    if (!token.skipBill && preSell > 0) {
+      adjustQuota(token.userId, token.tokenId, meta.id, -preSell, `image refund model=${meta.id}`);
+    }
+  };
+
+  const native = {
+    model: String(meta.upstream_model || meta.id),
+    prompt,
+    images,
+    replyType: "async",
+  };
+  if (typeof body.size === "string" && body.size) native.size = body.size;
+
+  let submit;
+  try {
+    submit = await proxyOrigin(
+      GRSAI_ORIGIN,
+      GRSAI_KEY,
+      { ...req, method: "POST", headers: { ...req.headers, "content-type": "application/json" } },
+      Buffer.from(JSON.stringify(native), "utf8"),
+      "/v1/api/generate"
+    );
+  } catch (e) {
+    refund();
+    return json(res, 502, {
+      error: { message: `Upstream submit failed: ${e.message || e}`, type: "server_error" },
+    });
+  }
+  const submitText = submit.buf.toString("utf8");
+  let tid = "";
+  try {
+    tid = String(JSON.parse(submitText).id || "");
+  } catch {}
+  if (!tid || submit.status >= 400) {
+    refund();
+    return json(res, 502, {
+      error: {
+        message: `Upstream rejected the request: ${submitText.slice(0, 300)}`,
+        type: "server_error",
+        code: "upstream_failed",
+      },
+    });
+  }
+
+  const deadline = Date.now() + IMAGE_POLL_MAX_MS;
+  let lastText = "";
+  while (Date.now() < deadline) {
+    await new Promise((r) => setTimeout(r, IMAGE_POLL_INTERVAL_MS));
+    let poll = null;
+    try {
+      poll = await proxyOrigin(
+        GRSAI_ORIGIN,
+        GRSAI_KEY,
+        { ...req, method: "GET", headers: { ...req.headers } },
+        Buffer.alloc(0),
+        `/v1/api/result?id=${encodeURIComponent(tid)}`
+      );
+    } catch (e) {
+      lastText = String(e.message || e);
+      continue; // 瞬时轮询错误 → 继续等
+    }
+    lastText = poll.buf.toString("utf8");
+    let j = null;
+    try {
+      j = JSON.parse(lastText);
+    } catch {}
+    const st = taskStatus(j?.status || j?.data?.status || "");
+    if (["completed", "success", "succeeded", "done"].includes(st)) {
+      const raw = [];
+      collectImageUrls(j?.results || j?.result || j?.data || j?.output, raw);
+      let imgs = [...new Set(raw)].filter((u) => /\.(png|jpe?g|webp)([?#]|$)/i.test(u));
+      if (!imgs.length) imgs = [...new Set(raw)];
+      if (!imgs.length) {
+        refund();
+        return json(res, 502, {
+          error: {
+            message: `Upstream finished without image URLs: ${lastText.slice(0, 240)}`,
+            type: "server_error",
+            code: "missing_result",
+          },
+        });
+      }
+      const want = Math.max(1, Math.min(4, Number(body.n) || 1));
+      return json(res, 200, {
+        created: Math.floor(Date.now() / 1000),
+        data: imgs.slice(0, want).map((u) => ({ url: u })),
+      });
+    }
+    if (["failed", "cancelled", "error"].includes(st)) {
+      refund();
+      const reason =
+        j?.error?.message || j?.message || j?.fail_reason || lastText.slice(0, 240);
+      return json(res, 502, {
+        error: { message: String(reason), type: "server_error", code: "upstream_failed" },
+      });
+    }
+    // running / pending → 继续轮询
+  }
+  refund();
+  return json(res, 504, {
+    error: {
+      message: `Image generation still running after ${Math.round(
+        IMAGE_POLL_MAX_MS / 1000
+      )}s; the pre-charge was refunded. Retry or contact support with task id ${tid}.`,
+      type: "server_error",
+      code: "generation_timeout",
+      task_id: tid,
+    },
+  });
+}
 
 const server = http.createServer(async (req, res) => {
   if (req.method === "OPTIONS") {
@@ -1020,6 +1215,11 @@ const server = http.createServer(async (req, res) => {
           type: "invalid_request_error",
         },
       });
+    }
+
+    // 图片（参考图/图生图）：独立分支——同步等待、OpenAI images 响应形状
+    if (meta.kind === "image") {
+      return handleImageSubmit(req, res, token, meta, body);
     }
 
     const useGrsai = isGrsaiMeta(meta);

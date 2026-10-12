@@ -372,6 +372,142 @@
         "fx_cny_usd": 7.3
       },
       "desc_zh": "seedance-2.5-720p"
+    },
+    {
+      "id": "gpt-image-2",
+      "kind": "image",
+      "vendor": "GPT Image",
+      "icon": "OpenAI.Color",
+      "tag": "图片",
+      "upstream": "grsai",
+      "upstream_model": "gpt-image-2",
+      "markup": 1,
+      "billing": "fixed_call",
+      "display_unit": "request",
+      "estimate": {
+        "mode": "fixed",
+        "cost_usd": 0.006849
+      },
+      "desc_zh": "gpt-image-2 图片生成，支持参考图（图生图），按张计费。"
+    },
+    {
+      "id": "gpt-image-2-vip",
+      "kind": "image",
+      "vendor": "GPT Image",
+      "icon": "OpenAI.Color",
+      "tag": "图片",
+      "upstream": "grsai",
+      "upstream_model": "gpt-image-2-vip",
+      "markup": 1,
+      "billing": "fixed_call",
+      "display_unit": "request",
+      "estimate": {
+        "mode": "fixed",
+        "cost_usd": 0.027397
+      },
+      "desc_zh": "gpt-image-2-vip 图片生成，支持参考图（图生图），按张计费。"
+    },
+    {
+      "id": "gpt-image-2.5",
+      "kind": "image",
+      "vendor": "GPT Image",
+      "icon": "OpenAI.Color",
+      "tag": "图片",
+      "upstream": "grsai",
+      "upstream_model": "gpt-image-2.5",
+      "markup": 1,
+      "billing": "fixed_call",
+      "display_unit": "request",
+      "estimate": {
+        "mode": "fixed",
+        "cost_usd": 0.006164
+      },
+      "desc_zh": "gpt-image-2.5 图片生成，支持参考图（图生图），按张计费。"
+    },
+    {
+      "id": "gpt-image-2.5-flare",
+      "kind": "image",
+      "vendor": "GPT Image",
+      "icon": "OpenAI.Color",
+      "tag": "图片",
+      "upstream": "grsai",
+      "upstream_model": "gpt-image-2.5-flare",
+      "markup": 1,
+      "billing": "fixed_call",
+      "display_unit": "request",
+      "estimate": {
+        "mode": "fixed",
+        "cost_usd": 0.020548
+      },
+      "desc_zh": "gpt-image-2.5-flare 图片生成，支持参考图（图生图），按张计费。"
+    },
+    {
+      "id": "gpt-image-2.5-sunburst",
+      "kind": "image",
+      "vendor": "GPT Image",
+      "icon": "OpenAI.Color",
+      "tag": "图片",
+      "upstream": "grsai",
+      "upstream_model": "gpt-image-2.5-sunburst",
+      "markup": 1,
+      "billing": "fixed_call",
+      "display_unit": "request",
+      "estimate": {
+        "mode": "fixed",
+        "cost_usd": 0.024658
+      },
+      "desc_zh": "gpt-image-2.5-sunburst 图片生成，支持参考图（图生图），按张计费。"
+    },
+    {
+      "id": "nano-banana-2",
+      "kind": "image",
+      "vendor": "Nano Banana",
+      "icon": "Gemini.Color",
+      "tag": "图片",
+      "upstream": "grsai",
+      "upstream_model": "nano-banana-2",
+      "markup": 1,
+      "billing": "fixed_call",
+      "display_unit": "request",
+      "estimate": {
+        "mode": "fixed",
+        "cost_usd": 0.020548
+      },
+      "desc_zh": "nano-banana-2 图片生成，支持参考图（图生图），按张计费。"
+    },
+    {
+      "id": "nano-banana-2.1",
+      "kind": "image",
+      "vendor": "Nano Banana",
+      "icon": "Gemini.Color",
+      "tag": "图片",
+      "upstream": "grsai",
+      "upstream_model": "nano-banana-2.1",
+      "markup": 1,
+      "billing": "fixed_call",
+      "display_unit": "request",
+      "estimate": {
+        "mode": "fixed",
+        "cost_usd": 0.012329
+      },
+      "desc_zh": "nano-banana-2.1 图片生成，支持参考图（图生图），按张计费。"
+    },
+    {
+      "id": "nano-banana-pro",
+      "kind": "image",
+      "vendor": "Nano Banana",
+      "icon": "Gemini.Color",
+      "tag": "图片",
+      "upstream": "grsai",
+      "upstream_model": "nano-banana-pro",
+      "markup": 1,
+      "billing": "fixed_call",
+      "display_unit": "request",
+      "estimate": {
+        "mode": "fixed",
+        "cost_usd": 0.027397
+      },
+      "desc_zh": "nano-banana-pro 图片生成，支持参考图（图生图），按张计费。"
     }
   ],
   "fx_cny_usd": 7.3

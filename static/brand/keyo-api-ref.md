@@ -314,7 +314,18 @@ curl https://www.keyoapi.xyz/v1/systemone \
 
 排错：请求 4K 报 `generate failed` → 九成是 `size` 不在上表（如 `4096x4096` 总像素 16.7M，超上限一倍）；换表内对应档位即可。
 
-**参考图（图生图）当前不支持**：`/v1/images/generations` 的 `images` / `image_url` 字段会被忽略（输出与参考图无关），`/v1/images/edits` 不在本网关开放范围内。需要基于参考图的生成，请先把参考图要点写进 `prompt`。
+**参考图（图生图）**：`images` 数组传公网可达的图片 URL（别名 `image_urls` / `image_url`）。带参考图的请求由网关走原生生成通道，输出会跟随参考图。输出尺寸跟随参考图比例（`size` 仅作尽力提示）。参考图须为 `http(s)` URL，本地图先 `POST /v1/uploads` 换取 URL。
+
+```json
+{
+  "model": "gpt-image-2-vip",
+  "prompt": "参考图中的角色抱着一只狗",
+  "images": ["https://www.keyoapi.xyz/uploads/xxxx.png"],
+  "size": "3840x2160"
+}
+```
+
+注意：**不带** `images` 的纯文生图走标准通道，`size` 严格按 §3.1 表格生效。
 
 ---
 

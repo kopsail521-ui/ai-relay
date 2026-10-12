@@ -158,6 +158,35 @@ function loadVideoGenModels() {
 }
 const VIDEO_GEN_MODELS = loadVideoGenModels();
 
+// 参考图生图模型集：与透传目录(kind=image)自动同源
+function loadImageGenModels() {
+  const candidates = [
+    process.env.VIDEO_CATALOG,
+    "/app/video-catalog.json",
+    path.join(
+      path.dirname(fileURLToPath(import.meta.url)),
+      "../apimart-passthrough/catalog.json"
+    ),
+    "/opt/ai-relay/services/apimart-passthrough/catalog.json",
+  ].filter(Boolean);
+  for (const p of candidates) {
+    try {
+      if (!fs.existsSync(p)) continue;
+      const j = JSON.parse(fs.readFileSync(p, "utf8"));
+      const ids = (j.models || []).filter((m) => m.kind === "image").map((m) => m.id).filter(Boolean);
+      if (ids.length) {
+        console.log(`[creem] IMAGE_GEN_MODELS from ${p} (${ids.length})`);
+        return new Set(ids);
+      }
+    } catch (e) {
+      console.warn("[creem] image catalog load failed", p, e.message || e);
+    }
+  }
+  console.warn("[creem] IMAGE_GEN_MODELS empty — reference-image requests go to New API");
+  return new Set();
+}
+const IMAGE_GEN_MODELS = loadImageGenModels();
+
 function qsOf(url) {
   const s = String(url || "");
   const i = s.indexOf("?");
@@ -1445,6 +1474,31 @@ const server = http.createServer(async (req, res) => {
             code: "moderation_unavailable",
           },
         });
+      }
+    }
+
+    if (req.method === "POST" && pathOnly === "/v1/images/generations") {
+      // 带参考图的请求 → 透传(:3011)原生路径（真正采纳参考图）；
+      // 纯文本请求继续走 New API 兼容面。审核已在上方 IMAGE_PATHS 完成。
+      try {
+        const payload = JSON.parse(bodyBuf.toString("utf8") || "{}");
+        const hasRef =
+          (Array.isArray(payload.images) && payload.images.length > 0) ||
+          (Array.isArray(payload.image_urls) && payload.image_urls.length > 0) ||
+          typeof payload.image_url === "string";
+        if (hasRef && IMAGE_GEN_MODELS.has(String(payload.model || ""))) {
+          writeProxy(
+            res,
+            await proxyRaw(
+              `${VIDEO_GEN}/v1/images/generations${qsOf(req.url)}`,
+              req,
+              bodyBuf
+            )
+          );
+          return;
+        }
+      } catch {
+        /* invalid JSON → New API */
       }
     }
 

@@ -2017,15 +2017,15 @@
     "price_key_en": ""
   },
   "gpt-image-2": {
-    "description": "文生图，约 1K 画质（支持 16:9 等比例或 1K 像素值），按张计费。 计费：$0.006849/次。",
+    "description": "文生图 / 图生图（images 传参考图 URL），约 1K 画质（16:9 等比例或 1K 像素值），按张计费。 计费：$0.006849/次。",
     "descriptions": {
-      "zhCN": "文生图，约 1K 画质（支持 16:9 等比例或 1K 像素值），按张计费。 计费：$0.006849/次。",
-      "zhTW": "文生圖，約 1K 畫質（支援 16:9 等比例或 1K 像素值），按張計費。 計費：$0.006849/次。",
-      "en": "Text-to-image at ~1K (ratio strings like 16:9 or 1K pixel sizes). Billed per image. Pricing: $0.006849 / request.",
-      "fr": "Texte-vers-image ~1K (ratios comme 16:9 ou tailles 1K). Facturé par image. Tarif : $0.006849 / requête.",
-      "ru": "Текст-в-изображение ~1K (пропорции вроде 16:9 или 1K пиксели). Оплата за изображение. Тариф: $0.006849 / запрос.",
-      "ja": "テキストから画像生成（約1K、16:9 などの比率または 1K ピクセル値）。画像ごとに課金。 料金：$0.006849/回。",
-      "vi": "Sinh ảnh từ văn bản ~1K (tỷ lệ như 16:9 hoặc pixel 1K). Tính phí theo ảnh. Giá: $0.006849 / lần."
+      "zhCN": "文生图 / 图生图（images 传参考图 URL），约 1K 画质（16:9 等比例或 1K 像素值），按张计费。 计费：$0.006849/次。",
+      "zhTW": "文生圖 / 圖生圖（images 傳參考圖 URL），約 1K 畫質（16:9 等比例或 1K 像素值），按張計費。 計費：$0.006849/次。",
+      "en": "Text-to-image and image-to-image (pass reference URLs in images), ~1K (ratio strings like 16:9 or 1K pixel sizes). Billed per image. Pricing: $0.006849 / request.",
+      "fr": "Texte-vers-image et image-vers-image (URLs de référence dans images), ~1K (ratios ou pixels 1K). Facturé par image. Tarif : $0.006849 / requête.",
+      "ru": "Текст-в-изображение и изображение-в-изображение (URL референсов в images), ~1K. Оплата за изображение. Тариф: $0.006849 / запрос.",
+      "ja": "テキストから画像・画像から画像（images に参照画像 URL）、約1K。画像ごとに課金。 料金：$0.006849/回。",
+      "vi": "Sinh ảnh từ văn bản và từ ảnh tham chiếu (URL trong images), ~1K. Tính phí theo ảnh. Giá: $0.006849 / lần."
     },
     "unit": "request",
     "badge": {
@@ -2065,15 +2065,15 @@
     "price_key_en": "Per request"
   },
   "gpt-image-2-vip": {
-    "description": "高清画图，1K/2K/4K 像素档（16:9 4K=3840x2160，不支持比例串），按张计费。 计费：$0.0274/次。",
+    "description": "高清画图，1K/2K/4K 像素档（16:9 4K=3840x2160，不支持比例串）；支持参考图（图生图），按张计费。 计费：$0.0274/次。",
     "descriptions": {
-      "zhCN": "高清画图，1K/2K/4K 像素档（16:9 4K=3840x2160，不支持比例串），按张计费。 计费：$0.0274/次。",
-      "zhTW": "高清晰度畫圖，1K/2K/4K 像素檔（16:9 4K=3840x2160，不支援比例字串），按張計費。 計費：$0.0274/次。",
-      "en": "HD images at 1K/2K/4K pixel sizes (16:9 4K = 3840x2160; ratio strings not accepted). Billed per image. Pricing: $0.0274 / request.",
-      "fr": "Images HD en 1K/2K/4K pixels (16:9 4K = 3840x2160 ; ratios non acceptés). Facturé par image. Tarif : $0.0274 / requête.",
-      "ru": "HD-изображения 1K/2K/4K в пикселях (16:9 4K = 3840x2160; пропорции-строки не принимаются). Оплата за изображение. Тариф: $0.0274 / запрос.",
-      "ja": "高精細画像生成、1K/2K/4K ピクセル指定（16:9 4K=3840x2160、比率文字列は不可）。画像ごとに課金。 料金：$0.0274/回。",
-      "vi": "Sinh ảnh HD 1K/2K/4K theo pixel (16:9 4K = 3840x2160; không nhận chuỗi tỷ lệ). Tính phí theo ảnh. Giá: $0.0274 / lần."
+      "zhCN": "高清画图，1K/2K/4K 像素档（16:9 4K=3840x2160，不支持比例串）；支持参考图（图生图），按张计费。 计费：$0.0274/次。",
+      "zhTW": "高清晰度畫圖，1K/2K/4K 像素檔（16:9 4K=3840x2160，不支援比例字串）；支援參考圖（圖生圖），按張計費。 計費：$0.0274/次。",
+      "en": "HD images at 1K/2K/4K pixel sizes (16:9 4K = 3840x2160; ratio strings not accepted); reference-image (image-to-image) supported. Billed per image. Pricing: $0.0274 / request.",
+      "fr": "Images HD 1K/2K/4K en pixels (16:9 4K = 3840x2160) ; images de référence prises en charge. Facturé par image. Tarif : $0.0274 / requête.",
+      "ru": "HD-изображения 1K/2K/4K в пикселях (16:9 4K = 3840x2160); поддерживаются референсы. Оплата за изображение. Тариф: $0.0274 / запрос.",
+      "ja": "高精細画像生成、1K/2K/4K ピクセル指定（16:9 4K=3840x2160）；参照画像に対応。画像ごとに課金。 料金：$0.0274/回。",
+      "vi": "Sinh ảnh HD 1K/2K/4K theo pixel (16:9 4K = 3840x2160); hỗ trợ ảnh tham chiếu. Tính phí theo ảnh. Giá: $0.0274 / lần."
     },
     "unit": "request",
     "badge": {

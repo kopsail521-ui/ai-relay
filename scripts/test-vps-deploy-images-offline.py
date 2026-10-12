@@ -269,15 +269,21 @@ class DeploymentTests(unittest.TestCase):
         old['Config']['Env'] = [v for v in old['Config']['Env'] if not v.startswith('LISTEN_HOST=')] + ['LISTEN_HOST=0.0.0.0']
         with self.assertRaises(RuntimeError): self.replacement(old)
 
-    def test_wallet_cache_remote_and_log_configuration_fail_closed(self):
+    def test_wallet_remote_and_log_configuration_fail_closed(self):
         native = fixture('native', self.root)
         body = self.replacement(native)
-        for setting in ('REDIS_CONN_STRING=fixture-do-not-print', 'BATCH_UPDATE_ENABLED=true', 'SQL_DSN=postgres://fixture-do-not-print', 'SQL_DSN=sqlite://wrong-dialect', 'LOG_SQL_DSN=fixture-do-not-print'):
+        for setting in ('REDIS_CONN_STRING=fixture-do-not-print', 'SQL_DSN=postgres://fixture-do-not-print', 'SQL_DSN=sqlite://wrong-dialect', 'LOG_SQL_DSN=fixture-do-not-print'):
             with self.subTest(key=setting.split('=')[0]):
                 wallet = wallet_fixture(self.root)
                 wallet['Config']['Env'] = [setting]
                 with self.assertRaises(RuntimeError) as caught: deploy.validate_wallet(native, body, wallet)
                 self.assertNotIn(setting.split('=', 1)[1], str(caught.exception))
+
+    def test_wallet_batch_updates_are_compatible(self):
+        native = fixture('native', self.root)
+        wallet = wallet_fixture(self.root)
+        wallet['Config']['Env'] = ['SQL_DSN=local', 'LOG_SQL_DSN=local', 'BATCH_UPDATE_ENABLED=true', 'SQLITE_PATH=one-api.db?_busy_timeout=30000']
+        deploy.validate_wallet(native, self.replacement(native), wallet)
 
     def test_wallet_local_dialect_and_same_file_accepted(self):
         native = fixture('native', self.root)

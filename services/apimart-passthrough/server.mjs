@@ -792,7 +792,7 @@ const server = http.createServer(async (req, res) => {
     res.writeHead(204, {
       "Access-Control-Allow-Origin": "*",
       "Access-Control-Allow-Methods": "GET,POST,OPTIONS",
-      "Access-Control-Allow-Headers": "Authorization,Content-Type",
+      "Access-Control-Allow-Headers": "Authorization,Content-Type,Idempotency-Key",
     });
     return res.end();
   }

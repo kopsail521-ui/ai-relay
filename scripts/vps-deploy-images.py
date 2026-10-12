@@ -184,13 +184,12 @@ def storage_identity(container, target):
 
 
 def validate_wallet(native, plan, wallet):
-    # Ledger writes SQLite balances and logs directly; cache/batch/remote DBs are
-    # unsupported. Inspect only, do not print values or change wallet settings.
+    # The wallet integration handles batch quota updates. Keep the checks that
+    # protect the shared SQLite file and persistent storage; inspect only and
+    # never print or change wallet settings.
     env = environments(wallet['Config'])
     if env.get('REDIS_CONN_STRING'):
         raise RuntimeError('Native image billing is incompatible with New API REDIS_CONN_STRING')
-    if env.get('BATCH_UPDATE_ENABLED') == 'true':
-        raise RuntimeError('Native image billing is incompatible with New API BATCH_UPDATE_ENABLED')
     if env.get('SQL_DSN') and not env['SQL_DSN'].startswith('local'):
         raise RuntimeError('Native image billing requires New API SQLite SQL_DSN')
     if env.get('LOG_SQL_DSN') and not env['LOG_SQL_DSN'].startswith('local'):

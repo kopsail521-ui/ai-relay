@@ -37,6 +37,76 @@
       "uniqueBlurb": "Paid glm-5.2 on Keyo — OpenAI-shaped client, confirm live rates on /pricing."
     },
     {
+      "id": "glm-5.3",
+      "category": "llm",
+      "batch": 2,
+      "targetKeywords": [
+        "glm 5.3 api",
+        "glm api",
+        "glm-5.3"
+      ],
+      "h1": "GLM 5.3 API — Call Zhipu GLM on KeyoAPI (OpenAI-Compatible)",
+      "title": "GLM 5.3 API Pricing | KeyoAPI",
+      "metaDescription": "Use GLM 5.3 API via KeyoAPI: OpenAI-compatible chat ~$0.24/$0.77 per 1M. One key for glm api workloads.",
+      "priceLabel": "~$0.24 / $0.77 per 1M in/out",
+      "priceUnit": "per_1m_tokens",
+      "related": [
+        "glm-5.2",
+        "glm-5.3-flash",
+        "deepseek-v4-flash"
+      ],
+      "endpoint": "POST /v1/chat/completions",
+      "codeHint": "model=glm-5.3",
+      "faqs": [
+        {
+          "q": "How do I call glm-5.3?",
+          "a": "Set baseURL to https://www.keyoapi.xyz/v1, Authorization: Bearer YOUR_KEY, and model=glm-5.3 on POST /v1/chat/completions."
+        },
+        {
+          "q": "Where is live pricing?",
+          "a": "Confirm on /pricing/glm-5.3. Indicative Keyo rates are about $0.24 / $0.77 per 1M in/out."
+        }
+      ],
+      "body": "GLM 5.3 on KeyoAPI is an OpenAI-compatible chat model for everyday product lanes, high-volume classification, and tool loops. Indicative rates are about $0.24 / $0.77 per 1M in/out — confirm live on /pricing/glm-5.3. Call POST /v1/chat/completions at https://www.keyoapi.xyz/v1 with Bearer auth and model=glm-5.3. Same key as GPT-class, Claude-class, and vision models.",
+      "curlExample": "curl https://www.keyoapi.xyz/v1/chat/completions \\\n  -H \"Authorization: Bearer YOUR_API_KEY\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\"model\":\"glm-5.3\",\"messages\":[{\"role\":\"user\",\"content\":\"Summarize GLM 5.3 API pricing on KeyoAPI\"}]}'",
+      "uniqueBlurb": "Paid glm-5.3 on Keyo — OpenAI-shaped client, confirm live rates on /pricing."
+    },
+    {
+      "id": "glm-5.3-flash",
+      "category": "llm",
+      "batch": 2,
+      "targetKeywords": [
+        "glm 5.3 flash api",
+        "glm api",
+        "glm-5.3-flash"
+      ],
+      "h1": "GLM 5.3 Flash API — Call Zhipu GLM on KeyoAPI (OpenAI-Compatible)",
+      "title": "GLM 5.3 Flash API Pricing | KeyoAPI",
+      "metaDescription": "Use GLM 5.3 Flash API via KeyoAPI: OpenAI-compatible chat ~$0.22/$0.72 per 1M. One key for glm api workloads.",
+      "priceLabel": "~$0.22 / $0.72 per 1M in/out",
+      "priceUnit": "per_1m_tokens",
+      "related": [
+        "glm-5.3",
+        "glm-5.2",
+        "deepseek-v4.1-flash"
+      ],
+      "endpoint": "POST /v1/chat/completions",
+      "codeHint": "model=glm-5.3-flash",
+      "faqs": [
+        {
+          "q": "How do I call glm-5.3-flash?",
+          "a": "Set baseURL to https://www.keyoapi.xyz/v1, Authorization: Bearer YOUR_KEY, and model=glm-5.3-flash on POST /v1/chat/completions."
+        },
+        {
+          "q": "Where is live pricing?",
+          "a": "Confirm on /pricing/glm-5.3-flash. Indicative Keyo rates are about $0.22 / $0.72 per 1M in/out."
+        }
+      ],
+      "body": "GLM 5.3 Flash on KeyoAPI is an OpenAI-compatible chat model for high-volume classification, drafts, and summarization. Indicative rates are about $0.22 / $0.72 per 1M in/out — confirm live on /pricing/glm-5.3-flash. Call POST /v1/chat/completions at https://www.keyoapi.xyz/v1 with Bearer auth and model=glm-5.3-flash. Same key as GPT-class, Claude-class, and vision models.",
+      "curlExample": "curl https://www.keyoapi.xyz/v1/chat/completions \\\n  -H \"Authorization: Bearer YOUR_API_KEY\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\"model\":\"glm-5.3-flash\",\"messages\":[{\"role\":\"user\",\"content\":\"Summarize GLM 5.3 Flash API pricing on KeyoAPI\"}]}'",
+      "uniqueBlurb": "Paid glm-5.3-flash on Keyo — OpenAI-shaped client, confirm live rates on /pricing."
+    },
+    {
       "id": "deepseek-v4-pro-0813",
       "category": "llm",
       "batch": 2,

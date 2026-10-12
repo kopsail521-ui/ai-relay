@@ -184,12 +184,12 @@
           "model": "glm-5.2",
           "official": "Zhipu GLM 5.2 — verify on open.bigmodel.cn",
           "keyo": "~$1.40 / $4.40 per 1M in/out",
-          "note": "Own band; paid twin of Atria-dawn-v2:free"
+          "note": "Own band; independent of the free catalog IDs"
         }
       ],
       "freeKiller": {
         "title": "Prototype free, then meter GLM on the same key",
-        "body": "For $0 prototyping on the same key, use Atria-dawn-v2:free from /free-models — a $0 fixed-ID twin whose calls draw down your $10 welcome credit (fair-use rate limits). When you meter GLM traffic, switch model= to glm-5.3-flash or glm-5.3 without changing base URL or auth."
+        "body": "For $0 prototyping on the same key, use any fixed free catalog ID on the free models page — calls draw down your $10 welcome credit (fair-use rate limits). When you meter GLM traffic, switch model= to glm-5.3-flash or glm-5.3 without changing base URL or auth."
       },
       "body": [
         "The GLM family on KeyoAPI covers three chat lanes and two speech lanes on one OpenAI-compatible key: glm-5.3 and glm-5.3-flash for chat, glm-5.2 at its own band, plus GLM-ASR (~$0.007 per request) and GLM-TTS (~$0.014 per request). No separate Zhipu account, no second invoice.",
@@ -205,7 +205,7 @@
         },
         {
           "q": "Is there a free GLM tier?",
-          "a": "Yes — Atria-dawn-v2:free is a fixed $0 catalog ID on /free-models, covered by your $10 welcome credit with fair-use rate limits. Switch model= to a metered GLM lane on the same key when you outgrow it."
+          "a": "Yes — fixed $0 catalog IDs live on the free models page, covered by your $10 welcome credit with fair-use rate limits. Switch model= to a metered GLM lane on the same key when you outgrow it."
         },
         {
           "q": "Do you carry GLM ASR and TTS?",

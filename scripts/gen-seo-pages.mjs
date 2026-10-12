@@ -30,6 +30,22 @@ const batch2 = JSON.parse(
   fs.readFileSync(path.join(root, "config/seo/batch2-models.json"), "utf8")
 );
 pages.models = [...pages.models, ...batch2.models];
+
+/**
+ * Hand-maintained model pages (outside config) that still need to appear in the
+ * models index, pricing-list Guide rows, and sitemap. Regeneration must NOT
+ * overwrite these files — the generation loop skips HAND_MAINTAINED_GUIDES.
+ * Keep this metadata in sync with the live page content.
+ */
+const HAND_MAINTAINED_META = [
+  {
+    id: "gemini-3.8-flash-tts",
+    category: "speech",
+    priceLabel: "~$0.44 / $8.82 per 1M in/out",
+    endpoint: "POST /v1/audio/speech",
+  },
+];
+pages.models = [...pages.models, ...HAND_MAINTAINED_META];
 const priceRefs = JSON.parse(
   fs.readFileSync(path.join(root, "config/seo/official-price-refs.json"), "utf8")
 );
@@ -1403,6 +1419,8 @@ for (const p of pricingLandings.pages) {
   fs.writeFileSync(path.join(outDir, `${p.slug}.html`), renderPricingLanding(p));
 }
 for (const m of pages.models) {
+  // Hand-maintained pages live outside config — never overwrite them.
+  if (HAND_MAINTAINED_GUIDES.has(m.id)) continue;
   fs.writeFileSync(path.join(outDir, "model", `${m.id}.html`), renderModel(m));
 }
 fs.writeFileSync(path.join(outDir, "robots.txt"), writeRobots());

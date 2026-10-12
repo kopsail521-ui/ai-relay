@@ -2,24 +2,24 @@
   "_note": "lastmod bumps only when page content hash changes.",
   "entries": {
     "https://www.keyoapi.xyz/": {
-      "hash": "1cbbc1a3146b306d",
-      "lastmod": "2026-10-10"
+      "hash": "001bafebf747834b",
+      "lastmod": "2026-10-12"
     },
     "https://www.keyoapi.xyz/compare": {
-      "hash": "409d5b65581b5fed",
-      "lastmod": "2026-10-11"
+      "hash": "d8c81d95cf590c4d",
+      "lastmod": "2026-10-12"
     },
     "https://www.keyoapi.xyz/pricing-list": {
-      "hash": "8559d66f2fc82ff8",
-      "lastmod": "2026-10-11"
+      "hash": "a9b79cb21d699a91",
+      "lastmod": "2026-10-12"
     },
     "https://www.keyoapi.xyz/free-models": {
       "hash": "0c8c03064d63b100",
       "lastmod": "2026-10-11"
     },
     "https://www.keyoapi.xyz/models": {
-      "hash": "65382a4a652dedf0",
-      "lastmod": "2026-10-11"
+      "hash": "f4405256e3f11e74",
+      "lastmod": "2026-10-12"
     },
     "https://www.keyoapi.xyz/gemini-api-pricing": {
       "hash": "c0f6332cfd1fe113",
@@ -226,8 +226,8 @@
       "lastmod": "2026-10-11"
     },
     "https://www.keyoapi.xyz/openai-api-alternative": {
-      "hash": "727846090ca2da74",
-      "lastmod": "2026-10-11"
+      "hash": "1839ce461a91a2a4",
+      "lastmod": "2026-10-12"
     },
     "https://www.keyoapi.xyz/model/gpt-6.1-sol": {
       "hash": "9ba5e14ac7054907",
@@ -238,8 +238,8 @@
       "lastmod": "2026-10-11"
     },
     "https://www.keyoapi.xyz/glm-api-pricing": {
-      "hash": "2e7e1387470edc37",
-      "lastmod": "2026-10-11"
+      "hash": "99e2a1c8701871a4",
+      "lastmod": "2026-10-12"
     },
     "https://www.keyoapi.xyz/model/nano-banana-2": {
       "hash": "e47eb9227adebb13",
@@ -251,6 +251,18 @@
     },
     "https://www.keyoapi.xyz/model/claude-sonnet-5-5": {
       "hash": "6077bbb181935d77",
+      "lastmod": "2026-10-11"
+    },
+    "https://www.keyoapi.xyz/model/glm-5.3": {
+      "hash": "28dbfa84a4256941",
+      "lastmod": "2026-10-12"
+    },
+    "https://www.keyoapi.xyz/model/glm-5.3-flash": {
+      "hash": "b1dafd08985673ec",
+      "lastmod": "2026-10-12"
+    },
+    "https://www.keyoapi.xyz/model/gemini-3.8-flash-tts": {
+      "hash": "a45104c0298d76ea",
       "lastmod": "2026-10-11"
     }
   },

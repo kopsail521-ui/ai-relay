@@ -213,7 +213,7 @@ def merge_prices(opts):
 
 def ensure_db(db):
     # Never claim a preexisting unrelated channel. Also reject ambiguous rows.
-    rows = db.execute('SELECT id,type,base_url,models FROM channels WHERE name=? AND deleted_at IS NULL', (CHANNEL,)).fetchall()
+    rows = db.execute('SELECT id,type,base_url,models FROM channels WHERE name=?', (CHANNEL,)).fetchall()
     if len(rows) > 1 or rows and (rows[0][1] != 1 or rows[0][2] != GATEWAY or rows[0][3] != MODEL):
         raise RuntimeError("Keyo Decisions channel conflicts with existing configuration")
     prices = merge_prices(options(db))

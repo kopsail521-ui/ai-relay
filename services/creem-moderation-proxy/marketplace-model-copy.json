@@ -7169,45 +7169,82 @@
   },
   "agnes-video-2.5": {
     "display_names": "Agnes Video 2.5",
-    "description": "Agnes Video 2.5 视频生成：文生视频、图生视频，支持 720p / 1080p / 2k。 计费：按秒，720p $0.020548/秒、1080p $0.034932/秒、2k $0.04726/秒（最长 12 秒）。",
-    "description_zh": "Agnes Video 2.5 视频生成：文生视频、图生视频，支持 720p / 1080p / 2k。 计费：按秒，720p $0.020548/秒、1080p $0.034932/秒、2k $0.04726/秒（最长 12 秒）。",
-    "description_en": "Agnes Video 2.5 video generation: text-to-video and image-to-video at 720p / 1080p / 2k. Billing: per second, 720p $0.020548/s, 1080p $0.034932/s, 2k $0.04726/s (up to 12s).",
+    "description": "Agnes Video 2.5 视频生成，文生视频 / 图生视频，支持 720p / 1080p / 2k，最长 12 秒。 计费：720p $0.02055/秒；1080p $0.03493/秒；2k $0.04726/秒。",
     "descriptions": {
-      "zhCN": "Agnes Video 2.5 视频生成：文生视频、图生视频，支持 720p / 1080p / 2k。 计费：按秒，720p $0.020548/秒、1080p $0.034932/秒、2k $0.04726/秒（最长 12 秒）。",
-      "zhTW": "Agnes Video 2.5 影片生成：文生影片、圖生影片，支援 720p / 1080p / 2k。 計費：按秒，720p $0.020548/秒、1080p $0.034932/秒、2k $0.04726/秒（最長 12 秒）。",
-      "en": "Agnes Video 2.5 video generation: text-to-video and image-to-video at 720p / 1080p / 2k. Billing: per second, 720p $0.020548/s, 1080p $0.034932/s, 2k $0.04726/s (up to 12s).",
-      "fr": "Agnes Video 2.5 — génération vidéo texte-vidéo et image-vidéo en 720p / 1080p / 2k. Facturation à la seconde : 720p $0.020548/s, 1080p $0.034932/s, 2k $0.04726/s (max 12s).",
-      "ru": "Agnes Video 2.5 — генерация видео из текста и изображения, 720p / 1080p / 2k. Оплата посекундно: 720p $0.020548/с, 1080p $0.034932/с, 2k $0.04726/с (до 12 с).",
-      "ja": "Agnes Video 2.5。テキスト・画像から動画を生成、720p / 1080p / 2k 対応。課金：秒ごと（720p $0.020548/秒、1080p $0.034932/秒、2k $0.04726/秒、最大12秒）。",
-      "vi": "Agnes Video 2.5 — tạo video từ văn bản và ảnh, 720p / 1080p / 2k. Tính phí theo giây: 720p $0.020548/s, 1080p $0.034932/s, 2k $0.04726/s (tối đa 12s)."
+      "zhCN": "Agnes Video 2.5 视频生成，文生视频 / 图生视频，支持 720p / 1080p / 2k，最长 12 秒。 计费：720p $0.02055/秒；1080p $0.03493/秒；2k $0.04726/秒。",
+      "zhTW": "Agnes Video 2.5 影片生成，文生影片 / 圖生影片，支援 720p / 1080p / 2k，最長 12 秒。 計費：720p $0.02055/秒；1080p $0.03493/秒；2k $0.04726/秒。",
+      "en": "Agnes Video 2.5 video generation: text-to-video and image-to-video at 720p / 1080p / 2k, up to 12 seconds. Billing: 720p $0.02055/sec; 1080p $0.03493/sec; 2k $0.04726/sec.",
+      "fr": "Agnes Video 2.5 — génération vidéo texte-vidéo / image-vidéo en 720p / 1080p / 2k, jusqu'à 12 secondes. Facturation : 720p $0.02055/s ; 1080p $0.03493/s ; 2k $0.04726/s.",
+      "ru": "Agnes Video 2.5 — генерация видео из текста и изображения, 720p / 1080p / 2k, до 12 секунд. Оплата: 720p $0.02055/с; 1080p $0.03493/с; 2k $0.04726/с.",
+      "ja": "Agnes Video 2.5。テキスト・画像から動画生成、720p / 1080p / 2k、最大12秒。課金：720p $0.02055/秒；1080p $0.03493/秒；2k $0.04726/秒。",
+      "vi": "Agnes Video 2.5 — tạo video từ văn bản / ảnh, 720p / 1080p / 2k, tối đa 12 giây. Tính phí: 720p $0.02055/giây; 1080p $0.03493/giây; 2k $0.04726/giây."
     },
     "unit": "second",
     "badge": {
-      "zhCN": "按秒计费",
+      "zhCN": "按秒收费",
       "zhTW": "按秒計費",
-      "en": "Per-second",
+      "en": "Per Second",
       "fr": "À la seconde",
-      "ru": "Посекундно",
+      "ru": "За секунду",
       "ja": "秒課金",
       "vi": "Theo giây"
     },
     "suffix": {
-      "zhCN": "",
-      "zhTW": "",
-      "en": "",
-      "fr": "",
-      "ru": "",
-      "ja": "",
-      "vi": ""
+      "zhCN": "/秒",
+      "zhTW": "/秒",
+      "en": "/ second",
+      "fr": "/ seconde",
+      "ru": "/ сек",
+      "ja": "/ 秒",
+      "vi": "/ giây"
     },
     "price_key": {
-      "zhCN": "",
-      "zhTW": "",
-      "en": "",
-      "fr": "",
-      "ru": "",
-      "ja": "",
-      "vi": ""
+      "zhCN": "每秒",
+      "zhTW": "每秒",
+      "en": "Per second",
+      "fr": "Par seconde",
+      "ru": "За секунду",
+      "ja": "秒ごと",
+      "vi": "Mỗi giây"
+    },
+    "badge_zh": "按秒收费",
+    "badge_en": "Per Second",
+    "suffix_zh": "/秒",
+    "suffix_en": "/ second",
+    "price_key_zh": "每秒",
+    "price_key_en": "Per second",
+    "description_zh": "Agnes Video 2.5 视频生成，文生视频 / 图生视频，支持 720p / 1080p / 2k，最长 12 秒。 计费：720p $0.02055/秒；1080p $0.03493/秒；2k $0.04726/秒。",
+    "description_en": "Agnes Video 2.5 video generation: text-to-video and image-to-video at 720p / 1080p / 2k, up to 12 seconds. Billing: 720p $0.02055/sec; 1080p $0.03493/sec; 2k $0.04726/sec.",
+    "price_table": {
+      "columns": {
+        "zhCN": [
+          "分辨率",
+          "场景",
+          "价格 (/秒)"
+        ],
+        "en": [
+          "Resolution",
+          "Scenario",
+          "Price (/sec)"
+        ]
+      },
+      "rows": [
+        [
+          "720p",
+          "标准输出",
+          "$0.02055"
+        ],
+        [
+          "1080p",
+          "标准输出",
+          "$0.03493"
+        ],
+        [
+          "2k",
+          "标准输出",
+          "$0.04726"
+        ]
+      ]
     }
   }
 }

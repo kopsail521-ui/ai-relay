@@ -86,10 +86,10 @@ def T(pid, up, cost, tag, vendor, icon, zh, en):
 
 
 MODELS = [
-    T("keyo-eleven-v4", "elevenlabs/eleven-v4", 40, "语音合成", "ElevenLabs", "Custom",
+    T("keyo-eleven-v4", "elevenlabs/eleven-v4", 40, "语音合成", "ElevenLabs", "ElevenLabs",
       "Keyo Eleven V4：高保真 AI 语音合成，自然表达与角色演绎。",
       "Keyo Eleven V4 — high-fidelity AI speech for natural voiceovers."),
-    T("keyo-eleven-v4-turbo", "elevenlabs/eleven-v4-turbo", 20, "语音合成", "ElevenLabs", "Custom",
+    T("keyo-eleven-v4-turbo", "elevenlabs/eleven-v4-turbo", 20, "语音合成", "ElevenLabs", "ElevenLabs",
       "Keyo Eleven V4 Turbo：更快的 AI 语音合成，低延迟实时场景。",
       "Keyo Eleven V4 Turbo — faster AI speech for real-time use."),
 ]
@@ -146,6 +146,8 @@ def put_opt(cur, key, value):
 def ensure_vendor(cur, v_cols, name, icon, now):
     row = cur.execute("SELECT id FROM vendors WHERE name=?", (name,)).fetchone()
     if row:
+        if name == "ElevenLabs" and "icon" in v_cols:
+            cur.execute("UPDATE vendors SET icon=? WHERE id=?", (icon, row[0]))
         return row[0]
     fields, values = ["name"], [name]
     if "icon" in v_cols:

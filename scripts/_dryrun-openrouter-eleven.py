@@ -37,6 +37,7 @@ cur.execute(
     ),
 )
 cur.execute("INSERT INTO vendors(id,name,icon,status,created_time,updated_time) VALUES (1,'Keyo','Custom',1,?,?)", (now, now))
+cur.execute("INSERT INTO vendors(id,name,icon,status,created_time,updated_time) VALUES (2,'ElevenLabs','Custom',1,?,?)", (now, now))
 cur.execute("INSERT INTO models(model_name,description,icon,tags,vendor_id,endpoints,quota_type,status,sync_official,created_time,updated_time,deleted_at) VALUES ('gemini-3.8-flash-tts','x','Custom','语音合成',1,'{}',0,1,0,?,?,NULL)", (now, now))
 cur.execute("INSERT INTO options(key,value) VALUES ('ModelRatio','{\"legacy\":1}'),('CompletionRatio','{\"legacy\":1}'),('AudioRatio','{}'),('AudioCompletionRatio','{}'),('ModelPrice','{}')")
 cur.execute('INSERT INTO abilities("group",model,channel_id,enabled,priority,weight) VALUES (?,?,?,?,?,?)', ("default", "keyo-example:free", 1, 1, 0, 1))
@@ -48,6 +49,7 @@ c.close()
 
 env = dict(os.environ)
 env["OPENROUTER_API_KEY"] = "sk-dryrun-test-key"
+icon_state = None
 for run in ("first", "second"):
     r = subprocess.run(
         [sys.executable, "scripts/vps-add-openrouter-eleven.py", db, copy_base],
@@ -59,6 +61,16 @@ for run in ("first", "second"):
     if r.returncode != 0:
         print("STDERR:", r.stderr)
         sys.exit(1)
+    with sqlite3.connect(db) as check:
+        vendor = check.execute("SELECT id, icon FROM vendors WHERE name='ElevenLabs'").fetchall()
+        assert vendor == [(2, "ElevenLabs")], vendor
+        icons = check.execute("SELECT model_name, icon, vendor_id FROM models WHERE model_name IN ('keyo-eleven-v4','keyo-eleven-v4-turbo') ORDER BY model_name").fetchall()
+        assert icons == [("keyo-eleven-v4", "ElevenLabs", 2), ("keyo-eleven-v4-turbo", "ElevenLabs", 2)], icons
+        assert check.execute("SELECT icon FROM vendors WHERE name='Keyo'").fetchone()[0] == "Custom"
+        state = (vendor, icons)
+        if icon_state is not None:
+            assert state == icon_state, "icon update is not idempotent"
+        icon_state = state
 
 c = sqlite3.connect(db)
 cur = c.cursor()
@@ -98,7 +110,7 @@ rows = cur.execute("SELECT model_name, tags, icon, vendor_id, endpoints, quota_t
 for row in rows:
     print("model:", row)
     assert row[1] == "语音合成", row
-    assert row[2] == "Custom", row
+    assert row[2] == "ElevenLabs", row
     ep = json.loads(row[4])
     assert ep == {"openai-audio": "/v1/audio/speech"}, row
     assert row[5] == 0, row

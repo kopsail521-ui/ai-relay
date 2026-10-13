@@ -2,15 +2,15 @@
   "_note": "lastmod bumps only when page content hash changes.",
   "entries": {
     "https://www.keyoapi.xyz/": {
-      "hash": "453b38cd0badbcec",
+      "hash": "dc08bc04c87aa20a",
       "lastmod": "2026-10-13"
     },
     "https://www.keyoapi.xyz/compare": {
-      "hash": "b6f070224be90adb",
+      "hash": "6720689420c22ca8",
       "lastmod": "2026-10-13"
     },
     "https://www.keyoapi.xyz/pricing-list": {
-      "hash": "556a597d0949ece2",
+      "hash": "2d10bd65d34ac059",
       "lastmod": "2026-10-13"
     },
     "https://www.keyoapi.xyz/free-models": {
@@ -18,11 +18,11 @@
       "lastmod": "2026-10-13"
     },
     "https://www.keyoapi.xyz/models": {
-      "hash": "7490ea28bd9b6835",
+      "hash": "b4415ca20b0c7246",
       "lastmod": "2026-10-13"
     },
     "https://www.keyoapi.xyz/gemini-api-pricing": {
-      "hash": "d4fb1997a7694d41",
+      "hash": "74b618c9d5c3a1a0",
       "lastmod": "2026-10-13"
     },
     "https://www.keyoapi.xyz/deepseek-api-pricing": {
@@ -42,7 +42,7 @@
       "lastmod": "2026-10-13"
     },
     "https://www.keyoapi.xyz/tts-api": {
-      "hash": "13764e63fbf7df19",
+      "hash": "2560bae5f34114c4",
       "lastmod": "2026-10-13"
     },
     "https://www.keyoapi.xyz/voice-cloning-api": {
@@ -266,11 +266,19 @@
       "lastmod": "2026-10-11"
     },
     "https://www.keyoapi.xyz/model/eleven-v4": {
-      "hash": "32d0b63095fcf852",
+      "hash": "2e1c979bb2401174",
       "lastmod": "2026-10-13"
     },
     "https://www.keyoapi.xyz/model/eleven-v4-turbo": {
-      "hash": "87106eaf7a4f9e52",
+      "hash": "08ecc3fa70212644",
+      "lastmod": "2026-10-13"
+    },
+    "https://www.keyoapi.xyz/model/gemini-4-argon": {
+      "hash": "7cc6dadf4b7ea6e7",
+      "lastmod": "2026-10-13"
+    },
+    "https://www.keyoapi.xyz/model/gemini-4-barium": {
+      "hash": "b1b0cb1a8ad22c45",
       "lastmod": "2026-10-13"
     }
   },

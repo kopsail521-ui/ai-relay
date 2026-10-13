@@ -702,6 +702,76 @@
       "body": "Claude Sonnet 5.5 on KeyoAPI is the balanced lane of the Claude 5.5 family — coding and reasoning for everyday development and agent loops.\n\nIndicative rates are about $0.88 / $4.41 per 1M in/out — confirm live on /pricing-list. For most agent loops and code generation the balance lands here: strong enough on multi-step reasoning, still far below the Opus and Fable tiers (~$1.76 / $8.82 and ~$7.35 / $36.77). If a step does not need Sonnet-class reasoning, route it to claude-haiku-5-5 (~$0.07 / $0.37) or gpt-6-luna (~$0.03 / $0.15) on the same key.\n\nHow to call: keep your OpenAI SDK and set the base URL to https://www.keyoapi.xyz/v1, then pass model=claude-sonnet-5-5 to POST /v1/chat/completions with your Bearer key.\n\nThe full Claude comparison lives on /claude-api-pricing. All metered rows: /pricing-list.",
       "curlExample": "curl https://www.keyoapi.xyz/v1/chat/completions \\\n  -H \"Authorization: Bearer YOUR_API_KEY\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\"model\":\"claude-sonnet-5-5\",\"messages\":[{\"role\":\"user\",\"content\":\"Refactor this function for readability\"}]}'",
       "uniqueBlurb": "Balanced Claude 5.5 lane — ~$0.88/$4.41 per 1M, coding and reasoning for everyday development."
+    },
+    {
+      "id": "gemini-4-argon",
+      "category": "llm",
+      "batch": 2,
+      "targetKeywords": [
+        "gemini 4 argon api",
+        "gemini-4-argon",
+        "gemini api"
+      ],
+      "h1": "Gemini 4 Argon API on KeyoAPI",
+      "title": "Gemini 4 Argon API Guide | KeyoAPI",
+      "metaDescription": "Call gemini-4-argon on KeyoAPI ~$0.74/$3.68 per 1M. OpenAI-compatible Gemini 4 chat with strong coding and multimodal reasoning.",
+      "priceLabel": "~$0.74 / $3.68 per 1M in/out",
+      "priceUnit": "per_1m_tokens",
+      "related": [
+        "gemini-3.8-flash",
+        "gemini-4-barium",
+        "gpt-6-astra"
+      ],
+      "endpoint": "POST /v1/chat/completions",
+      "codeHint": "model=gemini-4-argon",
+      "faqs": [
+        {
+          "q": "How do I call gemini-4-argon?",
+          "a": "Set baseURL to https://www.keyoapi.xyz/v1, Authorization: Bearer YOUR_KEY, and model=gemini-4-argon on POST /v1/chat/completions."
+        },
+        {
+          "q": "Where is live pricing?",
+          "a": "Confirm on /pricing/gemini-4-argon. Indicative Keyo rates are about $0.74 / $3.68 per 1M in/out."
+        }
+      ],
+      "body": "gemini-4-argon is a current KeyoAPI Gemini 4-class chat ID — strong coding, reasoning, and multimodal input on an OpenAI-compatible endpoint at https://www.keyoapi.xyz/v1. Indicative sell rates are about $0.74 / $3.68 per 1M in/out; confirm /pricing/gemini-4-argon before volume. Family table: /gemini-api-pricing. The Barium sibling /model/gemini-4-barium covers million-token context lanes.",
+      "curlExample": "curl https://www.keyoapi.xyz/v1/chat/completions \\\n  -H \"Authorization: Bearer YOUR_API_KEY\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\"model\":\"gemini-4-argon\",\"messages\":[{\"role\":\"user\",\"content\":\"Compare Gemini 4 Argon and Flash on KeyoAPI\"}]}'",
+      "uniqueBlurb": "Live gemini-4-argon ID with current Keyo sell rates."
+    },
+    {
+      "id": "gemini-4-barium",
+      "category": "llm",
+      "batch": 2,
+      "targetKeywords": [
+        "gemini 4 barium api",
+        "gemini-4-barium",
+        "gemini long context api"
+      ],
+      "h1": "Gemini 4 Barium API on KeyoAPI",
+      "title": "Gemini 4 Barium API Guide | KeyoAPI",
+      "metaDescription": "Call gemini-4-barium on KeyoAPI ~$0.74/$3.68 per 1M. OpenAI-compatible Gemini 4 chat with million-token context.",
+      "priceLabel": "~$0.74 / $3.68 per 1M in/out",
+      "priceUnit": "per_1m_tokens",
+      "related": [
+        "gemini-4-argon",
+        "gemini-3.8-flash",
+        "claude-sonnet-5-5"
+      ],
+      "endpoint": "POST /v1/chat/completions",
+      "codeHint": "model=gemini-4-barium",
+      "faqs": [
+        {
+          "q": "How do I call gemini-4-barium?",
+          "a": "Set baseURL to https://www.keyoapi.xyz/v1, Authorization: Bearer YOUR_KEY, and model=gemini-4-barium on POST /v1/chat/completions."
+        },
+        {
+          "q": "What is gemini-4-barium best at?",
+          "a": "Million-token context work: whole-repo review, legal and finance document analysis, and long tool transcripts. Confirm live rates on /pricing/gemini-4-barium."
+        }
+      ],
+      "body": "gemini-4-barium is a current KeyoAPI Gemini 4-class chat ID with million-token context and multimodal input on an OpenAI-compatible endpoint at https://www.keyoapi.xyz/v1. Indicative sell rates are about $0.74 / $3.68 per 1M in/out; confirm /pricing/gemini-4-barium before volume. Family table: /gemini-api-pricing. For faster coding lanes, use the Argon sibling /model/gemini-4-argon.",
+      "curlExample": "curl https://www.keyoapi.xyz/v1/chat/completions \\\n  -H \"Authorization: Bearer YOUR_API_KEY\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\"model\":\"gemini-4-barium\",\"messages\":[{\"role\":\"user\",\"content\":\"Summarize this long document and list risks\"}]}'",
+      "uniqueBlurb": "Live gemini-4-barium ID with current Keyo sell rates."
     }
   ]
 }

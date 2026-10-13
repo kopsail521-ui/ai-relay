@@ -136,10 +136,13 @@ test("Claude task budgets use exact rates and keep client compatibility qualifie
   }
   assert.equal(budgets.length, 4);
   const html = read("static/seo/claude-code-api-pricing.html");
-  assert.match(html, /illustrative budget, not a measured average/);
-  assert.match(html, /not yet been verified end to end/);
-  assert.match(html, /not a command to configure Claude Code/);
-  assert.match(html, /count each billed occurrence/);
+  assert.match(html, /Example budget: 100,000 billed input tokens/);
+  assert.match(html, /Actual usage varies/);
+  assert.match(html, /Count each billed occurrence/);
+  assert.match(html, /A chat request alone does not establish full Claude Code support/);
+  const lead = html.match(/<p class="lead">([\s\S]*?)<\/p>/)[1];
+  assert.doesNotMatch(lead, /verified|validation|claim|checked|not yet/i);
+  assert.doesNotMatch(html, /this page does not claim|not yet been verified|six checked IDs|This page does not quote|One successful Messages response/i);
   for (const file of ["models", "compare", "pricing", "claude-api-pricing", "ai-agent-api"]) {
     assert.ok(read(`static/seo/${file}.html`).includes('href="/claude-code-api-pricing"'), `Missing cost-guide link in ${file}`);
   }

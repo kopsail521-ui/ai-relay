@@ -4,19 +4,19 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Claude Code API Pricing: Task Budgets &amp; Model Rates | KeyoAPI</title>
-<meta name="description" content="Plan Claude Code API costs with KeyoAPI token rates, a clearly assumed 100K/10K task budget, subscription tradeoffs and gateway compatibility requirements." />
+<meta name="description" content="Compare Claude model API rates on KeyoAPI, estimate a 100K-input / 10K-output coding budget, and understand token billing, subscriptions and API formats." />
 <link rel="canonical" href="https://www.keyoapi.xyz/claude-code-api-pricing" />
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://www.keyoapi.xyz/claude-code-api-pricing" />
 <meta property="og:title" content="Claude Code API Pricing: Task Budgets &amp; Model Rates | KeyoAPI" />
-<meta property="og:description" content="Plan Claude Code API costs with KeyoAPI token rates, a clearly assumed 100K/10K task budget, subscription tradeoffs and gateway compatibility requirements." />
+<meta property="og:description" content="Compare Claude model API rates on KeyoAPI, estimate a 100K-input / 10K-output coding budget, and understand token billing, subscriptions and API formats." />
 <meta property="og:image" content="https://www.keyoapi.xyz/brand/logo.svg" />
 <link rel="icon" href="/brand/logo.svg" type="image/svg+xml" />
 <link rel="stylesheet" href="/brand/keyo-theme.css" />
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content="Claude Code API Pricing: Task Budgets &amp; Model Rates | KeyoAPI" />
-<meta name="twitter:description" content="Plan Claude Code API costs with KeyoAPI token rates, a clearly assumed 100K/10K task budget, subscription tradeoffs and gateway compatibility requirements." />
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebPage","name":"Claude Code API Pricing: Task Budgets & Model Rates | KeyoAPI","url":"https://www.keyoapi.xyz/claude-code-api-pricing","description":"Plan Claude Code API costs with KeyoAPI token rates, a clearly assumed 100K/10K task budget, subscription tradeoffs and gateway compatibility requirements."}</script>
+<meta name="twitter:description" content="Compare Claude model API rates on KeyoAPI, estimate a 100K-input / 10K-output coding budget, and understand token billing, subscriptions and API formats." />
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebPage","name":"Claude Code API Pricing: Task Budgets & Model Rates | KeyoAPI","url":"https://www.keyoapi.xyz/claude-code-api-pricing","description":"Compare Claude model API rates on KeyoAPI, estimate a 100K-input / 10K-output coding budget, and understand token billing, subscriptions and API formats."}</script>
 <style>.wrap{max-width:880px;margin:0 auto;padding:28px 24px 48px}
 .footer{display:flex;flex-wrap:wrap;gap:10px 16px;max-width:1080px;margin:0 auto;padding:24px 24px 40px;border-top:1px solid var(--line);font-size:13px;color:var(--muted)}
 .footer a{color:var(--ink-2);text-decoration:none}
@@ -77,11 +77,11 @@ ul{margin:0 0 14px;padding-left:1.2em}
 </header>
 <main class="wrap">
 <h1>Claude Code API Pricing: Budget the Whole Task</h1>
-<p class="lead">An API budget for Claude Code needs the billed usage across the whole task: context sent on each turn, generated output and any retries. Use the KeyoAPI rates below to compare a stated token budget with your own usage. Direct Claude Code integration through KeyoAPI has not yet been verified end to end.</p>
+<p class="lead">Compare Claude model rates on KeyoAPI and estimate your coding budget from input and output tokens. See the cost of a 100K-input / 10K-output workload, how repeated context affects spending, and how metered API billing differs from a monthly subscription.</p>
 <div class="btnrow"><a class="btn btn-primary" href="/sign-up">Get API key</a><a class="btn btn-secondary" href="/pricing">Live prices</a><a class="btn btn-secondary" href="/models">Model guides</a></div>
 
 <h2>Claude model API rates on KeyoAPI</h2>
-<p>Checked against the public catalog on 2026-10-14 for the default billing group. These are KeyoAPI sell rates and catalog IDs, not Anthropic official list prices or a guarantee of Claude Code compatibility. The catalog currently advertises OpenAI-compatible chat for these IDs. Other billing groups, cached input and additional features can use different rates. Confirm current prices on <a href="/pricing">the pricing page</a> and compare the wider table on <a href="/claude-api-pricing">the Claude API pricing page</a>.</p>
+<p>The table shows KeyoAPI input and output rates per million tokens for the default billing group. Group multipliers, cache pricing and additional features can affect the final charge. Open <a href="/pricing">the pricing page</a> for current rates and <a href="/claude-api-pricing">the Claude API pricing page</a> for the broader model comparison.</p>
 <div class="table-scroll"><table>
 <thead><tr><th scope="col">KeyoAPI model ID</th><th scope="col">Input / 1M tokens</th><th scope="col">Output / 1M tokens</th></tr></thead>
 <tbody><tr><td>claude-haiku-5-5</td><td>$0.07353</td><td>$0.36765</td></tr>
@@ -91,43 +91,43 @@ ul{margin:0 0 14px;padding-left:1.2em}
 <tr><td>claude-opus-5-5</td><td>$1.76470</td><td>$8.82350</td></tr>
 <tr><td>claude-fable-5-1</td><td>$7.35300</td><td>$36.76500</td></tr></tbody>
 </table></div>
-<p>Price alone does not establish answer quality, context limits or the best model for a task. Compare accepted edits, passing tests, latency and total cost on your actual repository work. Fable is included as a catalog cost comparison; check the exact model route and client support before use.</p>
+<p>Choose a model by the cost and quality of completed work. Compare accepted edits, passing tests, response time and total token usage on your own repository.</p>
 
 
 
 <h2>A worked task budget: 100K input + 10K output</h2>
-<p>Assume one task accumulates 100,000 billed input tokens and 10,000 billed output tokens across all its requests. This is an illustrative budget, not a measured average or a claim about typical Claude Code usage. If context is sent repeatedly, count each billed occurrence. These examples exclude cache-rate differences, group multipliers, additional charges and retries beyond that stated usage.</p>
+<p>Example budget: 100,000 billed input tokens and 10,000 billed output tokens accumulated across a coding task. Actual usage varies with repository size, conversation length and tool results. Count each billed occurrence of repeated context. The calculation uses default-group token rates; cache pricing, other group multipliers and usage beyond this token budget are excluded.</p>
 <p>Cost = total input tokens / 1,000,000 × input rate + total output tokens / 1,000,000 × output rate.</p>
 <div class="table-scroll"><table>
-<thead><tr><th scope="col">Model ID</th><th scope="col">Input cost</th><th scope="col">Output cost</th><th scope="col">Total task cost</th><th scope="col">$20 balance: complete tasks</th></tr></thead>
+<thead><tr><th scope="col">Model ID</th><th scope="col">Input cost</th><th scope="col">Output cost</th><th scope="col">Total task cost</th><th scope="col">$20 balance: example workloads</th></tr></thead>
 <tbody><tr><td>claude-haiku-5-5</td><td>$0.0073530</td><td>$0.0036765</td><td>$0.0110295</td><td>1813</td></tr>
 <tr><td>claude-sonnet-5-5</td><td>$0.0882350</td><td>$0.0441175</td><td>$0.1323525</td><td>151</td></tr>
 <tr><td>claude-opus-5-5</td><td>$0.1764700</td><td>$0.0882350</td><td>$0.2647050</td><td>75</td></tr>
 <tr><td>claude-fable-5-1</td><td>$0.7353000</td><td>$0.3676500</td><td>$1.1029500</td><td>18</td></tr></tbody>
 </table></div>
-<p>A $20 prepaid API balance is not equivalent to a $20 subscription: it buys metered requests at the applicable rates. The counts above are budget divisions under identical usage assumptions, not guaranteed completed coding tasks. See <a href="/ai-agent-api">Build an AI agent with the KeyoAPI chat API</a> for a bounded execution loop and total-session budgeting.</p>
+<p>The last column divides a $20 API balance by the cost of the example token budget and rounds down. Your number of completed tasks depends on actual usage. See <a href="/ai-agent-api">Build an AI agent with the KeyoAPI chat API</a> for turn limits and session budgeting.</p>
 
 
 
 <h2>API billing vs a monthly Claude plan</h2>
-<p>Compare your expected metered spend with the current first-party plan price, usage limits, included products and terms. A subscription may include access to Claude Code and other features; an API balance pays for API requests and does not establish the same entitlements. This page does not quote a subscription price because those terms can change.</p>
-<p>Metered usage can suit occasional or uneven workloads, while a subscription can offer a predictable monthly outlay within its limits. Neither is always cheaper. Start with the token totals from completed tasks and account for caching, retries and human corrections before choosing. KeyoAPI balance rules and eligibility for gift credits are separate from first-party subscription billing.</p>
+<p>API billing charges for requests at the applicable rates. A monthly Claude subscription has its own included products and usage limits. Compare your expected API spend with the current plan price and features; check Claude’s published plan terms for subscription access to Claude Code.</p>
+<p>For occasional or uneven workloads, estimate spend from the token totals of completed tasks. For regular use, compare that monthly estimate with the subscription’s price and limits. Include caching, retries and revisions in your calculation. KeyoAPI gift credits follow the account’s model eligibility rules.</p>
 
 
 
 
 
-<h2>Claude Code gateway compatibility: check before connecting</h2>
-<p>Claude Code requires a gateway that serves a supported API format; an OpenAI chat endpoint alone is not a Claude Code setup. KeyoAPI has a POST /v1/messages route, but this page does not claim a verified end-to-end Claude Code connection for the listed IDs.</p>
-<p>One successful Messages response is only a first check. Validate the exact model IDs, streaming, tool-use and tool-result turns, and the requests made by your installed Claude Code version before production use. Model routing and any model alias configuration must match the gateway catalog. Do not assume the client’s default model name matches a KeyoAPI ID.</p>
-<p>The example below demonstrates the catalog’s OpenAI-compatible chat endpoint. It is not a command to configure Claude Code. Check <a href="/brand/keyo-api-ref.html">the API endpoint reference</a> for the endpoint reference.</p>
+<h2>API formats and client requirements</h2>
+<p>Claude Code uses the Anthropic Messages format. KeyoAPI provides POST /v1/messages and OpenAI-compatible POST /v1/chat/completions. Choose the endpoint required by your client and a model available to your API key.</p>
+<p>Client support depends on the selected model and the required features, including streaming and tool use. A chat request alone does not establish full Claude Code support. Use the exact model ID from the catalog; client defaults and model aliases may differ.</p>
+<p>The curl example below sends an OpenAI-compatible chat request with claude-sonnet-5-5. See <a href="/brand/keyo-api-ref.html">the API endpoint reference</a> for authentication and request formats.</p>
 
 
 
 
 
 <h2>Make a metered chat request with a catalog ID</h2>
-<p>Use your API key from the console and the exact model value. This ordinary chat request lets you inspect response usage in your own application; it does not reproduce a multi-turn coding task.</p>
+<p>Set KEYO_API_KEY to your console API key, send the request below and use the response usage to track input and output tokens.</p>
 
 
 <pre><code>curl https://www.keyoapi.xyz/v1/chat/completions \
@@ -137,16 +137,16 @@ ul{margin:0 0 14px;padding-left:1.2em}
 
 
 <h2>Keep the task within a spending budget</h2>
-<p>Track usage for every request, stop after repeated failures, and cap the number of turns and the amount of context your application sends. Measure the cost per accepted result rather than the cost of one answer. If you use a supported client, check its own budget controls and usage reporting as well.</p>
-<p>Calls to eligible gift-credit model IDs are billed by usage and consume gift credits under the account rules; they are not zero-cost inference. The bare paid IDs in this page’s examples do not establish gift-credit eligibility. Confirm your balance and model billing rules in the console.</p>
+<p>Track usage for every request, limit repeated retries, and cap the number of turns and the amount of context your application sends. Measure the cost per accepted result. Use your client’s budget controls and usage reports where available.</p>
+<p>Eligible gift-credit model calls consume gift credits according to account billing rules. Check model eligibility, available balances and billing details in the console.</p>
 
 
 
 
-<h2>FAQ</h2><div class="faq"><details><summary>How many tokens does one Claude Code task use?</summary><p>There is no fixed amount. Repository context, tool results, repeated turns, caching and retries affect billed usage. The 100K input plus 10K output on this page is a stated budget assumption; measure your own completed tasks.</p></details>
-<details><summary>Which listed model has the lowest token price?</summary><p>Among the six checked IDs, claude-haiku-5-5 has the lowest default-group input and output rates. That does not establish the lowest cost per accepted coding task or Claude Code compatibility.</p></details>
-<details><summary>Can I point Claude Code directly at KeyoAPI now?</summary><p>End-to-end client compatibility is not confirmed by this guide. POST /v1/messages exists, but the selected model route, streaming, tool cycle and client requests need validation. The chat curl shown here is not a Claude Code setup.</p></details>
-<details><summary>Is a prepaid API balance the same as a Claude subscription?</summary><p>No. They have different billing, usage limits and product entitlements. Compare the current first-party plan terms with metered usage at the applicable API rates.</p></details>
+<h2>FAQ</h2><div class="faq"><details><summary>How many tokens does one Claude Code task use?</summary><p>Usage varies with repository context, tool results, repeated turns, caching and retries. The table uses an example budget of 100K input plus 10K output tokens. Estimate your own tasks from their cumulative billed usage.</p></details>
+<details><summary>Which listed model has the lowest token price?</summary><p>claude-haiku-5-5 has the lowest input and output rates in this table for the default group. Compare total usage and result quality to choose the best value for your workload.</p></details>
+<details><summary>Which API format does Claude Code require?</summary><p>Claude Code uses Anthropic Messages. KeyoAPI exposes POST /v1/messages; compatibility also depends on the model and client features. The example on this page uses OpenAI-compatible chat, which has a different request format.</p></details>
+<details><summary>Is a prepaid API balance the same as a Claude subscription?</summary><p>A prepaid API balance pays for metered requests. A subscription covers the products and usage limits listed in its plan. Compare current plan terms with your expected API usage.</p></details>
 <details><summary>Where are the current Claude API rates?</summary><p>Use <a href="/pricing">the pricing page</a> for the live catalog and <a href="/claude-api-pricing">the Claude API pricing page</a> for the broader guide. See <a href="/pricing-list">the full pricing list</a> for model IDs and documented endpoints.</p></details></div>
 <h2>Related guides</h2><div class="grid"><a href="/claude-api-pricing">the Claude API pricing page</a>
 <a href="/ai-agent-api">Build an AI agent with the KeyoAPI chat API</a>

@@ -3,8 +3,8 @@
  * Loaded by server.mjs as raw JS (no template-literal escaping).
  */
 (function () {
-  if (window.__keyoBillV15) return;
-  window.__keyoBillV15 = 1;
+  if (window.__keyoBillV16) return;
+  window.__keyoBillV16 = 1;
 
   function MAP() {
     return window.__KEYO_MKT_COPY || {};
@@ -95,6 +95,45 @@
     }
     return best;
   }
+  // v16: dialogs may show only the display name (raw id hidden), so also
+  // resolve localized display_names back to the model id.
+  var _aliasCache = null;
+  function aliasToId(tx) {
+    if (!tx) return null;
+    if (!_aliasCache) {
+      _aliasCache = [];
+      try {
+        var M = MAP();
+        for (var k in M) {
+          if (!k || k.indexOf("__") === 0) continue;
+          var names = M[k] && M[k].display_names;
+          if (!names) continue;
+          var seen = {};
+          var add = function (s) {
+            s = String(s || "").trim();
+            if (s && s !== k && !seen[s]) {
+              seen[s] = 1;
+              _aliasCache.push([s, k]);
+            }
+          };
+          if (typeof names === "string") add(names);
+          else for (var lang in names) add(names[lang]);
+        }
+      } catch (e) {}
+      _aliasCache.sort(function (a, b) {
+        return b[0].length - a[0].length;
+      });
+    }
+    for (var i = 0; i < _aliasCache.length; i++) {
+      if (tx.indexOf(_aliasCache[i][0]) >= 0) return _aliasCache[i][1];
+    }
+    return null;
+  }
+  function resolveId(tx, keys) {
+    var id = pickIdInText(tx, keys);
+    if (id) return id;
+    return aliasToId(tx);
+  }
   function norm(t) {
     return String(t || "")
       .replace(/[\t\n\r ]+/g, " ")
@@ -140,7 +179,7 @@
       var root = roots[r];
       var tx = root.innerText || "";
       if (tx.length < 30) continue;
-      var mid = pickIdInText(tx, keys);
+      var mid = resolveId(tx, keys);
       if (!mid) continue;
       if (
         tx.indexOf("定价") < 0 &&
@@ -386,7 +425,7 @@
         var tx = (el.innerText || "").slice(0, 700);
         if (!tx || tx.length < 10 || tx.length > 1200) continue;
         if (tx.indexOf("基础价格") >= 0 || tx.indexOf("定价") >= 0) continue;
-        var mid = pickIdInText(tx, ids);
+        var mid = resolveId(tx, ids);
         if (!mid) continue;
         rewrite(el, meta(mid));
       }

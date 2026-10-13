@@ -20,6 +20,7 @@ for f in services/apimart-passthrough/server.mjs \
   services/apimart-passthrough/image-service.mjs \
   services/apimart-passthrough/catalog.json \
   services/apimart-passthrough/Dockerfile \
+  services/creem-moderation-proxy/billing-unit-inject.js \
   config/apimart-selected-models.json \
   config/marketplace-model-copy.json \
   services/creem-moderation-proxy/marketplace-model-copy.json \
@@ -91,10 +92,17 @@ docker run --rm -v "$(dirname "$DB"):/data:rw" -v "$ROOT:/root:rw" -w /root \
 docker restart ai-relay-new-api >/dev/null
 sleep 4
 
-# 3) marketplace 文案 + 能力页
+# 3) marketplace 文案 + 计费注入脚本 + 能力页
 install -m 644 "$WORK/config/marketplace-model-copy.json" "$ROOT/config/marketplace-model-copy.json"
 install -m 644 "$WORK/services/creem-moderation-proxy/marketplace-model-copy.json" \
   "$ROOT/services/creem-moderation-proxy/marketplace-model-copy.json"
+# v16 注入：display_names 别名匹配（agnes 详情弹窗只有显示名时也能渲染分组价格表）
+grep -q '__keyoBillV16' "$WORK/services/creem-moderation-proxy/billing-unit-inject.js" \
+  || { printf 'billing-unit-inject.js 缺少 v16 别名匹配\n' >&2; exit 1; }
+install -m 644 "$WORK/services/creem-moderation-proxy/billing-unit-inject.js" \
+  "$ROOT/services/creem-moderation-proxy/billing-unit-inject.js"
+docker cp "$ROOT/services/creem-moderation-proxy/billing-unit-inject.js" \
+  ai-relay-creem-moderation:/app/billing-unit-inject.js
 docker cp "$ROOT/services/creem-moderation-proxy/marketplace-model-copy.json" \
   ai-relay-creem-moderation:/app/marketplace-model-copy.json
 docker restart ai-relay-creem-moderation >/dev/null

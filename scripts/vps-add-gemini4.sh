@@ -34,7 +34,7 @@ done
 DB_DIR=$(dirname "$DB")
 
 # 1) 数据库：渠道模型 + 定价 + 元数据 + abilities
-docker run --rm -v "$DB_DIR:/data:rw" -v "$WORK:/work:ro" python:3.12-alpine python /work/vps-add-gemini4.py /data/one-api.db
+docker run --rm -v "$DB_DIR:/data:rw" -v "$WORK:/work:ro" python:3.12-alpine python /work/scripts/vps-add-gemini4.py /data/one-api.db
 docker restart ai-relay-new-api >/dev/null
 sleep 4
 

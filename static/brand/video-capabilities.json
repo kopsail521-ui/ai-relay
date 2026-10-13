@@ -544,12 +544,14 @@
       ],
       "enums": {
         "aspectRatio": [
-          "landscape",
-          "portrait"
+          "16:9",
+          "9:16",
+          "1:1"
         ],
         "aspectRatio_aliases": [
-          "16:9→landscape",
-          "9:16→portrait"
+          "landscape→16:9",
+          "portrait→9:16",
+          "square→1:1"
         ],
         "resolution": [
           "720p",

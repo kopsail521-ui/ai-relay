@@ -656,8 +656,14 @@ function buildAioneVideoBody(meta, body) {
   return out;
 }
 
-function mapAspectToGrsai(v) {
+function mapAspectToGrsai(v, est) {
   const s = String(v || "").trim().toLowerCase();
+  // agnes-style inventories take numeric ratios; legacy (minimax) takes words.
+  if (est && est.aspect_ratio_style === "numeric") {
+    if (s === "9:16" || s === "portrait" || s === "vertical") return "9:16";
+    if (s === "1:1" || s === "square") return "1:1";
+    return "16:9";
+  }
   if (!s) return "landscape";
   if (s === "16:9" || s === "landscape" || s === "horizontal") return "landscape";
   if (s === "9:16" || s === "portrait" || s === "vertical") return "portrait";
@@ -702,7 +708,8 @@ function buildGrsaiVideoBody(meta, body) {
     duration,
     resolution,
     aspectRatio: mapAspectToGrsai(
-      body.aspectRatio || body.aspect_ratio || body.ratio
+      body.aspectRatio || body.aspect_ratio || body.ratio,
+      est
     ),
     // Official Grsai contract: replyType=async returns {id,status:running}
     // immediately. Poll with GET /v1/api/result?id= while status is running.

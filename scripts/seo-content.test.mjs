@@ -14,7 +14,7 @@ const modelPages = [
   ...JSON.parse(read("config/seo/model-pages.json")).models,
   ...JSON.parse(read("config/seo/batch2-models.json")).models,
 ];
-const modelIds = new Set(modelPages.map((model) => model.id));
+const modelIds = new Set(modelPages.map((model) => model.modelId || model.id));
 const seoRoot = path.join(root, "static/seo");
 const staticRoutes = new Set([
   "/", "/models", "/compare", "/pricing-list", "/free-models", "/about",
@@ -49,6 +49,10 @@ function fixture() {
     fs.copyFileSync(path.join(root, "scripts", file), path.join(temp, "scripts", file));
   }
   fs.cpSync(seoRoot, path.join(temp, "static/seo"), { recursive: true });
+  fs.mkdirSync(path.join(temp, "static/brand"), { recursive: true });
+  for (const file of ["keyo-docs.html", "keyo-api-ref.html", "faq.html"]) {
+    fs.copyFileSync(path.join(root, "static/brand", file), path.join(temp, "static/brand", file));
+  }
   return temp;
 }
 
@@ -102,6 +106,83 @@ test("content pages publish unique canonical URLs, valid examples and working in
     assert.ok(modelsIndex.includes(`href="/model/${model}"`));
     assert.ok(locations.includes(`https://www.keyoapi.xyz/model/${model}`));
   }
+});
+
+test("Claude task budgets use exact rates and keep client compatibility qualified", () => {
+  const page = content.pages.find((page) => page.slug === "claude-code-api-pricing");
+  const rates = new Map(page.sections.find((section) => section.heading === "Claude model API rates on KeyoAPI").rows.map((row) => [row[0], row]));
+  const expected = [
+    ["claude-haiku-5-5", 7353, 36765],
+    ["claude-sonnet-5", 44120, 220600],
+    ["claude-sonnet-5-5", 88235, 441175],
+    ["claude-opus-5", 110300, 551500],
+    ["claude-opus-5-5", 176470, 882350],
+    ["claude-fable-5-1", 735300, 3676500],
+  ];
+  for (const [id, input, output] of expected) {
+    const row = rates.get(id);
+    assert.equal(Math.round(Number(row[1].slice(1)) * 100000), input);
+    assert.equal(Math.round(Number(row[2].slice(1)) * 100000), output);
+  }
+  assert.equal(rates.size, expected.length);
+  const budgets = page.sections.find((section) => section.heading.startsWith("A worked task budget")).rows;
+  for (const row of budgets) {
+    const [, input, output] = expected.find(([id]) => id === row[0]);
+    const total = input * 10 + output;
+    assert.equal(row[1], `$${(input / 1000000).toFixed(7)}`);
+    assert.equal(row[2], `$${(output / 10000000).toFixed(7)}`);
+    assert.equal(row[3], `$${(total / 10000000).toFixed(7)}`);
+    assert.equal(Number(row[4]), Math.floor(200000000 / total));
+  }
+  assert.equal(budgets.length, 4);
+  const html = read("static/seo/claude-code-api-pricing.html");
+  assert.match(html, /illustrative budget, not a measured average/);
+  assert.match(html, /not yet been verified end to end/);
+  assert.match(html, /not a command to configure Claude Code/);
+  assert.match(html, /count each billed occurrence/);
+  for (const file of ["models", "compare", "pricing", "claude-api-pricing", "ai-agent-api"]) {
+    assert.ok(read(`static/seo/${file}.html`).includes('href="/claude-code-api-pricing"'), `Missing cost-guide link in ${file}`);
+  }
+});
+
+test("Clef guide preserves the decision protocol, billing explanation and API ID", () => {
+  const model = modelPages.find((model) => model.id === "cloudflare-clef");
+  assert.equal(model.modelId, "cloudflare/clef");
+  assert.equal(model.endpoint, "POST /v1/decisions");
+  assert.ok(model.curlExample.startsWith("curl https://www.keyoapi.xyz/v1/decisions \\\n"));
+  const payload = JSON.parse(model.curlExample.match(/-d '([^']+)'/)[1]);
+  assert.deepEqual(Object.keys(payload).sort(), ["model", "questions", "state"]);
+  assert.equal(payload.model, model.modelId);
+  assert.equal(typeof payload.state, "string");
+  for (const question of Object.values(payload.questions)) {
+    assert.equal(question.type, "choice");
+    assert.ok(question.instructions);
+    assert.ok(Object.values(question.criteria).every((value) => value === null));
+  }
+  const html = read("static/seo/model/cloudflare-clef.html");
+  assert.match(html, /already including the settlement markup/);
+  assert.match(html, /Do not multiply that returned value by 1.5 again/);
+  assert.match(html, /approximately the first 2000/);
+  assert.match(html, /below 300KiB/);
+  assert.match(html, /illustrative usage fragment, not a captured response/);
+  assert.match(html, /not a guaranteed request price/);
+  assert.ok(html.includes('href="/ai-agent-api"'));
+  assert.ok(html.includes('href="/claude-code-api-pricing"'));
+  const row = read("static/seo/pricing.html").match(/<tr>\s*<td><a href="\/model\/cloudflare-clef">[\s\S]*?<\/tr>/)[0];
+  assert.ok(row.includes("<code>cloudflare/clef</code>"));
+  assert.ok(row.includes("POST /v1/decisions"));
+  const fragment = JSON.parse(model.guideSections.find((section) => section.heading === "Read the final charge from usage.cost").code);
+  assert.equal(fragment.usage.cost, fragment.usage.input_tokens * 0.063 / 1000000);
+  assert.equal(fragment.usage.output_tokens, 0);
+});
+
+test("API reference has one self canonical and appears in the sitemap", () => {
+  const html = read("static/brand/keyo-api-ref.html");
+  const canonical = "https://www.keyoapi.xyz/brand/keyo-api-ref.html";
+  assert.equal((html.match(/rel="canonical"/g) || []).length, 1);
+  assert.ok(html.includes(`<link rel="canonical" href="${canonical}"`));
+  assert.match(html, /<title>KeyoAPI API Reference/);
+  assert.equal((read("static/seo/sitemap.xml").match(new RegExp(`<loc>${canonical.replaceAll(".", "\\.")}</loc>`, "g")) || []).length, 1);
 });
 
 test("selected generation preserves every other HTML file and is repeatable", () => {

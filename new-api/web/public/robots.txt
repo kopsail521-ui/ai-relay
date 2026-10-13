@@ -22,6 +22,7 @@ Allow: /gemini-4-api
 Allow: /ai-agent-api
 Allow: /ai-story-api
 Allow: /study-ai-api
+Allow: /claude-code-api-pricing
 Allow: /brand/
 Allow: /about
 

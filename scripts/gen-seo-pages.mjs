@@ -521,8 +521,7 @@ ${freeTierBlock(m)}
 </div>
 <h2>FAQ</h2>
 <div class="faq">${faqs}</div>
-<h2>Related models</h2>
-${relatedLinks(m.related)}
+${m.related.length ? `<h2>Related models</h2>\n${relatedLinks(m.related)}` : ""}
 <p class="meta">Guide for <strong>${esc(m.modelId || m.id)}</strong>. Catalog: <a href="/pricing">the pricing page</a> · Rates: <a href="/pricing-list">the full pricing list</a>.</p>
 `;
   return layout({
@@ -892,6 +891,9 @@ function renderCompare() {
 </div>
 <h2>Compare specific model pairs</h2>
 ${contentGuideLinks("comparison")}
+<h2>Task budgets and decision routing</h2>
+${contentGuideLinks("cost-guide")}
+<p>For explicit classification alongside a chat workflow, see <a href="/model/cloudflare-clef">Cloudflare Clef decision API</a>. Its typed probabilities and actual-cost settlement differ from the chat token rates below.</p>
 <h2>Headline LLM API pricing comparison</h2>
 <div class="table-scroll"><table>
 <thead><tr><th>Capability</th><th>Typical official list</th><th>KeyoAPI model</th><th>Notes</th></tr></thead>
@@ -937,7 +939,7 @@ ${relatedLinks(["CosyVoice3", "whisper-large-v3", "Qwen3-TTS", "IndexTTS-2", "Du
 }
 
 function renderPricing() {
-  const seenIds = new Set(pages.models.map((m) => m.id));
+  const seenIds = new Set(pages.models.map((m) => m.modelId || m.id));
   const landingExtra = [];
   for (const p of pricingLandings.pages || []) {
     for (const r of p.rows || []) {
@@ -959,8 +961,8 @@ function renderPricing() {
       // No guide page -> the model name is plain text. Linking it through
       // catalogHref would put /pricing-list (this very page) as its own href.
       const modelCell = hasGuide
-        ? `<a href="/model/${encodeURIComponent(m.id)}"><code>${esc(m.id)}</code></a>`
-        : `<code>${esc(m.id)}</code>`;
+        ? `<a href="/model/${encodeURIComponent(m.id)}"><code>${esc(m.modelId || m.id)}</code></a>`
+        : `<code>${esc(m.modelId || m.id)}</code>`;
       const guide = hasGuide
         ? `<a href="/model/${encodeURIComponent(m.id)}">Guide</a>`
         : `List`;
@@ -984,11 +986,14 @@ function renderPricing() {
 </div>
 <h2>Free models ($0 — covered by your $10 credit)</h2>
 <p class="meta">Free IDs ($0 catalog IDs whose calls draw down your $10 welcome credit, fair-use): see <a href="/free-models">the free models page</a> for the full list, paid twins and curl examples. The tables below cover the metered catalog.</p>
+<h2>Task cost guides</h2>
+${contentGuideLinks("cost-guide")}
+<p>For typed routing probabilities, see <a href="/model/cloudflare-clef">Cloudflare Clef</a> and its dedicated <code>POST /v1/decisions</code> endpoint.</p>
 <h2>Guided model price table</h2>
-<table>
+<div class="table-scroll"><table>
 <thead><tr><th>Model ID</th><th>Category</th><th>Listed price</th><th>Endpoint</th><th>Links</th></tr></thead>
 <tbody>${rows}</tbody>
-</table>
+</table></div>
 <h2>Headline vs official list</h2>
 <p class="meta">The headline comparison (typical official list vs Keyo rates for every lane) lives on <a href="/compare">the model comparison page</a> — this page is the full static price list.</p>
 <h2>How billing works</h2>
@@ -1481,6 +1486,12 @@ function writeSitemap() {
     {
       loc: `${site}/brand/keyo-docs.html`,
       file: path.join(root, "static/brand/keyo-docs.html"),
+      priority: "0.5",
+      changefreq: "monthly",
+    },
+    {
+      loc: `${site}/brand/keyo-api-ref.html`,
+      file: path.join(root, "static/brand/keyo-api-ref.html"),
       priority: "0.5",
       changefreq: "monthly",
     },

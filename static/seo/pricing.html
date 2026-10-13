@@ -38,6 +38,8 @@ pre,code{font-family:var(--mono)}
 pre{background:var(--panel);color:var(--panel-ink);padding:14px 16px;border-radius:var(--radius);overflow:auto;font-size:13px}
 pre code{background:transparent;padding:0;color:inherit;font-size:inherit;border-radius:0}
 table{width:100%;border-collapse:collapse;font-size:14px;background:var(--surface)}
+.table-scroll{overflow-x:auto;margin:16px 0}
+.table-scroll table{min-width:620px}
 th,td{border:1px solid var(--line);padding:10px 12px;text-align:left;vertical-align:top}
 th{background:color-mix(in srgb,var(--line) 40%,var(--surface));font-weight:600}
 .ok{color:var(--ok);font-weight:600}
@@ -86,8 +88,11 @@ ul{margin:0 0 14px;padding-left:1.2em}
 </div>
 <h2>Free models ($0 — covered by your $10 credit)</h2>
 <p class="meta">Free IDs ($0 catalog IDs whose calls draw down your $10 welcome credit, fair-use): see <a href="/free-models">the free models page</a> for the full list, paid twins and curl examples. The tables below cover the metered catalog.</p>
+<h2>Task cost guides</h2>
+<div class="grid"><a href="/claude-code-api-pricing">Claude Code API Pricing: Budget the Whole Task</a></div>
+<p>For typed routing probabilities, see <a href="/model/cloudflare-clef">Cloudflare Clef</a> and its dedicated <code>POST /v1/decisions</code> endpoint.</p>
 <h2>Guided model price table</h2>
-<table>
+<div class="table-scroll"><table>
 <thead><tr><th>Model ID</th><th>Category</th><th>Listed price</th><th>Endpoint</th><th>Links</th></tr></thead>
 <tbody><tr>
   <td><a href="/model/whisper-large-v3"><code>whisper-large-v3</code></a></td>
@@ -256,6 +261,13 @@ ul{margin:0 0 14px;padding-left:1.2em}
   <td class="ok">$0.0123 / image</td>
   <td><code>POST /v1/images/generations</code></td>
   <td><a href="/model/nano-banana-2.1">Guide</a> · <a href="/pricing">Catalog</a></td>
+</tr>
+<tr>
+  <td><a href="/model/cloudflare-clef"><code>cloudflare/clef</code></a></td>
+  <td>decision</td>
+  <td class="ok">From $0.063 input / $0 output per 1M tokens; actual-cost settlement</td>
+  <td><code>POST /v1/decisions</code></td>
+  <td><a href="/model/cloudflare-clef">Guide</a> · <a href="/pricing">Catalog</a></td>
 </tr>
 <tr>
   <td><a href="/model/glm-5.2"><code>glm-5.2</code></a></td>
@@ -460,7 +472,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
   <td><code>POST /v1/audio/speech</code></td>
   <td>List · <a href="/pricing">Catalog</a></td>
 </tr></tbody>
-</table>
+</table></div>
 <h2>Headline vs official list</h2>
 <p class="meta">The headline comparison (typical official list vs Keyo rates for every lane) lives on <a href="/compare">the model comparison page</a> — this page is the full static price list.</p>
 <h2>How billing works</h2>

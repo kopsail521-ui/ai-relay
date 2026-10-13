@@ -10,12 +10,15 @@
         "cloudflare clef api",
         "cloudflare/clef",
         "multimodal decision api",
-        "typed questions api"
+        "typed questions api",
+        "clef model",
+        "clef api",
+        "cloudflare clef pricing"
       ],
       "h1": "Cloudflare Clef API — Multimodal Decisions on KeyoAPI",
       "title": "Cloudflare Clef API Guide & Pricing | KeyoAPI",
       "metaDescription": "Cloudflare Clef: open-source 27B multimodal decisions via POST /v1/decisions. Typed choice/noul probabilities, input from $0.063/M, output $0.",
-      "priceLabel": "From $0.063 input / $0 output per 1M tokens; actual cost ×1.5",
+      "priceLabel": "From $0.063 input / $0 output per 1M tokens; actual-cost settlement",
       "priceUnit": "per_1m_tokens",
       "related": [],
       "endpoint": "POST /v1/decisions",
@@ -38,7 +41,25 @@
         {
           "heading": "Starting price and actual settlement",
           "paragraphs": [
-            "Input starts at $0.063 per 1M tokens and output is $0. Settlement uses the actual request cost multiplied by 1.5. The catalog shows a starting rate, not a fixed rate for every request; actual input pricing may be higher when the serving route changes. Confirm current prices in Model Square before production traffic."
+            "Input starts at $0.063 per 1M tokens and output is $0. The service calculates the charge from the underlying metered request cost with a 1.5× markup, then returns the final charge in usage.cost. Both the starting sell rate and the returned charge already include the markup. Actual input pricing may be higher when the serving route changes. Confirm current prices in Model Square before production traffic."
+          ]
+        },
+        {
+          "heading": "A decision model alongside a chat agent",
+          "paragraphs": [
+            "Use Clef for a defined choice such as account, billing or technical support routing. Your application supplies the candidate labels and decides how to handle low confidence. The returned probabilities are not a guarantee of correctness; evaluate labeled examples and choose thresholds that match the cost of mistakes.",
+            "Clef is a Cloudflare decision model, separate from Claude-class chat. See /ai-agent-api for the application execution loop, /claude-api-pricing for chat-model rates and /claude-code-api-pricing for a stated coding-task token budget."
+          ]
+        },
+        {
+          "heading": "Read the final charge from usage.cost",
+          "paragraphs": [
+            "The response usage.cost is the final KeyoAPI charge in USD, already including the settlement markup. Do not multiply that returned value by 1.5 again. Wallet deductions follow the service’s quota precision; output_tokens is 0 for this decision protocol.",
+            "At the starting input rate, 1,000 input tokens would estimate $0.000063. This is arithmetic at the starting rate, not a guaranteed request price or a live inference measurement. Use the returned usage.cost and your console usage records for the actual charge."
+          ],
+          "code": "{\n  \"model\": \"cloudflare/clef\",\n  \"usage\": {\n    \"input_tokens\": 1000,\n    \"output_tokens\": 0,\n    \"cost\": 0.000063\n  }\n}",
+          "paragraphsAfter": [
+            "This is an illustrative usage fragment, not a captured response; the real response also includes id and answers."
           ]
         }
       ],
@@ -57,10 +78,14 @@
         },
         {
           "q": "Is $0.063/M the fixed input price?",
-          "a": "No. It is the starting input rate. Output is $0, and each request settles at actual cost ×1.5. Actual input pricing may exceed the starting rate."
+          "a": "No. It is the starting sell rate, already including markup. Output is $0, and usage.cost returns the final request charge. Actual input pricing may exceed the starting rate; do not multiply the starting sell rate or returned charge by 1.5 again."
+        },
+        {
+          "q": "Is Clef a Claude model?",
+          "a": "No. cloudflare/clef is a Cloudflare decision model. Use /v1/decisions for typed probabilities; use a chat model for free-form explanations or generation."
         }
       ],
-      "curlExample": "curl https://www.keyoapi.xyz/v1/decisions \\\n  -H \"Authorization: Bearer YOUR_API_KEY\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\"model\":\"cloudflare/clef\",\"state\":\"A customer asks to reset password.\",\"questions\":{\"route\":{\"type\":\"choice\",\"instructions\":\"Route request\",\"criteria\":{\"account\":null,\"billing\":null,\"technical\":null}}}}'",
+      "curlExample": "curl https://www.keyoapi.xyz/v1/decisions \\\n  -H \"Authorization: Bearer $KEYO_API_KEY\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\"model\":\"cloudflare/clef\",\"state\":\"A customer asks to reset password.\",\"questions\":{\"route\":{\"type\":\"choice\",\"instructions\":\"Route request\",\"criteria\":{\"account\":null,\"billing\":null,\"technical\":null}}}}'",
       "uniqueBlurb": "Open-source 27B multimodal choice / noul probabilities through a dedicated decision endpoint."
     },
     {

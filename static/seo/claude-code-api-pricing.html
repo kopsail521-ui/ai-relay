@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Claude Code API Pricing: Task Budgets &amp; Model Rates | KeyoAPI</title>
+<meta name="description" content="Plan Claude Code API costs with KeyoAPI token rates, a clearly assumed 100K/10K task budget, subscription tradeoffs and gateway compatibility requirements." />
+<link rel="canonical" href="https://www.keyoapi.xyz/claude-code-api-pricing" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://www.keyoapi.xyz/claude-code-api-pricing" />
+<meta property="og:title" content="Claude Code API Pricing: Task Budgets &amp; Model Rates | KeyoAPI" />
+<meta property="og:description" content="Plan Claude Code API costs with KeyoAPI token rates, a clearly assumed 100K/10K task budget, subscription tradeoffs and gateway compatibility requirements." />
+<meta property="og:image" content="https://www.keyoapi.xyz/brand/logo.svg" />
+<link rel="icon" href="/brand/logo.svg" type="image/svg+xml" />
+<link rel="stylesheet" href="/brand/keyo-theme.css" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Claude Code API Pricing: Task Budgets &amp; Model Rates | KeyoAPI" />
+<meta name="twitter:description" content="Plan Claude Code API costs with KeyoAPI token rates, a clearly assumed 100K/10K task budget, subscription tradeoffs and gateway compatibility requirements." />
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebPage","name":"Claude Code API Pricing: Task Budgets & Model Rates | KeyoAPI","url":"https://www.keyoapi.xyz/claude-code-api-pricing","description":"Plan Claude Code API costs with KeyoAPI token rates, a clearly assumed 100K/10K task budget, subscription tradeoffs and gateway compatibility requirements."}</script>
+<style>.wrap{max-width:880px;margin:0 auto;padding:28px 24px 48px}
+.footer{display:flex;flex-wrap:wrap;gap:10px 16px;max-width:1080px;margin:0 auto;padding:24px 24px 40px;border-top:1px solid var(--line);font-size:13px;color:var(--muted)}
+.footer a{color:var(--ink-2);text-decoration:none}
+.footer a:hover{color:var(--ink)}
+h1{font-size:clamp(1.7rem,3.1vw,2.35rem);line-height:1.18;letter-spacing:-.035em;margin:0 0 14px;font-weight:600;text-wrap:balance}
+h2{font-size:1.15rem;margin:28px 0 10px;letter-spacing:-.02em}
+p{margin:0 0 14px;color:var(--ink)}
+.lead{font-size:1.02rem;color:var(--ink-2);line-height:1.55;text-wrap:pretty}
+.meta{font-size:14px;color:var(--muted);margin:0 0 18px}
+.btnrow{display:flex;flex-wrap:wrap;gap:10px;margin:18px 0 28px}
+.btn,.k-btn{display:inline-block;padding:10px 16px;border-radius:var(--radius);font-weight:600;font-size:14px;text-decoration:none;line-height:1.2}
+.btn-primary,.k-btn-primary{background:var(--ink);color:#f6f5f1}
+.btn-primary:hover,.k-btn-primary:hover{background:#000;color:#f6f5f1;text-decoration:none}
+.btn-secondary,.k-btn-secondary{background:transparent;color:var(--ink);border:1px solid var(--line-strong,#c9c4b8)}
+.btn-secondary:hover,.k-btn-secondary:hover{border-color:var(--ink);text-decoration:none}
+.btn-link,.k-btn-link{background:transparent;color:var(--link);padding-inline:8px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:16px 18px;margin:16px 0}
+pre,code{font-family:var(--mono)}
+pre{background:var(--panel);color:var(--panel-ink);padding:14px 16px;border-radius:var(--radius);overflow:auto;font-size:13px}
+pre code{background:transparent;padding:0;color:inherit;font-size:inherit;border-radius:0}
+table{width:100%;border-collapse:collapse;font-size:14px;background:var(--surface)}
+.table-scroll{overflow-x:auto;margin:16px 0}
+.table-scroll table{min-width:620px}
+th,td{border:1px solid var(--line);padding:10px 12px;text-align:left;vertical-align:top}
+th{background:color-mix(in srgb,var(--line) 40%,var(--surface));font-weight:600}
+.ok{color:var(--ok);font-weight:600}
+.grid{display:grid;gap:10px;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));margin:16px 0}
+.grid a{display:flex;flex-direction:column;justify-content:center;gap:4px;min-height:4.5rem;padding:12px 14px;border:1px solid var(--line);border-radius:var(--radius);background:var(--surface);color:var(--ink);text-decoration:none;font-weight:500;line-height:1.35}
+.grid a:hover{border-color:var(--ink)}
+.grid a .grid-title{font-weight:600;overflow-wrap:anywhere}
+.grid a .grid-meta{color:var(--muted);font-size:13px;font-weight:500}
+.grid a code{font-size:12.5px;background:transparent;padding:0}
+ul{margin:0 0 14px;padding-left:1.2em}
+.faq details{border:1px solid var(--line);border-radius:var(--radius);padding:12px 14px;margin:0 0 10px;background:var(--surface)}
+.faq summary{cursor:pointer;font-weight:600}
+.surfaces{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));margin:16px 0 8px}
+.surf{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:14px 16px;font-size:14px}
+.surf h3{font-size:15px;margin:0 0 8px}
+.surf ul{margin:0;padding-left:1.15em;color:var(--muted)}
+.panel{background:var(--panel);color:var(--panel-ink);border-radius:var(--radius);padding:18px;text-align:left;font-family:var(--mono);font-size:12.5px;overflow:auto;border:1px solid #2a2924}
+.panel .label{color:#b9b6ab;margin-bottom:5px;font-size:11px;letter-spacing:.06em;text-transform:uppercase}
+.panel .label+.label{margin-top:14px}</style>
+</head>
+<body>
+<header class="k-nav">
+  <a class="k-wordmark" href="/"><img src="/brand/logo.svg" alt="" width="22" height="22" />KeyoAPI</a>
+  <nav aria-label="Primary">
+    <a href="/pricing">Pricing</a>
+    <a href="/models">Models</a>
+    <a href="/compare">Compare</a>
+    <a href="/brand/keyo-docs.html">Docs</a>
+    <a href="/brand/blog/">Blog</a>
+    <a href="/brand/faq.html">FAQ</a>
+    <a href="/console">Console</a>
+    <a href="/sign-in">Sign in</a>
+    <a class="k-nav-cta" href="/sign-up">Get started</a>
+  </nav>
+</header>
+<main class="wrap">
+<h1>Claude Code API Pricing: Budget the Whole Task</h1>
+<p class="lead">An API budget for Claude Code needs the billed usage across the whole task: context sent on each turn, generated output and any retries. Use the KeyoAPI rates below to compare a stated token budget with your own usage. Direct Claude Code integration through KeyoAPI has not yet been verified end to end.</p>
+<div class="btnrow"><a class="btn btn-primary" href="/sign-up">Get API key</a><a class="btn btn-secondary" href="/pricing">Live prices</a><a class="btn btn-secondary" href="/models">Model guides</a></div>
+
+<h2>Claude model API rates on KeyoAPI</h2>
+<p>Checked against the public catalog on 2026-10-14 for the default billing group. These are KeyoAPI sell rates and catalog IDs, not Anthropic official list prices or a guarantee of Claude Code compatibility. The catalog currently advertises OpenAI-compatible chat for these IDs. Other billing groups, cached input and additional features can use different rates. Confirm current prices on <a href="/pricing">the pricing page</a> and compare the wider table on <a href="/claude-api-pricing">the Claude API pricing page</a>.</p>
+<div class="table-scroll"><table>
+<thead><tr><th scope="col">KeyoAPI model ID</th><th scope="col">Input / 1M tokens</th><th scope="col">Output / 1M tokens</th></tr></thead>
+<tbody><tr><td>claude-haiku-5-5</td><td>$0.07353</td><td>$0.36765</td></tr>
+<tr><td>claude-sonnet-5</td><td>$0.44120</td><td>$2.20600</td></tr>
+<tr><td>claude-sonnet-5-5</td><td>$0.88235</td><td>$4.41175</td></tr>
+<tr><td>claude-opus-5</td><td>$1.10300</td><td>$5.51500</td></tr>
+<tr><td>claude-opus-5-5</td><td>$1.76470</td><td>$8.82350</td></tr>
+<tr><td>claude-fable-5-1</td><td>$7.35300</td><td>$36.76500</td></tr></tbody>
+</table></div>
+<p>Price alone does not establish answer quality, context limits or the best model for a task. Compare accepted edits, passing tests, latency and total cost on your actual repository work. Fable is included as a catalog cost comparison; check the exact model route and client support before use.</p>
+
+
+
+<h2>A worked task budget: 100K input + 10K output</h2>
+<p>Assume one task accumulates 100,000 billed input tokens and 10,000 billed output tokens across all its requests. This is an illustrative budget, not a measured average or a claim about typical Claude Code usage. If context is sent repeatedly, count each billed occurrence. These examples exclude cache-rate differences, group multipliers, additional charges and retries beyond that stated usage.</p>
+<p>Cost = total input tokens / 1,000,000 × input rate + total output tokens / 1,000,000 × output rate.</p>
+<div class="table-scroll"><table>
+<thead><tr><th scope="col">Model ID</th><th scope="col">Input cost</th><th scope="col">Output cost</th><th scope="col">Total task cost</th><th scope="col">$20 balance: complete tasks</th></tr></thead>
+<tbody><tr><td>claude-haiku-5-5</td><td>$0.0073530</td><td>$0.0036765</td><td>$0.0110295</td><td>1813</td></tr>
+<tr><td>claude-sonnet-5-5</td><td>$0.0882350</td><td>$0.0441175</td><td>$0.1323525</td><td>151</td></tr>
+<tr><td>claude-opus-5-5</td><td>$0.1764700</td><td>$0.0882350</td><td>$0.2647050</td><td>75</td></tr>
+<tr><td>claude-fable-5-1</td><td>$0.7353000</td><td>$0.3676500</td><td>$1.1029500</td><td>18</td></tr></tbody>
+</table></div>
+<p>A $20 prepaid API balance is not equivalent to a $20 subscription: it buys metered requests at the applicable rates. The counts above are budget divisions under identical usage assumptions, not guaranteed completed coding tasks. See <a href="/ai-agent-api">Build an AI agent with the KeyoAPI chat API</a> for a bounded execution loop and total-session budgeting.</p>
+
+
+
+<h2>API billing vs a monthly Claude plan</h2>
+<p>Compare your expected metered spend with the current first-party plan price, usage limits, included products and terms. A subscription may include access to Claude Code and other features; an API balance pays for API requests and does not establish the same entitlements. This page does not quote a subscription price because those terms can change.</p>
+<p>Metered usage can suit occasional or uneven workloads, while a subscription can offer a predictable monthly outlay within its limits. Neither is always cheaper. Start with the token totals from completed tasks and account for caching, retries and human corrections before choosing. KeyoAPI balance rules and eligibility for gift credits are separate from first-party subscription billing.</p>
+
+
+
+
+
+<h2>Claude Code gateway compatibility: check before connecting</h2>
+<p>Claude Code requires a gateway that serves a supported API format; an OpenAI chat endpoint alone is not a Claude Code setup. KeyoAPI has a POST /v1/messages route, but this page does not claim a verified end-to-end Claude Code connection for the listed IDs.</p>
+<p>One successful Messages response is only a first check. Validate the exact model IDs, streaming, tool-use and tool-result turns, and the requests made by your installed Claude Code version before production use. Model routing and any model alias configuration must match the gateway catalog. Do not assume the client’s default model name matches a KeyoAPI ID.</p>
+<p>The example below demonstrates the catalog’s OpenAI-compatible chat endpoint. It is not a command to configure Claude Code. Check <a href="/brand/keyo-api-ref.html">the API endpoint reference</a> for the endpoint reference.</p>
+
+
+
+
+
+<h2>Make a metered chat request with a catalog ID</h2>
+<p>Use your API key from the console and the exact model value. This ordinary chat request lets you inspect response usage in your own application; it does not reproduce a multi-turn coding task.</p>
+
+
+<pre><code>curl https://www.keyoapi.xyz/v1/chat/completions \
+  -H &quot;Authorization: Bearer $KEYO_API_KEY&quot; \
+  -H &quot;Content-Type: application/json&quot; \
+  -d '{&quot;model&quot;:&quot;claude-sonnet-5-5&quot;,&quot;messages&quot;:[{&quot;role&quot;:&quot;user&quot;,&quot;content&quot;:&quot;Review this migration plan: add a nullable column, backfill it, validate and enforce the constraint. Identify missing rollback steps.&quot;}],&quot;max_tokens&quot;:400}'</code></pre>
+
+
+<h2>Keep the task within a spending budget</h2>
+<p>Track usage for every request, stop after repeated failures, and cap the number of turns and the amount of context your application sends. Measure the cost per accepted result rather than the cost of one answer. If you use a supported client, check its own budget controls and usage reporting as well.</p>
+<p>Calls to eligible gift-credit model IDs are billed by usage and consume gift credits under the account rules; they are not zero-cost inference. The bare paid IDs in this page’s examples do not establish gift-credit eligibility. Confirm your balance and model billing rules in the console.</p>
+
+
+
+
+<h2>FAQ</h2><div class="faq"><details><summary>How many tokens does one Claude Code task use?</summary><p>There is no fixed amount. Repository context, tool results, repeated turns, caching and retries affect billed usage. The 100K input plus 10K output on this page is a stated budget assumption; measure your own completed tasks.</p></details>
+<details><summary>Which listed model has the lowest token price?</summary><p>Among the six checked IDs, claude-haiku-5-5 has the lowest default-group input and output rates. That does not establish the lowest cost per accepted coding task or Claude Code compatibility.</p></details>
+<details><summary>Can I point Claude Code directly at KeyoAPI now?</summary><p>End-to-end client compatibility is not confirmed by this guide. POST /v1/messages exists, but the selected model route, streaming, tool cycle and client requests need validation. The chat curl shown here is not a Claude Code setup.</p></details>
+<details><summary>Is a prepaid API balance the same as a Claude subscription?</summary><p>No. They have different billing, usage limits and product entitlements. Compare the current first-party plan terms with metered usage at the applicable API rates.</p></details>
+<details><summary>Where are the current Claude API rates?</summary><p>Use <a href="/pricing">the pricing page</a> for the live catalog and <a href="/claude-api-pricing">the Claude API pricing page</a> for the broader guide. See <a href="/pricing-list">the full pricing list</a> for model IDs and documented endpoints.</p></details></div>
+<h2>Related guides</h2><div class="grid"><a href="/claude-api-pricing">the Claude API pricing page</a>
+<a href="/ai-agent-api">Build an AI agent with the KeyoAPI chat API</a>
+<a href="/model/claude-sonnet-5-5">the claude-sonnet-5-5 model page</a>
+<a href="/model/claude-opus-5-5">the claude-opus-5-5 model page</a>
+<a href="/fable-5-1-vs-opus-5-5">Fable 5.1 vs Opus 5.5</a>
+<a href="/pricing-list">the full pricing list</a>
+<a href="/compare">the model comparison page</a>
+<a href="/brand/keyo-api-ref.html">the API endpoint reference</a></div>
+</main>
+<footer class="footer">
+  <a href="/">Home</a>
+  <a href="/pricing">Pricing</a>
+  <a href="/pricing-list">Pricing list</a>
+  <a href="/models">Model guides</a>
+  <a href="/compare">Compare</a>
+  <a href="/free-models">Free models</a>
+  <a href="/brand/blog/">Blog</a>
+  <a href="/gemini-api-pricing">Gemini pricing</a>
+  <a href="/deepseek-api-pricing">DeepSeek pricing</a>
+  <a href="/glm-api-pricing">GLM pricing</a>
+  <a href="/claude-api-pricing">Claude pricing</a>
+  <a href="/openai-api-pricing">OpenAI pricing</a>
+  <a href="/remove-bg-api-alternative">remove.bg API</a>
+  <a href="/tts-api">Text to Speech</a>
+  <a href="/voice-cloning-api">Voice clone API</a>
+  <a href="/ai-avatar-video-generator">Avatar video API</a>
+  <a href="/grok-api-pricing">Grok pricing</a>
+  <a href="/openai-api-alternative">OpenAI alternative</a>
+  <a href="/brand/keyo-docs.html">Docs</a>
+  <a href="/brand/faq.html">FAQ</a>
+  <a href="/brand/privacy.html">Privacy</a>
+  <a href="/brand/terms.html">Terms</a>
+  <a href="/sign-in">Sign in</a>
+  <a href="https://toolfame.com/item/keyoapi" target="_blank" rel="noopener noreferrer"><img src="https://toolfame.com/badge-light.svg" alt="Featured on ToolFame.com" style="height:54px;width:auto;" /></a>
+  <a href="https://yo.directory" target="_blank" rel="dofollow noopener">Featured on Yo.directory</a>
+  <a href="https://www.toolpilot.ai" target="_blank" rel="dofollow noopener">Featured on ToolPilot.ai</a>
+  <a href="https://dang.ai" target="_blank" rel="dofollow noopener"><img src="https://assets.dang.ai/badges/dang-verified-dark.png" alt="Verified on DANG!" style="height:54px;width:auto;border:0;outline:none;text-decoration:none;" /></a>
+  <a href="https://fazier.com" target="_blank" rel="dofollow noopener">Featured on Fazier</a>
+  <a href="https://twelve.tools" target="_blank"><img src="https://twelve.tools/badge0-white.svg" alt="Featured on Twelve Tools" style="height:54px;width:auto;" /></a>
+  <a href="https://deeplaunch.io" target="_blank" rel="dofollow noopener">Featured on DeepLaunch.io</a>
+  <a href="https://findly.tools" target="_blank" rel="dofollow noopener">Featured on Findly.tools</a>
+  <a href="https://startupfa.me" target="_blank" rel="dofollow noopener">Featured on Startup Fame</a>
+</footer>
+</body>
+</html>

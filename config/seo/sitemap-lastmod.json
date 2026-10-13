@@ -6,11 +6,11 @@
       "lastmod": "2026-10-13"
     },
     "https://www.keyoapi.xyz/compare": {
-      "hash": "52cf83d6dbf389b4",
+      "hash": "0403b4f9be8618d4",
       "lastmod": "2026-10-13"
     },
     "https://www.keyoapi.xyz/pricing-list": {
-      "hash": "2d10bd65d34ac059",
+      "hash": "19f224de0bd3ae06",
       "lastmod": "2026-10-13"
     },
     "https://www.keyoapi.xyz/free-models": {
@@ -18,7 +18,7 @@
       "lastmod": "2026-10-13"
     },
     "https://www.keyoapi.xyz/models": {
-      "hash": "ed91317d717e6ced",
+      "hash": "013e613f3a4a045e",
       "lastmod": "2026-10-13"
     },
     "https://www.keyoapi.xyz/gemini-api-pricing": {
@@ -30,7 +30,7 @@
       "lastmod": "2026-10-13"
     },
     "https://www.keyoapi.xyz/claude-api-pricing": {
-      "hash": "56b3d6a09257c4e9",
+      "hash": "cebe14f6d2562068",
       "lastmod": "2026-10-13"
     },
     "https://www.keyoapi.xyz/openai-api-pricing": {
@@ -294,7 +294,7 @@
       "lastmod": "2026-10-13"
     },
     "https://www.keyoapi.xyz/ai-agent-api": {
-      "hash": "e27e1d8d729a028a",
+      "hash": "9867823a43168b09",
       "lastmod": "2026-10-13"
     },
     "https://www.keyoapi.xyz/ai-story-api": {
@@ -306,7 +306,15 @@
       "lastmod": "2026-10-13"
     },
     "https://www.keyoapi.xyz/model/cloudflare-clef": {
-      "hash": "1dfe8cc2563f2ca5",
+      "hash": "5410d5832a9cadb6",
+      "lastmod": "2026-10-13"
+    },
+    "https://www.keyoapi.xyz/claude-code-api-pricing": {
+      "hash": "8aec79b85572df96",
+      "lastmod": "2026-10-13"
+    },
+    "https://www.keyoapi.xyz/brand/keyo-api-ref.html": {
+      "hash": "a6766a63dd14cd4d",
       "lastmod": "2026-10-13"
     }
   },

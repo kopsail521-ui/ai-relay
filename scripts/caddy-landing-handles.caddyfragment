@@ -83,3 +83,8 @@
 		rewrite * /study-ai-api.html
 		file_server
 	}
+	handle /claude-code-api-pricing {
+		root * __AI_RELAY_ROOT__/static/seo
+		rewrite * /claude-code-api-pricing.html
+		file_server
+	}

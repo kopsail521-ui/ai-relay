@@ -359,6 +359,18 @@
           "paragraphs": [
             "At the default-group rates checked on 2026-10-13, claude-opus-5-5 lists $1.7647 / $8.8235 per million input/output tokens and claude-fable-5-1 lists $7.3530 / $36.7650. Fable tokens cost about 4.17 times as much. See /fable-5-1-vs-opus-5-5 for the request-cost calculation and coding or agent evaluation checklist. The Opus model guide is /model/claude-opus-5-5."
           ]
+        },
+        {
+          "heading": "Claude Code API pricing: budget the full task",
+          "paragraphs": [
+            "See /claude-code-api-pricing for exact default-group rates and a worked 100K input / 10K output task budget. The token mix is an explicit assumption, not an average Claude Code session. Compare current subscription terms separately, and verify the supported gateway format before connecting a client."
+          ]
+        },
+        {
+          "heading": "A separate decision model for routing",
+          "paragraphs": [
+            "For bounded routing, /model/cloudflare-clef is a Cloudflare decision model with POST /v1/decisions. It returns typed probabilities and is not part of the Claude chat price table. An application can use it to classify a request before sending selected work to a chat model; evaluate that routing policy on your own tasks."
+          ]
         }
       ]
     },

@@ -113,6 +113,14 @@ ul{margin:0 0 14px;padding-left:1.2em}
 
 
 
+
+<h2>Use a decision model for explicit routing</h2>
+<p>For bounded routing or triage, <a href="/model/cloudflare-clef">the cloudflare-clef model page</a> accepts state plus typed questions and returns choice / noul probabilities through POST /v1/decisions. It does not generate a chat message or execute tools. Your application interprets the probabilities, applies thresholds and decides whether to route, ask for clarification or request human review.</p>
+<p>For Claude-class agent budget examples, see <a href="/claude-code-api-pricing">Claude Code API Pricing: Budget the Whole Task</a>. The token budget there is an assumption, not a typical session measurement.</p>
+
+
+
+
 <h2>FAQ</h2><div class="faq"><details><summary>Does KeyoAPI run my agent tools?</summary><p>The chat API generates model responses. Your application manages the agent loop, tool execution, state and acceptance checks.</p></details>
 <details><summary>Do all chat models support tool calling?</summary><p>Do not assume that. Check the selected model and route, then verify a small tool-call request before deploying the feature.</p></details>
 <details><summary>How do I compare agent models fairly?</summary><p>Use the same tasks, tools, context and budgets. Compare completed tasks, corrections, time and the total bill including retries, not only per-token rates.</p></details></div>
@@ -120,7 +128,9 @@ ul{margin:0 0 14px;padding-left:1.2em}
 <a href="/model/claude-opus-5-5">the claude-opus-5-5 model page</a>
 <a href="/gpt-6-1-sol-vs-gpt-6-astra">GPT-6.1 Sol vs GPT-6 Astra</a>
 <a href="/fable-5-1-vs-opus-5-5">Fable 5.1 vs Opus 5.5</a>
-<a href="/brand/keyo-api-ref.html">the API endpoint reference</a></div>
+<a href="/brand/keyo-api-ref.html">the API endpoint reference</a>
+<a href="/model/cloudflare-clef">the cloudflare-clef model page</a>
+<a href="/claude-code-api-pricing">Claude Code API Pricing: Budget the Whole Task</a></div>
 </main>
 <footer class="footer">
   <a href="/">Home</a>

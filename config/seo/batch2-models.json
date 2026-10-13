@@ -514,7 +514,10 @@
       "targetKeywords": [
         "gpt-6.1-sol",
         "gpt 6.1 sol api",
-        "gpt-6.1 sol"
+        "gpt-6.1 sol",
+        "gpt 6.1 sol pricing",
+        "gpt sol 6.1",
+        "6.1 sol vs 6 astra"
       ],
       "h1": "GPT-6.1 Sol API on KeyoAPI — Updated Sol-Class Chat",
       "title": "GPT-6.1 Sol API | GPT-6 Sol Update on KeyoAPI",
@@ -536,11 +539,38 @@
         {
           "q": "Where is live pricing?",
           "a": "See /pricing/gpt-6.1-sol and /compare for the static planning table."
+        },
+        {
+          "q": "What does GPT 6.1 Sol cost?",
+          "a": "At the checked default-group rate: $0.3677 per million input tokens and $1.8385 per million output tokens. Check /pricing for your current group and rates. See /gpt-6-1-sol-vs-gpt-6-astra for a worked cost comparison."
         }
       ],
       "body": "GPT-6.1 Sol on KeyoAPI is the updated Sol-class chat ID in the GPT-6 family. Indicative rates are about $0.37 / $1.84 per 1M in/out — the same band as gpt-6-sol; confirm live on /pricing/gpt-6.1-sol. Use it as a production chat default, keep high-volume paths on gpt-6-luna, and escalate stubborn jobs to gpt-6-astra. Call via OpenAI-compatible POST /v1/chat/completions at https://www.keyoapi.xyz/v1.",
       "curlExample": "curl https://www.keyoapi.xyz/v1/chat/completions \\\n  -H \"Authorization: Bearer YOUR_API_KEY\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\"model\":\"gpt-6.1-sol\",\"messages\":[{\"role\":\"user\",\"content\":\"Hello from GPT-6.1 Sol\"}]}'",
-      "uniqueBlurb": "Newer Sol-class GPT-6 ID at the same Keyo rate band as gpt-6-sol."
+      "uniqueBlurb": "Newer Sol-class GPT-6 ID at the same Keyo rate band as gpt-6-sol.",
+      "guideSections": [
+        {
+          "heading": "GPT 6.1 Sol pricing and a request-cost example",
+          "paragraphs": [
+            "The public KeyoAPI catalog checked on 2026-10-13 lists default-group rates of $0.3677 per million input tokens and $1.8385 per million output tokens. These are KeyoAPI sell rates, not official OpenAI list prices. Other billing groups can apply a multiplier; confirm your active group and current rates on /pricing.",
+            "For 10,000 input tokens and 2,000 output tokens, the ordinary token estimate is 0.01 × $0.3677 + 0.002 × $1.8385 = $0.007354. A thousand requests with that identical mix total about $7.354 before retries, cached-token adjustments or extra modalities. Use actual response usage when calculating a production budget."
+          ]
+        },
+        {
+          "heading": "GPT-6.1 Sol vs GPT-6 Astra",
+          "paragraphs": [
+            "Astra lists $1.8385 input and $9.1925 output per million tokens in the checked default group. Sol therefore costs one fifth as much per input or output token. The same 10,000-input and 2,000-output example costs $0.036770 on Astra. The complete table and evaluation checklist are on /gpt-6-1-sol-vs-gpt-6-astra.",
+            "Choose using accepted task results, not the model names alone. Compare identical prompts, correctness, latency, output lengths and retries. Start a Sol evaluation on routine chat or structured work, then test Astra on cases that fail your acceptance checks. Higher unit prices do not by themselves prove better coding or reasoning quality."
+          ]
+        },
+        {
+          "heading": "Use the exact Sol model ID",
+          "paragraphs": [
+            "GPT Sol 6.1 and GPT 6.1 Sol refer to gpt-6.1-sol in this catalog. Pass that exact ID to POST /v1/chat/completions; the words in a search phrase are not interchangeable API aliases. Check optional tool, streaming and context behavior on the channel you use before depending on those features.",
+            "For an application workflow see /ai-agent-api, /ai-story-api or /study-ai-api. For a broader GPT-class token table see /openai-api-pricing. These examples use the bare paid model ID; gift-credit eligibility is tied to eligible gift-credit IDs rather than automatically applied to every chat model."
+          ]
+        }
+      ]
     },
     {
       "id": "claude-opus-5-5",
@@ -549,7 +579,10 @@
       "targetKeywords": [
         "claude opus 5.5",
         "claude-opus-5-5",
-        "claude api pricing"
+        "claude api pricing",
+        "opus5.5",
+        "fable 5.1 vs opus 5.5",
+        "opus 5.5 vs fable 5.1"
       ],
       "h1": "Claude Opus 5.5 API on KeyoAPI — Hard Agents",
       "title": "Claude Opus 5.5 API Pricing | KeyoAPI",
@@ -559,7 +592,8 @@
       "related": [
         "claude-opus-5",
         "claude-sonnet-5",
-        "claude-fable-5"
+        "claude-fable-5",
+        "claude-fable-5-1"
       ],
       "endpoint": "POST /v1/chat/completions",
       "codeHint": "model=claude-opus-5-5",
@@ -571,11 +605,38 @@
         {
           "q": "How do I integrate?",
           "a": "Keep your OpenAI SDK, set baseURL to https://www.keyoapi.xyz/v1, and use model=claude-opus-5-5."
+        },
+        {
+          "q": "Is opus5.5 the API model ID?",
+          "a": "Use claude-opus-5-5 as the model value. opus5.5 is a shorthand label, not the exact catalog ID. See /fable-5-1-vs-opus-5-5 to compare it with claude-fable-5-1."
         }
       ],
       "body": "Claude Opus 5.5 on KeyoAPI is an Opus-class chat and agent model for hard coding and multi-step tool loops. Indicative rates are about $1.76 / $8.82 per 1M in/out — confirm live on /pricing/claude-opus-5-5. Reserve it for escalations; keep Sonnet or cheaper chat IDs on the hot path. Same OpenAI-compatible gateway as other Keyo chat models.",
       "curlExample": "curl https://www.keyoapi.xyz/v1/chat/completions \\\n  -H \"Authorization: Bearer YOUR_API_KEY\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\"model\":\"claude-opus-5-5\",\"messages\":[{\"role\":\"user\",\"content\":\"Hello from Claude Opus 5.5\"}]}'",
-      "uniqueBlurb": "Newer Opus-class ID for stubborn agents — escalate intentionally so Claude spend stays controlled."
+      "uniqueBlurb": "Newer Opus-class ID for stubborn agents — escalate intentionally so Claude spend stays controlled.",
+      "guideSections": [
+        {
+          "heading": "Opus 5.5 pricing by input and output tokens",
+          "paragraphs": [
+            "The public KeyoAPI catalog checked on 2026-10-13 lists default-group rates of $1.7647 per million input tokens and $8.8235 per million output tokens. These are KeyoAPI sell rates, not Anthropic official list prices. Confirm current rates and your billing-group multiplier in /pricing.",
+            "A request with 10,000 input tokens and 2,000 output tokens costs about $0.035294 before retries, cached-token adjustments or extra modalities. A thousand requests with that identical mix cost about $35.294. For agent sessions, count tokens across every model turn and repeated context rather than only the final answer."
+          ]
+        },
+        {
+          "heading": "Fable 5.1 vs Opus 5.5",
+          "paragraphs": [
+            "claude-fable-5-1 lists $7.3530 input and $36.7650 output per million tokens in the checked default group, about 4.17 times the Opus rate. The same example costs $0.147060 on Fable. /fable-5-1-vs-opus-5-5 covers both comparison word orders with one table and one evaluation checklist.",
+            "Test both models on the same coding or agent tasks with the same context, tools and execution budget. Compare passing tests, completed tasks, human corrections and total cost including retries. Use measured results to decide when a higher-cost candidate is worth routing to; this guide does not claim a universal performance ranking."
+          ]
+        },
+        {
+          "heading": "Call opus5.5 through the chat API",
+          "paragraphs": [
+            "The shorthand opus5.5 maps to claude-opus-5-5 in this guide. Keep the exact catalog ID in your request. Both Opus and Fable currently advertise the OpenAI-compatible chat route; verify advanced tool and streaming behavior before deploying it.",
+            "Use /ai-agent-api for a bounded application loop and /claude-api-pricing for the broader Claude-class rate table. Your application executes tools and checks results; a chat response does not run the agent workflow by itself."
+          ]
+        }
+      ]
     },
     {
       "id": "gpt-6-astra",

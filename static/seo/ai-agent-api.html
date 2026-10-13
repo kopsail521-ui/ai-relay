@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>AI Agent API: Build Bounded Workflows with One Key | KeyoAPI</title>
+<meta name="description" content="Build an AI agent using KeyoAPI's chat API: separate planning from execution, validate tool actions, set turn budgets and compare model costs per completed task." />
+<link rel="canonical" href="https://www.keyoapi.xyz/ai-agent-api" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://www.keyoapi.xyz/ai-agent-api" />
+<meta property="og:title" content="AI Agent API: Build Bounded Workflows with One Key | KeyoAPI" />
+<meta property="og:description" content="Build an AI agent using KeyoAPI's chat API: separate planning from execution, validate tool actions, set turn budgets and compare model costs per completed task." />
+<meta property="og:image" content="https://www.keyoapi.xyz/brand/logo.svg" />
+<link rel="icon" href="/brand/logo.svg" type="image/svg+xml" />
+<link rel="stylesheet" href="/brand/keyo-theme.css" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="AI Agent API: Build Bounded Workflows with One Key | KeyoAPI" />
+<meta name="twitter:description" content="Build an AI agent using KeyoAPI's chat API: separate planning from execution, validate tool actions, set turn budgets and compare model costs per completed task." />
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebPage","name":"AI Agent API: Build Bounded Workflows with One Key | KeyoAPI","url":"https://www.keyoapi.xyz/ai-agent-api","description":"Build an AI agent using KeyoAPI's chat API: separate planning from execution, validate tool actions, set turn budgets and compare model costs per completed task."}</script>
+<style>.wrap{max-width:880px;margin:0 auto;padding:28px 24px 48px}
+.footer{display:flex;flex-wrap:wrap;gap:10px 16px;max-width:1080px;margin:0 auto;padding:24px 24px 40px;border-top:1px solid var(--line);font-size:13px;color:var(--muted)}
+.footer a{color:var(--ink-2);text-decoration:none}
+.footer a:hover{color:var(--ink)}
+h1{font-size:clamp(1.7rem,3.1vw,2.35rem);line-height:1.18;letter-spacing:-.035em;margin:0 0 14px;font-weight:600;text-wrap:balance}
+h2{font-size:1.15rem;margin:28px 0 10px;letter-spacing:-.02em}
+p{margin:0 0 14px;color:var(--ink)}
+.lead{font-size:1.02rem;color:var(--ink-2);line-height:1.55;text-wrap:pretty}
+.meta{font-size:14px;color:var(--muted);margin:0 0 18px}
+.btnrow{display:flex;flex-wrap:wrap;gap:10px;margin:18px 0 28px}
+.btn,.k-btn{display:inline-block;padding:10px 16px;border-radius:var(--radius);font-weight:600;font-size:14px;text-decoration:none;line-height:1.2}
+.btn-primary,.k-btn-primary{background:var(--ink);color:#f6f5f1}
+.btn-primary:hover,.k-btn-primary:hover{background:#000;color:#f6f5f1;text-decoration:none}
+.btn-secondary,.k-btn-secondary{background:transparent;color:var(--ink);border:1px solid var(--line-strong,#c9c4b8)}
+.btn-secondary:hover,.k-btn-secondary:hover{border-color:var(--ink);text-decoration:none}
+.btn-link,.k-btn-link{background:transparent;color:var(--link);padding-inline:8px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:16px 18px;margin:16px 0}
+pre,code{font-family:var(--mono)}
+pre{background:var(--panel);color:var(--panel-ink);padding:14px 16px;border-radius:var(--radius);overflow:auto;font-size:13px}
+pre code{background:transparent;padding:0;color:inherit;font-size:inherit;border-radius:0}
+table{width:100%;border-collapse:collapse;font-size:14px;background:var(--surface)}
+.table-scroll{overflow-x:auto;margin:16px 0}
+.table-scroll table{min-width:620px}
+th,td{border:1px solid var(--line);padding:10px 12px;text-align:left;vertical-align:top}
+th{background:color-mix(in srgb,var(--line) 40%,var(--surface));font-weight:600}
+.ok{color:var(--ok);font-weight:600}
+.grid{display:grid;gap:10px;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));margin:16px 0}
+.grid a{display:flex;flex-direction:column;justify-content:center;gap:4px;min-height:4.5rem;padding:12px 14px;border:1px solid var(--line);border-radius:var(--radius);background:var(--surface);color:var(--ink);text-decoration:none;font-weight:500;line-height:1.35}
+.grid a:hover{border-color:var(--ink)}
+.grid a .grid-title{font-weight:600;overflow-wrap:anywhere}
+.grid a .grid-meta{color:var(--muted);font-size:13px;font-weight:500}
+.grid a code{font-size:12.5px;background:transparent;padding:0}
+ul{margin:0 0 14px;padding-left:1.2em}
+.faq details{border:1px solid var(--line);border-radius:var(--radius);padding:12px 14px;margin:0 0 10px;background:var(--surface)}
+.faq summary{cursor:pointer;font-weight:600}
+.surfaces{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));margin:16px 0 8px}
+.surf{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:14px 16px;font-size:14px}
+.surf h3{font-size:15px;margin:0 0 8px}
+.surf ul{margin:0;padding-left:1.15em;color:var(--muted)}
+.panel{background:var(--panel);color:var(--panel-ink);border-radius:var(--radius);padding:18px;text-align:left;font-family:var(--mono);font-size:12.5px;overflow:auto;border:1px solid #2a2924}
+.panel .label{color:#b9b6ab;margin-bottom:5px;font-size:11px;letter-spacing:.06em;text-transform:uppercase}
+.panel .label+.label{margin-top:14px}</style>
+</head>
+<body>
+<header class="k-nav">
+  <a class="k-wordmark" href="/"><img src="/brand/logo.svg" alt="" width="22" height="22" />KeyoAPI</a>
+  <nav aria-label="Primary">
+    <a href="/pricing">Pricing</a>
+    <a href="/models">Models</a>
+    <a href="/compare">Compare</a>
+    <a href="/brand/keyo-docs.html">Docs</a>
+    <a href="/brand/blog/">Blog</a>
+    <a href="/brand/faq.html">FAQ</a>
+    <a href="/console">Console</a>
+    <a href="/sign-in">Sign in</a>
+    <a class="k-nav-cta" href="/sign-up">Get started</a>
+  </nav>
+</header>
+<main class="wrap">
+<h1>Build an AI agent with the KeyoAPI chat API</h1>
+<p class="lead">An AI agent combines model requests with application code that tracks state, runs tools and checks results. KeyoAPI supplies the model API; your application owns the execution loop. Start with a small planning request, add validated actions, and set a budget for every task.</p>
+<div class="btnrow"><a class="btn btn-primary" href="/sign-up">Get API key</a><a class="btn btn-secondary" href="/pricing">Live prices</a><a class="btn btn-secondary" href="/models">Model guides</a></div>
+
+<h2>Choose an API model for your agent</h2>
+<p>For a first evaluation, gpt-6.1-sol is a lower-cost chat candidate than gpt-6-astra at the checked default-group rates. Claude Opus 5.5 and Fable 5.1 provide another pair to test on coding or planning tasks. Compare <a href="/gpt-6-1-sol-vs-gpt-6-astra">GPT-6.1 Sol vs GPT-6 Astra</a> and <a href="/fable-5-1-vs-opus-5-5">Fable 5.1 vs Opus 5.5</a> for prices and evaluation criteria. Those rate differences do not prove which model will complete your task best.</p>
+<p>The basic endpoint is POST /v1/chat/completions. Create an API key in the console and keep it on your server. Check tools, tool_choice, streaming and other optional parameters against the chosen model route before depending on them. You can begin with ordinary messages and a planner response while you verify the advanced contract.</p>
+
+
+
+
+
+<h2>Make a bounded planning request</h2>
+<p>This example asks for a plan only. It does not execute code, call an external tool or create an agent session. Your application must parse the response, validate its structure and decide which actions it can run.</p>
+
+
+<pre><code>curl https://www.keyoapi.xyz/v1/chat/completions \
+  -H &quot;Authorization: Bearer $KEYO_API_KEY&quot; \
+  -H &quot;Content-Type: application/json&quot; \
+  -d '{&quot;model&quot;:&quot;gpt-6.1-sol&quot;,&quot;messages&quot;:[{&quot;role&quot;:&quot;system&quot;,&quot;content&quot;:&quot;Return a JSON object with goal, steps and stop_condition. Plan at most three steps. Do not claim to have executed any action.&quot;},{&quot;role&quot;:&quot;user&quot;,&quot;content&quot;:&quot;Plan a support assistant that searches an approved help center and drafts an answer with source links.&quot;}],&quot;max_tokens&quot;:600}'</code></pre>
+
+
+<h2>Implement the execution loop in your application</h2>
+<p>Store a task ID, user goal, selected model, validated plan and previous tool results. Limit available tools to explicit schemas and authorized data. Treat the model's proposed arguments as input to validate, then run the selected tool in application code and attach its result to the next request using the route's documented message format.</p>
+<p>Stop when the acceptance condition is met, a tool fails repeatedly, the maximum turn count is reached or the budget is exhausted. Log each request's usage and each action's result. Avoid replaying actions with side effects when retrying a timed-out model request; use application-level action IDs and idempotency where appropriate. Test a failed tool response as well as a successful path.</p>
+
+
+
+
+
+<h2>Budget for the whole agent task</h2>
+<p>Agent cost is the sum of every model turn, including retries and repeated context. At the checked Sol default-group rates, a single 10,000-input and 2,000-output turn costs about $0.007354. Ten turns with that identical token mix cost about $0.07354; real conversations often grow, so log actual usage rather than multiplying only the first turn.</p>
+<p>Track cost per accepted task, execution errors and human corrections. Summarize old tool output when it no longer needs to remain verbatim, cache reusable application data, and test any cheaper model against the same acceptance rules. Use <a href="/model/gpt-6.1-sol">the gpt-6.1-sol model page</a> for a starting model guide and <a href="/pricing">the pricing page</a> for current billing-group rates.</p>
+
+
+
+
+<h2>FAQ</h2><div class="faq"><details><summary>Does KeyoAPI run my agent tools?</summary><p>The chat API generates model responses. Your application manages the agent loop, tool execution, state and acceptance checks.</p></details>
+<details><summary>Do all chat models support tool calling?</summary><p>Do not assume that. Check the selected model and route, then verify a small tool-call request before deploying the feature.</p></details>
+<details><summary>How do I compare agent models fairly?</summary><p>Use the same tasks, tools, context and budgets. Compare completed tasks, corrections, time and the total bill including retries, not only per-token rates.</p></details></div>
+<h2>Related guides</h2><div class="grid"><a href="/model/gpt-6.1-sol">the gpt-6.1-sol model page</a>
+<a href="/model/claude-opus-5-5">the claude-opus-5-5 model page</a>
+<a href="/gpt-6-1-sol-vs-gpt-6-astra">GPT-6.1 Sol vs GPT-6 Astra</a>
+<a href="/fable-5-1-vs-opus-5-5">Fable 5.1 vs Opus 5.5</a>
+<a href="/brand/keyo-api-ref.html">the API endpoint reference</a></div>
+</main>
+<footer class="footer">
+  <a href="/">Home</a>
+  <a href="/pricing">Pricing</a>
+  <a href="/pricing-list">Pricing list</a>
+  <a href="/models">Model guides</a>
+  <a href="/compare">Compare</a>
+  <a href="/free-models">Free models</a>
+  <a href="/brand/blog/">Blog</a>
+  <a href="/gemini-api-pricing">Gemini pricing</a>
+  <a href="/deepseek-api-pricing">DeepSeek pricing</a>
+  <a href="/glm-api-pricing">GLM pricing</a>
+  <a href="/claude-api-pricing">Claude pricing</a>
+  <a href="/openai-api-pricing">OpenAI pricing</a>
+  <a href="/remove-bg-api-alternative">remove.bg API</a>
+  <a href="/tts-api">Text to Speech</a>
+  <a href="/voice-cloning-api">Voice clone API</a>
+  <a href="/ai-avatar-video-generator">Avatar video API</a>
+  <a href="/grok-api-pricing">Grok pricing</a>
+  <a href="/openai-api-alternative">OpenAI alternative</a>
+  <a href="/brand/keyo-docs.html">Docs</a>
+  <a href="/brand/faq.html">FAQ</a>
+  <a href="/brand/privacy.html">Privacy</a>
+  <a href="/brand/terms.html">Terms</a>
+  <a href="/sign-in">Sign in</a>
+  <a href="https://toolfame.com/item/keyoapi" target="_blank" rel="noopener noreferrer"><img src="https://toolfame.com/badge-light.svg" alt="Featured on ToolFame.com" style="height:54px;width:auto;" /></a>
+  <a href="https://yo.directory" target="_blank" rel="dofollow noopener">Featured on Yo.directory</a>
+  <a href="https://www.toolpilot.ai" target="_blank" rel="dofollow noopener">Featured on ToolPilot.ai</a>
+  <a href="https://dang.ai" target="_blank" rel="dofollow noopener"><img src="https://assets.dang.ai/badges/dang-verified-dark.png" alt="Verified on DANG!" style="height:54px;width:auto;border:0;outline:none;text-decoration:none;" /></a>
+  <a href="https://fazier.com" target="_blank" rel="dofollow noopener">Featured on Fazier</a>
+  <a href="https://twelve.tools" target="_blank"><img src="https://twelve.tools/badge0-white.svg" alt="Featured on Twelve Tools" style="height:54px;width:auto;" /></a>
+  <a href="https://deeplaunch.io" target="_blank" rel="dofollow noopener">Featured on DeepLaunch.io</a>
+  <a href="https://findly.tools" target="_blank" rel="dofollow noopener">Featured on Findly.tools</a>
+  <a href="https://startupfa.me" target="_blank" rel="dofollow noopener">Featured on Startup Fame</a>
+</footer>
+</body>
+</html>

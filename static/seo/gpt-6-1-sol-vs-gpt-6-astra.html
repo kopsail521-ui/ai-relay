@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>GPT-6.1 Sol vs GPT-6 Astra: API Prices &amp; Evaluation | KeyoAPI</title>
+<meta name="description" content="Compare GPT-6.1 Sol and GPT-6 Astra on KeyoAPI: input/output token prices, a worked request budget, model IDs and an API evaluation checklist." />
+<link rel="canonical" href="https://www.keyoapi.xyz/gpt-6-1-sol-vs-gpt-6-astra" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://www.keyoapi.xyz/gpt-6-1-sol-vs-gpt-6-astra" />
+<meta property="og:title" content="GPT-6.1 Sol vs GPT-6 Astra: API Prices &amp; Evaluation | KeyoAPI" />
+<meta property="og:description" content="Compare GPT-6.1 Sol and GPT-6 Astra on KeyoAPI: input/output token prices, a worked request budget, model IDs and an API evaluation checklist." />
+<meta property="og:image" content="https://www.keyoapi.xyz/brand/logo.svg" />
+<link rel="icon" href="/brand/logo.svg" type="image/svg+xml" />
+<link rel="stylesheet" href="/brand/keyo-theme.css" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="GPT-6.1 Sol vs GPT-6 Astra: API Prices &amp; Evaluation | KeyoAPI" />
+<meta name="twitter:description" content="Compare GPT-6.1 Sol and GPT-6 Astra on KeyoAPI: input/output token prices, a worked request budget, model IDs and an API evaluation checklist." />
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebPage","name":"GPT-6.1 Sol vs GPT-6 Astra: API Prices & Evaluation | KeyoAPI","url":"https://www.keyoapi.xyz/gpt-6-1-sol-vs-gpt-6-astra","description":"Compare GPT-6.1 Sol and GPT-6 Astra on KeyoAPI: input/output token prices, a worked request budget, model IDs and an API evaluation checklist."}</script>
+<style>.wrap{max-width:880px;margin:0 auto;padding:28px 24px 48px}
+.footer{display:flex;flex-wrap:wrap;gap:10px 16px;max-width:1080px;margin:0 auto;padding:24px 24px 40px;border-top:1px solid var(--line);font-size:13px;color:var(--muted)}
+.footer a{color:var(--ink-2);text-decoration:none}
+.footer a:hover{color:var(--ink)}
+h1{font-size:clamp(1.7rem,3.1vw,2.35rem);line-height:1.18;letter-spacing:-.035em;margin:0 0 14px;font-weight:600;text-wrap:balance}
+h2{font-size:1.15rem;margin:28px 0 10px;letter-spacing:-.02em}
+p{margin:0 0 14px;color:var(--ink)}
+.lead{font-size:1.02rem;color:var(--ink-2);line-height:1.55;text-wrap:pretty}
+.meta{font-size:14px;color:var(--muted);margin:0 0 18px}
+.btnrow{display:flex;flex-wrap:wrap;gap:10px;margin:18px 0 28px}
+.btn,.k-btn{display:inline-block;padding:10px 16px;border-radius:var(--radius);font-weight:600;font-size:14px;text-decoration:none;line-height:1.2}
+.btn-primary,.k-btn-primary{background:var(--ink);color:#f6f5f1}
+.btn-primary:hover,.k-btn-primary:hover{background:#000;color:#f6f5f1;text-decoration:none}
+.btn-secondary,.k-btn-secondary{background:transparent;color:var(--ink);border:1px solid var(--line-strong,#c9c4b8)}
+.btn-secondary:hover,.k-btn-secondary:hover{border-color:var(--ink);text-decoration:none}
+.btn-link,.k-btn-link{background:transparent;color:var(--link);padding-inline:8px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:16px 18px;margin:16px 0}
+pre,code{font-family:var(--mono)}
+pre{background:var(--panel);color:var(--panel-ink);padding:14px 16px;border-radius:var(--radius);overflow:auto;font-size:13px}
+pre code{background:transparent;padding:0;color:inherit;font-size:inherit;border-radius:0}
+table{width:100%;border-collapse:collapse;font-size:14px;background:var(--surface)}
+.table-scroll{overflow-x:auto;margin:16px 0}
+.table-scroll table{min-width:620px}
+th,td{border:1px solid var(--line);padding:10px 12px;text-align:left;vertical-align:top}
+th{background:color-mix(in srgb,var(--line) 40%,var(--surface));font-weight:600}
+.ok{color:var(--ok);font-weight:600}
+.grid{display:grid;gap:10px;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));margin:16px 0}
+.grid a{display:flex;flex-direction:column;justify-content:center;gap:4px;min-height:4.5rem;padding:12px 14px;border:1px solid var(--line);border-radius:var(--radius);background:var(--surface);color:var(--ink);text-decoration:none;font-weight:500;line-height:1.35}
+.grid a:hover{border-color:var(--ink)}
+.grid a .grid-title{font-weight:600;overflow-wrap:anywhere}
+.grid a .grid-meta{color:var(--muted);font-size:13px;font-weight:500}
+.grid a code{font-size:12.5px;background:transparent;padding:0}
+ul{margin:0 0 14px;padding-left:1.2em}
+.faq details{border:1px solid var(--line);border-radius:var(--radius);padding:12px 14px;margin:0 0 10px;background:var(--surface)}
+.faq summary{cursor:pointer;font-weight:600}
+.surfaces{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));margin:16px 0 8px}
+.surf{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:14px 16px;font-size:14px}
+.surf h3{font-size:15px;margin:0 0 8px}
+.surf ul{margin:0;padding-left:1.15em;color:var(--muted)}
+.panel{background:var(--panel);color:var(--panel-ink);border-radius:var(--radius);padding:18px;text-align:left;font-family:var(--mono);font-size:12.5px;overflow:auto;border:1px solid #2a2924}
+.panel .label{color:#b9b6ab;margin-bottom:5px;font-size:11px;letter-spacing:.06em;text-transform:uppercase}
+.panel .label+.label{margin-top:14px}</style>
+</head>
+<body>
+<header class="k-nav">
+  <a class="k-wordmark" href="/"><img src="/brand/logo.svg" alt="" width="22" height="22" />KeyoAPI</a>
+  <nav aria-label="Primary">
+    <a href="/pricing">Pricing</a>
+    <a href="/models">Models</a>
+    <a href="/compare">Compare</a>
+    <a href="/brand/keyo-docs.html">Docs</a>
+    <a href="/brand/blog/">Blog</a>
+    <a href="/brand/faq.html">FAQ</a>
+    <a href="/console">Console</a>
+    <a href="/sign-in">Sign in</a>
+    <a class="k-nav-cta" href="/sign-up">Get started</a>
+  </nav>
+</header>
+<main class="wrap">
+<h1>GPT-6.1 Sol vs GPT-6 Astra</h1>
+<p class="lead">Choosing between GPT-6.1 Sol and GPT-6 Astra starts with the price of a successful task. Both are listed on KeyoAPI with the same OpenAI-compatible chat endpoint; Sol costs one fifth as much per token in the default billing group. Compare answer quality and retries on your own workload before choosing a default.</p>
+<div class="btnrow"><a class="btn btn-primary" href="/sign-up">Get API key</a><a class="btn btn-secondary" href="/pricing">Live prices</a><a class="btn btn-secondary" href="/models">Model guides</a></div>
+
+<h2>GPT 6.1 Sol pricing vs GPT 6 Astra</h2>
+<p>The rates below were checked against KeyoAPI's public pricing catalog on 2026-10-13. They are KeyoAPI sell rates for the default group, not a statement of OpenAI's official list prices. Other billing groups can apply a multiplier. Cached input, extra modalities and different billing modes require their own rate check.</p>
+<div class="table-scroll"><table>
+<thead><tr><th scope="col">Model ID</th><th scope="col">Input / 1M tokens</th><th scope="col">Output / 1M tokens</th><th scope="col">10,000 input + 2,000 output</th></tr></thead>
+<tbody><tr><td>gpt-6.1-sol</td><td>$0.3677</td><td>$1.8385</td><td>$0.007354</td></tr>
+<tr><td>gpt-6-astra</td><td>$1.8385</td><td>$9.1925</td><td>$0.036770</td></tr></tbody>
+</table></div>
+<p>For 1,000 requests with that same token mix, the planning total is $7.354 for Sol or $36.770 for Astra before retries and additional charges. Cost = input tokens / 1,000,000 × input rate + output tokens / 1,000,000 × output rate. These figures use more precision than the rounded model-guide labels.</p>
+
+
+
+<h2>When does the higher Astra rate pay off?</h2>
+<p>Start a Sol evaluation with the tasks you actually ship: product Q&amp;A, structured extraction, code edits or document summaries. Keep the prompts and required outputs fixed. Test Astra on the same cases and measure whether it resolves failures that Sol leaves unfinished. A model name or higher rate alone does not establish a quality advantage.</p>
+<p>Score correctness, schema validity, completed tasks, latency and total billed tokens including retries. A fivefold unit-price difference means Astra needs a measurable benefit in your workload to justify routing every request to it. A practical alternative is a Sol default with Astra reserved for cases rejected by your validators; verify that the second attempt improves the result rather than repeating the first failure.</p>
+
+
+
+
+
+<h2>Use the exact API model IDs</h2>
+<p>Use gpt-6.1-sol for GPT 6.1 Sol (sometimes written GPT Sol 6.1), and gpt-6-astra for Astra. Keep the same endpoint, API key and messages when you compare them. Do not substitute a search phrase such as gpt-sol-6.1 for the catalog ID. Tool calling, context limits and optional parameters should be checked for the specific route before integration.</p>
+
+
+<pre><code>curl https://www.keyoapi.xyz/v1/chat/completions \
+  -H &quot;Authorization: Bearer $KEYO_API_KEY&quot; \
+  -H &quot;Content-Type: application/json&quot; \
+  -d '{&quot;model&quot;:&quot;gpt-6.1-sol&quot;,&quot;messages&quot;:[{&quot;role&quot;:&quot;user&quot;,&quot;content&quot;:&quot;Summarize this project brief in three actionable steps: ship a search feature, evaluate relevance, and report costs.&quot;}],&quot;max_tokens&quot;:400}'</code></pre>
+
+<h2>FAQ</h2><div class="faq"><details><summary>Is GPT-6.1 Sol five times cheaper than GPT-6 Astra?</summary><p>In the checked default-group token rates, yes: both input and output cost one fifth as much. Total task cost can differ because the models may produce different output lengths or require different retry counts.</p></details>
+<details><summary>Which model is better for coding?</summary><p>The catalog prices do not answer that. Compare accepted patches, passing tests, completion rate and cost per accepted result on the same repository tasks. Use those results to choose your routing policy.</p></details>
+<details><summary>Where can I verify the current GPT 6.1 Sol price?</summary><p>See <a href="/model/gpt-6.1-sol">the gpt-6.1-sol model page</a> for the model guide and <a href="/pricing">the pricing page</a> for the live catalog. The broader rate table is on <a href="/openai-api-pricing">the OpenAI API pricing page</a>.</p></details></div>
+<h2>Related guides</h2><div class="grid"><a href="/model/gpt-6.1-sol">the gpt-6.1-sol model page</a>
+<a href="/model/gpt-6-astra">the gpt-6-astra model page</a>
+<a href="/openai-api-pricing">the OpenAI API pricing page</a>
+<a href="/ai-agent-api">Build an AI agent with the KeyoAPI chat API</a></div>
+</main>
+<footer class="footer">
+  <a href="/">Home</a>
+  <a href="/pricing">Pricing</a>
+  <a href="/pricing-list">Pricing list</a>
+  <a href="/models">Model guides</a>
+  <a href="/compare">Compare</a>
+  <a href="/free-models">Free models</a>
+  <a href="/brand/blog/">Blog</a>
+  <a href="/gemini-api-pricing">Gemini pricing</a>
+  <a href="/deepseek-api-pricing">DeepSeek pricing</a>
+  <a href="/glm-api-pricing">GLM pricing</a>
+  <a href="/claude-api-pricing">Claude pricing</a>
+  <a href="/openai-api-pricing">OpenAI pricing</a>
+  <a href="/remove-bg-api-alternative">remove.bg API</a>
+  <a href="/tts-api">Text to Speech</a>
+  <a href="/voice-cloning-api">Voice clone API</a>
+  <a href="/ai-avatar-video-generator">Avatar video API</a>
+  <a href="/grok-api-pricing">Grok pricing</a>
+  <a href="/openai-api-alternative">OpenAI alternative</a>
+  <a href="/brand/keyo-docs.html">Docs</a>
+  <a href="/brand/faq.html">FAQ</a>
+  <a href="/brand/privacy.html">Privacy</a>
+  <a href="/brand/terms.html">Terms</a>
+  <a href="/sign-in">Sign in</a>
+  <a href="https://toolfame.com/item/keyoapi" target="_blank" rel="noopener noreferrer"><img src="https://toolfame.com/badge-light.svg" alt="Featured on ToolFame.com" style="height:54px;width:auto;" /></a>
+  <a href="https://yo.directory" target="_blank" rel="dofollow noopener">Featured on Yo.directory</a>
+  <a href="https://www.toolpilot.ai" target="_blank" rel="dofollow noopener">Featured on ToolPilot.ai</a>
+  <a href="https://dang.ai" target="_blank" rel="dofollow noopener"><img src="https://assets.dang.ai/badges/dang-verified-dark.png" alt="Verified on DANG!" style="height:54px;width:auto;border:0;outline:none;text-decoration:none;" /></a>
+  <a href="https://fazier.com" target="_blank" rel="dofollow noopener">Featured on Fazier</a>
+  <a href="https://twelve.tools" target="_blank"><img src="https://twelve.tools/badge0-white.svg" alt="Featured on Twelve Tools" style="height:54px;width:auto;" /></a>
+  <a href="https://deeplaunch.io" target="_blank" rel="dofollow noopener">Featured on DeepLaunch.io</a>
+  <a href="https://findly.tools" target="_blank" rel="dofollow noopener">Featured on Findly.tools</a>
+  <a href="https://startupfa.me" target="_blank" rel="dofollow noopener">Featured on Startup Fame</a>
+</footer>
+</body>
+</html>

@@ -1,0 +1,198 @@
+{
+  "pages": [
+    {
+      "slug": "gpt-6-1-sol-vs-gpt-6-astra",
+      "kind": "comparison",
+      "title": "GPT-6.1 Sol vs GPT-6 Astra: API Prices & Evaluation | KeyoAPI",
+      "h1": "GPT-6.1 Sol vs GPT-6 Astra",
+      "metaDescription": "Compare GPT-6.1 Sol and GPT-6 Astra on KeyoAPI: input/output token prices, a worked request budget, model IDs and an API evaluation checklist.",
+      "lead": "Choosing between GPT-6.1 Sol and GPT-6 Astra starts with the price of a successful task. Both are listed on KeyoAPI with the same OpenAI-compatible chat endpoint; Sol costs one fifth as much per token in the default billing group. Compare answer quality and retries on your own workload before choosing a default.",
+      "sections": [
+        {
+          "heading": "GPT 6.1 Sol pricing vs GPT 6 Astra",
+          "paragraphs": ["The rates below were checked against KeyoAPI's public pricing catalog on 2026-10-13. They are KeyoAPI sell rates for the default group, not a statement of OpenAI's official list prices. Other billing groups can apply a multiplier. Cached input, extra modalities and different billing modes require their own rate check."],
+          "headers": ["Model ID", "Input / 1M tokens", "Output / 1M tokens", "10,000 input + 2,000 output"],
+          "rows": [["gpt-6.1-sol", "$0.3677", "$1.8385", "$0.007354"], ["gpt-6-astra", "$1.8385", "$9.1925", "$0.036770"]],
+          "paragraphsAfter": ["For 1,000 requests with that same token mix, the planning total is $7.354 for Sol or $36.770 for Astra before retries and additional charges. Cost = input tokens / 1,000,000 × input rate + output tokens / 1,000,000 × output rate. These figures use more precision than the rounded model-guide labels."]
+        },
+        {
+          "heading": "When does the higher Astra rate pay off?",
+          "paragraphs": ["Start a Sol evaluation with the tasks you actually ship: product Q&A, structured extraction, code edits or document summaries. Keep the prompts and required outputs fixed. Test Astra on the same cases and measure whether it resolves failures that Sol leaves unfinished. A model name or higher rate alone does not establish a quality advantage.", "Score correctness, schema validity, completed tasks, latency and total billed tokens including retries. A fivefold unit-price difference means Astra needs a measurable benefit in your workload to justify routing every request to it. A practical alternative is a Sol default with Astra reserved for cases rejected by your validators; verify that the second attempt improves the result rather than repeating the first failure."]
+        },
+        {
+          "heading": "Use the exact API model IDs",
+          "paragraphs": ["Use gpt-6.1-sol for GPT 6.1 Sol (sometimes written GPT Sol 6.1), and gpt-6-astra for Astra. Keep the same endpoint, API key and messages when you compare them. Do not substitute a search phrase such as gpt-sol-6.1 for the catalog ID. Tool calling, context limits and optional parameters should be checked for the specific route before integration."],
+          "code": "curl https://www.keyoapi.xyz/v1/chat/completions \\\n  -H \"Authorization: Bearer $KEYO_API_KEY\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\"model\":\"gpt-6.1-sol\",\"messages\":[{\"role\":\"user\",\"content\":\"Summarize this project brief in three actionable steps: ship a search feature, evaluate relevance, and report costs.\"}],\"max_tokens\":400}'"
+        }
+      ],
+      "faqs": [
+        {"q": "Is GPT-6.1 Sol five times cheaper than GPT-6 Astra?", "a": "In the checked default-group token rates, yes: both input and output cost one fifth as much. Total task cost can differ because the models may produce different output lengths or require different retry counts."},
+        {"q": "Which model is better for coding?", "a": "The catalog prices do not answer that. Compare accepted patches, passing tests, completion rate and cost per accepted result on the same repository tasks. Use those results to choose your routing policy."},
+        {"q": "Where can I verify the current GPT 6.1 Sol price?", "a": "See /model/gpt-6.1-sol for the model guide and /pricing for the live catalog. The broader rate table is on /openai-api-pricing."}
+      ],
+      "related": ["/model/gpt-6.1-sol", "/model/gpt-6-astra", "/openai-api-pricing", "/ai-agent-api"]
+    },
+    {
+      "slug": "fable-5-1-vs-opus-5-5",
+      "kind": "comparison",
+      "title": "Fable 5.1 vs Opus 5.5: API Prices & Task Costs | KeyoAPI",
+      "h1": "Fable 5.1 vs Opus 5.5",
+      "metaDescription": "Compare Fable 5.1 vs Opus 5.5 API prices on KeyoAPI, including exact model IDs, request-cost examples and a coding or agent evaluation checklist.",
+      "lead": "Fable 5.1 and Opus 5.5 are two distinct Claude-class catalog IDs on KeyoAPI. The default-group rate for Fable is about 4.17 times the Opus rate. Use the cost table to budget an evaluation, then compare completed work instead of assuming the more expensive option is better for every task.",
+      "sections": [
+        {
+          "heading": "Opus 5.5 vs Fable 5.1 API pricing",
+          "paragraphs": ["Checked against KeyoAPI's public catalog on 2026-10-13. These are KeyoAPI sell rates for the default billing group, not Anthropic official list prices. The examples cover ordinary input and output tokens; they exclude cached-token differences, extra modalities, billing-group multipliers and retries."],
+          "headers": ["Model ID", "Input / 1M tokens", "Output / 1M tokens", "10,000 input + 2,000 output"],
+          "rows": [["claude-opus-5-5", "$1.7647", "$8.8235", "$0.035294"], ["claude-fable-5-1", "$7.3530", "$36.7650", "$0.147060"]],
+          "paragraphsAfter": ["For 1,000 requests at that mix, plan $35.294 for Opus or $147.060 for Fable before retries and additional charges. A long agent session may send its growing conversation repeatedly, so estimate the tokens across every turn rather than only the final answer."]
+        },
+        {
+          "heading": "Choose a model for coding and agent tasks",
+          "paragraphs": ["Build an evaluation set with your actual acceptance rules: a patch must pass the project tests, a research answer must cite the supplied sources, and a plan must respect its constraints. Give both models the same instructions, context, execution budget and available tools. Record successful tasks, human corrections and the bill for the entire session.", "Consider Opus as a lower-cost candidate in this pair and Fable as an option to test on difficult failures. That is a cost-based experiment, not a benchmark claim. Fable is economical only when its measured improvement in accepted results or avoided retries compensates for the higher unit rate. Keep a task and token budget so either model stops after repeated failures."]
+        },
+        {
+          "heading": "Call Opus 5.5 using the catalog ID",
+          "paragraphs": ["The shorthand opus5.5 means claude-opus-5-5 in this KeyoAPI guide. Fable 5.1 uses claude-fable-5-1. Both currently advertise the OpenAI-compatible chat route. For an A/B comparison, keep this request unchanged and replace only the model value. Check optional tool and streaming behavior on the route you will deploy."],
+          "code": "curl https://www.keyoapi.xyz/v1/chat/completions \\\n  -H \"Authorization: Bearer $KEYO_API_KEY\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\"model\":\"claude-opus-5-5\",\"messages\":[{\"role\":\"user\",\"content\":\"Review this migration plan: add a nullable field, backfill existing records, validate, then enforce the constraint. Identify missing rollback steps.\"}],\"max_tokens\":600}'"
+        }
+      ],
+      "faqs": [
+        {"q": "Does Opus 5.5 vs Fable 5.1 need a different comparison?", "a": "No. Both word orders refer to the same pair. This page compares claude-opus-5-5 and claude-fable-5-1 with the same token assumptions."},
+        {"q": "Does Fable 5.1 cost more than Opus 5.5?", "a": "At the checked default-group rates, Fable input and output tokens each cost about 4.17 times as much. Use actual session usage to calculate your task cost."},
+        {"q": "Are these official Anthropic model names and prices?", "a": "This comparison documents KeyoAPI catalog IDs and KeyoAPI sell rates. Check first-party provider documentation separately for official naming, availability and prices. More Keyo rates are on /claude-api-pricing."}
+      ],
+      "related": ["/model/claude-opus-5-5", "/model/claude-fable-5-1", "/claude-api-pricing", "/ai-agent-api"]
+    },
+    {
+      "slug": "gemini-4-api",
+      "kind": "family",
+      "title": "Gemini 4 API: Argon & Barium Models and Pricing | KeyoAPI",
+      "h1": "Gemini 4 API on KeyoAPI",
+      "metaDescription": "Use Gemini 4 Argon or Barium through KeyoAPI's OpenAI-compatible chat API. Compare catalog IDs, default-group token prices and an integration example.",
+      "lead": "KeyoAPI currently lists two Gemini 4 chat IDs: gemini-4-argon and gemini-4-barium. This family guide connects their model pages, prices and OpenAI-compatible request format. Choose one of the exact IDs in your request; the family label Gemini 4 is not itself a callable model ID.",
+      "sections": [
+        {
+          "heading": "Gemini 4 models and token prices",
+          "paragraphs": ["Both IDs advertise the OpenAI-compatible chat endpoint in the public catalog. On 2026-10-13, each listed $0.7353 per million input tokens and $3.6765 per million output tokens in the default group. These are KeyoAPI sell rates; confirm current prices and your group multiplier in /pricing before budgeting."],
+          "headers": ["Model ID", "Input / 1M tokens", "Output / 1M tokens", "Model guide"],
+          "rows": [["gemini-4-argon", "$0.7353", "$3.6765", "/model/gemini-4-argon"], ["gemini-4-barium", "$0.7353", "$3.6765", "/model/gemini-4-barium"]]
+        },
+        {
+          "heading": "Call Gemini 4 Argon",
+          "paragraphs": ["Set your OpenAI client's base URL to https://www.keyoapi.xyz/v1 and use a KeyoAPI key. The example sends a plain text chat request to Argon. Replace the model value with gemini-4-barium to evaluate Barium with the same messages."],
+          "code": "curl https://www.keyoapi.xyz/v1/chat/completions \\\n  -H \"Authorization: Bearer $KEYO_API_KEY\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\"model\":\"gemini-4-argon\",\"messages\":[{\"role\":\"user\",\"content\":\"Turn this brief into an implementation checklist: import records, validate required fields, and report rejected rows.\"}],\"max_tokens\":500}'"
+        },
+        {
+          "heading": "Check the route before relying on advanced features",
+          "paragraphs": ["An OpenAI-compatible chat request does not establish that every Google-native feature is forwarded. Confirm supported content types, context limits, tool calling, streaming and optional parameters for the specific model and channel you use. Start with a small known input, validate the response shape, then increase the workload.", "At equal listed token rates, compare Argon and Barium by accepted results and actual output length. Use a fixed evaluation set for your code, document or assistant workflow and log response usage. Do not infer a performance ranking from the two names. More Gemini catalog options are on /gemini-api-pricing, and both individual guides appear in /models."]
+        }
+      ],
+      "faqs": [
+        {"q": "Can I send model=gemini-4?", "a": "Use gemini-4-argon or gemini-4-barium. The checked public catalog does not list a bare gemini-4 ID."},
+        {"q": "Are Argon and Barium priced differently?", "a": "They had equal default-group input and output rates in the checked catalog. Confirm live prices on /pricing, because rates and group multipliers can change."},
+        {"q": "Is this Google's native Gemini API?", "a": "The example uses KeyoAPI's OpenAI-compatible POST /v1/chat/completions route. Consult the endpoint reference for any native routes or advanced features rather than assuming identical Google-console behavior."}
+      ],
+      "related": ["/model/gemini-4-argon", "/model/gemini-4-barium", "/gemini-api-pricing", "/models"]
+    },
+    {
+      "slug": "ai-agent-api",
+      "kind": "use-case",
+      "title": "AI Agent API: Build Bounded Workflows with One Key | KeyoAPI",
+      "h1": "Build an AI agent with the KeyoAPI chat API",
+      "metaDescription": "Build an AI agent using KeyoAPI's chat API: separate planning from execution, validate tool actions, set turn budgets and compare model costs per completed task.",
+      "lead": "An AI agent combines model requests with application code that tracks state, runs tools and checks results. KeyoAPI supplies the model API; your application owns the execution loop. Start with a small planning request, add validated actions, and set a budget for every task.",
+      "sections": [
+        {
+          "heading": "Choose an API model for your agent",
+          "paragraphs": ["For a first evaluation, gpt-6.1-sol is a lower-cost chat candidate than gpt-6-astra at the checked default-group rates. Claude Opus 5.5 and Fable 5.1 provide another pair to test on coding or planning tasks. Compare /gpt-6-1-sol-vs-gpt-6-astra and /fable-5-1-vs-opus-5-5 for prices and evaluation criteria. Those rate differences do not prove which model will complete your task best.", "The basic endpoint is POST /v1/chat/completions. Create an API key in the console and keep it on your server. Check tools, tool_choice, streaming and other optional parameters against the chosen model route before depending on them. You can begin with ordinary messages and a planner response while you verify the advanced contract."]
+        },
+        {
+          "heading": "Make a bounded planning request",
+          "paragraphs": ["This example asks for a plan only. It does not execute code, call an external tool or create an agent session. Your application must parse the response, validate its structure and decide which actions it can run."],
+          "code": "curl https://www.keyoapi.xyz/v1/chat/completions \\\n  -H \"Authorization: Bearer $KEYO_API_KEY\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\"model\":\"gpt-6.1-sol\",\"messages\":[{\"role\":\"system\",\"content\":\"Return a JSON object with goal, steps and stop_condition. Plan at most three steps. Do not claim to have executed any action.\"},{\"role\":\"user\",\"content\":\"Plan a support assistant that searches an approved help center and drafts an answer with source links.\"}],\"max_tokens\":600}'"
+        },
+        {
+          "heading": "Implement the execution loop in your application",
+          "paragraphs": ["Store a task ID, user goal, selected model, validated plan and previous tool results. Limit available tools to explicit schemas and authorized data. Treat the model's proposed arguments as input to validate, then run the selected tool in application code and attach its result to the next request using the route's documented message format.", "Stop when the acceptance condition is met, a tool fails repeatedly, the maximum turn count is reached or the budget is exhausted. Log each request's usage and each action's result. Avoid replaying actions with side effects when retrying a timed-out model request; use application-level action IDs and idempotency where appropriate. Test a failed tool response as well as a successful path."]
+        },
+        {
+          "heading": "Budget for the whole agent task",
+          "paragraphs": ["Agent cost is the sum of every model turn, including retries and repeated context. At the checked Sol default-group rates, a single 10,000-input and 2,000-output turn costs about $0.007354. Ten turns with that identical token mix cost about $0.07354; real conversations often grow, so log actual usage rather than multiplying only the first turn.", "Track cost per accepted task, execution errors and human corrections. Summarize old tool output when it no longer needs to remain verbatim, cache reusable application data, and test any cheaper model against the same acceptance rules. Use /model/gpt-6.1-sol for a starting model guide and /pricing for current billing-group rates."]
+        }
+      ],
+      "faqs": [
+        {"q": "Does KeyoAPI run my agent tools?", "a": "The chat API generates model responses. Your application manages the agent loop, tool execution, state and acceptance checks."},
+        {"q": "Do all chat models support tool calling?", "a": "Do not assume that. Check the selected model and route, then verify a small tool-call request before deploying the feature."},
+        {"q": "How do I compare agent models fairly?", "a": "Use the same tasks, tools, context and budgets. Compare completed tasks, corrections, time and the total bill including retries, not only per-token rates."}
+      ],
+      "related": ["/model/gpt-6.1-sol", "/model/claude-opus-5-5", "/gpt-6-1-sol-vs-gpt-6-astra", "/fable-5-1-vs-opus-5-5", "/brand/keyo-api-ref.html"]
+    },
+    {
+      "slug": "ai-story-api",
+      "kind": "use-case",
+      "title": "AI Story API: Outlines, Scenes & Continuity | KeyoAPI",
+      "h1": "Build an AI story generator with the chat API",
+      "metaDescription": "Use KeyoAPI's chat API for AI story outlines, scene drafts and revisions. Keep a story bible, validate continuity and budget input and output tokens per scene.",
+      "lead": "An AI story generator can use an ordinary chat API for outlining, scene drafting and revision. Give the model a clear brief and a compact story bible, then generate one scene at a time. Keep character facts and plot decisions in your application so each new chapter can stay consistent.",
+      "sections": [
+        {
+          "heading": "Separate the outline, scene and revision requests",
+          "paragraphs": ["Start with genre, audience, tone, point of view and a target scene length. Ask for an outline before prose so a reader can approve the plot direction. Turn each outline beat into a scene request, then use a separate revision pass to check character names, timeline, established facts and pacing.", "Store approved character facts, world rules, unresolved threads and a short chapter summary outside the conversation. Attach only the relevant parts when you draft the next scene. This makes continuity explicit and avoids repeatedly sending every earlier chapter. Keep the original draft and revised version so editors can accept changes selectively."]
+        },
+        {
+          "heading": "Example: generate a short story scene",
+          "paragraphs": ["This plain text example uses the listed gpt-6.1-sol chat ID. It requests a short scene with constrained characters and a plot beat. Output length is a prompt target, not a guarantee; max_tokens is a separate token cap. Check for truncation before showing a finished scene."],
+          "code": "curl https://www.keyoapi.xyz/v1/chat/completions \\\n  -H \"Authorization: Bearer $KEYO_API_KEY\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\"model\":\"gpt-6.1-sol\",\"messages\":[{\"role\":\"system\",\"content\":\"Write an original scene from the supplied brief. Preserve the established facts and avoid adding new main characters.\"},{\"role\":\"user\",\"content\":\"Genre: gentle mystery. Audience: adults. Story bible: Mira repairs clocks; her brother Len has been away for a year. Beat: Mira finds a clock running backward with a note signed Len. Write approximately 300 words in third person, ending with a question Mira must investigate.\"}],\"max_tokens\":700}'"
+        },
+        {
+          "heading": "Choose the model by editorial results",
+          "paragraphs": ["Evaluate a small fixed set of briefs across candidate models. Ask editors to score adherence to the brief, continuity, dialogue, pacing and the amount of rewriting required. The model with the lowest input price is not necessarily the cheapest per approved scene if its drafts need repeated retries.", "Use /model/gpt-6.1-sol as a starting integration guide, /gpt-6-1-sol-vs-gpt-6-astra for a GPT-class price comparison, and /claude-api-pricing for Claude-class candidates. Save the prompt and model alongside each draft so an editor can reproduce the workflow. Avoid claiming that a generated story is factually true or that every draft is publication-ready."]
+        },
+        {
+          "heading": "Plan the cost of a story workflow",
+          "paragraphs": ["For an illustrative 5,000-input and 1,000-output request, the checked Sol default-group rates produce about $0.003677. Three requests with that identical token mix cost about $0.011031 before retries and any extra charges. Outlining, drafting and revision usually have different token counts, so sum the actual usage from each response.", "Expose a scene-length setting and a maximum revision count in your application. Reuse a compact story bible, stop when the editor accepts the draft, and keep failed drafts out of the published story. Audio narration is a separate workflow and charge; see /tts-api if you later add narration."]
+        }
+      ],
+      "faqs": [
+        {"q": "Is there a dedicated story endpoint?", "a": "This guide uses POST /v1/chat/completions with a story prompt. Your application provides the story state, editor interface and revision workflow."},
+        {"q": "How do I keep characters consistent across chapters?", "a": "Store a story bible and approved chapter summaries, attach the relevant facts to each new request, and validate drafts against those facts before approval."},
+        {"q": "Is AI story generation free?", "a": "These chat requests are billed by usage. Welcome gift credits apply only to eligible gift-credit model IDs, are consumed first, and any shortfall is charged to recharge balance. The bare model in this example uses recharge balance; see /pricing for current rates."}
+      ],
+      "related": ["/model/gpt-6.1-sol", "/gpt-6-1-sol-vs-gpt-6-astra", "/claude-api-pricing", "/tts-api", "/brand/keyo-docs.html"]
+    },
+    {
+      "slug": "study-ai-api",
+      "kind": "use-case",
+      "title": "Study AI API: Grounded Explanations & Practice Quizzes | KeyoAPI",
+      "h1": "Build a study AI assistant with the chat API",
+      "metaDescription": "Build a study AI assistant with KeyoAPI: provide course excerpts, generate explanations and practice quizzes, validate answers and track token costs.",
+      "lead": "A study AI assistant is most useful when it explains the learner's actual material and checks understanding. Use the chat API with a supplied course excerpt, ask for a short explanation or practice question, and verify the answer against the source before showing feedback.",
+      "sections": [
+        {
+          "heading": "Ground explanations in course material",
+          "paragraphs": ["Select a relevant excerpt from notes or a textbook before calling the model. Give the excerpt an ID and ask the model to cite it in the answer. Tell it to say when the excerpt does not contain enough information. Your application must check cited IDs and answer claims; the prompt alone does not guarantee grounded output.", "For longer materials, chunk and retrieve the relevant passages before constructing the request. PDF extraction is a separate step: /model/MinerU2.5-Pro documents an asynchronous parsing route. Do not assume a plain text chat request can directly read an uploaded PDF or browse a source URL. Preserve the original page reference so a student can open the source."]
+        },
+        {
+          "heading": "Example: explanation and a practice question",
+          "paragraphs": ["The example sends the course text directly in the message and asks for one short explanation and one quiz item. It uses gpt-6.1-sol on the OpenAI-compatible chat route. Treat the response as a draft that your application validates, especially for graded answers."],
+          "code": "curl https://www.keyoapi.xyz/v1/chat/completions \\\n  -H \"Authorization: Bearer $KEYO_API_KEY\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\"model\":\"gpt-6.1-sol\",\"messages\":[{\"role\":\"system\",\"content\":\"Use only the supplied excerpt. Cite its ID. If it is insufficient, say so. Give a short explanation and one practice question with a separate answer.\"},{\"role\":\"user\",\"content\":\"Excerpt BIO-01: In photosynthesis, plants use light energy to convert carbon dioxide and water into sugars, releasing oxygen. Explain this to a beginner and ask one question about the inputs.\"}],\"max_tokens\":500}'"
+        },
+        {
+          "heading": "Create a learning loop rather than an answer dump",
+          "paragraphs": ["Keep the question, expected answer and supporting excerpt together. First show the question without its answer, collect the student's attempt, then give feedback and a hint. For factual quizzes, validate the answer key with the source or a teacher-authored reference before using it to grade.", "Track the topics a learner has practiced and choose the next item from that history. Ask for a simpler explanation when the learner struggles, but keep the same source facts. Evaluate the system with missing excerpts, ambiguous questions and intentionally incorrect student answers, as well as easy examples. Measure whether feedback identifies the misconception without inventing a new fact."]
+        },
+        {
+          "heading": "Budget source context and repeated feedback",
+          "paragraphs": ["A 3,000-input and 600-output request costs about $0.0022062 at the checked Sol default-group rates. A lesson may use several requests for explanation, quiz generation and feedback. Sum actual usage across those steps and verify live rates on /pricing; do not treat one request as the cost of the whole lesson.", "Send only the relevant source excerpt and a compact learning summary. Compare candidate models using answer correctness, citation validity, helpful feedback and cost per reviewed lesson. /gpt-6-1-sol-vs-gpt-6-astra covers one price comparison, while /models links to individual API guides."]
+        }
+      ],
+      "faqs": [
+        {"q": "Can a study AI read my textbook automatically?", "a": "This example reads text included in the request. Your application must extract and retrieve relevant textbook passages separately, using an appropriate document API if needed."},
+        {"q": "Does a source prompt prevent hallucinations?", "a": "No. It helps define the task, but your application still needs to check citations and facts against the source, especially before grading or publishing learning material."},
+        {"q": "Is this a ready-made student app?", "a": "This is an API integration guide. You build the student interface, retrieval, progress tracking and grading rules around the chat requests."}
+      ],
+      "related": ["/model/gpt-6.1-sol", "/model/MinerU2.5-Pro", "/gpt-6-1-sol-vs-gpt-6-astra", "/models", "/brand/keyo-api-ref.html"]
+    }
+  ]
+}

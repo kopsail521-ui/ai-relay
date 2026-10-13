@@ -38,6 +38,8 @@ pre,code{font-family:var(--mono)}
 pre{background:var(--panel);color:var(--panel-ink);padding:14px 16px;border-radius:var(--radius);overflow:auto;font-size:13px}
 pre code{background:transparent;padding:0;color:inherit;font-size:inherit;border-radius:0}
 table{width:100%;border-collapse:collapse;font-size:14px;background:var(--surface)}
+.table-scroll{overflow-x:auto;margin:16px 0}
+.table-scroll table{min-width:620px}
 th,td{border:1px solid var(--line);padding:10px 12px;text-align:left;vertical-align:top}
 th{background:color-mix(in srgb,var(--line) 40%,var(--surface));font-weight:600}
 .ok{color:var(--ok);font-weight:600}
@@ -83,8 +85,11 @@ ul{margin:0 0 14px;padding-left:1.2em}
   <a class="btn btn-secondary" href="/pricing-list">Open pricing list</a>
   <a class="btn btn-secondary" href="/openai-api-alternative">OpenAI API alternative</a>
 </div>
+<h2>Compare specific model pairs</h2>
+<div class="grid"><a href="/gpt-6-1-sol-vs-gpt-6-astra">GPT-6.1 Sol vs GPT-6 Astra</a>
+<a href="/fable-5-1-vs-opus-5-5">Fable 5.1 vs Opus 5.5</a></div>
 <h2>Headline LLM API pricing comparison</h2>
-<table>
+<div class="table-scroll"><table>
 <thead><tr><th>Capability</th><th>Typical official list</th><th>KeyoAPI model</th><th>Notes</th></tr></thead>
 <tbody><tr>
   <td>Flagship chat (GPT-class)</td>
@@ -134,9 +139,9 @@ ul{margin:0 0 14px;padding-left:1.2em}
   <td><a href="/model/sam3">sam3</a><br/><span class="ok">~$0.0137 / request</span></td>
   <td>Per-request billing on Keyo</td>
 </tr></tbody>
-</table>
+</table></div>
 <h2>Keyo LLM token rates (batch)</h2>
-<table>
+<div class="table-scroll"><table>
 <thead><tr><th>Model</th><th>Listed Keyo price</th><th>Interactive page</th></tr></thead>
 <tbody><tr><td><a href="/model/claude-fable-5-1">claude-fable-5-1</a></td><td>~$7.35 / $36.77 per 1M in/out</td><td><a href="/model/claude-fable-5-1">Guide</a></td></tr>
 <tr><td><a href="/model/claude-fable-5">claude-fable-5</a></td><td>~$8.82 / $44.12 per 1M in/out</td><td><a href="/model/claude-fable-5">Guide</a></td></tr>
@@ -166,7 +171,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
 <tr><td><a href="/model/claude-sonnet-5-5">claude-sonnet-5-5</a></td><td>~$0.88 / $4.41 per 1M in/out</td><td><a href="/model/claude-sonnet-5-5">Guide</a></td></tr>
 <tr><td><a href="/model/gemini-4-argon">gemini-4-argon</a></td><td>~$0.74 / $3.68 per 1M in/out</td><td><a href="/model/gemini-4-argon">Guide</a></td></tr>
 <tr><td><a href="/model/gemini-4-barium">gemini-4-barium</a></td><td>~$0.74 / $3.68 per 1M in/out</td><td><a href="/model/gemini-4-barium">Guide</a></td></tr></tbody>
-</table>
+</table></div>
 <h2>How to estimate API costs (no calculator app required)</h2>
 <p>For token-metered chat IDs: expected cost ≈ (input millions × input $/1M) + (output millions × output $/1M), then add retries. Pull the $/1M figures from live <a href="/pricing">the pricing page</a> or the rows on this page — do not hard-code a spreadsheet forever. Worked OpenAI-side example: <a href="/openai-api-pricing">the OpenAI API pricing page</a>. Brand hubs: <a href="/claude-api-pricing">Claude / Anthropic</a>, <a href="/grok-api-pricing">Grok</a>, <a href="/gemini-api-pricing">Gemini</a>, <a href="/deepseek-api-pricing">DeepSeek</a>.</p>
 <h2>How to use this comparison</h2>

@@ -53,3 +53,33 @@
 		rewrite * /openai-api-alternative.html
 		file_server
 	}
+	handle /gpt-6-1-sol-vs-gpt-6-astra {
+		root * __AI_RELAY_ROOT__/static/seo
+		rewrite * /gpt-6-1-sol-vs-gpt-6-astra.html
+		file_server
+	}
+	handle /fable-5-1-vs-opus-5-5 {
+		root * __AI_RELAY_ROOT__/static/seo
+		rewrite * /fable-5-1-vs-opus-5-5.html
+		file_server
+	}
+	handle /gemini-4-api {
+		root * __AI_RELAY_ROOT__/static/seo
+		rewrite * /gemini-4-api.html
+		file_server
+	}
+	handle /ai-agent-api {
+		root * __AI_RELAY_ROOT__/static/seo
+		rewrite * /ai-agent-api.html
+		file_server
+	}
+	handle /ai-story-api {
+		root * __AI_RELAY_ROOT__/static/seo
+		rewrite * /ai-story-api.html
+		file_server
+	}
+	handle /study-ai-api {
+		root * __AI_RELAY_ROOT__/static/seo
+		rewrite * /study-ai-api.html
+		file_server
+	}

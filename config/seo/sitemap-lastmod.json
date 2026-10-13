@@ -6,7 +6,7 @@
       "lastmod": "2026-10-13"
     },
     "https://www.keyoapi.xyz/compare": {
-      "hash": "6720689420c22ca8",
+      "hash": "52cf83d6dbf389b4",
       "lastmod": "2026-10-13"
     },
     "https://www.keyoapi.xyz/pricing-list": {
@@ -18,11 +18,11 @@
       "lastmod": "2026-10-13"
     },
     "https://www.keyoapi.xyz/models": {
-      "hash": "b4415ca20b0c7246",
+      "hash": "ffa63ada73b3648b",
       "lastmod": "2026-10-13"
     },
     "https://www.keyoapi.xyz/gemini-api-pricing": {
-      "hash": "74b618c9d5c3a1a0",
+      "hash": "0571a3c77e8f01d3",
       "lastmod": "2026-10-13"
     },
     "https://www.keyoapi.xyz/deepseek-api-pricing": {
@@ -30,11 +30,11 @@
       "lastmod": "2026-10-13"
     },
     "https://www.keyoapi.xyz/claude-api-pricing": {
-      "hash": "2fae84c2acd9f0bf",
+      "hash": "56b3d6a09257c4e9",
       "lastmod": "2026-10-13"
     },
     "https://www.keyoapi.xyz/openai-api-pricing": {
-      "hash": "387b7dfba6afb2a0",
+      "hash": "3a605fb61419fe56",
       "lastmod": "2026-10-13"
     },
     "https://www.keyoapi.xyz/remove-bg-api-alternative": {
@@ -178,7 +178,7 @@
       "lastmod": "2026-10-13"
     },
     "https://www.keyoapi.xyz/model/claude-opus-5-5": {
-      "hash": "e5309c7d86e96459",
+      "hash": "fdfed32f7a31d114",
       "lastmod": "2026-10-13"
     },
     "https://www.keyoapi.xyz/brand/keyo-docs.html": {
@@ -230,7 +230,7 @@
       "lastmod": "2026-10-13"
     },
     "https://www.keyoapi.xyz/model/gpt-6.1-sol": {
-      "hash": "dcadf3e6b11b5ed8",
+      "hash": "cda2752ba7041acc",
       "lastmod": "2026-10-13"
     },
     "https://www.keyoapi.xyz/model/nano-banana-2.1": {
@@ -279,6 +279,30 @@
     },
     "https://www.keyoapi.xyz/model/gemini-4-barium": {
       "hash": "b1b0cb1a8ad22c45",
+      "lastmod": "2026-10-13"
+    },
+    "https://www.keyoapi.xyz/gpt-6-1-sol-vs-gpt-6-astra": {
+      "hash": "8c87a8304781f3f6",
+      "lastmod": "2026-10-13"
+    },
+    "https://www.keyoapi.xyz/fable-5-1-vs-opus-5-5": {
+      "hash": "10984933bb964a60",
+      "lastmod": "2026-10-13"
+    },
+    "https://www.keyoapi.xyz/gemini-4-api": {
+      "hash": "36a0d8d076206ee8",
+      "lastmod": "2026-10-13"
+    },
+    "https://www.keyoapi.xyz/ai-agent-api": {
+      "hash": "e27e1d8d729a028a",
+      "lastmod": "2026-10-13"
+    },
+    "https://www.keyoapi.xyz/ai-story-api": {
+      "hash": "512faace2fa52725",
+      "lastmod": "2026-10-13"
+    },
+    "https://www.keyoapi.xyz/study-ai-api": {
+      "hash": "f0333c318cdda214",
       "lastmod": "2026-10-13"
     }
   },

@@ -38,6 +38,8 @@ pre,code{font-family:var(--mono)}
 pre{background:var(--panel);color:var(--panel-ink);padding:14px 16px;border-radius:var(--radius);overflow:auto;font-size:13px}
 pre code{background:transparent;padding:0;color:inherit;font-size:inherit;border-radius:0}
 table{width:100%;border-collapse:collapse;font-size:14px;background:var(--surface)}
+.table-scroll{overflow-x:auto;margin:16px 0}
+.table-scroll table{min-width:620px}
 th,td{border:1px solid var(--line);padding:10px 12px;text-align:left;vertical-align:top}
 th{background:color-mix(in srgb,var(--line) 40%,var(--surface));font-weight:600}
 .ok{color:var(--ok);font-weight:600}
@@ -84,8 +86,15 @@ ul{margin:0 0 14px;padding-left:1.2em}
 </div>
 <h2>Headline price anchors</h2>
 <p class="meta">Full headline comparison (official list vs Keyo rates for every lane) lives on <a href="/compare">the model comparison page</a> — this index lists the guides themselves.</p>
+<h2>Model comparisons and API workflows</h2>
+<div class="grid"><a href="/gpt-6-1-sol-vs-gpt-6-astra">GPT-6.1 Sol vs GPT-6 Astra</a>
+<a href="/fable-5-1-vs-opus-5-5">Fable 5.1 vs Opus 5.5</a>
+<a href="/gemini-4-api">Gemini 4 API on KeyoAPI</a>
+<a href="/ai-agent-api">Build an AI agent with the KeyoAPI chat API</a>
+<a href="/ai-story-api">Build an AI story generator with the chat API</a>
+<a href="/study-ai-api">Build a study AI assistant with the chat API</a></div>
 <h2>All model guides</h2>
-<table>
+<div class="table-scroll"><table>
 <thead><tr><th>Model ID</th><th>Category</th><th>Listed price</th><th>Links</th></tr></thead>
 <tbody><tr><td><a href="/model/whisper-large-v3"><code>whisper-large-v3</code></a></td><td>speech</td><td class="ok">$0.0103 / request</td><td><a href="/model/whisper-large-v3">Guide</a> · <a href="/pricing">Catalog</a></td></tr>
 <tr><td><a href="/model/whisper-large-v3-turbo"><code>whisper-large-v3-turbo</code></a></td><td>speech</td><td class="ok">$0.0103 / request</td><td><a href="/model/whisper-large-v3-turbo">Guide</a> · <a href="/pricing">Catalog</a></td></tr>
@@ -135,7 +144,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
 <tr><td><a href="/model/eleven-v4"><code>eleven-v4</code></a></td><td>speech</td><td class="ok">$80 / 1M characters</td><td><a href="/model/eleven-v4">Guide</a> · <a href="/pricing">Catalog</a></td></tr>
 <tr><td><a href="/model/eleven-v4-turbo"><code>eleven-v4-turbo</code></a></td><td>speech</td><td class="ok">$40 / 1M characters</td><td><a href="/model/eleven-v4-turbo">Guide</a> · <a href="/pricing">Catalog</a></td></tr>
 <tr><td><a href="/model/gemini-3.8-flash-tts"><code>gemini-3.8-flash-tts</code></a></td><td>speech</td><td class="ok">~$0.44 / $8.82 per 1M in/out</td><td><a href="/model/gemini-3.8-flash-tts">Guide</a> · <a href="/pricing">Catalog</a></td></tr></tbody>
-</table>
+</table></div>
 <p class="meta">Also: <a href="/gemini-api-pricing">Gemini pricing</a> · <a href="/deepseek-api-pricing">DeepSeek pricing</a> · <a href="/glm-api-pricing">GLM pricing</a> · <a href="/claude-api-pricing">Claude pricing</a> · <a href="/openai-api-pricing">OpenAI pricing</a> · <a href="/remove-bg-api-alternative">remove.bg API</a> · <a href="/tts-api">Text to Speech</a> · <a href="/voice-cloning-api">Voice clone API</a> · <a href="/ai-avatar-video-generator">Avatar video API</a> · <a href="/grok-api-pricing">Grok pricing</a> · <a href="/openai-api-alternative">OpenAI alternative</a>.</p>
 
 </main>

@@ -38,6 +38,8 @@ pre,code{font-family:var(--mono)}
 pre{background:var(--panel);color:var(--panel-ink);padding:14px 16px;border-radius:var(--radius);overflow:auto;font-size:13px}
 pre code{background:transparent;padding:0;color:inherit;font-size:inherit;border-radius:0}
 table{width:100%;border-collapse:collapse;font-size:14px;background:var(--surface)}
+.table-scroll{overflow-x:auto;margin:16px 0}
+.table-scroll table{min-width:620px}
 th,td{border:1px solid var(--line);padding:10px 12px;text-align:left;vertical-align:top}
 th{background:color-mix(in srgb,var(--line) 40%,var(--surface));font-weight:600}
 .ok{color:var(--ok);font-weight:600}
@@ -86,7 +88,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
 
 <h2>Price comparison table</h2>
 <p class="meta">Indicative figures for planning. Confirm live Keyo sell rates on interactive <a href="/pricing">Model Square</a> or the static <a href="/pricing-list">pricing list</a>.</p>
-<table>
+<div class="table-scroll"><table>
 <thead><tr><th>Model ID</th><th>Typical official / context</th><th>KeyoAPI</th><th>Notes</th></tr></thead>
 <tbody>
 <tr>
@@ -126,7 +128,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
   <td>Request-metered Omni Ext</td>
 </tr>
 </tbody>
-</table>
+</table></div>
 
 <h2>A $0 prototyping lane on the same key</h2>
 <p>Google Gemini free tiers are usually quota- or trial-shaped. On the same Keyo key you can call Atria-dawn-v2:free and other fixed $0 catalog IDs on <a href="/free-models">the free models page</a> — $0 model IDs whose calls draw down your $10 welcome credit (fair-use rate limits apply). Prototype there, then meter paid Gemini-class traffic.</p>
@@ -136,6 +138,13 @@ ul{margin:0 0 14px;padding-left:1.2em}
 <p>Keyo rates above are indicative sell prices from the live Keyo catalog. Always confirm interactive pricing pages under /pricing/{modelId} before contracting volume. Catalog IDs can change as Google ships new stables — this page tracks what Keyo currently lists.</p>
 <p>How to call: set OPENAI_BASE_URL=https://www.keyoapi.xyz/v1, use your Keyo API key, and pass the Gemini model string (for example gemini-3.8-flash) to POST /v1/chat/completions. Many Google-native features remain Google-console only; Keyo focuses on OpenAI-compatible chat access for overseas developer stacks.</p>
 <p>When Gemini list prices spike your margin, keep Gemini for multimodal strengths and shift plain text volume to deepseek-v4.1-flash or gpt-6-luna on the same key. For pure free prototyping, start on <a href="/free-models">the free models page</a>, then promote to Gemini paid IDs when quality gates pass.</p>
+
+<h2>Gemini 4 API: Argon and Barium</h2>
+<p>The Gemini 4 family entry is <a href="/gemini-4-api">Gemini 4 API on KeyoAPI</a>. It links to <a href="/model/gemini-4-argon">the gemini-4-argon model page</a> and <a href="/model/gemini-4-barium">the gemini-4-barium model page</a>, both already listed in <a href="/models">the model guides page</a>. Use one of those exact model IDs for POST /v1/chat/completions. The checked default-group rates are $0.7353 input and $3.6765 output per million tokens for either ID. A bare gemini-4 is a family label, not a model listed in the checked catalog.</p>
+
+
+
+
 <pre>curl https://www.keyoapi.xyz/v1/chat/completions \
   -H "Authorization: Bearer $KEYO_API_KEY" \
   -H "Content-Type: application/json" \

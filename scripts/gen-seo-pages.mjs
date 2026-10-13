@@ -2,6 +2,8 @@
  * Generate static SEO pages into static/seo/
  * Source: config/seo/model-pages.json (+ official-price-refs.json)
  * Usage: node scripts/gen-seo-pages.mjs
+ * Selected HTML only: node scripts/gen-seo-pages.mjs --pages=models,model/gpt-6.1-sol
+ * Selected runs also refresh sitemap, robots and Caddy fragments.
  *
  * User-facing copy: do not use meta-talk such as "crawlable", "for SEO",
  * "search engines", "this page targets", "search demand", "searches are",
@@ -63,6 +65,19 @@ const priceRefs = JSON.parse(
 );
 const pricingLandings = JSON.parse(
   fs.readFileSync(path.join(root, "config/seo/pricing-landings.json"), "utf8")
+);
+const contentLandings = JSON.parse(
+  fs.readFileSync(path.join(root, "config/seo/content-landings.json"), "utf8")
+);
+const selectedPages = new Set(
+  process.argv.slice(2).flatMap((arg) => {
+    if (!arg.startsWith("--pages=")) throw new Error(`Unknown argument: ${arg}`);
+    const keys = arg.slice("--pages=".length).split(",");
+    if (keys.some((key) => !key.trim())) {
+      throw new Error("Page selection must contain non-empty page keys");
+    }
+    return keys;
+  })
 );
 const freeCfg = JSON.parse(
   fs.readFileSync(path.join(root, "config/sensenova-free-models.json"), "utf8")
@@ -146,7 +161,7 @@ function esc(s) {
 /** Escape then turn site paths into <a href> for crawlable internal links. */
 function linkifySitePaths(raw) {
   let s = esc(raw);
-  const literals = (pricingLandings.pages || [])
+  const literals = [...pricingLandings.pages, ...contentLandings.pages]
     .map((p) => `/${p.slug}`)
     .concat([
       "/pricing-list",
@@ -192,6 +207,8 @@ function pathLabel(href) {
   for (const p of pricingLandings.pages || []) {
     if (href === `/${p.slug}`) return landingPathLabel(p.slug);
   }
+  const contentPage = contentLandings.pages.find((p) => href === `/${p.slug}`);
+  if (contentPage) return contentPage.h1;
   return href;
 }
 
@@ -249,6 +266,8 @@ pre,code{font-family:var(--mono)}
 pre{background:var(--panel);color:var(--panel-ink);padding:14px 16px;border-radius:var(--radius);overflow:auto;font-size:13px}
 pre code{background:transparent;padding:0;color:inherit;font-size:inherit;border-radius:0}
 table{width:100%;border-collapse:collapse;font-size:14px;background:var(--surface)}
+.table-scroll{overflow-x:auto;margin:16px 0}
+.table-scroll table{min-width:620px}
 th,td{border:1px solid var(--line);padding:10px 12px;text-align:left;vertical-align:top}
 th{background:color-mix(in srgb,var(--line) 40%,var(--surface));font-weight:600}
 .ok{color:var(--ok);font-weight:600}
@@ -422,6 +441,48 @@ function freeTierBlock(m) {
 `;
 }
 
+function contentGuideLinks(kind) {
+  return `<div class="grid">${contentLandings.pages
+    .filter((p) => !kind || p.kind === kind)
+    .map((p) => `<a href="/${esc(p.slug)}">${esc(p.h1)}</a>`)
+    .join("\n")}</div>`;
+}
+
+function renderContentSections(sections = []) {
+  return sections.map((section) => `
+<h2>${esc(section.heading)}</h2>
+${(section.paragraphs || []).map((p) => `<p>${linkifySitePaths(p)}</p>`).join("\n")}
+${section.rows ? `<div class="table-scroll"><table>
+<thead><tr>${section.headers.map((h) => `<th scope="col">${esc(h)}</th>`).join("")}</tr></thead>
+<tbody>${section.rows.map((row) => `<tr>${row.map((cell) => `<td>${linkifySitePaths(cell)}</td>`).join("")}</tr>`).join("\n")}</tbody>
+</table></div>` : ""}
+${(section.paragraphsAfter || []).map((p) => `<p>${linkifySitePaths(p)}</p>`).join("\n")}
+${section.code ? `<pre><code>${esc(section.code)}</code></pre>` : ""}
+`).join("\n");
+}
+
+function renderContentLanding(p) {
+  const canonical = `${site}/${p.slug}`;
+  return layout({
+    title: p.title,
+    description: p.metaDescription,
+    canonical,
+    h1: p.h1,
+    bodyHtml: `<p class="lead">${linkifySitePaths(p.lead)}</p>
+<div class="btnrow"><a class="btn btn-primary" href="/sign-up">Get API key</a><a class="btn btn-secondary" href="/pricing">Live prices</a><a class="btn btn-secondary" href="/models">Model guides</a></div>
+${renderContentSections(p.sections)}
+<h2>FAQ</h2><div class="faq">${p.faqs.map((f) => `<details><summary>${esc(f.q)}</summary><p>${linkifySitePaths(f.a)}</p></details>`).join("\n")}</div>
+<h2>Related guides</h2><div class="grid">${p.related.map((href) => `<a href="${esc(href)}">${esc(pathLabel(href))}</a>`).join("\n")}</div>`,
+    jsonLd: {
+      "@context": "https://schema.org",
+      "@type": "WebPage",
+      name: p.title,
+      url: canonical,
+      description: p.metaDescription,
+    },
+  });
+}
+
 function renderModel(m) {
   const canonical = `${site}/model/${encodeURIComponent(m.id)}`;
   const leadSrc = m.sections?.intro || m.body;
@@ -447,6 +508,7 @@ function renderModel(m) {
 </div>
 <h2>Overview</h2>
 ${paras}
+${renderContentSections(m.guideSections)}
 ${freeTierBlock(m)}
 <h2>Quick start</h2>
 <div class="card">
@@ -701,11 +763,13 @@ function renderModelsIndex() {
 </div>
 <h2>Headline price anchors</h2>
 <p class="meta">Full headline comparison (official list vs Keyo rates for every lane) lives on <a href="/compare">the model comparison page</a> — this index lists the guides themselves.</p>
+<h2>Model comparisons and API workflows</h2>
+${contentGuideLinks()}
 <h2>All model guides</h2>
-<table>
+<div class="table-scroll"><table>
 <thead><tr><th>Model ID</th><th>Category</th><th>Listed price</th><th>Links</th></tr></thead>
 <tbody>${rows}</tbody>
-</table>
+</table></div>
 <p class="meta">Also: ${landingDeepDiveHtml()}.</p>
 `;
   return layout({
@@ -825,16 +889,18 @@ function renderCompare() {
   <a class="btn btn-secondary" href="/pricing-list">Open pricing list</a>
   <a class="btn btn-secondary" href="/openai-api-alternative">OpenAI API alternative</a>
 </div>
+<h2>Compare specific model pairs</h2>
+${contentGuideLinks("comparison")}
 <h2>Headline LLM API pricing comparison</h2>
-<table>
+<div class="table-scroll"><table>
 <thead><tr><th>Capability</th><th>Typical official list</th><th>KeyoAPI model</th><th>Notes</th></tr></thead>
 <tbody>${compareTableRows()}</tbody>
-</table>
+</table></div>
 <h2>Keyo LLM token rates (batch)</h2>
-<table>
+<div class="table-scroll"><table>
 <thead><tr><th>Model</th><th>Listed Keyo price</th><th>Interactive page</th></tr></thead>
 <tbody>${llmRows}</tbody>
-</table>
+</table></div>
 <h2>How to estimate API costs (no calculator app required)</h2>
 <p>For token-metered chat IDs: expected cost ≈ (input millions × input $/1M) + (output millions × output $/1M), then add retries. Pull the $/1M figures from live <a href="/pricing">the pricing page</a> or the rows on this page — do not hard-code a spreadsheet forever. Worked OpenAI-side example: <a href="/openai-api-pricing">the OpenAI API pricing page</a>. Brand hubs: <a href="/claude-api-pricing">Claude / Anthropic</a>, <a href="/grok-api-pricing">Grok</a>, <a href="/gemini-api-pricing">Gemini</a>, <a href="/deepseek-api-pricing">DeepSeek</a>.</p>
 <h2>How to use this comparison</h2>
@@ -1231,12 +1297,12 @@ function renderPricingLanding(p) {
 ${LANDING_EXTRA_SECTIONS[p.slug] || ""}
 <h2>${esc(tableHeading)}</h2>
 <p class="meta">Indicative figures for planning. Confirm live Keyo sell rates on interactive <a href="/pricing">Model Square</a> or the static <a href="/pricing-list">pricing list</a>.</p>
-<table>
+<div class="table-scroll"><table>
 <thead><tr><th>Model ID</th><th>${esc(colOfficial)}</th><th>KeyoAPI</th><th>Notes</th></tr></thead>
 <tbody>
 ${rows}
 </tbody>
-</table>
+</table></div>
 ${p.announcedNote
   ? `<h2>${esc(p.announcedNote.title)}</h2>
 ${(p.announcedNote.body || [])
@@ -1253,6 +1319,7 @@ ${(p.cheapestNote.body || [])
   : ""}
 <h2>${esc(bodyHeading)}</h2>
 ${bodyParas}
+${renderContentSections(p.guideSections)}
 ${curlBlock}
 <h2>FAQ</h2>
 <div class="faq">${faqs}</div>
@@ -1275,7 +1342,7 @@ ${landingRelatedLinks(p.slug)}
 }
 
 function writeRobots() {
-  const landingAllows = (pricingLandings.pages || [])
+  const landingAllows = [...pricingLandings.pages, ...contentLandings.pages]
     .map((p) => `Allow: /${p.slug}`)
     .join("\n");
   return `User-agent: *
@@ -1360,7 +1427,7 @@ function writeSitemap() {
     /* first run */
   }
 
-  const landingUrls = (pricingLandings.pages || []).map((p) => ({
+  const landingUrls = [...pricingLandings.pages, ...contentLandings.pages].map((p) => ({
     loc: `${site}/${p.slug}`,
     file: path.join(outDir, `${p.slug}.html`),
     priority: "0.95",
@@ -1439,24 +1506,43 @@ ${body}
 `;
 }
 
-fs.mkdirSync(path.join(outDir, "model"), { recursive: true });
-fs.writeFileSync(path.join(outDir, "index.html"), renderHome());
-fs.writeFileSync(path.join(outDir, "models.html"), renderModelsIndex());
-fs.writeFileSync(path.join(outDir, "about.html"), renderAbout());
-fs.writeFileSync(path.join(outDir, "compare.html"), renderCompare());
-fs.writeFileSync(path.join(outDir, "pricing.html"), renderPricing());
-fs.writeFileSync(path.join(outDir, "free-models.html"), renderFreeModels());
-for (const p of pricingLandings.pages) {
-  fs.writeFileSync(path.join(outDir, `${p.slug}.html`), renderPricingLanding(p));
+const renderers = new Map([
+  ["index", renderHome],
+  ["models", renderModelsIndex],
+  ["about", renderAbout],
+  ["compare", renderCompare],
+  ["pricing", renderPricing],
+  ["free-models", renderFreeModels],
+]);
+for (const p of [...pricingLandings.pages, ...contentLandings.pages]) {
+  if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(p.slug) || renderers.has(p.slug)) {
+    throw new Error(`Invalid or duplicate landing slug: ${p.slug}`);
+  }
+  renderers.set(p.slug, () => contentLandings.pages.includes(p)
+    ? renderContentLanding(p)
+    : renderPricingLanding(p));
 }
 for (const m of pages.models) {
-  // Hand-maintained pages live outside config — never overwrite them.
   if (HAND_MAINTAINED_GUIDES.has(m.id)) continue;
-  fs.writeFileSync(path.join(outDir, "model", `${m.id}.html`), renderModel(m));
+  const key = `model/${m.id}`;
+  if (renderers.has(key)) throw new Error(`Duplicate model ID: ${m.id}`);
+  renderers.set(key, () => renderModel(m));
+}
+for (const key of selectedPages) {
+  if (!renderers.has(key)) throw new Error(`Unknown or hand-maintained page: ${key}`);
+}
+fs.mkdirSync(path.join(outDir, "model"), { recursive: true });
+let generatedCount = 0;
+for (const [key, render] of renderers) {
+  if (selectedPages.size && !selectedPages.has(key)) continue;
+  fs.writeFileSync(path.join(outDir, `${key}.html`), render());
+  generatedCount++;
 }
 fs.writeFileSync(path.join(outDir, "robots.txt"), writeRobots());
 fs.writeFileSync(path.join(outDir, "sitemap.xml"), writeSitemap());
-fs.rmSync(path.join(outDir, "sitemap-live.xml"), { force: true });
+if (!selectedPages.size) {
+  fs.rmSync(path.join(outDir, "sitemap-live.xml"), { force: true });
+}
 fs.writeFileSync(path.join(root, "new-api/web/public/robots.txt"), writeRobots());
 fs.writeFileSync(
   path.join(root, "new-api/web/public/sitemap.xml"),
@@ -1473,7 +1559,7 @@ fs.writeFileSync(
 
 console.log(
   "Generated",
-  5 + pricingLandings.pages.length + pages.models.length,
+  generatedCount,
   "HTML pages + robots.txt + sitemap.xml ->",
   outDir
 );

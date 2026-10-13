@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>AI Story API: Outlines, Scenes &amp; Continuity | KeyoAPI</title>
+<meta name="description" content="Use KeyoAPI's chat API for AI story outlines, scene drafts and revisions. Keep a story bible, validate continuity and budget input and output tokens per scene." />
+<link rel="canonical" href="https://www.keyoapi.xyz/ai-story-api" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://www.keyoapi.xyz/ai-story-api" />
+<meta property="og:title" content="AI Story API: Outlines, Scenes &amp; Continuity | KeyoAPI" />
+<meta property="og:description" content="Use KeyoAPI's chat API for AI story outlines, scene drafts and revisions. Keep a story bible, validate continuity and budget input and output tokens per scene." />
+<meta property="og:image" content="https://www.keyoapi.xyz/brand/logo.svg" />
+<link rel="icon" href="/brand/logo.svg" type="image/svg+xml" />
+<link rel="stylesheet" href="/brand/keyo-theme.css" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="AI Story API: Outlines, Scenes &amp; Continuity | KeyoAPI" />
+<meta name="twitter:description" content="Use KeyoAPI's chat API for AI story outlines, scene drafts and revisions. Keep a story bible, validate continuity and budget input and output tokens per scene." />
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebPage","name":"AI Story API: Outlines, Scenes & Continuity | KeyoAPI","url":"https://www.keyoapi.xyz/ai-story-api","description":"Use KeyoAPI's chat API for AI story outlines, scene drafts and revisions. Keep a story bible, validate continuity and budget input and output tokens per scene."}</script>
+<style>.wrap{max-width:880px;margin:0 auto;padding:28px 24px 48px}
+.footer{display:flex;flex-wrap:wrap;gap:10px 16px;max-width:1080px;margin:0 auto;padding:24px 24px 40px;border-top:1px solid var(--line);font-size:13px;color:var(--muted)}
+.footer a{color:var(--ink-2);text-decoration:none}
+.footer a:hover{color:var(--ink)}
+h1{font-size:clamp(1.7rem,3.1vw,2.35rem);line-height:1.18;letter-spacing:-.035em;margin:0 0 14px;font-weight:600;text-wrap:balance}
+h2{font-size:1.15rem;margin:28px 0 10px;letter-spacing:-.02em}
+p{margin:0 0 14px;color:var(--ink)}
+.lead{font-size:1.02rem;color:var(--ink-2);line-height:1.55;text-wrap:pretty}
+.meta{font-size:14px;color:var(--muted);margin:0 0 18px}
+.btnrow{display:flex;flex-wrap:wrap;gap:10px;margin:18px 0 28px}
+.btn,.k-btn{display:inline-block;padding:10px 16px;border-radius:var(--radius);font-weight:600;font-size:14px;text-decoration:none;line-height:1.2}
+.btn-primary,.k-btn-primary{background:var(--ink);color:#f6f5f1}
+.btn-primary:hover,.k-btn-primary:hover{background:#000;color:#f6f5f1;text-decoration:none}
+.btn-secondary,.k-btn-secondary{background:transparent;color:var(--ink);border:1px solid var(--line-strong,#c9c4b8)}
+.btn-secondary:hover,.k-btn-secondary:hover{border-color:var(--ink);text-decoration:none}
+.btn-link,.k-btn-link{background:transparent;color:var(--link);padding-inline:8px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:16px 18px;margin:16px 0}
+pre,code{font-family:var(--mono)}
+pre{background:var(--panel);color:var(--panel-ink);padding:14px 16px;border-radius:var(--radius);overflow:auto;font-size:13px}
+pre code{background:transparent;padding:0;color:inherit;font-size:inherit;border-radius:0}
+table{width:100%;border-collapse:collapse;font-size:14px;background:var(--surface)}
+.table-scroll{overflow-x:auto;margin:16px 0}
+.table-scroll table{min-width:620px}
+th,td{border:1px solid var(--line);padding:10px 12px;text-align:left;vertical-align:top}
+th{background:color-mix(in srgb,var(--line) 40%,var(--surface));font-weight:600}
+.ok{color:var(--ok);font-weight:600}
+.grid{display:grid;gap:10px;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));margin:16px 0}
+.grid a{display:flex;flex-direction:column;justify-content:center;gap:4px;min-height:4.5rem;padding:12px 14px;border:1px solid var(--line);border-radius:var(--radius);background:var(--surface);color:var(--ink);text-decoration:none;font-weight:500;line-height:1.35}
+.grid a:hover{border-color:var(--ink)}
+.grid a .grid-title{font-weight:600;overflow-wrap:anywhere}
+.grid a .grid-meta{color:var(--muted);font-size:13px;font-weight:500}
+.grid a code{font-size:12.5px;background:transparent;padding:0}
+ul{margin:0 0 14px;padding-left:1.2em}
+.faq details{border:1px solid var(--line);border-radius:var(--radius);padding:12px 14px;margin:0 0 10px;background:var(--surface)}
+.faq summary{cursor:pointer;font-weight:600}
+.surfaces{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));margin:16px 0 8px}
+.surf{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:14px 16px;font-size:14px}
+.surf h3{font-size:15px;margin:0 0 8px}
+.surf ul{margin:0;padding-left:1.15em;color:var(--muted)}
+.panel{background:var(--panel);color:var(--panel-ink);border-radius:var(--radius);padding:18px;text-align:left;font-family:var(--mono);font-size:12.5px;overflow:auto;border:1px solid #2a2924}
+.panel .label{color:#b9b6ab;margin-bottom:5px;font-size:11px;letter-spacing:.06em;text-transform:uppercase}
+.panel .label+.label{margin-top:14px}</style>
+</head>
+<body>
+<header class="k-nav">
+  <a class="k-wordmark" href="/"><img src="/brand/logo.svg" alt="" width="22" height="22" />KeyoAPI</a>
+  <nav aria-label="Primary">
+    <a href="/pricing">Pricing</a>
+    <a href="/models">Models</a>
+    <a href="/compare">Compare</a>
+    <a href="/brand/keyo-docs.html">Docs</a>
+    <a href="/brand/blog/">Blog</a>
+    <a href="/brand/faq.html">FAQ</a>
+    <a href="/console">Console</a>
+    <a href="/sign-in">Sign in</a>
+    <a class="k-nav-cta" href="/sign-up">Get started</a>
+  </nav>
+</header>
+<main class="wrap">
+<h1>Build an AI story generator with the chat API</h1>
+<p class="lead">An AI story generator can use an ordinary chat API for outlining, scene drafting and revision. Give the model a clear brief and a compact story bible, then generate one scene at a time. Keep character facts and plot decisions in your application so each new chapter can stay consistent.</p>
+<div class="btnrow"><a class="btn btn-primary" href="/sign-up">Get API key</a><a class="btn btn-secondary" href="/pricing">Live prices</a><a class="btn btn-secondary" href="/models">Model guides</a></div>
+
+<h2>Separate the outline, scene and revision requests</h2>
+<p>Start with genre, audience, tone, point of view and a target scene length. Ask for an outline before prose so a reader can approve the plot direction. Turn each outline beat into a scene request, then use a separate revision pass to check character names, timeline, established facts and pacing.</p>
+<p>Store approved character facts, world rules, unresolved threads and a short chapter summary outside the conversation. Attach only the relevant parts when you draft the next scene. This makes continuity explicit and avoids repeatedly sending every earlier chapter. Keep the original draft and revised version so editors can accept changes selectively.</p>
+
+
+
+
+
+<h2>Example: generate a short story scene</h2>
+<p>This plain text example uses the listed gpt-6.1-sol chat ID. It requests a short scene with constrained characters and a plot beat. Output length is a prompt target, not a guarantee; max_tokens is a separate token cap. Check for truncation before showing a finished scene.</p>
+
+
+<pre><code>curl https://www.keyoapi.xyz/v1/chat/completions \
+  -H &quot;Authorization: Bearer $KEYO_API_KEY&quot; \
+  -H &quot;Content-Type: application/json&quot; \
+  -d '{&quot;model&quot;:&quot;gpt-6.1-sol&quot;,&quot;messages&quot;:[{&quot;role&quot;:&quot;system&quot;,&quot;content&quot;:&quot;Write an original scene from the supplied brief. Preserve the established facts and avoid adding new main characters.&quot;},{&quot;role&quot;:&quot;user&quot;,&quot;content&quot;:&quot;Genre: gentle mystery. Audience: adults. Story bible: Mira repairs clocks; her brother Len has been away for a year. Beat: Mira finds a clock running backward with a note signed Len. Write approximately 300 words in third person, ending with a question Mira must investigate.&quot;}],&quot;max_tokens&quot;:700}'</code></pre>
+
+
+<h2>Choose the model by editorial results</h2>
+<p>Evaluate a small fixed set of briefs across candidate models. Ask editors to score adherence to the brief, continuity, dialogue, pacing and the amount of rewriting required. The model with the lowest input price is not necessarily the cheapest per approved scene if its drafts need repeated retries.</p>
+<p>Use <a href="/model/gpt-6.1-sol">the gpt-6.1-sol model page</a> as a starting integration guide, <a href="/gpt-6-1-sol-vs-gpt-6-astra">GPT-6.1 Sol vs GPT-6 Astra</a> for a GPT-class price comparison, and <a href="/claude-api-pricing">the Claude API pricing page</a> for Claude-class candidates. Save the prompt and model alongside each draft so an editor can reproduce the workflow. Avoid claiming that a generated story is factually true or that every draft is publication-ready.</p>
+
+
+
+
+
+<h2>Plan the cost of a story workflow</h2>
+<p>For an illustrative 5,000-input and 1,000-output request, the checked Sol default-group rates produce about $0.003677. Three requests with that identical token mix cost about $0.011031 before retries and any extra charges. Outlining, drafting and revision usually have different token counts, so sum the actual usage from each response.</p>
+<p>Expose a scene-length setting and a maximum revision count in your application. Reuse a compact story bible, stop when the editor accepts the draft, and keep failed drafts out of the published story. Audio narration is a separate workflow and charge; see <a href="/tts-api">the TTS API guide</a> if you later add narration.</p>
+
+
+
+
+<h2>FAQ</h2><div class="faq"><details><summary>Is there a dedicated story endpoint?</summary><p>This guide uses POST /v1/chat/completions with a story prompt. Your application provides the story state, editor interface and revision workflow.</p></details>
+<details><summary>How do I keep characters consistent across chapters?</summary><p>Store a story bible and approved chapter summaries, attach the relevant facts to each new request, and validate drafts against those facts before approval.</p></details>
+<details><summary>Is AI story generation free?</summary><p>These chat requests are billed by usage. Welcome gift credits apply only to eligible gift-credit model IDs, are consumed first, and any shortfall is charged to recharge balance. The bare model in this example uses recharge balance; see <a href="/pricing">the pricing page</a> for current rates.</p></details></div>
+<h2>Related guides</h2><div class="grid"><a href="/model/gpt-6.1-sol">the gpt-6.1-sol model page</a>
+<a href="/gpt-6-1-sol-vs-gpt-6-astra">GPT-6.1 Sol vs GPT-6 Astra</a>
+<a href="/claude-api-pricing">the Claude API pricing page</a>
+<a href="/tts-api">the TTS API guide</a>
+<a href="/brand/keyo-docs.html">/brand/keyo-docs.html</a></div>
+</main>
+<footer class="footer">
+  <a href="/">Home</a>
+  <a href="/pricing">Pricing</a>
+  <a href="/pricing-list">Pricing list</a>
+  <a href="/models">Model guides</a>
+  <a href="/compare">Compare</a>
+  <a href="/free-models">Free models</a>
+  <a href="/brand/blog/">Blog</a>
+  <a href="/gemini-api-pricing">Gemini pricing</a>
+  <a href="/deepseek-api-pricing">DeepSeek pricing</a>
+  <a href="/glm-api-pricing">GLM pricing</a>
+  <a href="/claude-api-pricing">Claude pricing</a>
+  <a href="/openai-api-pricing">OpenAI pricing</a>
+  <a href="/remove-bg-api-alternative">remove.bg API</a>
+  <a href="/tts-api">Text to Speech</a>
+  <a href="/voice-cloning-api">Voice clone API</a>
+  <a href="/ai-avatar-video-generator">Avatar video API</a>
+  <a href="/grok-api-pricing">Grok pricing</a>
+  <a href="/openai-api-alternative">OpenAI alternative</a>
+  <a href="/brand/keyo-docs.html">Docs</a>
+  <a href="/brand/faq.html">FAQ</a>
+  <a href="/brand/privacy.html">Privacy</a>
+  <a href="/brand/terms.html">Terms</a>
+  <a href="/sign-in">Sign in</a>
+  <a href="https://toolfame.com/item/keyoapi" target="_blank" rel="noopener noreferrer"><img src="https://toolfame.com/badge-light.svg" alt="Featured on ToolFame.com" style="height:54px;width:auto;" /></a>
+  <a href="https://yo.directory" target="_blank" rel="dofollow noopener">Featured on Yo.directory</a>
+  <a href="https://www.toolpilot.ai" target="_blank" rel="dofollow noopener">Featured on ToolPilot.ai</a>
+  <a href="https://dang.ai" target="_blank" rel="dofollow noopener"><img src="https://assets.dang.ai/badges/dang-verified-dark.png" alt="Verified on DANG!" style="height:54px;width:auto;border:0;outline:none;text-decoration:none;" /></a>
+  <a href="https://fazier.com" target="_blank" rel="dofollow noopener">Featured on Fazier</a>
+  <a href="https://twelve.tools" target="_blank"><img src="https://twelve.tools/badge0-white.svg" alt="Featured on Twelve Tools" style="height:54px;width:auto;" /></a>
+  <a href="https://deeplaunch.io" target="_blank" rel="dofollow noopener">Featured on DeepLaunch.io</a>
+  <a href="https://findly.tools" target="_blank" rel="dofollow noopener">Featured on Findly.tools</a>
+  <a href="https://startupfa.me" target="_blank" rel="dofollow noopener">Featured on Startup Fame</a>
+</footer>
+</body>
+</html>

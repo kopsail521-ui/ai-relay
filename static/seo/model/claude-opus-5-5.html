@@ -38,6 +38,8 @@ pre,code{font-family:var(--mono)}
 pre{background:var(--panel);color:var(--panel-ink);padding:14px 16px;border-radius:var(--radius);overflow:auto;font-size:13px}
 pre code{background:transparent;padding:0;color:inherit;font-size:inherit;border-radius:0}
 table{width:100%;border-collapse:collapse;font-size:14px;background:var(--surface)}
+.table-scroll{overflow-x:auto;margin:16px 0}
+.table-scroll table{min-width:620px}
 th,td{border:1px solid var(--line);padding:10px 12px;text-align:left;vertical-align:top}
 th{background:color-mix(in srgb,var(--line) 40%,var(--surface));font-weight:600}
 .ok{color:var(--ok);font-weight:600}
@@ -86,6 +88,30 @@ ul{margin:0 0 14px;padding-left:1.2em}
 <h2>Overview</h2>
 <p>Claude Opus 5.5 on KeyoAPI is an Opus-class chat and agent model for hard coding and multi-step tool loops. Indicative rates are about $1.76 / $8.82 per 1M in/out — confirm live on <a href="/model/claude-opus-5-5">the claude-opus-5-5 model page</a>. Reserve it for escalations; keep Sonnet or cheaper chat IDs on the hot path. Same OpenAI-compatible gateway as other Keyo chat models.</p>
 
+<h2>Opus 5.5 pricing by input and output tokens</h2>
+<p>The public KeyoAPI catalog checked on 2026-10-13 lists default-group rates of $1.7647 per million input tokens and $8.8235 per million output tokens. These are KeyoAPI sell rates, not Anthropic official list prices. Confirm current rates and your billing-group multiplier in <a href="/pricing">the pricing page</a>.</p>
+<p>A request with 10,000 input tokens and 2,000 output tokens costs about $0.035294 before retries, cached-token adjustments or extra modalities. A thousand requests with that identical mix cost about $35.294. For agent sessions, count tokens across every model turn and repeated context rather than only the final answer.</p>
+
+
+
+
+
+<h2>Fable 5.1 vs Opus 5.5</h2>
+<p>claude-fable-5-1 lists $7.3530 input and $36.7650 output per million tokens in the checked default group, about 4.17 times the Opus rate. The same example costs $0.147060 on Fable. <a href="/fable-5-1-vs-opus-5-5">Fable 5.1 vs Opus 5.5</a> covers both comparison word orders with one table and one evaluation checklist.</p>
+<p>Test both models on the same coding or agent tasks with the same context, tools and execution budget. Compare passing tests, completed tasks, human corrections and total cost including retries. Use measured results to decide when a higher-cost candidate is worth routing to; this guide does not claim a universal performance ranking.</p>
+
+
+
+
+
+<h2>Call opus5.5 through the chat API</h2>
+<p>The shorthand opus5.5 maps to claude-opus-5-5 in this guide. Keep the exact catalog ID in your request. Both Opus and Fable currently advertise the OpenAI-compatible chat route; verify advanced tool and streaming behavior before deploying it.</p>
+<p>Use <a href="/ai-agent-api">Build an AI agent with the KeyoAPI chat API</a> for a bounded application loop and <a href="/claude-api-pricing">the Claude API pricing page</a> for the broader Claude-class rate table. Your application executes tools and checks results; a chat response does not run the agent workflow by itself.</p>
+
+
+
+
+
 <h2>Quick start</h2>
 <div class="card">
 <p>Base URL: <code>https://www.keyoapi.xyz/v1</code></p>
@@ -99,11 +125,13 @@ ul{margin:0 0 14px;padding-left:1.2em}
 </div>
 <h2>FAQ</h2>
 <div class="faq"><details><summary>Opus 5.5 vs Opus 5?</summary><p>claude-opus-5-5 is the newer Opus-class ID (~$1.76/$8.82). claude-opus-5 remains available at a lower indicative band (~$1.10/$5.52). Confirm live on <a href="/pricing">the pricing page</a>.</p></details>
-<details><summary>How do I integrate?</summary><p>Keep your OpenAI SDK, set baseURL to https://www.keyoapi.xyz/v1, and use model=claude-opus-5-5.</p></details></div>
+<details><summary>How do I integrate?</summary><p>Keep your OpenAI SDK, set baseURL to https://www.keyoapi.xyz/v1, and use model=claude-opus-5-5.</p></details>
+<details><summary>Is opus5.5 the API model ID?</summary><p>Use claude-opus-5-5 as the model value. opus5.5 is a shorthand label, not the exact catalog ID. See <a href="/fable-5-1-vs-opus-5-5">Fable 5.1 vs Opus 5.5</a> to compare it with claude-fable-5-1.</p></details></div>
 <h2>Related models</h2>
 <div class="grid"><a href="/model/claude-opus-5">Claude Opus 5 API</a>
 <a href="/model/claude-sonnet-5">Claude Sonnet 5 API</a>
-<a href="/model/claude-fable-5">Claude Fable 5 API</a></div>
+<a href="/model/claude-fable-5">Claude Fable 5 API</a>
+<a href="/model/claude-fable-5-1">Claude Fable 5.1 API</a></div>
 <p class="meta">Guide for <strong>claude-opus-5-5</strong>. Catalog: <a href="/pricing">the pricing page</a> · Rates: <a href="/pricing-list">the full pricing list</a>.</p>
 
 </main>

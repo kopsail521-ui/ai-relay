@@ -7,15 +7,16 @@ import path from "path";
 import { fileURLToPath } from "url";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const landingsPath = path.join(__dirname, "../config/seo/pricing-landings.json");
+const landingPaths = [
+  "../config/seo/pricing-landings.json",
+  "../config/seo/content-landings.json",
+].map((file) => path.join(__dirname, file));
 
 function pricingLandingSlugs() {
-  try {
-    const data = JSON.parse(fs.readFileSync(landingsPath, "utf8"));
+  return landingPaths.flatMap((file) => {
+    const data = JSON.parse(fs.readFileSync(file, "utf8"));
     return (data.pages || []).map((p) => p.slug).filter(Boolean);
-  } catch {
-    return [];
-  }
+  });
 }
 
 /** Landing-only handles for deploy-brand-static.sh (no runtime node). */

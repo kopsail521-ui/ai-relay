@@ -1,8 +1,8 @@
 Eleven V4 / V4 Turbo 上架（成本 × 2）
 
 公开模型                 售价 USD / 百万输入字符
-keyo-eleven-v4            80
-keyo-eleven-v4-turbo      40
+eleven-v4            80
+eleven-v4-turbo      40
 
 实测成本（2026-10-12）分别为 $40 / $20 每百万字符；default 组倍率为 1。
 ModelRatio=40/20；CompletionRatio、AudioRatio、AudioCompletionRatio 均为 0。
@@ -29,8 +29,8 @@ curl -fsSL https://raw.githubusercontent.com/kopsail521-ui/ai-relay/main/scripts
 curl https://www.keyoapi.xyz/v1/audio/speech \
   -H "Authorization: Bearer YOUR_KEYO_API_KEY" \
   -H "Content-Type: application/json" \
-  -d '{"model":"keyo-eleven-v4","input":"Hello from KeyoAPI.","voice":"george","response_format":"mp3"}' \
+  -d '{"model":"eleven-v4","input":"Hello from KeyoAPI.","voice":"george","response_format":"mp3"}' \
   --output speech.mp3
-Turbo 使用相同请求结构，将 model 改为 keyo-eleven-v4-turbo。
+Turbo 使用相同请求结构，将 model 改为 eleven-v4-turbo。
 
 本地验证：py -3 scripts/_dryrun-openrouter-eleven.py

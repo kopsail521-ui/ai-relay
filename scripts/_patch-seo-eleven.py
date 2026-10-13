@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
-"""Generate static/seo/model/keyo-eleven-v4.html & keyo-eleven-v4-turbo.html
+"""Generate static/seo/model/eleven-v4.html & eleven-v4-turbo.html
 and add both models to models.html, tts-api.html, pricing.html, index.html,
 sitemap.xml.
 
-Prices: keyo-eleven-v4 ~$80 / 1M characters (cost $40 x2), v4-turbo ~$40 / 1M
+Prices: eleven-v4 ~$80 / 1M characters (cost $40 x2), v4-turbo ~$40 / 1M
 (cost $20 x2), billed per input character. Sync POST /v1/audio/speech.
 No upstream/reseller wording (OpenRouter/上游/二道/进货 must never appear).
 """
@@ -65,75 +65,75 @@ def build(m):
 
 MODELS = [
     {
-        "id": "keyo-eleven-v4",
-        "name": "Keyo Eleven V4",
+        "id": "eleven-v4",
+        "name": "Eleven V4",
         "price": "~$80 / 1M characters",
         "ld_price": "$80 / 1M characters",
-        "title": "Keyo Eleven V4 API on KeyoAPI | Speech",
-        "h1": "Keyo Eleven V4 API on KeyoAPI — High-Fidelity Speech",
-        "lead": "Keyo Eleven V4 for expressive, high-fidelity text-to-speech on the same Keyo API key as chat — one POST /v1/audio/speech returns audio in a single round trip.",
-        "overview": ("keyo-eleven-v4 is a high-fidelity neural text-to-speech model on KeyoAPI. "
+        "title": "Eleven V4 API on KeyoAPI | Speech",
+        "h1": "Eleven V4 API on KeyoAPI — High-Fidelity Speech",
+        "lead": "Eleven V4 for expressive, high-fidelity text-to-speech on the same Keyo API key as chat — one POST /v1/audio/speech returns audio in a single round trip.",
+        "overview": ("eleven-v4 is a high-fidelity neural text-to-speech model on KeyoAPI. "
                      "Indicative rates about $80 per 1M characters, billed per input character — "
                      "confirm live on <a href=\"/pricing\">Model Square</a>. Call POST /v1/audio/speech "
-                     "with model=keyo-eleven-v4, an input string, and a built-in voice; audio comes back "
+                     "with model=eleven-v4, an input string, and a built-in voice; audio comes back "
                      "synchronously in the response. Choose a voice by name (george, sarah, adam, alice, "
                      "bella, bill, brian, callum, charlie, chris, daniel, eric, harry, jessica, laura, "
                      "liam, lily, matilda, river, roger, will)."),
         "curl": ("curl https://www.keyoapi.xyz/v1/audio/speech \\\n"
                  '  -H "Authorization: Bearer YOUR_API_KEY" \\\n'
                  '  -H "Content-Type: application/json" \\\n'
-                 '  -d \'{"model":"keyo-eleven-v4","input":"Hello from Keyo Eleven V4.","voice":"george","response_format":"mp3"}\' \\\n'
+                 '  -d \'{"model":"eleven-v4","input":"Hello from Eleven V4.","voice":"george","response_format":"mp3"}\' \\\n'
                  "  --output speech.mp3"),
         "faq": [
             ("Sync or async?",
              "Sync: POST /v1/audio/speech returns audio in the same response. Async TTS on Keyo remains Qwen3-TTS / CosyVoice3."),
             ("How is pricing metered?",
-             "keyo-eleven-v4 bills per input character. Indicative ~$80 per 1M characters; confirm live rates on Model Square."),
+             "eleven-v4 bills per input character. Indicative ~$80 per 1M characters; confirm live rates on Model Square."),
             ("Which voices are available?",
              "Built-in voices include george, sarah, adam, alice, bella, bill, brian, callum, charlie, chris, daniel, eric, harry, jessica, laura, liam, lily, matilda, river, roger, and will."),
         ],
         "related": """<a href="/model/IndexTTS-2">IndexTTS-2 API</a>
 <a href="/model/CosyVoice3">CosyVoice3 API</a>
 <a href="/model/gemini-3.8-flash-tts">Gemini 3.8 Flash TTS API</a>
-<a href="/model/keyo-eleven-v4-turbo">Keyo Eleven V4 Turbo API</a>""",
+<a href="/model/eleven-v4-turbo">Eleven V4 Turbo API</a>""",
     },
     {
-        "id": "keyo-eleven-v4-turbo",
-        "name": "Keyo Eleven V4 Turbo",
+        "id": "eleven-v4-turbo",
+        "name": "Eleven V4 Turbo",
         "price": "~$40 / 1M characters",
         "ld_price": "$40 / 1M characters",
-        "title": "Keyo Eleven V4 Turbo API on KeyoAPI | Speech",
-        "h1": "Keyo Eleven V4 Turbo API on KeyoAPI — Fast Speech",
-        "lead": "Keyo Eleven V4 Turbo for low-latency, high-quality text-to-speech on the same Keyo API key as chat — POST /v1/audio/speech returns audio fast.",
-        "overview": ("keyo-eleven-v4-turbo is a fast neural text-to-speech model on KeyoAPI. "
+        "title": "Eleven V4 Turbo API on KeyoAPI | Speech",
+        "h1": "Eleven V4 Turbo API on KeyoAPI — Fast Speech",
+        "lead": "Eleven V4 Turbo for low-latency, high-quality text-to-speech on the same Keyo API key as chat — POST /v1/audio/speech returns audio fast.",
+        "overview": ("eleven-v4-turbo is a fast neural text-to-speech model on KeyoAPI. "
                      "Indicative rates about $40 per 1M characters, billed per input character — "
                      "confirm live on <a href=\"/pricing\">Model Square</a>. Call POST /v1/audio/speech "
-                     "with model=keyo-eleven-v4-turbo, an input string, and a built-in voice; audio comes "
+                     "with model=eleven-v4-turbo, an input string, and a built-in voice; audio comes "
                      "back synchronously in the response. It is tuned for real-time interactions and "
                      "large-scale generation."),
         "curl": ("curl https://www.keyoapi.xyz/v1/audio/speech \\\n"
                  '  -H "Authorization: Bearer YOUR_API_KEY" \\\n'
                  '  -H "Content-Type: application/json" \\\n'
-                 '  -d \'{"model":"keyo-eleven-v4-turbo","input":"Hello from Keyo Eleven V4 Turbo.","voice":"george","response_format":"mp3"}\' \\\n'
+                 '  -d \'{"model":"eleven-v4-turbo","input":"Hello from Eleven V4 Turbo.","voice":"george","response_format":"mp3"}\' \\\n'
                  "  --output speech.mp3"),
         "faq": [
             ("Sync or async?",
              "Sync: POST /v1/audio/speech returns audio in the same response. Async TTS on Keyo remains Qwen3-TTS / CosyVoice3."),
             ("How is pricing metered?",
-             "keyo-eleven-v4-turbo bills per input character. Indicative ~$40 per 1M characters; confirm live rates on Model Square."),
+             "eleven-v4-turbo bills per input character. Indicative ~$40 per 1M characters; confirm live rates on Model Square."),
             ("Which voices are available?",
              "Built-in voices include george, sarah, adam, alice, bella, bill, brian, callum, charlie, chris, daniel, eric, harry, jessica, laura, liam, lily, matilda, river, roger, and will."),
         ],
         "related": """<a href="/model/IndexTTS-2">IndexTTS-2 API</a>
 <a href="/model/CosyVoice3">CosyVoice3 API</a>
 <a href="/model/gemini-3.8-flash-tts">Gemini 3.8 Flash TTS API</a>
-<a href="/model/keyo-eleven-v4">Keyo Eleven V4 API</a>""",
+<a href="/model/eleven-v4">Eleven V4 API</a>""",
     },
 ]
 
 META_DESC = {
-    "keyo-eleven-v4": "Call keyo-eleven-v4 on KeyoAPI (~$80 / 1M characters). Sync text-to-speech via POST /v1/audio/speech with expressive built-in voices.",
-    "keyo-eleven-v4-turbo": "Call keyo-eleven-v4-turbo on KeyoAPI (~$40 / 1M characters). Sync text-to-speech via POST /v1/audio/speech for real-time voice.",
+    "eleven-v4": "Call eleven-v4 on KeyoAPI (~$80 / 1M characters). Sync text-to-speech via POST /v1/audio/speech with expressive built-in voices.",
+    "eleven-v4-turbo": "Call eleven-v4-turbo on KeyoAPI (~$40 / 1M characters). Sync text-to-speech via POST /v1/audio/speech for real-time voice.",
 }
 
 for m in MODELS:
@@ -232,12 +232,12 @@ def add_row(p, rows):
 # models.html: insert rows right after the gemini-3.8-flash-tts row (before </tbody>)
 add_row(
     ROOT + "/models.html",
-    [("keyo-eleven-v4", "~$80 / 1M characters"), ("keyo-eleven-v4-turbo", "~$40 / 1M characters")],
+    [("eleven-v4", "~$80 / 1M characters"), ("eleven-v4-turbo", "~$40 / 1M characters")],
 )
 
 # pricing.html: same table shape, endpoint column
 s = load(ROOT + "/pricing.html")
-for mid, price in [("keyo-eleven-v4", "~$80 / 1M characters"), ("keyo-eleven-v4-turbo", "~$40 / 1M characters")]:
+for mid, price in [("eleven-v4", "~$80 / 1M characters"), ("eleven-v4-turbo", "~$40 / 1M characters")]:
     row = (
         '<tr>\n  <td><a href="/model/%s"><code>%s</code></a></td>\n  <td>speech</td>\n'
         '  <td class="ok">%s</td>\n  <td><code>POST /v1/audio/speech</code></td>\n'
@@ -252,8 +252,8 @@ print("patched pricing.html")
 # tts-api.html: model table rows before </tbody>
 s = load(ROOT + "/tts-api.html")
 for mid, desc, price in [
-    ("keyo-eleven-v4", "Sync high-fidelity TTS — token-billed per input character", "~$80 / 1M characters"),
-    ("keyo-eleven-v4-turbo", "Sync low-latency TTS — token-billed per input character", "~$40 / 1M characters"),
+    ("eleven-v4", "Sync high-fidelity TTS — token-billed per input character", "~$80 / 1M characters"),
+    ("eleven-v4-turbo", "Sync low-latency TTS — token-billed per input character", "~$40 / 1M characters"),
 ]:
     row = (
         '<tr>\n  <td><a href="/model/%s"><code>%s</code></a></td>\n  <td>%s</td>\n'
@@ -265,7 +265,7 @@ for mid, desc, price in [
         s = s.replace("</tbody>", row + "</tbody>", 1)
 # also update the "Indicative rates above" paragraph to reference new guides
 old_guides = 'and <a href="/model/gemini-3.8-flash-tts">the gemini-3.8-flash-tts model page</a> (live rates on <a href="/pricing">the pricing page</a>).'
-new_guides = 'the <a href="/model/keyo-eleven-v4">keyo-eleven-v4 model page</a>, <a href="/model/keyo-eleven-v4-turbo">the keyo-eleven-v4-turbo model page</a>, and <a href="/model/gemini-3.8-flash-tts">the gemini-3.8-flash-tts model page</a> (live rates on <a href="/pricing">the pricing page</a>).'
+new_guides = 'the <a href="/model/eleven-v4">eleven-v4 model page</a>, <a href="/model/eleven-v4-turbo">the eleven-v4-turbo model page</a>, and <a href="/model/gemini-3.8-flash-tts">the gemini-3.8-flash-tts model page</a> (live rates on <a href="/pricing">the pricing page</a>).'
 if old_guides in s:
     s = s.replace(old_guides, new_guides)
 save(ROOT + "/tts-api.html", s)
@@ -273,7 +273,7 @@ print("patched tts-api.html")
 
 # index.html: add model links before the closing </div> of the model grid
 s = load(ROOT + "/index.html")
-for mid in ["keyo-eleven-v4", "keyo-eleven-v4-turbo"]:
+for mid in ["eleven-v4", "eleven-v4-turbo"]:
     link = '<a href="/model/%s">%s</a>' % (mid, mid)
     if link not in s:
         s = s.replace('<a href="/model/gemini-3.8-flash-tts">gemini-3.8-flash-tts</a>', link + "\n<a href=\"/model/gemini-3.8-flash-tts\">gemini-3.8-flash-tts</a>", 1)
@@ -286,7 +286,7 @@ for p in (ROOT + "/sitemap.xml",):
     anchor = "<url><loc>https://www.keyoapi.xyz/model/gemini-3.8-flash-tts</loc>"
     assert anchor in s, p
     entries = ""
-    for mid in ("keyo-eleven-v4", "keyo-eleven-v4-turbo"):
+    for mid in ("eleven-v4", "eleven-v4-turbo"):
         if ("https://www.keyoapi.xyz/model/%s</loc>" % mid) in s:
             continue
         e = (
@@ -301,8 +301,8 @@ for p in (ROOT + "/sitemap.xml",):
 
 # ---- verification ----
 blob = "\n".join(load(p) for p in [
-    MODEL_DIR + "/keyo-eleven-v4.html",
-    MODEL_DIR + "/keyo-eleven-v4-turbo.html",
+    MODEL_DIR + "/eleven-v4.html",
+    MODEL_DIR + "/eleven-v4-turbo.html",
     ROOT + "/models.html",
     ROOT + "/tts-api.html",
     ROOT + "/pricing.html",
@@ -310,7 +310,7 @@ blob = "\n".join(load(p) for p in [
 ])
 leaks = LEAK.findall(blob)
 assert not leaks, leaks
-for mid in ("keyo-eleven-v4", "keyo-eleven-v4-turbo"):
+for mid in ("eleven-v4", "eleven-v4-turbo"):
     assert load(MODEL_DIR + "/" + mid + ".html").count("/pricing") >= 3, mid
     assert load(ROOT + "/models.html").count(">" + mid + "<") >= 1
     assert load(ROOT + "/pricing.html").count(">" + mid + "<") >= 1

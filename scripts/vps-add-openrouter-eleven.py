@@ -2,7 +2,7 @@
 """List OpenRouter TTS models elevenlabs/eleven-v4 & eleven-v4-turbo on Keyo at cost x 2.
 
 New "Keyo TTS" channel (type 1) pointing at https://openrouter.ai/api.
-Public IDs keyo-eleven-v4 / keyo-eleven-v4-turbo. Upstream bills per character
+Public IDs eleven-v4 / eleven-v4-turbo. Upstream bills per character
 via POST /v1/audio/speech: v4 = $40/M chars, v4-turbo = $20/M chars (verified
 by live billing probe 2026-10-12). Sell = cost x 2 -> v4 $80/M, turbo $40/M.
 
@@ -86,29 +86,31 @@ def T(pid, up, cost, tag, vendor, icon, zh, en):
 
 
 MODELS = [
-    T("keyo-eleven-v4", "elevenlabs/eleven-v4", 40, "语音合成", "ElevenLabs", "ElevenLabs",
-      "Keyo Eleven V4：高保真 AI 语音合成，自然表达与角色演绎。",
-      "Keyo Eleven V4 — high-fidelity AI speech for natural voiceovers."),
-    T("keyo-eleven-v4-turbo", "elevenlabs/eleven-v4-turbo", 20, "语音合成", "ElevenLabs", "ElevenLabs",
-      "Keyo Eleven V4 Turbo：更快的 AI 语音合成，低延迟实时场景。",
-      "Keyo Eleven V4 Turbo — faster AI speech for real-time use."),
+    T("eleven-v4", "elevenlabs/eleven-v4", 40, "语音合成", "ElevenLabs", "ElevenLabs",
+      "Eleven V4：高保真 AI 语音合成，自然表达与角色演绎。",
+      "Eleven V4 — high-fidelity AI speech for natural voiceovers."),
+    T("eleven-v4-turbo", "elevenlabs/eleven-v4-turbo", 20, "语音合成", "ElevenLabs", "ElevenLabs",
+      "Eleven V4 Turbo：更快的 AI 语音合成，低延迟实时场景。",
+      "Eleven V4 Turbo — faster AI speech for real-time use."),
 ]
 
+OLD_IDS = ("keyo-eleven-v4", "keyo-eleven-v4-turbo")
+
 COPY = {
-    "keyo-eleven-v4": copy_token(
-        "Keyo Eleven V4：高保真 AI 语音合成，自然表达、角色演绎。按输入字符计费：$80 / 百万字符，输出音频不另收费。",
-        "Keyo Eleven V4 — high-fidelity AI speech. $80 per million input characters; no additional audio output charge.",
-        zhTW="Keyo Eleven V4：高保真 AI 語音合成。按輸入字元計費：$80 / 百萬字元，輸出音訊不另收費。",
-        ja="Keyo Eleven V4。高忠実度の AI 音声合成。入力100万文字あたり$80、音声出力の追加料金なし。",
-        vi="Keyo Eleven V4 — giọng nói AI trung thực cao. $80 / triệu ký tự đầu vào; không tính thêm phí âm thanh đầu ra.",
-    ),
-    "keyo-eleven-v4-turbo": copy_token(
-        "Keyo Eleven V4 Turbo：快速 AI 语音合成，适合实时交互。按输入字符计费：$40 / 百万字符，输出音频不另收费。",
-        "Keyo Eleven V4 Turbo — fast AI speech. $40 per million input characters; no additional audio output charge.",
-        zhTW="Keyo Eleven V4 Turbo：快速 AI 語音合成。按輸入字元計費：$40 / 百萬字元，輸出音訊不另收費。",
-        ja="Keyo Eleven V4 Turbo。低遅延の高速 AI 音声合成。入力100万文字あたり$40、音声出力の追加料金なし。",
-        vi="Keyo Eleven V4 Turbo — TTS nhanh. $40 / triệu ký tự đầu vào; không tính thêm phí âm thanh đầu ra.",
-    ),
+    "eleven-v4": dict(display_names="Eleven V4", **copy_token(
+        "Eleven V4：高保真 AI 语音合成，自然表达、角色演绎。按输入字符计费：$80 / 百万字符，输出音频不另收费。",
+        "Eleven V4 — high-fidelity AI speech. $80 per million input characters; no additional audio output charge.",
+        zhTW="Eleven V4：高保真 AI 語音合成。按輸入字元計費：$80 / 百萬字元，輸出音訊不另收費。",
+        ja="Eleven V4。高忠実度の AI 音声合成。入力100万文字あたり$80、音声出力の追加料金なし。",
+        vi="Eleven V4 — giọng nói AI trung thực cao. $80 / triệu ký tự đầu vào; không tính thêm phí âm thanh đầu ra.",
+    )),
+    "eleven-v4-turbo": dict(display_names="Eleven V4 Turbo", **copy_token(
+        "Eleven V4 Turbo：快速 AI 语音合成，适合实时交互。按输入字符计费：$40 / 百万字符，输出音频不另收费。",
+        "Eleven V4 Turbo — fast AI speech. $40 per million input characters; no additional audio output charge.",
+        zhTW="Eleven V4 Turbo：快速 AI 語音合成。按輸入字元計費：$40 / 百萬字元，輸出音訊不另收費。",
+        ja="Eleven V4 Turbo。低遅延の高速 AI 音声合成。入力100万文字あたり$40、音声出力の追加料金なし。",
+        vi="Eleven V4 Turbo — TTS nhanh. $40 / triệu ký tự đầu vào; không tính thêm phí âm thanh đầu ra.",
+    )),
 }
 
 
@@ -185,12 +187,15 @@ def find_channel(cur, ch_cols):
 
 def merge_channel(cur, ch_cols, cid, name, models, mapping, base, key, now):
     parts = [p.strip() for p in models.replace("\n", ",").split(",") if p.strip()]
+    parts = [p for p in parts if p not in OLD_IDS]
     added = [m["id"] for m in MODELS if m["id"] not in parts]
     merged_models = ",".join(parts + added)
 
     mapping_data = json.loads(mapping) if mapping else {}
     if not isinstance(mapping_data, dict):
         raise SystemExit("Existing model mapping is invalid; refusing to overwrite it")
+    for old in OLD_IDS:
+        mapping_data.pop(old, None)
     mapping_added = [m["id"] for m in MODELS if m["id"] not in mapping_data]
     for m in MODELS:
         mapping_data[m["id"]] = m["up"]
@@ -260,6 +265,11 @@ def upsert_model(cur, m_cols, m, vid, now):
             "UPDATE models SET deleted_at=NULL WHERE model_name=? AND deleted_at IS NOT NULL AND deleted_at!=0",
             (m["id"],),
         )
+    old = "keyo-" + m["id"]
+    if cur.execute("SELECT id FROM models WHERE model_name=?", (m["id"],)).fetchone() is None:
+        cur.execute("UPDATE models SET model_name=? WHERE model_name=?", (m["id"], old))
+    else:
+        cur.execute("DELETE FROM models WHERE model_name=?", (old,))
     row = cur.execute("SELECT id FROM models WHERE model_name=?", (m["id"],)).fetchone()
     if row is None:
         fields = ["model_name", "description", "icon", "tags", "vendor_id", "endpoints"]
@@ -317,6 +327,8 @@ def prepare_copy(base):
         existing = json.load(f)
     if existing != data:
         print("copy drift detected; synchronizing services from config")
+    for old in OLD_IDS:
+        data.pop(old, None)
     data.update(COPY)
     payload = (json.dumps(data, ensure_ascii=False, indent=2) + "\n").encode("utf-8")
     return paths, payload
@@ -375,7 +387,7 @@ def main():
             vids[m["vendor"]] = ensure_vendor(cur, v_cols, m["vendor"], m["icon"], now)
         upsert_model(cur, m_cols, m, vids[m["vendor"]], now)
         if "abilities" in tabs:
-            cur.execute("DELETE FROM abilities WHERE model=?", (m["id"],))
+            cur.execute("DELETE FROM abilities WHERE model IN (?,?)", (m["id"], "keyo-" + m["id"]))
             cur.execute(
                 'INSERT INTO abilities("group", model, channel_id, enabled, priority, weight) VALUES (?,?,?,?,?,?)',
                 ("default", m["id"], cid, 1, 0, 1),
@@ -387,6 +399,9 @@ def main():
     ar = json.loads(get_opt(cur, "AudioRatio") or "{}")
     acr = json.loads(get_opt(cur, "AudioCompletionRatio") or "{}")
     mp = json.loads(get_opt(cur, "ModelPrice") or "{}")
+    for ratios in (mr, cr, ar, acr, mp):
+        for old in OLD_IDS:
+            ratios.pop(old, None)
     for m in MODELS:
         mr[m["id"]] = m["ratio"]
         cr[m["id"]] = 0

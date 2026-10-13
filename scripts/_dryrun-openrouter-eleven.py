@@ -13,7 +13,7 @@ copy_base = os.path.join(tmp, "airelay")
 os.makedirs(os.path.join(copy_base, "config"), exist_ok=True)
 os.makedirs(os.path.join(copy_base, "services", "creem-moderation-proxy"), exist_ok=True)
 for p in ("config/marketplace-model-copy.json", "services/creem-moderation-proxy/marketplace-model-copy.json"):
-    json.dump({"grok-imagine-video-1.5": {"description": "x"}}, open(os.path.join(copy_base, p), "w", encoding="utf-8"), ensure_ascii=False)
+    json.dump({"grok-imagine-video-1.5": {"description": "x"}, "keyo-eleven-v4": {"description": "old"}, "keyo-eleven-v4-turbo": {"description": "old"}}, open(os.path.join(copy_base, p), "w", encoding="utf-8"), ensure_ascii=False)
 
 c = sqlite3.connect(db)
 cur = c.cursor()
@@ -42,7 +42,7 @@ cur.execute("INSERT INTO models(model_name,description,icon,tags,vendor_id,endpo
 cur.execute("INSERT INTO options(key,value) VALUES ('ModelRatio','{\"legacy\":1}'),('CompletionRatio','{\"legacy\":1}'),('AudioRatio','{}'),('AudioCompletionRatio','{}'),('ModelPrice','{}')")
 cur.execute('INSERT INTO abilities("group",model,channel_id,enabled,priority,weight) VALUES (?,?,?,?,?,?)', ("default", "keyo-example:free", 1, 1, 0, 1))
 cur.execute('INSERT INTO options(key,value) VALUES (?,?)', ("GroupRatio", '{"default":1}'))
-cur.execute('UPDATE options SET value=? WHERE key=?', ('{"keyo-example:free":0,"keyo-eleven-v4":7,"keyo-eleven-v4-turbo":8}', "ModelPrice"))
+cur.execute('UPDATE options SET value=? WHERE key=?', ('{"keyo-example:free":0,"eleven-v4":7,"eleven-v4-turbo":8}', "ModelPrice"))
 original_channel = cur.execute('SELECT * FROM channels WHERE id=1').fetchone()
 c.commit()
 c.close()
@@ -50,7 +50,17 @@ c.close()
 env = dict(os.environ)
 env["OPENROUTER_API_KEY"] = "sk-dryrun-test-key"
 icon_state = None
-for run in ("first", "second"):
+for run in ("first", "second", "migration"):
+    if run == "migration":
+        with sqlite3.connect(db) as seed:
+            seed.execute("UPDATE channels SET models=?, model_mapping=? WHERE name='Keyo TTS'", (
+                "keyo-eleven-v4,keyo-eleven-v4-turbo,keep-tts", json.dumps({"keyo-eleven-v4": "elevenlabs/eleven-v4", "keyo-eleven-v4-turbo": "elevenlabs/eleven-v4-turbo", "keep-tts": "keep-upstream"})))
+            for opt in ("ModelRatio", "CompletionRatio", "AudioRatio", "AudioCompletionRatio", "ModelPrice"):
+                vals = json.loads(seed.execute("SELECT value FROM options WHERE key=?", (opt,)).fetchone()[0])
+                vals.update({"keyo-eleven-v4": 7, "keyo-eleven-v4-turbo": 8})
+                seed.execute("UPDATE options SET value=? WHERE key=?", (json.dumps(vals), opt))
+            seed.execute("UPDATE models SET model_name='keyo-' || model_name WHERE model_name IN ('eleven-v4', 'eleven-v4-turbo')")
+            seed.execute("UPDATE abilities SET model='keyo-' || model WHERE model IN ('eleven-v4', 'eleven-v4-turbo')")
     r = subprocess.run(
         [sys.executable, "scripts/vps-add-openrouter-eleven.py", db, copy_base],
         capture_output=True, text=True,
@@ -64,8 +74,8 @@ for run in ("first", "second"):
     with sqlite3.connect(db) as check:
         vendor = check.execute("SELECT id, icon FROM vendors WHERE name='ElevenLabs'").fetchall()
         assert vendor == [(2, "ElevenLabs")], vendor
-        icons = check.execute("SELECT model_name, icon, vendor_id FROM models WHERE model_name IN ('keyo-eleven-v4','keyo-eleven-v4-turbo') ORDER BY model_name").fetchall()
-        assert icons == [("keyo-eleven-v4", "ElevenLabs", 2), ("keyo-eleven-v4-turbo", "ElevenLabs", 2)], icons
+        icons = check.execute("SELECT model_name, icon, vendor_id FROM models WHERE model_name IN ('eleven-v4','eleven-v4-turbo') ORDER BY model_name").fetchall()
+        assert icons == [("eleven-v4", "ElevenLabs", 2), ("eleven-v4-turbo", "ElevenLabs", 2)], icons
         assert check.execute("SELECT icon FROM vendors WHERE name='Keyo'").fetchone()[0] == "Custom"
         state = (vendor, icons)
         if icon_state is not None:
@@ -78,13 +88,14 @@ ch = cur.execute("SELECT id, models, model_mapping, `key`, base_url FROM channel
 assert ch is not None, "Keyo TTS channel missing"
 chid, models_col, mapping, key, base = ch
 ids = [p.strip() for p in models_col.split(",")]
-expect = ["keyo-eleven-v4", "keyo-eleven-v4-turbo"]
+expect = ["keep-tts", "eleven-v4", "eleven-v4-turbo"]
 print("channel models:", ids)
 assert ids == expect, ids
 md = json.loads(mapping)
 print("mapping entries:", len(md))
-assert md["keyo-eleven-v4"] == "elevenlabs/eleven-v4", md
-assert md["keyo-eleven-v4-turbo"] == "elevenlabs/eleven-v4-turbo", md
+assert md["eleven-v4"] == "elevenlabs/eleven-v4", md
+assert md["eleven-v4-turbo"] == "elevenlabs/eleven-v4-turbo", md
+assert md["keep-tts"] == "keep-upstream" and not any(k.startswith("keyo-eleven-") for k in md)
 assert key == "sk-dryrun-test-key" and base == "https://openrouter.ai/api", (key, base)
 
 mr = json.loads(cur.execute("SELECT value FROM options WHERE key='ModelRatio'").fetchone()[0])
@@ -92,18 +103,21 @@ cr = json.loads(cur.execute("SELECT value FROM options WHERE key='CompletionRati
 ar = json.loads(cur.execute("SELECT value FROM options WHERE key='AudioRatio'").fetchone()[0])
 acr = json.loads(cur.execute("SELECT value FROM options WHERE key='AudioCompletionRatio'").fetchone()[0])
 mp = json.loads(cur.execute("SELECT value FROM options WHERE key='ModelPrice'").fetchone()[0])
-assert mr["keyo-eleven-v4"] == 40 and mr["keyo-eleven-v4-turbo"] == 20, mr
-assert cr["keyo-eleven-v4"] == 0 and cr["keyo-eleven-v4-turbo"] == 0, cr
-assert ar["keyo-eleven-v4"] == 0 and ar["keyo-eleven-v4-turbo"] == 0, ar
-assert acr["keyo-eleven-v4"] == 0 and acr["keyo-eleven-v4-turbo"] == 0, acr
-assert "keyo-eleven-v4" not in mp and "keyo-eleven-v4-turbo" not in mp, mp
+assert mr["eleven-v4"] == 40 and mr["eleven-v4-turbo"] == 20, mr
+assert cr["eleven-v4"] == 0 and cr["eleven-v4-turbo"] == 0, cr
+assert ar["eleven-v4"] == 0 and ar["eleven-v4-turbo"] == 0, ar
+assert acr["eleven-v4"] == 0 and acr["eleven-v4-turbo"] == 0, acr
+assert "eleven-v4" not in mp and "eleven-v4-turbo" not in mp, mp
+assert all("keyo-eleven-v4" not in d and "keyo-eleven-v4-turbo" not in d for d in (mr, cr, ar, acr, mp))
+assert cur.execute("SELECT count(*) FROM models WHERE model_name IN ('keyo-eleven-v4','keyo-eleven-v4-turbo')").fetchone()[0] == 0
+assert cur.execute("SELECT count(*) FROM abilities WHERE model IN ('keyo-eleven-v4','keyo-eleven-v4-turbo')").fetchone()[0] == 0
 assert mr["legacy"] == 1 and cr["legacy"] == 1, (mr, cr)
 assert mp["keyo-example:free"] == 0
 assert cur.execute('SELECT * FROM channels WHERE id=1').fetchone() == original_channel
 assert cur.execute('SELECT enabled FROM abilities WHERE model=?', ("keyo-example:free",)).fetchone()[0] == 1
 assert cur.execute('SELECT "group" FROM channels WHERE id=?', (chid,)).fetchone()[0] == "default"
-print("pricing ok: ratio", {k: mr[k] for k in ("keyo-eleven-v4", "keyo-eleven-v4-turbo")},
-      "comp", {k: cr[k] for k in ("keyo-eleven-v4", "keyo-eleven-v4-turbo")},
+print("pricing ok: ratio", {k: mr[k] for k in ("eleven-v4", "eleven-v4-turbo")},
+      "comp", {k: cr[k] for k in ("eleven-v4", "eleven-v4-turbo")},
       "audio", ar, "acomp", acr, "modelprice removed")
 
 rows = cur.execute("SELECT model_name, tags, icon, vendor_id, endpoints, quota_type FROM models WHERE model_name != 'gemini-3.8-flash-tts'").fetchall()
@@ -117,7 +131,7 @@ for row in rows:
     vid = cur.execute("SELECT name FROM vendors WHERE id=?", (row[3],)).fetchone()[0]
     assert vid == "ElevenLabs", (row, vid)
 
-ab = cur.execute("SELECT model, \"group\", channel_id FROM abilities WHERE model IN ('keyo-eleven-v4','keyo-eleven-v4-turbo')").fetchall()
+ab = cur.execute("SELECT model, \"group\", channel_id FROM abilities WHERE model IN ('eleven-v4','eleven-v4-turbo')").fetchall()
 print("abilities:", len(ab))
 assert len(ab) == 2 and all(r[1] == "default" and r[2] == chid for r in ab), ab
 
@@ -125,9 +139,13 @@ a = open(os.path.join(copy_base, "config/marketplace-model-copy.json"), encoding
 b = open(os.path.join(copy_base, "services/creem-moderation-proxy/marketplace-model-copy.json"), encoding="utf-8").read()
 assert a == b, "copies diverged"
 da = json.loads(a)
-assert "keyo-eleven-v4" in da and "keyo-eleven-v4-turbo" in da, "copy entries missing"
-assert da["keyo-eleven-v4"]["badge"]["zhCN"] == "按 Token 计费" and da["keyo-eleven-v4"]["unit"] == "token"
-assert da["keyo-eleven-v4-turbo"]["badge"]["en"] == "Token-based"
+assert "eleven-v4" in da and "eleven-v4-turbo" in da, "copy entries missing"
+assert da["eleven-v4"]["badge"]["zhCN"] == "按 Token 计费" and da["eleven-v4"]["unit"] == "token"
+assert da["eleven-v4-turbo"]["badge"]["en"] == "Token-based"
+assert da["eleven-v4"]["display_names"] == "Eleven V4"
+assert da["eleven-v4-turbo"]["display_names"] == "Eleven V4 Turbo"
+assert "keyo-eleven-v4" not in da and "keyo-eleven-v4-turbo" not in da
+assert "Keyo Eleven" not in json.dumps({k: da[k] for k in ("eleven-v4", "eleven-v4-turbo")}, ensure_ascii=False)
 assert da["grok-imagine-video-1.5"] == {"description": "x"}
 print("copies merged ok, byte-identical:", True)
 c.close()

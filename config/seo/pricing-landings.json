@@ -552,18 +552,18 @@
           "note": "Gemini-native POST /v1beta/models/gemini-3.8-flash-tts:generateContent · not on /v1/audio/speech · guide /model/gemini-3.8-flash-tts"
         },
         {
-          "model": "keyo-eleven-v4",
+          "model": "eleven-v4",
           "official": "Sync high-fidelity TTS — billed per input character",
           "keyo": "$80 / 1M characters",
-          "note": "POST /v1/audio/speech · guide /model/keyo-eleven-v4",
+          "note": "POST /v1/audio/speech · guide /model/eleven-v4",
           "category": "speech",
           "endpoint": "POST /v1/audio/speech"
         },
         {
-          "model": "keyo-eleven-v4-turbo",
+          "model": "eleven-v4-turbo",
           "official": "Sync low-latency TTS — billed per input character",
           "keyo": "$40 / 1M characters",
-          "note": "POST /v1/audio/speech · guide /model/keyo-eleven-v4-turbo",
+          "note": "POST /v1/audio/speech · guide /model/eleven-v4-turbo",
           "category": "speech",
           "endpoint": "POST /v1/audio/speech"
         }

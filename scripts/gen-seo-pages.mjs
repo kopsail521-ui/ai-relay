@@ -39,13 +39,13 @@ pages.models = [...pages.models, ...batch2.models];
  */
 const HAND_MAINTAINED_META = [
   {
-    id: "keyo-eleven-v4",
+    id: "eleven-v4",
     category: "speech",
     priceLabel: "$80 / 1M characters",
     endpoint: "POST /v1/audio/speech",
   },
   {
-    id: "keyo-eleven-v4-turbo",
+    id: "eleven-v4-turbo",
     category: "speech",
     priceLabel: "$40 / 1M characters",
     endpoint: "POST /v1/audio/speech",
@@ -106,8 +106,8 @@ function isFreeId(id) {
 /** Crawlable catalog link: guide page > free hub > pricing-list. */
 /** Hand-maintained model pages outside config (regeneration does not cover them). */
 const HAND_MAINTAINED_GUIDES = new Set([
-  "keyo-eleven-v4",
-  "keyo-eleven-v4-turbo",
+  "eleven-v4",
+  "eleven-v4-turbo",
   "gemini-3.8-flash-tts",
   "gemini-3.1-flash-tts-preview",
   "suno_music_open",

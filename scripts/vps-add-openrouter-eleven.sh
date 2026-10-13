@@ -91,7 +91,7 @@ docker cp "$INJECT" ai-relay-creem-moderation:/app/billing-unit-inject.js
 docker cp "$ROOT/services/creem-moderation-proxy/marketplace-model-copy.json" ai-relay-creem-moderation:/app/marketplace-model-copy.json
 docker restart ai-relay-creem-moderation >/dev/null
 
-for file in static/seo/model/keyo-eleven-v4.html static/seo/model/keyo-eleven-v4-turbo.html \
+for file in static/seo/model/eleven-v4.html static/seo/model/eleven-v4-turbo.html \
   static/seo/models.html static/seo/pricing.html static/seo/tts-api.html static/seo/index.html \
   static/seo/sitemap.xml; do
   [[ ! -f "$ROOT/$file" ]] || cp -p "$ROOT/$file" "$ROOT/$file.eleven-$(date +%s).bak"

@@ -7039,16 +7039,17 @@
     "price_key_zh": "每次请求",
     "price_key_en": "Per request"
   },
-  "keyo-eleven-v4": {
-    "description": "Keyo Eleven V4：高保真 AI 语音合成，自然表达、角色演绎。按输入字符计费：$80 / 百万字符，输出音频不另收费。",
+  "eleven-v4": {
+    "display_names": "Eleven V4",
+    "description": "Eleven V4：高保真 AI 语音合成，自然表达、角色演绎。按输入字符计费：$80 / 百万字符，输出音频不另收费。",
     "descriptions": {
-      "zhCN": "Keyo Eleven V4：高保真 AI 语音合成，自然表达、角色演绎。按输入字符计费：$80 / 百万字符，输出音频不另收费。",
-      "zhTW": "Keyo Eleven V4：高保真 AI 語音合成。按輸入字元計費：$80 / 百萬字元，輸出音訊不另收費。",
-      "en": "Keyo Eleven V4 — high-fidelity AI speech. $80 per million input characters; no additional audio output charge.",
-      "fr": "Keyo Eleven V4 — high-fidelity AI speech. $80 per million input characters; no additional audio output charge.",
-      "ru": "Keyo Eleven V4 — high-fidelity AI speech. $80 per million input characters; no additional audio output charge.",
-      "ja": "Keyo Eleven V4。高忠実度の AI 音声合成。入力100万文字あたり$80、音声出力の追加料金なし。",
-      "vi": "Keyo Eleven V4 — giọng nói AI trung thực cao. $80 / triệu ký tự đầu vào; không tính thêm phí âm thanh đầu ra."
+      "zhCN": "Eleven V4：高保真 AI 语音合成，自然表达、角色演绎。按输入字符计费：$80 / 百万字符，输出音频不另收费。",
+      "zhTW": "Eleven V4：高保真 AI 語音合成。按輸入字元計費：$80 / 百萬字元，輸出音訊不另收費。",
+      "en": "Eleven V4 — high-fidelity AI speech. $80 per million input characters; no additional audio output charge.",
+      "fr": "Eleven V4 — high-fidelity AI speech. $80 per million input characters; no additional audio output charge.",
+      "ru": "Eleven V4 — high-fidelity AI speech. $80 per million input characters; no additional audio output charge.",
+      "ja": "Eleven V4。高忠実度の AI 音声合成。入力100万文字あたり$80、音声出力の追加料金なし。",
+      "vi": "Eleven V4 — giọng nói AI trung thực cao. $80 / triệu ký tự đầu vào; không tính thêm phí âm thanh đầu ra."
     },
     "unit": "token",
     "badge": {
@@ -7078,8 +7079,8 @@
       "ja": "",
       "vi": ""
     },
-    "description_zh": "Keyo Eleven V4：高保真 AI 语音合成，自然表达、角色演绎。按输入字符计费：$80 / 百万字符，输出音频不另收费。",
-    "description_en": "Keyo Eleven V4 — high-fidelity AI speech. $80 per million input characters; no additional audio output charge.",
+    "description_zh": "Eleven V4：高保真 AI 语音合成，自然表达、角色演绎。按输入字符计费：$80 / 百万字符，输出音频不另收费。",
+    "description_en": "Eleven V4 — high-fidelity AI speech. $80 per million input characters; no additional audio output charge.",
     "badge_zh": "按 Token 计费",
     "badge_en": "Token-based",
     "suffix_zh": "",
@@ -7087,16 +7088,17 @@
     "price_key_zh": "",
     "price_key_en": ""
   },
-  "keyo-eleven-v4-turbo": {
-    "description": "Keyo Eleven V4 Turbo：快速 AI 语音合成，适合实时交互。按输入字符计费：$40 / 百万字符，输出音频不另收费。",
+  "eleven-v4-turbo": {
+    "display_names": "Eleven V4 Turbo",
+    "description": "Eleven V4 Turbo：快速 AI 语音合成，适合实时交互。按输入字符计费：$40 / 百万字符，输出音频不另收费。",
     "descriptions": {
-      "zhCN": "Keyo Eleven V4 Turbo：快速 AI 语音合成，适合实时交互。按输入字符计费：$40 / 百万字符，输出音频不另收费。",
-      "zhTW": "Keyo Eleven V4 Turbo：快速 AI 語音合成。按輸入字元計費：$40 / 百萬字元，輸出音訊不另收費。",
-      "en": "Keyo Eleven V4 Turbo — fast AI speech. $40 per million input characters; no additional audio output charge.",
-      "fr": "Keyo Eleven V4 Turbo — fast AI speech. $40 per million input characters; no additional audio output charge.",
-      "ru": "Keyo Eleven V4 Turbo — fast AI speech. $40 per million input characters; no additional audio output charge.",
-      "ja": "Keyo Eleven V4 Turbo。低遅延の高速 AI 音声合成。入力100万文字あたり$40、音声出力の追加料金なし。",
-      "vi": "Keyo Eleven V4 Turbo — TTS nhanh. $40 / triệu ký tự đầu vào; không tính thêm phí âm thanh đầu ra."
+      "zhCN": "Eleven V4 Turbo：快速 AI 语音合成，适合实时交互。按输入字符计费：$40 / 百万字符，输出音频不另收费。",
+      "zhTW": "Eleven V4 Turbo：快速 AI 語音合成。按輸入字元計費：$40 / 百萬字元，輸出音訊不另收費。",
+      "en": "Eleven V4 Turbo — fast AI speech. $40 per million input characters; no additional audio output charge.",
+      "fr": "Eleven V4 Turbo — fast AI speech. $40 per million input characters; no additional audio output charge.",
+      "ru": "Eleven V4 Turbo — fast AI speech. $40 per million input characters; no additional audio output charge.",
+      "ja": "Eleven V4 Turbo。低遅延の高速 AI 音声合成。入力100万文字あたり$40、音声出力の追加料金なし。",
+      "vi": "Eleven V4 Turbo — TTS nhanh. $40 / triệu ký tự đầu vào; không tính thêm phí âm thanh đầu ra."
     },
     "unit": "token",
     "badge": {
@@ -7126,8 +7128,8 @@
       "ja": "",
       "vi": ""
     },
-    "description_zh": "Keyo Eleven V4 Turbo：快速 AI 语音合成，适合实时交互。按输入字符计费：$40 / 百万字符，输出音频不另收费。",
-    "description_en": "Keyo Eleven V4 Turbo — fast AI speech. $40 per million input characters; no additional audio output charge.",
+    "description_zh": "Eleven V4 Turbo：快速 AI 语音合成，适合实时交互。按输入字符计费：$40 / 百万字符，输出音频不另收费。",
+    "description_en": "Eleven V4 Turbo — fast AI speech. $40 per million input characters; no additional audio output charge.",
     "badge_zh": "按 Token 计费",
     "badge_en": "Token-based",
     "suffix_zh": "",

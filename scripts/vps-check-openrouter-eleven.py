@@ -11,7 +11,7 @@ def check(data):
         errors.append("pricing API did not return success")
     vendors = {v.get("id"): v.get("name") for v in data.get("vendors", [])}
     models = {m.get("model_name"): m for m in data.get("data", [])}
-    for name, ratio in (("keyo-eleven-v4", 40), ("keyo-eleven-v4-turbo", 20)):
+    for name, ratio in (("eleven-v4", 40), ("eleven-v4-turbo", 20)):
         m = models.get(name)
         if not m:
             errors.append(name + " MISSING")
@@ -29,6 +29,8 @@ def check(data):
             errors.append(name + " unavailable in default group")
         if "openai-audio" not in (m.get("supported_endpoint_types") or []):
             errors.append(name + " missing speech endpoint")
+    if any(name in models for name in ("keyo-eleven-v4", "keyo-eleven-v4-turbo")):
+        errors.append("old public model IDs remain")
     if data.get("group_ratio", {}).get("default") != 1:
         errors.append("default group ratio must be 1 for these listed prices")
     leak = bool(re.search(r"小裴|豆姐|aicopy|unorouter|openlux|openrouter|apimart|grsai|SenseNova|模力|上游|passthrough|进货|二道|转售", json.dumps(data, ensure_ascii=False), re.I))

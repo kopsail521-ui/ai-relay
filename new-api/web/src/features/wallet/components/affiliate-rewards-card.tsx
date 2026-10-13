@@ -70,7 +70,7 @@ export function AffiliateRewardsCard({
             </h3>
             <p className='text-muted-foreground line-clamp-2 text-xs'>
               {t(
-                'Earn gift credits when users join through your referral link. Rewards credit instantly on signup and can only be used on free models (fair-use).'
+                'Earn gift credits when users join through your referral link. Rewards credit instantly on signup and are used first for gift-credit models; any shortfall is charged to your recharge balance.'
               )}
             </p>
           </div>

@@ -264,6 +264,11 @@ export function Pricing() {
                 onClearFilters={clearFilters}
               />
 
+              <p className='text-muted-foreground text-xs leading-relaxed'>
+                {t(
+                  'Gift-credit models are billed by usage. Gift credits are used first; any shortfall is charged to your recharge balance.'
+                )}
+              </p>
               {renderPricingContent()}
             </main>
           </div>

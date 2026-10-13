@@ -346,7 +346,7 @@ export function RedemptionsMutateDrawer({
                             {t('Recharge balance (any model)')}
                           </SelectItem>
                           <SelectItem value='gift'>
-                            {t('Gift credits / experience code (free models)')}
+                            {t('Gift-credit models / experience code')}
                           </SelectItem>
                         </SelectContent>
                       </Select>

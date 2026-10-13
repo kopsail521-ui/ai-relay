@@ -54,7 +54,6 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from '@/components/ui/tooltip'
-import { usePageMeta } from '@/hooks/use-page-meta'
 import { getPerfMetrics } from '@/features/performance-metrics/api'
 import {
   formatLatency,
@@ -62,6 +61,7 @@ import {
   formatUptimePct,
   getSuccessRateTextClass,
 } from '@/features/performance-metrics/lib/format'
+import { usePageMeta } from '@/hooks/use-page-meta'
 import { getLobeIcon } from '@/lib/lobe-icon'
 import { SITE_ORIGIN } from '@/lib/seo'
 import { cn } from '@/lib/utils'
@@ -75,6 +75,7 @@ import {
   isDynamicPricingModel,
 } from '../lib/dynamic-price'
 import { parseTags } from '../lib/filters'
+import { isGiftCreditModel } from '../lib/gift-credit'
 import { getAvailableGroups, isTokenBasedModel } from '../lib/model-helpers'
 import { formatFixedPrice, formatGroupPrice } from '../lib/price'
 import type {
@@ -536,7 +537,11 @@ function ModelHeader(props: { model: PricingModel }) {
   const model = props.model
   const modelIconKey = model.icon || model.vendor_icon
   const modelIcon = modelIconKey ? getLobeIcon(modelIconKey, 20) : null
-  const description = model.description || model.vendor_description || null
+  const description = isGiftCreditModel(model)
+    ? t(
+        'Calls are billed at the corresponding model rate. Gift credits are used first; any shortfall is charged to your recharge balance.'
+      )
+    : model.description || model.vendor_description || null
 
   return (
     <header className='pb-4'>
@@ -1164,11 +1169,13 @@ export interface ModelDetailsContentProps {
 
 export function ModelDetailsContent(props: ModelDetailsContentProps) {
   const { t } = useTranslation()
-  const showRechargePrice = props.showRechargePrice ?? false
+  const isGiftCredit = isGiftCreditModel(props.model)
+  const showRechargePrice = !isGiftCredit && (props.showRechargePrice ?? false)
 
   const isDynamic =
     props.model.billing_mode === 'tiered_expr' &&
     Boolean(props.model.billing_expr)
+  const showRates = !isGiftCredit || props.model.gift_billing_rate_available
 
   return (
     <div className='@container/details space-y-4'>
@@ -1196,26 +1203,43 @@ export function ModelDetailsContent(props: ModelDetailsContentProps) {
 
           <section className='bg-card/60 space-y-5 rounded-xl border p-4 shadow-sm'>
             <SectionTitle>{t('Pricing')}</SectionTitle>
-            <PriceSection
-              model={props.model}
-              priceRate={props.priceRate}
-              usdExchangeRate={props.usdExchangeRate}
-              tokenUnit={props.tokenUnit}
-              showRechargePrice={showRechargePrice}
-            />
-            {isDynamic && (
-              <DynamicPricingBreakdown billingExpr={props.model.billing_expr} />
+            {isGiftCredit && (
+              <p className='text-muted-foreground text-sm leading-relaxed'>
+                {t(
+                  'Calls are billed at the corresponding model rate. Gift credits are used first; any shortfall is charged to your recharge balance.'
+                )}
+              </p>
             )}
-            <GroupPricingSection
-              model={props.model}
-              groupRatio={props.groupRatio}
-              usableGroup={props.usableGroup}
-              autoGroups={props.autoGroups}
-              priceRate={props.priceRate}
-              usdExchangeRate={props.usdExchangeRate}
-              tokenUnit={props.tokenUnit}
-              showRechargePrice={showRechargePrice}
-            />
+            {showRates ? (
+              <>
+                <PriceSection
+                  model={props.model}
+                  priceRate={props.priceRate}
+                  usdExchangeRate={props.usdExchangeRate}
+                  tokenUnit={props.tokenUnit}
+                  showRechargePrice={showRechargePrice}
+                />
+                {isDynamic && (
+                  <DynamicPricingBreakdown
+                    billingExpr={props.model.billing_expr}
+                  />
+                )}
+                <GroupPricingSection
+                  model={props.model}
+                  groupRatio={props.groupRatio}
+                  usableGroup={props.usableGroup}
+                  autoGroups={props.autoGroups}
+                  priceRate={props.priceRate}
+                  usdExchangeRate={props.usdExchangeRate}
+                  tokenUnit={props.tokenUnit}
+                  showRechargePrice={showRechargePrice}
+                />
+              </>
+            ) : (
+              <p className='text-muted-foreground text-sm'>
+                {t('See the corresponding model for billing rates.')}
+              </p>
+            )}
           </section>
 
           <ModelBackendDetailsSection model={props.model} />

@@ -40,6 +40,8 @@ export type PricingModel = {
   model_ratio: number
   completion_ratio: number
   model_price?: number
+  /** Whether the catalog contains the rates used to bill this gift-credit model. */
+  gift_billing_rate_available?: boolean
   cache_ratio?: number | null
   create_cache_ratio?: number | null
   image_ratio?: number | null

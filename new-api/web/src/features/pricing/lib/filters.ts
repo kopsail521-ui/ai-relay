@@ -25,6 +25,7 @@ import {
 } from '../constants'
 import type { PricingModel } from '../types'
 import { getDynamicPricingTiers } from './dynamic-price'
+import { isGiftCreditModel } from './gift-credit'
 import { getDisplayGroupRatio } from './model-helpers'
 
 // ----------------------------------------------------------------------------
@@ -81,17 +82,6 @@ export function filterByGroup(
 }
 
 /**
- * True when the model costs nothing: per-request price is 0 (ModelPrice=0)
- * or token ratio is 0. Used by the 免费 pricing-type filter.
- */
-export function isFreeModel(model: PricingModel): boolean {
-  if (model.quota_type === 1) {
-    return Number(model.model_price ?? 0) === 0
-  }
-  return Number(model.model_ratio ?? 0) === 0
-}
-
-/**
  * Filter models by quota type
  */
 export function filterByQuotaType(
@@ -100,7 +90,7 @@ export function filterByQuotaType(
 ): PricingModel[] {
   if (quotaType === QUOTA_TYPES.ALL) return models
   if (quotaType === QUOTA_TYPES.FREE) {
-    return models.filter(isFreeModel)
+    return models.filter(isGiftCreditModel)
   }
   const targetType =
     quotaType === QUOTA_TYPES.TOKEN
@@ -178,8 +168,7 @@ export function sortModels(
         priceKeys.set(model, getModelSortPrice(model, selectedGroup))
       }
       tokenModels.sort((a, b) => {
-        const diff =
-          (priceKeys.get(a) ?? 0) - (priceKeys.get(b) ?? 0)
+        const diff = (priceKeys.get(a) ?? 0) - (priceKeys.get(b) ?? 0)
         return sortBy === SORT_OPTIONS.PRICE_LOW ? diff : -diff
       })
       return [...tokenModels, ...requestModels]

@@ -54,7 +54,6 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from '@/components/ui/tooltip'
-import { createApiKey, fetchTokenKey, getApiKeys } from '@/features/keys/api'
 import {
   STARTER_FREE_MODEL,
   buildCurlCommand,
@@ -63,6 +62,7 @@ import {
   normalizeEndpoint,
   pickStarterModel,
 } from '@/features/dashboard/lib/starter-curl'
+import { createApiKey, fetchTokenKey, getApiKeys } from '@/features/keys/api'
 import { useCopyToClipboard } from '@/hooks/use-copy-to-clipboard'
 import { getUserModels } from '@/lib/api'
 import { MOTION_TRANSITION } from '@/lib/motion'
@@ -238,7 +238,7 @@ function StartStepItem(props: {
               </span>
               <span className='truncate'>{props.step.title}</span>
               {props.step.note && (
-                <span className='bg-success/10 text-success shrink-0 rounded-md border border-success/30 px-1.5 py-0.5 text-[10px] font-medium'>
+                <span className='bg-success/10 text-success border-success/30 shrink-0 rounded-md border px-1.5 py-0.5 text-[10px] font-medium'>
                   {props.step.note}
                 </span>
               )}
@@ -360,7 +360,9 @@ function RequestPreview(props: {
             <div className='text-muted-foreground truncate text-xs'>
               {props.example.ready
                 ? props.example.isFreeModel
-                  ? t('Paste in a terminal — free model (fair-use), no recharge needed')
+                  ? t(
+                      'Paste in a terminal — gift-credit model, billed by usage'
+                    )
                   : props.example.keyName
                 : t('Create an API key to unlock the real request')}
             </div>
@@ -418,7 +420,7 @@ function RequestPreview(props: {
           {previewLines.map((line, index) => (
             <code
               key={`${index}-${line.slice(0, 24)}`}
-              className='text-muted-foreground select-all whitespace-pre-wrap break-all'
+              className='text-muted-foreground break-all whitespace-pre-wrap select-all'
               title={line}
             >
               {line}
@@ -556,7 +558,9 @@ export function OverviewDashboard() {
       if (result.success) {
         setStarterKeyAutoCreated(true)
         toast.success(t('A starter API key has been created for you'))
-        void queryClient.invalidateQueries({ queryKey: OVERVIEW_KEYS_QUERY_KEY })
+        void queryClient.invalidateQueries({
+          queryKey: OVERVIEW_KEYS_QUERY_KEY,
+        })
       } else {
         toast.error(result.message || t('Failed to create starter API key'))
       }
@@ -616,7 +620,7 @@ export function OverviewDashboard() {
       {
         title: t('Trial ready'),
         description: t(
-          'Free models (fair-use) need no recharge — top up anytime for more models'
+          'Gift-credit models are billed by usage. Gift credits are used first; any shortfall is charged to your recharge balance.'
         ),
         to: '/wallet',
         icon: CreditCard,
@@ -757,7 +761,7 @@ export function OverviewDashboard() {
                       <p className='text-muted-foreground max-w-xl text-sm leading-relaxed'>
                         {isFirstRunUnused
                           ? t(
-                              'Copy the curl on the right — your API key and a free model (fair-use) are already filled in. Paste into a terminal and press Enter.'
+                              'Copy the curl on the right — your API key and a gift-credit model are already filled in. Calls are billed by usage with gift credits used first; any shortfall is charged to your recharge balance.'
                             )
                           : t(
                               'A focused home for keys, balance, routing, and service health.'
@@ -875,10 +879,7 @@ export function OverviewDashboard() {
           </CardStaggerItem>
           {showCompactFirstCurl ? (
             <CardStaggerItem className='max-w-xl'>
-              <RequestPreview
-                example={requestExample}
-                signals={heroSignals}
-              />
+              <RequestPreview example={requestExample} signals={heroSignals} />
             </CardStaggerItem>
           ) : null}
         </CardStaggerContainer>

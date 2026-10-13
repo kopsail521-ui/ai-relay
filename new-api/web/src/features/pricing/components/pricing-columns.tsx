@@ -34,6 +34,7 @@ import {
   getDynamicPricingSummary,
 } from '../lib/dynamic-price'
 import { parseTags } from '../lib/filters'
+import { isGiftCreditModel } from '../lib/gift-credit'
 import { isTokenBasedModel } from '../lib/model-helpers'
 import {
   formatPrice,
@@ -63,7 +64,6 @@ export function usePricingColumns(
     tokenUnit = DEFAULT_TOKEN_UNIT,
     priceRate = 1,
     usdExchangeRate = 1,
-    showRechargePrice = false,
     selectedGroup,
   } = options
 
@@ -119,6 +119,15 @@ export function usePricingColumns(
       ),
       cell: ({ row }) => {
         const model = row.original
+        const showRechargePrice =
+          !isGiftCreditModel(model) && (options.showRechargePrice ?? false)
+        if (isGiftCreditModel(model) && !model.gift_billing_rate_available) {
+          return (
+            <span className='text-muted-foreground text-xs'>
+              {t('Usage billed · gift credits first')}
+            </span>
+          )
+        }
         const dynamicSummary = getDynamicPricingSummary(model, {
           tokenUnit,
           showRechargePrice,
@@ -257,6 +266,15 @@ export function usePricingColumns(
       header: t('Cached'),
       cell: ({ row }) => {
         const model = row.original
+        const showRechargePrice =
+          !isGiftCreditModel(model) && (options.showRechargePrice ?? false)
+        if (isGiftCreditModel(model) && !model.gift_billing_rate_available) {
+          return (
+            <span className='text-muted-foreground text-xs'>
+              {t('Usage billed · gift credits first')}
+            </span>
+          )
+        }
         const dynamicSummary = getDynamicPricingSummary(model, {
           tokenUnit,
           showRechargePrice,

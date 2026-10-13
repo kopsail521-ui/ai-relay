@@ -193,13 +193,13 @@ export function GiftWelcomeDialog() {
             'Click Copy command, paste it into your computer’s terminal, and press Enter. The model and API key are already filled in. You should see JSON in a few seconds — no card.'
           )}
         </p>
-        {giftQuota > 0 ? (
-          <p className='text-muted-foreground mt-2 text-xs leading-relaxed'>
-            {t(
-              'Gift credits are for free models only (fair-use limits). Paid models use your recharge balance.'
-            )}
-          </p>
-        ) : null}
+        <p className='mt-3 text-sm leading-relaxed'>
+          <strong>{t('Gift-credit models')}</strong>{' '}
+          {t(
+            'Calls are billed at the corresponding model rate. Gift credits are used first; any shortfall is charged to your recharge balance.'
+          )}{' '}
+          {t('Other models use your recharge balance.')}
+        </p>
 
         <div className='bg-muted/40 mt-4 overflow-hidden rounded-lg border'>
           <div className='flex items-center justify-between gap-2 border-b px-3 py-2'>

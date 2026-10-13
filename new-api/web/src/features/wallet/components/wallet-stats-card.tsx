@@ -61,9 +61,11 @@ export function WalletStatsCard(props: WalletStatsCardProps) {
       tone: 'success',
     },
     {
-      label: t('Gift Credits'),
+      label: t('Gift-credit balance'),
       value: formatQuota(props.user?.gift_quota ?? 0),
-      description: t('Free models only (fair-use); twin sell price billed'),
+      description: t(
+        'Calls are billed at the corresponding model rate. Gift credits are used first; any shortfall is charged to your recharge balance.'
+      ),
       icon: Gift,
       tone: 'chart-3',
     },

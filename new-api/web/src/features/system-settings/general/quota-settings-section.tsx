@@ -103,32 +103,32 @@ export function QuotaSettingsSection({
     saveFailures,
     dismissSaveFailures,
   } = useSettingsForm<QuotaFormValues>({
-      resolver: zodResolver(quotaSchema) as Resolver<
-        QuotaFormValues,
-        unknown,
-        QuotaFormValues
-      >,
-      defaultValues,
-      onSubmit: async (_data, changedFields) => {
-        const failures: SettingsSaveFailure[] = []
-        for (const [key, value] of Object.entries(changedFields)) {
-          try {
-            await updateOption.mutateAsync({
-              key,
-              value: value as string | number | boolean,
-            })
-          } catch (error) {
-            failures.push({
-              key,
-              message: error instanceof Error ? error.message : undefined,
-            })
-          }
+    resolver: zodResolver(quotaSchema) as Resolver<
+      QuotaFormValues,
+      unknown,
+      QuotaFormValues
+    >,
+    defaultValues,
+    onSubmit: async (_data, changedFields) => {
+      const failures: SettingsSaveFailure[] = []
+      for (const [key, value] of Object.entries(changedFields)) {
+        try {
+          await updateOption.mutateAsync({
+            key,
+            value: value as string | number | boolean,
+          })
+        } catch (error) {
+          failures.push({
+            key,
+            message: error instanceof Error ? error.message : undefined,
+          })
         }
-        if (failures.length > 0) {
-          throw new SettingsSaveError(failures)
-        }
-      },
-    })
+      }
+      if (failures.length > 0) {
+        throw new SettingsSaveError(failures)
+      }
+    },
+  })
 
   return (
     <SettingsSection title={t('Quota Settings')}>
@@ -204,7 +204,7 @@ export function QuotaSettingsSection({
                   </FormControl>
                   <FormDescription>
                     {t(
-                      'Gift credits given on registration (free models only). Default $10. ({{formattedQuota}})',
+                      'Gift credits given on registration for gift-credit models. Default $10. ({{formattedQuota}})',
                       {
                         formattedQuota: formatQuotaInputValue(field.value),
                       }
@@ -233,7 +233,7 @@ export function QuotaSettingsSection({
                   </FormControl>
                   <FormDescription>
                     {t(
-                      'Gift credits credited to inviter on each successful signup. Default $3. ({{formattedQuota}})',
+                      'Gift credits credited to inviter for gift-credit models on each successful signup. Default $3. ({{formattedQuota}})',
                       {
                         formattedQuota: formatQuotaInputValue(field.value),
                       }
@@ -330,7 +330,9 @@ export function QuotaSettingsSection({
                 render={({ field }) => (
                   <SettingsSwitchItem>
                     <SettingsSwitchContent>
-                      <FormLabel>{t('Pre-Consume for Free Models')}</FormLabel>
+                      <FormLabel>
+                        {t('Pre-Consume for Zero-Cost Models')}
+                      </FormLabel>
                       <FormDescription>
                         {t(
                           'When enabled, zero-cost models also pre-consume quota before final settlement.'

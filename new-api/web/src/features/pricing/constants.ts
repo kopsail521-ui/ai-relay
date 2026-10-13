@@ -60,7 +60,7 @@ export function getQuotaTypeLabels(
 ): Record<QuotaTypeOption, string> {
   return {
     [QUOTA_TYPES.ALL]: t('All Models'),
-    [QUOTA_TYPES.FREE]: t('Free models'),
+    [QUOTA_TYPES.FREE]: t('Gift-credit models'),
     [QUOTA_TYPES.TOKEN]: t('Token-based'),
     [QUOTA_TYPES.REQUEST]: t('Per Request'),
   }

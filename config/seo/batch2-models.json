@@ -2,6 +2,68 @@
   "_note": "Batch-2 model SEO pages. freeTier embeds Free block + dual curl. Do not invent vendor names publicly.",
   "models": [
     {
+      "id": "cloudflare-clef",
+      "modelId": "cloudflare/clef",
+      "category": "decision",
+      "batch": 2,
+      "targetKeywords": [
+        "cloudflare clef api",
+        "cloudflare/clef",
+        "multimodal decision api",
+        "typed questions api"
+      ],
+      "h1": "Cloudflare Clef API — Multimodal Decisions on KeyoAPI",
+      "title": "Cloudflare Clef API Guide & Pricing | KeyoAPI",
+      "metaDescription": "Cloudflare Clef: open-source 27B multimodal decisions via POST /v1/decisions. Typed choice/noul probabilities, input from $0.063/M, output $0.",
+      "priceLabel": "From $0.063 input / $0 output per 1M tokens; actual cost ×1.5",
+      "priceUnit": "per_1m_tokens",
+      "related": [],
+      "endpoint": "POST /v1/decisions",
+      "codeHint": "model=cloudflare/clef",
+      "body": "Cloudflare Clef is an open-source 27B multimodal decision model fine-tuned from Qwen3.8-27B. The current KeyoAPI endpoint accepts text or image state with typed questions, and returns choice / noul probabilities in a single forward pass without generating free-form text. Use it for request routing, ticket triage and classification.\n\nCall POST /v1/decisions with model cloudflare/clef and a Bearer API key. Check Model Square for current availability and pricing.",
+      "guideSections": [
+        {
+          "heading": "Context and image limits",
+          "paragraphs": [
+            "The model context is 65536 tokens, but the text state limit on the serving path is much smaller: only approximately the first 2000 text state tokens are read. The remaining text is truncated and not read. Put decision-critical facts first; do not assume a 65536-token state will be processed. Images count separately from this text limit.",
+            "Attach at most 4 images as base64 data URLs in PNG, JPEG or WebP format. Remote image URLs are not supported. Each image must be below 300KiB on the current endpoint."
+          ]
+        },
+        {
+          "heading": "Answers and usage",
+          "paragraphs": [
+            "The request contains model, state and questions. Each named question declares a supported type (choice or noul) and its instructions. For a choice question, criteria declares the candidate labels. The response contains answers and usage with input_tokens, output_tokens: 0 and cost. These are structured decision probabilities, not a generated chat message. The current KeyoAPI endpoint does not accept score questions or JSON-object state; send state as supported text or image content."
+          ]
+        },
+        {
+          "heading": "Starting price and actual settlement",
+          "paragraphs": [
+            "Input starts at $0.063 per 1M tokens and output is $0. Settlement uses the actual request cost multiplied by 1.5. The catalog shows a starting rate, not a fixed rate for every request; actual input pricing may be higher when the serving route changes. Confirm current prices in Model Square before production traffic."
+          ]
+        }
+      ],
+      "faqs": [
+        {
+          "q": "Does Clef generate chat or free-form text?",
+          "a": "No. A single forward pass returns typed choice / noul probabilities in answers. The current endpoint does not accept score questions. Use POST /v1/decisions."
+        },
+        {
+          "q": "Can Clef read a 65536-token text state?",
+          "a": "Do not rely on it. 65536 is the model context length; the serving text state is truncated after approximately the first 2000 tokens and the remainder is not read. Images count separately."
+        },
+        {
+          "q": "Can I send remote image URLs?",
+          "a": "No. Use up to 4 base64 data URL images in PNG, JPEG or WebP format, each below 300KiB."
+        },
+        {
+          "q": "Is $0.063/M the fixed input price?",
+          "a": "No. It is the starting input rate. Output is $0, and each request settles at actual cost ×1.5. Actual input pricing may exceed the starting rate."
+        }
+      ],
+      "curlExample": "curl https://www.keyoapi.xyz/v1/decisions \\\n  -H \"Authorization: Bearer YOUR_API_KEY\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\"model\":\"cloudflare/clef\",\"state\":\"A customer asks to reset password.\",\"questions\":{\"route\":{\"type\":\"choice\",\"instructions\":\"Route request\",\"criteria\":{\"account\":null,\"billing\":null,\"technical\":null}}}}'",
+      "uniqueBlurb": "Open-source 27B multimodal choice / noul probabilities through a dedicated decision endpoint."
+    },
+    {
       "id": "glm-5.2",
       "category": "llm",
       "batch": 2,

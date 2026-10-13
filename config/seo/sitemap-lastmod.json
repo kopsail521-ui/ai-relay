@@ -18,7 +18,7 @@
       "lastmod": "2026-10-13"
     },
     "https://www.keyoapi.xyz/models": {
-      "hash": "ffa63ada73b3648b",
+      "hash": "ed91317d717e6ced",
       "lastmod": "2026-10-13"
     },
     "https://www.keyoapi.xyz/gemini-api-pricing": {
@@ -303,6 +303,10 @@
     },
     "https://www.keyoapi.xyz/study-ai-api": {
       "hash": "f0333c318cdda214",
+      "lastmod": "2026-10-13"
+    },
+    "https://www.keyoapi.xyz/model/cloudflare-clef": {
+      "hash": "1dfe8cc2563f2ca5",
       "lastmod": "2026-10-13"
     }
   },

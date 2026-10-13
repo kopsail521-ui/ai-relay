@@ -131,8 +131,9 @@ const HAND_MAINTAINED_GUIDES = new Set([
 ]);
 
 function catalogHref(id) {
-  const guideIds = new Set(pages.models.map((m) => m.id));
-  if (guideIds.has(id) || HAND_MAINTAINED_GUIDES.has(id)) return `/model/${encodeURIComponent(id)}`;
+  const guide = pages.models.find((m) => m.id === id || m.modelId === id);
+  if (guide) return `/model/${encodeURIComponent(guide.id)}`;
+  if (HAND_MAINTAINED_GUIDES.has(id)) return `/model/${encodeURIComponent(id)}`;
   if (isFreeId(id)) return "/free-models";
   return "/pricing-list";
 }
@@ -522,7 +523,7 @@ ${freeTierBlock(m)}
 <div class="faq">${faqs}</div>
 <h2>Related models</h2>
 ${relatedLinks(m.related)}
-<p class="meta">Guide for <strong>${esc(m.id)}</strong>. Catalog: <a href="/pricing">the pricing page</a> · Rates: <a href="/pricing-list">the full pricing list</a>.</p>
+<p class="meta">Guide for <strong>${esc(m.modelId || m.id)}</strong>. Catalog: <a href="/pricing">the pricing page</a> · Rates: <a href="/pricing-list">the full pricing list</a>.</p>
 `;
   return layout({
     title: m.title,
@@ -533,7 +534,7 @@ ${relatedLinks(m.related)}
     jsonLd: {
       "@context": "https://schema.org",
       "@type": "SoftwareApplication",
-      name: `KeyoAPI ${m.id}`,
+      name: `KeyoAPI ${m.modelId || m.id}`,
       applicationCategory: "DeveloperApplication",
       url: canonical,
       description: m.metaDescription,
@@ -751,7 +752,7 @@ function renderModelsIndex() {
   const rows = pages.models
     .map(
       (m) =>
-        `<tr><td><a href="/model/${encodeURIComponent(m.id)}"><code>${esc(m.id)}</code></a></td><td>${esc(m.category || "")}</td><td class="ok">${esc(m.priceLabel)}</td><td><a href="/model/${encodeURIComponent(m.id)}">Guide</a> · <a href="/pricing">Catalog</a></td></tr>`
+        `<tr><td><a href="/model/${encodeURIComponent(m.id)}"><code>${esc(m.modelId || m.id)}</code></a></td><td>${esc(m.category || "")}</td><td class="ok">${esc(m.priceLabel)}</td><td><a href="/model/${encodeURIComponent(m.id)}">Guide</a> · <a href="/pricing">Catalog</a></td></tr>`
     )
     .join("\n");
   const bodyHtml = `

@@ -1,0 +1,105 @@
+{
+  "provider": "openrouter",
+  "baseUrl": "https://openrouter.ai",
+  "markup": 1.5,
+  "note": "Decision metadata only. Sell price is actual upstream usage.cost ×1.5, not a fixed starting token rate. Public copy must not expose supplier or channel names. Enable only after the VPS deployment smoke test succeeds.",
+  "models": [
+    {
+      "id": "cloudflare/clef",
+      "upstream": "cloudflare/clef",
+      "vendor": "Cloudflare",
+      "category": "system_one",
+      "category_zh": "多模态决策模型",
+      "description": "Cloudflare Clef：基于 Qwen3.8-27B 微调的开源 27B 多模态决策模型。模型原生支持文本、JSON、图像与 choice/noul/score；当前 KeyoAPI 接口仅支持文本/图像 state 和 choice/noul，单次前向返回概率，不生成自由文本。",
+      "description_en": "Cloudflare Clef is an open-source 27B multimodal decision model fine-tuned from Qwen3.8-27B. Native capabilities include text/JSON/images and choice/noul/score; the current KeyoAPI endpoint supports text/image state and choice/noul only, returning probabilities in one forward pass without free-form text.",
+      "enabled": false,
+      "activation_requires": "successful_vps_deployment_smoke_test",
+      "paths": [
+        "v1/decisions"
+      ],
+      "upstream_path": "/api/alpha/decisions",
+      "request_fields": [
+        "model",
+        "state",
+        "questions"
+      ],
+      "question_types": [
+        "choice",
+        "noul"
+      ],
+      "response_fields": [
+        "answers",
+        "usage"
+      ],
+      "usage_fields": [
+        "input_tokens",
+        "output_tokens",
+        "cost"
+      ],
+      "output_tokens": 0,
+      "context_length": 65536,
+      "input_limits": {
+        "text_state_tokens_approx": 2000,
+        "text_state_overflow": "truncate_after_first_tokens_unread_remainder",
+        "images_count_separately": true,
+        "max_images": 4,
+        "image_encoding": "base64_data_url",
+        "image_mime_types": [
+          "image/png",
+          "image/jpeg",
+          "image/webp"
+        ],
+        "remote_image_urls_supported": false,
+        "recommended_image_bytes_lt": 307200,
+        "image_bytes_lt": 307200,
+        "max_body_bytes": 2097152,
+        "max_state_string_bytes": 65536
+      },
+      "billing": {
+        "mode": "token",
+        "settlement": "actual_upstream_cost_times_markup",
+        "markup": 1.5,
+        "cost_in_usd_per_m": 0.042,
+        "cost_out_usd_per_m": 0,
+        "sell_in_usd_per_m": 0.063,
+        "sell_out_usd_per_m": 0,
+        "price_is_starting_rate": true,
+        "fallback_cost_in_usd_per_m": 0.24,
+        "fallback_cost_out_usd_per_m": 0,
+        "fallback_sell_in_usd_per_m": 0.36,
+        "fallback_sell_out_usd_per_m": 0
+      },
+      "seo_slug": "cloudflare-clef",
+      "example_request": {
+        "model": "cloudflare/clef",
+        "state": "A customer asks to reset password.",
+        "questions": {
+          "route": {
+            "type": "choice",
+            "instructions": "Route request",
+            "criteria": {
+              "account": null,
+              "billing": null,
+              "technical": null
+            }
+          }
+        }
+      },
+      "native_question_types": [
+        "choice",
+        "noul",
+        "score"
+      ],
+      "native_state_types": [
+        "text",
+        "json",
+        "image"
+      ],
+      "state_types": [
+        "text",
+        "image"
+      ],
+      "json_object_state_supported": false
+    }
+  ]
+}

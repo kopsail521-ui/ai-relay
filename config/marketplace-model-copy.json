@@ -5002,6 +5002,54 @@
     "price_key_zh": "输入 / 输出",
     "price_key_en": "Input / Output"
   },
+  "cloudflare/clef": {
+    "description": "Cloudflare Clef：基于 Qwen3.8-27B 微调的开源 27B 多模态决策模型。当前接口支持文本或图像 state + typed questions，单次前向返回 choice / noul 概率，不生成自由文本。模型上下文 65536 tokens；文本 state 实际仅读取开头约 2000 tokens，其余截断，图像另计。最多 4 张 PNG/JPEG/WebP base64 data URL 图像，不支持远程 URL，单图须小于 300KiB。POST /v1/decisions，返回 answers 与 usage（input_tokens、output_tokens:0、cost）。输入 $0.063 起 / 输出 $0（每百万 tokens），按实际成本 ×1.5 结算；实际费率可高于起价。可用性与当前价格以模型市场为准。",
+    "descriptions": {
+      "zhCN": "Cloudflare Clef：基于 Qwen3.8-27B 微调的开源 27B 多模态决策模型。当前接口支持文本或图像 state + typed questions，单次前向返回 choice / noul 概率，不生成自由文本。模型上下文 65536 tokens；文本 state 实际仅读取开头约 2000 tokens，其余截断，图像另计。最多 4 张 PNG/JPEG/WebP base64 data URL 图像，不支持远程 URL，单图须小于 300KiB。POST /v1/decisions，返回 answers 与 usage（input_tokens、output_tokens:0、cost）。输入 $0.063 起 / 输出 $0（每百万 tokens），按实际成本 ×1.5 结算；实际费率可高于起价。可用性与当前价格以模型市场为准。",
+      "zhTW": "Cloudflare Clef：基於 Qwen3.8-27B 微調的開源 27B 多模態決策模型。目前介面支援文字或圖像 state + typed questions，單次前向傳播回傳 choice / noul 機率，不產生自由文字。模型上下文 65536 tokens；文字 state 實際僅讀取開頭約 2000 tokens，其餘截斷，圖像另計。最多 4 張 PNG/JPEG/WebP base64 data URL 圖像，不支援遠端 URL，單圖須小於 300KiB。POST /v1/decisions，回傳 answers 與 usage（input_tokens、output_tokens:0、cost）。輸入 $0.063 起 / 輸出 $0（每百萬 tokens），按實際成本 ×1.5 結算；實際費率可高於起價。可用性與目前價格以模型市場為準。",
+      "en": "Cloudflare Clef is an open-source 27B multimodal decision model fine-tuned from Qwen3.8-27B. The current endpoint accepts text or image state + typed questions; one forward pass returns choice / noul probabilities, with no free-form text. Model context: 65536 tokens; only the first ~2000 text state tokens are read, with the remainder truncated; images count separately. Up to 4 PNG/JPEG/WebP base64 data URL images; remote URLs are unsupported; each image must be below 300KiB. POST /v1/decisions returns answers and usage (input_tokens, output_tokens:0, cost). Input starts at $0.063 / output $0 per 1M tokens; settlement is actual cost ×1.5 and rates may exceed the starting price. Check Model Square for availability and current pricing.",
+      "fr": "Cloudflare Clef est un modèle de décision multimodal open source de 27B, affiné à partir de Qwen3.8-27B. L’interface actuelle accepte un state texte ou image + des questions typées ; un seul passage renvoie des probabilités choice / noul, sans texte libre. Contexte du modèle : 65536 tokens ; seuls les ~2000 premiers tokens du state texte sont lus, le reste est tronqué ; les images sont comptées séparément. Jusqu’à 4 images PNG/JPEG/WebP en base64 data URL ; URL distantes non prises en charge ; chaque image doit faire moins de 300KiB. POST /v1/decisions renvoie answers et usage (input_tokens, output_tokens:0, cost). Entrée dès $0.063 / sortie $0 par 1M tokens ; facturation au coût réel ×1.5, avec un tarif pouvant dépasser le prix de départ. Consultez Model Square pour la disponibilité et les tarifs actuels.",
+      "ru": "Cloudflare Clef — открытая мультимодальная модель решений 27B, дообученная на Qwen3.8-27B. Текущий интерфейс принимает текстовый или графический state + типизированные questions; один прямой проход возвращает вероятности choice / noul без свободного текста. Контекст модели: 65536 токенов; читаются только первые ~2000 токенов текстового state, остальное обрезается; изображения учитываются отдельно. До 4 изображений PNG/JPEG/WebP в base64 data URL; удалённые URL не поддерживаются; каждое изображение должно быть меньше 300KiB. POST /v1/decisions возвращает answers и usage (input_tokens, output_tokens:0, cost). Вход от $0.063 / выход $0 за 1M токенов; расчёт по фактической стоимости ×1.5, тариф может быть выше начального. Доступность и текущие цены указаны в Model Square.",
+      "ja": "Cloudflare Clef は Qwen3.8-27B を微調整した、オープンソースの 27B マルチモーダル意思決定モデルです。現在のエンドポイントはテキストまたは画像の state と型付き questions を受け付け、1 回の順伝播で choice / noul の確率を返し、自由テキストは生成しません。モデルの文脈長は 65536 tokens ですが、テキスト state は先頭約 2000 tokens のみを読み、残りを切り捨てます。画像は別計算です。PNG/JPEG/WebP の base64 data URL 画像は最大 4 枚、リモート URL は非対応、各画像は 300KiB 未満が必要です。POST /v1/decisions は answers と usage（input_tokens、output_tokens:0、cost）を返します。100万 tokens あたり入力 $0.063〜 / 出力 $0、実際のコスト ×1.5 で精算し、開始価格を上回る場合があります。提供状況と現在の料金は Model Square でご確認ください。",
+      "vi": "Cloudflare Clef là mô hình quyết định đa phương thức mã nguồn mở 27B, tinh chỉnh từ Qwen3.8-27B. Giao diện hiện tại nhận state dạng văn bản hoặc hình ảnh + questions có kiểu; một lượt truyền tiến trả về xác suất choice / noul, không sinh văn bản tự do. Ngữ cảnh mô hình: 65536 tokens; chỉ đọc ~2000 tokens đầu của state văn bản, phần còn lại bị cắt; hình ảnh tính riêng. Tối đa 4 ảnh PNG/JPEG/WebP dạng base64 data URL; không hỗ trợ URL từ xa; mỗi ảnh phải dưới 300KiB. POST /v1/decisions trả về answers và usage (input_tokens, output_tokens:0, cost). Đầu vào từ $0.063 / đầu ra $0 mỗi 1M tokens; thanh toán theo chi phí thực tế ×1.5, giá có thể cao hơn mức khởi điểm. Xem Model Square để biết khả dụng và giá hiện tại."
+    },
+    "unit": "token",
+    "badge": {
+      "zhCN": "按量计费",
+      "zhTW": "按量計費",
+      "en": "Pay as you go",
+      "fr": "À l’usage",
+      "ru": "По использованию",
+      "ja": "従量",
+      "vi": "Theo mức sử dụng"
+    },
+    "suffix": {
+      "zhCN": "/百万tokens",
+      "zhTW": "/百萬tokens",
+      "en": "/ 1M tokens",
+      "fr": "/ 1M tokens",
+      "ru": "/ 1M токенов",
+      "ja": "/ 100万 tokens",
+      "vi": "/ 1M tokens"
+    },
+    "price_key": {
+      "zhCN": "输入 / 输出",
+      "zhTW": "輸入 / 輸出",
+      "en": "Input / Output",
+      "fr": "Entrée / Sortie",
+      "ru": "Вход / Выход",
+      "ja": "入力 / 出力",
+      "vi": "Vào / Ra"
+    },
+    "description_zh": "Cloudflare Clef：基于 Qwen3.8-27B 微调的开源 27B 多模态决策模型。当前接口支持文本或图像 state + typed questions，单次前向返回 choice / noul 概率，不生成自由文本。模型上下文 65536 tokens；文本 state 实际仅读取开头约 2000 tokens，其余截断，图像另计。最多 4 张 PNG/JPEG/WebP base64 data URL 图像，不支持远程 URL，单图须小于 300KiB。POST /v1/decisions，返回 answers 与 usage（input_tokens、output_tokens:0、cost）。输入 $0.063 起 / 输出 $0（每百万 tokens），按实际成本 ×1.5 结算；实际费率可高于起价。可用性与当前价格以模型市场为准。",
+    "description_en": "Cloudflare Clef is an open-source 27B multimodal decision model fine-tuned from Qwen3.8-27B. The current endpoint accepts text or image state + typed questions; one forward pass returns choice / noul probabilities, with no free-form text. Model context: 65536 tokens; only the first ~2000 text state tokens are read, with the remainder truncated; images count separately. Up to 4 PNG/JPEG/WebP base64 data URL images; remote URLs are unsupported; each image must be below 300KiB. POST /v1/decisions returns answers and usage (input_tokens, output_tokens:0, cost). Input starts at $0.063 / output $0 per 1M tokens; settlement is actual cost ×1.5 and rates may exceed the starting price. Check Model Square for availability and current pricing.",
+    "badge_zh": "按量计费",
+    "badge_en": "Pay as you go",
+    "suffix_zh": "/百万tokens",
+    "suffix_en": "/ 1M tokens",
+    "price_key_zh": "输入 / 输出",
+    "price_key_en": "Input / Output"
+  },
   "jev-1.13.0": {
     "description": "TypeSafe Jev 1.13.0：System One 结构化决策模型（不生成自由文本），用于程序内分类、工单分诊、风险打分与路由。输入 state + questions，返回 choice / score / noul；上下文约 32k tokens。计费：输入 $0.0336 / 输出 $0（每百万 tokens）。",
     "descriptions": {

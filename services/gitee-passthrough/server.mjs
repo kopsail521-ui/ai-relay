@@ -24,6 +24,7 @@ import { spawn } from "child_process";
 import { fileURLToPath } from "url";
 import { DatabaseSync } from "node:sqlite";
 import { fixMarketplaceMeta } from "./fix-marketplace-meta.mjs";
+import { createDecisionsHandler } from "./decisions.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -67,6 +68,7 @@ const DB_PATH = process.env.NEW_API_DB || "/data/one-api.db";
 const CATALOG_PATH =
   process.env.CATALOG || path.join(__dirname, "catalog.json");
 const QUOTA_PER_USD = Number(process.env.QUOTA_PER_USD || 500000);
+const handleDecisions = createDecisionsHandler({ dbPath: DB_PATH, quotaPerUsd: QUOTA_PER_USD });
 
 const PASSTHROUGH_PREFIXES = [
   "/v1/images/object-detection",
@@ -827,6 +829,8 @@ const server = http.createServer(async (req, res) => {
     });
     return res.end();
   }
+
+  if (await handleDecisions(req, res)) return;
 
   const urlPath = (req.url || "/").split("?")[0];
 

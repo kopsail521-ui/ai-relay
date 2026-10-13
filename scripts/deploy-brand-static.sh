@@ -204,7 +204,12 @@ ${GEOFLOW_AGENT_BLOCK}
 			header_up Accept-Encoding identity
 		}
 	}
-	@gitee_special path /v1/images/object-detection* /v1/images/segmentation* /v1/images/pose-detection* /v1/images/upscaling* /v1/images/unwarping* /v1/images/mattings* /v1/async/* /v1/task/* /v1/systemone*
+		handle /v1/decisions {
+			reverse_proxy 127.0.0.1:3010 {
+				header_up Accept-Encoding identity
+			}
+		}
+		@gitee_special path /v1/images/object-detection* /v1/images/segmentation* /v1/images/pose-detection* /v1/images/upscaling* /v1/images/unwarping* /v1/images/mattings* /v1/async/* /v1/task/* /v1/systemone*
 	handle @gitee_special {
 		reverse_proxy 127.0.0.1:3010 {
 			header_up Accept-Encoding identity

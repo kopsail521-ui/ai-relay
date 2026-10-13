@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Generate static/seo/model/keyo-eleven-v4.html & keyo-eleven-v4-turbo.html
 and add both models to models.html, tts-api.html, pricing.html, index.html,
-sitemap.xml, sitemap-live.xml.
+sitemap.xml.
 
 Prices: keyo-eleven-v4 ~$80 / 1M characters (cost $40 x2), v4-turbo ~$40 / 1M
 (cost $20 x2), billed per input character. Sync POST /v1/audio/speech.
@@ -280,8 +280,8 @@ for mid in ["keyo-eleven-v4", "keyo-eleven-v4-turbo"]:
 save(ROOT + "/index.html", s)
 print("patched index.html")
 
-# sitemaps: add <url> entries after the gemini-3.8-flash-tts url
-for p in (ROOT + "/sitemap.xml", ROOT + "/sitemap-live.xml"):
+# sitemap.xml: add <url> entries after the gemini-3.8-flash-tts url
+for p in (ROOT + "/sitemap.xml",):
     s = load(p)
     anchor = "<url><loc>https://www.keyoapi.xyz/model/gemini-3.8-flash-tts</loc>"
     assert anchor in s, p
@@ -317,5 +317,4 @@ for mid in ("keyo-eleven-v4", "keyo-eleven-v4-turbo"):
     assert load(ROOT + "/tts-api.html").count(">" + mid + "<") >= 1
     assert load(ROOT + "/index.html").count(">" + mid + "<") >= 1
     assert load(ROOT + "/sitemap.xml").count("https://www.keyoapi.xyz/model/" + mid + "</loc>") == 1
-    assert load(ROOT + "/sitemap-live.xml").count("https://www.keyoapi.xyz/model/" + mid + "</loc>") == 1
 print("SEO_PATCH_OK")

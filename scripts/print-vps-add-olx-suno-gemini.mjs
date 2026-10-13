@@ -59,7 +59,6 @@ const seoList = [
   "static/seo/tts-api.html",
   "static/seo/gemini-api-pricing.html",
   "static/seo/sitemap.xml",
-  "static/seo/sitemap-live.xml",
   "static/brand/keyo-docs.html",
   "new-api/web/public/sitemap.xml",
   "config/model-icon-map.json",

@@ -93,7 +93,7 @@ docker restart ai-relay-creem-moderation >/dev/null
 
 for file in static/seo/model/keyo-eleven-v4.html static/seo/model/keyo-eleven-v4-turbo.html \
   static/seo/models.html static/seo/pricing.html static/seo/tts-api.html static/seo/index.html \
-  static/seo/sitemap.xml static/seo/sitemap-live.xml; do
+  static/seo/sitemap.xml; do
   [[ ! -f "$ROOT/$file" ]] || cp -p "$ROOT/$file" "$ROOT/$file.eleven-$(date +%s).bak"
   fetch "$file"
 done

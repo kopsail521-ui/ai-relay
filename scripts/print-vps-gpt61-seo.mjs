@@ -24,7 +24,6 @@ const packList = [
   "static/seo/pricing.html",
   "static/seo/index.html",
   "static/seo/sitemap.xml",
-  "static/seo/sitemap-live.xml",
   "scripts/vps-gpt61-seo-apply.py",
   "scripts/vps-gpt61-seo-check.py",
 ];

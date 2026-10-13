@@ -1445,7 +1445,7 @@ for (const m of pages.models) {
 }
 fs.writeFileSync(path.join(outDir, "robots.txt"), writeRobots());
 fs.writeFileSync(path.join(outDir, "sitemap.xml"), writeSitemap());
-fs.writeFileSync(path.join(outDir, "sitemap-live.xml"), writeSitemap());
+fs.rmSync(path.join(outDir, "sitemap-live.xml"), { force: true });
 fs.writeFileSync(path.join(root, "new-api/web/public/robots.txt"), writeRobots());
 fs.writeFileSync(
   path.join(root, "new-api/web/public/sitemap.xml"),

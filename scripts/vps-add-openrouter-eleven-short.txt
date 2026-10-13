@@ -1,0 +1,1 @@
+curl -fsSL https://raw.githubusercontent.com/kopsail521-ui/ai-relay/main/scripts/vps-add-openrouter-eleven.sh | sudo bash

@@ -95,6 +95,37 @@ func cachedLoginSessionKey(t *testing.T, server *miniredis.Miniredis) string {
 	return ""
 }
 
+func TestCreateLoginSessionAdministratorsBypassSessionLimits(t *testing.T) {
+	for _, role := range []int{common.RoleAdminUser, common.RoleRootUser} {
+		t.Run(fmt.Sprintf("role-%d", role), func(t *testing.T) {
+			useTestSessionSecret(t)
+			user := setupAuthSessionTestDB(t)
+			require.NoError(t, model.DB.Model(user).Update("role", role).Error)
+			common.UserSessionActiveLimit = 1
+			common.UserSessionIssuanceLimit = 1
+			common.UserSessionIssuanceWindowSeconds = 60
+
+			first, err := CreateLoginSession(user.Id, "password", "127.0.0.1", "test-agent")
+			require.NoError(t, err)
+			second, err := CreateLoginSessionAtAuthVersion(user.Id, user.AuthVersion, "oauth", "127.0.0.1", "test-agent")
+			require.NoError(t, err)
+			assert.NotEqual(t, first.Session.SID, second.Session.SID)
+			count, err := model.CountActiveUserSessions(user.Id, time.Now().Unix())
+			require.NoError(t, err)
+			assert.Equal(t, int64(2), count)
+
+			_, err = CreateLoginSessionAtAuthVersion(user.Id, user.AuthVersion+1, "password", "127.0.0.1", "test-agent")
+			assert.ErrorIs(t, err, ErrLoginSessionRevoked)
+			require.NoError(t, model.DB.Model(user).Update("role", common.RoleCommonUser).Error)
+			_, err = CreateLoginSession(user.Id, "password", "127.0.0.1", "test-agent")
+			assert.ErrorIs(t, err, model.ErrUserSessionLimit)
+			require.NoError(t, model.DB.Model(user).Updates(map[string]interface{}{"role": role, "status": common.UserStatusDisabled}).Error)
+			_, err = CreateLoginSession(user.Id, "password", "127.0.0.1", "test-agent")
+			assert.ErrorIs(t, err, ErrLoginSessionInvalid)
+		})
+	}
+}
+
 func TestCreateLoginSessionEnforcesActiveLimitAcrossAuthVersions(t *testing.T) {
 	useTestSessionSecret(t)
 	user := setupAuthSessionTestDB(t)

@@ -1,0 +1,116 @@
+[
+  {
+    "slug": "1gger7hd",
+    "ok": true,
+    "title": "OpenAI API Python Structured Output: Validation Patterns for Backends",
+    "desc": "Learn how to build reliable Python backends around OpenAI-style structured output: parse safely, validate schemas, handle retries, migrate compatible integrations, and discover live model availability."
+  },
+  {
+    "slug": "1y1kuuoj",
+    "ok": true,
+    "title": "Gemini API Key Error 429: Diagnosis and Retry Strategy",
+    "desc": "A 429 response means a request was rejected because some limit or quota was reached, but it does not identify the cause by itself."
+  },
+  {
+    "slug": "2o2w88ar",
+    "ok": true,
+    "title": "AI Avatar Video Generator API: Queue, Retry, and Webhook Design",
+    "desc": "Learn how to build a reliable AI avatar video generator API workflow with asynchronous queues, retries, signed webhooks, idempotency, error handling, and production cost controls."
+  },
+  {
+    "slug": "45717fli",
+    "ok": true,
+    "title": "Claude API Connection Closed Mid-Response: Detecting and Recovering Incomplete Output",
+    "desc": "Learn how to detect incomplete Claude API responses, safely retry or resume generation, preserve partial output, and evaluate migration alternatives without corrupting production data."
+  },
+  {
+    "slug": "62c44nq0",
+    "ok": true,
+    "title": "Gemini API Rate Limit Exceeded: Queue and Backoff Design",
+    "desc": "Learn how to handle Gemini API rate limits with queues, exponential backoff, jitter, bounded retries, authentication, observability, and provider-agnostic migration patterns."
+  },
+  {
+    "slug": "7tw9n0ql",
+    "ok": true,
+    "title": "Gemini API Rate Limits Tier 1: Capacity Planning Without Assumptions",
+    "desc": "Learn how to plan around Gemini API Tier 1 rate limits using measured traffic, explicit backpressure, retries, provider-agnostic interfaces, and production capacity tests."
+  },
+  {
+    "slug": "9lvxpssw",
+    "ok": true,
+    "title": "Gemini Video Generation Model API: What to Verify Before Integration",
+    "desc": "Learn how to evaluate a Gemini video generation API integration, compare alternatives safely, and design a provider-agnostic production workflow covering models, jobs, security, retries, cost, and migration."
+  },
+  {
+    "slug": "axc6qmip",
+    "ok": true,
+    "title": "OpenAI API Rate Limits: Measuring and Scheduling Production Traffic",
+    "desc": "Learn how to estimate safe API concurrency from request and token limits, handle throttling, and evaluate OpenAI-compatible alternatives without assuming their quotas match."
+  },
+  {
+    "slug": "cu1coapk",
+    "ok": true,
+    "title": "Claude API Prompt Caching: When It Helps and What to Verify",
+    "desc": "Learn when Claude API prompt caching reduces latency and cost, how to evaluate its real-world impact, and what to verify before migrating to another AI API."
+  },
+  {
+    "slug": "dxp8cdop",
+    "ok": true,
+    "title": "AI Avatar API Python Example: Server-Side Job Polling and Errors",
+    "desc": "Learn how to structure a Python backend for an AI avatar API: submit jobs, poll safely, handle errors and retries, and protect credentials and costs."
+  },
+  {
+    "slug": "jnv30sj3",
+    "ok": true,
+    "title": "OpenAI API Image Generation and Speech-to-Text: What to Verify Before Production",
+    "desc": "A practical guide to evaluating OpenAI-compatible image generation and speech-to-text APIs, with migration steps, live model discovery, reliability controls, security checks, and production readiness criteria."
+  },
+  {
+    "slug": "jnyu9un7",
+    "ok": true,
+    "title": "Remove.bg API Alternative: Evaluating a KeyoAPI Migration",
+    "desc": "Learn how to evaluate a Remove.bg API alternative: migration steps, output quality checks, alpha handling, retries, cost, and production readiness."
+  },
+  {
+    "slug": "n7allrtc",
+    "ok": true,
+    "title": "Claude Vision API Pricing: Measuring Real Image Costs",
+    "desc": "Learn how to estimate Claude vision API costs, compare image-analysis alternatives, and build a migration evaluation workflow that accounts for tokens, retries, quality, latency, and production risk."
+  },
+  {
+    "slug": "ooy10bjn",
+    "ok": true,
+    "title": "Gemini API Rate Limit Reset Time: Designing Safe Retries",
+    "desc": "Learn why Gemini API rate limits do not have one universal reset time and how to build provider-agnostic retry, backoff, quota, and fallback logic for production systems."
+  },
+  {
+    "slug": "oyu8kdbq",
+    "ok": true,
+    "title": "Alpha PNG Background Removal: Transparent Output Validation",
+    "desc": "Learn how to handle alpha PNG output, transparency artifacts, and error retries in a production background removal API integration."
+  },
+  {
+    "slug": "qbfzdawk",
+    "ok": true,
+    "title": "OpenAI API 401 Error: Incorrect API Key Troubleshooting",
+    "desc": "Learn how to diagnose OpenAI API 401 errors, verify Bearer authentication, migrate to an OpenAI-compatible endpoint, and build reliable production checks for API keys and model availability."
+  },
+  {
+    "slug": "tvdqdo7z",
+    "ok": true,
+    "title": "Claude API Tool Use: Input Validation and Portable Tool Design",
+    "desc": "Learn how to validate Claude tool inputs, keep tool execution secure, and design a provider-neutral tool layer that can be evaluated when migrating to another API."
+  },
+  {
+    "slug": "ur3fw22w",
+    "ok": true,
+    "title": "Bulk Background Removal API for E-Commerce Product Catalogs",
+    "desc": "Learn how to run bulk background removal on e-commerce product catalogs: batching, alpha output validation, retries, cost control, and pipeline design."
+  },
+  {
+    "slug": "vv4t8krr",
+    "ok": true,
+    "title": "OpenAI API Rate Limit: What It Means and How to Respond",
+    "desc": "Learn how to handle OpenAI API rate limits with exponential backoff, bounded retries, durable queues, model discovery, authentication, and production-safe migration patterns."
+  }
+]

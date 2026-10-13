@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "checked_on": "2026-10-12",
+  "check_time_precision": "day; exact original request time was not retained",
+  "source": "Existing read-only observations from this audit; no management requests repeated for this snapshot",
+  "management_reads": ["GET /api/pricing", "GET /api/channel/?p=1&page_size=100", "GET /api/models/?p=1&page_size=100", "GET /api/models/?p=2&page_size=100", "GET /api/channel/models_enabled", "GET /api/option/"],
+  "completeness": {"channels_total": 13, "channels_retrieved": 13, "model_metadata_total": 126, "model_metadata_retrieved": 126},
+  "redaction": "No credentials, supplier hosts, supplier channel names, user records or full management response bodies retained",
+  "default_group_ratio": 1,
+  "models": [
+    {"id":"gpt-image-2","category":"generation","active":true,"group":"default","quota_type":1,"model_price_usd":0.006849,"metadata_endpoint":"/v1/images/generations","channel_ids":[1]},
+    {"id":"gpt-image-2-vip","category":"generation","active":true,"group":"default","quota_type":1,"model_price_usd":0.027397,"metadata_endpoint":"/v1/images/generations","channel_ids":[1],"description_claim":"1K/2K/4K; advertised, not capability-tested"},
+    {"id":"gpt-image-2.5","category":"generation","active":true,"group":"default","quota_type":1,"model_price_usd":0.006164383561643835,"metadata_endpoint":"/v1/chat/completions","metadata_tag":"大语言模型","channel_ids":[1]},
+    {"id":"gpt-image-2.5-flare","category":"generation","active":true,"group":"default","quota_type":1,"model_price_usd":0.020547945205479454,"metadata_endpoint":"/v1/chat/completions","metadata_tag":"大语言模型","channel_ids":[1,2]},
+    {"id":"gpt-image-2.5-sunburst","category":"generation","active":true,"group":"default","quota_type":1,"model_price_usd":0.02465753424657534,"metadata_endpoint":"/v1/chat/completions","metadata_tag":"大语言模型","channel_ids":[1,2]},
+    {"id":"nano-banana-2","category":"generation","active":true,"group":"default","quota_type":1,"model_price_usd":0.020548,"metadata_endpoint":"/v1/images/generations","channel_ids":[1]},
+    {"id":"nano-banana-pro","category":"generation","active":true,"group":"default","quota_type":1,"model_price_usd":0.027397,"metadata_endpoint":"/v1/images/generations","channel_ids":[1]},
+    {"id":"nano-banana-2.1","category":"generation","active":true,"group":"default","quota_type":1,"model_price_usd":0.012329,"metadata_endpoint":"/v1/images/generations","channel_ids":[1]},
+    {"id":"grok-image-2.0","category":"generation","active":true,"group":"default","quota_type":1,"model_price_usd":0.00274,"metadata_endpoint":"/v1/chat/completions","channel_ids":[10],"upstream_model_alias":"grok-图片-2.0"},
+    {"id":"VajraV1","category":"processing","active":true,"group":"default","model_price_usd":0.006849,"channel_ids":[3],"metadata_endpoint":null,"metadata_endpoint_note":"Exact live endpoint string not retained in bounded handoff; do not infer from catalog","catalog_endpoints":["/v1/images/object-detection","/v1/images/segmentation","/v1/images/pose-detection"]},
+    {"id":"sam3","category":"processing","active":true,"group":"default","model_price_usd":0.013699,"channel_ids":[3],"metadata_endpoint":null,"metadata_endpoint_note":"Exact live endpoint string not retained in bounded handoff; do not infer from catalog","catalog_endpoints":["/v1/images/object-detection","/v1/images/segmentation"]},
+    {"id":"AnimeSharp","category":"processing","active":true,"group":"default","model_price_usd":0.006849,"metadata_endpoint":"/v1/images/upscaling","channel_ids":[3]},
+    {"id":"Real-ESRGAN","category":"processing","active":true,"group":"default","model_price_usd":0.006849,"metadata_endpoint":"/v1/images/upscaling","channel_ids":[3]},
+    {"id":"UVDoc","category":"processing","active":true,"group":"default","model_price_usd":0.013699,"metadata_endpoint":"/v1/images/unwarping","metadata_tag":"OCR","channel_ids":[3]},
+    {"id":"RMBG-2.0","category":"processing","active":true,"group":"default","model_price_usd":0.006849,"metadata_endpoint":"/v1/images/upscaling","catalog_endpoints":["/v1/images/mattings"],"channel_ids":[3],"finding":"Live endpoint metadata disagrees with catalog"},
+    {"id":"nonescape-v0","category":"image_moderation","active":true,"group":"default","model_price_usd":0.006849,"metadata_endpoint":"/v1/moderations","channel_ids":[3]},
+    {"id":"nsfw-classifier","category":"image_moderation","active":true,"group":"default","model_price_usd":0.006849,"metadata_endpoint":"/v1/moderations","channel_ids":[3]}
+  ],
+  "channels": [
+    {"id":1,"type":1,"status":1,"groups":["default"],"priority":0,"weight":1,"image_model_mapping_present":false,"setting":null,"param_override":null,"audited_model_ids":["gpt-image-2","gpt-image-2-vip","gpt-image-2.5","gpt-image-2.5-flare","gpt-image-2.5-sunburst","nano-banana-2","nano-banana-pro","nano-banana-2.1"]},
+    {"id":2,"type":1,"status":1,"groups":["default","Claude-Code-2","AWS-Bedrock-2"],"priority":0,"weight":1,"setting":null,"param_override":null,"audited_model_ids":["gpt-image-2.5-flare","gpt-image-2.5-sunburst"]},
+    {"id":3,"type":1,"status":1,"groups":["default"],"pass_through_body_enabled":false,"audited_model_names_unchanged_by_mapping":true,"audited_model_ids":["VajraV1","sam3","AnimeSharp","Real-ESRGAN","UVDoc","RMBG-2.0","nonescape-v0","nsfw-classifier"]},
+    {"id":10,"type":1,"status":1,"groups":["default"],"setting":null,"audited_model_mapping":{"grok-image-2.0":"grok-图片-2.0"}}
+  ],
+  "gemini_image_inventory": {
+    "active_native_image_skus_found":[],
+    "configured_supported_imagine_option":["gemini-2.0-flash-exp-image-generation","gemini-2.0-flash-exp","gemini-3-pro-image-preview","gemini-3-pro-image","gemini-2.5-flash-image","gemini-3.1-flash-image","gemini-3.1-flash-image-preview"],
+    "note":"None of these option IDs appeared in active public pricing inventory. Nano aliases are type-1 compatibility bindings, not evidence of native Gemini channel availability."
+  },
+  "excluded_disabled_metadata_ids":["gpt-image-2.5-flare-c","gpt-image-2.5-sunburst-c"],
+  "limits":["Configuration inventory is not a paid capability test","Deployed source revision and live Caddy configuration were not observed","Global raw-body passthrough state was not conclusively established","This is a sanitized reconstruction of retained observations, not a raw API export"]
+}

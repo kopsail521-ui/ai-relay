@@ -1,0 +1,256 @@
+{
+  "source": "actual source sections executed with local mocks; no paid generation or production changes",
+  "results": [
+    {
+      "model": "gpt-image-2",
+      "status": 200,
+      "forwarded": {
+        "model": "gpt-image-2",
+        "prompt": "audit",
+        "images": [
+          "https://mock.invalid/ref.png"
+        ],
+        "replyType": "async",
+        "aspectRatio": "3840x2160",
+        "quality": "high"
+      },
+      "count": 1,
+      "responseFields": [
+        "url"
+      ],
+      "charges": [
+        0.006849
+      ]
+    },
+    {
+      "model": "gpt-image-2-vip",
+      "status": 200,
+      "forwarded": {
+        "model": "gpt-image-2-vip",
+        "prompt": "audit",
+        "images": [
+          "https://mock.invalid/ref.png"
+        ],
+        "replyType": "async",
+        "aspectRatio": "3840x2160",
+        "quality": "high"
+      },
+      "count": 1,
+      "responseFields": [
+        "url"
+      ],
+      "charges": [
+        0.027397
+      ]
+    },
+    {
+      "model": "gpt-image-2.5",
+      "status": 200,
+      "forwarded": {
+        "model": "gpt-image-2.5",
+        "prompt": "audit",
+        "images": [
+          "https://mock.invalid/ref.png"
+        ],
+        "replyType": "async",
+        "aspectRatio": "3840x2160",
+        "quality": "high"
+      },
+      "count": 1,
+      "responseFields": [
+        "url"
+      ],
+      "charges": [
+        0.006164
+      ]
+    },
+    {
+      "model": "gpt-image-2.5-flare",
+      "status": 200,
+      "forwarded": {
+        "model": "gpt-image-2.5-flare",
+        "prompt": "audit",
+        "images": [
+          "https://mock.invalid/ref.png"
+        ],
+        "replyType": "async",
+        "aspectRatio": "3840x2160",
+        "quality": "high"
+      },
+      "count": 1,
+      "responseFields": [
+        "url"
+      ],
+      "charges": [
+        0.020548
+      ]
+    },
+    {
+      "model": "gpt-image-2.5-sunburst",
+      "status": 200,
+      "forwarded": {
+        "model": "gpt-image-2.5-sunburst",
+        "prompt": "audit",
+        "images": [
+          "https://mock.invalid/ref.png"
+        ],
+        "replyType": "async",
+        "aspectRatio": "3840x2160",
+        "quality": "high"
+      },
+      "count": 1,
+      "responseFields": [
+        "url"
+      ],
+      "charges": [
+        0.024658
+      ]
+    },
+    {
+      "model": "nano-banana-2",
+      "status": 200,
+      "forwarded": {
+        "model": "nano-banana-2",
+        "prompt": "audit",
+        "images": [
+          "https://mock.invalid/ref.png"
+        ],
+        "replyType": "async",
+        "aspectRatio": "3840x2160",
+        "quality": "high"
+      },
+      "count": 1,
+      "responseFields": [
+        "url"
+      ],
+      "charges": [
+        0.020548
+      ]
+    },
+    {
+      "model": "nano-banana-2.1",
+      "status": 200,
+      "forwarded": {
+        "model": "nano-banana-2.1",
+        "prompt": "audit",
+        "images": [
+          "https://mock.invalid/ref.png"
+        ],
+        "replyType": "async",
+        "aspectRatio": "3840x2160",
+        "quality": "high"
+      },
+      "count": 1,
+      "responseFields": [
+        "url"
+      ],
+      "charges": [
+        0.012329
+      ]
+    },
+    {
+      "model": "nano-banana-pro",
+      "status": 200,
+      "forwarded": {
+        "model": "nano-banana-pro",
+        "prompt": "audit",
+        "images": [
+          "https://mock.invalid/ref.png"
+        ],
+        "replyType": "async",
+        "aspectRatio": "3840x2160",
+        "quality": "high"
+      },
+      "count": 1,
+      "responseFields": [
+        "url"
+      ],
+      "charges": [
+        0.027397
+      ]
+    },
+    {
+      "check": "invalid_size",
+      "model": "gpt-image-2-vip",
+      "status": 400,
+      "submits": 0,
+      "charges": []
+    },
+    {
+      "check": "invalid_size",
+      "model": "gpt-image-2.5-flare",
+      "status": 200,
+      "submits": 1,
+      "charges": [
+        0.020548
+      ]
+    },
+    {
+      "check": "invalid_size",
+      "model": "gpt-image-2.5-sunburst",
+      "status": 200,
+      "submits": 1,
+      "charges": [
+        0.024658
+      ]
+    },
+    {
+      "check": "base64_reference",
+      "status": 400,
+      "submits": 0
+    },
+    {
+      "check": "running_task_retry",
+      "status": 504,
+      "submits": 2,
+      "charges": [
+        0.027397,
+        -0.027397
+      ],
+      "errorCode": "generation_timeout"
+    },
+    {
+      "check": "singular_image_array",
+      "status": 400,
+      "submits": 0
+    },
+    {
+      "check": "policy_rejection_retry",
+      "status": 502,
+      "submits": 3,
+      "charges": [
+        0.027397,
+        -0.027397
+      ],
+      "errorCode": "upstream_failed"
+    },
+    {
+      "check": "multipart_edit",
+      "status": 400,
+      "body": {
+        "error": {
+          "message": "Invalid JSON body",
+          "type": "invalid_request_error"
+        }
+      }
+    },
+    {
+      "check": "native_forward_failure",
+      "status": 200,
+      "fellBack": true,
+      "compatibilityForwardCount": 1
+    }
+  ],
+  "assertions": {
+    "allEightMaskBackgroundDropped": true,
+    "nanoImageSizeDropped": true,
+    "base64Rejected": true,
+    "multipartRejected": true,
+    "transportFallsBack": true,
+    "runningTaskDuplicated": true,
+    "nThreeReturnsOne": true,
+    "formatB64ReturnsUrl": true,
+    "singularArrayRejected": true,
+    "policyRejectionRetried": true
+  }
+}

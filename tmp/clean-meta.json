@@ -1,0 +1,22 @@
+{
+  "ncx234u2": {
+    "title": "Claude API Error 529 Overloaded: Retry and Fallback Strategy",
+    "desc": "Learn how to handle Claude API HTTP 529 overload errors with bounded retries, backoff, circuit breakers, and a carefully evaluated fallback provider such as KeyoAPI."
+  },
+  "lfmh7jgs": {
+    "title": "Text-to-Avatar Video API: Building a Reliable Generation Pipeline",
+    "desc": "Learn how to design a production-ready text-to-avatar video pipeline with script generation, voice synthesis, lip-sync rendering, job tracking, retries, security, cost controls, and provider evaluation."
+  },
+  "pb2y5qxm": {
+    "title": "RMBG-2.0 API for Product Photos: A Practical Integration Guide",
+    "desc": "A developer-focused guide to server-side multipart uploads, output validation, production limits, and safe ecommerce image workflows."
+  },
+  "c896hb32": {
+    "title": "AI Avatar API Node.js Example: Upload, Job Status, and Retry Patterns",
+    "desc": "Learn how to design a production-ready Node.js workflow for AI avatar APIs, including media upload, asynchronous job polling, retries, authentication, error handling, security, cost controls, and provider capability checks."
+  },
+  "exq994v0": {
+    "title": "InfiniteTalk API: Questions Developers Should Verify Before Integration",
+    "desc": "A practical checklist for evaluating an InfiniteTalk API integration, including avatar capabilities, lip-sync quality, authentication, retries, security, cost, and production readiness."
+  }
+}

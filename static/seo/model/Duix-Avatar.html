@@ -38,6 +38,8 @@ pre,code{font-family:var(--mono)}
 pre{background:var(--panel);color:var(--panel-ink);padding:14px 16px;border-radius:var(--radius);overflow:auto;font-size:13px}
 pre code{background:transparent;padding:0;color:inherit;font-size:inherit;border-radius:0}
 table{width:100%;border-collapse:collapse;font-size:14px;background:var(--surface)}
+.table-scroll{overflow-x:auto;margin:16px 0}
+.table-scroll table{min-width:620px}
 th,td{border:1px solid var(--line);padding:10px 12px;text-align:left;vertical-align:top}
 th{background:color-mix(in srgb,var(--line) 40%,var(--surface));font-weight:600}
 .ok{color:var(--ok);font-weight:600}
@@ -85,6 +87,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
 </div>
 <h2>Overview</h2>
 <p>Searching for a Duix Avatar API or a hosted alternative to self-managed digital-human stacks? KeyoAPI exposes Duix-Avatar as an async talking-avatar API: feed a face video plus driving audio, get lip-sync and expressions back as a render job. This is the API path for product teams — not a consumer Duix app. Build the loop on one prepaid key: generate speech with CosyVoice3 / Qwen3-TTS / IndexTTS-2, then drive Duix-Avatar. Per-second pricing (~$0.0068) maps to output length; confirm on <a href="/model/Duix-Avatar">the Duix-Avatar model page</a>. Cap max duration, show queue ETA, and moderate deepfake abuse. Prefer InfiniteTalk when you start from a still photo plus audio. Endpoint: POST /v1/async/videos/audio-video-to-video with model=Duix-Avatar, then GET /v1/task/{id}. Hub page: <a href="/ai-avatar-video-generator">the AI avatar video generator page</a>.</p>
+
 
 <h2>Quick start</h2>
 <div class="card">

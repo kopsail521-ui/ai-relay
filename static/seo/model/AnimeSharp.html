@@ -38,6 +38,8 @@ pre,code{font-family:var(--mono)}
 pre{background:var(--panel);color:var(--panel-ink);padding:14px 16px;border-radius:var(--radius);overflow:auto;font-size:13px}
 pre code{background:transparent;padding:0;color:inherit;font-size:inherit;border-radius:0}
 table{width:100%;border-collapse:collapse;font-size:14px;background:var(--surface)}
+.table-scroll{overflow-x:auto;margin:16px 0}
+.table-scroll table{min-width:620px}
 th,td{border:1px solid var(--line);padding:10px 12px;text-align:left;vertical-align:top}
 th{background:color-mix(in srgb,var(--line) 40%,var(--surface));font-weight:600}
 .ok{color:var(--ok);font-weight:600}
@@ -85,6 +87,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
 </div>
 <h2>Overview</h2>
 <p>AnimeSharp specializes in anime and illustration super-resolution—an image upscaling api tuned for line art rather than camera noise. Creator platforms and game pipelines use it to ship crisp assets without desktop ESRGAN installs. Generic photo upscalers smear cel shading. AnimeSharp keeps edges sharp for characters, UI art, and manga panels. Combine with RMBG-2.0 when you need transparent stickers from upscaled art. About $0.0068 per request—enable as a paid “HD export” feature in consumer apps. Batch overnight for catalog migrations. Fan art marketplaces, VTuber asset prep, mobile drawing apps, and print posters. Optional SAM masks for layered PSD-like exports. Upscaling endpoint with model=AnimeSharp. Start at <a href="/model/AnimeSharp">the AnimeSharp model page</a>. AnimeSharp is the illustration/anime upscaler sibling of Real-ESRGAN—keep line art sharp instead of photoreal texture guesses. Anime and illustration assets need different priors than photos. AnimeSharp preserves line art that Real-ESRGAN may soften. Use it in sticker pipelines, manga cleanup, and game sprite prep. Keep a style classifier so photoreal uploads never hit AnimeSharp by mistake. Offer before/after previews in your admin tool so artists trust the automation. Separate anime uploads via a lightweight classifier. Keep artist opt-in for batch cleanup. Creators care about line stability more than PSNR—collect subjective ratings in your admin tool.</p>
+
 
 <h2>Quick start</h2>
 <div class="card">

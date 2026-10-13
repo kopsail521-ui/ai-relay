@@ -38,6 +38,8 @@ pre,code{font-family:var(--mono)}
 pre{background:var(--panel);color:var(--panel-ink);padding:14px 16px;border-radius:var(--radius);overflow:auto;font-size:13px}
 pre code{background:transparent;padding:0;color:inherit;font-size:inherit;border-radius:0}
 table{width:100%;border-collapse:collapse;font-size:14px;background:var(--surface)}
+.table-scroll{overflow-x:auto;margin:16px 0}
+.table-scroll table{min-width:620px}
 th,td{border:1px solid var(--line);padding:10px 12px;text-align:left;vertical-align:top}
 th{background:color-mix(in srgb,var(--line) 40%,var(--surface));font-weight:600}
 .ok{color:var(--ok);font-weight:600}
@@ -89,6 +91,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
 <p>How to call: keep your OpenAI SDK and set the base URL to https://www.keyoapi.xyz/v1, then pass model=claude-haiku-5-5 to POST /v1/chat/completions with your Bearer key. Same endpoint, same key, same invoice as every other chat model on KeyoAPI.</p>
 <p>When to pick this lane: high-volume classification, extraction, routing and batch subtasks where you want Claude-quality instruction following without the per-token cost of Sonnet or Opus. If the step does not need Claude at all, gpt-6-luna (~$0.03 / $0.15) is cheaper on the same key. Prototype on the $0 free catalog IDs first (covered by your $10 welcome credit, fair-use) — see <a href="/free-models">the free models page</a>.</p>
 <p>The full Claude comparison lives on <a href="/claude-api-pricing">the Claude API pricing page</a>. All metered rows: <a href="/pricing-list">the full pricing list</a>.</p>
+
 
 <h2>Quick start</h2>
 <div class="card">

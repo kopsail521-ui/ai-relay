@@ -18,7 +18,7 @@
       "h1": "Cloudflare Clef API — Multimodal Decisions on KeyoAPI",
       "title": "Cloudflare Clef API Guide & Pricing | KeyoAPI",
       "metaDescription": "Cloudflare Clef: open-source 27B multimodal decisions via POST /v1/decisions. Typed choice/noul probabilities, input from $0.063/M, output $0.",
-      "priceLabel": "From $0.063 input / $0 output per 1M tokens; actual-cost settlement",
+      "priceLabel": "From $0.063 input / $0 output per 1M tokens",
       "priceUnit": "per_1m_tokens",
       "related": [],
       "endpoint": "POST /v1/decisions",
@@ -39,9 +39,9 @@
           ]
         },
         {
-          "heading": "Starting price and actual settlement",
+          "heading": "Pricing",
           "paragraphs": [
-            "Input starts at $0.063 per 1M tokens and output is $0. The service calculates the charge from the underlying metered request cost with a 1.5× markup, then returns the final charge in usage.cost. Both the starting sell rate and the returned charge already include the markup. Actual input pricing may be higher when the serving route changes. Confirm current prices in Model Square before production traffic."
+            "Input starts at $0.063 per 1M tokens and output is $0. Each request is billed for its actual usage, and the response’s usage.cost is the final charge in USD. Confirm current prices in Model Square before production traffic."
           ]
         },
         {
@@ -54,7 +54,7 @@
         {
           "heading": "Read the final charge from usage.cost",
           "paragraphs": [
-            "The response usage.cost is the final KeyoAPI charge in USD, already including the settlement markup. Do not multiply that returned value by 1.5 again. Wallet deductions follow the service’s quota precision; output_tokens is 0 for this decision protocol.",
+            "The response usage.cost is the final KeyoAPI charge in USD — use it as returned; no further conversion is needed. Wallet deductions follow the service’s quota precision; output_tokens is 0 for this decision protocol.",
             "At the starting input rate, 1,000 input tokens would estimate $0.000063. This is arithmetic at the starting rate, not a guaranteed request price or a live inference measurement. Use the returned usage.cost and your console usage records for the actual charge."
           ],
           "code": "{\n  \"model\": \"cloudflare/clef\",\n  \"usage\": {\n    \"input_tokens\": 1000,\n    \"output_tokens\": 0,\n    \"cost\": 0.000063\n  }\n}",
@@ -78,7 +78,7 @@
         },
         {
           "q": "Is $0.063/M the fixed input price?",
-          "a": "No. It is the starting sell rate, already including markup. Output is $0, and usage.cost returns the final request charge. Actual input pricing may exceed the starting rate; do not multiply the starting sell rate or returned charge by 1.5 again."
+          "a": "No. It is the starting rate. Output is $0, and usage.cost returns the final request charge. Use the returned usage.cost as the actual charge; no further conversion is needed."
         },
         {
           "q": "Is Clef a Claude model?",

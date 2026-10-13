@@ -38,6 +38,8 @@ pre,code{font-family:var(--mono)}
 pre{background:var(--panel);color:var(--panel-ink);padding:14px 16px;border-radius:var(--radius);overflow:auto;font-size:13px}
 pre code{background:transparent;padding:0;color:inherit;font-size:inherit;border-radius:0}
 table{width:100%;border-collapse:collapse;font-size:14px;background:var(--surface)}
+.table-scroll{overflow-x:auto;margin:16px 0}
+.table-scroll table{min-width:620px}
 th,td{border:1px solid var(--line);padding:10px 12px;text-align:left;vertical-align:top}
 th{background:color-mix(in srgb,var(--line) 40%,var(--surface));font-weight:600}
 .ok{color:var(--ok);font-weight:600}
@@ -183,7 +185,7 @@ console.log(r.choices[0].message.content);</pre>
 
 <h2>What you keep vs what changes</h2>
 <p class="meta">Indicative figures for planning. Confirm live Keyo sell rates on interactive <a href="/pricing">Model Square</a> or the static <a href="/pricing-list">pricing list</a>.</p>
-<table>
+<div class="table-scroll"><table>
 <thead><tr><th>Model ID</th><th>Official OpenAI path</th><th>KeyoAPI</th><th>Notes</th></tr></thead>
 <tbody>
 <tr>
@@ -217,7 +219,7 @@ console.log(r.choices[0].message.content);</pre>
   <td>Budget GLM lane · <a href="/pricing-list">the full pricing list</a></td>
 </tr>
 </tbody>
-</table>
+</table></div>
 
 <h2>Prototype for $0 before you commit volume</h2>
 <p>Official OpenAI free tiers are usually trial- or quota-shaped. On Keyo, fixed $0 catalog IDs on <a href="/free-models">the free models page</a> — covered by your $10 welcome credit, fair-use — share the same API key as paid GPT-class traffic. Prototype there, then switch model= to gpt-6-astra or deepseek-v4.1-flash without changing base URL.</p>
@@ -227,6 +229,7 @@ console.log(r.choices[0].message.content);</pre>
 <p>How to switch (two lines): set OPENAI_BASE_URL=https://www.keyoapi.xyz/v1 (or sdk base_url), use your Keyo API key as Authorization Bearer, keep POST /v1/chat/completions. Then pass model=gpt-6-astra for flagship chat, or deepseek-v4.1-flash / gpt-5.6-luna for cheaper bulk. Full price planning table: <a href="/compare">the model comparison page</a>. OpenAI-side unit economics: <a href="/openai-api-pricing">the OpenAI API pricing page</a>.</p>
 <p>Migration notes that actually break builds: (1) tool-calling / vision / streaming parity is not 1:1 with every OpenAI first-party feature — verify against live docs for your workload; (2) Keyo gpt-5.6-* IDs are GPT-class twins, not OpenAI first-party GPT-5 names; (3) visual processing, async video, digital-human and document-parsing jobs use dedicated REST paths — see <a href="/pricing-list">the full pricing list</a>; (4) rates above are indicative — confirm interactive /pricing/{id} before volume.</p>
 <p>When to stay on official OpenAI: you need first-party Assistants, specific OpenAI product surfaces, or enterprise contracts that require OpenAI as the contracting party. When Keyo fits: you already speak OpenAI SDK, want cheaper bulk lanes or multi-vendor IDs on one key, and can accept prepaid credits instead of OpenAI billing.</p>
+
 <pre>curl https://www.keyoapi.xyz/v1/chat/completions \
   -H &quot;Authorization: Bearer $KEYO_API_KEY&quot; \
   -H &quot;Content-Type: application/json&quot; \

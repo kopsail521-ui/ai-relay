@@ -38,6 +38,8 @@ pre,code{font-family:var(--mono)}
 pre{background:var(--panel);color:var(--panel-ink);padding:14px 16px;border-radius:var(--radius);overflow:auto;font-size:13px}
 pre code{background:transparent;padding:0;color:inherit;font-size:inherit;border-radius:0}
 table{width:100%;border-collapse:collapse;font-size:14px;background:var(--surface)}
+.table-scroll{overflow-x:auto;margin:16px 0}
+.table-scroll table{min-width:620px}
 th,td{border:1px solid var(--line);padding:10px 12px;text-align:left;vertical-align:top}
 th{background:color-mix(in srgb,var(--line) 40%,var(--surface));font-weight:600}
 .ok{color:var(--ok);font-weight:600}
@@ -85,6 +87,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
 </div>
 <h2>Overview</h2>
 <p>Claude Sonnet 5 is the workhorse Claude-class model on KeyoAPI—enough depth for production chat, priced for production budgets. If you are comparing Claude API pricing, Sonnet-class tiers are usually the first production fit — KeyoAPI exposes that capability through one OpenAI-compatible relay. Sonnet balances quality and cost for customer support, writing aids, light coding, and RAG answers. Long-context support helps when users paste tickets, policies, or specs into the thread. Indicative Keyo pricing ~$0.88 input / $4.41 output per 1M tokens. Against official Claude Sonnet list bands near $3 / $15, the relay savings are the core sales story—validate on <a href="/compare">the model comparison page</a>. Blended architectures (Sonnet + Luna) often beat “always flagship” designs on margin. Default bot for B2B help centers, CRM side panels, and docs Q&amp;A. Content drafting with human edit loops. First-pass code suggestions before Opus escalation. Set model=claude-sonnet-5 on /v1/chat/completions. Reuse existing tool-calling code. Get a key at <a href="/model/claude-sonnet-5">the claude-sonnet-5 model page</a>. Sonnet 5 is the production Claude workhorse for support, RAG, and light coding—strong enough daily, cheap enough to leave as the default model string. Sonnet 5 is the model you should leave as the default string in most production configs. It covers support macros, RAG answers, light coding, and structured extraction without the Opus bill. Build golden-set evals for your top twenty prompts and only escalate outliers. Because KeyoAPI shares keys with Whisper and OCR, you can attach documents or transcripts in the same product session without a second vendor. Publish an internal runbook: Sonnet first, Fable/Opus on call, Luna for batch. That runbook is what keeps Claude API pricing predictable as usage scales. Add structured output schemas for support macros and reject free-form answers when JSON is required. Cache frequent RAG answers at the edge. Sonnet should feel boring and reliable—that reliability is what makes Claude API pricing forecastable in SaaS margins.</p>
+
 
 <h2>Quick start</h2>
 <div class="card">

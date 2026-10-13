@@ -160,8 +160,9 @@ test("Clef guide preserves the decision protocol, billing explanation and API ID
     assert.ok(Object.values(question.criteria).every((value) => value === null));
   }
   const html = read("static/seo/model/cloudflare-clef.html");
-  assert.match(html, /already including the settlement markup/);
-  assert.match(html, /Do not multiply that returned value by 1.5 again/);
+  assert.match(html, /usage\.cost is the final KeyoAPI charge in USD/);
+  assert.doesNotMatch(html, /markup|x ?1\.5/);
+  assert.doesNotMatch(html, /actual-cost settlement/);
   assert.match(html, /approximately the first 2000/);
   assert.match(html, /below 300KiB/);
   assert.match(html, /illustrative usage fragment, not a captured response/);

@@ -38,6 +38,8 @@ pre,code{font-family:var(--mono)}
 pre{background:var(--panel);color:var(--panel-ink);padding:14px 16px;border-radius:var(--radius);overflow:auto;font-size:13px}
 pre code{background:transparent;padding:0;color:inherit;font-size:inherit;border-radius:0}
 table{width:100%;border-collapse:collapse;font-size:14px;background:var(--surface)}
+.table-scroll{overflow-x:auto;margin:16px 0}
+.table-scroll table{min-width:620px}
 th,td{border:1px solid var(--line);padding:10px 12px;text-align:left;vertical-align:top}
 th{background:color-mix(in srgb,var(--line) 40%,var(--surface));font-weight:600}
 .ok{color:var(--ok);font-weight:600}
@@ -85,6 +87,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
 </div>
 <h2>Overview</h2>
 <p>VajraV1 packs YOLO-based object detection, image segmentation, and pose estimation into KeyoAPI’s vision lane. If you need an object detection api without standing up GPU workers, call this model through the same gateway as your LLMs. Realtime CV features used to require dedicated inference clusters. An AI API relay collapses that into HTTP calls with prepaid balance. VajraV1 is ideal when class vocabularies are standard YOLO-style objects; use sam3 for open-vocabulary masks. Per-call pricing near $0.0068 keeps experiments cheap until you prove ROI on camera streams. Batch still frames rather than every video frame when budgets are tight. Shelf monitoring, people counting, workout form checks, and factory defect triage. Feed detections into gpt-5.6-luna for natural-language incident summaries. Use Keyo /v1/images/object-detection and related paths with model=VajraV1. Keys: <a href="/model/VajraV1">the VajraV1 model page</a>. VajraV1 exposes YOLO-style detection (and related segmentation/pose routes) for retail and industrial CV without standing up your own GPU fleet. YOLO-style detection is for closed vocabularies you already understand: people, boxes, vehicles, shelves. Sample frames from video instead of every frame to control cost. Persist boxes with camera id and timestamp for analytics. When you need “find the weird unlabeled object,” escalate to sam3. Feed compact detection JSON into Luna for incident summaries so the LLM never sees raw pixels. Object detection API pricing stays sane when you batch stills and cache identical frames. Define class allowlists per camera. Drop detections below confidence thresholds. Aggregate into events before calling an LLM. Object detection API noise will drown your logs if you forward every box raw.</p>
+
 
 <h2>Quick start</h2>
 <div class="card">

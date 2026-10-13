@@ -38,6 +38,8 @@ pre,code{font-family:var(--mono)}
 pre{background:var(--panel);color:var(--panel-ink);padding:14px 16px;border-radius:var(--radius);overflow:auto;font-size:13px}
 pre code{background:transparent;padding:0;color:inherit;font-size:inherit;border-radius:0}
 table{width:100%;border-collapse:collapse;font-size:14px;background:var(--surface)}
+.table-scroll{overflow-x:auto;margin:16px 0}
+.table-scroll table{min-width:620px}
 th,td{border:1px solid var(--line);padding:10px 12px;text-align:left;vertical-align:top}
 th{background:color-mix(in srgb,var(--line) 40%,var(--surface));font-weight:600}
 .ok{color:var(--ok);font-weight:600}
@@ -85,6 +87,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
 </div>
 <h2>Overview</h2>
 <p>Looking for a CosyVoice3 API without self-hosting GPUs? KeyoAPI exposes CosyVoice3 as async multilingual zero-shot TTS on the same OpenAI-style key you use for Whisper and chat. How to call CosyVoice3 API on Keyo: create a key at <a href="/sign-up">the sign-up page</a>, set Authorization: Bearer YOUR_KEY, POST https://www.keyoapi.xyz/v1/async/audio/speech with JSON {&quot;model&quot;:&quot;CosyVoice3&quot;,&quot;input&quot;:&quot;...&quot;}, then poll GET /v1/task/{id} until the audio URL is ready. Prefer IndexTTS-2 when you need audio back inside a single HTTP round trip. About $1.37 per 10,000 characters — confirm live rates on <a href="/model/CosyVoice3">the CosyVoice3 model page</a>. Product voiceovers, localized support replies, game NPCs, and digital humans (pair with Duix-Avatar or InfiniteTalk via <a href="/ai-avatar-video-generator">the AI avatar video generator page</a>). If you want hosted inference instead of a research install, KeyoAPI is that path. Normalize text before synthesis, store voice ids per locale, and CDN-cache finished audio. Try it from <a href="/model/CosyVoice3">the CosyVoice3 model page</a>. Broader TTS map: <a href="/tts-api">the TTS API guide</a>.</p>
+
 
 <h2>Quick start</h2>
 <div class="card">

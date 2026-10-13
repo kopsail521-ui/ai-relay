@@ -38,6 +38,8 @@ pre,code{font-family:var(--mono)}
 pre{background:var(--panel);color:var(--panel-ink);padding:14px 16px;border-radius:var(--radius);overflow:auto;font-size:13px}
 pre code{background:transparent;padding:0;color:inherit;font-size:inherit;border-radius:0}
 table{width:100%;border-collapse:collapse;font-size:14px;background:var(--surface)}
+.table-scroll{overflow-x:auto;margin:16px 0}
+.table-scroll table{min-width:620px}
 th,td{border:1px solid var(--line);padding:10px 12px;text-align:left;vertical-align:top}
 th{background:color-mix(in srgb,var(--line) 40%,var(--surface));font-weight:600}
 .ok{color:var(--ok);font-weight:600}
@@ -85,6 +87,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
 </div>
 <h2>Overview</h2>
 <p>Looking up DeepSeek V4 Flash pricing or a free path on an OpenAI-compatible relay? On KeyoAPI, deepseek-v4-flash is a metered catalog ID at indicative ~$0.44 / $1.32 per 1M in/out — confirm live on <a href="/model/deepseek-v4-flash">the deepseek-v4-flash model page</a>. It is not the same row as deepseek-v4.1-flash (~$0.14 / $0.56) or deepseek-v4-flash-0731 (~$0.09 / $0.17). Prefer deepseek-v4.1-flash for cheaper high-volume paid Flash; keep deepseek-v4-flash when your stack already pins this exact model string. For DeepSeek V4 Flash free prototyping on the same API key, use fixed $0 IDs on <a href="/free-models">the free models page</a> — $0 fixed-ID twins whose calls draw down your $10 welcome credit (fair-use rate limits), then switch model= to a metered Flash ID without changing base URL or auth. deepseek-v4-pro-0813 (~$0.14 / $0.29) is a separate Pro model. Family table: <a href="/deepseek-api-pricing">the DeepSeek API pricing page</a>. Call POST /v1/chat/completions with Bearer auth and model=deepseek-v4-flash.</p>
+
 
 <h2>Quick start</h2>
 <div class="card">

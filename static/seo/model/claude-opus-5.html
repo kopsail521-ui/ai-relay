@@ -38,6 +38,8 @@ pre,code{font-family:var(--mono)}
 pre{background:var(--panel);color:var(--panel-ink);padding:14px 16px;border-radius:var(--radius);overflow:auto;font-size:13px}
 pre code{background:transparent;padding:0;color:inherit;font-size:inherit;border-radius:0}
 table{width:100%;border-collapse:collapse;font-size:14px;background:var(--surface)}
+.table-scroll{overflow-x:auto;margin:16px 0}
+.table-scroll table{min-width:620px}
 th,td{border:1px solid var(--line);padding:10px 12px;text-align:left;vertical-align:top}
 th{background:color-mix(in srgb,var(--line) 40%,var(--surface));font-weight:600}
 .ok{color:var(--ok);font-weight:600}
@@ -85,6 +87,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
 </div>
 <h2>Overview</h2>
 <p>Claude Opus 5 is KeyoAPI’s pick when agents must finish hard coding and reasoning jobs—not just chat politely. Developers comparing claude api pricing for Opus-class models can buy through this AI API relay and keep OpenAI SDK clients. Below: when to choose Opus, how pricing works, and how to integrate. Opus-class models shine on stubborn refactors, subtle bug hunts, and tool-using agents that plan across many steps. KeyoAPI exposes Opus beside cheaper Claude and GPT tiers so you can build a quality ladder instead of a single expensive default. Indicative rates ~$1.10 / $5.52 per 1M input/output tokens on KeyoAPI—verify live. That is typically well below first-party Opus list pricing, which is why finance teams approve relays for experimental agent fleets. Track cost per resolved ticket or per merged PR, not only cost per 1K tokens. CI bots that propose patches, security review assistants, and data-pipeline repair agents. Internal “ask the codebase” tools with large context windows. Escalate from Sonnet when unit tests keep failing. Chat completions with model=claude-opus-5 against https://www.keyoapi.xyz/v1. Prefer structured outputs / tools for agent loops. Start at <a href="/model/claude-opus-5">the claude-opus-5 model page</a>. Reserve Opus 5 for stubborn refactors and tool-heavy agents; keep Sonnet/Luna on the hot path so Claude API pricing does not explode on every request. Opus-class models are where teams overspend if every chat window defaults to max intelligence. Put Opus behind an explicit “deep mode” button or an agent router that only escalates after Sonnet fails a rubric. On KeyoAPI you can A/B that router against gpt-5.6-sol without new credentials. Capture failure modes—wrong file edits, invented APIs, incomplete refactors—so you can prove Opus is paying for itself. Document a kill switch to demote traffic to Sonnet during cost spikes. Claude API pricing only stays rational when escalation is intentional. Ship Opus only on paths with a human escalation button or an automated failure detector. Keep a canary percentage so costs cannot silently climb overnight. Publish a status page metric for Opus spend per day so engineering and finance share one number.</p>
+
 
 <h2>Quick start</h2>
 <div class="card">

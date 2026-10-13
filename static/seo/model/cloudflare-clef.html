@@ -16,7 +16,7 @@
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content="Cloudflare Clef API Guide &amp; Pricing | KeyoAPI" />
 <meta name="twitter:description" content="Cloudflare Clef: open-source 27B multimodal decisions via POST /v1/decisions. Typed choice/noul probabilities, input from $0.063/M, output $0." />
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"SoftwareApplication","name":"KeyoAPI cloudflare/clef","applicationCategory":"DeveloperApplication","url":"https://www.keyoapi.xyz/model/cloudflare-clef","description":"Cloudflare Clef: open-source 27B multimodal decisions via POST /v1/decisions. Typed choice/noul probabilities, input from $0.063/M, output $0.","offers":{"@type":"Offer","priceCurrency":"USD","description":"From $0.063 input / $0 output per 1M tokens; actual-cost settlement"}}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"SoftwareApplication","name":"KeyoAPI cloudflare/clef","applicationCategory":"DeveloperApplication","url":"https://www.keyoapi.xyz/model/cloudflare-clef","description":"Cloudflare Clef: open-source 27B multimodal decisions via POST /v1/decisions. Typed choice/noul probabilities, input from $0.063/M, output $0.","offers":{"@type":"Offer","priceCurrency":"USD","description":"From $0.063 input / $0 output per 1M tokens"}}</script>
 <style>.wrap{max-width:880px;margin:0 auto;padding:28px 24px 48px}
 .footer{display:flex;flex-wrap:wrap;gap:10px 16px;max-width:1080px;margin:0 auto;padding:24px 24px 40px;border-top:1px solid var(--line);font-size:13px;color:var(--muted)}
 .footer a{color:var(--ink-2);text-decoration:none}
@@ -79,7 +79,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
 <h1>Cloudflare Clef API — Multimodal Decisions on KeyoAPI</h1>
 
 <p class="lead">Cloudflare Clef is an open-source 27B multimodal decision model fine-tuned from Qwen3.8-27B.</p>
-<p class="meta">Listed price: <span class="ok">From $0.063 input / $0 output per 1M tokens; actual-cost settlement</span> · Live catalog: <a href="/pricing">Model Square</a> · Static list: <a href="/pricing-list">pricing list</a>.</p>
+<p class="meta">Listed price: <span class="ok">From $0.063 input / $0 output per 1M tokens</span> · Live catalog: <a href="/pricing">Model Square</a> · Static list: <a href="/pricing-list">pricing list</a>.</p>
 <div class="btnrow">
   <a class="btn btn-primary" href="/sign-up">Get API key</a>
   <a class="btn btn-secondary" href="/pricing">Open Model Square</a>
@@ -104,8 +104,8 @@ ul{margin:0 0 14px;padding-left:1.2em}
 
 
 
-<h2>Starting price and actual settlement</h2>
-<p>Input starts at $0.063 per 1M tokens and output is $0. The service calculates the charge from the underlying metered request cost with a 1.5× markup, then returns the final charge in usage.cost. Both the starting sell rate and the returned charge already include the markup. Actual input pricing may be higher when the serving route changes. Confirm current prices in Model Square before production traffic.</p>
+<h2>Pricing</h2>
+<p>Input starts at $0.063 per 1M tokens and output is $0. Each request is billed for its actual usage, and the response’s usage.cost is the final charge in USD. Confirm current prices in Model Square before production traffic.</p>
 
 
 
@@ -120,7 +120,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
 
 
 <h2>Read the final charge from usage.cost</h2>
-<p>The response usage.cost is the final KeyoAPI charge in USD, already including the settlement markup. Do not multiply that returned value by 1.5 again. Wallet deductions follow the service’s quota precision; output_tokens is 0 for this decision protocol.</p>
+<p>The response usage.cost is the final KeyoAPI charge in USD — use it as returned; no further conversion is needed. Wallet deductions follow the service’s quota precision; output_tokens is 0 for this decision protocol.</p>
 <p>At the starting input rate, 1,000 input tokens would estimate $0.000063. This is arithmetic at the starting rate, not a guaranteed request price or a live inference measurement. Use the returned usage.cost and your console usage records for the actual charge.</p>
 
 <p>This is an illustrative usage fragment, not a captured response; the real response also includes id and answers.</p>
@@ -149,7 +149,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
 <div class="faq"><details><summary>Does Clef generate chat or free-form text?</summary><p>No. A single forward pass returns typed choice / noul probabilities in answers. The current endpoint does not accept score questions. Use POST /v1/decisions.</p></details>
 <details><summary>Can Clef read a 65536-token text state?</summary><p>Do not rely on it. 65536 is the model context length; the serving text state is truncated after approximately the first 2000 tokens and the remainder is not read. Images count separately.</p></details>
 <details><summary>Can I send remote image URLs?</summary><p>No. Use up to 4 base64 data URL images in PNG, JPEG or WebP format, each below 300KiB.</p></details>
-<details><summary>Is $0.063/M the fixed input price?</summary><p>No. It is the starting sell rate, already including markup. Output is $0, and usage.cost returns the final request charge. Actual input pricing may exceed the starting rate; do not multiply the starting sell rate or returned charge by 1.5 again.</p></details>
+<details><summary>Is $0.063/M the fixed input price?</summary><p>No. It is the starting rate. Output is $0, and usage.cost returns the final request charge. Use the returned usage.cost as the actual charge; no further conversion is needed.</p></details>
 <details><summary>Is Clef a Claude model?</summary><p>No. cloudflare/clef is a Cloudflare decision model. Use /v1/decisions for typed probabilities; use a chat model for free-form explanations or generation.</p></details></div>
 
 <p class="meta">Guide for <strong>cloudflare/clef</strong>. Catalog: <a href="/pricing">the pricing page</a> · Rates: <a href="/pricing-list">the full pricing list</a>.</p>

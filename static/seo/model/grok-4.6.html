@@ -38,6 +38,8 @@ pre,code{font-family:var(--mono)}
 pre{background:var(--panel);color:var(--panel-ink);padding:14px 16px;border-radius:var(--radius);overflow:auto;font-size:13px}
 pre code{background:transparent;padding:0;color:inherit;font-size:inherit;border-radius:0}
 table{width:100%;border-collapse:collapse;font-size:14px;background:var(--surface)}
+.table-scroll{overflow-x:auto;margin:16px 0}
+.table-scroll table{min-width:620px}
 th,td{border:1px solid var(--line);padding:10px 12px;text-align:left;vertical-align:top}
 th{background:color-mix(in srgb,var(--line) 40%,var(--surface));font-weight:600}
 .ok{color:var(--ok);font-weight:600}
@@ -85,6 +87,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
 </div>
 <h2>Overview</h2>
 <p>grok-4.6 is a KeyoAPI Grok-class chat ID — OpenAI-compatible on https://www.keyoapi.xyz/v1. Indicative sell rates are about $0.74 / $2.21 per 1M in/out; confirm <a href="/model/grok-4.6">the grok-4.6 model page</a>. Family table: <a href="/grok-api-pricing">the Grok API pricing page</a>.</p>
+
 
 <h2>Quick start</h2>
 <div class="card">

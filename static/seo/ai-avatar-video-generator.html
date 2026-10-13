@@ -38,6 +38,8 @@ pre,code{font-family:var(--mono)}
 pre{background:var(--panel);color:var(--panel-ink);padding:14px 16px;border-radius:var(--radius);overflow:auto;font-size:13px}
 pre code{background:transparent;padding:0;color:inherit;font-size:inherit;border-radius:0}
 table{width:100%;border-collapse:collapse;font-size:14px;background:var(--surface)}
+.table-scroll{overflow-x:auto;margin:16px 0}
+.table-scroll table{min-width:620px}
 th,td{border:1px solid var(--line);padding:10px 12px;text-align:left;vertical-align:top}
 th{background:color-mix(in srgb,var(--line) 40%,var(--surface));font-weight:600}
 .ok{color:var(--ok);font-weight:600}
@@ -86,7 +88,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
 
 <h2>Digital human models</h2>
 <p class="meta">Indicative figures for planning. Confirm live Keyo sell rates on interactive <a href="/pricing">Model Square</a> or the static <a href="/pricing-list">pricing list</a>.</p>
-<table>
+<div class="table-scroll"><table>
 <thead><tr><th>Model ID</th><th>Input → output</th><th>KeyoAPI</th><th>Notes</th></tr></thead>
 <tbody>
 <tr>
@@ -108,7 +110,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
   <td>Often used before Duix / InfiniteTalk</td>
 </tr>
 </tbody>
-</table>
+</table></div>
 
 <h2>Productize the loop, not a single model</h2>
 <p>Typical product loop: draft script → TTS (optionally cloned) → avatar render → CDN cache. Cap max duration, show queue ETA, and moderate deepfake abuse. Try/buy each model from its /pricing/{id} page after <a href="/sign-up">the sign-up page</a> — no separate upload playground.</p>
@@ -119,6 +121,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
 <p>Indicative rates: Duix-Avatar ~$0.0068 per second of output; InfiniteTalk ~$0.342 per request. Confirm <a href="/model/Duix-Avatar">the Duix-Avatar model page</a> and <a href="/model/InfiniteTalk">the InfiniteTalk model page</a> before volume. Pick Duix when you have driving video; pick InfiniteTalk when you start from a still spokesperson photo.</p>
 <p>How to call: async video endpoints with model=Duix-Avatar or InfiniteTalk, then GET /v1/task/{id}. Speech side: <a href="/tts-api">the TTS API guide</a> and <a href="/voice-cloning-api">the voice cloning API guide</a>. Model guides under <a href="/model/Duix-Avatar">the Duix-Avatar model page</a> and <a href="/model/InfiniteTalk">the InfiniteTalk model page</a>.</p>
 <p>Likeness rights and abuse prevention are your product’s responsibility — rate-limit, log, and require consent flags before queueing.</p>
+
 <pre>curl https://www.keyoapi.xyz/v1/async/videos/image-to-video \
   -H &quot;Authorization: Bearer $KEYO_API_KEY&quot; \
   -F model=InfiniteTalk \

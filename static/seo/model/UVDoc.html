@@ -38,6 +38,8 @@ pre,code{font-family:var(--mono)}
 pre{background:var(--panel);color:var(--panel-ink);padding:14px 16px;border-radius:var(--radius);overflow:auto;font-size:13px}
 pre code{background:transparent;padding:0;color:inherit;font-size:inherit;border-radius:0}
 table{width:100%;border-collapse:collapse;font-size:14px;background:var(--surface)}
+.table-scroll{overflow-x:auto;margin:16px 0}
+.table-scroll table{min-width:620px}
 th,td{border:1px solid var(--line);padding:10px 12px;text-align:left;vertical-align:top}
 th{background:color-mix(in srgb,var(--line) 40%,var(--surface));font-weight:600}
 .ok{color:var(--ok);font-weight:600}
@@ -85,6 +87,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
 </div>
 <h2>Overview</h2>
 <p>UVDoc fixes the physical world problem that kills OCR: curved book pages and skewed phone scans. As part of KeyoAPI’s ocr api toolkit, UVDoc unwarps images so MinerU2.5-Pro and Unlimited-OCR see straighter text lines. Unwarping is a specialized CV step—not a full OCR replacement. Products that let users snap receipts or IDs see immediate accuracy lifts after UVDoc. Per-request pricing around $0.0137 keeps the preprocessing stage accountable in your cost model. Compare against losing conversions when OCR fails on mobile uploads. Banking onboarding, expense apps, classroom worksheet capture, and archive digitization. Optional upscale with Real-ESRGAN when resolution is tiny. Call UVDoc via Keyo image/unwarping paths documented in the developer docs, then pass output to OCR models. Start at <a href="/model/UVDoc">the UVDoc model page</a>. UVDoc is preprocessing, not OCR: unwarp curved phone scans first, then hand the flattened image to MinerU or Unlimited-OCR for higher text accuracy. Phone scans fail OCR because of curvature and perspective, not because the OCR model is weak. UVDoc’s job is geometric cleanup before recognition. Run it only on camera captures; skip it for digital-born PDFs to save latency and cost. Store both the warped original and the unwarped result for audit. After UVDoc, call MinerU or Unlimited-OCR and compare character error rates on a labeled set of receipts or IDs. That A/B is how you justify the extra hop. KeyoAPI keeps unwarp + OCR + LLM on one prepaid balance. Gate UVDoc with a curvature heuristic so flat scans skip the hop. Log warp confidence. When confidence is low, ask the user to retake the photo instead of burning OCR tokens on garbage geometry.</p>
+
 
 <h2>Quick start</h2>
 <div class="card">

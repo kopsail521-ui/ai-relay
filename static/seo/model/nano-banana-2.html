@@ -38,6 +38,8 @@ pre,code{font-family:var(--mono)}
 pre{background:var(--panel);color:var(--panel-ink);padding:14px 16px;border-radius:var(--radius);overflow:auto;font-size:13px}
 pre code{background:transparent;padding:0;color:inherit;font-size:inherit;border-radius:0}
 table{width:100%;border-collapse:collapse;font-size:14px;background:var(--surface)}
+.table-scroll{overflow-x:auto;margin:16px 0}
+.table-scroll table{min-width:620px}
 th,td{border:1px solid var(--line);padding:10px 12px;text-align:left;vertical-align:top}
 th{background:color-mix(in srgb,var(--line) 40%,var(--surface));font-weight:600}
 .ok{color:var(--ok);font-weight:600}
@@ -88,6 +90,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
 <p>Pricing is simple: $0.0205 per generated image. It sits between nano-banana-2.1 ($0.0123, the newer release) and nano-banana-pro ($0.0274, the top tier) — all three on the same key, so A/B testing a prompt across tiers is a model-string change.</p>
 <p>Call it with POST /v1/images/generations, model=nano-banana-2, and a prompt. size is optional (1024x1024 by default). Responses come back in the OpenAI images shape, so existing clients and SDKs work after pointing base_url at https://www.keyoapi.xyz/v1.</p>
 <p>When to pick this lane: keep nano-banana-2 where your stack pins the base generation, prefer 2.1 for newer-release quality at a lower per-image price, and escalate to pro when fidelity dominates. Confirm live rates on <a href="/pricing-list">the full pricing list</a> before volume work.</p>
+
 
 <h2>Quick start</h2>
 <div class="card">

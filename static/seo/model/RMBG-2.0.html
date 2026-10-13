@@ -38,6 +38,8 @@ pre,code{font-family:var(--mono)}
 pre{background:var(--panel);color:var(--panel-ink);padding:14px 16px;border-radius:var(--radius);overflow:auto;font-size:13px}
 pre code{background:transparent;padding:0;color:inherit;font-size:inherit;border-radius:0}
 table{width:100%;border-collapse:collapse;font-size:14px;background:var(--surface)}
+.table-scroll{overflow-x:auto;margin:16px 0}
+.table-scroll table{min-width:620px}
 th,td{border:1px solid var(--line);padding:10px 12px;text-align:left;vertical-align:top}
 th{background:color-mix(in srgb,var(--line) 40%,var(--surface));font-weight:600}
 .ok{color:var(--ok);font-weight:600}
@@ -88,6 +90,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
 <p>E-commerce feeds, creator tools, and print-on-demand flows need reliable cutouts without Photoshop macros. RMBG-2.0 focuses on high-accuracy mattes that survive zoom and marketplace compression. About $0.0068 per request—often cheaper than legacy SaaS background APIs that charge five to twenty cents an image. Compare against other background-removal APIs on <a href="/compare">the model comparison page</a>. Teams use it for SKU studio automation, avatar builders, thumbnail pipelines, and design editors; combine with sam3 when you need open-vocabulary masks beyond subject/background.</p>
 <p>Call Keyo matting endpoints with model=RMBG-2.0 on POST /v1/images/mattings (multipart image upload), not chat completions. Try it from <a href="/model/RMBG-2.0">the RMBG-2.0 model page</a>. Accept PNG/JPEG, return alpha, soft-fail on tiny images, and offer a preview URL for merchant QA.</p>
 <p>Cutout quality in commerce is a reliability problem: hair edges, transparent packaging, and white-on-white SKUs. Build a QA loop that flags leftover background, re-run or escalate to sam3 masks, store alpha PNGs with SKU ids, and curate a regression set of fifty SKUs after every model upgrade.</p>
+
 
 <h2>Quick start</h2>
 <div class="card">

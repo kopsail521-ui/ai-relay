@@ -38,6 +38,8 @@ pre,code{font-family:var(--mono)}
 pre{background:var(--panel);color:var(--panel-ink);padding:14px 16px;border-radius:var(--radius);overflow:auto;font-size:13px}
 pre code{background:transparent;padding:0;color:inherit;font-size:inherit;border-radius:0}
 table{width:100%;border-collapse:collapse;font-size:14px;background:var(--surface)}
+.table-scroll{overflow-x:auto;margin:16px 0}
+.table-scroll table{min-width:620px}
 th,td{border:1px solid var(--line);padding:10px 12px;text-align:left;vertical-align:top}
 th{background:color-mix(in srgb,var(--line) 40%,var(--surface));font-weight:600}
 .ok{color:var(--ok);font-weight:600}
@@ -85,6 +87,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
 </div>
 <h2>Overview</h2>
 <p>Real-ESRGAN is KeyoAPI’s general image upscaling api for photos that need more pixels and cleaner detail. Marketplaces, print shops, and UGC apps call this super resolution api instead of maintaining ESRGAN GPUs. Real-world photos suffer from compression and blur. Real-ESRGAN restores usable resolution for zoom, crop, and print. On the same AI API relay you can unwarp with UVDoc then upscale before OCR. Per-request ~$0.0068—cheap enough to run on every upload or only when users hit “Enhance.” Gate with file-size heuristics to control spend. Listing image polish, archival scans, social media quality boosts, and pre-OCR enhancement. Anime content should prefer AnimeSharp. Keyo upscaling paths with model=Real-ESRGAN. Keys at <a href="/model/Real-ESRGAN">the Real-ESRGAN model page</a>. Real-ESRGAN upscales real photos on /v1/images/upscaling when marketplace or mobile captures need sharper pixels before OCR or publishing. Upscaling helps marketplace photos and OCR preprocessors more than it helps already-sharp DSLR shots. Detect low resolution before calling Real-ESRGAN to avoid wasting requests. Compare SSIM or a simple sharpness score pre/post. For text-heavy scans, upscale then OCR; for portraits, upscale then RMBG. Image upscaling API costs add up in user-generated content apps—cache by content hash. Keyo’s /v1/images/upscaling path keeps this step next to other vision tools. Skip upscale when the short side already exceeds your publish threshold. Prefer 2x then quality check before 4x. Image upscaling API spend correlates with UGC spikes—rate limit per user.</p>
+
 
 <h2>Quick start</h2>
 <div class="card">

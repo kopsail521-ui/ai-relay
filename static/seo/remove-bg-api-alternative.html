@@ -38,6 +38,8 @@ pre,code{font-family:var(--mono)}
 pre{background:var(--panel);color:var(--panel-ink);padding:14px 16px;border-radius:var(--radius);overflow:auto;font-size:13px}
 pre code{background:transparent;padding:0;color:inherit;font-size:inherit;border-radius:0}
 table{width:100%;border-collapse:collapse;font-size:14px;background:var(--surface)}
+.table-scroll{overflow-x:auto;margin:16px 0}
+.table-scroll table{min-width:620px}
 th,td{border:1px solid var(--line);padding:10px 12px;text-align:left;vertical-align:top}
 th{background:color-mix(in srgb,var(--line) 40%,var(--surface));font-weight:600}
 .ok{color:var(--ok);font-weight:600}
@@ -86,7 +88,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
 
 <h2>Migration options at a glance</h2>
 <p class="meta">Indicative figures for planning. Confirm live Keyo sell rates on interactive <a href="/pricing">Model Square</a> or the static <a href="/pricing-list">pricing list</a>.</p>
-<table>
+<div class="table-scroll"><table>
 <thead><tr><th>Model ID</th><th>Context</th><th>KeyoAPI</th><th>Notes</th></tr></thead>
 <tbody>
 <tr>
@@ -102,7 +104,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
   <td>POST /v1/images/segmentation · escalate from RMBG</td>
 </tr>
 </tbody>
-</table>
+</table></div>
 
 <h2>Independent API option</h2>
 <p>KeyoAPI is not Canva, not Leonardo.Ai, and not a claim to be remove.bg’s official successor. Consumer click-to-cutout traffic is pointed at Canva by remove.bg itself. Keyo’s lane is developer-metered matting on a multi-model relay: authenticate, upload, get alpha — then continue to OCR, TTS, or chat on the same balance.</p>
@@ -114,6 +116,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
 <p>When plain subject/background cutouts are not enough — for example open-vocabulary masks, multi-object labels, or promptable regions — escalate to sam3 via POST /v1/images/segmentation. Guides: <a href="/model/RMBG-2.0">the RMBG-2.0 model page</a> and <a href="/model/sam3">the sam3 model page</a>. Price row also appears on <a href="/compare">the model comparison page</a>.</p>
 <p>Pipeline tip: many shops matte first, then run OCR (<a href="/model/Unlimited-OCR">the Unlimited-OCR model page</a> or <a href="/model/MinerU2.5-Pro">the MinerU2.5-Pro model page</a>), then chat or TTS on the same prepaid key. If the next step is speech or talking video, continue to <a href="/tts-api">the TTS API guide</a> or <a href="/ai-avatar-video-generator">the AI avatar video generator page</a> without opening a second vendor wallet.</p>
 <p>Operational notes: send reasonable image sizes (downscale huge originals before upload), log HTTP status and Keyo request ids for support, and treat matting as a metered request — empty or corrupt files still consume budget when accepted. Confirm live rates after every catalog change on Model Square.</p>
+
 <pre># cURL — RMBG-2.0 matting (multipart)
 curl https://www.keyoapi.xyz/v1/images/mattings \
   -H &quot;Authorization: Bearer $KEYO_API_KEY&quot; \

@@ -38,6 +38,8 @@ pre,code{font-family:var(--mono)}
 pre{background:var(--panel);color:var(--panel-ink);padding:14px 16px;border-radius:var(--radius);overflow:auto;font-size:13px}
 pre code{background:transparent;padding:0;color:inherit;font-size:inherit;border-radius:0}
 table{width:100%;border-collapse:collapse;font-size:14px;background:var(--surface)}
+.table-scroll{overflow-x:auto;margin:16px 0}
+.table-scroll table{min-width:620px}
 th,td{border:1px solid var(--line);padding:10px 12px;text-align:left;vertical-align:top}
 th{background:color-mix(in srgb,var(--line) 40%,var(--surface));font-weight:600}
 .ok{color:var(--ok);font-weight:600}
@@ -86,7 +88,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
 
 <h2>Price comparison table</h2>
 <p class="meta">Indicative figures for planning. Confirm live Keyo sell rates on interactive <a href="/pricing">Model Square</a> or the static <a href="/pricing-list">pricing list</a>.</p>
-<table>
+<div class="table-scroll"><table>
 <thead><tr><th>Model ID</th><th>Typical official / context</th><th>KeyoAPI</th><th>Notes</th></tr></thead>
 <tbody>
 <tr>
@@ -120,7 +122,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
   <td>Same catalog rates as deepseek-v4-pro-0813; alias redirects there — the paid twin of Atria-dawn-v2:free on <a href="/free-models">the free models page</a></td>
 </tr>
 </tbody>
-</table>
+</table></div>
 
 <h2>Prototype free, then meter DeepSeek on the same key</h2>
 <p>For $0 prototyping on the same key, use catalog free IDs on <a href="/free-models">the free models page</a> — $0 model IDs whose calls draw down your $10 welcome credit (fair-use rate limits) — including DeepSeek-Prover-V2-7B. When you meter DeepSeek chat, switch model= to deepseek-v4.1-flash, deepseek-v4-flash, or deepseek-v4-pro-0813 without changing base URL or auth — those are separate IDs, not one upgrade ladder. Free-path vs pricing detail for Flash: <a href="/model/deepseek-v4-flash">the deepseek-v4-flash model page</a>.</p>
@@ -133,6 +135,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
 <p>Indicative Keyo sell rates above come from the live Keyo catalog (<a href="/pricing">the pricing page</a>). Confirm each ID on <a href="/pricing">the pricing page</a> before volume contracts. For DeepSeek V4 Flash free prototyping vs metered pricing detail, see the guide at <a href="/model/deepseek-v4-flash">the deepseek-v4-flash model page</a> (also covers deepseek-v4.1-flash as the cheaper high-volume Flash when you want a different catalog row).</p>
 <p>How to call: POST https://www.keyoapi.xyz/v1/chat/completions with Authorization: Bearer YOUR_KEY and model set to the DeepSeek ID you want — Flash and Pro are different products.</p>
 <p>For Gemini rates, see <a href="/gemini-api-pricing">the Gemini API pricing page</a>. For free prototyping, open <a href="/free-models">the free models page</a>. Side-by-side planning: <a href="/compare">the model comparison page</a>.</p>
+
 <pre>curl https://www.keyoapi.xyz/v1/chat/completions \
   -H "Authorization: Bearer $KEYO_API_KEY" \
   -H "Content-Type: application/json" \

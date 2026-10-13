@@ -24,7 +24,7 @@ MODEL = "cloudflare/clef"
 CHANNEL = "Keyo Decisions"
 GATEWAY = "http://127.0.0.1:3010"
 ENDPOINTS = json.dumps({"decisions": "/v1/decisions"}, separators=(",", ":"))
-DESCRIPTION = "Clef 决策模型：结构化分类与选择。输入起价 $0.063 / 百万 Token，输出 $0；实际按请求成本的 1.5 倍结算。"
+DESCRIPTION = "Clef 决策模型：基于 Qwen3.8-27B 的开源 27B 多模态决策模型，单次前向返回 choice/noul 概率，不生成自由文本。输入 $0.063 起 / 输出 $0（每百万 Token）。"
 PAYLOAD = {
     "model": MODEL,
     "state": "A customer wants to reset a forgotten password.",

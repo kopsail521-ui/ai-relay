@@ -38,6 +38,8 @@ pre,code{font-family:var(--mono)}
 pre{background:var(--panel);color:var(--panel-ink);padding:14px 16px;border-radius:var(--radius);overflow:auto;font-size:13px}
 pre code{background:transparent;padding:0;color:inherit;font-size:inherit;border-radius:0}
 table{width:100%;border-collapse:collapse;font-size:14px;background:var(--surface)}
+.table-scroll{overflow-x:auto;margin:16px 0}
+.table-scroll table{min-width:620px}
 th,td{border:1px solid var(--line);padding:10px 12px;text-align:left;vertical-align:top}
 th{background:color-mix(in srgb,var(--line) 40%,var(--surface));font-weight:600}
 .ok{color:var(--ok);font-weight:600}
@@ -92,6 +94,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
 <p>When to choose which family member. Use 2.1 for volume: mockups, ad variants, storyboards, and batch hero images. Use pro when typography, layout accuracy, or dense prompt following decides success. Keep nano-banana-2 for pipelines already validated on the previous generation — switching mid-flight costs more in QA than it saves per image.</p>
 <p>Prompting notes. Generated images track prompt detail: state subject, style, and composition explicitly. For text inside images, prefer pro and spell the text out in quotes. Respect platform usage policies around real people's likenesses and sensitive content.</p>
 <p>Related reading on the same site. Background removal for generated art: <a href="/model/RMBG-2.0">the RMBG-2.0 model page</a>. Open-vocabulary segmentation: <a href="/model/sam3">the sam3 model page</a>. Upscaling before print: <a href="/model/Real-ESRGAN">the Real-ESRGAN model page</a>. Full model guide index: <a href="/models">the model guides page</a>. Docs: /brand/keyo-docs.html.</p>
+
 
 <h2>Quick start</h2>
 <div class="card">

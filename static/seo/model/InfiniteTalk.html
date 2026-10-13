@@ -38,6 +38,8 @@ pre,code{font-family:var(--mono)}
 pre{background:var(--panel);color:var(--panel-ink);padding:14px 16px;border-radius:var(--radius);overflow:auto;font-size:13px}
 pre code{background:transparent;padding:0;color:inherit;font-size:inherit;border-radius:0}
 table{width:100%;border-collapse:collapse;font-size:14px;background:var(--surface)}
+.table-scroll{overflow-x:auto;margin:16px 0}
+.table-scroll table{min-width:620px}
 th,td{border:1px solid var(--line);padding:10px 12px;text-align:left;vertical-align:top}
 th{background:color-mix(in srgb,var(--line) 40%,var(--surface));font-weight:600}
 .ok{color:var(--ok);font-weight:600}
@@ -85,6 +87,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
 </div>
 <h2>Overview</h2>
 <p>InfiniteTalk generates audio-driven talking-head video from an image or video—ideal when you need a digital human api without a motion-capture stage. Creators generate a voice with Qwen3-TTS, then animate a still spokesperson photo through KeyoAPI. Natural lip-sync and body motion make short marketing and education clips feel presentable. Async processing fits batch content calendars better than realtime WebRTC avatars. Per-request pricing around $0.342 is simple for “one clip = one charge” packaging. For long continuous streams, evaluate Duix-Avatar’s per-second meter instead. Localized ads, course intros, newsreader demos, and support explainers. Transcribe source scripts with Whisper, synthesize with TTS, animate with InfiniteTalk. Submit async jobs with model=InfiniteTalk via Keyo task APIs. Get started at <a href="/model/InfiniteTalk">the InfiniteTalk model page</a>. InfiniteTalk turns an image into talking-head video via /v1/async/videos/image-to-video—ideal for support avatars and localized explainers. Image-to-talking-head is the onboarding-friendly digital human path: one portrait plus one audio track. Enforce portrait resolution minimums and reject group photos. Localize audio with Qwen3-TTS, then animate with InfiniteTalk for multilingual explainers. Store consent flags for likeness rights. For support bots, pre-render common answers; only generate live for long-tail questions. KeyoAPI provides speech and avatar generation through one API. Require single-subject portraits. Reject images with text overlays that break lipsync. Pre-generate FAQs; live-generate only long-tail answers to control async cost.</p>
+
 
 <h2>Quick start</h2>
 <div class="card">

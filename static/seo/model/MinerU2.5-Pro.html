@@ -38,6 +38,8 @@ pre,code{font-family:var(--mono)}
 pre{background:var(--panel);color:var(--panel-ink);padding:14px 16px;border-radius:var(--radius);overflow:auto;font-size:13px}
 pre code{background:transparent;padding:0;color:inherit;font-size:inherit;border-radius:0}
 table{width:100%;border-collapse:collapse;font-size:14px;background:var(--surface)}
+.table-scroll{overflow-x:auto;margin:16px 0}
+.table-scroll table{min-width:620px}
 th,td{border:1px solid var(--line);padding:10px 12px;text-align:left;vertical-align:top}
 th{background:color-mix(in srgb,var(--line) 40%,var(--surface));font-weight:600}
 .ok{color:var(--ok);font-weight:600}
@@ -85,6 +87,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
 </div>
 <h2>Overview</h2>
 <p>MinerU2.5-Pro is KeyoAPI’s heavy-duty document parsing OCR API for PDFs and images that break naive OCR. If you searched ocr api because invoices, papers, and slide decks must become machine-readable, this model is the structured extraction layer before your LLM. Complex documents mix columns, tables, formulas, and figures. MinerU2.5-Pro focuses on recovering text plus layout so downstream chat models reason over faithful structure. On KeyoAPI it sits beside Unlimited-OCR and UVDoc so you can build a full document lane on one AI API relay. Billing is approximately $0.0137 per page—easy to map onto “pages processed” product metrics. Compare against building and hosting your own GPU parsing stack when volume is spiky. Fintech KYC packets, academic PDF ingestion, contract analytics, and enterprise knowledge bases. Feed parsed markdown into claude-sonnet-5 or gpt-5.6-terra for Q&amp;A. Follow Keyo docs for the async document endpoints using model MinerU2.5-Pro. Try and top up at <a href="/model/MinerU2.5-Pro">the MinerU2.5-Pro model page</a>. MinerU2.5-Pro is the async PDF/layout parser—submit once, poll /v1/task/{id}, then feed structured text to your LLM. Prefer it over chat-OCR for multi-page packets. Document pipelines fail when you treat PDFs like plain text. MinerU2.5-Pro recovers layout so tables and headings survive into your LLM context. Design the job as async: upload, store task id, poll, then write markdown into your vector store. Retry only failed pages. Cache hashes so re-uploads are free. For finance and legal, keep the original PDF URL next to the parsed chunk for citation. Chain UVDoc first when users photograph paper. That OCR API stack on one Keyo key beats stitching three SaaS vendors. Version your parse prompts and post-processors. When a template invoice changes, update the extractor without re-OCR of historical files if cached markdown remains valid. That cache discipline keeps OCR API spend flat as volume grows.</p>
+
 
 <h2>Quick start</h2>
 <div class="card">

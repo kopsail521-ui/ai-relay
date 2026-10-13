@@ -38,6 +38,8 @@ pre,code{font-family:var(--mono)}
 pre{background:var(--panel);color:var(--panel-ink);padding:14px 16px;border-radius:var(--radius);overflow:auto;font-size:13px}
 pre code{background:transparent;padding:0;color:inherit;font-size:inherit;border-radius:0}
 table{width:100%;border-collapse:collapse;font-size:14px;background:var(--surface)}
+.table-scroll{overflow-x:auto;margin:16px 0}
+.table-scroll table{min-width:620px}
 th,td{border:1px solid var(--line);padding:10px 12px;text-align:left;vertical-align:top}
 th{background:color-mix(in srgb,var(--line) 40%,var(--surface));font-weight:600}
 .ok{color:var(--ok);font-weight:600}
@@ -85,6 +87,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
 </div>
 <h2>Overview</h2>
 <p>GPT-5.6 Sol is the higher-tier GPT-5.6 chat model on KeyoAPI for complex tasks that need stronger reasoning. Teams tuning gpt api pricing often keep Terra as default and route a percentage of traffic to Sol—easy on an AI API relay. Sol targets harder prompts: multi-file reasoning, careful instruction following, and denser analysis. Pair with Luna for pre-filtering so only worthy requests pay Sol rates. Indicative ~$0.92 / $5.52 per 1M in/out on KeyoAPI. Still typically cheaper than official flagship GPT bands—check <a href="/compare">the model comparison page</a> for the narrative board decks need. Analytics narratives, policy interpretation, coding assistants, and escalation lanes from Terra. Offline eval jobs that score prompt variants. model=gpt-5.6-sol on /v1/chat/completions. Issue keys at <a href="/model/gpt-5.6-sol">the gpt-5.6-sol model page</a>. Sol is the escalation GPT-5.6 tier: stronger instruction following for dense analysis, while Luna/Terra absorb bulk traffic. Sol is the “think harder” GPT-5.6 tier for dense analysis, long briefs, and stubborn instruction following. Do not put Sol on every autocomplete keystroke—route it from a classifier or from user intent like “deep research.” Pair Sol with Luna for summarising tool output so the expensive model only sees compressed context. Track dollars per successful task, not just tokens. That metric sells an AI API relay better than raw GPT API pricing slides. Start experiments on <a href="/model/gpt-5.6-sol">the gpt-5.6-sol model page</a> and keep Terra as the safe rollback model string. Use Sol for long briefs, multi-file reasoning, and stubborn tool loops. Cap max tokens and enforce timeouts. Compare Sol versus Claude Sonnet on your golden set monthly; keep whichever wins on quality per dollar, not brand loyalty.</p>
+
 
 <h2>Quick start</h2>
 <div class="card">

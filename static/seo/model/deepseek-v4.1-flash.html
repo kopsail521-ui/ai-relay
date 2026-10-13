@@ -38,6 +38,8 @@ pre,code{font-family:var(--mono)}
 pre{background:var(--panel);color:var(--panel-ink);padding:14px 16px;border-radius:var(--radius);overflow:auto;font-size:13px}
 pre code{background:transparent;padding:0;color:inherit;font-size:inherit;border-radius:0}
 table{width:100%;border-collapse:collapse;font-size:14px;background:var(--surface)}
+.table-scroll{overflow-x:auto;margin:16px 0}
+.table-scroll table{min-width:620px}
 th,td{border:1px solid var(--line);padding:10px 12px;text-align:left;vertical-align:top}
 th{background:color-mix(in srgb,var(--line) 40%,var(--surface));font-weight:600}
 .ok{color:var(--ok);font-weight:600}
@@ -85,6 +87,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
 </div>
 <h2>Overview</h2>
 <p>deepseek-v4.1-flash is KeyoAPI’s low-cost DeepSeek Flash ID for chat widgets, classification, and high-volume rewrites — indicative ~$0.14 / $0.56 per 1M in/out. It is not the same catalog row as deepseek-v4-flash (~$0.44 / $1.32) or deepseek-v4-flash-0731 (~$0.09 / $0.17). deepseek-v4-pro-0813 (~$0.14 / $0.29) is a separate Pro ID. Confirm interactive <a href="/pricing">the pricing page</a> before volume. Family table: <a href="/deepseek-api-pricing">the DeepSeek API pricing page</a>.</p>
+
 
 <h2>Quick start</h2>
 <div class="card">

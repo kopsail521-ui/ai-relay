@@ -223,6 +223,20 @@
       "model_price_usd": 0.133562,
       "desc_zh": "seedance-2.5-720p",
       "markup": 1.3
+    },
+    {
+      "id": "agnes-video-2.5",
+      "vendor": "Agnes AI",
+      "icon": "Custom",
+      "tag": "视频按秒",
+      "billing": "settle_cost",
+      "model_price_usd": 0.020548,
+      "sell_usd_per_second": {
+        "720p": 0.020548,
+        "1080p": 0.034932,
+        "2k": 0.04726
+      },
+      "desc_zh": "Agnes Video 2.5：文生视频/图生视频，720p/1080p/2k，最长 12 秒，按秒计费（720p $0.020548/秒、1080p $0.034932/秒、2k $0.047260/秒）。"
     }
   ]
 }

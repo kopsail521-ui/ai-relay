@@ -536,6 +536,63 @@
         "duration together with video_urls",
         "generation_type=frame with image count ≠ 1"
       ]
+    },
+    "agnes-video-2.5": {
+      "required": [
+        "model",
+        "prompt"
+      ],
+      "enums": {
+        "aspectRatio": [
+          "landscape",
+          "portrait"
+        ],
+        "aspectRatio_aliases": [
+          "16:9→landscape",
+          "9:16→portrait"
+        ],
+        "resolution": [
+          "720p",
+          "1080p",
+          "2k"
+        ],
+        "duration": "1–12 seconds (default 5)"
+      },
+      "optional": [
+        "duration",
+        "resolution",
+        "aspectRatio",
+        "images (≤9)",
+        "audios (≤3)",
+        "seed"
+      ],
+      "examples": {
+        "basic": {
+          "body": {
+            "model": "agnes-video-2.5",
+            "prompt": "A drone shot over neon city rain, cinematic",
+            "duration": 5,
+            "resolution": "720p",
+            "aspectRatio": "landscape"
+          }
+        },
+        "i2v": {
+          "body": {
+            "model": "agnes-video-2.5",
+            "prompt": "Animate this scene with gentle parallax",
+            "duration": 8,
+            "resolution": "1080p",
+            "images": [
+              "https://example.com/frame.jpg"
+            ]
+          }
+        }
+      },
+      "forbidden": [
+        "duration > 12",
+        "resolution outside 720p/1080p/2k (falls back to 720p)"
+      ],
+      "billing": "per second × resolution: 720p $0.020548, 1080p $0.034932, 2k $0.04726; final charge settles on actual upstream duration (failed tasks refund)"
     }
   },
   "delisted": [

@@ -508,6 +508,42 @@
         "cost_usd": 0.027397
       },
       "desc_zh": "nano-banana-pro 图片生成，支持参考图（图生图），按张计费。"
+    },
+    {
+      "id": "agnes-video-2.5",
+      "vendor": "Agnes AI",
+      "icon": "Custom",
+      "tag": "视频",
+      "upstream": "grsai",
+      "upstream_model": "agnes-video-2.5",
+      "markup": 1.5,
+      "billing": "settle_cost",
+      "display_unit": "second",
+      "estimate": {
+        "mode": "per_second_resolution_cny",
+        "default_seconds": 5,
+        "default_resolution": "720p",
+        "allowed_resolutions": [
+          "720p",
+          "1080p",
+          "2k"
+        ],
+        "max_seconds": 12,
+        "cost_cny_per_second": {
+          "720p": 0.1,
+          "720P": 0.1,
+          "1080p": 0.17,
+          "1080P": 0.17,
+          "2k": 0.23,
+          "2K": 0.23
+        },
+        "sell_usd_per_second": {
+          "720p": 0.020548,
+          "1080p": 0.034932,
+          "2k": 0.04726
+        }
+      },
+      "desc_zh": "Agnes Video 2.5 视频生成，文生视频/图生视频，支持 720p / 1080p / 2k，最长 12 秒，按秒计费。"
     }
   ],
   "fx_cny_usd": 7.3

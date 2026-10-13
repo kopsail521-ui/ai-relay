@@ -669,18 +669,31 @@ function buildGrsaiVideoBody(meta, body) {
   const est = meta.estimate || {};
   let duration = Number(body.duration ?? body.seconds ?? est.default_seconds ?? 5);
   if (!Number.isFinite(duration) || duration <= 0) duration = 5;
-  // resolution ONLY from resolution field (or size if it looks like a tier — never aspect)
+  // Models declaring allowed_resolutions (e.g. agnes 720p/1080p/2k) use the
+  // catalog-driven path; others keep the legacy MiniMax inventory rules.
+  const allowed = Array.isArray(est.allowed_resolutions) && est.allowed_resolutions.length
+    ? est.allowed_resolutions.map((r) => String(r).trim().toLowerCase())
+    : null;
   let resolution = String(body.resolution || "").toLowerCase();
   if (!resolution) {
     const sz = String(body.size || "").toLowerCase();
-    if (/^(480p|768p|1080p|2k)$/.test(sz)) resolution = sz;
+    if (!allowed || allowed.includes(sz)) {
+      if (allowed || /^(480p|768p|1080p|2k)$/.test(sz)) resolution = sz;
+    }
   }
-  if (!resolution) resolution = String(est.default_resolution || "768p").toLowerCase();
-  if (resolution === "2k") resolution = "1080p";
-  if (!/^(480p|768p|1080p)$/.test(resolution)) resolution = "768p";
-  // 1080p max 10s (inventory rule)
-  if (resolution === "1080p" && duration > 10) duration = 10;
-  if (duration > 15) duration = 15;
+  if (allowed) {
+    const fallback = String(est.default_resolution || allowed[0]).toLowerCase();
+    if (!allowed.includes(resolution)) resolution = fallback;
+    const maxSeconds = Number(est.max_seconds || 15);
+    if (duration > maxSeconds) duration = maxSeconds;
+  } else {
+    if (!resolution) resolution = String(est.default_resolution || "768p").toLowerCase();
+    if (resolution === "2k") resolution = "1080p";
+    if (!/^(480p|768p|1080p)$/.test(resolution)) resolution = "768p";
+    // 1080p max 10s (inventory rule)
+    if (resolution === "1080p" && duration > 10) duration = 10;
+    if (duration > 15) duration = 15;
+  }
   if (duration < 1) duration = 1;
 
   const out = {

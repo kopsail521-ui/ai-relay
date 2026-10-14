@@ -52,8 +52,8 @@ jobs:
           fi
           if [ -z "${USER}" ]; then USER=admin; fi
           if [ -z "${KEY}" ]; then
-            echo "KEYO_VPS_SSH_KEY is empty; skip deploy"
-            exit 0
+            echo "::error::KEYO_VPS_HOST is set but secrets.KEYO_VPS_SSH_KEY is empty. Create the repository secret at Settings > Secrets and variables > Actions > Secrets (name exactly KEYO_VPS_SSH_KEY)."
+            exit 1
           fi
           install -m 700 -d "${HOME}/.ssh"
           printf '%s\n' "${KEY}" > "${HOME}/.ssh/keyo_vps"

@@ -92,8 +92,8 @@ jobs:
           set -euo pipefail
           if [ -z "${USER}" ]; then USER=admin; fi
           if [ -z "${KEY}" ]; then
-            echo "KEYO_VPS_SSH_KEY is empty; skip deploy"
-            exit 0
+            echo "::error::KEYO_VPS_HOST is set but secrets.KEYO_VPS_SSH_KEY is empty. Create the repository secret at Settings > Secrets and variables > Actions > Secrets (name exactly KEYO_VPS_SSH_KEY)."
+            exit 1
           fi
           install -m 700 -d "${HOME}/.ssh"
           printf '%s\n' "${KEY}" > "${HOME}/.ssh/keyo_vps"
@@ -116,16 +116,17 @@ jobs:
       - name: Verify funnel route is live
         run: |
           set -euo pipefail
-          for attempt in 1 2 3 4 5 6; do
+          code=""
+          for attempt in 1 2 3 4 5 6 7 8 9 10 11 12; do
             code=$(curl -s -o /dev/null -w '%{http_code}' https://www.keyoapi.xyz/api/analytics/funnel || true)
             echo "attempt ${attempt}: GET /api/analytics/funnel -> ${code}"
-            # 401/403 means the route exists behind admin auth (new image serving);
-            # 404 means the old image without the funnel controller is still up.
-            if [ "${code}" != "404" ] && [ -n "${code}" ] && [ "${code}" != "000" ]; then
-              echo "DONE_DEPLOY_VERIFY code=${code}"
-              exit 0
-            fi
+            case "${code}" in
+              200|401|403)
+                echo "DONE_DEPLOY_VERIFY code=${code} (route exists behind admin auth)"
+                exit 0
+                ;;
+            esac
             sleep 10
           done
-          echo "FUNNEL_ROUTE_MISSING: container still serves an image without the funnel controller"
+          echo "::error::Funnel route not live after deploy (last code ${code}); the container may still serve an image without the funnel controller"
           exit 1

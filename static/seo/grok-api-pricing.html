@@ -107,13 +107,13 @@ ul{margin:0 0 14px;padding-left:1.2em}
 </table></div>
 
 <h2>Prototype free, then call Grok</h2>
-<p>Keyo does not ship an xAI-branded free Grok ID. For $0 prototyping on the same API key, use fixed free catalog IDs on <a href="/free-models">the free models page</a> — $0 model IDs whose calls draw down your $10 welcome credit (fair-use rate limits) — then switch model= to grok-4.7 without changing base URL or auth.</p>
+<p>Keyo does not ship an xAI-branded free Grok ID. For $0 prototyping on the same API key, use fixed free catalog IDs on <a href="/free-models">the gift-credit models page</a> — $0 model IDs whose calls draw down your $10 welcome credit (fair-use rate limits) — then switch model= to grok-4.7 without changing base URL or auth.</p>
 
 <h2>Rates and how to call</h2>
 <p>Teams comparing Grok API pricing usually want xAI-class chat with clearer unit economics — or one prepaid balance that also covers GPT-class, Claude, DeepSeek, Whisper, and vision. Official xAI surfaces win on brand-first features; KeyoAPI wins when you want that model string on an OpenAI-compatible client without a second vendor stack.</p>
 <p>Keyo rates above are indicative sell prices from the live Keyo catalog. Always confirm interactive pages under <a href="/model/grok-4.7">the grok-4.7 model page</a> (and <a href="/model/grok-4.6">the grok-4.6 model page</a> if you pin that ID) before contracting volume. xAI list bands change — treat official figures as planning context.</p>
 <p>How to call: set OPENAI_BASE_URL=https://www.keyoapi.xyz/v1, use your Keyo API key, and pass model=grok-4.7 to POST /v1/chat/completions.</p>
-<p>When Grok list prices spike your margin, keep Grok for the workloads that need it and shift bulk classification to deepseek-v4.1-flash or gpt-6-luna on the same key. For Claude dollars see <a href="/claude-api-pricing">the Claude API pricing page</a>; for OpenAI see <a href="/openai-api-pricing">the OpenAI API pricing page</a>; for Gemini see <a href="/gemini-api-pricing">the Gemini API pricing page</a>; for DeepSeek see <a href="/deepseek-api-pricing">the DeepSeek API pricing page</a>; for free prototyping see <a href="/free-models">the free models page</a>.</p>
+<p>When Grok list prices spike your margin, keep Grok for the workloads that need it and shift bulk classification to deepseek-v4.1-flash or gpt-6-luna on the same key. For Claude dollars see <a href="/claude-api-pricing">the Claude API pricing page</a>; for OpenAI see <a href="/openai-api-pricing">the OpenAI API pricing page</a>; for Gemini see <a href="/gemini-api-pricing">the Gemini API pricing page</a>; for DeepSeek see <a href="/deepseek-api-pricing">the DeepSeek API pricing page</a>; for free prototyping see <a href="/free-models">the gift-credit models page</a>.</p>
 
 <pre>curl https://www.keyoapi.xyz/v1/chat/completions \
   -H "Authorization: Bearer $KEYO_API_KEY" \

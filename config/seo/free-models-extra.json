@@ -1,23 +1,29 @@
 {
-  "_note": "Fixed-$0 models on the Gitee (Keyo Media) channel only. Refresh with: node scripts/_sync-free-extra-from-live.mjs",
-  "synced_at": "2026-10-05",
+  "_note": "Gift-credit models callable with your complimentary credits. Billed at the base model rate; gift credits are used first, with any shortfall charged to your recharge balance. New users get $10, and each successful invite earns $3. Refresh with: node scripts/_sync-free-extra-from-live.mjs",
+  "synced_at": "2026-10-14",
   "models": [
     {
       "id": "keyo-flash:free",
       "family": "Keyo",
       "twin": null,
-      "note": "Keyo Relay pool: multi free-model auto-relay. Fixed $0 on catalog (billed against gift credits)."
+      "note": "Callable with gift credits. Billed at the base model rate; gift credits are used first — new users get $10, and each invite earns $3."
+    },
+    {
+      "id": "keyo-flash2:free",
+      "family": "Keyo",
+      "twin": null,
+      "note": "Callable with gift credits. Billed at the base model rate; gift credits are used first — new users get $10, and each invite earns $3."
     },
     {
       "id": "Atria-dawn-v2:free",
       "family": "Other",
-      "note": "Fixed $0 on Keyo catalog (covered by your $10 credit). Availability can change; confirm live on /pricing."
+      "note": "Callable with gift credits at $0.01 / $0.04 per 1M tokens. Gift credits are used first; new users get $10, and each invite earns $3."
     },
     {
       "id": "DeepSeek-Prover-V2-7B:free",
       "family": "DeepSeek",
       "twin": null,
-      "note": "Fixed $0 on Keyo catalog (covered by your $10 credit). Availability can change; confirm live on /pricing."
+      "note": "Callable with gift credits at $0.01 / $0.04 per 1M tokens. Gift credits are used first; new users get $10, and each invite earns $3."
     }
   ]
 }

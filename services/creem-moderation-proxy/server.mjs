@@ -531,6 +531,8 @@ function normalizeTagToken(tag) {
     free: "",
     "免费": "",
     "免費": "",
+    "gratuit": "",
+    "Gratuit": "",
   };
   if (map[t] !== undefined) return map[t];
   if (t.includes("·")) {
@@ -577,6 +579,24 @@ function pickMarketplaceDescription(entry, lang) {
 
 function enrichPricingPayload(payload) {
   if (!payload || !Array.isArray(payload.data)) return payload;
+
+  // 全局端点字典：确保所有用到的端点类型都有定义
+  const defaultEndpoints = {
+    "openai": { path: "/v1/chat/completions", method: "POST" },
+    "openai-response": { path: "/v1/chat/completions", method: "POST" },
+    "anthropic": { path: "/v1/messages", method: "POST" },
+    "gemini": { path: "/v1/models/{model}:generateContent", method: "POST" },
+    "image-generation": { path: "/v1/images/generations", method: "POST" },
+    "image-processing": { path: "/v1/images/edits", method: "POST" },
+    "embeddings": { path: "/v1/embeddings", method: "POST" },
+    "jina-rerank": { path: "/v1/rerank", method: "POST" },
+    "openai-video": { path: "/v1/videos/generations", method: "POST" },
+    "openai-audio": { path: "/v1/audio/speech", method: "POST" },
+    "suno": { path: "/v1/audio/music", method: "POST" },
+    "moderation": { path: "/v1/moderations", method: "POST" },
+  };
+  // 合并现有 supported_endpoint 与默认端点
+  const mergedEndpoints = { ...defaultEndpoints, ...(payload.supported_endpoint || {}) };
 
   // Collapse alias vendors (Qwen→阿里巴巴) but remap model.vendor_id → kept id
   // so sidebar countBy(vendor_name) never goes to 0 for real models.
@@ -653,7 +673,7 @@ function enrichPricingPayload(payload) {
     ? vendors.filter((v) => v && usedVids.has(v.id))
     : vendors;
 
-  return { ...payload, data, vendors: vendorsUsed };
+  return { ...payload, data, vendors: vendorsUsed, supported_endpoint: mergedEndpoints };
 }
 
 /** 排行榜展示倍率：只放大 token 展示量，不改库、不影响扣费。份额/增速不变。 */
@@ -1225,7 +1245,7 @@ async function proxyRequest(req, res, bodyBuf) {
           .replace(/<!--keyo-pricing-sort(?:-v\d+)?-->[\s\S]*?<\/script>/g, "")
           .replace(/<!--keyo-billing-unit-->[\s\S]*?<\/script>/g, "")
           .replace(/<!--keyo-locale-desc-->[\s\S]*?<\/script>/g, "");
-        const inject = `<!--keyo-pricing-sort-v20-->${PRICING_SORT_SCRIPT}<!--keyo-locale-desc-->${LOCALE_DESC_SCRIPT}<!--keyo-billing-unit-->${BILLING_UNIT_SCRIPT}`;
+        const inject = `<!--keyo-pricing-sort-v20-->${PRICING_SORT_SCRIPT}<!--keyo-locale-desc-->${LOCALE_DESC_SCRIPT}<!--keyo-billing-unit-->${BILLING_UNIT_SCRIPT}`;${FOOTER_CLEANUP_SCRIPT}
         if (html.includes("<head>")) {
           html = html.replace("<head>", `<head>${inject}`);
           changed = true;
@@ -1538,3 +1558,5 @@ server.listen(PORT, HOST, () => {
     `creem-moderation-proxy on http://${HOST}:${PORT} -> ${UPSTREAM} (creem ${TEST_MODE ? "test" : "live"}; rankings×${RANKINGS_DISPLAY_MULTIPLIER}; synth=${rankingsSyntheticEnabled() ? "on" : "off"}; uploads ${UPLOAD_DIR} → ${UPLOAD_PUBLIC_BASE})`
   );
 });
+
+const FOOTER_CLEANUP_SCRIPT = `<script>(function(){if(window.__keyoFooterClean)return;window.__keyoFooterClean=1;function clean(){try{document.querySelectorAll('footer a[href*="github.com/QuantumNous"],footer a[href*="github.com/songquanpeng"]').forEach(function(a){var p=a.parentElement;if(p&&p.textContent.indexOf('© 2026')!==-1)p.remove();else a.remove()})}catch(e){}}clean();setInterval(clean,500)})();</script>`;

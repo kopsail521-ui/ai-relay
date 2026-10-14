@@ -119,13 +119,13 @@ ul{margin:0 0 14px;padding-left:1.2em}
   <td><a href="/model/deepseek-v4-pro"><code>deepseek-v4-pro</code></a></td>
   <td>DeepSeek V4 Pro (base) — verify on api-docs.deepseek.com</td>
   <td class="ok">~$0.14 / $0.29 per 1M in/out</td>
-  <td>Same catalog rates as deepseek-v4-pro-0813; alias redirects there — the paid twin of Atria-dawn-v2:free on <a href="/free-models">the free models page</a></td>
+  <td>Same catalog rates as deepseek-v4-pro-0813; alias redirects there — the paid twin of Atria-dawn-v2:free on <a href="/free-models">the gift-credit models page</a></td>
 </tr>
 </tbody>
 </table></div>
 
 <h2>Prototype free, then meter DeepSeek on the same key</h2>
-<p>For $0 prototyping on the same key, use catalog free IDs on <a href="/free-models">the free models page</a> — $0 model IDs whose calls draw down your $10 welcome credit (fair-use rate limits) — including DeepSeek-Prover-V2-7B. When you meter DeepSeek chat, switch model= to deepseek-v4.1-flash, deepseek-v4-flash, or deepseek-v4-pro-0813 without changing base URL or auth — those are separate IDs, not one upgrade ladder. Free-path vs pricing detail for Flash: <a href="/model/deepseek-v4-flash">the deepseek-v4-flash model page</a>.</p>
+<p>For $0 prototyping on the same key, use catalog free IDs on <a href="/free-models">the gift-credit models page</a> — $0 model IDs whose calls draw down your $10 welcome credit (fair-use rate limits) — including DeepSeek-Prover-V2-7B. When you meter DeepSeek chat, switch model= to deepseek-v4.1-flash, deepseek-v4-flash, or deepseek-v4-pro-0813 without changing base URL or auth — those are separate IDs, not one upgrade ladder. Free-path vs pricing detail for Flash: <a href="/model/deepseek-v4-flash">the deepseek-v4-flash model page</a>.</p>
 <h2>Cheapest DeepSeek API rate on Keyo</h2>
 <p>If you are hunting for a cheap DeepSeek API, the lowest DeepSeek row on Keyo is deepseek-v4.1-flash at ~$0.14 / $0.56 per 1M in/out — the newest Flash lane, and the one to start on for batch or classification work.</p>
 <p>The other rows are separate products, not rungs on a ladder: deepseek-v4-flash ~$0.44 / $1.32 (legacy catalog string), and deepseek-v4-pro-0813 with its alias deepseek-v4-pro at ~$0.14 / $0.29 each. So &quot;cheap&quot; here is a task choice, not a tier you upgrade through.</p>
@@ -134,7 +134,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
 <p>Compare DeepSeek rates across official platforms, aggregators, and a multi-model API. KeyoAPI is the third option — OpenAI-compatible base URL, prepaid balance, and Gemini/Whisper/OCR on the same key when DeepSeek is only part of the stack.</p>
 <p>Indicative Keyo sell rates above come from the live Keyo catalog (<a href="/pricing">the pricing page</a>). Confirm each ID on <a href="/pricing">the pricing page</a> before volume contracts. For DeepSeek V4 Flash free prototyping vs metered pricing detail, see the guide at <a href="/model/deepseek-v4-flash">the deepseek-v4-flash model page</a> (also covers deepseek-v4.1-flash as the cheaper high-volume Flash when you want a different catalog row).</p>
 <p>How to call: POST https://www.keyoapi.xyz/v1/chat/completions with Authorization: Bearer YOUR_KEY and model set to the DeepSeek ID you want — Flash and Pro are different products.</p>
-<p>For Gemini rates, see <a href="/gemini-api-pricing">the Gemini API pricing page</a>. For free prototyping, open <a href="/free-models">the free models page</a>. Side-by-side planning: <a href="/compare">the model comparison page</a>.</p>
+<p>For Gemini rates, see <a href="/gemini-api-pricing">the Gemini API pricing page</a>. For free prototyping, open <a href="/free-models">the gift-credit models page</a>. Side-by-side planning: <a href="/compare">the model comparison page</a>.</p>
 
 <pre>curl https://www.keyoapi.xyz/v1/chat/completions \
   -H "Authorization: Bearer $KEYO_API_KEY" \

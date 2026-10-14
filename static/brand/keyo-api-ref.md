@@ -20,6 +20,17 @@
 
 ---
 
+## 0. 轮询路径（禁止搞混）
+
+| 场景 | 轮询 |
+|------|------|
+| 视频 Path B（`/v1/videos/generations`） | `GET /v1/tasks/{id}`（**复数 tasks**） |
+| 视频 Path A（`/v1/videos`） | `GET /v1/videos/{id}` |
+| TTS 异步 / 文档解析 / InfiniteTalk | `GET /v1/task/{id}`（**单数 task**） |
+| 图片任务 | `GET /v1/images/tasks/{task_id}`（图片专用路径） |
+
+---
+
 ## 0.1 调用的三种形态（同一把 Key、同一余额）
 
 - Base URL（OpenAI 形状）：`https://www.keyoapi.xyz/v1`
@@ -32,17 +43,6 @@
 | 专属 REST | 视觉处理、异步视频、数字人、文档解析、系统一决策、视频工具 | 抠图/超分/展平/检测/分割/姿态（§1.10）· Path B 视频（§5）· InfiniteTalk（§12）· 文档解析 MinerU（§1.9 / §10）· 系统一决策（§1.11b）· 视频工具（§1.11a）——路径不同，Key 和余额相同 |
 
 规则：换模型只改 `model`；只有能力本身不是 OpenAI 形状时，才换路径。
-
----
-
-## 0. 轮询路径（禁止搞混）
-
-| 场景 | 轮询 |
-|------|------|
-| 视频 Path B（`/v1/videos/generations`） | `GET /v1/tasks/{id}`（**复数 tasks**） |
-| 视频 Path A（`/v1/videos`） | `GET /v1/videos/{id}` |
-| TTS 异步 / 文档解析 / InfiniteTalk | `GET /v1/task/{id}`（**单数 task**） |
-| 图片任务 | `GET /v1/images/tasks/{task_id}`（图片专用路径） |
 
 ---
 

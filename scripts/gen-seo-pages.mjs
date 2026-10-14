@@ -345,12 +345,12 @@ ${landingLinks}
   <a href="/brand/privacy.html">Privacy</a>
   <a href="/brand/terms.html">Terms</a>
   <a href="/sign-in">Sign in</a>
-  <a href="https://toolfame.com/item/keyoapi" target="_blank" rel="noopener noreferrer"><img src="https://toolfame.com/badge-light.svg" alt="Featured on ToolFame.com" style="height:54px;width:auto;" /></a>
+  <a href="https://toolfame.com/item/keyoapi" target="_blank" rel="noopener noreferrer"><img src="https://toolfame.com/badge-light.svg" alt="Featured on ToolFame.com" width="160" height="54" loading="lazy" style="height:54px;width:auto;" /></a>
   <a href="https://yo.directory" target="_blank" rel="dofollow noopener">Featured on Yo.directory</a>
   <a href="https://www.toolpilot.ai" target="_blank" rel="dofollow noopener">Featured on ToolPilot.ai</a>
-  <a href="https://dang.ai" target="_blank" rel="dofollow noopener"><img src="https://assets.dang.ai/badges/dang-verified-dark.png" alt="Verified on DANG!" style="height:54px;width:auto;border:0;outline:none;text-decoration:none;" /></a>
+  <a href="https://dang.ai" target="_blank" rel="dofollow noopener"><img src="https://assets.dang.ai/badges/dang-verified-dark.png" alt="Verified on DANG!" width="550" height="198" loading="lazy" style="height:54px;width:auto;border:0;outline:none;text-decoration:none;" /></a>
   <a href="https://fazier.com" target="_blank" rel="dofollow noopener">Featured on Fazier</a>
-  <a href="https://twelve.tools" target="_blank"><img src="https://twelve.tools/badge0-white.svg" alt="Featured on Twelve Tools" style="height:54px;width:auto;" /></a>
+  <a href="https://twelve.tools" target="_blank" rel="dofollow noopener"><img src="https://twelve.tools/badge0-white.svg" alt="Featured on Twelve Tools" width="200" height="54" loading="lazy" style="height:54px;width:auto;" /></a>
   <a href="https://deeplaunch.io" target="_blank" rel="dofollow noopener">Featured on DeepLaunch.io</a>
   <a href="https://findly.tools" target="_blank" rel="dofollow noopener">Featured on Findly.tools</a>
   <a href="https://startupfa.me" target="_blank" rel="dofollow noopener">Featured on Startup Fame</a>
@@ -731,12 +731,12 @@ ${(pricingLandings.pages || [])
 ${modelFoot}
   </div>
   <div class="frow" aria-label="Featured on">
-    <a href="https://toolfame.com/item/keyoapi" target="_blank" rel="noopener noreferrer"><img src="https://toolfame.com/badge-light.svg" alt="Featured on ToolFame.com" style="height:32px;width:auto;vertical-align:middle;" /></a>
+    <a href="https://toolfame.com/item/keyoapi" target="_blank" rel="noopener noreferrer"><img src="https://toolfame.com/badge-light.svg" alt="Featured on ToolFame.com" width="160" height="54" loading="lazy" style="height:32px;width:auto;vertical-align:middle;" /></a>
     <a href="https://yo.directory" target="_blank" rel="dofollow noopener">Yo.directory</a>
     <a href="https://www.toolpilot.ai" target="_blank" rel="dofollow noopener">ToolPilot.ai</a>
-    <a href="https://dang.ai" target="_blank" rel="dofollow noopener"><img src="https://assets.dang.ai/badges/dang-verified-dark.png" alt="Verified on DANG!" style="height:32px;width:auto;border:0;outline:none;text-decoration:none;vertical-align:middle;" /></a>
+    <a href="https://dang.ai" target="_blank" rel="dofollow noopener"><img src="https://assets.dang.ai/badges/dang-verified-dark.png" alt="Verified on DANG!" width="550" height="198" loading="lazy" style="height:32px;width:auto;border:0;outline:none;text-decoration:none;vertical-align:middle;" /></a>
     <a href="https://fazier.com" target="_blank" rel="dofollow noopener">Fazier</a>
-    <a href="https://twelve.tools" target="_blank"><img src="https://twelve.tools/badge0-white.svg" alt="Featured on Twelve Tools" style="height:32px;width:auto;vertical-align:middle;" /></a>
+    <a href="https://twelve.tools" target="_blank" rel="dofollow noopener"><img src="https://twelve.tools/badge0-white.svg" alt="Featured on Twelve Tools" width="200" height="54" loading="lazy" style="height:32px;width:auto;vertical-align:middle;" /></a>
     <a href="https://deeplaunch.io" target="_blank" rel="dofollow noopener">DeepLaunch.io</a>
     <a href="https://findly.tools" target="_blank" rel="dofollow noopener">Findly.tools</a>
     <a href="https://startupfa.me" target="_blank" rel="dofollow noopener">Startup Fame</a>

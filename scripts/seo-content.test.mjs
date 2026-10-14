@@ -189,6 +189,19 @@ test("API reference has one self canonical and appears in the sitemap", () => {
   assert.equal((read("static/seo/sitemap.xml").match(new RegExp(`<loc>${canonical.replaceAll(".", "\\.")}</loc>`, "g")) || []).length, 1);
 });
 
+test("footer badge images declare intrinsic dimensions, lazy loading and noopener", () => {
+  for (const file of ["openai-api-pricing", "index"]) {
+    const html = read(`static/seo/${file}.html`);
+    const badges = [...html.matchAll(/<img src="https:\/\/(?:toolfame\.com\/badge-light\.svg|assets\.dang\.ai\/badges\/dang-verified-dark\.png|twelve\.tools\/badge0-white\.svg)"[^>]*>/g)].map((m) => m[0]);
+    assert.equal(badges.length, 3, `${file}: expected 3 badge images`);
+    for (const tag of badges) {
+      assert.match(tag, /width="\d+" height="\d+" loading="lazy"/, `${file}: ${tag}`);
+    }
+    const twelve = html.match(/<a href="https:\/\/twelve\.tools"[^>]*>/)[0];
+    assert.match(twelve, /rel="dofollow noopener"/, `${file}: twelve.tools link missing rel`);
+  }
+});
+
 test("selected generation preserves every other HTML file and is repeatable", () => {
   const temp = fixture();
   try {

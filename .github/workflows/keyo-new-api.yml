@@ -79,6 +79,11 @@ jobs:
     needs: build
     if: vars.KEYO_VPS_HOST != ''
     runs-on: ubuntu-latest
+    # Serialize VPS access across the console/static/blog deploy jobs:
+    # all three run git operations on /opt/ai-relay and must not overlap.
+    concurrency:
+      group: keyo-vps-mutex
+      cancel-in-progress: false
     steps:
       - name: Pull image and recreate container
         env:

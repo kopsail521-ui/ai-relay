@@ -941,6 +941,20 @@ ${relatedLinks(["CosyVoice3", "whisper-large-v3", "Qwen3-TTS", "IndexTTS-2", "Du
 function renderPricing() {
   const seenIds = new Set(pages.models.map((m) => m.modelId || m.id));
   const landingExtra = [];
+  // catalogRows: price-table rows that belong to no single landing page
+  // (e.g. the video generation catalog) — merged into the guided table only.
+  for (const r of pricingLandings.catalogRows || []) {
+    const id = r.model;
+    if (!id || seenIds.has(id)) continue;
+    seenIds.add(id);
+    landingExtra.push({
+      id,
+      category: r.category || "llm",
+      priceLabel: r.keyo,
+      endpoint: r.endpoint || "POST /v1/chat/completions",
+      guide: false,
+    });
+  }
   for (const p of pricingLandings.pages || []) {
     for (const r of p.rows || []) {
       const id = r.model;

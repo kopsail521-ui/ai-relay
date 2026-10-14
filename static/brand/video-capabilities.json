@@ -594,7 +594,7 @@
         "duration > 12",
         "resolution outside 720p/1080p/2k (falls back to 720p)"
       ],
-      "billing": "per second × resolution: 720p $0.020548, 1080p $0.034932, 2k $0.04726; final charge settles on actual upstream duration (failed tasks refund)"
+      "billing": "per second × resolution: 720p $0.020548, 1080p $0.034932, 2k $0.04726; final charge settles on the actual generated duration (failed tasks are refunded)"
     }
   },
   "delisted": [

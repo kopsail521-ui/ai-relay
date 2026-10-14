@@ -139,7 +139,7 @@
       },
       "body": [
         "Compare DeepSeek rates across official platforms, aggregators, and a multi-model API. KeyoAPI is the third option — OpenAI-compatible base URL, prepaid balance, and Gemini/Whisper/OCR on the same key when DeepSeek is only part of the stack.",
-        "Indicative Keyo sell rates above come from the live Keyo catalog (/pricing). Confirm each ID on /pricing before volume contracts. For DeepSeek V4 Flash free prototyping vs metered pricing detail, see the guide at /model/deepseek-v4-flash (also covers deepseek-v4.1-flash as the cheaper high-volume Flash when you want a different catalog row).",
+        "Indicative Keyo sell rates above come from the live Keyo catalog (/pricing). Confirm each ID on /pricing before volume contracts. For details on free prototyping with DeepSeek V4 Flash versus metered pricing, see the guide at /model/deepseek-v4-flash (also covers deepseek-v4.1-flash as the cheaper high-volume Flash when you want a different catalog row).",
         "How to call: POST https://www.keyoapi.xyz/v1/chat/completions with Authorization: Bearer YOUR_KEY and model set to the DeepSeek ID you want — Flash and Pro are different products.",
         "For Gemini rates, see /gemini-api-pricing. For free prototyping, open /free-models. Side-by-side planning: /compare."
       ],
@@ -910,6 +910,62 @@
           "a": "No. One prepaid key and one balance cover OpenAI-shaped calls and dedicated REST alike — see /free-models for the $0 IDs you can test with."
         }
       ]
+    }
+  ],
+  "catalogRows": [
+    {
+      "model": "seedance-2.5-1080p",
+      "category": "video",
+      "keyo": "$0.138 / second",
+      "endpoint": "POST /v1/videos/generations"
+    },
+    {
+      "model": "seedance-2.0-1080p",
+      "category": "video",
+      "keyo": "$0.1006 / second",
+      "endpoint": "POST /v1/videos/generations"
+    },
+    {
+      "model": "seedance-2.0-720p",
+      "category": "video",
+      "keyo": "$0.0962 / second",
+      "endpoint": "POST /v1/videos/generations"
+    },
+    {
+      "model": "flux-3-video",
+      "category": "video",
+      "keyo": "$0.1632 / second",
+      "endpoint": "POST /v1/videos/generations"
+    },
+    {
+      "model": "MiniMax-H3",
+      "category": "video",
+      "keyo": "$0.0288 / second",
+      "endpoint": "POST /v1/videos/generations"
+    },
+    {
+      "model": "wan3.0-video",
+      "category": "video",
+      "keyo": "$0.0411 / second",
+      "endpoint": "POST /v1/videos/generations"
+    },
+    {
+      "model": "agnes-video-2.5",
+      "category": "video",
+      "keyo": "$0.0205 / second",
+      "endpoint": "POST /v1/videos/generations"
+    },
+    {
+      "model": "video-enhance-pro",
+      "category": "video-processing",
+      "keyo": "$0.0685 / second",
+      "endpoint": "POST /v1/videos/generations"
+    },
+    {
+      "model": "subtitle-erase-pro",
+      "category": "video-processing",
+      "keyo": "$0.0183 / second",
+      "endpoint": "POST /v1/videos/generations"
     }
   ]
 }

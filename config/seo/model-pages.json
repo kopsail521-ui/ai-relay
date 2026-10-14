@@ -269,12 +269,12 @@
       "sections": {
         "intro": "Claude Sonnet 5 is the workhorse Claude-class model on KeyoAPI—enough depth for production chat, priced for production budgets. If you are comparing Claude API pricing, Sonnet-class tiers are usually the first production fit — KeyoAPI exposes that capability through one OpenAI-compatible relay.",
         "about": "Sonnet balances quality and cost for customer support, writing aids, light coding, and RAG answers. Long-context support helps when users paste tickets, policies, or specs into the thread.",
-        "pricing": "Indicative Keyo pricing ~$0.88 input / $4.41 output per 1M tokens. Against official Claude Sonnet list bands near $3 / $15, the relay savings are the core sales story—validate on /compare. Blended architectures (Sonnet + Luna) often beat “always flagship” designs on margin.",
+        "pricing": "Indicative Keyo pricing ~$0.44 input / $2.21 output per 1M tokens. Against official Claude Sonnet list bands near $3 / $15, the relay savings are the core sales story—validate on /compare. Blended architectures (Sonnet + Luna) often beat “always flagship” designs on margin.",
         "useCases": "Default bot for B2B help centers, CRM side panels, and docs Q&A. Content drafting with human edit loops. First-pass code suggestions before Opus escalation.",
         "integrate": "Set model=claude-sonnet-5 on /v1/chat/completions. Reuse existing tool-calling code. Get a key at /pricing/claude-sonnet-5."
       },
       "bodyWordCount": 306,
-      "body": "Claude Sonnet 5 is the workhorse Claude-class model on KeyoAPI—enough depth for production chat, priced for production budgets. If you are comparing Claude API pricing, Sonnet-class tiers are usually the first production fit — KeyoAPI exposes that capability through one OpenAI-compatible relay. Sonnet balances quality and cost for customer support, writing aids, light coding, and RAG answers. Long-context support helps when users paste tickets, policies, or specs into the thread. Indicative Keyo pricing ~$0.88 input / $4.41 output per 1M tokens. Against official Claude Sonnet list bands near $3 / $15, the relay savings are the core sales story—validate on /compare. Blended architectures (Sonnet + Luna) often beat “always flagship” designs on margin. Default bot for B2B help centers, CRM side panels, and docs Q&A. Content drafting with human edit loops. First-pass code suggestions before Opus escalation. Set model=claude-sonnet-5 on /v1/chat/completions. Reuse existing tool-calling code. Get a key at /pricing/claude-sonnet-5. Sonnet 5 is the production Claude workhorse for support, RAG, and light coding—strong enough daily, cheap enough to leave as the default model string. Sonnet 5 is the model you should leave as the default string in most production configs. It covers support macros, RAG answers, light coding, and structured extraction without the Opus bill. Build golden-set evals for your top twenty prompts and only escalate outliers. Because KeyoAPI shares keys with Whisper and OCR, you can attach documents or transcripts in the same product session without a second vendor. Publish an internal runbook: Sonnet first, Fable/Opus on call, Luna for batch. That runbook is what keeps Claude API pricing predictable as usage scales. Add structured output schemas for support macros and reject free-form answers when JSON is required. Cache frequent RAG answers at the edge. Sonnet should feel boring and reliable—that reliability is what makes Claude API pricing forecastable in SaaS margins.",
+      "body": "Claude Sonnet 5 is the workhorse Claude-class model on KeyoAPI—enough depth for production chat, priced for production budgets. If you are comparing Claude API pricing, Sonnet-class tiers are usually the first production fit — KeyoAPI exposes that capability through one OpenAI-compatible relay. Sonnet balances quality and cost for customer support, writing aids, light coding, and RAG answers. Long-context support helps when users paste tickets, policies, or specs into the thread. Indicative Keyo pricing ~$0.44 input / $2.21 output per 1M tokens. Against official Claude Sonnet list bands near $3 / $15, the relay savings are the core sales story—validate on /compare. Blended architectures (Sonnet + Luna) often beat “always flagship” designs on margin. Default bot for B2B help centers, CRM side panels, and docs Q&A. Content drafting with human edit loops. First-pass code suggestions before Opus escalation. Set model=claude-sonnet-5 on /v1/chat/completions. Reuse existing tool-calling code. Get a key at /pricing/claude-sonnet-5. Sonnet 5 is the production Claude workhorse for support, RAG, and light coding—strong enough daily, cheap enough to leave as the default model string. Sonnet 5 is the model you should leave as the default string in most production configs. It covers support macros, RAG answers, light coding, and structured extraction without the Opus bill. Build golden-set evals for your top twenty prompts and only escalate outliers. Because KeyoAPI shares keys with Whisper and OCR, you can attach documents or transcripts in the same product session without a second vendor. Publish an internal runbook: Sonnet first, Fable/Opus on call, Luna for batch. That runbook is what keeps Claude API pricing predictable as usage scales. Add structured output schemas for support macros and reject free-form answers when JSON is required. Cache frequent RAG answers at the edge. Sonnet should feel boring and reliable—that reliability is what makes Claude API pricing forecastable in SaaS margins.",
       "curlExample": "curl https://www.keyoapi.xyz/v1/chat/completions \\\n  -H \"Authorization: Bearer YOUR_API_KEY\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\"model\":\"claude-sonnet-5\",\"messages\":[{\"role\":\"user\",\"content\":\"Hello from KeyoAPI\"}]}'",
       "uniqueBlurb": "Sonnet 5 is the production Claude workhorse for support, RAG, and light coding—strong enough daily, cheap enough to leave as the default model string."
     },
@@ -619,8 +619,8 @@
       ],
       "h1": "RMBG-2.0 API — Background Removal for Product & Portraits",
       "title": "RMBG-2.0 Background Removal API | KeyoAPI",
-      "metaDescription": "BRIA RMBG-2.0 background removal API on KeyoAPI. High-accuracy cutouts from ~$0.0068 per request via a unified vision API.",
-      "priceLabel": "$0.0068 / request",
+      "metaDescription": "BRIA RMBG-2.0 background removal API on KeyoAPI. High-accuracy cutouts from ~$0.0685 per request via a unified vision API.",
+      "priceLabel": "$0.0685 / request",
       "priceUnit": "per_call",
       "related": [
         "sam3",
@@ -632,7 +632,7 @@
       "faqs": [
         {
           "q": "How does this compare to consumer remove-bg tools?",
-          "a": "Those tools optimize for humans clicking a website. RMBG-2.0 is an API for automated catalogs, DAM pipelines, and apps at ~$0.0068/request."
+          "a": "Those tools optimize for humans clicking a website. RMBG-2.0 is an API for automated catalogs, DAM pipelines, and apps at ~$0.0685/request."
         },
         {
           "q": "Can I upscale after cutout?",
@@ -646,14 +646,14 @@
       "sections": {
         "intro": "RMBG-2.0 (BRIA) is KeyoAPI’s background-removal API for product photos, portraits, and design assets that must ship with clean alpha. Unlike consumer remove-background websites, this is a developer-metered image matting API on an AI API relay.",
         "about": "E-commerce feeds, creator tools, and print-on-demand flows need reliable cutouts without Photoshop macros. RMBG-2.0 focuses on high-accuracy mattes that survive zoom and marketplace compression.",
-        "pricing": "About $0.0068 per request—often cheaper than legacy SaaS background APIs that charge five to twenty cents an image. Compare against other background-removal APIs on /compare.",
+        "pricing": "About $0.0685 per request—often cheaper than legacy SaaS background APIs that charge five to twenty cents an image. Compare against other background-removal APIs on /compare.",
         "useCases": "Teams use it for SKU studio automation, avatar builders, thumbnail pipelines, and design editors. Combine with sam3 when you need open-vocabulary masks beyond simple subject/background.",
         "integrate": "Call Keyo matting endpoints with model=RMBG-2.0. Try it from /pricing/RMBG-2.0."
       },
       "bodyWordCount": 320,
-      "body": "RMBG-2.0 (BRIA) is KeyoAPI’s background-removal API for product photos, portraits, and design assets that must ship with clean alpha. Unlike consumer remove-background websites, this is a developer-metered image matting API on an AI API relay.\n\nE-commerce feeds, creator tools, and print-on-demand flows need reliable cutouts without Photoshop macros. RMBG-2.0 focuses on high-accuracy mattes that survive zoom and marketplace compression. About $0.0068 per request—often cheaper than legacy SaaS background APIs that charge five to twenty cents an image. Compare against other background-removal APIs on /compare. Teams use it for SKU studio automation, avatar builders, thumbnail pipelines, and design editors; combine with sam3 when you need open-vocabulary masks beyond subject/background.\n\nCall Keyo matting endpoints with model=RMBG-2.0 on POST /v1/images/mattings (multipart image upload), not chat completions. Try it from /pricing/RMBG-2.0. Accept PNG/JPEG, return alpha, soft-fail on tiny images, and offer a preview URL for merchant QA.\n\nCutout quality in commerce is a reliability problem: hair edges, transparent packaging, and white-on-white SKUs. Build a QA loop that flags leftover background, re-run or escalate to sam3 masks, store alpha PNGs with SKU ids, and curate a regression set of fifty SKUs after every model upgrade.",
+      "body": "RMBG-2.0 (BRIA) is KeyoAPI’s background-removal API for product photos, portraits, and design assets that must ship with clean alpha. Unlike consumer remove-background websites, this is a developer-metered image matting API on an AI API relay.\n\nE-commerce feeds, creator tools, and print-on-demand flows need reliable cutouts without Photoshop macros. RMBG-2.0 focuses on high-accuracy mattes that survive zoom and marketplace compression. About $0.0685 per request—often cheaper than legacy SaaS background APIs that charge five to twenty cents an image. Compare against other background-removal APIs on /compare. Teams use it for SKU studio automation, avatar builders, thumbnail pipelines, and design editors; combine with sam3 when you need open-vocabulary masks beyond subject/background.\n\nCall Keyo matting endpoints with model=RMBG-2.0 on POST /v1/images/mattings (multipart image upload), not chat completions. Try it from /pricing/RMBG-2.0. Accept PNG/JPEG, return alpha, soft-fail on tiny images, and offer a preview URL for merchant QA.\n\nCutout quality in commerce is a reliability problem: hair edges, transparent packaging, and white-on-white SKUs. Build a QA loop that flags leftover background, re-run or escalate to sam3 masks, store alpha PNGs with SKU ids, and curate a regression set of fifty SKUs after every model upgrade.",
       "curlExample": "curl https://www.keyoapi.xyz/v1/images/mattings \\\n  -H \"Authorization: Bearer YOUR_API_KEY\" \\\n  -F model=RMBG-2.0 \\\n  -F image=@./photo.png",
-      "uniqueBlurb": "RMBG-2.0 is a true matting API on /v1/images/mattings (multipart image upload), not a chat toy. Metered near $0.0068/request for catalog and avatar pipelines."
+      "uniqueBlurb": "RMBG-2.0 is a true matting API on /v1/images/mattings (multipart image upload), not a chat toy. Metered near $0.0685/request for catalog and avatar pipelines."
     },
     {
       "id": "VajraV1",
@@ -665,8 +665,8 @@
       ],
       "h1": "VajraV1 YOLO API — Detection, Segmentation & Pose",
       "title": "VajraV1 Object Detection API | YOLO Vision on KeyoAPI",
-      "metaDescription": "VajraV1 YOLO-based object detection, segmentation, and pose API on KeyoAPI from ~$0.0068 per request.",
-      "priceLabel": "$0.0068 / request",
+      "metaDescription": "VajraV1 YOLO-based object detection, segmentation, and pose API on KeyoAPI from ~$0.0685 per request.",
+      "priceLabel": "$0.0685 / request",
       "priceUnit": "per_call",
       "related": [
         "sam3",
@@ -686,18 +686,18 @@
         },
         {
           "q": "Pricing?",
-          "a": "About $0.0068 per request—live on /pricing/VajraV1."
+          "a": "About $0.0685 per request—live on /pricing/VajraV1."
         }
       ],
       "sections": {
         "intro": "VajraV1 packs YOLO-based object detection, image segmentation, and pose estimation into KeyoAPI’s vision lane. If you need an object detection api without standing up GPU workers, call this model through the same gateway as your LLMs.",
         "about": "Realtime CV features used to require dedicated inference clusters. An AI API relay collapses that into HTTP calls with prepaid balance. VajraV1 is ideal when class vocabularies are standard YOLO-style objects; use sam3 for open-vocabulary masks.",
-        "pricing": "Per-call pricing near $0.0068 keeps experiments cheap until you prove ROI on camera streams. Batch still frames rather than every video frame when budgets are tight.",
+        "pricing": "Per-call pricing near $0.0685 keeps experiments cheap until you prove ROI on camera streams. Batch still frames rather than every video frame when budgets are tight.",
         "useCases": "Shelf monitoring, people counting, workout form checks, and factory defect triage. Feed detections into gpt-5.6-luna for natural-language incident summaries.",
         "integrate": "Use Keyo /v1/images/object-detection and related paths with model=VajraV1. Keys: /pricing/VajraV1."
       },
       "bodyWordCount": 338,
-      "body": "VajraV1 packs YOLO-based object detection, image segmentation, and pose estimation into KeyoAPI’s vision lane. If you need an object detection api without standing up GPU workers, call this model through the same gateway as your LLMs. Realtime CV features used to require dedicated inference clusters. An AI API relay collapses that into HTTP calls with prepaid balance. VajraV1 is ideal when class vocabularies are standard YOLO-style objects; use sam3 for open-vocabulary masks. Per-call pricing near $0.0068 keeps experiments cheap until you prove ROI on camera streams. Batch still frames rather than every video frame when budgets are tight. Shelf monitoring, people counting, workout form checks, and factory defect triage. Feed detections into gpt-5.6-luna for natural-language incident summaries. Use Keyo /v1/images/object-detection and related paths with model=VajraV1. Keys: /pricing/VajraV1. VajraV1 exposes YOLO-style detection (and related segmentation/pose routes) for retail and industrial CV without standing up your own GPU fleet. YOLO-style detection is for closed vocabularies you already understand: people, boxes, vehicles, shelves. Sample frames from video instead of every frame to control cost. Persist boxes with camera id and timestamp for analytics. When you need “find the weird unlabeled object,” escalate to sam3. Feed compact detection JSON into Luna for incident summaries so the LLM never sees raw pixels. Object detection API pricing stays sane when you batch stills and cache identical frames. Define class allowlists per camera. Drop detections below confidence thresholds. Aggregate into events before calling an LLM. Object detection API noise will drown your logs if you forward every box raw.",
+      "body": "VajraV1 packs YOLO-based object detection, image segmentation, and pose estimation into KeyoAPI’s vision lane. If you need an object detection api without standing up GPU workers, call this model through the same gateway as your LLMs. Realtime CV features used to require dedicated inference clusters. An AI API relay collapses that into HTTP calls with prepaid balance. VajraV1 is ideal when class vocabularies are standard YOLO-style objects; use sam3 for open-vocabulary masks. Per-call pricing near $0.0685 keeps experiments cheap until you prove ROI on camera streams. Batch still frames rather than every video frame when budgets are tight. Shelf monitoring, people counting, workout form checks, and factory defect triage. Feed detections into gpt-5.6-luna for natural-language incident summaries. Use Keyo /v1/images/object-detection and related paths with model=VajraV1. Keys: /pricing/VajraV1. VajraV1 exposes YOLO-style detection (and related segmentation/pose routes) for retail and industrial CV without standing up your own GPU fleet. YOLO-style detection is for closed vocabularies you already understand: people, boxes, vehicles, shelves. Sample frames from video instead of every frame to control cost. Persist boxes with camera id and timestamp for analytics. When you need “find the weird unlabeled object,” escalate to sam3. Feed compact detection JSON into Luna for incident summaries so the LLM never sees raw pixels. Object detection API pricing stays sane when you batch stills and cache identical frames. Define class allowlists per camera. Drop detections below confidence thresholds. Aggregate into events before calling an LLM. Object detection API noise will drown your logs if you forward every box raw.",
       "curlExample": "curl https://www.keyoapi.xyz/v1/images/object-detection \\\n  -H \"Authorization: Bearer YOUR_API_KEY\" \\\n  -F model=VajraV1 \\\n  -F image=@./frame.png",
       "uniqueBlurb": "VajraV1 exposes YOLO-style detection (and related segmentation/pose routes) for retail and industrial CV without standing up your own GPU fleet."
     },
@@ -762,8 +762,8 @@
       ],
       "h1": "Real-ESRGAN API — Real-World Image Super-Resolution",
       "title": "Real-ESRGAN Upscaling API | KeyoAPI",
-      "metaDescription": "Real-ESRGAN image upscaling API on KeyoAPI. Restore detail on photos from ~$0.0068 per request.",
-      "priceLabel": "$0.0068 / request",
+      "metaDescription": "Real-ESRGAN image upscaling API on KeyoAPI. Restore detail on photos from ~$0.0685 per request.",
+      "priceLabel": "$0.0685 / request",
       "priceUnit": "per_call",
       "related": [
         "AnimeSharp",
@@ -783,18 +783,18 @@
         },
         {
           "q": "Pricing?",
-          "a": "About $0.0068 per request on /pricing/Real-ESRGAN."
+          "a": "About $0.0685 per request on /pricing/Real-ESRGAN."
         }
       ],
       "sections": {
         "intro": "Real-ESRGAN is KeyoAPI’s general image upscaling api for photos that need more pixels and cleaner detail. Marketplaces, print shops, and UGC apps call this super resolution api instead of maintaining ESRGAN GPUs.",
         "about": "Real-world photos suffer from compression and blur. Real-ESRGAN restores usable resolution for zoom, crop, and print. On the same AI API relay you can unwarp with UVDoc then upscale before OCR.",
-        "pricing": "Per-request ~$0.0068—cheap enough to run on every upload or only when users hit “Enhance.” Gate with file-size heuristics to control spend.",
+        "pricing": "Per-request ~$0.0685—cheap enough to run on every upload or only when users hit “Enhance.” Gate with file-size heuristics to control spend.",
         "useCases": "Listing image polish, archival scans, social media quality boosts, and pre-OCR enhancement. Anime content should prefer AnimeSharp.",
         "integrate": "Keyo upscaling paths with model=Real-ESRGAN. Keys at /pricing/Real-ESRGAN."
       },
       "bodyWordCount": 309,
-      "body": "Real-ESRGAN is KeyoAPI’s general image upscaling api for photos that need more pixels and cleaner detail. Marketplaces, print shops, and UGC apps call this super resolution api instead of maintaining ESRGAN GPUs. Real-world photos suffer from compression and blur. Real-ESRGAN restores usable resolution for zoom, crop, and print. On the same AI API relay you can unwarp with UVDoc then upscale before OCR. Per-request ~$0.0068—cheap enough to run on every upload or only when users hit “Enhance.” Gate with file-size heuristics to control spend. Listing image polish, archival scans, social media quality boosts, and pre-OCR enhancement. Anime content should prefer AnimeSharp. Keyo upscaling paths with model=Real-ESRGAN. Keys at /pricing/Real-ESRGAN. Real-ESRGAN upscales real photos on /v1/images/upscaling when marketplace or mobile captures need sharper pixels before OCR or publishing. Upscaling helps marketplace photos and OCR preprocessors more than it helps already-sharp DSLR shots. Detect low resolution before calling Real-ESRGAN to avoid wasting requests. Compare SSIM or a simple sharpness score pre/post. For text-heavy scans, upscale then OCR; for portraits, upscale then RMBG. Image upscaling API costs add up in user-generated content apps—cache by content hash. Keyo’s /v1/images/upscaling path keeps this step next to other vision tools. Skip upscale when the short side already exceeds your publish threshold. Prefer 2x then quality check before 4x. Image upscaling API spend correlates with UGC spikes—rate limit per user.",
+      "body": "Real-ESRGAN is KeyoAPI’s general image upscaling api for photos that need more pixels and cleaner detail. Marketplaces, print shops, and UGC apps call this super resolution api instead of maintaining ESRGAN GPUs. Real-world photos suffer from compression and blur. Real-ESRGAN restores usable resolution for zoom, crop, and print. On the same AI API relay you can unwarp with UVDoc then upscale before OCR. Per-request ~$0.0685—cheap enough to run on every upload or only when users hit “Enhance.” Gate with file-size heuristics to control spend. Listing image polish, archival scans, social media quality boosts, and pre-OCR enhancement. Anime content should prefer AnimeSharp. Keyo upscaling paths with model=Real-ESRGAN. Keys at /pricing/Real-ESRGAN. Real-ESRGAN upscales real photos on /v1/images/upscaling when marketplace or mobile captures need sharper pixels before OCR or publishing. Upscaling helps marketplace photos and OCR preprocessors more than it helps already-sharp DSLR shots. Detect low resolution before calling Real-ESRGAN to avoid wasting requests. Compare SSIM or a simple sharpness score pre/post. For text-heavy scans, upscale then OCR; for portraits, upscale then RMBG. Image upscaling API costs add up in user-generated content apps—cache by content hash. Keyo’s /v1/images/upscaling path keeps this step next to other vision tools. Skip upscale when the short side already exceeds your publish threshold. Prefer 2x then quality check before 4x. Image upscaling API spend correlates with UGC spikes—rate limit per user.",
       "curlExample": "curl https://www.keyoapi.xyz/v1/images/upscaling \\\n  -H \"Authorization: Bearer YOUR_API_KEY\" \\\n  -F model=Real-ESRGAN \\\n  -F image=@./photo.png",
       "uniqueBlurb": "Real-ESRGAN upscales real photos on /v1/images/upscaling when marketplace or mobile captures need sharper pixels before OCR or publishing."
     },
@@ -808,8 +808,8 @@
       ],
       "h1": "AnimeSharp API — Anime & Illustration Upscaling",
       "title": "AnimeSharp 4x Upscale API | KeyoAPI",
-      "metaDescription": "AnimeSharp illustration super-resolution API on KeyoAPI. Upscale anime-style art from ~$0.0068 per request.",
-      "priceLabel": "$0.0068 / request",
+      "metaDescription": "AnimeSharp illustration super-resolution API on KeyoAPI. Upscale anime-style art from ~$0.0685 per request.",
+      "priceLabel": "$0.0685 / request",
       "priceUnit": "per_call",
       "related": [
         "Real-ESRGAN",
@@ -829,18 +829,18 @@
         },
         {
           "q": "Price?",
-          "a": "~$0.0068 per request—/pricing/AnimeSharp."
+          "a": "~$0.0685 per request—/pricing/AnimeSharp."
         }
       ],
       "sections": {
         "intro": "AnimeSharp specializes in anime and illustration super-resolution—an image upscaling api tuned for line art rather than camera noise. Creator platforms and game pipelines use it to ship crisp assets without desktop ESRGAN installs.",
         "about": "Generic photo upscalers smear cel shading. AnimeSharp keeps edges sharp for characters, UI art, and manga panels. Combine with RMBG-2.0 when you need transparent stickers from upscaled art.",
-        "pricing": "About $0.0068 per request—enable as a paid “HD export” feature in consumer apps. Batch overnight for catalog migrations.",
+        "pricing": "About $0.0685 per request—enable as a paid “HD export” feature in consumer apps. Batch overnight for catalog migrations.",
         "useCases": "Fan art marketplaces, VTuber asset prep, mobile drawing apps, and print posters. Optional SAM masks for layered PSD-like exports.",
         "integrate": "Upscaling endpoint with model=AnimeSharp. Start at /pricing/AnimeSharp."
       },
       "bodyWordCount": 302,
-      "body": "AnimeSharp specializes in anime and illustration super-resolution—an image upscaling api tuned for line art rather than camera noise. Creator platforms and game pipelines use it to ship crisp assets without desktop ESRGAN installs. Generic photo upscalers smear cel shading. AnimeSharp keeps edges sharp for characters, UI art, and manga panels. Combine with RMBG-2.0 when you need transparent stickers from upscaled art. About $0.0068 per request—enable as a paid “HD export” feature in consumer apps. Batch overnight for catalog migrations. Fan art marketplaces, VTuber asset prep, mobile drawing apps, and print posters. Optional SAM masks for layered PSD-like exports. Upscaling endpoint with model=AnimeSharp. Start at /pricing/AnimeSharp. AnimeSharp is the illustration/anime upscaler sibling of Real-ESRGAN—keep line art sharp instead of photoreal texture guesses. Anime and illustration assets need different priors than photos. AnimeSharp preserves line art that Real-ESRGAN may soften. Use it in sticker pipelines, manga cleanup, and game sprite prep. Keep a style classifier so photoreal uploads never hit AnimeSharp by mistake. Offer before/after previews in your admin tool so artists trust the automation. Separate anime uploads via a lightweight classifier. Keep artist opt-in for batch cleanup. Creators care about line stability more than PSNR—collect subjective ratings in your admin tool.",
+      "body": "AnimeSharp specializes in anime and illustration super-resolution—an image upscaling api tuned for line art rather than camera noise. Creator platforms and game pipelines use it to ship crisp assets without desktop ESRGAN installs. Generic photo upscalers smear cel shading. AnimeSharp keeps edges sharp for characters, UI art, and manga panels. Combine with RMBG-2.0 when you need transparent stickers from upscaled art. About $0.0685 per request—enable as a paid “HD export” feature in consumer apps. Batch overnight for catalog migrations. Fan art marketplaces, VTuber asset prep, mobile drawing apps, and print posters. Optional SAM masks for layered PSD-like exports. Upscaling endpoint with model=AnimeSharp. Start at /pricing/AnimeSharp. AnimeSharp is the illustration/anime upscaler sibling of Real-ESRGAN—keep line art sharp instead of photoreal texture guesses. Anime and illustration assets need different priors than photos. AnimeSharp preserves line art that Real-ESRGAN may soften. Use it in sticker pipelines, manga cleanup, and game sprite prep. Keep a style classifier so photoreal uploads never hit AnimeSharp by mistake. Offer before/after previews in your admin tool so artists trust the automation. Separate anime uploads via a lightweight classifier. Keep artist opt-in for batch cleanup. Creators care about line stability more than PSNR—collect subjective ratings in your admin tool.",
       "curlExample": "curl https://www.keyoapi.xyz/v1/images/upscaling \\\n  -H \"Authorization: Bearer YOUR_API_KEY\" \\\n  -F model=AnimeSharp \\\n  -F image=@./photo.png",
       "uniqueBlurb": "AnimeSharp is the illustration/anime upscaler sibling of Real-ESRGAN—keep line art sharp instead of photoreal texture guesses."
     },
@@ -857,8 +857,8 @@
       ],
       "h1": "Duix Avatar API — Audio+Video Driven Digital Human",
       "title": "Duix Avatar API | Duix-Avatar on KeyoAPI",
-      "metaDescription": "Duix Avatar API on KeyoAPI (model=Duix-Avatar). Async lip-sync digital human from ~$0.0068 per second — hosted alternative to self-managed avatar stacks.",
-      "priceLabel": "$0.0068 / second",
+      "metaDescription": "Duix Avatar API on KeyoAPI (model=Duix-Avatar). Async lip-sync digital human from ~$0.0685 per second — hosted alternative to self-managed avatar stacks.",
+      "priceLabel": "$0.0685 / second",
       "priceUnit": "per_second",
       "related": [
         "InfiniteTalk",
@@ -883,18 +883,18 @@
         },
         {
           "q": "Billing unit?",
-          "a": "About $0.0068 per second of output—see /pricing/Duix-Avatar."
+          "a": "About $0.0685 per second of output—see /pricing/Duix-Avatar."
         }
       ],
       "sections": {
         "intro": "Searching for a Duix Avatar API? KeyoAPI hosts Duix-Avatar as an async talking-avatar endpoint: feed a face video plus driving audio, get lip-sync and expressions back without a custom Unreal pipeline.",
         "about": "Digital humans used to mean custom game engines. HTTP async APIs let SaaS teams productize avatars faster. KeyoAPI collocates TTS, STT, and avatar models so you can build the full loop on one relay key.",
-        "pricing": "Per-second pricing (~$0.0068) maps cleanly to video length sold to end users. Cap max duration in your product to control worst-case invoices.",
+        "pricing": "Per-second pricing (~$0.0685) maps cleanly to video length sold to end users. Cap max duration in your product to control worst-case invoices.",
         "useCases": "Training videos, localized spokesperson clips, and in-app guides. Pair with InfiniteTalk when you start from a still image plus audio.",
         "integrate": "Async endpoint POST /v1/async/videos/audio-video-to-video with model=Duix-Avatar. Keys: /pricing/Duix-Avatar."
       },
       "bodyWordCount": 320,
-      "body": "Searching for a Duix Avatar API or a hosted alternative to self-managed digital-human stacks? KeyoAPI exposes Duix-Avatar as an async talking-avatar API: feed a face video plus driving audio, get lip-sync and expressions back as a render job. This is the API path for product teams — not a consumer Duix app. Build the loop on one prepaid key: generate speech with CosyVoice3 / Qwen3-TTS / IndexTTS-2, then drive Duix-Avatar. Per-second pricing (~$0.0068) maps to output length; confirm on /pricing/Duix-Avatar. Cap max duration, show queue ETA, and moderate deepfake abuse. Prefer InfiniteTalk when you start from a still photo plus audio. Endpoint: POST /v1/async/videos/audio-video-to-video with model=Duix-Avatar, then GET /v1/task/{id}. Hub page: /ai-avatar-video-generator.",
+      "body": "Searching for a Duix Avatar API or a hosted alternative to self-managed digital-human stacks? KeyoAPI exposes Duix-Avatar as an async talking-avatar API: feed a face video plus driving audio, get lip-sync and expressions back as a render job. This is the API path for product teams — not a consumer Duix app. Build the loop on one prepaid key: generate speech with CosyVoice3 / Qwen3-TTS / IndexTTS-2, then drive Duix-Avatar. Per-second pricing (~$0.0685) maps to output length; confirm on /pricing/Duix-Avatar. Cap max duration, show queue ETA, and moderate deepfake abuse. Prefer InfiniteTalk when you start from a still photo plus audio. Endpoint: POST /v1/async/videos/audio-video-to-video with model=Duix-Avatar, then GET /v1/task/{id}. Hub page: /ai-avatar-video-generator.",
       "curlExample": "curl https://www.keyoapi.xyz/v1/async/videos/audio-video-to-video \\\n  -H \"Authorization: Bearer YOUR_API_KEY\" \\\n  -F model=Duix-Avatar \\\n  -F audio=@./voice.wav \\\n  -F video=@./face.mp4\n# then: GET /v1/task/{id}",
       "uniqueBlurb": "Duix-Avatar is async audio+video→talking avatar: post to /v1/async/videos/audio-video-to-video and poll /v1/task/{id} for the rendered clip."
     },

@@ -17,7 +17,7 @@ const MODEL_POOL = [
   { name: "gemini-3.8-flash", vendor: "Google", w: 74 },
   { name: "gpt-5.6-luna", vendor: "OpenAI", w: 68 },
   { name: "kimi-k3", vendor: "Moonshot", w: 62 },
-  { name: "MiniMax-M3", vendor: "MiniMax", w: 58 },
+  { name: "minimax-m3", vendor: "MiniMax", w: 58 },
   { name: "grok-4.7", vendor: "xAI", w: 54 },
   { name: "claude-opus-5-5", vendor: "Anthropic", w: 50 },
   { name: "glm-5.3-flash", vendor: "智谱", w: 46 },
@@ -29,6 +29,18 @@ const MODEL_POOL = [
   { name: "claude-fable-5-1", vendor: "Anthropic", w: 26 },
   { name: "gpt-5.6-sol", vendor: "OpenAI", w: 16 },
 ];
+
+const VENDOR_ICON_BY_NAME = {
+  "智谱": "Zhipu.Color",
+  OpenAI: "OpenAI",
+  Anthropic: "Anthropic",
+  DeepSeek: "DeepSeek.Color",
+  Google: "Gemini.Color",
+  Moonshot: "Moonshot",
+  MiniMax: "Minimax.Color",
+  xAI: "Grok",
+  "阿里巴巴": "Qwen.Color",
+};
 
 const PERIODS = {
   today: {
@@ -239,6 +251,7 @@ function synthesizePeriod(period, nowMs, dayKey) {
       previous_rank: prev ? prev.rank : undefined,
       model_name: m.name,
       vendor: m.vendor,
+      vendor_icon: VENDOR_ICON_BY_NAME[m.vendor] || "",
       category: "all",
       total_tokens: m.total,
       share: round4(m.total / grand),
@@ -274,6 +287,7 @@ function synthesizePeriod(period, nowMs, dayKey) {
     .map((v, i) => ({
       rank: i + 1,
       vendor: v.vendor,
+      vendor_icon: VENDOR_ICON_BY_NAME[v.vendor] || "",
       total_tokens: v.total_tokens,
       share: round4(v.total_tokens / grand),
       growth_pct: softGrowth(v.total_tokens, v.prev_tokens || 1, rng),
@@ -287,6 +301,7 @@ function synthesizePeriod(period, nowMs, dayKey) {
   const modelsHistoryModels = histModels.map((m) => ({
     name: m.name,
     vendor: m.vendor,
+    vendor_icon: VENDOR_ICON_BY_NAME[m.vendor] || "",
     total: m.total,
   }));
   let otherTotal = 0;
@@ -338,6 +353,7 @@ function synthesizePeriod(period, nowMs, dayKey) {
   const vendorPoints = [];
   const vendorSeriesVendors = topVendors.map((v) => ({
     name: v.vendor,
+    vendor_icon: VENDOR_ICON_BY_NAME[v.vendor] || "",
     total: v.total_tokens,
     share: v.share,
   }));
@@ -381,6 +397,7 @@ function synthesizePeriod(period, nowMs, dayKey) {
     .map((r) => ({
       model_name: r.model_name,
       vendor: r.vendor,
+      vendor_icon: r.vendor_icon || "",
       rank_delta: (r.previous_rank || r.rank) - r.rank,
       current_rank: r.rank,
       growth_pct: r.growth_pct,

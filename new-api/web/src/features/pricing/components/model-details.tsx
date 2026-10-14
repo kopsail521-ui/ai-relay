@@ -1315,7 +1315,12 @@ export function ModelDetails() {
 
   const model = useMemo(() => {
     if (!models || !modelId) return null
-    return models.find((m) => m.model_name === modelId) || null
+    const needle = modelId.toLowerCase()
+    return (
+      models.find((m) => m.model_name === modelId) ||
+      models.find((m) => m.model_name.toLowerCase() === needle) ||
+      null
+    )
   }, [models, modelId])
 
   usePageMeta({

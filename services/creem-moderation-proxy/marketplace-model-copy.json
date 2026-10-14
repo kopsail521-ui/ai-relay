@@ -157,8 +157,8 @@
       "zhCN": "视频模型",
       "zhTW": "影片模型",
       "en": "Video",
-      "fr": "Video",
-      "ru": "Video",
+      "fr": "Vidéo",
+      "ru": "Видео",
       "ja": "動画モデル",
       "vi": "Video"
     },
@@ -166,8 +166,8 @@
       "zhCN": "视频模型",
       "zhTW": "影片模型",
       "en": "Video",
-      "fr": "Video",
-      "ru": "Video",
+      "fr": "Vidéo",
+      "ru": "Видео",
       "ja": "動画モデル",
       "vi": "Video"
     },
@@ -282,20 +282,20 @@
     "决策模型": {
       "zhCN": "决策模型",
       "zhTW": "決策模型",
-      "en": "Decision Model",
-      "fr": "Modèle de décision",
-      "ru": "Модель принятия решений",
+      "en": "Decision",
+      "fr": "Décision",
+      "ru": "Решение",
       "ja": "意思決定モデル",
-      "vi": "Mô hình quyết định"
+      "vi": "QuyếtĐịnh"
     },
     "视频处理": {
       "zhCN": "视频处理",
       "zhTW": "影片處理",
-      "en": "Video Processing",
-      "fr": "Traitement vidéo",
-      "ru": "Обработка видео",
+      "en": "VideoProc",
+      "fr": "VidéoProc",
+      "ru": "ВидеоОбр",
       "ja": "動画処理",
-      "vi": "Xử lý video"
+      "vi": "XửLýVideo"
     },
     "音乐": {
       "zhCN": "音乐",
@@ -304,7 +304,7 @@
       "fr": "Musique",
       "ru": "Музыка",
       "ja": "音楽",
-      "vi": "Âm nhạc"
+      "vi": "ÂmNhạc"
     }
   },
   "__vendors__": {
@@ -950,15 +950,15 @@
     "price_key_en": "Per request"
   },
   "RMBG-2.0": {
-    "description": "腾讯 RMBG 2.0 背景移除模型。高精度抠图，一键去除图像背景。支持图像模态。适合电商图片处理、人像抠图、设计素材。 计费：$0.006849/次。",
+    "description": "BRIA AI RMBG 2.0 背景移除模型。高精度抠图，一键去除图像背景。支持图像模态。适合电商图片处理、人像抠图、设计素材。 计费：$0.006849/次。",
     "descriptions": {
-      "zhCN": "腾讯 RMBG 2.0 背景移除模型。高精度抠图，一键去除图像背景。支持图像模态。适合电商图片处理、人像抠图、设计素材。 计费：$0.006849/次。",
-      "zhTW": "腾讯 RMBG 2.0 背景移除模型。高精度去背，一鍵去除圖像背景。支援圖像模态。適合電商圖片處理、人像去背、設計素材。 計費：$0.006849/次。",
-      "en": "Tencent's RMBG 2.0 background removal model. high-precision background removal in one step. image modality. Ideal for e-commerce image processing, portrait cutout, design assets. Pricing: 0.006849 / request.",
-      "fr": "Tencent's RMBG 2.0 background removal model. high-precision background removal in one step. image modality. Idéal pour e-commerce image processing, portrait cutout, design assets. Tarif : 0.006849 $ / requête.",
-      "ru": "Tencent's RMBG 2.0 background removal model. high-precision background removal in one step. image modality. Подходит для e-commerce image processing, portrait cutout, design assets. Тариф: 0.006849 $ / запрос.",
-      "ja": "Tencent's RMBG 2.0 background removal model. high-precision background removal in one step. image modality. e-commerce image processing, portrait cutout, design assets 向け。 料金：0.006849 $ / 回.",
-      "vi": "Tencent's RMBG 2.0 background removal model. high-precision background removal in one step. image modality. Phù hợp cho e-commerce image processing, portrait cutout, design assets. Giá: 0.006849 $ / lần."
+      "zhCN": "BRIA AI RMBG 2.0 背景移除模型。高精度抠图，一键去除图像背景。支持图像模态。适合电商图片处理、人像抠图、设计素材。 计费：$0.006849/次。",
+      "zhTW": "BRIA AI RMBG 2.0 背景移除模型。高精度去背，一鍵去除圖像背景。支援圖像模态。適合電商圖片處理、人像去背、設計素材。 計費：$0.006849/次。",
+      "en": "BRIA AI's RMBG 2.0 background removal model. high-precision background removal in one step. image modality. Ideal for e-commerce image processing, portrait cutout, design assets. Pricing: 0.006849 / request.",
+      "fr": "BRIA AI's RMBG 2.0 background removal model. high-precision background removal in one step. image modality. Idéal pour e-commerce image processing, portrait cutout, design assets. Tarif : 0.006849 $ / requête.",
+      "ru": "BRIA AI's RMBG 2.0 background removal model. high-precision background removal in one step. image modality. Подходит для e-commerce image processing, portrait cutout, design assets. Тариф: 0.006849 $ / запрос.",
+      "ja": "BRIA AI's RMBG 2.0 background removal model. high-precision background removal in one step. image modality. e-commerce image processing, portrait cutout, design assets 向け。 料金：0.006849 $ / 回.",
+      "vi": "BRIA AI's RMBG 2.0 background removal model. high-precision background removal in one step. image modality. Phù hợp cho e-commerce image processing, portrait cutout, design assets. Giá: 0.006849 $ / lần."
     },
     "unit": "request",
     "badge": {
@@ -988,8 +988,8 @@
       "ja": "リクエストごと",
       "vi": "Mỗi lần gọi"
     },
-    "description_zh": "腾讯 RMBG 2.0 背景移除模型。高精度抠图，一键去除图像背景。支持图像模态。适合电商图片处理、人像抠图、设计素材。 计费：$0.006849/次。",
-    "description_en": "Tencent's RMBG 2.0 background removal model. high-precision background removal in one step. image modality. Ideal for e-commerce image processing, portrait cutout, design assets. Pricing: 0.006849 / request.",
+    "description_zh": "BRIA AI RMBG 2.0 背景移除模型。高精度抠图，一键去除图像背景。支持图像模态。适合电商图片处理、人像抠图、设计素材。 计费：$0.006849/次。",
+    "description_en": "BRIA AI's RMBG 2.0 background removal model. high-precision background removal in one step. image modality. Ideal for e-commerce image processing, portrait cutout, design assets. Pricing: 0.006849 / request.",
     "badge_zh": "按次计费",
     "badge_en": "Per Request",
     "suffix_zh": "/次",
@@ -1094,15 +1094,15 @@
     "price_key_en": ""
   },
   "Duix-Avatar": {
-    "description": "Duix 数字人视频生成模型。由照片或文本驱动生成逼真数字人播报视频。支持视频模态。适合数字人播报、虚拟主播、视频营销。 计费：$0.06849/秒。",
+    "description": "Duix 数字人视频生成模型。由照片或文本驱动生成逼真数字人播报视频。支持视频模态。适合数字人播报、虚拟主播、视频营销。 计费：$0.0685/秒。",
     "descriptions": {
-      "zhCN": "Duix 数字人视频生成模型。由照片或文本驱动生成逼真数字人播报视频。支持视频模态。适合数字人播报、虚拟主播、视频营销。 计费：$0.06849/秒。",
-      "zhTW": "Duix 數位人影片生成模型。由照片或文本驅動生成逼真數位人播報影片。支援影片模态。適合數位人播報、虛擬主播、影片行銷。 計費：$0.06849/秒。",
-      "en": "Duix digital human video generation model. drives realistic digital human videos from photos or text. video modality. Ideal for digital human broadcasting, virtual anchors, video marketing. Pricing: 0.06849 / second.",
-      "fr": "Duix digital human video generation model. drives realistic digital human videos from photos or text. video modality. Idéal pour digital human broadcasting, virtual anchors, video marketing. Tarif : 0.06849 $ / seconde.",
-      "ru": "Duix digital human video generation model. drives realistic digital human videos from photos or text. video modality. Подходит для digital human broadcasting, virtual anchors, video marketing. Тариф: 0.06849 $ / секунду.",
-      "ja": "Duix digital human video generation model. drives realistic digital human videos from photos or text. video modality. digital human broadcasting, virtual anchors, video marketing 向け。 料金：0.06849 $ / 秒.",
-      "vi": "Duix digital human video generation model. drives realistic digital human videos from photos or text. video modality. Phù hợp cho digital human broadcasting, virtual anchors, video marketing. Giá: 0.06849 $ / giây."
+      "zhCN": "Duix 数字人视频生成模型。由照片或文本驱动生成逼真数字人播报视频。支持视频模态。适合数字人播报、虚拟主播、视频营销。 计费：$0.0685/秒。",
+      "zhTW": "Duix 數位人影片生成模型。由照片或文本驅動生成逼真數位人播報影片。支援影片模态。適合數位人播報、虛擬主播、影片行銷。 計費：$0.0685/秒。",
+      "en": "Duix digital human video generation model. drives realistic digital human videos from photos or text. video modality. Ideal for digital human broadcasting, virtual anchors, video marketing. Pricing: 0.0685 / second.",
+      "fr": "Duix digital human video generation model. drives realistic digital human videos from photos or text. video modality. Idéal pour digital human broadcasting, virtual anchors, video marketing. Tarif : 0.0685 $ / seconde.",
+      "ru": "Duix digital human video generation model. drives realistic digital human videos from photos or text. video modality. Подходит для digital human broadcasting, virtual anchors, video marketing. Тариф: 0.0685 $ / секунду.",
+      "ja": "Duix digital human video generation model. drives realistic digital human videos from photos or text. video modality. digital human broadcasting, virtual anchors, video marketing 向け。 料金：0.0685 $ / 秒.",
+      "vi": "Duix digital human video generation model. drives realistic digital human videos from photos or text. video modality. Phù hợp cho digital human broadcasting, virtual anchors, video marketing. Giá: 0.0685 $ / giây."
     },
     "unit": "second",
     "badge": {
@@ -1132,8 +1132,8 @@
       "ja": "秒ごと",
       "vi": "Mỗi giây"
     },
-    "description_zh": "Duix 数字人视频生成模型。由照片或文本驱动生成逼真数字人播报视频。支持视频模态。适合数字人播报、虚拟主播、视频营销。 计费：$0.06849/秒。",
-    "description_en": "Duix digital human video generation model. drives realistic digital human videos from photos or text. video modality. Ideal for digital human broadcasting, virtual anchors, video marketing. Pricing: 0.06849 / second.",
+    "description_zh": "Duix 数字人视频生成模型。由照片或文本驱动生成逼真数字人播报视频。支持视频模态。适合数字人播报、虚拟主播、视频营销。 计费：$0.0685/秒。",
+    "description_en": "Duix digital human video generation model. drives realistic digital human videos from photos or text. video modality. Ideal for digital human broadcasting, virtual anchors, video marketing. Pricing: 0.0685 / second.",
     "badge_zh": "按秒计费",
     "badge_en": "Per Second",
     "suffix_zh": "/秒",
@@ -5654,15 +5654,15 @@
     "price_key_en": ""
   },
   "SenseVoiceSmall": {
-    "description": "阿里 SenseVoice Small 语音识别模型。轻量快速的中英文语音识别，支持情感与事件检测。支持音频模态。适合实时语音转写、语音指令、内容审核辅助。 计费：$0/次。",
+    "description": "阿里 SenseVoice Small 语音识别模型。轻量快速的中英文语音识别，支持情感与事件检测。支持音频模态。适合实时语音转写、语音指令、内容审核辅助。 计费：$0.00685/次。",
     "descriptions": {
-      "zhCN": "阿里 SenseVoice Small 语音识别模型。轻量快速的中英文语音识别，支持情感与事件检测。支持音频模态。适合实时语音转写、语音指令、内容审核辅助。 计费：$0/次。",
-      "zhTW": "阿里 SenseVoice Small 語音辨識模型。輕量快速的中英文語音辨識，支援情感与事件偵測。支援音訊模态。適合即時語音转写、語音指令、內容審核輔助。 計費：$0/次。",
-      "en": "Alibaba's SenseVoice Small speech recognition model. lightweight, fast Chinese and English ASR with emotion and event detection. audio modality. Ideal for real-time transcription, voice commands, content moderation assistance. Pricing: 0 / request.",
-      "fr": "Alibaba's SenseVoice Small speech recognition model. lightweight, fast Chinese and English ASR with emotion and event detection. audio modality. Idéal pour real-time transcription, voice commands, content moderation assistance. Tarif : 0 $ / requête.",
-      "ru": "Alibaba's SenseVoice Small speech recognition model. lightweight, fast Chinese and English ASR with emotion and event detection. audio modality. Подходит для real-time transcription, voice commands, content moderation assistance. Тариф: 0 $ / запрос.",
-      "ja": "Alibaba's SenseVoice Small speech recognition model. lightweight, fast Chinese and English ASR with emotion and event detection. audio modality. real-time transcription, voice commands, content moderation assistance 向け。 料金：0 $ / 回.",
-      "vi": "Alibaba's SenseVoice Small speech recognition model. lightweight, fast Chinese and English ASR with emotion and event detection. audio modality. Phù hợp cho real-time transcription, voice commands, content moderation assistance. Giá: 0 $ / lần."
+      "zhCN": "阿里 SenseVoice Small 语音识别模型。轻量快速的中英文语音识别，支持情感与事件检测。支持音频模态。适合实时语音转写、语音指令、内容审核辅助。 计费：$0.00685/次。",
+      "zhTW": "阿里 SenseVoice Small 語音辨識模型。輕量快速的中英文語音辨識，支援情感与事件偵測。支援音訊模态。適合即時語音转写、語音指令、內容審核輔助。 計費：$0.00685/次。",
+      "en": "Alibaba's SenseVoice Small speech recognition model. lightweight, fast Chinese and English ASR with emotion and event detection. audio modality. Ideal for real-time transcription, voice commands, content moderation assistance. Pricing: $0.00685 / request.",
+      "fr": "Alibaba's SenseVoice Small speech recognition model. lightweight, fast Chinese and English ASR with emotion and event detection. audio modality. Idéal pour real-time transcription, voice commands, content moderation assistance. Tarif : 0.00685 $ / requête.",
+      "ru": "Alibaba's SenseVoice Small speech recognition model. lightweight, fast Chinese and English ASR with emotion and event detection. audio modality. Подходит для real-time transcription, voice commands, content moderation assistance. Тариф: 0.00685 $ / запрос.",
+      "ja": "Alibaba's SenseVoice Small speech recognition model. lightweight, fast Chinese and English ASR with emotion and event detection. audio modality. real-time transcription, voice commands, content moderation assistance 向け。 料金：0.00685 $ / 回.",
+      "vi": "Alibaba's SenseVoice Small speech recognition model. lightweight, fast Chinese and English ASR with emotion and event detection. audio modality. Phù hợp cho real-time transcription, voice commands, content moderation assistance. Giá: 0.00685 $ / lần."
     },
     "unit": "request",
     "badge": {
@@ -5692,8 +5692,8 @@
       "ja": "リクエストごと",
       "vi": "Mỗi lần gọi"
     },
-    "description_zh": "阿里 SenseVoice Small 语音识别模型。轻量快速的中英文语音识别，支持情感与事件检测。支持音频模态。适合实时语音转写、语音指令、内容审核辅助。 计费：$0/次。",
-    "description_en": "Alibaba's SenseVoice Small speech recognition model. lightweight, fast Chinese and English ASR with emotion and event detection. audio modality. Ideal for real-time transcription, voice commands, content moderation assistance. Pricing: 0 / request.",
+    "description_zh": "阿里 SenseVoice Small 语音识别模型。轻量快速的中英文语音识别，支持情感与事件检测。支持音频模态。适合实时语音转写、语音指令、内容审核辅助。 计费：$0.00685/次。",
+    "description_en": "Alibaba's SenseVoice Small speech recognition model. lightweight, fast Chinese and English ASR with emotion and event detection. audio modality. Ideal for real-time transcription, voice commands, content moderation assistance. Pricing: $0.00685 / request.",
     "badge_zh": "按次计费",
     "badge_en": "Per Request",
     "suffix_zh": "/次",
@@ -5702,15 +5702,15 @@
     "price_key_en": "Per request"
   },
   "Spark-TTS-0.5B": {
-    "description": "Spark TTS 0.5B 轻量语音合成模型。开源轻量级 TTS，音色自然，适合低成本语音场景。支持音频模态。适合语音提示、轻量配音、原型验证。 计费：$0/次。",
+    "description": "Spark TTS 0.5B 轻量语音合成模型。开源轻量级 TTS，音色自然，适合低成本语音场景。支持音频模态。适合语音提示、轻量配音、原型验证。 计费：$0.0137/次。",
     "descriptions": {
-      "zhCN": "Spark TTS 0.5B 轻量语音合成模型。开源轻量级 TTS，音色自然，适合低成本语音场景。支持音频模态。适合语音提示、轻量配音、原型验证。 计费：$0/次。",
-      "zhTW": "Spark TTS 0.5B 輕量語音合成模型。开源輕量級 TTS，音色自然，適合低成本語音場景。支援音訊模态。適合語音提示、輕量配音、原型验证。 計費：$0/次。",
-      "en": "Spark TTS 0.5B lightweight speech synthesis model. lightweight open TTS with natural voices for low-cost speech scenarios. audio modality. Ideal for voice prompts, lightweight dubbing, prototyping. Pricing: 0 / request.",
-      "fr": "Spark TTS 0.5B lightweight speech synthesis model. lightweight open TTS with natural voices for low-cost speech scenarios. audio modality. Idéal pour voice prompts, lightweight dubbing, prototyping. Tarif : 0 $ / requête.",
-      "ru": "Spark TTS 0.5B lightweight speech synthesis model. lightweight open TTS with natural voices for low-cost speech scenarios. audio modality. Подходит для voice prompts, lightweight dubbing, prototyping. Тариф: 0 $ / запрос.",
-      "ja": "Spark TTS 0.5B lightweight speech synthesis model. lightweight open TTS with natural voices for low-cost speech scenarios. audio modality. voice prompts, lightweight dubbing, prototyping 向け。 料金：0 $ / 回.",
-      "vi": "Spark TTS 0.5B lightweight speech synthesis model. lightweight open TTS with natural voices for low-cost speech scenarios. audio modality. Phù hợp cho voice prompts, lightweight dubbing, prototyping. Giá: 0 $ / lần."
+      "zhCN": "Spark TTS 0.5B 轻量语音合成模型。开源轻量级 TTS，音色自然，适合低成本语音场景。支持音频模态。适合语音提示、轻量配音、原型验证。 计费：$0.0137/次。",
+      "zhTW": "Spark TTS 0.5B 輕量語音合成模型。开源輕量級 TTS，音色自然，適合低成本語音場景。支援音訊模态。適合語音提示、輕量配音、原型验证。 計費：$0.0137/次。",
+      "en": "Spark TTS 0.5B lightweight speech synthesis model. lightweight open TTS with natural voices for low-cost speech scenarios. audio modality. Ideal for voice prompts, lightweight dubbing, prototyping. Pricing: $0.0137 / request.",
+      "fr": "Spark TTS 0.5B lightweight speech synthesis model. lightweight open TTS with natural voices for low-cost speech scenarios. audio modality. Idéal pour voice prompts, lightweight dubbing, prototyping. Tarif : 0.0137 $ / requête.",
+      "ru": "Spark TTS 0.5B lightweight speech synthesis model. lightweight open TTS with natural voices for low-cost speech scenarios. audio modality. Подходит для voice prompts, lightweight dubbing, prototyping. Тариф: 0.0137 $ / запрос.",
+      "ja": "Spark TTS 0.5B lightweight speech synthesis model. lightweight open TTS with natural voices for low-cost speech scenarios. audio modality. voice prompts, lightweight dubbing, prototyping 向け。 料金：0.0137 $ / 回.",
+      "vi": "Spark TTS 0.5B lightweight speech synthesis model. lightweight open TTS with natural voices for low-cost speech scenarios. audio modality. Phù hợp cho voice prompts, lightweight dubbing, prototyping. Giá: 0.0137 $ / lần."
     },
     "unit": "request",
     "badge": {
@@ -5740,8 +5740,8 @@
       "ja": "リクエストごと",
       "vi": "Mỗi lần gọi"
     },
-    "description_zh": "Spark TTS 0.5B 轻量语音合成模型。开源轻量级 TTS，音色自然，适合低成本语音场景。支持音频模态。适合语音提示、轻量配音、原型验证。 计费：$0/次。",
-    "description_en": "Spark TTS 0.5B lightweight speech synthesis model. lightweight open TTS with natural voices for low-cost speech scenarios. audio modality. Ideal for voice prompts, lightweight dubbing, prototyping. Pricing: 0 / request.",
+    "description_zh": "Spark TTS 0.5B 轻量语音合成模型。开源轻量级 TTS，音色自然，适合低成本语音场景。支持音频模态。适合语音提示、轻量配音、原型验证。 计费：$0.0137/次。",
+    "description_en": "Spark TTS 0.5B lightweight speech synthesis model. lightweight open TTS with natural voices for low-cost speech scenarios. audio modality. Ideal for voice prompts, lightweight dubbing, prototyping. Pricing: $0.0137 / request.",
     "badge_zh": "按次计费",
     "badge_en": "Per Request",
     "suffix_zh": "/次",
@@ -6662,15 +6662,15 @@
     "price_key_en": ""
   },
   "keyo-flash:free": {
-    "description": "Keyo Flash 的赠送金调用模型。可用赠送金调用，按对应模型费率计费，优先扣减赠送金；新用户注册送 $10，每邀请一位新用户送 $3。支持文本模态。适合通用对话、内容创作、智能助手。",
+    "description": "Keyo Flash 的赠送金调用模型。可用赠送金调用，按对应模型费率计费，优先扣减赠送金；新用户注册送 $10，每邀请一位新用户送 $3。支持文本模态。适合通用对话、内容创作、智能助手。 计费：输入 $0.01 / 输出 $0.05 每百万 tokens。",
     "descriptions": {
-      "zhCN": "Keyo Flash 的赠送金调用模型。可用赠送金调用，按对应模型费率计费，优先扣减赠送金；新用户注册送 $10，每邀请一位新用户送 $3。支持文本模态。适合通用对话、内容创作、智能助手。",
-      "zhTW": "Keyo Flash 的贈送金呼叫模型。可用贈送金呼叫，按对应模型费率計費，优先扣减贈送金；新用戶註冊送 $10，每邀請一位新用戶送 $3。支援文本模态。適合通用對話、內容創作、智慧助手。",
-      "en": "Keyo Flash gift-credit edition. callable with gift credits at the base model rate; gift credits are used first — new users get $10, and each successful invite earns $3. text modality. Ideal for general chat, content creation, intelligent assistance.",
-      "fr": "Keyo Flash gift-credit edition. callable with gift credits at the base model rate; gift credits are used first — new users get $10, and each successful invite earns $3. text modality. Idéal pour general chat, content creation, intelligent assistance.",
-      "ru": "Keyo Flash gift-credit edition. callable with gift credits at the base model rate; gift credits are used first — new users get $10, and each successful invite earns $3. text modality. Подходит для general chat, content creation, intelligent assistance.",
-      "ja": "Keyo Flash gift-credit edition. callable with gift credits at the base model rate; gift credits are used first — new users get $10, and each successful invite earns $3. text modality. general chat, content creation, intelligent assistance 向け。",
-      "vi": "Keyo Flash gift-credit edition. callable with gift credits at the base model rate; gift credits are used first — new users get $10, and each successful invite earns $3. text modality. Phù hợp cho general chat, content creation, intelligent assistance."
+      "zhCN": "Keyo Flash 的赠送金调用模型。可用赠送金调用，按对应模型费率计费，优先扣减赠送金；新用户注册送 $10，每邀请一位新用户送 $3。支持文本模态。适合通用对话、内容创作、智能助手。 计费：输入 $0.01 / 输出 $0.05 每百万 tokens。",
+      "zhTW": "Keyo Flash 的贈送金呼叫模型。可用贈送金呼叫，按对应模型费率計費，优先扣减贈送金；新用戶註冊送 $10，每邀請一位新用戶送 $3。支援文本模态。適合通用對話、內容創作、智慧助手。 計費：輸入 $0.01 / 輸出 $0.05 每百萬 tokens。",
+      "en": "Keyo Flash gift-credit edition. callable with gift credits at the base model rate; gift credits are used first — new users get $10, and each successful invite earns $3. text modality. Ideal for general chat, content creation, intelligent assistance. Pricing: $0.01 in / $0.05 out per 1M tokens.",
+      "fr": "Keyo Flash gift-credit edition. callable with gift credits at the base model rate; gift credits are used first — new users get $10, and each successful invite earns $3. text modality. Idéal pour general chat, content creation, intelligent assistance. Tarif : 0.01 $ entrée / 0.05 $ sortie par million de tokens.",
+      "ru": "Keyo Flash gift-credit edition. callable with gift credits at the base model rate; gift credits are used first — new users get $10, and each successful invite earns $3. text modality. Подходит для general chat, content creation, intelligent assistance. Тариф: 0.01 $ ввод / 0.05 $ вывод за 1M токенов.",
+      "ja": "Keyo Flash gift-credit edition. callable with gift credits at the base model rate; gift credits are used first — new users get $10, and each successful invite earns $3. text modality. general chat, content creation, intelligent assistance 向け。 料金：入力 $0.01 / 出力 $0.05（100万トークンあたり）。",
+      "vi": "Keyo Flash gift-credit edition. callable with gift credits at the base model rate; gift credits are used first — new users get $10, and each successful invite earns $3. text modality. Phù hợp cho general chat, content creation, intelligent assistance. Giá: 0.01 $ đầu vào / 0.05 $ đầu ra mỗi 1M token."
     },
     "unit": "token",
     "badge": {
@@ -6700,8 +6700,8 @@
       "ja": "",
       "vi": ""
     },
-    "description_zh": "Keyo Flash 的赠送金调用模型。可用赠送金调用，按对应模型费率计费，优先扣减赠送金；新用户注册送 $10，每邀请一位新用户送 $3。支持文本模态。适合通用对话、内容创作、智能助手。",
-    "description_en": "Keyo Flash gift-credit edition. callable with gift credits at the base model rate; gift credits are used first — new users get $10, and each successful invite earns $3. text modality. Ideal for general chat, content creation, intelligent assistance.",
+    "description_zh": "Keyo Flash 的赠送金调用模型。可用赠送金调用，按对应模型费率计费，优先扣减赠送金；新用户注册送 $10，每邀请一位新用户送 $3。支持文本模态。适合通用对话、内容创作、智能助手。 计费：输入 $0.01 / 输出 $0.05 每百万 tokens。",
+    "description_en": "Keyo Flash gift-credit edition. callable with gift credits at the base model rate; gift credits are used first — new users get $10, and each successful invite earns $3. text modality. Ideal for general chat, content creation, intelligent assistance. Pricing: $0.01 in / $0.05 out per 1M tokens.",
     "badge_zh": "按 Token 计费",
     "badge_en": "Token-based",
     "suffix_zh": "",
@@ -6710,15 +6710,15 @@
     "price_key_en": ""
   },
   "keyo-flash2:free": {
-    "description": "Keyo Flash2 的赠送金调用模型。可用赠送金调用，按对应模型费率计费，优先扣减赠送金；新用户注册送 $10，每邀请一位新用户送 $3。支持文本模态。适合通用对话、内容创作、智能助手。",
+    "description": "Keyo Flash2 的赠送金调用模型。可用赠送金调用，按对应模型费率计费，优先扣减赠送金；新用户注册送 $10，每邀请一位新用户送 $3。支持文本模态。适合通用对话、内容创作、智能助手。 计费：输入 $0.01 / 输出 $0.05 每百万 tokens。",
     "descriptions": {
-      "zhCN": "Keyo Flash2 的赠送金调用模型。可用赠送金调用，按对应模型费率计费，优先扣减赠送金；新用户注册送 $10，每邀请一位新用户送 $3。支持文本模态。适合通用对话、内容创作、智能助手。",
-      "zhTW": "Keyo Flash2 的贈送金呼叫模型。可用贈送金呼叫，按对应模型费率計費，优先扣减贈送金；新用戶註冊送 $10，每邀請一位新用戶送 $3。支援文本模态。適合通用對話、內容創作、智慧助手。",
-      "en": "Keyo Flash2 gift-credit edition. callable with gift credits at the base model rate; gift credits are used first — new users get $10, and each successful invite earns $3. text modality. Ideal for general chat, content creation, intelligent assistance.",
-      "fr": "Keyo Flash2 gift-credit edition. callable with gift credits at the base model rate; gift credits are used first — new users get $10, and each successful invite earns $3. text modality. Idéal pour general chat, content creation, intelligent assistance.",
-      "ru": "Keyo Flash2 gift-credit edition. callable with gift credits at the base model rate; gift credits are used first — new users get $10, and each successful invite earns $3. text modality. Подходит для general chat, content creation, intelligent assistance.",
-      "ja": "Keyo Flash2 gift-credit edition. callable with gift credits at the base model rate; gift credits are used first — new users get $10, and each successful invite earns $3. text modality. general chat, content creation, intelligent assistance 向け。",
-      "vi": "Keyo Flash2 gift-credit edition. callable with gift credits at the base model rate; gift credits are used first — new users get $10, and each successful invite earns $3. text modality. Phù hợp cho general chat, content creation, intelligent assistance."
+      "zhCN": "Keyo Flash2 的赠送金调用模型。可用赠送金调用，按对应模型费率计费，优先扣减赠送金；新用户注册送 $10，每邀请一位新用户送 $3。支持文本模态。适合通用对话、内容创作、智能助手。 计费：输入 $0.01 / 输出 $0.05 每百万 tokens。",
+      "zhTW": "Keyo Flash2 的贈送金呼叫模型。可用贈送金呼叫，按对应模型费率計費，优先扣减贈送金；新用戶註冊送 $10，每邀請一位新用戶送 $3。支援文本模态。適合通用對話、內容創作、智慧助手。 計費：輸入 $0.01 / 輸出 $0.05 每百萬 tokens。",
+      "en": "Keyo Flash2 gift-credit edition. callable with gift credits at the base model rate; gift credits are used first — new users get $10, and each successful invite earns $3. text modality. Ideal for general chat, content creation, intelligent assistance. Pricing: $0.01 in / $0.05 out per 1M tokens.",
+      "fr": "Keyo Flash2 gift-credit edition. callable with gift credits at the base model rate; gift credits are used first — new users get $10, and each successful invite earns $3. text modality. Idéal pour general chat, content creation, intelligent assistance. Tarif : 0.01 $ entrée / 0.05 $ sortie par million de tokens.",
+      "ru": "Keyo Flash2 gift-credit edition. callable with gift credits at the base model rate; gift credits are used first — new users get $10, and each successful invite earns $3. text modality. Подходит для general chat, content creation, intelligent assistance. Тариф: 0.01 $ ввод / 0.05 $ вывод за 1M токенов.",
+      "ja": "Keyo Flash2 gift-credit edition. callable with gift credits at the base model rate; gift credits are used first — new users get $10, and each successful invite earns $3. text modality. general chat, content creation, intelligent assistance 向け。 料金：入力 $0.01 / 出力 $0.05（100万トークンあたり）。",
+      "vi": "Keyo Flash2 gift-credit edition. callable with gift credits at the base model rate; gift credits are used first — new users get $10, and each successful invite earns $3. text modality. Phù hợp cho general chat, content creation, intelligent assistance. Giá: 0.01 $ đầu vào / 0.05 $ đầu ra mỗi 1M token."
     },
     "unit": "token",
     "badge": {
@@ -6748,8 +6748,8 @@
       "ja": "",
       "vi": ""
     },
-    "description_zh": "Keyo Flash2 的赠送金调用模型。可用赠送金调用，按对应模型费率计费，优先扣减赠送金；新用户注册送 $10，每邀请一位新用户送 $3。支持文本模态。适合通用对话、内容创作、智能助手。",
-    "description_en": "Keyo Flash2 gift-credit edition. callable with gift credits at the base model rate; gift credits are used first — new users get $10, and each successful invite earns $3. text modality. Ideal for general chat, content creation, intelligent assistance.",
+    "description_zh": "Keyo Flash2 的赠送金调用模型。可用赠送金调用，按对应模型费率计费，优先扣减赠送金；新用户注册送 $10，每邀请一位新用户送 $3。支持文本模态。适合通用对话、内容创作、智能助手。 计费：输入 $0.01 / 输出 $0.05 每百万 tokens。",
+    "description_en": "Keyo Flash2 gift-credit edition. callable with gift credits at the base model rate; gift credits are used first — new users get $10, and each successful invite earns $3. text modality. Ideal for general chat, content creation, intelligent assistance. Pricing: $0.01 in / $0.05 out per 1M tokens.",
     "badge_zh": "按 Token 计费",
     "badge_en": "Token-based",
     "suffix_zh": "",

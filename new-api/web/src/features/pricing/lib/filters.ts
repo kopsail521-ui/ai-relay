@@ -219,18 +219,21 @@ export function parseTags(tagsString?: string): string[] {
  * Extract all unique tags from models
  */
 export function extractAllTags(models: PricingModel[]): string[] {
-  const tagSet = new Set<string>()
+  const tagMap = new Map<string, string>()
 
   models.forEach((model) => {
     if (model.tags) {
       const tags = parseTags(model.tags)
       tags.forEach((tag) => {
-        tagSet.add(tag.toLowerCase())
+        const key = tag.toLowerCase()
+        if (!tagMap.has(key)) {
+          tagMap.set(key, key === 'ocr' ? 'OCR' : tag)
+        }
       })
     }
   })
 
-  return Array.from(tagSet).sort((a, b) => a.localeCompare(b))
+  return Array.from(tagMap.values()).sort((a, b) => a.localeCompare(b))
 }
 
 /**

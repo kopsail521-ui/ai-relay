@@ -105,7 +105,7 @@ function ModelList(props: {
             >
               {t('by')}{' '}
               <VendorLink vendor={row.vendor}>
-                {row.vendor.toLowerCase()}
+                {row.vendor}
               </VendorLink>
             </p>
           </div>

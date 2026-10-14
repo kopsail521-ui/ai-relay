@@ -33,9 +33,28 @@ export function resolveGiftCreditPricing(
       return { ...model, gift_billing_rate_available: true }
     }
 
-    const twin = modelMap.get(model.model_name.trim().slice(0, -5))
+    const baseName = model.model_name.trim().slice(0, -5)
+    const twin =
+      modelMap.get(baseName) ||
+      models.find((m) => m.model_name.toLowerCase() === baseName.toLowerCase())
     if (!twin || twin.billing_mode === 'tiered_expr') {
-      return { ...model, gift_billing_rate_available: false }
+      // No separately-listed base model (e.g. keyo-flash:free): fall back to
+      // the model's own ratio, or the free-pool default ($0.01 in / $0.05 out
+      // per 1M tokens) so the detail page can still show billing rates.
+      const selfHasRate =
+        model.quota_type === 1
+          ? Number(model.model_price ?? 0) > 0
+          : Number(model.model_ratio ?? 0) > 0
+      return {
+        ...model,
+        quota_type: selfHasRate ? model.quota_type : 0,
+        model_price: selfHasRate ? model.model_price : undefined,
+        model_ratio: selfHasRate ? model.model_ratio : 0.005,
+        completion_ratio: selfHasRate
+          ? (model.completion_ratio ?? 5)
+          : 5,
+        gift_billing_rate_available: true,
+      }
     }
 
     return {

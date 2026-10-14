@@ -14,7 +14,18 @@
     "keyo-text-moderation": "/brand/logo.svg",
     "Atria-dawn-v2": "/brand/logo.svg",
     "video-enhance-pro": "/brand/logo.svg",
-    "subtitle-erase-pro": "/brand/logo.svg"
+    "subtitle-erase-pro": "/brand/logo.svg",
+    "RMBG-2.0": "/brand/logo.svg",
+    "Atria-dawn-v2:free": "/brand/logo.svg",
+    "keyo-flash:free": "/brand/logo.svg",
+    "keyo-flash2:free": "/brand/logo.svg",
+    "Spark-TTS-0.5B": "/brand/logo.svg",
+    "WeMM-Embedding-1.3B": "/brand/logo.svg",
+    "WeMM-Embedding-1.7B": "/brand/logo.svg",
+    "WeMM-Embedding-4B": "/brand/logo.svg",
+    "SemIf-OpenJev-4B": "/brand/logo.svg",
+    "jev-1.13.0": "/brand/logo.svg",
+    "laya-multilingual": "/brand/logo.svg"
   },
   "lobehub_fixes": {
     "seedance-2.5": "Doubao.Color",
@@ -31,7 +42,6 @@
     "Unlimited-OCR": "Wenxin.Color",
     "IndexTTS-2": "Bilibili.Color",
     "Real-ESRGAN": "Tencent.Color",
-    "RMBG-2.0": "Tencent.Color",
     "Fun-ASR-Nano-2512": "Qwen.Color",
     "Qwen3-TTS": "Qwen.Color",
     "CosyVoice3": "Qwen.Color",

@@ -122,7 +122,7 @@ function MoverRow(props: { row: RankingMover; intent: 'up' | 'down' }) {
         <p className='text-muted-foreground/80 truncate text-[11px]'>
           #{props.row.current_rank} ·{' '}
           <VendorLink vendor={props.row.vendor}>
-            {props.row.vendor.toLowerCase()}
+            {props.row.vendor}
           </VendorLink>
         </p>
       </div>

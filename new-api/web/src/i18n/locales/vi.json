@@ -5432,5 +5432,6 @@
     "Gift credits given on registration for gift-credit models. Default $10. ({{formattedQuota}})": "Tín dụng tặng khi đăng ký cho mô hình dùng tín dụng tặng. Mặc định $10. ({{formattedQuota}})",
     "Gift credits credited to inviter for gift-credit models on each successful signup. Default $3. ({{formattedQuota}})": "Tín dụng tặng cho người mời dùng với mô hình dùng tín dụng tặng sau mỗi lượt đăng ký thành công. Mặc định $3. ({{formattedQuota}})",
     "Pre-Consume for Zero-Cost Models": "Trừ hạn mức trước cho mô hình có đơn giá bằng không"
-  }
+  },
+  "Recommended order": "Thứ tự đề xuất"
 }

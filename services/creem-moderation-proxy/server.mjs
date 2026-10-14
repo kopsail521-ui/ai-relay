@@ -645,7 +645,6 @@ function enrichPricingPayload(payload) {
     (vendors || []).map((v) => [v.id, v])
   );
 
-  const HIDDEN_PUBLIC_GROUPS = new Set(["AWS-Bedrock-2", "Claude-Code-2", "vip"]);
   const briaVendorRow = (vendors || []).find((v) => v && v.name === "BRIA AI");
 
   const data = payload.data.map((m) => {
@@ -713,10 +712,6 @@ function enrichPricingPayload(payload) {
         next.supported_endpoint_types = ["anthropic", "openai", "openai-response"];
       }
     }
-    if (Array.isArray(next.enable_groups)) {
-      const filteredGroups = next.enable_groups.filter((g) => !HIDDEN_PUBLIC_GROUPS.has(g));
-      next.enable_groups = filteredGroups.length > 0 ? filteredGroups : ["default"];
-    }
     if (next.tags != null) next.tags = normalizeModelTags(next.tags);
     if (next.description) next.description = sanitizeDescription(next.description);
     return next;
@@ -731,25 +726,10 @@ function enrichPricingPayload(payload) {
     ? vendors.filter((v) => v && usedVids.has(v.id))
     : vendors;
 
-  const nextUsableGroup = payload.usable_group && typeof payload.usable_group === "object"
-    ? Object.fromEntries(Object.entries(payload.usable_group).filter(([k]) => !HIDDEN_PUBLIC_GROUPS.has(k)))
-    : payload.usable_group;
-  const nextGroupRatio = payload.group_ratio && typeof payload.group_ratio === "object"
-    ? Object.fromEntries(Object.entries(payload.group_ratio).filter(([k]) => !HIDDEN_PUBLIC_GROUPS.has(k)))
-    : payload.group_ratio;
-const nextAutoGroups = Array.isArray(payload.auto_groups)
-    ? payload.auto_groups.filter((g) => !HIDDEN_PUBLIC_GROUPS.has(g))
-    : payload.auto_groups;
-
-  return {
-    ...payload,
-    data,
-    vendors: vendorsUsed,
-    supported_endpoint: mergedEndpoints,
-    ...(nextUsableGroup ? { usable_group: nextUsableGroup } : {}),
-    ...(nextGroupRatio ? { group_ratio: nextGroupRatio } : {}),
-    ...(nextAutoGroups ? { auto_groups: nextAutoGroups } : {}),
-  };
+  // Group pricing data (usable_group / group_ratio / auto_groups / enable_groups)
+  // must stay intact: the detail-page group price tables for the Claude series
+  // and per-second video models render directly from these fields.
+  return { ...payload, data, vendors: vendorsUsed, supported_endpoint: mergedEndpoints };
 }
 
 /** 排行榜展示倍率：只放大 token 展示量，不改库、不影响扣费。份额/增速不变。 */

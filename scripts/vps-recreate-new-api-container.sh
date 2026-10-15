@@ -58,10 +58,23 @@ for bind in host.get("Binds") or []:
     cmd += ["-v", bind]
 
 env_re = re.compile(r"^[A-Za-z_][A-Za-z0-9_]*=")
+envs = []
 for e in cfg.get("Env") or []:
     if not e or not env_re.match(e):
         print("SKIP_ENV", repr(e), flush=True)
         continue
+    envs.append(e)
+
+# Per-call task models must never inherit the sora seconds/size multiplier.
+# Injected on every recreate so CI deploys keep it even before any onboarding.
+TASK_PATCH = (
+    "TASK_PRICE_PATCH=gpt-image-2,gpt-image-2-2K,gpt-image-2-4K,gpt-image-2.5,"
+    "gpt-image-2.5-flare,gpt-image-2.5-flare-vip,gpt-image-2.5-sunburst,gpt-image-2.5-sunburst-vip"
+)
+if not any(e.startswith("TASK_PRICE_PATCH=") for e in envs):
+    envs.append(TASK_PATCH)
+    print("ENV_ADDED TASK_PRICE_PATCH for per-call gpt-image task models", flush=True)
+for e in envs:
     cmd += ["-e", e]
 
 cmd.append(img)

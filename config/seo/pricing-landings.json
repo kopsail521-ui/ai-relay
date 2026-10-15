@@ -422,7 +422,7 @@
       },
       "body": [
         "Teams that search ChatGPT API pricing, OpenAI API pricing, or OpenAI API costs usually need GPT-class chat inside an OpenAI SDK with clearer unit economics — or one prepaid balance that also covers Claude, DeepSeek, Whisper, OCR, and TTS. Official OpenAI / ChatGPT surfaces win on brand trust and first-party product UI. KeyoAPI is for when you want that stack without five invoices and without rewriting clients when you swap models.",
-        "Keyo rates in the table are indicative sell prices from the live Keyo catalog. On Keyo, gpt-6-astra is OpenAI’s gpt-6-astra model ID (confirm live /model/gpt-6-astra). Always confirm interactive try/buy under Model Square (/pricing) for gpt-6-astra, gpt-5.6-luna, gpt-5.6-terra, and gpt-5.6-sol before contracting volume. OpenAI list bands, cached-input discounts, and model renames change — treat official figures as planning context only. Keyo GPT-5.6 IDs remain GPT-class twins on an OpenAI-compatible API, not OpenAI first-party model names.",
+        "Keyo rates in the table are indicative sell prices from the live Keyo catalog. On Keyo, gpt-6-astra is OpenAI’s gpt-6-astra model ID (confirm live /model/gpt-6-astra). Always confirm interactive try/buy under /pricing (Model Square) for gpt-6-astra, gpt-5.6-luna, gpt-5.6-terra, and gpt-5.6-sol before contracting volume. OpenAI list bands, cached-input discounts, and model renames change — treat official figures as planning context only. Keyo GPT-5.6 IDs remain GPT-class twins on an OpenAI-compatible API, not OpenAI first-party model names.",
         "Worked planning example (indicative only): suppose a batch path burns 50M input tokens and 10M output tokens per month. At Luna ~$0.10 / $0.62 per 1M in/out that is roughly $5 input + $6.20 output ≈ $11.20 before retries and overhead. At Terra ~$0.37 / $2.21 the same mix is roughly $18.50 + $22.10 ≈ $40.60. Put high-volume classification on Luna and keep product chat on Terra so the expensive model only sees the traffic that needs it. Re-run the math on live /pricing pages before you budget.",
         "Integration steps: (1) create an account at /sign-up and top up Wallet; (2) create an API key in console; (3) set base URL https://www.keyoapi.xyz/v1 (OPENAI_BASE_URL or sdk base_url); (4) call POST /v1/chat/completions with model gpt-6-astra, gpt-5.6-luna, gpt-5.6-terra, or gpt-5.6-sol; (5) try/buy interactively from /pricing/{modelId} — there is no separate upload playground. Longer guides: /model/gpt-6-astra, /model/gpt-5.6-luna, /model/gpt-5.6-terra, /model/gpt-5.6-sol.",
         "Routing tip: keep GPT-class for product chat defaults; shift bulk classification, tagging, and draft rewrites to gpt-5.6-luna or deepseek-v4-flash on the same key. Escalate only failing slices to Terra, Sol, or gpt-6-astra after automated validators reject output. For Claude dollars see /claude-api-pricing; for Gemini see /gemini-api-pricing; for DeepSeek see /deepseek-api-pricing; for Grok see /grok-api-pricing; for free prototyping see /free-models; for a side-by-side catalog see /compare.",
@@ -451,7 +451,7 @@
         },
         {
           "q": "How do I try GPT-class models on Keyo?",
-          "a": "Create a key at /sign-up, then open /model/gpt-6-astra (or Luna/Terra/Sol guides) and use Model Square (/pricing) for interactive try/buy. There is no separate upload playground — Model Square is the try path."
+          "a": "Create a key at /sign-up, then open /model/gpt-6-astra (or Luna/Terra/Sol guides) and use /pricing (Model Square) for interactive try/buy. There is no separate upload playground — Model Square is the try path."
         },
         {
           "q": "How do I estimate monthly GPT-class cost on Keyo?",
@@ -622,7 +622,7 @@
         "Teams call a text to speech API for IVR, voice agents, course narration, and avatar pipelines. Keyo keeps STT (Whisper) and TTS on one prepaid balance so you are not juggling three vendor consoles.",
         "Indicative rates above come from the live Keyo catalog — confirm /model/IndexTTS-2, /model/CosyVoice3, /model/Qwen3-TTS, and /model/gemini-3.8-flash-tts (live rates on /pricing). Prefer IndexTTS-2 when the product needs audio inside one request; prefer CosyVoice3 or Qwen3-TTS when jobs are already async. Gemini 3.8 Flash TTS bills per token, not per 10K characters — it is not covered by the ~$0.548–$1.37 / 10K characters range above, and it calls a Gemini-native endpoint rather than the OpenAI-compatible /v1/audio/speech.",
         "How to call CosyVoice3 API (and siblings): set base URL https://www.keyoapi.xyz/v1, authenticate with your Keyo key, pass the model id. Full CosyVoice3 walkthrough: /model/CosyVoice3. Also /model/IndexTTS-2, /model/Qwen3-TTS. Voice clone angle: /voice-cloning-api. Talking video: /ai-avatar-video-generator.",
-        "Create a key at /sign-up, then open Model Square (/pricing) for interactive try/buy."
+        "Create a key at /sign-up, then open /pricing (Model Square) for interactive try/buy."
       ],
       "curlExample": "curl https://www.keyoapi.xyz/v1/audio/speech \\\n  -H \"Authorization: Bearer $KEYO_API_KEY\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\"model\":\"IndexTTS-2\",\"input\":\"Hello from KeyoAPI TTS.\"}'",
       "faqs": [
@@ -1095,7 +1095,7 @@
         },
         {
           "q": "How do I try MiniMax-H3 on Keyo?",
-          "a": "Create a key at /sign-up and open Model Square (/pricing) to find MiniMax-H3, or start with a $0 free catalog ID on /free-models to warm up your pipeline."
+          "a": "Create a key at /sign-up and open /pricing (Model Square) to find MiniMax-H3. To prove out base URL and auth first, call a $0 gift-credit ID on /free-models (chat and speech models), then switch model=."
         }
       ],
       "curlExample": "curl https://www.keyoapi.xyz/v1/videos/generations \\\n  -H \"Authorization: Bearer $KEYO_API_KEY\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\"model\":\"MiniMax-H3\",\"prompt\":\"A red balloon rising into a blue sky, cinematic light\",\"aspectRatio\":\"landscape\",\"resolution\":\"480p\",\"duration\":5}'\n# Poll GET /v1/tasks/{id} with the same key: processing = still rendering, completed = ready url"
@@ -1164,7 +1164,7 @@
         },
         {
           "q": "How do I try FLUX.3 Video on Keyo?",
-          "a": "Create a key at /sign-up and open Model Square (/pricing) to find flux-3-video, or start with a $0 free catalog ID on /free-models."
+          "a": "Create a key at /sign-up and open /pricing (Model Square) to find flux-3-video, or start with a $0 gift-credit ID on /free-models."
         }
       ],
       "curlExample": "curl https://www.keyoapi.xyz/v1/videos/generations \\\n  -H \"Authorization: Bearer $KEYO_API_KEY\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\"model\":\"flux-3-video\",\"prompt\":\"A flower blooming, slow camera push-in\",\"duration\":5,\"resolution\":\"hd\"}'\n# Poll GET /v1/tasks/{id} with the same key: processing = still rendering, completed = ready url"
@@ -1221,7 +1221,7 @@
         },
         {
           "q": "How do I try Wan 3.0 on Keyo?",
-          "a": "Create a key at /sign-up and open Model Square (/pricing) to find wan3.0-video, or start with a $0 free catalog ID on /free-models."
+          "a": "Create a key at /sign-up and open /pricing (Model Square) to find wan3.0-video, or start with a $0 gift-credit ID on /free-models."
         }
       ],
       "curlExample": "curl https://www.keyoapi.xyz/v1/videos/generations \\\n  -H \"Authorization: Bearer $KEYO_API_KEY\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\"model\":\"wan3.0-video\",\"prompt\":\"A kitten running across a moonlit rooftop\",\"resolution\":\"720P\",\"duration\":5}'\n# Poll GET /v1/tasks/{id} with the same key: processing = still rendering, completed = ready url"
@@ -1278,7 +1278,7 @@
         },
         {
           "q": "How do I try Agnes Video 2.5 on Keyo?",
-          "a": "Create a key at /sign-up, then call POST /v1/videos/generations with model=agnes-video-2.5, or find it in Model Square (/pricing)."
+          "a": "Create a key at /sign-up, then call POST /v1/videos/generations with model=agnes-video-2.5, or find it in /pricing (Model Square)."
         }
       ],
       "curlExample": "curl https://www.keyoapi.xyz/v1/videos/generations \\\n  -H \"Authorization: Bearer $KEYO_API_KEY\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\"model\":\"agnes-video-2.5\",\"prompt\":\"A drone shot over neon city rain, cinematic\",\"duration\":5,\"resolution\":\"720p\",\"aspectRatio\":\"landscape\"}'\n# Poll GET /v1/tasks/{id} with the same key: processing = still rendering, completed = ready url"

@@ -114,7 +114,8 @@ export function useOAuthLogin(
 
       const url = buildDiscordOAuthUrl(status.discord_client_id, state)
       window.open(url, '_self')
-    } catch {
+    } catch (err) {
+      console.error('[Discord] Login failed:', err)
       toast.error(t('Failed to start Discord login'))
     } finally {
       setIsLoading(false)
@@ -135,8 +136,10 @@ export function useOAuthLogin(
         state
       )
       window.open(url, '_self')
-    } catch {
-      toast.error(t('Failed to start OIDC login'))
+    } catch (err) {
+      console.error('[OIDC] Login failed:', err)
+      const message = err instanceof Error ? err.message : String(err)
+      toast.error(t('Failed to start OIDC login') + ': ' + message)
     } finally {
       setIsLoading(false)
     }
@@ -152,7 +155,8 @@ export function useOAuthLogin(
 
       const url = buildLinuxDOOAuthUrl(status.linuxdo_client_id, state)
       window.open(url, '_self')
-    } catch {
+    } catch (err) {
+      console.error('[LinuxDO] Login failed:', err)
       toast.error(t('Failed to start LinuxDO login'))
     } finally {
       setIsLoading(false)

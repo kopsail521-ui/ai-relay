@@ -16,6 +16,10 @@ Allow: /voice-cloning-api
 Allow: /ai-avatar-video-generator
 Allow: /grok-api-pricing
 Allow: /openai-api-alternative
+Allow: /seedance-2-5-api-pricing
+Allow: /minimax-h3-api-pricing
+Allow: /flux-3-video-api-pricing
+Allow: /wan3-video-api-pricing
 Allow: /gpt-6-1-sol-vs-gpt-6-astra
 Allow: /fable-5-1-vs-opus-5-5
 Allow: /gemini-4-api

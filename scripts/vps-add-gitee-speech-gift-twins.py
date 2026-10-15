@@ -146,20 +146,23 @@ def main():
                 fields.append("created_time"); values.append(now)
             if "updated_time" in m_cols:
                 fields.append("updated_time"); values.append(now)
+            # NB: deleted_at must stay NULL — gorm soft delete treats any
+            # non-NULL value (incl. 0) as deleted and hides the row from
+            # DB.Find, which is where /api/pricing reads model metadata.
             if "deleted_at" in m_cols:
-                fields.append("deleted_at"); values.append(0)
+                fields.append("deleted_at"); values.append(None)
             cur.execute(
                 "INSERT INTO models(%s) VALUES (%s)" % (",".join(fields), ",".join(["?"] * len(fields))),
                 values,
             )
             print("models: inserted %s (vendor_id=%s)" % (twin, vendor_id))
         else:
-            sets = ["description=?", "status=1"]
-            vals = [desc]
+            sets = ["description=?", "icon=?", "tags=?", "vendor_id=?", "endpoints=?", "status=1"]
+            vals = [desc, icon, tags, vendor_id, endpoints]
             if "updated_time" in m_cols:
                 sets.append("updated_time=?"); vals.append(now)
             if "deleted_at" in m_cols:
-                sets.append("deleted_at=0")
+                sets.append("deleted_at=NULL")
             vals.append(exists[0])
             cur.execute("UPDATE models SET %s WHERE id=?" % ",".join(sets), vals)
             print("models: revived/updated %s" % twin)

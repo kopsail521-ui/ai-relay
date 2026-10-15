@@ -35,6 +35,7 @@ for name, desc, icon, tags, vid, ep in [
         'INSERT INTO abilities("group",model,channel_id,enabled,priority,weight) VALUES (?,?,?,1,0,1)',
         ("default", name, 7 if name != "Spark-TTS-0.5B" else 8),
     )
+cur.execute("INSERT INTO models(model_name,description,icon,tags,vendor_id,endpoints,status,sync_official,created_time,updated_time,deleted_at) VALUES ('SenseVoiceSmall:free','stale','','',NULL,'',1,0,?,?,0)", (now, now))
 cur.execute("INSERT INTO options(key,value) VALUES ('ModelPrice','{\"SenseVoiceSmall\":0.006849,\"GLM-ASR\":0.006849,\"Spark-TTS-0.5B\":0.013699}')")
 c.commit(); c.close()
 
@@ -56,6 +57,11 @@ for row in cur.execute('SELECT model, "group", channel_id FROM abilities WHERE m
     print("ability:", row)
 desc = cur.execute("SELECT description FROM models WHERE model_name='SenseVoiceSmall:free'").fetchone()[0]
 assert "赠送金" in desc and "$0.00685" not in desc, desc
+for row in cur.execute("SELECT model_name, description, deleted_at FROM models WHERE model_name LIKE '%:free'").fetchall():
+    assert row[2] is None, ("deleted_at must be NULL", row)
+    assert row[1] and "赠送金" in row[1], ("desc must be set", row)
+n = cur.execute("SELECT COUNT(*) FROM models WHERE model_name='SenseVoiceSmall:free'").fetchone()[0]
+assert n == 1, ("duplicate rows", n)
 mm8 = json.loads(cur.execute("SELECT model_mapping FROM channels WHERE id=8").fetchone()[0])
 assert mm8.get("Spark-TTS-0.5B:free") == "Spark-TTS-0.5B" and mm8.get("x") == "y", mm8
 c.close()

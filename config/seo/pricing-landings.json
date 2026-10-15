@@ -968,7 +968,7 @@
       "body": [
         "Seedance 2.0 is ByteDance's prior-generation video family, still fully supported on KeyoAPI. Every SKU has the resolution baked into the model ID — 1080p or 720p in standard, fast and mini variants — so you pick price and latency in the model string itself: POST /v1/videos/generations with model=seedance-2.0-720p-mini is the cheapest entry at about $0.0499 per generated second.",
         "Clips run 4 to 15 seconds (default 5); duration or seconds is the only extra field you usually need. Image inputs follow the Seedance conventions: first_frame_image for a first frame, image_urls for reference generation, image_with_roles for first+last frame. Keyo rates above are indicative sell prices from the live Keyo catalog — confirm the interactive card under /pricing before volume.",
-        "For the current-generation flagship see Seedance 2.5 pricing; for other video lanes on the same key see MiniMax-H3, FLUX.3 Video, Wan 3.0 and Agnes Video 2.5 on /pricing-list."
+        "For the current-generation flagship see /seedance-2-5-api-pricing; for other video lanes on the same key see /minimax-h3-api-pricing, /flux-3-video-api-pricing, /wan3-video-api-pricing and /agnes-video-2-5-api-pricing, all listed on /pricing-list."
       ],
       "faqs": [
         {
@@ -1025,7 +1025,7 @@
       "body": [
         "Seedance is ByteDance's video generation family. On KeyoAPI you call the same OpenAI-compatible endpoint you already use for chat: set OPENAI_BASE_URL=https://www.keyoapi.xyz/v1, send POST /v1/videos/generations with model=seedance-2.5-1080p (or the 2.0 tiers), and pay per second of generated video from your prepaid wallet.",
         "Keyo rates above are indicative sell prices from the live Keyo catalog. Confirm the interactive card under /pricing/seedance-2.5-1080p before volume, and treat official ByteDance figures as planning context — list bands move.",
-        "Seedance bills by generated second, so a shorter clip costs less. For image-to-video and longer scenes, compare the 2.5 and 2.0 tiers on this page, then check /pricing-list for the full catalog."
+        "Seedance bills by generated second, so a shorter clip costs less. For image-to-video and longer scenes, compare the 2.5 tiers here with the six 2.0 SKUs on /seedance-2-0-api-pricing, then check /pricing-list for the full catalog."
       ],
       "faqs": [
         {
@@ -1082,7 +1082,7 @@
       "body": [
         "MiniMax-H3 is MiniMax's video generation model, billed per second of output on KeyoAPI. Use the standard OpenAI-compatible flow: set OPENAI_BASE_URL=https://www.keyoapi.xyz/v1 and POST /v1/videos/generations with model=MiniMax-H3; the resolution you request (480p / 768p / 1080p) decides the per-second rate.",
         "Keyo rates above are indicative sell prices from the live Keyo catalog. Confirm the interactive card under /pricing before volume, and treat MiniMax official figures as planning context — list bands move.",
-        "MiniMax-H3 supports reference images for image-to-video. Compare it with Seedance and other video lanes on /pricing-list when you need a second vendor on the same key."
+        "MiniMax-H3 supports reference images for image-to-video. Compare it with /seedance-2-5-api-pricing and other video lanes on /pricing-list when you need a second vendor on the same key."
       ],
       "faqs": [
         {
@@ -1208,7 +1208,7 @@
       "body": [
         "Wan 3.0 is Alibaba's video generation model, available on KeyoAPI as wan3.0-video. Use the OpenAI-compatible /v1/videos/generations endpoint with your Keyo key; the output resolution (480P / 720P / 1080P) decides the per-second rate.",
         "Keyo rates above are indicative sell prices from the live Keyo catalog. Confirm the interactive card under /pricing before volume, and treat Alibaba official figures as planning context — list bands move.",
-        "Wan 3.0 supports text-to-video and image-to-video workflows. Compare it with Seedance, MiniMax-H3 and FLUX.3 Video on /pricing-list when you want multiple video vendors on one key."
+        "Wan 3.0 supports text-to-video and image-to-video workflows. Compare it with /seedance-2-5-api-pricing, /minimax-h3-api-pricing and /flux-3-video-api-pricing on /pricing-list when you want multiple video vendors on one key."
       ],
       "faqs": [
         {
@@ -1265,7 +1265,7 @@
       "body": [
         "Agnes Video 2.5 is a text-to-video and image-to-video model. On KeyoAPI you POST /v1/videos/generations with model=agnes-video-2.5, a prompt, and the output resolution (720p / 1080p / 2k); clips run 1–12 seconds (default 5) and billing is per generated second from your prepaid wallet.",
         "Optional inputs follow the same JSON body: aspectRatio (landscape / portrait / square, or 16:9 / 9:16 / 1:1), up to 9 reference images for image-to-video, up to 3 audio clips, and a seed. Keyo rates above are indicative sell prices from the live Keyo catalog — confirm the interactive card under /pricing before volume.",
-        "For other video lanes on the same key see Seedance 2.5, MiniMax-H3 and FLUX.3 Video on /pricing-list; for post-generation cleanup see the subtitle erase and video enhance tools."
+        "For other video lanes on the same key see /seedance-2-5-api-pricing, /minimax-h3-api-pricing and /flux-3-video-api-pricing on /pricing-list; for post-generation cleanup see /subtitle-erase-pro-api-pricing and /video-enhance-pro-api-pricing."
       ],
       "faqs": [
         {
@@ -1322,7 +1322,7 @@
       "body": [
         "video-enhance-pro is a generative video enhancement tool: you submit an existing video and get back a higher-quality version. Call POST /v1/async/videos/enhance with model=video-enhance-pro, the source video as video_url (https), and the target resolution (720p / 1080p / 2k; default 1080p).",
         "The call returns a task id immediately — poll GET /v1/task/{id} (singular) with the same key until it returns the result URL. Billing is per second of successfully processed video, so a 10-second 1080p clip costs about $0.68.",
-        "Keyo rates above are indicative sell prices from the live Keyo catalog; confirm under /pricing before volume. For removing burned-in subtitles on the same key see the subtitle erase tool; for generation see Seedance, MiniMax-H3, FLUX.3 and Wan 3.0 on /pricing-list."
+        "Keyo rates above are indicative sell prices from the live Keyo catalog; confirm under /pricing before volume. For removing burned-in subtitles on the same key see /subtitle-erase-pro-api-pricing; for generation see /seedance-2-5-api-pricing, /minimax-h3-api-pricing, /flux-3-video-api-pricing and /wan3-video-api-pricing on /pricing-list."
       ],
       "faqs": [
         {
@@ -1367,7 +1367,7 @@
       "body": [
         "subtitle-erase-pro removes burned-in (hard) subtitles from video and reconstructs the area behind them. Call POST /v1/async/videos/subtitle-erase with model=subtitle-erase-pro and the source video as video_url (https).",
         "The call returns a task id immediately — poll GET /v1/task/{id} (singular) with the same key until it returns the cleaned video URL. Billing is per second of successfully processed video; a 60-second clip costs about $1.10.",
-        "Keyo rates above are indicative sell prices from the live Keyo catalog; confirm under /pricing before volume. Pair it with the video enhance tool for restore-then-upscale workflows; for generation see the Seedance, MiniMax-H3, FLUX.3 and Wan 3.0 lanes on /pricing-list."
+        "Keyo rates above are indicative sell prices from the live Keyo catalog; confirm under /pricing before volume. Pair it with /video-enhance-pro-api-pricing for restore-then-upscale workflows; for generation see /seedance-2-5-api-pricing, /minimax-h3-api-pricing, /flux-3-video-api-pricing and /wan3-video-api-pricing on /pricing-list."
       ],
       "faqs": [
         {

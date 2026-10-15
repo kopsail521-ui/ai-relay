@@ -136,7 +136,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
 <h2>Rates and how to call</h2>
 <p>Seedance 2.0 is ByteDance's prior-generation video family, still fully supported on KeyoAPI. Every SKU has the resolution baked into the model ID — 1080p or 720p in standard, fast and mini variants — so you pick price and latency in the model string itself: POST /v1/videos/generations with model=seedance-2.0-720p-mini is the cheapest entry at about $0.0499 per generated second.</p>
 <p>Clips run 4 to 15 seconds (default 5); duration or seconds is the only extra field you usually need. Image inputs follow the Seedance conventions: first_frame_image for a first frame, image_urls for reference generation, image_with_roles for first+last frame. Keyo rates above are indicative sell prices from the live Keyo catalog — confirm the interactive card under <a href="/pricing">the pricing page</a> before volume.</p>
-<p>For the current-generation flagship see Seedance 2.5 pricing; for other video lanes on the same key see MiniMax-H3, FLUX.3 Video, Wan 3.0 and Agnes Video 2.5 on <a href="/pricing-list">the full pricing list</a>.</p>
+<p>For the current-generation flagship see <a href="/seedance-2-5-api-pricing">the seedance 2 5 api pricing page</a>; for other video lanes on the same key see <a href="/minimax-h3-api-pricing">the minimax h3 api pricing page</a>, <a href="/flux-3-video-api-pricing">the flux 3 video api pricing page</a>, <a href="/wan3-video-api-pricing">the wan3 video api pricing page</a> and <a href="/agnes-video-2-5-api-pricing">the agnes video 2 5 api pricing page</a>, all listed on <a href="/pricing-list">the full pricing list</a>.</p>
 
 <pre>curl https://www.keyoapi.xyz/v1/videos/generations \
   -H &quot;Authorization: Bearer $KEYO_API_KEY&quot; \

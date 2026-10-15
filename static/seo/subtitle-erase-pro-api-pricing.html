@@ -106,7 +106,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
 <h2>Rates and how to call</h2>
 <p>subtitle-erase-pro removes burned-in (hard) subtitles from video and reconstructs the area behind them. Call POST /v1/async/videos/subtitle-erase with model=subtitle-erase-pro and the source video as video_url (https).</p>
 <p>The call returns a task id immediately — poll GET /v1/task/{id} (singular) with the same key until it returns the cleaned video URL. Billing is per second of successfully processed video; a 60-second clip costs about $1.10.</p>
-<p>Keyo rates above are indicative sell prices from the live Keyo catalog; confirm under <a href="/pricing">the pricing page</a> before volume. Pair it with the video enhance tool for restore-then-upscale workflows; for generation see the Seedance, MiniMax-H3, FLUX.3 and Wan 3.0 lanes on <a href="/pricing-list">the full pricing list</a>.</p>
+<p>Keyo rates above are indicative sell prices from the live Keyo catalog; confirm under <a href="/pricing">the pricing page</a> before volume. Pair it with <a href="/video-enhance-pro-api-pricing">the video enhance pro api pricing page</a> for restore-then-upscale workflows; for generation see <a href="/seedance-2-5-api-pricing">the seedance 2 5 api pricing page</a>, <a href="/minimax-h3-api-pricing">the minimax h3 api pricing page</a>, <a href="/flux-3-video-api-pricing">the flux 3 video api pricing page</a> and <a href="/wan3-video-api-pricing">the wan3 video api pricing page</a> on <a href="/pricing-list">the full pricing list</a>.</p>
 
 <pre>curl https://www.keyoapi.xyz/v1/async/videos/subtitle-erase \
   -H &quot;Authorization: Bearer $KEYO_API_KEY&quot; \

@@ -118,7 +118,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
 <h2>Rates and how to call</h2>
 <p>Agnes Video 2.5 is a text-to-video and image-to-video model. On KeyoAPI you POST /v1/videos/generations with model=agnes-video-2.5, a prompt, and the output resolution (720p / 1080p / 2k); clips run 1–12 seconds (default 5) and billing is per generated second from your prepaid wallet.</p>
 <p>Optional inputs follow the same JSON body: aspectRatio (landscape / portrait / square, or 16:9 / 9:16 / 1:1), up to 9 reference images for image-to-video, up to 3 audio clips, and a seed. Keyo rates above are indicative sell prices from the live Keyo catalog — confirm the interactive card under <a href="/pricing">the pricing page</a> before volume.</p>
-<p>For other video lanes on the same key see Seedance 2.5, MiniMax-H3 and FLUX.3 Video on <a href="/pricing-list">the full pricing list</a>; for post-generation cleanup see the subtitle erase and video enhance tools.</p>
+<p>For other video lanes on the same key see <a href="/seedance-2-5-api-pricing">the seedance 2 5 api pricing page</a>, <a href="/minimax-h3-api-pricing">the minimax h3 api pricing page</a> and <a href="/flux-3-video-api-pricing">the flux 3 video api pricing page</a> on <a href="/pricing-list">the full pricing list</a>; for post-generation cleanup see <a href="/subtitle-erase-pro-api-pricing">the subtitle erase pro api pricing page</a> and <a href="/video-enhance-pro-api-pricing">the video enhance pro api pricing page</a>.</p>
 
 <pre>curl https://www.keyoapi.xyz/v1/videos/generations \
   -H &quot;Authorization: Bearer $KEYO_API_KEY&quot; \

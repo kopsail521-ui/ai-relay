@@ -118,7 +118,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
 <h2>Rates and how to call</h2>
 <p>video-enhance-pro is a generative video enhancement tool: you submit an existing video and get back a higher-quality version. Call POST /v1/async/videos/enhance with model=video-enhance-pro, the source video as video_url (https), and the target resolution (720p / 1080p / 2k; default 1080p).</p>
 <p>The call returns a task id immediately — poll GET /v1/task/{id} (singular) with the same key until it returns the result URL. Billing is per second of successfully processed video, so a 10-second 1080p clip costs about $0.68.</p>
-<p>Keyo rates above are indicative sell prices from the live Keyo catalog; confirm under <a href="/pricing">the pricing page</a> before volume. For removing burned-in subtitles on the same key see the subtitle erase tool; for generation see Seedance, MiniMax-H3, FLUX.3 and Wan 3.0 on <a href="/pricing-list">the full pricing list</a>.</p>
+<p>Keyo rates above are indicative sell prices from the live Keyo catalog; confirm under <a href="/pricing">the pricing page</a> before volume. For removing burned-in subtitles on the same key see <a href="/subtitle-erase-pro-api-pricing">the subtitle erase pro api pricing page</a>; for generation see <a href="/seedance-2-5-api-pricing">the seedance 2 5 api pricing page</a>, <a href="/minimax-h3-api-pricing">the minimax h3 api pricing page</a>, <a href="/flux-3-video-api-pricing">the flux 3 video api pricing page</a> and <a href="/wan3-video-api-pricing">the wan3 video api pricing page</a> on <a href="/pricing-list">the full pricing list</a>.</p>
 
 <pre>curl https://www.keyoapi.xyz/v1/async/videos/enhance \
   -H &quot;Authorization: Bearer $KEYO_API_KEY&quot; \

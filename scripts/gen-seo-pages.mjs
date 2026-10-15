@@ -1202,6 +1202,12 @@ function landingRelatedLinks(slug) {
       `${base}, and <a href="/seedance-2-5-api-pricing">Seedance 2.5 pricing</a> · <a href="/minimax-h3-api-pricing">MiniMax-H3 pricing</a> · <a href="/wan3-video-api-pricing">Wan 3.0 Video pricing</a>`,
     "wan3-video-api-pricing":
       `${base}, and <a href="/seedance-2-5-api-pricing">Seedance 2.5 pricing</a> · <a href="/minimax-h3-api-pricing">MiniMax-H3 pricing</a> · <a href="/flux-3-video-api-pricing">FLUX.3 Video pricing</a>`,
+    "agnes-video-2-5-api-pricing":
+      `${base}, and <a href="/seedance-2-5-api-pricing">Seedance 2.5 pricing</a> · <a href="/minimax-h3-api-pricing">MiniMax-H3 pricing</a> · <a href="/flux-3-video-api-pricing">FLUX.3 Video pricing</a>`,
+    "video-enhance-pro-api-pricing":
+      `${base}, and <a href="/subtitle-erase-pro-api-pricing">Subtitle Erase Pro pricing</a> · <a href="/agnes-video-2-5-api-pricing">Agnes Video 2.5 pricing</a> · <a href="/seedance-2-5-api-pricing">Seedance 2.5 pricing</a>`,
+    "subtitle-erase-pro-api-pricing":
+      `${base}, and <a href="/video-enhance-pro-api-pricing">Video Enhance Pro pricing</a> · <a href="/agnes-video-2-5-api-pricing">Agnes Video 2.5 pricing</a> · <a href="/seedance-2-5-api-pricing">Seedance 2.5 pricing</a>`,
   };
   const links = bySlug[slug] || `${base}, and <a href="/tts-api">TTS API</a> · <a href="/ai-avatar-video-generator">Avatar video</a>`;
   return `<p class="meta">Also see ${links}.</p>`;

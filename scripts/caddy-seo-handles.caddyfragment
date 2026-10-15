@@ -108,6 +108,21 @@
 		rewrite * /wan3-video-api-pricing.html
 		file_server
 	}
+	handle /agnes-video-2-5-api-pricing {
+		root * /opt/ai-relay/static/seo
+		rewrite * /agnes-video-2-5-api-pricing.html
+		file_server
+	}
+	handle /video-enhance-pro-api-pricing {
+		root * /opt/ai-relay/static/seo
+		rewrite * /video-enhance-pro-api-pricing.html
+		file_server
+	}
+	handle /subtitle-erase-pro-api-pricing {
+		root * /opt/ai-relay/static/seo
+		rewrite * /subtitle-erase-pro-api-pricing.html
+		file_server
+	}
 	handle /gpt-6-1-sol-vs-gpt-6-astra {
 		root * /opt/ai-relay/static/seo
 		rewrite * /gpt-6-1-sol-vs-gpt-6-astra.html

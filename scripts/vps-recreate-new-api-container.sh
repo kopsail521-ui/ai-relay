@@ -74,6 +74,28 @@ TASK_PATCH = (
 if not any(e.startswith("TASK_PRICE_PATCH=") for e in envs):
     envs.append(TASK_PATCH)
     print("ENV_ADDED TASK_PRICE_PATCH for per-call gpt-image task models", flush=True)
+
+# Stable login sessions: without SESSION_SECRET new-api generates a fresh
+# random secret per boot (common/constants.go) and every recreate logs every
+# user out. Persisted in the gitignored data dir so it survives resets and
+# stashes. CRYPTO_SECRET defaults to SESSION_SECRET, so it stabilizes too.
+SECRET_FILE = "/opt/ai-relay/data/.newapi-session-secret"
+if not any(e.startswith("SESSION_SECRET=") for e in envs):
+    secret = ""
+    try:
+        secret = open(SECRET_FILE).read().strip()
+    except OSError:
+        pass
+    if not re.fullmatch(r"[A-Za-z0-9_-]{32,}", secret or ""):
+        import secrets as pysecrets
+        secret = pysecrets.token_hex(32)
+        fd = os.open(SECRET_FILE, os.O_WRONLY | os.O_CREAT | os.O_TRUNC, 0o600)
+        with os.fdopen(fd, "w") as f:
+            f.write(secret + "\n")
+        print("SESSION_SECRET generated ->", SECRET_FILE, flush=True)
+    envs.append("SESSION_SECRET=" + secret)
+    print("ENV_ADDED SESSION_SECRET (stable logins across recreates)", flush=True)
+
 for e in envs:
     cmd += ["-e", e]
 
@@ -81,7 +103,9 @@ cmd.append(img)
 if cfg.get("Cmd"):
     cmd += list(cfg["Cmd"])
 
-print("RUN:", " ".join(shlex.quote(x) for x in cmd), flush=True)
+# Never echo the session secret into CI logs.
+safe_cmd = ["SESSION_SECRET=***" if x.startswith("SESSION_SECRET=") else x for x in cmd]
+print("RUN:", " ".join(shlex.quote(x) for x in safe_cmd), flush=True)
 if exists:
     # The old container still owns published ports (3000). Stop it first.
     # restart=always would bring it back immediately, so turn that off until swap.

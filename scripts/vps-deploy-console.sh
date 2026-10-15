@@ -39,6 +39,21 @@ while IFS= read -r e; do
   ARGS+=(-e "$e")
 done < <(sudo docker inspect "$NAME" --format '{{range .Config.Env}}{{println .}}{{end}}')
 
+# 稳定登录态：无 SESSION_SECRET 时 new-api 每次启动随机生成新密钥，重建
+# 容器即全站登出。密钥落在 gitignore 的 data 目录，一次生成永久复用
+# （同 vps-recreate-new-api-container.sh；CRYPTO_SECRET 默认跟随它）。
+SECRET_FILE=/opt/ai-relay/data/.newapi-session-secret
+if ! printf '%s\n' "${ARGS[@]}" | grep -q '^SESSION_SECRET='; then
+  SECRET=$(sudo cat "$SECRET_FILE" 2>/dev/null || true)
+  if ! printf '%s' "$SECRET" | grep -Eq '^[A-Za-z0-9_-]{32,}$'; then
+    SECRET=$(head -c 32 /dev/urandom | od -An -tx1 | tr -d ' \n')
+    sudo sh -c "umask 077 && printf '%s\\n' '$SECRET' > '$SECRET_FILE'"
+    say "SESSION_SECRET generated -> $SECRET_FILE"
+  fi
+  ARGS+=(-e "SESSION_SECRET=$SECRET")
+  say "ENV_ADDED SESSION_SECRET (stable logins across recreates)"
+fi
+
 n_mount=0
 while IFS= read -r m; do
   [ -z "$m" ] && continue

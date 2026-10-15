@@ -19,7 +19,7 @@ services:
       - ERROR_LOG_ENABLED=true
       - BATCH_UPDATE_ENABLED=true
       # 首次启动后在网页初始化管理员账号
-      # 多机部署时请改成随机长字符串：
+      # 不设 SESSION_SECRET 时每次重启随机生成新密钥 → 全站登录态失效（VPS 由 vps-recreate 脚本自动注入）：
       # - SESSION_SECRET=please-change-me
       # - CRYPTO_SECRET=please-change-me
     healthcheck:

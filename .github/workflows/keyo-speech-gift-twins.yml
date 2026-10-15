@@ -1,0 +1,69 @@
+name: Add speech gift twins on VPS
+
+# One-shot gift-credit provisioning: add ":free" twins for SenseVoiceSmall,
+# GLM-ASR and Spark-TTS-0.5B on the new-api DB, then restart and smoke-test.
+# Requires the same repo variable/secret as the console/static deploys:
+#   vars.KEYO_VPS_HOST (+ optional vars.KEYO_VPS_USER)
+#   secrets.KEYO_VPS_SSH_KEY
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "scripts/vps-add-gitee-speech-gift-twins.py"
+      - ".github/workflows/keyo-speech-gift-twins.yml"
+  workflow_dispatch:
+
+concurrency:
+  group: keyo-speech-gift-twins
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    name: Provision speech gift twins
+    if: vars.KEYO_VPS_HOST != ''
+    runs-on: ubuntu-latest
+    # Serialize VPS access across the console/static/blog deploy jobs.
+    concurrency:
+      group: keyo-vps-mutex
+      cancel-in-progress: false
+    steps:
+      - name: Provision over SSH
+        env:
+          HOST: ${{ vars.KEYO_VPS_HOST }}
+          USER: ${{ vars.KEYO_VPS_USER }}
+          KEY: ${{ secrets.KEYO_VPS_SSH_KEY }}
+        run: |
+          set -euo pipefail
+          if [ -z "${HOST}" ]; then
+            echo "KEYO_VPS_HOST is empty; skip deploy"
+            exit 0
+          fi
+          if [ -z "${USER}" ]; then USER=admin; fi
+          if [ -z "${KEY}" ]; then
+            echo "::error::KEYO_VPS_HOST is set but secrets.KEYO_VPS_SSH_KEY is empty."
+            exit 1
+          fi
+          install -m 700 -d "${HOME}/.ssh"
+          printf '%s\n' "${KEY}" > "${HOME}/.ssh/keyo_vps"
+          chmod 600 "${HOME}/.ssh/keyo_vps"
+          ssh -i "${HOME}/.ssh/keyo_vps" -o StrictHostKeyChecking=accept-new \
+            "${USER}@${HOST}" "sudo -n true && sudo bash -c '
+              set -e
+              cd /opt/ai-relay
+              bash scripts/vps-safe-pull-preserve-blog.sh >/dev/null
+              python3 /opt/ai-relay/scripts/vps-add-gitee-speech-gift-twins.py /opt/ai-relay/data/new-api/one-api.db
+              docker restart ai-relay-new-api
+              sleep 6
+              curl -fsS -o /dev/null http://127.0.0.1:3000/api/status && echo console_http_ok
+              PJSON=\$(mktemp)
+              curl -fsS https://www.keyoapi.xyz/api/pricing -o \"\$PJSON\"
+              for id in SenseVoiceSmall:free GLM-ASR:free Spark-TTS-0.5B:free; do
+                grep -q \"\$id\" \"\$PJSON\" && echo \"pricing_ok=\$id\" || { echo \"pricing_MISSING=\$id\"; exit 1; }
+              done
+              rm -f \"\$PJSON\"
+              echo DONE_SPEECH_GIFT_TWINS_DEPLOY
+            '"

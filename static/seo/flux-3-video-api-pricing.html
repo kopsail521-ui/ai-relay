@@ -132,15 +132,16 @@ ul{margin:0 0 14px;padding-left:1.2em}
 <p>Keyo rates above are indicative sell prices from the live Keyo catalog. Confirm the interactive card under <a href="/pricing">the pricing page</a> before volume, and treat Black Forest Labs official figures as planning context — list bands move.</p>
 <p>DRAFT is the budget tier for quick iteration; HD and FHD cost more per second. V2V (video-to-video) tiers add a second input clip and bill at the higher end of the table.</p>
 
-<pre>curl https://www.keyoapi.xyz/v1/chat/completions \
-  -H "Authorization: Bearer $KEYO_API_KEY" \
-  -H "Content-Type: application/json" \
-  -d '{"model":"flux-3-video","messages":[{"role":"user","content":"Hello"}]}'</pre>
+<pre>curl https://www.keyoapi.xyz/v1/videos/generations \
+  -H &quot;Authorization: Bearer $KEYO_API_KEY&quot; \
+  -H &quot;Content-Type: application/json&quot; \
+  -d '{&quot;model&quot;:&quot;flux-3-video&quot;,&quot;prompt&quot;:&quot;A flower blooming, slow camera push-in&quot;,&quot;duration&quot;:5,&quot;resolution&quot;:&quot;hd&quot;}'
+# Poll GET /v1/tasks/{id} with the same key: processing = still rendering, completed = ready url</pre>
 <h2>FAQ</h2>
 <div class="faq"><details><summary>What do the FLUX.3 Video tiers mean?</summary><p>DRAFT is the fastest, lowest-cost tier for iterating. HD and FHD are higher-quality outputs at higher per-second rates. V2V tiers generate from a video input clip.</p></details>
 <details><summary>Is Keyo cheaper than official FLUX.3 Video pricing?</summary><p>The Keyo rows are indicative sell rates from the live catalog. Black Forest Labs bands change, so treat this page as a planning snapshot and verify both sides before committing.</p></details>
 <details><summary>How do I try FLUX.3 Video on Keyo?</summary><p>Create a key at <a href="/sign-up">the sign-up page</a> and open Model Square (<a href="/pricing">the pricing page</a>) to find flux-3-video, or start with a $0 free catalog ID on <a href="/free-models">the gift-credit models page</a>.</p></details></div>
-<p class="meta">Also see <a href="/compare">the model comparison page</a>, <a href="/free-models">the free models page</a>, <a href="/pricing-list">the full pricing list</a>, and <a href="/tts-api">TTS API</a> · <a href="/ai-avatar-video-generator">Avatar video</a>.</p>
+<p class="meta">Also see <a href="/compare">the model comparison page</a>, <a href="/free-models">the free models page</a>, <a href="/pricing-list">the full pricing list</a>, and <a href="/seedance-2-5-api-pricing">Seedance 2.5 pricing</a> · <a href="/minimax-h3-api-pricing">MiniMax-H3 pricing</a> · <a href="/wan3-video-api-pricing">Wan 3.0 Video pricing</a>.</p>
 
 </main>
 <footer class="footer">

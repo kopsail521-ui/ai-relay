@@ -120,15 +120,16 @@ ul{margin:0 0 14px;padding-left:1.2em}
 <p>Keyo rates above are indicative sell prices from the live Keyo catalog. Confirm the interactive card under <a href="/pricing">the pricing page</a> before volume, and treat MiniMax official figures as planning context — list bands move.</p>
 <p>MiniMax-H3 supports reference images for image-to-video. Compare it with Seedance and other video lanes on <a href="/pricing-list">the full pricing list</a> when you need a second vendor on the same key.</p>
 
-<pre>curl https://www.keyoapi.xyz/v1/chat/completions \
-  -H "Authorization: Bearer $KEYO_API_KEY" \
-  -H "Content-Type: application/json" \
-  -d '{"model":"MiniMax-H3","messages":[{"role":"user","content":"Hello"}]}'</pre>
+<pre>curl https://www.keyoapi.xyz/v1/videos/generations \
+  -H &quot;Authorization: Bearer $KEYO_API_KEY&quot; \
+  -H &quot;Content-Type: application/json&quot; \
+  -d '{&quot;model&quot;:&quot;MiniMax-H3&quot;,&quot;prompt&quot;:&quot;A red balloon rising into a blue sky, cinematic light&quot;,&quot;aspectRatio&quot;:&quot;landscape&quot;,&quot;resolution&quot;:&quot;480p&quot;,&quot;duration&quot;:5}'
+# Poll GET /v1/tasks/{id} with the same key: processing = still rendering, completed = ready url</pre>
 <h2>FAQ</h2>
 <div class="faq"><details><summary>How is MiniMax-H3 billed on KeyoAPI?</summary><p>Per second of generated video, at the resolution you request. 480p is the lowest rate; 1080p is the highest of the three tiers listed above.</p></details>
 <details><summary>Can I use reference images with MiniMax-H3?</summary><p>Yes — MiniMax-H3 supports reference images for image-to-video generation through the standard /v1/videos/generations endpoint.</p></details>
 <details><summary>How do I try MiniMax-H3 on Keyo?</summary><p>Create a key at <a href="/sign-up">the sign-up page</a> and open Model Square (<a href="/pricing">the pricing page</a>) to find MiniMax-H3, or start with a $0 free catalog ID on <a href="/free-models">the gift-credit models page</a> to warm up your pipeline.</p></details></div>
-<p class="meta">Also see <a href="/compare">the model comparison page</a>, <a href="/free-models">the free models page</a>, <a href="/pricing-list">the full pricing list</a>, and <a href="/tts-api">TTS API</a> · <a href="/ai-avatar-video-generator">Avatar video</a>.</p>
+<p class="meta">Also see <a href="/compare">the model comparison page</a>, <a href="/free-models">the free models page</a>, <a href="/pricing-list">the full pricing list</a>, and <a href="/seedance-2-5-api-pricing">Seedance 2.5 pricing</a> · <a href="/flux-3-video-api-pricing">FLUX.3 Video pricing</a> · <a href="/wan3-video-api-pricing">Wan 3.0 Video pricing</a>.</p>
 
 </main>
 <footer class="footer">

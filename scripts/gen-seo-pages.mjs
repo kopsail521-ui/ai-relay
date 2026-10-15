@@ -69,6 +69,13 @@ const pricingLandings = JSON.parse(
 const contentLandings = JSON.parse(
   fs.readFileSync(path.join(root, "config/seo/content-landings.json"), "utf8")
 );
+/** model ID -> landing slug (first landing page that lists the model) */
+const landingByModel = new Map();
+for (const p of [...pricingLandings.pages, ...contentLandings.pages]) {
+  for (const r of p.rows || []) {
+    if (r.model && !landingByModel.has(r.model)) landingByModel.set(r.model, p.slug);
+  }
+}
 const selectedPages = new Set(
   process.argv.slice(2).flatMap((arg) => {
     if (!arg.startsWith("--pages=")) throw new Error(`Unknown argument: ${arg}`);
@@ -748,14 +755,30 @@ ${modelFoot}
 }
 
 function renderModelsIndex() {
-  const rows = pages.models
-    .map(
+  const seenIds = new Set(pages.models.map((m) => m.modelId || m.id));
+  // Catalog-only models (video generation/processing lane) still belong in
+  // this index; link each row through its landing page when one covers it.
+  const catalogRows = (pricingLandings.catalogRows || [])
+    .filter((r) => r.model && !seenIds.has(r.model))
+    .map((r) => {
+      const landing = landingByModel.get(r.model);
+      const modelCell = landing
+        ? `<a href="/${landing}"><code>${esc(r.model)}</code></a>`
+        : `<code>${esc(r.model)}</code>`;
+      const links = landing
+        ? `<a href="/${landing}">Guide</a> · <a href="/pricing">Catalog</a>`
+        : `<a href="/pricing">Catalog</a>`;
+      return `<tr><td>${modelCell}</td><td>${esc(r.category || "")}</td><td class="ok">${esc(r.keyo)}</td><td>${links}</td></tr>`;
+    });
+  const rows = [
+    ...pages.models.map(
       (m) =>
         `<tr><td><a href="/model/${encodeURIComponent(m.id)}"><code>${esc(m.modelId || m.id)}</code></a></td><td>${esc(m.category || "")}</td><td class="ok">${esc(m.priceLabel)}</td><td><a href="/model/${encodeURIComponent(m.id)}">Guide</a> · <a href="/pricing">Catalog</a></td></tr>`
-    )
-    .join("\n");
+    ),
+    ...catalogRows,
+  ].join("\n");
   const bodyHtml = `
-<p class="lead">Index of KeyoAPI model guides — chat, speech, vision, OCR, TTS, and digital humans. For the interactive catalog use <a href="/pricing">Model Square</a>.</p>
+<p class="lead">Index of KeyoAPI model guides — chat, speech, vision, OCR, TTS, digital humans, and video generation. For the interactive catalog use <a href="/pricing">Model Square</a>.</p>
 <div class="btnrow">
   <a class="btn btn-primary" href="/pricing">Browse Models</a>
   <a class="btn btn-secondary" href="/compare">Price comparison</a>
@@ -972,14 +995,19 @@ function renderPricing() {
   const rows = [...pages.models, ...landingExtra]
     .map((m) => {
       const hasGuide = m.guide !== false;
-      // No guide page -> the model name is plain text. Linking it through
-      // catalogHref would put /pricing-list (this very page) as its own href.
+      const landing = landingByModel.get(m.id);
+      // No /model/ guide -> link through the landing page that covers the
+      // model (e.g. the video generation catalog) instead of dead "List".
       const modelCell = hasGuide
         ? `<a href="/model/${encodeURIComponent(m.id)}"><code>${esc(m.modelId || m.id)}</code></a>`
-        : `<code>${esc(m.modelId || m.id)}</code>`;
+        : landing
+          ? `<a href="/${landing}"><code>${esc(m.modelId || m.id)}</code></a>`
+          : `<code>${esc(m.modelId || m.id)}</code>`;
       const guide = hasGuide
         ? `<a href="/model/${encodeURIComponent(m.id)}">Guide</a>`
-        : `List`;
+        : landing
+          ? `<a href="/${landing}">Guide</a>`
+          : `List`;
       return `<tr>
   <td>${modelCell}</td>
   <td>${esc(m.category)}</td>
@@ -1166,6 +1194,14 @@ function landingRelatedLinks(slug) {
       `${base}, and <a href="/model/gpt-6-astra">gpt-6-astra</a> · <a href="/model/gpt-5.6-luna">gpt-5.6-luna</a> · <a href="/openai-api-alternative">OpenAI API alternative</a>`,
     "openai-api-alternative":
       `${base}, and <a href="/openai-api-pricing">OpenAI API pricing</a> · <a href="/model/gpt-6-astra">gpt-6-astra</a> · <a href="/model/deepseek-v4.1-flash">deepseek-v4.1-flash</a>`,
+    "seedance-2-5-api-pricing":
+      `${base}, and <a href="/minimax-h3-api-pricing">MiniMax-H3 pricing</a> · <a href="/flux-3-video-api-pricing">FLUX.3 Video pricing</a> · <a href="/wan3-video-api-pricing">Wan 3.0 Video pricing</a>`,
+    "minimax-h3-api-pricing":
+      `${base}, and <a href="/seedance-2-5-api-pricing">Seedance 2.5 pricing</a> · <a href="/flux-3-video-api-pricing">FLUX.3 Video pricing</a> · <a href="/wan3-video-api-pricing">Wan 3.0 Video pricing</a>`,
+    "flux-3-video-api-pricing":
+      `${base}, and <a href="/seedance-2-5-api-pricing">Seedance 2.5 pricing</a> · <a href="/minimax-h3-api-pricing">MiniMax-H3 pricing</a> · <a href="/wan3-video-api-pricing">Wan 3.0 Video pricing</a>`,
+    "wan3-video-api-pricing":
+      `${base}, and <a href="/seedance-2-5-api-pricing">Seedance 2.5 pricing</a> · <a href="/minimax-h3-api-pricing">MiniMax-H3 pricing</a> · <a href="/flux-3-video-api-pricing">FLUX.3 Video pricing</a>`,
   };
   const links = bySlug[slug] || `${base}, and <a href="/tts-api">TTS API</a> · <a href="/ai-avatar-video-generator">Avatar video</a>`;
   return `<p class="meta">Also see ${links}.</p>`;

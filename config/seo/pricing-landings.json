@@ -965,7 +965,8 @@
           "q": "Which Seedance model should I use?",
           "a": "seedance-2.5-1080p is the current 2.5 flagship for 1080p output. seedance-2.0-1080p and seedance-2.0-720p are prior-generation tiers at lower per-second rates. Pick by resolution and budget."
         }
-      ]
+      ],
+      "curlExample": "curl https://www.keyoapi.xyz/v1/videos/generations \\\n  -H \"Authorization: Bearer $KEYO_API_KEY\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\"model\":\"seedance-2.5-1080p\",\"prompt\":\"A red paper boat drifting on calm water at sunset\",\"duration\":5}'\n# Poll GET /v1/tasks/{id} with the same key: processing = still rendering, completed = ready url"
     },
     {
       "slug": "minimax-h3-api-pricing",
@@ -1021,7 +1022,8 @@
           "q": "How do I try MiniMax-H3 on Keyo?",
           "a": "Create a key at /sign-up and open Model Square (/pricing) to find MiniMax-H3, or start with a $0 free catalog ID on /free-models to warm up your pipeline."
         }
-      ]
+      ],
+      "curlExample": "curl https://www.keyoapi.xyz/v1/videos/generations \\\n  -H \"Authorization: Bearer $KEYO_API_KEY\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\"model\":\"MiniMax-H3\",\"prompt\":\"A red balloon rising into a blue sky, cinematic light\",\"aspectRatio\":\"landscape\",\"resolution\":\"480p\",\"duration\":5}'\n# Poll GET /v1/tasks/{id} with the same key: processing = still rendering, completed = ready url"
     },
     {
       "slug": "flux-3-video-api-pricing",
@@ -1089,7 +1091,8 @@
           "q": "How do I try FLUX.3 Video on Keyo?",
           "a": "Create a key at /sign-up and open Model Square (/pricing) to find flux-3-video, or start with a $0 free catalog ID on /free-models."
         }
-      ]
+      ],
+      "curlExample": "curl https://www.keyoapi.xyz/v1/videos/generations \\\n  -H \"Authorization: Bearer $KEYO_API_KEY\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\"model\":\"flux-3-video\",\"prompt\":\"A flower blooming, slow camera push-in\",\"duration\":5,\"resolution\":\"hd\"}'\n# Poll GET /v1/tasks/{id} with the same key: processing = still rendering, completed = ready url"
     },
     {
       "slug": "wan3-video-api-pricing",
@@ -1145,7 +1148,8 @@
           "q": "How do I try Wan 3.0 on Keyo?",
           "a": "Create a key at /sign-up and open Model Square (/pricing) to find wan3.0-video, or start with a $0 free catalog ID on /free-models."
         }
-      ]
+      ],
+      "curlExample": "curl https://www.keyoapi.xyz/v1/videos/generations \\\n  -H \"Authorization: Bearer $KEYO_API_KEY\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\"model\":\"wan3.0-video\",\"prompt\":\"A kitten running across a moonlit rooftop\",\"resolution\":\"720P\",\"duration\":5}'\n# Poll GET /v1/tasks/{id} with the same key: processing = still rendering, completed = ready url"
     }
   ],
   "catalogRows": [

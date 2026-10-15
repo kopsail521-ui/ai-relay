@@ -1141,13 +1141,14 @@ ${rows}
 </details>
 </div>
 <h2>When you outgrow gift-credit models</h2>
-<p>Same key, switch <code>model=</code> only:</p>
+<p>Same key, switch <code>model=</code> only. Gift-credit IDs are chat and speech lanes — video generation has no free tier and bills per generated second:</p>
 <ul>
   <li><a href="/model/CosyVoice3"><strong>CosyVoice3 API</strong></a> — hosted async TTS when you need production throughput</li>
   <li><a href="/tts-api">TTS API hub</a> · <a href="/voice-cloning-api">Voice cloning</a> · <a href="/model/IndexTTS-2">IndexTTS-2</a></li>
   <li><a href="/model/deepseek-v4-flash"><strong>DeepSeek V4 Flash pricing</strong></a> — metered Flash after gift-credit prototypes</li>
   <li><a href="/model/kimi-k3"><strong>Kimi K3 API key</strong></a> — draft on gift-credit IDs, then <code>kimi-k3</code></li>
   <li><a href="/model/Duix-Avatar"><strong>Duix Avatar API</strong></a> — talking-face after TTS · <a href="/compare">Compare rates</a></li>
+  <li><a href="/seedance-2-5-api-pricing"><strong>Video generation APIs</strong></a> — per-second billing from ~$0.02/s: <a href="/seedance-2-0-api-pricing">Seedance 2.0</a> · <a href="/minimax-h3-api-pricing">MiniMax-H3</a> · <a href="/flux-3-video-api-pricing">FLUX.3</a> · <a href="/wan3-video-api-pricing">Wan 3.0</a> · <a href="/agnes-video-2-5-api-pricing">Agnes</a> · <a href="/video-enhance-pro-api-pricing">enhance</a> / <a href="/subtitle-erase-pro-api-pricing">subtitle erase</a></li>
 </ul>
 <p class="meta">Also see the interactive catalog on <a href="/pricing">the pricing page</a> (filter Gift-credit models) and the OpenAI-compatible docs.</p>
 `;

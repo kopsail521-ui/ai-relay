@@ -6756,5 +6756,389 @@
     "suffix_en": "",
     "price_key_zh": "",
     "price_key_en": ""
+  },
+  "gpt-image-2-1K": {
+    "descriptions": {
+      "zhCN": "GPT Image 2 标准档（1K）。文生图与图生图（最多 8 张参考图），经 POST /v1/videos 异步任务调用，轮询 GET /v1/videos/{task_id} 取图。支持 aspect_ratio 或 size 控制画幅。计费：$0.02505/次。",
+      "zhTW": "GPT Image 2 標準檔（1K）。文生圖與圖生圖（最多 8 張參考圖），經 POST /v1/videos 非同步任務呼叫，輪詢 GET /v1/videos/{task_id} 取圖。支援 aspect_ratio 或 size 控制畫幅。計費：$0.02505/次。",
+      "en": "GPT Image 2 standard tier (1K). Text-to-image and image-to-image (up to 8 reference images) via the async POST /v1/videos task API; poll GET /v1/videos/{task_id} for the result. Control framing with aspect_ratio or size. Pricing: $0.02505 / request.",
+      "fr": "GPT Image 2 niveau standard (1K). Texte-to-image et image-to-image (jusqu'à 8 images de référence) via l'API asynchrone POST /v1/videos ; interrogez GET /v1/videos/{task_id} pour le résultat. Cadrage via aspect_ratio ou size. Tarif : $0.02505 / requête.",
+      "ru": "GPT Image 2 стандартный уровень (1K). Генерация из текста и из изображения (до 8 референсов) через асинхронный API POST /v1/videos; результат — опросом GET /v1/videos/{task_id}. Кадрирование через aspect_ratio или size. Тариф: $0.02505 / запрос.",
+      "ja": "GPT Image 2 標準档（1K）. テキストから画像・画像から画像（参照画像は最大 8 枚）を POST /v1/videos の非同期タスク API で生成し、GET /v1/videos/{task_id} で結果を取得します。aspect_ratio または size でアスペクト比を指定可能。料金：$0.02505 / 回。",
+      "vi": "GPT Image 2 cấp chuẩn (1K). Tạo ảnh từ văn bản và từ ảnh tham chiếu (tối đa 8 ảnh) qua API tác vụ bất đồng bộ POST /v1/videos; lấy kết quả bằng GET /v1/videos/{task_id}. Khung hình qua aspect_ratio hoặc size. Giá: $0.02505 / lần."
+    },
+    "unit": "request",
+    "description": "GPT Image 2 标准档（1K）。文生图与图生图（最多 8 张参考图），经 POST /v1/videos 异步任务调用，轮询 GET /v1/videos/{task_id} 取图。支持 aspect_ratio 或 size 控制画幅。计费：$0.02505/次。",
+    "badge": {
+      "zhCN": "按次计费",
+      "zhTW": "按次計費",
+      "en": "Pay per request",
+      "fr": "À la requête",
+      "ru": "По запросам",
+      "ja": "リクエスト課金",
+      "vi": "Theo yêu cầu"
+    },
+    "suffix": {
+      "zhCN": "/次",
+      "zhTW": "/次",
+      "en": "/ request",
+      "fr": "/ requête",
+      "ru": "/ запрос",
+      "ja": "/ 回",
+      "vi": "/ lần"
+    },
+    "price_key": {
+      "zhCN": "价格",
+      "zhTW": "價格",
+      "en": "Price",
+      "fr": "Tarif",
+      "ru": "Тариф",
+      "ja": "料金",
+      "vi": "Giá"
+    },
+    "description_zh": "GPT Image 2 标准档（1K）。文生图与图生图（最多 8 张参考图），经 POST /v1/videos 异步任务调用，轮询 GET /v1/videos/{task_id} 取图。支持 aspect_ratio 或 size 控制画幅。计费：$0.02505/次。",
+    "description_en": "GPT Image 2 standard tier (1K). Text-to-image and image-to-image (up to 8 reference images) via the async POST /v1/videos task API; poll GET /v1/videos/{task_id} for the result. Control framing with aspect_ratio or size. Pricing: $0.02505 / request.",
+    "badge_zh": "按次计费",
+    "badge_en": "Pay per request",
+    "suffix_zh": "/次",
+    "suffix_en": "/ request",
+    "price_key_zh": "价格",
+    "price_key_en": "Price"
+  },
+  "gpt-image-2-2K": {
+    "descriptions": {
+      "zhCN": "GPT Image 2 高清 2K 档。文生图与图生图（最多 8 张参考图），经 POST /v1/videos 异步任务调用，轮询 GET /v1/videos/{task_id} 取图。支持 aspect_ratio 或 size 控制画幅。计费：$0.15/次。",
+      "zhTW": "GPT Image 2 高畫質 2K 檔。文生圖與圖生圖（最多 8 張參考圖），經 POST /v1/videos 非同步任務呼叫，輪詢 GET /v1/videos/{task_id} 取圖。支援 aspect_ratio 或 size 控制畫幅。計費：$0.15/次。",
+      "en": "GPT Image 2 high-resolution 2K tier. Text-to-image and image-to-image (up to 8 reference images) via the async POST /v1/videos task API; poll GET /v1/videos/{task_id} for the result. Control framing with aspect_ratio or size. Pricing: $0.15 / request.",
+      "fr": "GPT Image 2 niveau haute résolution 2K. Texte-to-image et image-to-image (jusqu'à 8 images de référence) via l'API asynchrone POST /v1/videos ; interrogez GET /v1/videos/{task_id} pour le résultat. Cadrage via aspect_ratio ou size. Tarif : $0.15 / requête.",
+      "ru": "GPT Image 2 уровень 2K. Генерация из текста и из изображения (до 8 референсов) через асинхронный API POST /v1/videos; результат — опросом GET /v1/videos/{task_id}. Кадрирование через aspect_ratio или size. Тариф: $0.15 / запрос.",
+      "ja": "GPT Image 2 高解像度 2K 档. テキストから画像・画像から画像（参照画像は最大 8 枚）を POST /v1/videos の非同期タスク API で生成し、GET /v1/videos/{task_id} で結果を取得します。aspect_ratio または size でアスペクト比を指定可能。料金：$0.15 / 回。",
+      "vi": "GPT Image 2 cấp 2K. Tạo ảnh từ văn bản và từ ảnh tham chiếu (tối đa 8 ảnh) qua API tác vụ bất đồng bộ POST /v1/videos; lấy kết quả bằng GET /v1/videos/{task_id}. Khung hình qua aspect_ratio hoặc size. Giá: $0.15 / lần."
+    },
+    "unit": "request",
+    "description": "GPT Image 2 高清 2K 档。文生图与图生图（最多 8 张参考图），经 POST /v1/videos 异步任务调用，轮询 GET /v1/videos/{task_id} 取图。支持 aspect_ratio 或 size 控制画幅。计费：$0.15/次。",
+    "badge": {
+      "zhCN": "按次计费",
+      "zhTW": "按次計費",
+      "en": "Pay per request",
+      "fr": "À la requête",
+      "ru": "По запросам",
+      "ja": "リクエスト課金",
+      "vi": "Theo yêu cầu"
+    },
+    "suffix": {
+      "zhCN": "/次",
+      "zhTW": "/次",
+      "en": "/ request",
+      "fr": "/ requête",
+      "ru": "/ запрос",
+      "ja": "/ 回",
+      "vi": "/ lần"
+    },
+    "price_key": {
+      "zhCN": "价格",
+      "zhTW": "價格",
+      "en": "Price",
+      "fr": "Tarif",
+      "ru": "Тариф",
+      "ja": "料金",
+      "vi": "Giá"
+    },
+    "description_zh": "GPT Image 2 高清 2K 档。文生图与图生图（最多 8 张参考图），经 POST /v1/videos 异步任务调用，轮询 GET /v1/videos/{task_id} 取图。支持 aspect_ratio 或 size 控制画幅。计费：$0.15/次。",
+    "description_en": "GPT Image 2 high-resolution 2K tier. Text-to-image and image-to-image (up to 8 reference images) via the async POST /v1/videos task API; poll GET /v1/videos/{task_id} for the result. Control framing with aspect_ratio or size. Pricing: $0.15 / request.",
+    "badge_zh": "按次计费",
+    "badge_en": "Pay per request",
+    "suffix_zh": "/次",
+    "suffix_en": "/ request",
+    "price_key_zh": "价格",
+    "price_key_en": "Price"
+  },
+  "gpt-image-2-4K": {
+    "descriptions": {
+      "zhCN": "GPT Image 2 超高清 4K 档。文生图与图生图（最多 8 张参考图），经 POST /v1/videos 异步任务调用，轮询 GET /v1/videos/{task_id} 取图。支持 aspect_ratio 或 size 控制画幅。计费：$0.15/次。",
+      "zhTW": "GPT Image 2 超高畫質 4K 檔。文生圖與圖生圖（最多 8 張參考圖），經 POST /v1/videos 非同步任務呼叫，輪詢 GET /v1/videos/{task_id} 取圖。支援 aspect_ratio 或 size 控制畫幅。計費：$0.15/次。",
+      "en": "GPT Image 2 ultra-high-resolution 4K tier. Text-to-image and image-to-image (up to 8 reference images) via the async POST /v1/videos task API; poll GET /v1/videos/{task_id} for the result. Control framing with aspect_ratio or size. Pricing: $0.15 / request.",
+      "fr": "GPT Image 2 niveau ultra-haute résolution 4K. Texte-to-image et image-to-image (jusqu'à 8 images de référence) via l'API asynchrone POST /v1/videos ; interrogez GET /v1/videos/{task_id} pour le résultat. Cadrage via aspect_ratio ou size. Tarif : $0.15 / requête.",
+      "ru": "GPT Image 2 уровень 4K. Генерация из текста и из изображения (до 8 референсов) через асинхронный API POST /v1/videos; результат — опросом GET /v1/videos/{task_id}. Кадрирование через aspect_ratio или size. Тариф: $0.15 / запрос.",
+      "ja": "GPT Image 2 超高解像度 4K 档. テキストから画像・画像から画像（参照画像は最大 8 枚）を POST /v1/videos の非同期タスク API で生成し、GET /v1/videos/{task_id} で結果を取得します。aspect_ratio または size でアスペクト比を指定可能。料金：$0.15 / 回。",
+      "vi": "GPT Image 2 cấp 4K. Tạo ảnh từ văn bản và từ ảnh tham chiếu (tối đa 8 ảnh) qua API tác vụ bất đồng bộ POST /v1/videos; lấy kết quả bằng GET /v1/videos/{task_id}. Khung hình qua aspect_ratio hoặc size. Giá: $0.15 / lần."
+    },
+    "unit": "request",
+    "description": "GPT Image 2 超高清 4K 档。文生图与图生图（最多 8 张参考图），经 POST /v1/videos 异步任务调用，轮询 GET /v1/videos/{task_id} 取图。支持 aspect_ratio 或 size 控制画幅。计费：$0.15/次。",
+    "badge": {
+      "zhCN": "按次计费",
+      "zhTW": "按次計費",
+      "en": "Pay per request",
+      "fr": "À la requête",
+      "ru": "По запросам",
+      "ja": "リクエスト課金",
+      "vi": "Theo yêu cầu"
+    },
+    "suffix": {
+      "zhCN": "/次",
+      "zhTW": "/次",
+      "en": "/ request",
+      "fr": "/ requête",
+      "ru": "/ запрос",
+      "ja": "/ 回",
+      "vi": "/ lần"
+    },
+    "price_key": {
+      "zhCN": "价格",
+      "zhTW": "價格",
+      "en": "Price",
+      "fr": "Tarif",
+      "ru": "Тариф",
+      "ja": "料金",
+      "vi": "Giá"
+    },
+    "description_zh": "GPT Image 2 超高清 4K 档。文生图与图生图（最多 8 张参考图），经 POST /v1/videos 异步任务调用，轮询 GET /v1/videos/{task_id} 取图。支持 aspect_ratio 或 size 控制画幅。计费：$0.15/次。",
+    "description_en": "GPT Image 2 ultra-high-resolution 4K tier. Text-to-image and image-to-image (up to 8 reference images) via the async POST /v1/videos task API; poll GET /v1/videos/{task_id} for the result. Control framing with aspect_ratio or size. Pricing: $0.15 / request.",
+    "badge_zh": "按次计费",
+    "badge_en": "Pay per request",
+    "suffix_zh": "/次",
+    "suffix_en": "/ request",
+    "price_key_zh": "价格",
+    "price_key_en": "Price"
+  },
+  "gpt-image-2.5-1K": {
+    "descriptions": {
+      "zhCN": "GPT Image 2.5 新版标准档（仅 1K）。文生图与图生图（最多 8 张参考图），经 POST /v1/videos 异步任务调用，轮询 GET /v1/videos/{task_id} 取图。支持 aspect_ratio 或 size 控制画幅。计费：$0.02505/次。",
+      "zhTW": "GPT Image 2.5 新版標準檔（僅 1K）。文生圖與圖生圖（最多 8 張參考圖），經 POST /v1/videos 非同步任務呼叫，輪詢 GET /v1/videos/{task_id} 取圖。支援 aspect_ratio 或 size 控制畫幅。計費：$0.02505/次。",
+      "en": "GPT Image 2.5 new standard tier (1K only). Text-to-image and image-to-image (up to 8 reference images) via the async POST /v1/videos task API; poll GET /v1/videos/{task_id} for the result. Control framing with aspect_ratio or size. Pricing: $0.02505 / request.",
+      "fr": "GPT Image 2.5 nouveau niveau standard (1K uniquement). Texte-to-image et image-to-image (jusqu'à 8 images de référence) via l'API asynchrone POST /v1/videos ; interrogez GET /v1/videos/{task_id} pour le résultat. Cadrage via aspect_ratio ou size. Tarif : $0.02505 / requête.",
+      "ru": "GPT Image 2.5 новый стандартный уровень (только 1K). Генерация из текста и из изображения (до 8 референсов) через асинхронный API POST /v1/videos; результат — опросом GET /v1/videos/{task_id}. Кадрирование через aspect_ratio или size. Тариф: $0.02505 / запрос.",
+      "ja": "GPT Image 2.5 新標準档（1K のみ）. テキストから画像・画像から画像（参照画像は最大 8 枚）を POST /v1/videos の非同期タスク API で生成し、GET /v1/videos/{task_id} で結果を取得します。aspect_ratio または size でアスペクト比を指定可能。料金：$0.02505 / 回。",
+      "vi": "GPT Image 2.5 cấp chuẩn mới (chỉ 1K). Tạo ảnh từ văn bản và từ ảnh tham chiếu (tối đa 8 ảnh) qua API tác vụ bất đồng bộ POST /v1/videos; lấy kết quả bằng GET /v1/videos/{task_id}. Khung hình qua aspect_ratio hoặc size. Giá: $0.02505 / lần."
+    },
+    "unit": "request",
+    "description": "GPT Image 2.5 新版标准档（仅 1K）。文生图与图生图（最多 8 张参考图），经 POST /v1/videos 异步任务调用，轮询 GET /v1/videos/{task_id} 取图。支持 aspect_ratio 或 size 控制画幅。计费：$0.02505/次。",
+    "badge": {
+      "zhCN": "按次计费",
+      "zhTW": "按次計費",
+      "en": "Pay per request",
+      "fr": "À la requête",
+      "ru": "По запросам",
+      "ja": "リクエスト課金",
+      "vi": "Theo yêu cầu"
+    },
+    "suffix": {
+      "zhCN": "/次",
+      "zhTW": "/次",
+      "en": "/ request",
+      "fr": "/ requête",
+      "ru": "/ запрос",
+      "ja": "/ 回",
+      "vi": "/ lần"
+    },
+    "price_key": {
+      "zhCN": "价格",
+      "zhTW": "價格",
+      "en": "Price",
+      "fr": "Tarif",
+      "ru": "Тариф",
+      "ja": "料金",
+      "vi": "Giá"
+    },
+    "description_zh": "GPT Image 2.5 新版标准档（仅 1K）。文生图与图生图（最多 8 张参考图），经 POST /v1/videos 异步任务调用，轮询 GET /v1/videos/{task_id} 取图。支持 aspect_ratio 或 size 控制画幅。计费：$0.02505/次。",
+    "description_en": "GPT Image 2.5 new standard tier (1K only). Text-to-image and image-to-image (up to 8 reference images) via the async POST /v1/videos task API; poll GET /v1/videos/{task_id} for the result. Control framing with aspect_ratio or size. Pricing: $0.02505 / request.",
+    "badge_zh": "按次计费",
+    "badge_en": "Pay per request",
+    "suffix_zh": "/次",
+    "suffix_en": "/ request",
+    "price_key_zh": "价格",
+    "price_key_en": "Price"
+  },
+  "gpt-image-2.5-flare-hd": {
+    "descriptions": {
+      "zhCN": "GPT Image 2.5 Flare 高画质档，支持 1K/2K/4K 分辨率。文生图与图生图（最多 8 张参考图），经 POST /v1/videos 异步任务调用，轮询 GET /v1/videos/{task_id} 取图。支持 aspect_ratio 或 size 控制画幅。计费：$0.27/次。",
+      "zhTW": "GPT Image 2.5 Flare 高畫質檔，支援 1K/2K/4K。文生圖與圖生圖（最多 8 張參考圖），經 POST /v1/videos 非同步任務呼叫，輪詢 GET /v1/videos/{task_id} 取圖。支援 aspect_ratio 或 size 控制畫幅。計費：$0.27/次。",
+      "en": "GPT Image 2.5 Flare high-quality tier with 1K/2K/4K resolution. Text-to-image and image-to-image (up to 8 reference images) via the async POST /v1/videos task API; poll GET /v1/videos/{task_id} for the result. Control framing with aspect_ratio or size. Pricing: $0.27 / request.",
+      "fr": "GPT Image 2.5 Flare niveau qualité supérieure, résolution 1K/2K/4K. Texte-to-image et image-to-image (jusqu'à 8 images de référence) via l'API asynchrone POST /v1/videos ; interrogez GET /v1/videos/{task_id} pour le résultat. Cadrage via aspect_ratio ou size. Tarif : $0.27 / requête.",
+      "ru": "GPT Image 2.5 Flare повышенное качество, разрешение 1K/2K/4K. Генерация из текста и из изображения (до 8 референсов) через асинхронный API POST /v1/videos; результат — опросом GET /v1/videos/{task_id}. Кадрирование через aspect_ratio или size. Тариф: $0.27 / запрос.",
+      "ja": "GPT Image 2.5 Flare 高画質档、1K/2K/4K 対応. テキストから画像・画像から画像（参照画像は最大 8 枚）を POST /v1/videos の非同期タスク API で生成し、GET /v1/videos/{task_id} で結果を取得します。aspect_ratio または size でアスペクト比を指定可能。料金：$0.27 / 回。",
+      "vi": "GPT Image 2.5 Flare cấp chất lượng cao, độ phân giải 1K/2K/4K. Tạo ảnh từ văn bản và từ ảnh tham chiếu (tối đa 8 ảnh) qua API tác vụ bất đồng bộ POST /v1/videos; lấy kết quả bằng GET /v1/videos/{task_id}. Khung hình qua aspect_ratio hoặc size. Giá: $0.27 / lần."
+    },
+    "unit": "request",
+    "description": "GPT Image 2.5 Flare 高画质档，支持 1K/2K/4K 分辨率。文生图与图生图（最多 8 张参考图），经 POST /v1/videos 异步任务调用，轮询 GET /v1/videos/{task_id} 取图。支持 aspect_ratio 或 size 控制画幅。计费：$0.27/次。",
+    "badge": {
+      "zhCN": "按次计费",
+      "zhTW": "按次計費",
+      "en": "Pay per request",
+      "fr": "À la requête",
+      "ru": "По запросам",
+      "ja": "リクエスト課金",
+      "vi": "Theo yêu cầu"
+    },
+    "suffix": {
+      "zhCN": "/次",
+      "zhTW": "/次",
+      "en": "/ request",
+      "fr": "/ requête",
+      "ru": "/ запрос",
+      "ja": "/ 回",
+      "vi": "/ lần"
+    },
+    "price_key": {
+      "zhCN": "价格",
+      "zhTW": "價格",
+      "en": "Price",
+      "fr": "Tarif",
+      "ru": "Тариф",
+      "ja": "料金",
+      "vi": "Giá"
+    },
+    "description_zh": "GPT Image 2.5 Flare 高画质档，支持 1K/2K/4K 分辨率。文生图与图生图（最多 8 张参考图），经 POST /v1/videos 异步任务调用，轮询 GET /v1/videos/{task_id} 取图。支持 aspect_ratio 或 size 控制画幅。计费：$0.27/次。",
+    "description_en": "GPT Image 2.5 Flare high-quality tier with 1K/2K/4K resolution. Text-to-image and image-to-image (up to 8 reference images) via the async POST /v1/videos task API; poll GET /v1/videos/{task_id} for the result. Control framing with aspect_ratio or size. Pricing: $0.27 / request.",
+    "badge_zh": "按次计费",
+    "badge_en": "Pay per request",
+    "suffix_zh": "/次",
+    "suffix_en": "/ request",
+    "price_key_zh": "价格",
+    "price_key_en": "Price"
+  },
+  "gpt-image-2.5-flare-vip": {
+    "descriptions": {
+      "zhCN": "GPT Image 2.5 Flare VIP 通道，支持 1K/2K/4K 分辨率。文生图与图生图（最多 8 张参考图），经 POST /v1/videos 异步任务调用，轮询 GET /v1/videos/{task_id} 取图。支持 aspect_ratio 或 size 控制画幅。计费：$0.27/次。",
+      "zhTW": "GPT Image 2.5 Flare VIP 通道，支援 1K/2K/4K。文生圖與圖生圖（最多 8 張參考圖），經 POST /v1/videos 非同步任務呼叫，輪詢 GET /v1/videos/{task_id} 取圖。支援 aspect_ratio 或 size 控制畫幅。計費：$0.27/次。",
+      "en": "GPT Image 2.5 Flare VIP lane with 1K/2K/4K resolution. Text-to-image and image-to-image (up to 8 reference images) via the async POST /v1/videos task API; poll GET /v1/videos/{task_id} for the result. Control framing with aspect_ratio or size. Pricing: $0.27 / request.",
+      "fr": "GPT Image 2.5 Flare voie VIP, résolution 1K/2K/4K. Texte-to-image et image-to-image (jusqu'à 8 images de référence) via l'API asynchrone POST /v1/videos ; interrogez GET /v1/videos/{task_id} pour le résultat. Cadrage via aspect_ratio ou size. Tarif : $0.27 / requête.",
+      "ru": "GPT Image 2.5 Flare VIP-канал, разрешение 1K/2K/4K. Генерация из текста и из изображения (до 8 референсов) через асинхронный API POST /v1/videos; результат — опросом GET /v1/videos/{task_id}. Кадрирование через aspect_ratio или size. Тариф: $0.27 / запрос.",
+      "ja": "GPT Image 2.5 Flare VIP チャネル、1K/2K/4K 対応. テキストから画像・画像から画像（参照画像は最大 8 枚）を POST /v1/videos の非同期タスク API で生成し、GET /v1/videos/{task_id} で結果を取得します。aspect_ratio または size でアスペクト比を指定可能。料金：$0.27 / 回。",
+      "vi": "GPT Image 2.5 Flare kênh VIP, độ phân giải 1K/2K/4K. Tạo ảnh từ văn bản và từ ảnh tham chiếu (tối đa 8 ảnh) qua API tác vụ bất đồng bộ POST /v1/videos; lấy kết quả bằng GET /v1/videos/{task_id}. Khung hình qua aspect_ratio hoặc size. Giá: $0.27 / lần."
+    },
+    "unit": "request",
+    "description": "GPT Image 2.5 Flare VIP 通道，支持 1K/2K/4K 分辨率。文生图与图生图（最多 8 张参考图），经 POST /v1/videos 异步任务调用，轮询 GET /v1/videos/{task_id} 取图。支持 aspect_ratio 或 size 控制画幅。计费：$0.27/次。",
+    "badge": {
+      "zhCN": "按次计费",
+      "zhTW": "按次計費",
+      "en": "Pay per request",
+      "fr": "À la requête",
+      "ru": "По запросам",
+      "ja": "リクエスト課金",
+      "vi": "Theo yêu cầu"
+    },
+    "suffix": {
+      "zhCN": "/次",
+      "zhTW": "/次",
+      "en": "/ request",
+      "fr": "/ requête",
+      "ru": "/ запрос",
+      "ja": "/ 回",
+      "vi": "/ lần"
+    },
+    "price_key": {
+      "zhCN": "价格",
+      "zhTW": "價格",
+      "en": "Price",
+      "fr": "Tarif",
+      "ru": "Тариф",
+      "ja": "料金",
+      "vi": "Giá"
+    },
+    "description_zh": "GPT Image 2.5 Flare VIP 通道，支持 1K/2K/4K 分辨率。文生图与图生图（最多 8 张参考图），经 POST /v1/videos 异步任务调用，轮询 GET /v1/videos/{task_id} 取图。支持 aspect_ratio 或 size 控制画幅。计费：$0.27/次。",
+    "description_en": "GPT Image 2.5 Flare VIP lane with 1K/2K/4K resolution. Text-to-image and image-to-image (up to 8 reference images) via the async POST /v1/videos task API; poll GET /v1/videos/{task_id} for the result. Control framing with aspect_ratio or size. Pricing: $0.27 / request.",
+    "badge_zh": "按次计费",
+    "badge_en": "Pay per request",
+    "suffix_zh": "/次",
+    "suffix_en": "/ request",
+    "price_key_zh": "价格",
+    "price_key_en": "Price"
+  },
+  "gpt-image-2.5-sunburst-hd": {
+    "descriptions": {
+      "zhCN": "GPT Image 2.5 Sunburst 高画质档，支持 1K/2K/4K 分辨率。文生图与图生图（最多 8 张参考图），经 POST /v1/videos 异步任务调用，轮询 GET /v1/videos/{task_id} 取图。支持 aspect_ratio 或 size 控制画幅。计费：$0.27/次。",
+      "zhTW": "GPT Image 2.5 Sunburst 高畫質檔，支援 1K/2K/4K。文生圖與圖生圖（最多 8 張參考圖），經 POST /v1/videos 非同步任務呼叫，輪詢 GET /v1/videos/{task_id} 取圖。支援 aspect_ratio 或 size 控制畫幅。計費：$0.27/次。",
+      "en": "GPT Image 2.5 Sunburst high-quality tier with 1K/2K/4K resolution. Text-to-image and image-to-image (up to 8 reference images) via the async POST /v1/videos task API; poll GET /v1/videos/{task_id} for the result. Control framing with aspect_ratio or size. Pricing: $0.27 / request.",
+      "fr": "GPT Image 2.5 Sunburst niveau qualité supérieure, résolution 1K/2K/4K. Texte-to-image et image-to-image (jusqu'à 8 images de référence) via l'API asynchrone POST /v1/videos ; interrogez GET /v1/videos/{task_id} pour le résultat. Cadrage via aspect_ratio ou size. Tarif : $0.27 / requête.",
+      "ru": "GPT Image 2.5 Sunburst повышенное качество, разрешение 1K/2K/4K. Генерация из текста и из изображения (до 8 референсов) через асинхронный API POST /v1/videos; результат — опросом GET /v1/videos/{task_id}. Кадрирование через aspect_ratio или size. Тариф: $0.27 / запрос.",
+      "ja": "GPT Image 2.5 Sunburst 高画質档、1K/2K/4K 対応. テキストから画像・画像から画像（参照画像は最大 8 枚）を POST /v1/videos の非同期タスク API で生成し、GET /v1/videos/{task_id} で結果を取得します。aspect_ratio または size でアスペクト比を指定可能。料金：$0.27 / 回。",
+      "vi": "GPT Image 2.5 Sunburst cấp chất lượng cao, độ phân giải 1K/2K/4K. Tạo ảnh từ văn bản và từ ảnh tham chiếu (tối đa 8 ảnh) qua API tác vụ bất đồng bộ POST /v1/videos; lấy kết quả bằng GET /v1/videos/{task_id}. Khung hình qua aspect_ratio hoặc size. Giá: $0.27 / lần."
+    },
+    "unit": "request",
+    "description": "GPT Image 2.5 Sunburst 高画质档，支持 1K/2K/4K 分辨率。文生图与图生图（最多 8 张参考图），经 POST /v1/videos 异步任务调用，轮询 GET /v1/videos/{task_id} 取图。支持 aspect_ratio 或 size 控制画幅。计费：$0.27/次。",
+    "badge": {
+      "zhCN": "按次计费",
+      "zhTW": "按次計費",
+      "en": "Pay per request",
+      "fr": "À la requête",
+      "ru": "По запросам",
+      "ja": "リクエスト課金",
+      "vi": "Theo yêu cầu"
+    },
+    "suffix": {
+      "zhCN": "/次",
+      "zhTW": "/次",
+      "en": "/ request",
+      "fr": "/ requête",
+      "ru": "/ запрос",
+      "ja": "/ 回",
+      "vi": "/ lần"
+    },
+    "price_key": {
+      "zhCN": "价格",
+      "zhTW": "價格",
+      "en": "Price",
+      "fr": "Tarif",
+      "ru": "Тариф",
+      "ja": "料金",
+      "vi": "Giá"
+    },
+    "description_zh": "GPT Image 2.5 Sunburst 高画质档，支持 1K/2K/4K 分辨率。文生图与图生图（最多 8 张参考图），经 POST /v1/videos 异步任务调用，轮询 GET /v1/videos/{task_id} 取图。支持 aspect_ratio 或 size 控制画幅。计费：$0.27/次。",
+    "description_en": "GPT Image 2.5 Sunburst high-quality tier with 1K/2K/4K resolution. Text-to-image and image-to-image (up to 8 reference images) via the async POST /v1/videos task API; poll GET /v1/videos/{task_id} for the result. Control framing with aspect_ratio or size. Pricing: $0.27 / request.",
+    "badge_zh": "按次计费",
+    "badge_en": "Pay per request",
+    "suffix_zh": "/次",
+    "suffix_en": "/ request",
+    "price_key_zh": "价格",
+    "price_key_en": "Price"
+  },
+  "gpt-image-2.5-sunburst-vip": {
+    "descriptions": {
+      "zhCN": "GPT Image 2.5 Sunburst VIP 通道，支持 1K/2K/4K 分辨率。文生图与图生图（最多 8 张参考图），经 POST /v1/videos 异步任务调用，轮询 GET /v1/videos/{task_id} 取图。支持 aspect_ratio 或 size 控制画幅。计费：$0.375/次。",
+      "zhTW": "GPT Image 2.5 Sunburst VIP 通道，支援 1K/2K/4K。文生圖與圖生圖（最多 8 張參考圖），經 POST /v1/videos 非同步任務呼叫，輪詢 GET /v1/videos/{task_id} 取圖。支援 aspect_ratio 或 size 控制畫幅。計費：$0.375/次。",
+      "en": "GPT Image 2.5 Sunburst VIP lane with 1K/2K/4K resolution. Text-to-image and image-to-image (up to 8 reference images) via the async POST /v1/videos task API; poll GET /v1/videos/{task_id} for the result. Control framing with aspect_ratio or size. Pricing: $0.375 / request.",
+      "fr": "GPT Image 2.5 Sunburst voie VIP, résolution 1K/2K/4K. Texte-to-image et image-to-image (jusqu'à 8 images de référence) via l'API asynchrone POST /v1/videos ; interrogez GET /v1/videos/{task_id} pour le résultat. Cadrage via aspect_ratio ou size. Tarif : $0.375 / requête.",
+      "ru": "GPT Image 2.5 Sunburst VIP-канал, разрешение 1K/2K/4K. Генерация из текста и из изображения (до 8 референсов) через асинхронный API POST /v1/videos; результат — опросом GET /v1/videos/{task_id}. Кадрирование через aspect_ratio или size. Тариф: $0.375 / запрос.",
+      "ja": "GPT Image 2.5 Sunburst VIP チャネル、1K/2K/4K 対応. テキストから画像・画像から画像（参照画像は最大 8 枚）を POST /v1/videos の非同期タスク API で生成し、GET /v1/videos/{task_id} で結果を取得します。aspect_ratio または size でアスペクト比を指定可能。料金：$0.375 / 回。",
+      "vi": "GPT Image 2.5 Sunburst kênh VIP, độ phân giải 1K/2K/4K. Tạo ảnh từ văn bản và từ ảnh tham chiếu (tối đa 8 ảnh) qua API tác vụ bất đồng bộ POST /v1/videos; lấy kết quả bằng GET /v1/videos/{task_id}. Khung hình qua aspect_ratio hoặc size. Giá: $0.375 / lần."
+    },
+    "unit": "request",
+    "description": "GPT Image 2.5 Sunburst VIP 通道，支持 1K/2K/4K 分辨率。文生图与图生图（最多 8 张参考图），经 POST /v1/videos 异步任务调用，轮询 GET /v1/videos/{task_id} 取图。支持 aspect_ratio 或 size 控制画幅。计费：$0.375/次。",
+    "badge": {
+      "zhCN": "按次计费",
+      "zhTW": "按次計費",
+      "en": "Pay per request",
+      "fr": "À la requête",
+      "ru": "По запросам",
+      "ja": "リクエスト課金",
+      "vi": "Theo yêu cầu"
+    },
+    "suffix": {
+      "zhCN": "/次",
+      "zhTW": "/次",
+      "en": "/ request",
+      "fr": "/ requête",
+      "ru": "/ запрос",
+      "ja": "/ 回",
+      "vi": "/ lần"
+    },
+    "price_key": {
+      "zhCN": "价格",
+      "zhTW": "價格",
+      "en": "Price",
+      "fr": "Tarif",
+      "ru": "Тариф",
+      "ja": "料金",
+      "vi": "Giá"
+    },
+    "description_zh": "GPT Image 2.5 Sunburst VIP 通道，支持 1K/2K/4K 分辨率。文生图与图生图（最多 8 张参考图），经 POST /v1/videos 异步任务调用，轮询 GET /v1/videos/{task_id} 取图。支持 aspect_ratio 或 size 控制画幅。计费：$0.375/次。",
+    "description_en": "GPT Image 2.5 Sunburst VIP lane with 1K/2K/4K resolution. Text-to-image and image-to-image (up to 8 reference images) via the async POST /v1/videos task API; poll GET /v1/videos/{task_id} for the result. Control framing with aspect_ratio or size. Pricing: $0.375 / request.",
+    "badge_zh": "按次计费",
+    "badge_en": "Pay per request",
+    "suffix_zh": "/次",
+    "suffix_en": "/ request",
+    "price_key_zh": "价格",
+    "price_key_en": "Price"
   }
 }

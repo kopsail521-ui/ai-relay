@@ -53,6 +53,11 @@
 		rewrite * /openai-api-alternative.html
 		file_server
 	}
+	handle /seedance-2-0-api-pricing {
+		root * __AI_RELAY_ROOT__/static/seo
+		rewrite * /seedance-2-0-api-pricing.html
+		file_server
+	}
 	handle /seedance-2-5-api-pricing {
 		root * __AI_RELAY_ROOT__/static/seo
 		rewrite * /seedance-2-5-api-pricing.html
@@ -121,5 +126,10 @@
 	handle /claude-code-api-pricing {
 		root * __AI_RELAY_ROOT__/static/seo
 		rewrite * /claude-code-api-pricing.html
+		file_server
+	}
+	handle /deepseek-server-unavailable {
+		root * __AI_RELAY_ROOT__/static/seo
+		rewrite * /deepseek-server-unavailable.html
 		file_server
 	}

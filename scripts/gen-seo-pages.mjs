@@ -1195,7 +1195,9 @@ function landingRelatedLinks(slug) {
     "openai-api-alternative":
       `${base}, and <a href="/openai-api-pricing">OpenAI API pricing</a> · <a href="/model/gpt-6-astra">gpt-6-astra</a> · <a href="/model/deepseek-v4.1-flash">deepseek-v4.1-flash</a>`,
     "seedance-2-5-api-pricing":
-      `${base}, and <a href="/minimax-h3-api-pricing">MiniMax-H3 pricing</a> · <a href="/flux-3-video-api-pricing">FLUX.3 Video pricing</a> · <a href="/wan3-video-api-pricing">Wan 3.0 Video pricing</a>`,
+      `${base}, and <a href="/seedance-2-0-api-pricing">Seedance 2.0 pricing</a> · <a href="/minimax-h3-api-pricing">MiniMax-H3 pricing</a> · <a href="/flux-3-video-api-pricing">FLUX.3 Video pricing</a>`,
+    "seedance-2-0-api-pricing":
+      `${base}, and <a href="/seedance-2-5-api-pricing">Seedance 2.5 pricing</a> · <a href="/minimax-h3-api-pricing">MiniMax-H3 pricing</a> · <a href="/agnes-video-2-5-api-pricing">Agnes Video 2.5 pricing</a>`,
     "minimax-h3-api-pricing":
       `${base}, and <a href="/seedance-2-5-api-pricing">Seedance 2.5 pricing</a> · <a href="/flux-3-video-api-pricing">FLUX.3 Video pricing</a> · <a href="/wan3-video-api-pricing">Wan 3.0 Video pricing</a>`,
     "flux-3-video-api-pricing":

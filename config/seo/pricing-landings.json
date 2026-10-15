@@ -912,6 +912,81 @@
       ]
     },
     {
+      "slug": "seedance-2-0-api-pricing",
+      "navLabel": "Seedance 2.0 pricing",
+      "h1": "Seedance 2.0 API Pricing — KeyoAPI Video Generation Rates",
+      "title": "Seedance 2.0 API Pricing | KeyoAPI",
+      "metaDescription": "Seedance 2.0 API pricing on KeyoAPI: six fixed-resolution SKUs from ~$0.0499/sec (720p-mini) to ~$0.1006/sec (1080p), 4–15 second clips. No free Seedance tier — $0 prototyping IDs on the same key.",
+      "targetKeywords": [
+        "seedance 2.0 api pricing",
+        "seedance 2.0 free",
+        "seedance 2.0 api price"
+      ],
+      "lead": "Seedance 2.0 video generation API. KeyoAPI hosts all six fixed-resolution Seedance 2.0 SKUs — 1080p / 720p in standard, fast and mini — billed per generated second on one prepaid key.",
+      "rows": [
+        {
+          "model": "seedance-2.0-1080p",
+          "official": "ByteDance Seedance list — verify on volcengine.com before budgeting",
+          "keyo": "~$0.1006 / second",
+          "note": "1080p standard · POST /v1/videos/generations"
+        },
+        {
+          "model": "seedance-2.0-1080p-fast",
+          "official": "ByteDance Seedance list — verify on volcengine.com before budgeting",
+          "keyo": "~$0.0754 / second",
+          "note": "1080p fast tier · POST /v1/videos/generations"
+        },
+        {
+          "model": "seedance-2.0-1080p-mini",
+          "official": "ByteDance Seedance list — verify on volcengine.com before budgeting",
+          "keyo": "~$0.0501 / second",
+          "note": "1080p mini tier · POST /v1/videos/generations"
+        },
+        {
+          "model": "seedance-2.0-720p",
+          "official": "ByteDance Seedance list — verify on volcengine.com before budgeting",
+          "keyo": "~$0.0962 / second",
+          "note": "720p standard · POST /v1/videos/generations"
+        },
+        {
+          "model": "seedance-2.0-720p-fast",
+          "official": "ByteDance Seedance list — verify on volcengine.com before budgeting",
+          "keyo": "~$0.0748 / second",
+          "note": "720p fast tier · POST /v1/videos/generations"
+        },
+        {
+          "model": "seedance-2.0-720p-mini",
+          "official": "ByteDance Seedance list — verify on volcengine.com before budgeting",
+          "keyo": "~$0.0499 / second",
+          "note": "720p mini tier · POST /v1/videos/generations"
+        }
+      ],
+      "freeKiller": {
+        "title": "No free Seedance tier — prototype at $0 anyway",
+        "body": "Keyo ships no free Seedance ID, but the fixed free catalog IDs cost $0 per call and draw down your $10 welcome credit (fair-use rate limits). Warm up your video pipeline at $0, then switch model= to a seedance-2.0 SKU on the same base URL and key — the mini tiers start around five cents per generated second."
+      },
+      "body": [
+        "Seedance 2.0 is ByteDance's prior-generation video family, still fully supported on KeyoAPI. Every SKU has the resolution baked into the model ID — 1080p or 720p in standard, fast and mini variants — so you pick price and latency in the model string itself: POST /v1/videos/generations with model=seedance-2.0-720p-mini is the cheapest entry at about $0.0499 per generated second.",
+        "Clips run 4 to 15 seconds (default 5); duration or seconds is the only extra field you usually need. Image inputs follow the Seedance conventions: first_frame_image for a first frame, image_urls for reference generation, image_with_roles for first+last frame. Keyo rates above are indicative sell prices from the live Keyo catalog — confirm the interactive card under /pricing before volume.",
+        "For the current-generation flagship see Seedance 2.5 pricing; for other video lanes on the same key see MiniMax-H3, FLUX.3 Video, Wan 3.0 and Agnes Video 2.5 on /pricing-list."
+      ],
+      "faqs": [
+        {
+          "q": "Is there a free Seedance 2.0 API?",
+          "a": "No free Seedance ID exists on Keyo. The $0 path is the fixed free catalog IDs (covered by your $10 welcome credit, fair-use rate limits) for pipeline prototyping, then switch model= to a seedance-2.0 SKU. The cheapest paid tier is seedance-2.0-720p-mini at about $0.0499 per generated second."
+        },
+        {
+          "q": "What is the difference between standard, fast and mini Seedance 2.0 tiers?",
+          "a": "Same resolution family, different cost/latency/quality trade-offs: standard is the full-quality tier, fast prioritizes turnaround at a lower per-second rate, and mini is the budget tier. All three bill per generated second."
+        },
+        {
+          "q": "How long can a Seedance 2.0 clip be?",
+          "a": "4 to 15 seconds, default 5 — the same window as Seedance 2.5. Requests outside that range are rejected rather than clamped."
+        }
+      ],
+      "curlExample": "curl https://www.keyoapi.xyz/v1/videos/generations \\\n  -H \"Authorization: Bearer $KEYO_API_KEY\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\"model\":\"seedance-2.0-1080p\",\"prompt\":\"A red paper boat drifting on calm water at sunset\",\"duration\":5}'\n# Poll GET /v1/tasks/{id} with the same key: processing = still rendering, completed = ready url"
+    },
+    {
       "slug": "seedance-2-5-api-pricing",
       "navLabel": "Seedance 2.5 pricing",
       "h1": "Seedance 2.5 API Pricing — KeyoAPI Video Generation Rates",

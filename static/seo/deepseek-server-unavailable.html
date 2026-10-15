@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>DeepSeek API Server Unavailable: Causes, Retries and Fallback | KeyoAPI</title>
+<meta name="description" content="DeepSeek API returning server unavailable or overloaded errors? Separate upstream capacity problems from your own code, build bounded retries with backoff, and fall back to a second model on the same key." />
+<link rel="canonical" href="https://www.keyoapi.xyz/deepseek-server-unavailable" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://www.keyoapi.xyz/deepseek-server-unavailable" />
+<meta property="og:title" content="DeepSeek API Server Unavailable: Causes, Retries and Fallback | KeyoAPI" />
+<meta property="og:description" content="DeepSeek API returning server unavailable or overloaded errors? Separate upstream capacity problems from your own code, build bounded retries with backoff, and fall back to a second model on the same key." />
+<meta property="og:image" content="https://www.keyoapi.xyz/brand/logo.svg" />
+<link rel="icon" href="/brand/logo.svg" type="image/svg+xml" />
+<link rel="stylesheet" href="/brand/keyo-theme.css" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="DeepSeek API Server Unavailable: Causes, Retries and Fallback | KeyoAPI" />
+<meta name="twitter:description" content="DeepSeek API returning server unavailable or overloaded errors? Separate upstream capacity problems from your own code, build bounded retries with backoff, and fall back to a second model on the same key." />
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebPage","name":"DeepSeek API Server Unavailable: Causes, Retries and Fallback | KeyoAPI","url":"https://www.keyoapi.xyz/deepseek-server-unavailable","description":"DeepSeek API returning server unavailable or overloaded errors? Separate upstream capacity problems from your own code, build bounded retries with backoff, and fall back to a second model on the same key."}</script>
+<style>.wrap{max-width:880px;margin:0 auto;padding:28px 24px 48px}
+.footer{display:flex;flex-wrap:wrap;gap:10px 16px;max-width:1080px;margin:0 auto;padding:24px 24px 40px;border-top:1px solid var(--line);font-size:13px;color:var(--muted)}
+.footer a{color:var(--ink-2);text-decoration:none}
+.footer a:hover{color:var(--ink)}
+h1{font-size:clamp(1.7rem,3.1vw,2.35rem);line-height:1.18;letter-spacing:-.035em;margin:0 0 14px;font-weight:600;text-wrap:balance}
+h2{font-size:1.15rem;margin:28px 0 10px;letter-spacing:-.02em}
+p{margin:0 0 14px;color:var(--ink)}
+.lead{font-size:1.02rem;color:var(--ink-2);line-height:1.55;text-wrap:pretty}
+.meta{font-size:14px;color:var(--muted);margin:0 0 18px}
+.btnrow{display:flex;flex-wrap:wrap;gap:10px;margin:18px 0 28px}
+.btn,.k-btn{display:inline-block;padding:10px 16px;border-radius:var(--radius);font-weight:600;font-size:14px;text-decoration:none;line-height:1.2}
+.btn-primary,.k-btn-primary{background:var(--ink);color:#f6f5f1}
+.btn-primary:hover,.k-btn-primary:hover{background:#000;color:#f6f5f1;text-decoration:none}
+.btn-secondary,.k-btn-secondary{background:transparent;color:var(--ink);border:1px solid var(--line-strong,#c9c4b8)}
+.btn-secondary:hover,.k-btn-secondary:hover{border-color:var(--ink);text-decoration:none}
+.btn-link,.k-btn-link{background:transparent;color:var(--link);padding-inline:8px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:16px 18px;margin:16px 0}
+pre,code{font-family:var(--mono)}
+pre{background:var(--panel);color:var(--panel-ink);padding:14px 16px;border-radius:var(--radius);overflow:auto;font-size:13px}
+pre code{background:transparent;padding:0;color:inherit;font-size:inherit;border-radius:0}
+table{width:100%;border-collapse:collapse;font-size:14px;background:var(--surface)}
+.table-scroll{overflow-x:auto;margin:16px 0}
+.table-scroll table{min-width:620px}
+th,td{border:1px solid var(--line);padding:10px 12px;text-align:left;vertical-align:top}
+th{background:color-mix(in srgb,var(--line) 40%,var(--surface));font-weight:600}
+.ok{color:var(--ok);font-weight:600}
+.grid{display:grid;gap:10px;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));margin:16px 0}
+.grid a{display:flex;flex-direction:column;justify-content:center;gap:4px;min-height:4.5rem;padding:12px 14px;border:1px solid var(--line);border-radius:var(--radius);background:var(--surface);color:var(--ink);text-decoration:none;font-weight:500;line-height:1.35}
+.grid a:hover{border-color:var(--ink)}
+.grid a .grid-title{font-weight:600;overflow-wrap:anywhere}
+.grid a .grid-meta{color:var(--muted);font-size:13px;font-weight:500}
+.grid a code{font-size:12.5px;background:transparent;padding:0}
+ul{margin:0 0 14px;padding-left:1.2em}
+.faq details{border:1px solid var(--line);border-radius:var(--radius);padding:12px 14px;margin:0 0 10px;background:var(--surface)}
+.faq summary{cursor:pointer;font-weight:600}
+.surfaces{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));margin:16px 0 8px}
+.surf{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:14px 16px;font-size:14px}
+.surf h3{font-size:15px;margin:0 0 8px}
+.surf ul{margin:0;padding-left:1.15em;color:var(--muted)}
+.panel{background:var(--panel);color:var(--panel-ink);border-radius:var(--radius);padding:18px;text-align:left;font-family:var(--mono);font-size:12.5px;overflow:auto;border:1px solid #2a2924}
+.panel .label{color:#b9b6ab;margin-bottom:5px;font-size:11px;letter-spacing:.06em;text-transform:uppercase}
+.panel .label+.label{margin-top:14px}</style>
+</head>
+<body>
+<header class="k-nav">
+  <a class="k-wordmark" href="/"><img src="/brand/logo.svg" alt="" width="22" height="22" />KeyoAPI</a>
+  <nav aria-label="Primary">
+    <a href="/pricing">Pricing</a>
+    <a href="/models">Models</a>
+    <a href="/compare">Compare</a>
+    <a href="/brand/keyo-docs.html">Docs</a>
+    <a href="/brand/blog/">Blog</a>
+    <a href="/brand/faq.html">FAQ</a>
+    <a href="/console">Console</a>
+    <a href="/sign-in">Sign in</a>
+    <a class="k-nav-cta" href="/sign-up">Get started</a>
+  </nav>
+</header>
+<main class="wrap">
+<h1>DeepSeek API server unavailable: diagnose, retry, fall back</h1>
+<p class="lead">A server unavailable error from a DeepSeek endpoint is almost always upstream capacity — rate limits, overloaded nodes or a timed-out request — not a problem with your API key. This page walks through confirming the cause, building a bounded retry policy, and falling back to a second model on the same key.</p>
+<div class="btnrow"><a class="btn btn-primary" href="/sign-up">Get API key</a><a class="btn btn-secondary" href="/pricing">Live prices</a><a class="btn btn-secondary" href="/models">Model guides</a></div>
+
+<h2>What server unavailable actually means</h2>
+<p>DeepSeek lanes surface capacity pressure as HTTP 5xx responses — 500/502/503, timeout-style failures, or 429 when the limit is rate rather than capacity. None of these mean your credentials are wrong: auth failures come back 401 with a clear message. The response usually carries a request id; keep it, it is what support needs if an error persists.</p>
+<p>On a relay like KeyoAPI the same status codes mean the same thing: the upstream DeepSeek capacity was unavailable for that attempt. Your client decides whether to retry, and how hard.</p>
+
+
+
+
+
+<h2>Confirm it is the upstream, not your code</h2>
+<p>Three checks separate capacity errors from client bugs: the same key works on a cheaper model, the error reproduces across several minutes rather than only once, and the failing requests are spread across different prompts rather than one oversized payload. If all three point to capacity, retries and fallback are the right response.</p>
+<p>The one-token smoke test against the flash lane is the fastest first check — if this answers while the heavier lane fails, capacity is the issue and a fallback model is the right move.</p>
+
+
+<pre><code>curl https://www.keyoapi.xyz/v1/chat/completions \
+  -H &quot;Authorization: Bearer $KEYO_API_KEY&quot; \
+  -H &quot;Content-Type: application/json&quot; \
+  -d '{&quot;model&quot;:&quot;deepseek-v4.1-flash&quot;,&quot;messages&quot;:[{&quot;role&quot;:&quot;user&quot;,&quot;content&quot;:&quot;ping&quot;}],&quot;max_tokens&quot;:1}'</code></pre>
+
+
+<h2>Build a bounded retry policy</h2>
+<p>Retry only what is retryable — 408, 429 and 5xx status codes and network timeouts — and cap attempts at three or four. Space them with exponential backoff plus jitter: sleep for min(0.5 × 2^attempt, 8) seconds scaled by a random 0.5–1.5 factor, so concurrent workers do not re-stampede the same upstream. A shared retry budget across your workers keeps retry amplification bounded when an upstream degrades.</p>
+
+
+
+
+
+<h2>Fall back to a second model on the same key</h2>
+<p>Retries only help when capacity comes back. For hard deadlines, switch model= instead: deepseek-v4.1-flash for cheap classification, deepseek-v4-pro-0813 when you need the heavier lane, or glm-5.3 / kimi-k3 as cross-vendor chat alternatives. The base URL and API key do not change — fallback is a one-field switch in the request body.</p>
+<p>Treat fallback as a deliberate route, not a silent rewrite: log which model served each response, because pricing and output shape differ per lane. Live rates for every fallback candidate are on <a href="/pricing-list">the full pricing list</a> and the deepseek lane is covered in detail on <a href="/deepseek-api-pricing">the DeepSeek API pricing page</a>.</p>
+
+
+
+
+
+<h2>Run DeepSeek inside agent harnesses without melting capacity</h2>
+<p>Agent and eval harnesses multiply capacity problems: dozens of workers each firing multi-step chains turn one slow upstream into a self-inflicted outage. Bound the harness the same way you bound retries — a hard concurrency cap on in-flight DeepSeek calls, a per-stage timeout (planner, tool, critic) rather than one global timeout, and a single shared retry budget so a degraded lane throttles the whole harness instead of queueing forever.</p>
+<p>Make harness steps idempotent where you can, checkpoint intermediate state between steps, and put the cheapest model on the highest-frequency step. A harness that burns deepseek-v4.1-flash on routing and reserves deepseek-v4-pro for the hard steps survives upstream wobble far better than one that sends every step to the heaviest lane.</p>
+
+
+
+
+
+<h2>Watch cost amplification while you retry</h2>
+<p>Every retry of a timed-out request risks paying twice if the first attempt eventually completes upstream. For expensive calls, prefer idempotency keys or at-least-once accounting in your own logs, and stop retrying non-idempotent tool-triggering requests automatically — surface those to the orchestrator instead.</p>
+<p>Retry storms also inflate spend indirectly: a 4-request retry policy against a 5-second timeout can triple your effective request count exactly when the upstream is slowest. The concurrency cap from the harness section is the guardrail that keeps this bounded.</p>
+
+
+
+
+
+<h2>A practical response checklist</h2>
+
+<div class="table-scroll"><table>
+<thead><tr><th scope="col">Symptom</th><th scope="col">First response</th><th scope="col">If it persists</th></tr></thead>
+<tbody><tr><td>Single 5xx on one request</td><td>Retry once with backoff</td><td>Log request id, continue</td></tr>
+<tr><td>5xx across many requests, minutes</td><td>Cut concurrency in half, keep bounded retries</td><td>Switch model= to a fallback lane</td></tr>
+<tr><td>429 rate limit</td><td>Honor the limit window, add jitter</td><td>Spread load or pre-purchase capacity</td></tr>
+<tr><td>Timeouts on long prompts</td><td>Shorten prompt or split the task</td><td>Per-stage timeouts, checkpoint steps</td></tr>
+<tr><td>One model down, others fine</td><td>Verify with a cheap flash request</td><td>Run on fallback model, monitor <a href="/pricing">the pricing page</a></td></tr></tbody>
+</table></div>
+
+
+
+<h2>FAQ</h2><div class="faq"><details><summary>Is DeepSeek down right now?</summary><p>We do not publish a per-vendor status page. The fastest self-check is a one-token request to deepseek-v4.1-flash on the same key — if the flash lane answers, capacity is the issue on the heavier lane, and a fallback model is the right move.</p></details>
+<details><summary>Does KeyoAPI retry unavailable upstreams for me?</summary><p>No — your client owns retry policy. That is deliberate: automatic retries behind your back make retry amplification and double-billing impossible to reason about. Keep the bounded-retry pattern from this page in your own code.</p></details>
+<details><summary>Which model should I fall back to?</summary><p>Same-family cheap lane first: deepseek-v4.1-flash for classification and routing. Cross-vendor alternatives on the same key include glm-5.3 and kimi-k3. Compare live rates on <a href="/pricing-list">the full pricing list</a> before committing a fallback route.</p></details></div>
+<h2>Related guides</h2><div class="grid"><a href="/deepseek-api-pricing">the DeepSeek API pricing page</a>
+<a href="/pricing-list">the full pricing list</a>
+<a href="/free-models">the gift-credit models page</a>
+<a href="/models">the model guides page</a></div>
+</main>
+<footer class="footer">
+  <a href="/">Home</a>
+  <a href="/pricing">Pricing</a>
+  <a href="/pricing-list">Pricing list</a>
+  <a href="/models">Model guides</a>
+  <a href="/compare">Compare</a>
+  <a href="/free-models">Free models</a>
+  <a href="/brand/blog/">Blog</a>
+  <a href="/gemini-api-pricing">Gemini pricing</a>
+  <a href="/deepseek-api-pricing">DeepSeek pricing</a>
+  <a href="/glm-api-pricing">GLM pricing</a>
+  <a href="/claude-api-pricing">Claude pricing</a>
+  <a href="/openai-api-pricing">OpenAI pricing</a>
+  <a href="/remove-bg-api-alternative">remove.bg API</a>
+  <a href="/tts-api">Text to Speech</a>
+  <a href="/voice-cloning-api">Voice clone API</a>
+  <a href="/ai-avatar-video-generator">Avatar video API</a>
+  <a href="/grok-api-pricing">Grok pricing</a>
+  <a href="/openai-api-alternative">OpenAI alternative</a>
+  <a href="/seedance-2-0-api-pricing">Seedance 2.0 pricing</a>
+  <a href="/seedance-2-5-api-pricing">Seedance 2.5 pricing</a>
+  <a href="/minimax-h3-api-pricing">MiniMax H3 pricing</a>
+  <a href="/flux-3-video-api-pricing">FLUX.3 Video pricing</a>
+  <a href="/wan3-video-api-pricing">Wan 3.0 Video pricing</a>
+  <a href="/agnes-video-2-5-api-pricing">Agnes Video 2.5 pricing</a>
+  <a href="/video-enhance-pro-api-pricing">Video Enhance Pro pricing</a>
+  <a href="/subtitle-erase-pro-api-pricing">Subtitle Erase Pro pricing</a>
+  <a href="/brand/keyo-docs.html">Docs</a>
+  <a href="/brand/faq.html">FAQ</a>
+  <a href="/brand/privacy.html">Privacy</a>
+  <a href="/brand/terms.html">Terms</a>
+  <a href="/sign-in">Sign in</a>
+  <a href="https://toolfame.com/item/keyoapi" target="_blank" rel="noopener noreferrer"><img src="https://toolfame.com/badge-light.svg" alt="Featured on ToolFame.com" width="160" height="54" loading="lazy" style="height:54px;width:auto;" /></a>
+  <a href="https://yo.directory" target="_blank" rel="dofollow noopener">Featured on Yo.directory</a>
+  <a href="https://www.toolpilot.ai" target="_blank" rel="dofollow noopener">Featured on ToolPilot.ai</a>
+  <a href="https://dang.ai" target="_blank" rel="dofollow noopener"><img src="https://assets.dang.ai/badges/dang-verified-dark.png" alt="Verified on DANG!" width="550" height="198" loading="lazy" style="height:54px;width:auto;border:0;outline:none;text-decoration:none;" /></a>
+  <a href="https://fazier.com" target="_blank" rel="dofollow noopener">Featured on Fazier</a>
+  <a href="https://twelve.tools" target="_blank" rel="dofollow noopener"><img src="https://twelve.tools/badge0-white.svg" alt="Featured on Twelve Tools" width="200" height="54" loading="lazy" style="height:54px;width:auto;" /></a>
+  <a href="https://deeplaunch.io" target="_blank" rel="dofollow noopener">Featured on DeepLaunch.io</a>
+  <a href="https://findly.tools" target="_blank" rel="dofollow noopener">Featured on Findly.tools</a>
+  <a href="https://startupfa.me" target="_blank" rel="dofollow noopener">Featured on Startup Fame</a>
+</footer>
+</body>
+</html>

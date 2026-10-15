@@ -16,6 +16,7 @@ Allow: /voice-cloning-api
 Allow: /ai-avatar-video-generator
 Allow: /grok-api-pricing
 Allow: /openai-api-alternative
+Allow: /seedance-2-0-api-pricing
 Allow: /seedance-2-5-api-pricing
 Allow: /minimax-h3-api-pricing
 Allow: /flux-3-video-api-pricing
@@ -30,6 +31,7 @@ Allow: /ai-agent-api
 Allow: /ai-story-api
 Allow: /study-ai-api
 Allow: /claude-code-api-pricing
+Allow: /deepseek-server-unavailable
 Allow: /brand/
 Allow: /about
 

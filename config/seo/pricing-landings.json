@@ -910,6 +910,39 @@
           "a": "No. One prepaid key and one balance cover OpenAI-shaped calls and dedicated REST alike — see /free-models for the $0 IDs you can test with."
         }
       ]
+    },
+    {
+      "slug": "seedance-2-5-api-pricing",
+      "navLabel": "Seedance 2.5 pricing",
+      "h1": "Seedance 2.5 API Pricing — KeyoAPI Video Generation Rates",
+      "title": "Seedance 2.5 API Pricing | KeyoAPI",
+      "metaDescription": "Seedance 2.5 API pricing on KeyoAPI: seedance-2.5-1080p ~/usr/bin/bash.138/sec, seedance-2.0-1080p ~/usr/bin/bash.1006/sec, seedance-2.0-720p ~/usr/bin/bash.0962/sec. OpenAI-compatible video endpoint.",
+      "targetKeywords": [
+        "seedance 2.5 api pricing",
+        "seedance api pricing",
+        "seedance video api price"
+      ],
+      "lead": "Seedance 2.5 video generation API. KeyoAPI hosts seedance-2.5-1080p, seedance-2.0-1080p and seedance-2.0-720p on one OpenAI-compatible key.",
+      "rows": [
+        {
+          "model": "seedance-2.5-1080p",
+          "keyo": "~/usr/bin/bash.138 / second",
+          "note": "1080p video generation",
+          "endpoint": "POST /v1/videos/generations"
+        },
+        {
+          "model": "seedance-2.0-1080p",
+          "keyo": "~/usr/bin/bash.1006 / second",
+          "note": "1080p video generation",
+          "endpoint": "POST /v1/videos/generations"
+        },
+        {
+          "model": "seedance-2.0-720p",
+          "keyo": "~/usr/bin/bash.0962 / second",
+          "note": "720p video generation",
+          "endpoint": "POST /v1/videos/generations"
+        }
+      ]
     }
   ],
   "catalogRows": [

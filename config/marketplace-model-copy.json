@@ -1139,7 +1139,68 @@
     "suffix_zh": "/秒",
     "suffix_en": "/ second",
     "price_key_zh": "每秒",
-    "price_key_en": "Per second"
+    "price_key_en": "Per second",
+    "price_table": {
+      "columns": {
+        "zhCN": [
+          "分辨率",
+          "时长",
+          "价格 (/秒)"
+        ],
+        "zhTW": [
+          "解析度",
+          "時長",
+          "價格 (/秒)"
+        ],
+        "en": [
+          "Resolution",
+          "Duration",
+          "Price (/sec)"
+        ],
+        "fr": [
+          "Résolution",
+          "Durée",
+          "Prix (/sec)"
+        ],
+        "ru": [
+          "Разрешение",
+          "Длительность",
+          "Цена (/сек)"
+        ],
+        "ja": [
+          "解像度",
+          "尺",
+          "価格 (/秒)"
+        ],
+        "vi": [
+          "Độ phân giải",
+          "Thời lượng",
+          "Giá (/giây)"
+        ]
+      },
+      "rows": [
+        [
+          "≤720P",
+          "0–15s",
+          "$0.06849"
+        ],
+        [
+          "≤720P",
+          "15–60s",
+          "$0.13699"
+        ],
+        [
+          "720P–1080P",
+          "0–15s",
+          "$0.10274"
+        ],
+        [
+          "720P–1080P",
+          "15–60s",
+          "$0.20548"
+        ]
+      ]
+    }
   },
   "InfiniteTalk": {
     "description": "InfiniteTalk 数字人视频生成模型。生成长时长口播数字人视频，唇形与动作自然。支持视频模态。适合口播视频、课程讲解、产品介绍。 计费：$0.342466/次。",
@@ -2051,7 +2112,49 @@
     "suffix_zh": "",
     "suffix_en": "",
     "price_key_zh": "",
-    "price_key_en": ""
+    "price_key_en": "",
+    "price_table": {
+      "columns": {
+        "zhCN": [
+          "分组",
+          "输入 / 输出 · 每 1M"
+        ],
+        "zhTW": [
+          "分組",
+          "輸入 / 輸出 · 每 1M"
+        ],
+        "en": [
+          "Group",
+          "In / Out per 1M"
+        ],
+        "fr": [
+          "Groupe",
+          "Entrée / sortie / 1M"
+        ],
+        "ru": [
+          "Группа",
+          "Вход / выход / 1M"
+        ],
+        "ja": [
+          "グループ",
+          "入力 / 出力 · 1M"
+        ],
+        "vi": [
+          "Nhóm",
+          "Vào / ra / 1M"
+        ]
+      },
+      "rows": [
+        [
+          "default",
+          "$7.353 / $36.765"
+        ],
+        [
+          "Claude-Code-2",
+          "$12.255139 / $61.275694"
+        ]
+      ]
+    }
   },
   "claude-fable-5": {
     "description": "Anthropic Claude Fable 5 创意写作模型。专注于文学表达、细腻文风与情感叙事。支持 1M 上下文。支持文本模态。适合小说与文案创作、内容润色、创意策划。 计费：输入 $4.41175 / 输出 $22.05875 每百万 tokens。",
@@ -2099,7 +2202,53 @@
     "suffix_zh": "",
     "suffix_en": "",
     "price_key_zh": "",
-    "price_key_en": ""
+    "price_key_en": "",
+    "price_table": {
+      "columns": {
+        "zhCN": [
+          "分组",
+          "输入 / 输出 · 每 1M"
+        ],
+        "zhTW": [
+          "分組",
+          "輸入 / 輸出 · 每 1M"
+        ],
+        "en": [
+          "Group",
+          "In / Out per 1M"
+        ],
+        "fr": [
+          "Groupe",
+          "Entrée / sortie / 1M"
+        ],
+        "ru": [
+          "Группа",
+          "Вход / выход / 1M"
+        ],
+        "ja": [
+          "グループ",
+          "入力 / 出力 · 1M"
+        ],
+        "vi": [
+          "Nhóm",
+          "Vào / ra / 1M"
+        ]
+      },
+      "rows": [
+        [
+          "default",
+          "$4.41175 / $22.05875"
+        ],
+        [
+          "Claude-Code-2",
+          "$7.353 / $36.765"
+        ],
+        [
+          "AWS-Bedrock-2",
+          "$14.706 / $73.53"
+        ]
+      ]
+    }
   },
   "claude-opus-5": {
     "description": "Anthropic Claude Opus 5 深度推理模型。擅长复杂分析与高难度编码，推理链条长而准确。支持 1M 上下文。支持文本模态。适合复杂软件开发、研究报告、架构设计。 计费：输入 $1.103 / 输出 $5.515 每百万 tokens。",
@@ -2147,7 +2296,53 @@
     "suffix_zh": "",
     "suffix_en": "",
     "price_key_zh": "",
-    "price_key_en": ""
+    "price_key_en": "",
+    "price_table": {
+      "columns": {
+        "zhCN": [
+          "分组",
+          "输入 / 输出 · 每 1M"
+        ],
+        "zhTW": [
+          "分組",
+          "輸入 / 輸出 · 每 1M"
+        ],
+        "en": [
+          "Group",
+          "In / Out per 1M"
+        ],
+        "fr": [
+          "Groupe",
+          "Entrée / sortie / 1M"
+        ],
+        "ru": [
+          "Группа",
+          "Вход / выход / 1M"
+        ],
+        "ja": [
+          "グループ",
+          "入力 / 出力 · 1M"
+        ],
+        "vi": [
+          "Nhóm",
+          "Vào / ra / 1M"
+        ]
+      },
+      "rows": [
+        [
+          "default",
+          "$1.103 / $5.515"
+        ],
+        [
+          "Claude-Code-2",
+          "$1.838354 / $9.191771"
+        ],
+        [
+          "AWS-Bedrock-2",
+          "$3.676708 / $18.383542"
+        ]
+      ]
+    }
   },
   "claude-sonnet-5": {
     "description": "Anthropic Claude Sonnet 5 均衡型对话模型。在通用对话、编码与分析任务上提供稳定可靠的表现。支持 1M 上下文。支持文本模态。适合日常开发、内容创作、业务流程自动化。 计费：输入 $0.4412 / 输出 $2.206 每百万 tokens。",
@@ -2195,7 +2390,53 @@
     "suffix_zh": "",
     "suffix_en": "",
     "price_key_zh": "",
-    "price_key_en": ""
+    "price_key_en": "",
+    "price_table": {
+      "columns": {
+        "zhCN": [
+          "分组",
+          "输入 / 输出 · 每 1M"
+        ],
+        "zhTW": [
+          "分組",
+          "輸入 / 輸出 · 每 1M"
+        ],
+        "en": [
+          "Group",
+          "In / Out per 1M"
+        ],
+        "fr": [
+          "Groupe",
+          "Entrée / sortie / 1M"
+        ],
+        "ru": [
+          "Группа",
+          "Вход / выход / 1M"
+        ],
+        "ja": [
+          "グループ",
+          "入力 / 出力 · 1M"
+        ],
+        "vi": [
+          "Nhóm",
+          "Vào / ra / 1M"
+        ]
+      },
+      "rows": [
+        [
+          "default",
+          "$0.4412 / $2.206"
+        ],
+        [
+          "Claude-Code-2",
+          "$0.735342 / $3.676708"
+        ],
+        [
+          "AWS-Bedrock-2",
+          "$1.470683 / $7.353417"
+        ]
+      ]
+    }
   },
   "gemini-3.8-flash": {
     "description": "Google Gemini 3.8 Flash 高速多模态模型。低延迟高吞吐，兼具多模态理解与工具调用能力。支持 1M 上下文。支持文本与图像模态。适合实时应用、大规模处理、智能体工具调用。 计费：输入 $0.275738 / 输出 $1.37869 每百万 tokens。",
@@ -2771,7 +3012,25 @@
     "suffix_zh": "/次",
     "suffix_en": "/ request",
     "price_key_zh": "每次请求",
-    "price_key_en": "Per request"
+    "price_key_en": "Per request",
+    "price_table": {
+      "columns": {
+        "zhCN": [
+          "项目",
+          "售价"
+        ],
+        "en": [
+          "Item",
+          "Price"
+        ]
+      },
+      "rows": [
+        [
+          "标准生成（约 8 秒）",
+          "$0.14125 / request"
+        ]
+      ]
+    }
   },
   "gemini-omni-1.1-flash": {
     "description": "Google Gemini Omni 1.1 Flash 视频生成模型。由文本或图像生成连贯视频片段，支持多种宽高比。支持视频模态。适合短视频创作、广告素材、概念预览。 计费：$0.1056/秒。",
@@ -2819,7 +3078,25 @@
     "suffix_zh": "/秒",
     "suffix_en": "/ second",
     "price_key_zh": "每秒",
-    "price_key_en": "Per second"
+    "price_key_en": "Per second",
+    "price_table": {
+      "columns": {
+        "zhCN": [
+          "项目",
+          "售价"
+        ],
+        "en": [
+          "Item",
+          "Price"
+        ]
+      },
+      "rows": [
+        [
+          "输出视频",
+          "$0.1056 / sec"
+        ]
+      ]
+    }
   },
   "gemini-omni-1.1-flash-ext": {
     "description": "Google Gemini Omni 1.1 Flash 扩展版视频生成模型。提供更长时长与更丰富控制的视频生成能力。支持视频模态。适合中长视频创作、动态视觉素材、影视预览。 计费：$0.42/秒。",
@@ -2867,7 +3144,53 @@
     "suffix_zh": "/秒",
     "suffix_en": "/ second",
     "price_key_zh": "每秒",
-    "price_key_en": "Per second"
+    "price_key_en": "Per second",
+    "price_table": {
+      "columns": {
+        "zhCN": [
+          "规格",
+          "类型",
+          "售价"
+        ],
+        "en": [
+          "Spec",
+          "Type",
+          "Price"
+        ]
+      },
+      "rows": [
+        [
+          "360P 4s/6s/8s/10s",
+          "标准档位",
+          "$0.18 / 0.21 / 0.24 / 0.27"
+        ],
+        [
+          "720P/1080P 4s/6s/8s/10s",
+          "标准档位",
+          "$0.30 / 0.36 / 0.42 / 0.48"
+        ],
+        [
+          "4K 4s/6s/8s/10s",
+          "标准档位",
+          "$0.90 / 0.96 / 1.02 / 1.08"
+        ],
+        [
+          "参考视频 360P",
+          "按秒",
+          "$0.048 / sec"
+        ],
+        [
+          "参考视频 720P/1080P",
+          "按秒",
+          "$0.096 / sec"
+        ],
+        [
+          "参考视频 4K",
+          "按秒",
+          "$0.288 / sec"
+        ]
+      ]
+    }
   },
   "seedance-2.5": {
     "description": "字节 Seedance 2.5 视频生成模型。新一代高保真视频生成，支持多种分辨率档位。支持视频模态。适合高质量视频创作、专业内容制作。",
@@ -2915,7 +3238,53 @@
     "suffix_zh": "/秒",
     "suffix_en": "/ second",
     "price_key_zh": "每秒",
-    "price_key_en": "Per second"
+    "price_key_en": "Per second",
+    "price_table": {
+      "columns": {
+        "zhCN": [
+          "分辨率",
+          "有参考视频",
+          "售价"
+        ],
+        "en": [
+          "Resolution",
+          "Reference video",
+          "Price"
+        ]
+      },
+      "rows": [
+        [
+          "480P",
+          "否 / No",
+          "$0.1153 / sec"
+        ],
+        [
+          "480P",
+          "是（参考+生成时长）",
+          "$0.06912 / sec"
+        ],
+        [
+          "720P",
+          "否 / No",
+          "$0.2592 / sec"
+        ],
+        [
+          "720P",
+          "是（参考+生成时长）",
+          "$0.15552 / sec"
+        ],
+        [
+          "1080P",
+          "否 / No",
+          "$0.4619 / sec"
+        ],
+        [
+          "1080P",
+          "是（参考+生成时长）",
+          "$0.2759 / sec"
+        ]
+      ]
+    }
   },
   "seedance-2.0": {
     "description": "字节 Seedance 2.0 视频生成模型。成熟的视频生成能力，支持多分辨率与参考视频。支持视频模态。适合短视频创作、广告与营销内容。",
@@ -2963,7 +3332,63 @@
     "suffix_zh": "/秒",
     "suffix_en": "/ second",
     "price_key_zh": "每秒",
-    "price_key_en": "Per second"
+    "price_key_en": "Per second",
+    "price_table": {
+      "columns": {
+        "zhCN": [
+          "分辨率",
+          "有参考视频",
+          "售价"
+        ],
+        "en": [
+          "Resolution",
+          "Reference video",
+          "Price"
+        ]
+      },
+      "rows": [
+        [
+          "480P",
+          "否",
+          "$0.0792 / sec"
+        ],
+        [
+          "480P",
+          "是（参考+生成）",
+          "$0.048 / sec"
+        ],
+        [
+          "720P",
+          "否",
+          "$0.1704 / sec"
+        ],
+        [
+          "720P",
+          "是（参考+生成）",
+          "$0.1030 / sec"
+        ],
+        [
+          "1080P",
+          "否",
+          "$0.4253 / sec"
+        ],
+        [
+          "1080P",
+          "是（参考+生成）",
+          "$0.2588 / sec"
+        ],
+        [
+          "4K",
+          "否",
+          "$0.8664 / sec"
+        ],
+        [
+          "4K",
+          "是（参考+生成）",
+          "$0.5332 / sec"
+        ]
+      ]
+    }
   },
   "flux-3-video": {
     "description": "Black Forest Labs Flux 3 视频生成模型。提供电影级画质与多档生成配置，支持高清视频创作。支持视频模态。适合电影级视频、广告大片、创意视觉。 计费：$0.1632/秒。",
@@ -3011,7 +3436,45 @@
     "suffix_zh": "/秒",
     "suffix_en": "/ second",
     "price_key_zh": "每秒",
-    "price_key_en": "Per second"
+    "price_key_en": "Per second",
+    "price_table": {
+      "columns": {
+        "zhCN": [
+          "规格",
+          "售价"
+        ],
+        "en": [
+          "Tier",
+          "Price"
+        ]
+      },
+      "rows": [
+        [
+          "DRAFT",
+          "$0.0576 / sec"
+        ],
+        [
+          "V2V-DRAFT",
+          "$0.1152 / sec"
+        ],
+        [
+          "HD",
+          "$0.1632 / sec"
+        ],
+        [
+          "FHD",
+          "$0.2784 / sec"
+        ],
+        [
+          "V2V-HD",
+          "$0.3936 / sec"
+        ],
+        [
+          "V2V-FHD",
+          "$0.5088 / sec"
+        ]
+      ]
+    }
   },
   "MiniMax-H3": {
     "description": "MiniMax H3 视频生成模型。从文本或图像生成高质量视频，支持多种分辨率与风格。支持视频模态。适合短视频创作、广告素材、动态内容生成。 计费：$0.028767/秒。",
@@ -3059,7 +3522,38 @@
     "suffix_zh": "/秒",
     "suffix_en": "/ second",
     "price_key_zh": "每秒",
-    "price_key_en": "Per second"
+    "price_key_en": "Per second",
+    "price_table": {
+      "columns": {
+        "zhCN": [
+          "分辨率",
+          "场景",
+          "价格 (/秒)"
+        ],
+        "en": [
+          "Resolution",
+          "Scenario",
+          "Price (/sec)"
+        ]
+      },
+      "rows": [
+        [
+          "480p",
+          "标准输出",
+          "$0.02055"
+        ],
+        [
+          "768p",
+          "标准输出",
+          "$0.02877"
+        ],
+        [
+          "1080p",
+          "标准输出",
+          "$0.04110"
+        ]
+      ]
+    }
   },
   "wan3.0-video": {
     "description": "阿里 Wan3.0 视频生成模型。在运动连贯性与画面质量上表现突出，支持多档分辨率。支持视频模态。适合创意视频、影视预览、产品展示。 计费：$0.041146/秒。",
@@ -3107,7 +3601,33 @@
     "suffix_zh": "/秒",
     "suffix_en": "/ second",
     "price_key_zh": "每秒",
-    "price_key_en": "Per second"
+    "price_key_en": "Per second",
+    "price_table": {
+      "columns": {
+        "zhCN": [
+          "分辨率",
+          "售价"
+        ],
+        "en": [
+          "Resolution",
+          "Price"
+        ]
+      },
+      "rows": [
+        [
+          "480P",
+          "$0.04115 / sec"
+        ],
+        [
+          "720P",
+          "$0.08228 / sec"
+        ],
+        [
+          "1080P",
+          "$0.16457 / sec"
+        ]
+      ]
+    }
   },
   "gpt-6-astra": {
     "description": "OpenAI 第六代 Astra 系列的顶级深度推理模型。在数学、科学、代码与多步规划等难题上具备最强深度推理能力。支持 1M 上下文。支持文本模态。适合高难度研究、算法开发、复杂系统设计与深度分析。 计费：输入 $1.8385 / 输出 $9.1925 每百万 tokens。",
@@ -4067,7 +4587,28 @@
     "suffix_zh": "/秒",
     "suffix_en": "/ second",
     "price_key_zh": "每秒",
-    "price_key_en": "Per second"
+    "price_key_en": "Per second",
+    "price_table": {
+      "columns": {
+        "zhCN": [
+          "规格",
+          "说明",
+          "售价"
+        ],
+        "en": [
+          "Spec",
+          "Note",
+          "Price"
+        ]
+      },
+      "rows": [
+        [
+          "1080p",
+          "standard",
+          "$0.100599 / sec"
+        ]
+      ]
+    }
   },
   "seedance-2.0-1080p-fast": {
     "description": "字节 Seedance 2.0 1080p 快速版视频生成模型。在保持高清画质的同时显著提升生成速度。支持视频模态。适合时效性强的视频创作、批量素材生成。 计费：$0.0754/秒。",
@@ -4115,7 +4656,28 @@
     "suffix_zh": "/秒",
     "suffix_en": "/ second",
     "price_key_zh": "每秒",
-    "price_key_en": "Per second"
+    "price_key_en": "Per second",
+    "price_table": {
+      "columns": {
+        "zhCN": [
+          "规格",
+          "说明",
+          "售价"
+        ],
+        "en": [
+          "Spec",
+          "Note",
+          "Price"
+        ]
+      },
+      "rows": [
+        [
+          "1080p",
+          "fast",
+          "$0.0754 / sec"
+        ]
+      ]
+    }
   },
   "seedance-2.0-1080p-mini": {
     "description": "字节 Seedance 2.0 1080p 轻量版视频生成模型。以更低成本提供 1080p 视频生成能力。支持视频模态。适合预算敏感型视频内容、批量创作。 计费：$0.050112/秒。",
@@ -4163,7 +4725,28 @@
     "suffix_zh": "/秒",
     "suffix_en": "/ second",
     "price_key_zh": "每秒",
-    "price_key_en": "Per second"
+    "price_key_en": "Per second",
+    "price_table": {
+      "columns": {
+        "zhCN": [
+          "规格",
+          "说明",
+          "售价"
+        ],
+        "en": [
+          "Spec",
+          "Note",
+          "Price"
+        ]
+      },
+      "rows": [
+        [
+          "1080p",
+          "mini",
+          "$0.050112 / sec"
+        ]
+      ]
+    }
   },
   "seedance-2.5-1080p": {
     "description": "字节 Seedance 2.5 1080p 视频生成模型。以全高清分辨率生成高保真视频内容。支持视频模态。适合高清视频创作、专业内容制作。 计费：$0.137996/秒。",
@@ -4211,7 +4794,28 @@
     "suffix_zh": "/秒",
     "suffix_en": "/ second",
     "price_key_zh": "每秒",
-    "price_key_en": "Per second"
+    "price_key_en": "Per second",
+    "price_table": {
+      "columns": {
+        "zhCN": [
+          "规格",
+          "说明",
+          "售价"
+        ],
+        "en": [
+          "Spec",
+          "Note",
+          "Price"
+        ]
+      },
+      "rows": [
+        [
+          "1080p",
+          "2.5",
+          "$0.137996 / sec"
+        ]
+      ]
+    }
   },
   "seedance-2.0-720p": {
     "description": "字节 Seedance 2.0 720p 视频生成模型。成熟的 720p 视频生成，画质与成本平衡。支持视频模态。适合短视频创作、广告素材。 计费：$0.096165/秒。",
@@ -4259,7 +4863,28 @@
     "suffix_zh": "/秒",
     "suffix_en": "/ second",
     "price_key_zh": "每秒",
-    "price_key_en": "Per second"
+    "price_key_en": "Per second",
+    "price_table": {
+      "columns": {
+        "zhCN": [
+          "规格",
+          "说明",
+          "售价"
+        ],
+        "en": [
+          "Spec",
+          "Note",
+          "Price"
+        ]
+      },
+      "rows": [
+        [
+          "720p",
+          "standard",
+          "$0.096165 / sec"
+        ]
+      ]
+    }
   },
   "seedance-2.0-720p-fast": {
     "description": "字节 Seedance 2.0 720p 快速版视频生成模型。快速生成 720p 视频，适合高迭代节奏。支持视频模态。适合快速原型、社交短视频。 计费：$0.074794/秒。",
@@ -4307,7 +4932,28 @@
     "suffix_zh": "/秒",
     "suffix_en": "/ second",
     "price_key_zh": "每秒",
-    "price_key_en": "Per second"
+    "price_key_en": "Per second",
+    "price_table": {
+      "columns": {
+        "zhCN": [
+          "规格",
+          "说明",
+          "售价"
+        ],
+        "en": [
+          "Spec",
+          "Note",
+          "Price"
+        ]
+      },
+      "rows": [
+        [
+          "720p",
+          "fast",
+          "$0.074794 / sec"
+        ]
+      ]
+    }
   },
   "seedance-2.0-720p-mini": {
     "description": "字节 Seedance 2.0 720p 轻量版视频生成模型。以最低成本获得 720p 视频生成能力。支持视频模态。适合低成本批量视频、内容测试。 计费：$0.049863/秒。",
@@ -4355,7 +5001,28 @@
     "suffix_zh": "/秒",
     "suffix_en": "/ second",
     "price_key_zh": "每秒",
-    "price_key_en": "Per second"
+    "price_key_en": "Per second",
+    "price_table": {
+      "columns": {
+        "zhCN": [
+          "规格",
+          "说明",
+          "售价"
+        ],
+        "en": [
+          "Spec",
+          "Note",
+          "Price"
+        ]
+      },
+      "rows": [
+        [
+          "720p",
+          "mini",
+          "$0.049863 / sec"
+        ]
+      ]
+    }
   },
   "seedance-2.5-720p": {
     "description": "字节 Seedance 2.5 720p 视频生成模型。以 720p 分辨率快速生成高质量视频，兼顾成本。支持视频模态。适合高质量短视频、内容营销。 计费：$0.133562/秒。",
@@ -4403,7 +5070,28 @@
     "suffix_zh": "/秒",
     "suffix_en": "/ second",
     "price_key_zh": "每秒",
-    "price_key_en": "Per second"
+    "price_key_en": "Per second",
+    "price_table": {
+      "columns": {
+        "zhCN": [
+          "规格",
+          "说明",
+          "售价"
+        ],
+        "en": [
+          "Spec",
+          "Note",
+          "Price"
+        ]
+      },
+      "rows": [
+        [
+          "720p",
+          "2.5",
+          "$0.133562 / sec"
+        ]
+      ]
+    }
   },
   "Bespoke-Nimble-9B": {
     "description": "Bespoke Nimble 9B 轻量决策模型。面向实时决策场景优化，响应快速、成本极低。支持文本与图像模态。适合实时决策、流程判断、自动化选择。 计费：输入 $0.032 / 输出 $0.032 每百万 tokens。",
@@ -4691,7 +5379,53 @@
     "suffix_zh": "",
     "suffix_en": "",
     "price_key_zh": "",
-    "price_key_en": ""
+    "price_key_en": "",
+    "price_table": {
+      "columns": {
+        "zhCN": [
+          "分组",
+          "输入 / 输出 · 每 1M"
+        ],
+        "zhTW": [
+          "分組",
+          "輸入 / 輸出 · 每 1M"
+        ],
+        "en": [
+          "Group",
+          "In / Out per 1M"
+        ],
+        "fr": [
+          "Groupe",
+          "Entrée / sortie / 1M"
+        ],
+        "ru": [
+          "Группа",
+          "Вход / выход / 1M"
+        ],
+        "ja": [
+          "グループ",
+          "入力 / 出力 · 1M"
+        ],
+        "vi": [
+          "Nhóm",
+          "Vào / ra / 1M"
+        ]
+      },
+      "rows": [
+        [
+          "default",
+          "$1.7647 / $8.8235"
+        ],
+        [
+          "Claude-Code-2",
+          "$2.9412 / $14.706"
+        ],
+        [
+          "AWS-Bedrock-2",
+          "$5.8824 / $29.412"
+        ]
+      ]
+    }
   },
   "glm-5.3-flash": {
     "description": "智谱 GLM 5.3 Flash 高速对话模型。响应迅速，在通用任务与工具调用上表现稳定。支持 128K 上下文。支持文本模态。适合智能客服、Agent 应用、内容生成。 计费：输入 $0.21534 / 输出 $0.717792 每百万 tokens。",
@@ -5171,7 +5905,28 @@
     "suffix_zh": "/秒",
     "suffix_en": "/ second",
     "price_key_zh": "每秒",
-    "price_key_en": "Per second"
+    "price_key_en": "Per second",
+    "price_table": {
+      "columns": {
+        "zhCN": [
+          "规格",
+          "说明",
+          "价格 (/秒)"
+        ],
+        "en": [
+          "Spec",
+          "Note",
+          "Price (/sec)"
+        ]
+      },
+      "rows": [
+        [
+          "standard",
+          "精细化字幕擦除",
+          "0.018265"
+        ]
+      ]
+    }
   },
   "video-enhance-pro": {
     "description": "Video Enhance Pro 视频增强模型。提升视频清晰度与画质，支持多档分辨率增强。支持视频模态。适合老旧视频修复、画质升级、影视后期。 计费：$0.068493/秒。",
@@ -5219,7 +5974,38 @@
     "suffix_zh": "/秒",
     "suffix_en": "/ second",
     "price_key_zh": "每秒",
-    "price_key_en": "Per second"
+    "price_key_en": "Per second",
+    "price_table": {
+      "columns": {
+        "zhCN": [
+          "分辨率",
+          "场景",
+          "价格 (/秒)"
+        ],
+        "en": [
+          "Resolution",
+          "Scenario",
+          "Price (/sec)"
+        ]
+      },
+      "rows": [
+        [
+          "720p",
+          "标准输出",
+          "0.034247"
+        ],
+        [
+          "1080p",
+          "标准输出",
+          "0.068493"
+        ],
+        [
+          "2K",
+          "标准输出",
+          "0.136986"
+        ]
+      ]
+    }
   },
   "claude-sonnet-5-5": {
     "description": "Anthropic Claude Sonnet 5.5 智能体型对话模型。在智能体任务、编码与工具调用上表现出色，兼具速度与质量。支持 1M 上下文。支持文本模态。适合代码开发、智能体工作流、企业级应用。 计费：输入 $0.88235 / 输出 $4.41175 每百万 tokens。",
@@ -5267,7 +6053,53 @@
     "suffix_zh": "",
     "suffix_en": "",
     "price_key_zh": "",
-    "price_key_en": ""
+    "price_key_en": "",
+    "price_table": {
+      "columns": {
+        "zhCN": [
+          "分组",
+          "输入 / 输出 · 每 1M"
+        ],
+        "zhTW": [
+          "分組",
+          "輸入 / 輸出 · 每 1M"
+        ],
+        "en": [
+          "Group",
+          "In / Out per 1M"
+        ],
+        "fr": [
+          "Groupe",
+          "Entrée / sortie / 1M"
+        ],
+        "ru": [
+          "Группа",
+          "Вход / выход / 1M"
+        ],
+        "ja": [
+          "グループ",
+          "入力 / 出力 · 1M"
+        ],
+        "vi": [
+          "Nhóm",
+          "Vào / ra / 1M"
+        ]
+      },
+      "rows": [
+        [
+          "default",
+          "$0.88235 / $4.41175"
+        ],
+        [
+          "Claude-Code-2",
+          "$1.4706 / $7.353"
+        ],
+        [
+          "AWS-Bedrock-2",
+          "$2.9412 / $14.706"
+        ]
+      ]
+    }
   },
   "claude-haiku-5-5": {
     "description": "Anthropic Claude Haiku 5.5 轻量高速对话模型。极低延迟与高性价比，适合大规模高频调用。支持 200K 上下文。支持文本模态。适合实时客服、文本分类、内容摘要、边缘应用。 计费：输入 $0.07353 / 输出 $0.36765 每百万 tokens。",
@@ -5315,7 +6147,53 @@
     "suffix_zh": "",
     "suffix_en": "",
     "price_key_zh": "",
-    "price_key_en": ""
+    "price_key_en": "",
+    "price_table": {
+      "columns": {
+        "zhCN": [
+          "分组",
+          "输入 / 输出 · 每 1M"
+        ],
+        "zhTW": [
+          "分組",
+          "輸入 / 輸出 · 每 1M"
+        ],
+        "en": [
+          "Group",
+          "In / Out per 1M"
+        ],
+        "fr": [
+          "Groupe",
+          "Entrée / sortie / 1M"
+        ],
+        "ru": [
+          "Группа",
+          "Вход / выход / 1M"
+        ],
+        "ja": [
+          "グループ",
+          "入力 / 出力 · 1M"
+        ],
+        "vi": [
+          "Nhóm",
+          "Vào / ra / 1M"
+        ]
+      },
+      "rows": [
+        [
+          "default",
+          "$0.07353 / $0.36765"
+        ],
+        [
+          "Claude-Code-2",
+          "$0.122551 / $0.612757"
+        ],
+        [
+          "AWS-Bedrock-2",
+          "$0.245103 / $1.225514"
+        ]
+      ]
+    }
   },
   "gpt-6.1-sol": {
     "description": "OpenAI 第六代 Sol 系列的最新升级版对话模型。在复杂推理、长程智能体任务与全栈编码上表现均衡，输出稳定可靠。支持 1M 上下文。支持文本模态。适合智能体编排、复杂代码生成、深度数据分析。 计费：输入 $0.3677 / 输出 $1.8385 每百万 tokens。",
@@ -5795,7 +6673,33 @@
     "suffix_zh": "/次",
     "suffix_en": "/ request",
     "price_key_zh": "每次请求",
-    "price_key_en": "Per request"
+    "price_key_en": "Per request",
+    "price_table": {
+      "columns": {
+        "zhCN": [
+          "场景",
+          "价格 (/次)"
+        ],
+        "en": [
+          "Scenario",
+          "Price (/req)"
+        ]
+      },
+      "rows": [
+        [
+          "文生 / 单图生视频",
+          "$0.3082"
+        ],
+        [
+          "首尾帧",
+          "$0.3082"
+        ],
+        [
+          "多参考图",
+          "$0.3082"
+        ]
+      ]
+    }
   },
   "nano-banana-2.1": {
     "description": "Google Nano Banana 2.1 图像生成模型。以低成本提供高质量的文生图与图生图能力。支持图像模态。适合快速出图、创意探索、内容配图。 计费：$0.012329/次。",
@@ -6563,7 +7467,38 @@
     "suffix_zh": "/秒",
     "suffix_en": "/ second",
     "price_key_zh": "每秒",
-    "price_key_en": "Per second"
+    "price_key_en": "Per second",
+    "price_table": {
+      "columns": {
+        "zhCN": [
+          "分辨率",
+          "场景",
+          "价格 (/秒)"
+        ],
+        "en": [
+          "Resolution",
+          "Scenario",
+          "Price (/sec)"
+        ]
+      },
+      "rows": [
+        [
+          "720p",
+          "标准输出",
+          "$0.02055"
+        ],
+        [
+          "1080p",
+          "标准输出",
+          "$0.03493"
+        ],
+        [
+          "2k",
+          "标准输出",
+          "$0.04726"
+        ]
+      ]
+    }
   },
   "DeepSeek-Prover-V2-7B:free": {
     "description": "DeepSeek Prover V2 7B 的赠送金调用模型。调用按对应模型费率计费，优先扣减赠送金，赠送金不足时扣充值余额。支持 16K 上下文。支持文本模态。适合数学定理证明、形式化验证、研究辅助。 计费：输入 $0.01 / 输出 $0.04 每百万 tokens。",

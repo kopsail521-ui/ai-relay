@@ -42,11 +42,12 @@ import json, sys
 left, right = [json.load(open(p, encoding='utf-8')) for p in sys.argv[1:3]]
 if left != right:
     raise SystemExit('Marketplace copies differ; deploy matching reviewed metadata first')
-for name in ("gpt-image-2-1K", "gpt-image-2-2K", "gpt-image-2-4K", "gpt-image-2.5-1K",
-             "gpt-image-2.5-flare-hd", "gpt-image-2.5-flare-vip",
-             "gpt-image-2.5-sunburst-hd", "gpt-image-2.5-sunburst-vip"):
+for name in ("gpt-image-2-2K", "gpt-image-2-4K", "gpt-image-2.5-flare-vip", "gpt-image-2.5-sunburst-vip"):
     if name not in left:
         raise SystemExit('Marketplace copy lacks ' + name)
+for name in ("gpt-image-2-1K", "gpt-image-2.5-1K", "gpt-image-2.5-flare-hd", "gpt-image-2.5-sunburst-hd"):
+    if name in left:
+        raise SystemExit('Legacy renamed entry still present: ' + name)
 PYEOF
 mkdir -p "$BACKUP"; chmod 700 "$BACKUP"
 docker inspect "$NEW_API" > "$BACKUP/new-api-inspect.json"

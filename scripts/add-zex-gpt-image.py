@@ -1,13 +1,17 @@
 #!/usr/bin/env python3
-"""Zexapi gpt-image onboarding: registration, container env clone, real billed probe.
+"""Zexapi gpt-image onboarding as a SECOND USER GROUP (GPT-Image-HD).
 
+Same model names as upstream, served in a new group so the default-group supply
+and prices stay untouched. Group ratio scales per-call prices; the four model
+names new to the catalog get their own ModelPrice.
 python scripts/add-zex-gpt-image.py --db /opt/ai-relay/data/new-api/one-api.db --key-file KEY
-Never logs the upstream credential. Requires Python 3 standard library only.
+Never logs the upstream credential. Python 3 standard library only.
 """
 from __future__ import annotations
 
 import argparse
 import json
+import math
 import os
 from pathlib import Path
 import secrets
@@ -19,22 +23,25 @@ import urllib.error
 import urllib.parse
 import urllib.request
 
-# public model -> (upstream model, sell USD per request)
-MODELS = {
-    "gpt-image-2-1K": ("gpt-image-2", 0.02505),
-    "gpt-image-2-2K": ("gpt-image-2-2K", 0.15),
-    "gpt-image-2-4K": ("gpt-image-2-4K", 0.15),
-    "gpt-image-2.5-1K": ("gpt-image-2.5", 0.02505),
-    "gpt-image-2.5-flare-hd": ("gpt-image-2.5-flare", 0.27),
-    "gpt-image-2.5-flare-vip": ("gpt-image-2.5-flare-vip", 0.27),
-    "gpt-image-2.5-sunburst-hd": ("gpt-image-2.5-sunburst", 0.27),
-    "gpt-image-2.5-sunburst-vip": ("gpt-image-2.5-sunburst-vip", 0.375),
-}
+GROUP = "GPT-Image-HD"
+RATIO = 13.140553  # 0.27 sell / 0.020548 default flare price; covers upstream cost x1.5 on every shared name
 CHANNEL = "Keyo Zex GPT Image"
 BASE_URL = "https://zexapi.com"
-GROUP = "default"
-ENDPOINTS = json.dumps({"openai-video": "/v1/videos"}, separators=(",", ":"))
 QUOTA_PER_USD = 500000
+ENDPOINTS = json.dumps({"openai-video": "/v1/videos"}, separators=(",", ":"))
+
+# model -> base ModelPrice (USD/request before group ratio); None = keep existing global price
+MODELS = {
+    "gpt-image-2": None,
+    "gpt-image-2-2K": 0.011416,
+    "gpt-image-2-4K": 0.011416,
+    "gpt-image-2.5": None,
+    "gpt-image-2.5-flare": None,
+    "gpt-image-2.5-flare-vip": 0.0205471,
+    "gpt-image-2.5-sunburst": None,
+    "gpt-image-2.5-sunburst-vip": 0.0285377,
+}
+LEGACY = ["gpt-image-2-1K", "gpt-image-2.5-1K", "gpt-image-2.5-flare-hd", "gpt-image-2.5-sunburst-hd"]
 
 
 def load_env(path):
@@ -93,6 +100,10 @@ def update(db, table, row_id, spec):
     db.execute('UPDATE "%s" SET %s WHERE id=?' % (table, ",".join('"%s"=?' % k for k in values)), list(values.values()) + [row_id])
 
 
+def options(db):
+    return dict(db.execute("SELECT key,value FROM options"))
+
+
 def backup(db, path):
     target = str(path) + ".zex-%s.bak" % time.time_ns()
     with sqlite3.connect(target) as dest:
@@ -101,37 +112,61 @@ def backup(db, path):
     print("DATABASE_BACKUP " + target)
 
 
+def ensure_groups(db):
+    opts = options(db)
+    ratio_key = "group_ratio_setting.group_ratio" if "group_ratio_setting.group_ratio" in opts else "GroupRatio"
+    usable = json.loads(opts.get("UserUsableGroups") or '{"default":"default"}')
+    ratios = json.loads(opts.get(ratio_key) or "{}")
+    if not isinstance(usable, dict) or not isinstance(ratios, dict):
+        raise RuntimeError("Group configuration is invalid")
+    if float(ratios.get("default", 1)) != 1:
+        raise RuntimeError("default GroupRatio must stay 1")
+    usable.setdefault(GROUP, "GPT Image HD " + GROUP)
+    ratios[GROUP] = RATIO
+    with db:
+        for key, data in (("UserUsableGroups", usable), (ratio_key, ratios)):
+            value = json.dumps(data, ensure_ascii=False, separators=(",", ":"))
+            if db.execute("SELECT 1 FROM options WHERE key=?", (key,)).fetchone():
+                db.execute("UPDATE options SET value=? WHERE key=?", (value, key))
+            else:
+                db.execute("INSERT INTO options(key,value) VALUES (?,?)", (key, value))
+    return ratios
+
+
 def channel_spec(key):
-    mapping = {pub: up for pub, (up, _) in MODELS.items() if pub != up}
     return {"name": CHANNEL, "type": 1, "base_url": BASE_URL, "models": ",".join(MODELS), "group": GROUP,
-            "status": 1, "key": key, "model_mapping": json.dumps(mapping, separators=(",", ":")),
-            "priority": 0, "weight": 1}
+            "status": 1, "key": key, "model_mapping": "{}", "priority": 0, "weight": 1}
 
 
-def model_spec(vid, name, price):
-    upstream, _ = MODELS[name]
-    desc = "GPT Image 异步图像生成（%s，上游 %s）。经 POST /v1/videos 提交，GET /v1/videos/{task_id} 轮询取图。计费：$%g/次。" % (name, upstream, price)
-    return {"model_name": name, "description": desc, "icon": "OpenAI", "vendor_id": vid,
-            "tags": "图像生成", "endpoints": ENDPOINTS, "status": 1, "sync_official": 0}
+def merge_endpoints(existing):
+    try:
+        data = json.loads(existing) if existing else {}
+    except ValueError:
+        data = {}
+    if not isinstance(data, dict):
+        data = {}
+    data["openai-video"] = "/v1/videos"
+    return json.dumps(data, separators=(",", ":"))
 
 
 def ensure_db(db, key):
     rows = db.execute("SELECT id,type,base_url,models FROM channels WHERE name=?", (CHANNEL,)).fetchall()
     if len(rows) > 1 or rows and (rows[0][1] != 1 or rows[0][2] != BASE_URL):
         raise RuntimeError("Keyo Zex GPT Image channel conflicts with existing configuration")
-    for (other_id, other_models) in db.execute("SELECT id,models FROM channels WHERE name<>?", (CHANNEL,)).fetchall():
+    for (other_id, other_group, other_models) in db.execute('SELECT id,"group",models FROM channels WHERE name<>?', (CHANNEL,)).fetchall():
         overlap = set((other_models or "").split(",")) & set(MODELS)
-        if overlap:
-            raise RuntimeError("Another channel already serves " + ",".join(sorted(overlap)))
+        if overlap and (other_group or "").split(",")[0] == GROUP:
+            raise RuntimeError("Another channel already serves " + ",".join(sorted(overlap)) + " in group " + GROUP)
+    ensure_groups(db)
     prices = {}
-    for name, value in (("ModelPrice", None), ("ModelRatio", None), ("CompletionRatio", None)):
-        data = json.loads(dict(db.execute("SELECT key,value FROM options")).get(name) or "{}")
-        if value is None:
-            for m in MODELS:
-                data.pop(m, None)
+    for name in ("ModelPrice", "ModelRatio", "CompletionRatio"):
+        data = json.loads(options(db).get(name) or "{}")
+        for legacy in LEGACY:
+            data.pop(legacy, None)
         prices[name] = data
-    for name, (_, price) in MODELS.items():
-        prices["ModelPrice"][name] = price
+    for name, base in MODELS.items():
+        if base is not None:
+            prices["ModelPrice"][name] = base
     now = int(time.time())
     with db:
         cid = rows[0][0] if rows else insert(db, "channels", dict(channel_spec(key), created_time=now))
@@ -140,16 +175,20 @@ def ensure_db(db, key):
         if len(vendors) > 1:
             raise RuntimeError("Multiple OpenAI vendors found")
         vid = vendors[0][0] if vendors else insert(db, "vendors", {"name": "OpenAI", "icon": "OpenAI", "status": 1, "created_time": now})
-        for name, (_, price) in MODELS.items():
-            matches = db.execute("SELECT id FROM models WHERE model_name=?", (name,)).fetchall()
+        for name, base in MODELS.items():
+            matches = db.execute("SELECT id,endpoints FROM models WHERE model_name=?", (name,)).fetchall()
             if len(matches) > 1:
                 raise RuntimeError("Multiple metadata rows for " + name)
-            spec = dict(model_spec(vid, name, price), deleted_at=None, updated_time=now)
             if matches:
-                update(db, "models", matches[0][0], spec)
+                # Shared catalog names: only merge the openai-video endpoint, keep copy intact.
+                update(db, "models", matches[0][0], {"endpoints": merge_endpoints(matches[0][1]), "deleted_at": None, "updated_time": now})
             else:
-                insert(db, "models", dict(spec, created_time=now))
-        db.execute("DELETE FROM abilities WHERE channel_id=? AND model IN (%s)" % ",".join("?" * len(MODELS)), [cid] + list(MODELS))
+                effective = (base if base is not None else 0) * RATIO
+                desc = "GPT Image 异步图像生成（%s，分组 %s）。经 POST /v1/videos 提交，GET /v1/videos/{task_id} 轮询取图。本分组计费：$%.6g/次。" % (name, GROUP, effective)
+                insert(db, "models", {"model_name": name, "description": desc, "icon": "OpenAI", "vendor_id": vid,
+                    "tags": "图像生成", "endpoints": ENDPOINTS, "status": 1, "sync_official": 0,
+                    "created_time": now, "updated_time": now, "deleted_at": None})
+        db.execute("DELETE FROM abilities WHERE channel_id=? AND \"group\"=?", (cid, GROUP))
         for name in MODELS:
             insert(db, "abilities", {"group": GROUP, "model": name, "channel_id": cid, "enabled": 1, "priority": 0, "weight": 1})
         for opt, data in prices.items():
@@ -158,7 +197,7 @@ def ensure_db(db, key):
                 db.execute("UPDATE options SET value=? WHERE key=?", (value, opt))
             else:
                 db.execute("INSERT INTO options(key,value) VALUES (?,?)", (opt, value))
-    print("REGISTERED_DB channel=%d models=%d; TASK_PRICE_PATCH=%s" % (cid, len(MODELS), ",".join(MODELS)))
+    print("REGISTERED_DB channel=%d group=%s ratio=%s models=%d; TASK_PRICE_PATCH=%s" % (cid, GROUP, RATIO, len(MODELS), ",".join(MODELS)))
 
 
 def disable(db):
@@ -166,7 +205,7 @@ def disable(db):
     with db:
         for (cid,) in rows:
             db.execute("UPDATE channels SET status=2 WHERE id=?", (cid,))
-            db.execute("UPDATE abilities SET enabled=0 WHERE channel_id=?", (cid,))
+            db.execute('UPDATE abilities SET enabled=0 WHERE channel_id=? AND "group"=?', (cid, GROUP))
     print("CHANNEL_DISABLED_AFTER_FAILED_PROBE")
 
 
@@ -245,18 +284,24 @@ def clone_container(inspect_path, image, name, env_file):
         subprocess.run(connect + [net, name], check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
 
-def probe(db, base, key):
-    """Real billed proof: one cheap 1K task and one flare 4K task through the public API."""
+def probe(db, base):
+    """Real billed proof through the public route in the GPT-Image-HD group."""
     required = {"model_limits_enabled", "model_limits", "expired_time", "remain_quota", "unlimited_quota", "used_quota", "group"}
     if not required <= columns(db, "tokens"):
         raise RuntimeError("Token schema cannot enforce a restricted probe")
+    mp = json.loads(options(db).get("ModelPrice") or "{}")
+    jobs = [
+        ("gpt-image-2", {"model": "gpt-image-2", "prompt": "A simple red circle on a white background", "aspect_ratio": "1:1"}, mp.get("gpt-image-2")),
+        ("gpt-image-2.5-flare", {"model": "gpt-image-2.5-flare", "prompt": "A blue square on a white background", "aspect_ratio": "1:1", "image_size": "4K"}, mp.get("gpt-image-2.5-flare")),
+    ]
+    if not all(isinstance(price, (int, float)) and price > 0 for _, _, price in jobs):
+        raise RuntimeError("Shared model prices missing from ModelPrice; probe cannot compute expectations")
     now = int(time.time())
-    results = []
+    name = "zex-probe-" + secrets.token_hex(8)
+    token_key = secrets.token_hex(24)
     uid = tid = None
     try:
         budget = 300000  # $0.60 ceiling
-        name = "zex-probe-" + secrets.token_hex(8)
-        token_key = secrets.token_hex(24)
         with db:
             uid = insert(db, "users", {"username": name, "password": "!" + secrets.token_hex(32), "display_name": name,
                 "role": 1, "status": 1, "group": GROUP, "quota": budget, "used_quota": 0, "request_count": 0})
@@ -265,13 +310,10 @@ def probe(db, base, key):
                 "unlimited_quota": 0, "used_quota": 0, "model_limits_enabled": 1,
                 "model_limits": ",".join(MODELS), "group": "", "cross_group_retry": 0})
         auth = "sk-" + token_key
-        jobs = [
-            ("gpt-image-2-1K", {"model": "gpt-image-2-1K", "prompt": "A simple red circle on a white background", "aspect_ratio": "1:1"}, 0.02505),
-            ("gpt-image-2.5-flare-hd", {"model": "gpt-image-2.5-flare-hd", "prompt": "A blue square on a white background", "aspect_ratio": "1:1", "image_size": "4K"}, 0.27),
-        ]
         cumulative = 0
-        for model, payload, sell in jobs:
-            expected = round(sell * QUOTA_PER_USD)
+        results = []
+        for model, payload, base_price in jobs:
+            expected = math.floor(base_price * RATIO * QUOTA_PER_USD + 0.5)
             cumulative += expected
             submit = request(base.rstrip("/") + "/v1/videos", "POST", payload, auth, timeout=90)
             task_id = submit.get("id") or submit.get("task_id")
@@ -293,14 +335,14 @@ def probe(db, base, key):
             settled = False
             for _ in range(40):
                 row = db.execute("SELECT quota,used_quota FROM users WHERE id=?", (uid,)).fetchone()
-                logs = db.execute('SELECT quota FROM logs WHERE user_id=? AND model_name=? AND type=2', (uid, model)).fetchall()
+                logs = db.execute("SELECT quota FROM logs WHERE user_id=? AND model_name=? AND type=2", (uid, model)).fetchall()
                 if row and row[1] == cumulative and len(logs) == 1 and logs[0][0] == expected:
                     settled = True
                     break
                 time.sleep(2)
             if not settled:
-                raise RuntimeError("Settlement for %s differs: expected quota %d cumulative %d (sell $%g x1.5 of upstream cost)" % (model, expected, cumulative, sell))
-            results.append("%s OK quota=%d url_present=yes" % (model, expected))
+                raise RuntimeError("Settlement for %s differs: expected quota %d cumulative %d (price %g x ratio %s)" % (model, expected, cumulative, base_price, RATIO))
+            results.append("%s OK quota=%d($%g) url=yes" % (model, expected, base_price * RATIO))
         print("REAL_VIDEO_TASK_AND_SETTLEMENT_OK " + "; ".join(results))
     finally:
         with db:
@@ -318,13 +360,18 @@ def check_public(base):
     rows = {r.get("model_name"): r for r in data.get("data", []) if r.get("model_name") in MODELS}
     if set(rows) != set(MODELS):
         raise RuntimeError("Public pricing missing models: " + ",".join(set(MODELS) - set(rows)))
-    for name, (_, price) in MODELS.items():
+    for name, base_price in MODELS.items():
         row = rows[name]
-        if row.get("quota_type") != 1 or abs(float(row.get("model_price", -1)) - price) > 1e-9 or GROUP not in row.get("enable_groups", []):
-            raise RuntimeError("Public pricing mismatch for " + name)
+        if GROUP not in row.get("enable_groups", []):
+            raise RuntimeError("Public pricing omits group %s for %s" % (GROUP, name))
         if "openai-video" not in row.get("supported_endpoint_types", []):
             raise RuntimeError("Public pricing omits openai-video endpoint for " + name)
-    print("PUBLIC_ZEX_PRICING_OK models=%d" % len(MODELS))
+        if base_price is not None and (row.get("quota_type") != 1 or abs(float(row.get("model_price", -1)) - base_price) > 1e-9):
+            raise RuntimeError("Public per-call price mismatch for " + name)
+    ratio = (data.get("group_ratio") or {}).get(GROUP)
+    if ratio is None or abs(float(ratio) - RATIO) > 1e-6:
+        raise RuntimeError("Public group ratio for %s is %s" % (GROUP, ratio))
+    print("PUBLIC_ZEX_PRICING_OK group=%s ratio=%s models=%d" % (GROUP, ratio, len(MODELS)))
 
 
 def main():
@@ -359,7 +406,7 @@ def main():
         if args.register:
             ensure_db(db, key)
         if args.probe:
-            probe(db, args.base, key)
+            probe(db, args.base)
     print("ZEX_OK")
 
 

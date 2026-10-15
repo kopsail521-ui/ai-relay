@@ -1211,6 +1211,8 @@ function landingRelatedLinks(slug) {
       `${base}, and <a href="/subtitle-erase-pro-api-pricing">Subtitle Erase Pro pricing</a> · <a href="/agnes-video-2-5-api-pricing">Agnes Video 2.5 pricing</a> · <a href="/seedance-2-5-api-pricing">Seedance 2.5 pricing</a>`,
     "subtitle-erase-pro-api-pricing":
       `${base}, and <a href="/video-enhance-pro-api-pricing">Video Enhance Pro pricing</a> · <a href="/agnes-video-2-5-api-pricing">Agnes Video 2.5 pricing</a> · <a href="/seedance-2-5-api-pricing">Seedance 2.5 pricing</a>`,
+    "nano-banana-api-pricing":
+      `${base}, and <a href="/model/nano-banana-2.1">Nano Banana 2.1</a> · <a href="/model/nano-banana-2">Nano Banana 2</a> · <a href="/model/nano-banana-pro">Nano Banana Pro</a>`,
   };
   const links = bySlug[slug] || `${base}, and <a href="/tts-api">TTS API</a> · <a href="/ai-avatar-video-generator">Avatar video</a>`;
   return `<p class="meta">Also see ${links}.</p>`;

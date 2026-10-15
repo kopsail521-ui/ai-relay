@@ -1082,7 +1082,7 @@
         },
         {
           "q": "Nano Banana 2 vs 2.1 vs Pro — which one?",
-          "a": "nano-banana-2 is the base lane at $0.0205 per image; nano-banana-2.1 is the newer release at $0.0123 per image; nano-banana-pro is the top tier at $0.0274. All three run on the same key — see /model/nano-banana-2.1 and /pricing-list."
+          "a": "nano-banana-2 is the base lane at $0.0205 per image; nano-banana-2.1 is the newer release at $0.0123 per image; nano-banana-pro is the top tier at $0.0274. All three run on the same key — see /model/nano-banana-2.1, /model/nano-banana-pro and /pricing-list."
         }
       ],
       "sections": {
@@ -1147,6 +1147,44 @@
       "bodyWordCount": 420,
       "curlExample": "curl https://www.keyoapi.xyz/v1/images/generations \\\n  -H \"Authorization: Bearer YOUR_API_KEY\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\"model\":\"nano-banana-2.1\",\"prompt\":\"a red paper boat on calm water at sunset\"}'",
       "uniqueBlurb": "Nano Banana 2.1 is hosted image generation on /v1/images/generations — one Bearer key covers it beside chat, TTS, and OCR; escalate to nano-banana-pro when text-in-image accuracy dominates."
+    },
+    {
+      "id": "nano-banana-pro",
+      "category": "vision",
+      "targetKeywords": [
+        "nano banana pro api",
+        "nano banana pro",
+        "nano banana pro pricing",
+        "nano banana pro image api"
+      ],
+      "h1": "Nano Banana Pro API — Google's Top Image Tier on KeyoAPI",
+      "title": "Nano Banana Pro API — Pricing & Quick Start | KeyoAPI",
+      "metaDescription": "Nano Banana Pro API on KeyoAPI: high-resolution image generation and fine-grained editing via POST /v1/images/generations at $0.0274 per image. Same OpenAI-compatible key as chat.",
+      "priceLabel": "$0.0274 / image",
+      "priceUnit": "per_call",
+      "related": [
+        "nano-banana-2.1",
+        "nano-banana-2",
+        "RMBG-2.0"
+      ],
+      "endpoint": "POST /v1/images/generations",
+      "codeHint": "model=nano-banana-pro · prompt required · size optional (e.g. 1024x1024)",
+      "faqs": [
+        {
+          "q": "How do I call the Nano Banana Pro API?",
+          "a": "Use your KeyoAPI Bearer key and POST to /v1/images/generations with model=nano-banana-pro and a prompt. The endpoint is OpenAI-compatible, so existing image clients work with a base URL change."
+        },
+        {
+          "q": "Nano Banana Pro vs 2 vs 2.1 — which one?",
+          "a": "nano-banana-pro is the top tier at $0.0274 per image with higher resolution and finer editing control; nano-banana-2 is the base lane at $0.0205; nano-banana-2.1 is the newer release at $0.0123. All three run on the same key — see /model/nano-banana-2.1, /model/nano-banana-2 and /pricing-list."
+        }
+      ],
+      "sections": {
+        "intro": "Nano Banana Pro is Google's top image generation tier served on KeyoAPI's OpenAI-compatible /v1/images/generations endpoint — same Bearer key as chat, $0.0274 per image, built for high-resolution commercial visuals and fine-grained editing."
+      },
+      "body": "Nano Banana Pro is the top tier of Google's Nano Banana image family, served on KeyoAPI through the OpenAI-compatible /v1/images/generations endpoint. If you already call chat, Whisper, or OCR with a KeyoAPI key, image generation is one more model string — no Google Cloud project, no second credential.\n\nPricing is per generated image: $0.0274 on pro, against nano-banana-2 at $0.0205 (base lane) and nano-banana-2.1 at $0.0123 (newer release). Pro earns its premium when fidelity dominates — higher resolution output and finer editing control for commercial visuals, detailed image work and art direction. All three tiers run on the same key, so escalating a prompt from 2.1 to pro is a model-string change.\n\nCall it with POST /v1/images/generations, model=nano-banana-pro, and a prompt. size is optional (1024x1024 by default). Responses come back in the OpenAI images shape synchronously — no task polling — so existing clients and SDKs work after pointing base_url at https://www.keyoapi.xyz/v1. Confirm live rates on /pricing-list before volume work.",
+      "curlExample": "curl https://www.keyoapi.xyz/v1/images/generations \\\n  -H \"Authorization: Bearer YOUR_API_KEY\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\"model\":\"nano-banana-pro\",\"prompt\":\"a mug of coffee on a desk, studio light\",\"size\":\"1024x1024\"}'",
+      "uniqueBlurb": "nano-banana-pro is Google's top image tier on /v1/images/generations at $0.0274 per image — higher resolution and finer editing control, on the same Bearer key as chat, TTS, and OCR."
     }
   ]
 }

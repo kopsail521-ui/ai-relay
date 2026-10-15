@@ -4,19 +4,19 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Seedance 2.0 API Pricing | KeyoAPI</title>
-<meta name="description" content="Seedance 2.0 API pricing on KeyoAPI: six fixed-resolution SKUs from ~$0.0499/sec (720p-mini) to ~$0.1006/sec (1080p), 4–15 second clips. No free Seedance tier — $0 prototyping IDs on the same key." />
+<meta name="description" content="Seedance 2.0 API pricing on KeyoAPI: six fixed-resolution SKUs from ~$0.0499/sec (720p-mini) to ~$0.1006/sec (1080p), 4–15 second clips. No free Seedance tier — prototyping runs on gift-credit IDs on the same key." />
 <link rel="canonical" href="https://www.keyoapi.xyz/seedance-2-0-api-pricing" />
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://www.keyoapi.xyz/seedance-2-0-api-pricing" />
 <meta property="og:title" content="Seedance 2.0 API Pricing | KeyoAPI" />
-<meta property="og:description" content="Seedance 2.0 API pricing on KeyoAPI: six fixed-resolution SKUs from ~$0.0499/sec (720p-mini) to ~$0.1006/sec (1080p), 4–15 second clips. No free Seedance tier — $0 prototyping IDs on the same key." />
+<meta property="og:description" content="Seedance 2.0 API pricing on KeyoAPI: six fixed-resolution SKUs from ~$0.0499/sec (720p-mini) to ~$0.1006/sec (1080p), 4–15 second clips. No free Seedance tier — prototyping runs on gift-credit IDs on the same key." />
 <meta property="og:image" content="https://www.keyoapi.xyz/brand/logo.svg" />
 <link rel="icon" href="/brand/logo.svg" type="image/svg+xml" />
 <link rel="stylesheet" href="/brand/keyo-theme.css" />
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content="Seedance 2.0 API Pricing | KeyoAPI" />
-<meta name="twitter:description" content="Seedance 2.0 API pricing on KeyoAPI: six fixed-resolution SKUs from ~$0.0499/sec (720p-mini) to ~$0.1006/sec (1080p), 4–15 second clips. No free Seedance tier — $0 prototyping IDs on the same key." />
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebPage","name":"Seedance 2.0 API Pricing | KeyoAPI","url":"https://www.keyoapi.xyz/seedance-2-0-api-pricing","description":"Seedance 2.0 API pricing on KeyoAPI: six fixed-resolution SKUs from ~$0.0499/sec (720p-mini) to ~$0.1006/sec (1080p), 4–15 second clips. No free Seedance tier — $0 prototyping IDs on the same key."}</script>
+<meta name="twitter:description" content="Seedance 2.0 API pricing on KeyoAPI: six fixed-resolution SKUs from ~$0.0499/sec (720p-mini) to ~$0.1006/sec (1080p), 4–15 second clips. No free Seedance tier — prototyping runs on gift-credit IDs on the same key." />
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebPage","name":"Seedance 2.0 API Pricing | KeyoAPI","url":"https://www.keyoapi.xyz/seedance-2-0-api-pricing","description":"Seedance 2.0 API pricing on KeyoAPI: six fixed-resolution SKUs from ~$0.0499/sec (720p-mini) to ~$0.1006/sec (1080p), 4–15 second clips. No free Seedance tier — prototyping runs on gift-credit IDs on the same key."}</script>
 <style>.wrap{max-width:880px;margin:0 auto;padding:28px 24px 48px}
 .footer{display:flex;flex-wrap:wrap;gap:10px 16px;max-width:1080px;margin:0 auto;padding:24px 24px 40px;border-top:1px solid var(--line);font-size:13px;color:var(--muted)}
 .footer a{color:var(--ink-2);text-decoration:none}
@@ -131,7 +131,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
 </table></div>
 
 <h2>No free Seedance tier — wire your client at $0</h2>
-<p>Keyo ships no free Seedance ID — the $0 catalog IDs are chat and speech models only. Use them (covered by your $10 welcome credit, fair-use rate limits) to prove out base URL, auth and retry wiring, then switch model= to a seedance-2.0 SKU on the same key. Video bills per generated second; the 720p-mini tier starts at about $0.0499.</p>
+<p>Keyo ships no free Seedance ID — the gift-credit IDs are chat and speech models only. Use them (billed from your one-time $10 new-user credit, fair-use limits) to prove out base URL, auth and retry wiring, then switch model= to a seedance-2.0 SKU on the same key. Video bills per generated second; the 720p-mini tier starts at about $0.0499.</p>
 
 <h2>Rates and how to call</h2>
 <p>Seedance 2.0 is ByteDance's prior-generation video family, still fully supported on KeyoAPI. Every SKU has the resolution baked into the model ID — 1080p or 720p in standard, fast and mini variants — so you pick price and latency in the model string itself: POST /v1/videos/generations with model=seedance-2.0-720p-mini is the cheapest entry at about $0.0499 per generated second.</p>
@@ -144,7 +144,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
   -d '{&quot;model&quot;:&quot;seedance-2.0-1080p&quot;,&quot;prompt&quot;:&quot;A red paper boat drifting on calm water at sunset&quot;,&quot;duration&quot;:5}'
 # Poll GET /v1/tasks/{id} with the same key: processing = still rendering, completed = ready url</pre>
 <h2>FAQ</h2>
-<div class="faq"><details><summary>Is there a free Seedance 2.0 API?</summary><p>No free Seedance ID exists on Keyo — the $0 catalog IDs are chat and speech models only. Use them (covered by your $10 welcome credit, fair-use rate limits) to prove out your wiring, then switch model= to a seedance-2.0 SKU. The cheapest paid tier is seedance-2.0-720p-mini at about $0.0499 per generated second.</p></details>
+<div class="faq"><details><summary>Is there a free Seedance 2.0 API?</summary><p>No free Seedance ID exists on Keyo — the gift-credit IDs are chat and speech models only. Use them (billed from your one-time $10 new-user credit, fair-use limits) to prove out your wiring, then switch model= to a seedance-2.0 SKU. The cheapest paid tier is seedance-2.0-720p-mini at about $0.0499 per generated second.</p></details>
 <details><summary>What is the difference between standard, fast and mini Seedance 2.0 tiers?</summary><p>Same resolution family, different cost/latency/quality trade-offs: standard is the full-quality tier, fast prioritizes turnaround at a lower per-second rate, and mini is the budget tier. All three bill per generated second.</p></details>
 <details><summary>How long can a Seedance 2.0 clip be?</summary><p>4 to 15 seconds, default 5 — the same window as Seedance 2.5. Requests outside that range are rejected rather than clamped.</p></details></div>
 <p class="meta">Also see <a href="/compare">the model comparison page</a>, <a href="/free-models">the free models page</a>, <a href="/pricing-list">the full pricing list</a>, and <a href="/seedance-2-5-api-pricing">Seedance 2.5 pricing</a> · <a href="/minimax-h3-api-pricing">MiniMax-H3 pricing</a> · <a href="/agnes-video-2-5-api-pricing">Agnes Video 2.5 pricing</a>.</p>
@@ -177,6 +177,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
   <a href="/agnes-video-2-5-api-pricing">Agnes Video 2.5 pricing</a>
   <a href="/video-enhance-pro-api-pricing">Video Enhance Pro pricing</a>
   <a href="/subtitle-erase-pro-api-pricing">Subtitle Erase Pro pricing</a>
+  <a href="/nano-banana-api-pricing">Nano Banana pricing</a>
   <a href="/brand/keyo-docs.html">Docs</a>
   <a href="/brand/faq.html">FAQ</a>
   <a href="/brand/privacy.html">Privacy</a>

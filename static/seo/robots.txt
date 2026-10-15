@@ -24,6 +24,7 @@ Allow: /wan3-video-api-pricing
 Allow: /agnes-video-2-5-api-pricing
 Allow: /video-enhance-pro-api-pricing
 Allow: /subtitle-erase-pro-api-pricing
+Allow: /nano-banana-api-pricing
 Allow: /gpt-6-1-sol-vs-gpt-6-astra
 Allow: /fable-5-1-vs-opus-5-5
 Allow: /gemini-4-api

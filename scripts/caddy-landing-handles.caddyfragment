@@ -93,6 +93,11 @@
 		rewrite * /subtitle-erase-pro-api-pricing.html
 		file_server
 	}
+	handle /nano-banana-api-pricing {
+		root * __AI_RELAY_ROOT__/static/seo
+		rewrite * /nano-banana-api-pricing.html
+		file_server
+	}
 	handle /gpt-6-1-sol-vs-gpt-6-astra {
 		root * __AI_RELAY_ROOT__/static/seo
 		rewrite * /gpt-6-1-sol-vs-gpt-6-astra.html

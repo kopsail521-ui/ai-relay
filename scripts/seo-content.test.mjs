@@ -242,3 +242,39 @@ test("invalid and hand-maintained page selections fail before writes", () => {
     fs.rmSync(temp, { recursive: true, force: true });
   }
 });
+
+test("generated SEO pages have zero natural-language phrase collisions", () => {
+  const patterns = [
+    { name: "double the", re: /\bthe\s+(?:<[^>]+>\s*)*the\b/i },
+    { name: "live the", re: /\blive\s+(?:<[^>]+>\s*)*the\b/i },
+    { name: "static the", re: /\bstatic\s+(?:<[^>]+>\s*)*the\b/i },
+    { name: "page the", re: /\bpage\s+(?:<[^>]+>\s*)*the\b/i },
+    { name: "paren space the", re: /\(\s+the\b/i },
+    { name: "double page", re: /<a[^>]*>[^<]*\bpage<\/a>\s+(?:AI\s+API\s+price\s+comparison\s+)?page\b/i },
+    { name: "lowercase sentence start", re: /(?:<p>|<p\s+[^>]*>)\s*<a[^>]*>the\s+[a-z0-9]/i },
+  ];
+
+  const files = [];
+  function collectHtml(dir) {
+    for (const ent of fs.readdirSync(dir, { withFileTypes: true })) {
+      const full = path.join(dir, ent.name);
+      if (ent.isDirectory()) collectHtml(full);
+      else if (full.endsWith(".html")) files.push(full);
+    }
+  }
+  collectHtml(seoRoot);
+
+  const errors = [];
+  for (const file of files) {
+    const content = fs.readFileSync(file, "utf8");
+    for (const p of patterns) {
+      const regex = new RegExp(p.re.source, "gi");
+      let match;
+      while ((match = regex.exec(content)) !== null) {
+        const snippet = content.slice(Math.max(0, match.index - 30), Math.min(content.length, match.index + 70)).replace(/\n/g, " ");
+        errors.push(`${path.relative(root, file)}: [${p.name}] "${match[0]}" in "...${snippet}..."`);
+      }
+    }
+  }
+  assert.equal(errors.length, 0, `Found ${errors.length} phrase collision(s):\n${errors.join("\n")}`);
+});

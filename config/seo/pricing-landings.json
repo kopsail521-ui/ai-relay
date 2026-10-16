@@ -69,7 +69,7 @@
         },
         {
           "q": "Do you offer a free Gemini model?",
-          "a": "Yes — Atria-dawn-v2:free is a fixed $0 catalog ID covered by your $10 welcome credit (fair-use). Other free IDs on /free-models sit on the same API key beside paid Gemini traffic."
+          "a": "Yes — Atria-dawn-v2:free is a gift-credit catalog ID billed from your $10 welcome credit (fair-use). Other gift-credit IDs on /free-models sit on the same API key beside paid Gemini traffic."
         },
         {
           "q": "Is Gemini 4 Argon available on KeyoAPI?",
@@ -139,7 +139,7 @@
       },
       "body": [
         "Compare DeepSeek rates across official platforms, aggregators, and a multi-model API. KeyoAPI is the third option — OpenAI-compatible base URL, prepaid balance, and Gemini/Whisper/OCR on the same key when DeepSeek is only part of the stack.",
-        "Indicative Keyo sell rates above come from the live Keyo catalog (/pricing). Confirm each ID on /pricing before volume contracts. For details on free prototyping with DeepSeek V4 Flash versus metered pricing, see the guide at /model/deepseek-v4-flash (also covers deepseek-v4.1-flash as the cheaper high-volume Flash when you want a different catalog row).",
+        "Indicative Keyo sell rates above come from the live Keyo catalog on /pricing. Confirm each ID on /pricing before volume contracts. For details on free prototyping with DeepSeek V4 Flash versus metered pricing, see the guide at /model/deepseek-v4-flash (also covers deepseek-v4.1-flash as the cheaper high-volume Flash when you want a different catalog row).",
         "How to call: POST https://www.keyoapi.xyz/v1/chat/completions with Authorization: Bearer YOUR_KEY and model set to the DeepSeek ID you want — Flash and Pro are different products.",
         "For Gemini rates, see /gemini-api-pricing. For free prototyping, open /free-models. Side-by-side planning: /compare."
       ],
@@ -333,7 +333,7 @@
         },
         {
           "q": "Do you offer a free Claude model?",
-          "a": "Not as an Anthropic-branded free ID. Use Keyo’s $0 fixed-ID twins on /free-models (covered by your $10 welcome credit, fair-use) to prototype on the same key, then promote to paid Claude IDs when you need that quality band."
+          "a": "Not as an Anthropic-branded free ID. Use Keyo’s gift-credit twins on /free-models (billed from your $10 welcome credit, fair-use) to prototype on the same key, then promote to paid Claude IDs when you need that quality band."
         },
         {
           "q": "How do I try Claude on Keyo?",
@@ -422,8 +422,8 @@
       },
       "body": [
         "Teams that search ChatGPT API pricing, OpenAI API pricing, or OpenAI API costs usually need GPT-class chat inside an OpenAI SDK with clearer unit economics — or one prepaid balance that also covers Claude, DeepSeek, Whisper, OCR, and TTS. Official OpenAI / ChatGPT surfaces win on brand trust and first-party product UI. KeyoAPI is for when you want that stack without five invoices and without rewriting clients when you swap models.",
-        "Keyo rates in the table are indicative sell prices from the live Keyo catalog. On Keyo, gpt-6-astra is OpenAI’s gpt-6-astra model ID (confirm live /model/gpt-6-astra). Always confirm interactive try/buy under /pricing (Model Square) for gpt-6-astra, gpt-5.6-luna, gpt-5.6-terra, and gpt-5.6-sol before contracting volume. OpenAI list bands, cached-input discounts, and model renames change — treat official figures as planning context only. Keyo GPT-5.6 IDs remain GPT-class twins on an OpenAI-compatible API, not OpenAI first-party model names.",
-        "Worked planning example (indicative only): suppose a batch path burns 50M input tokens and 10M output tokens per month. At Luna ~$0.10 / $0.62 per 1M in/out that is roughly $5 input + $6.20 output ≈ $11.20 before retries and overhead. At Terra ~$0.37 / $2.21 the same mix is roughly $18.50 + $22.10 ≈ $40.60. Put high-volume classification on Luna and keep product chat on Terra so the expensive model only sees the traffic that needs it. Re-run the math on live /pricing pages before you budget.",
+        "Keyo rates in the table are indicative sell prices from the live Keyo catalog. On Keyo, gpt-6-astra is OpenAI’s gpt-6-astra model ID (confirm live rates on /model/gpt-6-astra). Always confirm interactive try/buy under /pricing (Model Square) for gpt-6-astra, gpt-5.6-luna, gpt-5.6-terra, and gpt-5.6-sol before contracting volume. OpenAI list bands, cached-input discounts, and model renames change — treat official figures as planning context only. Keyo GPT-5.6 IDs remain GPT-class twins on an OpenAI-compatible API, not OpenAI first-party model names.",
+        "Worked planning example (indicative only): suppose a batch path burns 50M input tokens and 10M output tokens per month. At Luna ~$0.10 / $0.62 per 1M in/out that is roughly $5 input + $6.20 output ≈ $11.20 before retries and overhead. At Terra ~$0.37 / $2.21 the same mix is roughly $18.50 + $22.10 ≈ $40.60. Put high-volume classification on Luna and keep product chat on Terra so the expensive model only sees the traffic that needs it. Re-run the math on /pricing before you budget.",
         "Integration steps: (1) create an account at /sign-up and top up Wallet; (2) create an API key in console; (3) set base URL https://www.keyoapi.xyz/v1 (OPENAI_BASE_URL or sdk base_url); (4) call POST /v1/chat/completions with model gpt-6-astra, gpt-5.6-luna, gpt-5.6-terra, or gpt-5.6-sol; (5) try/buy interactively from /pricing/{modelId} — there is no separate upload playground. Longer guides: /model/gpt-6-astra, /model/gpt-5.6-luna, /model/gpt-5.6-terra, /model/gpt-5.6-sol.",
         "Routing tip: keep GPT-class for product chat defaults; shift bulk classification, tagging, and draft rewrites to gpt-5.6-luna or deepseek-v4-flash on the same key. Escalate only failing slices to Terra, Sol, or gpt-6-astra after automated validators reject output. For Claude dollars see /claude-api-pricing; for Gemini see /gemini-api-pricing; for DeepSeek see /deepseek-api-pricing; for Grok see /grok-api-pricing; for free prototyping see /free-models; for a side-by-side catalog see /compare.",
         "Cost hygiene that actually moves the bill: truncate unused chat history, prefer structured short outputs for batch jobs, cache identical prompts by hash, and measure tokens from the response usage object rather than guessing. Confirm live Keyo sell rates on Model Square after every catalog change."
@@ -447,7 +447,7 @@
         },
         {
           "q": "Do you offer a free OpenAI / GPT model?",
-          "a": "Not as a free gpt-6-astra ID. Use Keyo’s $0 fixed-ID twins on /free-models (covered by your $10 welcome credit, fair-use) to prototype on the same key, then promote to paid GPT-class IDs when you need that quality band."
+          "a": "Not as a free gpt-6-astra ID. Use Keyo’s gift-credit twins on /free-models (billed from your $10 welcome credit, fair-use) to prototype on the same key, then promote to paid GPT-class IDs when you need that quality band."
         },
         {
           "q": "How do I try GPT-class models on Keyo?",
@@ -479,7 +479,7 @@
         "title": "Cheapest OpenAI-class API on Keyo — and the cheapest chat lane overall",
         "body": [
           "If you searched for a cheap OpenAI API, two different questions are hiding in there. (1) The cheapest GPT-class lane on Keyo is gpt-5.6-luna at ~$0.10 / $0.62 per 1M in/out — GPT-5-class twins under the same OpenAI-compatible base URL. (2) The cheapest chat lane of any brand on that same key is gpt-6-luna at ~$0.03 / $0.15 per 1M in/out — already named above; deepseek-v4.1-flash (~$0.14 / $0.56) is the DeepSeek lane when you want that family instead.",
-          "Both ride one key, one base URL and one prepaid wallet, so the cheapest way to test OpenAI-shaped code is usually to prototype on a $0 ID from /free-models, then move only the traffic that needs GPT-class quality onto luna.",
+          "Both ride one key, one base URL and one prepaid wallet, so the cheapest way to test OpenAI-shaped code is usually to prototype on a gift-credit ID from /free-models, then move only the traffic that needs GPT-class quality onto luna.",
           "Cost math: 50M input + 10M output tokens/month on luna ≈ $5.00 in + $6.20 out ≈ $11.20. The same mix on gpt-6-astra at ~$1.84 / $9.19 ≈ $92.00 + $91.90 ≈ $183.90. Confirm live Keyo rates on /pricing-list before you budget."
         ]
       },
@@ -530,7 +530,7 @@
         "Keyo sell rate for RMBG-2.0 is about $0.0068 per request (indicative). Confirm live at /pricing/RMBG-2.0. Typical legacy SaaS remove-bg APIs often sit near $0.05–$0.20 per image on public marketing pages; use that only as planning context, not a contractual quote. Worked example: 10,000 product photos / month at ~$0.0068 ≈ $68 indicative on Keyo RMBG — recompute with your live rate and retry policy.",
         "Migration checklist for API traffic: (1) inventory every remove.bg call site and note image size / QPS; (2) create a Keyo key at /sign-up and top up Wallet; (3) open /pricing/RMBG-2.0 for interactive try/buy (no separate upload playground); (4) switch clients to POST multipart https://www.keyoapi.xyz/v1/images/mattings with model=RMBG-2.0 and field image=@file; (5) compare alpha quality on a golden set of SKUs before cutting over; (6) keep a feature flag so you can roll back during the Dec 2026 window.",
         "When plain subject/background cutouts are not enough — for example open-vocabulary masks, multi-object labels, or promptable regions — escalate to sam3 via POST /v1/images/segmentation. Guides: /model/RMBG-2.0 and /model/sam3. Price row also appears on /compare.",
-        "Pipeline tip: many shops matte first, then run OCR (/model/Unlimited-OCR or /model/MinerU2.5-Pro), then chat or TTS on the same prepaid key. If the next step is speech or talking video, continue to /tts-api or /ai-avatar-video-generator without opening a second vendor wallet.",
+        "Pipeline tip: many shops matte first, then run OCR (see /model/Unlimited-OCR or /model/MinerU2.5-Pro), then chat or TTS on the same prepaid key. If the next step is speech or talking video, continue to /tts-api or /ai-avatar-video-generator without opening a second vendor wallet.",
         "Operational notes: send reasonable image sizes (downscale huge originals before upload), log HTTP status and Keyo request ids for support, and treat matting as a metered request — empty or corrupt files still consume budget when accepted. Confirm live rates after every catalog change on Model Square."
       ],
       "curlExample": "# cURL — RMBG-2.0 matting (multipart)\ncurl https://www.keyoapi.xyz/v1/images/mattings \\\n  -H \"Authorization: Bearer $KEYO_API_KEY\" \\\n  -F model=RMBG-2.0 \\\n  -F image=@./product.png \\\n  -o ./product-alpha.png\n\n# Python — requests multipart\nimport requests\nurl = \"https://www.keyoapi.xyz/v1/images/mattings\"\nheaders = {\"Authorization\": \"Bearer YOUR_KEYO_API_KEY\"}\nfiles = {\"image\": open(\"product.png\", \"rb\")}\ndata = {\"model\": \"RMBG-2.0\"}\nr = requests.post(url, headers=headers, files=files, data=data, timeout=120)\nr.raise_for_status()\nopen(\"product-alpha.png\", \"wb\").write(r.content)",
@@ -553,7 +553,7 @@
         },
         {
           "q": "When should I use sam3 instead of RMBG-2.0?",
-          "a": "Use RMBG for classic background removal. Use sam3 (/model/sam3) when you need open-vocabulary or multi-region masks beyond a single subject cutout."
+          "a": "Use RMBG for classic background removal. Use sam3 (see /model/sam3) when you need open-vocabulary or multi-region masks beyond a single subject cutout."
         }
       ]
     },
@@ -616,7 +616,7 @@
       ],
       "freeKiller": {
         "title": "Prototype on gift-credit chat, then meter TTS",
-        "body": "$0 chat twins (Atria-dawn-v2:free and other :free catalog IDs, covered by your $10 welcome credit) sit on the same key for script drafting. TTS rows above are metered — confirm live rates on Model Square. Guides: /model/IndexTTS-2, /model/CosyVoice3, /model/Qwen3-TTS."
+        "body": "Gift-credit chat twins (Atria-dawn-v2:free and other :free catalog IDs, billed from your $10 welcome credit) sit on the same key for script drafting. TTS rows above are metered — confirm live rates on Model Square. Guides: /model/IndexTTS-2, /model/CosyVoice3, /model/Qwen3-TTS."
       },
       "body": [
         "Teams call a text to speech API for IVR, voice agents, course narration, and avatar pipelines. Keyo keeps STT (Whisper) and TTS on one prepaid balance so you are not juggling three vendor consoles.",
@@ -632,7 +632,7 @@
         },
         {
           "q": "Is there a free TTS model?",
-          "a": "Not as a permanent $0 TTS ID today. Use free chat twins to draft scripts, then meter TTS. See /free-models and /model/CosyVoice3."
+          "a": "Not as a permanent gift-credit TTS ID today. Use gift-credit chat twins to draft scripts, then meter TTS. See /free-models and /model/CosyVoice3."
         },
         {
           "q": "Can I pair TTS with avatars?",
@@ -660,19 +660,19 @@
           "model": "Qwen3-TTS",
           "official": "Async TTS with rapid voice cloning for brand / locale voices",
           "keyo": "~$0.548 / 10K characters",
-          "note": "/pricing/Qwen3-TTS · guide /model/Qwen3-TTS"
+          "note": "POST /v1/async/audio/speech · guide /model/Qwen3-TTS"
         },
         {
           "model": "CosyVoice3",
           "official": "Async multilingual zero-shot speech; strong for longer narration",
           "keyo": "~$1.37 / 10K characters",
-          "note": "/pricing/CosyVoice3 · guide /model/CosyVoice3"
+          "note": "POST /v1/async/audio/speech · guide /model/CosyVoice3"
         },
         {
           "model": "IndexTTS-2",
           "official": "Sync TTS when you need audio in one round trip (clone where schema allows)",
           "keyo": "~$1.37 / 10K characters",
-          "note": "/pricing/IndexTTS-2 · guide /model/IndexTTS-2"
+          "note": "POST /v1/audio/speech · guide /model/IndexTTS-2"
         }
       ],
       "freeKiller": {
@@ -723,13 +723,13 @@
           "model": "Duix-Avatar",
           "official": "Audio + face video → lip-sync / expression render (async)",
           "keyo": "~$0.0068 / second",
-          "note": "/pricing/Duix-Avatar · /model/Duix-Avatar"
+          "note": "POST /v1/async/videos/audio-video-to-video · guide /model/Duix-Avatar"
         },
         {
           "model": "InfiniteTalk",
           "official": "Portrait image (or video) + audio → talking-head clip (async)",
           "keyo": "~$0.342 / request",
-          "note": "/pricing/InfiniteTalk · /model/InfiniteTalk"
+          "note": "POST /v1/async/videos/image-to-video · guide /model/InfiniteTalk"
         },
         {
           "model": "Qwen3-TTS",
@@ -895,7 +895,7 @@
         },
         {
           "q": "Can I prototype without a credit card?",
-          "a": "Use fixed $0 IDs on /free-models — covered by your $10 welcome credit, fair-use — then promote to metered models on the same key."
+          "a": "Use gift-credit IDs on /free-models — billed from your $10 welcome credit, fair-use — then promote to metered models on the same key."
         },
         {
           "q": "Is KeyoAPI's API OpenAI-compatible?",
@@ -907,7 +907,7 @@
         },
         {
           "q": "Do the native REST paths need a different API key?",
-          "a": "No. One prepaid key and one balance cover OpenAI-shaped calls and dedicated REST alike — see /free-models for the $0 IDs you can test with."
+          "a": "No. One prepaid key and one balance cover OpenAI-shaped calls and dedicated REST alike — see /free-models for the gift-credit IDs you can test with."
         }
       ]
     },

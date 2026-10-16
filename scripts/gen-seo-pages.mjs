@@ -188,10 +188,33 @@ function linkifySitePaths(raw) {
     `(\\/brand\\/blog\\/article\\/[A-Za-z0-9][A-Za-z0-9_-]*\\/?|\\/(?:pricing|model)\\/[A-Za-z0-9](?:[A-Za-z0-9._-]*[A-Za-z0-9_-])?|${literals.join("|")}|(?<![A-Za-z0-9./])\\/pricing)(?![A-Za-z0-9_/-])`,
     "g"
   );
-  return s.replace(re, (m) => {
+  let linked = s.replace(re, (m) => {
     const href = rewritePricingIdPath(m);
     return `<a href="${href}">${esc(pathLabel(href))}</a>`;
   });
+  // Deduplicate adjacent identical anchors: <a href="X">Label</a> · the same <a href="X">
+  linked = linked.replace(/(<a\s+href="([^"]+)">([^<]+)<\/a>)\s*·\s*(?:guide\s*)?<a\s+href="\2">\3<\/a>/gi, "$1");
+  // Generator-level defenses against natural-language phrase collisions:
+  // 1. Remove duplicate articles: "the <a ...>the model page</a>" -> "<a ...>the model page</a>"
+  linked = linked.replace(/\bthe\s+(<a\s+[^>]*>)\s*the\b/gi, "$1the");
+  // 2. Prevent "live the ... page": "live <a href="/pricing">the pricing page</a>" -> "live rates on <a href="/pricing">the pricing page</a>"
+  linked = linked.replace(/\blive\s+(<a\s+href="\/pricing[^"]*">)the\s+pricing\s+page\b/gi, "live rates on $1the pricing page");
+  linked = linked.replace(/\blive\s+(<a\s+href="\/model\/[^"]*">)the\s+([a-z0-9._-]+)\s+model\s+page\b/gi, "live rates on $1the $2 model page");
+  linked = linked.replace(/\blive\s+(<a\s+[^>]*>)the\b/gi, "live rates on $1the");
+  // 3. Prevent "static the ...": "static <a href="/pricing...">the ...</a>" -> "$1the static ..."
+  linked = linked.replace(/\bstatic\s+(<a\s+href="\/pricing(?:-list)?">)the\s+(?:pricing\s+page|full\s+pricing\s+list)\b/gi, "$1the static pricing list");
+  linked = linked.replace(/\bstatic\s+(<a\s+[^>]*>)the\b/gi, "$1the");
+  // 4. Prevent "page the ... page": "Model Square page <a ...>the ... model page</a>" -> "Model Square at <a ...>the ... model page</a>"
+  linked = linked.replace(/\bModel Square page\s+(<a\s+[^>]*>)the\s+/gi, "Model Square at $1the ");
+  linked = linked.replace(/\bpage\s+(<a\s+[^>]*>)the\s+/gi, "page at $1the ");
+  // 5. Clean up redundant page suffix after comparison anchor
+  linked = linked.replace(/(<a\s+href="\/compare">the model comparison page<\/a>)\s+AI\s+API\s+price\s+comparison\s+page\b/gi, "$1 for side-by-side AI API price comparison");
+  linked = linked.replace(/(<a\s+[^>]*>[^<]*\bpage<\/a>)\s+pages?\b/gi, "$1");
+  // 6. Fix space inside opening parenthesis before anchor: "( <a" -> "(<a"
+  linked = linked.replace(/\(\s+(<a\s+[^>]*>)/gi, "($1");
+  // 7. Capitalize sentence-start lowercase "the": e.g. paragraph or sentence starting with "<a ...>the ..."
+  linked = linked.replace(/(?:^|(?<=[.!?]\s+)|(?<=<p[^>]*>\s*))(<a\s+[^>]*>)the\b/g, "$1The");
+  return linked;
 }
 
 /** Natural-word anchor text for internal links (never the bare path). */
@@ -582,7 +605,7 @@ function renderHome() {
     .slice(0, 12)
     .map(
       (m) =>
-        `<a href="/free-models"><span class="grid-title"><code>${esc(m.id)}</code></span><span class="grid-meta">$0</span></a>`
+        `<a href="/free-models"><span class="grid-title"><code>${esc(m.id)}</code></span><span class="grid-meta">Gift credits</span></a>`
     )
     .join("\n");
   const modelFoot = pages.models
@@ -828,7 +851,7 @@ function renderAbout() {
     .slice(0, 12)
     .map(
       (m) =>
-        `<a href="/free-models"><span class="grid-title"><code>${esc(m.id)}</code></span><span class="grid-meta">$0</span></a>`
+        `<a href="/free-models"><span class="grid-title"><code>${esc(m.id)}</code></span><span class="grid-meta">Gift credits</span></a>`
     )
     .join("\n");
   const bodyHtml = `
@@ -930,7 +953,7 @@ ${contentGuideLinks("cost-guide")}
 <tbody>${llmRows}</tbody>
 </table></div>
 <h2>How to estimate API costs (no calculator app required)</h2>
-<p>For token-metered chat IDs: expected cost ≈ (input millions × input $/1M) + (output millions × output $/1M), then add retries. Pull the $/1M figures from live <a href="/pricing">the pricing page</a> or the rows on this page — do not hard-code a spreadsheet forever. Worked OpenAI-side example: <a href="/openai-api-pricing">the OpenAI API pricing page</a>. Brand hubs: <a href="/claude-api-pricing">Claude / Anthropic</a>, <a href="/grok-api-pricing">Grok</a>, <a href="/gemini-api-pricing">Gemini</a>, <a href="/deepseek-api-pricing">DeepSeek</a>.</p>
+<p>For token-metered chat IDs: expected cost ≈ (input millions × input $/1M) + (output millions × output $/1M), then add retries. Pull the $/1M figures from <a href="/pricing">the live pricing page</a> or the rows on this page — do not hard-code a spreadsheet forever. Worked OpenAI-side example: <a href="/openai-api-pricing">the OpenAI API pricing page</a>. Brand hubs: <a href="/claude-api-pricing">Claude / Anthropic</a>, <a href="/grok-api-pricing">Grok</a>, <a href="/gemini-api-pricing">Gemini</a>, <a href="/deepseek-api-pricing">DeepSeek</a>.</p>
 <h2>How to use this comparison</h2>
 <p>One OpenAI-compatible SDK, one prepaid balance, and multimodal add-ons on one invoice. Swap <code>base_url</code> + key; keep your existing client for chat / image / speech paths.</p>
 <p>Recommended rollout: start with <a href="${featuredHref("deepseek-v4.1-flash")}"><code>deepseek-v4.1-flash</code></a> on high-volume paths, <a href="${featuredHref("gpt-6-astra")}"><code>gpt-6-astra</code></a> or <a href="${featuredHref("gpt-5.6-terra")}"><code>gpt-5.6-terra</code></a> as default chat, escalate to <a href="${featuredHref("grok-4.7")}"><code>grok-4.7</code></a> or Claude-class lanes when you need denser reasoning.</p>
@@ -1047,7 +1070,7 @@ ${contentGuideLinks("cost-guide")}
   return layout({
     title: "AI API Pricing List - KeyoAPI Models & Rates",
     description:
-      "KeyoAPI pricing list: free $0 models plus GPT-class, Claude-class, Whisper, OCR, vision, TTS model IDs with indicative USD rates.",
+      "KeyoAPI pricing list: gift-credit models plus GPT-class, Claude-class, Whisper, OCR, vision, TTS model IDs with indicative USD rates.",
     canonical: `${site}/pricing-list`,
     h1: "AI API Pricing List: Models, Rates & Endpoints",
     bodyHtml,

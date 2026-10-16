@@ -134,7 +134,7 @@
         }
       ],
       "freeKiller": {
-        "title": "Prototype free, then meter DeepSeek on the same key",
+        "title": "Prototype on gift-credit models, then meter DeepSeek on the same key",
         "body": "To prototype on the same key, use catalog free IDs on /free-models — gift-credit IDs that bill at normal rates from your one-time $10 new-user credit (fair-use rate limits) — including DeepSeek-Prover-V2-7B. When you meter DeepSeek chat, switch model= to deepseek-v4.1-flash, deepseek-v4-flash, or deepseek-v4-pro-0813 without changing base URL or auth — those are separate IDs, not one upgrade ladder. Free-path vs pricing detail for Flash: /model/deepseek-v4-flash."
       },
       "body": [
@@ -216,7 +216,7 @@
         }
       ],
       "freeKiller": {
-        "title": "Prototype free, then meter GLM on the same key",
+        "title": "Prototype on gift-credit models, then meter GLM on the same key",
         "body": "To prototype on the same key, use any gift-credit catalog ID on the free models page — calls bill at normal rates from your one-time $10 new-user credit (fair-use rate limits). When you meter GLM traffic, switch model= to glm-5.3-flash or glm-5.3 without changing base URL or auth."
       },
       "body": [
@@ -304,7 +304,7 @@
         }
       ],
       "freeKiller": {
-        "title": "Prototype free, then promote to Claude",
+        "title": "Prototype on gift-credit models, then promote to Claude",
         "body": "Keyo does not ship Anthropic-branded free Claude IDs. To prototype on the same key, use gift-credit catalog IDs on /free-models — gift-credit IDs that bill at normal rates from your one-time $10 new-user credit (fair-use rate limits). When quality gates pass, switch model= to claude-sonnet-5 or another Claude ID without changing base URL or auth."
       },
       "body": [
@@ -417,7 +417,7 @@
         }
       ],
       "freeKiller": {
-        "title": "Prototype free, then promote to GPT-class",
+        "title": "Prototype on gift-credit models, then promote to GPT-class",
         "body": "To prototype on the same key, use free catalog IDs on /free-models — gift-credit IDs that bill at normal rates from your one-time $10 new-user credit (fair-use rate limits). When quality gates pass, switch model= to gpt-6-astra, gpt-5.6-luna, deepseek-v4.1-flash, or kimi-k3 without changing base URL or auth. Guides: /model/gpt-6-astra, /model/deepseek-v4-flash, /model/kimi-k3."
       },
       "body": [
@@ -615,7 +615,7 @@
         }
       ],
       "freeKiller": {
-        "title": "Prototype chat free, then meter TTS",
+        "title": "Prototype on gift-credit chat, then meter TTS",
         "body": "$0 chat twins (Atria-dawn-v2:free and other :free catalog IDs, covered by your $10 welcome credit) sit on the same key for script drafting. TTS rows above are metered — confirm live rates on Model Square. Guides: /model/IndexTTS-2, /model/CosyVoice3, /model/Qwen3-TTS."
       },
       "body": [
@@ -797,7 +797,7 @@
         }
       ],
       "freeKiller": {
-        "title": "Prototype free, then call Grok",
+        "title": "Prototype on gift-credit models, then call Grok",
         "body": "Keyo does not ship an xAI-branded free Grok ID. To prototype on the same key, use gift-credit catalog IDs on /free-models — gift-credit IDs that bill at normal rates from your one-time $10 new-user credit (fair-use rate limits) — then switch model= to grok-4.7 without changing base URL or auth."
       },
       "body": [
@@ -870,7 +870,7 @@
         }
       ],
       "freeKiller": {
-        "title": "Prototype for $0 before you commit volume",
+        "title": "Prototype on gift credits before you commit volume",
         "body": "Official OpenAI free tiers are usually trial- or quota-shaped. On Keyo, gift-credit catalog IDs on /free-models — covered by your $10 welcome credit, fair-use — share the same API key as paid GPT-class traffic. Prototype there, then switch model= to gpt-6-astra or deepseek-v4.1-flash without changing base URL."
       },
       "body": [
@@ -932,12 +932,16 @@
         },
         {
           "model": "seedance-2.0-1080p-fast",
+          "category": "video",
+          "endpoint": "POST /v1/videos/generations",
           "official": "ByteDance Seedance list — verify on volcengine.com before budgeting",
           "keyo": "~$0.0754 / second",
           "note": "1080p fast tier · POST /v1/videos/generations"
         },
         {
           "model": "seedance-2.0-1080p-mini",
+          "category": "video",
+          "endpoint": "POST /v1/videos/generations",
           "official": "ByteDance Seedance list — verify on volcengine.com before budgeting",
           "keyo": "~$0.0501 / second",
           "note": "1080p mini tier · POST /v1/videos/generations"
@@ -950,19 +954,23 @@
         },
         {
           "model": "seedance-2.0-720p-fast",
+          "category": "video",
+          "endpoint": "POST /v1/videos/generations",
           "official": "ByteDance Seedance list — verify on volcengine.com before budgeting",
           "keyo": "~$0.0748 / second",
           "note": "720p fast tier · POST /v1/videos/generations"
         },
         {
           "model": "seedance-2.0-720p-mini",
+          "category": "video",
+          "endpoint": "POST /v1/videos/generations",
           "official": "ByteDance Seedance list — verify on volcengine.com before budgeting",
           "keyo": "~$0.0499 / second",
           "note": "720p mini tier · POST /v1/videos/generations"
         }
       ],
       "freeKiller": {
-        "title": "No free Seedance tier — wire your client at $0",
+        "title": "No free Seedance tier — prototype on gift-credit IDs",
         "body": "Keyo ships no free Seedance ID — the gift-credit IDs are chat and speech models only. Use them (billed from your one-time $10 new-user credit, fair-use limits) to prove out base URL, auth and retry wiring, then switch model= to a seedance-2.0 SKU on the same key. Video bills per generated second; the 720p-mini tier starts at about $0.0499."
       },
       "body": [
@@ -1019,7 +1027,7 @@
         }
       ],
       "freeKiller": {
-        "title": "No free video tier — wire your client at $0",
+        "title": "No free video tier — prototype on gift-credit IDs",
         "body": "The gift-credit IDs are chat and speech models only — there is no free video tier. They bill at normal rates from your one-time $10 new-user credit (fair-use limits) and are the right place to prove out base URL, auth and retry wiring. Then switch model= to seedance-2.5-1080p on the same key; video bills per generated second at the rates on this page."
       },
       "body": [
@@ -1076,7 +1084,7 @@
         }
       ],
       "freeKiller": {
-        "title": "No free video tier — wire your client at $0",
+        "title": "No free video tier — prototype on gift-credit IDs",
         "body": "The gift-credit IDs are chat and speech models only — there is no free video tier. They bill at normal rates from your one-time $10 new-user credit (fair-use limits) and are the right place to prove out base URL, auth and retry wiring. Then switch model= to MiniMax-H3 on the same key; video bills per generated second from about $0.0205 (480p) at the rates on this page."
       },
       "body": [
@@ -1145,7 +1153,7 @@
         }
       ],
       "freeKiller": {
-        "title": "No free video tier — wire your client at $0",
+        "title": "No free video tier — prototype on gift-credit IDs",
         "body": "The gift-credit IDs are chat and speech models only — there is no free video tier. They bill at normal rates from your one-time $10 new-user credit (fair-use limits) and are the right place to prove out base URL, auth and retry wiring. Then switch model= to flux-3-video on the same key; video bills per generated second — the DRAFT tier starts at about $0.0576."
       },
       "body": [
@@ -1202,7 +1210,7 @@
         }
       ],
       "freeKiller": {
-        "title": "No free video tier — wire your client at $0",
+        "title": "No free video tier — prototype on gift-credit IDs",
         "body": "The gift-credit IDs are chat and speech models only — there is no free video tier. They bill at normal rates from your one-time $10 new-user credit (fair-use limits) and are the right place to prove out base URL, auth and retry wiring. Then switch model= to wan3.0-video on the same key; video bills per generated second — 480P starts at about $0.0411."
       },
       "body": [
@@ -1259,7 +1267,7 @@
         }
       ],
       "freeKiller": {
-        "title": "No free video tier — wire your client at $0",
+        "title": "No free video tier — prototype on gift-credit IDs",
         "body": "The gift-credit IDs are chat and speech models only — there is no free video tier. They bill at normal rates from your one-time $10 new-user credit (fair-use limits) and are the right place to prove out base URL, auth and retry wiring. Then switch model= to agnes-video-2.5 on the same key; video bills per generated second — 720p starts at about $0.0205."
       },
       "body": [
@@ -1316,7 +1324,7 @@
         }
       ],
       "freeKiller": {
-        "title": "No free tier — wire the loop at $0",
+        "title": "No free tier — prototype on gift-credit IDs",
         "body": "The gift-credit IDs are chat and speech models only — this tool has no free tier. They bill at normal rates from your one-time $10 new-user credit (fair-use limits) and are the right place to prove out base URL, auth and retry wiring. Then point your submit-and-poll loop at /v1/async/videos/enhance with the same key; billing is per second of processed video at the rates on this page."
       },
       "body": [
@@ -1361,7 +1369,7 @@
         }
       ],
       "freeKiller": {
-        "title": "No free tier — wire the loop at $0",
+        "title": "No free tier — prototype on gift-credit IDs",
         "body": "The gift-credit IDs are chat and speech models only — this tool has no free tier. They bill at normal rates from your one-time $10 new-user credit (fair-use limits) and are the right place to prove out base URL, auth and retry wiring. Then point your submit-and-poll loop at /v1/async/videos/subtitle-erase with the same key; billing is per second of processed video at about $0.0183."
       },
       "body": [

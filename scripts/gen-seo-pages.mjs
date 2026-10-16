@@ -696,7 +696,7 @@ ${headlineRows}
 </tbody>
 </table>
 <p class="compare-jump"><a href="/compare">See the full comparison page →</a></p>
-<h2>Free models — $0 (covered by your $10 credit)</h2>
+<h2>Gift-credit models — billed from your $10 welcome credit</h2>
 <p class="meta">Gift-credit catalog IDs for prototyping, billed at base rate with gift credits used first (new users: $10; per invite: $3) with fair-use limits. Full list + rules: <a href="/free-models">the gift-credit models page</a>.</p>
 <div class="grid">
 ${freeCards}
@@ -853,7 +853,7 @@ ${priceSample}
 </tbody>
 </table>
 <p>Full list: <a href="/compare">the model comparison page</a> · <a href="/pricing-list">the full pricing list</a> · deep dives: ${landingDeepDiveHtml()}</p>
-<h2>Free models at $0</h2>
+<h2>Gift-credit models at base rates</h2>
 <p>Call a gift-credit ID from the catalog — billed at the base model rate with gift credits used first (new users: $10; per invite: $3; fair-use limits). Metered twins stay available for production. Rules: <a href="/free-models">the gift-credit models page</a></p>
 <div class="grid">
 ${freeCards}
@@ -1026,7 +1026,7 @@ function renderPricing() {
   <a class="btn btn-secondary" href="/compare">AI API price comparison</a>
   <a class="btn btn-secondary" href="/brand/keyo-docs.html">Docs</a>
 </div>
-<h2>Free models ($0 — covered by your $10 credit)</h2>
+<h2>Gift-credit models — billed from your $10 welcome credit</h2>
 <p class="meta">Gift-credit IDs (billed at base rate, gift credits used first; new users: $10, per invite: $3; fair-use): see <a href="/free-models">the gift-credit models page</a> for the full list, paid twins and curl examples. The tables below cover the metered catalog.</p>
 <h2>Task cost guides</h2>
 ${contentGuideLinks("cost-guide")}

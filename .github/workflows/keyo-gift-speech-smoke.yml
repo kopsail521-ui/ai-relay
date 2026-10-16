@@ -58,5 +58,17 @@ jobs:
               set -e
               cd /opt/ai-relay
               bash scripts/vps-safe-pull-preserve-blog.sh >/dev/null
-              python3 /opt/ai-relay/scripts/vps-smoke-gift-speech.py /opt/ai-relay/data/new-api/one-api.db
+              set +e
+              OUT=\$(python3 /opt/ai-relay/scripts/vps-smoke-gift-speech.py /opt/ai-relay/data/new-api/one-api.db 2>&1)
+              CODE=\$?
+              echo \"\$OUT\"
+              # Public diagnostic channel: read at /brand/smoke-status.txt
+              mkdir -p /opt/ai-relay/static/brand
+              {
+                echo \"smoke_exit=\$CODE\"
+                echo \"smoke_time=\$(date -u +%FT%TZ)\"
+                echo \"\$OUT\"
+              } > /opt/ai-relay/static/brand/smoke-status.txt
+              chmod 644 /opt/ai-relay/static/brand/smoke-status.txt
+              exit \$CODE
             '"

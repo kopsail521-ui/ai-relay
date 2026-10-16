@@ -359,7 +359,7 @@ ${landingLinks}
   <a href="https://fazier.com" target="_blank" rel="dofollow noopener">Featured on Fazier</a>
   <a href="https://twelve.tools" target="_blank" rel="dofollow noopener"><img src="https://twelve.tools/badge0-white.svg" alt="Featured on Twelve Tools" width="200" height="54" loading="lazy" style="height:54px;width:auto;" /></a>
   <a href="https://deeplaunch.io" target="_blank" rel="dofollow noopener">Featured on DeepLaunch.io</a>
-  <a href="https://findly.tools" target="_blank" rel="dofollow noopener"><img src="https://findly.tools/badges/findly-tools-badge-dark.svg" alt="Featured on Findly.tools" width="139" height="44" loading="lazy" style="height:44px;width:auto;" /></a>
+  <a href="https://findly.tools/keyoapi?utm_source=keyoapi" target="_blank" rel="noopener noreferrer"><img src="https://findly.tools/badges/findly-tools-badge-dark.svg" alt="Featured on Findly.tools" width="175" height="55" loading="lazy" style="height:44px;width:auto;" /></a>
   <a href="https://startupfa.me" target="_blank" rel="dofollow noopener">Featured on Startup Fame</a>
 </footer>`;
 }
@@ -745,7 +745,7 @@ ${modelFoot}
     <a href="https://fazier.com" target="_blank" rel="dofollow noopener">Fazier</a>
     <a href="https://twelve.tools" target="_blank" rel="dofollow noopener"><img src="https://twelve.tools/badge0-white.svg" alt="Featured on Twelve Tools" width="200" height="54" loading="lazy" style="height:32px;width:auto;vertical-align:middle;" /></a>
     <a href="https://deeplaunch.io" target="_blank" rel="dofollow noopener">DeepLaunch.io</a>
-    <a href="https://findly.tools" target="_blank" rel="dofollow noopener"><img src="https://findly.tools/badges/findly-tools-badge-dark.svg" alt="Featured on Findly.tools" width="139" height="44" loading="lazy" style="height:32px;width:auto;vertical-align:middle;" /></a>
+    <a href="https://findly.tools/keyoapi?utm_source=keyoapi" target="_blank" rel="noopener noreferrer"><img src="https://findly.tools/badges/findly-tools-badge-dark.svg" alt="Featured on Findly.tools" width="175" height="55" loading="lazy" style="height:32px;width:auto;vertical-align:middle;" /></a>
     <a href="https://startupfa.me" target="_blank" rel="dofollow noopener">Startup Fame</a>
   </div>
 </footer>

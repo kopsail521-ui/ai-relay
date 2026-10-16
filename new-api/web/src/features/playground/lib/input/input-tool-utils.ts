@@ -46,10 +46,10 @@ export const ATTACHMENT_ACTIONS = [
   { action: 'take-photo', icon: CameraIcon, label: 'Take photo' },
 ] satisfies AttachmentAction[]
 
-export function getAttachmentActionNotice(action: string): InputToolNotice {
+export function getAttachmentActionNotice(_action: string): InputToolNotice {
   return {
-    description: action,
     title: 'Feature in development',
+    description: 'This feature will be available in an upcoming release.',
   }
 }
 

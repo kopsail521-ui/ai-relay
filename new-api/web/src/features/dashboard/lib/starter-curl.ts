@@ -20,8 +20,8 @@ import { createApiKey, fetchTokenKey, getApiKeys } from '@/features/keys/api'
 import type { ApiKey } from '@/features/keys/types'
 import { getUserModels } from '@/lib/api'
 
-/** Prefer a $0 catalog ID so first curl works without recharge. */
-export const STARTER_FREE_MODEL = 'glm-5.3-flash:free'
+/** Prefer an active $0 catalog ID so first curl works without recharge. */
+export const STARTER_FREE_MODEL = 'keyo-flash:free'
 
 export function getPreferredKey(keys: ApiKey[]): ApiKey | null {
   return keys.find((item) => item.status === 1) ?? keys[0] ?? null
@@ -29,7 +29,10 @@ export function getPreferredKey(keys: ApiKey[]): ApiKey | null {
 
 export function pickStarterModel(models: string[] | undefined): string {
   if (!models?.length) return STARTER_FREE_MODEL
-  if (models.includes(STARTER_FREE_MODEL)) return STARTER_FREE_MODEL
+  const candidates = ['keyo-flash:free', 'Atria-dawn-v2:free', 'keyo-flash2:free']
+  for (const c of candidates) {
+    if (models.includes(c)) return c
+  }
   const freeId = models.find((id) => id.endsWith(':free') || id.endsWith('-free'))
   return freeId ?? models[0] ?? STARTER_FREE_MODEL
 }

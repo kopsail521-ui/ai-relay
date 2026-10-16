@@ -30,6 +30,7 @@ bin/*.exe.*
 **/*.exe.*
 
 # local temp / diagnostic artifacts
+tmp/
 tmp-*
 _tmp_*
 scripts/_*.txt

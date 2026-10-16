@@ -384,6 +384,7 @@ function layout({ title, description, canonical, h1, bodyHtml, jsonLd }) {
 <meta name="twitter:title" content="${esc(title)}" />
 <meta name="twitter:description" content="${esc(description)}" />
 <script type="application/ld+json">${JSON.stringify(jsonLd)}</script>
+<script defer src="/brand/keyo-track.js"></script>
 <style>${css()}</style>
 </head>
 <body>
@@ -618,6 +619,7 @@ function renderHome() {
     applicationCategory: "DeveloperApplication",
     offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
   })}</script>
+<script defer src="/brand/keyo-track.js"></script>
 <style>${css()}
 .hero{max-width:1080px;margin:0 auto;padding:48px 24px 8px}
 .inner{display:grid;grid-template-columns:minmax(0,1.28fr) minmax(280px,.78fr);gap:36px 40px;align-items:stretch;max-width:none;width:100%}

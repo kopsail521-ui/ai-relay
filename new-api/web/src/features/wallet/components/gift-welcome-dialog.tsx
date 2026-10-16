@@ -54,6 +54,12 @@ async function loadSelfOnce(): Promise<SelfPayload | null> {
   return null
 }
 
+declare global {
+  interface Window {
+    keyoTrack?: (eventName: string, eventData?: Record<string, unknown>) => void
+  }
+}
+
 /**
  * First-login gift credits notice + prefilled curl (real API key).
  * Uses a portal overlay (not Base UI Dialog) so OAuth navigation cannot swallow it.
@@ -76,7 +82,8 @@ export function GiftWelcomeDialog() {
   const runIdRef = useRef(0)
   const { copyToClipboard } = useCopyToClipboard({ notify: false })
 
-  const dismiss = useCallback((id: number) => {
+  const dismiss = useCallback((id: number, reason: string = 'got_it') => {
+    window.keyoTrack?.('gift_welcome_dismiss', { userId: id, reason })
     markGiftWelcomeSeen(id)
     shownRef.current = false
     setOpen(false)
@@ -103,6 +110,10 @@ export function GiftWelcomeDialog() {
       setOpen(true)
       setGiftQuota(Number(localSnapshot.gift_quota ?? 0))
       setCurlLoading(true)
+      window.keyoTrack?.('gift_welcome_shown', {
+        userId,
+        gift_quota: Number(localSnapshot.gift_quota ?? 0),
+      })
 
       const curlPromise = resolveStarterCurl()
         .then((ready) => ready?.curl ?? null)
@@ -154,6 +165,11 @@ export function GiftWelcomeDialog() {
     try {
       const copied = await copyToClipboard(curl)
       if (copied) {
+        window.keyoTrack?.('gift_welcome_copy_curl', {
+          userId,
+          gift_quota: giftQuota,
+          has_curl: true,
+        })
         toast.success(t('Copied to clipboard'))
       } else {
         toast.error(t('Failed to copy to clipboard'))
@@ -233,7 +249,10 @@ export function GiftWelcomeDialog() {
             <Button
               variant='outline'
               onClick={() => {
-                if (userId) dismiss(userId)
+                if (userId) {
+                  window.keyoTrack?.('gift_welcome_view_wallet', { userId })
+                  dismiss(userId, 'view_wallet')
+                }
                 void navigate({ to: '/wallet' })
               }}
             >

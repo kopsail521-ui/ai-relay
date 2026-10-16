@@ -461,6 +461,85 @@ app.get("/api/analytics/funnel", authRequired, (_req, res) => {
   }
 });
 
+app.get("/api/analytics/behavior", authRequired, (_req, res) => {
+  try {
+    const db = openFunnelDb();
+    const tableExists = db
+      .prepare("SELECT name FROM sqlite_master WHERE type='table' AND name='analytics_events'")
+      .get();
+
+    if (!tableExists) {
+      return res.json({
+        ok: true,
+        geo: [],
+        exitPages: [],
+        sources: [],
+        dialogFunnel: { shown: 0, copied: 0, dismissed: 0, wallet: 0 },
+        recentEvents: [],
+        note: "analytics_events 表将在收到首条埋点或完成服务迁移后就绪",
+      });
+    }
+
+    const geo = db
+      .prepare(
+        `SELECT country, COUNT(DISTINCT visitor_id) AS visitors, COUNT(*) AS pageviews
+         FROM analytics_events
+         WHERE event_name = 'page_view'
+         GROUP BY country
+         ORDER BY visitors DESC
+         LIMIT 20`
+      )
+      .all();
+
+    const exitPages = db
+      .prepare(
+        `SELECT path, country, COUNT(*) AS count
+         FROM analytics_events
+         WHERE event_name = 'page_leave'
+         GROUP BY path, country
+         ORDER BY count DESC
+         LIMIT 25`
+      )
+      .all();
+
+    const sources = db
+      .prepare(
+        `SELECT CASE WHEN utm_source != '' THEN utm_source ELSE 'Direct / Organic' END AS source,
+                COUNT(DISTINCT visitor_id) AS visitors
+         FROM analytics_events
+         GROUP BY source
+         ORDER BY visitors DESC
+         LIMIT 15`
+      )
+      .all();
+
+    const shown = db.prepare("SELECT COUNT(*) AS c FROM analytics_events WHERE event_name = 'gift_welcome_shown'").get().c;
+    const copied = db.prepare("SELECT COUNT(*) AS c FROM analytics_events WHERE event_name = 'gift_welcome_copy_curl'").get().c;
+    const dismissed = db.prepare("SELECT COUNT(*) AS c FROM analytics_events WHERE event_name = 'gift_welcome_dismiss'").get().c;
+    const wallet = db.prepare("SELECT COUNT(*) AS c FROM analytics_events WHERE event_name = 'gift_welcome_view_wallet'").get().c;
+
+    const recentEvents = db
+      .prepare(
+        `SELECT id, visitor_id, country, event_name, path, utm_source, event_data, created_at
+         FROM analytics_events
+         ORDER BY created_at DESC
+         LIMIT 30`
+      )
+      .all();
+
+    res.json({
+      ok: true,
+      geo,
+      exitPages,
+      sources,
+      dialogFunnel: { shown, copied, dismissed, wallet },
+      recentEvents,
+    });
+  } catch (e) {
+    res.status(503).json({ ok: false, error: e.message });
+  }
+});
+
 app.get("/api/export.csv", authRequired, (_req, res) => {
   const models = loadModels().map(enrich);
   const lines = [

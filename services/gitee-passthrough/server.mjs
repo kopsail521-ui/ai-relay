@@ -285,7 +285,7 @@ function priceUsdFromUsage(modelId, usage) {
   return Number(Math.max(0, usd).toFixed(8));
 }
 
-function deductQuota(userId, tokenId, modelId, priceUsd) {
+function deductQuota(userId, tokenId, modelId, priceUsd, preferGift = false) {
   if (!userId || !priceUsd || priceUsd <= 0) return { ok: true, quota: 0 };
   const quota = Math.max(1, Math.round(priceUsd * QUOTA_PER_USD));
   const db = openDb(false);
@@ -293,14 +293,36 @@ function deductQuota(userId, tokenId, modelId, priceUsd) {
   const requestId = `gpt_${Math.floor(Date.now() / 1000)}_${Math.random().toString(36).slice(2, 10)}`;
   try {
     db.exec("BEGIN");
-    const user = db.prepare(`SELECT quota FROM users WHERE id = ?`).get(userId);
-    if (!user || user.quota < quota) {
+    const user = db.prepare(`SELECT quota, gift_quota FROM users WHERE id = ?`).get(userId);
+    if (!user) {
       db.exec("ROLLBACK");
       return { ok: false, quota, error: "insufficient_quota" };
     }
+    const paid = Number(user.quota) || 0;
+    const gift = Number(user.gift_quota) || 0;
+    const available = preferGift ? paid + gift : paid;
+    if (available < quota) {
+      db.exec("ROLLBACK");
+      return { ok: false, quota, error: "insufficient_quota" };
+    }
+    // Gift-credit twins draw from the gift wallet first, then paid quota.
+    let fromGift = 0;
+    let fromPaid = 0;
+    if (preferGift) {
+      fromGift = Math.min(gift, quota);
+      fromPaid = quota - fromGift;
+    } else {
+      fromPaid = quota;
+    }
+    if (fromPaid > 0) {
+      db.prepare(`UPDATE users SET quota = quota - ? WHERE id = ?`).run(fromPaid, userId);
+    }
+    if (fromGift > 0) {
+      db.prepare(`UPDATE users SET gift_quota = gift_quota - ? WHERE id = ?`).run(fromGift, userId);
+    }
     db.prepare(
-      `UPDATE users SET quota = quota - ?, used_quota = used_quota + ?, request_count = request_count + 1 WHERE id = ?`
-    ).run(quota, quota, userId);
+      `UPDATE users SET used_quota = used_quota + ?, request_count = request_count + 1 WHERE id = ?`
+    ).run(quota, userId);
 
     const tok = db
       .prepare(`SELECT unlimited_quota FROM tokens WHERE id = ?`)
@@ -336,7 +358,7 @@ function deductQuota(userId, tokenId, modelId, priceUsd) {
     }
 
     db.exec("COMMIT");
-    return { ok: true, quota, requestId };
+    return { ok: true, quota, requestId, preferGift, fromGift, fromPaid };
   } catch (e) {
     try {
       db.exec("ROLLBACK");
@@ -354,9 +376,18 @@ function refundQuota(userId, tokenId, bill) {
   try {
     db.exec("PRAGMA busy_timeout = 5000");
     db.exec("BEGIN");
+    // Refund to the same wallet(s) the charge came from.
+    const refundGift = bill.preferGift ? Number(bill.fromGift) || 0 : 0;
+    const refundPaid = bill.preferGift ? Number(bill.fromPaid) || 0 : bill.quota;
+    if (refundPaid > 0) {
+      db.prepare(`UPDATE users SET quota = quota + ? WHERE id = ?`).run(refundPaid, userId);
+    }
+    if (refundGift > 0) {
+      db.prepare(`UPDATE users SET gift_quota = gift_quota + ? WHERE id = ?`).run(refundGift, userId);
+    }
     db.prepare(
-      `UPDATE users SET quota = quota + ?, used_quota = MAX(0, used_quota - ?) WHERE id = ?`
-    ).run(bill.quota, bill.quota, userId);
+      `UPDATE users SET used_quota = MAX(0, used_quota - ?) WHERE id = ?`
+    ).run(bill.quota, userId);
     const token = db
       .prepare(`SELECT unlimited_quota FROM tokens WHERE id = ?`)
       .get(tokenId);
@@ -401,6 +432,44 @@ function extractModel(urlPath, bodyBuf, contentType) {
     if (u.searchParams.get("model")) return u.searchParams.get("model");
   } catch {}
   return "";
+}
+
+// Gift-credit twins: a ":free" catalog id is a display twin of a paid base
+// model (e.g. "Spark-TTS-0.5B:free" -> "Spark-TTS-0.5B"). The upstream only
+// knows the base id, and the gift wallet should be debited first, mirroring
+// new-api's FreeModelTwin/BillingModelName (model/gift_models.go).
+function freeTwinBase(modelId) {
+  const s = String(modelId || "").trim();
+  return s.toLowerCase().endsWith(":free") ? s.slice(0, -":free".length) : "";
+}
+
+function normalizeModelId(modelId) {
+  return freeTwinBase(modelId) || String(modelId || "").trim();
+}
+
+function escapeRegExp(s) {
+  return String(s).replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
+function rewriteModelField(bodyBuf, contentType, fromModel, toModel) {
+  const ct = String(contentType || "").toLowerCase();
+  if (ct.includes("application/json") || (bodyBuf.length && bodyBuf[0] === 0x7b)) {
+    try {
+      const j = JSON.parse(bodyBuf.toString("utf8"));
+      if (j.model === fromModel) j.model = toModel;
+      return { buf: Buffer.from(JSON.stringify(j), "utf8") };
+    } catch {
+      return { error: "Invalid JSON body" };
+    }
+  }
+  if (ct.includes("multipart/form-data")) {
+    const s = bodyBuf.toString("utf8");
+    const re = new RegExp('(name="model"\\r?\\n\\r?\\n)' + escapeRegExp(fromModel));
+    if (re.test(s)) {
+      return { buf: Buffer.from(s.replace(re, "$1" + toModel), "utf8") };
+    }
+  }
+  return { buf: bodyBuf };
 }
 
 function scrubGiteeErrorBuf(buf, ct) {
@@ -712,13 +781,18 @@ function extractTaskId(body) {
   ).trim();
 }
 
-function softCheckQuota(userId, minQuota) {
+function softCheckQuota(userId, minQuota, preferGift = false) {
   const db = openDb(true);
   try {
     const user = db
-      ?.prepare(`SELECT quota FROM users WHERE id = ?`)
+      ?.prepare(`SELECT quota, gift_quota FROM users WHERE id = ?`)
       .get(userId);
-    if (!user || user.quota < minQuota) {
+    if (!user) {
+      return { ok: false, error: "insufficient_quota" };
+    }
+    const paid = Number(user.quota) || 0;
+    const available = preferGift ? paid + (Number(user.gift_quota) || 0) : paid;
+    if (available < minQuota) {
       return { ok: false, error: "insufficient_quota" };
     }
     return { ok: true };
@@ -955,18 +1029,35 @@ const server = http.createServer(async (req, res) => {
     duixBillUsd = prepared.priceUsd;
   }
 
-  const modelId = urlPath === "/v1/async/videos/image-to-video"
+  const rawModelId = urlPath === "/v1/async/videos/image-to-video"
     ? "InfiniteTalk"
     : urlPath.includes("/async/videos/audio-video-to-video")
       ? "Duix-Avatar"
       : extractModel(req.url || "", forwardBuf, req.headers["content-type"]);
+  const modelId = normalizeModelId(rawModelId);
+  const preferGift = rawModelId !== modelId;
   if (!modelId || !modelMap[modelId]) {
     return json(res, 400, {
       error: {
-        message: `Unknown or missing model: ${modelId || "(empty)"}`,
+        message: `Unknown or missing model: ${rawModelId || "(empty)"}`,
         type: "invalid_request_error",
       },
     });
+  }
+  // Gift-credit twins must reach the upstream as their base model.
+  if (preferGift) {
+    const rewritten = rewriteModelField(
+      forwardBuf,
+      req.headers["content-type"],
+      rawModelId,
+      modelId
+    );
+    if (rewritten.error) {
+      return json(res, 400, {
+        error: { message: rewritten.error, type: "invalid_request_error" },
+      });
+    }
+    forwardBuf = rewritten.buf;
   }
 
   let priceUsd = priceUsdForModel(modelId);
@@ -990,7 +1081,13 @@ const server = http.createServer(async (req, res) => {
 
   let precharged = null;
   if (!token.skipBill && !usageBill && !billAfterTaskId) {
-    precharged = deductQuota(token.userId, token.tokenId, modelId, priceUsd);
+    precharged = deductQuota(
+      token.userId,
+      token.tokenId,
+      rawModelId,
+      priceUsd,
+      preferGift
+    );
     if (!precharged.ok) {
       return json(res, 403, {
         error: {
@@ -1004,7 +1101,7 @@ const server = http.createServer(async (req, res) => {
     const minQuota = billAfterTaskId
       ? Math.max(1, Math.round(priceUsd * QUOTA_PER_USD))
       : 1;
-    const soft = softCheckQuota(token.userId, minQuota);
+    const soft = softCheckQuota(token.userId, minQuota, preferGift);
     if (!soft.ok) {
       return json(res, 403, {
         error: { message: "额度不足", type: "billing_error" },

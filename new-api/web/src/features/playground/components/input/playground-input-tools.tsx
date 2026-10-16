@@ -121,9 +121,15 @@ export function PlaygroundInputTools({
                 <DropdownMenuItem
                   key={action}
                   onClick={() => handleFileAction(action)}
+                  className='flex items-center justify-between gap-3'
                 >
-                  <Icon className='mr-2' size={16} />
-                  {t(label)}
+                  <div className='flex items-center gap-2'>
+                    <Icon size={16} />
+                    <span>{t(label)}</span>
+                  </div>
+                  <span className='bg-muted text-muted-foreground rounded px-1.5 py-0.5 text-[10px] font-semibold uppercase'>
+                    {t('Soon')}
+                  </span>
                 </DropdownMenuItem>
               ))}
             </DropdownMenuContent>
@@ -134,7 +140,7 @@ export function PlaygroundInputTools({
           <TooltipTrigger
             render={
               <PromptInputButton
-                aria-label={t('Search')}
+                aria-label={t('Search (Coming soon)')}
                 className='text-muted-foreground hover:text-foreground hover:bg-muted/70 font-medium'
                 disabled={disabled}
                 onClick={handleSearchAction}
@@ -145,7 +151,7 @@ export function PlaygroundInputTools({
             }
           />
           <TooltipContent>
-            <p>{t('Search')}</p>
+            <p>{t('Search (Coming soon)')}</p>
           </TooltipContent>
         </Tooltip>
 

@@ -283,8 +283,9 @@ tbody.addEventListener("click", async (e) => {
   }
 });
 
-// ---- 标签页：模型价格 / 转化漏斗 ----
+// ---- 标签页：模型价格 / 转化漏斗 / 用户行为与国籍 ----
 let funnelLoaded = false;
+let behaviorLoaded = false;
 
 document.querySelectorAll(".tab").forEach((btn) => {
   btn.addEventListener("click", () => {
@@ -297,7 +298,9 @@ document.querySelectorAll(".tab").forEach((btn) => {
     const tab = btn.getAttribute("data-tab");
     document.getElementById("tab-pricing").classList.toggle("hidden", tab !== "pricing");
     document.getElementById("tab-funnel").classList.toggle("hidden", tab !== "funnel");
+    document.getElementById("tab-behavior").classList.toggle("hidden", tab !== "behavior");
     if (tab === "funnel" && !funnelLoaded) loadFunnel();
+    if (tab === "behavior" && !behaviorLoaded) loadBehavior();
   });
 });
 
@@ -441,6 +444,152 @@ async function loadFunnel() {
 }
 
 document.getElementById("btn-funnel-refresh").addEventListener("click", loadFunnel);
+
+function renderBehavior(data) {
+  const df = data.dialogFunnel || { shown: 0, copied: 0, dismissed: 0, wallet: 0 };
+  const copyRate = df.shown > 0 ? ((df.copied / df.shown) * 100).toFixed(1) + "%" : "—";
+  const dismissRate = df.shown > 0 ? ((df.dismissed / df.shown) * 100).toFixed(1) + "%" : "—";
+
+  const dialogHtml = `
+    <div class="funnel-cards">
+      <div class="funnel-step">
+        <strong>${money(df.shown)}</strong>
+        <span>弹窗曝光展示</span>
+        <em>首登欢迎窗弹出</em>
+      </div>
+      <div class="funnel-step with-conv">
+        <span class="conv">${copyRate}</span>
+        <strong>${money(df.copied)}</strong>
+        <span>点击复制代码</span>
+        <em>复制一键测试 curl</em>
+      </div>
+      <div class="funnel-step with-conv">
+        <span class="conv">${dismissRate}</span>
+        <strong>${money(df.dismissed)}</strong>
+        <span>直接关闭</span>
+        <em>未复制直接关掉/Got it</em>
+      </div>
+      <div class="funnel-step">
+        <strong>${money(df.wallet)}</strong>
+        <span>跳转查看钱包</span>
+        <em>点击 View wallet</em>
+      </div>
+    </div>`;
+
+  const geoHtml = data.geo && data.geo.length
+    ? `
+      <table style="min-width:0">
+        <thead><tr><th>国家/地区</th><th>独立访客 (UV)</th><th>浏览量 (PV)</th></tr></thead>
+        <tbody>
+          ${data.geo
+            .map(
+              (g) => `<tr>
+                <td><strong>${escapeHtml(g.country)}</strong></td>
+                <td>${money(g.visitors)}</td>
+                <td>${money(g.pageviews)}</td>
+              </tr>`
+            )
+            .join("")}
+        </tbody>
+      </table>`
+    : `<p class="muted">暂无访客国籍记录 · 待站点产生访问后自动聚合</p>`;
+
+  const exitHtml = data.exitPages && data.exitPages.length
+    ? `
+      <table style="min-width:0">
+        <thead><tr><th>最后离开页面</th><th>访客国籍</th><th>跳出人次</th></tr></thead>
+        <tbody>
+          ${data.exitPages
+            .map(
+              (p) => `<tr>
+                <td><code>${escapeHtml(p.path)}</code></td>
+                <td><span class="badge warn">${escapeHtml(p.country)}</span></td>
+                <td>${money(p.count)}</td>
+              </tr>`
+            )
+            .join("")}
+        </tbody>
+      </table>`
+    : `<p class="muted">暂无跳出页面记录</p>`;
+
+  const sourceHtml = data.sources && data.sources.length
+    ? `
+      <table style="min-width:0">
+        <thead><tr><th>渠道来源 (UTM Source / Ref)</th><th>独立访客 (UV)</th></tr></thead>
+        <tbody>
+          ${data.sources
+            .map(
+              (s) => `<tr>
+                <td><strong>${escapeHtml(s.source)}</strong></td>
+                <td>${money(s.visitors)}</td>
+              </tr>`
+            )
+            .join("")}
+        </tbody>
+      </table>`
+    : `<p class="muted">暂无渠道来源记录</p>`;
+
+  const recentHtml = data.recentEvents && data.recentEvents.length
+    ? `
+      <table style="min-width:0">
+        <thead><tr><th>时间</th><th>国家</th><th>事件</th><th>页面</th><th>渠道</th></tr></thead>
+        <tbody>
+          ${data.recentEvents
+            .map(
+              (e) => `<tr>
+                <td>${e.created_at ? new Date(e.created_at * 1000).toLocaleTimeString("zh-CN") : "—"}</td>
+                <td><span class="badge good">${escapeHtml(e.country || "—")}</span></td>
+                <td><strong>${escapeHtml(e.event_name)}</strong></td>
+                <td><code>${escapeHtml(e.path || "—")}</code></td>
+                <td>${escapeHtml(e.utm_source || "—")}</td>
+              </tr>`
+            )
+            .join("")}
+        </tbody>
+      </table>`
+    : `<p class="muted">暂无事件流水</p>`;
+
+  document.getElementById("behavior-body").innerHTML = `
+    <div class="funnel-card">
+      <h3>新用户赠送金欢迎弹窗交互漏斗<span class="muted">（盲区一：监控用户到底点了复制还是直接关闭）</span></h3>
+      ${dialogHtml}
+    </div>
+    <div class="funnel-grid">
+      <div class="funnel-card">
+        <h3>访客国籍分布 (Top Countries)<span class="muted">（识别海外与本土真实开发者）</span></h3>
+        ${geoHtml}
+      </div>
+      <div class="funnel-card">
+        <h3>各国籍最高跳出页面 (Top Exit Pages)<span class="muted">（他们在哪个页面看了就离开）</span></h3>
+        ${exitHtml}
+      </div>
+    </div>
+    <div class="funnel-grid" style="margin-top: 14px">
+      <div class="funnel-card">
+        <h3>外链与引流渠道 (Traffic Sources)<span class="muted">（评估外链投放效果）</span></h3>
+        ${sourceHtml}
+      </div>
+      <div class="funnel-card">
+        <h3>最新实时行为流水 (Real-time Activity)</h3>
+        ${recentHtml}
+      </div>
+    </div>
+    ${data.note ? `<p class="muted" style="margin: 12px 28px">${escapeHtml(data.note)}</p>` : ""}`;
+}
+
+async function loadBehavior() {
+  const body = document.getElementById("behavior-body");
+  body.innerHTML = '<p class="muted" style="padding: 0 28px">加载中…</p>';
+  try {
+    const data = await api("/api/analytics/behavior");
+    renderBehavior(data);
+    behaviorLoaded = true;
+  } catch (ex) {
+    body.innerHTML = `<div class="funnel-card"><h3>无法读取数据</h3><p>${escapeHtml(ex.message)}</p></div>`;
+  }
+}
+
+document.getElementById("btn-behavior-refresh").addEventListener("click", loadBehavior);
 
 (async function init() {
   try {

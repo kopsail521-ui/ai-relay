@@ -18,7 +18,7 @@ For commercial licensing, please contact support@quantumnous.com
 */
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useQuery } from '@tanstack/react-query'
-import { Check, ChevronDown, KeyRound, Settings2, WalletCards } from 'lucide-react'
+import { Check, ChevronDown, Copy, KeyRound, Settings2, WalletCards } from 'lucide-react'
 import { useEffect, useMemo, useState } from 'react'
 import { useForm, type SubmitErrorHandler } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
@@ -113,6 +113,7 @@ export function ApiKeysMutateDrawer({
   // Number of keys created by the latest submit; non-null switches the drawer
   // body to the success guide (the create API never returns the plaintext key).
   const [createdCount, setCreatedCount] = useState<number | null>(null)
+  const [createdKey, setCreatedKey] = useState<string | null>(null)
   const defaultUseAutoGroup = status?.default_use_auto_group === true
 
   // Fetch models
@@ -208,6 +209,7 @@ export function ApiKeysMutateDrawer({
       // Buttons close the drawer via onOpenChange directly, which does not
       // pass through the Sheet's own close handler — reset here as well.
       setCreatedCount(null)
+      setCreatedKey(null)
       return
     }
     if (
@@ -304,6 +306,7 @@ export function ApiKeysMutateDrawer({
         // Create mode - handle batch creation
         const count = data.tokenCount || 1
         let successCount = 0
+        let newKey: string | null = null
 
         for (let i = 0; i < count; i++) {
           const result = await createApiKey({
@@ -315,6 +318,10 @@ export function ApiKeysMutateDrawer({
           })
           if (result.success) {
             successCount++
+            const returnedKey = (result as { data?: { key?: string } }).data?.key
+            if (returnedKey) {
+              newKey = returnedKey
+            }
           } else {
             toast.error(result.message || t(ERROR_MESSAGES.CREATE_FAILED))
             break
@@ -328,10 +335,9 @@ export function ApiKeysMutateDrawer({
             })
           )
           // Refresh the table behind the drawer, then show the success guide
-          // instead of closing silently — the API never returns the plaintext
-          // key, so point the user at the key column in the table.
           triggerRefresh()
           setCreatedCount(successCount)
+          setCreatedKey(newKey)
         }
       }
     } catch {
@@ -377,6 +383,7 @@ export function ApiKeysMutateDrawer({
         if (!v) {
           form.reset()
           setCreatedCount(null)
+          setCreatedKey(null)
         }
       }}
     >
@@ -403,11 +410,42 @@ export function ApiKeysMutateDrawer({
                 count: createdCount,
               })}
             </div>
-            <p className='text-muted-foreground max-w-sm text-sm leading-relaxed'>
-              {t(
-                'The full key is not shown here. Click the key column in the table below to view or copy it.'
-              )}
-            </p>
+            {createdKey ? (
+              <div className='w-full max-w-md rounded-xl border bg-muted/40 p-4 text-left'>
+                <div className='mb-1.5 flex items-center justify-between text-xs font-medium text-muted-foreground'>
+                  <span>{t('Your API Key')}</span>
+                  <span className='text-[11px] font-semibold text-amber-500'>
+                    {t('Please copy and save now')}
+                  </span>
+                </div>
+                <div className='flex items-center gap-2'>
+                  <code className='bg-background flex-1 break-all rounded border px-2.5 py-1.5 font-mono text-xs select-all'>
+                    {createdKey.startsWith('sk-') ? createdKey : `sk-${createdKey}`}
+                  </code>
+                  <Button
+                    size='sm'
+                    variant='outline'
+                    className='h-8 shrink-0 gap-1.5'
+                    onClick={() => {
+                      const full = createdKey.startsWith('sk-')
+                        ? createdKey
+                        : `sk-${createdKey}`
+                      void navigator.clipboard.writeText(full)
+                      toast.success(t('API Key copied to clipboard'))
+                    }}
+                  >
+                    <Copy className='size-3.5' />
+                    {t('Copy')}
+                  </Button>
+                </div>
+              </div>
+            ) : (
+              <p className='text-muted-foreground max-w-sm text-sm leading-relaxed'>
+                {t(
+                  'The full key is not shown here. Click the key column in the table below to view or copy it.'
+                )}
+              </p>
+            )}
             <Button
               variant='outline'
               onClick={() => onOpenChange(false)}

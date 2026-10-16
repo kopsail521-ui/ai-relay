@@ -33,8 +33,9 @@
     </header>
 
     <nav class="tabs" role="tablist" aria-label="数据视图">
-      <button type="button" id="tab-btn-pricing" class="tab active" role="tab" aria-selected="true" aria-controls="tab-pricing">模型价格</button>
-      <button type="button" id="tab-btn-funnel" class="tab" role="tab" aria-selected="false" aria-controls="tab-funnel">转化漏斗</button>
+      <button type="button" id="tab-btn-pricing" data-tab="pricing" class="tab active" role="tab" aria-selected="true" aria-controls="tab-pricing">模型价格</button>
+      <button type="button" id="tab-btn-funnel" data-tab="funnel" class="tab" role="tab" aria-selected="false" aria-controls="tab-funnel">转化漏斗</button>
+      <button type="button" id="tab-btn-behavior" data-tab="behavior" class="tab" role="tab" aria-selected="false" aria-controls="tab-behavior">用户行为与国籍</button>
     </nav>
 
     <section id="tab-pricing" role="tabpanel" aria-labelledby="tab-btn-pricing">
@@ -84,6 +85,14 @@
         <button type="button" id="btn-funnel-refresh" class="ghost small">刷新</button>
       </div>
       <div id="funnel-body"><p class="muted" style="padding: 0 28px">加载中…</p></div>
+    </section>
+
+    <section id="tab-behavior" class="hidden" role="tabpanel" aria-labelledby="tab-btn-behavior">
+      <div class="funnel-toolbar">
+        <p class="sub">数据来自 keyo-track.js 前端上报与 IP 国籍识别 · 实时监控访客国籍、跳出页面、欢迎弹窗转化及外链渠道</p>
+        <button type="button" id="btn-behavior-refresh" class="ghost small">刷新</button>
+      </div>
+      <div id="behavior-body"><p class="muted" style="padding: 0 28px">加载中…</p></div>
     </section>
   </div>
 

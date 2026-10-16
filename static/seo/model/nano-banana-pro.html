@@ -88,7 +88,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
 </div>
 <h2>Overview</h2>
 <p>Nano Banana Pro is the top tier of Google's Nano Banana image family, served on KeyoAPI through the OpenAI-compatible /v1/images/generations endpoint. If you already call chat, Whisper, or OCR with a KeyoAPI key, image generation is one more model string — no Google Cloud project, no second credential.</p>
-<p>Pricing is per generated image: $0.0274 on pro, against nano-banana-2 at $0.0205 (base lane) and nano-banana-2.1 at $0.0123 (newer release). Pro earns its premium when fidelity dominates — higher resolution output and finer editing control for commercial visuals, detailed image work and art direction. All three tiers run on the same key, so escalating a prompt from 2.1 to pro is a model-string change.</p>
+<p>Pricing is per generated image: $0.0274 on pro, against <a href="/model/nano-banana-2">the nano-banana-2 model page</a> at $0.0205 (base lane) and <a href="/model/nano-banana-2.1">the nano-banana-2.1 model page</a> at $0.0123 (newer release). Pro earns its premium when fidelity dominates — higher resolution output and finer editing control for commercial visuals, detailed image work and art direction. All three tiers run on the same key, so escalating a prompt from <a href="/model/nano-banana-2.1">the nano-banana-2.1 model page</a> to pro is a model-string change.</p>
 <p>Call it with POST /v1/images/generations, model=nano-banana-pro, and a prompt. size is optional (1024x1024 by default). Responses come back in the OpenAI images shape synchronously — no task polling — so existing clients and SDKs work after pointing base_url at https://www.keyoapi.xyz/v1. Confirm live rates on <a href="/pricing-list">the full pricing list</a> before volume work.</p>
 
 

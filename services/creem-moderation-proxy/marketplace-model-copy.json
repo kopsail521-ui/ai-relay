@@ -27,9 +27,9 @@
       "ja": "デジタルヒューマン",
       "vi": "DigitalHuman"
     },
-    "图片": {
-      "zhCN": "图片",
-      "zhTW": "圖片",
+    "图片模型": {
+      "zhCN": "图片模型",
+      "zhTW": "圖片模型",
       "en": "Image",
       "fr": "Image",
       "ru": "Image",
@@ -109,8 +109,8 @@
       "vi": "LLM"
     },
     "image": {
-      "zhCN": "图片",
-      "zhTW": "圖片",
+      "zhCN": "图片模型",
+      "zhTW": "圖片模型",
       "en": "Image",
       "fr": "Image",
       "ru": "Image",

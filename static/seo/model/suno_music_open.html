@@ -75,14 +75,14 @@ ul{margin:0 0 14px;padding-left:1.2em}
 <main class="wrap">
 <h1>Suno Music API on KeyoAPI — Song Generation</h1>
 <p class="lead">Generate songs from a prompt (custom, inspiration, or continue) on the same Keyo key as chat and speech.</p>
-<p class="meta">Listed price: <span class="ok">~$0.0039 / request</span> · Confirm live on <a href="/pricing/suno_music_open">interactive pricing</a>.</p>
+<p class="meta">Listed price: <span class="ok">~$0.0039 / request</span> · Live catalog: <a href="/pricing">Model Square</a> · Static list: <a href="/pricing-list">pricing list</a>.</p>
 <div class="btnrow">
-  <a class="btn btn-primary" href="/pricing/suno_music_open">Open interactive pricing</a>
+  <a class="btn btn-primary" href="/sign-up">Get API key</a>
+  <a class="btn btn-secondary" href="/pricing">Open Model Square</a>
   <a class="btn btn-secondary" href="/compare">Compare API prices</a>
-  <a class="btn btn-secondary" href="/sign-up">Create account</a>
 </div>
 <h2>Overview</h2>
-<p>suno_music_open is Keyo’s Suno song-generation ID. Indicative rate about $0.0039 per request — confirm live on <a href="/pricing/suno_music_open">the suno_music_open Model Square page</a>. POST https://www.keyoapi.xyz/suno/submit/MUSIC with Bearer auth, then poll the returned task id. This is a music job, not a chat completion. Pair lyrics drafting on chat models, then render audio here.</p>
+<p>suno_music_open is Keyo’s Suno song-generation ID. Indicative rate about $0.0039 per request — confirm live on <a href="/pricing-list">the full pricing list</a>. POST https://www.keyoapi.xyz/suno/submit/MUSIC with Bearer auth, then poll the returned task id. This is a music job, not a chat completion. Pair lyrics drafting on chat models, then render audio here.</p>
 <h2>Quick start</h2>
 <div class="card">
 <p>Base URL: <code>https://www.keyoapi.xyz/v1</code></p>
@@ -95,13 +95,13 @@ ul{margin:0 0 14px;padding-left:1.2em}
 <p>Auth uses the same Bearer API key as chat. Full notes: <a href="/brand/keyo-docs.html">Keyo docs</a>.</p>
 </div>
 <h2>FAQ</h2>
-<div class="faq"><details><summary>Is this billed per song or per token?</summary><p>Per request (~$0.0039). Confirm the live Model Square row before volume.</p></details>
+<div class="faq"><details><summary>Is this billed per song or per token?</summary><p>Per request (~$0.0039). Confirm the live Model Square row or <a href="/pricing-list">the full pricing list</a> before volume.</p></details>
 <details><summary>Do I need a second API key?</summary><p>No. Use the same Keyo key as /v1/chat/completions. Only the path is /suno/submit/MUSIC.</p></details></div>
 <h2>Related models</h2>
 <div class="grid"><a href="/model/gemini-3.1-flash-tts-preview">Gemini Flash TTS API</a>
 <a href="/model/IndexTTS-2">IndexTTS-2 API</a>
 <a href="/model/CosyVoice3">CosyVoice3 API</a></div>
-<p class="meta">Guide for <strong>suno_music_open</strong>. Try/buy: <a href="/pricing/suno_music_open">the suno_music_open Model Square page</a> · Catalog: <a href="/pricing">the pricing page</a>.</p>
+<p class="meta">Guide for <strong>suno_music_open</strong>. Catalog: <a href="/pricing">the pricing page</a> · Rates: <a href="/pricing-list">the full pricing list</a>.</p>
 </main>
 <footer class="footer">
   <a href="/">Home</a>
@@ -110,8 +110,10 @@ ul{margin:0 0 14px;padding-left:1.2em}
   <a href="/models">Model guides</a>
   <a href="/compare">Compare</a>
   <a href="/free-models">Free models</a>
+  <a href="/brand/blog/">Blog</a>
   <a href="/gemini-api-pricing">Gemini pricing</a>
   <a href="/deepseek-api-pricing">DeepSeek pricing</a>
+  <a href="/glm-api-pricing">GLM pricing</a>
   <a href="/claude-api-pricing">Claude pricing</a>
   <a href="/openai-api-pricing">OpenAI pricing</a>
   <a href="/remove-bg-api-alternative">remove.bg API</a>
@@ -120,11 +122,29 @@ ul{margin:0 0 14px;padding-left:1.2em}
   <a href="/ai-avatar-video-generator">Avatar video API</a>
   <a href="/grok-api-pricing">Grok pricing</a>
   <a href="/openai-api-alternative">OpenAI alternative</a>
+  <a href="/seedance-2-0-api-pricing">Seedance 2.0 pricing</a>
+  <a href="/seedance-2-5-api-pricing">Seedance 2.5 pricing</a>
+  <a href="/minimax-h3-api-pricing">MiniMax H3 pricing</a>
+  <a href="/flux-3-video-api-pricing">FLUX.3 Video pricing</a>
+  <a href="/wan3-video-api-pricing">Wan 3.0 Video pricing</a>
+  <a href="/agnes-video-2-5-api-pricing">Agnes Video 2.5 pricing</a>
+  <a href="/video-enhance-pro-api-pricing">Video Enhance Pro pricing</a>
+  <a href="/subtitle-erase-pro-api-pricing">Subtitle Erase Pro pricing</a>
+  <a href="/nano-banana-api-pricing">Nano Banana pricing</a>
   <a href="/brand/keyo-docs.html">Docs</a>
   <a href="/brand/faq.html">FAQ</a>
   <a href="/brand/privacy.html">Privacy</a>
   <a href="/brand/terms.html">Terms</a>
   <a href="/sign-in">Sign in</a>
+  <a href="https://toolfame.com/item/keyoapi" target="_blank" rel="noopener noreferrer"><img src="https://toolfame.com/badge-light.svg" alt="Featured on ToolFame.com" width="160" height="54" loading="lazy" style="height:54px;width:auto;" /></a>
+  <a href="https://yo.directory" target="_blank" rel="dofollow noopener">Featured on Yo.directory</a>
+  <a href="https://www.toolpilot.ai" target="_blank" rel="dofollow noopener">Featured on ToolPilot.ai</a>
+  <a href="https://dang.ai" target="_blank" rel="dofollow noopener"><img src="https://assets.dang.ai/badges/dang-verified-dark.png" alt="Verified on DANG!" width="550" height="198" loading="lazy" style="height:54px;width:auto;border:0;outline:none;text-decoration:none;" /></a>
+  <a href="https://fazier.com" target="_blank" rel="dofollow noopener">Featured on Fazier</a>
+  <a href="https://twelve.tools" target="_blank" rel="dofollow noopener"><img src="https://twelve.tools/badge0-white.svg" alt="Featured on Twelve Tools" width="200" height="54" loading="lazy" style="height:54px;width:auto;" /></a>
+  <a href="https://deeplaunch.io" target="_blank" rel="dofollow noopener">Featured on DeepLaunch.io</a>
+  <a href="https://findly.tools/keyoapi?utm_source=keyoapi" target="_blank" rel="noopener noreferrer"><img src="https://findly.tools/badges/findly-tools-badge-dark.svg" alt="Featured on Findly.tools" width="175" height="55" loading="lazy" style="height:44px;width:auto;" /></a>
+  <a href="https://startupfa.me" target="_blank" rel="dofollow noopener">Featured on Startup Fame</a>
 </footer>
 </body>
 </html>

@@ -278,3 +278,40 @@ test("generated SEO pages have zero natural-language phrase collisions", () => {
   }
   assert.equal(errors.length, 0, `Found ${errors.length} phrase collision(s):\n${errors.join("\n")}`);
 });
+
+test("all internal /model/ and /pricing/ links across static SEO pages are valid and crawlable", () => {
+  const files = [];
+  function collectHtml(dir) {
+    for (const ent of fs.readdirSync(dir, { withFileTypes: true })) {
+      const full = path.join(dir, ent.name);
+      if (ent.isDirectory()) collectHtml(full);
+      else if (full.endsWith(".html")) files.push(full);
+    }
+  }
+  collectHtml(seoRoot);
+
+  const errors = [];
+  for (const file of files) {
+    const content = fs.readFileSync(file, "utf8");
+    const rel = path.relative(root, file);
+
+    // Check broken /model/* hrefs
+    const modelMatches = [...content.matchAll(/href="\/model\/([^"#?]+)"/g)];
+    for (const match of modelMatches) {
+      const target = decodeURIComponent(match[1]);
+      const targetFile = path.join(seoRoot, "model", `${target}.html`);
+      if (!fs.existsSync(targetFile)) {
+        errors.push(`${rel}: broken link href="/model/${target}" (file does not exist)`);
+      }
+    }
+
+    // Check blocked /pricing/* hrefs
+    const pricingMatches = [...content.matchAll(/href="(\/pricing\/[^"#?]+)"/g)];
+    for (const match of pricingMatches) {
+      errors.push(`${rel}: blocked link href="${match[1]}" (disallowed by robots.txt; use /pricing or /pricing-list)`);
+    }
+  }
+
+  assert.equal(errors.length, 0, `Found ${errors.length} crawlability / link error(s):\n${errors.join("\n")}`);
+});
+

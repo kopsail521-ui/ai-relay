@@ -1055,8 +1055,8 @@ function renderPricing() {
 <p class="meta">Gift-credit IDs (billed at base rate, gift credits used first; new users: $10, per invite: $3; fair-use): see <a href="/free-models">the gift-credit models page</a> for the full list, paid twins and curl examples. The tables below cover the metered catalog.</p>
 <h2>Task cost guides</h2>
 ${contentGuideLinks("cost-guide")}
-<p>For typed routing probabilities, see <a href="/model/cloudflare-clef">Cloudflare Clef</a> and its dedicated <code>POST /v1/decisions</code> endpoint.</p>
 <h2>Guided model price table</h2>
+<p class="meta">For typed routing probabilities, see <a href="/model/cloudflare-clef">Cloudflare Clef</a> and its dedicated <code>POST /v1/decisions</code> endpoint.</p>
 <div class="table-scroll"><table>
 <thead><tr><th>Model ID</th><th>Category</th><th>Listed price</th><th>Endpoint</th><th>Links</th></tr></thead>
 <tbody>${rows}</tbody>

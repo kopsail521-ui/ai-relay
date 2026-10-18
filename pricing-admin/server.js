@@ -414,7 +414,7 @@ app.get("/api/analytics/funnel", authRequired, (_req, res) => {
     };
     const dayMap = new Map();
     const today = new Date();
-    for (let i = 29; i >= 0; i--) {
+    for (let i = 0; i < 30; i++) {
       const d = new Date(today - i * 24 * 3600 * 1000).toLocaleDateString("sv");
       dayMap.set(d, { d, users: 0, consume: 0, topups: 0, paidMoney: 0 });
     }

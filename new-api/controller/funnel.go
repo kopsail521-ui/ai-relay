@@ -126,7 +126,7 @@ func GetFunnelStats(c *gin.Context) {
 	daily := make([]FunnelDailyRow, 0, funnelDailyWindowDays)
 	dayIndex := make(map[string]*FunnelDailyRow, funnelDailyWindowDays)
 	today := time.Now()
-	for i := funnelDailyWindowDays - 1; i >= 0; i-- {
+	for i := 0; i < funnelDailyWindowDays; i++ {
 		date := today.AddDate(0, 0, -i).Format("2006-01-02")
 		row := FunnelDailyRow{Date: date}
 		daily = append(daily, row)

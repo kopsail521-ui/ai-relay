@@ -384,7 +384,7 @@ function renderFunnel(data) {
       <thead><tr><th>日期</th><th>新注册</th><th>消费请求</th><th>充值单</th><th>成功充值金额</th></tr></thead>
       <tbody>
         ${[...data.daily]
-          .reverse()
+          .sort((a, b) => b.d.localeCompare(a.d))
           .map((r) => {
             const noData = !r.users && !r.consume && !r.topups;
             return `<tr class="${noData ? "muted-row" : ""}">

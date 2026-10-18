@@ -16,11 +16,13 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 For commercial licensing, please contact support@quantumnous.com
 */
-import { useCallback, useEffect, useState, type ReactNode } from 'react'
+import { useCallback, useEffect, useMemo, useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
   Activity,
   AlertTriangle,
+  ArrowDown,
+  ArrowUp,
   Key,
   RefreshCw,
   TrendingDown,
@@ -139,15 +141,37 @@ function FunnelStepCard(props: {
 
 function DailyTrendTable({ daily }: { daily: FunnelDailyRow[] }) {
   const { t } = useTranslation()
+  const [sortOrder, setSortOrder] = useState<'desc' | 'asc'>('desc')
+
   const maxDaily = Math.max(
     1,
     ...daily.map((r) => Math.max(r.new_users, r.consume_requests))
   )
+
+  const sortedDaily = useMemo(() => {
+    return [...daily].sort((a, b) => {
+      const cmp = a.date.localeCompare(b.date)
+      return sortOrder === 'desc' ? -cmp : cmp
+    })
+  }, [daily, sortOrder])
+
   return (
     <Table>
       <TableHeader>
         <TableRow>
-          <TableHead>{t('Date')}</TableHead>
+          <TableHead
+            className='cursor-pointer select-none hover:text-foreground'
+            onClick={() => setSortOrder((prev) => (prev === 'desc' ? 'asc' : 'desc'))}
+          >
+            <div className='inline-flex items-center gap-1.5'>
+              <span>{t('Date')}</span>
+              {sortOrder === 'desc' ? (
+                <ArrowDown className='size-3.5 text-muted-foreground' />
+              ) : (
+                <ArrowUp className='size-3.5 text-muted-foreground' />
+              )}
+            </div>
+          </TableHead>
           <TableHead className='text-right'>{t('New Users')}</TableHead>
           <TableHead className='text-right'>{t('Consume Requests')}</TableHead>
           <TableHead className='text-right'>{t('Top-ups')}</TableHead>
@@ -155,7 +179,7 @@ function DailyTrendTable({ daily }: { daily: FunnelDailyRow[] }) {
         </TableRow>
       </TableHeader>
       <TableBody>
-        {daily.map((r) => {
+        {sortedDaily.map((r) => {
           const empty =
             !r.new_users && !r.consume_requests && !r.top_ups && !r.paid_money
           return (

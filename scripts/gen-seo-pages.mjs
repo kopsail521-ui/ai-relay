@@ -167,7 +167,7 @@ function esc(s) {
 }
 
 /** Escape then turn site paths into <a href> for crawlable internal links. */
-function linkifySitePaths(raw) {
+function linkifySitePaths(raw, currentPath) {
   let s = esc(raw);
   const literals = [...pricingLandings.pages, ...contentLandings.pages]
     .map((p) => `/${p.slug}`)
@@ -190,6 +190,9 @@ function linkifySitePaths(raw) {
   );
   let linked = s.replace(re, (m) => {
     const href = rewritePricingIdPath(m);
+    if (currentPath && href === currentPath) {
+      return esc(pathLabel(href).replace(/^the\s+/, ""));
+    }
     return `<a href="${href}">${esc(pathLabel(href))}</a>`;
   });
   // Deduplicate adjacent identical anchors: <a href="X">Label</a> · the same <a href="X">
@@ -204,15 +207,17 @@ function linkifySitePaths(raw) {
   // 3. Prevent "static the ...": "static <a href="/pricing...">the ...</a>" -> "$1the static ..."
   linked = linked.replace(/\bstatic\s+(<a\s+href="\/pricing(?:-list)?">)the\s+(?:pricing\s+page|full\s+pricing\s+list)\b/gi, "$1the static pricing list");
   linked = linked.replace(/\bstatic\s+(<a\s+[^>]*>)the\b/gi, "$1the");
-  // 4. Prevent "page the ... page": "Model Square page <a ...>the ... model page</a>" -> "Model Square at <a ...>the ... model page</a>"
+  // 4. Prevent "interactive the ... catalog": "interactive <a href="/pricing...">the ...</a>"
+  linked = linked.replace(/(?:the\s+)?interactive\s+(<a\s+href="\/pricing[^"]*">)the\s+pricing\s+page(?:\s+catalog)?\b/gi, "the interactive $1pricing catalog");
+  // 5. Prevent "page the ... page": "Model Square page <a ...>the ... model page</a>" -> "Model Square at <a ...>the ... model page</a>"
   linked = linked.replace(/\bModel Square page\s+(<a\s+[^>]*>)the\s+/gi, "Model Square at $1the ");
   linked = linked.replace(/\bpage\s+(<a\s+[^>]*>)the\s+/gi, "page at $1the ");
-  // 5. Clean up redundant page suffix after comparison anchor
+  // 6. Clean up redundant page suffix after comparison anchor
   linked = linked.replace(/(<a\s+href="\/compare">the model comparison page<\/a>)\s+AI\s+API\s+price\s+comparison\s+page\b/gi, "$1 for side-by-side AI API price comparison");
   linked = linked.replace(/(<a\s+[^>]*>[^<]*\bpage<\/a>)\s+pages?\b/gi, "$1");
-  // 6. Fix space inside opening parenthesis before anchor: "( <a" -> "(<a"
+  // 7. Fix space inside opening parenthesis before anchor: "( <a" -> "(<a"
   linked = linked.replace(/\(\s+(<a\s+[^>]*>)/gi, "($1");
-  // 7. Capitalize sentence-start lowercase "the": e.g. paragraph or sentence starting with "<a ...>the ..."
+  // 8. Capitalize sentence-start lowercase "the": e.g. paragraph or sentence starting with "<a ...>the ..."
   linked = linked.replace(/(?:^|(?<=[.!?]\s+)|(?<=<p[^>]*>\s*))(<a\s+[^>]*>)the\b/g, "$1The");
   return linked;
 }
@@ -480,15 +485,19 @@ function contentGuideLinks(kind) {
     .join("\n")}</div>`;
 }
 
-function renderContentSections(sections = []) {
+function renderContentSections(sections = [], currentPath) {
   return sections.map((section) => `
 <h2>${esc(section.heading)}</h2>
-${(section.paragraphs || []).map((p) => `<p>${linkifySitePaths(p)}</p>`).join("\n")}
+${section.html ? section.html : ""}
+${(section.paragraphs || []).map((p) => `<p>${linkifySitePaths(p, currentPath)}</p>`).join("\n")}
 ${section.rows ? `<div class="table-scroll"><table>
 <thead><tr>${section.headers.map((h) => `<th scope="col">${esc(h)}</th>`).join("")}</tr></thead>
-<tbody>${section.rows.map((row) => `<tr>${row.map((cell) => `<td>${linkifySitePaths(cell)}</td>`).join("")}</tr>`).join("\n")}</tbody>
+<tbody>${section.rows.map((row) => `<tr>${row.map((cell) => `<td>${linkifySitePaths(cell, currentPath)}</td>`).join("")}</tr>`).join("\n")}</tbody>
 </table></div>` : ""}
-${(section.paragraphsAfter || []).map((p) => `<p>${linkifySitePaths(p)}</p>`).join("\n")}
+${(section.paragraphsAfter || []).map((p) => `<p>${linkifySitePaths(p, currentPath)}</p>`).join("\n")}
+${section.codeBlocks ? section.codeBlocks.map((cb) => `
+<p><strong>${esc(cb.title)}</strong></p>
+<pre><code>${esc(cb.code)}</code></pre>`).join("\n") : ""}
 ${section.code ? `<pre><code>${esc(section.code)}</code></pre>` : ""}
 `).join("\n");
 }
@@ -500,10 +509,10 @@ function renderContentLanding(p) {
     description: p.metaDescription,
     canonical,
     h1: p.h1,
-    bodyHtml: `<p class="lead">${linkifySitePaths(p.lead)}</p>
+    bodyHtml: `<p class="lead">${linkifySitePaths(p.lead, `/${p.slug}`)}</p>
 <div class="btnrow"><a class="btn btn-primary" href="/sign-up">Get API key</a><a class="btn btn-secondary" href="/pricing">Live prices</a><a class="btn btn-secondary" href="/models">Model guides</a></div>
-${renderContentSections(p.sections)}
-<h2>FAQ</h2><div class="faq">${p.faqs.map((f) => `<details><summary>${esc(f.q)}</summary><p>${linkifySitePaths(f.a)}</p></details>`).join("\n")}</div>
+${renderContentSections(p.sections, `/${p.slug}`)}
+<h2>FAQ</h2><div class="faq">${p.faqs.map((f) => `<details><summary>${esc(f.q)}</summary><p>${linkifySitePaths(f.a, `/${p.slug}`)}</p></details>`).join("\n")}</div>
 <h2>Related guides</h2><div class="grid">${p.related.map((href) => `<a href="${esc(href)}">${esc(pathLabel(href))}</a>`).join("\n")}</div>`,
     jsonLd: {
       "@context": "https://schema.org",
@@ -516,22 +525,23 @@ ${renderContentSections(p.sections)}
 }
 
 function renderModel(m) {
-  const canonical = `${site}/model/${encodeURIComponent(m.id)}`;
-  const leadSrc = m.sections?.intro || m.body;
-  const lead = firstSentence(leadSrc);
+  const modelPath = `/model/${encodeURIComponent(m.id)}`;
+  const canonical = `${site}${modelPath}`;
+  const leadSrc = m.lead || m.sections?.intro || m.body;
+  const lead = m.lead ? m.lead : firstSentence(leadSrc);
   const paras = m.body
     .split(/\n\n+/)
-    .map((p) => `<p>${linkifySitePaths(p)}</p>`)
+    .map((p) => `<p>${linkifySitePaths(p, modelPath)}</p>`)
     .join("\n");
   const faqs = m.faqs
     .map(
       (f) =>
-        `<details><summary>${esc(f.q)}</summary><p>${linkifySitePaths(f.a)}</p></details>`
+        `<details><summary>${esc(f.q)}</summary><p>${linkifySitePaths(f.a, modelPath)}</p></details>`
     )
     .join("\n");
   const curl = m.curlExample || "";
   const bodyHtml = `
-<p class="lead">${linkifySitePaths(lead)}</p>
+<p class="lead">${linkifySitePaths(lead, modelPath)}</p>
 <p class="meta">Listed price: <span class="ok">${esc(m.priceLabel)}</span> · Live catalog: <a href="/pricing">Model Square</a> · Static list: <a href="/pricing-list">pricing list</a>.</p>
 <div class="btnrow">
   <a class="btn btn-primary" href="/sign-up">Get API key</a>
@@ -540,14 +550,16 @@ function renderModel(m) {
 </div>
 <h2>Overview</h2>
 ${paras}
-${renderContentSections(m.guideSections)}
+${renderContentSections(m.guideSections, modelPath)}
 ${freeTierBlock(m)}
 <h2>Quick start</h2>
 <div class="card">
 <p>Base URL: <code>https://www.keyoapi.xyz/v1</code></p>
 <p>Endpoint: <code>${esc(m.endpoint)}</code></p>
 <p>Model: <code>${esc(m.codeHint)}</code></p>
-<pre><code>${esc(curl)}</code></pre>
+${m.codeBlocks ? m.codeBlocks.map((cb) => `
+<p><strong>${esc(cb.title)}</strong></p>
+<pre><code>${esc(cb.code)}</code></pre>`).join("\n") : `<pre><code>${esc(curl)}</code></pre>`}
 <p>Auth uses the same Bearer API key as chat. Full notes: <a href="/brand/keyo-docs.html">Keyo docs</a>.</p>
 </div>
 <h2>FAQ</h2>

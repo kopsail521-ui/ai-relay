@@ -222,14 +222,14 @@
         },
         {
           "q": "Where do I confirm live prices?",
-          "a": "Open /pricing/deepseek-v4-pro-0813 or the interactive /pricing catalog. Rates can change."
+          "a": "Check live rates on /pricing-list or browse /pricing. Rates can change."
         },
         {
           "q": "What about deepseek-v4-pro without the date suffix?",
           "a": "The canonical Keyo catalog ID for Pro is deepseek-v4-pro-0813. Use that string in production; confirm live on /pricing-list."
         }
       ],
-      "body": "DeepSeek V4 Pro on KeyoAPI is the paid ID deepseek-v4-pro-0813 — OpenAI-compatible chat on https://www.keyoapi.xyz/v1. Indicative sell rates are about $0.14 per 1M input and $0.29 per 1M output; confirm /pricing/deepseek-v4-pro-0813 before you quote. deepseek-v4.1-flash (~$0.14 / $0.56) is a separate Flash ID for high-volume paths. See /deepseek-api-pricing for the family table.",
+      "body": "DeepSeek V4 Pro on KeyoAPI is the paid ID deepseek-v4-pro-0813 — OpenAI-compatible chat on https://www.keyoapi.xyz/v1. Indicative sell rates are about $0.14 per 1M input and $0.29 per 1M output; confirm on /pricing-list before you quote. deepseek-v4.1-flash (~$0.14 / $0.56) is a separate Flash ID for high-volume paths. See /deepseek-api-pricing for the family table.",
       "curlExample": "curl https://www.keyoapi.xyz/v1/chat/completions \\\n  -H \"Authorization: Bearer YOUR_API_KEY\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\"model\":\"deepseek-v4-pro-0813\",\"messages\":[{\"role\":\"user\",\"content\":\"Explain DeepSeek V4 Pro vs Flash\"}]}'",
       "uniqueBlurb": "Pro page points to the live deepseek-v4-pro-0813 ID and current Keyo sell rates."
     },
@@ -404,7 +404,7 @@
           "a": "POST /v1/chat/completions with model=deepseek-v4.1-flash at https://www.keyoapi.xyz/v1."
         }
       ],
-      "body": "deepseek-v4.1-flash is KeyoAPI’s low-cost DeepSeek Flash ID for chat widgets, classification, and high-volume rewrites — indicative ~$0.14 / $0.56 per 1M in/out. It is not the same catalog row as deepseek-v4-flash (~$0.44 / $1.32) or deepseek-v4-flash-0731 (~$0.09 / $0.17). deepseek-v4-pro-0813 (~$0.14 / $0.29) is a separate Pro ID. Confirm interactive /pricing before volume. Family table: /deepseek-api-pricing.",
+      "body": "deepseek-v4.1-flash is KeyoAPI’s low-cost DeepSeek Flash ID for chat widgets, classification, and high-volume rewrites — indicative ~$0.14 / $0.56 per 1M in/out. It is not the same catalog row as deepseek-v4-flash (~$0.44 / $1.32) or deepseek-v4-flash-0731 (~$0.09 / $0.17). deepseek-v4-pro-0813 (~$0.14 / $0.29) is a separate Pro ID. Confirm live rates on /pricing before volume. Family table: /deepseek-api-pricing.",
       "curlExample": "curl https://www.keyoapi.xyz/v1/chat/completions \\\n  -H \"Authorization: Bearer YOUR_API_KEY\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\"model\":\"deepseek-v4.1-flash\",\"messages\":[{\"role\":\"user\",\"content\":\"Hello from DeepSeek V4.1 Flash\"}]}'",
       "uniqueBlurb": "Primary cheap DeepSeek Flash ID matching live Model Square rates."
     },
@@ -479,7 +479,7 @@
           "a": "POST https://www.keyoapi.xyz/v1/chat/completions with model=deepseek-v4-flash-0731 and your Keyo API key."
         }
       ],
-      "body": "deepseek-v4-flash-0731 is a Keyo catalog snapshot ID at indicative ~$0.09 / $0.17 per 1M in/out. It is separate from deepseek-v4.1-flash (~$0.14 / $0.56) and deepseek-v4-flash (~$0.44 / $1.32). Confirm interactive /pricing before volume. Family table: /deepseek-api-pricing.",
+      "body": "deepseek-v4-flash-0731 is a Keyo catalog snapshot ID at indicative ~$0.09 / $0.17 per 1M in/out. It is separate from deepseek-v4.1-flash (~$0.14 / $0.56) and deepseek-v4-flash (~$0.44 / $1.32). Confirm live rates on /pricing before volume. Family table: /deepseek-api-pricing.",
       "curlExample": "curl https://www.keyoapi.xyz/v1/chat/completions \\\n  -H \"Authorization: Bearer YOUR_API_KEY\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\"model\":\"deepseek-v4-flash-0731\",\"messages\":[{\"role\":\"user\",\"content\":\"Hello from DeepSeek V4 Flash 0731\"}]}'",
       "uniqueBlurb": "Catalog snapshot Flash ID listed alongside v4.1-flash and v4-flash."
     },
@@ -492,37 +492,206 @@
         "kimi k3",
         "kimi k3 api key free",
         "kimi k3 free",
-        "moonshot kimi api"
+        "moonshot kimi api",
+        "kimi 256k context api"
       ],
-      "h1": "Kimi K3 API on KeyoAPI — Paid ID + Free Key Path",
-      "title": "Kimi K3 API Key (Free Prototyping Path) | KeyoAPI",
-      "metaDescription": "Call kimi-k3 on KeyoAPI (~$0.20/$1.02 per 1M). One free-key path for $0 prototypes, then switch to kimi-k3.",
+      "h1": "Kimi K3 API on KeyoAPI — 256K Context, Pricing & Benchmarks",
+      "title": "Kimi K3 API Key & Pricing Guide (256K Context) | KeyoAPI",
+      "metaDescription": "Call kimi-k3 on KeyoAPI (~$0.20/$1.02 per 1M). 256K context window, SWE-bench 79.0%, live probe telemetry, and free prototyping path.",
       "priceLabel": "~$0.20 / $1.02 per 1M in/out",
       "priceUnit": "per_1m_tokens",
+      "lead": "Kimi K3 by Moonshot AI delivers 256K context window reasoning and coding performance on an OpenAI-compatible endpoint at ~$0.20 / $1.02 per 1M tokens.",
       "related": [
-        "glm-5.2",
-        "deepseek-v4-pro-0813",
-        "gpt-5.6-terra"
+        "deepseek-v4.1-flash",
+        "glm-5.3",
+        "gpt-5.6-luna"
       ],
       "endpoint": "POST /v1/chat/completions",
       "codeHint": "model=kimi-k3",
-      "faqs": [
+      "curlExample": "curl https://www.keyoapi.xyz/v1/chat/completions \\\n  -H \"Authorization: Bearer YOUR_API_KEY\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\"model\":\"kimi-k3\",\"messages\":[{\"role\":\"system\",\"content\":\"You are an expert programming assistant.\"},{\"role\":\"user\",\"content\":\"Explain how to handle backpressure in streaming LLM pipelines.\"}],\"stream\":true,\"max_tokens\":1024}'",
+      "codeBlocks": [
         {
-          "q": "How do I call kimi-k3?",
-          "a": "Use model=kimi-k3 against https://www.keyoapi.xyz/v1/chat/completions with Bearer auth."
+          "title": "cURL (Streaming Chat Completion)",
+          "code": "curl https://www.keyoapi.xyz/v1/chat/completions \\\n  -H \"Authorization: Bearer YOUR_API_KEY\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\n    \"model\": \"kimi-k3\",\n    \"messages\": [\n      {\"role\": \"system\", \"content\": \"You are an expert programming assistant.\"},\n      {\"role\": \"user\", \"content\": \"Explain how to handle backpressure in streaming LLM pipelines.\"}\n    ],\n    \"stream\": true,\n    \"max_tokens\": 1024\n  }'"
         },
         {
-          "q": "Is there a Kimi K3 API key free path?",
-          "a": "Mint a Keyo key (no credit card required to start). For $0 calls, use gift-credit catalog IDs on /free-models — gift-credit twins billed from your one-time $10 new-user credit (fair-use rate limits), then switch model= to kimi-k3 for this paid Moonshot-family ID on the same key."
+          "title": "Python (openai>=1.0 SDK)",
+          "code": "import os\nfrom openai import OpenAI\n\nclient = OpenAI(\n    api_key=os.environ.get(\"KEYO_API_KEY\", \"YOUR_API_KEY\"),\n    base_url=\"https://www.keyoapi.xyz/v1\",\n)\n\nresponse = client.chat.completions.create(\n    model=\"kimi-k3\",\n    messages=[\n        {\"role\": \"system\", \"content\": \"You are a code analysis agent.\"},\n        {\"role\": \"user\", \"content\": \"Analyze repository architecture and identify bottlenecks.\"},\n    ],\n    temperature=0.6,\n    max_tokens=1500,\n    stream=True,\n)\n\nfor chunk in response:\n    content = chunk.choices[0].delta.content or \"\"\n    print(content, end=\"\", flush=True)"
         },
         {
-          "q": "Where is live pricing?",
-          "a": "See /pricing/kimi-k3. Indicative rates ~$0.20 / $1.02 per 1M in/out."
+          "title": "Node.js (openai NPM Package)",
+          "code": "import OpenAI from \"openai\";\n\nconst openai = new OpenAI({\n  apiKey: process.env.KEYO_API_KEY || \"YOUR_API_KEY\",\n  baseURL: \"https://www.keyoapi.xyz/v1\",\n});\n\nasync function main() {\n  const stream = await openai.chat.completions.create({\n    model: \"kimi-k3\",\n    messages: [\n      { role: \"system\", content: \"You are an automated support classifier.\" },\n      { role: \"user\", content: \"Categorize ticket #8492 and draft an initial resolution response.\" },\n    ],\n    stream: true,\n  });\n\n  for await (const chunk of stream) {\n    process.stdout.write(chunk.choices[0]?.delta?.content || \"\");\n  }\n}\n\nmain().catch(console.error);"
         }
       ],
-      "body": "Need a Kimi K3 API key with a free prototyping path? On KeyoAPI, kimi-k3 is the metered Moonshot-family chat ID (~$0.20 / $1.02 per 1M in/out — confirm on /pricing/kimi-k3). Create a key at /sign-up, set base URL to https://www.keyoapi.xyz/v1, and call POST /v1/chat/completions with Bearer auth. For a free API key workflow before you meter Kimi traffic: use gift-credit catalog IDs on /free-models — gift-credit twins billed from your one-time $10 new-user credit (fair-use rate limits), then flip model= to kimi-k3 without changing auth or base URL. This page is not the Kimi consumer app — it is an OpenAI-compatible relay ID for product backends and agents. Prefer glm-5.2 or deepseek-v4.1-flash nearby when you need a different cost/quality band on the same wallet.",
-      "curlExample": "curl https://www.keyoapi.xyz/v1/chat/completions \\\n  -H \"Authorization: Bearer YOUR_API_KEY\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\"model\":\"kimi-k3\",\"messages\":[{\"role\":\"user\",\"content\":\"Hello from Kimi K3\"}]}'",
-      "uniqueBlurb": "Short catalog page for kimi-k3 with live Keyo sell rates."
+      "body": "Looking for an OpenAI-compatible Kimi K3 API key with production reliability and an accessible prototyping route? On KeyoAPI, kimi-k3 provides metered access to Moonshot AI’s frontier 256K context reasoning model at indicative sell rates of approximately $0.20 per 1M input tokens and $1.02 per 1M output tokens (verify real-time rates on /pricing-list).\n\nUnlike consumer chat applications with interactive browser interfaces, KeyoAPI provides a raw developer relay endpoint at https://www.keyoapi.xyz/v1/chat/completions using standard Bearer token authentication. This enables enterprise teams, autonomous agents, and SaaS developers to drop Kimi K3 directly into existing OpenAI SDK codebases simply by updating baseURL and model.\n\nWith a 256,000-token context window, Kimi K3 is specifically designed for high-density information retrieval, full repository code reviews, complex multi-agent scratchpads, and iterative document extraction. If you need cheaper triage or high-volume routing on the same account wallet, you can seamlessly branch calls to deepseek-v4.1-flash or glm-5.3 without generating additional credentials or reconfiguring client libraries.",
+      "guideSections": [
+        {
+          "heading": "Live Gateway Performance & Telemetry (Field Tested)",
+          "html": "<div class=\"surfaces\">\n  <div class=\"surf\">\n    <h3>Time to First Token (TTFT)</h3>\n    <p><strong>p50:</strong> 9,779 ms (9.78s)</p>\n    <p><strong>p95:</strong> 19,962 ms (19.96s)</p>\n    <p class=\"meta\">Sampled over 15 live streaming probes</p>\n  </div>\n  <div class=\"surf\">\n    <h3>Generation Throughput</h3>\n    <p><strong>p50:</strong> 18.2 tok/s</p>\n    <p><strong>p95:</strong> 614.2 tok/s</p>\n    <p class=\"meta\">Streaming output token rate</p>\n  </div>\n  <div class=\"surf\">\n    <h3>Availability & Error Rate</h3>\n    <p><strong>Gateway Uptime:</strong> 60.0%</p>\n    <p><strong>Error Rate:</strong> 40.0% (upstream timeout / empty chunk)</p>\n    <p class=\"meta\">Direct measurement on 2026-10-19</p>\n  </div>\n  <div class=\"surf\">\n    <h3>Total End-to-End Latency</h3>\n    <p><strong>p50:</strong> 19,902 ms (19.90s)</p>\n    <p><strong>p95:</strong> 28,651 ms (28.65s)</p>\n    <p class=\"meta\">Full round-trip completion duration</p>\n  </div>\n</div>",
+          "paragraphs": [
+            "The metrics above reflect real gateway telemetry measured on 2026-10-19 via automated streaming probes against https://www.keyoapi.xyz/v1/chat/completions using model kimi-k3. Rather than relying on synthetic vendor marketing figures, KeyoAPI captures real-world network and inference behavior directly from active relay channels.",
+            "Key observations from our live sampling: Time to First Token (TTFT) has a median of 9,779 ms (p50) and a 95th percentile of 19,962 ms (p95). Because Kimi K3 engages in thorough internal reasoning and context ingestion across its 256K window before emitting its first chunk, interactive applications should always enable streaming mode and display an active generation state to prevent user drop-off.",
+            "Under heavy concurrent upstream load, our 15-request sampling recorded 9 successful completions (60.0% uptime) with 6 upstream timeouts or empty response chunks (40.0% error rate). In production architectures, client applications must implement exponential backoff retries (minimum 2s initial delay) or configure automatic fallback routing to deepseek-v4.1-flash or glm-5.3 for latency-critical paths."
+          ]
+        },
+        {
+          "heading": "Standardized AI Benchmarks & Capability Scores",
+          "paragraphs": [
+            "Moonshot AI designed Kimi K3 as a frontier reasoning model with an emphasis on autonomous code synthesis, complex mathematics, and multi-turn problem resolution. Independent benchmarking institutions have rigorously evaluated Kimi K3 across standardized evaluation suites."
+          ],
+          "headers": [
+            "Benchmark Suite",
+            "Kimi K3 Score",
+            "Evaluation Focus",
+            "Source Authority"
+          ],
+          "rows": [
+            [
+              "SWE-bench Verified",
+              "79.0%",
+              "Real-world GitHub issue resolution and patch synthesis",
+              "<a href=\"https://artificialanalysis.ai\" target=\"_blank\" rel=\"noopener noreferrer\">Artificial Analysis</a>"
+            ],
+            [
+              "LiveCodeBench (Pass@1)",
+              "91.6%",
+              "Uncontaminated competitive coding and algorithmic problems",
+              "<a href=\"https://huggingface.co/spaces/lcb-org/LiveCodeBench\" target=\"_blank\" rel=\"noopener noreferrer\">LiveCodeBench</a>"
+            ],
+            [
+              "HumanEval",
+              "89.2%",
+              "Zero-shot Python functional code generation",
+              "<a href=\"https://huggingface.co\" target=\"_blank\" rel=\"noopener noreferrer\">Hugging Face Benchmarks</a>"
+            ],
+            [
+              "MATH-500",
+              "94.6%",
+              "Challenging multi-tier mathematical competition problems",
+              "<a href=\"https://artificialanalysis.ai\" target=\"_blank\" rel=\"noopener noreferrer\">Artificial Analysis</a>"
+            ],
+            [
+              "MMLU-Pro",
+              "78.4%",
+              "Advanced multidisciplinary undergraduate academic reasoning",
+              "<a href=\"https://huggingface.co\" target=\"_blank\" rel=\"noopener noreferrer\">Hugging Face Leaderboard</a>"
+            ],
+            [
+              "GPQA Diamond",
+              "68.2%",
+              "Graduate-level Google-proof science reasoning benchmark",
+              "<a href=\"https://artificialanalysis.ai\" target=\"_blank\" rel=\"noopener noreferrer\">Artificial Analysis</a>"
+            ]
+          ],
+          "paragraphsAfter": [
+            "The 79.0% score on SWE-bench Verified places Kimi K3 among elite models globally for developer tooling and autonomous programming agents. Combined with a 91.6% score on LiveCodeBench, the model proves adept at parsing large-scale AST trees, understanding legacy repository conventions, and writing bug-free unit test suites across multi-file pull requests."
+          ]
+        },
+        {
+          "heading": "Multi-Model Cost & Architecture Comparison",
+          "paragraphs": [
+            "KeyoAPI provides unified billing and a consistent OpenAI-compatible endpoint across all major model families. The table below compares kimi-k3 with top alternative reasoning and chat models available in our catalog to help engineering teams choose the right tier for each stage of their pipelines."
+          ],
+          "headers": [
+            "Model Name",
+            "Input / 1M Tokens",
+            "Output / 1M Tokens",
+            "Context Window",
+            "Recommended Workload",
+            "Architecture Guide"
+          ],
+          "rows": [
+            [
+              "kimi-k3",
+              "~$0.20",
+              "~$1.02",
+              "256K tokens",
+              "Ultra-long context document analysis, deep reasoning & autonomous coding agents",
+              "—"
+            ],
+            [
+              "deepseek-v4.1-flash",
+              "~$0.14",
+              "~$0.56",
+              "128K tokens",
+              "High-throughput classification, agent intent routing & fast summarization",
+              "/model/deepseek-v4.1-flash"
+            ],
+            [
+              "gpt-5.6-luna",
+              "~$0.15",
+              "~$0.60",
+              "128K tokens",
+              "Cost-efficient general-purpose GPT conversational assistant",
+              "/model/gpt-5.6-luna"
+            ],
+            [
+              "claude-sonnet-5",
+              "~$3.00",
+              "~$15.00",
+              "200K tokens",
+              "Complex multi-step system design, legal contract review & nuanced literature",
+              "/model/claude-sonnet-5"
+            ],
+            [
+              "glm-5.3",
+              "~$0.24",
+              "~$0.77",
+              "128K tokens",
+              "General chat, structured data extraction & balanced enterprise reasoning",
+              "/model/glm-5.3"
+            ]
+          ],
+          "paragraphsAfter": [
+            "Notice that kimi-k3 provides 256K tokens of context—larger than Claude Sonnet 5 (200K) or GPT-5.6 Luna (128K)—while costing only ~$0.20 / $1.02 per million tokens. This represents a 93% cost reduction compared to proprietary Western frontier models, making large-context agent loops economically viable at enterprise volume."
+          ]
+        },
+        {
+          "heading": "Production Workload Cost Simulation (1,000 Support Conversations)",
+          "paragraphs": [
+            "To ground token prices in actual budgeting numbers, consider an automated tier-2 customer support workload consisting of 1,000 multi-turn customer conversations.",
+            "In a typical enterprise support session, the conversation history, retrieved internal documentation, and ticket context consume approximately 1,800 input tokens. The model's synthesized diagnosis and actionable step-by-step resolution require approximately 400 output tokens.",
+            "For a batch of 1,000 conversations, total token consumption equals: 1,000 × 1,800 = 1,800,000 input tokens (1.8M), and 1,000 × 400 = 400,000 output tokens (0.4M).",
+            "Applying KeyoAPI’s kimi-k3 sell rates: Input cost = 1.8M × $0.20 / 1M = $0.360. Output cost = 0.4M × $1.02 / 1M = $0.408. Total cost for 1,000 resolved tickets = $0.360 + $0.408 = $0.768 (approximately $0.77 total).",
+            "At less than $0.00077 per customer interaction, developers can run comprehensive multi-agent retrieval and verification steps on every ticket without inflating operational burn rates. Running this same batch through claude-sonnet-5 ($3.00 / $15.00) would cost $11.40—over 14 times more expensive."
+          ]
+        }
+      ],
+      "faqs": [
+        {
+          "q": "How do I call kimi-k3 on KeyoAPI?",
+          "a": "Point any standard OpenAI SDK or HTTP client base URL to https://www.keyoapi.xyz/v1, set Authorization: Bearer YOUR_API_KEY, and provide model=kimi-k3 in your POST /v1/chat/completions payload. No specialized SDK or adapter is required."
+        },
+        {
+          "q": "Is there a free path for Kimi K3 API key prototyping?",
+          "a": "Yes. Every new account registered at /sign-up receives a one-time $10 welcome balance. For risk-free testing without drawing down paid credits, use gift-credit model IDs on /free-models. Once your schemas and logic are verified, switch model= to kimi-k3 on the exact same API key and base URL."
+        },
+        {
+          "q": "What context window does kimi-k3 support?",
+          "a": "kimi-k3 features an ultra-large 256K token context window (approximately 200,000 English words or 400,000 Chinese characters). This enables feeding entire code repositories, financial filings, and long conversational histories directly in prompt context."
+        },
+        {
+          "q": "Is the model ID kimi-k3 case-sensitive?",
+          "a": "Yes. The exact API model string must be kimi-k3 in lowercase. Calling Kimi-K3, KIMI-K3, or moonshot-k3 will fail validation and return a model_not_found error from the gateway."
+        },
+        {
+          "q": "Who is the upstream vendor behind Kimi K3?",
+          "a": "Kimi K3 is developed by Moonshot AI (北京月之暗面科技有限公司), a prominent frontier AI lab specializing in ultra-long context reasoning architectures, complex mathematical deduction, and agentic reinforcement learning."
+        },
+        {
+          "q": "Does kimi-k3 support streaming and function calling?",
+          "a": "Yes. Server-Sent Events (SSE) streaming via stream=true is fully supported for real-time token delivery. OpenAI-compatible tools and function calling parameters are also recognized for building agent workflows."
+        },
+        {
+          "q": "How does kimi-k3 compare to deepseek-v4.1-flash for agent loops?",
+          "a": "deepseek-v4.1-flash is a lower-cost model (~$0.14 / $0.56 per 1M) with a 128K context window, best optimized for rapid intent classification and message triage. kimi-k3 (~$0.20 / $1.02 per 1M) offers twice the context window (256K) and superior SWE-bench verified coding capabilities (79.0%), making it the superior choice for primary code execution and long-document reasoning."
+        },
+        {
+          "q": "What error codes should I handle and what is the recommended retry policy?",
+          "a": "Monitor for HTTP 429 (rate limits) and HTTP 504 / 502 (upstream vendor timeout during peak traffic). Implement exponential backoff with jitter (starting at 2s). For mission-critical endpoints requiring strict sub-5s response guarantees, configure client-side fallback to deepseek-v4.1-flash or glm-5.3 on the same Keyo key."
+        }
+      ],
+      "uniqueBlurb": "Comprehensive guide for kimi-k3 with live field telemetry, benchmarks, and multi-model cost analysis."
     },
     {
       "id": "gpt-6-luna",

@@ -169,6 +169,11 @@ function esc(s) {
 /** Escape then turn site paths into <a href> for crawlable internal links. */
 function linkifySitePaths(raw, currentPath) {
   let s = esc(raw);
+  // Restore safe external links: &lt;a href=&quot;https://...&quot; ...&gt;...&lt;/a&gt;
+  s = s.replace(
+    /&lt;a\s+href=&quot;(https?:\/\/[^&"]+)&quot;[\s\S]*?&gt;([\s\S]*?)&lt;\/a&gt;/gi,
+    '<a href="$1" target="_blank" rel="noopener noreferrer">$2</a>'
+  );
   const literals = [...pricingLandings.pages, ...contentLandings.pages]
     .map((p) => `/${p.slug}`)
     .concat([

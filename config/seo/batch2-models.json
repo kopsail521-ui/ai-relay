@@ -1086,7 +1086,7 @@
           "a": "Million-token context work: whole-repo review, legal and finance document analysis, and long tool transcripts. Confirm live rates on /pricing/gemini-4-barium."
         }
       ],
-      "body": "gemini-4-barium is a current KeyoAPI Gemini 4-class chat ID with million-token context and multimodal input on an OpenAI-compatible endpoint at https://www.keyoapi.xyz/v1. Indicative sell rates are about $0.74 / $3.68 per 1M in/out; confirm /pricing/gemini-4-barium before volume. Family table: /gemini-api-pricing. For faster coding lanes, use the Argon sibling /model/gemini-4-argon.",
+      "body": "gemini-4-barium is a current KeyoAPI Gemini 4-class chat ID with million-token context and multimodal input on an OpenAI-compatible endpoint at https://www.keyoapi.xyz/v1. Indicative sell rates are about $0.74 / $3.68 per 1M in/out; confirm /pricing/gemini-4-barium before volume. Family table: /gemini-api-pricing. For faster coding lanes, use the Argon sibling on /model/gemini-4-argon.",
       "curlExample": "curl https://www.keyoapi.xyz/v1/chat/completions \\\n  -H \"Authorization: Bearer YOUR_API_KEY\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\"model\":\"gemini-4-barium\",\"messages\":[{\"role\":\"user\",\"content\":\"Summarize this long document and list risks\"}]}'",
       "uniqueBlurb": "Live gemini-4-barium ID with current Keyo sell rates."
     }

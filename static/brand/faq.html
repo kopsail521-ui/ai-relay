@@ -40,7 +40,7 @@
     </details>
     <details>
       <summary data-i18n="q3">What are the price units?</summary>
-      <p data-i18n-html="a3">Console and Model Square show <strong>USD</strong>. Text models are usually per million tokens; images and similar tools are often per request. Live console billing is authoritative.</p>
+      <p data-i18n-html="a3">Console and Model Square show <strong>USD</strong>. Text models are usually per million tokens; video models are per second; images and multimodal tools are often per request. Live console billing is authoritative.</p>
     </details>
     <details>
       <summary data-i18n="q4">Can I see prices without signing in?</summary>
@@ -56,7 +56,7 @@
     </details>
     <details>
       <summary data-i18n="q7">Common errors?</summary>
-      <p data-i18n-html="a7">Wrong model name, invalid API key, or insufficient balance. Match the model ID exactly to <a href="/pricing">the pricing page</a> and confirm Wallet has credits.</p>
+      <p data-i18n-html="a7">Wrong model name, invalid API key, or insufficient balance. Match the model ID exactly to <a href="/pricing-list">the full pricing list</a> and confirm Wallet has credits.</p>
     </details>
     <details>
       <summary data-i18n="q8">How do I contact support?</summary>
@@ -81,7 +81,7 @@ const I18N = {
     q2: 'How do I top up?',
     a2: 'After login, open <strong>Wallet</strong> and pay prepaid credits online via Waffo. Credits are available immediately for API calls.',
     q3: 'What are the price units?',
-    a3: 'Console and Model Square show <strong>USD</strong>. Text models are usually per million tokens; images and similar tools are often per request. Live console billing is authoritative.',
+    a3: 'Console and Model Square show <strong>USD</strong>. Text models are usually per million tokens; video models are per second; images and multimodal tools are often per request. Live console billing is authoritative.',
     q4: 'Can I see prices without signing in?',
     a4: 'Yes. Open the static list at <a href="/pricing-list">the full pricing list</a> (no sign-in). Interactive try/buy is on <a href="/pricing">the pricing page</a> (Model Square). Model guides live at <a href="/models">the model guides page</a>.',
     q5: 'Are there free models?',
@@ -89,7 +89,7 @@ const I18N = {
     q6: 'Which clients are supported?',
     a6: 'Any OpenAI-compatible client: Cursor, ChatBox, OpenAI Python/Node SDK, and more. Setup notes: <a href="/brand/keyo-docs.html">Docs</a>.',
     q7: 'Common errors?',
-    a7: 'Wrong model name, invalid API key, or insufficient balance. Match the model ID exactly to <a href="/pricing">the pricing page</a> and confirm Wallet has credits.',
+    a7: 'Wrong model name, invalid API key, or insufficient balance. Match the model ID exactly to <a href="/pricing-list">the full pricing list</a> and confirm Wallet has credits.',
     q8: 'How do I contact support?',
     a8: 'Email <a href="mailto:kopsail521@gmail.com">kopsail521@gmail.com</a> — usually within 3 business days. Status: <a href="/status">the status page</a>.',
     legalLabel: 'Legal:', legalPrivacy: 'Privacy', legalTerms: 'Terms', legalAup: 'Acceptable Use'
@@ -99,11 +99,11 @@ const I18N = {
     title: 'FAQ',
     sub: 'KeyoAPI 常见问题',
     q1: '如何开始使用？',
-    a1: '注册 / 登录 → 钱包充值 → 创建 API Key → 将 Base URL 设为 <code>https://www.keyoapi.xyz/v1</code>。静态公开价目见 <a href="/pricing-list">the full pricing list</a>；互动模型广场见 <a href="/pricing">the pricing page</a>。',
+    a1: '注册 / 登录 → 钱包充值 → 创建 API Key → 将 Base URL 设为 <code>https://www.keyoapi.xyz/v1</code>。静态公开价目见 <a href="/pricing-list">完整价格表</a>；互动模型广场见 <a href="/pricing">模型广场</a>。',
     q2: '如何充值？',
     a2: '登录后打开<strong>钱包 / Wallet</strong>，通过 Waffo 在线支付预付额度。额度即时到账用于 API 调用。',
     q3: '价格单位是什么？',
-    a3: '控制台与模型广场以 <strong>USD</strong> 展示。文本模型多为按百万 tokens；图片等按次计费。以控制台实时扣费为准。',
+    a3: '控制台与模型广场以 <strong>USD</strong> 展示。文本模型多为按百万 tokens；视频模型按秒计费；图片等工具多按次计费。以控制台实时扣费为准。',
     q4: '未登录能看价格吗？',
     a4: '可以。静态价目表见 <a href="/pricing-list">完整价格表</a>（无需登录）。互动试玩/购买在 <a href="/pricing">价格页面</a>（模型广场）。<a href="/models">模型指南页</a> 是模型指南索引。',
     q5: '有免费模型吗？',
@@ -111,7 +111,7 @@ const I18N = {
     q6: '支持哪些客户端？',
     a6: '任何 OpenAI 兼容客户端：Cursor、ChatBox、OpenAI Python/Node SDK 等。接入说明见 <a href="/brand/keyo-docs.html">文档</a>。',
     q7: '常见报错？',
-    a7: '模型名写错、API Key 无效、余额不足。请核对模型名与 <a href="/pricing">the pricing page</a> 完全一致，并确认钱包有余额。',
+    a7: '模型名写错、API Key 无效、余额不足。请核对模型名与 <a href="/pricing-list">完整价格表</a> 完全一致，并确认钱包有余额。',
     q8: '如何联系客服？',
     a8: '发邮件至 <a href="mailto:kopsail521@gmail.com">kopsail521@gmail.com</a>，通常 3 个工作日内回复。服务状态：<a href="/status">状态页</a>。',
     legalLabel: '法律信息：', legalPrivacy: '隐私政策', legalTerms: '服务条款', legalAup: '可接受使用政策'
@@ -121,19 +121,19 @@ const I18N = {
     title: 'FAQ',
     sub: 'KeyoAPI 常見問題',
     q1: '如何開始使用？',
-    a1: '註冊 / 登入 → 錢包儲值 → 建立 API Key → 將 Base URL 設為 <code>https://www.keyoapi.xyz/v1</code>。靜態公開價目見 <a href="/pricing-list">the full pricing list</a>；互動模型廣場見 <a href="/pricing">the pricing page</a>。',
+    a1: '註冊 / 登入 → 錢包儲值 → 建立 API Key → 將 Base URL 設為 <code>https://www.keyoapi.xyz/v1</code>。靜態公開價目見 <a href="/pricing-list">完整價格表</a>；互動模型廣場見 <a href="/pricing">模型廣場</a>。',
     q2: '如何儲值？',
     a2: '登入後開啟<strong>錢包 / Wallet</strong>，透過 Waffo 線上支付預付額度。額度即時到帳可用於 API 呼叫。',
     q3: '價格單位是什麼？',
-    a3: '控制台與模型廣場以 <strong>USD</strong> 顯示。文字模型多為每百萬 tokens；圖片等常按次計費。以控制台即時扣費為準。',
+    a3: '控制台與模型廣場以 <strong>USD</strong> 顯示。文字模型多為每百萬 tokens；影片模型按秒計費；圖片等工具常按次計費。以控制台即時扣費為準。',
     q4: '未登入能看價格嗎？',
-    a4: '可以。靜態價目表見 <a href="/pricing-list">the full pricing list</a>（無需登入）。互動試用／購買在 <a href="/pricing">the pricing page</a>（模型廣場）。<a href="/models">模型指南頁</a> 是模型指南索引。',
+    a4: '可以。靜態價目表見 <a href="/pricing-list">完整價格表</a>（無需登入）。互動試用／購買在 <a href="/pricing">模型廣場</a>。<a href="/models">模型指南頁</a> 是模型指南索引。',
     q5: '有免費模型嗎？',
-    a5: '有。部分模型為贈送金模型（<code>:free</code> 後綴）——呼叫按基礎費率計費，優先扣減贈送金（新用戶 $10、每邀請送 $3），不足時扣儲值餘額。完整列表見 <a href="/free-models">贈送金模型頁</a> 與 <a href="/pricing-list">the full pricing list</a>。',
+    a5: '有。部分模型為贈送金模型（<code>:free</code> 後綴）——呼叫按基礎費率計費，優先扣減贈送金（新用戶 $10、每邀請送 $3），不足時扣儲值餘額。完整列表見 <a href="/free-models">贈送金模型頁</a> 與 <a href="/pricing-list">完整價格表</a>。',
     q6: '支援哪些客戶端？',
     a6: '任何 OpenAI 相容客戶端：Cursor、ChatBox、OpenAI Python/Node SDK 等。說明見 <a href="/brand/keyo-docs.html">文件</a>。',
     q7: '常見錯誤？',
-    a7: '模型名寫錯、API Key 無效、餘額不足。請核對模型名與 <a href="/pricing">the pricing page</a> 完全一致，並確認錢包有餘額。',
+    a7: '模型名寫錯、API Key 無效、餘額不足。請核對模型名與 <a href="/pricing-list">完整價格表</a> 完全一致，並確認錢包有餘額。',
     q8: '如何聯絡客服？',
     a8: '寄信至 <a href="mailto:kopsail521@gmail.com">kopsail521@gmail.com</a>，通常 3 個工作天內回覆。服務狀態：<a href="/status">狀態頁</a>。',
     legalLabel: '法律資訊：', legalPrivacy: '隱私政策', legalTerms: '服務條款', legalAup: '可接受使用政策'
@@ -143,21 +143,21 @@ const I18N = {
     title: 'FAQ',
     sub: 'KeyoAPI よくある質問',
     q1: '始め方は？',
-    a1: '登録 / ログイン → Wallet 入金 → API Key 作成 → Base URL を <code>https://www.keyoapi.xyz/v1</code> に設定。静的な公開料金は <a href="/pricing-list">the full pricing list</a>、対話型 Model Square は <a href="/pricing">the pricing page</a>。',
+    a1: '登録 / ログイン → Wallet 入金 → API Key 作成 → Base URL を <code>https://www.keyoapi.xyz/v1</code> に設定。静的な公開料金は <a href="/pricing-list">料金一覧</a>、対話型 Model Square は <a href="/pricing">料金ページ</a>。',
     q2: '入金方法は？',
     a2: 'ログイン後 <strong>Wallet</strong> を開き、Waffo で前払いクレジットを購入。入金は API 呼び出しに即利用できます。',
     q3: '料金単位は？',
-    a3: 'コンソールと Model Square は <strong>USD</strong> 表示。テキストは主に 100 万 tokens 単位、画像などは多くの場合リクエスト単位。最終はコンソールの課金が正です。',
+    a3: 'コンソールと Model Square は <strong>USD</strong> 表示。テキストは主に 100 万 tokens 単位、動画モデルは秒単位、画像などは多くの場合リクエスト単位です。最終はコンソールの課金が正です。',
     q4: '未ログインでも料金は見られますか？',
-    a4: 'はい。静的一覧は <a href="/pricing-list">the full pricing list</a>（ログイン不要）。試用／購入は <a href="/pricing">the pricing page</a>（Model Square）。<a href="/models">the model guides page</a> はモデルガイド一覧です。',
+    a4: 'はい。静的一覧は <a href="/pricing-list">料金一覧</a>（ログイン不要）。試用／購入は <a href="/pricing">料金ページ</a>（Model Square）。<a href="/models">モデルガイド一覧</a> はモデルガイド一覧です。',
     q5: '無料モデルはありますか？',
-    a5: 'あります。一部のモデルはギフトクレジットモデル（<code>:free</code> サフィックス）で、基本料金で課金され、ギフトクレジットが優先して使用されます（新規ユーザー: $10、招待ごと: $3）。一覧は <a href="/free-models">the gift-credit models page</a> と <a href="/pricing-list">the full pricing list</a>。',
+    a5: 'あります。一部のモデルはギフトクレジットモデル（<code>:free</code> サフィックス）で、基本料金で課金され、ギフトクレジットが優先して使用されます（新規ユーザー: $10、招待ごと: $3）。一覧は <a href="/free-models">ギフトクレジットモデル一覧</a> と <a href="/pricing-list">料金一覧</a>。',
     q6: '対応クライアントは？',
     a6: 'OpenAI 互換なら可：Cursor、ChatBox、OpenAI Python/Node SDK など。手順は <a href="/brand/keyo-docs.html">ドキュメント</a>。',
     q7: 'よくあるエラーは？',
-    a7: 'モデル名の誤り、無効な API Key、残高不足。<a href="/pricing">the pricing page</a> と完全一致のモデル名か、Wallet 残高を確認してください。',
+    a7: 'モデル名の誤り、無効な API Key、残高不足。<a href="/pricing-list">料金一覧</a> と完全一致のモデル名か、Wallet 残高を確認してください。',
     q8: 'サポート連絡先は？',
-    a8: '<a href="mailto:kopsail521@gmail.com">kopsail521@gmail.com</a> へメール（通常 3 営業日以内）。ステータス: <a href="/status">the status page</a>。',
+    a8: '<a href="mailto:kopsail521@gmail.com">kopsail521@gmail.com</a> へメール（通常 3 営業日以内）。ステータス: <a href="/status">ステータスページ</a>。',
     legalLabel: '法務:', legalPrivacy: 'Privacy', legalTerms: 'Terms', legalAup: 'Acceptable Use'
   },
   fr: {
@@ -165,21 +165,21 @@ const I18N = {
     title: 'FAQ',
     sub: 'Questions fréquentes KeyoAPI',
     q1: 'Comment démarrer ?',
-    a1: 'Inscription / connexion → recharger le Wallet → créer une clé API → Base URL = <code>https://www.keyoapi.xyz/v1</code>. Tarifs publics (statique) : <a href="/pricing-list">the full pricing list</a>. Model Square : <a href="/pricing">the pricing page</a>.',
+    a1: 'Inscription / connexion → recharger le Wallet → créer une clé API → Base URL = <code>https://www.keyoapi.xyz/v1</code>. Tarifs publics (statique) : <a href="/pricing-list">la grille tarifaire complète</a>. Model Square : <a href="/pricing">la page des tarifs</a>.',
     q2: 'Comment recharger ?',
     a2: 'Après connexion, ouvrez <strong>Wallet</strong> et payez des crédits prépayés via Waffo. Les crédits sont utilisables immédiatement.',
     q3: 'Quelles sont les unités de prix ?',
-    a3: 'La console et Model Square affichent des <strong>USD</strong>. Texte souvent par million de tokens ; images souvent à la requête. La facturation console fait foi.',
+    a3: 'La console et Model Square affichent des <strong>USD</strong>. Texte souvent par million de tokens ; vidéo à la seconde ; images souvent à la requête. La facturation console fait foi.',
     q4: 'Puis-je voir les prix sans compte ?',
-    a4: 'Oui. Liste statique : <a href="/pricing-list">the full pricing list</a> (sans connexion). Essai / achat sur <a href="/pricing">the pricing page</a> (Model Square). <a href="/models">the model guides page</a> est l’index des guides.',
+    a4: 'Oui. Liste statique : <a href="/pricing-list">la grille tarifaire complète</a> (sans connexion). Essai / achat sur <a href="/pricing">la page des tarifs</a> (Model Square). <a href="/models">la page des guides modèles</a> est l’index des guides.',
     q5: 'Y a-t-il des modèles gratuits ?',
-    a5: 'Oui. Certains IDs sont des modèles à crédits offerts (suffixe <code>:free</code>) facturés au tarif de base avec utilisation prioritaire des crédits offerts (nouveaux utilisateurs : 10 $, par parrainage : 3 $). Liste : <a href="/free-models">the gift-credit models page</a> et <a href="/pricing-list">the full pricing list</a>.',
+    a5: 'Oui. Certains IDs sont des modèles à crédits offerts (suffixe <code>:free</code>) facturés au tarif de base avec utilisation prioritaire des crédits offerts (nouveaux utilisateurs : 10 $, par parrainage : 3 $). Liste : <a href="/free-models">la page des modèles à crédits offerts</a> et <a href="/pricing-list">la grille tarifaire complète</a>.',
     q6: 'Quels clients sont supportés ?',
     a6: 'Tout client compatible OpenAI : Cursor, ChatBox, SDK Python/Node, etc. Voir <a href="/brand/keyo-docs.html">Docs</a>.',
     q7: 'Erreurs courantes ?',
-    a7: 'Nom de modèle incorrect, clé invalide, solde insuffisant. Vérifiez l’ID sur <a href="/pricing">the pricing page</a> et le solde Wallet.',
+    a7: 'Nom de modèle incorrect, clé invalide, solde insuffisant. Vérifiez l’ID sur <a href="/pricing-list">la grille tarifaire complète</a> et le solde Wallet.',
     q8: 'Comment contacter le support ?',
-    a8: 'Écrivez à <a href="mailto:kopsail521@gmail.com">kopsail521@gmail.com</a> (souvent sous 3 jours ouvrés). Statut : <a href="/status">the status page</a>.',
+    a8: 'Écrivez à <a href="mailto:kopsail521@gmail.com">kopsail521@gmail.com</a> (souvent sous 3 jours ouvrés). Statut : <a href="/status">la page de statut</a>.',
     legalLabel: 'Légal :', legalPrivacy: 'Privacy', legalTerms: 'Terms', legalAup: 'Acceptable Use'
   },
   ru: {
@@ -187,21 +187,21 @@ const I18N = {
     title: 'FAQ',
     sub: 'Частые вопросы KeyoAPI',
     q1: 'Как начать?',
-    a1: 'Регистрация / вход → пополнение Wallet → создать API Key → Base URL <code>https://www.keyoapi.xyz/v1</code>. Статический прайс: <a href="/pricing-list">the full pricing list</a>. Model Square: <a href="/pricing">the pricing page</a>.',
+    a1: 'Регистрация / вход → пополнение Wallet → создать API Key → Base URL <code>https://www.keyoapi.xyz/v1</code>. Статический прайс: <a href="/pricing-list">полный прайс-лист</a>. Model Square: <a href="/pricing">страницу тарифов</a>.',
     q2: 'Как пополнить?',
     a2: 'После входа откройте <strong>Wallet</strong> и оплатите предоплату через Waffo. Кредиты сразу доступны для API.',
     q3: 'В каких единицах цены?',
-    a3: 'Консоль и Model Square показывают <strong>USD</strong>. Текст обычно за миллион tokens; изображения часто за запрос. Итог — по консоли.',
+    a3: 'Консоль и Model Square показывают <strong>USD</strong>. Текст обычно за миллион tokens; видео модели — за секунду; изображения часто за запрос. Итог — по консоли.',
     q4: 'Можно ли смотреть цены без входа?',
-    a4: 'Да. Статический список: <a href="/pricing-list">the full pricing list</a> (без входа). Попробовать / купить — <a href="/pricing">the pricing page</a> (Model Square). <a href="/models">the model guides page</a> — индекс гайдов.',
+    a4: 'Да. Статический список: <a href="/pricing-list">полный прайс-лист</a> (без входа). Попробовать / купить — <a href="/pricing">страницу тарифов</a> (Model Square). <a href="/models">индекс гайдов</a> — индекс гайдов.',
     q5: 'Есть бесплатные модели?',
-    a5: 'Да. Часть ID — подарочные модели (суффикс <code>:free</code>), тарифицируются по базовому тарифу с приоритетным списанием подарочных кредитов (новым пользователям: $10, за приглашение: $3). Список: <a href="/free-models">the gift-credit models page</a> и <a href="/pricing-list">the full pricing list</a>.',
+    a5: 'Да. Часть ID — подарочные модели (суффикс <code>:free</code>), тарифицируются по базовому тарифу с приоритетным списанием подарочных кредитов (новым пользователям: $10, за приглашение: $3). Список: <a href="/free-models">модели с подарочными кредитами</a> и <a href="/pricing-list">полный прайс-лист</a>.',
     q6: 'Какие клиенты поддерживаются?',
     a6: 'Любой OpenAI-совместимый клиент: Cursor, ChatBox, OpenAI Python/Node SDK и др. См. <a href="/brand/keyo-docs.html">Docs</a>.',
     q7: 'Типичные ошибки?',
-    a7: 'Неверное имя модели, неверный ключ, недостаточно баланса. Сверьте ID с <a href="/pricing">the pricing page</a> и баланс Wallet.',
+    a7: 'Неверное имя модели, неверный ключ, недостаточно баланса. Сверьте ID с <a href="/pricing-list">полным прайс-листом</a> и баланс Wallet.',
     q8: 'Как связаться с поддержкой?',
-    a8: 'Пишите на <a href="mailto:kopsail521@gmail.com">kopsail521@gmail.com</a> — обычно в течение 3 рабочих дней. Статус: <a href="/status">the status page</a>.',
+    a8: 'Пишите на <a href="mailto:kopsail521@gmail.com">kopsail521@gmail.com</a> — обычно в течение 3 рабочих дней. Статус: <a href="/status">страницу статуса</a>.',
     legalLabel: 'Legal:', legalPrivacy: 'Privacy', legalTerms: 'Terms', legalAup: 'Acceptable Use'
   },
   vi: {
@@ -209,21 +209,21 @@ const I18N = {
     title: 'FAQ',
     sub: 'Câu hỏi thường gặp KeyoAPI',
     q1: 'Bắt đầu thế nào?',
-    a1: 'Đăng ký / đăng nhập → nạp Wallet → tạo API Key → đặt Base URL <code>https://www.keyoapi.xyz/v1</code>. Bảng giá tĩnh: <a href="/pricing-list">the full pricing list</a>. Model Square: <a href="/pricing">the pricing page</a>.',
+    a1: 'Đăng ký / đăng nhập → nạp Wallet → tạo API Key → đặt Base URL <code>https://www.keyoapi.xyz/v1</code>. Bảng giá tĩnh: <a href="/pricing-list">bảng giá đầy đủ</a>. Model Square: <a href="/pricing">trang bảng giá</a>.',
     q2: 'Nạp tiền thế nào?',
     a2: 'Sau khi đăng nhập, mở <strong>Wallet</strong> và thanh toán tín dụng trả trước qua Waffo. Tín dụng dùng ngay cho API.',
     q3: 'Đơn vị giá là gì?',
-    a3: 'Console và Model Square hiển thị <strong>USD</strong>. Text thường theo triệu tokens; ảnh thường theo request. Lấy billing console làm chuẩn.',
+    a3: 'Console và Model Square hiển thị <strong>USD</strong>. Text thường theo triệu tokens; video tính theo giây; ảnh thường theo request. Lấy billing console làm chuẩn.',
     q4: 'Chưa đăng nhập có xem giá được không?',
-    a4: 'Có. Bảng tĩnh: <a href="/pricing-list">the full pricing list</a> (không cần đăng nhập). Thử / mua trên <a href="/pricing">the pricing page</a> (Model Square). <a href="/models">the model guides page</a> là mục lục hướng dẫn.',
+    a4: 'Có. Bảng tĩnh: <a href="/pricing-list">bảng giá đầy đủ</a> (không cần đăng nhập). Thử / mua trên <a href="/pricing">trang bảng giá</a> (Model Square). <a href="/models">trang hướng dẫn model</a> là mục lục hướng dẫn.',
     q5: 'Có model miễn phí không?',
-    a5: 'Có. Một số ID là model tặng tín dụng (hậu tố <code>:free</code>), tính theo giá cơ sở và trừ ưu tiên từ tín dụng tặng (người dùng mới: $10, mỗi lượt mời: $3). Danh sách: <a href="/free-models">the gift-credit models page</a> và <a href="/pricing-list">the full pricing list</a>.',
+    a5: 'Có. Một số ID là model tặng tín dụng (hậu tố <code>:free</code>), tính theo giá cơ sở và trừ ưu tiên từ tín dụng tặng (người dùng mới: $10, mỗi lượt mời: $3). Danh sách: <a href="/free-models">trang model tặng tín dụng</a> và <a href="/pricing-list">bảng giá đầy đủ</a>.',
     q6: 'Hỗ trợ client nào?',
     a6: 'Mọi client tương thích OpenAI: Cursor, ChatBox, OpenAI Python/Node SDK… Xem <a href="/brand/keyo-docs.html">Docs</a>.',
     q7: 'Lỗi thường gặp?',
-    a7: 'Sai tên model, API key không hợp lệ, hoặc thiếu số dư. Khớp đúng ID trên <a href="/pricing">the pricing page</a> và kiểm tra Wallet.',
+    a7: 'Sai tên model, API key không hợp lệ, hoặc thiếu số dư. Khớp đúng ID trên <a href="/pricing-list">bảng giá đầy đủ</a> và kiểm tra Wallet.',
     q8: 'Liên hệ hỗ trợ thế nào?',
-    a8: 'Email <a href="mailto:kopsail521@gmail.com">kopsail521@gmail.com</a> — thường trong 3 ngày làm việc. Trạng thái: <a href="/status">the status page</a>.',
+    a8: 'Email <a href="mailto:kopsail521@gmail.com">kopsail521@gmail.com</a> — thường trong 3 ngày làm việc. Trạng thái: <a href="/status">trang trạng thái</a>.',
     legalLabel: 'Pháp lý:', legalPrivacy: 'Privacy', legalTerms: 'Terms', legalAup: 'Acceptable Use'
   }
 };

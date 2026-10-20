@@ -160,9 +160,9 @@
       "cheapestNote": {
         "title": "Cheapest DeepSeek API rate on Keyo",
         "body": [
-          "If you are hunting for a cheap DeepSeek API, the lowest DeepSeek row on Keyo is deepseek-v4.1-flash at ~$0.14 / $0.56 per 1M in/out — the newest Flash lane, and the one to start on for batch or classification work.",
-          "The other rows are separate products, not rungs on a ladder: deepseek-v4-flash ~$0.44 / $1.32 (legacy catalog string), and deepseek-v4-pro-0813 with its alias deepseek-v4-pro at ~$0.14 / $0.29 each. So \"cheap\" here is a task choice, not a tier you upgrade through.",
-          "Cost math: 50M input + 10M output tokens/month on deepseek-v4.1-flash ≈ $0.50 + $0.40 ≈ $0.90. The same mix on deepseek-v4-flash ≈ $4.50 + $1.70 ≈ $6.20. Confirm live rates on /pricing-list."
+          "For current-generation chat, the primary high-volume Flash lane on Keyo is deepseek-v4.1-flash at ~$0.14 / $0.56 per 1M in/out (an earlier snapshot tier, deepseek-v4-flash-0731, sits at ~$0.09 / $0.17). deepseek-v4.1-flash is the recommended default for batch, classification, and agent loops.",
+          "The other rows are separate products, not rungs on a ladder: deepseek-v4-flash at ~$0.44 / $1.32 (legacy catalog string), deepseek-v4-flash-0731 at ~$0.09 / $0.17 (earlier snapshot), and deepseek-v4-pro-0813 with its alias deepseek-v4-pro at ~$0.14 / $0.29 each. So \"cheap\" here is a task choice, not a tier you upgrade through.",
+          "Cost math: 50M input + 10M output tokens/month on deepseek-v4.1-flash ≈ $7.00 + $5.60 ≈ $12.60. The same mix on deepseek-v4-flash (~$0.44 / $1.32) ≈ $22.00 + $13.20 ≈ $35.20. Confirm live rates on /pricing-list."
         ]
       }
     },
@@ -1319,7 +1319,7 @@
       },
       "body": [
         "video-enhance-pro is a generative video enhancement tool: you submit an existing video and get back a higher-quality version. Call POST /v1/async/videos/enhance with model=video-enhance-pro, the source video as video_url (https), and the target resolution (720p / 1080p / 2k; default 1080p).",
-        "The call returns a task id immediately — poll GET /v1/task/{id} (singular) with the same key until it returns the result URL. Billing is per second of successfully processed video, so a 10-second 1080p clip costs about $0.68.",
+        "The call returns a task id immediately — poll GET /v1/tasks/{id} with the same key until it returns the result URL. Billing is per second of successfully processed video, so a 10-second 1080p clip costs about $0.68.",
         "Keyo rates above are indicative sell prices from the live Keyo catalog; confirm under /pricing before volume. For removing burned-in subtitles on the same key see /subtitle-erase-pro-api-pricing; for generation see /seedance-2-5-api-pricing, /minimax-h3-api-pricing, /flux-3-video-api-pricing and /wan3-video-api-pricing on /pricing-list."
       ],
       "faqs": [
@@ -1336,7 +1336,7 @@
           "a": "The current tiers are 720p, 1080p and 2k. Submit at the highest tier you need — the tool upscales and restores detail generatively."
         }
       ],
-      "curlExample": "curl https://www.keyoapi.xyz/v1/async/videos/enhance \\\n  -H \"Authorization: Bearer $KEYO_API_KEY\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\"model\":\"video-enhance-pro\",\"video_url\":\"https://example.com/clip.mp4\",\"resolution\":\"1080p\"}'\n# Poll GET /v1/task/{id} (singular) with the same key until it returns the result url"
+      "curlExample": "curl https://www.keyoapi.xyz/v1/async/videos/enhance \\\n  -H \"Authorization: Bearer $KEYO_API_KEY\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\"model\":\"video-enhance-pro\",\"video_url\":\"https://example.com/clip.mp4\",\"resolution\":\"1080p\"}'\n# Poll GET /v1/tasks/{id} with the same key until it returns the result url"
     },
     {
       "slug": "subtitle-erase-pro-api-pricing",
@@ -1364,7 +1364,7 @@
       },
       "body": [
         "subtitle-erase-pro removes burned-in (hard) subtitles from video and reconstructs the area behind them. Call POST /v1/async/videos/subtitle-erase with model=subtitle-erase-pro and the source video as video_url (https).",
-        "The call returns a task id immediately — poll GET /v1/task/{id} (singular) with the same key until it returns the cleaned video URL. Billing is per second of successfully processed video; a 60-second clip costs about $1.10.",
+        "The call returns a task id immediately — poll GET /v1/tasks/{id} with the same key until it returns the cleaned video URL. Billing is per second of successfully processed video; a 60-second clip costs about $1.10.",
         "Keyo rates above are indicative sell prices from the live Keyo catalog; confirm under /pricing before volume. Pair it with /video-enhance-pro-api-pricing for restore-then-upscale workflows; for generation see /seedance-2-5-api-pricing, /minimax-h3-api-pricing, /flux-3-video-api-pricing and /wan3-video-api-pricing on /pricing-list."
       ],
       "faqs": [
@@ -1381,7 +1381,7 @@
           "a": "POST /v1/async/videos/subtitle-erase with model and video_url (https link to your video). Then poll GET /v1/task/{id} for the cleaned video URL."
         }
       ],
-      "curlExample": "curl https://www.keyoapi.xyz/v1/async/videos/subtitle-erase \\\n  -H \"Authorization: Bearer $KEYO_API_KEY\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\"model\":\"subtitle-erase-pro\",\"video_url\":\"https://example.com/subtitled.mp4\"}'\n# Poll GET /v1/task/{id} (singular) with the same key until it returns the result url"
+      "curlExample": "curl https://www.keyoapi.xyz/v1/async/videos/subtitle-erase \\\n  -H \"Authorization: Bearer $KEYO_API_KEY\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\"model\":\"subtitle-erase-pro\",\"video_url\":\"https://example.com/subtitled.mp4\"}'\n# Poll GET /v1/tasks/{id} with the same key until it returns the result url"
     },
     {
       "slug": "nano-banana-api-pricing",

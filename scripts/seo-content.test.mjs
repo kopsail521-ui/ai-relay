@@ -315,3 +315,32 @@ test("all internal /model/ and /pricing/ links across static SEO pages are valid
   assert.equal(errors.length, 0, `Found ${errors.length} crawlability / link error(s):\n${errors.join("\n")}`);
 });
 
+test("model guide pages have zero self-referential circular links", () => {
+  const modelDir = path.join(seoRoot, "model");
+  const errors = [];
+  for (const f of fs.readdirSync(modelDir).filter((x) => x.endsWith(".html"))) {
+    const id = f.slice(0, -5);
+    const text = fs.readFileSync(path.join(modelDir, f), "utf8");
+    const re = new RegExp(`<a\\s+[^>]*href=["'](?:https://www\\.keyoapi\\.xyz)?/model/${id}(?:/|["'#])`, "gi");
+    const matches = text.match(re);
+    if (matches) {
+      errors.push(`${f} contains ${matches.length} self-referential link(s) to /model/${id}`);
+    }
+  }
+  assert.equal(errors.length, 0, `Found self-referential link(s):\n${errors.join("\n")}`);
+});
+
+test("deepseek pricing math and FAQ q7 link integrity", () => {
+  const dsHtml = fs.readFileSync(path.join(seoRoot, "deepseek-api-pricing.html"), "utf8");
+  assert.match(dsHtml, /\$12\.60/, "deepseek-api-pricing must have accurate math for 50M/10M v4.1-flash ($12.60)");
+  assert.match(dsHtml, /\$35\.20/, "deepseek-api-pricing must have accurate math for 50M/10M v4-flash ($35.20)");
+  assert.match(dsHtml, /deepseek-v4-flash-0731/, "deepseek-api-pricing must acknowledge snapshot tier");
+
+  const faqHtml = fs.readFileSync(path.join(root, "static/brand/faq.html"), "utf8");
+  const a7Tag = faqHtml.match(/<p\s+data-i18n-html="a7"[^>]*>([\s\S]*?)<\/p>/);
+  assert.ok(a7Tag, "FAQ a7 element must exist");
+  assert.match(a7Tag[1], /href="\/pricing-list"/, "FAQ a7 must link to /pricing-list");
+  assert.doesNotMatch(a7Tag[1], /href="\/pricing"/, "FAQ a7 must not link to /pricing");
+  assert.doesNotMatch(faqHtml, /a7:\s*['"][^'"]*href="\/pricing"/, "No i18n a7 translation may link to /pricing");
+  assert.match(faqHtml, /per second \/ 按秒计费|video models are per second/, "FAQ must mention per-second video billing");
+});

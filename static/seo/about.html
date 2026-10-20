@@ -3,20 +3,20 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>About KeyoAPI — One Key for Chat, Speech, OCR &amp; Digital Humans</title>
-<meta name="description" content="KeyoAPI is an AI API relay: chat, image and speech are OpenAI-compatible; OCR, vision, TTS-async and digital-human models use dedicated REST paths — same key, same prepaid balance, with gift-credit IDs (new users: $10; per invite: $3)." />
+<title>About KeyoAPI — One Key for Chat, Image, Video, Speech, OCR &amp; Digital Humans</title>
+<meta name="description" content="KeyoAPI is an AI API relay: chat, image, video and speech endpoints; OCR, vision, TTS-async and digital-human models use dedicated REST paths — same key, same prepaid balance, with gift-credit IDs (new users: $10; per invite: $3)." />
 <link rel="canonical" href="https://www.keyoapi.xyz/about" />
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://www.keyoapi.xyz/about" />
-<meta property="og:title" content="About KeyoAPI — One Key for Chat, Speech, OCR &amp; Digital Humans" />
-<meta property="og:description" content="KeyoAPI is an AI API relay: chat, image and speech are OpenAI-compatible; OCR, vision, TTS-async and digital-human models use dedicated REST paths — same key, same prepaid balance, with gift-credit IDs (new users: $10; per invite: $3)." />
+<meta property="og:title" content="About KeyoAPI — One Key for Chat, Image, Video, Speech, OCR &amp; Digital Humans" />
+<meta property="og:description" content="KeyoAPI is an AI API relay: chat, image, video and speech endpoints; OCR, vision, TTS-async and digital-human models use dedicated REST paths — same key, same prepaid balance, with gift-credit IDs (new users: $10; per invite: $3)." />
 <meta property="og:image" content="https://www.keyoapi.xyz/brand/logo.svg" />
 <link rel="icon" href="/brand/logo.svg" type="image/svg+xml" />
 <link rel="stylesheet" href="/brand/keyo-theme.css" />
 <meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:title" content="About KeyoAPI — One Key for Chat, Speech, OCR &amp; Digital Humans" />
-<meta name="twitter:description" content="KeyoAPI is an AI API relay: chat, image and speech are OpenAI-compatible; OCR, vision, TTS-async and digital-human models use dedicated REST paths — same key, same prepaid balance, with gift-credit IDs (new users: $10; per invite: $3)." />
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"AboutPage","name":"About KeyoAPI","url":"https://www.keyoapi.xyz/about","description":"About KeyoAPI — prepaid AI API gateway with OpenAI-compatible chat/image/speech and dedicated REST for OCR, vision and avatars."}</script>
+<meta name="twitter:title" content="About KeyoAPI — One Key for Chat, Image, Video, Speech, OCR &amp; Digital Humans" />
+<meta name="twitter:description" content="KeyoAPI is an AI API relay: chat, image, video and speech endpoints; OCR, vision, TTS-async and digital-human models use dedicated REST paths — same key, same prepaid balance, with gift-credit IDs (new users: $10; per invite: $3)." />
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"AboutPage","name":"About KeyoAPI","url":"https://www.keyoapi.xyz/about","description":"About KeyoAPI — prepaid AI API gateway with OpenAI-compatible chat, image, video, speech and dedicated REST for OCR, vision and avatars."}</script>
 <script defer src="/brand/keyo-track.js"></script>
 <style>.wrap{max-width:880px;margin:0 auto;padding:28px 24px 48px}
 .footer{display:flex;flex-wrap:wrap;gap:10px 16px;max-width:1080px;margin:0 auto;padding:24px 24px 40px;border-top:1px solid var(--line);font-size:13px;color:var(--muted)}
@@ -77,7 +77,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
   </nav>
 </header>
 <main class="wrap">
-<h1>One key for chat, speech, OCR &amp; digital humans</h1>
+<h1>One key for chat, image, video, speech, OCR &amp; digital humans</h1>
 
 <p class="lead">KeyoAPI is a developer-first <strong>AI API relay</strong>: chat, image and speech are OpenAI-compatible, while OCR, vision tools, async video/docs and digital-human models run on dedicated REST paths — <strong>same key, same prepaid balance</strong>. No five vendor dashboards, no five invoices.</p>
 <div class="btnrow">
@@ -101,17 +101,22 @@ ul{margin:0 0 14px;padding-left:1.2em}
 <tr>
   <td>Flagship chat (GPT-class)</td>
   <td>OpenAI gpt-6-astra official list — confirm on openai.com/api/pricing</td>
-  <td><span class="ok">~$1.84 / $9.19 per 1M in/out</span></td>
+  <td><a href="/model/gpt-6-astra"><code>gpt-6-astra</code></a><br/><span class="ok">~$1.84 / $9.19 per 1M in/out</span></td>
 </tr>
 <tr>
   <td>High-volume budget LLM</td>
   <td>DeepSeek official Flash-class list often ~$0.14–$0.28 / $0.28–$1.10 per 1M in/out (confirm on platform.deepseek.com; not an OpenAI GPT mini equivalent)</td>
-  <td><span class="ok">~$0.14 / $0.56 per 1M in/out</span></td>
+  <td><a href="/model/deepseek-v4.1-flash"><code>deepseek-v4.1-flash</code></a><br/><span class="ok">~$0.14 / $0.56 per 1M in/out</span></td>
 </tr>
 <tr>
   <td>Claude-class flagship</td>
   <td>Anthropic Claude Fable 5.1 list ~$10 / $50 per 1M in/out (confirm on platform.claude.com)</td>
-  <td><span class="ok">~$7.35 / $36.77 per 1M in/out</span></td>
+  <td><a href="/model/claude-fable-5-1"><code>claude-fable-5-1</code></a><br/><span class="ok">~$7.35 / $36.77 per 1M in/out</span></td>
+</tr>
+<tr>
+  <td>Image generation (Nano Banana 2.1)</td>
+  <td>Google Gemini image list — confirm on official Google pages</td>
+  <td><a href="/model/nano-banana-2.1"><code>nano-banana-2.1</code></a><br/><span class="ok">~$0.0123 / request</span></td>
 </tr>
 </tbody>
 </table>
@@ -129,10 +134,12 @@ ul{margin:0 0 14px;padding-left:1.2em}
 </div>
 <h2>Model categories</h2>
 <div class="grid">
-  <a href="/model/gpt-5.6-terra">GPT-class chat</a>
-  <a href="/model/claude-sonnet-5">Claude-class reasoning</a>
-  <a href="/model/deepseek-v4-pro-0813">DeepSeek open models</a>
-  <a href="/model/glm-5.2">GLM</a>
+  <a href="/model/gpt-6-astra">GPT-class chat</a>
+  <a href="/model/claude-sonnet-5-5">Claude-class reasoning</a>
+  <a href="/model/deepseek-v4.1-flash">DeepSeek open models</a>
+  <a href="/model/glm-5.3">GLM</a>
+  <a href="/seedance-2-5-api-pricing">Video generation</a>
+  <a href="/nano-banana-api-pricing">Image generation</a>
   <a href="/model/kimi-k3">Kimi</a>
   <a href="/model/whisper-large-v3">Speech-to-text</a>
   <a href="/model/MinerU2.5-Pro">Document &amp; OCR</a>

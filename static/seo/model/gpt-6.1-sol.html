@@ -87,9 +87,10 @@ ul{margin:0 0 14px;padding-left:1.2em}
   <a class="btn btn-secondary" href="/compare">Compare API prices</a>
 </div>
 <h2>Overview</h2>
-<p>GPT-6.1 Sol on KeyoAPI is the updated Sol-class chat ID in the GPT-6 family. Indicative rates are about $0.37 / $1.84 per 1M in/out — the same band as gpt-6-sol; confirm live on <a href="/model/gpt-6.1-sol">the gpt-6.1-sol model page</a>. Use it as a production chat default, keep high-volume paths on gpt-6-luna, and escalate stubborn jobs to gpt-6-astra. Call via OpenAI-compatible POST /v1/chat/completions at https://www.keyoapi.xyz/v1.</p>
+<p>GPT-6.1 Sol on KeyoAPI is the updated Sol-class chat ID in the GPT-6 family. Indicative rates are about $0.37 / $1.84 per 1M in/out — the same band as gpt-6-sol; confirm live on this page. Use it as a production chat default, keep high-volume paths on gpt-6-luna, and escalate stubborn jobs to gpt-6-astra. Call via OpenAI-compatible POST /v1/chat/completions at https://www.keyoapi.xyz/v1.</p>
 
 <h2>GPT 6.1 Sol pricing and a request-cost example</h2>
+
 <p>The public KeyoAPI catalog checked on 2026-10-13 lists default-group rates of $0.3677 per million input tokens and $1.8385 per million output tokens. These are KeyoAPI sell rates, not official OpenAI list prices. Other billing groups can apply a multiplier; confirm your active group and current rates on <a href="/pricing">the pricing page</a>.</p>
 <p>For 10,000 input tokens and 2,000 output tokens, the ordinary token estimate is 0.01 × $0.3677 + 0.002 × $1.8385 = $0.007354. A thousand requests with that identical mix total about $7.354 before retries, cached-token adjustments or extra modalities. Use actual response usage when calculating a production budget.</p>
 
@@ -97,7 +98,9 @@ ul{margin:0 0 14px;padding-left:1.2em}
 
 
 
+
 <h2>GPT-6.1 Sol vs GPT-6 Astra</h2>
+
 <p>Astra lists $1.8385 input and $9.1925 output per million tokens in the checked default group. Sol therefore costs one fifth as much per input or output token. The same 10,000-input and 2,000-output example costs $0.036770 on Astra. The complete table and evaluation checklist are on <a href="/gpt-6-1-sol-vs-gpt-6-astra">GPT-6.1 Sol vs GPT-6 Astra</a>.</p>
 <p>Choose using accepted task results, not the model names alone. Compare identical prompts, correctness, latency, output lengths and retries. Start a Sol evaluation on routine chat or structured work, then test Astra on cases that fail your acceptance checks. Higher unit prices do not by themselves prove better coding or reasoning quality.</p>
 
@@ -105,9 +108,12 @@ ul{margin:0 0 14px;padding-left:1.2em}
 
 
 
+
 <h2>Use the exact Sol model ID</h2>
+
 <p>GPT Sol 6.1 and GPT 6.1 Sol refer to gpt-6.1-sol in this catalog. Pass that exact ID to POST /v1/chat/completions; the words in a search phrase are not interchangeable API aliases. Check optional tool, streaming and context behavior on the channel you use before depending on those features.</p>
 <p>For an application workflow see <a href="/ai-agent-api">Build an AI agent with the KeyoAPI chat API</a>, <a href="/ai-story-api">Build an AI story generator with the chat API</a> or <a href="/study-ai-api">Build a study AI assistant with the chat API</a>. For a broader GPT-class token table see <a href="/openai-api-pricing">the OpenAI API pricing page</a>. These examples use the bare paid model ID; gift-credit eligibility is tied to eligible gift-credit IDs rather than automatically applied to every chat model.</p>
+
 
 
 
@@ -126,7 +132,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
 </div>
 <h2>FAQ</h2>
 <div class="faq"><details><summary>How is gpt-6.1-sol different from gpt-6-sol?</summary><p>Same Keyo price band (~$0.37 / $1.84 per 1M). gpt-6.1-sol is the newer Sol-class ID. Swap only the model string on the same Keyo key.</p></details>
-<details><summary>Where is live pricing?</summary><p>See <a href="/model/gpt-6.1-sol">the gpt-6.1-sol model page</a> and <a href="/compare">the model comparison page</a> for the static planning table.</p></details>
+<details><summary>Where is live pricing?</summary><p>See this page and <a href="/compare">the model comparison page</a> for the static planning table.</p></details>
 <details><summary>What does GPT 6.1 Sol cost?</summary><p>At the checked default-group rate: $0.3677 per million input tokens and $1.8385 per million output tokens. Check <a href="/pricing">the pricing page</a> for your current group and rates. See <a href="/gpt-6-1-sol-vs-gpt-6-astra">GPT-6.1 Sol vs GPT-6 Astra</a> for a worked cost comparison.</p></details></div>
 <h2>Related models</h2>
 <div class="grid"><a href="/model/gpt-6-sol">GPT-6 Sol API on KeyoAPI</a>

@@ -196,7 +196,7 @@ function linkifySitePaths(raw, currentPath) {
   let linked = s.replace(re, (m) => {
     const href = rewritePricingIdPath(m);
     if (currentPath && href === currentPath) {
-      return esc(pathLabel(href).replace(/^the\s+/, ""));
+      return "this page";
     }
     return `<a href="${href}">${esc(pathLabel(href))}</a>`;
   });
@@ -224,6 +224,12 @@ function linkifySitePaths(raw, currentPath) {
   linked = linked.replace(/\(\s+(<a\s+[^>]*>)/gi, "($1");
   // 8. Capitalize sentence-start lowercase "the": e.g. paragraph or sentence starting with "<a ...>the ..."
   linked = linked.replace(/(?:^|(?<=[.!?]\s+)|(?<=<p[^>]*>\s*))(<a\s+[^>]*>)the\b/g, "$1The");
+  // 9. Clean up references to "this page" & fix missing prepositions before sibling link
+  linked = linked.replace(/\bat\s+this\s+page\b/gi, "on this page");
+  linked = linked.replace(/\bthe\s+this\s+page\b/gi, "this page");
+  linked = linked.replace(/\bconfirm\s+this\s+page\b/gi, "confirm live rates on this page");
+  linked = linked.replace(/\bsibling\s+(<a\s+[^>]*>)the\s+/gi, "sibling on $1the ");
+  linked = linked.replace(/\bsibling\s+(<a\s+[^>]*>)/gi, "sibling on $1");
   return linked;
 }
 
@@ -377,7 +383,7 @@ function footer() {
   <a href="/pricing-list">Pricing list</a>
   <a href="/models">Model guides</a>
   <a href="/compare">Compare</a>
-  <a href="/free-models">Free models</a>
+  <a href="/free-models">Gift-credit models</a>
   <a href="/brand/blog/">Blog</a>
 ${landingLinks}
   <a href="/brand/keyo-docs.html">Docs</a>
@@ -569,15 +575,34 @@ ${m.codeBlocks ? m.codeBlocks.map((cb) => `
 </div>
 <h2>FAQ</h2>
 <div class="faq">${faqs}</div>
-${m.related.length ? `<h2>Related models</h2>\n${relatedLinks(m.related)}` : ""}
+${(m.related || []).filter((id) => id !== m.id && (!m.modelId || id !== m.modelId)).length ? `<h2>Related models</h2>\n${relatedLinks((m.related || []).filter((id) => id !== m.id && (!m.modelId || id !== m.modelId)))}` : ""}
 <p class="meta">Guide for <strong>${esc(m.modelId || m.id)}</strong>. Catalog: <a href="/pricing">the pricing page</a> · Rates: <a href="/pricing-list">the full pricing list</a>.</p>
 `;
+  // Generator-level defense: strip any circular self-links
+  let cleanBodyHtml = bodyHtml;
+  const selfPatterns = [
+    new RegExp(`<a\\s+[^>]*href=["'](?:https://www\\.keyoapi\\.xyz)?/model/${encodeURIComponent(m.id)}["'][^>]*>([\\s\\S]*?)<\\/a>`, "gi"),
+    new RegExp(`<a\\s+[^>]*href=["'](?:https://www\\.keyoapi\\.xyz)?${modelPath}["'][^>]*>([\\s\\S]*?)<\\/a>`, "gi"),
+  ];
+  if (m.modelId && m.modelId !== m.id) {
+    selfPatterns.push(
+      new RegExp(`<a\\s+[^>]*href=["'](?:https://www\\.keyoapi\\.xyz)?/model/${encodeURIComponent(m.modelId)}["'][^>]*>([\\s\\S]*?)<\\/a>`, "gi")
+    );
+  }
+  for (const pat of selfPatterns) {
+    cleanBodyHtml = cleanBodyHtml.replace(pat, "$1");
+  }
+  cleanBodyHtml = cleanBodyHtml.replace(new RegExp(`\\bthe\\s+${encodeURIComponent(m.id)}\\s+model\\s+page\\b`, "gi"), "this page");
+  cleanBodyHtml = cleanBodyHtml.replace(new RegExp(`\\b${encodeURIComponent(m.id)}\\s+model\\s+page\\b`, "gi"), "this page");
+  cleanBodyHtml = cleanBodyHtml.replace(/\\bat\\s+this\\s+page\\b/gi, "on this page");
+  cleanBodyHtml = cleanBodyHtml.replace(/\\bthe\\s+this\\s+page\\b/gi, "this page");
+
   return layout({
     title: m.title,
     description: m.metaDescription,
     canonical,
     h1: m.h1,
-    bodyHtml,
+    bodyHtml: cleanBodyHtml,
     jsonLd: {
       "@context": "https://schema.org",
       "@type": "SoftwareApplication",
@@ -595,6 +620,10 @@ ${m.related.length ? `<h2>Related models</h2>\n${relatedLinks(m.related)}` : ""}
 }
 
 function renderHome() {
+  const existingPath = path.join(outDir, "index.html");
+  if (fs.existsSync(existingPath)) {
+    return fs.readFileSync(existingPath, "utf8");
+  }
   // Conversion-first hero (matches keyo-home) + below-fold anchors.
   // OpenAI-compatible is a path fact, not a whole-catalog claim.
   const title =
@@ -824,7 +853,7 @@ function renderModelsIndex() {
 <div class="btnrow">
   <a class="btn btn-primary" href="/pricing">Browse Models</a>
   <a class="btn btn-secondary" href="/compare">Price comparison</a>
-  <a class="btn btn-secondary" href="/free-models">Free models</a>
+  <a class="btn btn-secondary" href="/free-models">Gift-credit models</a>
 </div>
 <h2>Headline price anchors</h2>
 <p class="meta">Full headline comparison (official list vs Keyo rates for every lane) lives on <a href="/compare">the model comparison page</a> — this index lists the guides themselves.</p>
@@ -855,12 +884,12 @@ ${contentGuideLinks()}
 
 function renderAbout() {
   const priceSample = priceRefs.compare_rows
-    .slice(0, 3)
+    .slice(0, 4)
     .map(
       (r) => `<tr>
   <td>${esc(r.capability)}</td>
   <td>${esc(r.official)}</td>
-  <td><span class="ok">${esc(r.keyo_price)}</span></td>
+  <td><a href="${featuredHref(r.keyo_model)}"><code>${esc(r.keyo_model)}</code></a><br/><span class="ok">${esc(r.keyo_price)}</span></td>
 </tr>`
     )
     .join("\n");
@@ -902,10 +931,12 @@ ${freeCards}
 </div>
 <h2>Model categories</h2>
 <div class="grid">
-  <a href="/model/gpt-5.6-terra">GPT-class chat</a>
-  <a href="/model/claude-sonnet-5">Claude-class reasoning</a>
-  <a href="/model/deepseek-v4-pro-0813">DeepSeek open models</a>
-  <a href="/model/glm-5.2">GLM</a>
+  <a href="/model/gpt-6-astra">GPT-class chat</a>
+  <a href="/model/claude-sonnet-5-5">Claude-class reasoning</a>
+  <a href="/model/deepseek-v4.1-flash">DeepSeek open models</a>
+  <a href="/model/glm-5.3">GLM</a>
+  <a href="/seedance-2-5-api-pricing">Video generation</a>
+  <a href="/nano-banana-api-pricing">Image generation</a>
   <a href="/model/kimi-k3">Kimi</a>
   <a href="/model/whisper-large-v3">Speech-to-text</a>
   <a href="/model/MinerU2.5-Pro">Document &amp; OCR</a>
@@ -921,11 +952,11 @@ ${freeCards}
 </div>
 `;
   return layout({
-    title: "About KeyoAPI — One Key for Chat, Speech, OCR & Digital Humans",
+    title: "About KeyoAPI — One Key for Chat, Image, Video, Speech, OCR & Digital Humans",
     description:
-      "KeyoAPI is an AI API relay: chat, image and speech are OpenAI-compatible; OCR, vision, TTS-async and digital-human models use dedicated REST paths — same key, same prepaid balance, with gift-credit IDs (new users: $10; per invite: $3).",
+      "KeyoAPI is an AI API relay: chat, image, video and speech endpoints; OCR, vision, TTS-async and digital-human models use dedicated REST paths — same key, same prepaid balance, with gift-credit IDs (new users: $10; per invite: $3).",
     canonical: `${site}/about`,
-    h1: "One key for chat, speech, OCR & digital humans",
+    h1: "One key for chat, image, video, speech, OCR & digital humans",
     bodyHtml,
     jsonLd: {
       "@context": "https://schema.org",
@@ -933,7 +964,7 @@ ${freeCards}
       name: "About KeyoAPI",
       url: `${site}/about`,
       description:
-        "About KeyoAPI — prepaid AI API gateway with OpenAI-compatible chat/image/speech and dedicated REST for OCR, vision and avatars.",
+        "About KeyoAPI — prepaid AI API gateway with OpenAI-compatible chat, image, video, speech and dedicated REST for OCR, vision and avatars.",
     },
   });
 }
@@ -1087,7 +1118,7 @@ ${contentGuideLinks("cost-guide")}
   return layout({
     title: "AI API Pricing List - KeyoAPI Models & Rates",
     description:
-      "KeyoAPI pricing list: gift-credit models plus GPT-class, Claude-class, Whisper, OCR, vision, TTS model IDs with indicative USD rates.",
+      "KeyoAPI pricing list: gift-credit models plus GPT-class, Claude-class, video generation, Whisper, OCR, vision, TTS model IDs with indicative USD rates.",
     canonical: `${site}/pricing-list`,
     h1: "AI API Pricing List: Models, Rates & Endpoints",
     bodyHtml,
@@ -1215,7 +1246,7 @@ ${rows}
 /** Brand-aware related links — avoid one TTS boilerplate on every LLM hub. */
 function landingRelatedLinks(slug) {
   const base =
-    '<a href="/compare">the model comparison page</a>, <a href="/free-models">the free models page</a>, <a href="/pricing-list">the full pricing list</a>';
+    '<a href="/compare">the model comparison page</a>, <a href="/free-models">the gift-credit models page</a>, <a href="/pricing-list">the full pricing list</a>';
   const bySlug = {
     "tts-api":
       `${base}, and <a href="/model/CosyVoice3">CosyVoice3 API</a> · <a href="/voice-cloning-api">Voice cloning</a> · <a href="/model/IndexTTS-2">IndexTTS-2</a>`,
@@ -1401,7 +1432,7 @@ function renderPricingLanding(p) {
   <a class="btn btn-primary" href="/sign-up">Get API key</a>
   <a class="btn btn-secondary" href="/pricing">Open Model Square</a>
   <a class="btn btn-secondary" href="/pricing-list">Full pricing list</a>
-  <a class="btn btn-secondary" href="/free-models">Free models</a>
+  <a class="btn btn-secondary" href="/free-models">Gift-credit models</a>
 </div>
 ${LANDING_EXTRA_SECTIONS[p.slug] || ""}
 <h2>${esc(tableHeading)}</h2>
@@ -1501,7 +1532,7 @@ function fileLastmod(absPath) {
 }
 
 function contentHash(raw) {
-  return crypto.createHash("sha256").update(String(raw)).digest("hex").slice(0, 16);
+  return crypto.createHash("sha256").update(String(raw).replace(/\r\n/g, "\n")).digest("hex").slice(0, 16);
 }
 
 /** Keep lastmod stable across regenerations unless page content hash changes. */

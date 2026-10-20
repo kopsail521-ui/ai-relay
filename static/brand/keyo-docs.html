@@ -718,6 +718,19 @@
         </div>
         <p class="hint" data-i18n-html="allModelsHint"></p>
         <p class="hint" data-i18n-html="chatHint"></p>
+        <div class="endpoint">
+          <span class="method">POST</span>
+          <span class="path">/v1/messages</span>
+          <button type="button" class="btn-copy" data-copy="https://www.keyoapi.xyz/v1/messages" data-i18n="copyUrl"></button>
+        </div>
+        <div class="code-block">
+          <div class="code-bar">
+            <span class="lang">cURL · Anthropic / Claude Code</span>
+            <button type="button" class="btn-copy" data-copy-target="curl-messages" data-i18n="copy"></button>
+          </div>
+          <pre id="curl-messages"></pre>
+        </div>
+        <p class="hint" data-i18n-html="messagesHint"></p>
       </section>
 
       <section id="image">
@@ -821,13 +834,15 @@
 <tr><td class="model"><button type="button" class="model-btn" data-copy="MiniMax-H3">MiniMax-H3</button></td><td>480p / 768p / 1080p</td><td>5s / 6s</td><td data-i18n="nMinimaxH3"></td></tr>
 <tr><td class="model"><button type="button" class="model-btn" data-copy="flux-3-video">flux-3-video</button></td><td>draft / hd / fhd</td><td>5s</td><td data-i18n="nFluxVideo"></td></tr>
 <tr><td class="model"><button type="button" class="model-btn" data-copy="wan3.0-video">wan3.0-video</button></td><td>480P / 720P / 1080P</td><td>5s</td><td data-i18n="nWanVideo"></td></tr>
-<tr><td class="model"><button type="button" class="model-btn" data-copy="agnes-video-2.5">agnes-video-2.5</button></td><td>720p / 1080p / 2k</td><td>5s</td><td data-i18n="nAgnesVideo"></td></tr>
+<tr><td class="model"><button type="button" class="model-btn" data-copy="agnes-video-2.5">agnes-video-2.5</button></td><td>720p / 1080p / 2k</td><td>1–12s (default 5s)</td><td data-i18n="nAgnesVideo"></td></tr>
 <tr><td class="model"><button type="button" class="model-btn" data-copy="video-enhance-pro">video-enhance-pro</button></td><td>720p / 1080p (default) / 2k</td><td>Input duration</td><td data-i18n="nVideoEnhance"></td></tr>
 <tr><td class="model"><button type="button" class="model-btn" data-copy="subtitle-erase-pro">subtitle-erase-pro</button></td><td>Native resolution</td><td>Input duration</td><td data-i18n="nSubtitleErase"></td></tr>
             </tbody>
           </table>
         </div>
 
+        <div class="endpoint"><span class="method">POST</span><span class="path">/v1/async/videos/enhance</span><button type="button" class="btn-copy" data-copy="https://www.keyoapi.xyz/v1/async/videos/enhance" data-i18n="copyUrl"></button></div>
+        <div class="endpoint"><span class="method">POST</span><span class="path">/v1/async/videos/subtitle-erase</span><button type="button" class="btn-copy" data-copy="https://www.keyoapi.xyz/v1/async/videos/subtitle-erase" data-i18n="copyUrl"></button></div>
         <p class="hint" data-i18n-html="videoTaskHint"></p>
         <div class="endpoint"><span class="method">GET</span><span class="path">/v1/tasks/{id}</span></div>
         <div class="code-block">
@@ -957,6 +972,8 @@
 <script>
 const I18N = {
   "en": {
+    "messagesHint": "Anthropic Messages format (Claude Code / Anthropic SDK). Set <code>ANTHROPIC_BASE_URL=https://www.keyoapi.xyz</code>. Accepts both <code>x-api-key: YOUR_KEY</code> and <code>Authorization: Bearer YOUR_KEY</code> with header <code>anthropic-version: 2023-06-01</code>.",
+
     "title": "KeyoAPI Docs",
     "docTitle": "KeyoAPI Integration Docs",
     "heroSub": "One Base URL + one API Key. OpenAI-compatible — works with Cursor, ChatBox, and official SDKs.",
@@ -1065,6 +1082,8 @@ const I18N = {
     "manualCta": "Open handbook →"
   },
   "zhCN": {
+    "messagesHint": "Anthropic Messages 原生格式（适用于 Claude Code / Anthropic SDK）。设置 <code>ANTHROPIC_BASE_URL=https://www.keyoapi.xyz</code>。支持 <code>x-api-key: YOUR_KEY</code> 与 <code>Authorization: Bearer YOUR_KEY</code>，需携带 <code>anthropic-version: 2023-06-01</code> 请求头。",
+
     "title": "KeyoAPI 接入文档",
     "docTitle": "KeyoAPI 接入文档",
     "heroSub": "一个 Base URL + 一把 API Key，兼容 OpenAI 协议。可直接用于 Cursor、ChatBox 与官方 SDK。",
@@ -1173,6 +1192,8 @@ const I18N = {
     "manualCta": "打开手册 →"
   },
   "zhTW": {
+    "messagesHint": "Anthropic Messages 原生格式（適用於 Claude Code / Anthropic SDK）。設定 <code>ANTHROPIC_BASE_URL=https://www.keyoapi.xyz</code>。支援 <code>x-api-key: YOUR_KEY</code> 與 <code>Authorization: Bearer YOUR_KEY</code>，需攜帶 <code>anthropic-version: 2023-06-01</code> 標頭。",
+
     "title": "KeyoAPI 接入文件",
     "docTitle": "KeyoAPI 接入文件",
     "heroSub": "一個 Base URL + 一把 API Key，相容 OpenAI 協定。可直接用於 Cursor、ChatBox 與官方 SDK。",
@@ -1259,6 +1280,8 @@ const I18N = {
     "manualCta": "開啟手冊 →"
   },
   "ja": {
+    "messagesHint": "Anthropic Messages 形式（Claude Code / Anthropic SDK 対応）。<code>ANTHROPIC_BASE_URL=https://www.keyoapi.xyz</code> を設定。<code>x-api-key: YOUR_KEY</code> または <code>Authorization: Bearer YOUR_KEY</code>（<code>anthropic-version: 2023-06-01</code>）をサポート。",
+
     "title": "KeyoAPI ドキュメント",
     "docTitle": "KeyoAPI 連携ドキュメント",
     "heroSub": "1つの Base URL と 1つの API Key。OpenAI 互換で Cursor / ChatBox / 公式 SDK にそのまま使えます。",
@@ -1345,6 +1368,8 @@ const I18N = {
     "manualCta": "ハンドブックを開く →"
   },
   "fr": {
+    "messagesHint": "Format Anthropic Messages (Claude Code / SDK Anthropic). Définissez <code>ANTHROPIC_BASE_URL=https://www.keyoapi.xyz</code>. Accepte <code>x-api-key: YOUR_KEY</code> et <code>Authorization: Bearer YOUR_KEY</code> avec l’en-tête <code>anthropic-version: 2023-06-01</code>.",
+
     "title": "Docs KeyoAPI",
     "docTitle": "Documentation d’intégration KeyoAPI",
     "heroSub": "Une Base URL + une clé API. Compatible OpenAI — Cursor, ChatBox et SDK officiels.",
@@ -1431,6 +1456,8 @@ const I18N = {
     "manualCta": "Ouvrir le manuel →"
   },
   "ru": {
+    "messagesHint": "Формат Anthropic Messages (для Claude Code / Anthropic SDK). Укажите <code>ANTHROPIC_BASE_URL=https://www.keyoapi.xyz</code>. Поддерживает <code>x-api-key: YOUR_KEY</code> и <code>Authorization: Bearer YOUR_KEY</code> с заголовком <code>anthropic-version: 2023-06-01</code>.",
+
     "title": "Документация KeyoAPI",
     "docTitle": "Документация по подключению KeyoAPI",
     "heroSub": "Один Base URL + один API Key. Совместимо с OpenAI — Cursor, ChatBox и официальные SDK.",
@@ -1517,6 +1544,8 @@ const I18N = {
     "manualCta": "Открыть справочник →"
   },
   "vi": {
+    "messagesHint": "Định dạng Anthropic Messages (cho Claude Code / Anthropic SDK). Đặt <code>ANTHROPIC_BASE_URL=https://www.keyoapi.xyz</code>. Hỗ trợ <code>x-api-key: YOUR_KEY</code> và <code>Authorization: Bearer YOUR_KEY</code> với header <code>anthropic-version: 2023-06-01</code>.",
+
     "title": "Tài liệu KeyoAPI",
     "docTitle": "Tài liệu tích hợp KeyoAPI",
     "heroSub": "Một Base URL + một API Key. Tương thích OpenAI — dùng với Cursor, ChatBox và SDK chính thức.",
@@ -1737,6 +1766,14 @@ function renderSamples(dict) {
   const videoTask = document.getElementById('curl-video-task');
   if (videoTask) {
     videoTask.textContent = 'curl https://www.keyoapi.xyz/v1/tasks/task_TASK_ID \\\n  -H "Authorization: Bearer ' + key + '"';
+  }
+  const messages = document.getElementById('curl-messages');
+  if (messages) {
+    messages.innerHTML = '<code><span class="tok-cmd">curl</span> https://www.keyoapi.xyz/v1/messages \\\n' +
+      '  -H <span class="tok-str">"x-api-key: ' + escapeHtml(key) + '"</span> \\\n' +
+      '  -H <span class="tok-str">"anthropic-version: 2023-06-01"</span> \\\n' +
+      '  -H <span class="tok-str">"Content-Type: application/json"</span> \\\n' +
+      '  -d <span class="tok-str">\'{\\n    "model": "claude-sonnet-5-5",\\n    "max_tokens": 1024,\\n    "messages": [{"role":"user","content":"' + escapeHtml(hello) + '"}]\\n  }\'</span></code>';
   }
   if (models) {
     models.textContent = 'curl https://www.keyoapi.xyz/v1/models \\\n  -H "Authorization: Bearer ' + key + '"';

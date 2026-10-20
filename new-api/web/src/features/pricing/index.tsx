@@ -199,6 +199,13 @@ export function Pricing() {
                 'Discover curated AI models, compare pricing and capabilities, and choose the right model for every scenario.'
               )}
             </p>
+                        <div className='mx-auto mt-4 max-w-2xl rounded-xl border border-emerald-500/30 bg-emerald-500/10 p-3 text-center text-xs text-emerald-800 dark:text-emerald-300 sm:text-sm'>
+              🎁 <strong>{t('New user bonus:')}</strong>{' '}
+              {t('Register to get $10 welcome gift credits + $3 per invite — test gift-credit models (:free) with no credit card required!')}{' '}
+              <a href='/sign-up' className='ml-1 font-semibold underline underline-offset-2 hover:opacity-80'>
+                {t('Get started →')}
+              </a>
+            </div>
             <SearchBar
               value={searchInput}
               onChange={setSearchInput}

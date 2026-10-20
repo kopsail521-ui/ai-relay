@@ -84,7 +84,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
   <a class="btn btn-primary" href="/sign-up">Get API key</a>
   <a class="btn btn-secondary" href="/pricing">Open Model Square</a>
   <a class="btn btn-secondary" href="/pricing-list">Full pricing list</a>
-  <a class="btn btn-secondary" href="/free-models">Free models</a>
+  <a class="btn btn-secondary" href="/free-models">Gift-credit models</a>
 </div>
 
 <h2>OpenAI-compatible API: what works on one base URL</h2>
@@ -103,7 +103,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
   <td><code>GET /v1/models</code></td>
   <td class="ok">Yes</td>
   <td>Live catalog for the key</td>
-  <td>Confirm IDs before a bulk run · <a href="/free-models">the free models page</a></td>
+  <td>Confirm IDs before a bulk run · <a href="/free-models">the gift-credit models page</a></td>
 </tr>
 <tr>
   <td><code>POST /v1/images/generations</code></td>
@@ -243,7 +243,7 @@ console.log(r.choices[0].message.content);</pre>
 <details><summary>Is KeyoAPI's API OpenAI-compatible?</summary><p>Yes for the paths in the table above: point the official OpenAI SDK at https://www.keyoapi.xyz/v1 with your Keyo key. Chat, model listing, embeddings, image generation, OCR and speech-to-text take OpenAI-shaped requests.</p></details>
 <details><summary>Which endpoints are not OpenAI-compatible?</summary><p>/v1/audio/speech covers only part of the TTS catalog — Gemini TTS IDs use Gemini-native generateContent, and Qwen3-TTS / CosyVoice3 run on /v1/async/audio/speech. Visual processing, video, digital-human and document parsing jobs run on dedicated REST paths. Same key and balance, different URL shape; the live contract is in <a href="/brand/keyo-api-ref.html">the API endpoint reference</a>.</p></details>
 <details><summary>Do the native REST paths need a different API key?</summary><p>No. One prepaid key and one balance cover OpenAI-shaped calls and dedicated REST alike — see <a href="/free-models">the gift-credit models page</a> for the gift-credit IDs you can test with.</p></details></div>
-<p class="meta">Also see <a href="/compare">the model comparison page</a>, <a href="/free-models">the free models page</a>, <a href="/pricing-list">the full pricing list</a>, and <a href="/openai-api-pricing">OpenAI API pricing</a> · <a href="/model/gpt-6-astra">gpt-6-astra</a> · <a href="/model/deepseek-v4.1-flash">deepseek-v4.1-flash</a>.</p>
+<p class="meta">Also see <a href="/compare">the model comparison page</a>, <a href="/free-models">the gift-credit models page</a>, <a href="/pricing-list">the full pricing list</a>, and <a href="/openai-api-pricing">OpenAI API pricing</a> · <a href="/model/gpt-6-astra">gpt-6-astra</a> · <a href="/model/deepseek-v4.1-flash">deepseek-v4.1-flash</a>.</p>
 
 </main>
 <footer class="footer">
@@ -252,7 +252,7 @@ console.log(r.choices[0].message.content);</pre>
   <a href="/pricing-list">Pricing list</a>
   <a href="/models">Model guides</a>
   <a href="/compare">Compare</a>
-  <a href="/free-models">Free models</a>
+  <a href="/free-models">Gift-credit models</a>
   <a href="/brand/blog/">Blog</a>
   <a href="/gemini-api-pricing">Gemini pricing</a>
   <a href="/deepseek-api-pricing">DeepSeek pricing</a>

@@ -346,49 +346,25 @@ export const RULES = {
     endpoints: EP.tts,
     icon: "Gemini.Color",
   },
-  "seedance-2.0-1080p": {
+  "seedance-2.5": {
     vendor: "字节跳动",
     tag: "视频按秒",
     endpoints: EP.videoGen,
     icon: "Doubao.Color",
   },
-  "seedance-2.0-1080p-fast": {
+  "seedance-2.0": {
     vendor: "字节跳动",
     tag: "视频按秒",
     endpoints: EP.videoGen,
     icon: "Doubao.Color",
   },
-  "seedance-2.0-1080p-mini": {
+  "seedance-2.0-fast": {
     vendor: "字节跳动",
     tag: "视频按秒",
     endpoints: EP.videoGen,
     icon: "Doubao.Color",
   },
-  "seedance-2.5-1080p": {
-    vendor: "字节跳动",
-    tag: "视频按秒",
-    endpoints: EP.videoGen,
-    icon: "Doubao.Color",
-  },
-  "seedance-2.0-720p": {
-    vendor: "字节跳动",
-    tag: "视频按秒",
-    endpoints: EP.videoGen,
-    icon: "Doubao.Color",
-  },
-  "seedance-2.0-720p-fast": {
-    vendor: "字节跳动",
-    tag: "视频按秒",
-    endpoints: EP.videoGen,
-    icon: "Doubao.Color",
-  },
-  "seedance-2.0-720p-mini": {
-    vendor: "字节跳动",
-    tag: "视频按秒",
-    endpoints: EP.videoGen,
-    icon: "Doubao.Color",
-  },
-  "seedance-2.5-720p": {
+  "seedance-2.0-mini": {
     vendor: "字节跳动",
     tag: "视频按秒",
     endpoints: EP.videoGen,

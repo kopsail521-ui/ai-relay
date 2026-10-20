@@ -137,94 +137,6 @@
       "desc_zh": "通义万相 Wan 3.0 视频生成，按分辨率输出。"
     },
     {
-      "id": "seedance-2.0-1080p",
-      "vendor": "字节跳动",
-      "icon": "Doubao.Color",
-      "tag": "视频模型",
-      "billing": "settle_cost",
-      "sell_usd_per_second": 0.100599,
-      "model_price_usd": 0.100599,
-      "desc_zh": "seedance-2.0-1080p",
-      "markup": 1.365
-    },
-    {
-      "id": "seedance-2.0-1080p-fast",
-      "vendor": "字节跳动",
-      "icon": "Doubao.Color",
-      "tag": "视频模型",
-      "billing": "settle_cost",
-      "sell_usd_per_second": 0.0754,
-      "model_price_usd": 0.0754,
-      "desc_zh": "seedance-2.0-1080p-fast",
-      "markup": 1.382953
-    },
-    {
-      "id": "seedance-2.0-1080p-mini",
-      "vendor": "字节跳动",
-      "icon": "Doubao.Color",
-      "tag": "视频模型",
-      "billing": "settle_cost",
-      "sell_usd_per_second": 0.050112,
-      "model_price_usd": 0.050112,
-      "desc_zh": "seedance-2.0-1080p-mini",
-      "markup": 1.365
-    },
-    {
-      "id": "seedance-2.5-1080p",
-      "vendor": "字节跳动",
-      "icon": "Doubao.Color",
-      "tag": "视频模型",
-      "billing": "settle_cost",
-      "sell_usd_per_second": 0.137996,
-      "model_price_usd": 0.137996,
-      "desc_zh": "seedance-2.5-1080p",
-      "markup": 1.365
-    },
-    {
-      "id": "seedance-2.0-720p",
-      "vendor": "字节跳动",
-      "icon": "Doubao.Color",
-      "tag": "视频模型",
-      "billing": "settle_cost",
-      "sell_usd_per_second": 0.096165,
-      "model_price_usd": 0.096165,
-      "desc_zh": "seedance-2.0-720p",
-      "markup": 1.3
-    },
-    {
-      "id": "seedance-2.0-720p-fast",
-      "vendor": "字节跳动",
-      "icon": "Doubao.Color",
-      "tag": "视频模型",
-      "billing": "settle_cost",
-      "sell_usd_per_second": 0.074794,
-      "model_price_usd": 0.074794,
-      "desc_zh": "seedance-2.0-720p-fast",
-      "markup": 1.3
-    },
-    {
-      "id": "seedance-2.0-720p-mini",
-      "vendor": "字节跳动",
-      "icon": "Doubao.Color",
-      "tag": "视频模型",
-      "billing": "settle_cost",
-      "sell_usd_per_second": 0.049863,
-      "model_price_usd": 0.049863,
-      "desc_zh": "seedance-2.0-720p-mini",
-      "markup": 1.3
-    },
-    {
-      "id": "seedance-2.5-720p",
-      "vendor": "字节跳动",
-      "icon": "Doubao.Color",
-      "tag": "视频模型",
-      "billing": "settle_cost",
-      "sell_usd_per_second": 0.133562,
-      "model_price_usd": 0.133562,
-      "desc_zh": "seedance-2.5-720p",
-      "markup": 1.3
-    },
-    {
       "id": "agnes-video-2.5",
       "vendor": "Agnes AI",
       "icon": "Custom",
@@ -242,88 +154,64 @@
       "id": "seedance-2.5",
       "vendor": "字节跳动",
       "icon": "Doubao.Color",
-      "tag": "视频模型",
+      "tag": "视频按秒",
       "billing": "settle_cost",
-      "sell_usd_per_second": 0.124479,
-      "model_price_usd": 0.124479,
-      "desc_zh": "seedance-2.5",
+      "sell_usd_per_second": 0.133562,
+      "model_price_usd": 0.133562,
+      "tier_sell_usd_per_second": {
+        "480p": 0.124479,
+        "720p": 0.133562,
+        "1080p": 0.137996
+      },
+      "desc_zh": "字节 Seedance 2.5 视频生成大模型。新一代高保真长时长视频生成，单次最高30秒，支持多模态参考与480p ($0.124479/秒) / 720p ($0.133562/秒) / 1080p ($0.137996/秒) 多分辨率按秒计费。",
       "markup": 1.3
     },
     {
       "id": "seedance-2.0",
       "vendor": "字节跳动",
       "icon": "Doubao.Color",
-      "tag": "视频模型",
+      "tag": "视频按秒",
       "billing": "settle_cost",
-      "sell_usd_per_second": 0.085479,
-      "model_price_usd": 0.085479,
-      "desc_zh": "seedance-2.0",
+      "sell_usd_per_second": 0.096165,
+      "model_price_usd": 0.096165,
+      "tier_sell_usd_per_second": {
+        "480p": 0.085479,
+        "720p": 0.096165,
+        "1080p": 0.100599
+      },
+      "desc_zh": "字节 Seedance 2.0 标准满血版视频生成模型。高保真运动控制，主体一致性强，支持480p ($0.085479/秒) / 720p ($0.096165/秒) / 1080p ($0.100599/秒) 多分辨率按秒计费。",
       "markup": 1.3
     },
     {
       "id": "seedance-2.0-fast",
       "vendor": "字节跳动",
       "icon": "Doubao.Color",
-      "tag": "视频模型",
+      "tag": "视频按秒",
       "billing": "settle_cost",
-      "sell_usd_per_second": 0.06411,
-      "model_price_usd": 0.06411,
-      "desc_zh": "seedance-2.0-fast",
+      "sell_usd_per_second": 0.074794,
+      "model_price_usd": 0.074794,
+      "tier_sell_usd_per_second": {
+        "480p": 0.06411,
+        "720p": 0.074794,
+        "1080p": 0.0754
+      },
+      "desc_zh": "字节 Seedance 2.0 Fast 极速版视频生成模型。更快出片效率，适合快速试错、迭代预览，支持480p ($0.064110/秒) / 720p ($0.074794/秒) / 1080p ($0.075400/秒) 多分辨率按秒计费。",
       "markup": 1.3
     },
     {
       "id": "seedance-2.0-mini",
       "vendor": "字节跳动",
       "icon": "Doubao.Color",
-      "tag": "视频模型",
+      "tag": "视频按秒",
       "billing": "settle_cost",
-      "sell_usd_per_second": 0.032055,
-      "model_price_usd": 0.032055,
-      "desc_zh": "seedance-2.0-mini",
-      "markup": 1.3
-    },
-    {
-      "id": "seedance-2.5-480p",
-      "vendor": "字节跳动",
-      "icon": "Doubao.Color",
-      "tag": "视频模型",
-      "billing": "settle_cost",
-      "sell_usd_per_second": 0.124479,
-      "model_price_usd": 0.124479,
-      "desc_zh": "seedance-2.5-480p",
-      "markup": 1.3
-    },
-    {
-      "id": "seedance-2.0-480p",
-      "vendor": "字节跳动",
-      "icon": "Doubao.Color",
-      "tag": "视频模型",
-      "billing": "settle_cost",
-      "sell_usd_per_second": 0.085479,
-      "model_price_usd": 0.085479,
-      "desc_zh": "seedance-2.0-480p",
-      "markup": 1.3
-    },
-    {
-      "id": "seedance-2.0-480p-fast",
-      "vendor": "字节跳动",
-      "icon": "Doubao.Color",
-      "tag": "视频模型",
-      "billing": "settle_cost",
-      "sell_usd_per_second": 0.06411,
-      "model_price_usd": 0.06411,
-      "desc_zh": "seedance-2.0-480p-fast",
-      "markup": 1.3
-    },
-    {
-      "id": "seedance-2.0-480p-mini",
-      "vendor": "字节跳动",
-      "icon": "Doubao.Color",
-      "tag": "视频模型",
-      "billing": "settle_cost",
-      "sell_usd_per_second": 0.032055,
-      "model_price_usd": 0.032055,
-      "desc_zh": "seedance-2.0-480p-mini",
+      "sell_usd_per_second": 0.049863,
+      "model_price_usd": 0.049863,
+      "tier_sell_usd_per_second": {
+        "480p": 0.032055,
+        "720p": 0.049863,
+        "1080p": 0.050112
+      },
+      "desc_zh": "字节 Seedance 2.0 Mini 轻量经济版视频生成模型。大幅降低生成成本，适合短镜头、大批量调用，支持480p ($0.032055/秒) / 720p ($0.049863/秒) / 1080p ($0.050112/秒) 多分辨率按秒计费。",
       "markup": 1.3
     }
   ]

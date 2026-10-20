@@ -1605,7 +1605,7 @@ function renderSamples(dict) {
     chat.innerHTML = '<code><span class="tok-cmd">curl</span> https://www.keyoapi.xyz/v1/chat/completions \\\n' +
       '  -H <span class="tok-str">"Authorization: Bearer ' + escapeHtml(key) + '"</span> \\\n' +
       '  -H <span class="tok-str">"Content-Type: application/json"</span> \\\n' +
-      '  -d <span class="tok-str">\'{\n    "model": "gpt-5.6-luna",\n    "messages": [{"role":"user","content":"' + escapeHtml(hello) + '"}]\n  }\'</span></code>';
+      '  -d <span class="tok-str">\'{\n    "model": "Atria-dawn-v2:free", // uses your $10 welcome bonus\n    "messages": [{"role":"user","content":"' + escapeHtml(hello) + '"}]\n  }\'</span></code>';
   }
   if (image) {
     image.innerHTML = '<code><span class="tok-cmd">curl</span> https://www.keyoapi.xyz/v1/images/generations \\\n' +
@@ -1632,7 +1632,7 @@ function renderSamples(dict) {
       '    api_key=<span class="tok-str">"' + escapeHtml(key) + '"</span>,\n' +
       ')\n' +
       'r = client.chat.completions.create(\n' +
-      '    model=<span class="tok-str">"gpt-5.6-luna"</span>,\n' +
+      '    model=<span class="tok-str">"Atria-dawn-v2:free"</span>,  # covered by $10 welcome bonus\n' +
       '    messages=[{<span class="tok-str">"role"</span>: <span class="tok-str">"user"</span>, <span class="tok-str">"content"</span>: <span class="tok-str">"' + escapeHtml(hello) + '"</span>}],\n' +
       ')\n' +
       'print(r.choices[0].message.content)</code>';

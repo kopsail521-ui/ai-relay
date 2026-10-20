@@ -18,291 +18,675 @@
 <meta name="twitter:description" content="One API key for chat, image, speech, OCR, vision and avatars — OpenAI-compatible on chat/image/speech paths; dedicated REST for the rest." />
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"KeyoAPI","url":"https://www.keyoapi.xyz","description":"Prepaid AI API gateway: OpenAI-compatible chat/image/speech plus dedicated REST for OCR, vision, TTS and digital humans — one key, one balance.","applicationCategory":"DeveloperApplication","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}</script>
 <script defer src="/brand/keyo-track.js"></script>
-<style>.wrap{max-width:880px;margin:0 auto;padding:28px 24px 48px}
-.footer{display:flex;flex-wrap:wrap;gap:10px 16px;max-width:1080px;margin:0 auto;padding:24px 24px 40px;border-top:1px solid var(--line);font-size:13px;color:var(--muted)}
-.footer a{color:var(--ink-2);text-decoration:none}
-.footer a:hover{color:var(--ink)}
-h1{font-size:clamp(1.7rem,3.1vw,2.35rem);line-height:1.18;letter-spacing:-.035em;margin:0 0 14px;font-weight:600;text-wrap:balance}
-h2{font-size:1.15rem;margin:28px 0 10px;letter-spacing:-.02em}
-p{margin:0 0 14px;color:var(--ink)}
-.lead{font-size:1.02rem;color:var(--ink-2);line-height:1.55;text-wrap:pretty}
-.meta{font-size:14px;color:var(--muted);margin:0 0 18px}
-.btnrow{display:flex;flex-wrap:wrap;gap:10px;margin:18px 0 28px}
-.btn,.k-btn{display:inline-block;padding:10px 16px;border-radius:var(--radius);font-weight:600;font-size:14px;text-decoration:none;line-height:1.2}
-.btn-primary,.k-btn-primary{background:var(--ink);color:#f6f5f1}
-.btn-primary:hover,.k-btn-primary:hover{background:#000;color:#f6f5f1;text-decoration:none}
-.btn-secondary,.k-btn-secondary{background:transparent;color:var(--ink);border:1px solid var(--line-strong,#c9c4b8)}
-.btn-secondary:hover,.k-btn-secondary:hover{border-color:var(--ink);text-decoration:none}
-.btn-link,.k-btn-link{background:transparent;color:var(--link);padding-inline:8px}
-.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:16px 18px;margin:16px 0}
-pre,code{font-family:var(--mono)}
-pre{background:var(--panel);color:var(--panel-ink);padding:14px 16px;border-radius:var(--radius);overflow:auto;font-size:13px}
-pre code{background:transparent;padding:0;color:inherit;font-size:inherit;border-radius:0}
-table{width:100%;border-collapse:collapse;font-size:14px;background:var(--surface)}
-.table-scroll{overflow-x:auto;margin:16px 0}
-.table-scroll table{min-width:620px}
-th,td{border:1px solid var(--line);padding:10px 12px;text-align:left;vertical-align:top}
-th{background:color-mix(in srgb,var(--line) 40%,var(--surface));font-weight:600}
-.ok{color:var(--ok);font-weight:600}
-.grid{display:grid;gap:10px;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));margin:16px 0}
-.grid a{display:flex;flex-direction:column;justify-content:center;gap:4px;min-height:4.5rem;padding:12px 14px;border:1px solid var(--line);border-radius:var(--radius);background:var(--surface);color:var(--ink);text-decoration:none;font-weight:500;line-height:1.35}
-.grid a:hover{border-color:var(--ink)}
-.grid a .grid-title{font-weight:600;overflow-wrap:anywhere}
-.grid a .grid-meta{color:var(--muted);font-size:13px;font-weight:500}
-.grid a code{font-size:12.5px;background:transparent;padding:0}
-ul{margin:0 0 14px;padding-left:1.2em}
-.faq details{border:1px solid var(--line);border-radius:var(--radius);padding:12px 14px;margin:0 0 10px;background:var(--surface)}
-.faq summary{cursor:pointer;font-weight:600}
-.surfaces{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));margin:16px 0 8px}
-.surf{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:14px 16px;font-size:14px}
-.surf h3{font-size:15px;margin:0 0 8px}
-.surf ul{margin:0;padding-left:1.15em;color:var(--muted)}
-.panel{background:var(--panel);color:var(--panel-ink);border-radius:var(--radius);padding:18px;text-align:left;font-family:var(--mono);font-size:12.5px;overflow:auto;border:1px solid #2a2924}
-.panel .label{color:#b9b6ab;margin-bottom:5px;font-size:11px;letter-spacing:.06em;text-transform:uppercase}
-.panel .label+.label{margin-top:14px}
-.hero{max-width:1080px;margin:0 auto;padding:48px 24px 8px}
-.inner{display:grid;grid-template-columns:minmax(0,1.28fr) minmax(280px,.78fr);gap:36px 40px;align-items:stretch;max-width:none;width:100%}
-.inner>div:first-child{display:flex;flex-direction:column;justify-content:center;min-width:0}
-.hero h1{font-size:clamp(1.7rem,3.1vw,2.35rem);line-height:1.18;letter-spacing:-.035em;margin:0 0 12px;font-weight:600;text-align:left;text-wrap:balance}
-.hero .sub{font-size:clamp(.95rem,1.35vw,1.02rem);color:var(--ink-2);margin:0 0 22px;max-width:none;line-height:1.55;text-align:left;text-wrap:pretty}
-.actions{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:0}
-.btn{border-radius:var(--radius)}
-.btn-secondary{background:transparent}
-.panel{font-family:var(--mono);border-radius:var(--radius);border:1px solid #2a2924;margin:0}
-.surfaces{margin-top:8px}
-.surfaces .surf{background:var(--surface)}
-.surf code{font-family:var(--mono)}
-.content{max-width:1080px;margin:0 auto;padding:36px 24px 56px}
-.content > h2:first-child{margin-top:0}
-.grid a{border-radius:var(--radius);background:var(--surface)}
-.grid a:hover{border-color:var(--ink)}
-pre{background:var(--panel);color:var(--panel-ink);border-radius:var(--radius);font-family:var(--mono)}
-.foot{max-width:1080px;margin:0 auto;padding:24px 24px 40px;border-top:1px solid var(--line);font-size:13px;color:var(--muted)}
-.frow{display:flex;flex-wrap:wrap;gap:10px 14px;margin-bottom:12px}
-.compare-jump{margin:8px 0 28px}
-@media (max-width:820px){.inner{grid-template-columns:1fr;gap:28px}.hero{padding:28px 20px 8px}.content{padding:24px 20px 48px}}
+<style>
+/* ── Design System Tokens ── */
+:root {
+  --bg: #f7f6f2;
+  --surface: #ffffff;
+  --surface-raised: #fbfaf7;
+  --ink: #161513;
+  --ink-2: #3a3833;
+  --muted: #696760;
+  --line: #e2ded5;
+  --line-strong: #c8c3b7;
+  --accent: #1e564a;
+  --accent-soft: rgba(30, 86, 74, 0.08);
+  --accent-hover: #153e35;
+  --panel-bg: #151513;
+  --panel-ink: #eeece6;
+  --panel-muted: #959287;
+  --panel-line: #272622;
+  --ok: #1e564a;
+  --font-display: 'Iowan Old Style', 'Charter', Georgia, Cambria, serif;
+  --font-body: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --font-mono: ui-monospace, 'JetBrains Mono', 'SF Mono', Menlo, Consolas, monospace;
+  --radius-sm: 6px;
+  --radius: 10px;
+  --radius-lg: 14px;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 15px;
+  line-height: 1.6;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+img, svg { display: block; max-width: 100%; }
+a { color: inherit; text-decoration: none; transition: color 0.15s ease, border-color 0.15s ease; }
+code { font-family: var(--font-mono); font-size: 0.9em; background: rgba(0,0,0,0.04); padding: 0.15em 0.4em; border-radius: 4px; }
+pre code { background: transparent; padding: 0; }
+.num { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
+
+/* ── Container & Layout ── */
+.container { max-width: 1100px; margin-inline: auto; padding-inline: 24px; }
+.section { padding-block: 44px; }
+.section + .section { border-top: 1px solid var(--line); }
+
+/* ── Top Navigation ── */
+.k-nav {
+  position: sticky; top: 0; z-index: 50;
+  background: color-mix(in srgb, var(--bg) 88%, transparent);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--line);
+}
+.k-nav-inner {
+  display: flex; align-items: center; justify-content: space-between;
+  padding-block: 13px; gap: 16px;
+}
+.k-wordmark {
+  display: inline-flex; align-items: center; gap: 9px;
+  font-family: var(--font-display); font-size: 18px; font-weight: 700;
+  letter-spacing: -0.02em; color: var(--ink);
+}
+.k-wordmark img { width: 22px; height: 22px; border-radius: 5px; }
+.k-nav nav {
+  display: flex; align-items: center; gap: 20px; flex-wrap: wrap;
+}
+.k-nav nav a { font-size: 13.5px; color: var(--muted); font-weight: 500; }
+.k-nav nav a:hover { color: var(--ink); }
+.k-nav-cta {
+  display: inline-flex; align-items: center; justify-content: center;
+  padding: 6px 13px; border-radius: var(--radius-sm);
+  background: var(--ink); color: #f7f6f2 !important;
+  font-size: 13px; font-weight: 600; line-height: 1.2;
+}
+.k-nav-cta:hover { background: #000; }
+
+/* ── Buttons ── */
+.btn-group { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+.btn, .k-btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 7px;
+  padding: 9px 18px; border-radius: var(--radius-sm);
+  font-size: 14px; font-weight: 600; text-decoration: none; line-height: 1.25;
+  cursor: pointer; border: 1px solid transparent;
+  transition: all 0.15s ease;
+}
+.btn-primary, .k-btn-primary {
+  background: var(--ink); color: #f7f6f2; border-color: var(--ink);
+}
+.btn-primary:hover, .k-btn-primary:hover {
+  background: #000; border-color: #000; color: #f7f6f2;
+}
+.btn-secondary, .k-btn-secondary {
+  background: var(--surface); color: var(--ink); border-color: var(--line-strong);
+}
+.btn-secondary:hover, .k-btn-secondary:hover {
+  border-color: var(--ink); background: var(--surface-raised);
+}
+.btn-ghost {
+  background: transparent; color: var(--accent); padding-inline: 4px; font-size: 13.5px;
+}
+.btn-ghost:hover { color: var(--accent-hover); text-decoration: underline; }
+
+/* ── Hero: Compact Split Grid (No Giant H1) ── */
+.hero {
+  padding-block: 36px 40px;
+}
+.hero-split {
+  display: grid;
+  grid-template-columns: minmax(0, 1.22fr) minmax(320px, 0.95fr);
+  gap: 32px 36px;
+  align-items: center;
+}
+.hero-copy {
+  display: flex; flex-direction: column; justify-content: center;
+}
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 7px;
+  width: fit-content;
+  padding: 3px 10px; border-radius: 999px;
+  background: var(--accent-soft); border: 1px solid rgba(30, 86, 74, 0.15);
+  color: var(--accent); font-family: var(--font-mono); font-size: 11.5px;
+  letter-spacing: 0.04em; text-transform: uppercase; font-weight: 600;
+  margin-bottom: 12px;
+}
+.hero-badge .dot {
+  width: 6px; height: 6px; border-radius: 50%; background: var(--accent);
+}
+.hero h1 {
+  font-family: var(--font-display);
+  font-size: clamp(26px, 3.1vw, 36px);
+  line-height: 1.16;
+  letter-spacing: -0.025em;
+  font-weight: 700;
+  color: var(--ink);
+  margin: 0 0 12px;
+  text-wrap: balance;
+}
+.hero .sub {
+  font-size: 15px;
+  color: var(--ink-2);
+  line-height: 1.55;
+  margin: 0 0 20px;
+  max-width: 52ch;
+  text-wrap: pretty;
+}
+
+/* ── Hero Terminal Panel ── */
+.panel {
+  background: var(--panel-bg);
+  color: var(--panel-ink);
+  border-radius: var(--radius);
+  border: 1px solid var(--panel-line);
+  padding: 16px 18px;
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  line-height: 1.5;
+  box-shadow: 0 4px 20px -6px rgba(0,0,0,0.22);
+}
+.panel-header {
+  display: flex; align-items: center; gap: 6px;
+  padding-bottom: 10px; margin-bottom: 12px;
+  border-bottom: 1px solid var(--panel-line);
+}
+.panel-dot {
+  width: 8px; height: 8px; border-radius: 50%; background: #35342e;
+}
+.panel-title {
+  margin-left: 6px; font-size: 11px; color: var(--panel-muted); letter-spacing: 0.05em; text-transform: uppercase;
+}
+.panel .label {
+  color: var(--panel-muted);
+  font-size: 10.5px;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+.panel .label + .label { margin-top: 12px; }
+.panel .val {
+  color: #f3f1eb;
+  background: rgba(255,255,255,0.04);
+  padding: 4px 8px;
+  border-radius: 4px;
+  word-break: break-all;
+}
+
+/* ── Content Headings & Text ── */
+h2 {
+  font-family: var(--font-display);
+  font-size: clamp(20px, 2.4vw, 25px);
+  line-height: 1.25;
+  letter-spacing: -0.015em;
+  font-weight: 700;
+  margin: 0 0 6px;
+  color: var(--ink);
+}
+p { margin: 0 0 12px; }
+.meta { font-size: 13.5px; color: var(--muted); margin: 0 0 16px; line-height: 1.5; }
+.meta a { color: var(--ink); text-decoration: underline; text-underline-offset: 3px; }
+.meta a:hover { color: var(--accent); }
+
+/* ── Surfaces Cards ── */
+.surfaces {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+  gap: 16px;
+  margin-top: 14px;
+}
+.surf {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 18px 20px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+}
+.surf h3 {
+  font-size: 15px; font-weight: 700; margin: 0 0 10px; color: var(--ink);
+  display: flex; align-items: center; justify-content: space-between;
+}
+.surf ul {
+  margin: 0; padding-left: 18px; color: var(--ink-2); font-size: 13.5px;
+}
+.surf li { margin-bottom: 6px; }
+.surf li:last-child { margin-bottom: 0; }
+
+/* ── Modern Pricing Table ── */
+.table-wrap {
+  overflow-x: auto;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+  margin-top: 14px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+}
+table {
+  width: 100%; border-collapse: collapse; font-size: 13.5px; text-align: left;
+}
+th, td {
+  padding: 12px 14px; border-bottom: 1px solid var(--line); vertical-align: top;
+}
+th {
+  background: var(--surface-raised);
+  font-family: var(--font-mono); font-size: 11.5px; font-weight: 600;
+  color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em;
+}
+tbody tr:last-child td { border-bottom: none; }
+tbody tr:hover td { background: rgba(0,0,0,0.015); }
+.ok {
+  display: inline-block;
+  margin-top: 3px;
+  color: var(--ok);
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  font-weight: 600;
+}
+td a {
+  font-weight: 600; color: var(--ink); text-decoration: underline; text-underline-offset: 3px;
+}
+td a:hover { color: var(--accent); }
+.compare-jump { margin: 14px 0 0; font-size: 13.5px; font-weight: 600; }
+.compare-jump a { color: var(--accent); }
+.compare-jump a:hover { text-decoration: underline; }
+
+/* ── Model Cards Grids (Free & Featured) ── */
+.grid {
+  display: grid;
+  gap: 10px;
+  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  margin-top: 14px;
+}
+.grid a {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 4px;
+  min-height: 4.5rem;
+  padding: 12px 14px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+  color: var(--ink);
+  text-decoration: none;
+  font-weight: 500;
+  transition: all 0.15s ease;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.02);
+}
+.grid a:hover {
+  border-color: var(--ink);
+  transform: translateY(-1px);
+  box-shadow: 0 3px 8px rgba(0,0,0,0.04);
+}
+.grid a .grid-title {
+  font-weight: 600; font-size: 13.5px; overflow-wrap: anywhere; color: var(--ink);
+}
+.grid a .grid-meta {
+  color: var(--muted); font-size: 12.5px; font-weight: 400;
+}
+.grid a code {
+  font-size: 12.5px; background: transparent; padding: 0; color: var(--ink); font-weight: 600;
+}
+.badge-gift {
+  display: inline-block;
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-size: 11px;
+  font-weight: 600;
+  padding: 2px 7px;
+  border-radius: 4px;
+}
+
+/* ── Integrate Code Block ── */
+pre {
+  background: var(--panel-bg);
+  color: var(--panel-ink);
+  border-radius: var(--radius);
+  border: 1px solid var(--panel-line);
+  padding: 16px 18px;
+  overflow: auto;
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  line-height: 1.6;
+  margin: 14px 0 0;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+}
+
+/* ── Footer & SEO Anchor Clouds ── */
+.foot {
+  padding-block: 40px 56px;
+  border-top: 1px solid var(--line);
+  background: var(--surface-raised);
+}
+.foot-title {
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+  margin-bottom: 12px;
+}
+.frow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 14px;
+  margin-bottom: 24px;
+  font-size: 13px;
+}
+.frow a {
+  color: var(--ink-2);
+  text-decoration: none;
+  padding: 2px 0;
+  border-bottom: 1px solid transparent;
+}
+.frow a:hover {
+  color: var(--ink);
+  border-bottom-color: var(--ink);
+}
+.frow.model-cloud {
+  gap: 6px 12px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+}
+.frow.model-cloud a {
+  color: var(--muted);
+  background: var(--surface);
+  padding: 3px 7px;
+  border-radius: 4px;
+  border: 1px solid var(--line);
+}
+.frow.model-cloud a:hover {
+  color: var(--ink);
+  border-color: var(--ink);
+  background: #fff;
+}
+.foot-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding-top: 20px;
+  margin-top: 12px;
+  border-top: 1px solid var(--line);
+  font-size: 12.5px;
+  color: var(--muted);
+}
+.foot-bottom a { color: var(--muted); }
+.foot-bottom a:hover { color: var(--ink); }
+
+@media (max-width: 860px) {
+  .hero-split { grid-template-columns: 1fr; gap: 24px; }
+  .hero { padding-block: 28px 32px; }
+  .k-nav nav { gap: 12px; }
+  .grid { grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); }
+}
 </style>
 </head>
 <body>
+
 <header class="k-nav">
-  <a class="k-wordmark" href="/"><img src="/brand/logo.svg" alt="" width="22" height="22" />KeyoAPI</a>
-  <nav aria-label="Primary">
-    <a href="/pricing">Pricing</a>
-    <a href="/models">Models</a>
-    <a href="/compare">Compare</a>
-    <a href="/brand/keyo-docs.html">Docs</a>
-    <a href="/brand/blog/">Blog</a>
-    <a href="/brand/faq.html">FAQ</a>
-    <a href="/console">Console</a>
-    <a href="/sign-in">Sign in</a>
-    <a class="k-nav-cta" href="/sign-up">Get started</a>
-  </nav>
+  <div class="container k-nav-inner">
+    <a class="k-wordmark" href="/">
+      <img src="/brand/logo.svg" alt="KeyoAPI logo" width="22" height="22" />
+      <span>KeyoAPI</span>
+    </a>
+    <nav aria-label="Primary">
+      <a href="/pricing">Pricing</a>
+      <a href="/models">Models</a>
+      <a href="/compare">Compare</a>
+      <a href="/brand/keyo-docs.html">Docs</a>
+      <a href="/brand/blog/">Blog</a>
+      <a href="/brand/faq.html">FAQ</a>
+      <a href="/console">Console</a>
+      <a href="/sign-in">Sign in</a>
+      <a class="k-nav-cta" href="/sign-up">Get started</a>
+    </nav>
+  </div>
 </header>
-<section class="hero">
-  <div class="inner">
-    <div>
-      <h1>One key for chat, speech, OCR &amp; digital humans</h1>
-      <p class="sub">OpenAI-compatible chat, image and speech — plus OCR, TTS and talking-avatar APIs on the same prepaid balance.</p>
-      <div class="actions">
-        <a class="btn btn-primary" href="/sign-up">Start free — get API key</a>
-        <a class="btn btn-secondary" href="/brand/keyo-docs.html">Docs</a>
-        <a class="btn btn-secondary" href="/models">Browse Models</a>
+
+<main>
+  <!-- Hero Section (Balanced Split: Left Value + Right Interactive Panel) -->
+  <section class="section hero" data-od-id="hero">
+    <div class="container hero-split">
+      <div class="hero-copy">
+        <div class="hero-badge">
+          <span class="dot"></span>
+          Prepaid AI Gateway · $10 Welcome Credit
+        </div>
+        <h1>One key for chat, speech,<br/>OCR &amp; digital humans</h1>
+        <p class="sub">OpenAI-compatible chat, image and speech — plus OCR, TTS and talking-avatar APIs on the same prepaid balance.</p>
+        <div class="btn-group actions">
+          <a class="btn btn-primary" href="/sign-up">Start with $10 Credit — Get API Key</a>
+          <a class="btn btn-secondary" href="/brand/keyo-docs.html">Docs</a>
+          <a class="btn btn-secondary" href="/models">Browse Models</a>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="panel-header">
+          <span class="panel-dot"></span>
+          <span class="panel-dot"></span>
+          <span class="panel-dot"></span>
+          <span class="panel-title">Developer Quickstart</span>
+        </div>
+        <div class="label">Base URL</div>
+        <div class="val">https://www.keyoapi.xyz/v1</div>
+        <div class="label">Example (OpenAI-compatible chat)</div>
+        <div class="val">POST /v1/chat/completions &nbsp;·&nbsp; model=gpt-6-astra</div>
+        <div class="label">What you get</div>
+        <div class="val">Compatible: chat / image / speech · Dedicated REST: OCR, CV, async video/docs, digital human · one key · /pricing</div>
       </div>
     </div>
-    <div class="panel">
-      <div class="label">Base URL</div>
-      <div>https://www.keyoapi.xyz/v1</div>
-      <div class="label">Example (OpenAI-compatible chat)</div>
-      <div>POST /v1/chat/completions &nbsp;·&nbsp; model=gpt-6-astra</div>
-      <div class="label">What you get</div>
-      <div>Compatible: chat / image / speech · Dedicated REST: OCR, CV, async video/docs, digital human · one key · /pricing</div>
+  </section>
+
+  <!-- API Surfaces Section -->
+  <section class="section" data-od-id="api-surfaces">
+    <div class="container">
+      <h2>API surfaces (same key, same balance)</h2>
+      <p class="meta">Billing unit is a quick compatibility signal: token or OpenAI path ≈ SDK drop-in; page / request / second / characters ≈ dedicated docs path.</p>
+      <div class="surfaces">
+        <div class="surf">
+          <h3>OpenAI-compatible</h3>
+          <ul>
+            <li><code>/v1/chat/completions</code> — GPT-class, Claude, DeepSeek, GLM, Kimi</li>
+            <li><code>/v1/images/generations</code> — text-to-image</li>
+            <li><code>/v1/audio/transcriptions</code> — Whisper</li>
+            <li><code>/v1/audio/speech</code> — sync TTS</li>
+          </ul>
+        </div>
+        <div class="surf">
+          <h3>Dedicated REST (see docs)</h3>
+          <ul>
+            <li>OCR / docs — often per page</li>
+            <li>Vision tools (matting, detect, upscale) — per request</li>
+            <li>Async TTS / video / digital human — per chars / request / second</li>
+          </ul>
+        </div>
+      </div>
     </div>
-  </div>
-</section>
-<div class="content">
-<h2>API surfaces (same key, same balance)</h2>
-<p class="meta">Billing unit is a quick compatibility signal: token or OpenAI path ≈ SDK drop-in; page / request / second / characters ≈ dedicated docs path.</p>
-<div class="surfaces">
-  <div class="surf">
-    <h3>OpenAI-compatible</h3>
-    <ul>
-      <li><code>/v1/chat/completions</code> — GPT-class, Claude, DeepSeek, GLM, Kimi</li>
-      <li><code>/v1/images/generations</code> — text-to-image</li>
-      <li><code>/v1/audio/transcriptions</code> — Whisper</li>
-      <li><code>/v1/audio/speech</code> — sync TTS</li>
-    </ul>
-  </div>
-  <div class="surf">
-    <h3>Dedicated REST (see docs)</h3>
-    <ul>
-      <li>OCR / docs — often per page</li>
-      <li>Vision tools (matting, detect, upscale) — per request</li>
-      <li>Async TTS / video / digital human — per chars / request / second</li>
-    </ul>
-  </div>
-</div>
-<h2>Headline prices</h2>
-<p class="meta">Indicative KeyoAPI sell rates for planning. Full table on <a href="/compare">the model comparison page</a> · live list on <a href="/pricing-list">the full pricing list</a>.</p>
-<table>
-<thead><tr><th>Capability</th><th>Typical official list</th><th>KeyoAPI</th><th>Notes</th></tr></thead>
-<tbody>
-<tr>
-  <td>Flagship chat (GPT-class)</td>
-  <td>OpenAI gpt-6-astra official list — confirm on openai.com/api/pricing</td>
-  <td><a href="/model/gpt-6-astra">gpt-6-astra</a><br/><span class="ok">~$1.84 / $9.19 per 1M in/out</span></td>
-  <td>OpenAI model ID on Keyo OpenAI-compatible /v1/chat/completions</td>
-</tr>
-<tr>
-  <td>High-volume budget LLM</td>
-  <td>DeepSeek official Flash-class list often ~$0.14–$0.28 / $0.28–$1.10 per 1M in/out (confirm on platform.deepseek.com; not an OpenAI GPT mini equivalent)</td>
-  <td><a href="/model/deepseek-v4.1-flash">deepseek-v4.1-flash</a><br/><span class="ok">~$0.14 / $0.56 per 1M in/out</span></td>
-  <td>Same-family budget Flash lane on Keyo — confirm live /pricing</td>
-</tr>
-<tr>
-  <td>Claude-class flagship</td>
-  <td>Anthropic Claude Fable 5.1 list ~$10 / $50 per 1M in/out (confirm on platform.claude.com)</td>
-  <td><a href="/model/claude-fable-5-1">claude-fable-5-1</a><br/><span class="ok">~$7.35 / $36.77 per 1M in/out</span></td>
-  <td>Drop-in chat completions via Keyo relay</td>
-</tr>
-<tr>
-  <td>Image generation (Nano Banana 2.1)</td>
-  <td>Google Gemini image list — confirm on official Google pages</td>
-  <td><a href="/model/nano-banana-2.1">nano-banana-2.1</a><br/><span class="ok">~$0.0123 / request</span></td>
-  <td>OpenAI-compatible /v1/images/generations; family: nano-banana-2, nano-banana-pro</td>
-</tr>
-</tbody>
-</table>
-<p class="compare-jump"><a href="/compare">See the full comparison page →</a></p>
-<h2>Gift-credit models — billed from your $10 welcome credit</h2>
-<p class="meta">Gift-credit catalog IDs for prototyping, billed at base rate with gift credits used first (new users: $10; per invite: $3) with fair-use limits. Full list + rules: <a href="/free-models">the gift-credit models page</a>.</p>
-<div class="grid">
-<a href="/free-models"><span class="grid-title"><code>Atria-dawn-v2:free</code></span><span class="grid-meta">Gift credits</span></a>
-<a href="/free-models"><span class="grid-title"><code>DeepSeek-Prover-V2-7B:free</code></span><span class="grid-meta">Gift credits</span></a>
-<a href="/free-models"><span class="grid-title"><code>GLM-ASR:free</code></span><span class="grid-meta">Gift credits</span></a>
-<a href="/free-models"><span class="grid-title"><code>keyo-flash:free</code></span><span class="grid-meta">Gift credits</span></a>
-<a href="/free-models"><span class="grid-title"><code>keyo-flash2:free</code></span><span class="grid-meta">Gift credits</span></a>
-<a href="/free-models"><span class="grid-title"><code>SenseVoiceSmall:free</code></span><span class="grid-meta">Gift credits</span></a>
-<a href="/free-models"><span class="grid-title"><code>Spark-TTS-0.5B:free</code></span><span class="grid-meta">Gift credits</span></a>
-</div>
-<p class="meta"><a href="/free-models">See all free model IDs →</a></p>
-<h2>Featured models</h2>
-<div class="grid">
-<a href="/model/gpt-6-astra"><span class="grid-title">GPT-6 Astra</span><span class="grid-meta">flagship GPT-class chat</span></a>
-<a href="/model/claude-fable-5-1"><span class="grid-title">Claude Fable 5.1</span><span class="grid-meta">top Claude-class reasoning</span></a>
-<a href="/model/deepseek-v4.1-flash"><span class="grid-title">DeepSeek V4.1 Flash</span><span class="grid-meta">fast budget DeepSeek</span></a>
-<a href="/model/grok-4.7"><span class="grid-title">Grok 4.7</span><span class="grid-meta">xAI Grok chat</span></a>
-<a href="/pricing-list"><span class="grid-title">Bespoke Nimble 9B</span><span class="grid-meta">lightweight decision model</span></a>
-<a href="/pricing-list"><span class="grid-title">MiniMax H3</span><span class="grid-meta">video generation</span></a>
-<a href="/pricing-list"><span class="grid-title">Seedance 2.5 1080p</span><span class="grid-meta">1080p video</span></a>
-<a href="/model/IndexTTS-2"><span class="grid-title">IndexTTS 2</span><span class="grid-meta">TTS</span></a>
-<a href="/model/sam3"><span class="grid-title">SAM 3</span><span class="grid-meta">segmentation</span></a>
-<a href="/model/RMBG-2.0"><span class="grid-title">RMBG 2.0</span><span class="grid-meta">background removal</span></a>
-</div>
-<p class="meta">Compare in depth: <a href="/gemini-api-pricing">Gemini pricing</a> · <a href="/deepseek-api-pricing">DeepSeek pricing</a> · <a href="/glm-api-pricing">GLM pricing</a> · <a href="/claude-api-pricing">Claude pricing</a> · <a href="/openai-api-pricing">OpenAI pricing</a> · <a href="/remove-bg-api-alternative">remove.bg API</a> · <a href="/tts-api">Text to Speech</a> · <a href="/voice-cloning-api">Voice clone API</a> · <a href="/ai-avatar-video-generator">Avatar video API</a> · <a href="/grok-api-pricing">Grok pricing</a> · <a href="/openai-api-alternative">OpenAI alternative</a> · <a href="/seedance-2-0-api-pricing">Seedance 2.0 pricing</a> · <a href="/seedance-2-5-api-pricing">Seedance 2.5 pricing</a> · <a href="/minimax-h3-api-pricing">MiniMax H3 pricing</a> · <a href="/flux-3-video-api-pricing">FLUX.3 Video pricing</a> · <a href="/wan3-video-api-pricing">Wan 3.0 Video pricing</a> · <a href="/agnes-video-2-5-api-pricing">Agnes Video 2.5 pricing</a> · <a href="/video-enhance-pro-api-pricing">Video Enhance Pro pricing</a> · <a href="/subtitle-erase-pro-api-pricing">Subtitle Erase Pro pricing</a> · <a href="/nano-banana-api-pricing">Nano Banana pricing</a> · <a href="/models">all model guides</a></p>
-<h2>Integrate in minutes</h2>
-<pre><code>export OPENAI_BASE_URL=https://www.keyoapi.xyz/v1
+  </section>
+
+  <!-- Headline Prices Section -->
+  <section class="section" data-od-id="headline-prices">
+    <div class="container">
+      <h2>Headline prices</h2>
+      <p class="meta">Indicative KeyoAPI sell rates for planning. Full table on <a href="/compare">/compare</a> · live list on <a href="/pricing-list">/pricing-list</a>.</p>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Capability</th>
+              <th>Typical official list</th>
+              <th>KeyoAPI</th>
+              <th>Notes</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Flagship chat (GPT-class)</strong></td>
+              <td>OpenAI gpt-6-astra official list — confirm on openai.com/api/pricing</td>
+              <td><a href="/model/gpt-6-astra">gpt-6-astra</a><br/><span class="ok">~$1.84 / $9.19 per 1M in/out</span></td>
+              <td>OpenAI model ID on Keyo OpenAI-compatible /v1/chat/completions</td>
+            </tr>
+            <tr>
+              <td><strong>High-volume budget LLM</strong></td>
+              <td>DeepSeek official Flash-class list often ~$0.14–$0.28 / $0.28–$1.10 per 1M in/out (confirm on platform.deepseek.com; not an OpenAI GPT mini equivalent)</td>
+              <td><a href="/model/deepseek-v4.1-flash">deepseek-v4.1-flash</a><br/><span class="ok">~$0.14 / $0.56 per 1M in/out</span></td>
+              <td>Same-family budget Flash lane on Keyo — confirm live /pricing</td>
+            </tr>
+            <tr>
+              <td><strong>Claude-class flagship</strong></td>
+              <td>Anthropic Claude Fable 5.1 list ~$10 / $50 per 1M in/out (confirm on platform.claude.com)</td>
+              <td><a href="/model/claude-fable-5-1">claude-fable-5-1</a><br/><span class="ok">~$7.35 / $36.77 per 1M in/out</span></td>
+              <td>Drop-in chat completions via Keyo relay</td>
+            </tr>
+            <tr>
+              <td><strong>Image generation (Nano Banana 2.1)</strong></td>
+              <td>Google Gemini image list — confirm on official Google pages</td>
+              <td><a href="/model/nano-banana-2.1">nano-banana-2.1</a><br/><span class="ok">~$0.0123 / request</span></td>
+              <td>OpenAI-compatible /v1/images/generations; family: nano-banana-2, nano-banana-pro</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="compare-jump"><a href="/compare">See the full comparison page →</a></p>
+    </div>
+  </section>
+
+  <!-- Gift-Credit Models Section -->
+  <section class="section" data-od-id="free-models">
+    <div class="container">
+      <h2>Gift-credit models — Powered by your $10 welcome bonus</h2>
+      <p class="meta">New users receive <strong>$10 in gift credits</strong> upon registration; earn <strong>$3 more</strong> for each friend you invite. Gift credits cover all designated models below (IDs ending in <code>:free</code>). Full list + balance rules: <a href="/free-models">/free-models</a>.</p>
+      <div class="grid">
+        <a href="/free-models"><span class="grid-title"><code>Atria-dawn-v2:free</code></span><span class="grid-meta"><span class="badge-gift">Gift Credit</span></span></a>
+        <a href="/free-models"><span class="grid-title"><code>DeepSeek-Prover-V2-7B:free</code></span><span class="grid-meta"><span class="badge-gift">Gift Credit</span></span></a>
+        <a href="/free-models"><span class="grid-title"><code>dots-3-note-preview:free</code></span><span class="grid-meta"><span class="badge-gift">Gift Credit</span></span></a>
+        <a href="/free-models"><span class="grid-title"><code>gemini-robotics-er-2-preview:free</code></span><span class="grid-meta"><span class="badge-gift">Gift Credit</span></span></a>
+        <a href="/free-models"><span class="grid-title"><code>gemma-4-26b:free</code></span><span class="grid-meta"><span class="badge-gift">Gift Credit</span></span></a>
+        <a href="/free-models"><span class="grid-title"><code>gemma-4-31b-it:free</code></span><span class="grid-meta"><span class="badge-gift">Gift Credit</span></span></a>
+        <a href="/free-models"><span class="grid-title"><code>glm-5.3-flash-search:free</code></span><span class="grid-meta"><span class="badge-gift">Gift Credit</span></span></a>
+        <a href="/free-models"><span class="grid-title"><code>glm-5.3-flash-think-search:free</code></span><span class="grid-meta"><span class="badge-gift">Gift Credit</span></span></a>
+        <a href="/free-models"><span class="grid-title"><code>glm-5.3-flash-thinking:free</code></span><span class="grid-meta"><span class="badge-gift">Gift Credit</span></span></a>
+        <a href="/free-models"><span class="grid-title"><code>glm-5.3-flash:free</code></span><span class="grid-meta"><span class="badge-gift">Gift Credit</span></span></a>
+        <a href="/free-models"><span class="grid-title"><code>k2-horizon:free</code></span><span class="grid-meta"><span class="badge-gift">Gift Credit</span></span></a>
+        <a href="/free-models"><span class="grid-title"><code>laguna-s-2.1:free</code></span><span class="grid-meta"><span class="badge-gift">Gift Credit</span></span></a>
+      </div>
+      <p class="meta" style="margin-top: 14px;"><a href="/free-models">See all gift-credit model IDs &amp; balance rules →</a></p>
+    </div>
+  </section>
+
+  <!-- Featured Models Section -->
+  <section class="section" data-od-id="featured-models">
+    <div class="container">
+      <h2>Featured models</h2>
+      <div class="grid">
+        <a href="/model/gpt-6-astra"><span class="grid-title">GPT-6 Astra</span><span class="grid-meta">flagship GPT-class chat</span></a>
+        <a href="/model/claude-fable-5-1"><span class="grid-title">Claude Fable 5.1</span><span class="grid-meta">top Claude-class reasoning</span></a>
+        <a href="/model/deepseek-v4.1-flash"><span class="grid-title">DeepSeek V4.1 Flash</span><span class="grid-meta">fast budget DeepSeek</span></a>
+        <a href="/model/grok-4.7"><span class="grid-title">Grok 4.7</span><span class="grid-meta">xAI Grok chat</span></a>
+        <a href="/pricing-list"><span class="grid-title">Bespoke Nimble 9B</span><span class="grid-meta">Jev / Open-Jev System One</span></a>
+        <a href="/pricing-list"><span class="grid-title">MiniMax H3</span><span class="grid-meta">video generation</span></a>
+        <a href="/pricing-list"><span class="grid-title">Seedance 2.5 1080p</span><span class="grid-meta">1080p video</span></a>
+        <a href="/model/IndexTTS-2"><span class="grid-title">IndexTTS 2</span><span class="grid-meta">TTS</span></a>
+        <a href="/model/sam3"><span class="grid-title">SAM 3</span><span class="grid-meta">segmentation</span></a>
+        <a href="/model/RMBG-2.0"><span class="grid-title">RMBG 2.0</span><span class="grid-meta">background removal</span></a>
+      </div>
+      <p class="meta" style="margin-top: 18px; line-height: 1.8;">
+        Compare in depth: <a href="/gemini-api-pricing">Gemini pricing</a> · <a href="/deepseek-api-pricing">DeepSeek pricing</a> · <a href="/claude-api-pricing">Claude pricing</a> · <a href="/openai-api-pricing">OpenAI pricing</a> · <a href="/remove-bg-api-alternative">remove.bg API</a> · <a href="/tts-api">Text to Speech</a> · <a href="/voice-cloning-api">Voice clone API</a> · <a href="/ai-avatar-video-generator">Avatar video API</a> · <a href="/grok-api-pricing">Grok pricing</a> · <a href="/openai-api-alternative">OpenAI alternative</a> · <a href="/models">all model guides</a>
+      </p>
+    </div>
+  </section>
+
+  <!-- Integrate in Minutes Section -->
+  <section class="section" data-od-id="integrate">
+    <div class="container">
+      <h2>Integrate in minutes</h2>
+      <pre><code>export OPENAI_BASE_URL=https://www.keyoapi.xyz/v1
 export OPENAI_API_KEY=sk-...
 # chat (OpenAI SDK): model=gpt-6-astra | claude-fable-5-1 | deepseek-v4.1-flash
-# free: model=Atria-dawn-v2:free | DeepSeek-Prover-V2-7B:free (see /free-models)
+# gift-credit models (uses your $10 welcome bonus): model=Atria-dawn-v2:free | glm-5.3-flash:free (see /free-models)
 # speech / vision / video: IndexTTS-2 · sam3 · RMBG-2.0 · MiniMax-H3 — see Docs</code></pre>
-</div>
+    </div>
+  </section>
+</main>
+
+<!-- Footer with All SEO Internal Links & Anchor Cloud -->
 <footer class="foot">
-  <div class="frow">
-    <a href="/pricing">Model Square</a>
-    <a href="/pricing-list">Pricing list</a>
-    <a href="/models">All model guides</a>
-    <a href="https://launchtory.com/projects/keyoapi-xyz">KeyoAPI on Launchtory</a>
-    <a href="/compare">Compare</a>
-    <a href="/free-models">Gift-Credit AI Models</a>
-    <a href="/brand/blog/">Blog</a>
-    <a href="/gemini-api-pricing">Gemini pricing</a>
-    <a href="/deepseek-api-pricing">DeepSeek pricing</a>
-    <a href="/glm-api-pricing">GLM pricing</a>
-    <a href="/claude-api-pricing">Claude pricing</a>
-    <a href="/openai-api-pricing">OpenAI pricing</a>
-    <a href="/remove-bg-api-alternative">remove.bg API</a>
-    <a href="/tts-api">Text to Speech</a>
-    <a href="/voice-cloning-api">Voice clone API</a>
-    <a href="/ai-avatar-video-generator">Avatar video API</a>
-    <a href="/grok-api-pricing">Grok pricing</a>
-    <a href="/openai-api-alternative">OpenAI alternative</a>
-    <a href="/seedance-2-0-api-pricing">Seedance 2.0 pricing</a>
-    <a href="/seedance-2-5-api-pricing">Seedance 2.5 pricing</a>
-    <a href="/minimax-h3-api-pricing">MiniMax H3 pricing</a>
-    <a href="/flux-3-video-api-pricing">FLUX.3 Video pricing</a>
-    <a href="/wan3-video-api-pricing">Wan 3.0 Video pricing</a>
-    <a href="/agnes-video-2-5-api-pricing">Agnes Video 2.5 pricing</a>
-    <a href="/video-enhance-pro-api-pricing">Video Enhance Pro pricing</a>
-    <a href="/subtitle-erase-pro-api-pricing">Subtitle Erase Pro pricing</a>
-    <a href="/nano-banana-api-pricing">Nano Banana pricing</a>
-    <a href="/brand/faq.html">FAQ</a>
-    <a href="/brand/privacy.html">Privacy</a>
-    <a href="/brand/terms.html">Terms</a>
-    <a href="/sign-in">Sign in</a>
-  </div>
-  <div class="frow" aria-label="Popular model guides">
-<a href="/model/whisper-large-v3">whisper-large-v3</a>
-<a href="/model/whisper-large-v3-turbo">whisper-large-v3-turbo</a>
-<a href="/model/claude-fable-5-1">claude-fable-5-1</a>
-<a href="/model/claude-fable-5">claude-fable-5</a>
-<a href="/model/claude-opus-5">claude-opus-5</a>
-<a href="/model/claude-sonnet-5">claude-sonnet-5</a>
-<a href="/model/gpt-5.6-terra">gpt-5.6-terra</a>
-<a href="/model/gpt-5.6-sol">gpt-5.6-sol</a>
-<a href="/model/gpt-5.6-luna">gpt-5.6-luna</a>
-<a href="/model/MinerU2.5-Pro">MinerU2.5-Pro</a>
-<a href="/model/Unlimited-OCR">Unlimited-OCR</a>
-<a href="/model/UVDoc">UVDoc</a>
-<a href="/model/Qwen3-TTS">Qwen3-TTS</a>
-<a href="/model/RMBG-2.0">RMBG-2.0</a>
-<a href="/model/VajraV1">VajraV1</a>
-<a href="/model/sam3">sam3</a>
-<a href="/model/Real-ESRGAN">Real-ESRGAN</a>
-<a href="/model/AnimeSharp">AnimeSharp</a>
-<a href="/model/Duix-Avatar">Duix-Avatar</a>
-<a href="/model/InfiniteTalk">InfiniteTalk</a>
-<a href="/model/IndexTTS-2">IndexTTS-2</a>
-<a href="/model/CosyVoice3">CosyVoice3</a>
-<a href="/model/nano-banana-2">nano-banana-2</a>
-<a href="/model/nano-banana-2.1">nano-banana-2.1</a>
-<a href="/model/nano-banana-pro">nano-banana-pro</a>
-<a href="/model/cloudflare-clef">cloudflare-clef</a>
-<a href="/model/glm-5.2">glm-5.2</a>
-<a href="/model/glm-5.3">glm-5.3</a>
-<a href="/model/glm-5.3-flash">glm-5.3-flash</a>
-<a href="/model/deepseek-v4-pro-0813">deepseek-v4-pro-0813</a>
-<a href="/model/gemini-3.8-flash">gemini-3.8-flash</a>
-<a href="/model/gemini-3.7-flash">gemini-3.7-flash</a>
-<a href="/model/grok-4.7">grok-4.7</a>
-<a href="/model/grok-4.6">grok-4.6</a>
-<a href="/model/deepseek-v4.1-flash">deepseek-v4.1-flash</a>
-<a href="/model/deepseek-v4-flash">deepseek-v4-flash</a>
-<a href="/model/deepseek-v4-flash-0731">deepseek-v4-flash-0731</a>
-<a href="/model/kimi-k3">kimi-k3</a>
-<a href="/model/gpt-6-luna">gpt-6-luna</a>
-<a href="/model/gpt-6-sol">gpt-6-sol</a>
-<a href="/model/gpt-6.1-sol">gpt-6.1-sol</a>
-<a href="/model/claude-opus-5-5">claude-opus-5-5</a>
-<a href="/model/gpt-6-astra">gpt-6-astra</a>
-<a href="/model/claude-haiku-5-5">claude-haiku-5-5</a>
-<a href="/model/claude-sonnet-5-5">claude-sonnet-5-5</a>
-<a href="/model/gemini-4-argon">gemini-4-argon</a>
-<a href="/model/gemini-4-barium">gemini-4-barium</a>
-<a href="/model/eleven-v4">eleven-v4</a>
-<a href="/model/eleven-v4-turbo">eleven-v4-turbo</a>
-<a href="/model/gemini-3.8-flash-tts">gemini-3.8-flash-tts</a>
-  </div>
-  <div class="frow" aria-label="Featured on">
-    <a href="https://toolfame.com/item/keyoapi" target="_blank" rel="noopener noreferrer"><img src="https://toolfame.com/badge-light.svg" alt="Featured on ToolFame.com" width="160" height="54" loading="lazy" style="height:32px;width:auto;vertical-align:middle;" /></a>
-    <a href="https://yo.directory" target="_blank" rel="dofollow noopener">Yo.directory</a>
-    <a href="https://www.toolpilot.ai" target="_blank" rel="dofollow noopener">ToolPilot.ai</a>
-    <a href="https://dang.ai" target="_blank" rel="dofollow noopener"><img src="https://assets.dang.ai/badges/dang-verified-dark.png" alt="Verified on DANG!" width="550" height="198" loading="lazy" style="height:32px;width:auto;border:0;outline:none;text-decoration:none;vertical-align:middle;" /></a>
-    <a href="https://fazier.com" target="_blank" rel="dofollow noopener">Fazier</a>
-    <a href="https://twelve.tools" target="_blank" rel="dofollow noopener"><img src="https://twelve.tools/badge0-white.svg" alt="Featured on Twelve Tools" width="200" height="54" loading="lazy" style="height:32px;width:auto;vertical-align:middle;" /></a>
-    <a href="https://deeplaunch.io" target="_blank" rel="dofollow noopener">DeepLaunch.io</a>
-    <a href="https://findly.tools/keyoapi?utm_source=keyoapi" target="_blank" rel="noopener noreferrer"><img src="https://findly.tools/badges/findly-tools-badge-dark.svg" alt="Featured on Findly.tools" width="175" height="55" loading="lazy" style="height:32px;width:auto;vertical-align:middle;" /></a>
-    <a href="https://startupfa.me" target="_blank" rel="dofollow noopener">Startup Fame</a>
+  <div class="container">
+    <div class="foot-title">Explore &amp; Documentation</div>
+    <div class="frow">
+      <a href="/pricing">Models &amp; Pricing</a>
+      <a href="/pricing-list">Pricing list</a>
+      <a href="/models">Model Guides</a>
+      <a href="/compare">Compare</a>
+      <a href="/free-models">Gift-Credit Models ($10 Bonus)</a>
+      <a href="/brand/blog/">Blog</a>
+      <a href="/gemini-api-pricing">Gemini pricing</a>
+      <a href="/deepseek-api-pricing">DeepSeek pricing</a>
+      <a href="/claude-api-pricing">Claude pricing</a>
+      <a href="/openai-api-pricing">OpenAI pricing</a>
+      <a href="/remove-bg-api-alternative">remove.bg API</a>
+      <a href="/tts-api">Text to Speech</a>
+      <a href="/voice-cloning-api">Voice clone API</a>
+      <a href="/ai-avatar-video-generator">Avatar video API</a>
+      <a href="/grok-api-pricing">Grok pricing</a>
+      <a href="/openai-api-alternative">OpenAI alternative</a>
+      <a href="/brand/faq.html">FAQ</a>
+      <a href="/brand/privacy.html">Privacy</a>
+      <a href="/brand/terms.html">Terms</a>
+      <a href="/sign-in">Sign in</a>
+    </div>
+
+    <div class="foot-title" style="margin-top: 10px;">Popular Model Guides (Direct Link Cloud)</div>
+    <div class="frow model-cloud" aria-label="Popular model guides">
+      <a href="/model/whisper-large-v3">whisper-large-v3</a>
+      <a href="/model/whisper-large-v3-turbo">whisper-large-v3-turbo</a>
+      <a href="/model/claude-fable-5-1">claude-fable-5-1</a>
+      <a href="/model/claude-fable-5">claude-fable-5</a>
+      <a href="/model/claude-opus-5">claude-opus-5</a>
+      <a href="/model/claude-sonnet-5">claude-sonnet-5</a>
+      <a href="/model/gpt-5.6-terra">gpt-5.6-terra</a>
+      <a href="/model/gpt-5.6-sol">gpt-5.6-sol</a>
+      <a href="/model/gpt-5.6-luna">gpt-5.6-luna</a>
+      <a href="/model/MinerU2.5-Pro">MinerU2.5-Pro</a>
+      <a href="/model/Unlimited-OCR">Unlimited-OCR</a>
+      <a href="/model/UVDoc">UVDoc</a>
+      <a href="/model/Qwen3-TTS">Qwen3-TTS</a>
+      <a href="/model/RMBG-2.0">RMBG-2.0</a>
+      <a href="/model/VajraV1">VajraV1</a>
+      <a href="/model/sam3">sam3</a>
+      <a href="/model/Real-ESRGAN">Real-ESRGAN</a>
+      <a href="/model/AnimeSharp">AnimeSharp</a>
+      <a href="/model/Duix-Avatar">Duix-Avatar</a>
+      <a href="/model/InfiniteTalk">InfiniteTalk</a>
+      <a href="/model/IndexTTS-2">IndexTTS-2</a>
+      <a href="/model/CosyVoice3">CosyVoice3</a>
+      <a href="/model/nano-banana-2.1">nano-banana-2.1</a>
+      <a href="/model/glm-5.2">glm-5.2</a>
+      <a href="/model/deepseek-v4-pro-0813">deepseek-v4-pro-0813</a>
+      <a href="/model/gemini-3.8-flash">gemini-3.8-flash</a>
+      <a href="/model/gemini-3.7-flash">gemini-3.7-flash</a>
+      <a href="/model/grok-4.7">grok-4.7</a>
+      <a href="/model/grok-4.6">grok-4.6</a>
+      <a href="/model/deepseek-v4.1-flash">deepseek-v4.1-flash</a>
+      <a href="/model/deepseek-v4-flash">deepseek-v4-flash</a>
+      <a href="/model/deepseek-v4-flash-0731">deepseek-v4-flash-0731</a>
+      <a href="/model/kimi-k3">kimi-k3</a>
+      <a href="/model/gpt-6-luna">gpt-6-luna</a>
+      <a href="/model/gpt-6-sol">gpt-6-sol</a>
+      <a href="/model/gpt-6.1-sol">gpt-6.1-sol</a>
+      <a href="/model/claude-opus-5-5">claude-opus-5-5</a>
+      <a href="/model/gpt-6-astra">gpt-6-astra</a>
+    </div>
+
+    <div class="foot-bottom">
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <img src="/brand/logo.svg" alt="KeyoAPI" width="18" height="18" style="opacity: 0.8;" />
+        <span>© KeyoAPI · One key for chat, speech, OCR &amp; digital humans</span>
+      </div>
+      <div>
+        <a href="/brand/privacy.html">Privacy</a> &nbsp;·&nbsp; <a href="/brand/terms.html">Terms</a> &nbsp;·&nbsp; <a href="/brand/faq.html">FAQ</a>
+      </div>
+    </div>
   </div>
 </footer>
+
 </body>
 </html>

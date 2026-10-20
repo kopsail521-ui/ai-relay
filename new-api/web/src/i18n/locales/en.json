@@ -5464,6 +5464,10 @@
     "Gift-credit models / experience code": "Gift-credit models / experience code",
     "Gift credits given on registration for gift-credit models. Default $10. ({{formattedQuota}})": "Gift credits given on registration for gift-credit models. Default $10. ({{formattedQuota}})",
     "Gift credits credited to inviter for gift-credit models on each successful signup. Default $3. ({{formattedQuota}})": "Gift credits credited to inviter for gift-credit models on each successful signup. Default $3. ({{formattedQuota}})",
-    "Pre-Consume for Zero-Cost Models": "Pre-Consume for Zero-Cost Models"
+    "Pre-Consume for Zero-Cost Models": "Pre-Consume for Zero-Cost Models",
+    "Earn $3 gift credits for every user who joins through your referral link (new users get $10). Rewards credit instantly on signup and are used first for gift-credit models; any shortfall is charged to your recharge balance.": "Earn $3 gift credits for every user who joins through your referral link (new users get $10). Rewards credit instantly on signup and are used first for gift-credit models; any shortfall is charged to your recharge balance.",
+    "New user bonus:": "New user bonus:",
+    "Register to get $10 welcome gift credits + $3 per invite — test gift-credit models (:free) with no credit card required!": "Register to get $10 welcome gift credits + $3 per invite — test gift-credit models (:free) with no credit card required!",
+    "Get started →": "Get started →"
   }
 }

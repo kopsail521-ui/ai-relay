@@ -3,12 +3,27 @@
  * Loaded by server.mjs as raw JS (no template-literal escaping).
  */
 (function () {
-  if (window.__keyoBillV16) return;
-  window.__keyoBillV16 = 1;
+  if (window.__keyoBillWeldedV1) return;
+  window.__keyoBillWeldedV1 = 1;
+
+  // 1. Inject permanent CSS rule into <head> so native cards can NEVER be shown
+  function ensureWeldCss() {
+    if (document.getElementById("keyo-weld-css")) return;
+    try {
+      var style = document.createElement("style");
+      style.id = "keyo-weld-css";
+      style.textContent =
+        '[data-keyo-welded="1"] > *:not(h2):not([data-keyo-price-table="1"]) { display: none !important; }\n' +
+        '[data-keyo-price-table="1"] { display: block !important; width: 100% !important; margin-top: 4px !important; }';
+      (document.head || document.documentElement).appendChild(style);
+    } catch (e) {}
+  }
+  ensureWeldCss();
 
   function MAP() {
     return window.__KEYO_MKT_COPY || {};
   }
+
   function lang() {
     try {
       var v = (
@@ -34,15 +49,18 @@
     } catch (e) {}
     return "zhCN";
   }
+
   function L(bag) {
     if (!bag) return "";
     if (typeof bag === "string") return bag;
     var c = lang();
     return bag[c] || bag.zhCN || bag.en || "";
   }
+
   function meta(n) {
     return n ? MAP()[n] : null;
   }
+
   function pricedIds() {
     try {
       return Object.keys(MAP())
@@ -64,6 +82,7 @@
       return [];
     }
   }
+
   function unitIds() {
     try {
       return Object.keys(MAP())
@@ -85,18 +104,7 @@
       return [];
     }
   }
-  function pickIdInText(tx, keys) {
-    if (!tx) return null;
-    var best = null;
-    for (var i = 0; i < keys.length; i++) {
-      if (tx.indexOf(keys[i]) >= 0) {
-        if (!best || keys[i].length > best.length) best = keys[i];
-      }
-    }
-    return best;
-  }
-  // v16: dialogs may show only the display name (raw id hidden), so also
-  // resolve localized display_names back to the model id.
+
   var _aliasCache = null;
   function aliasToId(tx) {
     if (!tx) return null;
@@ -117,7 +125,7 @@
             }
           };
           if (typeof names === "string") add(names);
-          else for (var lang in names) add(names[lang]);
+          else for (var lg in names) add(names[lg]);
         }
       } catch (e) {}
       _aliasCache.sort(function (a, b) {
@@ -129,82 +137,132 @@
     }
     return null;
   }
+
+  function pickIdInText(tx, keys) {
+    if (!tx) return null;
+    var best = null;
+    for (var i = 0; i < keys.length; i++) {
+      if (tx.indexOf(keys[i]) >= 0) {
+        if (!best || keys[i].length > best.length) best = keys[i];
+      }
+    }
+    return best;
+  }
+
   function resolveId(tx, keys) {
     var id = pickIdInText(tx, keys);
     if (id) return id;
     return aliasToId(tx);
   }
+
   function norm(t) {
     return String(t || "")
       .replace(/[\t\n\r ]+/g, " ")
       .trim();
   }
+
   function colsOf(pt) {
     var c = pt.columns;
     if (Array.isArray(c)) return c;
     return L(c) || (c && (c.zhCN || c.en)) || [];
   }
 
-  function detailRoots() {
-    var out = [];
-    var seen = {};
-    function add(el) {
-      if (!el || seen[el]) return;
-      seen[el] = 1;
-      out.push(el);
+  // Find all open drawers / dialogs currently in the DOM
+  function findActiveDrawers() {
+    var list = [];
+    var seen = new Set();
+    var candidates = document.querySelectorAll(
+      '[data-slot="sheet-content"], [data-slot="dialog-content"], [role="dialog"], [aria-modal="true"], aside, .SheetContent'
+    );
+    for (var i = 0; i < candidates.length; i++) {
+      var el = candidates[i];
+      if (!el || seen.has(el)) continue;
+      seen.add(el);
+      if (el.offsetWidth > 0 || el.offsetHeight > 0 || el.getClientRects().length > 0) {
+        list.push(el);
+      }
     }
-    try {
-      document.querySelectorAll('[data-slot="sheet-content"], [data-slot="dialog-content"], [role="dialog"], [data-open], [data-state="open"]').forEach(function (el) {
-        var tx = el.innerText || "";
-        if (
-          tx.indexOf("定价") >= 0 ||
-          tx.indexOf("Pricing") >= 0 ||
-          tx.indexOf("基础价格") >= 0 ||
-          tx.indexOf("Base Price") >= 0
-        )
-          add(el);
-      });
-    } catch (e) {}
-    if (!out.length) add(document.body);
-    return out;
+    if (list.length === 0 && location.pathname.indexOf("/pricing/") >= 0) {
+      var root = document.getElementById("root") || document.body;
+      if (root) list.push(root);
+    }
+    return list;
   }
 
-  function findHit() {
-    var keys = pricedIds();
-    if (!keys.length) keys = unitIds();
-    if (!keys.length) return null;
-    var roots = detailRoots();
-    for (var r = 0; r < roots.length; r++) {
-      var root = roots[r];
-      var tx = root.innerText || "";
-      if (tx.length < 30) continue;
-      var mid = resolveId(tx, keys);
-      if (!mid) continue;
-      if (
-        tx.indexOf("定价") < 0 &&
-        tx.indexOf("Pricing") < 0 &&
-        tx.indexOf("基础价格") < 0 &&
-        tx.indexOf("Base Price") < 0
-      )
-        continue;
-      return { root: root, mid: mid };
+  // Extract model ID from the drawer header
+  function getDrawerModelId(drawer, pKeys, uKeys) {
+    if (!drawer) return null;
+
+    // 1. Direct h1 check (ModelHeader: <h1 className="...">{model.model_name}</h1>)
+    var h1 = drawer.querySelector("h1");
+    if (h1) {
+      var raw = norm(h1.textContent).replace(/^[✦★•\s]+/, "").replace(/[\s]+$/, "");
+      if (raw) {
+        if (MAP()[raw]) return raw;
+        var aid = aliasToId(raw);
+        if (aid) return aid;
+        for (var k = 0; k < pKeys.length; k++) {
+          if (raw.indexOf(pKeys[k]) >= 0) return pKeys[k];
+        }
+        for (var k2 = 0; k2 < uKeys.length; k2++) {
+          if (raw.indexOf(uKeys[k2]) >= 0) return uKeys[k2];
+        }
+      }
+    }
+
+    // 2. SheetTitle (rendered as <SheetTitle className="sr-only">{model.model_name}</SheetTitle>)
+    var sheetTitle = drawer.querySelector('[data-slot="sheet-title"], [data-slot="dialog-title"]');
+    if (sheetTitle) {
+      var st = norm(sheetTitle.textContent).replace(/^[✦★•\s]+/, "").trim();
+      if (st && MAP()[st]) return st;
+    }
+
+    // 3. Fallback: resolve from drawer text using known priced keys, then unit keys
+    var tx = drawer.innerText || "";
+    if (tx.length >= 30) {
+      var hit = resolveId(tx, pKeys);
+      if (hit) return hit;
+      hit = resolveId(tx, uKeys);
+      if (hit) return hit;
     }
     return null;
   }
 
-  function findPricingCard(root) {
-    var tw = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, null);
+  // Locate the Pricing card section within the drawer
+  function findPricingCardInDrawer(drawer) {
+    if (!drawer) return null;
+    var sections = drawer.querySelectorAll("section");
+    for (var i = 0; i < sections.length; i++) {
+      var sec = sections[i];
+      var h2 = sec.querySelector("h2");
+      if (h2) {
+        var ht = norm(h2.textContent);
+        if (
+          ht === "定价" ||
+          ht === "Pricing" ||
+          ht === "定價" ||
+          ht === "Tarification" ||
+          ht === "Tarif" ||
+          ht === "Ценообразование" ||
+          ht === "料金" ||
+          ht === "Giá"
+        ) {
+          return sec;
+        }
+      }
+    }
+    // Fallback: tree walker within drawer only
+    var tw = document.createTreeWalker(drawer, NodeFilter.SHOW_TEXT, null);
     var n;
     while ((n = tw.nextNode())) {
       var t = norm(n.nodeValue);
       if (t !== "定价" && t !== "Pricing" && t !== "定價") continue;
       var el = n.parentElement;
-      for (var up = 0; up < 10 && el; up++) {
-        if (el.tagName && String(el.tagName).toLowerCase() === "section")
-          return el;
-        var cls = (el.className && String(el.className)) || "";
-        if (cls.indexOf("rounded-xl") >= 0 && cls.indexOf("border") >= 0)
-          return el;
+      for (var up = 0; up < 10 && el && el !== drawer; up++) {
+        var tag = el.tagName ? el.tagName.toLowerCase() : "";
+        if (tag === "section") return el;
+        var cls = el.className ? String(el.className) : "";
+        if (cls.indexOf("rounded-xl") >= 0 && cls.indexOf("border") >= 0) return el;
         el = el.parentElement;
       }
     }
@@ -212,7 +270,7 @@
   }
 
   function swapLabel(t, u) {
-    var badge = L(u.badge) || u.badge_zh || "按秒收费";
+    var badge = L(u.badge) || u.badge_zh || "按秒计费";
     var pkey = L(u.price_key) || u.price_key_zh || "每秒";
     var suf = L(u.suffix) || u.suffix_zh || "/秒";
     if (u.unit === "10k_chars") {
@@ -330,7 +388,7 @@
     tdB.style.cssText =
       "padding:12px;vertical-align:top;border-bottom:1px solid rgba(127,127,127,.12)";
     var bTag = document.createElement("span");
-    bTag.textContent = L(u.badge) || u.badge_zh || (zh ? "按秒收费" : "Per second");
+    bTag.textContent = L(u.badge) || u.badge_zh || (zh ? "按秒计费" : "Per second");
     bTag.style.cssText =
       "display:inline-block;padding:2px 10px;border-radius:999px;background:rgba(124,58,237,.14);font-size:12px";
     tdB.appendChild(bTag);
@@ -385,9 +443,16 @@
     return wrap;
   }
 
-  function fillPricingCard(card, mid, u) {
-    if (!card || !u || !u.price_table || !u.price_table.rows) return;
-    var id = "keyo-pt-" + mid.replace(/[^\w.-]+/g, "_");
+  // Weld the pricing card: marks with data-keyo-welded="1" and mounts the custom table
+  function weldPricingCard(card, mid, u) {
+    if (!card || !mid || !u || !u.price_table || !u.price_table.rows) return;
+    var targetId = "keyo-pt-" + mid.replace(/[^\w.-]+/g, "_");
+
+    // 1. Tag card to activate CSS rule: [data-keyo-welded="1"] > *:not(h2):not([data-keyo-price-table="1"]) { display: none !important; }
+    card.setAttribute("data-keyo-welded", "1");
+    card.setAttribute("data-keyo-mid", mid);
+
+    // 2. Hide native children inline for immediate effect
     var kids = Array.prototype.slice.call(card.children || []);
     for (var i = 0; i < kids.length; i++) {
       var kid = kids[i];
@@ -395,20 +460,38 @@
       if (kid.getAttribute("data-keyo-price-table") === "1") continue;
       var tag = String(kid.tagName || "").toLowerCase();
       var txt = norm(kid.textContent).slice(0, 20);
-      if (tag === "h2" && (txt === "定价" || txt === "Pricing" || txt === "定價"))
+      if (
+        tag === "h2" &&
+        (txt === "定价" ||
+          txt === "Pricing" ||
+          txt === "定價" ||
+          txt === "Tarification" ||
+          txt === "Tarif" ||
+          txt === "Ценообразование" ||
+          txt === "料金" ||
+          txt === "Giá")
+      ) {
         continue;
-      // Keep native base/group blocks hidden even after React remounts siblings.
+      }
       kid.style.setProperty("display", "none", "important");
       kid.setAttribute("data-keyo-hid", "1");
     }
-    var old = document.getElementById(id);
-    if (old && card.contains(old)) return;
-    if (old) {
-      try {
-        old.remove();
-      } catch (e) {}
+
+    // 3. Ensure target table exists and matches current model
+    var existing = card.querySelector('[data-keyo-price-table="1"]');
+    if (existing) {
+      if (existing.id === targetId) {
+        return; // Already welded and up to date!
+      }
+      existing.remove();
     }
-    card.appendChild(buildGroupPriceTable(id, mid, u));
+
+    var oldById = document.getElementById(targetId);
+    if (oldById && oldById.parentNode) {
+      oldById.remove();
+    }
+
+    card.appendChild(buildGroupPriceTable(targetId, mid, u));
   }
 
   function rewriteListCards() {
@@ -433,15 +516,34 @@
 
   function tick() {
     try {
+      ensureWeldCss();
       rewriteListCards();
-      var hit = findHit();
-      if (!hit) return;
-      var u = meta(hit.mid);
-      if (!u) return;
-      rewrite(hit.root, u);
-      if (!u.price_table) return;
-      var card = findPricingCard(hit.root);
-      if (card) fillPricingCard(card, hit.mid, u);
+      var pKeys = pricedIds();
+      var uKeys = unitIds();
+      var drawers = findActiveDrawers();
+      for (var d = 0; d < drawers.length; d++) {
+        var drawer = drawers[d];
+        var mid = getDrawerModelId(drawer, pKeys, uKeys);
+        if (!mid) continue;
+        var u = meta(mid);
+        if (!u) continue;
+
+        // Rewrite badges inside the drawer (e.g. 按次计费 -> 按秒计费)
+        rewrite(drawer, u);
+
+        if (u.price_table && u.price_table.rows && u.price_table.rows.length) {
+          var card = findPricingCardInDrawer(drawer);
+          if (card) {
+            weldPricingCard(card, mid, u);
+          }
+        } else {
+          // If this model has no custom price table, remove any leftover welded markers
+          var stray = drawer.querySelector('[data-keyo-price-table="1"]');
+          if (stray) stray.remove();
+          var welded = drawer.querySelector('[data-keyo-welded="1"]');
+          if (welded) welded.removeAttribute("data-keyo-welded");
+        }
+      }
     } catch (e) {}
   }
 
@@ -451,9 +553,12 @@
     _t = setTimeout(function () {
       _t = null;
       tick();
-    }, 40);
+    }, 25);
   }
-  setInterval(tick, 180);
+
+  // Fast 80ms interval loop guarantees zero visible flicker & instantaneous welding
+  setInterval(tick, 80);
+
   try {
     new MutationObserver(schedule).observe(document.documentElement, {
       childList: true,
@@ -461,13 +566,19 @@
       characterData: true,
     });
   } catch (e) {}
+
   document.addEventListener(
     "click",
     function () {
-      setTimeout(tick, 20);
-      setTimeout(tick, 100);
-      setTimeout(tick, 250);
+      setTimeout(tick, 10);
+      setTimeout(tick, 50);
+      setTimeout(tick, 150);
+      setTimeout(tick, 300);
+      setTimeout(tick, 600);
     },
     true
   );
+
+  document.addEventListener("DOMContentLoaded", tick);
+  setTimeout(tick, 100);
 })();

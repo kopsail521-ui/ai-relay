@@ -1304,12 +1304,12 @@ async function proxyRequest(req, res, bodyBuf) {
         }
       }
       // v20: billing inject on all non-auth SPA shells (SPA soft-nav safe)
-      if (wantPricingPatches && !html.includes("keyo-pricing-sort-v20")) {
+      if (wantPricingPatches && !html.includes("keyo-pricing-sort-v21")) {
         html = html
           .replace(/<!--keyo-pricing-sort(?:-v\d+)?-->[\s\S]*?<\/script>/g, "")
           .replace(/<!--keyo-billing-unit-->[\s\S]*?<\/script>/g, "")
           .replace(/<!--keyo-locale-desc-->[\s\S]*?<\/script>/g, "");
-        const inject = `<!--keyo-pricing-sort-v20-->${PRICING_SORT_SCRIPT}<!--keyo-locale-desc-->${LOCALE_DESC_SCRIPT}<!--keyo-billing-unit-->${BILLING_UNIT_SCRIPT}${FOOTER_CLEANUP_SCRIPT}`;
+        const inject = `<!--keyo-pricing-sort-v21-->${PRICING_SORT_SCRIPT}<!--keyo-locale-desc-->${LOCALE_DESC_SCRIPT}<!--keyo-billing-unit-->${BILLING_UNIT_SCRIPT}${FOOTER_CLEANUP_SCRIPT}`;
         if (html.includes("<head>")) {
           html = html.replace("<head>", `<head>${inject}`);
           changed = true;

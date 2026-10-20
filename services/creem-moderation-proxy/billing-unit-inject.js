@@ -154,8 +154,7 @@
       out.push(el);
     }
     try {
-      document.querySelectorAll('[role="dialog"]').forEach(add);
-      document.querySelectorAll("[data-state='open']").forEach(function (el) {
+      document.querySelectorAll('[data-slot="sheet-content"], [data-slot="dialog-content"], [role="dialog"], [data-open], [data-state="open"]').forEach(function (el) {
         var tx = el.innerText || "";
         if (
           tx.indexOf("定价") >= 0 ||

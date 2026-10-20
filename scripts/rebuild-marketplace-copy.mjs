@@ -166,28 +166,20 @@ function toTraditional(text) {
 }
 
 // ---------- 描述组装 ----------
+// 用户明确规则：所有模型不要在简介里写价格，以下面定价分组表为准
 function buildDescriptions(m) {
-  const hasPrice = (m.unit === "token" && m.in != null) || (m.unit !== "token" && m.per != null);
-  const price = PRICE[m.unit] || {};
-  const pzh = hasPrice && price.zhCN ? ` 计费：${price.zhCN(m)}。` : "";
-  const pen = hasPrice && price.en ? ` Pricing: ${price.en(m)}.` : "";
-  const pfr = hasPrice && price.fr ? ` Tarif : ${price.fr(m)}.` : "";
-  const pru = hasPrice && price.ru ? ` Тариф: ${price.ru(m)}.` : "";
-  const pja = hasPrice && price.ja ? ` 料金：${price.ja(m)}.` : "";
-  const pvi = hasPrice && price.vi ? ` Giá: ${price.vi(m)}.` : "";
-
   const ctxZh = m.ctx ? `支持 ${m.ctx} 上下文。` : "";
   const ctxEn = m.ctx ? ` ${m.ctx} context window.` : "";
   const modZh = m.mod ? `支持${m.mod}模态。` : "";
   const modEn = m.modEn ? ` ${m.modEn} modality.` : "";
 
-  const zhCN = `${m.fam}。${m.feat}。${ctxZh}${modZh}适合${m.usage}。${pzh}`.replace(/。+/g, "。");
-  const en = `${m.famEn}. ${m.featEn}.${ctxEn}${modEn} Ideal for ${m.usageEn}.${pen}`.replace(/\.\./g, ".");
+  const zhCN = `${m.fam}。${m.feat}。${ctxZh}${modZh}适合${m.usage}。`.replace(/。+/g, "。");
+  const en = `${m.famEn}. ${m.featEn}.${ctxEn}${modEn} Ideal for ${m.usageEn}.`.replace(/\.\./g, ".");
   const zhTW = toTraditional(zhCN);
-  const fr = `${m.famEn}. ${m.featEn}.${ctxEn}${modEn} Idéal pour ${m.usageEn}.${pfr}`.replace(/\.\./g, ".");
-  const ru = `${m.famEn}. ${m.featEn}.${ctxEn}${modEn} Подходит для ${m.usageEn}.${pru}`.replace(/\.\./g, ".");
-  const ja = `${m.famEn}. ${m.featEn}.${ctxEn}${modEn} ${m.usageEn} 向け。${pja}`.replace(/\.\./g, ".");
-  const vi = `${m.famEn}. ${m.featEn}.${ctxEn}${modEn} Phù hợp cho ${m.usageEn}.${pvi}`.replace(/\.\./g, ".");
+  const fr = `${m.famEn}. ${m.featEn}.${ctxEn}${modEn} Idéal pour ${m.usageEn}.`.replace(/\.\./g, ".");
+  const ru = `${m.famEn}. ${m.featEn}.${ctxEn}${modEn} Подходит для ${m.usageEn}.`.replace(/\.\./g, ".");
+  const ja = `${m.famEn}. ${m.featEn}.${ctxEn}${modEn} ${m.usageEn} 向け。`.replace(/\.\./g, ".");
+  const vi = `${m.famEn}. ${m.featEn}.${ctxEn}${modEn} Phù hợp cho ${m.usageEn}.`.replace(/\.\./g, ".");
 
   return {
     description: zhCN,
@@ -197,12 +189,12 @@ function buildDescriptions(m) {
   };
 }
 
-function buildEntry(m) {
+function buildEntry(m, existingEntry) {
   const { description, descriptions, description_zh, description_en } = buildDescriptions(m);
   const badge = BADGE[m.unit] || BADGE.request;
   const suffix = SUFFIX[m.unit] || SUFFIX.request;
   const priceKey = PRICE_KEY[m.unit] || PRICE_KEY.request;
-  return {
+  const entry = {
     description,
     descriptions,
     unit: m.unit,
@@ -218,6 +210,12 @@ function buildEntry(m) {
     price_key_zh: priceKey.zhCN,
     price_key_en: priceKey.en,
   };
+  if (existingEntry) {
+    if (existingEntry.price_table) entry.price_table = existingEntry.price_table;
+    if (existingEntry.display_names) entry.display_names = existingEntry.display_names;
+    if (existingEntry.free != null) entry.free = existingEntry.free;
+  }
+  return entry;
 }
 
 // ---------- 合并数据 ----------
@@ -253,7 +251,7 @@ if (existing.vendors) out.vendors = existing.vendors;
 for (const key of Object.keys(existing)) {
   if (key.startsWith("__") || key === "tags" || key === "vendors") continue;
   if (models[key]) {
-    out[key] = buildEntry(models[key]);
+    out[key] = buildEntry(models[key], existing[key]);
     delete models[key];
   } else {
     // 保留旧条目但重写（理论上不应发生）
@@ -262,7 +260,7 @@ for (const key of Object.keys(existing)) {
 }
 // 追加新模型（:free）
 for (const key of Object.keys(models)) {
-  out[key] = buildEntry(models[key]);
+  out[key] = buildEntry(models[key], existing[key]);
 }
 
 for (const file of OUT_FILES) {

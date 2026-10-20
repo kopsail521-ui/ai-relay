@@ -87,10 +87,11 @@ ul{margin:0 0 14px;padding-left:1.2em}
   <a class="btn btn-secondary" href="/compare">Compare API prices</a>
 </div>
 <h2>Overview</h2>
-<p>Cloudflare Clef is an open-source 27B multimodal decision model fine-tuned from Qwen3.8-27B. The current KeyoAPI endpoint accepts text or image state with typed questions, and returns choice / noul probabilities in a single forward pass without generating free-form text. Use it for request routing, ticket triage and classification.</p>
+<p>The current KeyoAPI endpoint accepts text or image state with typed questions, and returns choice / noul probabilities in a single forward pass without generating free-form text. Use it for request routing, ticket triage and classification.</p>
 <p>Call POST /v1/decisions with model cloudflare/clef and a Bearer API key. Check Model Square for current availability and pricing.</p>
 
 <h2>Context and image limits</h2>
+
 <p>The model context is 65536 tokens, but the text state limit on the serving path is much smaller: only approximately the first 2000 text state tokens are read. The remaining text is truncated and not read. Put decision-critical facts first; do not assume a 65536-token state will be processed. Images count separately from this text limit.</p>
 <p>Attach at most 4 images as base64 data URLs in PNG, JPEG or WebP format. Remote image URLs are not supported. Each image must be below 300KiB on the current endpoint.</p>
 
@@ -98,21 +99,27 @@ ul{margin:0 0 14px;padding-left:1.2em}
 
 
 
+
 <h2>Answers and usage</h2>
+
 <p>The request contains model, state and questions. Each named question declares a supported type (choice or noul) and its instructions. For a choice question, criteria declares the candidate labels. The response contains answers and usage with input_tokens, output_tokens: 0 and cost. These are structured decision probabilities, not a generated chat message. The current KeyoAPI endpoint does not accept score questions or JSON-object state; send state as supported text or image content.</p>
 
 
 
 
 
+
 <h2>Pricing</h2>
+
 <p>Input starts at $0.063 per 1M tokens and output is $0. Each request is billed for its actual usage, and the response’s usage.cost is the final charge in USD. Confirm current prices in Model Square before production traffic.</p>
 
 
 
 
 
+
 <h2>A decision model alongside a chat agent</h2>
+
 <p>Use Clef for a defined choice such as account, billing or technical support routing. Your application supplies the candidate labels and decides how to handle low confidence. The returned probabilities are not a guarantee of correctness; evaluate labeled examples and choose thresholds that match the cost of mistakes.</p>
 <p>Clef is a Cloudflare decision model, separate from Claude-class chat. See <a href="/ai-agent-api">Build an AI agent with the KeyoAPI chat API</a> for the application execution loop, <a href="/claude-api-pricing">the Claude API pricing page</a> for chat-model rates and <a href="/claude-code-api-pricing">Claude Code API Pricing: Budget the Whole Task</a> for a stated coding-task token budget.</p>
 
@@ -120,11 +127,14 @@ ul{margin:0 0 14px;padding-left:1.2em}
 
 
 
+
 <h2>Read the final charge from usage.cost</h2>
+
 <p>The response usage.cost is the final KeyoAPI charge in USD — use it as returned; no further conversion is needed. Wallet deductions follow the service’s quota precision; output_tokens is 0 for this decision protocol.</p>
 <p>At the starting input rate, 1,000 input tokens would estimate $0.000063. This is arithmetic at the starting rate, not a guaranteed request price or a live inference measurement. Use the returned usage.cost and your console usage records for the actual charge.</p>
 
 <p>This is an illustrative usage fragment, not a captured response; the real response also includes id and answers.</p>
+
 <pre><code>{
   &quot;model&quot;: &quot;cloudflare/clef&quot;,
   &quot;usage&quot;: {

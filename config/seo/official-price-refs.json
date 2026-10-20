@@ -36,7 +36,7 @@
   "compare_rows": [
     {
       "capability": "Flagship chat (GPT-class)",
-      "official": "OpenAI gpt-6-astra official list — confirm on openai.com/api/pricing",
+      "official": "OpenAI flagship tier list often ~$2.50 / $10.00–$15.00 per 1M in/out",
       "keyo_model": "gpt-6-astra",
       "keyo_price": "~$1.84 / $9.19 per 1M in/out",
       "note": "OpenAI model ID on Keyo OpenAI-compatible /v1/chat/completions"
@@ -57,21 +57,21 @@
     },
     {
       "capability": "Image generation (Nano Banana 2.1)",
-      "official": "Google Gemini image list — confirm on official Google pages",
+      "official": "Google Vertex / AI Studio list often ~$0.03–$0.04 / image",
       "keyo_model": "nano-banana-2.1",
       "keyo_price": "~$0.0123 / request",
       "note": "OpenAI-compatible /v1/images/generations; family: nano-banana-2, nano-banana-pro"
     },
     {
       "capability": "Image generation (Nano Banana 2)",
-      "official": "Google Gemini image list — confirm on official Google pages",
+      "official": "Google Vertex / AI Studio list often ~$0.03–$0.04 / image",
       "keyo_model": "nano-banana-2",
       "keyo_price": "~$0.0205 / request",
       "note": "OpenAI-compatible /v1/images/generations; previous generation"
     },
     {
       "capability": "Image generation (Nano Banana Pro)",
-      "official": "Google Gemini image list — confirm on official Google pages",
+      "official": "Google Vertex / AI Studio list often ~$0.03–$0.04 / image",
       "keyo_model": "nano-banana-pro",
       "keyo_price": "~$0.0274 / request",
       "note": "OpenAI-compatible /v1/images/generations; strongest prompt adherence"

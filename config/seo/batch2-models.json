@@ -116,7 +116,7 @@
         },
         {
           "q": "Where is live pricing?",
-          "a": "Confirm on /pricing/glm-5.2. Indicative Keyo rates are about $1.40 / $4.40 per 1M in/out."
+          "a": "Confirm on /pricing-list. Indicative Keyo rates are about $1.40 / $4.40 per 1M in/out."
         }
       ],
       "body": "GLM 5.2 on KeyoAPI is an OpenAI-compatible chat model for general product copilots, bilingual support, and tool loops. Indicative rates are about $1.40 / $4.40 per 1M in/out — confirm live on /pricing/glm-5.2. Call POST /v1/chat/completions at https://www.keyoapi.xyz/v1 with Bearer auth and model=glm-5.2. Same key as GPT-class, Claude-class, and vision models.",
@@ -151,7 +151,7 @@
         },
         {
           "q": "Where is live pricing?",
-          "a": "Confirm on /pricing/glm-5.3. Indicative Keyo rates are about $0.24 / $0.77 per 1M in/out."
+          "a": "Confirm on /pricing-list. Indicative Keyo rates are about $0.24 / $0.77 per 1M in/out."
         }
       ],
       "body": "GLM 5.3 on KeyoAPI is an OpenAI-compatible chat model for everyday product lanes, high-volume classification, and tool loops. Indicative rates are about $0.24 / $0.77 per 1M in/out — confirm live on /pricing/glm-5.3. Call POST /v1/chat/completions at https://www.keyoapi.xyz/v1 with Bearer auth and model=glm-5.3. Same key as GPT-class, Claude-class, and vision models.",
@@ -186,7 +186,7 @@
         },
         {
           "q": "Where is live pricing?",
-          "a": "Confirm on /pricing/glm-5.3-flash. Indicative Keyo rates are about $0.22 / $0.72 per 1M in/out."
+          "a": "Confirm on /pricing-list. Indicative Keyo rates are about $0.22 / $0.72 per 1M in/out."
         }
       ],
       "body": "GLM 5.3 Flash on KeyoAPI is an OpenAI-compatible chat model for high-volume classification, drafts, and summarization. Indicative rates are about $0.22 / $0.72 per 1M in/out — confirm live on /pricing/glm-5.3-flash. Call POST /v1/chat/completions at https://www.keyoapi.xyz/v1 with Bearer auth and model=glm-5.3-flash. Same key as GPT-class, Claude-class, and vision models.",
@@ -261,7 +261,7 @@
         },
         {
           "q": "Where is the family pricing table?",
-          "a": "See /gemini-api-pricing and confirm live rates on /pricing/gemini-3.8-flash."
+          "a": "See /gemini-api-pricing and confirm live rates on /pricing-list."
         }
       ],
       "body": "gemini-3.8-flash is a current KeyoAPI Gemini-class Flash chat ID — OpenAI-compatible on https://www.keyoapi.xyz/v1. Indicative sell rates are about $0.28 / $1.38 per 1M in/out; confirm /pricing/gemini-3.8-flash before volume. Family table: /gemini-api-pricing. To prototype on the same key, use Atria-dawn-v2:free on /free-models — gift-credit twins billed from your one-time $10 new-user credit (fair-use rate limits).",
@@ -331,7 +331,7 @@
         },
         {
           "q": "Where is live pricing?",
-          "a": "Confirm on /pricing/grok-4.7 or the family table at /grok-api-pricing."
+          "a": "Confirm on /pricing-list or the family table at /grok-api-pricing."
         }
       ],
       "body": "grok-4.7 is KeyoAPI’s featured Grok-class chat ID — OpenAI-compatible on https://www.keyoapi.xyz/v1. Indicative sell rates are about $0.74 / $2.21 per 1M in/out; confirm /pricing/grok-4.7 before volume. Family table: /grok-api-pricing. To prototype on the same key, use fixed free IDs on /free-models — gift-credit twins billed from your one-time $10 new-user credit (fair-use rate limits) — then switch model= to grok-4.7.",
@@ -434,7 +434,7 @@
       "faqs": [
         {
           "q": "What is deepseek-v4-flash pricing on Keyo?",
-          "a": "Indicative ~$0.44 / $1.32 per 1M in/out. Confirm live on /pricing/deepseek-v4-flash. Family table: /deepseek-api-pricing."
+          "a": "Indicative ~$0.44 / $1.32 per 1M in/out. Confirm live on /pricing-list. Family table: /deepseek-api-pricing."
         },
         {
           "q": "Is there a free DeepSeek V4 Flash?",
@@ -756,7 +756,7 @@
         },
         {
           "q": "Where is live pricing?",
-          "a": "See /pricing/gpt-6-sol and /compare for the static planning table."
+          "a": "See /pricing-list and /compare for the static planning table."
         }
       ],
       "body": "GPT-6 Sol on KeyoAPI is the balanced mid-tier of the GPT-6 family. Indicative rates are about $0.37 / $1.84 per 1M in/out — confirm live on /pricing/gpt-6-sol. Use Sol as a production default chat model, demote high-volume paths to gpt-6-luna, and escalate stubborn jobs to gpt-6-astra. Call via OpenAI-compatible POST /v1/chat/completions at https://www.keyoapi.xyz/v1.",
@@ -794,7 +794,7 @@
         },
         {
           "q": "Where is live pricing?",
-          "a": "See /pricing/gpt-6.1-sol and /compare for the static planning table."
+          "a": "See /pricing-list and /compare for the static planning table."
         },
         {
           "q": "What does GPT 6.1 Sol cost?",
@@ -922,15 +922,15 @@
       "faqs": [
         {
           "q": "Is gpt-6-astra the OpenAI model?",
-          "a": "Yes. On KeyoAPI, model=gpt-6-astra is OpenAI’s gpt-6-astra, served through Keyo’s OpenAI-compatible gateway (prepaid Keyo key). Confirm live Keyo rates on /pricing/gpt-6-astra."
+          "a": "Yes. On KeyoAPI, model=gpt-6-astra is OpenAI’s gpt-6-astra, served through Keyo’s OpenAI-compatible gateway (prepaid Keyo key). Confirm live Keyo rates on /pricing-list."
         },
         {
           "q": "How do I use GPT-6 Astra (how to call)?",
-          "a": "Create a key at /sign-up, set baseURL to https://www.keyoapi.xyz/v1, Authorization: Bearer YOUR_KEY, and model=gpt-6-astra on POST /v1/chat/completions. Interactive try/buy: /pricing/gpt-6-astra."
+          "a": "Create a key at /sign-up, set baseURL to https://www.keyoapi.xyz/v1, Authorization: Bearer YOUR_KEY, and model=gpt-6-astra on POST /v1/chat/completions. Interactive try/buy: /pricing-list."
         },
         {
           "q": "What is GPT-6 Astra price on Keyo?",
-          "a": "Indicative Keyo rates ~$1.84 / $9.19 per 1M in/out. Confirm live on /pricing/gpt-6-astra. Nearby: gpt-6-luna ~$0.03/$0.15, gpt-6-sol and gpt-6.1-sol ~$0.37/$1.84. Family hub: /openai-api-pricing."
+          "a": "Indicative Keyo rates ~$1.84 / $9.19 per 1M in/out. Confirm live on /pricing-list. Nearby: gpt-6-luna ~$0.03/$0.15, gpt-6-sol and gpt-6.1-sol ~$0.37/$1.84. Family hub: /openai-api-pricing."
         },
         {
           "q": "Is there a free GPT-6 Astra / gpt 6 astra free path?",
@@ -1048,7 +1048,7 @@
         },
         {
           "q": "Where is live pricing?",
-          "a": "Confirm on /pricing/gemini-4-argon. Indicative Keyo rates are about $0.74 / $3.68 per 1M in/out."
+          "a": "Confirm on /pricing-list. Indicative Keyo rates are about $0.74 / $3.68 per 1M in/out."
         }
       ],
       "body": "gemini-4-argon is a current KeyoAPI Gemini 4-class chat ID — strong coding, reasoning, and multimodal input on an OpenAI-compatible endpoint at https://www.keyoapi.xyz/v1. Indicative sell rates are about $0.74 / $3.68 per 1M in/out; confirm /pricing/gemini-4-argon before volume. Family table: /gemini-api-pricing. The Barium sibling /model/gemini-4-barium covers million-token context lanes.",
@@ -1083,7 +1083,7 @@
         },
         {
           "q": "What is gemini-4-barium best at?",
-          "a": "Million-token context work: whole-repo review, legal and finance document analysis, and long tool transcripts. Confirm live rates on /pricing/gemini-4-barium."
+          "a": "Million-token context work: whole-repo review, legal and finance document analysis, and long tool transcripts. Confirm live rates on /pricing-list."
         }
       ],
       "body": "gemini-4-barium is a current KeyoAPI Gemini 4-class chat ID with million-token context and multimodal input on an OpenAI-compatible endpoint at https://www.keyoapi.xyz/v1. Indicative sell rates are about $0.74 / $3.68 per 1M in/out; confirm /pricing/gemini-4-barium before volume. Family table: /gemini-api-pricing. For faster coding lanes, use the Argon sibling on /model/gemini-4-argon.",

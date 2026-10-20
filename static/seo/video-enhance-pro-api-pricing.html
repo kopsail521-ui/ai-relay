@@ -94,19 +94,19 @@ ul{margin:0 0 14px;padding-left:1.2em}
 <tbody>
 <tr>
   <td><a href="/pricing-list"><code>video-enhance-pro</code></a></td>
-  <td>Managed tool lane — compare MediaKit-class tooling before budgeting</td>
+  <td>Commercial video upscale APIs often ~$0.05–$0.08 / second</td>
   <td class="ok">~$0.0342 / second</td>
   <td>720p enhancement · POST /v1/async/videos/enhance</td>
 </tr>
 <tr>
   <td><a href="/pricing-list"><code>video-enhance-pro</code></a></td>
-  <td>Managed tool lane — compare MediaKit-class tooling before budgeting</td>
+  <td>Commercial video upscale APIs often ~$0.08–$0.15 / second</td>
   <td class="ok">~$0.0685 / second</td>
   <td>1080p enhancement (default) · POST /v1/async/videos/enhance</td>
 </tr>
 <tr>
   <td><a href="/pricing-list"><code>video-enhance-pro</code></a></td>
-  <td>Managed tool lane — compare MediaKit-class tooling before budgeting</td>
+  <td>Commercial video upscale APIs often ~$0.18–$0.30 / second</td>
   <td class="ok">~$0.1370 / second</td>
   <td>2k enhancement · POST /v1/async/videos/enhance</td>
 </tr>
@@ -128,7 +128,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
 # Poll GET /v1/tasks/{id} with the same key until it returns the result url</pre>
 <h2>FAQ</h2>
 <div class="faq"><details><summary>How is Video Enhance Pro billed?</summary><p>Per second of processed video at the target resolution — 720p $0.0342/s, 1080p $0.0685/s, 2k $0.1370/s (indicative). A 10-second 1080p enhancement costs about $0.68.</p></details>
-<details><summary>How do I submit a video?</summary><p>POST /v1/async/videos/enhance with model, video_url (https link to your source video) and resolution. Then poll GET /v1/task/{id} for the result URL.</p></details>
+<details><summary>How do I submit a video?</summary><p>POST /v1/async/videos/enhance with model, video_url (https link to your source video) and resolution. Then poll GET /v1/tasks/{id} for the result URL.</p></details>
 <details><summary>Can I enhance to 4K?</summary><p>The current tiers are 720p, 1080p and 2k. Submit at the highest tier you need — the tool upscales and restores detail generatively.</p></details></div>
 <p class="meta">Also see <a href="/compare">the model comparison page</a>, <a href="/free-models">the gift-credit models page</a>, <a href="/pricing-list">the full pricing list</a>, and <a href="/subtitle-erase-pro-api-pricing">Subtitle Erase Pro pricing</a> · <a href="/agnes-video-2-5-api-pricing">Agnes Video 2.5 pricing</a> · <a href="/seedance-2-5-api-pricing">Seedance 2.5 pricing</a>.</p>
 

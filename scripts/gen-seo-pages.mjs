@@ -194,7 +194,7 @@ function linkifySitePaths(raw, currentPath) {
     "g"
   );
   let linked = s.replace(re, (m) => {
-    const href = rewritePricingIdPath(m);
+    const href = rewritePricingIdPath(m, currentPath);
     if (currentPath && href === currentPath) {
       return "this page";
     }
@@ -277,10 +277,12 @@ function landingPathLabel(slug) {
 }
 
 /** Crawlers cannot fetch /pricing/{id} (robots Disallow: /pricing/). */
-function rewritePricingIdPath(pathname) {
+function rewritePricingIdPath(pathname, currentPath) {
   const m = String(pathname).match(/^\/pricing\/(.+)$/);
   if (!m) return pathname;
-  return catalogHref(decodeURIComponent(m[1]));
+  const targetHref = catalogHref(decodeURIComponent(m[1]));
+  if (currentPath && targetHref === currentPath) return "/pricing-list";
+  return targetHref;
 }
 
 /** First sentence without breaking on decimals like RMBG-2.0 */
@@ -540,7 +542,16 @@ function renderModel(m) {
   const canonical = `${site}${modelPath}`;
   const leadSrc = m.lead || m.sections?.intro || m.body;
   const lead = m.lead ? m.lead : firstSentence(leadSrc);
-  const paras = m.body
+  const leadFirstS = firstSentence(lead);
+  let bodyText = m.body;
+  const bodyFirstS = firstSentence(bodyText);
+  if (leadFirstS === bodyFirstS || bodyText.trim().startsWith(leadFirstS)) {
+    const trimmed = bodyText.trim();
+    if (trimmed.startsWith(bodyFirstS)) {
+      bodyText = trimmed.slice(bodyFirstS.length).trim();
+    }
+  }
+  const paras = bodyText
     .split(/\n\n+/)
     .map((p) => `<p>${linkifySitePaths(p, modelPath)}</p>`)
     .join("\n");
@@ -596,6 +607,8 @@ ${(m.related || []).filter((id) => id !== m.id && (!m.modelId || id !== m.modelI
   cleanBodyHtml = cleanBodyHtml.replace(new RegExp(`\\b${encodeURIComponent(m.id)}\\s+model\\s+page\\b`, "gi"), "this page");
   cleanBodyHtml = cleanBodyHtml.replace(/\\bat\\s+this\\s+page\\b/gi, "on this page");
   cleanBodyHtml = cleanBodyHtml.replace(/\\bthe\\s+this\\s+page\\b/gi, "this page");
+  cleanBodyHtml = cleanBodyHtml.replace(/\\bSee\\s+this\\s+page\\s+and\\b/gi, 'See <a href="/pricing-list">the full pricing list</a> and');
+  cleanBodyHtml = cleanBodyHtml.replace(/\\bConfirm\\s+on\\s+this\\s+page\\b/gi, 'Confirm live rates on <a href="/pricing-list">the full pricing list</a>');
 
   return layout({
     title: m.title,

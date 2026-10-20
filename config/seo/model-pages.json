@@ -217,7 +217,7 @@
         },
         {
           "q": "Where is live pricing?",
-          "a": "See /pricing/claude-opus-5 and /compare for side-by-side AI API price comparisons."
+          "a": "See /pricing-list and /compare for side-by-side AI API price comparisons."
         }
       ],
       "sections": {
@@ -263,7 +263,7 @@
         },
         {
           "q": "How do I compare vs official Anthropic pricing?",
-          "a": "Use /compare for an AI API price comparison, then confirm Keyo live rates on /pricing/claude-sonnet-5."
+          "a": "Use /compare for an AI API price comparison, then confirm Keyo live rates on /pricing-list."
         }
       ],
       "sections": {
@@ -305,7 +305,7 @@
         },
         {
           "q": "How does GPT API pricing compare?",
-          "a": "See /compare for AI API price comparison versus OpenAI list rates, and /pricing/gpt-5.6-terra for live Keyo numbers."
+          "a": "See /compare for AI API price comparison versus OpenAI list rates, and /pricing-list for live Keyo numbers."
         },
         {
           "q": "Terra vs Sol vs Luna?",
@@ -355,7 +355,7 @@
         },
         {
           "q": "Where is pricing?",
-          "a": "Review /pricing/gpt-5.6-sol and /compare for current rates."
+          "a": "Review /pricing-list and /compare for current rates."
         }
       ],
       "sections": {
@@ -393,7 +393,7 @@
       "faqs": [
         {
           "q": "Is Luna good enough for production?",
-          "a": "For classification, extraction, short replies, and bulk rewrite—often yes. Escalate to Terra/Sol/Claude when quality gates fail. Confirm live rates on /pricing/gpt-5.6-luna."
+          "a": "For classification, extraction, short replies, and bulk rewrite—often yes. Escalate to Terra/Sol/Claude when quality gates fail. Confirm live rates on /pricing-list."
         },
         {
           "q": "Why pick this model for high-volume workloads?",
@@ -401,7 +401,7 @@
         },
         {
           "q": "How do I estimate monthly cost?",
-          "a": "Multiply expected input/output millions of tokens by live rates on /pricing/gpt-5.6-luna; add retries. Use /compare and /openai-api-pricing for planning context."
+          "a": "Multiply expected input/output millions of tokens by live rates on /pricing-list; add retries. Use /compare and /openai-api-pricing for planning context."
         },
         {
           "q": "Can I use the OpenAI Python SDK?",
@@ -409,7 +409,7 @@
         },
         {
           "q": "How do I try Luna interactively?",
-          "a": "Create a key at /sign-up, then open /pricing/gpt-5.6-luna. There is no separate playground — Model Square is the try/buy path."
+          "a": "Create a key at /sign-up, then open /pricing-list. There is no separate playground — Model Square is the try/buy path."
         }
       ],
       "sections": {
@@ -455,7 +455,7 @@
         },
         {
           "q": "Per-page pricing details?",
-          "a": "About $0.0137 per page on KeyoAPI—confirm on /pricing/MinerU2.5-Pro."
+          "a": "About $0.0137 per page on KeyoAPI—confirm on /pricing-list."
         }
       ],
       "sections": {
@@ -501,7 +501,7 @@
         },
         {
           "q": "Token pricing?",
-          "a": "About $1.92 per 1M input and output tokens—see /pricing/Unlimited-OCR."
+          "a": "About $1.92 per 1M input and output tokens—see /pricing-list."
         }
       ],
       "sections": {
@@ -547,7 +547,7 @@
         },
         {
           "q": "Pricing?",
-          "a": "About $0.0137 per request on /pricing/UVDoc."
+          "a": "About $0.0137 per request on /pricing-list."
         }
       ],
       "sections": {
@@ -594,7 +594,7 @@
         },
         {
           "q": "How is Qwen3-TTS billed?",
-          "a": "Billed per 10K characters at about $0.548—see /pricing/Qwen3-TTS."
+          "a": "Billed per 10K characters at about $0.548—see /pricing-list."
         }
       ],
       "sections": {
@@ -640,7 +640,7 @@
         },
         {
           "q": "Authentication?",
-          "a": "Same KeyoAPI Bearer token as chat models; see /pricing/RMBG-2.0."
+          "a": "Same KeyoAPI Bearer token as chat models; see /pricing-list."
         }
       ],
       "sections": {
@@ -686,7 +686,7 @@
         },
         {
           "q": "Pricing?",
-          "a": "About $0.0685 per request—live on /pricing/VajraV1."
+          "a": "About $0.0685 per request—live on /pricing-list."
         }
       ],
       "sections": {
@@ -725,7 +725,7 @@
       "faqs": [
         {
           "q": "Can I try sam3 without deploying it?",
-          "a": "Yes. KeyoAPI hosts model=sam3 behind POST /v1/images/segmentation. Open /pricing/sam3 to place a test call with your API key — no local GPU or Hugging Face download."
+          "a": "Yes. KeyoAPI hosts model=sam3 behind POST /v1/images/segmentation. Open /pricing-list to place a test call with your API key — no local GPU or Hugging Face download."
         },
         {
           "q": "SAM 3 vs RMBG?",
@@ -737,7 +737,7 @@
         },
         {
           "q": "Price?",
-          "a": "About $0.0137 per request on /pricing/sam3."
+          "a": "About $0.0137 per request on /pricing-list."
         }
       ],
       "sections": {
@@ -783,7 +783,7 @@
         },
         {
           "q": "Pricing?",
-          "a": "About $0.0685 per request on /pricing/Real-ESRGAN."
+          "a": "About $0.0685 per request on /pricing-list."
         }
       ],
       "sections": {
@@ -829,7 +829,7 @@
         },
         {
           "q": "Price?",
-          "a": "~$0.0685 per request—/pricing/AnimeSharp."
+          "a": "~$0.0685 per request—/pricing-list."
         }
       ],
       "sections": {
@@ -883,7 +883,7 @@
         },
         {
           "q": "Billing unit?",
-          "a": "About $0.0685 per second of output—see /pricing/Duix-Avatar."
+          "a": "About $0.0685 per second of output—see /pricing-list."
         }
       ],
       "sections": {
@@ -929,7 +929,7 @@
         },
         {
           "q": "Price?",
-          "a": "About $0.342 per request—confirm on /pricing/InfiniteTalk."
+          "a": "About $0.342 per request—confirm on /pricing-list."
         }
       ],
       "sections": {
@@ -977,11 +977,11 @@
         },
         {
           "q": "How do I try it?",
-          "a": "Create a key at /sign-up, then open /pricing/IndexTTS-2 for interactive try/buy. Gift-credit LLM IDs (separate from TTS; billed from your $10 welcome credit, fair-use) are listed at /free-models."
+          "a": "Create a key at /sign-up, then open /pricing-list for interactive try/buy. Gift-credit LLM IDs (separate from TTS; billed from your $10 welcome credit, fair-use) are listed at /free-models."
         },
         {
           "q": "Price?",
-          "a": "About $1.37 per 10,000 characters — confirm live rates on /pricing/IndexTTS-2."
+          "a": "About $1.37 per 10,000 characters — confirm live rates on /pricing-list."
         }
       ],
       "sections": {
@@ -1035,11 +1035,11 @@
         },
         {
           "q": "How do I try it?",
-          "a": "Open /pricing/CosyVoice3 after /sign-up. No separate upload playground — try from interactive pricing."
+          "a": "Open /pricing-list after /sign-up. No separate upload playground — try from interactive pricing."
         },
         {
           "q": "Price?",
-          "a": "About $1.37 per 10,000 characters — confirm on /pricing/CosyVoice3."
+          "a": "About $1.37 per 10,000 characters — confirm on /pricing-list."
         }
       ],
       "sections": {

@@ -344,3 +344,52 @@ test("deepseek pricing math and FAQ q7 link integrity", () => {
   assert.doesNotMatch(faqHtml, /a7:\s*['"][^'"]*href="\/pricing"/, "No i18n a7 translation may link to /pricing");
   assert.match(faqHtml, /per second \/ 按秒计费|video models are per second/, "FAQ must mention per-second video billing");
 });
+
+test("video enhance and subtitle erase standardize on /v1/tasks/{id} without singular task endpoint", () => {
+  for (const page of ["video-enhance-pro-api-pricing.html", "subtitle-erase-pro-api-pricing.html"]) {
+    const html = fs.readFileSync(path.join(seoRoot, page), "utf8");
+    assert.doesNotMatch(html, /\/v1\/task\/\{id\}/, `${page} must not mention singular /v1/task/{id}`);
+    assert.doesNotMatch(html, /\(singular\)/i, `${page} must not mention (singular)`);
+    assert.match(html, /\/v1\/tasks\/\{id\}/, `${page} must mention plural /v1/tasks/{id}`);
+  }
+});
+
+test("deepseek pricing table has no broken confirm Keyo the phrasing", () => {
+  const html = fs.readFileSync(path.join(seoRoot, "deepseek-api-pricing.html"), "utf8");
+  assert.doesNotMatch(html, /confirm\s+Keyo\s+the/i, "deepseek-api-pricing must not contain broken confirm Keyo the");
+  assert.match(html, /confirm live rates on <a href="\/pricing-list">the full pricing list<\/a>/, "deepseek-api-pricing must cleanly link to pricing list");
+});
+
+test("model guide pages have no lead and overview first-sentence duplication", () => {
+  const modelDir = path.join(seoRoot, "model");
+  const errors = [];
+  function firstS(text) {
+    const clean = text.replace(/<[^>]+>/g, "").trim();
+    const m = clean.match(/^[\s\S]+?[.!?](?=\s|$)/);
+    return m ? m[0].trim() : clean.slice(0, 100).trim();
+  }
+  for (const f of fs.readdirSync(modelDir).filter((x) => x.endsWith(".html"))) {
+    const text = fs.readFileSync(path.join(modelDir, f), "utf8");
+    const leadMatch = text.match(/<p class="lead">([\s\S]*?)<\/p>/);
+    const overviewMatch = text.match(/<h2>Overview<\/h2>\s*<p>([\s\S]*?)<\/p>/);
+    if (leadMatch && overviewMatch) {
+      const s1 = firstS(leadMatch[1]);
+      const s2 = firstS(overviewMatch[1]);
+      if (s1 && s2 && s1.toLowerCase() === s2.toLowerCase()) {
+        errors.push(`${f}: duplicate lead and overview first sentence ("${s1}")`);
+      }
+    }
+    if (/<details>[\s\S]*?(?:See this page|Confirm on this page)/i.test(text)) {
+      errors.push(`${f}: FAQ contains vague 'See this page' or 'Confirm on this page'`);
+    }
+  }
+  assert.equal(errors.length, 0, `Found template issues:\n${errors.join("\n")}`);
+});
+
+test("FAQ legal labels are localized across ja, fr, ru, vi", () => {
+  const faqHtml = fs.readFileSync(path.join(root, "static/brand/faq.html"), "utf8");
+  assert.match(faqHtml, /プライバシーポリシー/, "Japanese FAQ must localize Privacy");
+  assert.match(faqHtml, /Politique de confidentialité/, "French FAQ must localize Privacy");
+  assert.match(faqHtml, /Политика конфиденциальности/, "Russian FAQ must localize Privacy");
+  assert.match(faqHtml, /Chính sách bảo mật/, "Vietnamese FAQ must localize Privacy");
+});

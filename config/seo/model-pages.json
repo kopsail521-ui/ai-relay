@@ -108,9 +108,9 @@
       "priceLabel": "~$7.35 / $36.77 per 1M in/out",
       "priceUnit": "per_1m_tokens",
       "related": [
-        "claude-fable-5",
-        "claude-opus-5",
-        "claude-sonnet-5"
+        "claude-opus-5-5",
+        "claude-sonnet-5-5",
+        "claude-haiku-5-5"
       ],
       "endpoint": "POST /v1/chat/completions",
       "codeHint": "model=claude-fable-5-1",
@@ -440,7 +440,7 @@
       "related": [
         "Unlimited-OCR",
         "UVDoc",
-        "claude-sonnet-5"
+        "claude-sonnet-5-5"
       ],
       "endpoint": "POST /v1/async/documents/parse",
       "codeHint": "model=MinerU2.5-Pro",
@@ -486,7 +486,7 @@
       "related": [
         "MinerU2.5-Pro",
         "UVDoc",
-        "gpt-5.6-terra"
+        "gpt-6-sol"
       ],
       "endpoint": "POST /v1/chat/completions",
       "codeHint": "model=Unlimited-OCR",

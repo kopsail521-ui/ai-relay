@@ -18,7 +18,7 @@
       "lastmod": "2026-10-16"
     },
     "https://www.keyoapi.xyz/models": {
-      "hash": "e0fd09ab46a7593a",
+      "hash": "f120259b1dd1526d",
       "lastmod": "2026-10-20"
     },
     "https://www.keyoapi.xyz/gemini-api-pricing": {
@@ -134,7 +134,7 @@
       "lastmod": "2026-10-16"
     },
     "https://www.keyoapi.xyz/about": {
-      "hash": "4c351e3422140473",
+      "hash": "6bfe551f207623c7",
       "lastmod": "2026-10-20"
     },
     "https://www.keyoapi.xyz/model/whisper-large-v3": {
@@ -146,7 +146,7 @@
       "lastmod": "2026-10-20"
     },
     "https://www.keyoapi.xyz/model/claude-fable-5-1": {
-      "hash": "976cbdb47a54bfa1",
+      "hash": "2610b83e38ed1555",
       "lastmod": "2026-10-20"
     },
     "https://www.keyoapi.xyz/model/claude-fable-5": {
@@ -174,11 +174,11 @@
       "lastmod": "2026-10-20"
     },
     "https://www.keyoapi.xyz/model/MinerU2.5-Pro": {
-      "hash": "503cd727c1ac90a9",
+      "hash": "84c3dded59436684",
       "lastmod": "2026-10-20"
     },
     "https://www.keyoapi.xyz/model/Unlimited-OCR": {
-      "hash": "c29e2225ec8c7656",
+      "hash": "55c4038fafe32e76",
       "lastmod": "2026-10-20"
     },
     "https://www.keyoapi.xyz/model/UVDoc": {
@@ -246,15 +246,15 @@
       "lastmod": "2026-10-20"
     },
     "https://www.keyoapi.xyz/model/glm-5.3": {
-      "hash": "e07bd37a74c5f569",
+      "hash": "1160e2c337a50beb",
       "lastmod": "2026-10-20"
     },
     "https://www.keyoapi.xyz/model/glm-5.3-flash": {
-      "hash": "957337625ed0fdc7",
+      "hash": "039dede9524c18d8",
       "lastmod": "2026-10-20"
     },
     "https://www.keyoapi.xyz/model/deepseek-v4-pro-0813": {
-      "hash": "d4fcf84ef5eeede5",
+      "hash": "31a1c87f556184fd",
       "lastmod": "2026-10-20"
     },
     "https://www.keyoapi.xyz/model/gemini-3.8-flash": {
@@ -266,7 +266,7 @@
       "lastmod": "2026-10-20"
     },
     "https://www.keyoapi.xyz/model/grok-4.7": {
-      "hash": "b557b036a4c71d15",
+      "hash": "206ebff8fbc2c750",
       "lastmod": "2026-10-20"
     },
     "https://www.keyoapi.xyz/model/grok-4.6": {
@@ -274,11 +274,11 @@
       "lastmod": "2026-10-20"
     },
     "https://www.keyoapi.xyz/model/deepseek-v4.1-flash": {
-      "hash": "2eaf80b47cfde9fa",
+      "hash": "1ec3bb8b0d4838ce",
       "lastmod": "2026-10-20"
     },
     "https://www.keyoapi.xyz/model/deepseek-v4-flash": {
-      "hash": "623f2bcd2ab755d5",
+      "hash": "52f297943dfc21c6",
       "lastmod": "2026-10-20"
     },
     "https://www.keyoapi.xyz/model/deepseek-v4-flash-0731": {
@@ -286,11 +286,11 @@
       "lastmod": "2026-10-20"
     },
     "https://www.keyoapi.xyz/model/kimi-k3": {
-      "hash": "64315fcba42359a7",
-      "lastmod": "2026-10-19"
+      "hash": "02c7de12add1e91e",
+      "lastmod": "2026-10-20"
     },
     "https://www.keyoapi.xyz/model/gpt-6-luna": {
-      "hash": "e1fc35598c51ce59",
+      "hash": "f48b6e8de131d0b4",
       "lastmod": "2026-10-20"
     },
     "https://www.keyoapi.xyz/model/gpt-6-sol": {
@@ -302,7 +302,7 @@
       "lastmod": "2026-10-20"
     },
     "https://www.keyoapi.xyz/model/claude-opus-5-5": {
-      "hash": "01462eee2c7a055a",
+      "hash": "f5c7603c2fe790a4",
       "lastmod": "2026-10-20"
     },
     "https://www.keyoapi.xyz/model/gpt-6-astra": {
@@ -310,11 +310,11 @@
       "lastmod": "2026-10-20"
     },
     "https://www.keyoapi.xyz/model/claude-haiku-5-5": {
-      "hash": "c62ccd90fa0c6885",
+      "hash": "f67db336ee5fbf4e",
       "lastmod": "2026-10-20"
     },
     "https://www.keyoapi.xyz/model/claude-sonnet-5-5": {
-      "hash": "4210b17a0d7713d8",
+      "hash": "0e07dd731aa025c9",
       "lastmod": "2026-10-20"
     },
     "https://www.keyoapi.xyz/model/gemini-4-argon": {

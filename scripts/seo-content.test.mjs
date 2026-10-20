@@ -407,3 +407,21 @@ test("about model categories cards, deepseek cheapest title, and modern model re
   assert.match(whisperHtml, /gpt-6-luna for cost, claude-sonnet-5-5 for denser reasoning/, "whisper-large-v3 must recommend modern models");
   assert.doesNotMatch(whisperHtml, /gpt-5\.6-luna for cost, claude-sonnet-5 for denser reasoning/, "whisper-large-v3 must not recommend legacy models");
 });
+
+test("models index generation tags, about image card coherence, and clean related models", () => {
+  const modelsHtml = fs.readFileSync(path.join(seoRoot, "models.html"), "utf8");
+  assert.match(modelsHtml, /<th>Generation<\/th>/, "models.html must have Generation column");
+  assert.match(modelsHtml, /<span class="meta">Previous gen<\/span>/, "models.html must tag previous gen models");
+  assert.match(modelsHtml, /<span>Current<\/span>/, "models.html must tag current models");
+
+  const aboutHtml = fs.readFileSync(path.join(seoRoot, "about.html"), "utf8");
+  assert.match(aboutHtml, /<span class="grid-meta">nano-banana-2\.1 &amp; Pro<\/span>/, "about.html must show nano-banana-2.1 & Pro in image card");
+
+  const dsProHtml = fs.readFileSync(path.join(seoRoot, "model/deepseek-v4-pro-0813.html"), "utf8");
+  assert.doesNotMatch(dsProHtml, /href="\/model\/gpt-5\.6-terra"/, "deepseek-v4-pro-0813 must not link to gpt-5.6-terra in related");
+  assert.match(dsProHtml, /href="\/model\/gpt-6-sol"/, "deepseek-v4-pro-0813 must link to gpt-6-sol in related");
+
+  const mineruHtml = fs.readFileSync(path.join(seoRoot, "model/MinerU2.5-Pro.html"), "utf8");
+  assert.doesNotMatch(mineruHtml, /href="\/model\/claude-sonnet-5"/, "MinerU2.5-Pro must not link to claude-sonnet-5 in related");
+  assert.match(mineruHtml, /href="\/model\/claude-sonnet-5-5"/, "MinerU2.5-Pro must link to claude-sonnet-5-5 in related");
+});

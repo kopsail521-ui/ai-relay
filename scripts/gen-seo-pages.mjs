@@ -838,6 +838,29 @@ ${modelFoot}
 `;
 }
 
+const PREVIOUS_GEN_IDS = new Set([
+  "gpt-5.6-luna",
+  "gpt-5.6-terra",
+  "gpt-5.6-sol",
+  "claude-sonnet-5",
+  "claude-opus-5",
+  "claude-fable-5",
+  "deepseek-v4-flash",
+  "deepseek-v4-flash-0731",
+  "glm-5.2",
+  "gemini-3.7-flash",
+  "gemini-3.8-flash",
+  "grok-4.6",
+  "nano-banana-2",
+]);
+
+function modelGenerationLabel(id) {
+  if (PREVIOUS_GEN_IDS.has(id)) {
+    return `<span class="meta">Previous gen</span>`;
+  }
+  return `<span>Current</span>`;
+}
+
 function renderModelsIndex() {
   const seenIds = new Set(pages.models.map((m) => m.modelId || m.id));
   // Catalog-only models (video generation/processing lane) still belong in
@@ -852,12 +875,15 @@ function renderModelsIndex() {
       const links = landing
         ? `<a href="/${landing}">Guide</a> · <a href="/pricing">Catalog</a>`
         : `<a href="/pricing">Catalog</a>`;
-      return `<tr><td>${modelCell}</td><td>${esc(r.category || "")}</td><td class="ok">${esc(r.keyo)}</td><td>${links}</td></tr>`;
+      const gen = PREVIOUS_GEN_IDS.has(r.model)
+        ? `<span class="meta">Previous gen</span>`
+        : `<span>Current</span>`;
+      return `<tr><td>${modelCell}</td><td>${esc(r.category || "")}</td><td>${gen}</td><td class="ok">${esc(r.keyo)}</td><td>${links}</td></tr>`;
     });
   const rows = [
     ...pages.models.map(
       (m) =>
-        `<tr><td><a href="/model/${encodeURIComponent(m.id)}"><code>${esc(m.modelId || m.id)}</code></a></td><td>${esc(m.category || "")}</td><td class="ok">${esc(m.priceLabel)}</td><td><a href="/model/${encodeURIComponent(m.id)}">Guide</a> · <a href="/pricing">Catalog</a></td></tr>`
+        `<tr><td><a href="/model/${encodeURIComponent(m.id)}"><code>${esc(m.modelId || m.id)}</code></a></td><td>${esc(m.category || "")}</td><td>${modelGenerationLabel(m.id)}</td><td class="ok">${esc(m.priceLabel)}</td><td><a href="/model/${encodeURIComponent(m.id)}">Guide</a> · <a href="/pricing">Catalog</a></td></tr>`
     ),
     ...catalogRows,
   ].join("\n");
@@ -874,7 +900,7 @@ function renderModelsIndex() {
 ${contentGuideLinks()}
 <h2>All model guides</h2>
 <div class="table-scroll"><table>
-<thead><tr><th>Model ID</th><th>Category</th><th>Listed price</th><th>Links</th></tr></thead>
+<thead><tr><th>Model ID</th><th>Category</th><th>Generation</th><th>Listed price</th><th>Links</th></tr></thead>
 <tbody>${rows}</tbody>
 </table></div>
 <p class="meta">Also: ${landingDeepDiveHtml()}.</p>
@@ -949,7 +975,7 @@ ${freeCards}
   <a href="/model/deepseek-v4.1-flash"><span class="grid-title">DeepSeek open models</span><span class="grid-meta">deepseek-v4.1-flash</span></a>
   <a href="/model/glm-5.3"><span class="grid-title">GLM</span><span class="grid-meta">glm-5.3 &amp; Flash</span></a>
   <a href="/seedance-2-5-api-pricing"><span class="grid-title">Video generation</span><span class="grid-meta">seedance-2.5 &amp; Wan</span></a>
-  <a href="/nano-banana-api-pricing"><span class="grid-title">Image generation</span><span class="grid-meta">nano-banana-pro</span></a>
+  <a href="/nano-banana-api-pricing"><span class="grid-title">Image generation</span><span class="grid-meta">nano-banana-2.1 &amp; Pro</span></a>
   <a href="/model/kimi-k3"><span class="grid-title">Kimi</span><span class="grid-meta">kimi-k3 long-context</span></a>
   <a href="/model/whisper-large-v3"><span class="grid-title">Speech-to-text</span><span class="grid-meta">whisper-large-v3</span></a>
   <a href="/model/MinerU2.5-Pro"><span class="grid-title">Document &amp; OCR</span><span class="grid-meta">MinerU2.5-Pro</span></a>

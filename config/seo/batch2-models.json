@@ -138,9 +138,9 @@
       "priceLabel": "~$0.24 / $0.77 per 1M in/out",
       "priceUnit": "per_1m_tokens",
       "related": [
-        "glm-5.2",
         "glm-5.3-flash",
-        "deepseek-v4-flash"
+        "deepseek-v4.1-flash",
+        "kimi-k3"
       ],
       "endpoint": "POST /v1/chat/completions",
       "codeHint": "model=glm-5.3",
@@ -174,8 +174,8 @@
       "priceUnit": "per_1m_tokens",
       "related": [
         "glm-5.3",
-        "glm-5.2",
-        "deepseek-v4.1-flash"
+        "deepseek-v4.1-flash",
+        "kimi-k3"
       ],
       "endpoint": "POST /v1/chat/completions",
       "codeHint": "model=glm-5.3-flash",
@@ -211,7 +211,7 @@
       "related": [
         "deepseek-v4.1-flash",
         "deepseek-v4-flash",
-        "gpt-5.6-terra"
+        "gpt-6-sol"
       ],
       "endpoint": "POST /v1/chat/completions",
       "codeHint": "model=deepseek-v4-pro-0813",
@@ -318,7 +318,7 @@
       "priceLabel": "~$0.74 / $2.21 per 1M in/out",
       "priceUnit": "per_1m_tokens",
       "related": [
-        "grok-4.6",
+        "gpt-6-sol",
         "gpt-6-astra",
         "deepseek-v4.1-flash"
       ],
@@ -390,7 +390,7 @@
       "related": [
         "deepseek-v4-flash",
         "deepseek-v4-pro-0813",
-        "gpt-5.6-luna"
+        "gpt-6-luna"
       ],
       "endpoint": "POST /v1/chat/completions",
       "codeHint": "model=deepseek-v4.1-flash",
@@ -427,7 +427,7 @@
       "related": [
         "deepseek-v4.1-flash",
         "deepseek-v4-pro-0813",
-        "gpt-5.6-luna"
+        "gpt-6-luna"
       ],
       "endpoint": "POST /v1/chat/completions",
       "codeHint": "model=deepseek-v4-flash",
@@ -504,7 +504,7 @@
       "related": [
         "deepseek-v4.1-flash",
         "glm-5.3",
-        "gpt-5.6-luna"
+        "gpt-6-luna"
       ],
       "endpoint": "POST /v1/chat/completions",
       "codeHint": "model=kimi-k3",
@@ -710,7 +710,7 @@
       "related": [
         "gpt-6-sol",
         "gpt-6-astra",
-        "gpt-5.6-luna"
+        "deepseek-v4.1-flash"
       ],
       "endpoint": "POST /v1/chat/completions",
       "codeHint": "model=gpt-6-luna",
@@ -846,9 +846,8 @@
       "priceLabel": "~$1.76 / $8.82 per 1M in/out",
       "priceUnit": "per_1m_tokens",
       "related": [
-        "claude-opus-5",
-        "claude-sonnet-5",
-        "claude-fable-5",
+        "claude-sonnet-5-5",
+        "claude-haiku-5-5",
         "claude-fable-5-1"
       ],
       "endpoint": "POST /v1/chat/completions",
@@ -961,7 +960,7 @@
       "priceLabel": "~$0.07 / $0.37 per 1M in/out",
       "priceUnit": "per_1m_tokens",
       "related": [
-        "claude-sonnet-5",
+        "claude-sonnet-5-5",
         "claude-opus-5-5",
         "gpt-6-luna"
       ],
@@ -1002,7 +1001,7 @@
       "related": [
         "claude-haiku-5-5",
         "claude-opus-5-5",
-        "claude-sonnet-5"
+        "claude-fable-5-1"
       ],
       "endpoint": "POST /v1/chat/completions",
       "codeHint": "model=claude-sonnet-5-5",

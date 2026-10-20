@@ -237,6 +237,94 @@
         "2k": 0.04726
       },
       "desc_zh": "Agnes Video 2.5：文生视频/图生视频，720p/1080p/2k，最长 12 秒，按秒计费（720p $0.020548/秒、1080p $0.034932/秒、2k $0.047260/秒）。"
+    },
+    {
+      "id": "seedance-2.5",
+      "vendor": "字节跳动",
+      "icon": "Doubao.Color",
+      "tag": "视频模型",
+      "billing": "settle_cost",
+      "sell_usd_per_second": 0.124479,
+      "model_price_usd": 0.124479,
+      "desc_zh": "seedance-2.5",
+      "markup": 1.3
+    },
+    {
+      "id": "seedance-2.0",
+      "vendor": "字节跳动",
+      "icon": "Doubao.Color",
+      "tag": "视频模型",
+      "billing": "settle_cost",
+      "sell_usd_per_second": 0.085479,
+      "model_price_usd": 0.085479,
+      "desc_zh": "seedance-2.0",
+      "markup": 1.3
+    },
+    {
+      "id": "seedance-2.0-fast",
+      "vendor": "字节跳动",
+      "icon": "Doubao.Color",
+      "tag": "视频模型",
+      "billing": "settle_cost",
+      "sell_usd_per_second": 0.06411,
+      "model_price_usd": 0.06411,
+      "desc_zh": "seedance-2.0-fast",
+      "markup": 1.3
+    },
+    {
+      "id": "seedance-2.0-mini",
+      "vendor": "字节跳动",
+      "icon": "Doubao.Color",
+      "tag": "视频模型",
+      "billing": "settle_cost",
+      "sell_usd_per_second": 0.032055,
+      "model_price_usd": 0.032055,
+      "desc_zh": "seedance-2.0-mini",
+      "markup": 1.3
+    },
+    {
+      "id": "seedance-2.5-480p",
+      "vendor": "字节跳动",
+      "icon": "Doubao.Color",
+      "tag": "视频模型",
+      "billing": "settle_cost",
+      "sell_usd_per_second": 0.124479,
+      "model_price_usd": 0.124479,
+      "desc_zh": "seedance-2.5-480p",
+      "markup": 1.3
+    },
+    {
+      "id": "seedance-2.0-480p",
+      "vendor": "字节跳动",
+      "icon": "Doubao.Color",
+      "tag": "视频模型",
+      "billing": "settle_cost",
+      "sell_usd_per_second": 0.085479,
+      "model_price_usd": 0.085479,
+      "desc_zh": "seedance-2.0-480p",
+      "markup": 1.3
+    },
+    {
+      "id": "seedance-2.0-480p-fast",
+      "vendor": "字节跳动",
+      "icon": "Doubao.Color",
+      "tag": "视频模型",
+      "billing": "settle_cost",
+      "sell_usd_per_second": 0.06411,
+      "model_price_usd": 0.06411,
+      "desc_zh": "seedance-2.0-480p-fast",
+      "markup": 1.3
+    },
+    {
+      "id": "seedance-2.0-480p-mini",
+      "vendor": "字节跳动",
+      "icon": "Doubao.Color",
+      "tag": "视频模型",
+      "billing": "settle_cost",
+      "sell_usd_per_second": 0.032055,
+      "model_price_usd": 0.032055,
+      "desc_zh": "seedance-2.0-480p-mini",
+      "markup": 1.3
     }
   ]
 }

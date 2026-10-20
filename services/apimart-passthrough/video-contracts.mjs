@@ -114,13 +114,6 @@ function validateVideoClientBody(modelId, body) {
   const id = String(modelId || "");
 
   if (id.startsWith("seedance-")) {
-    if (id === "seedance-2.0" || id === "seedance-2.5") {
-      return {
-        param: "model",
-        message:
-          "seedance-2.0 / seedance-2.5 are delisted. Use seedance-2.0-720p-mini (or other *-720p/*-1080p SKUs).",
-      };
-    }
     const frame =
       hasAnyMedia(body, ["first_frame_image", "input_reference"]) ||
       (Array.isArray(body.image_with_roles) &&
@@ -161,11 +154,12 @@ function validateVideoClientBody(modelId, body) {
     const dur = body.duration ?? body.seconds;
     if (dur != null && dur !== "") {
       const n = Number(dur);
-      if (!Number.isFinite(n) || n !== Math.trunc(n) || n < 4 || n > 15) {
+      const maxSec = id.includes("2.5") ? 30 : 15;
+      if (!Number.isFinite(n) || n !== Math.trunc(n) || n < 4 || n > maxSec) {
         return {
           param: "duration",
           message:
-            "Seedance duration/seconds must be an integer 4–15 (default 5 if omitted)",
+            `Seedance duration/seconds must be an integer 4–${maxSec} (default 5 if omitted)`,
         };
       }
     }
@@ -495,9 +489,10 @@ function buildAioneVideoBody(meta, body) {
   if (seconds != null && seconds !== "") out.seconds = Number(seconds);
   else out.seconds = Number(meta?.estimate?.default_seconds || 5);
   if (!Number.isFinite(out.seconds) || out.seconds <= 0) out.seconds = 5;
-  // Upstream Seedance accepts 4–15s; clamp so bad clients do not hard-fail mid-flight
+  // Upstream Seedance accepts 4–15s (2.5 accepts up to 30s); clamp so bad clients do not hard-fail mid-flight
+  const maxSec = String(meta?.id || "").includes("2.5") ? 30 : 15;
   if (out.seconds < 4) out.seconds = 4;
-  if (out.seconds > 15) out.seconds = 15;
+  if (out.seconds > maxSec) out.seconds = maxSec;
   out.seconds = Math.trunc(out.seconds);
 
   // size is required by aione Seedance SKUs; derive from model id when missing

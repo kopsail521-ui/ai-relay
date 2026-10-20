@@ -545,6 +545,206 @@
         "aspect_ratio_style": "numeric"
       },
       "desc_zh": "Agnes Video 2.5 视频生成，文生视频/图生视频，支持 720p / 1080p / 2k，最长 12 秒，按秒计费。"
+    },
+    {
+      "id": "seedance-2.5-480p",
+      "vendor": "字节跳动",
+      "icon": "Doubao.Color",
+      "tag": "视频",
+      "upstream": "aicopy",
+      "upstream_model": "【官方稳定版】2.5-480p",
+      "upstream_submit_path": "/v1/videos",
+      "markup": 1.3,
+      "billing": "settle_cost",
+      "display_unit": "second",
+      "estimate": {
+        "mode": "per_second",
+        "default_seconds": 5,
+        "default_resolution": "480p",
+        "cost_usd_per_second": 0.095753,
+        "sell_usd_per_second": 0.124479,
+        "cost_cny_per_second": 0.699,
+        "fx_cny_usd": 7.3
+      },
+      "desc_zh": "seedance-2.5-480p"
+    },
+    {
+      "id": "seedance-2.0-480p",
+      "vendor": "字节跳动",
+      "icon": "Doubao.Color",
+      "tag": "视频",
+      "upstream": "aicopy",
+      "upstream_model": "【官方稳定版】sd2.0-480p-满血",
+      "upstream_submit_path": "/v1/videos",
+      "markup": 1.3,
+      "billing": "settle_cost",
+      "display_unit": "second",
+      "estimate": {
+        "mode": "per_second",
+        "default_seconds": 5,
+        "default_resolution": "480p",
+        "cost_usd_per_second": 0.065753,
+        "sell_usd_per_second": 0.085479,
+        "cost_cny_per_second": 0.48,
+        "fx_cny_usd": 7.3
+      },
+      "desc_zh": "seedance-2.0-480p"
+    },
+    {
+      "id": "seedance-2.0-480p-fast",
+      "vendor": "字节跳动",
+      "icon": "Doubao.Color",
+      "tag": "视频",
+      "upstream": "aicopy",
+      "upstream_model": "【官方稳定版】sd2.0-480p-fast",
+      "upstream_submit_path": "/v1/videos",
+      "markup": 1.3,
+      "billing": "settle_cost",
+      "display_unit": "second",
+      "estimate": {
+        "mode": "per_second",
+        "default_seconds": 5,
+        "default_resolution": "480p",
+        "cost_usd_per_second": 0.049315,
+        "sell_usd_per_second": 0.06411,
+        "cost_cny_per_second": 0.36,
+        "fx_cny_usd": 7.3
+      },
+      "desc_zh": "seedance-2.0-480p-fast"
+    },
+    {
+      "id": "seedance-2.0-480p-mini",
+      "vendor": "字节跳动",
+      "icon": "Doubao.Color",
+      "tag": "视频",
+      "upstream": "aicopy",
+      "upstream_model": "【官方稳定版】sd2.0-480p-mini",
+      "upstream_submit_path": "/v1/videos",
+      "markup": 1.3,
+      "billing": "settle_cost",
+      "display_unit": "second",
+      "estimate": {
+        "mode": "per_second",
+        "default_seconds": 5,
+        "default_resolution": "480p",
+        "cost_usd_per_second": 0.024658,
+        "sell_usd_per_second": 0.032055,
+        "cost_cny_per_second": 0.18,
+        "fx_cny_usd": 7.3
+      },
+      "desc_zh": "seedance-2.0-480p-mini"
+    },
+    {
+      "id": "seedance-2.5",
+      "vendor": "字节跳动",
+      "icon": "Doubao.Color",
+      "tag": "视频",
+      "upstream": "aione",
+      "upstream_model": "sd2.5-720均衡版",
+      "upstream_submit_path": "/v1/videos",
+      "markup": 1.3,
+      "billing": "settle_cost",
+      "display_unit": "second",
+      "estimate": {
+        "mode": "per_second_resolution",
+        "default_seconds": 5,
+        "default_resolution": "720p",
+        "cost_usd_per_second": {
+          "480p": 0.095753,
+          "720p": 0.10274,
+          "1080p": 0.101096
+        },
+        "sell_usd_per_second": {
+          "480p": 0.124479,
+          "720p": 0.133562,
+          "1080p": 0.137996
+        }
+      },
+      "desc_zh": "Seedance 2.5 视频生成 · 支持 480p / 720p / 1080p 按秒计费"
+    },
+    {
+      "id": "seedance-2.0",
+      "vendor": "字节跳动",
+      "icon": "Doubao.Color",
+      "tag": "视频",
+      "upstream": "aione",
+      "upstream_model": "sd2.0-720满血-不卡脸（按秒）",
+      "upstream_submit_path": "/v1/videos",
+      "markup": 1.3,
+      "billing": "settle_cost",
+      "display_unit": "second",
+      "estimate": {
+        "mode": "per_second_resolution",
+        "default_seconds": 5,
+        "default_resolution": "720p",
+        "cost_usd_per_second": {
+          "480p": 0.065753,
+          "720p": 0.073973,
+          "1080p": 0.073699
+        },
+        "sell_usd_per_second": {
+          "480p": 0.085479,
+          "720p": 0.096165,
+          "1080p": 0.100599
+        }
+      },
+      "desc_zh": "Seedance 2.0 标准满血版 · 支持 480p / 720p / 1080p 按秒计费"
+    },
+    {
+      "id": "seedance-2.0-fast",
+      "vendor": "字节跳动",
+      "icon": "Doubao.Color",
+      "tag": "视频",
+      "upstream": "aione",
+      "upstream_model": "sd2.0-720fast-不卡脸（按秒）",
+      "upstream_submit_path": "/v1/videos",
+      "markup": 1.3,
+      "billing": "settle_cost",
+      "display_unit": "second",
+      "estimate": {
+        "mode": "per_second_resolution",
+        "default_seconds": 5,
+        "default_resolution": "720p",
+        "cost_usd_per_second": {
+          "480p": 0.049315,
+          "720p": 0.057534,
+          "1080p": 0.054521
+        },
+        "sell_usd_per_second": {
+          "480p": 0.06411,
+          "720p": 0.074794,
+          "1080p": 0.0754
+        }
+      },
+      "desc_zh": "Seedance 2.0 Fast 极速版 · 支持 480p / 720p / 1080p 按秒计费"
+    },
+    {
+      "id": "seedance-2.0-mini",
+      "vendor": "字节跳动",
+      "icon": "Doubao.Color",
+      "tag": "视频",
+      "upstream": "aione",
+      "upstream_model": "sd2.0-720mini-不卡脸（按秒）",
+      "upstream_submit_path": "/v1/videos",
+      "markup": 1.3,
+      "billing": "settle_cost",
+      "display_unit": "second",
+      "estimate": {
+        "mode": "per_second_resolution",
+        "default_seconds": 5,
+        "default_resolution": "720p",
+        "cost_usd_per_second": {
+          "480p": 0.024658,
+          "720p": 0.038356,
+          "1080p": 0.036712
+        },
+        "sell_usd_per_second": {
+          "480p": 0.032055,
+          "720p": 0.049863,
+          "1080p": 0.050112
+        }
+      },
+      "desc_zh": "Seedance 2.0 Mini 轻量版 · 支持 480p / 720p / 1080p 按秒计费"
     }
   ],
   "fx_cny_usd": 7.3

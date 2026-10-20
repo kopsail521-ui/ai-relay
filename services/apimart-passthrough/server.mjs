@@ -1040,7 +1040,21 @@ const server = http.createServer(async (req, res) => {
         error: { message: "Invalid JSON body", type: "invalid_request_error" },
       });
     }
-    const modelId = String(body.model || "");
+    // Resolve unified Seedance series model -> concrete resolution SKU
+    let modelId = String(body.model || "");
+    if (
+      modelId === "seedance-2.5" ||
+      modelId === "seedance-2.0" ||
+      modelId === "seedance-2.0-fast" ||
+      modelId === "seedance-2.0-mini"
+    ) {
+      const resRaw = String(body.resolution || body.size || "720p").toLowerCase();
+      const resTag = resRaw.includes("1080") ? "1080p" : resRaw.includes("480") ? "480p" : "720p";
+      if (modelId === "seedance-2.5") modelId = `seedance-2.5-${resTag}`;
+      else if (modelId === "seedance-2.0") modelId = `seedance-2.0-${resTag}`;
+      else if (modelId === "seedance-2.0-fast") modelId = `seedance-2.0-${resTag}-fast`;
+      else if (modelId === "seedance-2.0-mini") modelId = `seedance-2.0-${resTag}-mini`;
+    }
     const meta = modelMap[modelId];
     if (!meta) {
       return json(res, 400, {
@@ -1060,20 +1074,25 @@ const server = http.createServer(async (req, res) => {
     const useGrsai = isGrsaiMeta(meta);
     const useOpenlux = isOpenluxMeta(meta);
     const useAione = isAioneMeta(meta);
+    const isAicopy = String(meta?.upstream || "").toLowerCase() === "aicopy";
     const upKey = useGrsai
       ? GRSAI_KEY
-      : useAione
-        ? AIONE_KEY
-        : useOpenlux
-          ? OPENLUX_KEY
-          : APIMART_KEY;
+      : isAicopy
+        ? (AICOPY_KEY || AIONE_KEY)
+        : useAione
+          ? AIONE_KEY
+          : useOpenlux
+            ? OPENLUX_KEY
+            : APIMART_KEY;
     const upOrigin = useGrsai
       ? GRSAI_ORIGIN
-      : useAione
-        ? AIONE_ORIGIN
-        : useOpenlux
-          ? OPENLUX_ORIGIN
-          : APIMART_ORIGIN;
+      : isAicopy
+        ? (AICOPY_ORIGIN || AIONE_ORIGIN)
+        : useAione
+          ? AIONE_ORIGIN
+          : useOpenlux
+            ? OPENLUX_ORIGIN
+            : APIMART_ORIGIN;
     if (!upKey) {
       return json(res, 500, {
         error: { message: "Service temporarily unavailable", type: "server_error" },

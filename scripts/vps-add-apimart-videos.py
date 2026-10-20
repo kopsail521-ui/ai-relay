@@ -237,10 +237,10 @@ def main():
         desc = m.get("desc_zh") or ("%s · $%s%s" % (mid, sell, unit))
 
         model_sql = "SELECT id FROM models WHERE model_name=?"
-        if "deleted_at" in m_cols:
-            model_sql += " AND deleted_at IS NULL"
         cur.execute(model_sql, (mid,))
         mrow = cur.fetchone()
+        if mrow is not None and "deleted_at" in m_cols:
+            cur.execute("UPDATE models SET deleted_at=NULL, status=1 WHERE id=?", (mrow[0],))
         if mrow is None:
             fields = [
                 "model_name",

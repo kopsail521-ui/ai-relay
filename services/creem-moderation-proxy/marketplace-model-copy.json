@@ -3193,15 +3193,15 @@
     }
   },
   "seedance-2.5": {
-    "description": "字节 Seedance 2.5 视频生成模型。新一代高保真视频生成，支持多种分辨率档位。支持视频模态。适合高质量视频创作、专业内容制作。",
+    "description": "字节 Seedance 2.5 视频生成大模型。新一代高保真长时长视频生成，单次最高30秒，支持多模态参考与480p/720p/1080p多分辨率。适合高质量短剧、广告营销与专业内容创作。",
     "descriptions": {
-      "zhCN": "字节 Seedance 2.5 视频生成模型。新一代高保真视频生成，支持多种分辨率档位。支持视频模态。适合高质量视频创作、专业内容制作。",
-      "zhTW": "字节 Seedance 2.5 影片生成模型。新一代高保真影片生成，支援多種解析度檔位。支援影片模态。適合高質量影片創作、专业內容制作。",
-      "en": "ByteDance's Seedance 2.5 video generation model. next-generation high-fidelity video generation across resolution tiers. video modality. Ideal for high-quality video creation, professional content production.",
-      "fr": "ByteDance's Seedance 2.5 video generation model. next-generation high-fidelity video generation across resolution tiers. video modality. Idéal pour high-quality video creation, professional content production.",
-      "ru": "ByteDance's Seedance 2.5 video generation model. next-generation high-fidelity video generation across resolution tiers. video modality. Подходит для high-quality video creation, professional content production.",
-      "ja": "ByteDance's Seedance 2.5 video generation model. next-generation high-fidelity video generation across resolution tiers. video modality. high-quality video creation, professional content production 向け。",
-      "vi": "ByteDance's Seedance 2.5 video generation model. next-generation high-fidelity video generation across resolution tiers. video modality. Phù hợp cho high-quality video creation, professional content production."
+      "zhCN": "字节 Seedance 2.5 视频生成大模型。新一代高保真长时长视频生成，单次最高30秒，支持多模态参考与480p/720p/1080p多分辨率。适合高质量短剧、广告营销与专业内容创作。",
+      "zhTW": "字節 Seedance 2.5 影片生成大模型。新一代高保真長時長影片生成，單次最高30秒，支援多模態參考與480p/720p/1080p多解析度。適合高質量短劇、廣告營銷與專業內容創作。",
+      "en": "ByteDance's flagship Seedance 2.5 video generation model. High-fidelity video generation up to 30s across 480p/720p/1080p resolutions with multimodal reference support.",
+      "fr": "Modèle phare Seedance 2.5 de ByteDance pour la génération vidéo haute fidélité jusqu'à 30s.",
+      "ru": "Флагманская модель генерации видео Seedance 2.5 от ByteDance с поддержкой до 30 секунд.",
+      "ja": "ByteDanceのフラッグシップ動画生成モデルSeedance 2.5。最大30秒の高解像度動画生成。",
+      "vi": "Mô hình tạo video cao cấp Seedance 2.5 của ByteDance, hỗ trợ độ dài lên đến 30 giây."
     },
     "unit": "second",
     "badge": {
@@ -3213,26 +3213,8 @@
       "ja": "秒課金",
       "vi": "Theo giây"
     },
-    "suffix": {
-      "zhCN": "/秒",
-      "zhTW": "/秒",
-      "en": "/ second",
-      "fr": "/ seconde",
-      "ru": "/ секунду",
-      "ja": "/ 秒",
-      "vi": "/ giây"
-    },
-    "price_key": {
-      "zhCN": "每秒",
-      "zhTW": "每秒",
-      "en": "Per second",
-      "fr": "Par seconde",
-      "ru": "За секунду",
-      "ja": "秒ごと",
-      "vi": "Mỗi giây"
-    },
-    "description_zh": "字节 Seedance 2.5 视频生成模型。新一代高保真视频生成，支持多种分辨率档位。支持视频模态。适合高质量视频创作、专业内容制作。",
-    "description_en": "ByteDance's Seedance 2.5 video generation model. next-generation high-fidelity video generation across resolution tiers. video modality. Ideal for high-quality video creation, professional content production.",
+    "description_zh": "字节 Seedance 2.5 视频生成大模型。支持 480p / 720p / 1080p，单次最高30秒。",
+    "description_en": "ByteDance's flagship Seedance 2.5 video model, up to 30 seconds across 480p/720p/1080p.",
     "badge_zh": "按秒计费",
     "badge_en": "Per Second",
     "suffix_zh": "/秒",
@@ -3243,59 +3225,69 @@
       "columns": {
         "zhCN": [
           "分辨率",
-          "有参考视频",
+          "规格说明",
           "售价"
+        ],
+        "zhTW": [
+          "解析度",
+          "規格說明",
+          "售價"
         ],
         "en": [
           "Resolution",
-          "Reference video",
+          "Tier",
           "Price"
+        ],
+        "fr": [
+          "Résolution",
+          "Spéc.",
+          "Prix"
+        ],
+        "ru": [
+          "Разрешение",
+          "Уровень",
+          "Цена"
+        ],
+        "ja": [
+          "解像度",
+          "規格",
+          "価格"
+        ],
+        "vi": [
+          "Độ phân giải",
+          "Quy cách",
+          "Giá"
         ]
       },
       "rows": [
         [
-          "480P",
-          "否 / No",
-          "$0.1153 / sec"
+          "480p",
+          "官方稳定版",
+          "$0.124479 / sec"
         ],
         [
-          "480P",
-          "是（参考+生成时长）",
-          "$0.06912 / sec"
+          "720p",
+          "均衡版",
+          "$0.133562 / sec"
         ],
         [
-          "720P",
-          "否 / No",
-          "$0.2592 / sec"
-        ],
-        [
-          "720P",
-          "是（参考+生成时长）",
-          "$0.15552 / sec"
-        ],
-        [
-          "1080P",
-          "否 / No",
-          "$0.4619 / sec"
-        ],
-        [
-          "1080P",
-          "是（参考+生成时长）",
-          "$0.2759 / sec"
+          "1080p",
+          "超分版",
+          "$0.137996 / sec"
         ]
       ]
     }
   },
   "seedance-2.0": {
-    "description": "字节 Seedance 2.0 视频生成模型。成熟的视频生成能力，支持多分辨率与参考视频。支持视频模态。适合短视频创作、广告与营销内容。",
+    "description": "字节 Seedance 2.0 标准满血版视频生成模型。高保真运动控制，主体一致性强，支持480p/720p/1080p分辨率与多图音视频多模态参考。",
     "descriptions": {
-      "zhCN": "字节 Seedance 2.0 视频生成模型。成熟的视频生成能力，支持多分辨率与参考视频。支持视频模态。适合短视频创作、广告与营销内容。",
-      "zhTW": "字节 Seedance 2.0 影片生成模型。成熟的影片生成能力，支援多解析度与参考影片。支援影片模态。適合短影片創作、廣告与行銷內容。",
-      "en": "ByteDance's Seedance 2.0 video generation model. mature video generation with multiple resolutions and reference video support. video modality. Ideal for short video creation, advertising and marketing content.",
-      "fr": "ByteDance's Seedance 2.0 video generation model. mature video generation with multiple resolutions and reference video support. video modality. Idéal pour short video creation, advertising and marketing content.",
-      "ru": "ByteDance's Seedance 2.0 video generation model. mature video generation with multiple resolutions and reference video support. video modality. Подходит для short video creation, advertising and marketing content.",
-      "ja": "ByteDance's Seedance 2.0 video generation model. mature video generation with multiple resolutions and reference video support. video modality. short video creation, advertising and marketing content 向け。",
-      "vi": "ByteDance's Seedance 2.0 video generation model. mature video generation with multiple resolutions and reference video support. video modality. Phù hợp cho short video creation, advertising and marketing content."
+      "zhCN": "字节 Seedance 2.0 标准满血版视频生成模型。高保真运动控制，主体一致性强，支持480p/720p/1080p分辨率与多图音视频多模态参考。",
+      "zhTW": "字節 Seedance 2.0 標準滿血版影片生成模型。高保真運動控制，主體一致性強，支援480p/720p/1080p解析度與多模態參考。",
+      "en": "ByteDance Seedance 2.0 standard full-tier video generation model. Cinematic motion and subject consistency across 480p/720p/1080p.",
+      "fr": "Modèle standard Seedance 2.0 de ByteDance pour la génération de vidéo cinématique.",
+      "ru": "Стандартная флагманская модель генерации видео Seedance 2.0 от ByteDance.",
+      "ja": "ByteDanceの標準フルスペック動画生成モデルSeedance 2.0。",
+      "vi": "Mô hình tạo video tiêu chuẩn Seedance 2.0 của ByteDance."
     },
     "unit": "second",
     "badge": {
@@ -3307,26 +3299,8 @@
       "ja": "秒課金",
       "vi": "Theo giây"
     },
-    "suffix": {
-      "zhCN": "/秒",
-      "zhTW": "/秒",
-      "en": "/ second",
-      "fr": "/ seconde",
-      "ru": "/ секунду",
-      "ja": "/ 秒",
-      "vi": "/ giây"
-    },
-    "price_key": {
-      "zhCN": "每秒",
-      "zhTW": "每秒",
-      "en": "Per second",
-      "fr": "Par seconde",
-      "ru": "За секунду",
-      "ja": "秒ごと",
-      "vi": "Mỗi giây"
-    },
-    "description_zh": "字节 Seedance 2.0 视频生成模型。成熟的视频生成能力，支持多分辨率与参考视频。支持视频模态。适合短视频创作、广告与营销内容。",
-    "description_en": "ByteDance's Seedance 2.0 video generation model. mature video generation with multiple resolutions and reference video support. video modality. Ideal for short video creation, advertising and marketing content.",
+    "description_zh": "字节 Seedance 2.0 标准满血版视频生成模型。计费：$0.085479/秒起。",
+    "description_en": "ByteDance Seedance 2.0 standard video model, starting at $0.085479 / sec.",
     "badge_zh": "按秒计费",
     "badge_en": "Per Second",
     "suffix_zh": "/秒",
@@ -3337,55 +3311,55 @@
       "columns": {
         "zhCN": [
           "分辨率",
-          "有参考视频",
+          "规格说明",
           "售价"
+        ],
+        "zhTW": [
+          "解析度",
+          "規格說明",
+          "售價"
         ],
         "en": [
           "Resolution",
-          "Reference video",
+          "Tier",
           "Price"
+        ],
+        "fr": [
+          "Résolution",
+          "Spéc.",
+          "Prix"
+        ],
+        "ru": [
+          "Разрешение",
+          "Уровень",
+          "Цена"
+        ],
+        "ja": [
+          "解像度",
+          "規格",
+          "価格"
+        ],
+        "vi": [
+          "Độ phân giải",
+          "Quy cách",
+          "Giá"
         ]
       },
       "rows": [
         [
-          "480P",
-          "否",
-          "$0.0792 / sec"
+          "480p",
+          "官方稳定版",
+          "$0.085479 / sec"
         ],
         [
-          "480P",
-          "是（参考+生成）",
-          "$0.048 / sec"
+          "720p",
+          "满血版",
+          "$0.096165 / sec"
         ],
         [
-          "720P",
-          "否",
-          "$0.1704 / sec"
-        ],
-        [
-          "720P",
-          "是（参考+生成）",
-          "$0.1030 / sec"
-        ],
-        [
-          "1080P",
-          "否",
-          "$0.4253 / sec"
-        ],
-        [
-          "1080P",
-          "是（参考+生成）",
-          "$0.2588 / sec"
-        ],
-        [
-          "4K",
-          "否",
-          "$0.8664 / sec"
-        ],
-        [
-          "4K",
-          "是（参考+生成）",
-          "$0.5332 / sec"
+          "1080p",
+          "超分满血版",
+          "$0.100599 / sec"
         ]
       ]
     }
@@ -7883,5 +7857,177 @@
     "suffix_en": "/ request",
     "price_key_zh": "价格",
     "price_key_en": "Price"
+  },
+  "seedance-2.0-fast": {
+    "description": "字节 Seedance 2.0 Fast 极速版视频生成模型。更快出片效率，适合快速试错、迭代预览与高吞吐批量生产。",
+    "descriptions": {
+      "zhCN": "字节 Seedance 2.0 Fast 极速版视频生成模型。更快出片效率，适合快速试错、迭代预览与高吞吐批量生产。",
+      "zhTW": "字節 Seedance 2.0 Fast 極速版影片生成模型。更快出片效率，適合快速試錯、迭代預覽與高吞吐批量生產。",
+      "en": "ByteDance Seedance 2.0 Fast video generation model. Accelerated generation for rapid prototyping and high-throughput batch workloads.",
+      "fr": "Modèle rapide Seedance 2.0 Fast de ByteDance pour prototypage rapide.",
+      "ru": "Ускоренная модель Seedance 2.0 Fast для быстрого рендеринга.",
+      "ja": "ByteDanceの高速版動画生成モデルSeedance 2.0 Fast。",
+      "vi": "Mô hình tạo video tốc độ cao Seedance 2.0 Fast của ByteDance."
+    },
+    "unit": "second",
+    "badge": {
+      "zhCN": "按秒计费",
+      "zhTW": "按秒計費",
+      "en": "Per Second",
+      "fr": "Par seconde",
+      "ru": "За секунду",
+      "ja": "秒課金",
+      "vi": "Theo giây"
+    },
+    "description_zh": "字节 Seedance 2.0 Fast 极速版。计费：$0.064110/秒起。",
+    "description_en": "ByteDance Seedance 2.0 Fast tier, starting at $0.064110 / sec.",
+    "badge_zh": "按秒计费",
+    "badge_en": "Per Second",
+    "suffix_zh": "/秒",
+    "suffix_en": "/ second",
+    "price_key_zh": "每秒",
+    "price_key_en": "Per second",
+    "price_table": {
+      "columns": {
+        "zhCN": [
+          "分辨率",
+          "规格说明",
+          "售价"
+        ],
+        "zhTW": [
+          "解析度",
+          "規格說明",
+          "售價"
+        ],
+        "en": [
+          "Resolution",
+          "Tier",
+          "Price"
+        ],
+        "fr": [
+          "Résolution",
+          "Spéc.",
+          "Prix"
+        ],
+        "ru": [
+          "Разрешение",
+          "Уровень",
+          "Цена"
+        ],
+        "ja": [
+          "解像度",
+          "規格",
+          "価格"
+        ],
+        "vi": [
+          "Độ phân giải",
+          "Quy cách",
+          "Giá"
+        ]
+      },
+      "rows": [
+        [
+          "480p",
+          "官方稳定版",
+          "$0.064110 / sec"
+        ],
+        [
+          "720p",
+          "加速版",
+          "$0.074794 / sec"
+        ],
+        [
+          "1080p",
+          "超分加速版",
+          "$0.075400 / sec"
+        ]
+      ]
+    }
+  },
+  "seedance-2.0-mini": {
+    "description": "字节 Seedance 2.0 Mini 轻量经济版视频生成模型。大幅降低生成成本，适合短镜头、大批量调用与内容测试。",
+    "descriptions": {
+      "zhCN": "字节 Seedance 2.0 Mini 轻量经济版视频生成模型。大幅降低生成成本，适合短镜头、大批量调用与内容测试。",
+      "zhTW": "字節 Seedance 2.0 Mini 輕量經濟版影片生成模型。大幅降低生成成本，適合短鏡頭、大批量調用與內容測試。",
+      "en": "ByteDance Seedance 2.0 Mini budget video generation model. Maximizes cost efficiency for high-volume and lightweight video workflows.",
+      "fr": "Modèle économique Seedance 2.0 Mini de ByteDance pour la création vidéo à coût réduit.",
+      "ru": "Бюджетная модель Seedance 2.0 Mini для высокообъемных задач.",
+      "ja": "ByteDanceの軽量コスト削減版動画生成モデルSeedance 2.0 Mini。",
+      "vi": "Mô hình tạo video tiết kiệm Seedance 2.0 Mini của ByteDance."
+    },
+    "unit": "second",
+    "badge": {
+      "zhCN": "按秒计费",
+      "zhTW": "按秒計費",
+      "en": "Per Second",
+      "fr": "Par seconde",
+      "ru": "За секунду",
+      "ja": "秒課金",
+      "vi": "Theo giây"
+    },
+    "description_zh": "字节 Seedance 2.0 Mini 精简版。计费：$0.032055/秒起。",
+    "description_en": "ByteDance Seedance 2.0 Mini tier, starting at $0.032055 / sec.",
+    "badge_zh": "按秒计费",
+    "badge_en": "Per Second",
+    "suffix_zh": "/秒",
+    "suffix_en": "/ second",
+    "price_key_zh": "每秒",
+    "price_key_en": "Per second",
+    "price_table": {
+      "columns": {
+        "zhCN": [
+          "分辨率",
+          "规格说明",
+          "售价"
+        ],
+        "zhTW": [
+          "解析度",
+          "規格說明",
+          "售價"
+        ],
+        "en": [
+          "Resolution",
+          "Tier",
+          "Price"
+        ],
+        "fr": [
+          "Résolution",
+          "Spéc.",
+          "Prix"
+        ],
+        "ru": [
+          "Разрешение",
+          "Уровень",
+          "Цена"
+        ],
+        "ja": [
+          "解像度",
+          "規格",
+          "価格"
+        ],
+        "vi": [
+          "Độ phân giải",
+          "Quy cách",
+          "Giá"
+        ]
+      },
+      "rows": [
+        [
+          "480p",
+          "官方稳定版",
+          "$0.032055 / sec"
+        ],
+        [
+          "720p",
+          "精简版",
+          "$0.049863 / sec"
+        ],
+        [
+          "1080p",
+          "超分精简版",
+          "$0.050112 / sec"
+        ]
+      ]
+    }
   }
 }

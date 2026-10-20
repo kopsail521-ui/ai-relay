@@ -131,6 +131,14 @@ const VIDEO_GEN_FALLBACK = [
   "seedance-2.0-720p-fast",
   "seedance-2.0-720p-mini",
   "seedance-2.5-720p",
+  "seedance-2.5-480p",
+  "seedance-2.0-480p",
+  "seedance-2.0-480p-fast",
+  "seedance-2.0-480p-mini",
+  "seedance-2.5",
+  "seedance-2.0",
+  "seedance-2.0-fast",
+  "seedance-2.0-mini",
 ];
 function loadVideoGenModels() {
   const candidates = [

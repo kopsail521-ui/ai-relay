@@ -54,6 +54,12 @@
     "Step-Audio-TTS-3B": "Stepfun.Color",
     "suno_music_open": "Suno",
     "gemini-3.1-flash-tts-preview": "Gemini.Color",
-    "gemini-embedding-2-preview": "Gemini.Color"
+    "gemini-embedding-2-preview": "Gemini.Color",
+    "seedance-2.0-fast": "Doubao.Color",
+    "seedance-2.0-mini": "Doubao.Color",
+    "seedance-2.5-480p": "Doubao.Color",
+    "seedance-2.0-480p": "Doubao.Color",
+    "seedance-2.0-480p-fast": "Doubao.Color",
+    "seedance-2.0-480p-mini": "Doubao.Color"
   }
 }

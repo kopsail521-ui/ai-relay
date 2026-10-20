@@ -691,6 +691,10 @@
               </tr>
             </thead>
             <tbody>
+<tr><td class="model"><button type="button" class="model-btn" data-copy="gpt-6-astra">gpt-6-astra</button></td><td class="note-cell" data-i18n="nGpt6Astra"></td></tr>
+<tr><td class="model"><button type="button" class="model-btn" data-copy="gpt-6.1-sol">gpt-6.1-sol</button></td><td class="note-cell" data-i18n="nGpt61Sol"></td></tr>
+<tr><td class="model"><button type="button" class="model-btn" data-copy="gpt-6-sol">gpt-6-sol</button></td><td class="note-cell" data-i18n="nGpt6Sol"></td></tr>
+<tr><td class="model"><button type="button" class="model-btn" data-copy="gpt-6-luna">gpt-6-luna</button></td><td class="note-cell" data-i18n="nGpt6Luna"></td></tr>
 <tr><td class="model"><button type="button" class="model-btn" data-copy="gpt-5.6-luna">gpt-5.6-luna</button></td><td class="note-cell" data-i18n="nLuna"></td></tr>
 <tr><td class="model"><button type="button" class="model-btn" data-copy="gpt-5.6-terra">gpt-5.6-terra</button></td><td class="note-cell" data-i18n="nTerra"></td></tr>
 <tr><td class="model"><button type="button" class="model-btn" data-copy="gpt-5.6-sol">gpt-5.6-sol</button></td><td class="note-cell" data-i18n="nSol"></td></tr>
@@ -706,6 +710,8 @@
 <tr><td class="model"><button type="button" class="model-btn" data-copy="kimi-k3">kimi-k3</button></td><td class="note-cell" data-i18n="nKimi"></td></tr>
 <tr><td class="model"><button type="button" class="model-btn" data-copy="grok-4.7">grok-4.7</button></td><td class="note-cell" data-i18n="nGrok"></td></tr>
 <tr><td class="model"><button type="button" class="model-btn" data-copy="minimax-m3">minimax-m3</button></td><td class="note-cell" data-i18n="nMinimax"></td></tr>
+<tr><td class="model"><button type="button" class="model-btn" data-copy="glm-5.3">glm-5.3</button></td><td class="note-cell" data-i18n="nGlm53"></td></tr>
+<tr><td class="model"><button type="button" class="model-btn" data-copy="glm-5.3-flash">glm-5.3-flash</button></td><td class="note-cell" data-i18n="nGlm53Flash"></td></tr>
 <tr><td class="model"><button type="button" class="model-btn" data-copy="glm-5.2">glm-5.2</button></td><td class="note-cell" data-i18n="nGlm"></td></tr>
             </tbody>
           </table>
@@ -816,6 +822,8 @@
 <tr><td class="model"><button type="button" class="model-btn" data-copy="flux-3-video">flux-3-video</button></td><td>draft / hd / fhd</td><td>5s</td><td data-i18n="nFluxVideo"></td></tr>
 <tr><td class="model"><button type="button" class="model-btn" data-copy="wan3.0-video">wan3.0-video</button></td><td>480P / 720P / 1080P</td><td>5s</td><td data-i18n="nWanVideo"></td></tr>
 <tr><td class="model"><button type="button" class="model-btn" data-copy="agnes-video-2.5">agnes-video-2.5</button></td><td>720p / 1080p / 2k</td><td>5s</td><td data-i18n="nAgnesVideo"></td></tr>
+<tr><td class="model"><button type="button" class="model-btn" data-copy="video-enhance-pro">video-enhance-pro</button></td><td>720p / 1080p (default) / 2k</td><td>Input duration</td><td data-i18n="nVideoEnhance"></td></tr>
+<tr><td class="model"><button type="button" class="model-btn" data-copy="subtitle-erase-pro">subtitle-erase-pro</button></td><td>Native resolution</td><td>Input duration</td><td data-i18n="nSubtitleErase"></td></tr>
             </tbody>
           </table>
         </div>
@@ -988,6 +996,15 @@ const I18N = {
     "chatHint": "Click a model name to copy. Billed by token usage (console is source of truth). Top up when quota runs out.",
     "imageTitle": "Images",
     "videoTitle": "Video Generation",
+    "nGpt6Astra": "GPT-6 flagship reasoning & agent tier",
+    "nGpt61Sol": "GPT-6.1 balanced general coding",
+    "nGpt6Sol": "GPT-6 premium reasoning",
+    "nGpt6Luna": "GPT-6 budget high-speed",
+    "nGlm53": "GLM-5.3 flagship Chinese/English LLM",
+    "nGlm53Flash": "GLM-5.3 Flash ultra-fast budget",
+    "nVideoEnhance": "Video enhancement & super-resolution (POST /v1/async/videos/enhance)",
+    "nSubtitleErase": "Hard-subtitle & watermark removal (POST /v1/async/videos/subtitle-erase)",
+
     "nSeedance25": "ByteDance 2.5 flagship · high fidelity up to 30s",
     "nSeedance20": "ByteDance 2.0 standard full-tier",
     "nSeedanceFast": "ByteDance 2.0 Fast accelerated generation",
@@ -997,7 +1014,7 @@ const I18N = {
     "nWanVideo": "Alibaba Tongyi Wanxiang 3.0 video",
     "nAgnesVideo": "Agnes 2.5 video generation",
     "videoSizeHint": "Selectable resolution (<code>resolution: \"480p\" | \"720p\" | \"1080p\"</code>, default <code>720p</code>). Clips run 4 to 15 seconds (default 5). Legacy suffix IDs (e.g. <code>seedance-2.0-1080p</code>) remain fully backward-compatible.",
-    "videoTaskHint": "Video generation is asynchronous. The submit request returns a <code>task_id</code> (or <code>id</code>). Poll status every 3–5 seconds until completed (<code>status: \"succeeded\"</code> with video URL):",
+    "videoTaskHint": "Video generation and async video processing are asynchronous. The submit call returns a task <code>id</code> (or <code>task_id</code>). Poll status via <code>GET /v1/tasks/{id}</code> every 3–5 seconds until completed (<code>status: \"succeeded\"</code> with video URL). Note: video tasks poll on <code>/v1/tasks/{id}</code>, while image tasks use <code>/v1/images/tasks/{task_id}</code>.",
     "videoBillingHint": "Billed per generated second directly from your prepaid wallet. Check the <a href=\"/pricing-list\">pricing list</a> and dedicated guides (<a href=\"/seedance-2-5-api-pricing\">Seedance 2.5</a>, <a href=\"/seedance-2-0-api-pricing\">Seedance 2.0</a>, <a href=\"/minimax-h3-api-pricing\">MiniMax-H3</a>) for per-second rates.",
     "clientsTitle": "Clients",
     "clientsDesc": "Fill these in common tools. Model names must match the table exactly.",
@@ -1087,6 +1104,15 @@ const I18N = {
     "chatHint": "点击模型名即可复制。计费按 token 用量，以控制台实时扣费为准；额度用完需充值。",
     "imageTitle": "图片生成",
     "videoTitle": "视频生成",
+    "nGpt6Astra": "GPT-6 旗舰推理与智能体主力",
+    "nGpt61Sol": "GPT-6.1 均衡编程与日常主力",
+    "nGpt6Sol": "GPT-6 高档推理",
+    "nGpt6Luna": "GPT-6 便宜高速档",
+    "nGlm53": "智谱 GLM-5.3 旗舰通用模型",
+    "nGlm53Flash": "智谱 GLM-5.3 Flash 极速低成本",
+    "nVideoEnhance": "视频画质增强与超分（POST /v1/async/videos/enhance）",
+    "nSubtitleErase": "视频硬字幕与去水印（POST /v1/async/videos/subtitle-erase）",
+
     "nSeedance25": "字节 2.5 旗舰 · 新一代高保真长时长视频",
     "nSeedance20": "字节 2.0 标准满血版",
     "nSeedanceFast": "字节 2.0 Fast 极速版",
@@ -1096,7 +1122,7 @@ const I18N = {
     "nWanVideo": "阿里通义万相 3.0 视频生成",
     "nAgnesVideo": "Agnes 2.5 高清视频生成",
     "videoSizeHint": "支持通过参数指定分辨率（<code>resolution: \"480p\" | \"720p\" | \"1080p\"</code>，默认 <code>720p</code>）。视频时长 4–15 秒（默认 5 秒）。带后缀的历史模型 ID（如 <code>seedance-2.0-1080p</code>）依然完整向后兼容。",
-    "videoTaskHint": "视频生成为异步任务。提交接口返回 <code>task_id</code>（或 <code>id</code>），每 3–5 秒轮询一次状态直到完成（<code>status: \"succeeded\"</code> 返回视频地址）：",
+    "videoTaskHint": "视频生成与视频处理均为异步任务。提交接口返回任务 <code>id</code>（或 <code>task_id</code>）。通过 <code>GET /v1/tasks/{id}</code> 每 3–5 秒轮询一次状态直到完成（<code>status: \"succeeded\"</code> 返回视频地址）。注：视频与异步工具任务统一通过 <code>/v1/tasks/{id}</code> 轮询，图片任务使用独立的 <code>/v1/images/tasks/{task_id}</code>。",
     "videoBillingHint": "按实际生成的视频秒数从预付钱包按秒计费。详细各档费率见 <a href=\"/pricing-list\">价目表</a> 与专属指南（<a href=\"/seedance-2-5-api-pricing\">Seedance 2.5</a>、<a href=\"/seedance-2-0-api-pricing\">Seedance 2.0</a>、<a href=\"/minimax-h3-api-pricing\">MiniMax-H3</a> 等）。",
     "clientsTitle": "客户端接入",
     "clientsDesc": "在常见工具里这样填；模型名必须与上表完全一致。",

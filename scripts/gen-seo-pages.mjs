@@ -840,7 +840,7 @@ ${contentGuideLinks()}
   return layout({
     title: "AI Model Guides Index | KeyoAPI",
     description:
-      "Index of KeyoAPI model guides — GPT-class, Claude, DeepSeek, GLM, Whisper, OCR, vision, TTS — with links to pricing and free tiers.",
+      "Index of KeyoAPI model guides — GPT-class, Claude, DeepSeek, GLM, video generation, Whisper, OCR, vision, TTS — with links to pricing and free tiers.",
     canonical: `${site}/models`,
     h1: "AI Model Guides on KeyoAPI",
     bodyHtml,

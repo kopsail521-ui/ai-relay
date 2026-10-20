@@ -18,7 +18,7 @@
       "lastmod": "2026-10-16"
     },
     "https://www.keyoapi.xyz/models": {
-      "hash": "e585f3682282809a",
+      "hash": "e6c02ecee750a52f",
       "lastmod": "2026-10-20"
     },
     "https://www.keyoapi.xyz/gemini-api-pricing": {
@@ -326,7 +326,7 @@
       "lastmod": "2026-10-16"
     },
     "https://www.keyoapi.xyz/brand/keyo-docs.html": {
-      "hash": "874741864820470e",
+      "hash": "68c8e1e2a443101b",
       "lastmod": "2026-10-20"
     },
     "https://www.keyoapi.xyz/brand/keyo-api-ref.html": {
@@ -336,6 +336,18 @@
     "https://www.keyoapi.xyz/brand/faq.html": {
       "hash": "8a8ed99719e19a11",
       "lastmod": "2026-10-16"
+    },
+    "https://www.keyoapi.xyz/model/eleven-v4": {
+      "hash": "b98a8637dad31c62",
+      "lastmod": "2026-10-13"
+    },
+    "https://www.keyoapi.xyz/model/eleven-v4-turbo": {
+      "hash": "b337f3dd44b25e3a",
+      "lastmod": "2026-10-13"
+    },
+    "https://www.keyoapi.xyz/model/gemini-3.8-flash-tts": {
+      "hash": "4ecc522767a716fd",
+      "lastmod": "2026-10-17"
     }
   },
   "https://www.keyoapi.xyz/model/gpt-6.1-sol": {

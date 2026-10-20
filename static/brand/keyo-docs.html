@@ -618,6 +618,7 @@
         <a href="#access" data-i18n="tocAccess"></a>
         <a href="#chat" data-i18n="tocChat"></a>
         <a href="#image" data-i18n="tocImage"></a>
+        <a href="#video" data-i18n="tocVideo"></a>
         <a href="#capabilities" data-i18n="tocCaps"></a>
         <a href="#clients" data-i18n="tocClients"></a>
         <a href="#support" data-i18n="tocSupport"></a>
@@ -776,9 +777,61 @@
         <p class="hint" data-i18n-html="imageBillingHint"></p>
       </section>
 
-      <section id="capabilities">
+            <section id="video">
         <div class="sec-head">
           <span class="num">04</span>
+          <h2 data-i18n="videoTitle"></h2>
+        </div>
+        <div class="endpoint">
+          <span class="method">POST</span>
+          <span class="path">/v1/videos/generations</span>
+          <button type="button" class="btn-copy" data-copy="https://www.keyoapi.xyz/v1/videos/generations" data-i18n="copyUrl"></button>
+        </div>
+
+        <div class="code-block">
+          <div class="code-bar">
+            <span class="lang">cURL · submit</span>
+            <button type="button" class="btn-copy" data-copy-target="curl-video" data-i18n="copy"></button>
+          </div>
+          <pre id="curl-video"></pre>
+        </div>
+
+        <p class="hint" data-i18n-html="videoSizeHint"></p>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th data-i18n="thModel"></th>
+                <th>resolution</th>
+                <th>duration</th>
+                <th data-i18n="thNote"></th>
+              </tr>
+            </thead>
+            <tbody>
+<tr><td class="model"><button type="button" class="model-btn" data-copy="seedance-2.5">seedance-2.5</button></td><td>480p / 720p (default) / 1080p</td><td>4–15s (default 5s)</td><td data-i18n="nSeedance25"></td></tr>
+<tr><td class="model"><button type="button" class="model-btn" data-copy="seedance-2.0">seedance-2.0</button></td><td>480p / 720p (default) / 1080p</td><td>4–15s (default 5s)</td><td data-i18n="nSeedance20"></td></tr>
+<tr><td class="model"><button type="button" class="model-btn" data-copy="seedance-2.0-fast">seedance-2.0-fast</button></td><td>480p / 720p (default) / 1080p</td><td>4–15s (default 5s)</td><td data-i18n="nSeedanceFast"></td></tr>
+<tr><td class="model"><button type="button" class="model-btn" data-copy="seedance-2.0-mini">seedance-2.0-mini</button></td><td>480p / 720p (default) / 1080p</td><td>4–15s (default 5s)</td><td data-i18n="nSeedanceMini"></td></tr>
+<tr><td class="model"><button type="button" class="model-btn" data-copy="MiniMax-H3">MiniMax-H3</button></td><td>480p / 768p / 1080p</td><td>5s / 6s</td><td data-i18n="nMinimaxH3"></td></tr>
+<tr><td class="model"><button type="button" class="model-btn" data-copy="flux-3-video">flux-3-video</button></td><td>draft / hd / fhd</td><td>5s</td><td data-i18n="nFluxVideo"></td></tr>
+<tr><td class="model"><button type="button" class="model-btn" data-copy="wan3.0-video">wan3.0-video</button></td><td>480P / 720P / 1080P</td><td>5s</td><td data-i18n="nWanVideo"></td></tr>
+<tr><td class="model"><button type="button" class="model-btn" data-copy="agnes-video-2.5">agnes-video-2.5</button></td><td>720p / 1080p / 2k</td><td>5s</td><td data-i18n="nAgnesVideo"></td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p class="hint" data-i18n-html="videoTaskHint"></p>
+        <div class="endpoint"><span class="method">GET</span><span class="path">/v1/tasks/{id}</span></div>
+        <div class="code-block">
+          <div class="code-bar"><span class="lang">cURL · task</span><button type="button" class="btn-copy" data-copy-target="curl-video-task" data-i18n="copy"></button></div>
+          <pre id="curl-video-task"></pre>
+        </div>
+        <p class="hint" data-i18n-html="videoBillingHint"></p>
+      </section>
+
+      <section id="capabilities">
+        <div class="sec-head">
+          <span class="num">05</span>
           <h2 data-i18n="capsTitle"></h2>
         </div>
         <p class="sec-desc" data-i18n="capsDesc"></p>
@@ -828,7 +881,7 @@
 
       <section id="clients">
         <div class="sec-head">
-          <span class="num">05</span>
+          <span class="num">06</span>
           <h2 data-i18n="clientsTitle"></h2>
         </div>
         <p class="sec-desc" data-i18n="clientsDesc"></p>
@@ -880,7 +933,7 @@
 
       <section id="support">
         <div class="sec-head">
-          <span class="num">06</span>
+          <span class="num">07</span>
           <h2 data-i18n="supportTitle"></h2>
         </div>
         <div class="footer-note" data-i18n-html="supportBody"></div>
@@ -902,6 +955,7 @@ const I18N = {
     "tocAccess": "Connection",
     "tocChat": "Chat",
     "tocImage": "Images",
+    "tocVideo": "Video",
     "tocClients": "Clients",
     "tocSupport": "Billing & support",
     "accessTitle": "Connection",
@@ -933,6 +987,18 @@ const I18N = {
     "nGlm": "Zhipu GLM",
     "chatHint": "Click a model name to copy. Billed by token usage (console is source of truth). Top up when quota runs out.",
     "imageTitle": "Images",
+    "videoTitle": "Video Generation",
+    "nSeedance25": "ByteDance 2.5 flagship · high fidelity up to 30s",
+    "nSeedance20": "ByteDance 2.0 standard full-tier",
+    "nSeedanceFast": "ByteDance 2.0 Fast accelerated generation",
+    "nSeedanceMini": "ByteDance 2.0 Mini budget tier",
+    "nMinimaxH3": "MiniMax Hailuo video generation",
+    "nFluxVideo": "Black Forest Labs FLUX.3 video",
+    "nWanVideo": "Alibaba Tongyi Wanxiang 3.0 video",
+    "nAgnesVideo": "Agnes 2.5 video generation",
+    "videoSizeHint": "Selectable resolution (<code>resolution: \"480p\" | \"720p\" | \"1080p\"</code>, default <code>720p</code>). Clips run 4 to 15 seconds (default 5). Legacy suffix IDs (e.g. <code>seedance-2.0-1080p</code>) remain fully backward-compatible.",
+    "videoTaskHint": "Video generation is asynchronous. The submit request returns a <code>task_id</code> (or <code>id</code>). Poll status every 3–5 seconds until completed (<code>status: \"succeeded\"</code> with video URL):",
+    "videoBillingHint": "Billed per generated second directly from your prepaid wallet. Check the <a href=\"/pricing-list\">pricing list</a> and dedicated guides (<a href=\"/seedance-2-5-api-pricing\">Seedance 2.5</a>, <a href=\"/seedance-2-0-api-pricing\">Seedance 2.0</a>, <a href=\"/minimax-h3-api-pricing\">MiniMax-H3</a>) for per-second rates.",
     "clientsTitle": "Clients",
     "clientsDesc": "Fill these in common tools. Model names must match the table exactly.",
     "clientsTools": "ChatBox / Cursor etc.",
@@ -988,6 +1054,7 @@ const I18N = {
     "tocAccess": "接入信息",
     "tocChat": "文本对话",
     "tocImage": "图片生成",
+    "tocVideo": "视频生成",
     "tocClients": "客户端接入",
     "tocSupport": "充值与支持",
     "accessTitle": "接入信息",
@@ -1019,6 +1086,18 @@ const I18N = {
     "nGlm": "智谱",
     "chatHint": "点击模型名即可复制。计费按 token 用量，以控制台实时扣费为准；额度用完需充值。",
     "imageTitle": "图片生成",
+    "videoTitle": "视频生成",
+    "nSeedance25": "字节 2.5 旗舰 · 新一代高保真长时长视频",
+    "nSeedance20": "字节 2.0 标准满血版",
+    "nSeedanceFast": "字节 2.0 Fast 极速版",
+    "nSeedanceMini": "字节 2.0 Mini 精简经济版",
+    "nMinimaxH3": "MiniMax 海螺视频大模型",
+    "nFluxVideo": "Black Forest Labs 视频大模型",
+    "nWanVideo": "阿里通义万相 3.0 视频生成",
+    "nAgnesVideo": "Agnes 2.5 高清视频生成",
+    "videoSizeHint": "支持通过参数指定分辨率（<code>resolution: \"480p\" | \"720p\" | \"1080p\"</code>，默认 <code>720p</code>）。视频时长 4–15 秒（默认 5 秒）。带后缀的历史模型 ID（如 <code>seedance-2.0-1080p</code>）依然完整向后兼容。",
+    "videoTaskHint": "视频生成为异步任务。提交接口返回 <code>task_id</code>（或 <code>id</code>），每 3–5 秒轮询一次状态直到完成（<code>status: \"succeeded\"</code> 返回视频地址）：",
+    "videoBillingHint": "按实际生成的视频秒数从预付钱包按秒计费。详细各档费率见 <a href=\"/pricing-list\">价目表</a> 与专属指南（<a href=\"/seedance-2-5-api-pricing\">Seedance 2.5</a>、<a href=\"/seedance-2-0-api-pricing\">Seedance 2.0</a>、<a href=\"/minimax-h3-api-pricing\">MiniMax-H3</a> 等）。",
     "clientsTitle": "客户端接入",
     "clientsDesc": "在常见工具里这样填；模型名必须与上表完全一致。",
     "clientsTools": "ChatBox / Cursor 等",
@@ -1621,6 +1700,17 @@ function renderSamples(dict) {
   const imageTask = document.getElementById('curl-image-task');
   if (imageTask) {
     imageTask.textContent = 'curl https://www.keyoapi.xyz/v1/images/tasks/img_TASK_ID \\\n  -H "Authorization: Bearer ' + key + '"';
+  }
+  const video = document.getElementById('curl-video');
+  if (video) {
+    video.innerHTML = '<code><span class="tok-cmd">curl</span> https://www.keyoapi.xyz/v1/videos/generations \\\n' +
+      '  -H <span class="tok-str">"Authorization: Bearer ' + escapeHtml(key) + '"</span> \\\n' +
+      '  -H <span class="tok-str">"Content-Type: application/json"</span> \\\n' +
+      '  -d <span class="tok-str">\'{\\n    "model": "seedance-2.5",\\n    "prompt": "A red paper boat drifting on calm water at sunset",\\n    "duration": 5,\\n    "resolution": "720p"\\n  }\'</span></code>';
+  }
+  const videoTask = document.getElementById('curl-video-task');
+  if (videoTask) {
+    videoTask.textContent = 'curl https://www.keyoapi.xyz/v1/tasks/task_TASK_ID \\\n  -H "Authorization: Bearer ' + key + '"';
   }
   if (models) {
     models.textContent = 'curl https://www.keyoapi.xyz/v1/models \\\n  -H "Authorization: Bearer ' + key + '"';

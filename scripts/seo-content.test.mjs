@@ -393,3 +393,17 @@ test("FAQ legal labels are localized across ja, fr, ru, vi", () => {
   assert.match(faqHtml, /Политика конфиденциальности/, "Russian FAQ must localize Privacy");
   assert.match(faqHtml, /Chính sách bảo mật/, "Vietnamese FAQ must localize Privacy");
 });
+
+test("about model categories cards, deepseek cheapest title, and modern model recommendations", () => {
+  const aboutHtml = fs.readFileSync(path.join(seoRoot, "about.html"), "utf8");
+  assert.match(aboutHtml, /<span class="grid-title">Video generation<\/span>/, "about.html must format category title");
+  assert.match(aboutHtml, /<span class="grid-meta">seedance-2\.5 &amp; Wan<\/span>/, "about.html must format category meta");
+
+  const dsHtml = fs.readFileSync(path.join(seoRoot, "deepseek-api-pricing.html"), "utf8");
+  assert.match(dsHtml, /<h2>Cheapest current-generation DeepSeek API rate on Keyo<\/h2>/, "deepseek-api-pricing must specify current-generation");
+  assert.match(dsHtml, /lowest absolute rate snapshot tier/i, "deepseek-api-pricing must qualify snapshot tier");
+
+  const whisperHtml = fs.readFileSync(path.join(seoRoot, "model/whisper-large-v3.html"), "utf8");
+  assert.match(whisperHtml, /gpt-6-luna for cost, claude-sonnet-5-5 for denser reasoning/, "whisper-large-v3 must recommend modern models");
+  assert.doesNotMatch(whisperHtml, /gpt-5\.6-luna for cost, claude-sonnet-5 for denser reasoning/, "whisper-large-v3 must not recommend legacy models");
+});

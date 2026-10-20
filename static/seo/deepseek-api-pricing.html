@@ -127,8 +127,8 @@ ul{margin:0 0 14px;padding-left:1.2em}
 
 <h2>Prototype on gift-credit models, then meter DeepSeek on the same key</h2>
 <p>To prototype on the same key, use catalog free IDs on <a href="/free-models">the gift-credit models page</a> — gift-credit IDs that bill at normal rates from your one-time $10 new-user credit (fair-use rate limits) — including DeepSeek-Prover-V2-7B. When you meter DeepSeek chat, switch model= to deepseek-v4.1-flash, deepseek-v4-flash, or deepseek-v4-pro-0813 without changing base URL or auth — those are separate IDs, not one upgrade ladder. Free-path vs pricing detail for Flash: <a href="/model/deepseek-v4-flash">the deepseek-v4-flash model page</a>.</p>
-<h2>Cheapest DeepSeek API rate on Keyo</h2>
-<p>For current-generation chat, the primary high-volume Flash lane on Keyo is deepseek-v4.1-flash at ~$0.14 / $0.56 per 1M in/out (an earlier snapshot tier, deepseek-v4-flash-0731, sits at ~$0.09 / $0.17). deepseek-v4.1-flash is the recommended default for batch, classification, and agent loops.</p>
+<h2>Cheapest current-generation DeepSeek API rate on Keyo</h2>
+<p>While the earlier snapshot deepseek-v4-flash-0731 is the lowest absolute rate snapshot tier on the table at ~$0.09 / $0.17 per 1M in/out, the cheapest current-generation production chat lane on Keyo is deepseek-v4.1-flash at ~$0.14 / $0.56 per 1M in/out. deepseek-v4.1-flash is the recommended default for batch, classification, and agent loops.</p>
 <p>The other rows are separate products, not rungs on a ladder: deepseek-v4-flash at ~$0.44 / $1.32 (legacy catalog string), deepseek-v4-flash-0731 at ~$0.09 / $0.17 (earlier snapshot), and deepseek-v4-pro-0813 with its alias deepseek-v4-pro at ~$0.14 / $0.29 each. So &quot;cheap&quot; here is a task choice, not a tier you upgrade through.</p>
 <p>Cost math: 50M input + 10M output tokens/month on deepseek-v4.1-flash ≈ $7.00 + $5.60 ≈ $12.60. The same mix on deepseek-v4-flash (~$0.44 / $1.32) ≈ $22.00 + $13.20 ≈ $35.20. Confirm live rates on <a href="/pricing-list">the full pricing list</a>.</p>
 <h2>Rates and how to call</h2>

@@ -76,6 +76,10 @@ const AIONE_KEY = process.env.AIONE_API_KEY || "";
 const AIONE_ORIGIN = (
   process.env.AIONE_BASE_URL || "https://api.aione.help"
 ).replace(/\/$/, "");
+const AICOPY_KEY = process.env.AICOPY_API_KEY || "";
+const AICOPY_ORIGIN = (
+  process.env.AICOPY_BASE_URL || "https://api.aicopy.top"
+).replace(/\/$/, "");
 const NEW_API_BASE = (process.env.NEW_API_BASE || "http://127.0.0.1:3000").replace(
   /\/$/,
   ""
@@ -780,9 +784,10 @@ const imageLedger = new ImageLedger(DB_PATH, {
 });
 const imageService = new ImageService({
   ledger: imageLedger, models: modelMap, origin: GRSAI_ORIGIN, key: GRSAI_KEY,
+  aicopyOrigin: AICOPY_ORIGIN, aicopyKey: AICOPY_KEY,
   pollIntervalMs: Number(process.env.IMAGE_POLL_INTERVAL_MS || 5000),
   waitMs: Number(process.env.IMAGE_POLL_MAX_MS || 180000),
-  transportMs: Number(process.env.IMAGE_TRANSPORT_TIMEOUT_MS || 30000),
+  transportMs: Number(process.env.IMAGE_TRANSPORT_TIMEOUT_MS || 60000),
   trustedProxies: process.env.IMAGE_TRUSTED_PROXIES || "",
 });
 imageService.startRecovery();

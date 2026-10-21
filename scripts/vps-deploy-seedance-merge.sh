@@ -21,6 +21,8 @@ fi
 if ! sudo grep -q '^AICOPY_API_KEY=.' "$ROOT/.env.apimart" 2>/dev/null; then
   if sudo grep -q '^AICOPY_API_KEY=.' "$ROOT/.env" 2>/dev/null; then
     sudo grep -E '^AICOPY_(API_KEY|BASE_URL)=' "$ROOT/.env" | sudo tee -a "$ROOT/.env.apimart" >/dev/null
+  else
+    echo 'AICOPY_API_KEY=sk-yKD9AN8fNzdqTyfluYubzGpOvURSgGQkDuSsZItvBHmCGYyj' | sudo tee -a "$ROOT/.env.apimart" >/dev/null
   fi
 fi
 if ! sudo grep -q '^AICOPY_BASE_URL=' "$ROOT/.env.apimart" 2>/dev/null; then

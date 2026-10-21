@@ -1,4 +1,4 @@
-import { normalizeImageRequest, extractImageResult } from "./image-contracts.mjs";
+import { normalizeImageRequest, extractImageResult, is4KSize } from "./image-contracts.mjs";
 import { ImageError, imageClientIp } from "./image-ledger.mjs";
 
 const SUCCESS = new Set(["succeeded", "success", "completed", "done"]);
@@ -6,8 +6,13 @@ const FAILURE = new Set(["failed", "violation", "rejected", "cancelled", "cancel
 const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 export class ImageService {
-  constructor({ ledger, models, origin, key, fetchImpl = fetch, pollIntervalMs = 5000, waitMs = 180000, transportMs = 30000, trustedProxies = "", maxBodyBytes = 32 * 1024 * 1024 }) {
-    this.ledger = ledger; this.models = models; this.origin = origin.replace(/\/$/, ""); this.key = key; this.fetch = fetchImpl;
+  constructor({ ledger, models, origin, key, aicopyOrigin = "https://api.aicopy.top", aicopyKey = "", fetchImpl = fetch, pollIntervalMs = 5000, waitMs = 180000, transportMs = 60000, trustedProxies = "", maxBodyBytes = 32 * 1024 * 1024 }) {
+    this.ledger = ledger; this.models = models;
+    this.origin = (origin || "").replace(/\/$/, "");
+    this.key = key;
+    this.aicopyOrigin = (aicopyOrigin || "").replace(/\/$/, "");
+    this.aicopyKey = aicopyKey || "";
+    this.fetch = fetchImpl;
     this.pollIntervalMs = pollIntervalMs; this.waitMs = waitMs; this.transportMs = transportMs; this.trustedProxies = trustedProxies; this.maxBodyBytes = maxBodyBytes;
     this.jobs = new Map(); this.stopped = false;
   }
@@ -38,14 +43,16 @@ export class ImageService {
     if (!Array.isArray(result.data) || !result.data.length) throw new ImageError(503, "image_result_unavailable", "Stored image result unavailable");
     return this.send(res, 200, { ...result, id: row.id, task_id: row.id, status: "succeeded", billing: { quota: row.quota, charged: !!row.charged } }, row.id);
   }
-  async transport(path, method, body) {
+  async transport(path, method, body, originOverride, keyOverride) {
     // Never forward client credentials, routing/idempotency headers or unrelated
     // proxy headers to the native provider. The local ledger owns idempotency.
+    const origin = (originOverride || this.origin).replace(/\/$/, "");
+    const key = keyOverride || this.key;
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), this.transportMs);
     try {
-      const response = await this.fetch(`${this.origin}${path}`, {
-        method, signal: controller.signal, headers: { Authorization: `Bearer ${this.key}`, "Content-Type": "application/json" },
+      const response = await this.fetch(`${origin}${path}`, {
+        method, signal: controller.signal, headers: { Authorization: `Bearer ${key}`, "Content-Type": "application/json" },
         ...(body ? { body: JSON.stringify(body) } : {}),
       });
       const chunks = []; let bytes = 0;
@@ -80,6 +87,42 @@ export class ImageService {
   startJob(row, native) {
     if (this.jobs.has(row.id)) return this.jobs.get(row.id);
     const work = (async () => {
+      const isAicopy = row.using_group === "GPT-Image-Pro";
+      if (isAicopy) {
+        if (native) {
+          const lease = Math.ceil(this.transportMs / 1000) + 30;
+          if (!this.ledger.submitting(row.id, lease)) return;
+          const aicopyBody = {
+            model: native.model,
+            prompt: native.prompt,
+            size: native.aspectRatio || native.size || "1024x1024",
+            ...(native.quality ? { quality: native.quality } : {}),
+            ...(native.background ? { background: native.background } : {}),
+            ...(native.images && native.images.length ? { images: native.images } : {}),
+          };
+          let up;
+          try {
+            up = await this.transport("/v1/images/generations", "POST", aicopyBody, this.aicopyOrigin, this.aicopyKey);
+          } catch {
+            this.ledger.failed(row.id, "image_submission_unknown", "submit_unknown");
+            return;
+          }
+          const result = extractImageResult(up.payload);
+          if (up.status >= 200 && up.status < 300 && result.urls.length) {
+            const upId = `aicopy_${crypto.randomUUID()}`;
+            this.ledger.submitted(row.id, upId);
+            this.ledger.ready(row.id, { created: up.payload?.created || row.created_at, data: result.urls.map((url) => ({ url })) });
+            return;
+          }
+          if (FAILURE.has(result.status) || (up.status >= 400 && up.status < 500)) {
+            this.ledger.failed(row.id, result.status === "violation" ? "image_policy_rejected" : "image_submission_rejected");
+            return;
+          }
+          this.ledger.failed(row.id, "image_generation_failed");
+          return;
+        }
+        return;
+      }
       if (native) {
         const lease = Math.ceil(this.transportMs / 1000) + 30;
         if (!this.ledger.submitting(row.id, lease)) return;
@@ -147,9 +190,10 @@ export class ImageService {
       const body = bodyOverride || await this.readJson(req);
       const meta = this.models[body?.model];
       const normalized = normalizeImageRequest(body?.model, body);
-      if (!meta || meta.kind !== "image" || meta.upstream !== "grsai") throw new ImageError(400, "image_model_unsupported", "Image model unavailable");
+      if (!meta || meta.kind !== "image") throw new ImageError(400, "image_model_unsupported", "Image model unavailable");
       if (!this.key) throw new ImageError(503, "image_service_unavailable", "Image service temporarily unavailable");
-      const { row, fresh } = this.ledger.reserve({ apiKey, model: meta.id, requestHash: normalized.requestHash, idempotencyKey: req.headers["idempotency-key"], ip, origin: this.origin });
+      const is4k = is4KSize(normalized.request.aspectRatio || body.size || body.resolution);
+      const { row, fresh } = this.ledger.reserve({ apiKey, model: meta.id, requestHash: normalized.requestHash, idempotencyKey: req.headers["idempotency-key"], ip, origin: this.origin, is4k });
       id = row.id;
       const job = this.startJob(row, fresh ? { ...normalized.request, model: meta.upstream_model || meta.id, replyType: "async" } : undefined);
       if (normalized.replyType === "async") return ["ready", "failed", "submit_unknown"].includes(row.state) ? this.delivery(res, row) : this.pending(res, row);

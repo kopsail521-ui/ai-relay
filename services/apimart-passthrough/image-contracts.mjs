@@ -146,6 +146,12 @@ function normalizedOptions(model, body) {
   }
 
   if (imageSize) throw invalid(`imageSize is only supported by Nano models`, "imageSize");
+  if (!nano && sizeAlias) {
+    const sUpper = sizeAlias.toUpperCase();
+    if (sUpper === "4K") sizeAlias = "3840x2160";
+    else if (sUpper === "2K") sizeAlias = "2048x2048";
+    else if (sUpper === "1K") sizeAlias = "1024x1024";
+  }
   const high = !["gpt-image-2", "gpt-image-2.5"].includes(model);
   if (aspect && !GPT_RATIOS.has(aspect) && !/^\d+x\d+$/i.test(aspect)) throw invalid(`Unsupported aspectRatio "${aspect}" for ${model}`, "aspectRatio");
   if (aspect && /^\d+x\d+$/i.test(aspect)) validatePixels(aspect, model);
@@ -226,3 +232,16 @@ export function extractImageResult(payload) {
 }
 
 export function imageModels() { return new Set(IMAGE_MODELS); }
+
+export function is4KSize(size) {
+  if (!size) return false;
+  const s = String(size).toLowerCase().trim();
+  if (s === "4k" || s.endsWith("4k")) return true;
+  const m = s.match(/^(\d{3,4})[x*](\d{3,4})$/);
+  if (m) {
+    const w = parseInt(m[1], 10);
+    const h = parseInt(m[2], 10);
+    if (w >= 2880 || h >= 2880 || (w * h >= 6000000)) return true;
+  }
+  return false;
+}

@@ -169,7 +169,7 @@ export class ImageLedger {
     this.drainAcks(db);
     for (const row of db.prepare("SELECT * FROM keyo_image_tasks WHERE reserved=1 AND charged=0 AND reserved_until<=? AND lease_until<=?").all(this.clock(), this.clock())) this.release(db, row);
   }
-  reserve({ apiKey, model, requestHash, idempotencyKey, ip, origin }) {
+  reserve({ apiKey, model, requestHash, idempotencyKey, ip, origin, is4k = false, quotaOverride }) {
     if (idempotencyKey !== undefined && (typeof idempotencyKey !== "string" || !idempotencyKey.length || idempotencyKey.length > 128 || /[^\x21-\x7e]/.test(idempotencyKey))) fail(400, "invalid_idempotency_key", "Idempotency-Key must be 1-128 visible ASCII characters");
     return this.transaction((db) => {
       this.expire(db);
@@ -186,17 +186,31 @@ export class ImageLedger {
       const groupRatios = read("GroupGroupRatio", read("group_ratio_setting.group_group_ratio", {}));
       let group, channel;
       for (const candidate of groups) {
-        const available = db.prepare(`SELECT c.id FROM channels c JOIN abilities a ON a.channel_id=c.id WHERE a.model=? AND a."group"=? AND a.enabled=1 AND c.status=1 AND (rtrim(c.base_url,'/')=? OR rtrim(c.base_url,'/')=?) ORDER BY c.id LIMIT 1`).get(model, candidate, origin.replace(/\/$/, ""), `${origin.replace(/\/$/, "")}/v1`);
+        let available;
+        if (candidate === "GPT-Image-Pro") {
+          available = db.prepare(`SELECT c.id, c.base_url FROM channels c JOIN abilities a ON a.channel_id=c.id WHERE a.model=? AND a."group"=? AND a.enabled=1 AND c.status=1 ORDER BY c.id LIMIT 1`).get(model, candidate);
+        } else if (origin) {
+          available = db.prepare(`SELECT c.id, c.base_url FROM channels c JOIN abilities a ON a.channel_id=c.id WHERE a.model=? AND a."group"=? AND a.enabled=1 AND c.status=1 AND (rtrim(c.base_url,'/')=? OR rtrim(c.base_url,'/')=?) ORDER BY c.id LIMIT 1`).get(model, candidate, origin.replace(/\/$/, ""), `${origin.replace(/\/$/, "")}/v1`);
+        } else {
+          available = db.prepare(`SELECT c.id, c.base_url FROM channels c JOIN abilities a ON a.channel_id=c.id WHERE a.model=? AND a."group"=? AND a.enabled=1 AND c.status=1 ORDER BY c.id LIMIT 1`).get(model, candidate);
+        }
         if (available) { group = candidate; channel = available; break; }
       }
       if (!channel) fail(503, "image_channel_unavailable", "Image model is not available in this token group");
       // Validate the consumption log before reserving funds, never silently omit
       // a settlement because an older/mismounted database has a different schema.
       db.prepare(`INSERT INTO logs (user_id,created_at,type,content,username,token_name,model_name,quota,prompt_tokens,completion_tokens,use_time,is_stream,channel_id,token_id,"group",ip,request_id,upstream_request_id,other) VALUES (?,?,2,?,'',?,?,?,0,0,?,0,?,?,?,?,?,?,?)`);
-      const price = prices[model];
-      const ratio = groupRatios?.[user.group]?.[group] ?? ratios[group];
-      if (typeof price !== "number" || typeof ratio !== "number" || !Number.isFinite(price) || !Number.isFinite(ratio) || price < 0 || ratio < 0) fail(503, "image_pricing_unavailable", "Image price configuration unavailable");
-      const quota = Math.round(price * ratio * this.quotaPerUsd);
+      let quota;
+      if (group === "GPT-Image-Pro") {
+        quota = is4k ? 14795 : 5918;
+      } else if (typeof quotaOverride === "number" && quotaOverride > 0) {
+        quota = quotaOverride;
+      } else {
+        const price = prices[model];
+        const ratio = groupRatios?.[user.group]?.[group] ?? ratios[group];
+        if (typeof price !== "number" || typeof ratio !== "number" || !Number.isFinite(price) || !Number.isFinite(ratio) || price < 0 || ratio < 0) fail(503, "image_pricing_unavailable", "Image price configuration unavailable");
+        quota = Math.round(price * ratio * this.quotaPerUsd);
+      }
       if (!Number.isSafeInteger(quota) || quota > 2147483647) fail(503, "image_pricing_unavailable", "Image price configuration unavailable");
       if (Number(user.quota) < quota || (!token.unlimited_quota && Number(token.remain_quota) < quota)) fail(403, "insufficient_quota", "Insufficient user or token quota");
       db.prepare("UPDATE users SET quota=quota-? WHERE id=?").run(quota, user.id);
@@ -204,7 +218,7 @@ export class ImageLedger {
       const id = `img_${crypto.randomUUID()}`;
       db.prepare(`INSERT INTO keyo_image_tasks (id,token_id,user_id,model,request_hash,idempotency_key,state,quota,token_limited,using_group,channel_id,token_name,ip,created_at,reserved_until) VALUES (?,?,?,?,?,?,'reserved',?,?,?,?,?,?,?,?)`).run(id, token.id, user.id, model, requestHash, idempotencyKey || null, quota, token.unlimited_quota ? 0 : 1, group, channel.id, token.name || "", ip || "", this.clock(), this.clock() + this.reservationTtl);
       row = db.prepare("SELECT * FROM keyo_image_tasks WHERE id=?").get(id);
-      return { row, fresh: true };
+      return { row, fresh: true, channel, group };
     });
   }
   get(id, auth) {

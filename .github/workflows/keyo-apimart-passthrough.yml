@@ -1,0 +1,57 @@
+name: Redeploy video passthrough on VPS
+
+# Rebuilds the apimart-passthrough and creem-moderation images and syncs New-API DB
+# on the VPS whenever video passthrough source or catalog changes.
+# Requires the same repo variable/secret as the other deploys:
+#   vars.KEYO_VPS_HOST (+ optional vars.KEYO_VPS_USER)
+#   secrets.KEYO_VPS_SSH_KEY
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "services/apimart-passthrough/**"
+      - ".github/workflows/keyo-apimart-passthrough.yml"
+      - "scripts/vps-deploy-seedance-merge.sh"
+      - "scripts/vps-add-apimart-videos.py"
+  workflow_dispatch:
+
+concurrency:
+  group: keyo-apimart-passthrough
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    name: Redeploy video passthrough on VPS
+    if: vars.KEYO_VPS_HOST != ''
+    runs-on: ubuntu-latest
+    # Serialize VPS access across the console/static/blog/proxy deploy jobs:
+    # all of them run git operations on /opt/ai-relay and must not overlap.
+    concurrency:
+      group: keyo-vps-mutex
+      cancel-in-progress: false
+    steps:
+      - name: Pull and redeploy over SSH
+        env:
+          HOST: ${{ vars.KEYO_VPS_HOST }}
+          USER: ${{ vars.KEYO_VPS_USER }}
+          KEY: ${{ secrets.KEYO_VPS_SSH_KEY }}
+        run: |
+          set -euo pipefail
+          if [ -z "${HOST}" ]; then
+            echo "KEYO_VPS_HOST is empty; skip deploy"
+            exit 0
+          fi
+          if [ -z "${USER}" ]; then USER=admin; fi
+          if [ -z "${KEY}" ]; then
+            echo "::error::KEYO_VPS_HOST is set but secrets.KEYO_VPS_SSH_KEY is empty."
+            exit 1
+          fi
+          install -m 700 -d "${HOME}/.ssh"
+          printf '%s\n' "${KEY}" > "${HOME}/.ssh/keyo_vps"
+          chmod 600 "${HOME}/.ssh/keyo_vps"
+          ssh -i "${HOME}/.ssh/keyo_vps" -o StrictHostKeyChecking=accept-new \
+            "${USER}@${HOST}" "sudo -n true && sudo bash /opt/ai-relay/scripts/vps-deploy-seedance-merge.sh"

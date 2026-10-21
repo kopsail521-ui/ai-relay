@@ -1,7 +1,7 @@
 name: Add speech gift twins on VPS
 
-# One-shot gift-credit provisioning: add ":free" twins for SenseVoiceSmall,
-# GLM-ASR and Spark-TTS-0.5B on the new-api DB, then restart and smoke-test.
+# Redeploys gitee-passthrough (:3010) and provisions gift-credit (":free") twins
+# for Atria-dawn-v2, SenseVoiceSmall, GLM-ASR and Spark-TTS-0.5B.
 # Requires the same repo variable/secret as the console/static deploys:
 #   vars.KEYO_VPS_HOST (+ optional vars.KEYO_VPS_USER)
 #   secrets.KEYO_VPS_SSH_KEY
@@ -10,7 +10,10 @@ on:
   push:
     branches: [main]
     paths:
+      - "services/gitee-passthrough/**"
+      - "scripts/vps-redeploy-gitee-passthrough.sh"
       - "scripts/vps-add-gitee-speech-gift-twins.py"
+      - "scripts/vps-free-rename-atria-prover.py"
       - ".github/workflows/keyo-speech-gift-twins.yml"
   workflow_dispatch:
 
@@ -23,7 +26,7 @@ permissions:
 
 jobs:
   deploy:
-    name: Provision speech gift twins
+    name: Provision speech gift twins and gitee passthrough
     if: vars.KEYO_VPS_HOST != ''
     runs-on: ubuntu-latest
     # Serialize VPS access across the console/static/blog deploy jobs.
@@ -51,19 +54,4 @@ jobs:
           printf '%s\n' "${KEY}" > "${HOME}/.ssh/keyo_vps"
           chmod 600 "${HOME}/.ssh/keyo_vps"
           ssh -i "${HOME}/.ssh/keyo_vps" -o StrictHostKeyChecking=accept-new \
-            "${USER}@${HOST}" "sudo -n true && sudo bash -c '
-              set -e
-              cd /opt/ai-relay
-              bash scripts/vps-safe-pull-preserve-blog.sh >/dev/null
-              python3 /opt/ai-relay/scripts/vps-add-gitee-speech-gift-twins.py /opt/ai-relay/data/new-api/one-api.db
-              docker restart ai-relay-new-api
-              sleep 6
-              curl -fsS -o /dev/null http://127.0.0.1:3000/api/status && echo console_http_ok
-              PJSON=\$(mktemp)
-              curl -fsS https://www.keyoapi.xyz/api/pricing -o \"\$PJSON\"
-              for id in SenseVoiceSmall:free GLM-ASR:free Spark-TTS-0.5B:free; do
-                grep -q \"\$id\" \"\$PJSON\" && echo \"pricing_ok=\$id\" || { echo \"pricing_MISSING=\$id\"; exit 1; }
-              done
-              rm -f \"\$PJSON\"
-              echo DONE_SPEECH_GIFT_TWINS_DEPLOY
-            '"
+            "${USER}@${HOST}" "sudo -n true && sudo bash /opt/ai-relay/scripts/vps-redeploy-gitee-passthrough.sh"

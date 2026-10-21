@@ -169,16 +169,23 @@ export function ApiKeysMutateDrawer({
   })
 
   const models = modelsData?.data || []
-  const groups = useMemo<ApiKeyGroupOption[]>(
-    () =>
-      Object.entries(groupsData?.data || {}).map(([key, info]) => ({
-        value: key,
-        label: key,
-        desc: info.desc || key,
-        ratio: info.ratio,
-      })),
-    [groupsData]
-  )
+  const groups = useMemo<ApiKeyGroupOption[]>(() => {
+    const raw = Object.entries(groupsData?.data || {}).map(([key, info]) => ({
+      value: key,
+      label: key,
+      desc: info.desc || key,
+      ratio: info.ratio,
+    }))
+    if (!raw.some((g) => g.value === 'auto')) {
+      raw.unshift({
+        value: 'auto',
+        label: t('Smart Routing'),
+        desc: t('Smart Routing description'),
+        ratio: t('Auto'),
+      })
+    }
+    return raw
+  }, [groupsData, t])
   const backendHasAuto = groups.some((g) => g.value === 'auto')
   const availableAutoGroupNames = useMemo(
     () => groups.filter((group) => group.value !== 'auto').map((g) => g.value),
@@ -335,19 +342,18 @@ export function ApiKeysMutateDrawer({
   useEffect(() => {
     if (groups.length === 0) return
     const currentGroup = selectedGroup
-    if (currentGroup && !groups.some((g) => g.value === currentGroup)) {
+    if (
+      currentGroup &&
+      currentGroup !== 'auto' &&
+      !groups.some((g) => g.value === currentGroup)
+    ) {
       const fallback =
         groups.find((g) => g.value === 'default')?.value ??
-        groups[0]?.value ??
+        availableAutoGroupNames[0] ??
         ''
       form.setValue('group', fallback)
-      if (currentGroup === 'auto') {
-        form.setValue('auto_groups', [])
-        form.setValue('auto_groups_mode', 'inherit')
-        form.setValue('cross_group_retry', false)
-      }
     }
-  }, [groups, form, selectedGroup])
+  }, [groups, form, selectedGroup, availableAutoGroupNames])
 
   const onSubmit = async (data: ApiKeyFormValues) => {
     setIsSubmitting(true)
@@ -557,7 +563,18 @@ export function ApiKeysMutateDrawer({
                 data-slot='smart-routing-card'
                 className='border-border/70 bg-card/60 flex flex-col gap-3 rounded-xl border p-3.5 shadow-2xs'
               >
-                <div className='flex items-center justify-between gap-3'>
+                <div
+                  role='button'
+                  tabIndex={0}
+                  onClick={() => handleToggleSmartRouting(!isSmartRouting)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      e.preventDefault()
+                      handleToggleSmartRouting(!isSmartRouting)
+                    }
+                  }}
+                  className='flex cursor-pointer items-center justify-between gap-3 select-none'
+                >
                   <div className='flex items-center gap-1.5'>
                     <span className='text-destructive text-sm font-bold'>*</span>
                     <span className='text-foreground text-sm font-semibold'>
@@ -569,6 +586,7 @@ export function ApiKeysMutateDrawer({
                           <span
                             role='button'
                             tabIndex={0}
+                            onClick={(e) => e.stopPropagation()}
                             className='text-muted-foreground hover:text-foreground inline-flex size-4 cursor-pointer items-center justify-center rounded-full transition-colors'
                             aria-label={t('Smart Routing description')}
                           />
@@ -584,6 +602,7 @@ export function ApiKeysMutateDrawer({
                   <Switch
                     checked={isSmartRouting}
                     onCheckedChange={handleToggleSmartRouting}
+                    onClick={(e) => e.stopPropagation()}
                     aria-label={t('Smart Routing')}
                   />
                 </div>

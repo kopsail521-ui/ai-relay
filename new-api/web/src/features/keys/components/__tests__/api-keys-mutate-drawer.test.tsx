@@ -84,14 +84,18 @@ function installApiFixtures(createdPayloads: Array<Record<string, unknown>>) {
   }
 }
 
-async function renderCreateDrawer(): Promise<void> {
+async function renderCreateDrawer(
+  defaultUseAutoGroup = true,
+  customGroups?: Record<string, unknown>,
+  currentRow?: any
+): Promise<void> {
   const queryClient = new QueryClient({
     defaultOptions: { queries: { retry: false } },
   })
   const freshAt = Date.now() + 60_000
   queryClient.setQueryData(
     ['status'],
-    { default_use_auto_group: true },
+    { default_use_auto_group: defaultUseAutoGroup },
     { updatedAt: freshAt }
   )
   queryClient.setQueryData(
@@ -103,7 +107,7 @@ async function renderCreateDrawer(): Promise<void> {
     ['user-groups'],
     {
       success: true,
-      data: {
+      data: customGroups ?? {
         auto: { desc: 'Automatic routing', ratio: 'auto' },
         default: { desc: 'Standard access', ratio: 1 },
         vip: { desc: 'Priority access', ratio: 2 },
@@ -119,13 +123,27 @@ async function renderCreateDrawer(): Promise<void> {
     },
     { updatedAt: freshAt }
   )
+  if (currentRow) {
+    queryClient.setQueryData(
+      ['api-key', currentRow.id],
+      {
+        success: true,
+        data: currentRow,
+      },
+      { updatedAt: freshAt }
+    )
+  }
   renderedDrawer = { queryClient }
 
   render(
     <QueryClientProvider client={queryClient}>
       <I18nextProvider i18n={i18n}>
         <ApiKeysProvider>
-          <ApiKeysMutateDrawer open onOpenChange={() => undefined} />
+          <ApiKeysMutateDrawer
+            open
+            onOpenChange={() => undefined}
+            currentRow={currentRow}
+          />
         </ApiKeysProvider>
       </I18nextProvider>
     </QueryClientProvider>
@@ -294,6 +312,67 @@ describe('API keys mutate drawer Auto group integration', () => {
     fireEvent.click(priceRadio)
 
     changeInput(getControlByLabel('Name'), 'smart-price')
+    fireEvent.click(findButton('Save changes', true))
+    await waitFor(() => expect(createdPayloads).toHaveLength(1))
+
+    expect(createdPayloads[0]?.group).toBe('auto')
+    expect(createdPayloads[0]?.cross_group_retry).toBe(true)
+    expect(createdPayloads[0]?.auto_groups).toEqual(['default', 'vip'])
+  })
+
+  test('Smart routing switch can be turned ON when user starts with standard group and groups API has no auto', async () => {
+    const createdPayloads: Array<Record<string, unknown>> = []
+    installApiFixtures(createdPayloads)
+    apiClient.get = async (url) => {
+      switch (url) {
+        case '/api/status':
+          return { data: { data: { default_use_auto_group: false } } }
+        case '/api/user/models':
+          return { data: { success: true, data: [] } }
+        case '/api/user/self/groups':
+          return {
+            data: {
+              success: true,
+              data: {
+                default: { desc: 'Standard access', ratio: 1 },
+                vip: { desc: 'Priority access', ratio: 2 },
+              },
+            },
+          }
+        case '/api/token/auto-groups':
+          return {
+            data: {
+              success: true,
+              data: { groups: ['vip', 'default'], max_count: 3 },
+            },
+          }
+        default:
+          throw new Error(`Unexpected GET ${url}`)
+      }
+    }
+
+    await renderCreateDrawer(false, {
+      default: { desc: 'Standard access', ratio: 1 },
+      vip: { desc: 'Priority access', ratio: 2 },
+    })
+
+    const switchToggle = screen.getByRole('switch', { name: 'Smart Routing' })
+    expect(switchToggle).not.toBeChecked()
+
+    // Click to turn ON
+    fireEvent.click(switchToggle)
+    expect(switchToggle).toBeChecked()
+
+    // Ensure strategies and banner are now visible
+    expect(screen.getByRole('radio', { name: /Price First/i })).toBeTruthy()
+    expect(
+      document.body.textContent?.includes('Smart Routing Active Banner')
+    ).toBe(true)
+
+    // Switch strategy to Price First
+    fireEvent.click(screen.getByRole('radio', { name: /Price First/i }))
+
+    changeInput(getControlByLabel('Name'), 'production-test-key')
     fireEvent.click(findButton('Save changes', true))
     await waitFor(() => expect(createdPayloads).toHaveLength(1))
 

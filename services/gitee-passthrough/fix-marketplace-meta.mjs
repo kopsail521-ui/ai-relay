@@ -340,6 +340,12 @@ export const RULES = {
     endpoints: JSON.stringify({ suno: "/suno/submit/MUSIC" }),
     icon: "Suno",
   },
+  "glm-5.3:free": {
+    vendor: "智谱",
+    tag: "大语言模型",
+    endpoints: EP.chat,
+    icon: "Zhipu.Color",
+  },
   "gemini-3.1-flash-tts-preview": {
     vendor: "Google",
     tag: "语音合成",

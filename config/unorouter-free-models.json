@@ -1,6 +1,19 @@
 {
-  "note": "免费线已下架（2026-10-09）。此前 17 个 :free 模型已从 Keyo Chat Free 渠道移除。",
+  "note": "UnoRouter 赠送金模型：glm-5.3:free（映射到上游 glm-5.2）。标价：输入 $1.198 / 输出 $7.4872 每 100 万 tokens。",
   "base_url": "https://api.unorouter.com",
   "channel_name": "Keyo Chat Free",
-  "models": []
+  "models": [
+    {
+      "id": "glm-5.3:free",
+      "upstream": "glm-5.2",
+      "vendor": "智谱",
+      "icon": "Zhipu.Color",
+      "tags": "大语言模型",
+      "price_in": 1.198,
+      "price_out": 7.4872,
+      "model_ratio": 0.599,
+      "completion_ratio": 6.24974958263773,
+      "desc_zh": "智谱 GLM 5.3 赠送金模型（上游 glm-5.2）。标价：输入 $1.198 / 输出 $7.4872 每 100 万 tokens。"
+    }
+  ]
 }

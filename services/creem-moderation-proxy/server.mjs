@@ -707,6 +707,13 @@ function enrichPricingPayload(payload) {
       next.supported_endpoint_types = ["openai-audio"];
     } else if (name === "Duix-Avatar") {
       next.model_price = 0.0685;
+    } else if (name === "glm-5.3:free") {
+      next.tags = "大语言模型";
+      next.supported_endpoint_types = ["openai"];
+      if (!next.model_ratio || next.model_ratio <= 0) {
+        next.model_ratio = 0.599;
+        next.completion_ratio = 6.24974958263773;
+      }
     } else if (name === "keyo-flash:free" || name === "keyo-flash2:free") {
       if (!next.model_ratio || next.model_ratio <= 0) {
         next.model_ratio = 0.005;

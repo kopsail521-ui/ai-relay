@@ -7477,5 +7477,53 @@
         ]
       ]
     }
+  },
+  "glm-5.3:free": {
+    "description": "智谱 GLM 5.3 赠送金模型。在通用对话、复杂推理与中文场景下表现出色。调用按对应模型费率计费（输入 .198 / 输出 .4872 每 100 万 tokens），优先扣减赠送金，赠送金不足时扣充值余额。支持 128K 上下文。支持文本模态。",
+    "descriptions": {
+      "zhCN": "智谱 GLM 5.3 赠送金模型。在通用对话、复杂推理与中文场景下表现出色。调用按对应模型费率计费（输入 .198 / 输出 .4872 每 100 万 tokens），优先扣减赠送金，赠送金不足时扣充值余额。支持 128K 上下文。支持文本模态。",
+      "zhTW": "智譜 GLM 5.3 贈送金模型。在通用對話、複雜推理與中文場景下表現出色。呼叫按對應模型費率計費（輸入 .198 / 輸出 .4872 每 100 萬 tokens），優先扣減贈送金，贈送金不足時扣儲值餘額。支援 128K 上下文。支援文本模態。",
+      "en": "Zhipu GLM 5.3 gift-credit edition. Excels at complex reasoning, coding, and bilingual tasks. Billed at model rate (.198 input / .4872 output per 1M tokens); gift credits are used first, with any shortfall charged to your recharge balance. 128K context window. Text modality.",
+      "fr": "Modèle avec crédits offerts GLM 5.3 de Zhipu. Tarification à 1,198 $ entrée / 7,4872 $ sortie par million de tokens. Les crédits offerts sont débités en priorité. Contexte 128K.",
+      "ru": "Модель с подарочными кредитами Zhipu GLM 5.3. Списание .198 за вход / .4872 за выход на 1 млн токенов. Подарочные кредиты списываются первыми. Контекст 128K.",
+      "ja": "Zhipu GLM 5.3 ギフトクレジット版。1Mトークンあたり入力 .198 / 出力 .4872。ギフトクレジットが優先して消費されます。128Kコンテキスト対応。",
+      "vi": "Phiên bản tín dụng quà tặng Zhipu GLM 5.3. Tính phí .198 đầu vào / .4872 đầu ra mỗi 1 triệu token. Ưu tiên trừ tín dụng quà tặng. Cửa sổ ngữ cảnh 128K."
+    },
+    "unit": "token",
+    "badge": {
+      "zhCN": "按 Token 计费",
+      "zhTW": "按 Token 計費",
+      "en": "Token-based",
+      "fr": "Au token",
+      "ru": "По токенам",
+      "ja": "Token 課金",
+      "vi": "Theo token"
+    },
+    "suffix": {
+      "zhCN": "",
+      "zhTW": "",
+      "en": "",
+      "fr": "",
+      "ru": "",
+      "ja": "",
+      "vi": ""
+    },
+    "price_key": {
+      "zhCN": "",
+      "zhTW": "",
+      "en": "",
+      "fr": "",
+      "ru": "",
+      "ja": "",
+      "vi": ""
+    },
+    "description_zh": "智谱 GLM 5.3 赠送金模型。调用按对应模型费率计费（输入 .198 / 输出 .4872 每 100 万 tokens），优先扣减赠送金，赠送金不足时扣充值余额。支持 128K 上下文。",
+    "description_en": "Zhipu GLM 5.3 gift-credit edition. Billed at model rate (.198 in / .4872 out per 1M tokens); gift credits used first. 128K context window.",
+    "badge_zh": "按 Token 计费",
+    "badge_en": "Token-based",
+    "suffix_zh": "",
+    "suffix_en": "",
+    "price_key_zh": "",
+    "price_key_en": ""
   }
 }

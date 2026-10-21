@@ -18,7 +18,7 @@ For commercial licensing, please contact support@quantumnous.com
 */
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useQuery } from '@tanstack/react-query'
-import { Check, ChevronDown, Copy, KeyRound, Settings2, WalletCards } from 'lucide-react'
+import { Check, ChevronDown, Copy, Info, KeyRound, Settings2, WalletCards } from 'lucide-react'
 import { useEffect, useMemo, useState } from 'react'
 import { useForm, type SubmitErrorHandler } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
@@ -51,6 +51,7 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import {
   Sheet,
   SheetClose,
@@ -62,6 +63,11 @@ import {
 } from '@/components/ui/sheet'
 import { Switch } from '@/components/ui/switch'
 import { Textarea } from '@/components/ui/textarea'
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from '@/components/ui/tooltip'
 import { useStatus } from '@/hooks/use-status'
 import { getUserModels, getUserGroups } from '@/lib/api'
 import { getCurrencyDisplay, getCurrencyLabel } from '@/lib/currency'
@@ -80,6 +86,10 @@ import {
   getApiKeyFormDefaultValues,
   transformFormDataToPayload,
   transformApiKeyToFormDefaults,
+  ROUTING_STRATEGIES,
+  type RoutingStrategy,
+  computeStrategyGroupOrder,
+  detectStrategyFromGroups,
 } from '../lib'
 import type { ApiKey } from '../types'
 import {
@@ -227,13 +237,21 @@ export function ApiKeysMutateDrawer({
     if (initializedTarget === target) return
     if (isUpdate && currentRow) {
       if (apiKeyData?.success && apiKeyData.data) {
-        form.reset(
-          transformApiKeyToFormDefaults(
-            apiKeyData.data,
-            availableAutoGroupNames,
-            maxAutoGroups
-          )
+        const defaults = transformApiKeyToFormDefaults(
+          apiKeyData.data,
+          availableAutoGroupNames,
+          maxAutoGroups
         )
+        const detected = detectStrategyFromGroups(
+          defaults.auto_groups,
+          groups,
+          globalAutoGroups,
+          maxAutoGroups
+        )
+        form.reset({
+          ...defaults,
+          routing_strategy: detected,
+        })
         setInitializedTarget(target)
       }
     } else {
@@ -266,6 +284,52 @@ export function ApiKeysMutateDrawer({
     isUpdate && currentRow ? `update:${currentRow.id}` : 'create'
   const isFormInitialized = initializedTarget === formTarget
   const selectedGroup = form.watch('group')
+  const isSmartRouting = selectedGroup === 'auto'
+  const currentStrategy =
+    (form.watch('routing_strategy') || 'smart') as RoutingStrategy
+
+  const handleToggleSmartRouting = (enabled: boolean) => {
+    if (enabled) {
+      form.setValue('group', 'auto', { shouldDirty: true })
+      form.setValue('cross_group_retry', true, { shouldDirty: true })
+      const nextStrategy = currentStrategy || 'smart'
+      const ordered = computeStrategyGroupOrder(
+        nextStrategy,
+        groups,
+        globalAutoGroups,
+        maxAutoGroups
+      )
+      form.setValue('auto_groups', ordered, {
+        shouldDirty: true,
+        shouldValidate: true,
+      })
+      form.setValue('auto_groups_mode', 'custom', { shouldDirty: true })
+    } else {
+      const fallback =
+        groups.find((g) => g.value === 'default')?.value ??
+        availableAutoGroupNames[0] ??
+        ''
+      form.setValue('group', fallback, { shouldDirty: true })
+      form.setValue('cross_group_retry', false, { shouldDirty: true })
+      form.setValue('auto_groups', [], { shouldDirty: true })
+      form.setValue('auto_groups_mode', 'inherit', { shouldDirty: true })
+    }
+  }
+
+  const handleStrategyChange = (newStrategy: RoutingStrategy) => {
+    form.setValue('routing_strategy', newStrategy, { shouldDirty: true })
+    const ordered = computeStrategyGroupOrder(
+      newStrategy,
+      groups,
+      globalAutoGroups,
+      maxAutoGroups
+    )
+    form.setValue('auto_groups', ordered, {
+      shouldDirty: true,
+      shouldValidate: true,
+    })
+    form.setValue('auto_groups_mode', 'custom', { shouldDirty: true })
+  }
 
   // Correct group after groups load: if the form value is not in available groups, fall back
   useEffect(() => {
@@ -488,12 +552,121 @@ export function ApiKeysMutateDrawer({
                 )}
               />
 
+              {/* 智能路由 Switch & Strategies (OpenLux Layout) */}
+              <div
+                data-slot='smart-routing-card'
+                className='border-border/70 bg-card/60 flex flex-col gap-3 rounded-xl border p-3.5 shadow-2xs'
+              >
+                <div className='flex items-center justify-between gap-3'>
+                  <div className='flex items-center gap-1.5'>
+                    <span className='text-destructive text-sm font-bold'>*</span>
+                    <span className='text-foreground text-sm font-semibold'>
+                      {t('Smart Routing')}
+                    </span>
+                    <Tooltip>
+                      <TooltipTrigger
+                        render={
+                          <span
+                            role='button'
+                            tabIndex={0}
+                            className='text-muted-foreground hover:text-foreground inline-flex size-4 cursor-pointer items-center justify-center rounded-full transition-colors'
+                            aria-label={t('Smart Routing description')}
+                          />
+                        }
+                      >
+                        <Info className='size-3.5' />
+                      </TooltipTrigger>
+                      <TooltipContent className='max-w-xs text-xs'>
+                        {t('Smart Routing description')}
+                      </TooltipContent>
+                    </Tooltip>
+                  </div>
+                  <Switch
+                    checked={isSmartRouting}
+                    onCheckedChange={handleToggleSmartRouting}
+                    aria-label={t('Smart Routing')}
+                  />
+                </div>
+
+                {isSmartRouting && (
+                  <div className='flex flex-col gap-3 pt-1'>
+                    <RadioGroup
+                      value={currentStrategy}
+                      onValueChange={(val) =>
+                        handleStrategyChange(val as RoutingStrategy)
+                      }
+                      className='grid grid-cols-1 gap-2 sm:grid-cols-2'
+                    >
+                      {ROUTING_STRATEGIES.map((item) => {
+                        const isSelected = currentStrategy === item.value
+                        return (
+                          <label
+                            key={item.value}
+                            htmlFor={`strategy-${item.value}`}
+                            className={cn(
+                              'border-border/60 hover:bg-muted/40 text-foreground flex cursor-pointer items-center gap-2.5 rounded-lg border px-3 py-2 text-xs transition-all select-none',
+                              isSelected &&
+                                'border-primary/60 bg-primary/10 text-primary font-medium shadow-2xs'
+                            )}
+                          >
+                            <RadioGroupItem
+                              value={item.value}
+                              id={`strategy-${item.value}`}
+                            />
+                            <div className='flex flex-wrap items-baseline gap-1'>
+                              <span className='font-medium'>{t(item.label)}</span>
+                              <span
+                                className={cn(
+                                  'text-[11px]',
+                                  isSelected
+                                    ? 'text-primary/80'
+                                    : 'text-muted-foreground'
+                                )}
+                              >
+                                {t(item.subLabel)}
+                              </span>
+                            </div>
+                          </label>
+                        )
+                      })}
+                    </RadioGroup>
+
+                    <div className='border-rose-200 bg-rose-50/80 text-rose-700 dark:border-rose-900/40 dark:bg-rose-950/25 dark:text-rose-400 flex items-start gap-2 rounded-lg border p-3 text-xs leading-relaxed'>
+                      <span>{t('Smart Routing Active Banner')}</span>
+                    </div>
+                  </div>
+                )}
+              </div>
+
               <FormField
                 control={form.control}
                 name='group'
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>{t('Group')}</FormLabel>
+                    <div className='flex items-center gap-1.5'>
+                      <FormLabel>{t('Group')}</FormLabel>
+                      <Tooltip>
+                        <TooltipTrigger
+                          render={
+                            <span
+                              role='button'
+                              tabIndex={0}
+                              className='text-muted-foreground hover:text-foreground inline-flex size-3.5 cursor-pointer items-center justify-center rounded-full transition-colors'
+                              aria-label={t('Group')}
+                            />
+                          }
+                        >
+                          <Info className='size-3' />
+                        </TooltipTrigger>
+                        <TooltipContent className='max-w-xs text-xs'>
+                          {isSmartRouting
+                            ? t('Smart routing overrides group selection')
+                            : t(
+                                'Groups that users can select when creating API keys.'
+                              )}
+                        </TooltipContent>
+                      </Tooltip>
+                    </div>
                     <FormControl>
                       <ApiKeyGroupCombobox
                         options={groups}
@@ -518,7 +691,7 @@ export function ApiKeysMutateDrawer({
                 )}
               />
 
-              {selectedGroup === 'auto' && (
+              {isSmartRouting && (
                 <FormField
                   control={form.control}
                   name='auto_groups'
@@ -559,7 +732,7 @@ export function ApiKeysMutateDrawer({
                 />
               )}
 
-              {selectedGroup === 'auto' && (
+              {isSmartRouting && (
                 <FormField
                   control={form.control}
                   name='cross_group_retry'

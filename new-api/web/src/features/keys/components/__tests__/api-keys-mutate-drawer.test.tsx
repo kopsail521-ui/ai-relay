@@ -277,4 +277,28 @@ describe('API keys mutate drawer Auto group integration', () => {
     await waitFor(() => expect(createdPayloads).toHaveLength(1))
     expect(createdPayloads[0]?.auto_groups).toEqual(['vip'])
   })
+
+  test('Smart routing switch toggle and strategy switching updates auto groups by price', async () => {
+    const createdPayloads: Array<Record<string, unknown>> = []
+    installApiFixtures(createdPayloads)
+    await renderCreateDrawer()
+
+    const switchToggle = screen.getByRole('switch', { name: 'Smart Routing' })
+    expect(switchToggle).toBeChecked()
+
+    expect(
+      document.body.textContent?.includes('Smart Routing Active Banner')
+    ).toBe(true)
+
+    const priceRadio = screen.getByRole('radio', { name: /Price First/i })
+    fireEvent.click(priceRadio)
+
+    changeInput(getControlByLabel('Name'), 'smart-price')
+    fireEvent.click(findButton('Save changes', true))
+    await waitFor(() => expect(createdPayloads).toHaveLength(1))
+
+    expect(createdPayloads[0]?.group).toBe('auto')
+    expect(createdPayloads[0]?.cross_group_retry).toBe(true)
+    expect(createdPayloads[0]?.auto_groups).toEqual(['default', 'vip'])
+  })
 })

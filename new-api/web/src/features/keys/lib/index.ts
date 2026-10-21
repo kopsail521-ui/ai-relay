@@ -27,3 +27,12 @@ export {
   transformFormDataToPayload,
   transformApiKeyToFormDefaults,
 } from './api-key-form'
+
+export {
+  ROUTING_STRATEGIES,
+  type RoutingStrategy,
+  type RoutingStrategyConfig,
+  computeStrategyGroupOrder,
+  detectStrategyFromGroups,
+} from './smart-routing'
+

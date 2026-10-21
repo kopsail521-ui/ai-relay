@@ -48,6 +48,7 @@ jobs:
               set -e
               cd /opt/ai-relay
               bash scripts/vps-safe-pull-preserve-blog.sh >/dev/null
+              bash scripts/vps-deploy-console.sh
               python3 /opt/ai-relay/scripts/vps-probe-kimi.py /opt/ai-relay/data/new-api/one-api.db /opt/ai-relay/static/brand/probe-kimi-k3.json
               chmod 644 /opt/ai-relay/static/brand/probe-kimi-k3.json || true
             '"

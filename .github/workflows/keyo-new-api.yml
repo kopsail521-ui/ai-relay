@@ -114,7 +114,7 @@ jobs:
           echo "${GH_TOKEN}" | sudo docker login ghcr.io -u "${ACTOR}" --password-stdin
           sudo docker pull "${IMAGE}"
           sudo docker logout ghcr.io || true
-          sudo IMAGE="${IMAGE}" bash /opt/ai-relay/scripts/vps-recreate-new-api-container.sh
+          sudo IMAGE="${IMAGE}" bash /opt/ai-relay/scripts/vps-deploy-console.sh
           echo DONE_CICD_DEPLOY
           EOF
 

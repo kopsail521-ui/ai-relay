@@ -2,7 +2,7 @@
 # Recreate ai-relay-new-api using an already-built keyo-new-api:local image.
 set -euo pipefail
 export CONTAINER="${CONTAINER:-ai-relay-new-api}"
-export IMAGE="${IMAGE:-keyo-new-api:local}"
+export IMAGE="${IMAGE:-ghcr.io/kopsail521-ui/keyo-new-api:main}"
 python3 - <<'PY'
 import json, os, re, shlex, subprocess
 

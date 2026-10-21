@@ -53,6 +53,10 @@ if ! printf '%s\n' "${ARGS[@]}" | grep -q '^SESSION_SECRET='; then
   ARGS+=(-e "SESSION_SECRET=$SECRET")
   say "ENV_ADDED SESSION_SECRET (stable logins across recreates)"
 fi
+if ! printf '%s\n' "${ARGS[@]}" | grep -q '^TASK_PRICE_PATCH='; then
+  ARGS+=(-e "TASK_PRICE_PATCH=gpt-image-2,gpt-image-2-2K,gpt-image-2-4K,gpt-image-2.5,gpt-image-2.5-flare,gpt-image-2.5-flare-vip,gpt-image-2.5-sunburst,gpt-image-2.5-sunburst-vip")
+  say "ENV_ADDED TASK_PRICE_PATCH for per-call gpt-image task models"
+fi
 
 n_mount=0
 while IFS= read -r m; do

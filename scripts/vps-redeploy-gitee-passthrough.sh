@@ -9,7 +9,7 @@ sudo RELOAD_CADDY=0 bash "$ROOT/scripts/vps-safe-pull-preserve-blog.sh"
 echo "=== 1/3 更新 New-API 数据库中的模型映射 (Atria-Dawn 及语音孪生) ==="
 python3 "$ROOT/scripts/vps-free-rename-atria-prover.py" "$ROOT/data/new-api/one-api.db"
 python3 "$ROOT/scripts/vps-add-gitee-speech-gift-twins.py" "$ROOT/data/new-api/one-api.db"
-docker restart ai-relay-new-api
+sudo docker restart ai-relay-new-api
 
 echo "=== 2/3 重建 gitee-passthrough 网关 (:3010) ==="
 sudo docker build -t keyo-gitee-passthrough "$ROOT/services/gitee-passthrough"

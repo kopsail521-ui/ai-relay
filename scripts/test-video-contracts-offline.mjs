@@ -9,6 +9,7 @@ import {
   buildAioneVideoBody,
   buildGrsaiVideoBody,
   buildOpenluxGrok15Body,
+  buildAicopyVideoBody,
 } from "../services/apimart-passthrough/video-contracts.mjs";
 
 const sdMeta = {
@@ -198,6 +199,80 @@ function ok(name) {
   });
   assert.ok(err);
   ok("reject local path");
+}
+
+
+// --- MiniMax-H3 / aicopy ---
+{
+  const err = validateVideoClientBody("MiniMax-H3", { prompt: "a cat" });
+  assert.ok(err?.message?.includes("requires at least one reference image"));
+  ok("minimax-h3 rejects missing image");
+}
+{
+  const err = validateVideoClientBody("MiniMax-H3", {
+    prompt: "a cat",
+    image: "https://ex.com/a.jpg",
+    resolution: "invalid"
+  });
+  assert.ok(err?.message?.includes("resolution must be"));
+  ok("minimax-h3 rejects bad resolution");
+}
+{
+  const err = validateVideoClientBody("MiniMax-H3", {
+    prompt: "a cat",
+    image: "https://ex.com/a.jpg",
+    resolution: "720p",
+    duration: 5
+  });
+  assert.equal(err, null);
+  ok("minimax-h3 accepts valid payload with 720p");
+}
+{
+  const b = buildAicopyVideoBody({ id: "MiniMax-H3" }, {
+    prompt: "a cat",
+    image: "https://ex.com/a.jpg",
+    resolution: "480p"
+  });
+  assert.equal(b.model, "开源h3-480p（特惠版）");
+  assert.equal(b.image, "https://ex.com/a.jpg");
+  ok("minimax-h3 480p maps to 开源h3-480p（特惠版）");
+}
+{
+  const b = buildAicopyVideoBody({ id: "MiniMax-H3" }, {
+    prompt: "a cat",
+    images: ["https://ex.com/a.jpg", "https://ex.com/b.jpg"],
+    resolution: "768p"
+  });
+  assert.equal(b.model, "【api调用】开源h3-768p");
+  assert.equal(b._relayCandidates.length, 4);
+  assert.equal(b.images.length, 2);
+  ok("minimax-h3 768p maps to 【api调用】开源h3-768p with 4 relay candidates");
+}
+{
+  const b = buildAicopyVideoBody({ id: "MiniMax-H3" }, {
+    prompt: "a cat",
+    image: "https://ex.com/a.jpg",
+    resolution: "720p"
+  });
+  assert.equal(b.model, "官方h3-720p");
+  ok("minimax-h3 720p maps to 官方h3-720p");
+}
+{
+  const b = buildAicopyVideoBody({ id: "MiniMax-H3-vip" }, {
+    prompt: "a cat",
+    image: "https://ex.com/a.jpg"
+  });
+  assert.equal(b.model, "官方h3-1080p");
+  ok("minimax-h3-vip defaults to 1080p");
+}
+{
+  const b = buildAicopyVideoBody({ id: "MiniMax-H3" }, {
+    prompt: "a cat",
+    image: "https://ex.com/a.jpg",
+    resolution: "2k"
+  });
+  assert.equal(b.model, "官方h3-2k");
+  ok("minimax-h3 2k maps to 官方h3-2k");
 }
 
 console.log(`\n${n} offline contract tests passed`);

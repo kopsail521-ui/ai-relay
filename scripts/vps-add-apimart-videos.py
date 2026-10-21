@@ -106,7 +106,7 @@ def main():
             "Keyo Video Gen",
             "https://api.apimart.ai",
             ",".join(m["id"] for m in models),
-            "default",
+            "default,vip",
             1,  # enabled so pricing/abilities list models; traffic still via Caddy :3011
         ]
         if "priority" in ch_cols:
@@ -165,7 +165,13 @@ def main():
                 "UPDATE channels SET models=?, name=? WHERE id=?",
                 (merged, new_name, cid),
             )
-        print("channel", cid, new_name, "models", len(parts))
+        cur.execute('SELECT "group" FROM channels WHERE id=?', (cid,))
+        grow = cur.fetchone()
+        cgrp = grow[0] if grow and grow[0] else "default"
+        if "vip" not in cgrp.split(","):
+            cgrp = cgrp + ",vip"
+            cur.execute('UPDATE channels SET "group"=? WHERE id=?', (cgrp, cid))
+        print("channel", cid, new_name, "group", cgrp, "models", len(parts))
         target = (cid, new_name, merged)
 
     def get_opt(key):
@@ -302,15 +308,16 @@ def main():
             cur.execute("UPDATE models SET %s WHERE id=?" % ",".join(sets), vals)
             print("marketplace updated", mid, "default_sell", sell)
 
-        # Abilities so model appears online / in pricing for default group
+        # Abilities so model appears online / in pricing for default and vip groups
         ch_id = target[0]
         try:
             cur.execute("DELETE FROM abilities WHERE model=?", (mid,))
-            cur.execute(
-                'INSERT OR IGNORE INTO abilities("group", model, channel_id, enabled, priority, weight) VALUES (?,?,?,?,?,?)',
-                ("default", mid, ch_id, 1, 0, 1),
-            )
-            print("abilities", mid, "-> channel", ch_id)
+            for grp in ("default", "vip"):
+                cur.execute(
+                    'INSERT OR IGNORE INTO abilities("group", model, channel_id, enabled, priority, weight) VALUES (?,?,?,?,?,?)',
+                    (grp, mid, ch_id, 1, 0, 1),
+                )
+            print("abilities", mid, "-> channel", ch_id, "(default, vip)")
         except Exception as e:
             print("abilities skip", mid, e)
 

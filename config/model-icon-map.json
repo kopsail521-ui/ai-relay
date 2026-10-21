@@ -47,6 +47,7 @@
     "CosyVoice3": "Qwen.Color",
     "wan3.0-video": "Qwen.Color",
     "MiniMax-H3": "Minimax.Color",
+    "MiniMax-H3-vip": "Minimax.Color",
     "sam3": "Meta.Color",
     "GLM-ASR": "Zhipu.Color",
     "GLM-TTS": "Zhipu.Color",

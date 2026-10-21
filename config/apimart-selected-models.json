@@ -105,17 +105,40 @@
       "tag": "视频模型",
       "billing": "per_second",
       "upstream_usd_per_second": {
-        "480p": 0.006849,
-        "768p": 0.009589,
-        "1080p": 0.013699
+        "480p": 0.003699,
+        "768p": 0.005479,
+        "720p": 0.013699,
+        "1080p": 0.017123,
+        "2k": 0.020548
       },
       "sell_usd_per_second": {
-        "480p": 0.020548,
-        "768p": 0.028767,
-        "1080p": 0.041096
+        "480p": 0.004438,
+        "768p": 0.006575,
+        "720p": 0.016438,
+        "1080p": 0.020548,
+        "2k": 0.024658
       },
-      "model_price_usd": 0.028767,
-      "desc_zh": "MiniMax-H3 视频生成，支持 480p / 768p / 1080p，可附参考图。"
+      "model_price_usd": 0.006575,
+      "desc_zh": "MiniMax-H3 视频生成，支持 480p / 768p / 720p / 1080p / 2k，可附参考图。"
+    },
+    {
+      "id": "MiniMax-H3-vip",
+      "vendor": "MiniMax",
+      "icon": "Minimax.Color",
+      "tag": "视频模型",
+      "billing": "per_second",
+      "upstream_usd_per_second": {
+        "720p": 0.013699,
+        "1080p": 0.017123,
+        "2k": 0.020548
+      },
+      "sell_usd_per_second": {
+        "720p": 0.016438,
+        "1080p": 0.020548,
+        "2k": 0.024658
+      },
+      "model_price_usd": 0.020548,
+      "desc_zh": "MiniMax-H3 VIP 官方尊享视频生成，支持 720p / 1080p / 2k，官方原厂旗舰品质。"
     },
     {
       "id": "wan3.0-video",

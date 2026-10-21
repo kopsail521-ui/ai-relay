@@ -3451,9 +3451,9 @@
     }
   },
   "MiniMax-H3": {
-    "description": "MiniMax H3 视频生成模型。从文本或图像生成高质量视频，支持多种分辨率与风格。支持视频模态。适合短视频创作、广告素材、动态内容生成。",
+    "description": "MiniMax H3 视频生成模型。支持特惠接力组（480p/768p）与官方尊享组（720p/1080p/2k），从文本与参考图像生成高质连贯视频。",
     "descriptions": {
-      "zhCN": "MiniMax H3 视频生成模型。从文本或图像生成高质量视频，支持多种分辨率与风格。支持视频模态。适合短视频创作、广告素材、动态内容生成。",
+      "zhCN": "MiniMax H3 视频生成模型。支持特惠接力组（480p/768p）与官方尊享组（720p/1080p/2k），从文本与参考图像生成高质连贯视频。",
       "zhTW": "MiniMax H3 影片生成模型。从文本或圖像生成高質量影片，支援多種解析度与風格。支援影片模态。適合短影片創作、廣告素材、動態內容生成。",
       "en": "MiniMax's H3 video generation model. text-to-video and image-to-video with high quality and multiple resolutions. video modality. Ideal for short video creation, ad assets, dynamic content.",
       "fr": "MiniMax's H3 video generation model. text-to-video and image-to-video with high quality and multiple resolutions. video modality. Idéal pour short video creation, ad assets, dynamic content.",
@@ -3489,7 +3489,7 @@
       "ja": "秒ごと",
       "vi": "Mỗi giây"
     },
-    "description_zh": "MiniMax H3 视频生成模型。从文本或图像生成高质量视频，支持多种分辨率与风格。支持视频模态。适合短视频创作、广告素材、动态内容生成。",
+    "description_zh": "MiniMax H3 视频生成模型。支持特惠接力组（480p/768p）与官方尊享组（720p/1080p/2k），从文本与参考图像生成高质连贯视频。",
     "description_en": "MiniMax's H3 video generation model. text-to-video and image-to-video with high quality and multiple resolutions. video modality. Ideal for short video creation, ad assets, dynamic content.",
     "badge_zh": "按秒计费",
     "badge_en": "Per Second",
@@ -3500,31 +3500,41 @@
     "price_table": {
       "columns": {
         "zhCN": [
+          "分组 / 梯队",
           "分辨率",
-          "场景",
           "价格 (/秒)"
         ],
         "en": [
+          "Group / Tier",
           "Resolution",
-          "Scenario",
           "Price (/sec)"
         ]
       },
       "rows": [
         [
+          "default (特惠接力组)",
           "480p",
-          "标准输出",
+          "$0.00444"
+        ],
+        [
+          "default (特惠接力组)",
+          "768p",
+          "$0.00658"
+        ],
+        [
+          "vip (官方尊享组)",
+          "720p",
+          "$0.01644"
+        ],
+        [
+          "vip (官方尊享组)",
+          "1080p",
           "$0.02055"
         ],
         [
-          "768p",
-          "标准输出",
-          "$0.02877"
-        ],
-        [
-          "1080p",
-          "标准输出",
-          "$0.04110"
+          "vip (官方尊享组)",
+          "2k",
+          "$0.02466"
         ]
       ]
     }
@@ -7525,5 +7535,84 @@
     "suffix_en": "",
     "price_key_zh": "",
     "price_key_en": ""
+  },
+  "MiniMax-H3-vip": {
+    "description": "MiniMax H3 VIP 官方原厂尊享视频生成模型。原厂高优先级通道，支持 720p / 1080p / 2k 超高清分辨率，无排队免水印。适合短视频创作、影视广告素材、高端商业动态内容生成。",
+    "descriptions": {
+      "zhCN": "MiniMax H3 VIP 官方原厂尊享视频生成模型。原厂高优先级通道，支持 720p / 1080p / 2k 超高清分辨率，无排队免水印。适合短视频创作、影视广告素材、高端商业动态内容生成。",
+      "zhTW": "MiniMax H3 VIP 官方原廠尊享影片生成模型。原廠高優先級通道，支援 720p / 1080p / 2k 超高解析度，免排隊無浮水印。適合短影片創作、影視廣告素材、高端商業動態內容生成。",
+      "en": "MiniMax H3 VIP official flagship video generation model. Official high-priority tier supporting 720p, 1080p, and 2K ultra-high resolution with no queue. Ideal for short video creation, commercial ad assets, and premium dynamic content.",
+      "fr": "MiniMax H3 VIP modèle de génération vidéo officiel. Prise en charge 720p, 1080p et 2K ultra-haute résolution sans file d'attente.",
+      "ru": "MiniMax H3 VIP официальная флагманская модель генерации видео. Поддержка разрешений 720p, 1080p и 2K без очереди.",
+      "ja": "MiniMax H3 VIP 公式フラッグシップ動画生成モデル。720p、1080p、2K 超高解像度を優先キューで提供。",
+      "vi": "MiniMax H3 VIP mô hình tạo video chính thức cao cấp. Hỗ trợ 720p, 1080p và 2K với độ ưu tiên cao."
+    },
+    "unit": "second",
+    "badge": {
+      "zhCN": "官方尊享",
+      "zhTW": "官方尊享",
+      "en": "Official VIP",
+      "fr": "VIP Officiel",
+      "ru": "Официальный VIP",
+      "ja": "公式VIP",
+      "vi": "VIP Chính thức"
+    },
+    "suffix": {
+      "zhCN": "/秒",
+      "zhTW": "/秒",
+      "en": "/ second",
+      "fr": "/ seconde",
+      "ru": "/ секунду",
+      "ja": "/ 秒",
+      "vi": "/ giây"
+    },
+    "price_key": {
+      "zhCN": "每秒",
+      "zhTW": "每秒",
+      "en": "Per second",
+      "fr": "Par seconde",
+      "ru": "За секунду",
+      "ja": "秒ごと",
+      "vi": "Mỗi giây"
+    },
+    "description_zh": "MiniMax H3 VIP 官方原厂尊享视频生成模型。原厂高优先级通道，支持 720p / 1080p / 2k 超高清分辨率，无排队免水印。适合短视频创作、影视广告素材、高端商业动态内容生成。",
+    "description_en": "MiniMax H3 VIP official flagship video generation model. Official high-priority tier supporting 720p, 1080p, and 2K ultra-high resolution with no queue.",
+    "badge_zh": "官方尊享",
+    "badge_en": "Official VIP",
+    "suffix_zh": "/秒",
+    "suffix_en": "/ second",
+    "price_key_zh": "每秒",
+    "price_key_en": "Per second",
+    "price_table": {
+      "columns": {
+        "zhCN": [
+          "规格",
+          "分辨率",
+          "价格 (/秒)"
+        ],
+        "en": [
+          "Tier",
+          "Resolution",
+          "Price (/sec)"
+        ]
+      },
+      "rows": [
+        [
+          "原厂高清",
+          "720p",
+          "$0.01644"
+        ],
+        [
+          "原厂旗舰",
+          "1080p",
+          "$0.02055"
+        ],
+        [
+          "原厂顶级",
+          "2k",
+          "$0.02466"
+        ]
+      ]
+    }
   }
 }

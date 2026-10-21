@@ -166,7 +166,7 @@ function validateVideoClientBody(modelId, body) {
     return null;
   }
 
-  if (id === "MiniMax-H3") {
+  if (id === "MiniMax-H3" || id === "MiniMax-H3-vip") {
     if (!String(body.prompt || body.text || "").trim()) {
       return { param: "prompt", message: "prompt is required" };
     }
@@ -182,10 +182,10 @@ function validateVideoClientBody(modelId, body) {
       };
     }
     const res = String(body.resolution || "").toLowerCase();
-    if (res && !/^(480p|768p|1080p|2k)$/.test(res)) {
+    if (res && !/^(480p|720p|768p|1080p|2k)$/.test(res)) {
       return {
         param: "resolution",
-        message: "MiniMax-H3 resolution must be 480p / 768p / 1080p (do not put aspect ratio in resolution)",
+        message: "MiniMax-H3 resolution must be 480p / 720p / 768p / 1080p / 2k (do not put aspect ratio in resolution)",
       };
     }
     const size = String(body.size || "");
@@ -193,7 +193,7 @@ function validateVideoClientBody(modelId, body) {
       return {
         param: "size",
         message:
-          "MiniMax-H3: put aspect in aspectRatio (landscape or portrait), not size. resolution is 480p/768p/1080p.",
+          "MiniMax-H3: put aspect in aspectRatio (landscape or portrait), not size. resolution is 480p/720p/768p/1080p/2k.",
       };
     }
     const ar = String(body.aspectRatio || body.aspect_ratio || body.ratio || "").trim().toLowerCase();
@@ -213,11 +213,21 @@ function validateVideoClientBody(modelId, body) {
     if (dur != null) {
       const n = Number(dur);
       if (!Number.isFinite(n) || n < 1 || n > 15) {
-        return { param: "duration", message: "MiniMax-H3 duration must be 1–15 (1080p max 10)" };
+        return { param: "duration", message: "MiniMax-H3 duration must be 1–15 seconds" };
       }
-      if (String(body.resolution || "").toLowerCase() === "1080p" && n > 10) {
-        return { param: "duration", message: "MiniMax-H3 1080p duration max is 10 seconds" };
-      }
+    }
+    const hasImage =
+      (Array.isArray(body.images) && body.images.length > 0) ||
+      (Array.isArray(body.image_urls) && body.image_urls.length > 0) ||
+      (typeof body.image === "string" && body.image.trim()) ||
+      (typeof body.image_url === "string" && body.image_url.trim()) ||
+      body.input_reference;
+    if (!hasImage) {
+      return {
+        param: "images",
+        message:
+          "MiniMax-H3 requires at least one reference image (pass images[] or image).",
+      };
     }
     return null;
   }
@@ -741,6 +751,93 @@ function buildGrsaiVideoBody(meta, body) {
 }
 
 
+/**
+ * Keyo Path B JSON → aicopy POST /v1/videos with resolution mapping & relay fallback
+ */
+function buildAicopyVideoBody(meta, body, clientGroup = "default") {
+  const est = meta?.estimate || {};
+  let duration = Number(body.duration ?? body.seconds);
+  if (!Number.isFinite(duration) || duration <= 0) {
+    duration = Number(est.default_seconds || 5);
+  }
+  if (duration < 1) duration = 1;
+  if (duration > 15) duration = 15;
+  duration = Math.trunc(duration);
+
+  let resolution = String(body.resolution || "").toLowerCase().trim();
+  if (!resolution) {
+    if (meta?.id === "MiniMax-H3-vip" || clientGroup === "vip") {
+      resolution = "1080p";
+    } else {
+      resolution = String(est.default_resolution || "768p").toLowerCase();
+    }
+  }
+
+  let upstreamModel = "【api调用】开源h3-768p";
+  let relayCandidates = [];
+
+  if (resolution === "480p") {
+    upstreamModel = "开源h3-480p（特惠版）";
+    relayCandidates = ["开源h3-480p（特惠版）"];
+  } else if (resolution === "768p") {
+    upstreamModel = "【api调用】开源h3-768p";
+    relayCandidates = [
+      "【api调用】开源h3-768p",
+      "开源h3-768p（特惠版）",
+      "【api调用】h3-768p（按次）",
+      "【特惠版】h3-768p（按次）",
+    ];
+  } else if (resolution === "720p") {
+    upstreamModel = "官方h3-720p";
+    relayCandidates = ["官方h3-720p"];
+  } else if (resolution === "1080p") {
+    upstreamModel = "官方h3-1080p";
+    relayCandidates = ["官方h3-1080p"];
+  } else if (resolution === "2k") {
+    upstreamModel = "官方h3-2k";
+    relayCandidates = ["官方h3-2k"];
+  } else {
+    upstreamModel = String(meta?.upstream_model || "【api调用】开源h3-768p");
+    relayCandidates = [upstreamModel];
+  }
+
+  const images = [];
+  const pushImg = (u) => {
+    if (typeof u === "string" && u) images.push(u);
+    else if (u && typeof u === "object" && u.url) images.push(String(u.url));
+  };
+  if (Array.isArray(body.images)) for (const u of body.images) pushImg(u);
+  if (Array.isArray(body.image_urls)) for (const u of body.image_urls) pushImg(u);
+  if (typeof body.image_url === "string") pushImg(body.image_url);
+  if (typeof body.image === "string") pushImg(body.image);
+  if (typeof body.first_frame_image === "string") pushImg(body.first_frame_image);
+  if (body.input_reference) {
+    if (typeof body.input_reference === "string") pushImg(body.input_reference);
+    else if (typeof body.input_reference === "object" && body.input_reference.url) {
+      pushImg(body.input_reference.url);
+    }
+  }
+
+  const out = {
+    model: upstreamModel,
+    prompt: String(body.prompt || body.text || ""),
+    seconds: duration,
+    duration: duration,
+    resolution: resolution,
+    _relayCandidates: relayCandidates,
+  };
+
+  if (images.length === 1) {
+    out.image = images[0];
+    out.images = images;
+  } else if (images.length > 1) {
+    out.image = images[0];
+    out.images = images.slice(0, 9);
+  }
+
+  return out;
+}
+
 export {
   firstHttpsUrl,
   validateVideoClientBody,
@@ -748,6 +845,7 @@ export {
   buildOpenluxGrok15Body,
   buildAioneVideoBody,
   buildGrsaiVideoBody,
+  buildAicopyVideoBody,
   mapAspectToAione,
   mapAspectToGrsai,
   scanBodyMedia,

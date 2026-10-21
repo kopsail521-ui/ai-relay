@@ -131,9 +131,10 @@
       "vendor": "MiniMax",
       "icon": "Minimax.Color",
       "tag": "视频",
-      "upstream": "grsai",
-      "upstream_model": "minimax-h3",
-      "markup": 3,
+      "upstream": "aicopy",
+      "upstream_model": "【api调用】开源h3-768p",
+      "upstream_submit_path": "/v1/videos",
+      "markup": 1.2,
       "billing": "settle_cost",
       "display_unit": "second",
       "estimate": {
@@ -141,27 +142,65 @@
         "default_seconds": 5,
         "default_resolution": "768p",
         "cost_cny_per_second": {
-          "480p": 0.05,
-          "480P": 0.05,
-          "768p": 0.07,
-          "768P": 0.07,
-          "1080p": 0.1,
-          "1080P": 0.1,
-          "2k": 0.1,
-          "2K": 0.1
+          "480p": 0.027,
+          "480P": 0.027,
+          "768p": 0.040,
+          "768P": 0.040,
+          "720p": 0.100,
+          "720P": 0.100,
+          "1080p": 0.125,
+          "1080P": 0.125,
+          "2k": 0.150,
+          "2K": 0.150
         },
         "sell_usd_per_second": {
-          "480p": 0.020548,
-          "480P": 0.020548,
-          "768p": 0.028767,
-          "768P": 0.028767,
-          "1080p": 0.041096,
-          "1080P": 0.041096,
-          "2k": 0.041096,
-          "2K": 0.041096
+          "480p": 0.004438,
+          "480P": 0.004438,
+          "768p": 0.006575,
+          "768P": 0.006575,
+          "720p": 0.016438,
+          "720P": 0.016438,
+          "1080p": 0.020548,
+          "1080P": 0.020548,
+          "2k": 0.024658,
+          "2K": 0.024658
         }
       },
-      "desc_zh": "MiniMax-H3 视频生成，支持 480p / 768p / 1080p，可附参考图。"
+      "desc_zh": "MiniMax-H3 视频生成，支持 480p / 768p / 720p / 1080p / 2k，可附参考图。"
+    },
+    {
+      "id": "MiniMax-H3-vip",
+      "vendor": "MiniMax",
+      "icon": "Minimax.Color",
+      "tag": "视频",
+      "upstream": "aicopy",
+      "upstream_model": "官方h3-1080p",
+      "upstream_submit_path": "/v1/videos",
+      "markup": 1.2,
+      "billing": "settle_cost",
+      "display_unit": "second",
+      "estimate": {
+        "mode": "per_second_resolution_cny",
+        "default_seconds": 5,
+        "default_resolution": "1080p",
+        "cost_cny_per_second": {
+          "720p": 0.100,
+          "720P": 0.100,
+          "1080p": 0.125,
+          "1080P": 0.125,
+          "2k": 0.150,
+          "2K": 0.150
+        },
+        "sell_usd_per_second": {
+          "720p": 0.016438,
+          "720P": 0.016438,
+          "1080p": 0.020548,
+          "1080P": 0.020548,
+          "2k": 0.024658,
+          "2K": 0.024658
+        }
+      },
+      "desc_zh": "MiniMax-H3 VIP 官方尊享视频生成，支持 720p / 1080p / 2k，官方原厂旗舰品质。"
     },
     {
       "id": "wan3.0-video",

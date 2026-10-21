@@ -32,6 +32,7 @@ import {
   buildOpenluxGrok15Body,
   buildAioneVideoBody,
   buildGrsaiVideoBody,
+  buildAicopyVideoBody,
   mapAspectToAione,
 } from "./video-contracts.mjs";
 
@@ -585,6 +586,10 @@ function isAioneMeta(meta) {
   return String(meta?.upstream || "").toLowerCase() === "aione";
 }
 
+function isAicopyMeta(meta) {
+  return String(meta?.upstream || "").toLowerCase() === "aicopy";
+}
+
 function grsaiCostUsd(j) {
   if (!j || typeof j !== "object") return null;
   if (j.price_cny != null && Number.isFinite(Number(j.price_cny))) {
@@ -923,8 +928,11 @@ const server = http.createServer(async (req, res) => {
         return res.end(out.buf);
       }
 
-      if (isAioneMeta(pendingMeta)) {
-        if (!AIONE_KEY) {
+      if (isAioneMeta(pendingMeta) || isAicopyMeta(pendingMeta)) {
+        const isAicopy = isAicopyMeta(pendingMeta);
+        const upKey = isAicopy ? (AICOPY_KEY || AIONE_KEY) : AIONE_KEY;
+        const upOrigin = isAicopy ? (AICOPY_ORIGIN || AIONE_ORIGIN) : AIONE_ORIGIN;
+        if (!upKey) {
           return json(res, 500, {
             error: { message: "Service temporarily unavailable", type: "server_error" },
           });
@@ -933,7 +941,7 @@ const server = http.createServer(async (req, res) => {
         const path = wantContent
           ? `/v1/videos/${tid}/content${qsOf(req.url)}`
           : `/v1/videos/${tid}${qsOf(req.url)}`;
-        const up = await proxyOrigin(AIONE_ORIGIN, AIONE_KEY, req, bodyBuf, path);
+        const up = await proxyOrigin(upOrigin, upKey, req, bodyBuf, path);
         if (wantContent) {
           const out = clientUp(up);
           res.writeHead(out.status, {
@@ -1133,6 +1141,19 @@ const server = http.createServer(async (req, res) => {
         });
       }
       bodyBuf = Buffer.from(JSON.stringify(gBody), "utf8");
+    } else if (isAicopy) {
+      const aicopyBody = buildAicopyVideoBody(meta, body, token.group || "default");
+      if (!aicopyBody.prompt) {
+        return json(res, 400, {
+          error: {
+            message: "prompt is required",
+            type: "invalid_request_error",
+            param: "prompt",
+          },
+        });
+      }
+      body = aicopyBody;
+      bodyBuf = Buffer.from(JSON.stringify(aicopyBody), "utf8");
     } else if (useAione) {
       const aBody = buildAioneVideoBody(meta, body);
       if (!aBody.prompt) {
@@ -1245,7 +1266,30 @@ const server = http.createServer(async (req, res) => {
           headers: { ...req.headers, "content-type": "application/json" },
         }
       : req;
-    const up = await proxyOrigin(upOrigin, upKey, submitReq, bodyBuf, submitPath);
+    let up;
+    const relayList = isAicopy && Array.isArray(body._relayCandidates) && body._relayCandidates.length > 0
+      ? body._relayCandidates
+      : null;
+
+    if (relayList) {
+      for (let i = 0; i < relayList.length; i++) {
+        const cand = relayList[i];
+        if (body.model !== cand) {
+          body.model = cand;
+          bodyBuf = Buffer.from(JSON.stringify(body), "utf8");
+        }
+        up = await proxyOrigin(upOrigin, upKey, submitReq, bodyBuf, submitPath);
+        if (up.status >= 200 && up.status < 300) {
+          const t = up.buf.toString("utf8");
+          if (extractTaskId(t)) break;
+        }
+        if (i < relayList.length - 1) {
+          console.warn(`[relay] MiniMax-H3 upstream ${cand} failed (${up.status}), trying next candidate: ${relayList[i + 1]}`);
+        }
+      }
+    } else {
+      up = await proxyOrigin(upOrigin, upKey, submitReq, bodyBuf, submitPath);
+    }
     let text = up.buf.toString("utf8");
     let outBuf = up.buf;
     let outCt = up.ct;

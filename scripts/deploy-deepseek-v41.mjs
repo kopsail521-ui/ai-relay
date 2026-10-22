@@ -35,7 +35,11 @@ echo '${pyB64}' | base64 -d | gunzip | sudo tee /opt/ai-relay/scripts/vps-add-de
 echo "OK: 文件解码完成"
 
 echo "==> 2. 执行数据库上架 (one-api.db)..."
-sudo python3 /opt/ai-relay/scripts/vps-add-deepseek-v41.py /opt/ai-relay/data/new-api/one-api.db
+if command -v python3 >/dev/null 2>&1; then
+  sudo python3 /opt/ai-relay/scripts/vps-add-deepseek-v41.py /opt/ai-relay/data/new-api/one-api.db
+else
+  sudo docker run --rm -v /opt/ai-relay:/opt/ai-relay:ro -v /opt/ai-relay/data/new-api:/data -w /opt/ai-relay python:3.12-alpine python scripts/vps-add-deepseek-v41.py /data/one-api.db
+fi
 
 echo "==> 3. 更新并重启 Creem Moderation Proxy..."
 if sudo docker ps --format '{{.Names}}' | grep -q '^ai-relay-creem-moderation$'; then

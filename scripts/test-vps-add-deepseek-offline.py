@@ -119,13 +119,13 @@ def test_offline():
         mp = opts.get("ModelPrice", {})
 
         # Paid model: 3x markup
-        assert mr.get("deepseek-v4.1-flash-1017") == 0.3375, f"Expected 0.3375, got {mr.get('deepseek-v4.1-flash-1017')}"
-        assert cr.get("deepseek-v4.1-flash-1017") == 4.0, f"Expected 4.0, got {cr.get('deepseek-v4.1-flash-1017')}"
+        assert mr.get("deepseek-v4.1-flash-1017") == 0.33, f"Expected 0.33, got {mr.get('deepseek-v4.1-flash-1017')}"
+        assert cr.get("deepseek-v4.1-flash-1017") == 2.7273, f"Expected 2.7273, got {cr.get('deepseek-v4.1-flash-1017')}"
         assert "deepseek-v4.1-flash-1017" not in mp
 
         # Gift model: 10x markup
-        assert mr.get("deepseek-v4.1-flash-1017:free") == 1.125, f"Expected 1.125, got {mr.get('deepseek-v4.1-flash-1017:free')}"
-        assert cr.get("deepseek-v4.1-flash-1017:free") == 4.0, f"Expected 4.0, got {cr.get('deepseek-v4.1-flash-1017:free')}"
+        assert mr.get("deepseek-v4.1-flash-1017:free") == 1.10, f"Expected 1.10, got {mr.get('deepseek-v4.1-flash-1017:free')}"
+        assert cr.get("deepseek-v4.1-flash-1017:free") == 2.7273, f"Expected 2.7273, got {cr.get('deepseek-v4.1-flash-1017:free')}"
         assert "deepseek-v4.1-flash-1017:free" not in mp
 
         print("[OK] Options (ModelRatio, CompletionRatio, ModelPrice) verified!")

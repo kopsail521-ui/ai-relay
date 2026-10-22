@@ -3,18 +3,18 @@
 
 Pricing:
   Upstream (UnoRouter):
-    Input:  $0.225 / 1M tokens (model_ratio = 0.1125)
-    Output: $0.900 / 1M tokens (completion_ratio = 4.0)
+    Input:  $0.220 / 1M tokens (model_ratio = 0.11)
+    Output: $0.600 / 1M tokens (completion_ratio = 2.7273)
 
   Paid (deepseek-v4.1-flash-1017):
     Markup: 3x cost
-    Input:  $0.675 / 1M tokens -> ModelRatio = 0.3375
-    Output: $2.700 / 1M tokens -> CompletionRatio = 4.0
+    Input:  $0.660 / 1M tokens -> ModelRatio = 0.33
+    Output: $1.800 / 1M tokens -> CompletionRatio = 2.7273
 
   Gift credit (deepseek-v4.1-flash-1017:free):
     Markup: 10x cost
-    Input:  $2.250 / 1M tokens -> ModelRatio = 1.125
-    Output: $9.000 / 1M tokens -> CompletionRatio = 4.0
+    Input:  $2.200 / 1M tokens -> ModelRatio = 1.10
+    Output: $6.000 / 1M tokens -> CompletionRatio = 2.7273
     Prioritizes gift_quota over recharge balance.
 
 Public copy must NOT mention UnoRouter or upstream markup.
@@ -35,8 +35,8 @@ MODELS_CONFIG = [
     {
         "id": "deepseek-v4.1-flash-1017",
         "upstream": "deepseek-v4.1-flash-1017",
-        "ratio": 0.3375,  # 3x cost ($0.675 / 1M)
-        "comp": 4.0,     # 3x cost ($2.700 / 1M)
+        "ratio": 0.33,    # 3x cost ($0.660 / 1M)
+        "comp": 2.7273,   # 3x cost ($1.800 / 1M)
         "desc": "DeepSeek V4.1 Flash 1017 快照版对话与推理模型。基于 CED 因果编码器-解码器架构，具备原生多模态视觉理解能力与 1M 超长上下文，在代码辅助、复杂 Agent 与推理任务上速度与吞吐全面提升。支持文本与图像模态。",
         "vendor": "DeepSeek",
         "icon": "DeepSeek.Color",
@@ -45,9 +45,9 @@ MODELS_CONFIG = [
     {
         "id": "deepseek-v4.1-flash-1017:free",
         "upstream": "deepseek-v4.1-flash-1017",
-        "ratio": 1.125,   # 10x cost ($2.250 / 1M)
-        "comp": 4.0,     # 10x cost ($9.000 / 1M)
-        "desc": "DeepSeek V4.1 Flash 1017 赠送金模型。基于 CED 架构与 1M 上下文，具备原生多模态视觉理解能力。可用赠送金调用（按对应费率计费，输入 $2.25 / 输出 $9.00 每 100 万 tokens），优先扣减赠送金，赠送金不足时扣充值余额。支持文本与图像模态。",
+        "ratio": 1.10,    # 10x cost ($2.200 / 1M)
+        "comp": 2.7273,   # 10x cost ($6.000 / 1M)
+        "desc": "DeepSeek V4.1 Flash 1017 赠送金模型。基于 CED 架构与 1M 上下文，具备原生多模态视觉理解能力。可用赠送金调用（按对应费率计费，输入 $2.20 / 输出 $6.00 每 100 万 tokens），优先扣减赠送金，赠送金不足时扣充值余额。支持文本与图像模态。",
         "vendor": "DeepSeek",
         "icon": "DeepSeek.Color",
         "tags": "大语言模型",

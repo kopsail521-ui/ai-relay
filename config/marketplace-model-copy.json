@@ -7664,15 +7664,15 @@
     "price_key_en": ""
   },
   "deepseek-v4.1-flash-1017:free": {
-    "description": "DeepSeek V4.1 Flash 1017 赠送金模型。基于 CED 架构与 1M 上下文，具备原生多模态视觉理解能力。可用赠送金调用（按对应费率计费，输入 $2.25 / 输出 $9.00 每 100 万 tokens），优先扣减赠送金，赠送金不足时扣充值余额。支持文本与图像模态。",
+    "description": "DeepSeek V4.1 Flash 1017 赠送金模型。基于 CED 架构与 1M 上下文，具备原生多模态视觉理解能力。可用赠送金调用（按对应费率计费，输入 $2.20 / 输出 $6.00 每 100 万 tokens），优先扣减赠送金，赠送金不足时扣充值余额。支持文本与图像模态。",
     "descriptions": {
-      "zhCN": "DeepSeek V4.1 Flash 1017 赠送金模型。基于 CED 架构与 1M 上下文，具备原生多模态视觉理解能力。可用赠送金调用（按对应费率计费，输入 $2.25 / 输出 $9.00 每 100 万 tokens），优先扣减赠送金，赠送金不足时扣充值余额。支持文本与图像模态。",
-      "zhTW": "DeepSeek V4.1 Flash 1017 贈送金模型。基於 CED 架構與 1M 上下文，具備原生多模態視覺理解能力。可用贈送金呼叫（按對應費率計費，輸入 $2.25 / 輸出 $9.00 每 100 萬 tokens），優先扣減贈送金，贈送金不足時扣儲值餘額。支援文本與圖像模態。",
-      "en": "DeepSeek V4.1 Flash 1017 gift-credit edition. Features CED architecture and 1M context with native vision understanding. Billed at model rate ($2.25 input / $9.00 output per 1M tokens); gift credits are used first, with any shortfall charged to recharge balance. Text and image modalities.",
-      "fr": "Édition avec crédits offerts DeepSeek V4.1 Flash 1017. Architecture CED et contexte 1M. Tarification à 2,25 $ entrée / 9,00 $ sortie par million de tokens. Les crédits offerts sont débités en priorité.",
-      "ru": "Модель с подарочными кредитами DeepSeek V4.1 Flash 1017. Архитектура CED и контекст 1M. Списание $2.25 за вход / $9.00 за выход на 1 млн токенов. Подарочные кредиты расходуются первыми.",
-      "ja": "DeepSeek V4.1 Flash 1017 ギフトクレジット版。CED アーキテクチャと 1M コンテキスト。1Mトークンあたり入力 $2.25 / 出力 $9.00。ギフトクレジットが優先して消費されます。",
-      "vi": "Phiên bản tín dụng quà tặng DeepSeek V4.1 Flash 1017. Kiến trúc CED và ngữ cảnh 1M. Tính phí $2.25 đầu vào / $9.00 đầu ra mỗi 1 triệu token. Ưu tiên trừ tín dụng quà tặng."
+      "zhCN": "DeepSeek V4.1 Flash 1017 赠送金模型。基于 CED 架构与 1M 上下文，具备原生多模态视觉理解能力。可用赠送金调用（按对应费率计费，输入 $2.20 / 输出 $6.00 每 100 万 tokens），优先扣减赠送金，赠送金不足时扣充值余额。支持文本与图像模态。",
+      "zhTW": "DeepSeek V4.1 Flash 1017 贈送金模型。基於 CED 架構與 1M 上下文，具備原生多模態視覺理解能力。可用贈送金呼叫（按對應費率計費，輸入 $2.20 / 輸出 $6.00 每 100 萬 tokens），優先扣減贈送金，贈送金不足時扣儲值餘額。支援文本與圖像模態。",
+      "en": "DeepSeek V4.1 Flash 1017 gift-credit edition. Features CED architecture and 1M context with native vision understanding. Billed at model rate ($2.20 input / $6.00 output per 1M tokens); gift credits are used first, with any shortfall charged to recharge balance. Text and image modalities.",
+      "fr": "Édition avec crédits offerts DeepSeek V4.1 Flash 1017. Architecture CED et contexte 1M. Tarification à 2,20 $ entrée / 6,00 $ sortie par million de tokens. Les crédits offerts sont débités en priorité.",
+      "ru": "Модель с подарочными кредитами DeepSeek V4.1 Flash 1017. Архитектура CED и контекст 1M. Списание $2.20 за вход / $6.00 за выход на 1 млн токенов. Подарочные кредиты расходуются первыми.",
+      "ja": "DeepSeek V4.1 Flash 1017 ギフトクレジット版。CED アーキテクチャと 1M コンテキスト。1Mトークンあたり入力 $2.20 / 出力 $6.00。ギフトクレジットが優先して消費されます。",
+      "vi": "Phiên bản tín dụng quà tặng DeepSeek V4.1 Flash 1017. Kiến trúc CED và ngữ cảnh 1M. Tính phí $2.20 đầu vào / $6.00 đầu ra mỗi 1 triệu token. Ưu tiên trừ tín dụng quà tặng."
     },
     "unit": "token",
     "badge": {
@@ -7702,8 +7702,8 @@
       "ja": "",
       "vi": ""
     },
-    "description_zh": "DeepSeek V4.1 Flash 1017 赠送金模型。调用按对应模型费率计费（输入 $2.25 / 输出 $9.00 每 100 万 tokens），优先扣减赠送金，赠送金不足时扣充值余额。支持 1M 上下文。",
-    "description_en": "DeepSeek V4.1 Flash 1017 gift-credit edition. Billed at model rate ($2.25 in / $9.00 out per 1M tokens); gift credits used first. 1M context window.",
+    "description_zh": "DeepSeek V4.1 Flash 1017 赠送金模型。调用按对应模型费率计费（输入 $2.20 / 输出 $6.00 每 100 万 tokens），优先扣减赠送金，赠送金不足时扣充值余额。支持 1M 上下文。",
+    "description_en": "DeepSeek V4.1 Flash 1017 gift-credit edition. Billed at model rate ($2.20 in / $6.00 out per 1M tokens); gift credits used first. 1M context window.",
     "badge_zh": "按 Token 计费",
     "badge_en": "Token-based",
     "suffix_zh": "",

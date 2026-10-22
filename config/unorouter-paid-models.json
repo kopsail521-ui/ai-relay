@@ -5,6 +5,15 @@
   "markup": 8,
   "models": [
     {
+      "id": "deepseek-v4.1-flash-1017",
+      "cost_in": 0.225,
+      "cost_out": 0.9,
+      "vendor": "DeepSeek",
+      "icon": "DeepSeek.Color",
+      "tags": "大语言模型",
+      "desc_zh": "DeepSeek V4.1 Flash 1017 旗舰对话与深度推理。"
+    },
+    {
       "id": "deepseek-v4.1-flash",
       "cost_in": 0.034995,
       "cost_out": 0.13998,

@@ -2,6 +2,8 @@ package model
 
 import (
 	"strings"
+
+	"github.com/QuantumNous/new-api/setting/ratio_setting"
 )
 
 // Free model twin billing: public display stays $0 / free; internal debit uses twin sell ratios.
@@ -35,8 +37,16 @@ func FreeModelTwin(modelName string) string {
 
 // BillingModelName returns the model name whose ratios/prices should be used for debit.
 func BillingModelName(modelName string) string {
-	if twin := FreeModelTwin(modelName); twin != "" {
+	name := strings.TrimSpace(modelName)
+	// If this model has an explicit ModelRatio defined and is not set to ModelPrice=0 (free display override),
+	// use its own name for billing instead of stripping to the twin.
+	if _, findPrice := ratio_setting.GetModelPrice(name, false); !findPrice {
+		if _, hasRatio, _ := ratio_setting.GetModelRatio(name); hasRatio {
+			return name
+		}
+	}
+	if twin := FreeModelTwin(name); twin != "" {
 		return twin
 	}
-	return modelName
+	return name
 }

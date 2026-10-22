@@ -7614,5 +7614,101 @@
         ]
       ]
     }
+  },
+  "deepseek-v4.1-flash-1017": {
+    "description": "DeepSeek V4.1 Flash 1017 快照版对话与推理模型。基于 CED 因果编码器-解码器架构，具备原生多模态视觉理解能力与 1M 超长上下文，在代码辅助、复杂 Agent 与推理任务上速度与吞吐全面提升。支持文本与图像模态。",
+    "descriptions": {
+      "zhCN": "DeepSeek V4.1 Flash 1017 快照版对话与推理模型。基于 CED 因果编码器-解码器架构，具备原生多模态视觉理解能力与 1M 超长上下文，在代码辅助、复杂 Agent 与推理任务上速度与吞吐全面提升。支持文本与图像模态。",
+      "zhTW": "DeepSeek V4.1 Flash 1017 快照版對話與推理模型。基於 CED 因果編碼器-解碼器架構，具備原生多模態視覺理解能力與 1M 超長上下文，在代碼輔助、複雜 Agent 與推理任務上速度與吞吐全面提升。支援文本與圖像模態。",
+      "en": "DeepSeek V4.1 Flash 1017 snapshot model. Built on the Causal Encoder-Decoder (CED) architecture with native multimodal vision understanding and 1M context window, delivering superior throughput and speed on coding, reasoning, and complex agentic tasks. Text and image modalities.",
+      "fr": "Modèle instantané DeepSeek V4.1 Flash 1017. Construit sur l'architecture CED avec compréhension multimodale native et fenêtre de contexte de 1M. Modalités texte et image.",
+      "ru": "Модель DeepSeek V4.1 Flash 1017 (снимок от 17 октября). Архитектура CED с нативным мультимодальным зрением и контекстом 1M. Текстовая и графическая модальности.",
+      "ja": "DeepSeek V4.1 Flash 1017 スナップショットモデル。CED アーキテクチャに基づき、ネイティブな視覚理解と 1M の長大なコンテキストに対応。テキストおよび画像モダリティをサポート。",
+      "vi": "Mô hình DeepSeek V4.1 Flash 1017 snapshot. Xây dựng trên kiến trúc CED với khả năng hiểu thị giác đa phương thức gốc và ngữ cảnh 1M. Hỗ trợ phương thức văn bản và hình ảnh."
+    },
+    "unit": "token",
+    "badge": {
+      "zhCN": "按 Token 计费",
+      "zhTW": "按 Token 計費",
+      "en": "Token-based",
+      "fr": "Au token",
+      "ru": "По токенам",
+      "ja": "Token 課金",
+      "vi": "Theo token"
+    },
+    "suffix": {
+      "zhCN": "",
+      "zhTW": "",
+      "en": "",
+      "fr": "",
+      "ru": "",
+      "ja": "",
+      "vi": ""
+    },
+    "price_key": {
+      "zhCN": "",
+      "zhTW": "",
+      "en": "",
+      "fr": "",
+      "ru": "",
+      "ja": "",
+      "vi": ""
+    },
+    "description_zh": "DeepSeek V4.1 Flash 1017 快照版对话与推理模型。基于 CED 架构，具备原生多模态视觉理解能力与 1M 超长上下文。支持文本与图像模态。",
+    "description_en": "DeepSeek V4.1 Flash 1017 snapshot model. CED architecture with native vision understanding and 1M context. Text and image modalities.",
+    "badge_zh": "按 Token 计费",
+    "badge_en": "Token-based",
+    "suffix_zh": "",
+    "suffix_en": "",
+    "price_key_zh": "",
+    "price_key_en": ""
+  },
+  "deepseek-v4.1-flash-1017:free": {
+    "description": "DeepSeek V4.1 Flash 1017 赠送金模型。基于 CED 架构与 1M 上下文，具备原生多模态视觉理解能力。可用赠送金调用（按对应费率计费，输入 $2.25 / 输出 $9.00 每 100 万 tokens），优先扣减赠送金，赠送金不足时扣充值余额。支持文本与图像模态。",
+    "descriptions": {
+      "zhCN": "DeepSeek V4.1 Flash 1017 赠送金模型。基于 CED 架构与 1M 上下文，具备原生多模态视觉理解能力。可用赠送金调用（按对应费率计费，输入 $2.25 / 输出 $9.00 每 100 万 tokens），优先扣减赠送金，赠送金不足时扣充值余额。支持文本与图像模态。",
+      "zhTW": "DeepSeek V4.1 Flash 1017 贈送金模型。基於 CED 架構與 1M 上下文，具備原生多模態視覺理解能力。可用贈送金呼叫（按對應費率計費，輸入 $2.25 / 輸出 $9.00 每 100 萬 tokens），優先扣減贈送金，贈送金不足時扣儲值餘額。支援文本與圖像模態。",
+      "en": "DeepSeek V4.1 Flash 1017 gift-credit edition. Features CED architecture and 1M context with native vision understanding. Billed at model rate ($2.25 input / $9.00 output per 1M tokens); gift credits are used first, with any shortfall charged to recharge balance. Text and image modalities.",
+      "fr": "Édition avec crédits offerts DeepSeek V4.1 Flash 1017. Architecture CED et contexte 1M. Tarification à 2,25 $ entrée / 9,00 $ sortie par million de tokens. Les crédits offerts sont débités en priorité.",
+      "ru": "Модель с подарочными кредитами DeepSeek V4.1 Flash 1017. Архитектура CED и контекст 1M. Списание $2.25 за вход / $9.00 за выход на 1 млн токенов. Подарочные кредиты расходуются первыми.",
+      "ja": "DeepSeek V4.1 Flash 1017 ギフトクレジット版。CED アーキテクチャと 1M コンテキスト。1Mトークンあたり入力 $2.25 / 出力 $9.00。ギフトクレジットが優先して消費されます。",
+      "vi": "Phiên bản tín dụng quà tặng DeepSeek V4.1 Flash 1017. Kiến trúc CED và ngữ cảnh 1M. Tính phí $2.25 đầu vào / $9.00 đầu ra mỗi 1 triệu token. Ưu tiên trừ tín dụng quà tặng."
+    },
+    "unit": "token",
+    "badge": {
+      "zhCN": "按 Token 计费",
+      "zhTW": "按 Token 計費",
+      "en": "Token-based",
+      "fr": "Au token",
+      "ru": "По токенам",
+      "ja": "Token 課金",
+      "vi": "Theo token"
+    },
+    "suffix": {
+      "zhCN": "",
+      "zhTW": "",
+      "en": "",
+      "fr": "",
+      "ru": "",
+      "ja": "",
+      "vi": ""
+    },
+    "price_key": {
+      "zhCN": "",
+      "zhTW": "",
+      "en": "",
+      "fr": "",
+      "ru": "",
+      "ja": "",
+      "vi": ""
+    },
+    "description_zh": "DeepSeek V4.1 Flash 1017 赠送金模型。调用按对应模型费率计费（输入 $2.25 / 输出 $9.00 每 100 万 tokens），优先扣减赠送金，赠送金不足时扣充值余额。支持 1M 上下文。",
+    "description_en": "DeepSeek V4.1 Flash 1017 gift-credit edition. Billed at model rate ($2.25 in / $9.00 out per 1M tokens); gift credits used first. 1M context window.",
+    "badge_zh": "按 Token 计费",
+    "badge_en": "Token-based",
+    "suffix_zh": "",
+    "suffix_en": "",
+    "price_key_zh": "",
+    "price_key_en": ""
   }
 }

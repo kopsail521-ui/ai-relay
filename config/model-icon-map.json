@@ -61,6 +61,8 @@
     "seedance-2.0-480p": "Doubao.Color",
     "seedance-2.0-480p-fast": "Doubao.Color",
     "seedance-2.0-480p-mini": "Doubao.Color",
-    "glm-5.3:free": "Zhipu.Color"
+    "glm-5.3:free": "Zhipu.Color",
+    "deepseek-v4.1-flash-1017": "DeepSeek.Color",
+    "deepseek-v4.1-flash-1017:free": "DeepSeek.Color"
   }
 }

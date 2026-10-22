@@ -6,8 +6,8 @@
   "models": [
     {
       "id": "deepseek-v4.1-flash-1017",
-      "cost_in": 0.22,
-      "cost_out": 0.6,
+      "cost_in": 0.0072,
+      "cost_out": 0.02,
       "vendor": "DeepSeek",
       "icon": "DeepSeek.Color",
       "tags": "大语言模型",

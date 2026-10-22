@@ -718,15 +718,15 @@ function enrichPricingPayload(payload) {
       next.tags = "大语言模型";
       next.supported_endpoint_types = ["openai"];
       if (!next.model_ratio || next.model_ratio <= 0) {
-        next.model_ratio = 1.1;
-        next.completion_ratio = 2.7273;
+        next.model_ratio = 0.036;
+        next.completion_ratio = 2.7778;
       }
     } else if (name === "deepseek-v4.1-flash-1017") {
       next.tags = "大语言模型";
       next.supported_endpoint_types = ["openai"];
       if (!next.model_ratio || next.model_ratio <= 0) {
-        next.model_ratio = 0.33;
-        next.completion_ratio = 2.7273;
+        next.model_ratio = 0.0108;
+        next.completion_ratio = 2.7778;
       }
     } else if (name === "keyo-flash:free" || name === "keyo-flash2:free") {
       if (!next.model_ratio || next.model_ratio <= 0) {

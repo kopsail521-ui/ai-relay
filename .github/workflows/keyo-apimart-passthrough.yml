@@ -14,6 +14,9 @@ on:
       - ".github/workflows/keyo-apimart-passthrough.yml"
       - "scripts/vps-deploy-seedance-merge.sh"
       - "scripts/vps-add-apimart-videos.py"
+      - "scripts/vps-add-deepseek-v41.py"
+      - "scripts/vps-deploy-deepseek-v41.sh"
+      - "config/unorouter-paid-models.json"
   workflow_dispatch:
 
 concurrency:

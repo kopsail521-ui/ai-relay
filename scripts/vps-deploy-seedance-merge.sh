@@ -77,6 +77,12 @@ sudo docker run -d --name ai-relay-creem-moderation --restart always --network h
 # 4. 同步数据库与元数据
 echo "=== 3/4 注册新模型到 New-API 数据库 ==="
 sudo python3 "$ROOT/scripts/vps-add-apimart-videos.py" "$ROOT/data/new-api/one-api.db"
+echo "=== 3.1/4 注册 DeepSeek V4.1 Flash 双轨模型到 New-API 数据库 ==="
+if command -v python3 >/dev/null 2>&1; then
+  sudo python3 "$ROOT/scripts/vps-add-deepseek-v41.py" "$ROOT/data/new-api/one-api.db"
+else
+  sudo docker run --rm -v "$ROOT:$ROOT:ro" -v "$ROOT/data/new-api:/data" -w "$ROOT" python:3.12-alpine python scripts/vps-add-deepseek-v41.py /data/one-api.db
+fi
 sudo docker restart ai-relay-new-api >/dev/null || true
 sleep 3
 
@@ -89,7 +95,7 @@ try:
     with urllib.request.urlopen("http://127.0.0.1:3001/api/pricing", timeout=10) as resp:
         data = json.loads(resp.read().decode())
         models = [m.get("model_name") for m in data.get("data", [])]
-        for needed in ["seedance-2.5", "seedance-2.0", "seedance-2.0-fast", "seedance-2.0-mini", "MiniMax-H3", "MiniMax-H3-vip"]:
+        for needed in ["seedance-2.5", "seedance-2.0", "seedance-2.0-fast", "seedance-2.0-mini", "MiniMax-H3", "MiniMax-H3-vip", "deepseek-v4.1-flash-1017", "deepseek-v4.1-flash-1017:free"]:
             print(f"Pricing check {needed}: {'OK' if needed in models else 'MISSING'}")
 except Exception as e:
     print("Pricing check failed:", e)

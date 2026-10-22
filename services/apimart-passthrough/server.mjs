@@ -1340,10 +1340,10 @@ const server = http.createServer(async (req, res) => {
     if (relayList) {
       for (let i = 0; i < relayList.length; i++) {
         const cand = relayList[i];
-        if (body.model !== cand) {
-          body.model = cand;
-          bodyBuf = Buffer.from(JSON.stringify(body), "utf8");
-        }
+        body.model = cand;
+        const sendBody = { ...body };
+        delete sendBody._relayCandidates;
+        bodyBuf = Buffer.from(JSON.stringify(sendBody), "utf8");
         up = await proxyOrigin(upOrigin, upKey, submitReq, bodyBuf, submitPath);
         if (up.status >= 200 && up.status < 300) {
           const t = up.buf.toString("utf8");
@@ -1354,6 +1354,9 @@ const server = http.createServer(async (req, res) => {
         }
       }
     } else {
+      const sendBody = { ...body };
+      delete sendBody._relayCandidates;
+      bodyBuf = Buffer.from(JSON.stringify(sendBody), "utf8");
       up = await proxyOrigin(upOrigin, upKey, submitReq, bodyBuf, submitPath);
     }
     let text = up.buf.toString("utf8");

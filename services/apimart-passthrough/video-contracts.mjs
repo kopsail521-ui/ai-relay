@@ -808,7 +808,6 @@ function buildAicopyVideoBody(meta, body, clientGroup = "default") {
     model: upstreamModel,
     prompt: String(body.prompt || body.text || ""),
     seconds: duration,
-    duration: duration,
     resolution: resolution,
     _relayCandidates: relayCandidates,
   };

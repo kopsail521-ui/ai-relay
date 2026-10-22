@@ -37,11 +37,11 @@ const short = [
   "base64 -d /tmp/ds-proxy.b64 | gunzip | sudo tee /opt/ai-relay/services/creem-moderation-proxy/server.mjs >/dev/null",
   `echo '${pyB64}' | sudo tee /tmp/ds-py.b64 >/dev/null`,
   "base64 -d /tmp/ds-py.b64 | gunzip | sudo tee /opt/ai-relay/scripts/vps-add-deepseek-v41.py >/dev/null",
-  "sudo python3 /opt/ai-relay/scripts/vps-add-deepseek-v41.py /opt/ai-relay/data/new-api/one-api.db",
+  "(if command -v python3 >/dev/null 2>&1; then sudo python3 /opt/ai-relay/scripts/vps-add-deepseek-v41.py /opt/ai-relay/data/new-api/one-api.db; else sudo docker run --rm -v /opt/ai-relay:/opt/ai-relay:ro -v /opt/ai-relay/data/new-api:/data -w /opt/ai-relay python:3.12-alpine python scripts/vps-add-deepseek-v41.py /data/one-api.db; fi)",
   "if sudo docker ps --format '{{.Names}}' | grep -q '^ai-relay-creem-moderation$'; then sudo docker cp /opt/ai-relay/services/creem-moderation-proxy/marketplace-model-copy.json ai-relay-creem-moderation:/app/marketplace-model-copy.json 2>/dev/null || true; sudo docker cp /opt/ai-relay/services/creem-moderation-proxy/model-icon-map.json ai-relay-creem-moderation:/app/model-icon-map.json 2>/dev/null || true; sudo docker cp /opt/ai-relay/services/creem-moderation-proxy/server.mjs ai-relay-creem-moderation:/app/server.mjs 2>/dev/null || true; sudo docker restart ai-relay-creem-moderation 2>/dev/null || true; echo 'OK: creem-moderation updated'; fi",
-  "sudo docker restart ai-relay-new-api && sleep 4",
+  "if sudo docker pull ghcr.io/kopsail521-ui/keyo-new-api:main 2>/dev/null; then sudo IMAGE=ghcr.io/kopsail521-ui/keyo-new-api:main bash /opt/ai-relay/scripts/vps-deploy-console.sh || sudo docker restart ai-relay-new-api; else sudo docker restart ai-relay-new-api; fi && sleep 4",
   "curl -sS -o /tmp/pricing.json http://127.0.0.1:3000/api/pricing || true",
-  `python3 - <<'PY'
+  `(if command -v python3 >/dev/null 2>&1; then python3 -; else sudo docker run --rm -i -v /tmp:/tmp:ro python:3.12-alpine python -; fi) <<'PY'
 import json
 try:
     d = json.load(open("/tmp/pricing.json"))

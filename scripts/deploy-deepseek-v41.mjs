@@ -52,14 +52,19 @@ fi
 
 echo "==> 4. 重启 New API 容器以刷新配置与缓存..."
 if sudo docker ps --format '{{.Names}}' | grep -q '^ai-relay-new-api$'; then
-  sudo docker restart ai-relay-new-api 2>/dev/null || true
+  if sudo docker pull ghcr.io/kopsail521-ui/keyo-new-api:main 2>/dev/null; then
+    sudo IMAGE=ghcr.io/kopsail521-ui/keyo-new-api:main bash /opt/ai-relay/scripts/vps-deploy-console.sh || sudo docker restart ai-relay-new-api
+  else
+    sudo docker restart ai-relay-new-api 2>/dev/null || true
+  fi
   sleep 4
-  echo "OK: ai-relay-new-api 已重启"
+  echo "OK: ai-relay-new-api 已就绪"
 fi
 
 echo "==> 5. 验证模型定价与状态..."
 curl -sS http://127.0.0.1:3000/api/pricing > /tmp/pricing_verify.json || true
-python3 - << 'PY'
+if command -v python3 >/dev/null 2>&1; then
+  python3 - << 'PY'
 import json
 try:
     d = json.load(open("/tmp/pricing_verify.json"))
@@ -77,6 +82,26 @@ try:
 except Exception as e:
     print(f"解析验证数据失败: {e}")
 PY
+else
+  sudo docker run --rm -i -v /tmp:/tmp:ro python:3.12-alpine python - << 'PY'
+import json
+try:
+    d = json.load(open("/tmp/pricing_verify.json"))
+    items = {m.get("model_name"): m for m in (d.get("data") or [])}
+    for name in ["deepseek-v4.1-flash-1017", "deepseek-v4.1-flash-1017:free"]:
+        m = items.get(name)
+        if m:
+            mr = float(m.get("model_ratio") or 0)
+            cr = float(m.get("completion_ratio") or 1)
+            in_p = round(mr * 2.0, 4)
+            out_p = round(mr * 2.0 * cr, 4)
+            print(f"✓ 成功上架 {name}: 输入 $" + str(in_p) + "/1M, 输出 $" + str(out_p) + f"/1M, 比例 {mr} / {cr}")
+        else:
+            print(f"✗ 警告: {name} 未在 /api/pricing 中找到")
+except Exception as e:
+    print(f"解析验证数据失败: {e}")
+PY
+fi
 
 echo "DEPLOY COMPLETED SUCCESSFULLY!"
 `;

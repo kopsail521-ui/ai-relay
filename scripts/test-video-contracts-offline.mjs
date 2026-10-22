@@ -9,7 +9,9 @@ import {
   buildAioneVideoBody,
   buildGrsaiVideoBody,
   buildOpenluxGrok15Body,
+  buildOpenluxMiniMaxH3Body,
   buildAicopyVideoBody,
+  hasMiniMaxImage,
 } from "../services/apimart-passthrough/video-contracts.mjs";
 
 const sdMeta = {
@@ -100,10 +102,10 @@ function ok(name) {
 {
   const err = validateVideoClientBody("MiniMax-H3", {
     prompt: "x",
-    first_frame_image: "https://ex.com/a.jpg",
+    last_frame_image: "https://ex.com/a.jpg",
   });
-  assert.ok(err?.message?.includes("images[]"));
-  ok("minimax reject wan-style frames");
+  assert.ok(err?.message?.includes("last_frame_image"));
+  ok("minimax reject last_frame_image");
 }
 {
   const b = buildGrsaiVideoBody(
@@ -195,18 +197,48 @@ function ok(name) {
 {
   const err = validateVideoClientBody("wan3.0-video", {
     prompt: "x",
-    image_urls: ["D:\\\\tmp\\\\a.png"],
+    image_urls: ["D:\\tmp\\a.png"],
   });
   assert.ok(err);
   ok("reject local path");
 }
 
 
-// --- MiniMax-H3 / aicopy ---
+// --- MiniMax-H3 Plan B dual-track ---
 {
   const err = validateVideoClientBody("MiniMax-H3", { prompt: "a cat" });
-  assert.ok(err?.message?.includes("requires at least one reference image"));
-  ok("minimax-h3 rejects missing image");
+  assert.equal(err, null);
+  ok("minimax-h3 accepts pure text without image (Plan B)");
+}
+{
+  assert.equal(hasMiniMaxImage({ prompt: "a cat" }), false);
+  assert.equal(hasMiniMaxImage({ prompt: "a cat", image: "https://ex.com/a.jpg" }), true);
+  assert.equal(hasMiniMaxImage({ prompt: "a cat", images: ["https://ex.com/a.jpg"] }), true);
+  assert.equal(hasMiniMaxImage({ prompt: "a cat", first_frame_image: "https://ex.com/a.jpg" }), true);
+  ok("hasMiniMaxImage correctly detects text vs image mode");
+}
+{
+  const b = buildOpenluxMiniMaxH3Body({ id: "MiniMax-H3" }, {
+    prompt: "a cat running on grass",
+    aspectRatio: "portrait",
+    duration: 6
+  });
+  assert.equal(b.model, "MiniMax-H3");
+  assert.equal(b.content[0].text, "a cat running on grass");
+  assert.equal(b.resolution, "768P");
+  assert.equal(b.ratio, "9:16");
+  assert.equal(b.duration, 6);
+  ok("buildOpenluxMiniMaxH3Body formats official text-to-video payload");
+}
+{
+  const b = buildOpenluxMiniMaxH3Body({ id: "MiniMax-H3-vip" }, {
+    prompt: "a cat",
+    resolution: "2k"
+  });
+  assert.equal(b.resolution, "2K");
+  assert.equal(b.ratio, "16:9");
+  assert.equal(b.duration, 5);
+  ok("buildOpenluxMiniMaxH3Body handles vip & 2k resolution");
 }
 {
   const err = validateVideoClientBody("MiniMax-H3", {

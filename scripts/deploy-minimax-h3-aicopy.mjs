@@ -1,5 +1,5 @@
 /**
- * Generate VPS deployment commands for MiniMax-H3 aicopy integration
+ * Generate VPS deployment commands for MiniMax-H3 aicopy + OpenLux dual-track integration
  * Usage: node scripts/deploy-minimax-h3-aicopy.mjs
  */
 import fs from "fs";
@@ -16,6 +16,7 @@ function b64gz(rel) {
 
 const serverB64 = b64gz("services/apimart-passthrough/server.mjs");
 const contractsB64 = b64gz("services/apimart-passthrough/video-contracts.mjs");
+const taskRespB64 = b64gz("services/apimart-passthrough/task-responses.mjs");
 const catalogB64 = b64gz("services/apimart-passthrough/catalog.json");
 const cfgB64 = b64gz("config/apimart-selected-models.json");
 const copyB64 = b64gz("config/marketplace-model-copy.json");
@@ -29,6 +30,7 @@ sudo mkdir -p /opt/ai-relay/services/apimart-passthrough /opt/ai-relay/config /o
 # --- 1. Decode payloads ---
 echo '${serverB64}' | base64 -d | gunzip | sudo tee /opt/ai-relay/services/apimart-passthrough/server.mjs >/dev/null
 echo '${contractsB64}' | base64 -d | gunzip | sudo tee /opt/ai-relay/services/apimart-passthrough/video-contracts.mjs >/dev/null
+echo '${taskRespB64}' | base64 -d | gunzip | sudo tee /opt/ai-relay/services/apimart-passthrough/task-responses.mjs >/dev/null
 echo '${catalogB64}' | base64 -d | gunzip | sudo tee /opt/ai-relay/services/apimart-passthrough/catalog.json >/dev/null
 echo '${cfgB64}' | base64 -d | gunzip | sudo tee /opt/ai-relay/config/apimart-selected-models.json >/dev/null
 echo '${copyB64}' | base64 -d | gunzip | sudo tee /opt/ai-relay/config/marketplace-model-copy.json >/dev/null
@@ -38,7 +40,7 @@ echo '${iconB64}' | base64 -d | gunzip | sudo tee /opt/ai-relay/services/creem-m
 echo '${pyB64}' | base64 -d | gunzip | sudo tee /opt/ai-relay/scripts/vps-add-apimart-videos.py >/dev/null
 echo "OK: files decoded"
 
-# --- 2. Ensure AICOPY credentials in .env.apimart ---
+# --- 2. Ensure AICOPY & OPENLUX credentials in .env.apimart ---
 sudo touch /opt/ai-relay/.env.apimart
 if ! sudo grep -q '^AICOPY_API_KEY=' /opt/ai-relay/.env.apimart 2>/dev/null; then
   echo 'AICOPY_API_KEY=sk-yKD9AN8fNzdqTyfluYubzGpOvURSgGQkDuSsZItvBHmCGYyj' | sudo tee -a /opt/ai-relay/.env.apimart >/dev/null
@@ -47,6 +49,14 @@ else
 fi
 if ! sudo grep -q '^AICOPY_BASE_URL=' /opt/ai-relay/.env.apimart 2>/dev/null; then
   echo 'AICOPY_BASE_URL=https://api.aicopy.top' | sudo tee -a /opt/ai-relay/.env.apimart >/dev/null
+fi
+if ! sudo grep -q '^OPENLUX_API_KEY=' /opt/ai-relay/.env.apimart 2>/dev/null; then
+  echo 'OPENLUX_API_KEY=sk-e8ixFinJnwUtIEw7j8EkWTmOFvni1MeRcG1zvWJVQOtmqSqd' | sudo tee -a /opt/ai-relay/.env.apimart >/dev/null
+else
+  sudo sed -i 's/^OPENLUX_API_KEY=.*/OPENLUX_API_KEY=sk-e8ixFinJnwUtIEw7j8EkWTmOFvni1MeRcG1zvWJVQOtmqSqd/' /opt/ai-relay/.env.apimart
+fi
+if ! sudo grep -q '^OPENLUX_BASE_URL=' /opt/ai-relay/.env.apimart 2>/dev/null; then
+  echo 'OPENLUX_BASE_URL=https://api.openlux.ai' | sudo tee -a /opt/ai-relay/.env.apimart >/dev/null
 fi
 echo "OK: .env.apimart configured"
 

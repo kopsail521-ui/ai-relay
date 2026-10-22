@@ -12,14 +12,14 @@ export function extractTaskId(payload) {
   try {
     const j = typeof payload === 'string' ? JSON.parse(payload) : payload;
     const d = Array.isArray(j?.data) ? j.data[0] : j?.data;
-    const id = j?.task_id || j?.id || d?.task_id || d?.id;
+    const id = j?.task_id || j?.id || d?.task_id || d?.id || j?.task?.id;
     return typeof id === 'string' && id.trim() ? id : '';
   } catch { return ''; }
 }
 
 /** Best-effort extraction of why an upstream task failed, for client-visible errors. */
 function upstreamFailureReason(j, d) {
-  const nodes = [j, d];
+  const nodes = [j, d, j?.task];
   const keys = ['error', 'fail_msg', 'failure_reason', 'fail_reason', 'reason', 'detail', 'message', 'msg'];
   for (const n of nodes) {
     if (!n || typeof n !== 'object') continue;
@@ -38,14 +38,17 @@ export function normalizeVideoPoll(raw, id, httpStatus = 200) {
   try { j = JSON.parse(raw); } catch { return raw; }
   if (!j || typeof j !== 'object' || Array.isArray(j)) return raw;
   const d = j.data && typeof j.data === 'object' && !Array.isArray(j.data) ? { ...j.data } : {};
-  const rawStatus = d.status || j.status;
+  let rawStatus = d.status || j.status || j.task?.status;
+  if (!rawStatus && j.task_id && j.base_resp && j.base_resp.status_code === 0 && !j.task) {
+    rawStatus = 'processing';
+  }
   const status = taskStatus(rawStatus);
-  const businessError = j.success === false || (Number(j.code) >= 400);
+  const businessError = j.success === false || (Number(j.code) >= 400) || (j.base_resp && j.base_resp.status_code !== 0);
   if (httpStatus >= 400 || businessError || (j.error && !['failed', 'cancelled'].includes(status))) return raw;
   // An empty object or a missing-status error is not evidence of a running task.
   if (!status) return raw;
   const videos = d.result?.videos || j.result?.videos;
-  const candidate = j.url || j.video_url || d.url || d.video_url || j.results?.[0]?.url || d.results?.[0]?.url || videos?.[0]?.url;
+  const candidate = j.url || j.video_url || d.url || d.video_url || j.results?.[0]?.url || d.results?.[0]?.url || videos?.[0]?.url || j.task?.content?.url || j.task?.video_url;
   const url = Array.isArray(candidate) ? candidate[0] : candidate;
   d.id = id; d.task_id = id; d.status = status;
   if (rawStatus !== status) d.status_raw = rawStatus;
@@ -56,7 +59,7 @@ export function normalizeVideoPoll(raw, id, httpStatus = 200) {
     d.result = { ...d.result, videos: [{ url: [url] }] };
   }
   if (status === 'failed' || status === 'cancelled') {
-    const reason = upstreamFailureReason(j, d);
+    const reason = upstreamFailureReason(j, d) || j.base_resp?.status_msg;
     const err = {
       code: status === 'cancelled' ? 'upstream_cancelled' : 'upstream_failed',
       message:
@@ -66,5 +69,5 @@ export function normalizeVideoPoll(raw, id, httpStatus = 200) {
     j.error = err;
     d.error = err;
   }
-  return JSON.stringify({ ...j, id, task_id: id, status, data: d });
+  return JSON.stringify({ ...j, id, task_id: id, status, data: d, url: url || j.url });
 }

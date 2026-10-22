@@ -171,14 +171,13 @@ function validateVideoClientBody(modelId, body) {
       return { param: "prompt", message: "prompt is required" };
     }
     if (
-      body.first_frame_image ||
       body.last_frame_image ||
       (Array.isArray(body.image_with_roles) && body.image_with_roles.length)
     ) {
       return {
         param: "images",
         message:
-          "MiniMax-H3 is not Seedance/Wan: use images[] (https URLs, max 9) and audios[] (max 3). Do not send first_frame_image / last_frame_image / image_with_roles.",
+          "MiniMax-H3 does not support last_frame_image or image_with_roles. Use images[] (https URLs, max 9) or image.",
       };
     }
     const res = String(body.resolution || "").toLowerCase();
@@ -215,19 +214,6 @@ function validateVideoClientBody(modelId, body) {
       if (!Number.isFinite(n) || n < 1 || n > 15) {
         return { param: "duration", message: "MiniMax-H3 duration must be 1–15 seconds" };
       }
-    }
-    const hasImage =
-      (Array.isArray(body.images) && body.images.length > 0) ||
-      (Array.isArray(body.image_urls) && body.image_urls.length > 0) ||
-      (typeof body.image === "string" && body.image.trim()) ||
-      (typeof body.image_url === "string" && body.image_url.trim()) ||
-      body.input_reference;
-    if (!hasImage) {
-      return {
-        param: "images",
-        message:
-          "MiniMax-H3 requires at least one reference image (pass images[] or image).",
-      };
     }
     return null;
   }
@@ -838,11 +824,75 @@ function buildAicopyVideoBody(meta, body, clientGroup = "default") {
   return out;
 }
 
+/**
+ * Detect whether body contains image references for MiniMax
+ */
+function hasMiniMaxImage(body) {
+  if (!body || typeof body !== "object") return false;
+  if (Array.isArray(body.images) && body.images.length > 0) return true;
+  if (Array.isArray(body.image_urls) && body.image_urls.length > 0) return true;
+  if (typeof body.image === "string" && body.image.trim()) return true;
+  if (typeof body.image_url === "string" && body.image_url.trim()) return true;
+  if (typeof body.first_frame_image === "string" && body.first_frame_image.trim()) return true;
+  if (body.image && typeof body.image === "object" && body.image.url) return true;
+  if (body.input_reference) return true;
+  return false;
+}
+
+/**
+ * Keyo pure text prompt -> OpenLux POST /minimax/v2/video_generation
+ */
+function buildOpenluxMiniMaxH3Body(meta, body, clientGroup = "default") {
+  const est = meta?.estimate || {};
+  let duration = Number(body.duration ?? body.seconds);
+  if (!Number.isFinite(duration) || duration <= 0) {
+    duration = Number(est.default_seconds || 5);
+  }
+  if (duration < 1) duration = 1;
+  if (duration > 15) duration = 15;
+  duration = Math.trunc(duration);
+
+  let resolution = String(body.resolution || "").toLowerCase().trim();
+  if (!resolution) {
+    if (meta?.id === "MiniMax-H3-vip" || clientGroup === "vip") {
+      resolution = "1080p";
+    } else {
+      resolution = String(est.default_resolution || "768p").toLowerCase();
+    }
+  }
+
+  let upRes = "768P";
+  if (resolution === "2k") upRes = "2K";
+  else if (resolution === "1080p") upRes = "1080P";
+  else if (resolution === "768p") upRes = "768P";
+  else if (resolution === "720p" || resolution === "480p") upRes = "768P";
+  else upRes = "768P";
+
+  const ar = String(body.aspectRatio || body.aspect_ratio || body.ratio || "").trim().toLowerCase();
+  let ratio = "16:9";
+  if (["portrait", "vertical", "9:16"].includes(ar)) {
+    ratio = "9:16";
+  } else {
+    ratio = "16:9";
+  }
+
+  const prompt = String(body.prompt || body.text || "").trim();
+
+  return {
+    model: "MiniMax-H3",
+    content: [{ type: "text", text: prompt }],
+    resolution: upRes,
+    duration: duration,
+    ratio: ratio,
+  };
+}
+
 export {
   firstHttpsUrl,
   validateVideoClientBody,
   normalizeApimartClientBody,
   buildOpenluxGrok15Body,
+  buildOpenluxMiniMaxH3Body,
   buildAioneVideoBody,
   buildGrsaiVideoBody,
   buildAicopyVideoBody,
@@ -850,4 +900,5 @@ export {
   mapAspectToGrsai,
   scanBodyMedia,
   hasAnyMedia,
+  hasMiniMaxImage,
 };

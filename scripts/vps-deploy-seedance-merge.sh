@@ -1,5 +1,5 @@
 #!/bin/bash
-# Seedance 4大系列合并 + 480p aicopy 官方稳定版一键发版脚本
+# Seedance 4大系列合并 + MiniMax-H3 双轨（图生视频aicopy + 文生视频OpenLux）一键发版脚本
 # 适用：VPS /opt/ai-relay
 set -euo pipefail
 ROOT="${ROOT:-/opt/ai-relay}"
@@ -27,6 +27,16 @@ if ! sudo grep -q '^AICOPY_API_KEY=.' "$ROOT/.env.apimart" 2>/dev/null; then
 fi
 if ! sudo grep -q '^AICOPY_BASE_URL=' "$ROOT/.env.apimart" 2>/dev/null; then
   echo 'AICOPY_BASE_URL=https://api.aicopy.top' | sudo tee -a "$ROOT/.env.apimart" >/dev/null
+fi
+if ! sudo grep -q '^OPENLUX_API_KEY=.' "$ROOT/.env.apimart" 2>/dev/null; then
+  if sudo grep -q '^OPENLUX_API_KEY=.' "$ROOT/.env" 2>/dev/null; then
+    sudo grep -E '^OPENLUX_(API_KEY|BASE_URL)=' "$ROOT/.env" | sudo tee -a "$ROOT/.env.apimart" >/dev/null
+  else
+    echo 'OPENLUX_API_KEY=sk-e8ixFinJnwUtIEw7j8EkWTmOFvni1MeRcG1zvWJVQOtmqSqd' | sudo tee -a "$ROOT/.env.apimart" >/dev/null
+  fi
+fi
+if ! sudo grep -q '^OPENLUX_BASE_URL=' "$ROOT/.env.apimart" 2>/dev/null; then
+  echo 'OPENLUX_BASE_URL=https://api.openlux.ai' | sudo tee -a "$ROOT/.env.apimart" >/dev/null
 fi
 
 # 2. 重建 apimart-passthrough 网关 (:3011)
@@ -79,10 +89,10 @@ try:
     with urllib.request.urlopen("http://127.0.0.1:3001/api/pricing", timeout=10) as resp:
         data = json.loads(resp.read().decode())
         models = [m.get("model_name") for m in data.get("data", [])]
-        for needed in ["seedance-2.5", "seedance-2.0", "seedance-2.0-fast", "seedance-2.0-mini"]:
+        for needed in ["seedance-2.5", "seedance-2.0", "seedance-2.0-fast", "seedance-2.0-mini", "MiniMax-H3", "MiniMax-H3-vip"]:
             print(f"Pricing check {needed}: {'OK' if needed in models else 'MISSING'}")
 except Exception as e:
     print("Pricing check failed:", e)
 PY
 
-echo "=== Seedance 4大系列合并与发版完成 ==="
+echo "=== MiniMax-H3 双轨与视频网关发版完成 ==="

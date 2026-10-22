@@ -30,10 +30,12 @@ import {
   validateVideoClientBody,
   normalizeApimartClientBody,
   buildOpenluxGrok15Body,
+  buildOpenluxMiniMaxH3Body,
   buildAioneVideoBody,
   buildGrsaiVideoBody,
   buildAicopyVideoBody,
   mapAspectToAione,
+  hasMiniMaxImage,
 } from "./video-contracts.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -134,8 +136,12 @@ function initPending() {
     model TEXT,
     precharge_usd REAL,
     settled INTEGER DEFAULT 0,
-    created_at INTEGER
+    created_at INTEGER,
+    upstream TEXT
   )`);
+  try {
+    db.exec(`ALTER TABLE pending ADD COLUMN upstream TEXT`);
+  } catch {}
   db.close();
 }
 initPending();
@@ -477,19 +483,20 @@ function adjustQuota(userId, tokenId, modelId, deltaUsd, note) {
   }
 }
 
-function savePending(taskId, userId, tokenId, model, prechargeUsd) {
+function savePending(taskId, userId, tokenId, model, prechargeUsd, upstream = "") {
   const db = openDb(PENDING_PATH, false);
   try {
     db.prepare(
-      `INSERT OR REPLACE INTO pending(task_id,user_id,token_id,model,precharge_usd,settled,created_at)
-       VALUES(?,?,?,?,?,0,?)`
+      `INSERT OR REPLACE INTO pending(task_id,user_id,token_id,model,precharge_usd,settled,created_at,upstream)
+       VALUES(?,?,?,?,?,0,?,?)`
     ).run(
       taskId,
       userId,
       tokenId,
       model,
       prechargeUsd,
-      Math.floor(Date.now() / 1000)
+      Math.floor(Date.now() / 1000),
+      upstream || ""
     );
   } finally {
     db.close();
@@ -928,8 +935,14 @@ const server = http.createServer(async (req, res) => {
         return res.end(out.buf);
       }
 
-      if (isAioneMeta(pendingMeta) || isAicopyMeta(pendingMeta)) {
-        const isAicopy = isAicopyMeta(pendingMeta);
+      const effectiveUpstream = String(pending.upstream || pendingMeta.upstream || "").toLowerCase();
+
+      if (
+        effectiveUpstream === "aicopy" ||
+        effectiveUpstream === "aione" ||
+        (!pending.upstream && (isAioneMeta(pendingMeta) || isAicopyMeta(pendingMeta)))
+      ) {
+        const isAicopy = effectiveUpstream === "aicopy" || (!pending.upstream && isAicopyMeta(pendingMeta));
         const upKey = isAicopy ? (AICOPY_KEY || AIONE_KEY) : AIONE_KEY;
         const upOrigin = isAicopy ? (AICOPY_ORIGIN || AIONE_ORIGIN) : AIONE_ORIGIN;
         if (!upKey) {
@@ -941,7 +954,13 @@ const server = http.createServer(async (req, res) => {
         const path = wantContent
           ? `/v1/videos/${tid}/content${qsOf(req.url)}`
           : `/v1/videos/${tid}${qsOf(req.url)}`;
-        const up = await proxyOrigin(upOrigin, upKey, req, bodyBuf, path);
+        let up = await proxyOrigin(upOrigin, upKey, req, bodyBuf, path);
+        if (isAicopy && (looksLikeMiss(up) || up.status === 404) && OPENLUX_KEY) {
+          const fb = await proxyOrigin(OPENLUX_ORIGIN, OPENLUX_KEY, req, bodyBuf, path);
+          if (fb && !looksLikeMiss(fb) && fb.status < 400) {
+            up = fb;
+          }
+        }
         if (wantContent) {
           const out = clientUp(up);
           res.writeHead(out.status, {
@@ -956,7 +975,7 @@ const server = http.createServer(async (req, res) => {
           logTerminalPoll(
             pending.model,
             tid,
-            taskStatus(jx.data?.status ?? jx.status),
+            taskStatus(jx.data?.status ?? jx.status ?? jx.task?.status),
             up.status,
             text
           );
@@ -984,7 +1003,7 @@ const server = http.createServer(async (req, res) => {
         return res.end(out.buf);
       }
 
-      let useOpenlux = isOpenluxMeta(pendingMeta);
+      let useOpenlux = effectiveUpstream === "openlux" || isOpenluxMeta(pendingMeta);
 
       const tryPoll = async (openlux) => {
         const key = openlux ? OPENLUX_KEY : APIMART_KEY;
@@ -997,11 +1016,24 @@ const server = http.createServer(async (req, res) => {
       };
 
       let up = await tryPoll(useOpenlux);
-      if (!pending && looksLikeMiss(up)) {
-        const other = await tryPoll(!useOpenlux);
-        if (other && !looksLikeMiss(other)) {
-          up = other;
-          useOpenlux = !useOpenlux;
+      if (looksLikeMiss(up) || up.status === 404) {
+        if (effectiveUpstream === "openlux" && (AICOPY_KEY || AIONE_KEY)) {
+          const fb = await proxyOrigin(
+            AICOPY_ORIGIN || AIONE_ORIGIN,
+            AICOPY_KEY || AIONE_KEY,
+            req,
+            bodyBuf,
+            `/v1/videos/${tid}${qsOf(req.url)}`
+          );
+          if (fb && !looksLikeMiss(fb) && fb.status < 400) {
+            up = fb;
+          }
+        } else if (!pending) {
+          const other = await tryPoll(!useOpenlux);
+          if (other && !looksLikeMiss(other)) {
+            up = other;
+            useOpenlux = !useOpenlux;
+          }
         }
       }
       if (!up) {
@@ -1012,7 +1044,7 @@ const server = http.createServer(async (req, res) => {
       const text = up.buf.toString("utf8");
       try {
         const j = JSON.parse(text);
-        const st = taskStatus(j.data?.status || j.status);
+        const st = taskStatus(j.data?.status || j.status || j.task?.status);
         logTerminalPoll(pending.model, tid, st, up.status, text);
         const cost = j.data?.cost ?? j.cost;
         const done = [
@@ -1084,28 +1116,48 @@ const server = http.createServer(async (req, res) => {
       return imageService.handle(req, res, body);
     }
 
+    const isMiniMaxH3 = modelId === "MiniMax-H3" || modelId === "MiniMax-H3-vip";
+    const miniMaxHasImg = isMiniMaxH3 && hasMiniMaxImage(body);
+    const isMiniMaxText = isMiniMaxH3 && !miniMaxHasImg;
+
     const useGrsai = isGrsaiMeta(meta);
-    const useOpenlux = isOpenluxMeta(meta);
+    const useOpenlux = isOpenluxMeta(meta) || isMiniMaxText;
     const useAione = isAioneMeta(meta);
-    const isAicopy = String(meta?.upstream || "").toLowerCase() === "aicopy";
-    const upKey = useGrsai
-      ? GRSAI_KEY
+    const isAicopy = !isMiniMaxText && String(meta?.upstream || "").toLowerCase() === "aicopy";
+    const targetUpstream = isMiniMaxText
+      ? "openlux"
       : isAicopy
-        ? (AICOPY_KEY || AIONE_KEY)
-        : useAione
-          ? AIONE_KEY
-          : useOpenlux
-            ? OPENLUX_KEY
-            : APIMART_KEY;
-    const upOrigin = useGrsai
-      ? GRSAI_ORIGIN
-      : isAicopy
-        ? (AICOPY_ORIGIN || AIONE_ORIGIN)
-        : useAione
-          ? AIONE_ORIGIN
-          : useOpenlux
-            ? OPENLUX_ORIGIN
-            : APIMART_ORIGIN;
+        ? "aicopy"
+        : useGrsai
+          ? "grsai"
+          : useAione
+            ? "aione"
+            : useOpenlux
+              ? "openlux"
+              : "apimart";
+
+    const upKey = isMiniMaxText
+      ? OPENLUX_KEY
+      : useGrsai
+        ? GRSAI_KEY
+        : isAicopy
+          ? (AICOPY_KEY || AIONE_KEY)
+          : useAione
+            ? AIONE_KEY
+            : useOpenlux
+              ? OPENLUX_KEY
+              : APIMART_KEY;
+    const upOrigin = isMiniMaxText
+      ? OPENLUX_ORIGIN
+      : useGrsai
+        ? GRSAI_ORIGIN
+        : isAicopy
+          ? (AICOPY_ORIGIN || AIONE_ORIGIN)
+          : useAione
+            ? AIONE_ORIGIN
+            : useOpenlux
+              ? OPENLUX_ORIGIN
+              : APIMART_ORIGIN;
     if (!upKey) {
       return json(res, 500, {
         error: { message: "Service temporarily unavailable", type: "server_error" },
@@ -1141,6 +1193,19 @@ const server = http.createServer(async (req, res) => {
         });
       }
       bodyBuf = Buffer.from(JSON.stringify(gBody), "utf8");
+    } else if (isMiniMaxText) {
+      const oBody = buildOpenluxMiniMaxH3Body(meta, body, token.group || "default");
+      if (!oBody.content?.[0]?.text) {
+        return json(res, 400, {
+          error: {
+            message: "prompt is required",
+            type: "invalid_request_error",
+            param: "prompt",
+          },
+        });
+      }
+      body = oBody;
+      bodyBuf = Buffer.from(JSON.stringify(oBody), "utf8");
     } else if (isAicopy) {
       const aicopyBody = buildAicopyVideoBody(meta, body, token.group || "default");
       if (!aicopyBody.prompt) {
@@ -1253,13 +1318,14 @@ const server = http.createServer(async (req, res) => {
       }
     }
 
-    const submitPath =
-      (meta.upstream_submit_path
+    const submitPath = isMiniMaxText
+      ? "/minimax/v2/video_generation"
+      : (meta.upstream_submit_path
         ? String(meta.upstream_submit_path)
         : useGrsai
           ? "/v1/api/generate"
-          : "/v1/videos/generations") + (useGrsai ? "" : qsOf(req.url));
-    const submitReq = useGrsai
+          : "/v1/videos/generations") + (useGrsai || isMiniMaxText ? "" : qsOf(req.url));
+    const submitReq = (useGrsai || isMiniMaxText)
       ? {
           ...req,
           method: "POST",
@@ -1332,7 +1398,7 @@ const server = http.createServer(async (req, res) => {
     if (outStatus >= 200 && outStatus < 300) {
       const tid = extractTaskId(text);
       if (tid && !token.skipBill) {
-        savePending(tid, token.userId, token.tokenId, modelId, preSell);
+        savePending(tid, token.userId, token.tokenId, modelId, preSell, targetUpstream);
       }
     } else if (!token.skipBill && preSell > 0) {
       // refund precharge on upstream reject

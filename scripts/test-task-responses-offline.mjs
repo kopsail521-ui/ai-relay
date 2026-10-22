@@ -10,6 +10,8 @@ assert.equal(taskStatus("succeeded"), "completed");
 assert.equal(taskStatus("error"), "failed");
 assert.equal(taskStatus("cancelled"), "cancelled");
 assert.equal(extractTaskId('{"data":[{"task_id":"t_1"}]}'), "t_1");
+assert.equal(extractTaskId('{"task":{"id":"task_ol_1"}}'), "task_ol_1");
+assert.equal(extractTaskId('{"base_resp":{"status_code":0},"task_id":"task_ol_2"}'), "task_ol_2");
 
 const normalized = JSON.parse(normalizeVideoPoll(
   JSON.stringify({ status: "succeeded", data: { result: { videos: [{ url: ["https://cdn.example/out.mp4"] }] } } }),
@@ -20,7 +22,29 @@ assert.equal(normalized.id, "t_1");
 assert.equal(normalized.data.task_id, "t_1");
 assert.equal(normalized.url, "https://cdn.example/out.mp4");
 
+// OpenLux MiniMax running state
+const openluxRunning = JSON.parse(normalizeVideoPoll(
+  JSON.stringify({ task_id: "task_ol_1", base_resp: { status_msg: "success", status_code: 0 } }),
+  "task_ol_1"
+));
+assert.equal(openluxRunning.status, "processing");
+assert.equal(openluxRunning.id, "task_ol_1");
+assert.equal(openluxRunning.data.status, "processing");
+
+// OpenLux MiniMax completed state
+const openluxCompleted = JSON.parse(normalizeVideoPoll(
+  JSON.stringify({
+    task: { id: "task_ol_1", status: "succeeded", content: { url: "https://files.metaso.cn/video.mp4" } },
+    base_resp: { status_msg: "success", status_code: 0 }
+  }),
+  "task_ol_1"
+));
+assert.equal(openluxCompleted.status, "completed");
+assert.equal(openluxCompleted.id, "task_ol_1");
+assert.equal(openluxCompleted.url, "https://files.metaso.cn/video.mp4");
+assert.equal(openluxCompleted.data.result.videos[0].url[0], "https://files.metaso.cn/video.mp4");
+
 const errorBody = JSON.stringify({ code: 404, message: "task not found" });
 assert.equal(normalizeVideoPoll(errorBody, "t_1", 404), errorBody);
 
-console.log("5 offline task response tests passed");
+console.log("All offline task response tests passed");

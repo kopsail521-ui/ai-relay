@@ -123,6 +123,7 @@ const VIDEO_GEN_FALLBACK = [
   "flux-3-video",
   "MiniMax-H3",
   "wan3.0-video",
+  "agnes-video-2.5",
   "seedance-2.0-1080p",
   "seedance-2.0-1080p-fast",
   "seedance-2.0-1080p-mini",
@@ -1582,7 +1583,14 @@ const server = http.createServer(async (req, res) => {
       return;
     }
 
-    if (req.method === "POST" && pathOnly === "/v1/videos") {
+    // Video generation models are served by the video-gen service, not New API
+    // (no channel exists for them there). Clients submit to either the legacy
+    // /v1/videos path or the OpenAI-style /v1/videos/generations path, so route
+    // both by model name; anything else still falls through to New API.
+    if (
+      req.method === "POST" &&
+      (pathOnly === "/v1/videos" || pathOnly === "/v1/videos/generations")
+    ) {
       try {
         const payload = JSON.parse(bodyBuf.toString("utf8") || "{}");
         if (VIDEO_GEN_MODELS.has(String(payload.model || ""))) {

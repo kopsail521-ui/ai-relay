@@ -18,7 +18,7 @@ const send = (res, status, body, headers = {}) => { res.writeHead(status, { 'con
 test('local HTTP integration: moderation, native JSON/multipart, tasks, auth/storage and video routes', { timeout: 30000 }, async () => {
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'relay-proxy-integration-'));
   const catalog = path.join(dir, 'catalog.json');
-  fs.writeFileSync(catalog, JSON.stringify({ models: [...models.map(id => ({ id, kind: 'image' })), { id: 'wan3.0-video', kind: 'video' }] }));
+  fs.writeFileSync(catalog, JSON.stringify({ models: [...models.map(id => ({ id, kind: 'image' })), { id: 'wan3.0-video', kind: 'video' }, { id: 'seedance-2.0-720p', kind: 'video' }] }));
   let authMode = 'valid';
   let nativeMode = 'ok';
   let moderationDecision = 'allow';
@@ -135,6 +135,9 @@ test('local HTTP integration: moderation, native JSON/multipart, tasks, auth/sto
     const uploadDir = path.join(dir, 'relative-uploads'); fs.rmSync(uploadDir, { recursive: true }); fs.writeFileSync(uploadDir, 'directory failure mock');
     const full = await post('/v1/uploads', { file_base64: 'YQ==', filename: 'tiny.png' }); assert.equal(full.status, 503); const error = (await full.json()).error; assert.equal(error.code, 'storage_unavailable'); assert.ok(error.request_id); assert.ok(output.includes(error.request_id));
     assert.equal((await post('/v1/videos', { model: 'wan3.0-video', prompt: 'x' })).status, 200);
+    // Clients that submit to the [OI]-style path must reach the video service
+    // too; falling through to New API yields "no available channel".
+    assert.equal((await post('/v1/videos/generations', { model: 'seedance-2.0-720p', prompt: 'x', duration: 4 })).status, 200);
     assert.equal((await fetch(base + '/v1/videos/video-local')).status, 200);
     assert.ok(videoRequests.includes('/v1/videos/generations')); assert.ok(videoRequests.includes('/v1/videos/video-local'));
     const caddy = caddyFullSite(); assert.match(caddy, /handle \{\s*reverse_proxy 127\.0\.0\.1:3001/);

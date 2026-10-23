@@ -82,6 +82,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
 <div class="btnrow"><a class="btn btn-primary" href="/sign-up">Get API key</a><a class="btn btn-secondary" href="/pricing">Live prices</a><a class="btn btn-secondary" href="/models">Model guides</a></div>
 
 <h2>Choose an API model for your agent</h2>
+
 <p>For a first evaluation, gpt-6.1-sol is a lower-cost chat candidate than gpt-6-astra at the checked default-group rates. Claude Opus 5.5 and Fable 5.1 provide another pair to test on coding or planning tasks. Compare <a href="/gpt-6-1-sol-vs-gpt-6-astra">GPT-6.1 Sol vs GPT-6 Astra</a> and <a href="/fable-5-1-vs-opus-5-5">Fable 5.1 vs Opus 5.5</a> for prices and evaluation criteria. Those rate differences do not prove which model will complete your task best.</p>
 <p>The basic endpoint is POST /v1/chat/completions. Create an API key in the console and keep it on your server. Check tools, tool_choice, streaming and other optional parameters against the chosen model route before depending on them. You can begin with ordinary messages and a planner response while you verify the advanced contract.</p>
 
@@ -89,8 +90,11 @@ ul{margin:0 0 14px;padding-left:1.2em}
 
 
 
+
 <h2>Make a bounded planning request</h2>
+
 <p>This example asks for a plan only. It does not execute code, call an external tool or create an agent session. Your application must parse the response, validate its structure and decide which actions it can run.</p>
+
 
 
 <pre><code>curl https://www.keyoapi.xyz/v1/chat/completions \
@@ -100,6 +104,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
 
 
 <h2>Implement the execution loop in your application</h2>
+
 <p>Store a task ID, user goal, selected model, validated plan and previous tool results. Limit available tools to explicit schemas and authorized data. Treat the model's proposed arguments as input to validate, then run the selected tool in application code and attach its result to the next request using the route's documented message format.</p>
 <p>Stop when the acceptance condition is met, a tool fails repeatedly, the maximum turn count is reached or the budget is exhausted. Log each request's usage and each action's result. Avoid replaying actions with side effects when retrying a timed-out model request; use application-level action IDs and idempotency where appropriate. Test a failed tool response as well as a successful path.</p>
 
@@ -107,7 +112,9 @@ ul{margin:0 0 14px;padding-left:1.2em}
 
 
 
+
 <h2>Budget for the whole agent task</h2>
+
 <p>Agent cost is the sum of every model turn, including retries and repeated context. At the checked Sol default-group rates, a single 10,000-input and 2,000-output turn costs about $0.007354. Ten turns with that identical token mix cost about $0.07354; real conversations often grow, so log actual usage rather than multiplying only the first turn.</p>
 <p>Track cost per accepted task, execution errors and human corrections. Summarize old tool output when it no longer needs to remain verbatim, cache reusable application data, and test any cheaper model against the same acceptance rules. Use <a href="/model/gpt-6.1-sol">the gpt-6.1-sol model page</a> for a starting model guide and <a href="/pricing">the pricing page</a> for current billing-group rates.</p>
 
@@ -115,9 +122,12 @@ ul{margin:0 0 14px;padding-left:1.2em}
 
 
 
+
 <h2>Use a decision model for explicit routing</h2>
+
 <p>For bounded routing or triage, <a href="/model/cloudflare-clef">the cloudflare-clef model page</a> accepts state plus typed questions and returns choice / noul probabilities through POST /v1/decisions. It does not generate a chat message or execute tools. Your application interprets the probabilities, applies thresholds and decides whether to route, ask for clarification or request human review.</p>
 <p>For Claude-class agent budget examples, see <a href="/claude-code-api-pricing">Claude Code API Pricing: Budget the Whole Task</a>. The token budget there is an assumption, not a typical session measurement.</p>
+
 
 
 
@@ -175,6 +185,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
   <a href="https://deeplaunch.io" target="_blank" rel="dofollow noopener">Featured on DeepLaunch.io</a>
   <a href="https://findly.tools/keyoapi?utm_source=keyoapi" target="_blank" rel="noopener noreferrer"><img src="https://findly.tools/badges/findly-tools-badge-dark.svg" alt="Featured on Findly.tools" width="175" height="55" loading="lazy" style="height:44px;width:auto;" /></a>
   <a href="https://startupfa.me" target="_blank" rel="dofollow noopener">Featured on Startup Fame</a>
+  <a href="https://submitaitools.org" target="_blank" rel="noopener noreferrer"><img src="https://submitaitools.org/static_submitaitools/images/submitaitools.png" alt="Submit AI Tools" width="200" height="60" loading="lazy" style="height:44px;width:auto;border-radius:10px;" /></a>
 </footer>
 </body>
 </html>

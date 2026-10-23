@@ -94,19 +94,25 @@
       "navLabel": "DeepSeek pricing",
       "h1": "DeepSeek API Pricing — KeyoAPI Rates & Official Context",
       "title": "DeepSeek API Pricing Comparison | KeyoAPI",
-      "metaDescription": "DeepSeek API pricing on KeyoAPI: deepseek-v4.1-flash ~$0.14/$0.56, deepseek-v4-flash ~$0.44/$1.32, deepseek-v4-pro-0813 ~$0.14/$0.29 per 1M. OpenAI-compatible.",
+      "metaDescription": "DeepSeek API pricing on KeyoAPI: deepseek-v4.1-flash-1017 ~$0.02/$0.06, deepseek-v4.1-flash ~$0.14/$0.56, deepseek-v4-pro-0813 ~$0.14/$0.29 per 1M. OpenAI-compatible.",
       "targetKeywords": [
         "deepseek api pricing",
         "deepseek api price",
         "cheap deepseek api"
       ],
-      "lead": "This page puts current KeyoAPI sell rates for DeepSeek V4.1 Flash, V4 Flash, and V4 Pro 0813 next to typical official list context — one OpenAI-compatible key.",
+      "lead": "This page puts current KeyoAPI sell rates for DeepSeek V4.1 Flash, V4.1 Flash 1017 snapshot, V4 Flash, and V4 Pro 0813 next to typical official list context — one OpenAI-compatible key.",
       "rows": [
         {
           "model": "deepseek-v4.1-flash",
           "official": "Official deepseek-flash / V4.1-Flash peak list — verify on api-docs.deepseek.com",
           "keyo": "~$0.14 / $0.56 per 1M in/out",
-          "note": "Preferred high-volume Flash"
+          "note": "Preferred high-volume Flash floating lane"
+        },
+        {
+          "model": "deepseek-v4.1-flash-1017",
+          "official": "DeepSeek V4.1 Flash 1017 snapshot — verify on api-docs.deepseek.com",
+          "keyo": "~$0.02 / $0.06 per 1M in/out",
+          "note": "October 17 snapshot edition · CED architecture · lowest unit cost"
         },
         {
           "model": "deepseek-v4-flash",
@@ -135,7 +141,7 @@
       ],
       "freeKiller": {
         "title": "Prototype on gift-credit models, then meter DeepSeek on the same key",
-        "body": "To prototype on the same key, use catalog free IDs on /free-models — gift-credit IDs that bill at normal rates from your one-time $10 new-user credit (fair-use rate limits) — including DeepSeek-Prover-V2-7B. When you meter DeepSeek chat, switch model= to deepseek-v4.1-flash, deepseek-v4-flash, or deepseek-v4-pro-0813 without changing base URL or auth — those are separate IDs, not one upgrade ladder. Free-path vs pricing detail for Flash: /model/deepseek-v4-flash."
+        "body": "To prototype on the same key, use catalog free IDs on /free-models — gift-credit IDs that bill at normal rates from your one-time $10 new-user credit (fair-use rate limits) — including deepseek-v4.1-flash-1017:free and DeepSeek-Prover-V2-7B:free. When you meter DeepSeek chat, switch model= to deepseek-v4.1-flash, deepseek-v4.1-flash-1017, deepseek-v4-flash, or deepseek-v4-pro-0813 without changing base URL or auth — those are separate IDs, not one upgrade ladder. Free-path vs pricing detail for Flash: /model/deepseek-v4-flash."
       },
       "body": [
         "Compare DeepSeek rates across official platforms, aggregators, and a multi-model API. KeyoAPI is the third option — OpenAI-compatible base URL, prepaid balance, and Gemini/Whisper/OCR on the same key when DeepSeek is only part of the stack.",
@@ -150,7 +156,7 @@
         },
         {
           "q": "Which DeepSeek ID should I start with?",
-          "a": "Start with deepseek-v4.1-flash for high-volume chat. Use deepseek-v4-flash when your stack already pins that catalog string — see /model/deepseek-v4-flash for free-path and pricing context. Use deepseek-v4-pro-0813 when you specifically want the Pro ID. Confirm live rates on /pricing before volume."
+          "a": "Start with deepseek-v4.1-flash for general high-volume chat, or pin deepseek-v4.1-flash-1017 for the lowest-cost CED snapshot rate (~$0.02 / $0.06). Use deepseek-v4-flash when your stack already pins that catalog string — see /model/deepseek-v4-flash for free-path and pricing context. Use deepseek-v4-pro-0813 when you specifically want the Pro ID. Confirm live rates on /pricing before volume."
         },
         {
           "q": "KeyoAPI vs OpenRouter for deepseek-v4.1-flash and V4 Pro lanes?",
@@ -160,9 +166,9 @@
       "cheapestNote": {
         "title": "Cheapest current-generation DeepSeek API rate on Keyo",
         "body": [
-          "While the earlier snapshot deepseek-v4-flash-0731 is the lowest absolute rate snapshot tier on the table at ~$0.09 / $0.17 per 1M in/out, the cheapest current-generation production chat lane on Keyo is deepseek-v4.1-flash at ~$0.14 / $0.56 per 1M in/out. deepseek-v4.1-flash is the recommended default for batch, classification, and agent loops.",
-          "The other rows are separate products, not rungs on a ladder: deepseek-v4-flash at ~$0.44 / $1.32 (legacy catalog string), deepseek-v4-flash-0731 at ~$0.09 / $0.17 (earlier snapshot), and deepseek-v4-pro-0813 with its alias deepseek-v4-pro at ~$0.14 / $0.29 each. So \"cheap\" here is a task choice, not a tier you upgrade through.",
-          "Cost math: 50M input + 10M output tokens/month on deepseek-v4.1-flash ≈ $7.00 + $5.60 ≈ $12.60. The same mix on deepseek-v4-flash (~$0.44 / $1.32) ≈ $22.00 + $13.20 ≈ $35.20. Confirm live rates on /pricing-list."
+          "While the earlier snapshot deepseek-v4-flash-0731 is the lowest absolute rate snapshot tier on the table at ~$0.09 / $0.17 per 1M in/out, the cheapest current-generation production chat lane on Keyo is deepseek-v4.1-flash at ~$0.14 / $0.56 per 1M in/out, with its October 17 snapshot edition deepseek-v4.1-flash-1017 setting the lowest absolute current-generation unit rate at ~$0.02 / $0.06 per 1M in/out. deepseek-v4.1-flash is the recommended default for batch, classification, and agent loops.",
+          "The other rows are separate products, not rungs on a ladder: deepseek-v4.1-flash-1017 at ~$0.02 / $0.06 (October 17 CED snapshot), deepseek-v4-flash at ~$0.44 / $1.32 (legacy catalog string), deepseek-v4-flash-0731 at ~$0.09 / $0.17 (earlier snapshot), and deepseek-v4-pro-0813 with its alias deepseek-v4-pro at ~$0.14 / $0.29 each. So \"cheap\" here is a task choice, not a tier you upgrade through.",
+          "Cost math: 50M input + 10M output tokens/month on deepseek-v4.1-flash ≈ $7.00 + $5.60 ≈ $12.60 (or ≈ $1.08 + $0.60 ≈ $1.68 on the -1017 snapshot). The same mix on deepseek-v4-flash (~$0.44 / $1.32) ≈ $22.00 + $13.20 ≈ $35.20. Confirm live rates on /pricing-list."
         ]
       }
     },

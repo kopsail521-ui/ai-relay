@@ -82,6 +82,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
 <div class="btnrow"><a class="btn btn-primary" href="/sign-up">Get API key</a><a class="btn btn-secondary" href="/pricing">Live prices</a><a class="btn btn-secondary" href="/models">Model guides</a></div>
 
 <h2>Opus 5.5 vs Fable 5.1 API pricing</h2>
+
 <p>Checked against KeyoAPI's public catalog on 2026-10-13. These are KeyoAPI sell rates for the default billing group, not Anthropic official list prices. The examples cover ordinary input and output tokens; they exclude cached-token differences, extra modalities, billing-group multipliers and retries.</p>
 <div class="table-scroll"><table>
 <thead><tr><th scope="col">Model ID</th><th scope="col">Input / 1M tokens</th><th scope="col">Output / 1M tokens</th><th scope="col">10,000 input + 2,000 output</th></tr></thead>
@@ -92,7 +93,9 @@ ul{margin:0 0 14px;padding-left:1.2em}
 
 
 
+
 <h2>Choose a model for coding and agent tasks</h2>
+
 <p>Build an evaluation set with your actual acceptance rules: a patch must pass the project tests, a research answer must cite the supplied sources, and a plan must respect its constraints. Give both models the same instructions, context, execution budget and available tools. Record successful tasks, human corrections and the bill for the entire session.</p>
 <p>Consider Opus as a lower-cost candidate in this pair and Fable as an option to test on difficult failures. That is a cost-based experiment, not a benchmark claim. Fable is economical only when its measured improvement in accepted results or avoided retries compensates for the higher unit rate. Keep a task and token budget so either model stops after repeated failures.</p>
 
@@ -100,8 +103,11 @@ ul{margin:0 0 14px;padding-left:1.2em}
 
 
 
+
 <h2>Call Opus 5.5 using the catalog ID</h2>
+
 <p>The shorthand opus5.5 means claude-opus-5-5 in this KeyoAPI guide. Fable 5.1 uses claude-fable-5-1. Both currently advertise the OpenAI-compatible chat route. For an A/B comparison, keep this request unchanged and replace only the model value. Check optional tool and streaming behavior on the route you will deploy.</p>
+
 
 
 <pre><code>curl https://www.keyoapi.xyz/v1/chat/completions \
@@ -159,6 +165,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
   <a href="https://deeplaunch.io" target="_blank" rel="dofollow noopener">Featured on DeepLaunch.io</a>
   <a href="https://findly.tools/keyoapi?utm_source=keyoapi" target="_blank" rel="noopener noreferrer"><img src="https://findly.tools/badges/findly-tools-badge-dark.svg" alt="Featured on Findly.tools" width="175" height="55" loading="lazy" style="height:44px;width:auto;" /></a>
   <a href="https://startupfa.me" target="_blank" rel="dofollow noopener">Featured on Startup Fame</a>
+  <a href="https://submitaitools.org" target="_blank" rel="noopener noreferrer"><img src="https://submitaitools.org/static_submitaitools/images/submitaitools.png" alt="Submit AI Tools" width="200" height="60" loading="lazy" style="height:44px;width:auto;border-radius:10px;" /></a>
 </footer>
 </body>
 </html>

@@ -397,16 +397,17 @@
       "faqs": [
         {
           "q": "Which Flash ID is cheapest?",
-          "a": "deepseek-v4.1-flash (~$0.14 / $0.56 per 1M indicative). deepseek-v4-flash (~$0.44 / $1.32) and deepseek-v4-flash-0731 (~$0.09 / $0.17) are separate catalog IDs — confirm on /pricing."
+          "a": "deepseek-v4.1-flash-1017 (~$0.02 / $0.06 per 1M indicative) is the lowest-cost fixed snapshot edition, while deepseek-v4.1-flash (~$0.14 / $0.56) is the standard floating lane. deepseek-v4-flash (~$0.44 / $1.32) and deepseek-v4-flash-0731 (~$0.09 / $0.17) are separate catalog IDs — confirm on /pricing."
         },
         {
           "q": "How do I call it?",
           "a": "POST /v1/chat/completions with model=deepseek-v4.1-flash at https://www.keyoapi.xyz/v1."
         }
       ],
-      "body": "deepseek-v4.1-flash is KeyoAPI’s low-cost DeepSeek Flash ID for chat widgets, classification, and high-volume rewrites — indicative ~$0.14 / $0.56 per 1M in/out. It is not the same catalog row as deepseek-v4-flash (~$0.44 / $1.32) or deepseek-v4-flash-0731 (~$0.09 / $0.17). deepseek-v4-pro-0813 (~$0.14 / $0.29) is a separate Pro ID. Confirm live rates on /pricing before volume. Family table: /deepseek-api-pricing.",
+      "body": "Indicative sell rates are about $0.14 per 1M input and $0.56 per 1M output on POST /v1/chat/completions. The October 17 snapshot edition deepseek-v4.1-flash-1017 (~$0.02 / $0.06 per 1M) is a separate fixed-snapshot SKU featuring CED architecture and 1M context at aggressive unit rates, while deepseek-v4.1-flash tracks the floating production lane. It is not the same catalog row as deepseek-v4-flash (~$0.44 / $1.32) or deepseek-v4-flash-0731 (~$0.09 / $0.17). deepseek-v4-pro-0813 (~$0.14 / $0.29) is a separate Pro ID. Confirm live rates on /pricing before volume. Family table: /deepseek-api-pricing.",
       "curlExample": "curl https://www.keyoapi.xyz/v1/chat/completions \\\n  -H \"Authorization: Bearer YOUR_API_KEY\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\"model\":\"deepseek-v4.1-flash\",\"messages\":[{\"role\":\"user\",\"content\":\"Hello from DeepSeek V4.1 Flash\"}]}'",
-      "uniqueBlurb": "Primary cheap DeepSeek Flash ID matching live Model Square rates."
+      "uniqueBlurb": "Primary cheap DeepSeek Flash ID matching live Model Square rates.",
+      "lead": "deepseek-v4.1-flash is KeyoAPI’s low-cost DeepSeek Flash chat model for high-volume widgets, classification, and rewrites on one OpenAI-compatible key."
     },
     {
       "id": "deepseek-v4-flash",

@@ -82,6 +82,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
 <div class="btnrow"><a class="btn btn-primary" href="/sign-up">Get API key</a><a class="btn btn-secondary" href="/pricing">Live prices</a><a class="btn btn-secondary" href="/models">Model guides</a></div>
 
 <h2>What server unavailable actually means</h2>
+
 <p>DeepSeek lanes surface capacity pressure as HTTP 5xx responses — 500/502/503, timeout-style failures, or 429 when the limit is rate rather than capacity. None of these mean your credentials are wrong: auth failures come back 401 with a clear message. The response usually carries a request id; keep it, it is what support needs if an error persists.</p>
 <p>On a relay like KeyoAPI the same status codes mean the same thing: the upstream DeepSeek capacity was unavailable for that attempt. Your client decides whether to retry, and how hard.</p>
 
@@ -89,9 +90,12 @@ ul{margin:0 0 14px;padding-left:1.2em}
 
 
 
+
 <h2>Confirm it is the upstream, not your code</h2>
+
 <p>Three checks separate capacity errors from client bugs: the same key works on a cheaper model, the error reproduces across several minutes rather than only once, and the failing requests are spread across different prompts rather than one oversized payload. If all three point to capacity, retries and fallback are the right response.</p>
 <p>The one-token smoke test against the flash lane is the fastest first check — if this answers while the heavier lane fails, capacity is the issue and a fallback model is the right move.</p>
+
 
 
 <pre><code>curl https://www.keyoapi.xyz/v1/chat/completions \
@@ -101,13 +105,16 @@ ul{margin:0 0 14px;padding-left:1.2em}
 
 
 <h2>Build a bounded retry policy</h2>
+
 <p>Retry only what is retryable — 408, 429 and 5xx status codes and network timeouts — and cap attempts at three or four. Space them with exponential backoff plus jitter: sleep for min(0.5 × 2^attempt, 8) seconds scaled by a random 0.5–1.5 factor, so concurrent workers do not re-stampede the same upstream. A shared retry budget across your workers keeps retry amplification bounded when an upstream degrades.</p>
 
 
 
 
 
+
 <h2>Fall back to a second model on the same key</h2>
+
 <p>Retries only help when capacity comes back. For hard deadlines, switch model= instead: deepseek-v4.1-flash for cheap classification, deepseek-v4-pro-0813 when you need the heavier lane, or glm-5.3 / kimi-k3 as cross-vendor chat alternatives. The base URL and API key do not change — fallback is a one-field switch in the request body.</p>
 <p>Treat fallback as a deliberate route, not a silent rewrite: log which model served each response, because pricing and output shape differ per lane. Live rates for every fallback candidate are on <a href="/pricing-list">the full pricing list</a> and the deepseek lane is covered in detail on <a href="/deepseek-api-pricing">the DeepSeek API pricing page</a>.</p>
 
@@ -115,7 +122,9 @@ ul{margin:0 0 14px;padding-left:1.2em}
 
 
 
+
 <h2>Run DeepSeek inside agent harnesses without melting capacity</h2>
+
 <p>Agent and eval harnesses multiply capacity problems: dozens of workers each firing multi-step chains turn one slow upstream into a self-inflicted outage. Bound the harness the same way you bound retries — a hard concurrency cap on in-flight DeepSeek calls, a per-stage timeout (planner, tool, critic) rather than one global timeout, and a single shared retry budget so a degraded lane throttles the whole harness instead of queueing forever.</p>
 <p>Make harness steps idempotent where you can, checkpoint intermediate state between steps, and put the cheapest model on the highest-frequency step. A harness that burns deepseek-v4.1-flash on routing and reserves deepseek-v4-pro for the hard steps survives upstream wobble far better than one that sends every step to the heaviest lane.</p>
 
@@ -123,7 +132,9 @@ ul{margin:0 0 14px;padding-left:1.2em}
 
 
 
+
 <h2>Watch cost amplification while you retry</h2>
+
 <p>Every retry of a timed-out request risks paying twice if the first attempt eventually completes upstream. For expensive calls, prefer idempotency keys or at-least-once accounting in your own logs, and stop retrying non-idempotent tool-triggering requests automatically — surface those to the orchestrator instead.</p>
 <p>Retry storms also inflate spend indirectly: a 4-request retry policy against a 5-second timeout can triple your effective request count exactly when the upstream is slowest. The concurrency cap from the harness section is the guardrail that keeps this bounded.</p>
 
@@ -131,7 +142,9 @@ ul{margin:0 0 14px;padding-left:1.2em}
 
 
 
+
 <h2>A practical response checklist</h2>
+
 
 <div class="table-scroll"><table>
 <thead><tr><th scope="col">Symptom</th><th scope="col">First response</th><th scope="col">If it persists</th></tr></thead>
@@ -141,6 +154,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
 <tr><td>Timeouts on long prompts</td><td>Shorten prompt or split the task</td><td>Per-stage timeouts, checkpoint steps</td></tr>
 <tr><td>One model down, others fine</td><td>Verify with a cheap flash request</td><td>Run on fallback model, monitor <a href="/pricing">the pricing page</a></td></tr></tbody>
 </table></div>
+
 
 
 
@@ -194,6 +208,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
   <a href="https://deeplaunch.io" target="_blank" rel="dofollow noopener">Featured on DeepLaunch.io</a>
   <a href="https://findly.tools/keyoapi?utm_source=keyoapi" target="_blank" rel="noopener noreferrer"><img src="https://findly.tools/badges/findly-tools-badge-dark.svg" alt="Featured on Findly.tools" width="175" height="55" loading="lazy" style="height:44px;width:auto;" /></a>
   <a href="https://startupfa.me" target="_blank" rel="dofollow noopener">Featured on Startup Fame</a>
+  <a href="https://submitaitools.org" target="_blank" rel="noopener noreferrer"><img src="https://submitaitools.org/static_submitaitools/images/submitaitools.png" alt="Submit AI Tools" width="200" height="60" loading="lazy" style="height:44px;width:auto;border-radius:10px;" /></a>
 </footer>
 </body>
 </html>

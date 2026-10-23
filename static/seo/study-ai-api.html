@@ -82,6 +82,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
 <div class="btnrow"><a class="btn btn-primary" href="/sign-up">Get API key</a><a class="btn btn-secondary" href="/pricing">Live prices</a><a class="btn btn-secondary" href="/models">Model guides</a></div>
 
 <h2>Ground explanations in course material</h2>
+
 <p>Select a relevant excerpt from notes or a textbook before calling the model. Give the excerpt an ID and ask the model to cite it in the answer. Tell it to say when the excerpt does not contain enough information. Your application must check cited IDs and answer claims; the prompt alone does not guarantee grounded output.</p>
 <p>For longer materials, chunk and retrieve the relevant passages before constructing the request. PDF extraction is a separate step: <a href="/model/MinerU2.5-Pro">the MinerU2.5-Pro model page</a> documents an asynchronous parsing route. Do not assume a plain text chat request can directly read an uploaded PDF or browse a source URL. Preserve the original page reference so a student can open the source.</p>
 
@@ -89,8 +90,11 @@ ul{margin:0 0 14px;padding-left:1.2em}
 
 
 
+
 <h2>Example: explanation and a practice question</h2>
+
 <p>The example sends the course text directly in the message and asks for one short explanation and one quiz item. It uses gpt-6.1-sol on the OpenAI-compatible chat route. Treat the response as a draft that your application validates, especially for graded answers.</p>
+
 
 
 <pre><code>curl https://www.keyoapi.xyz/v1/chat/completions \
@@ -100,6 +104,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
 
 
 <h2>Create a learning loop rather than an answer dump</h2>
+
 <p>Keep the question, expected answer and supporting excerpt together. First show the question without its answer, collect the student's attempt, then give feedback and a hint. For factual quizzes, validate the answer key with the source or a teacher-authored reference before using it to grade.</p>
 <p>Track the topics a learner has practiced and choose the next item from that history. Ask for a simpler explanation when the learner struggles, but keep the same source facts. Evaluate the system with missing excerpts, ambiguous questions and intentionally incorrect student answers, as well as easy examples. Measure whether feedback identifies the misconception without inventing a new fact.</p>
 
@@ -107,9 +112,12 @@ ul{margin:0 0 14px;padding-left:1.2em}
 
 
 
+
 <h2>Budget source context and repeated feedback</h2>
+
 <p>A 3,000-input and 600-output request costs about $0.0022062 at the checked Sol default-group rates. A lesson may use several requests for explanation, quiz generation and feedback. Sum actual usage across those steps and verify live rates on <a href="/pricing">the pricing page</a>; do not treat one request as the cost of the whole lesson.</p>
 <p>Send only the relevant source excerpt and a compact learning summary. Compare candidate models using answer correctness, citation validity, helpful feedback and cost per reviewed lesson. <a href="/gpt-6-1-sol-vs-gpt-6-astra">GPT-6.1 Sol vs GPT-6 Astra</a> covers one price comparison, while <a href="/models">the model guides page</a> links to individual API guides.</p>
+
 
 
 
@@ -165,6 +173,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
   <a href="https://deeplaunch.io" target="_blank" rel="dofollow noopener">Featured on DeepLaunch.io</a>
   <a href="https://findly.tools/keyoapi?utm_source=keyoapi" target="_blank" rel="noopener noreferrer"><img src="https://findly.tools/badges/findly-tools-badge-dark.svg" alt="Featured on Findly.tools" width="175" height="55" loading="lazy" style="height:44px;width:auto;" /></a>
   <a href="https://startupfa.me" target="_blank" rel="dofollow noopener">Featured on Startup Fame</a>
+  <a href="https://submitaitools.org" target="_blank" rel="noopener noreferrer"><img src="https://submitaitools.org/static_submitaitools/images/submitaitools.png" alt="Submit AI Tools" width="200" height="60" loading="lazy" style="height:44px;width:auto;border-radius:10px;" /></a>
 </footer>
 </body>
 </html>

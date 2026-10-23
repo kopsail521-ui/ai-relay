@@ -82,6 +82,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
 <div class="btnrow"><a class="btn btn-primary" href="/sign-up">Get API key</a><a class="btn btn-secondary" href="/pricing">Live prices</a><a class="btn btn-secondary" href="/models">Model guides</a></div>
 
 <h2>Gemini 4 models and token prices</h2>
+
 <p>Both IDs advertise the OpenAI-compatible chat endpoint in the public catalog. On 2026-10-13, each listed $0.7353 per million input tokens and $3.6765 per million output tokens in the default group. These are KeyoAPI sell rates; confirm current prices and your group multiplier in <a href="/pricing">the pricing page</a> before budgeting.</p>
 <div class="table-scroll"><table>
 <thead><tr><th scope="col">Model ID</th><th scope="col">Input / 1M tokens</th><th scope="col">Output / 1M tokens</th><th scope="col">Model guide</th></tr></thead>
@@ -92,8 +93,11 @@ ul{margin:0 0 14px;padding-left:1.2em}
 
 
 
+
 <h2>Call Gemini 4 Argon</h2>
+
 <p>Set your OpenAI client's base URL to https://www.keyoapi.xyz/v1 and use a KeyoAPI key. The example sends a plain text chat request to Argon. Replace the model value with gemini-4-barium to evaluate Barium with the same messages.</p>
+
 
 
 <pre><code>curl https://www.keyoapi.xyz/v1/chat/completions \
@@ -103,8 +107,10 @@ ul{margin:0 0 14px;padding-left:1.2em}
 
 
 <h2>Check the route before relying on advanced features</h2>
+
 <p>An OpenAI-compatible chat request does not establish that every Google-native feature is forwarded. Confirm supported content types, context limits, tool calling, streaming and optional parameters for the specific model and channel you use. Start with a small known input, validate the response shape, then increase the workload.</p>
 <p>At equal listed token rates, compare Argon and Barium by accepted results and actual output length. Use a fixed evaluation set for your code, document or assistant workflow and log response usage. Do not infer a performance ranking from the two names. More Gemini catalog options are on <a href="/gemini-api-pricing">the Gemini API pricing page</a>, and both individual guides appear in <a href="/models">the model guides page</a>.</p>
+
 
 
 
@@ -159,6 +165,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
   <a href="https://deeplaunch.io" target="_blank" rel="dofollow noopener">Featured on DeepLaunch.io</a>
   <a href="https://findly.tools/keyoapi?utm_source=keyoapi" target="_blank" rel="noopener noreferrer"><img src="https://findly.tools/badges/findly-tools-badge-dark.svg" alt="Featured on Findly.tools" width="175" height="55" loading="lazy" style="height:44px;width:auto;" /></a>
   <a href="https://startupfa.me" target="_blank" rel="dofollow noopener">Featured on Startup Fame</a>
+  <a href="https://submitaitools.org" target="_blank" rel="noopener noreferrer"><img src="https://submitaitools.org/static_submitaitools/images/submitaitools.png" alt="Submit AI Tools" width="200" height="60" loading="lazy" style="height:44px;width:auto;border-radius:10px;" /></a>
 </footer>
 </body>
 </html>

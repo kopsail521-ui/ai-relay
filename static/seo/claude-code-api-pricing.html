@@ -82,6 +82,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
 <div class="btnrow"><a class="btn btn-primary" href="/sign-up">Get API key</a><a class="btn btn-secondary" href="/pricing">Live prices</a><a class="btn btn-secondary" href="/models">Model guides</a></div>
 
 <h2>Claude model API rates on KeyoAPI</h2>
+
 <p>The table shows KeyoAPI input and output rates per million tokens for the default billing group. Group multipliers, cache pricing and additional features can affect the final charge. Open <a href="/pricing">the pricing page</a> for current rates and <a href="/claude-api-pricing">the Claude API pricing page</a> for the broader model comparison.</p>
 <div class="table-scroll"><table>
 <thead><tr><th scope="col">KeyoAPI model ID</th><th scope="col">Input / 1M tokens</th><th scope="col">Output / 1M tokens</th></tr></thead>
@@ -96,7 +97,9 @@ ul{margin:0 0 14px;padding-left:1.2em}
 
 
 
+
 <h2>A worked task budget: 100K input + 10K output</h2>
+
 <p>Example budget: 100,000 billed input tokens and 10,000 billed output tokens accumulated across a coding task. Actual usage varies with repository size, conversation length and tool results. Count each billed occurrence of repeated context. The calculation uses default-group token rates; cache pricing, other group multipliers and usage beyond this token budget are excluded.</p>
 <p>Cost = total input tokens / 1,000,000 × input rate + total output tokens / 1,000,000 × output rate.</p>
 <div class="table-scroll"><table>
@@ -110,7 +113,9 @@ ul{margin:0 0 14px;padding-left:1.2em}
 
 
 
+
 <h2>API billing vs a monthly Claude plan</h2>
+
 <p>API billing charges for requests at the applicable rates. A monthly Claude subscription has its own included products and usage limits. Compare your expected API spend with the current plan price and features; check Claude’s published plan terms for subscription access to Claude Code.</p>
 <p>For occasional or uneven workloads, estimate spend from the token totals of completed tasks. For regular use, compare that monthly estimate with the subscription’s price and limits. Include caching, retries and revisions in your calculation. KeyoAPI gift credits follow the account’s model eligibility rules.</p>
 
@@ -118,7 +123,9 @@ ul{margin:0 0 14px;padding-left:1.2em}
 
 
 
+
 <h2>API formats and client requirements</h2>
+
 <p>Claude Code uses the Anthropic Messages format. KeyoAPI provides POST /v1/messages and OpenAI-compatible POST /v1/chat/completions. Choose the endpoint required by your client and a model available to your API key.</p>
 <p>Client support depends on the selected model and the required features, including streaming and tool use. A chat request alone does not establish full Claude Code support. Use the exact model ID from the catalog; client defaults and model aliases may differ.</p>
 <p>The curl example below sends an OpenAI-compatible chat request with claude-sonnet-5-5. See <a href="/brand/keyo-api-ref.html">the API endpoint reference</a> for authentication and request formats.</p>
@@ -127,8 +134,11 @@ ul{margin:0 0 14px;padding-left:1.2em}
 
 
 
+
 <h2>Make a metered chat request with a catalog ID</h2>
+
 <p>Set KEYO_API_KEY to your console API key, send the request below and use the response usage to track input and output tokens.</p>
+
 
 
 <pre><code>curl https://www.keyoapi.xyz/v1/chat/completions \
@@ -138,8 +148,10 @@ ul{margin:0 0 14px;padding-left:1.2em}
 
 
 <h2>Keep the task within a spending budget</h2>
+
 <p>Track usage for every request, limit repeated retries, and cap the number of turns and the amount of context your application sends. Measure the cost per accepted result. Use your client’s budget controls and usage reports where available.</p>
 <p>Eligible gift-credit model calls consume gift credits according to account billing rules. Check model eligibility, available balances and billing details in the console.</p>
+
 
 
 
@@ -200,6 +212,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
   <a href="https://deeplaunch.io" target="_blank" rel="dofollow noopener">Featured on DeepLaunch.io</a>
   <a href="https://findly.tools/keyoapi?utm_source=keyoapi" target="_blank" rel="noopener noreferrer"><img src="https://findly.tools/badges/findly-tools-badge-dark.svg" alt="Featured on Findly.tools" width="175" height="55" loading="lazy" style="height:44px;width:auto;" /></a>
   <a href="https://startupfa.me" target="_blank" rel="dofollow noopener">Featured on Startup Fame</a>
+  <a href="https://submitaitools.org" target="_blank" rel="noopener noreferrer"><img src="https://submitaitools.org/static_submitaitools/images/submitaitools.png" alt="Submit AI Tools" width="200" height="60" loading="lazy" style="height:44px;width:auto;border-radius:10px;" /></a>
 </footer>
 </body>
 </html>

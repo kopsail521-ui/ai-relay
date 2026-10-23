@@ -82,6 +82,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
 <div class="btnrow"><a class="btn btn-primary" href="/sign-up">Get API key</a><a class="btn btn-secondary" href="/pricing">Live prices</a><a class="btn btn-secondary" href="/models">Model guides</a></div>
 
 <h2>Separate the outline, scene and revision requests</h2>
+
 <p>Start with genre, audience, tone, point of view and a target scene length. Ask for an outline before prose so a reader can approve the plot direction. Turn each outline beat into a scene request, then use a separate revision pass to check character names, timeline, established facts and pacing.</p>
 <p>Store approved character facts, world rules, unresolved threads and a short chapter summary outside the conversation. Attach only the relevant parts when you draft the next scene. This makes continuity explicit and avoids repeatedly sending every earlier chapter. Keep the original draft and revised version so editors can accept changes selectively.</p>
 
@@ -89,8 +90,11 @@ ul{margin:0 0 14px;padding-left:1.2em}
 
 
 
+
 <h2>Example: generate a short story scene</h2>
+
 <p>This plain text example uses the listed gpt-6.1-sol chat ID. It requests a short scene with constrained characters and a plot beat. Output length is a prompt target, not a guarantee; max_tokens is a separate token cap. Check for truncation before showing a finished scene.</p>
+
 
 
 <pre><code>curl https://www.keyoapi.xyz/v1/chat/completions \
@@ -100,6 +104,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
 
 
 <h2>Choose the model by editorial results</h2>
+
 <p>Evaluate a small fixed set of briefs across candidate models. Ask editors to score adherence to the brief, continuity, dialogue, pacing and the amount of rewriting required. The model with the lowest input price is not necessarily the cheapest per approved scene if its drafts need repeated retries.</p>
 <p>Use <a href="/model/gpt-6.1-sol">the gpt-6.1-sol model page</a> as a starting integration guide, <a href="/gpt-6-1-sol-vs-gpt-6-astra">GPT-6.1 Sol vs GPT-6 Astra</a> for a GPT-class price comparison, and <a href="/claude-api-pricing">the Claude API pricing page</a> for Claude-class candidates. Save the prompt and model alongside each draft so an editor can reproduce the workflow. Avoid claiming that a generated story is factually true or that every draft is publication-ready.</p>
 
@@ -107,9 +112,12 @@ ul{margin:0 0 14px;padding-left:1.2em}
 
 
 
+
 <h2>Plan the cost of a story workflow</h2>
+
 <p>For an illustrative 5,000-input and 1,000-output request, the checked Sol default-group rates produce about $0.003677. Three requests with that identical token mix cost about $0.011031 before retries and any extra charges. Outlining, drafting and revision usually have different token counts, so sum the actual usage from each response.</p>
 <p>Expose a scene-length setting and a maximum revision count in your application. Reuse a compact story bible, stop when the editor accepts the draft, and keep failed drafts out of the published story. Audio narration is a separate workflow and charge; see <a href="/tts-api">the TTS API guide</a> if you later add narration.</p>
+
 
 
 
@@ -165,6 +173,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
   <a href="https://deeplaunch.io" target="_blank" rel="dofollow noopener">Featured on DeepLaunch.io</a>
   <a href="https://findly.tools/keyoapi?utm_source=keyoapi" target="_blank" rel="noopener noreferrer"><img src="https://findly.tools/badges/findly-tools-badge-dark.svg" alt="Featured on Findly.tools" width="175" height="55" loading="lazy" style="height:44px;width:auto;" /></a>
   <a href="https://startupfa.me" target="_blank" rel="dofollow noopener">Featured on Startup Fame</a>
+  <a href="https://submitaitools.org" target="_blank" rel="noopener noreferrer"><img src="https://submitaitools.org/static_submitaitools/images/submitaitools.png" alt="Submit AI Tools" width="200" height="60" loading="lazy" style="height:44px;width:auto;border-radius:10px;" /></a>
 </footer>
 </body>
 </html>

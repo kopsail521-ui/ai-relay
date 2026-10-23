@@ -922,7 +922,7 @@ const server = http.createServer(async (req, res) => {
             );
           }
         } catch {}
-        const normalized = Buffer.from(normalizeVideoPoll(text, tid, up.status), "utf8");
+        const normalized = Buffer.from(normalizeVideoPoll(text, tid, up.status, pending.model), "utf8");
         const out = clientUp({
           status: up.status,
           buf: normalized,
@@ -982,7 +982,7 @@ const server = http.createServer(async (req, res) => {
         } catch {
           logTerminalPoll(pending.model, tid, "", up.status, text);
         }
-        const normalized = Buffer.from(normalizeVideoPoll(text, tid, up.status), "utf8");
+        const normalized = Buffer.from(normalizeVideoPoll(text, tid, up.status, pending.model), "utf8");
         if (up.status >= 200 && up.status < 300) {
           try {
             const j = JSON.parse(normalized.toString("utf8"));
@@ -1059,7 +1059,7 @@ const server = http.createServer(async (req, res) => {
           settleTask(tid, cost, st === "success" || st === "succeeded" || st === "done" ? "completed" : st);
         }
       } catch {}
-      const normalized = Buffer.from(normalizeVideoPoll(text, tid, up.status), "utf8");
+      const normalized = Buffer.from(normalizeVideoPoll(text, tid, up.status, pending.model), "utf8");
       const out = clientUp({
         status: up.status,
         buf: normalized,

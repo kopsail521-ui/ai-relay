@@ -33,7 +33,7 @@ function upstreamFailureReason(j, d) {
   return '';
 }
 
-export function normalizeVideoPoll(raw, id, httpStatus = 200) {
+export function normalizeVideoPoll(raw, id, httpStatus = 200, publicModel = '') {
   let j;
   try { j = JSON.parse(raw); } catch { return raw; }
   if (!j || typeof j !== 'object' || Array.isArray(j)) return raw;
@@ -68,6 +68,11 @@ export function normalizeVideoPoll(raw, id, httpStatus = 200) {
     };
     j.error = err;
     d.error = err;
+  }
+  // Never echo the upstream SKU name to clients; keep the public model id.
+  if (publicModel) {
+    j.model = publicModel;
+    d.model = publicModel;
   }
   return JSON.stringify({ ...j, id, task_id: id, status, data: d, url: url || j.url });
 }

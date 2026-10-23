@@ -1192,6 +1192,7 @@ const server = http.createServer(async (req, res) => {
           },
         });
       }
+      body = gBody;
       bodyBuf = Buffer.from(JSON.stringify(gBody), "utf8");
     } else if (isMiniMaxText) {
       const oBody = buildOpenluxMiniMaxH3Body(meta, body, token.group || "default");
@@ -1230,6 +1231,7 @@ const server = http.createServer(async (req, res) => {
           },
         });
       }
+      body = aBody;
       bodyBuf = Buffer.from(JSON.stringify(aBody), "utf8");
     } else if (modelId === "grok-1.5-video") {
       const g15 = buildOpenluxGrok15Body(meta, body);

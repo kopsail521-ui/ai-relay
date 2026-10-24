@@ -1,15 +1,10 @@
 name: Fix notice Acceptable-Use link on VPS
 
-# One-shot ops task: repoints the announcement "Acceptable Use" link from
-# /user-agreement to /brand/aup.html inside the New API options table,
-# then restarts the container. The fix script itself is idempotent, so
-# re-running this workflow is safe.
+# One-shot ops task (DONE 2026-10-25, verified live): repointed the
+# announcement "Acceptable Use" link to /brand/aup.html. Kept as a manual
+# template for future VPS-side one-liners over the KEYO_VPS_* SSH channel.
 
 on:
-  push:
-    branches: [main]
-    paths:
-      - ".github/workflows/keyo-vps-notice-fix.yml"
   workflow_dispatch:
 
 concurrency:

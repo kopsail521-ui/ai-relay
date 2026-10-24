@@ -213,8 +213,8 @@ export default {
     unit: "request", per: "0.342466",
     fam: "InfiniteTalk 数字人视频生成模型",
     famEn: "InfiniteTalk digital human video generation model",
-    feat: "生成长时长口播数字人视频，唇形与动作自然",
-    featEn: "long-form talking-head digital human videos with natural lip sync and motion",
+    feat: "使用 cond_video、cond_audio 和 prompt 创建口播任务，单段音频最长 15 秒；长音频需先分段",
+    featEn: "creates talking-head tasks with cond_video, cond_audio and prompt; each audio segment is limited to 15 seconds, so split longer recordings first",
     mod: "视频", modEn: "video",
     usage: "口播视频、课程讲解、产品介绍",
     usageEn: "talking-head videos, course narration, product introductions"

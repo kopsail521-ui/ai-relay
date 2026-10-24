@@ -13,6 +13,7 @@ on:
       - "services/creem-moderation-proxy/**"
       - ".github/workflows/keyo-creem-moderation.yml"
       - "scripts/vps-redeploy-creem-moderation.sh"
+      - "scripts/check-public-proxy-release.mjs"
   workflow_dispatch:
 
 concurrency:
@@ -38,6 +39,7 @@ jobs:
       queue: max
       cancel-in-progress: false
     steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
       - name: Pull and redeploy over SSH
         env:
           HOST: ${{ vars.KEYO_VPS_HOST }}
@@ -59,3 +61,5 @@ jobs:
           chmod 600 "${HOME}/.ssh/keyo_vps"
           ssh -i "${HOME}/.ssh/keyo_vps" -o StrictHostKeyChecking=accept-new \
             "${USER}@${HOST}" "sudo -n true && sudo RELOAD_CADDY=0 bash /opt/ai-relay/scripts/vps-safe-pull-preserve-blog.sh && sudo bash /opt/ai-relay/scripts/vps-redeploy-creem-moderation.sh"
+      - name: Verify the public proxy release without model calls
+        run: node scripts/check-public-proxy-release.mjs

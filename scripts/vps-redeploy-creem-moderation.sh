@@ -14,7 +14,7 @@ UPLOAD_DIR="${UPLOAD_DIR_OVERRIDE:-$ROOT/static/uploads}"
 OLD="${NAME}-previous-$(date +%s)-$$"
 BACKUP="${NAME}-rollback"
 HEALTH_ATTEMPTS="${HEALTH_ATTEMPTS:-15}"
-[[ "$HEALTH_ATTEMPTS" =~ ^[1-9][0-9]*$ && "$HEALTH_ATTEMPTS" -le 60 ]] || { echo "ABORT: invalid health attempt limit" >&2; exit 1; }
+[[ "$HEALTH_ATTEMPTS" =~ ^[1-9][0-9]*$ && "$HEALTH_ATTEMPTS" -ge 2 && "$HEALTH_ATTEMPTS" -le 60 ]] || { echo "ABORT: invalid health attempt limit (requires at least two checks)" >&2; exit 1; }
 
 # Pull latest source first (keep Caddy reload off; static deploy owns that).
 sudo RELOAD_CADDY="${RELOAD_CADDY:-0}" bash "$ROOT/scripts/vps-safe-pull-preserve-blog.sh"
@@ -66,6 +66,49 @@ fi
 [[ -z "$file_port" ]] || HEALTH_PORT="$file_port"
 [[ "$HEALTH_PORT" =~ ^[0-9]+$ && "$HEALTH_PORT" -ge 1 && "$HEALTH_PORT" -le 65535 ]] || { echo "ABORT: invalid moderation port" >&2; exit 1; }
 [[ "$UPLOAD_DIR" == /* && "$UPLOAD_DIR" != / ]] || { echo "ABORT: uploads path must be an absolute directory" >&2; exit 1; }
+
+# A 200 response alone can come from an unrelated or leftover container. The
+# host-network proxy runs node directly as its container PID. Fail closed when
+# ss cannot identify every owner; never stop another container to free the port.
+command -v ss >/dev/null || { echo "ABORT: ss is required to verify listener ownership" >&2; exit 1; }
+command -v sha256sum >/dev/null || { echo "ABORT: sha256sum is required to verify deployed source" >&2; exit 1; }
+listener_owned_by() {
+  local expected_pid="$1" listeners="$2" remaining line_found found=0
+  [[ "$expected_pid" =~ ^[1-9][0-9]*$ ]] || return 1
+  while IFS= read -r remaining; do
+    [[ -n "$remaining" ]] || continue
+    line_found=0
+    while [[ "$remaining" =~ pid=([0-9]+) ]]; do
+      [[ "${BASH_REMATCH[1]}" == "$expected_pid" ]] || return 1
+      found=1
+      line_found=1
+      remaining="${remaining#*"${BASH_REMATCH[0]}"}"
+    done
+    [[ "$line_found" == 1 ]] || return 1
+  done <<< "$listeners"
+  [[ "$found" == 1 ]]
+}
+CURRENT_PID=$(sudo docker inspect "$NAME" --format '{{.State.Pid}}')
+CURRENT_LISTENERS=$(sudo ss -H -lntp "( sport = :$HEALTH_PORT )") || { echo "ABORT: cannot inspect moderation listener" >&2; exit 1; }
+if [[ -n "$CURRENT_LISTENERS" ]] && ! listener_owned_by "$CURRENT_PID" "$CURRENT_LISTENERS"; then
+  echo "ABORT: moderation port is owned by another process; no containers were stopped" >&2
+  exit 1
+fi
+
+# Capture the checkout version before building. Check the actual container files
+# as well as process ownership, so a stale image or source bind cannot pass.
+SOURCE_NAMES=(server.mjs public-model-metadata.mjs model-contracts.json model-icon-inject.js)
+SOURCE_PATHS=()
+EXPECTED_SOURCE=''
+for source_name in "${SOURCE_NAMES[@]}"; do
+  source_file="$ROOT/services/creem-moderation-proxy/$source_name"
+  [[ -r "$source_file" ]] || { echo "ABORT: proxy source is not readable" >&2; exit 1; }
+  source_sum=$(sha256sum "$source_file")
+  SOURCE_PATHS+=("/app/$source_name")
+  EXPECTED_SOURCE+="${source_sum%% *}  /app/$source_name"$'\n'
+done
+EXPECTED_SOURCE="${EXPECTED_SOURCE%$'\n'}"
+
 add_default_env() {
   if [[ -z "${ENV_FILE_KEYS[$1]:-}" && -z "${CURRENT_ENV_KEYS[$1]:-}" ]]; then
     ENV_ARGS+=(-e "$1=$2")
@@ -169,22 +212,46 @@ sudo docker run -d --name "$NAME" --restart "${RESTART:-always}" --network host 
   "${MOUNT_ARGS[@]}" \
   "$IMAGE"
 
-# Wait for the health endpoint before declaring success.
+# Docker reports Running=true even while a restart-loop container has Pid=0.
+# Require a live, non-restarting process that owns the listener and contains the
+# checked-out source. Two successful rounds with the same PID reject brief starts.
+proxy_ready() {
+  local state running restarting pid listeners actual_source
+  state=$(sudo docker inspect "$NAME" --format '{{.State.Running}} {{.State.Restarting}} {{.State.Pid}}') || return 1
+  read -r running restarting pid <<< "$state"
+  [[ "$running" == true && "$restarting" == false && "$pid" =~ ^[1-9][0-9]*$ ]] || return 1
+  listeners=$(sudo ss -H -lntp "( sport = :$HEALTH_PORT )") || return 1
+  listener_owned_by "$pid" "$listeners" || return 1
+  curl -sfS --max-time 3 -o /dev/null "http://127.0.0.1:$HEALTH_PORT/healthz" || return 1
+  actual_source=$(sudo docker exec "$NAME" sha256sum "${SOURCE_PATHS[@]}") || return 1
+  [[ "$actual_source" == "$EXPECTED_SOURCE" ]] || return 1
+  READY_PID="$pid"
+}
 ok=0
+stable=0
+last_pid=''
 for i in $(seq 1 "$HEALTH_ATTEMPTS"); do
-  if [[ "$(sudo docker inspect "$NAME" --format '{{.State.Running}}')" == true ]] && \
-    curl -sfS --max-time 3 -o /dev/null "http://127.0.0.1:$HEALTH_PORT/healthz"; then ok=1; break; fi
+  if proxy_ready; then
+    if [[ "$READY_PID" == "$last_pid" ]]; then stable=$((stable + 1)); else stable=1; fi
+    last_pid="$READY_PID"
+    if [[ "$stable" -ge 2 ]]; then ok=1; break; fi
+  else
+    stable=0
+    last_pid=''
+  fi
   sleep 2
 done
 if [[ "$ok" != 1 ]]; then
-  echo "creem-moderation failed /healthz after deploy" >&2
+  echo "creem-moderation failed stable process/source/health verification after deploy" >&2
   # Do not print arbitrary container logs: they can contain request data.
   rollback
 fi
+echo "VERIFIED_PROXY_PID=$last_pid SOURCE_FILES=${#SOURCE_PATHS[@]} STABLE_CHECKS=$stable"
 trap - ERR INT TERM
 # Only discard the older rollback slot after the replacement is healthy.
 # If cleanup fails, leave the unique previous name available for recovery.
-if { ! sudo docker inspect "$BACKUP" >/dev/null 2>&1 || sudo docker rm -f "$BACKUP" >/dev/null; } && \
+if { ! sudo docker inspect "$BACKUP" >/dev/null 2>&1 || \
+    { [[ "$(sudo docker inspect "$BACKUP" --format '{{.State.Running}}')" == false ]] && sudo docker rm "$BACKUP" >/dev/null; }; } && \
   sudo docker rename "$OLD" "$BACKUP"; then
   echo "ROLLBACK_CONTAINER=$BACKUP RESTART_POLICY=${RESTART:-always}"
 else

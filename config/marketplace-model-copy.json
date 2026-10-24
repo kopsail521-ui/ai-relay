@@ -1203,15 +1203,15 @@
     }
   },
   "InfiniteTalk": {
-    "description": "InfiniteTalk 数字人视频生成模型。生成长时长口播数字人视频，唇形与动作自然。支持视频模态。适合口播视频、课程讲解、产品介绍。",
+    "description": "InfiniteTalk 数字人视频生成模型。使用 cond_video、cond_audio 和 prompt 创建口播任务，单段音频最长 15 秒；长音频需先分段。支持视频模态。适合口播视频、课程讲解、产品介绍。",
     "descriptions": {
-      "zhCN": "InfiniteTalk 数字人视频生成模型。生成长时长口播数字人视频，唇形与动作自然。支持视频模态。适合口播视频、课程讲解、产品介绍。",
-      "zhTW": "InfiniteTalk 數位人影片生成模型。生成长時長口播數位人影片，唇形与動作自然。支援影片模态。適合口播影片、課程講解、產品介紹。",
-      "en": "InfiniteTalk digital human video generation model. long-form talking-head digital human videos with natural lip sync and motion. video modality. Ideal for talking-head videos, course narration, product introductions.",
-      "fr": "InfiniteTalk digital human video generation model. long-form talking-head digital human videos with natural lip sync and motion. video modality. Idéal pour talking-head videos, course narration, product introductions.",
-      "ru": "InfiniteTalk digital human video generation model. long-form talking-head digital human videos with natural lip sync and motion. video modality. Подходит для talking-head videos, course narration, product introductions.",
-      "ja": "InfiniteTalk digital human video generation model. long-form talking-head digital human videos with natural lip sync and motion. video modality. talking-head videos, course narration, product introductions 向け。",
-      "vi": "InfiniteTalk digital human video generation model. long-form talking-head digital human videos with natural lip sync and motion. video modality. Phù hợp cho talking-head videos, course narration, product introductions."
+      "zhCN": "InfiniteTalk 数字人视频生成模型。使用 cond_video、cond_audio 和 prompt 创建口播任务，单段音频最长 15 秒；长音频需先分段。支持视频模态。适合口播视频、课程讲解、产品介绍。",
+      "zhTW": "InfiniteTalk 數位人影片生成模型。使用 cond_video、cond_audio 和 prompt 建立口播任務，單段音訊最長 15 秒；長音訊需先分段。支援影片模态。適合口播影片、課程講解、產品介紹。",
+      "en": "InfiniteTalk digital human video generation model. creates talking-head tasks with cond_video, cond_audio and prompt; each audio segment is limited to 15 seconds, so split longer recordings first. video modality. Ideal for talking-head videos, course narration, product introductions.",
+      "fr": "InfiniteTalk digital human video generation model. creates talking-head tasks with cond_video, cond_audio and prompt; each audio segment is limited to 15 seconds, so split longer recordings first. video modality. Idéal pour talking-head videos, course narration, product introductions.",
+      "ru": "InfiniteTalk digital human video generation model. creates talking-head tasks with cond_video, cond_audio and prompt; each audio segment is limited to 15 seconds, so split longer recordings first. video modality. Подходит для talking-head videos, course narration, product introductions.",
+      "ja": "InfiniteTalk digital human video generation model. creates talking-head tasks with cond_video, cond_audio and prompt; each audio segment is limited to 15 seconds, so split longer recordings first. video modality. talking-head videos, course narration, product introductions 向け。",
+      "vi": "InfiniteTalk digital human video generation model. creates talking-head tasks with cond_video, cond_audio and prompt; each audio segment is limited to 15 seconds, so split longer recordings first. video modality. Phù hợp cho talking-head videos, course narration, product introductions."
     },
     "unit": "request",
     "badge": {
@@ -1241,8 +1241,8 @@
       "ja": "リクエストごと",
       "vi": "Mỗi lần gọi"
     },
-    "description_zh": "InfiniteTalk 数字人视频生成模型。生成长时长口播数字人视频，唇形与动作自然。支持视频模态。适合口播视频、课程讲解、产品介绍。",
-    "description_en": "InfiniteTalk digital human video generation model. long-form talking-head digital human videos with natural lip sync and motion. video modality. Ideal for talking-head videos, course narration, product introductions.",
+    "description_zh": "InfiniteTalk 数字人视频生成模型。使用 cond_video、cond_audio 和 prompt 创建口播任务，单段音频最长 15 秒；长音频需先分段。支持视频模态。适合口播视频、课程讲解、产品介绍。",
+    "description_en": "InfiniteTalk digital human video generation model. creates talking-head tasks with cond_video, cond_audio and prompt; each audio segment is limited to 15 seconds, so split longer recordings first. video modality. Ideal for talking-head videos, course narration, product introductions.",
     "badge_zh": "按次计费",
     "badge_en": "Per Request",
     "suffix_zh": "/次",

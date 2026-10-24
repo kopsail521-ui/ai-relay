@@ -3,6 +3,7 @@
 
 Run: python3 scripts/test-vps-release-offline.py
 """
+import hashlib
 import json
 import os
 from pathlib import Path
@@ -16,7 +17,7 @@ BASH = 'C:/Program Files/Git/bin/bash.exe' if os.name == 'nt' else 'bash'
 NAME = 'ai-relay-creem-moderation'
 
 DRIVER = r'''
-import json, os, sys
+import json, os, re, sys
 from pathlib import Path
 state_path = Path(os.environ['MOCK_STATE'])
 s = json.loads(state_path.read_text())
@@ -29,6 +30,16 @@ containers = s['containers']
 mode = os.environ.get('MOCK_FAILURE', '')
 if tool == 'curl':
     code = 22 if mode == 'health' else 0
+elif tool == 'ss':
+    target_port = int(re.search(r':(\d+)', ' '.join(args)).group(1))
+    current = containers.get('ai-relay-creem-moderation', {})
+    new = current.get('image') == 'new-image'
+    port = s.get('new_port', 3001) if new else s.get('old_port', 3001)
+    if target_port == port:
+        pid = 333 if mode == 'preflight_foreign' or (new and mode in ('foreign', 'restarting')) else (222 if new else 111)
+        if new and mode == 'unstable' and s.get('health_checks', 0) > 1:
+            pid = 223
+        output = f'LISTEN 0 511 127.0.0.1:{port} 0.0.0.0:* users:(("node",pid={pid},fd=20))'
 elif tool == 'docker':
     cmd = args[0]
     if cmd == 'inspect':
@@ -39,8 +50,17 @@ elif tool == 'docker':
             fmt = args[args.index('--format') + 1]
             if 'RestartPolicy' in fmt:
                 output = containers[name]['restart']
+            elif 'Running' in fmt and 'Restarting' in fmt and 'Pid' in fmt:
+                new = containers[name]['image'] == 'new-image'
+                restarting = new and mode == 'restarting'
+                if new:
+                    s['health_checks'] = s.get('health_checks', 0) + 1
+                pid = 223 if new and mode == 'unstable' and s['health_checks'] > 1 else (222 if new else 111)
+                output = ('true' if containers[name]['running'] else 'false') + ' ' + ('true' if restarting else 'false') + ' ' + str(0 if restarting else pid)
             elif 'Running' in fmt:
                 output = 'true' if containers[name]['running'] else 'false'
+            elif '.State.Pid' in fmt:
+                output = str(222 if containers[name]['image'] == 'new-image' else 111)
             elif '.Config.Env' in fmt:
                 output = '\n'.join(s.get('current_env', []))
             elif '.HostConfig.Binds' in fmt:
@@ -51,6 +71,9 @@ elif tool == 'docker':
                 code = 2
     elif cmd == 'build':
         code = 1 if mode == 'build' else 0
+    elif cmd == 'exec':
+        assert args[2] == 'sha256sum', args
+        output = '\n'.join(('0' * 64 if mode == 'source_version' else s['source_hashes'][Path(path).name]) + '  ' + path for path in args[3:])
     elif cmd == 'update':
         name = args[-1]
         if name not in containers:
@@ -76,6 +99,16 @@ elif tool == 'docker':
         name = args[args.index('--name') + 1]
         containers[name] = {'image': 'new-image', 'running': mode != 'crash',
                             'restart': args[args.index('--restart') + 1]}
+        effective = {}
+        for line in Path(s['env_file']).read_text().splitlines():
+            if '=' in line and not line.lstrip().startswith('#'):
+                key, value = line.strip().split('=', 1)
+                effective[key] = value
+        for i, arg in enumerate(args[:-1]):
+            if arg == '-e':
+                key, value = args[i + 1].split('=', 1)
+                effective[key] = value
+        s['new_port'] = int(effective.get('PORT', 3001))
         if mode == 'run':
             containers[name]['running'] = False
             code = 1
@@ -132,7 +165,7 @@ exec env "$@"
 ''')
         self.add_script('php', '#!/bin/bash\nexit "${MOCK_PHP_EXIT:-0}"\n')
         self.add_script('sleep', '#!/bin/bash\nexit 0\n')
-        for name in ('docker', 'curl'):
+        for name in ('docker', 'curl', 'ss'):
             self.add_script(name, '#!/bin/bash\nexec "$MOCK_PYTHON" "$MOCK_DRIVER" ' + name + ' "$@"\n')
 
     def add_script(self, name, content):
@@ -236,6 +269,12 @@ exec env "$@"
             (root / 'static/uploads').mkdir(parents=True)
         state = {'containers': {NAME: {'image': 'old-image', 'running': True,
                                       'restart': 'unless-stopped'}}, 'events': []}
+        state['env_file'] = str(root / '.env.moderation')
+        state['source_hashes'] = {}
+        for file in ('server.mjs', 'public-model-metadata.mjs', 'model-contracts.json', 'model-icon-inject.js'):
+            content = 'offline-source-' + file
+            write(root / 'services/creem-moderation-proxy' / file, content)
+            state['source_hashes'][file] = hashlib.sha256(content.encode()).hexdigest()
         if with_backup:
             state['containers'][NAME + '-rollback'] = {'image': 'older-image', 'running': False,
                                                        'restart': 'no'}
@@ -270,6 +309,22 @@ exec env "$@"
     def test_crashed_new_container_cannot_pass_foreign_health_endpoint(self):
         self.assert_proxy_rollback('crash')
 
+    def test_restarting_container_with_running_true_cannot_pass_foreign_health(self):
+        self.assert_proxy_rollback('restarting')
+
+    def test_running_new_container_cannot_pass_another_process_listener(self):
+        self.assert_proxy_rollback('foreign')
+
+    def test_new_container_source_must_match_built_checkout(self):
+        self.assert_proxy_rollback('source_version')
+
+    def test_new_process_must_remain_stable_between_health_rounds(self):
+        self.assert_proxy_rollback('unstable')
+
+    def test_foreign_listener_aborts_before_stopping_any_container(self):
+        state = self.assert_proxy_rollback('preflight_foreign')
+        self.assertFalse(any(event[:2] == ['docker', 'stop'] for event in state['events']))
+
     def test_rename_failure_restarts_still_named_original(self):
         self.assert_proxy_rollback('rename')
 
@@ -292,6 +347,9 @@ exec env "$@"
         run = next(e for e in events if e[:2] == ['docker', 'run'])
         self.assertIn('--env-file', run)
         self.assertEqual(run[run.index('--network') + 1], 'host')
+        self.assertEqual(len([e for e in events if e[0] == 'curl']), 2)
+        self.assertEqual(len([e for e in events if e[:2] == ['docker', 'exec']]), 2)
+        self.assertIn('VERIFIED_PROXY_PID=222 SOURCE_FILES=4 STABLE_CHECKS=2', result.stdout)
         self.assertIn('DONE_REDEPLOY_CREEM_MODERATION', result.stdout)
 
     def test_success_keeps_first_rollback_container(self):
@@ -299,6 +357,20 @@ exec env "$@"
 
     def test_success_replaces_only_older_rollback_slot(self):
         self.assert_proxy_success(True)
+
+    def test_running_backup_slot_is_retained_without_stopping_or_removing(self):
+        root, state_path = self.proxy_fixture(with_backup=True)
+        state = json.loads(state_path.read_text())
+        state['containers'][NAME + '-rollback']['running'] = True
+        write(state_path, json.dumps(state))
+        result = self.run_script('vps-redeploy-creem-moderation.sh', root)
+        state = json.loads(state_path.read_text())
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        self.assertEqual(state['containers'][NAME + '-rollback'],
+                         {'image': 'older-image', 'running': True, 'restart': 'no'})
+        self.assertFalse(any(e[:2] in (['docker', 'stop'], ['docker', 'rm']) and
+                             e[-1] == NAME + '-rollback' for e in state['events']))
+        self.assertTrue(any('-previous-' in name for name in state['containers']))
 
     def test_missing_upload_directory_is_initialized_before_stopping(self):
         root, state_path = self.proxy_fixture(create_upload=False)

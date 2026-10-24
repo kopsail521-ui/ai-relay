@@ -37,6 +37,10 @@ fi
 [[ -f "$STASH/index.html" ]] && sudo cp -a "$STASH/index.html" "$BLOG/index.html" || true
 [[ -f "$STASH/sitemap.txt" ]] && sudo cp -a "$STASH/sitemap.txt" "$BLOG/sitemap.txt" || true
 echo "==> restored GEO article content (geoflow-agent PHP kept from git)"
+if [[ -f "$ROOT/scripts/geoflow-rebuild-blog.php" ]] && command -v php >/dev/null 2>&1; then
+  sudo php "$ROOT/scripts/geoflow-rebuild-blog.php" 2>/dev/null || true
+  echo "==> refreshed blog index using latest template"
+fi
 
 sudo chmod -R u+rwX,go+rX "$BLOG" 2>/dev/null || true
 if id www-data >/dev/null 2>&1; then

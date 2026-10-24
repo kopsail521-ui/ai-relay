@@ -59,7 +59,17 @@ jobs:
             "${USER}@${HOST}" "sudo -n true && sudo bash -c '
               set -e
               cd /opt/ai-relay
-              bash scripts/vps-safe-pull-preserve-blog.sh >/dev/null
+              bash scripts/vps-safe-pull-preserve-blog.sh >/tmp/safe-pull.log 2>&1 || {
+                mkdir -p /opt/ai-relay/static/brand
+                {
+                  echo "smoke_exit=97"
+                  echo "smoke_time=\$(date -u +%FT%TZ)"
+                  echo "SAFE_PULL_FAILED"
+                  tail -20 /tmp/safe-pull.log
+                } > /opt/ai-relay/static/brand/smoke-status.txt
+                chmod 644 /opt/ai-relay/static/brand/smoke-status.txt
+                exit 1
+              }
               # Rebuild the gitee passthrough image so the container picks up
               # the server.mjs committed in this push (gift-credit twins
               # support: model normalization + gift-first billing).

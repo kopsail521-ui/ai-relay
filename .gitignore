@@ -35,6 +35,10 @@ tmp-*
 _tmp_*
 scripts/_*.txt
 
+# VPS public smoke diagnostics — must survive safe-pull's `git stash -u`
+# (untracked files get stashed-and-dropped; ignored files do not)
+static/brand/smoke-status.txt
+
 # GEO auto-published CMS articles (VPS-only; do not wipe on git reset)
 static/brand/blog/article/*
 !static/brand/blog/article/.gitkeep

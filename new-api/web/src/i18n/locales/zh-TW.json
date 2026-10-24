@@ -5473,8 +5473,8 @@
     "Gift-credit models / experience code": "贈送金模型 / 體驗碼",
     "Gift credits given on registration for gift-credit models. Default $10. ({{formattedQuota}})": "註冊贈送用於贈送金模型的贈送金。預設 $10。（{{formattedQuota}}）",
     "Gift credits credited to inviter for gift-credit models on each successful signup. Default $3. ({{formattedQuota}})": "每成功邀請一人註冊，邀請人獲得用於贈送金模型的贈送金。預設 $3。（{{formattedQuota}}）",
-    "Pre-Consume for Zero-Cost Models": "零費率模型預扣額度"
-  },
-  "Invite code (optional)": "邀請碼（可選）",
-  "Enter invite code": "輸入邀請碼"
+    "Pre-Consume for Zero-Cost Models": "零費率模型預扣額度",
+    "Invite code (optional)": "邀請碼（可選）",
+    "Enter invite code": "輸入邀請碼"
+  }
 }

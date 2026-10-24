@@ -5432,9 +5432,9 @@
     "Gift-credit models / experience code": "ギフトクレジット対象モデル / 体験コード",
     "Gift credits given on registration for gift-credit models. Default $10. ({{formattedQuota}})": "登録時にギフトクレジット対象モデル用のクレジットを付与します。デフォルトは $10 です。（{{formattedQuota}}）",
     "Gift credits credited to inviter for gift-credit models on each successful signup. Default $3. ({{formattedQuota}})": "紹介による登録が成功するたびに、紹介者にギフトクレジット対象モデル用のクレジットを付与します。デフォルトは $3 です。（{{formattedQuota}}）",
-    "Pre-Consume for Zero-Cost Models": "料金ゼロのモデルの事前消費"
+    "Pre-Consume for Zero-Cost Models": "料金ゼロのモデルの事前消費",
+    "Invite code (optional)": "招待コード（任意）",
+    "Enter invite code": "招待コードを入力"
   },
-  "Recommended order": "おすすめ順",
-  "Invite code (optional)": "招待コード（任意）",
-  "Enter invite code": "招待コードを入力"
+  "Recommended order": "おすすめ順"
 }

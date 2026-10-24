@@ -5431,9 +5431,9 @@
     "Gift-credit models / experience code": "Модели с подарочными кредитами / пробный код",
     "Gift credits given on registration for gift-credit models. Default $10. ({{formattedQuota}})": "Подарочные кредиты при регистрации для моделей с подарочными кредитами. По умолчанию $10. ({{formattedQuota}})",
     "Gift credits credited to inviter for gift-credit models on each successful signup. Default $3. ({{formattedQuota}})": "Подарочные кредиты пригласившему для моделей с подарочными кредитами за каждую успешную регистрацию. По умолчанию $3. ({{formattedQuota}})",
-    "Pre-Consume for Zero-Cost Models": "Предварительное списание для моделей с нулевым тарифом"
+    "Pre-Consume for Zero-Cost Models": "Предварительное списание для моделей с нулевым тарифом",
+    "Invite code (optional)": "Код приглашения (необязательно)",
+    "Enter invite code": "Введите код приглашения"
   },
-  "Recommended order": "Рекомендуемый порядок",
-  "Invite code (optional)": "Код приглашения (необязательно)",
-  "Enter invite code": "Введите код приглашения"
+  "Recommended order": "Рекомендуемый порядок"
 }

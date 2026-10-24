@@ -5425,9 +5425,9 @@
     "Gift-credit models / experience code": "Modèles à crédits offerts / code d’essai",
     "Gift credits given on registration for gift-credit models. Default $10. ({{formattedQuota}})": "Crédits offerts à l’inscription pour les modèles à crédits offerts. Par défaut : 10 $. ({{formattedQuota}})",
     "Gift credits credited to inviter for gift-credit models on each successful signup. Default $3. ({{formattedQuota}})": "Crédits offerts au parrain pour les modèles à crédits offerts à chaque inscription réussie. Par défaut : 3 $. ({{formattedQuota}})",
-    "Pre-Consume for Zero-Cost Models": "Préconsommation pour les modèles à tarif nul"
+    "Pre-Consume for Zero-Cost Models": "Préconsommation pour les modèles à tarif nul",
+    "Invite code (optional)": "Code d'invitation (facultatif)",
+    "Enter invite code": "Saisir le code d'invitation"
   },
-  "Recommended order": "Ordre recommandé",
-  "Invite code (optional)": "Code d'invitation (facultatif)",
-  "Enter invite code": "Saisir le code d'invitation"
+  "Recommended order": "Ordre recommandé"
 }

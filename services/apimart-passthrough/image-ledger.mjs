@@ -227,9 +227,13 @@ export class ImageLedger {
   candidatesFor(row, { origin, is4k = false, excludeGroups = [] } = {}) {
     return this.transaction((db) => {
       const user = db.prepare("SELECT \"group\" FROM users WHERE id=?").get(row.user_id);
+      const token = db.prepare("SELECT \"group\" FROM tokens WHERE id=?").get(row.token_id);
+      const effectiveGroup = token?.group || user?.group || "default";
+      // 与 reserve 相同的按令牌智能路由判定：显式分组的任务不做跨组切换。
+      const smart = this.smartRouting && (effectiveGroup === "auto" || effectiveGroup === "default");
       const { plans } = this.planCandidates(db, {
         model: row.model, groups: [], userGroup: user?.group, origin, is4k,
-        smart: true, excludeGroups,
+        smart, excludeGroups,
       });
       return plans;
     });
@@ -259,7 +263,7 @@ export class ImageLedger {
     if (idempotencyKey !== undefined && (typeof idempotencyKey !== "string" || !idempotencyKey.length || idempotencyKey.length > 128 || /[^\x21-\x7e]/.test(idempotencyKey))) fail(400, "invalid_idempotency_key", "Idempotency-Key must be 1-128 visible ASCII characters");
     return this.transaction((db) => {
       this.expire(db);
-      const { token, user, groups, read } = this.auth(db, apiKey, model, ip, true);
+      const { token, user, group: tokenGroup, groups, read } = this.auth(db, apiKey, model, ip, true);
       let row = idempotencyKey ? db.prepare("SELECT * FROM keyo_image_tasks WHERE token_id=? AND idempotency_key=?").get(token.id, idempotencyKey) :
         db.prepare("SELECT * FROM keyo_image_tasks WHERE token_id=? AND request_hash=? AND (created_at>=? OR state IN ('reserved','submitting','running','submit_unknown')) ORDER BY created_at DESC LIMIT 1").get(token.id, requestHash, this.clock() - this.dedupSeconds);
       if (row) {
@@ -267,9 +271,12 @@ export class ImageLedger {
         return { row, fresh: false };
       }
       if (Number(token.status) !== 1) fail(401, "invalid_api_key", "Invalid API token");
+      // 智能路由按令牌判定：auto / default / 未显式选定分组的令牌跨分组价格
+      // 优先；用户显式选定的分组（vip、GPT-Image-Pro 等）保持锁定。
+      const smart = this.smartRouting && (tokenGroup === "auto" || tokenGroup === "default");
       const { plans, sawChannel } = this.planCandidates(db, {
         model, groups, userGroup: user.group, origin, is4k, quotaOverride,
-        smart: this.smartRouting,
+        smart,
       });
       if (!sawChannel) fail(503, "image_channel_unavailable", "Image model is not available in this token group");
       if (!plans.length) fail(503, "image_pricing_unavailable", "Image price configuration unavailable");

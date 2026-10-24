@@ -1,6 +1,7 @@
 package service
 
 import (
+	"sort"
 	"strings"
 
 	"github.com/QuantumNous/new-api/common"
@@ -10,6 +11,50 @@ import (
 	"github.com/QuantumNous/new-api/setting/ratio_setting"
 	"github.com/gin-gonic/gin"
 )
+
+// IsSmartRoutingToken reports whether a token routes by price priority across
+// every group that serves the model instead of being locked to its own group.
+// "auto" tokens and tokens that never pinned a concrete group (default / 空分组)
+// follow smart routing; a group the user explicitly selected (vip、
+// Claude-Code-2、GPT-Image-Pro 等) stays locked unless the token switches to
+// auto. 智能路由默认开启，显式选定分组的令牌除外。
+func IsSmartRoutingToken(tokenGroup string) bool {
+	return tokenGroup == "auto" || tokenGroup == "default" || tokenGroup == ""
+}
+
+// PriceSortGroups stably orders groups by the user's effective group ratio
+// ascending; the incoming (configured) order breaks ties.
+// 价格优先：按用户实际分组倍率升序，平级保持原顺序。
+func PriceSortGroups(userGroup string, groups []string) []string {
+	out := append([]string(nil), groups...)
+	sort.SliceStable(out, func(i, j int) bool {
+		return GetUserGroupRatio(userGroup, out[i]) < GetUserGroupRatio(userGroup, out[j])
+	})
+	return out
+}
+
+// GetSmartGroupsForModel returns every group the user may select that has an
+// enabled channel for the model, price-sorted. Used by tokens without an
+// explicitly pinned group so routing always starts at the cheapest group.
+func GetSmartGroupsForModel(userGroup, modelName string) []string {
+	enabled := model.GetModelEnabledGroups(modelName)
+	seen := make(map[string]struct{})
+	out := make([]string, 0, len(enabled))
+	for _, group := range enabled {
+		if group == "" {
+			continue
+		}
+		if _, ok := seen[group]; ok {
+			continue
+		}
+		seen[group] = struct{}{}
+		if !IsUserSelectableGroup(userGroup, group) {
+			continue
+		}
+		out = append(out, group)
+	}
+	return PriceSortGroups(userGroup, out)
+}
 
 func GetUserUsableGroups(userGroup string) map[string]string {
 	groupsCopy := setting.GetUserUsableGroupsCopy()

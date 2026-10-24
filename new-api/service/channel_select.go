@@ -86,16 +86,43 @@ func CacheGetRandomSatisfiedChannel(param *RetryParam) (*model.Channel, string, 
 	selectGroup := param.TokenGroup
 	userGroup := common.GetContextKeyString(param.Ctx, constant.ContextKeyUserGroup)
 
-	if param.TokenGroup == "auto" {
-		autoGroups := GetRequestAutoGroups(param.Ctx, userGroup)
-		if len(autoGroups) == 0 {
-			return nil, selectGroup, errors.New("auto groups is not enabled")
+	// 智能路由：auto 令牌以及未显式选定分组的令牌（default/空分组）都按
+	// 价格优先跨分组执行，失败后切换到下一个分组继续；只有用户显式选定
+	// 的具体分组保持锁定。auto 令牌沿用其配置/快照的分组集合，其余智能
+	// 令牌的候选集为「该模型有可用渠道的全部可选分组」，同样按价格排序。
+	if IsSmartRoutingToken(param.TokenGroup) {
+		var autoGroups []string
+		if param.TokenGroup == "auto" {
+			autoGroups = GetRequestAutoGroups(param.Ctx, userGroup)
+			if len(autoGroups) == 0 {
+				return nil, selectGroup, errors.New("auto groups is not enabled")
+			}
+			// 价格优先仅作用于全局 Auto 列表；令牌自己的 auto_groups 快照是
+			// 用户显式指定的顺序，保持原样不被重排。
+			if _, hasSnapshot := common.GetContextKey(param.Ctx, constant.ContextKeyTokenAutoGroups); !hasSnapshot {
+				autoGroups = PriceSortGroups(userGroup, autoGroups)
+			}
+		} else {
+			autoGroups = GetSmartGroupsForModel(userGroup, param.ModelName)
+			// No group serves the model anywhere: fall through to the legacy
+			// single-group lookup so the error keeps naming the token's group.
+			if len(autoGroups) == 0 {
+				channel, err = model.GetRandomSatisfiedChannel(param.TokenGroup, param.ModelName, param.GetRetry(), param.RequestPath)
+				if err != nil {
+					return nil, param.TokenGroup, err
+				}
+				return channel, selectGroup, nil
+			}
 		}
 
 		// startGroupIndex: the group index to start searching from
 		// startGroupIndex: 开始搜索的分组索引
 		startGroupIndex := 0
 		crossGroupRetry := common.GetContextKeyBool(param.Ctx, constant.ContextKeyTokenCrossGroupRetry)
+		if param.TokenGroup != "auto" {
+			// 智能路由令牌（default/空分组）没有 per-token 跨组重试开关，始终允许跨组切换
+			crossGroupRetry = true
+		}
 
 		if lastGroupIndex, exists := common.GetContextKey(param.Ctx, constant.ContextKeyAutoGroupIndex); exists {
 			if idx, ok := lastGroupIndex.(int); ok {

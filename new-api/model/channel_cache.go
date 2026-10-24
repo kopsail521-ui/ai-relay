@@ -111,6 +111,47 @@ func SyncChannelCache(frequency int) {
 	}
 }
 
+// GetModelEnabledGroups returns every group that currently has an enabled
+// channel serving the model (including wildcard/normalized matches). Memory
+// cache mode reads the synced cache; otherwise it queries the abilities table.
+// 智能路由的候选分组来源：凡是当前有可用渠道的分组都参与。
+func GetModelEnabledGroups(modelName string) []string {
+	if modelName == "" {
+		return []string{}
+	}
+	groups := make([]string, 0)
+	if common.MemoryCacheEnabled {
+		channelSyncLock.RLock()
+		for group, model2channels := range group2model2channels {
+			if _, ok := model2channels[modelName]; ok {
+				groups = append(groups, group)
+				continue
+			}
+			if _, ok := model2channels[ratio_setting.FormatMatchingModelName(modelName)]; ok {
+				groups = append(groups, group)
+			}
+		}
+		channelSyncLock.RUnlock()
+		sort.Strings(groups)
+		return groups
+	}
+	rows := make([]struct {
+		Group string
+	}, 0)
+	DB.Table("abilities").
+		Select("DISTINCT abilities.\"group\" AS \"group\"").
+		Joins("JOIN channels ON channels.id = abilities.channel_id").
+		Where("abilities.model = ? AND abilities.enabled = ? AND channels.status = ?", modelName, true, common.ChannelStatusEnabled).
+		Scan(&rows)
+	for _, row := range rows {
+		if row.Group != "" {
+			groups = append(groups, row.Group)
+		}
+	}
+	sort.Strings(groups)
+	return groups
+}
+
 func GetRandomSatisfiedChannel(group string, model string, retry int, requestPath string) (*Channel, error) {
 	// if memory cache is disabled, get channel directly from database
 	if !common.MemoryCacheEnabled {

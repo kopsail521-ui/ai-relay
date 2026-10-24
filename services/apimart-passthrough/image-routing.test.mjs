@@ -154,6 +154,20 @@ test("generation failure fails over to the next group and keeps the task id", as
   ]);
 });
 
+test("explicit group tokens stay locked to their own group", (t) => {
+  const f = fixture(t, { groups: { default: 1, vip: 0.5 } });
+  f.database((db) => {
+    db.prepare('INSERT INTO tokens(id,user_id,key,name,status,expired_time,remain_quota,unlimited_quota,"group") VALUES(2,1,\'routing-2\',\'t2\',1,-1,?,0,\'vip\')').run(INITIAL);
+    db.prepare("INSERT OR REPLACE INTO options(key,value) VALUES('UserUsableGroups',?)").run(JSON.stringify({ default: "Default", vip: "VIP" }));
+    // Model served only in the default group; a vip token must NOT reach it.
+  });
+  assert.throws(() => f.ledger.reserve({ apiKey: "sk-routing-2", model: MODEL, requestHash: "lock-1", ip: IP, origin: ORIGIN }),
+    (e) => e.code === "image_channel_unavailable");
+  // The default token still reaches it through smart routing.
+  const { group } = reserveOn(f);
+  assert.equal(group, "default");
+});
+
 test("policy rejections never fail over", async (t) => {
   const f = fixture(t);
   f.database((db) => db.prepare('INSERT INTO abilities(channel_id,model,"group",enabled) VALUES(3,?,\'GPT-Image-Pro\',1)').run(MODEL));

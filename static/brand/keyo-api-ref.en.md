@@ -140,11 +140,11 @@ Same pattern for other Path B models: upload once, map `url` to that model’s f
 
 ### 1.1 Chat → `POST /v1/chat/completions`
 
-Free (the `:free` suffix): `Atria-dawn-v2:free`, `DeepSeek-Prover-V2-7B:free`
+Gift-credit (the `:free` suffix): `Atria-dawn-v2:free` · `DeepSeek-Prover-V2-7B:free` · `deepseek-v4.1-flash-1017:free` · `glm-5.3:free` · `keyo-flash:free` · `keyo-flash2:free`
 
-Gift-credit IDs (`:free` suffix) currently include `Atria-dawn-v2:free`, `DeepSeek-Prover-V2-7B:free`, `keyo-flash2:free` (chat), plus `SenseVoiceSmall:free`, `GLM-ASR:free` (ASR) and `Spark-TTS-0.5B:free` (TTS, async). `:free` is not $0 billing: calls bill at dedicated gift-credit rates from your gift credit first (one-time $10 for new users, +$3 per invite). The live list is https://www.keyoapi.xyz/free-models — it changes over time.
+Gift-credit IDs (`:free` suffix) include the chat lanes above, plus `GLM-ASR:free` and `SenseVoiceSmall:free` (ASR, §1.5) and `Spark-TTS-0.5B:free` (TTS, §1.7). Calls bill at dedicated gift-credit rates from your gift credit first (one-time $10 for new users, +$3 per invite). Full live list and rates: https://www.keyoapi.xyz/free-models.
 
-Paid: `gpt-5.6-luna` · `gpt-5.6-terra` · `gpt-5.6-sol` · `gpt-6-luna` · `gpt-6-sol` · `gpt-6-astra` · `claude-sonnet-5` · `claude-sonnet-5-5` · `claude-opus-5` · `claude-opus-5-5` · `claude-fable-5` · `claude-fable-5-1` · `gemini-3.7-flash` · `gemini-3.8-flash` · `grok-4.7` · `grok-4.6` · `minimax-m3` · `glm-5.3` · `glm-5.3-flash` · `glm-5.2` · `deepseek-v4.1-flash` · `deepseek-v4-pro-0813` · `deepseek-v4-flash-0731` · `deepseek-v4-pro` · `deepseek-v4-flash` · `kimi-k3` · `kimi-k2.7-code` · `qwen3.8-flash` · `hy4-preview` · `mimo-v2.6-pro` · `mimo-v2.6-flash` · `qwen3.8-max-0902`
+Paid: `gpt-5.6-luna` · `gpt-5.6-terra` · `gpt-5.6-sol` · `gpt-6-luna` · `gpt-6-sol` · `gpt-6-astra` · `claude-sonnet-5` · `claude-sonnet-5-5` · `claude-opus-5` · `claude-opus-5-5` · `claude-fable-5` · `claude-fable-5-1` · `gemini-3.7-flash` · `gemini-3.8-flash` · `grok-4.7` · `grok-4.6` · `minimax-m3` · `MiniMax-M3.1-Flash` · `glm-5.3` · `glm-5.3-flash` · `glm-5.2` · `deepseek-v4.1-flash` · `deepseek-v4.1-flash-1017` · `deepseek-v4-pro-0813` · `deepseek-v4-flash-0731` · `deepseek-v4-pro` · `deepseek-v4-flash` · `kimi-k3` · `kimi-k2.7-code` · `qwen3.8-flash` · `hy4-preview` · `mimo-v2.6-pro` · `mimo-v2.6-flash` · `qwen3.8-max-0902`
 
 ### 1.2 Images → `POST /v1/images/generations`
 

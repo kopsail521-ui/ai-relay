@@ -785,7 +785,7 @@ ${headlineRows}
 </tbody>
 </table>
 <p class="compare-jump"><a href="/compare">See the full comparison page →</a></p>
-<h2>Gift-credit models — billed from your $10 welcome credit</h2>
+<h2>Prototyping with gift credits</h2>
 <p class="meta">Gift-credit catalog IDs for prototyping, billed at dedicated gift-credit rates with gift credits used first (new users: $10; per invite: $3) with fair-use limits. Full list + rules: <a href="/free-models">the gift-credit models page</a>.</p>
 <div class="grid">
 ${freeCards}
@@ -880,8 +880,9 @@ function renderModelsIndex() {
       const modelCell = landing
         ? `<a href="/${landing}"><code>${esc(r.model)}</code></a>`
         : `<code>${esc(r.model)}</code>`;
+      const linkLabel = landing && landing.includes("pricing") ? "Pricing" : "Guide";
       const links = landing
-        ? `<a href="/${landing}">Guide</a> · <a href="/pricing">Catalog</a>`
+        ? `<a href="/${landing}">${linkLabel}</a> · <a href="/pricing">Catalog</a>`
         : `<a href="/pricing">Catalog</a>`;
       const gen = PREVIOUS_GEN_IDS.has(r.model)
         ? `<span class="meta">Previous gen</span>`
@@ -1123,10 +1124,11 @@ function renderPricing() {
         : landing
           ? `<a href="/${landing}"><code>${esc(m.modelId || m.id)}</code></a>`
           : `<code>${esc(m.modelId || m.id)}</code>`;
+      const guideLabel = landing && landing.includes("pricing") ? "Pricing" : "Guide";
       const guide = hasGuide
         ? `<a href="/model/${encodeURIComponent(m.id)}">Guide</a>`
         : landing
-          ? `<a href="/${landing}">Guide</a>`
+          ? `<a href="/${landing}">${guideLabel}</a>`
           : `List`;
       return `<tr>
   <td>${modelCell}</td>
@@ -1146,7 +1148,7 @@ function renderPricing() {
   <a class="btn btn-secondary" href="/compare">AI API price comparison</a>
   <a class="btn btn-secondary" href="/brand/keyo-docs.html">Docs</a>
 </div>
-<h2>Gift-credit models — billed from your $10 welcome credit</h2>
+<h2>Prototyping with gift credits</h2>
 <p class="meta">Gift-credit IDs (billed at dedicated gift-credit rates, gift credits used first; new users: $10, per invite: $3; fair-use): see <a href="/free-models">the gift-credit models page</a> for the full list, paid twins and curl examples. The tables below cover the metered catalog.</p>
 <h2>Task cost guides</h2>
 ${contentGuideLinks("cost-guide")}

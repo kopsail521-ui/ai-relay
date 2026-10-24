@@ -1,60 +1,69 @@
 {
-  "_note": "Gift-credit models callable with your complimentary credits. Billed at the base model rate; gift credits are used first, with any shortfall charged to your recharge balance. New users get $10, and each successful invite earns $3. Refresh with: node scripts/_sync-free-extra-from-live.mjs",
-  "synced_at": "2026-10-22",
+  "_note": "Gift-credit models callable with your complimentary credits. Billed at dedicated gift-credit rates; gift credits are used first, with any shortfall charged to your recharge balance. New users get $10, and each successful invite earns $3. Refresh with: node scripts/_sync-free-extra-from-live.mjs",
+  "synced_at": "2026-10-24",
   "models": [
     {
       "id": "Atria-dawn-v2:free",
       "family": "Other",
-      "note": "Callable with gift credits at $0.01 / $0.04 per 1M tokens. Gift credits are used first; new users get $10, and each invite earns $3.",
-      "twin": "Atria-dawn-v2"
+      "rateLabel": "$0 / call (gift pool)",
+      "twin": "Atria-dawn-v2",
+      "note": "Callable with gift credits ($0 / call complimentary gift pool). Gift credits are used first; new users get $10, and each invite earns $3."
     },
     {
       "id": "DeepSeek-Prover-V2-7B:free",
       "family": "DeepSeek",
+      "rateLabel": "$0 / call (gift pool)",
       "twin": "DeepSeek-Prover-V2-7B",
-      "note": "Callable with gift credits at $0.01 / $0.04 per 1M tokens. Gift credits are used first; new users get $10, and each invite earns $3."
+      "note": "Callable with gift credits ($0 / call complimentary gift pool). Gift credits are used first; new users get $10, and each invite earns $3."
     },
     {
       "id": "deepseek-v4.1-flash-1017:free",
       "family": "DeepSeek",
+      "rateLabel": "$0.072 / $0.20 / 1M",
       "twin": "deepseek-v4.1-flash-1017",
       "note": "Callable with gift credits at $0.072 / $0.20 per 1M tokens. Gift credits are used first; new users get $10, and each invite earns $3."
     },
     {
       "id": "GLM-ASR:free",
       "family": "ASR",
+      "rateLabel": "$0 / call (gift pool)",
       "twin": "GLM-ASR",
-      "note": "Callable with gift credits. Billed at the base rate (ASR, POST /v1/audio/transcriptions); gift credits are used first — new users get $10, and each invite earns $3."
+      "note": "Callable with gift credits ($0 / call complimentary gift pool, ASR, POST /v1/audio/transcriptions). Gift credits are used first; new users get $10, and each invite earns $3."
     },
     {
       "id": "glm-5.3:free",
       "family": "GLM",
+      "rateLabel": "$1.198 / $7.487 / 1M",
       "twin": "glm-5.3",
-      "note": "Callable with gift credits at $1.198 / $7.4872 per 1M tokens. Gift credits are used first; new users get $10, and each invite earns $3."
+      "note": "Callable with gift credits at $1.198 / $7.487 per 1M tokens. Gift credits are used first; new users get $10, and each invite earns $3."
     },
     {
       "id": "keyo-flash:free",
       "family": "Keyo",
+      "rateLabel": "$0 / call (gift pool)",
       "twin": null,
-      "note": "Callable with gift credits. Billed at the base model rate; gift credits are used first — new users get $10, and each invite earns $3."
+      "note": "Callable with gift credits ($0 / call complimentary gift pool). Gift credits are used first; new users get $10, and each invite earns $3."
     },
     {
       "id": "keyo-flash2:free",
       "family": "Keyo",
+      "rateLabel": "$0 / call (gift pool)",
       "twin": null,
-      "note": "Callable with gift credits. Billed at the base model rate; gift credits are used first — new users get $10, and each invite earns $3."
+      "note": "Callable with gift credits ($0 / call complimentary gift pool). Gift credits are used first; new users get $10, and each invite earns $3."
     },
     {
       "id": "SenseVoiceSmall:free",
       "family": "ASR",
+      "rateLabel": "$0 / call (gift pool)",
       "twin": "SenseVoiceSmall",
-      "note": "Callable with gift credits. Billed at the base rate (ASR, POST /v1/audio/transcriptions); gift credits are used first — new users get $10, and each invite earns $3."
+      "note": "Callable with gift credits ($0 / call complimentary gift pool, ASR, POST /v1/audio/transcriptions). Gift credits are used first; new users get $10, and each invite earns $3."
     },
     {
       "id": "Spark-TTS-0.5B:free",
       "family": "TTS",
+      "rateLabel": "$0 / call (gift pool)",
       "twin": "Spark-TTS-0.5B",
-      "note": "Callable with gift credits. Billed at the base rate (async TTS, POST /v1/async/audio/speech then GET /v1/tasks/{id}); gift credits are used first — new users get $10, and each invite earns $3."
+      "note": "Callable with gift credits ($0 / call complimentary gift pool, async TTS, POST /v1/async/audio/speech then GET /v1/tasks/{id}). Gift credits are used first; new users get $10, and each invite earns $3."
     }
   ]
 }

@@ -102,12 +102,14 @@ function allFreeModels() {
     id: m.id,
     family: m.vendor || "Keyo Gift Credit",
     twin: m.upstream || String(m.id).replace(/:free$/, ""),
+    rateLabel: m.rateLabel || null,
     source: "keyo-free",
   }));
   const extra = (freeExtra.models || []).map((m) => ({
     id: m.id,
     family: m.family || "Other",
     twin: m.twin || null,
+    rateLabel: m.rateLabel || null,
     source: "catalog-free",
   }));
   const seen = new Set();
@@ -478,7 +480,7 @@ function freeTierBlock(m) {
   return `
 <h2>Free tier available</h2>
 <div class="card">
-<p>Same model family on KeyoAPI: use <code>${esc(freeId)}</code> for <span class="ok">gift-credit</span> calls (billed at base rate with gift credits used first; fair-use, ${esc(channel)} channel), or <code>${esc(paid)}</code> for token-metered production traffic.</p>
+<p>Same model family on KeyoAPI: use <code>${esc(freeId)}</code> for <span class="ok">gift-credit</span> calls (billed at dedicated gift-credit rates with gift credits used first; fair-use, ${esc(channel)} channel), or <code>${esc(paid)}</code> for token-metered production traffic.</p>
 <p>Rules: gift-credit = <code>:free</code> suffix; paid = bare ID. Fair-use rate/concurrency limits apply on gift-credit models — see <a href="/free-models">the gift-credit models page</a>.</p>
 <p><strong>Free curl</strong></p>
 <pre><code>curl https://www.keyoapi.xyz/v1/chat/completions \\
@@ -784,7 +786,7 @@ ${headlineRows}
 </table>
 <p class="compare-jump"><a href="/compare">See the full comparison page →</a></p>
 <h2>Gift-credit models — billed from your $10 welcome credit</h2>
-<p class="meta">Gift-credit catalog IDs for prototyping, billed at base rate with gift credits used first (new users: $10; per invite: $3) with fair-use limits. Full list + rules: <a href="/free-models">the gift-credit models page</a>.</p>
+<p class="meta">Gift-credit catalog IDs for prototyping, billed at dedicated gift-credit rates with gift credits used first (new users: $10; per invite: $3) with fair-use limits. Full list + rules: <a href="/free-models">the gift-credit models page</a>.</p>
 <div class="grid">
 ${freeCards}
 </div>
@@ -958,7 +960,7 @@ function renderAbout() {
   <li><strong>OpenAI-compatible paths:</strong> <code>/v1/chat/completions</code>, <code>/v1/images/generations</code>, <code>/v1/audio/transcriptions</code>, <code>/v1/audio/speech</code>.</li>
   <li><strong>Dedicated REST:</strong> OCR, CV tools, async TTS/video, digital humans — billed per page / request / second / characters.</li>
   <li><strong>One key, one balance:</strong> no per-vendor accounts or credits to manage.</li>
-  <li><strong>Gift-credit models:</strong> callable with complimentary credits (new users: $10; per invite: $3). Billed at base model rates with gift credits used first, fair-use limits — see <a href="/free-models">the gift-credit models page</a>.</li>
+  <li><strong>Gift-credit models:</strong> callable with complimentary credits (new users: $10; per invite: $3). Billed at dedicated gift-credit rates with gift credits used first, fair-use limits — see <a href="/free-models">the gift-credit models page</a>.</li>
 </ul>
 <h2>Pricing philosophy</h2>
 <p>We publish rates openly, model by model. Sample indicative Keyo sell rates:</p>
@@ -969,8 +971,8 @@ ${priceSample}
 </tbody>
 </table>
 <p>Full list: <a href="/compare">the model comparison page</a> · <a href="/pricing-list">the full pricing list</a> · deep dives: ${landingDeepDiveHtml()}</p>
-<h2>Gift-credit models at base rates</h2>
-<p>Call a gift-credit ID from the catalog — billed at the base model rate with gift credits used first (new users: $10; per invite: $3; fair-use limits). Metered twins stay available for production. Rules: <a href="/free-models">the gift-credit models page</a></p>
+<h2>Gift-credit models</h2>
+<p>Call a gift-credit ID from the catalog — billed at dedicated gift-credit rates with gift credits used first (new users: $10; per invite: $3; fair-use limits). Metered twins stay available for production. Rules: <a href="/free-models">the gift-credit models page</a></p>
 <div class="grid">
 ${freeCards}
 </div>
@@ -1145,7 +1147,7 @@ function renderPricing() {
   <a class="btn btn-secondary" href="/brand/keyo-docs.html">Docs</a>
 </div>
 <h2>Gift-credit models — billed from your $10 welcome credit</h2>
-<p class="meta">Gift-credit IDs (billed at base rate, gift credits used first; new users: $10, per invite: $3; fair-use): see <a href="/free-models">the gift-credit models page</a> for the full list, paid twins and curl examples. The tables below cover the metered catalog.</p>
+<p class="meta">Gift-credit IDs (billed at dedicated gift-credit rates, gift credits used first; new users: $10, per invite: $3; fair-use): see <a href="/free-models">the gift-credit models page</a> for the full list, paid twins and curl examples. The tables below cover the metered catalog.</p>
 <h2>Task cost guides</h2>
 ${contentGuideLinks("cost-guide")}
 <h2>Guided model price table</h2>
@@ -1185,10 +1187,11 @@ function renderFreeModels() {
       const twinCell = m.twin
         ? `<a href="${featuredHref(m.twin)}"><code>${esc(m.twin)}</code></a>`
         : "—";
+      const billingRate = m.rateLabel ? `<br/><span class="meta">${esc(m.rateLabel)}</span>` : "";
       return `<tr>
   <td><code>${esc(m.id)}</code></td>
   <td>${twinCell}</td>
-  <td class="ok">Gift credits</td>
+  <td class="ok">Gift credits${billingRate}</td>
   <td>${esc(m.family || "—")}</td>
   <td><a href="/sign-up">Get key</a></td>
 </tr>`;
@@ -1200,7 +1203,7 @@ function renderFreeModels() {
     freeAll[0]?.id ||
     "glm-5.3-flash:free";
   const bodyHtml = `
-<p class="lead">KeyoAPI offers <strong>gift-credit models</strong> callable with your complimentary credits. Billed at the base model rate; gift credits are used first, with any shortfall charged to your recharge balance. <strong>New users get $10</strong>, and <strong>each successful invite earns $3</strong>. Register a key and set <code>model</code> to any ID in the table below.</p>
+<p class="lead">KeyoAPI offers <strong>gift-credit models</strong> callable with your complimentary credits. Billed at dedicated gift-credit rates; gift credits are used first, with any shortfall charged to your recharge balance. <strong>New users get $10</strong>, and <strong>each successful invite earns $3</strong>. Register a key and set <code>model</code> to any ID in the table below.</p>
 <p class="meta">Built for prototypes, demos, CI smoke tests, and eval harnesses. For production QPS, switch to metered (paid) model IDs on the same base URL.</p>
 <div class="btnrow">
   <a class="btn btn-primary" href="/sign-up">Get your API key</a>
@@ -1229,7 +1232,7 @@ ${rows}
   }'</pre>
 <h2>Gift-credit rules (read before you ship)</h2>
 <ul>
-  <li><strong>Price:</strong> gift-credit IDs are <strong>billed at the base model rate</strong>. Gift credits are used first; any shortfall is charged to your recharge balance.</li>
+  <li><strong>Price:</strong> gift-credit IDs are <strong>billed at dedicated gift-credit rates</strong> (see table above and full pricing list). Gift credits are used first; any shortfall is charged to your recharge balance.</li>
   <li><strong>Complimentary credits:</strong> calls draw from your <strong>gift-credit balance</strong> (new users: $10; per successful invite: $3). When it runs out, top up to keep calling.</li>
   <li><strong>Fair use:</strong> gift-credit traffic has <strong>rate / concurrency limits</strong>. Limits can tighten under abuse. Do not treat gift-credit IDs as an unlimited production SLA.</li>
   <li><strong>Availability:</strong> some <code>:free</code> IDs may be added or removed from the catalog. Check <a href="/pricing">Model Square</a> before hard-coding.</li>
@@ -1273,7 +1276,7 @@ ${rows}
   return layout({
     title: "Gift-Credit AI Models — No Credit Card | KeyoAPI",
     description:
-      "Gift-credit AI models on KeyoAPI: callable with complimentary credits (new users: $10; per invite: $3). Billed at base model rates with gift credits used first. Get your API key and call OpenAI-compatible chat completions.",
+      "Gift-credit AI models on KeyoAPI: callable with complimentary credits (new users: $10; per invite: $3). Billed at dedicated gift-credit rates with gift credits used first. Get your API key and call OpenAI-compatible chat completions.",
     canonical: `${site}/free-models`,
     h1: "Gift-Credit AI Models — No Credit Card Required",
     bodyHtml,
@@ -1283,7 +1286,7 @@ ${rows}
       name: "Gift-Credit AI Models — KeyoAPI",
       url: `${site}/free-models`,
       description:
-        "Gift-credit AI models on KeyoAPI: new users get $10, each invite earns $3. Billed at base rates with gift credits used first. OpenAI-compatible chat completions.",
+        "Gift-credit AI models on KeyoAPI: new users get $10, each invite earns $3. Billed at dedicated gift-credit rates with gift credits used first. OpenAI-compatible chat completions.",
     },
   });
 }

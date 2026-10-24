@@ -32,6 +32,7 @@ jobs:
     # all three run git operations on /opt/ai-relay and must not overlap.
     concurrency:
       group: keyo-vps-mutex
+      queue: max
       cancel-in-progress: false
     steps:
       - name: Run vps-blog-sync over SSH

@@ -1571,7 +1571,10 @@ const server = http.createServer(async (req, res) => {
         writeProxy(res, await proxyRaw(`${VIDEO_GEN}/v1/images/generations${qsOf(req.url)}`, normalizedReq, Buffer.from(JSON.stringify(imagePayload))));
       } catch (e) {
         const requestId = crypto.randomUUID();
-        console.error(`[native-image] forwarding failed id=${requestId} reason=${e.name || "transport_error"}`);
+        // undici wraps transport failures (ECONNRESET, timeouts, ...) in a
+        // TypeError whose `cause` carries the real code — log both so a
+        // production 502 is diagnosable from the container logs alone.
+        console.error(`[native-image] forwarding failed id=${requestId} reason=${e.name || "transport_error"} cause=${e.cause?.code || e.cause?.name || "none"}`);
         return json(res, 502, { error: {
           message: "Image service response unavailable. A task may have been created; retry with the same Idempotency-Key or query its task ID.",
           type: "api_error", code: "image_forwarding_failed", request_id: requestId,

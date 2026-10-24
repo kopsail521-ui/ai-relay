@@ -14,6 +14,8 @@ on:
     branches: [main]
     paths:
       - "scripts/vps-smoke-gift-speech.py"
+      - "scripts/test-gitee-passthrough-unit.mjs"
+      - "services/gitee-passthrough/**"
       - ".github/workflows/keyo-gift-speech-smoke.yml"
   workflow_dispatch:
 
@@ -58,6 +60,15 @@ jobs:
               set -e
               cd /opt/ai-relay
               bash scripts/vps-safe-pull-preserve-blog.sh >/dev/null
+              # Rebuild the gitee passthrough image so the container picks up
+              # the server.mjs committed in this push (gift-credit twins
+              # support: model normalization + gift-first billing).
+              bash scripts/vps-passthrough-rebuild.txt >/tmp/passthrough-rebuild.log 2>&1 || {
+                cat /tmp/passthrough-rebuild.log
+                echo "PASSTHROUGH_REBUILD_FAILED"
+                exit 1
+              }
+              tail -5 /tmp/passthrough-rebuild.log
               set +e
               OUT=\$(python3 /opt/ai-relay/scripts/vps-smoke-gift-speech.py /opt/ai-relay/data/new-api/one-api.db 2>&1)
               CODE=\$?

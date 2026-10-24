@@ -44,6 +44,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+      # The billing tests exercise deductQuota/refundQuota against a real
+      # SQLite file via better-sqlite3 (repo root has no package.json).
+      - run: npm install better-sqlite3 --no-save --no-package-lock --no-audit --no-fund
       - run: node scripts/test-gitee-passthrough-unit.mjs
 
   smoke:

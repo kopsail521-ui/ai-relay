@@ -70,13 +70,17 @@ test('handbook JSON is valid and every capability anchor exists in both editions
     assert.match(markdown, /submission|未知|不明确/i);
   }
   const prefill = decode(viewer.match(/<!--NOSCRIPT-PREFILL--><noscript><pre>([\s\S]*?)<\/pre><\/noscript>/)[1]);
-  assert.equal(prefill, read('static/brand/keyo-api-ref.md'));
+  assert.equal(prefill.replaceAll('\r\n', '\n'), read('static/brand/keyo-api-ref.md').replaceAll('\r\n', '\n'));
 });
 
 test('public page inline scripts parse and payment copy avoids unsupported promises', () => {
   for (const name of ['keyo-docs', 'keyo-api-ref', 'faq', 'status']) {
     const html = read(`static/brand/${name}.html`);
-    for (const match of html.matchAll(/<script(?:\s[^>]*)?>([\s\S]*?)<\/script>/g)) if (match[1].trim()) new vm.Script(match[1]);
+    for (const [, attributes, source] of html.matchAll(/<script(\s[^>]*|)>([\s\S]*?)<\/script>/g)) {
+      if (!source.trim()) continue;
+      if (/type=["']application\/ld\+json["']/i.test(attributes)) JSON.parse(source);
+      else new vm.Script(source);
+    }
   }
   for (const name of ['keyo-docs', 'faq', 'terms', 'privacy']) assert.doesNotMatch(read(`static/brand/${name}.html`), /Waffo|Credits are available immediately|额度即时到账/);
   assert.ok(!read('static/brand/status.html').includes('All systems operational'));
@@ -126,11 +130,23 @@ test('live blog corrections keep contracts and retry boundaries explicit', () =>
   assert.match(infinite, /\/v1\/task\/TASK_ID/);
   for (const id of ['zxeywzwx', 'opus55-vs-fable51', 'haiku55-vs-luna6']) {
     const html = read(`static/brand/blog/article/${id}/index.html`);
-    assert.doesNotMatch(html, /[Ff]ixed \$0 catalog IDs/);
+    assert.doesNotMatch(html, /[Ff]ixed \$0 (?:catalog )?IDs?/);
     assert.match(html, /gift.credit/i);
   }
   const retry = read('static/brand/blog/article/ooy10bjn/index.html');
   assert.doesNotMatch(retry, /min\(provider_retry_delay, maximum_delay\)/);
   assert.match(retry, /Retry-After/);
   assert.match(retry, /deadline/i);
+});
+
+test('gift-credit guides do not equate gift billing with a zero rate', () => {
+  for (const file of ['static/seo/model/deepseek-v4-flash.html', 'static/seo/model/claude-haiku-5-5.html', 'static/seo/free-models.html']) {
+    const html = read(file);
+    assert.doesNotMatch(html, /fixed\s+\$0|\$0 free catalog|\$0\s*\/\s*call/i);
+    assert.match(html, /gift.credit/i);
+    assert.match(html, /recharge balance/i);
+  }
+  for (const model of JSON.parse(read('config/seo/free-models-extra.json')).models) {
+    assert.doesNotMatch(model.rateLabel || '', /^\$0\s*\/\s*call/);
+  }
 });

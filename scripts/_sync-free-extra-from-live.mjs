@@ -40,7 +40,7 @@ const extra = data
   .map((m) => ({
     id: m.model_name,
     family: family(m.model_name),
-    note: "Fixed $0 on Keyo catalog (fair-use). Availability can change with upstream free pools.",
+    note: "Confirm the current model and group rates on /pricing. A zero catalog base-price field alone does not establish zero billing. Gift-credit IDs may use recharge balance after gift credits are exhausted.",
   }))
   .sort((a, b) => a.id.localeCompare(b.id));
 

@@ -28,8 +28,10 @@ for (const lang of ['en', 'zhCN', 'zhTW', 'ja', 'fr', 'ru', 'vi']) {
   assert.ok(i18n[lang], `Missing language ${lang}`);
   for (const key of keys) assert.equal(typeof i18n[lang][key], 'string', `Missing ${lang}.${key}`);
 }
-for (const [, source] of html.matchAll(/<script(?:\s[^>]*)?>([\s\S]*?)<\/script>/g)) {
-  if (source.trim()) new vm.Script(source);
+for (const [, attributes, source] of html.matchAll(/<script(\s[^>]*|)>([\s\S]*?)<\/script>/g)) {
+  if (!source.trim()) continue;
+  if (/type=["']application\/ld\+json["']/i.test(attributes)) JSON.parse(source);
+  else new vm.Script(source);
 }
 console.log(`Validated canonical docs: ${Object.keys(i18n).length} languages, ${new Set(keys).size} translation keys`);
 

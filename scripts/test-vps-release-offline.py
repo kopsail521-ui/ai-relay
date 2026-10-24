@@ -41,6 +41,12 @@ elif tool == 'docker':
                 output = containers[name]['restart']
             elif 'Running' in fmt:
                 output = 'true' if containers[name]['running'] else 'false'
+            elif '.Config.Env' in fmt:
+                output = '\n'.join(s.get('current_env', []))
+            elif '.HostConfig.Binds' in fmt:
+                output = '\n'.join(s.get('binds', []))
+            elif '.Mounts' in fmt:
+                output = '\n'.join('|'.join(m) for m in s.get('mounts', []))
             else:
                 code = 2
     elif cmd == 'build':
@@ -222,11 +228,12 @@ exec env "$@"
         self.assertNotIn('DONE_SAFE_PULL_PRESERVE_BLOG', result.stdout)
         self.assertEqual(len(self.git(live, 'stash', 'list').splitlines()), 2)
 
-    def proxy_fixture(self, failure='', with_backup=False):
+    def proxy_fixture(self, failure='', with_backup=False, create_upload=True):
         root = self.base / 'proxy live'
         write(root / 'scripts/vps-safe-pull-preserve-blog.sh', '#!/bin/bash\nexit 0\n')
         write(root / '.env.moderation', 'OFFLINE_FIXTURE=not-a-secret\n')
-        (root / 'static/uploads').mkdir(parents=True)
+        if create_upload:
+            (root / 'static/uploads').mkdir(parents=True)
         state = {'containers': {NAME: {'image': 'old-image', 'running': True,
                                       'restart': 'unless-stopped'}}, 'events': []}
         if with_backup:
@@ -292,6 +299,110 @@ exec env "$@"
 
     def test_success_replaces_only_older_rollback_slot(self):
         self.assert_proxy_success(True)
+
+    def test_missing_upload_directory_is_initialized_before_stopping(self):
+        root, state_path = self.proxy_fixture(create_upload=False)
+        result = self.run_script('vps-redeploy-creem-moderation.sh', root)
+        state = json.loads(state_path.read_text())
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        self.assertTrue((root / 'static/uploads').is_dir())
+        self.assertEqual((root / '.env.moderation').read_text(), 'OFFLINE_FIXTURE=not-a-secret\n')
+        self.assertEqual(state['containers'][NAME]['image'], 'new-image')
+
+    def test_existing_upload_contents_are_not_changed(self):
+        root, state_path = self.proxy_fixture()
+        existing = root / 'static/uploads/user-media.bin'
+        write(existing, 'existing-user-upload')
+        permissions = existing.parent.stat().st_mode
+        result = self.run_script('vps-redeploy-creem-moderation.sh', root)
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        self.assertEqual(existing.read_text(), 'existing-user-upload')
+        self.assertEqual(existing.parent.stat().st_mode, permissions)
+
+    def test_custom_upload_bind_and_runtime_environment_are_preserved(self):
+        root, state_path = self.proxy_fixture(create_upload=False)
+        media = self.base / 'existing media'
+        write(media / 'keep.bin', 'existing-user-upload')
+        source = shell_path(media)
+        binding = source + ':/srv/data:rw'
+        state = json.loads(state_path.read_text())
+        state.update(current_env=['UPLOAD_DIR=/srv/data/uploads',
+                                  'UPLOAD_MAX_BYTES=777',
+                                  'UPLOAD_PUBLIC_BASE=https://media.example.invalid/files',
+                                  'CREEM_API_KEY=offline-fixture-value'],
+                     binds=[binding], mounts=[['bind', source, '/srv/data', 'true', '']])
+        write(state_path, json.dumps(state))
+        result = self.run_script('vps-redeploy-creem-moderation.sh', root)
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        self.assertTrue((media / 'uploads').is_dir())
+        self.assertEqual((media / 'keep.bin').read_text(), 'existing-user-upload')
+        self.assertFalse((root / 'static/uploads').exists())
+        state = json.loads(state_path.read_text())
+        run = next(e for e in state['events'] if e[:2] == ['docker', 'run'])
+        env_values = [run[i + 1] for i, arg in enumerate(run[:-1]) if arg == '-e']
+        effective_env = dict(value.split('=', 1) for value in env_values)
+        self.assertEqual(effective_env['UPLOAD_DIR'], '/srv/data/uploads')
+        self.assertEqual(effective_env['UPLOAD_MAX_BYTES'], '777')
+        self.assertEqual(effective_env['UPLOAD_PUBLIC_BASE'], 'https://media.example.invalid/files')
+        self.assertEqual(effective_env['CREEM_API_KEY'], 'offline-fixture-value')
+        self.assertEqual([run[i + 1] for i, arg in enumerate(run[:-1]) if arg == '-v'], [binding])
+        self.assertNotIn('offline-fixture-value', result.stdout + result.stderr)
+
+    def test_named_upload_volume_is_not_replaced_by_default_bind(self):
+        root, state_path = self.proxy_fixture(create_upload=False)
+        state = json.loads(state_path.read_text())
+        state.update(current_env=['UPLOAD_DIR=/srv/uploads'], binds=[],
+                     mounts=[['volume', '/var/lib/docker/volumes/existing/_data',
+                              '/srv/uploads', 'true', 'existing-upload-volume']])
+        write(state_path, json.dumps(state))
+        result = self.run_script('vps-redeploy-creem-moderation.sh', root)
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        self.assertFalse((root / 'static/uploads').exists())
+        state = json.loads(state_path.read_text())
+        run = next(e for e in state['events'] if e[:2] == ['docker', 'run'])
+        self.assertEqual([run[i + 1] for i, arg in enumerate(run[:-1]) if arg == '-v'],
+                         ['existing-upload-volume:/srv/uploads'])
+
+    def test_env_file_updates_override_old_environment_and_select_upload_mount(self):
+        root, state_path = self.proxy_fixture(create_upload=False)
+        media = self.base / 'configured media'
+        write(media / 'uploads/keep.bin', 'existing-user-upload')
+        source = shell_path(media)
+        write(root / '.env.moderation',
+              '# Updated production settings\nUPLOAD_DIR=/srv/data/newuploads\n'
+              'UPLOAD_MAX_BYTES=999\nCREEM_API_KEY=updated-offline-value\nPORT=3102\n')
+        state = json.loads(state_path.read_text())
+        state.update(current_env=['UPLOAD_DIR=/srv/data/uploads', 'UPLOAD_MAX_BYTES=777',
+                                  'CREEM_API_KEY=old-offline-value', 'PORT=3001',
+                                  'EXTRA_RUNTIME_SETTING=preserve-me'],
+                     binds=[source + ':/srv/data:rw'],
+                     mounts=[['bind', source, '/srv/data', 'true', '']])
+        write(state_path, json.dumps(state))
+        result = self.run_script('vps-redeploy-creem-moderation.sh', root)
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        self.assertTrue((media / 'newuploads').is_dir())
+        self.assertEqual((media / 'uploads/keep.bin').read_text(), 'existing-user-upload')
+        self.assertFalse((root / 'static/uploads').exists())
+        state = json.loads(state_path.read_text())
+        run = next(e for e in state['events'] if e[:2] == ['docker', 'run'])
+        env_values = [run[i + 1] for i, arg in enumerate(run[:-1]) if arg == '-e']
+        env_keys = {v.split('=', 1)[0] for v in env_values}
+        self.assertTrue({'UPLOAD_DIR', 'UPLOAD_MAX_BYTES', 'CREEM_API_KEY', 'PORT'}.isdisjoint(env_keys))
+        self.assertIn('EXTRA_RUNTIME_SETTING=preserve-me', env_values)
+        self.assertTrue(any(e[0] == 'curl' and e[-1] == 'http://127.0.0.1:3102/healthz'
+                            for e in state['events']))
+        self.assertNotIn('updated-offline-value', result.stdout + result.stderr)
+
+    def test_upload_path_file_aborts_without_stopping_or_overwriting(self):
+        root, state_path = self.proxy_fixture(create_upload=False)
+        write(root / 'static/uploads', 'existing-not-a-directory')
+        result = self.run_script('vps-redeploy-creem-moderation.sh', root)
+        state = json.loads(state_path.read_text())
+        self.assertNotEqual(result.returncode, 0)
+        self.assertEqual((root / 'static/uploads').read_text(), 'existing-not-a-directory')
+        self.assertEqual(state['containers'][NAME]['image'], 'old-image')
+        self.assertTrue(state['containers'][NAME]['running'])
+        self.assertFalse(any(e[:2] == ['docker', 'stop'] for e in state['events']))
 
     def test_real_model_workflows_require_explicit_opt_in(self):
         speech = (REPO / '.github/workflows/keyo-gift-speech-smoke.yml').read_text(encoding='utf-8')

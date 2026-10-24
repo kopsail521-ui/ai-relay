@@ -68,7 +68,7 @@ for (const m of MODELS) {
     extra.models.push({
       id: m.id,
       family: m.id.startsWith("k2-") ? "Moonshot" : "Other",
-      note: "Fixed $0 on Keyo catalog (fair-use). Availability can change; confirm live on /pricing.",
+      note: "Confirm the current model and group rates on /pricing. A zero catalog base-price field alone does not establish zero billing. Gift-credit IDs may use recharge balance after gift credits are exhausted.",
     });
   }
 }

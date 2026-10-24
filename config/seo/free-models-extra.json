@@ -5,16 +5,16 @@
     {
       "id": "Atria-dawn-v2:free",
       "family": "Other",
-      "rateLabel": "$0 / call (gift pool)",
+      "rateLabel": "Check the current model rate",
       "twin": "Atria-dawn-v2",
-      "note": "Callable with gift credits ($0 / call complimentary gift pool). Gift credits are used first; new users get $10, and each invite earns $3."
+      "note": "Billed at this model’s current rate, with gift credits used first and any shortfall charged to recharge balance. The :free suffix does not promise a zero rate. Confirm the current model and group rates on /pricing before submitting."
     },
     {
       "id": "DeepSeek-Prover-V2-7B:free",
       "family": "DeepSeek",
-      "rateLabel": "$0 / call (gift pool)",
+      "rateLabel": "Check the current model rate",
       "twin": "DeepSeek-Prover-V2-7B",
-      "note": "Callable with gift credits ($0 / call complimentary gift pool). Gift credits are used first; new users get $10, and each invite earns $3."
+      "note": "Billed at this model’s current rate, with gift credits used first and any shortfall charged to recharge balance. The :free suffix does not promise a zero rate. Confirm the current model and group rates on /pricing before submitting."
     },
     {
       "id": "deepseek-v4.1-flash-1017:free",
@@ -26,9 +26,9 @@
     {
       "id": "GLM-ASR:free",
       "family": "ASR",
-      "rateLabel": "$0 / call (gift pool)",
+      "rateLabel": "Check the current model rate",
       "twin": "GLM-ASR",
-      "note": "Callable with gift credits ($0 / call complimentary gift pool, ASR, POST /v1/audio/transcriptions). Gift credits are used first; new users get $10, and each invite earns $3."
+      "note": "Billed at this model’s current rate, with gift credits used first and any shortfall charged to recharge balance. The :free suffix does not promise a zero rate. Confirm the current model and group rates on /pricing before submitting."
     },
     {
       "id": "glm-5.3:free",
@@ -40,30 +40,30 @@
     {
       "id": "keyo-flash:free",
       "family": "Keyo",
-      "rateLabel": "$0 / call (gift pool)",
+      "rateLabel": "Check the current model rate",
       "twin": null,
-      "note": "Callable with gift credits ($0 / call complimentary gift pool). Gift credits are used first; new users get $10, and each invite earns $3."
+      "note": "Billed at this model’s current rate, with gift credits used first and any shortfall charged to recharge balance. The :free suffix does not promise a zero rate. Confirm the current model and group rates on /pricing before submitting."
     },
     {
       "id": "keyo-flash2:free",
       "family": "Keyo",
-      "rateLabel": "$0 / call (gift pool)",
+      "rateLabel": "Check the current model rate",
       "twin": null,
-      "note": "Callable with gift credits ($0 / call complimentary gift pool). Gift credits are used first; new users get $10, and each invite earns $3."
+      "note": "Billed at this model’s current rate, with gift credits used first and any shortfall charged to recharge balance. The :free suffix does not promise a zero rate. Confirm the current model and group rates on /pricing before submitting."
     },
     {
       "id": "SenseVoiceSmall:free",
       "family": "ASR",
-      "rateLabel": "$0 / call (gift pool)",
+      "rateLabel": "Check the current model rate",
       "twin": "SenseVoiceSmall",
-      "note": "Callable with gift credits ($0 / call complimentary gift pool, ASR, POST /v1/audio/transcriptions). Gift credits are used first; new users get $10, and each invite earns $3."
+      "note": "Billed at this model’s current rate, with gift credits used first and any shortfall charged to recharge balance. The :free suffix does not promise a zero rate. Confirm the current model and group rates on /pricing before submitting."
     },
     {
       "id": "Spark-TTS-0.5B:free",
       "family": "TTS",
-      "rateLabel": "$0 / call (gift pool)",
+      "rateLabel": "Check the current model rate",
       "twin": "Spark-TTS-0.5B",
-      "note": "Callable with gift credits ($0 / call complimentary gift pool, async TTS, POST /v1/async/audio/speech then GET /v1/tasks/{id}). Gift credits are used first; new users get $10, and each invite earns $3."
+      "note": "Billed at this model’s current rate, with gift credits used first and any shortfall charged to recharge balance. The :free suffix does not promise a zero rate. Confirm the current model and group rates on /pricing before submitting."
     }
   ]
 }

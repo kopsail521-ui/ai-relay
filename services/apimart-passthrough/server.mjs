@@ -788,11 +788,17 @@ function looksLikeMiss(up) {
 
 // Native images own their auth, durable task ledger and billing.
 // Video submission/polling keeps the existing implementation.
+// Smart routing (default on): price-priority across every group that serves
+// the model, with automatic failover to the next-cheapest group when a
+// generation definitively fails. Set IMAGE_SMART_ROUTING=0 to restrict
+// channel selection back to the token's own group only.
+const IMAGE_SMART_ROUTING = String(process.env.IMAGE_SMART_ROUTING ?? "1").trim().toLowerCase() !== "0";
 const imageLedger = new ImageLedger(DB_PATH, {
   quotaPerUsd: QUOTA_PER_USD,
   reservationTtl: Number(process.env.IMAGE_RESERVATION_TTL_SECONDS || 600),
   dedupSeconds: Number(process.env.IMAGE_DEDUP_SECONDS || 300),
   ackDir: process.env.IMAGE_DELIVERY_ACK_DIR || DB_PATH + ".image-delivery",
+  smartRouting: IMAGE_SMART_ROUTING,
 });
 const imageService = new ImageService({
   ledger: imageLedger, models: modelMap, origin: GRSAI_ORIGIN, key: GRSAI_KEY,
@@ -801,6 +807,7 @@ const imageService = new ImageService({
   waitMs: Number(process.env.IMAGE_POLL_MAX_MS || 180000),
   transportMs: Number(process.env.IMAGE_TRANSPORT_TIMEOUT_MS || 60000),
   trustedProxies: process.env.IMAGE_TRUSTED_PROXIES || "",
+  smartRouting: IMAGE_SMART_ROUTING,
 });
 imageService.startRecovery();
 

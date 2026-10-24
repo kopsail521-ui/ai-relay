@@ -6,14 +6,14 @@ const FAILURE = new Set(["failed", "violation", "rejected", "cancelled", "cancel
 const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 export class ImageService {
-  constructor({ ledger, models, origin, key, aicopyOrigin = "https://api.aicopy.top", aicopyKey = "", fetchImpl = fetch, pollIntervalMs = 5000, waitMs = 180000, transportMs = 60000, trustedProxies = "", maxBodyBytes = 32 * 1024 * 1024 }) {
+  constructor({ ledger, models, origin, key, aicopyOrigin = "https://api.aicopy.top", aicopyKey = "", fetchImpl = fetch, pollIntervalMs = 5000, waitMs = 180000, transportMs = 60000, trustedProxies = "", maxBodyBytes = 32 * 1024 * 1024, smartRouting = true }) {
     this.ledger = ledger; this.models = models;
     this.origin = (origin || "").replace(/\/$/, "");
     this.key = key;
     this.aicopyOrigin = (aicopyOrigin || "").replace(/\/$/, "");
     this.aicopyKey = aicopyKey || "";
     this.fetch = fetchImpl;
-    this.pollIntervalMs = pollIntervalMs; this.waitMs = waitMs; this.transportMs = transportMs; this.trustedProxies = trustedProxies; this.maxBodyBytes = maxBodyBytes;
+    this.pollIntervalMs = pollIntervalMs; this.waitMs = waitMs; this.transportMs = transportMs; this.trustedProxies = trustedProxies; this.maxBodyBytes = maxBodyBytes; this.smartRouting = smartRouting;
     this.jobs = new Map(); this.stopped = false;
   }
   error(res, e, id) {
@@ -84,14 +84,19 @@ export class ImageService {
     }
     return false;
   }
-  startJob(row, native) {
+  startJob(row, native, opts = {}) {
     if (this.jobs.has(row.id)) return this.jobs.get(row.id);
-    const work = (async () => {
+    // One attempt = submit + poll in the row's current group. Returns the
+    // terminal outcome so the failover wrapper can decide whether another
+    // group should take over: only definitive generation failures fail over;
+    // policy rejections and unknown submission outcomes never do.
+    const attempt = async (rowArg) => {
+      let row = rowArg;
       const isAicopy = row.using_group === "GPT-Image-Pro";
       if (isAicopy) {
         if (native) {
           const lease = Math.ceil(this.transportMs / 1000) + 30;
-          if (!this.ledger.submitting(row.id, lease)) return;
+          if (!this.ledger.submitting(row.id, lease)) return "submitting_conflict";
           const aicopyBody = {
             model: native.model,
             prompt: native.prompt,
@@ -105,52 +110,85 @@ export class ImageService {
             up = await this.transport("/v1/images/generations", "POST", aicopyBody, this.aicopyOrigin, this.aicopyKey);
           } catch {
             this.ledger.failed(row.id, "image_submission_unknown", "submit_unknown");
-            return;
+            return "submit_unknown";
           }
           const result = extractImageResult(up.payload);
           if (up.status >= 200 && up.status < 300 && result.urls.length) {
             const upId = `aicopy_${crypto.randomUUID()}`;
             this.ledger.submitted(row.id, upId);
             this.ledger.ready(row.id, { created: up.payload?.created || row.created_at, data: result.urls.map((url) => ({ url })) });
-            return;
+            return "ready";
           }
           if (FAILURE.has(result.status) || (up.status >= 400 && up.status < 500)) {
-            this.ledger.failed(row.id, result.status === "violation" ? "image_policy_rejected" : "image_submission_rejected");
-            return;
+            if (result.status === "violation") {
+              this.ledger.failed(row.id, "image_policy_rejected");
+              return "rejected";
+            }
+            this.ledger.failed(row.id, "image_submission_rejected");
+            return "failed";
           }
           this.ledger.failed(row.id, "image_generation_failed");
-          return;
+          return "failed";
         }
-        return;
+        return "no_request";
       }
       if (native) {
         const lease = Math.ceil(this.transportMs / 1000) + 30;
-        if (!this.ledger.submitting(row.id, lease)) return;
+        if (!this.ledger.submitting(row.id, lease)) return "submitting_conflict";
         let up;
         try { up = await this.transport("/v1/api/generate", "POST", native); }
-        catch { this.ledger.failed(row.id, "image_submission_unknown", "submit_unknown"); return; }
+        catch { this.ledger.failed(row.id, "image_submission_unknown", "submit_unknown"); return "submit_unknown"; }
         const id = up.payload?.id || up.payload?.task_id || up.payload?.data?.id || up.payload?.data?.task_id;
         const result = extractImageResult(up.payload);
         if (FAILURE.has(result.status) || (up.status >= 400 && up.status < 500)) {
-          this.ledger.failed(row.id, result.status === "violation" ? "image_policy_rejected" : "image_submission_rejected");
-          return;
+          if (result.status === "violation") {
+            this.ledger.failed(row.id, "image_policy_rejected");
+            return "rejected";
+          }
+          this.ledger.failed(row.id, "image_submission_rejected");
+          return "failed";
         }
         if (!id || up.status < 200 || up.status >= 300) {
-          this.ledger.failed(row.id, "image_submission_unknown", "submit_unknown"); return;
+          this.ledger.failed(row.id, "image_submission_unknown", "submit_unknown"); return "submit_unknown";
         }
         // Durable upstream ID comes before any terminal result or client response.
         this.ledger.submitted(row.id, String(id));
         row = this.ledger.get(row.id);
-        if (this.acceptResult(row, up)) return;
+        if (this.acceptResult(row, up)) return this.ledger.get(row.id).state === "ready" ? "ready" : "failed";
       }
       while (!this.stopped) {
         row = this.ledger.get(row.id);
-        if (row.state !== "running" || !row.upstream_id) return;
+        if (row.state !== "running" || !row.upstream_id) return row.state === "ready" ? "ready" : row.state === "failed" ? "failed" : "abandoned";
         try {
           const up = await this.transport(`/v1/api/result?id=${encodeURIComponent(row.upstream_id)}`, "GET");
-          if (this.acceptResult(row, up)) return;
+          if (this.acceptResult(row, up)) {
+            const done = this.ledger.get(row.id);
+            return done.state === "ready" ? "ready" : done.state === "failed" ? "failed" : "abandoned";
+          }
         } catch { /* transient poll failure, never another POST */ }
         await delay(this.pollIntervalMs);
+      }
+      return "stopped";
+    };
+    const work = (async () => {
+      let current = row;
+      const outcome = await attempt(current);
+      if (outcome !== "failed" || !(native && this.smartRouting)) return;
+      // Price-priority failover: refund the failed group's reservation and
+      // continue in the next-cheapest group that serves this model, keeping
+      // the customer-facing task id (and polling URL) unchanged.
+      const tried = new Set([current.using_group]);
+      for (;;) {
+        let next;
+        try { next = this.ledger.candidatesFor(current, { origin: this.origin, is4k: !!opts.is4k, excludeGroups: [...tried] })[0]; }
+        catch { return; }
+        if (!next) return;
+        tried.add(next.group);
+        try { current = this.ledger.reroute(current.id, next); }
+        catch { return; }
+        console.log(`[image] failover task=${current.id} group=${next.group} quota=${next.quota}`);
+        const retry = await attempt(current);
+        if (retry !== "failed") return;
       }
     })().catch(() => {
       // Any storage failure leaves the durable row for recovery; never submit
@@ -195,7 +233,7 @@ export class ImageService {
       const is4k = is4KSize(normalized.request.aspectRatio || body.size || body.resolution);
       const { row, fresh } = this.ledger.reserve({ apiKey, model: meta.id, requestHash: normalized.requestHash, idempotencyKey: req.headers["idempotency-key"], ip, origin: this.origin, is4k });
       id = row.id;
-      const job = this.startJob(row, fresh ? { ...normalized.request, model: meta.upstream_model || meta.id, replyType: "async" } : undefined);
+      const job = this.startJob(row, fresh ? { ...normalized.request, model: meta.upstream_model || meta.id, replyType: "async" } : undefined, { is4k });
       if (normalized.replyType === "async") return ["ready", "failed", "submit_unknown"].includes(row.state) ? this.delivery(res, row) : this.pending(res, row);
       // Bound the HTTP wait, not the lifetime of the persistent task. Disconnect
       // ends this wait while generation continues with the same durable ID.

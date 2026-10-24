@@ -16,6 +16,8 @@ on:
       - "scripts/vps-add-apimart-videos.py"
       - "scripts/vps-add-deepseek-v41.py"
       - "scripts/vps-deploy-deepseek-v41.sh"
+      - "scripts/vps-add-minimax-m31-flash.py"
+      - "config/openlux-paid-chat-models.json"
       - "config/unorouter-paid-models.json"
   workflow_dispatch:
 

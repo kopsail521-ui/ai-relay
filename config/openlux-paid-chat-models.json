@@ -21,6 +21,15 @@
       "icon": "DeepSeek",
       "tags": "大语言模型",
       "desc_zh": "DeepSeek V4 Flash。"
+    },
+    {
+      "id": "MiniMax-M3.1-Flash",
+      "cost_in": 0.045,
+      "cost_out": 0.18,
+      "vendor": "MiniMax",
+      "icon": "Minimax.Color",
+      "tags": "大语言模型,工具,识图",
+      "desc_zh": "MiniMax M3.1 Flash 原生多模态大语言模型。具备 1M 超长上下文与思考深度可调特性，在代码、复杂推理、工具调用与多模态视觉理解方面兼具高速响应与高性价比。支持文本与图像模态。"
     }
   ]
 }

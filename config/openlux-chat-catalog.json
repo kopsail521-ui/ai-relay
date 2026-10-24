@@ -2988,6 +2988,22 @@
       "markup": 1.5
     },
     {
+      "model": "MiniMax-M3.1-Flash",
+      "endpoints": "openai",
+      "group": "Self-Deployed-1",
+      "cost_in_usd": 0.045,
+      "cost_out_usd": 0.18,
+      "sell_in_usd": 0.09,
+      "sell_out_usd": 0.36,
+      "sell_in_cny": 0.63,
+      "sell_out_cny": 2.52,
+      "model_ratio": 0.075,
+      "completion_ratio": 4,
+      "our_model_ratio": 0.045,
+      "our_completion_ratio": 4,
+      "markup": 2
+    },
+    {
       "model": "o1",
       "endpoints": "openai-response|openai",
       "group": "Azure-Gpt-2",

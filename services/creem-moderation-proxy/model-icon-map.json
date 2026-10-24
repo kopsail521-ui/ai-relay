@@ -49,6 +49,7 @@
     "Bespoke-Nimble-9B": "Qwen.Color",
     "MiniMax-H3": "Minimax.Color",
     "MiniMax-H3-vip": "Minimax.Color",
+    "MiniMax-M3.1-Flash": "Minimax.Color",
     "sam3": "Meta.Color",
     "GLM-ASR": "Zhipu.Color",
     "GLM-TTS": "Zhipu.Color",

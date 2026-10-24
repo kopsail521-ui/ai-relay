@@ -7710,5 +7710,62 @@
     "suffix_en": "",
     "price_key_zh": "",
     "price_key_en": ""
+  },
+  "MiniMax-M3.1-Flash": {
+    "description": "MiniMax M3.1 Flash 原生多模态大语言模型。具备 1M 超长上下文与思考深度可调特性，在代码、复杂推理、工具调用与多模态视觉理解方面兼具高速响应与高性价比。支持文本与图像模态。",
+    "descriptions": {
+      "zhCN": "MiniMax M3.1 Flash 原生多模态大语言模型。具备 1M 超长上下文与思考深度可调特性，在代码、复杂推理、工具调用与多模态视觉理解方面兼具高速响应与高性价比。支持文本与图像模态。",
+      "zhTW": "MiniMax M3.1 Flash 原生多模態大語言模型。具備 1M 超長上下文與思考深度可調特性，在代碼、複雜推理、工具調用與多模態視覺理解方面兼具高速響應與高性價比。支援文本與圖像模態。",
+      "en": "MiniMax M3.1 Flash native multimodal large language model. Features a 1M token context window and adjustable reasoning depth, delivering exceptional speed and cost efficiency across coding, complex reasoning, tool calling, and multimodal vision understanding. Supports text and image modalities.",
+      "fr": "Modèle multimodal natif MiniMax M3.1 Flash. Fenêtre de contexte de 1M de tokens et profondeur de raisonnement réglable, offrant une vitesse exceptionnelle et un excellent rapport coût-efficacité pour le code, le raisonnement complexe et la vision multimodale.",
+      "ru": "Нативная мультимодальная модель MiniMax M3.1 Flash. Контекст 1M токенов и настраиваемая глубина рассуждений, высокая скорость и экономичность для кода, сложных рассуждений и визуального анализа.",
+      "ja": "MiniMax M3.1 Flash ネイティブマルチモーダル大規模言語モデル。1M トークンの長大コンテキストと調整可能な推論深度を備え、コーディング、高度推论、ツール呼び出し、マルチモーダル視覚理解において高速レスポンスと高い費用対効果を実現。テキストおよび画像モダリティをサポート。",
+      "vi": "Mô hình ngôn ngữ lớn đa phương thức MiniMax M3.1 Flash. Sở hữu cửa sổ ngữ cảnh 1M token và độ sâu suy luận có thể điều chỉnh, mang lại tốc độ vượt trội và chi phí tối ưu cho lập trình, suy luận phức tạp và xử lý hình ảnh."
+    },
+    "unit": "token",
+    "badge": {
+      "zhCN": "按 Token 计费",
+      "zhTW": "按 Token 計費",
+      "en": "Token-based",
+      "fr": "Au token",
+      "ru": "По токенам",
+      "ja": "Token 課金",
+      "vi": "Theo token"
+    },
+    "suffix": {
+      "zhCN": "",
+      "zhTW": "",
+      "en": "",
+      "fr": "",
+      "ru": "",
+      "ja": "",
+      "vi": ""
+    },
+    "price_key": {
+      "zhCN": "",
+      "zhTW": "",
+      "en": "",
+      "fr": "",
+      "ru": "",
+      "ja": "",
+      "vi": ""
+    },
+    "unit_price": {
+      "zhCN": "输入 $0.09 / 输出 $0.36 每 100 万 tokens",
+      "zhTW": "輸入 $0.09 / 輸出 $0.36 每 100 萬 tokens",
+      "en": "Input $0.09 / Output $0.36 per 1M tokens",
+      "fr": "Entrée 0,09 $ / Sortie 0,36 $ par 1M tokens",
+      "ru": "Вход $0.09 / Выход $0.36 за 1M токенов",
+      "ja": "入力 $0.09 / 出力 $0.36 (100万トークンあたり)",
+      "vi": "Đầu vào $0.09 / Đầu ra $0.36 mỗi 1 triệu token"
+    },
+    "description_zh": "MiniMax M3.1 Flash 原生多模态大语言模型。具备 1M 超长上下文与思考深度可调特性，在代码、复杂推理、工具调用与多模态视觉理解方面兼具高速响应与高性价比。支持文本与图像模态。",
+    "description_en": "MiniMax M3.1 Flash native multimodal large language model. Features a 1M token context window and adjustable reasoning depth with superior speed and cost-efficiency. Supports text and image modalities.",
+    "badge_zh": "按 Token 计费",
+    "badge_en": "Token-based",
+    "suffix_zh": "",
+    "suffix_en": "",
+    "price_key_zh": "",
+    "price_key_en": ""
   }
 }

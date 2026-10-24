@@ -83,6 +83,12 @@ if command -v python3 >/dev/null 2>&1; then
 else
   sudo docker run --rm -v "$ROOT:$ROOT:ro" -v "$ROOT/data/new-api:/data" -w "$ROOT" python:3.12-alpine python scripts/vps-add-deepseek-v41.py /data/one-api.db
 fi
+echo "=== 3.2/4 注册 MiniMax-M3.1-Flash 模型到 New-API 数据库 ==="
+if command -v python3 >/dev/null 2>&1; then
+  sudo python3 "$ROOT/scripts/vps-add-minimax-m31-flash.py" "$ROOT/data/new-api/one-api.db"
+else
+  sudo docker run --rm -v "$ROOT:$ROOT:ro" -v "$ROOT/data/new-api:/data" -w "$ROOT" python:3.12-alpine python scripts/vps-add-minimax-m31-flash.py /data/one-api.db
+fi
 sudo docker restart ai-relay-new-api >/dev/null || true
 sleep 3
 
@@ -95,7 +101,7 @@ try:
     with urllib.request.urlopen("http://127.0.0.1:3001/api/pricing", timeout=10) as resp:
         data = json.loads(resp.read().decode())
         models = [m.get("model_name") for m in data.get("data", [])]
-        for needed in ["seedance-2.5", "seedance-2.0", "seedance-2.0-fast", "seedance-2.0-mini", "MiniMax-H3", "MiniMax-H3-vip", "deepseek-v4.1-flash-1017", "deepseek-v4.1-flash-1017:free"]:
+        for needed in ["seedance-2.5", "seedance-2.0", "seedance-2.0-fast", "seedance-2.0-mini", "MiniMax-H3", "MiniMax-H3-vip", "deepseek-v4.1-flash-1017", "deepseek-v4.1-flash-1017:free", "MiniMax-M3.1-Flash"]:
             print(f"Pricing check {needed}: {'OK' if needed in models else 'MISSING'}")
 except Exception as e:
     print("Pricing check failed:", e)

@@ -78,6 +78,7 @@ import { parseTags } from '../lib/filters'
 import { isGiftCreditModel } from '../lib/gift-credit'
 import {
   getAvailableGroups,
+  getModelTokenLimits,
   isTokenBasedModel,
   hasDedicatedPriceUnit,
 } from '../lib/model-helpers'
@@ -299,8 +300,9 @@ function ModelBackendQuickStats(props: { model: PricingModel }) {
   const model = props.model
   const inputModalities = normalizeCatalogItems(model.input_modalities)
   const outputModalities = normalizeCatalogItems(model.output_modalities)
-  const contextLength = model.context_length ?? 0
-  const maxOutput = model.max_output_tokens ?? 0
+  const tokenLimits = getModelTokenLimits(model)
+  const contextLength = tokenLimits.contextLength ?? 0
+  const maxOutput = tokenLimits.maxOutputTokens ?? 0
   const knowledgeCutoff = formatCatalogYearMonth(model.knowledge_cutoff)
   const releaseDate = formatCatalogYearMonth(model.release_date)
 

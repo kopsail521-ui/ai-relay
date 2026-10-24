@@ -37,7 +37,7 @@ import { getDisplayGroupRatio } from './model-helpers'
  * separators (- _ . whitespace) so "gpt4o" matches "gpt-4o".
  */
 function normalizeForSearch(value: string): string {
-  return value.toLowerCase().replace(/[-_.\s]+/g, '')
+  return value.toLowerCase().replaceAll(/[-_.\s]+/g, '')
 }
 
 /**
@@ -99,16 +99,35 @@ export function filterByQuotaType(
   return models.filter((m) => m.quota_type === targetType)
 }
 
-/**
- * Filter models by endpoint type
- */
+/** Map precise model contracts to stable, semantic filter link values. */
+export function getEndpointFilterType(endpointType: string): string {
+  const kind = endpointType.split(':', 1)[0]
+  if (kind === 'video') return ENDPOINT_TYPES.OPENAI_VIDEO
+  if (kind === 'embedding') return ENDPOINT_TYPES.EMBEDDINGS
+  return kind
+}
+
+/** Match protocol declarations or model-capability groups without changing contracts. */
+export function modelSupportsEndpointType(
+  model: PricingModel,
+  endpointType: string
+): boolean {
+  if (endpointType === ENDPOINT_TYPES.ALL) return true
+  const declared = model.supported_endpoint_types || []
+  if (declared.includes(endpointType)) return true
+  if (endpointType.includes(':')) return false
+  const group = getEndpointFilterType(endpointType)
+  return declared.some((value) => getEndpointFilterType(value) === group)
+}
+
+/** Filter models using the same semantic mapping as sidebar counts. */
 export function filterByEndpointType(
   models: PricingModel[],
   endpointType: string
 ): PricingModel[] {
   if (endpointType === ENDPOINT_TYPES.ALL) return models
-  return models.filter((m) =>
-    m.supported_endpoint_types?.includes(endpointType)
+  return models.filter((model) =>
+    modelSupportsEndpointType(model, endpointType)
   )
 }
 
@@ -233,7 +252,7 @@ export function extractAllTags(models: PricingModel[]): string[] {
     }
   })
 
-  return Array.from(tagMap.values()).sort((a, b) => a.localeCompare(b))
+  return [...tagMap.values()].sort((a, b) => a.localeCompare(b))
 }
 
 /**

@@ -31,6 +31,7 @@ import {
 } from '../lib/dynamic-price'
 import { parseTags } from '../lib/filters'
 import { isGiftCreditModel } from '../lib/gift-credit'
+import { getModelContract } from '../lib/model-api-contracts'
 import { isTokenBasedModel, hasDedicatedPriceUnit } from '../lib/model-helpers'
 import { formatPrice, formatRequestPrice } from '../lib/price'
 import type { PricingModel, TokenUnit } from '../types'
@@ -59,6 +60,12 @@ export const ModelCard = memo(function ModelCard(props: ModelCardProps) {
   const showRechargePrice = !isGiftCredit && (props.showRechargePrice ?? false)
   const isTokenBased = isTokenBasedModel(props.model)
   const tokenUnitLabel = tokenUnit === 'K' ? '1K' : '1M'
+  const showTokenPriceUnit =
+    isTokenBased &&
+    !hasDedicatedPriceUnit(props.model) &&
+    (props.model.billing_unit === 'token' ||
+      getModelContract(props.model.model_name)?.kind === 'chat') &&
+    (!isGiftCredit || props.model.gift_billing_rate_available)
   const tags = parseTags(props.model.tags)
   const groups = props.model.enable_groups || []
   const endpoints = props.model.supported_endpoint_types || []
@@ -242,6 +249,11 @@ export const ModelCard = memo(function ModelCard(props: ModelCardProps) {
             </h3>
             <div className='mt-0.5 flex flex-wrap items-baseline gap-x-2 gap-y-0.5 text-sm sm:mt-1 sm:gap-x-3'>
               {priceSummary}
+              {showTokenPriceUnit && (
+                <span className='text-muted-foreground/70 text-xs'>
+                  /{tokenUnitLabel} {t('tokens')}
+                </span>
+              )}
             </div>
           </div>
         </div>
@@ -293,9 +305,6 @@ export const ModelCard = memo(function ModelCard(props: ModelCardProps) {
               {item}
             </span>
           ))}
-          <span className='text-muted-foreground/50 text-xs'>
-            {tokenUnitLabel}
-          </span>
           {hiddenCount > 0 && (
             <span className='text-muted-foreground/40 text-xs'>
               +{hiddenCount}

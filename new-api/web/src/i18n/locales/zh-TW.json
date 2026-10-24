@@ -5512,6 +5512,15 @@
     "Per character": "依字元計費",
     "Per 10,000 characters": "每一萬字元",
     "Per 1,000,000 input characters": "每一百萬輸入字元",
-    "Billing method not confirmed. Contact support.": "計費方式待確認，請聯絡客服。"
+    "Billing method not confirmed. Contact support.": "計費方式待確認，請聯絡客服。",
+    "Speech recognition": "語音識別",
+    "Speech synthesis": "語音合成",
+    "Asynchronous speech synthesis": "非同步語音合成",
+    "Image processing": "影像處理",
+    "Video processing": "影片處理",
+    "Digital human": "數位人",
+    "Document parsing": "文件解析",
+    "Decision": "決策",
+    "Content moderation": "內容審核"
   }
 }

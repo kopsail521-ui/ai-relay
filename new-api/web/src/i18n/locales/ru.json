@@ -5471,6 +5471,15 @@
     "Per character": "За символ",
     "Per 10,000 characters": "За 10 000 символов",
     "Per 1,000,000 input characters": "За 1 000 000 входных символов",
-    "Billing method not confirmed. Contact support.": "Способ оплаты не подтверждён. Обратитесь в поддержку."
+    "Billing method not confirmed. Contact support.": "Способ оплаты не подтверждён. Обратитесь в поддержку.",
+    "Speech recognition": "Распознавание речи",
+    "Speech synthesis": "Синтез речи",
+    "Asynchronous speech synthesis": "Асинхронный синтез речи",
+    "Image processing": "Обработка изображений",
+    "Video processing": "Обработка видео",
+    "Digital human": "Цифровой аватар",
+    "Document parsing": "Анализ документов",
+    "Decision": "Принятие решений",
+    "Content moderation": "Модерация контента"
   }
 }

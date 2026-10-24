@@ -16,7 +16,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 For commercial licensing, please contact support@quantumnous.com
 */
-import { type TFunction } from 'i18next'
+import type { TFunction } from 'i18next'
 
 import type { TokenUnit } from './types'
 
@@ -77,6 +77,16 @@ export const ENDPOINT_TYPES = {
   IMAGE_GENERATION: 'image-generation',
   EMBEDDINGS: 'embeddings',
   OPENAI_VIDEO: 'openai-video',
+  TRANSCRIPTION: 'transcription',
+  SPEECH: 'speech',
+  ASYNC_TTS: 'async-tts',
+  IMAGE_PROCESSING: 'image-processing',
+  VIDEO_PROCESSING: 'video-processing',
+  DIGITAL_HUMAN: 'digital-human',
+  OCR: 'ocr',
+  DOCUMENT: 'document',
+  DECISION: 'decision',
+  MODERATION: 'moderation',
 } as const
 
 export type EndpointTypeOption =
@@ -96,6 +106,16 @@ export function getEndpointTypeLabels(
     [ENDPOINT_TYPES.IMAGE_GENERATION]: t('Image'),
     [ENDPOINT_TYPES.EMBEDDINGS]: t('Embeddings'),
     [ENDPOINT_TYPES.OPENAI_VIDEO]: t('Video'),
+    [ENDPOINT_TYPES.TRANSCRIPTION]: t('Speech recognition'),
+    [ENDPOINT_TYPES.SPEECH]: t('Speech synthesis'),
+    [ENDPOINT_TYPES.ASYNC_TTS]: t('Asynchronous speech synthesis'),
+    [ENDPOINT_TYPES.IMAGE_PROCESSING]: t('Image processing'),
+    [ENDPOINT_TYPES.VIDEO_PROCESSING]: t('Video processing'),
+    [ENDPOINT_TYPES.DIGITAL_HUMAN]: t('Digital human'),
+    [ENDPOINT_TYPES.OCR]: 'OCR',
+    [ENDPOINT_TYPES.DOCUMENT]: t('Document parsing'),
+    [ENDPOINT_TYPES.DECISION]: t('Decision'),
+    [ENDPOINT_TYPES.MODERATION]: t('Content moderation'),
   }
 }
 

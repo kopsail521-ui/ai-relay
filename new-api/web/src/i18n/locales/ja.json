@@ -5472,6 +5472,15 @@
     "Per character": "文字単位",
     "Per 10,000 characters": "1万文字あたり",
     "Per 1,000,000 input characters": "入力100万文字あたり",
-    "Billing method not confirmed. Contact support.": "課金方法は未確認です。サポートにお問い合わせください。"
+    "Billing method not confirmed. Contact support.": "課金方法は未確認です。サポートにお問い合わせください。",
+    "Speech recognition": "音声認識",
+    "Speech synthesis": "音声合成",
+    "Asynchronous speech synthesis": "非同期音声合成",
+    "Image processing": "画像処理",
+    "Video processing": "動画処理",
+    "Digital human": "デジタルヒューマン",
+    "Document parsing": "文書解析",
+    "Decision": "意思決定",
+    "Content moderation": "コンテンツモデレーション"
   }
 }

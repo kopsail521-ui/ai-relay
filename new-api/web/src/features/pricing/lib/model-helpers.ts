@@ -109,6 +109,26 @@ export function isTokenBasedModel(model: PricingModel): boolean {
   return model.quota_type === QUOTA_TYPE_VALUES.TOKEN
 }
 
+/** Token-window metadata that can be shown in the public model details. */
+export function getModelTokenLimits(model: PricingModel): {
+  contextLength?: number
+  maxOutputTokens?: number
+} {
+  if (getModelContract(model.model_name)?.kind !== 'chat') return {}
+
+  return {
+    contextLength:
+      Number.isFinite(model.context_length) && (model.context_length ?? 0) > 0
+        ? model.context_length
+        : undefined,
+    maxOutputTokens:
+      Number.isFinite(model.max_output_tokens) &&
+      (model.max_output_tokens ?? 0) > 0
+        ? model.max_output_tokens
+        : undefined,
+  }
+}
+
 /** Show explicit non-token billing units and specification-based prices. */
 export function hasDedicatedPriceUnit(model: PricingModel): boolean {
   return Boolean(

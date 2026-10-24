@@ -5471,6 +5471,15 @@
     "Per character": "Mỗi ký tự",
     "Per 10,000 characters": "Mỗi 10.000 ký tự",
     "Per 1,000,000 input characters": "Mỗi 1.000.000 ký tự đầu vào",
-    "Billing method not confirmed. Contact support.": "Chưa xác nhận cách tính phí. Vui lòng liên hệ hỗ trợ."
+    "Billing method not confirmed. Contact support.": "Chưa xác nhận cách tính phí. Vui lòng liên hệ hỗ trợ.",
+    "Speech recognition": "Nhận dạng giọng nói",
+    "Speech synthesis": "Tổng hợp giọng nói",
+    "Asynchronous speech synthesis": "Tổng hợp giọng nói bất đồng bộ",
+    "Image processing": "Xử lý hình ảnh",
+    "Video processing": "Xử lý video",
+    "Digital human": "Người kỹ thuật số",
+    "Document parsing": "Phân tích tài liệu",
+    "Decision": "Quyết định",
+    "Content moderation": "Kiểm duyệt nội dung"
   }
 }

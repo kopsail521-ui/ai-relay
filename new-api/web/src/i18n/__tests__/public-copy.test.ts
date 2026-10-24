@@ -65,6 +65,19 @@ describe('public interface translations', () => {
       expect(instance.t('The model catalog could not be loaded')).not.toBe(
         'The model catalog could not be loaded'
       )
+      for (const key of [
+        'Speech recognition',
+        'Speech synthesis',
+        'Asynchronous speech synthesis',
+        'Image processing',
+        'Video processing',
+        'Digital human',
+        'Document parsing',
+        'Decision',
+        'Content moderation',
+      ]) {
+        expect(instance.t(key)).not.toBe(key)
+      }
     }
   )
 

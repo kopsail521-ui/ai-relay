@@ -5465,6 +5465,15 @@
     "Per character": "Par caractère",
     "Per 10,000 characters": "Par 10 000 caractères",
     "Per 1,000,000 input characters": "Par 1 000 000 de caractères en entrée",
-    "Billing method not confirmed. Contact support.": "Mode de facturation non confirmé. Contactez le support."
+    "Billing method not confirmed. Contact support.": "Mode de facturation non confirmé. Contactez le support.",
+    "Speech recognition": "Reconnaissance vocale",
+    "Speech synthesis": "Synthèse vocale",
+    "Asynchronous speech synthesis": "Synthèse vocale asynchrone",
+    "Image processing": "Traitement d’images",
+    "Video processing": "Traitement vidéo",
+    "Digital human": "Avatar numérique",
+    "Document parsing": "Analyse de documents",
+    "Decision": "Décision",
+    "Content moderation": "Modération de contenu"
   }
 }

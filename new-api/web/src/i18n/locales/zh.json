@@ -5520,6 +5520,15 @@
     "Per character": "按字符",
     "Per 10,000 characters": "每一万字符",
     "Per 1,000,000 input characters": "每一百万输入字符",
-    "Billing method not confirmed. Contact support.": "计费方式待确认，请联系客服。"
+    "Billing method not confirmed. Contact support.": "计费方式待确认，请联系客服。",
+    "Speech recognition": "语音识别",
+    "Speech synthesis": "语音合成",
+    "Asynchronous speech synthesis": "异步语音合成",
+    "Image processing": "图像处理",
+    "Video processing": "视频处理",
+    "Digital human": "数字人",
+    "Document parsing": "文档解析",
+    "Decision": "决策",
+    "Content moderation": "内容审核"
   }
 }

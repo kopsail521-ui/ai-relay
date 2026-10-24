@@ -37,7 +37,11 @@ import {
   getEndpointTypeLabels,
   getQuotaTypeLabels,
 } from '../constants'
-import { parseTags } from '../lib/filters'
+import {
+  getEndpointFilterType,
+  modelSupportsEndpointType,
+  parseTags,
+} from '../lib/filters'
 import { isGiftCreditModel } from '../lib/gift-credit'
 import type { PricingModel, PricingVendor } from '../types'
 
@@ -160,7 +164,7 @@ function FilterSection(props: FilterSectionProps) {
 export function PricingSidebar(props: PricingSidebarProps) {
   const { t } = useTranslation()
   const quotaTypeLabels = getQuotaTypeLabels(t)
-  const endpointTypeLabels = getEndpointTypeLabels(t)
+  const endpointTypeLabels: Record<string, string> = getEndpointTypeLabels(t)
 
   const vendorOptions: FilterOption[] = [
     {
@@ -233,22 +237,35 @@ export function PricingSidebar(props: PricingSidebarProps) {
     })),
   ]
 
+  const availableEndpointTypes = new Set(
+    props.models.flatMap((model) =>
+      (model.supported_endpoint_types || []).map(getEndpointFilterType)
+    )
+  )
+  if (props.endpointTypeFilter !== ENDPOINT_TYPES.ALL) {
+    availableEndpointTypes.add(props.endpointTypeFilter)
+  }
+  const orderedEndpointTypes = [
+    ...Object.keys(endpointTypeLabels).filter((value) =>
+      availableEndpointTypes.has(value)
+    ),
+    ...[...availableEndpointTypes].filter(
+      (value) => !Object.hasOwn(endpointTypeLabels, value)
+    ),
+  ]
   const endpointOptions: FilterOption[] = [
     {
       value: ENDPOINT_TYPES.ALL,
       label: endpointTypeLabels[ENDPOINT_TYPES.ALL],
       count: props.models.length,
     },
-    ...Object.entries(endpointTypeLabels)
-      .filter(([value]) => value !== ENDPOINT_TYPES.ALL)
-      .map(([value, label]) => ({
-        value,
-        label,
-        count: countBy(
-          props.models,
-          (model) => model.supported_endpoint_types?.includes(value) ?? false
-        ),
-      })),
+    ...orderedEndpointTypes.map((value) => ({
+      value,
+      label: endpointTypeLabels[value] || value,
+      count: countBy(props.models, (model) =>
+        modelSupportsEndpointType(model, value)
+      ),
+    })),
   ]
 
   return (

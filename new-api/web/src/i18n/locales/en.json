@@ -5520,6 +5520,15 @@
     "Per character": "Per character",
     "Per 10,000 characters": "Per 10,000 characters",
     "Per 1,000,000 input characters": "Per 1,000,000 input characters",
-    "Billing method not confirmed. Contact support.": "Billing method not confirmed. Contact support."
+    "Billing method not confirmed. Contact support.": "Billing method not confirmed. Contact support.",
+    "Speech recognition": "Speech recognition",
+    "Speech synthesis": "Speech synthesis",
+    "Asynchronous speech synthesis": "Asynchronous speech synthesis",
+    "Image processing": "Image processing",
+    "Video processing": "Video processing",
+    "Digital human": "Digital human",
+    "Document parsing": "Document parsing",
+    "Decision": "Decision",
+    "Content moderation": "Content moderation"
   }
 }

@@ -1450,6 +1450,12 @@
   ],
   "catalogRows": [
     {
+      "model": "deepseek-v4.1-flash-1017",
+      "category": "llm",
+      "keyo": "~$0.02 / $0.06 per 1M in/out",
+      "endpoint": "POST /v1/chat/completions"
+    },
+    {
       "model": "seedance-2.5",
       "category": "video",
       "keyo": "$0.1336 / second",

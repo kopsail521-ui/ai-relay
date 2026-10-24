@@ -26,7 +26,7 @@
 |------|------|
 | 视频 Path B（`/v1/videos/generations`） | `GET /v1/tasks/{id}`（**复数 tasks**） |
 | 视频 Path A（`/v1/videos`） | `GET /v1/videos/{id}` |
-| TTS 异步 / 文档解析 / InfiniteTalk | `GET /v1/task/{id}`（**单数 task**） |
+| TTS 异步 / 文档解析 / 数字人（InfiniteTalk / Duix-Avatar） | `GET /v1/task/{id}`（**单数 task**） |
 | 图片任务 | `GET /v1/images/tasks/{task_id}`（图片专用路径） |
 
 ---
@@ -39,8 +39,8 @@
 | 形态 | 用在什么上 | 路径示例 |
 |------|-----------|----------|
 | OpenAI 兼容 | 文本对话、模型列表、向量、文生图、语音识别、OCR | `POST /v1/chat/completions` · `GET /v1/models` · `POST /v1/embeddings` · `POST /v1/images/generations` · `POST /v1/audio/transcriptions` |
-| OpenAI 形状（部分覆盖） | TTS 同步、内容审核 | `POST /v1/audio/speech`——只覆盖 `GLM-TTS` / `Step-Audio-TTS-3B` / `IndexTTS-2`（见 §1.6 / §7），其它 TTS 走异步（§1.7 / §8）；`POST /v1/moderations`——`model` + `input` 与 OpenAI 同形，响应契约见 §13 |
-| 专属 REST | 视觉处理、异步视频、数字人、文档解析、系统一决策、视频工具 | 抠图/超分/展平/检测/分割/姿态（§1.10）· Path B 视频（§5）· InfiniteTalk（§12）· 文档解析 MinerU（§1.9 / §10）· 系统一决策（§1.11b）· 视频工具（§1.11a）——路径不同，Key 和余额相同 |
+| OpenAI 形状（部分覆盖） | TTS 同步、内容审核 | `POST /v1/audio/speech`——覆盖 `GLM-TTS` / `Step-Audio-TTS-3B` / `IndexTTS-2` / `eleven-v4` / `eleven-v4-turbo` / `gemini-3.8-flash-tts`（见 §1.6 / §7，Gemini TTS 原生亦走 `POST /v1beta/models/...:generateContent`），其它 TTS 走异步（§1.7 / §8）；`POST /v1/moderations`——`model` + `input` 与 OpenAI 同形，响应契约见 §13 |
+| 专属 REST | 视觉处理、异步视频、数字人、文档解析、系统一/结构化决策、视频工具 | 抠图/超分/展平/检测/分割/姿态（§1.10）· Path B 视频（§5）· 数字人说话视频（InfiniteTalk / Duix-Avatar，§1.11 / §12）· 文档解析 MinerU（§1.9 / §10）· 结构化决策（`POST /v1/systemone` 与 `POST /v1/decisions`，§1.11b）· 视频工具（§1.11a）——路径不同，Key 和余额相同 |
 
 规则：换模型只改 `model`；只有能力本身不是 OpenAI 形状时，才换路径。
 
@@ -51,7 +51,7 @@
 异步任务：**提交 → 拿到 id → 尚未完成时按族轮询 → 读 url/文本**。提交已返回成功结果或任务终态错误时直接处理；不要混轮询路径。
 
 **图片任务（§3）：** 进行中返回 HTTP 202，`status` 为 `reserved` / `submitting` / `running`；成功为 HTTP 200 + `status:"succeeded"` + 非空 `data[].url`。已记录的任务终态错误返回 HTTP 502，含 `error.task_id`；临时查询错误不代表任务失败，应重试同一任务的 GET（详见 §3.3）。
-**视频 / TTS / 文档解析 / InfiniteTalk 的归一状态：** `processing` | `completed` | `failed` | `cancelled`。这些接口可能仍带 `status_raw`（如 `succeeded` / `success` / `waiting`），以归一后的 `status` 为准；此规则不适用于图片任务。
+**视频 / TTS / 文档解析 / 数字人（InfiniteTalk / Duix-Avatar）的归一状态：** `processing` | `completed` | `failed` | `cancelled`。这些接口可能仍带 `status_raw`（如 `succeeded` / `success` / `waiting`），以归一后的 `status` 为准；此规则不适用于图片任务。
 
 | 能力族 | 提交后取 id | 轮询直到 | 结果怎么拿 |
 |--------|-------------|---------|------------|
@@ -98,7 +98,7 @@ Path B 轮询成功示例：
 ## 0.5 本地素材上传（本机图/音/视频 → 公网 URL）
 
 用于：**Path B 视频**（MiniMax / Wan / FLUX / Omni / Grok-imagine）、**Unlimited-OCR** / 多模态 chat 的 `image_url.url`。  
-不用于：ASR、抠图、超分、MinerU、InfiniteTalk（那些接口直接 multipart）。
+不用于：ASR、抠图、超分、MinerU、InfiniteTalk、Duix-Avatar（那些接口直接 multipart）。
 
 `POST https://www.keyoapi.xyz/v1/uploads`  
 别名：`POST https://www.keyoapi.xyz/v1/files`  
@@ -155,7 +155,7 @@ curl https://www.keyoapi.xyz/v1/videos/generations \
 
 赠送金 ID（`:free` 后缀）包含上述对话模型，以及 `GLM-ASR:free`、`SenseVoiceSmall:free`（语音识别，见 §1.5）与 `Spark-TTS-0.5B:free`（语音合成，见 §1.7）。`:free` 按对应赠送金费率、优先扣赠送金（新用户一次性 $10，邀请 +$3）。完整名单与实时费率以 https://www.keyoapi.xyz/free-models 为准，会动态调整。客户端的“连接测试成功”只说明测试请求通过；流式聊天还应确认收到 `choices[].delta.content` 和结束标记 `[DONE]`。若某个付费模型返回余额不足，先核对账户余额；账户仍有余额时保留 request id 联系支持，勿反复重试。
 
-付费：`gpt-5.6-luna` · `gpt-5.6-terra` · `gpt-5.6-sol` · `gpt-6-luna` · `gpt-6-sol` · `gpt-6-astra` · `claude-sonnet-5` · `claude-sonnet-5-5` · `claude-opus-5` · `claude-opus-5-5` · `claude-fable-5` · `claude-fable-5-1` · `gemini-3.7-flash` · `gemini-3.8-flash` · `grok-4.7` · `grok-4.6` · `minimax-m3` · `MiniMax-M3.1-Flash` · `glm-5.3` · `glm-5.3-flash` · `glm-5.2` · `deepseek-v4.1-flash` · `deepseek-v4.1-flash-1017` · `deepseek-v4-pro-0813` · `deepseek-v4-flash-0731` · `deepseek-v4-pro` · `deepseek-v4-flash` · `kimi-k3` · `kimi-k2.7-code` · `qwen3.8-flash` · `hy4-preview` · `mimo-v2.6-pro` · `mimo-v2.6-flash` · `qwen3.8-max-0902`
+付费：`gpt-5.6-luna` · `gpt-5.6-terra` · `gpt-5.6-sol` · `gpt-6-luna` · `gpt-6-sol` · `gpt-6-astra` · `gpt-6.1-sol` · `claude-sonnet-5` · `claude-sonnet-5-5` · `claude-opus-5` · `claude-opus-5-5` · `claude-haiku-5-5` · `claude-fable-5` · `claude-fable-5-1` · `gemini-3.7-flash` · `gemini-3.8-flash` · `gemini-4-argon` · `gemini-4-barium` · `grok-4.7` · `grok-4.6` · `minimax-m3` · `MiniMax-M3.1-Flash` · `glm-5.3` · `glm-5.3-flash` · `glm-5.2` · `deepseek-v4.1-flash` · `deepseek-v4.1-flash-1017` · `deepseek-v4-pro-0813` · `deepseek-v4-flash-0731` · `deepseek-v4-pro` · `deepseek-v4-flash` · `kimi-k3` · `kimi-k2.7-code` · `qwen3.8-flash` · `hy4-preview` · `mimo-v2.6-pro` · `mimo-v2.6-flash` · `qwen3.8-max-0902`
 
 ### 1.2 文生图 → `POST /v1/images/generations`
 
@@ -167,11 +167,9 @@ Path A 已无独立模型：打到这里的 wan / Seedance / FLUX / MiniMax / Ge
 
 ### 1.4 视频 Path B → `POST /v1/videos/generations` → 轮询 `GET /v1/tasks/{id}`
 
-`wan3.0-video` · `flux-3-video` · `MiniMax-H3` · `gemini-omni-1.1-flash` · `gemini-omni-1.1-flash-ext` · `seedance-2.0-1080p` · `seedance-2.0-1080p-fast` · `seedance-2.0-1080p-mini` · `seedance-2.5-1080p` · `seedance-2.0-720p` · `seedance-2.0-720p-fast` · `seedance-2.0-720p-mini` · `seedance-2.5-720p`  
+`wan3.0-video` · `flux-3-video` · `MiniMax-H3` · `seedance-2.5` · `seedance-2.0` · `seedance-2.0-fast` · `seedance-2.0-mini` · `agnes-video-2.5` · `gemini-omni-1.1-flash` · `gemini-omni-1.1-flash-ext`
 
-（`seedance-2.0` / `seedance-2.5` **已下架**，勿再调用。）
-
-（字段因模型而异，见第 5 节。）
+（字段因模型而异，见第 5 节。Seedance 亦兼容固定分辨率 SKU 如 `seedance-2.0-720p` / `seedance-2.0-1080p` 等。）
 
 ### 1.5 语音识别 ASR → `POST /v1/audio/transcriptions`（multipart）
 
@@ -179,11 +177,11 @@ Path A 已无独立模型：打到这里的 wan / Seedance / FLUX / MiniMax / Ge
 
 ### 1.6 TTS 同步 → `POST /v1/audio/speech`（返回音频字节）
 
-`GLM-TTS` · `Step-Audio-TTS-3B` · `IndexTTS-2`
+`GLM-TTS` · `Step-Audio-TTS-3B` · `IndexTTS-2` · `eleven-v4`（$80/1M 字符） · `eleven-v4-turbo`（$40/1M 字符） · `gemini-3.8-flash-tts`（支持 Google 原生 `POST /v1beta/models/gemini-3.8-flash-tts:generateContent` 与 OpenAI 兼容语音端点）
 
 ### 1.7 TTS 异步 → `POST /v1/async/audio/speech` → 轮询 `GET /v1/task/{id}`
 
-`Qwen3-TTS` · `CosyVoice3`（`IndexTTS-2` 也可走异步）
+`Qwen3-TTS` · `CosyVoice3` · `Spark-TTS-0.5B` · `Spark-TTS-0.5B:free`（`IndexTTS-2` 也可走异步）
 
 ### 1.8 OCR → `POST /v1/chat/completions`（多模态 messages）
 
@@ -204,9 +202,10 @@ Path A 已无独立模型：打到这里的 wan / Seedance / FLUX / MiniMax / Ge
 | 分割 | `POST /v1/images/segmentation` | `VajraV1` · `sam3` |
 | 姿态 | `POST /v1/images/pose-detection` | `VajraV1` |
 
-### 1.11 数字人说话视频 → `POST /v1/async/videos/image-to-video` → `GET /v1/task/{id}`
+### 1.11 数字人说话视频 → 异步生成 → 轮询 `GET /v1/task/{id}`
 
-`InfiniteTalk`（multipart：`model` + `prompt` + `cond_video` + `cond_audio`）
+- **图/视频+音频驱动**（`POST /v1/async/videos/image-to-video`）：`InfiniteTalk`（multipart：`model` + `prompt` + `cond_video` + `cond_audio`，约 $0.342/次）
+- **音视频驱动口型同步**（`POST /v1/async/videos/audio-video-to-video`）：`Duix-Avatar`（multipart 必填：`model=Duix-Avatar`、`ref_audio` 音频文件、`ref_video` 视频文件，最长 60 秒，分档计费从 $0.0685/秒 起）
 
 ### 1.11a 视频工具（异步按秒）→ `GET /v1/task/{id}`
 
@@ -217,11 +216,15 @@ Path A 已无独立模型：打到这里的 wan / Seedance / FLUX / MiniMax / Ge
 
 JSON 提交（示例）含 `model` + 视频 URL（或平台约定的 `video_url` / `url` 字段）；按成功处理时长折算秒计费。
 
-### 1.11b 系统一决策 → `POST /v1/systemone`
+### 1.11b 结构化决策 → `POST /v1/systemone` 与 `POST /v1/decisions`
 
+**System One 端点**（`POST /v1/systemone`）：
 `Bespoke-Nimble-9B`（**Jev / Open-Jev** 风格，BespokeLabs 2026-09-18，底座 Qwen3.5-9B-Instruct；JSON：`model` + `state` + `questions`；约 **$0.032 / $0** 每百万 tokens。非通用对话；每字段最多 26 选项；>2048 tokens 拒绝而非截断）
 
 `jev-1.13.0`（TypeSafe Jev System One；JSON 同上；约 **$0.0336 / $0** 每百万 tokens；上下文约 32k；不生成自由文本）
+
+**类型化路由决策端点**（`POST /v1/decisions`）：
+`cloudflare/clef`（Cloudflare 开源 27B 多模态结构化决策模型，从 **$0.063 / 1M** 输入 tokens 起，直接返回选项概率分布，免除自由生成与 JSON 解析）
 
 ```bash
 curl https://www.keyoapi.xyz/v1/systemone \
@@ -524,7 +527,7 @@ GET 进行中返回 202；完成返回 **HTTP 200**，以图片接口的 `status
 
 ### 5.2 Seedance SKU（按秒）
 
-旧 ID `seedance-2.0` / `seedance-2.5` **已下架**。请用下列固定分辨率 SKU（分辨率写在 model id 里，一般不必再传 `resolution`）：
+支持 4 个核心模型 ID（`seedance-2.5`、`seedance-2.0`、`seedance-2.0-fast`、`seedance-2.0-mini`，通过 `resolution` 参数指定 `480p` / `720p` / `1080p`），同时向下兼容下列固定分辨率 SKU：
 
 | model | 售价 |
 |------|------|
@@ -605,7 +608,7 @@ GET 进行中返回 202；完成返回 **HTTP 200**，以图片接口的 `status
 }
 ```
 
-**禁止：** 调用已下架的 `seedance-2.0` / `seedance-2.5`；`first_frame_image`（或首尾帧角色）与 `video_urls`/`audios` 混用；只有 `audios` 没有图/视频。
+**禁止：** `first_frame_image`（或首尾帧角色）与 `video_urls`/`audios` 混用；只有 `audios` 没有图/视频。
 
 ### 5.3 wan3.0-video
 
@@ -781,7 +784,7 @@ curl https://www.keyoapi.xyz/v1/audio/transcriptions \
 ## 7. TTS 同步
 
 `POST https://www.keyoapi.xyz/v1/audio/speech`  
-模型：`GLM-TTS` · `Step-Audio-TTS-3B` · `IndexTTS-2`
+模型：`GLM-TTS` · `Step-Audio-TTS-3B` · `IndexTTS-2` · `eleven-v4` · `eleven-v4-turbo` · `gemini-3.8-flash-tts`（原生端点 `POST /v1beta/models/gemini-3.8-flash-tts:generateContent`）
 
 ```json
 {
@@ -799,7 +802,7 @@ curl https://www.keyoapi.xyz/v1/audio/transcriptions \
 
 `POST https://www.keyoapi.xyz/v1/async/audio/speech`  
 轮询：`GET /v1/task/{id}`（单数）  
-模型：`Qwen3-TTS` · `CosyVoice3`
+模型：`Qwen3-TTS` · `CosyVoice3` · `Spark-TTS-0.5B` · `Spark-TTS-0.5B:free`
 
 ```json
 {

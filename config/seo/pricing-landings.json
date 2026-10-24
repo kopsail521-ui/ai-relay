@@ -43,13 +43,17 @@
           "model": "gemini-omni-1.1-flash",
           "official": "Google Omni / multimodal list — verify on Google",
           "keyo": "~$0.11 per request",
-          "note": "Request-metered Omni Flash"
+          "note": "Request-metered Omni Flash",
+          "category": "video",
+          "endpoint": "POST /v1/videos/generations"
         },
         {
           "model": "gemini-omni-1.1-flash-ext",
           "official": "Extended Omni list — verify on Google",
           "keyo": "~$0.42 per request",
-          "note": "Request-metered Omni Ext"
+          "note": "Request-metered Omni Ext",
+          "category": "video",
+          "endpoint": "POST /v1/videos/generations"
         }
       ],
       "freeKiller": {

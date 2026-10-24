@@ -29,7 +29,7 @@
 |------|-----------|----------|
 | OpenAI-compatible | Text chat, model list, embeddings, image generation, ASR, OCR | `POST /v1/chat/completions` · `GET /v1/models` · `POST /v1/embeddings` · `POST /v1/images/generations` · `POST /v1/audio/transcriptions` |
 | OpenAI-shaped (partial) | Sync TTS, content moderation | `POST /v1/audio/speech` — covers only `GLM-TTS` / `Step-Audio-TTS-3B` / `IndexTTS-2` (see §1.6 / §7), other TTS runs async (§1.7 / §8); `POST /v1/moderations` — `model` + `input` matches OpenAI, response contract in §13 |
-| Dedicated REST | Visual processing, async video, digital human, document parsing, System One decisions, video tools | Matting / upscale / unwarp / detect / segment / pose (§1.10) · Path B video (§5) · InfiniteTalk (§12) · MinerU document parsing (§1.9 / §10) · System One decisions (§1.11b) · video tools (§1.11a) — different paths, same key and balance |
+| Dedicated REST | Visual processing, async video, digital human, document parsing, System One / structured decisions, video tools | Matting / upscale / unwarp / detect / segment / pose (§1.10) · Path B video (§5) · Digital humans (InfiniteTalk / Duix-Avatar, §1.11 / §12) · MinerU document parsing (§1.9 / §10) · Structured decisions (`POST /v1/systemone` & `POST /v1/decisions`, §1.11b) · video tools (§1.11a) — different paths, same key and balance |
 
 Rule: switch models by changing `model`; change the path only when the capability itself is not OpenAI-shaped.
 
@@ -41,7 +41,7 @@ Rule: switch models by changing `model`; change the path only when the capabilit
 |------|------|
 | Video Path B (`/v1/videos/generations`) | `GET /v1/tasks/{id}` (**plural tasks**) |
 | Video Path A (`/v1/videos`) | `GET /v1/videos/{id}` |
-| TTS async / docs / InfiniteTalk | `GET /v1/task/{id}` (**singular task**) |
+| TTS async / docs / digital human (InfiniteTalk / Duix-Avatar) | `GET /v1/task/{id}` (**singular task**) |
 | Image tasks | `GET /v1/images/tasks/{task_id}` (image-specific path) |
 
 ---
@@ -51,7 +51,7 @@ Rule: switch models by changing `model`; change the path only when the capabilit
 Async flow: **submit → read id → poll by family while pending → read url/text**. Handle a success result or terminal task error returned at submission directly. Never mix poll paths.
 
 **Image tasks (§3):** pending responses are HTTP 202 with `status` = `reserved` / `submitting` / `running`; success is HTTP 200 + `status:"succeeded"` + nonempty `data[].url`. Recorded terminal task errors return HTTP 502 with `error.task_id`; temporary query errors do not mean the task failed — retry GET for the same task (§3.3).
-**Normalized status for video / TTS / document parsing / InfiniteTalk:** `processing` | `completed` | `failed` | `cancelled`. These responses may keep `status_raw` such as `succeeded` / `success` / `waiting`; use normalized `status` for these families. This rule does not apply to image tasks.
+**Normalized status for video / TTS / document parsing / digital humans (InfiniteTalk / Duix-Avatar):** `processing` | `completed` | `failed` | `cancelled`. These responses may keep `status_raw` such as `succeeded` / `success` / `waiting`; use normalized `status` for these families. This rule does not apply to image tasks.
 
 | Family | Submit id | Poll until | Result |
 |--------|-----------|------------|--------|
@@ -87,7 +87,7 @@ Path B poll success:
 ## 0.5 Local media upload (file → public URL)
 
 For: **Path B video** (MiniMax / Wan / FLUX / Omni / Grok-imagine), **Unlimited-OCR** / multimodal chat `image_url.url`.  
-Not for: ASR, matting, upscale, MinerU, InfiniteTalk (those accept multipart directly).
+Not for: ASR, matting, upscale, MinerU, InfiniteTalk, Duix-Avatar (those accept multipart directly).
 
 `POST https://www.keyoapi.xyz/v1/uploads`  
 Alias: `POST https://www.keyoapi.xyz/v1/files`  
@@ -144,7 +144,7 @@ Gift-credit (the `:free` suffix): `Atria-dawn-v2:free` · `DeepSeek-Prover-V2-7B
 
 Gift-credit IDs (`:free` suffix) include the chat lanes above, plus `GLM-ASR:free` and `SenseVoiceSmall:free` (ASR, §1.5) and `Spark-TTS-0.5B:free` (TTS, §1.7). Calls bill at dedicated gift-credit rates from your gift credit first (one-time $10 for new users, +$3 per invite). Full live list and rates: https://www.keyoapi.xyz/free-models.
 
-Paid: `gpt-5.6-luna` · `gpt-5.6-terra` · `gpt-5.6-sol` · `gpt-6-luna` · `gpt-6-sol` · `gpt-6-astra` · `claude-sonnet-5` · `claude-sonnet-5-5` · `claude-opus-5` · `claude-opus-5-5` · `claude-fable-5` · `claude-fable-5-1` · `gemini-3.7-flash` · `gemini-3.8-flash` · `grok-4.7` · `grok-4.6` · `minimax-m3` · `MiniMax-M3.1-Flash` · `glm-5.3` · `glm-5.3-flash` · `glm-5.2` · `deepseek-v4.1-flash` · `deepseek-v4.1-flash-1017` · `deepseek-v4-pro-0813` · `deepseek-v4-flash-0731` · `deepseek-v4-pro` · `deepseek-v4-flash` · `kimi-k3` · `kimi-k2.7-code` · `qwen3.8-flash` · `hy4-preview` · `mimo-v2.6-pro` · `mimo-v2.6-flash` · `qwen3.8-max-0902`
+Paid: `gpt-5.6-luna` · `gpt-5.6-terra` · `gpt-5.6-sol` · `gpt-6-luna` · `gpt-6-sol` · `gpt-6-astra` · `gpt-6.1-sol` · `claude-sonnet-5` · `claude-sonnet-5-5` · `claude-opus-5` · `claude-opus-5-5` · `claude-haiku-5-5` · `claude-fable-5` · `claude-fable-5-1` · `gemini-3.7-flash` · `gemini-3.8-flash` · `gemini-4-argon` · `gemini-4-barium` · `grok-4.7` · `grok-4.6` · `minimax-m3` · `MiniMax-M3.1-Flash` · `glm-5.3` · `glm-5.3-flash` · `glm-5.2` · `deepseek-v4.1-flash` · `deepseek-v4.1-flash-1017` · `deepseek-v4-pro-0813` · `deepseek-v4-flash-0731` · `deepseek-v4-pro` · `deepseek-v4-flash` · `kimi-k3` · `kimi-k2.7-code` · `qwen3.8-flash` · `hy4-preview` · `mimo-v2.6-pro` · `mimo-v2.6-flash` · `qwen3.8-max-0902`
 
 ### 1.2 Images → `POST /v1/images/generations`
 
@@ -156,11 +156,9 @@ Path A has no own models: wan / Seedance / FLUX / MiniMax / Gemini Omni posted h
 
 ### 1.4 Video Path B → `POST /v1/videos/generations` → poll `GET /v1/tasks/{id}`
 
-`wan3.0-video` · `flux-3-video` · `MiniMax-H3` · `gemini-omni-1.1-flash` · `gemini-omni-1.1-flash-ext` · `seedance-2.0-1080p` · `seedance-2.0-1080p-fast` · `seedance-2.0-1080p-mini` · `seedance-2.5-1080p` · `seedance-2.0-720p` · `seedance-2.0-720p-fast` · `seedance-2.0-720p-mini` · `seedance-2.5-720p`  
+`wan3.0-video` · `flux-3-video` · `MiniMax-H3` · `seedance-2.5` · `seedance-2.0` · `seedance-2.0-fast` · `seedance-2.0-mini` · `agnes-video-2.5` · `gemini-omni-1.1-flash` · `gemini-omni-1.1-flash-ext`
 
-(`seedance-2.0` / `seedance-2.5` are **delisted** — do not call.)
-
-(Fields differ by model — see §5.)
+(Fields differ by model — see §5. Seedance also supports fixed-resolution SKUs such as `seedance-2.0-720p` / `seedance-2.0-1080p`.)
 
 ### 1.5 ASR → `POST /v1/audio/transcriptions` (multipart)
 
@@ -168,11 +166,11 @@ Path A has no own models: wan / Seedance / FLUX / MiniMax / Gemini Omni posted h
 
 ### 1.6 TTS sync → `POST /v1/audio/speech` (audio bytes)
 
-`GLM-TTS` · `Step-Audio-TTS-3B` · `IndexTTS-2`
+`GLM-TTS` · `Step-Audio-TTS-3B` · `IndexTTS-2` · `eleven-v4` ($80/1M chars) · `eleven-v4-turbo` ($40/1M chars) · `gemini-3.8-flash-tts` (supports Google-native `POST /v1beta/models/gemini-3.8-flash-tts:generateContent` and OpenAI-compatible speech endpoint)
 
 ### 1.7 TTS async → `POST /v1/async/audio/speech` → poll `GET /v1/task/{id}`
 
-`Qwen3-TTS` · `CosyVoice3` (`IndexTTS-2` may also use async)
+`Qwen3-TTS` · `CosyVoice3` · `Spark-TTS-0.5B` · `Spark-TTS-0.5B:free` (`IndexTTS-2` may also use async)
 
 ### 1.8 OCR → `POST /v1/chat/completions` (multimodal messages)
 
@@ -193,9 +191,10 @@ Path A has no own models: wan / Seedance / FLUX / MiniMax / Gemini Omni posted h
 | Seg | `POST /v1/images/segmentation` | `VajraV1` · `sam3` |
 | Pose | `POST /v1/images/pose-detection` | `VajraV1` |
 
-### 1.11 Talking-head → `POST /v1/async/videos/image-to-video` → `GET /v1/task/{id}`
+### 1.11 Talking-head & digital human → async → poll `GET /v1/task/{id}`
 
-`InfiniteTalk` (multipart: `model` + `prompt` + `cond_video` + `cond_audio`)
+- **Image/video + audio driving** (`POST /v1/async/videos/image-to-video`): `InfiniteTalk` (multipart: `model` + `prompt` + `cond_video` + `cond_audio`, ~$0.342/request)
+- **Audio + video driving lip-sync** (`POST /v1/async/videos/audio-video-to-video`): `Duix-Avatar` (multipart required: `model=Duix-Avatar`, `ref_audio` audio file, `ref_video` video file, up to 60s, tiered pricing from $0.0685/sec)
 
 ### 1.11a Video tools (async, per-second) → `GET /v1/task/{id}`
 
@@ -206,11 +205,15 @@ Path A has no own models: wan / Seedance / FLUX / MiniMax / Gemini Omni posted h
 
 Submit JSON with `model` + video URL (`video_url` / `url`). Billed by successful processed duration in seconds.
 
-### 1.11b System One decisions → `POST /v1/systemone`
+### 1.11b Structured decisions → `POST /v1/systemone` & `POST /v1/decisions`
 
+**System One endpoint** (`POST /v1/systemone`):
 `Bespoke-Nimble-9B` (**Jev / Open-Jev**–style, BespokeLabs 2026-09-18, on Qwen3.5-9B-Instruct; JSON: `model` + `state` + `questions`; about **$0.032 / $0** per 1M tokens. Not general chat; max 26 options per field; prompts over 2048 tokens are rejected, not truncated)
 
 `jev-1.13.0` (TypeSafe Jev System One; same JSON shape; about **$0.0336 / $0** per 1M tokens; ~32k context; no free-form text)
+
+**Typed routing decisions endpoint** (`POST /v1/decisions`):
+`cloudflare/clef` (Cloudflare open-source 27B multimodal decision model, from **$0.063 / 1M** input tokens; returns option probability distribution directly without free-form text or JSON parsing)
 
 ```bash
 curl https://www.keyoapi.xyz/v1/systemone \
@@ -512,7 +515,7 @@ Reference image + audio:
 
 ### 5.2 Seedance SKUs (per-second)
 
-Legacy IDs `seedance-2.0` / `seedance-2.5` are **delisted**. Use these fixed-resolution SKUs (resolution is in the model id):
+Supports 4 core model IDs (`seedance-2.5`, `seedance-2.0`, `seedance-2.0-fast`, `seedance-2.0-mini`, select resolution via `resolution: "480p"|"720p"|"1080p"`), and remains backwards-compatible with fixed-resolution SKUs:
 
 | model | sell |
 |------|------|
@@ -593,7 +596,7 @@ Reference image + audio (never mix with first_frame_image):
 }
 ```
 
-**Forbidden:** delisted `seedance-2.0` / `seedance-2.5`; mixing `first_frame_image` (or frame roles) with `video_urls`/`audios`; `audios` alone without images/videos.
+**Forbidden:** mixing `first_frame_image` (or frame roles) with `video_urls`/`audios`; `audios` alone without images/videos.
 
 ### 5.3 wan3.0-video
 
@@ -749,7 +752,7 @@ Pick model from §1.5.
 ## 7. TTS sync
 
 `POST https://www.keyoapi.xyz/v1/audio/speech`  
-Models: `GLM-TTS` · `Step-Audio-TTS-3B` · `IndexTTS-2`
+Models: `GLM-TTS` · `Step-Audio-TTS-3B` · `IndexTTS-2` · `eleven-v4` · `eleven-v4-turbo` · `gemini-3.8-flash-tts` (native endpoint `POST /v1beta/models/gemini-3.8-flash-tts:generateContent`)
 
 ```json
 {
@@ -767,7 +770,7 @@ Response is audio bytes — save to a file.
 
 `POST https://www.keyoapi.xyz/v1/async/audio/speech`  
 Poll: `GET /v1/task/{id}` (singular)  
-Models: `Qwen3-TTS` · `CosyVoice3`
+Models: `Qwen3-TTS` · `CosyVoice3` · `Spark-TTS-0.5B` · `Spark-TTS-0.5B:free`
 
 ```json
 {
@@ -890,7 +893,7 @@ curl https://www.keyoapi.xyz/v1/models \
 | MiniMax with `image_with_roles` / `first_frame_image` | Use `images` / `audios` / `aspectRatio` |
 | grok-imagine prompt only | Add `image:{"url":"https://..."}` (local file → §0.5 first) |
 | Local path or base64 in video JSON | `POST /v1/uploads`, put returned `url` in JSON; or text-to-video |
-| Multipart / `-F file=@` for Path B | For Path B, upload first, then JSON + `image_urls` etc.; images at `/v1/images/edits`, ASR / matting / upscale / MinerU / InfiniteTalk and similar endpoints accept direct multipart using their own fields |
+| Multipart / `-F file=@` for Path B | For Path B, upload first, then JSON + `image_urls` etc.; images at `/v1/images/edits`, ASR / matting / upscale / MinerU / digital humans (InfiniteTalk / Duix-Avatar) and similar endpoints accept direct multipart using their own fields |
 | Calling `POST /v1/assets` or `asset://` | **None** — use `POST /v1/uploads` (or `/v1/files`) |
 | Video poll `/v1/task/` | Path B uses `/v1/tasks/` |
 | TTS async poll `/v1/tasks/` | Use `/v1/task/` |

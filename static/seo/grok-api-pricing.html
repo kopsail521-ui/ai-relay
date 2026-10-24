@@ -80,6 +80,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
 <h1>Grok API Pricing — KeyoAPI vs Typical xAI Context</h1>
 
 <p class="lead">Looking up Grok API pricing? KeyoAPI hosts grok-4.7 (and related Grok-class IDs when listed) on an OpenAI-compatible gateway — one prepaid wallet that also covers GPT-class, Claude, DeepSeek, and speech.</p>
+<p class="def"><strong>Grok API Pricing</strong> is a model-family pricing lane on KeyoAPI — a prepaid AI API gateway where one Bearer key and one wallet ($1 = 500,000 quota units) cover chat, speech, vision, OCR and video models.</p>
 <div class="btnrow">
   <a class="btn btn-primary" href="/sign-up">Get API key</a>
   <a class="btn btn-secondary" href="/pricing">Open Model Square</a>
@@ -120,6 +121,15 @@ ul{margin:0 0 14px;padding-left:1.2em}
   -H "Authorization: Bearer $KEYO_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{"model":"grok-4.7","messages":[{"role":"user","content":"Hello"}]}'</pre>
+<h2>Get started in five steps</h2>
+<ol class="steps">
+<li>Create an account — new users receive $10 of gift credit for prototyping.</li>
+<li>Create an API key in the <a href="/sign-in">console</a>.</li>
+<li>Point your OpenAI SDK at <code>https://www.keyoapi.xyz/v1</code> with the model ID from this page, or call the dedicated REST path from the <a href="/brand/keyo-api-ref.html">API handbook</a>.</li>
+<li>Track spend in the console Wallet — $1 equals 500,000 quota units, and gift credit burns before recharged balance.</li>
+<li>Set a per-key spending cap before wiring production traffic.</li>
+</ol>
+<p class="meta">A verified first call is the acceptance test for the setup: the response should carry the payload shape documented in the handbook, the Wallet ledger should show a deduction in quota units (500,000 units = $1), and repeated calls should deduct linearly at the listed rate. Any mismatch usually means the model ID or endpoint is wrong — check both against <a href="/pricing-list">the pricing list</a> before debugging client code.</p>
 <h2>FAQ</h2>
 <div class="faq"><details><summary>Is Keyo cheaper than official Grok API pricing?</summary><p>Often on the Keyo rows we list versus typical public xAI bands — but xAI list, tiers, and discounts change. Treat this table as a planning snapshot and verify both sides before you commit.</p></details>
 <details><summary>How do I try Grok on Keyo?</summary><p>Create a key at <a href="/sign-up">the sign-up page</a>, then open <a href="/model/grok-4.7">the grok-4.7 model page</a> for interactive try/buy. Model Square is the try path.</p></details>
@@ -174,6 +184,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
 
   <a href="https://launchclash.com" target="_blank" rel="noopener noreferrer"><img src="https://launchclash.com/assets/images/badge.png" alt="LaunchClash" height="54" loading="lazy" style="height:44px;width:auto;" /></a>
 
+  <span class="foot-updated">Updated 2026-10-24</span>
 </footer>
 </body>
 </html>

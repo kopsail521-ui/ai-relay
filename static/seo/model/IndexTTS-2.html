@@ -80,6 +80,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
 <h1>IndexTTS-2 API — Text to Speech and Voice Cloning</h1>
 
 <p class="lead">IndexTTS-2 is available on KeyoAPI as a hosted text-to-speech API: one REST call turns text into audio, with no model deployment and no separate vendor account.</p>
+<p class="def"><strong>IndexTTS-2</strong> is a speech / audio model on KeyoAPI, a prepaid AI API gateway: call it at <code>POST /v1/audio/speech</code>, billed at $1.37 / 10K characters from the same balance that covers chat, vision, OCR and video models.</p>
 <p class="meta">Listed price: <span class="ok">$1.37 / 10K characters</span> · Live catalog: <a href="/pricing">Model Square</a> · Static list: <a href="/pricing-list">pricing list</a>.</p>
 <div class="btnrow">
   <a class="btn btn-primary" href="/sign-up">Get API key</a>
@@ -89,8 +90,44 @@ ul{margin:0 0 14px;padding-left:1.2em}
 <h2>Overview</h2>
 <p>If you need an IndexTTS-2 endpoint you can call from code today, this is the shortest path. It runs on the synchronous speech endpoint, so a request returns audio in one round trip. That makes it the simpler of KeyoAPI’s TTS paths. For long narration or batch queues, CosyVoice3 and Qwen3-TTS (async) are usually a better fit. About $1.37 per 10,000 characters—map script length to cost in your CMS. Confirm live rates on <a href="/pricing-list">the full pricing list</a> before locking a quote. Product voiceovers, IVR prompts, agent spoken replies, and digital-human pipelines (pair with InfiniteTalk or Duix-Avatar). The basic synchronous example uses text input. Reference-audio enrollment and reusable voice-ID fields are not documented on this page; confirm them before implementing cloning. POST /v1/audio/speech with model=IndexTTS-2. Docs: /brand/keyo-docs.html. Try/buy: <a href="/pricing-list">the full pricing list</a>. You do not need to deploy weights: authenticate, send your text, and write the returned audio bytes to disk or a CDN. Keep TTS next to Whisper on the same key for full duplex voice agents. Normalize numbers and abbreviations before synthesis. Cache identical scripts by content hash. Fail closed on celebrity likeness without rights. Measure listener completion, not only HTTP 200. Try it from <a href="/pricing-list">the full pricing list</a>. There is no separate upload playground.</p>
 
+<h2>Where it fits</h2>
+<p>Speech models on KeyoAPI split into transcription (audio in, text out via multipart upload) and synthesis (text in, audio out, some via async task polling). Both directions bill on the same prepaid wallet as chat, so voice features can ride an existing balance without a second vendor account. For pipelines, transcription feeds agents and logs; synthesis closes the loop for voice replies.</p>
+<h2>Limits and good-fit use</h2>
+<p>Audio format and duration limits follow the endpoint contract: sync speech returns audio bytes directly, while async speech submits a task and returns a pollable id. Always verify live rates on the pricing list — speech models meter per request, per second or per 10k characters depending on the model.</p>
+<h2>Request contract</h2>
+<p>Speech requests split by direction. Transcription uploads audio as multipart form data with the model field, returning JSON text; synthesis posts JSON (or multipart for some clones) and returns audio bytes synchronously, or a task id for async lanes that you poll on the task endpoint until the render completes. Both directions authenticate with the same Bearer key as chat, and both deduct from the same prepaid wallet at the per-request or per-character rate listed above.</p>
+<h2>Compare within the family</h2>
+<ul>
+<li><a href="/model/CosyVoice3">CosyVoice3</a> — $1.37 / 10K characters</li>
+<li><a href="/model/Qwen3-TTS">Qwen3-TTS</a> — $0.548 / 10K characters</li>
+<li><a href="/model/whisper-large-v3">whisper-large-v3</a> — $0.0103 / request</li>
+<li><a href="/model/InfiniteTalk">InfiniteTalk</a> — $0.342 / request</li>
+</ul>
+<h2>Key facts</h2>
+<ul class="facts">
+<li>Listed price: <strong>$1.37 / 10K characters</strong></li>
+<li>Billing base: $1 of wallet balance = 500,000 quota units</li>
+<li>Gift-credit twin: <code>IndexTTS-2:free</code> — new users get $10 gift credit, invites add $3, gift credits spend first</li>
+<li>Endpoint: <code>POST /v1/audio/speech</code> with Bearer auth on <code>https://www.keyoapi.xyz/v1</code></li>
+</ul>
+<h2>Pricing and billing</h2>
+<p>This model meters at $1.37 / 10K characters. Balance converts at a fixed rate — $1 equals 500,000 quota units — so every call deducts from the same prepaid wallet that powers chat, speech and document models. Check the live number on <a href="/pricing-list">the full pricing list</a> before locking a quote; catalog rates can move with upstream cost, and the pricing list is the authoritative source for every model sold on the gateway.</p>
+<p>Concretely: at $1.37 / 10K characters, $1 of balance buys about 0.73 metered units, and the $10 new-user gift credit covers roughly 7.3 before any top-up. Budget at the line item you actually ship — requests, seconds or characters — not at token level, and re-check the row on <a href="/pricing-list">the pricing list</a> when upstream rates move.</p>
+<h3>Before production</h3>
+<ul>
+<li>Pin the exact model ID from the pricing list — close names are not interchangeable.</li>
+<li>Alert on wallet balance and per-call spend, not just on HTTP errors.</li>
+<li>Retry only idempotent reads; async lanes should poll the task endpoint instead of re-submitting.</li>
+<li>Re-run one end-to-end call after any catalog or rate change.</li>
+</ul>
 
-<h2>Quick start</h2>
+<h2>How to call it</h2>
+<ol class="steps">
+<li>Create an account and top up the prepaid wallet — new accounts include $10 of gift credit.</li>
+<li>Create an API key in the <a href="/sign-in">console</a>.</li>
+<li>Send the request: <code>model=IndexTTS-2</code> at <code>POST /v1/audio/speech</code>.</li>
+</ol>
+<p class="meta">Verify with one cheap call before production: the Wallet ledger should show the deduction in quota units (500,000 units = $1), repeated calls should deduct linearly at the listed rate, and a mismatch usually means the model ID or endpoint string is wrong — reconcile both against <a href="/pricing-list">the pricing list</a> before debugging client code.</p>
 <div class="card">
 <p>Base URL: <code>https://www.keyoapi.xyz/v1</code></p>
 <p>Endpoint: <code>POST /v1/audio/speech</code></p>
@@ -162,6 +199,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
 
   <a href="https://launchclash.com" target="_blank" rel="noopener noreferrer"><img src="https://launchclash.com/assets/images/badge.png" alt="LaunchClash" height="54" loading="lazy" style="height:44px;width:auto;" /></a>
 
+  <span class="foot-updated">Updated 2026-10-24</span>
 </footer>
 </body>
 </html>

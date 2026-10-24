@@ -37,6 +37,23 @@
   </header>
   <div class="k-page">
     <h1 data-i18n="title">FAQ</h1>
+<p class="def">The KeyoAPI FAQ is an answers index for a prepaid AI API gateway where one Bearer key and one wallet (<h1 data-i18n="title">FAQ</h1> = 500,000 quota units) cover chat, speech, vision, OCR and video models.</p>
+<h2>Key facts</h2>
+<ul class="facts">
+<li>Billing base: <h1 data-i18n="title">FAQ</h1> of wallet balance = 500,000 quota units</li>
+<li>Gift credit: new users get <h1 data-i18n="title">FAQ</h1>0, invites add $3 — spend-first on <code>:free</code> IDs</li>
+<li>OpenAI-compatible base URL: <code>https://www.keyoapi.xyz/v1</code>; dedicated REST for OCR, vision and video</li>
+<li>Live rates: <a href="/pricing-list">the full pricing list</a> is the authoritative source</li>
+</ul>
+<h2>Get started in five steps</h2>
+<ol class="steps">
+<li>Create an account — new users receive <h1 data-i18n="title">FAQ</h1>0 of gift credit for prototyping.</li>
+<li>Create an API key in the <a href="/sign-in">console</a>.</li>
+<li>Point your OpenAI SDK at <code>https://www.keyoapi.xyz/v1</code> with any model ID from the pricing list.</li>
+<li>Track spend in the Wallet — gift credit burns before recharged balance.</li>
+<li>Set a per-key spending cap before wiring production traffic.</li>
+</ol>
+<h2>Account and billing</h2>
     <p class="sub" data-i18n="sub">KeyoAPI frequently asked questions</p>
 
     <details open>
@@ -59,7 +76,8 @@
       <summary data-i18n="q5">Are there free models?</summary>
       <p data-i18n-html="a5">Yes. Gift-credit models (IDs ending in <code>:free</code>) are billed at dedicated gift-credit rates; gift credits are used first (new users: $10; per invite: $3), with any shortfall charged to your recharge balance. Live list: <a href="/free-models">the gift-credit models page</a>.</p>
     </details>
-    <details>
+    <h2>Models, clients and support</h2>
+<details>
       <summary data-i18n="q6">Which clients are supported?</summary>
       <p data-i18n-html="a6">OpenAI-compatible clients can be configured with Base URL <code>https://www.keyoapi.xyz/v1</code> and Chat Completions. Copy the complete model ID. Compatibility depends on the model, client version, streaming and tool requirements; a successful connection test does not verify all features. See <a href="/brand/keyo-docs.html">setup instructions</a>.</p>
     </details>
@@ -312,5 +330,6 @@ const initialLang = embedded
   : (readQueryLang() || readStoredLang() || navigator.language || 'en');
 applyLang(initialLang);
 </script>
+  <p class="sub">Updated 2026-10-24 · Rates verified against <a href="/pricing-list">the pricing list</a>.</p>
 </body>
 </html>

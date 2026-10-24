@@ -80,6 +80,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
 <h1>Nano Banana Pro API — Google's Top Image Tier on KeyoAPI</h1>
 
 <p class="lead">Nano Banana Pro is Google's top image generation tier served on KeyoAPI's OpenAI-compatible /v1/images/generations endpoint — same Bearer key as chat, $0.0274 per image, built for high-resolution commercial visuals and fine-grained editing.</p>
+<p class="def"><strong>nano-banana-pro</strong> is a vision model on KeyoAPI, a prepaid AI API gateway: call it at <code>POST /v1/images/generations</code>, billed at $0.0274 / image from the same balance that covers chat, vision, OCR and video models.</p>
 <p class="meta">Listed price: <span class="ok">$0.0274 / image</span> · Live catalog: <a href="/pricing">Model Square</a> · Static list: <a href="/pricing-list">pricing list</a>.</p>
 <div class="btnrow">
   <a class="btn btn-primary" href="/sign-up">Get API key</a>
@@ -93,8 +94,43 @@ ul{margin:0 0 14px;padding-left:1.2em}
 <p>Use aspectRatio (for example 1:1) and imageSize (1K, 2K or 4K); do not send GPT-style pixel sizes. Keep the returned task_id: HTTP 202 means the same task is still running. Query GET /v1/images/tasks/{task_id} with the same API key until HTTP 200, status=succeeded and data[].url is nonempty. A new generation needs a new idempotency key. Recover the same operation with its original key and identical parameters; do not change the key just because the result is slow. Temporary GET errors should retry the same saved task, not create another image. See <a href="/brand/keyo-api-ref.html#section-3">the API endpoint reference</a> for the complete image contract.</p>
 <p>Keep the task receipt and request parameters with your project before waiting for an image. A temporary query failure should resume the same task ID. A new prompt is a new operation and needs a new idempotency key; recovery of the same operation retains its existing key and parameters. Download a successful image while its result URL remains available, and record terminal errors instead of starting a replacement automatically.</p>
 
+<h2>Where it fits</h2>
+<p>This model serves its lane on KeyoAPI's prepaid gateway: one Bearer key, one wallet, and the same billing base ($1 = 500,000 quota units) as chat and vision models. Whatever the workload — prototyping, batch jobs or production traffic — the metered rate above is the number that hits the wallet.</p>
+<h2>Limits and good-fit use</h2>
+<p>Fair-use limits apply to gift-credit lanes, and catalog rates can move with upstream cost — confirm the live row on the pricing list before quoting customers or locking pricing into your own product.</p>
+<h2>Request contract</h2>
+<p>Requests authenticate with the standard Bearer key and hit the documented path above; responses follow the contract in the <a href="/brand/keyo-api-ref.html">API handbook</a> for this lane. Billing lands on the same prepaid wallet at the listed rate, with the pricing list as the authoritative number.</p>
+<h2>Compare within the family</h2>
+<ul>
+<li><a href="/model/nano-banana-2.1">nano-banana-2.1</a> — $0.0123 / image</li>
+<li><a href="/model/nano-banana-2">nano-banana-2</a> — $0.0205 / image</li>
+<li><a href="/model/RMBG-2.0">RMBG-2.0</a> — $0.0685 / request</li>
+</ul>
+<h2>Key facts</h2>
+<ul class="facts">
+<li>Listed price: <strong>$0.0274 / image</strong></li>
+<li>Billing base: $1 of wallet balance = 500,000 quota units</li>
+<li>Gift-credit twin: <code>nano-banana-pro:free</code> — new users get $10 gift credit, invites add $3, gift credits spend first</li>
+<li>Endpoint: <code>POST /v1/images/generations</code> with Bearer auth on <code>https://www.keyoapi.xyz/v1</code></li>
+</ul>
+<h2>Pricing and billing</h2>
+<p>This model meters at $0.0274 / image. Balance converts at a fixed rate — $1 equals 500,000 quota units — so every call deducts from the same prepaid wallet that powers chat, speech and document models. Check the live number on <a href="/pricing-list">the full pricing list</a> before locking a quote; catalog rates can move with upstream cost, and the pricing list is the authoritative source for every model sold on the gateway.</p>
+<p>Concretely: at $0.0274 / image, $1 of balance buys about 36 metered units, and the $10 new-user gift credit covers roughly 364 before any top-up. Budget at the line item you actually ship — requests, seconds or characters — not at token level, and re-check the row on <a href="/pricing-list">the pricing list</a> when upstream rates move.</p>
+<h3>Before production</h3>
+<ul>
+<li>Pin the exact model ID from the pricing list — close names are not interchangeable.</li>
+<li>Alert on wallet balance and per-call spend, not just on HTTP errors.</li>
+<li>Retry only idempotent reads; async lanes should poll the task endpoint instead of re-submitting.</li>
+<li>Re-run one end-to-end call after any catalog or rate change.</li>
+</ul>
 
-<h2>Quick start</h2>
+<h2>How to call it</h2>
+<ol class="steps">
+<li>Create an account and top up the prepaid wallet — new accounts include $10 of gift credit.</li>
+<li>Create an API key in the <a href="/sign-in">console</a>.</li>
+<li>Send the request: <code>model=nano-banana-pro · prompt required · aspectRatio=1:1 · imageSize=1K</code> at <code>POST /v1/images/generations</code>.</li>
+</ol>
+<p class="meta">Verify with one cheap call before production: the Wallet ledger should show the deduction in quota units (500,000 units = $1), repeated calls should deduct linearly at the listed rate, and a mismatch usually means the model ID or endpoint string is wrong — reconcile both against <a href="/pricing-list">the pricing list</a> before debugging client code.</p>
 <div class="card">
 <p>Base URL: <code>https://www.keyoapi.xyz/v1</code></p>
 <p>Endpoint: <code>POST /v1/images/generations</code></p>
@@ -164,6 +200,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
 
   <a href="https://launchclash.com" target="_blank" rel="noopener noreferrer"><img src="https://launchclash.com/assets/images/badge.png" alt="LaunchClash" height="54" loading="lazy" style="height:44px;width:auto;" /></a>
 
+  <span class="foot-updated">Updated 2026-10-24</span>
 </footer>
 </body>
 </html>

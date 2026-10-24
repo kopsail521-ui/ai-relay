@@ -425,7 +425,49 @@ ${landingLinks}
 
   <a href="https://launchclash.com" target="_blank" rel="noopener noreferrer"><img src="https://launchclash.com/assets/images/badge.png" alt="LaunchClash" height="54" loading="lazy" style="height:44px;width:auto;" /></a>
 
+  <span class="foot-updated">Updated ${BUILD_DATE}</span>
 </footer>`;
+}
+
+// T-008..T-010 extraction-block helpers (see content/facts.md red lines:
+// only real numbers from config; definitions phrased as is-a sentences).
+const BUILD_DATE = new Date().toISOString().slice(0, 10);
+
+function factsBlock(items) {
+  return `<ul class="facts">\n${items
+    .filter(Boolean)
+    .map((t) => `<li>${t}</li>`)
+    .join("\n")}\n</ul>`;
+}
+
+function stepsBlock(steps) {
+  return `<ol class="steps">\n${steps
+    .map((t) => `<li>${t}</li>`)
+    .join("\n")}\n</ol>`;
+}
+
+// T-010: universal quickstart with the real numbers from the fact card
+function getStartedBlock() {
+  return `<h2>Get started in five steps</h2>
+${stepsBlock([
+  `Create an account — new users receive $10 of gift credit for prototyping.`,
+  `Create an API key in the <a href="/sign-in">console</a>.`,
+  `Point your OpenAI SDK at <code>https://www.keyoapi.xyz/v1</code> with the model ID from this page, or call the dedicated REST path from the <a href="/brand/keyo-api-ref.html">API handbook</a>.`,
+  `Track spend in the console Wallet — $1 equals 500,000 quota units, and gift credit burns before recharged balance.`,
+  `Set a per-key spending cap before wiring production traffic.`,
+])}
+<p class="meta">A verified first call is the acceptance test for the setup: the response should carry the payload shape documented in the handbook, the Wallet ledger should show a deduction in quota units (500,000 units = $1), and repeated calls should deduct linearly at the listed rate. Any mismatch usually means the model ID or endpoint is wrong — check both against <a href="/pricing-list">the pricing list</a> before debugging client code.</p>`;
+}
+
+// T-008: wallet/gift-credit fact list — every number is from content/facts.md
+function walletFactsBlock() {
+  return `<h2>Key facts</h2>
+${factsBlock([
+  `Billing base: $1 of wallet balance = 500,000 quota units`,
+  `Gift credit: new users get $10, invites add $3 — spend-first on <code>:free</code> IDs`,
+  `OpenAI-compatible base URL: <code>https://www.keyoapi.xyz/v1</code>; dedicated REST for OCR, vision and video`,
+  `Live rates: <a href="/pricing-list">the full pricing list</a> is the authoritative source`,
+])}`;
 }
 
 function layout({ title, description, canonical, h1, bodyHtml, jsonLd }) {
@@ -546,8 +588,11 @@ function renderContentLanding(p) {
     canonical,
     h1: p.h1,
     bodyHtml: `<p class="lead">${linkifySitePaths(p.lead, `/${p.slug}`)}</p>
+<p class="def"><strong>${esc(p.h1.replace(/ — .*/, "").replace(/ \| .*/, ""))}</strong> is a capability lane on KeyoAPI — a prepaid AI API gateway where one Bearer key and one wallet ($1 = 500,000 quota units) cover chat, speech, vision, OCR and video models.</p>
 <div class="btnrow"><a class="btn btn-primary" href="/sign-up">Get API key</a><a class="btn btn-secondary" href="/pricing">Live prices</a><a class="btn btn-secondary" href="/models">Model guides</a></div>
 ${renderContentSections(p.sections, `/${p.slug}`)}
+${walletFactsBlock()}
+${getStartedBlock()}
 <h2>FAQ</h2><div class="faq">${p.faqs.map((f) => `<details><summary>${esc(f.q)}</summary><p>${linkifySitePaths(f.a, `/${p.slug}`)}</p></details>`).join("\n")}</div>
 <h2>Related guides</h2><div class="grid">${p.related.map((href) => `<a href="${esc(href)}">${esc(pathLabel(href))}</a>`).join("\n")}</div>`,
     jsonLd: {
@@ -585,8 +630,97 @@ function renderModel(m) {
     )
     .join("\n");
   const curl = m.curlExample || "";
+  const twin = isFreeId(`${m.id}:free`) ? `${m.id}:free` : "";
+  const catLabel =
+    ({
+      chat: "chat (LLM)",
+      speech: "speech / audio",
+      video: "async video generation",
+      image: "image / vision",
+      ocr: "document OCR",
+      embedding: "text embedding",
+      moderation: "content moderation",
+      decision: "typed routing decision",
+    })[String(m.category || "").toLowerCase()] || `${m.category || "AI"}`;
+  const defSentence = `<strong>${esc(m.id)}</strong> is a ${esc(catLabel)} model on KeyoAPI, a prepaid AI API gateway: call it at <code>${esc(m.endpoint)}</code>, billed at ${esc(m.priceLabel)} from the same balance that covers chat, vision, OCR and video models.`;
+  const factsHtml = factsBlock([
+    `Listed price: <strong>${esc(m.priceLabel)}</strong>`,
+    `Billing base: $1 of wallet balance = 500,000 quota units`,
+    twin
+      ? `Gift-credit twin: <code>${esc(twin)}</code> — new users get $10 gift credit, invites add $3, gift credits spend first`
+      : `Gift credit: new users get $10, invites add $3 (spend-first on <code>:free</code> IDs)`,
+    `Endpoint: <code>${esc(m.endpoint)}</code> with Bearer auth on <code>https://www.keyoapi.xyz/v1</code>`,
+  ]);
+  const billingPara = `This model meters at ${esc(m.priceLabel)}. Balance converts at a fixed rate — $1 equals 500,000 quota units — so every call deducts from the same prepaid wallet that powers chat, speech and document models. Check the live number on <a href="/pricing-list">the full pricing list</a> before locking a quote; catalog rates can move with upstream cost, and the pricing list is the authoritative source for every model sold on the gateway.`;
+  // Real arithmetic from the listed price: "$X / unit -> $1 buys N units"
+  const priceNum = Number(String(m.priceLabel).match(/\$([0-9][0-9.,]*)/)?.[1]?.replace(/,/g, ""));
+  const fmtQty = (q) =>
+    q >= 10 ? Math.floor(q).toLocaleString("en-US") : q >= 1 ? String(Math.round(q * 10) / 10) : q.toFixed(2);
+  const billingExample =
+    priceNum && priceNum > 0
+      ? `Concretely: at ${esc(m.priceLabel)}, $1 of balance buys about ${fmtQty(1 / priceNum)} metered units, and the $10 new-user gift credit covers roughly ${fmtQty(10 / priceNum)} before any top-up. Budget at the line item you actually ship — requests, seconds or characters — not at token level, and re-check the row on <a href="/pricing-list">the pricing list</a> when upstream rates move.`
+      : "";
+  const checklist = `<h3>Before production</h3>
+<ul>
+<li>Pin the exact model ID from the pricing list — close names are not interchangeable.</li>
+<li>Alert on wallet balance and per-call spend, not just on HTTP errors.</li>
+<li>Retry only idempotent reads; async lanes should poll the task endpoint instead of re-submitting.</li>
+<li>Re-run one end-to-end call after any catalog or rate change.</li>
+</ul>`;
+  // Request/response contract per family — real behavior from the API handbook
+  const contractNote = ({
+    chat: `The request contract is the OpenAI chat shape: a JSON body with <code>model</code> and <code>messages</code> posted to the completions endpoint, Bearer auth in the header. Responses return the standard choice structure, and streaming works server-sent-event style like the official API, so existing SDK code runs unchanged after swapping base URL and key. Tool calls and system prompts follow the same field names as the official API; keep an eye on per-model support for tool fields before relying on them.`,
+    speech: `Speech requests split by direction. Transcription uploads audio as multipart form data with the model field, returning JSON text; synthesis posts JSON (or multipart for some clones) and returns audio bytes synchronously, or a task id for async lanes that you poll on the task endpoint until the render completes. Both directions authenticate with the same Bearer key as chat, and both deduct from the same prepaid wallet at the per-request or per-character rate listed above.`,
+    video: `Video generation is submit-then-poll: POST the JSON request (prompt, model, options such as resolution or duration) to the async generation endpoint, receive a task id immediately, then GET the task endpoint until status turns completed and the response carries the download URL. Failed renders surface their error status on the same poll and are not billed. Keep the task id; it is the handle for both polling and support tickets.`,
+    image: `Image and vision tools use dedicated REST paths with their own JSON or multipart shapes — detection, segmentation, matting and upscaling each document their fields in the API handbook. Requests authenticate with the same Bearer key, bill per request at the listed rate, and return JSON with coordinates, masks or image URLs depending on the tool. Latency scales with input size but the price does not, unless the model row states a size tier.`,
+    ocr: `OCR accepts a file upload on its dedicated REST path and returns extracted text or structured markdown in the response body. The same Bearer key authorizes it, and billing lands on the same wallet per request. For pipelines, expect the response to pair raw text with layout hints; feed the extraction straight into a chat call on the same key to summarize, classify or answer questions over the document.`,
+    embedding: `Embedding requests post an array of input strings and return one vector per input, metered on input tokens only. There is no output-token component, so cost is fully predictable from corpus size. Vectors from different models are not interchangeable — re-embed the corpus if you switch the model ID, and prototype the switch with gift credit before committing to the re-index.`,
+  })[String(m.category || "").toLowerCase()] ||
+    `Requests authenticate with the standard Bearer key and hit the documented path above; responses follow the contract in the <a href="/brand/keyo-api-ref.html">API handbook</a> for this lane. Billing lands on the same prepaid wallet at the listed rate, with the pricing list as the authoritative number.`;
+  const priceOf = (id) => {
+    const r = pages.models.find((x) => x.id === id || x.modelId === id);
+    return r && r.priceLabel ? r.priceLabel : "";
+  };
+  const familyLis = (m.related || [])
+    .filter((id) => id !== m.id && (!m.modelId || id !== m.modelId))
+    .slice(0, 4)
+    .map((id) => {
+      const p = priceOf(id);
+      return `<li><a href="${catalogHref(id)}">${esc(id)}</a>${p ? ` — ${esc(p)}` : ""}</li>`;
+    })
+    .join("\n");
+  const familyNotes = ({
+    chat: [
+      "On the OpenAI-compatible completions lane, the same request shape covers system prompts, tool calls and streaming responses. Metering runs on both input and output tokens, so prompt discipline is the main cost lever: trim system text, cap max_tokens, and route high-volume classification to a cheaper flash-class ID before scaling. Pair with an embedding model for retrieval-augmented flows on the same key.",
+      "Context windows and tool-call behavior vary per model — verify the exact model string against the pricing list before shipping. There is no free tier unless a :free gift-credit twin is listed; prototypes should burn gift credit first, then switch the model string to the metered ID for production volume.",
+    ],
+    speech: [
+      "Speech models on KeyoAPI split into transcription (audio in, text out via multipart upload) and synthesis (text in, audio out, some via async task polling). Both directions bill on the same prepaid wallet as chat, so voice features can ride an existing balance without a second vendor account. For pipelines, transcription feeds agents and logs; synthesis closes the loop for voice replies.",
+      "Audio format and duration limits follow the endpoint contract: sync speech returns audio bytes directly, while async speech submits a task and returns a pollable id. Always verify live rates on the pricing list — speech models meter per request, per second or per 10k characters depending on the model.",
+    ],
+    video: [
+      "Video generation runs on the async contract: submit to the generation endpoint, receive a task id, then poll GET /v1/task/{id} until the render completes and returns a downloadable URL. Billing is per output second, and resolution or reference-input tiers can shift the rate, so the pricing-list row for the exact tier is the number to quote customers.",
+      "Async tasks consume balance at submission, with failed renders refunded per the task status. Keep clips short while testing — a 5-second render at the listed per-second rate costs 5× the unit price — and batch production runs only after validating one clip end to end.",
+    ],
+    image: [
+      "Vision and image-tool models run on dedicated REST paths rather than the chat endpoint, each with its own request shape documented in the API handbook. Most meter per request, which makes unit economics predictable for product features like background removal, upscaling or segmentation buttons.",
+      "Per-request metering means input size affects latency but not price on most lanes; confirm the specific row on the pricing list. For chat-with-vision workloads, use the multimodal chat models instead — they stay on /v1/chat/completions.",
+    ],
+    ocr: [
+      "Document OCR models accept file uploads on dedicated REST paths and return structured text or markdown, billing per request. They pair naturally with chat models on the same key: OCR first to extract, then an LLM call to summarize or answer questions over the extracted text.",
+      "Per-request billing makes cost proportional to document count, not page count, unless the model row states otherwise — verify on the pricing list. Handwriting-heavy or mixed-layout documents are the usual accuracy boundary.",
+    ],
+    embedding: [
+      "Embedding models meter on input tokens only and feed retrieval, clustering and dedup pipelines. They share the prepaid wallet with chat and vision models, so a RAG stack can run on one balance and one key.",
+      "Embedding dimensions and token ceilings vary per model; check the pricing-list row before choosing a vector-store schema. Switching models later means re-embedding the corpus, so prototype with gift credit before committing.",
+    ],
+  })[String(m.category || "").toLowerCase()] || [
+    `This model serves its lane on KeyoAPI's prepaid gateway: one Bearer key, one wallet, and the same billing base ($1 = 500,000 quota units) as chat and vision models. Whatever the workload — prototyping, batch jobs or production traffic — the metered rate above is the number that hits the wallet.`,
+    "Fair-use limits apply to gift-credit lanes, and catalog rates can move with upstream cost — confirm the live row on the pricing list before quoting customers or locking pricing into your own product.",
+  ];
   const bodyHtml = `
 <p class="lead">${linkifySitePaths(lead, modelPath)}</p>
+<p class="def">${defSentence}</p>
 <p class="meta">Listed price: <span class="ok">${esc(m.priceLabel)}</span> · Live catalog: <a href="/pricing">Model Square</a> · Static list: <a href="/pricing-list">pricing list</a>.</p>
 <div class="btnrow">
   <a class="btn btn-primary" href="/sign-up">Get API key</a>
@@ -596,8 +730,27 @@ function renderModel(m) {
 <h2>Overview</h2>
 ${paras}
 ${renderContentSections(m.guideSections, modelPath)}
+<h2>Where it fits</h2>
+<p>${familyNotes[0]}</p>
+<h2>Limits and good-fit use</h2>
+<p>${familyNotes[1]}</p>
+<h2>Request contract</h2>
+<p>${contractNote}</p>
+${familyLis ? `<h2>Compare within the family</h2>\n<ul>\n${familyLis}\n</ul>` : ""}
+<h2>Key facts</h2>
+${factsHtml}
+<h2>Pricing and billing</h2>
+<p>${billingPara}</p>
+${billingExample ? `<p>${billingExample}</p>` : ""}
+${checklist}
 ${freeTierBlock(m)}
-<h2>Quick start</h2>
+<h2>How to call it</h2>
+${stepsBlock([
+  `Create an account and top up the prepaid wallet — new accounts include $10 of gift credit.`,
+  `Create an API key in the <a href="/sign-in">console</a>.`,
+  `Send the request: <code>${esc(m.codeHint)}</code> at <code>${esc(m.endpoint)}</code>.`,
+])}
+<p class="meta">Verify with one cheap call before production: the Wallet ledger should show the deduction in quota units (500,000 units = $1), repeated calls should deduct linearly at the listed rate, and a mismatch usually means the model ID or endpoint string is wrong — reconcile both against <a href="/pricing-list">the pricing list</a> before debugging client code.</p>
 <div class="card">
 <p>Base URL: <code>https://www.keyoapi.xyz/v1</code></p>
 <p>Endpoint: <code>${esc(m.endpoint)}</code></p>
@@ -917,6 +1070,8 @@ function renderModelsIndex() {
   ].join("\n");
   const bodyHtml = `
 <p class="lead">Index of KeyoAPI model guides — chat, speech, vision, OCR, TTS, digital humans, and video generation. For the interactive catalog use <a href="/pricing">Model Square</a>.</p>
+<p class="def">The KeyoAPI model guide index is a catalog map of a prepaid AI API gateway: every guide below documents one model ID with its listed rate, endpoint and request shape, and all of them bill from the same wallet where $1 equals 500,000 quota units.</p>
+${getStartedBlock()}
 <div class="btnrow">
   <a class="btn btn-primary" href="/pricing">Browse Models</a>
   <a class="btn btn-secondary" href="/compare">Price comparison</a>
@@ -969,6 +1124,7 @@ function renderAbout() {
     .join("\n");
   const bodyHtml = `
 <p class="lead">${SITE_DEFINITION} Chat, image and speech are OpenAI-compatible, while OCR, vision tools, async video/docs and digital-human models run on dedicated REST paths — <strong>same key, same prepaid balance</strong>. No five vendor dashboards, no five invoices.</p>
+${getStartedBlock()}
 <div class="btnrow">
   <a class="btn btn-primary" href="/sign-up">Start with $10 Credit — Get API Key</a>
   <a class="btn btn-secondary" href="/brand/keyo-docs.html">Docs</a>
@@ -1044,6 +1200,8 @@ function renderCompare() {
     .join("\n");
   const bodyHtml = `
 <p class="lead">This <strong>LLM API pricing comparison</strong> (and broader <strong>AI API price comparison</strong>) page puts KeyoAPI sell rates next to typical official list bands for GPT-class, Claude-class, DeepSeek, Whisper, and vision APIs — useful when you want one prepaid key without juggling five vendor invoices.</p>
+<p class="def">This comparison page is a rate benchmark for KeyoAPI, a prepaid AI API gateway: one Bearer key and one wallet ($1 = 500,000 quota units) cover chat, speech, vision, OCR and video models, so the deltas below translate directly into invoice math.</p>
+${getStartedBlock()}
 <p class="meta">Figures are indicative for planning. Always confirm live sell rates in <a href="/pricing">Model Square</a> or the static <a href="/pricing-list">pricing list</a> before contracting volume.</p>
 <div class="btnrow">
   <a class="btn btn-primary" href="/sign-up">Create KeyoAPI account</a>
@@ -1158,6 +1316,8 @@ function renderPricing() {
     .join("\n");
   const bodyHtml = `
 <p class="lead">Static <strong>AI API pricing</strong> list for KeyoAPI — model IDs, indicative USD rates, and real endpoints. Use this page to compare rates; open Model Square when you are ready to generate keys.</p>
+<p class="def">The pricing list is the authoritative rate table of KeyoAPI, a prepaid AI API gateway: every row pairs a model ID with its listed USD rate and endpoint, and all rows bill from the same wallet where $1 equals 500,000 quota units.</p>
+${getStartedBlock()}
 <p class="meta">Rates below are catalog snapshots for planning. Wallet top-up and live sell prices are confirmed in the console after <a href="/sign-up">sign-up</a>.</p>
 <div class="btnrow">
   <a class="btn btn-primary" href="/sign-up">Create account</a>
@@ -1223,6 +1383,8 @@ function renderFreeModels() {
     "glm-5.3-flash:free";
   const bodyHtml = `
 <p class="lead">KeyoAPI offers <strong>gift-credit models</strong> callable with your complimentary credits. Billed at dedicated gift-credit rates; gift credits are used first, with any shortfall charged to your recharge balance. <strong>New users get $10</strong>, and <strong>each successful invite earns $3</strong>. Register a key and set <code>model</code> to any ID in the table below.</p>
+<p class="def">The gift-credit catalog is a prototype lane of <code>:free</code> IDs on KeyoAPI, a prepaid AI API gateway: each bills at each model's dedicated gift-credit rate from gift credits first — new accounts start with $10, invites add $3 — and any shortfall falls through to the recharge balance on the same wallet.</p>
+${getStartedBlock()}
 <p class="meta">Built for prototypes, demos, CI smoke tests, and eval harnesses. For production QPS, switch to metered (paid) model IDs on the same base URL.</p>
 <div class="btnrow">
   <a class="btn btn-primary" href="/sign-up">Get your API key</a>
@@ -1495,6 +1657,7 @@ function renderPricingLanding(p) {
   -d '{"model":"${esc(defaultModel)}","messages":[{"role":"user","content":"Hello"}]}'</pre>`;
   const bodyHtml = `
 <p class="lead">${linkifySitePaths(p.lead)}</p>
+<p class="def"><strong>${esc(p.h1.replace(/ — .*/, "").replace(/ \| .*/, ""))}</strong> is a model-family pricing lane on KeyoAPI — a prepaid AI API gateway where one Bearer key and one wallet ($1 = 500,000 quota units) cover chat, speech, vision, OCR and video models.</p>
 <div class="btnrow">
   <a class="btn btn-primary" href="/sign-up">Get API key</a>
   <a class="btn btn-secondary" href="/pricing">Open Model Square</a>
@@ -1528,6 +1691,7 @@ ${(p.cheapestNote.body || [])
 ${bodyParas}
 ${renderContentSections(p.guideSections)}
 ${curlBlock}
+${getStartedBlock()}
 <h2>FAQ</h2>
 <div class="faq">${faqs}</div>
 ${landingRelatedLinks(p.slug)}

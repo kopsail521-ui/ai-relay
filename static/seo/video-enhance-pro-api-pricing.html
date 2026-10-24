@@ -80,6 +80,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
 <h1>Video Enhance Pro API Pricing — KeyoAPI Video Enhancement Rates</h1>
 
 <p class="lead">Video Enhance Pro API. KeyoAPI hosts video-enhance-pro generative quality enhancement at 720p / 1080p / 2k — submit a video URL, poll for the enhanced result, billed per second of processed video.</p>
+<p class="def"><strong>Video Enhance Pro API Pricing</strong> is a model-family pricing lane on KeyoAPI — a prepaid AI API gateway where one Bearer key and one wallet ($1 = 500,000 quota units) cover chat, speech, vision, OCR and video models.</p>
 <div class="btnrow">
   <a class="btn btn-primary" href="/sign-up">Get API key</a>
   <a class="btn btn-secondary" href="/pricing">Open Model Square</a>
@@ -126,6 +127,15 @@ ul{margin:0 0 14px;padding-left:1.2em}
   -H &quot;Content-Type: application/json&quot; \
   -d '{&quot;model&quot;:&quot;video-enhance-pro&quot;,&quot;video_url&quot;:&quot;https://example.com/clip.mp4&quot;,&quot;resolution&quot;:&quot;1080p&quot;}'
 # Poll GET /v1/task/{id} with the same key until status completed includes a result URL; stop on failed or cancelled</pre>
+<h2>Get started in five steps</h2>
+<ol class="steps">
+<li>Create an account — new users receive $10 of gift credit for prototyping.</li>
+<li>Create an API key in the <a href="/sign-in">console</a>.</li>
+<li>Point your OpenAI SDK at <code>https://www.keyoapi.xyz/v1</code> with the model ID from this page, or call the dedicated REST path from the <a href="/brand/keyo-api-ref.html">API handbook</a>.</li>
+<li>Track spend in the console Wallet — $1 equals 500,000 quota units, and gift credit burns before recharged balance.</li>
+<li>Set a per-key spending cap before wiring production traffic.</li>
+</ol>
+<p class="meta">A verified first call is the acceptance test for the setup: the response should carry the payload shape documented in the handbook, the Wallet ledger should show a deduction in quota units (500,000 units = $1), and repeated calls should deduct linearly at the listed rate. Any mismatch usually means the model ID or endpoint is wrong — check both against <a href="/pricing-list">the pricing list</a> before debugging client code.</p>
 <h2>FAQ</h2>
 <div class="faq"><details><summary>How is Video Enhance Pro billed?</summary><p>Per second of processed video at the target resolution — 720p $0.0342/s, 1080p $0.0685/s, 2k $0.1370/s (indicative). A 10-second 1080p enhancement costs about $0.68.</p></details>
 <details><summary>How do I submit a video?</summary><p>POST /v1/async/videos/enhance with model, video_url (https link to your source video) and resolution. Then poll GET /v1/task/{id} for the result URL.</p></details>
@@ -180,6 +190,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
 
   <a href="https://launchclash.com" target="_blank" rel="noopener noreferrer"><img src="https://launchclash.com/assets/images/badge.png" alt="LaunchClash" height="54" loading="lazy" style="height:44px;width:auto;" /></a>
 
+  <span class="foot-updated">Updated 2026-10-24</span>
 </footer>
 </body>
 </html>

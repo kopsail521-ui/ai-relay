@@ -80,6 +80,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
 <h1>Nano Banana API Pricing — KeyoAPI Image Generation Rates</h1>
 
 <p class="lead">Nano Banana image generation API. KeyoAPI hosts all three Google Nano Banana tiers — 2.1, 2 and Pro — on one OpenAI-compatible key, billed per generated image.</p>
+<p class="def"><strong>Nano Banana API Pricing</strong> is a model-family pricing lane on KeyoAPI — a prepaid AI API gateway where one Bearer key and one wallet ($1 = 500,000 quota units) cover chat, speech, vision, OCR and video models.</p>
 <div class="btnrow">
   <a class="btn btn-primary" href="/sign-up">Get API key</a>
   <a class="btn btn-secondary" href="/pricing">Open Model Square</a>
@@ -128,6 +129,15 @@ ul{margin:0 0 14px;padding-left:1.2em}
   -H &quot;Content-Type: application/json&quot; \
   -d '{&quot;model&quot;:&quot;nano-banana-2.1&quot;,&quot;prompt&quot;:&quot;a mug of coffee on a desk, studio light&quot;,&quot;aspectRatio&quot;:&quot;1:1&quot;,&quot;imageSize&quot;:&quot;1K&quot;,&quot;replyType&quot;:&quot;async&quot;}'
 # Save task_id; query GET /v1/images/tasks/{task_id} with the same key.</pre>
+<h2>Get started in five steps</h2>
+<ol class="steps">
+<li>Create an account — new users receive $10 of gift credit for prototyping.</li>
+<li>Create an API key in the <a href="/sign-in">console</a>.</li>
+<li>Point your OpenAI SDK at <code>https://www.keyoapi.xyz/v1</code> with the model ID from this page, or call the dedicated REST path from the <a href="/brand/keyo-api-ref.html">API handbook</a>.</li>
+<li>Track spend in the console Wallet — $1 equals 500,000 quota units, and gift credit burns before recharged balance.</li>
+<li>Set a per-key spending cap before wiring production traffic.</li>
+</ol>
+<p class="meta">A verified first call is the acceptance test for the setup: the response should carry the payload shape documented in the handbook, the Wallet ledger should show a deduction in quota units (500,000 units = $1), and repeated calls should deduct linearly at the listed rate. Any mismatch usually means the model ID or endpoint is wrong — check both against <a href="/pricing-list">the pricing list</a> before debugging client code.</p>
 <h2>FAQ</h2>
 <div class="faq"><details><summary>Which Nano Banana tier should I use?</summary><p>Start with nano-banana-2.1 — the newer release at the lowest per-image rate ($0.0123). Keep nano-banana-2 where your stack pins the base lane ($0.0205), and escalate to nano-banana-pro ($0.0274) when you need higher resolution and finer editing control for commercial work.</p></details>
 <details><summary>How is Nano Banana billed on KeyoAPI?</summary><p>Per generated image, at the tier's rate. The images endpoint may return HTTP 202 while processing. Save task_id and poll GET /v1/images/tasks/{task_id}; do not resubmit a new generation.</p></details>
@@ -182,6 +192,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
 
   <a href="https://launchclash.com" target="_blank" rel="noopener noreferrer"><img src="https://launchclash.com/assets/images/badge.png" alt="LaunchClash" height="54" loading="lazy" style="height:44px;width:auto;" /></a>
 
+  <span class="foot-updated">Updated 2026-10-24</span>
 </footer>
 </body>
 </html>

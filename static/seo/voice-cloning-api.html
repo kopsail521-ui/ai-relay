@@ -80,6 +80,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
 <h1>Voice Cloning API — Check the Integration Contract</h1>
 
 <p class="lead">Basic text-to-speech and voice cloning are different operations. The examples on this page synthesize text; they do not supply a reference speaker. Confirm the chosen model’s reference-audio and voice-ID contract with support before building cloning.</p>
+<p class="def"><strong>Voice Cloning API</strong> is a model-family pricing lane on KeyoAPI — a prepaid AI API gateway where one Bearer key and one wallet ($1 = 500,000 quota units) cover chat, speech, vision, OCR and video models.</p>
 <div class="btnrow">
   <a class="btn btn-primary" href="/sign-up">Get API key</a>
   <a class="btn btn-secondary" href="/pricing">Open Model Square</a>
@@ -127,6 +128,15 @@ ul{margin:0 0 14px;padding-left:1.2em}
   -H &quot;Content-Type: application/json&quot; \
   -d '{&quot;model&quot;:&quot;Qwen3-TTS&quot;,&quot;inputs&quot;:&quot;Hello from KeyoAPI text-to-speech.&quot;}'
 # Basic TTS only. Save id/task_id and query GET /v1/task/{id}.</pre>
+<h2>Get started in five steps</h2>
+<ol class="steps">
+<li>Create an account — new users receive $10 of gift credit for prototyping.</li>
+<li>Create an API key in the <a href="/sign-in">console</a>.</li>
+<li>Point your OpenAI SDK at <code>https://www.keyoapi.xyz/v1</code> with the model ID from this page, or call the dedicated REST path from the <a href="/brand/keyo-api-ref.html">API handbook</a>.</li>
+<li>Track spend in the console Wallet — $1 equals 500,000 quota units, and gift credit burns before recharged balance.</li>
+<li>Set a per-key spending cap before wiring production traffic.</li>
+</ol>
+<p class="meta">A verified first call is the acceptance test for the setup: the response should carry the payload shape documented in the handbook, the Wallet ledger should show a deduction in quota units (500,000 units = $1), and repeated calls should deduct linearly at the listed rate. Any mismatch usually means the model ID or endpoint is wrong — check both against <a href="/pricing-list">the pricing list</a> before debugging client code.</p>
 <h2>FAQ</h2>
 <div class="faq"><details><summary>Does the basic example clone a voice?</summary><p>No. It sends only text. Confirm the reference-audio, enrollment and voice-ID contract for your model before implementing cloning.</p></details>
 <details><summary>Which fields identify the reference speaker?</summary><p>That model-specific contract is not specified on this page. Obtain it from support; do not guess field names.</p></details>
@@ -181,6 +191,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
 
   <a href="https://launchclash.com" target="_blank" rel="noopener noreferrer"><img src="https://launchclash.com/assets/images/badge.png" alt="LaunchClash" height="54" loading="lazy" style="height:44px;width:auto;" /></a>
 
+  <span class="foot-updated">Updated 2026-10-24</span>
 </footer>
 </body>
 </html>

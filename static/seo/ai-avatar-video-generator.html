@@ -80,6 +80,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
 <h1>Duix Avatar API &amp; AI Avatar Video Generator — KeyoAPI</h1>
 
 <p class="lead">Looking for a Duix Avatar API without running your own render farm? KeyoAPI hosts Duix-Avatar (audio+video → talking face) and InfiniteTalk (image/audio → talking head) as async jobs — generate speech with IndexTTS-2 / CosyVoice3 / Qwen3-TTS on the same key, then render.</p>
+<p class="def"><strong>Duix Avatar API &amp; AI Avatar Video Generator</strong> is a model-family pricing lane on KeyoAPI — a prepaid AI API gateway where one Bearer key and one wallet ($1 = 500,000 quota units) cover chat, speech, vision, OCR and video models.</p>
 <div class="btnrow">
   <a class="btn btn-primary" href="/sign-up">Get API key</a>
   <a class="btn btn-secondary" href="/pricing">Open Model Square</a>
@@ -130,6 +131,15 @@ ul{margin:0 0 14px;padding-left:1.2em}
   -F cond_video=@./portrait.png \
   -F cond_audio=@./voice.wav
 # then: GET /v1/task/{id}</pre>
+<h2>Get started in five steps</h2>
+<ol class="steps">
+<li>Create an account — new users receive $10 of gift credit for prototyping.</li>
+<li>Create an API key in the <a href="/sign-in">console</a>.</li>
+<li>Point your OpenAI SDK at <code>https://www.keyoapi.xyz/v1</code> with the model ID from this page, or call the dedicated REST path from the <a href="/brand/keyo-api-ref.html">API handbook</a>.</li>
+<li>Track spend in the console Wallet — $1 equals 500,000 quota units, and gift credit burns before recharged balance.</li>
+<li>Set a per-key spending cap before wiring production traffic.</li>
+</ol>
+<p class="meta">A verified first call is the acceptance test for the setup: the response should carry the payload shape documented in the handbook, the Wallet ledger should show a deduction in quota units (500,000 units = $1), and repeated calls should deduct linearly at the listed rate. Any mismatch usually means the model ID or endpoint is wrong — check both against <a href="/pricing-list">the pricing list</a> before debugging client code.</p>
 <h2>FAQ</h2>
 <div class="faq"><details><summary>Is this a Duix Avatar API alternative?</summary><p>Yes for developers who want hosted Duix-Avatar metering on Keyo: same prepaid key as TTS and chat. It is not the official Duix consumer product UI.</p></details>
 <details><summary>Realtime avatar streaming?</summary><p>These models are async render jobs, not WebRTC realtime avatars. Design UX around queue + progress.</p></details>
@@ -185,6 +195,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
 
   <a href="https://launchclash.com" target="_blank" rel="noopener noreferrer"><img src="https://launchclash.com/assets/images/badge.png" alt="LaunchClash" height="54" loading="lazy" style="height:44px;width:auto;" /></a>
 
+  <span class="foot-updated">Updated 2026-10-24</span>
 </footer>
 </body>
 </html>

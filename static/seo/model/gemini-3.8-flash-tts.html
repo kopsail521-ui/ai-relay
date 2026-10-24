@@ -81,6 +81,21 @@ ul{margin:0 0 14px;padding-left:1.2em}
   <a class="btn btn-secondary" href="/pricing">Open Model Square</a>
   <a class="btn btn-secondary" href="/compare">Compare API prices</a>
 </div>
+<p class="def"><strong>gemini-3.8-flash-tts</strong> is a speech synthesis model on KeyoAPI, a prepaid AI API gateway: call it at <code>POST /v1beta/models/gemini-3.8-flash-tts:generateContent</code>, billed at ~$0.44 / $8.82 per 1M in/out tokens from the same balance that covers chat, vision, OCR and video models.</p>
+<h2>Key facts</h2>
+<ul class="facts">
+<li>Listed price: <strong>~$0.44 / $8.82 per 1M in/out tokens</strong> — audio-token metered; a per-call cost follows your input and output token counts</li>
+<li>Billing base: $1 of wallet balance = 500,000 quota units</li>
+<li>Gift credit: new users get $10, invites add $3 — spend-first on <code>:free</code> IDs</li>
+<li>Endpoint: <code>POST /v1beta/models/gemini-3.8-flash-tts:generateContent</code> with Bearer auth on <code>https://www.keyoapi.xyz/v1</code></li>
+</ul>
+<h2>How to call it</h2>
+<ol class="steps">
+<li>Create an account and top up the prepaid wallet — new accounts include $10 of gift credit.</li>
+<li>Create an API key in the <a href="/sign-in">console</a>.</li>
+<li>Send the request: <code>gemini-3.8-flash-tts</code> at <code>POST /v1beta/models/gemini-3.8-flash-tts:generateContent</code>.</li>
+</ol>
+<p class="meta">Verify with one cheap call before production: the Wallet ledger shows the deduction in quota units (500,000 units = $1), repeated calls deduct linearly at the listed rate, and a mismatch usually means the model ID or endpoint string is wrong — reconcile against <a href="/pricing-list">the pricing list</a>.</p>
 <h2>Overview</h2>
 <p>gemini-3.8-flash-tts is Gemini Flash text-to-speech on KeyoAPI. Indicative rates about $0.44 / $8.82 per 1M in/out — confirm live on <a href="/pricing-list">the full pricing list</a>. Call POST /v1beta/models/gemini-3.8-flash-tts:generateContent with responseModalities ["AUDIO"] and receive WAV audio inline (base64) in the same response. Use IndexTTS-2 or CosyVoice3 when you already run async TTS jobs.</p>
 <h2>Quick start</h2>
@@ -146,5 +161,6 @@ ul{margin:0 0 14px;padding-left:1.2em}
   <a href="https://findly.tools/keyoapi?utm_source=keyoapi" target="_blank" rel="noopener noreferrer"><img src="https://findly.tools/badges/findly-tools-badge-dark.svg" alt="Featured on Findly.tools" width="175" height="55" loading="lazy" style="height:44px;width:auto;" /></a>
   <a href="https://startupfa.me" target="_blank" rel="dofollow noopener">Featured on Startup Fame</a>
 </footer>
+  <p class="meta">Updated 2026-10-24 · Rates verified against <a href="/pricing-list">the pricing list</a>.</p>
 </body>
 </html>

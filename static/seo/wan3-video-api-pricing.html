@@ -80,6 +80,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
 <h1>Wan 3.0 Video API Pricing — KeyoAPI Video Generation Rates</h1>
 
 <p class="lead">Wan 3.0 video generation API from Alibaba. KeyoAPI hosts wan3.0-video at 480P / 720P / 1080P on an OpenAI-compatible key with prepaid billing.</p>
+<p class="def"><strong>Wan 3.0 Video API Pricing</strong> is a model-family pricing lane on KeyoAPI — a prepaid AI API gateway where one Bearer key and one wallet ($1 = 500,000 quota units) cover chat, speech, vision, OCR and video models.</p>
 <div class="btnrow">
   <a class="btn btn-primary" href="/sign-up">Get API key</a>
   <a class="btn btn-secondary" href="/pricing">Open Model Square</a>
@@ -126,6 +127,15 @@ ul{margin:0 0 14px;padding-left:1.2em}
   -H &quot;Content-Type: application/json&quot; \
   -d '{&quot;model&quot;:&quot;wan3.0-video&quot;,&quot;prompt&quot;:&quot;A kitten running across a moonlit rooftop&quot;,&quot;resolution&quot;:&quot;720P&quot;,&quot;duration&quot;:5}'
 # Poll GET /v1/tasks/{id} with the same key: processing = still rendering, completed = ready url</pre>
+<h2>Get started in five steps</h2>
+<ol class="steps">
+<li>Create an account — new users receive $10 of gift credit for prototyping.</li>
+<li>Create an API key in the <a href="/sign-in">console</a>.</li>
+<li>Point your OpenAI SDK at <code>https://www.keyoapi.xyz/v1</code> with the model ID from this page, or call the dedicated REST path from the <a href="/brand/keyo-api-ref.html">API handbook</a>.</li>
+<li>Track spend in the console Wallet — $1 equals 500,000 quota units, and gift credit burns before recharged balance.</li>
+<li>Set a per-key spending cap before wiring production traffic.</li>
+</ol>
+<p class="meta">A verified first call is the acceptance test for the setup: the response should carry the payload shape documented in the handbook, the Wallet ledger should show a deduction in quota units (500,000 units = $1), and repeated calls should deduct linearly at the listed rate. Any mismatch usually means the model ID or endpoint is wrong — check both against <a href="/pricing-list">the pricing list</a> before debugging client code.</p>
 <h2>FAQ</h2>
 <div class="faq"><details><summary>How is Wan 3.0 billed on KeyoAPI?</summary><p>Per second of generated video at the requested resolution. 480P is the entry tier; 1080P is the highest of the three rates listed above.</p></details>
 <details><summary>Does Wan 3.0 support image-to-video?</summary><p>Yes — Wan 3.0 supports image-to-video generation through the standard /v1/videos/generations endpoint.</p></details>
@@ -180,6 +190,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
 
   <a href="https://launchclash.com" target="_blank" rel="noopener noreferrer"><img src="https://launchclash.com/assets/images/badge.png" alt="LaunchClash" height="54" loading="lazy" style="height:44px;width:auto;" /></a>
 
+  <span class="foot-updated">Updated 2026-10-24</span>
 </footer>
 </body>
 </html>

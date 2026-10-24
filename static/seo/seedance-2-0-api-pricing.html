@@ -80,6 +80,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
 <h1>Seedance 2.0 API Pricing — KeyoAPI Video Generation Rates</h1>
 
 <p class="lead">Seedance 2.0 video generation API. KeyoAPI hosts three Seedance 2.0 tiers — standard (seedance-2.0), fast (seedance-2.0-fast), and mini (seedance-2.0-mini) — with selectable resolution (480p / 720p / 1080p), billed per generated second on one prepaid key.</p>
+<p class="def"><strong>Seedance 2.0 API Pricing</strong> is a model-family pricing lane on KeyoAPI — a prepaid AI API gateway where one Bearer key and one wallet ($1 = 500,000 quota units) cover chat, speech, vision, OCR and video models.</p>
 <div class="btnrow">
   <a class="btn btn-primary" href="/sign-up">Get API key</a>
   <a class="btn btn-secondary" href="/pricing">Open Model Square</a>
@@ -126,6 +127,15 @@ ul{margin:0 0 14px;padding-left:1.2em}
   -H &quot;Content-Type: application/json&quot; \
   -d '{&quot;model&quot;:&quot;seedance-2.0&quot;,&quot;prompt&quot;:&quot;A red paper boat drifting on calm water at sunset&quot;,&quot;duration&quot;:5,&quot;resolution&quot;:&quot;720p&quot;}'
 # Poll GET /v1/tasks/{id} with the same key: processing = still rendering, completed = ready url</pre>
+<h2>Get started in five steps</h2>
+<ol class="steps">
+<li>Create an account — new users receive $10 of gift credit for prototyping.</li>
+<li>Create an API key in the <a href="/sign-in">console</a>.</li>
+<li>Point your OpenAI SDK at <code>https://www.keyoapi.xyz/v1</code> with the model ID from this page, or call the dedicated REST path from the <a href="/brand/keyo-api-ref.html">API handbook</a>.</li>
+<li>Track spend in the console Wallet — $1 equals 500,000 quota units, and gift credit burns before recharged balance.</li>
+<li>Set a per-key spending cap before wiring production traffic.</li>
+</ol>
+<p class="meta">A verified first call is the acceptance test for the setup: the response should carry the payload shape documented in the handbook, the Wallet ledger should show a deduction in quota units (500,000 units = $1), and repeated calls should deduct linearly at the listed rate. Any mismatch usually means the model ID or endpoint is wrong — check both against <a href="/pricing-list">the pricing list</a> before debugging client code.</p>
 <h2>FAQ</h2>
 <div class="faq"><details><summary>Is there a free Seedance 2.0 API?</summary><p>No free Seedance ID exists on Keyo — the gift-credit IDs are chat and speech models only. Use them (billed from your one-time $10 new-user credit, fair-use limits) to prove out your wiring, then switch model= to a Seedance model. The lowest-cost tier is seedance-2.0-mini at about $0.0321 per second for 480p and $0.0499 for 720p.</p></details>
 <details><summary>What is the difference between standard, fast and mini Seedance 2.0 tiers?</summary><p>Same resolution family, different cost/latency/quality trade-offs: standard (seedance-2.0) is the full-quality tier, fast (seedance-2.0-fast) prioritizes turnaround at lower per-second cost, and mini (seedance-2.0-mini) is the high-efficiency budget tier. All three accept resolution parameters (480p / 720p / 1080p) and bill per generated second.</p></details>
@@ -181,6 +191,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
 
   <a href="https://launchclash.com" target="_blank" rel="noopener noreferrer"><img src="https://launchclash.com/assets/images/badge.png" alt="LaunchClash" height="54" loading="lazy" style="height:44px;width:auto;" /></a>
 
+  <span class="foot-updated">Updated 2026-10-24</span>
 </footer>
 </body>
 </html>

@@ -80,6 +80,16 @@ ul{margin:0 0 14px;padding-left:1.2em}
 <h1>Gift-Credit AI Models — No Credit Card Required</h1>
 
 <p class="lead">KeyoAPI offers <strong>gift-credit models</strong> callable with your complimentary credits. Billed at dedicated gift-credit rates; gift credits are used first, with any shortfall charged to your recharge balance. <strong>New users get $10</strong>, and <strong>each successful invite earns $3</strong>. Register a key and set <code>model</code> to any ID in the table below.</p>
+<p class="def">The gift-credit catalog is a prototype lane of <code>:free</code> IDs on KeyoAPI, a prepaid AI API gateway: each bills at each model's dedicated gift-credit rate from gift credits first — new accounts start with $10, invites add $3 — and any shortfall falls through to the recharge balance on the same wallet.</p>
+<h2>Get started in five steps</h2>
+<ol class="steps">
+<li>Create an account — new users receive $10 of gift credit for prototyping.</li>
+<li>Create an API key in the <a href="/sign-in">console</a>.</li>
+<li>Point your OpenAI SDK at <code>https://www.keyoapi.xyz/v1</code> with the model ID from this page, or call the dedicated REST path from the <a href="/brand/keyo-api-ref.html">API handbook</a>.</li>
+<li>Track spend in the console Wallet — $1 equals 500,000 quota units, and gift credit burns before recharged balance.</li>
+<li>Set a per-key spending cap before wiring production traffic.</li>
+</ol>
+<p class="meta">A verified first call is the acceptance test for the setup: the response should carry the payload shape documented in the handbook, the Wallet ledger should show a deduction in quota units (500,000 units = $1), and repeated calls should deduct linearly at the listed rate. Any mismatch usually means the model ID or endpoint is wrong — check both against <a href="/pricing-list">the pricing list</a> before debugging client code.</p>
 <p class="meta">Built for prototypes, demos, CI smoke tests, and eval harnesses. For production QPS, switch to metered (paid) model IDs on the same base URL.</p>
 <div class="btnrow">
   <a class="btn btn-primary" href="/sign-up">Get your API key</a>
@@ -259,6 +269,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
 
   <a href="https://launchclash.com" target="_blank" rel="noopener noreferrer"><img src="https://launchclash.com/assets/images/badge.png" alt="LaunchClash" height="54" loading="lazy" style="height:44px;width:auto;" /></a>
 
+  <span class="foot-updated">Updated 2026-10-24</span>
 </footer>
 </body>
 </html>

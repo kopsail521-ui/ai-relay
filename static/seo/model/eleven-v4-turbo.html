@@ -81,6 +81,21 @@ ul{margin:0 0 14px;padding-left:1.2em}
   <a class="btn btn-secondary" href="/compare">Compare API prices</a>
   <a class="btn btn-secondary" href="/sign-up">Create account</a>
 </div>
+<p class="def"><strong>eleven-v4-turbo</strong> is a speech synthesis model on KeyoAPI, a prepaid AI API gateway: call it at <code>POST /v1/audio/speech</code>, billed at ~$40 / 1M characters from the same balance that covers chat, vision, OCR and video models.</p>
+<h2>Key facts</h2>
+<ul class="facts">
+<li>Listed price: <strong>~$40 / 1M characters</strong> — at $40 per 1M characters, 100k characters cost about $4</li>
+<li>Billing base: $1 of wallet balance = 500,000 quota units</li>
+<li>Gift credit: new users get $10, invites add $3 — spend-first on <code>:free</code> IDs</li>
+<li>Endpoint: <code>POST /v1/audio/speech</code> with Bearer auth on <code>https://www.keyoapi.xyz/v1</code></li>
+</ul>
+<h2>How to call it</h2>
+<ol class="steps">
+<li>Create an account and top up the prepaid wallet — new accounts include $10 of gift credit.</li>
+<li>Create an API key in the <a href="/sign-in">console</a>.</li>
+<li>Send the request: <code>eleven-v4-turbo</code> at <code>POST /v1/audio/speech</code>.</li>
+</ol>
+<p class="meta">Verify with one cheap call before production: the Wallet ledger shows the deduction in quota units (500,000 units = $1), repeated calls deduct linearly at the listed rate, and a mismatch usually means the model ID or endpoint string is wrong — reconcile against <a href="/pricing-list">the pricing list</a>.</p>
 <h2>Overview</h2>
 <p>eleven-v4-turbo is a fast neural text-to-speech model on KeyoAPI. Indicative rates about $40 per 1M characters, billed per input character — confirm live on <a href="/pricing">Model Square</a>. Call POST /v1/audio/speech with model=eleven-v4-turbo, an input string, and a built-in voice; audio comes back synchronously in the response. It is tuned for real-time interactions and large-scale generation.</p>
 <h2>Quick start</h2>
@@ -128,5 +143,6 @@ ul{margin:0 0 14px;padding-left:1.2em}
   <a href="/brand/terms.html">Terms</a>
   <a href="/sign-in">Sign in</a>
 </footer>
+  <p class="meta">Updated 2026-10-24 · Rates verified against <a href="/pricing-list">the pricing list</a>.</p>
 </body>
 </html>

@@ -80,6 +80,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
 <h1>remove.bg API Alternative — Background Removal on KeyoAPI</h1>
 
 <p class="lead">If you integrated remove.bg’s self-serve API and need a prepaid matting endpoint that stays under your control after Dec 1, 2026, KeyoAPI exposes BRIA RMBG-2.0 on POST /v1/images/mattings — same Keyo key you already use for chat, Whisper, and TTS. This page is for developers migrating API traffic, not a free browser cutout tool.</p>
+<p class="def"><strong>remove.bg API Alternative</strong> is a model-family pricing lane on KeyoAPI — a prepaid AI API gateway where one Bearer key and one wallet ($1 = 500,000 quota units) cover chat, speech, vision, OCR and video models.</p>
 <div class="btnrow">
   <a class="btn btn-primary" href="/sign-up">Get API key</a>
   <a class="btn btn-secondary" href="/pricing">Open Model Square</a>
@@ -134,6 +135,15 @@ data = {&quot;model&quot;: &quot;RMBG-2.0&quot;}
 r = requests.post(url, headers=headers, files=files, data=data, timeout=120)
 r.raise_for_status()
 open(&quot;product-alpha.png&quot;, &quot;wb&quot;).write(r.content)</pre>
+<h2>Get started in five steps</h2>
+<ol class="steps">
+<li>Create an account — new users receive $10 of gift credit for prototyping.</li>
+<li>Create an API key in the <a href="/sign-in">console</a>.</li>
+<li>Point your OpenAI SDK at <code>https://www.keyoapi.xyz/v1</code> with the model ID from this page, or call the dedicated REST path from the <a href="/brand/keyo-api-ref.html">API handbook</a>.</li>
+<li>Track spend in the console Wallet — $1 equals 500,000 quota units, and gift credit burns before recharged balance.</li>
+<li>Set a per-key spending cap before wiring production traffic.</li>
+</ol>
+<p class="meta">A verified first call is the acceptance test for the setup: the response should carry the payload shape documented in the handbook, the Wallet ledger should show a deduction in quota units (500,000 units = $1), and repeated calls should deduct linearly at the listed rate. Any mismatch usually means the model ID or endpoint is wrong — check both against <a href="/pricing-list">the pricing list</a> before debugging client code.</p>
 <h2>FAQ</h2>
 <div class="faq"><details><summary>Is Keyo the official remove.bg replacement?</summary><p>No. remove.bg directs self-serve API users to Leonardo.Ai and consumers to Canva. KeyoAPI is an independent AI API relay with RMBG-2.0 matting if you want a prepaid multi-model stack.</p></details>
 <details><summary>Do you offer a free remove-background website?</summary><p>No consumer free cutout site. Keyo sells metered API access; try/buy is on <a href="/model/RMBG-2.0">the RMBG-2.0 model page</a> after <a href="/sign-up">the sign-up page</a>.</p></details>
@@ -190,6 +200,7 @@ open(&quot;product-alpha.png&quot;, &quot;wb&quot;).write(r.content)</pre>
 
   <a href="https://launchclash.com" target="_blank" rel="noopener noreferrer"><img src="https://launchclash.com/assets/images/badge.png" alt="LaunchClash" height="54" loading="lazy" style="height:44px;width:auto;" /></a>
 
+  <span class="foot-updated">Updated 2026-10-24</span>
 </footer>
 </body>
 </html>

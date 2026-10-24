@@ -80,6 +80,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
 <h1>MinerU2.5-Pro API — Complex Document Parsing &amp; OCR</h1>
 
 <p class="lead">MinerU2.5-Pro is KeyoAPI’s heavy-duty document parsing OCR API for PDFs and images that break naive OCR.</p>
+<p class="def"><strong>MinerU2.5-Pro</strong> is a document OCR model on KeyoAPI, a prepaid AI API gateway: call it at <code>POST /v1/async/documents/parse</code>, billed at $0.0137 / page from the same balance that covers chat, vision, OCR and video models.</p>
 <p class="meta">Listed price: <span class="ok">$0.0137 / page</span> · Live catalog: <a href="/pricing">Model Square</a> · Static list: <a href="/pricing-list">pricing list</a>.</p>
 <div class="btnrow">
   <a class="btn btn-primary" href="/sign-up">Get API key</a>
@@ -89,8 +90,43 @@ ul{margin:0 0 14px;padding-left:1.2em}
 <h2>Overview</h2>
 <p>If you searched ocr api because invoices, papers, and slide decks must become machine-readable, this model is the structured extraction layer before your LLM. Complex documents mix columns, tables, formulas, and figures. MinerU2.5-Pro focuses on recovering text plus layout so downstream chat models reason over faithful structure. On KeyoAPI it sits beside Unlimited-OCR and UVDoc so you can build a full document lane on one AI API relay. Billing is approximately $0.0137 per page—easy to map onto “pages processed” product metrics. Compare against building and hosting your own GPU parsing stack when volume is spiky. Fintech KYC packets, academic PDF ingestion, contract analytics, and enterprise knowledge bases. Feed parsed markdown into claude-sonnet-5-5 or gpt-6-sol for Q&amp;A. Follow Keyo docs for the async document endpoints using model MinerU2.5-Pro. Try and top up at <a href="/pricing-list">the full pricing list</a>. MinerU2.5-Pro is the async PDF/layout parser—submit once, poll /v1/task/{id}, then feed structured text to your LLM. Prefer it over chat-OCR for multi-page packets. Document pipelines fail when you treat PDFs like plain text. MinerU2.5-Pro recovers layout so tables and headings survive into your LLM context. Design the job as async: upload, store task id, poll, then write markdown into your vector store. Retry only failed pages. Cache hashes so re-uploads are free. For finance and legal, keep the original PDF URL next to the parsed chunk for citation. Chain UVDoc first when users photograph paper. That OCR API stack on one Keyo key beats stitching three SaaS vendors. Version your parse prompts and post-processors. When a template invoice changes, update the extractor without re-OCR of historical files if cached markdown remains valid. That cache discipline keeps OCR API spend flat as volume grows.</p>
 
+<h2>Where it fits</h2>
+<p>Document OCR models accept file uploads on dedicated REST paths and return structured text or markdown, billing per request. They pair naturally with chat models on the same key: OCR first to extract, then an LLM call to summarize or answer questions over the extracted text.</p>
+<h2>Limits and good-fit use</h2>
+<p>Per-request billing makes cost proportional to document count, not page count, unless the model row states otherwise — verify on the pricing list. Handwriting-heavy or mixed-layout documents are the usual accuracy boundary.</p>
+<h2>Request contract</h2>
+<p>OCR accepts a file upload on its dedicated REST path and returns extracted text or structured markdown in the response body. The same Bearer key authorizes it, and billing lands on the same wallet per request. For pipelines, expect the response to pair raw text with layout hints; feed the extraction straight into a chat call on the same key to summarize, classify or answer questions over the document.</p>
+<h2>Compare within the family</h2>
+<ul>
+<li><a href="/model/Unlimited-OCR">Unlimited-OCR</a> — ~$1.92 / $1.92 per 1M in/out tokens</li>
+<li><a href="/model/UVDoc">UVDoc</a> — $0.0137 / request</li>
+<li><a href="/model/claude-sonnet-5-5">claude-sonnet-5-5</a> — ~$0.88 / $4.41 per 1M in/out</li>
+</ul>
+<h2>Key facts</h2>
+<ul class="facts">
+<li>Listed price: <strong>$0.0137 / page</strong></li>
+<li>Billing base: $1 of wallet balance = 500,000 quota units</li>
+<li>Gift-credit twin: <code>MinerU2.5-Pro:free</code> — new users get $10 gift credit, invites add $3, gift credits spend first</li>
+<li>Endpoint: <code>POST /v1/async/documents/parse</code> with Bearer auth on <code>https://www.keyoapi.xyz/v1</code></li>
+</ul>
+<h2>Pricing and billing</h2>
+<p>This model meters at $0.0137 / page. Balance converts at a fixed rate — $1 equals 500,000 quota units — so every call deducts from the same prepaid wallet that powers chat, speech and document models. Check the live number on <a href="/pricing-list">the full pricing list</a> before locking a quote; catalog rates can move with upstream cost, and the pricing list is the authoritative source for every model sold on the gateway.</p>
+<p>Concretely: at $0.0137 / page, $1 of balance buys about 72 metered units, and the $10 new-user gift credit covers roughly 729 before any top-up. Budget at the line item you actually ship — requests, seconds or characters — not at token level, and re-check the row on <a href="/pricing-list">the pricing list</a> when upstream rates move.</p>
+<h3>Before production</h3>
+<ul>
+<li>Pin the exact model ID from the pricing list — close names are not interchangeable.</li>
+<li>Alert on wallet balance and per-call spend, not just on HTTP errors.</li>
+<li>Retry only idempotent reads; async lanes should poll the task endpoint instead of re-submitting.</li>
+<li>Re-run one end-to-end call after any catalog or rate change.</li>
+</ul>
 
-<h2>Quick start</h2>
+<h2>How to call it</h2>
+<ol class="steps">
+<li>Create an account and top up the prepaid wallet — new accounts include $10 of gift credit.</li>
+<li>Create an API key in the <a href="/sign-in">console</a>.</li>
+<li>Send the request: <code>model=MinerU2.5-Pro</code> at <code>POST /v1/async/documents/parse</code>.</li>
+</ol>
+<p class="meta">Verify with one cheap call before production: the Wallet ledger should show the deduction in quota units (500,000 units = $1), repeated calls should deduct linearly at the listed rate, and a mismatch usually means the model ID or endpoint string is wrong — reconcile both against <a href="/pricing-list">the pricing list</a> before debugging client code.</p>
 <div class="card">
 <p>Base URL: <code>https://www.keyoapi.xyz/v1</code></p>
 <p>Endpoint: <code>POST /v1/async/documents/parse</code></p>
@@ -160,6 +196,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
 
   <a href="https://launchclash.com" target="_blank" rel="noopener noreferrer"><img src="https://launchclash.com/assets/images/badge.png" alt="LaunchClash" height="54" loading="lazy" style="height:44px;width:auto;" /></a>
 
+  <span class="foot-updated">Updated 2026-10-24</span>
 </footer>
 </body>
 </html>

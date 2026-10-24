@@ -80,6 +80,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
 <h1>GLM API Pricing — KeyoAPI Rates &amp; Zhipu Context</h1>
 
 <p class="lead">This page puts current KeyoAPI sell rates for the Zhipu GLM 5.x chat family next to official Zhipu context, with GLM ASR and TTS on the same key.</p>
+<p class="def"><strong>GLM API Pricing</strong> is a model-family pricing lane on KeyoAPI — a prepaid AI API gateway where one Bearer key and one wallet ($1 = 500,000 quota units) cover chat, speech, vision, OCR and video models.</p>
 <div class="btnrow">
   <a class="btn btn-primary" href="/sign-up">Get API key</a>
   <a class="btn btn-secondary" href="/pricing">Open Model Square</a>
@@ -138,6 +139,15 @@ ul{margin:0 0 14px;padding-left:1.2em}
   -H &quot;Authorization: Bearer $KEYO_API_KEY&quot; \
   -H &quot;Content-Type: application/json&quot; \
   -d '{&quot;model&quot;:&quot;glm-5.3-flash&quot;,&quot;messages&quot;:[{&quot;role&quot;:&quot;user&quot;,&quot;content&quot;:&quot;Hello&quot;}]}'</pre>
+<h2>Get started in five steps</h2>
+<ol class="steps">
+<li>Create an account — new users receive $10 of gift credit for prototyping.</li>
+<li>Create an API key in the <a href="/sign-in">console</a>.</li>
+<li>Point your OpenAI SDK at <code>https://www.keyoapi.xyz/v1</code> with the model ID from this page, or call the dedicated REST path from the <a href="/brand/keyo-api-ref.html">API handbook</a>.</li>
+<li>Track spend in the console Wallet — $1 equals 500,000 quota units, and gift credit burns before recharged balance.</li>
+<li>Set a per-key spending cap before wiring production traffic.</li>
+</ol>
+<p class="meta">A verified first call is the acceptance test for the setup: the response should carry the payload shape documented in the handbook, the Wallet ledger should show a deduction in quota units (500,000 units = $1), and repeated calls should deduct linearly at the listed rate. Any mismatch usually means the model ID or endpoint is wrong — check both against <a href="/pricing-list">the pricing list</a> before debugging client code.</p>
 <h2>FAQ</h2>
 <div class="faq"><details><summary>How do I call the GLM API on KeyoAPI?</summary><p>Set baseURL to https://www.keyoapi.xyz/v1, Authorization: Bearer YOUR_KEY, and model=glm-5.3, glm-5.3-flash, or glm-5.2 on POST /v1/chat/completions.</p></details>
 <details><summary>Is there a free GLM tier?</summary><p>Yes — gift-credit catalog IDs live on the free models page, covered by your $10 welcome credit with fair-use rate limits. Switch model= to a metered GLM lane on the same key when you outgrow it.</p></details>
@@ -193,6 +203,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
 
   <a href="https://launchclash.com" target="_blank" rel="noopener noreferrer"><img src="https://launchclash.com/assets/images/badge.png" alt="LaunchClash" height="54" loading="lazy" style="height:44px;width:auto;" /></a>
 
+  <span class="foot-updated">Updated 2026-10-24</span>
 </footer>
 </body>
 </html>

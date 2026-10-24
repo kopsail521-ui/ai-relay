@@ -79,6 +79,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
 <main class="wrap">
 <h1>Claude Code API Pricing: Budget the Whole Task</h1>
 <p class="lead">Compare Claude model rates on KeyoAPI and estimate your coding budget from input and output tokens. See the cost of a 100K-input / 10K-output workload, how repeated context affects spending, and how metered API billing differs from a monthly subscription.</p>
+<p class="def"><strong>Claude Code API Pricing: Budget the Whole Task</strong> is a capability lane on KeyoAPI — a prepaid AI API gateway where one Bearer key and one wallet ($1 = 500,000 quota units) cover chat, speech, vision, OCR and video models.</p>
 <div class="btnrow"><a class="btn btn-primary" href="/sign-up">Get API key</a><a class="btn btn-secondary" href="/pricing">Live prices</a><a class="btn btn-secondary" href="/models">Model guides</a></div>
 
 <h2>Claude model API rates on KeyoAPI</h2>
@@ -156,6 +157,22 @@ ul{margin:0 0 14px;padding-left:1.2em}
 
 
 
+<h2>Key facts</h2>
+<ul class="facts">
+<li>Billing base: $1 of wallet balance = 500,000 quota units</li>
+<li>Gift credit: new users get $10, invites add $3 — spend-first on <code>:free</code> IDs</li>
+<li>OpenAI-compatible base URL: <code>https://www.keyoapi.xyz/v1</code>; dedicated REST for OCR, vision and video</li>
+<li>Live rates: <a href="/pricing-list">the full pricing list</a> is the authoritative source</li>
+</ul>
+<h2>Get started in five steps</h2>
+<ol class="steps">
+<li>Create an account — new users receive $10 of gift credit for prototyping.</li>
+<li>Create an API key in the <a href="/sign-in">console</a>.</li>
+<li>Point your OpenAI SDK at <code>https://www.keyoapi.xyz/v1</code> with the model ID from this page, or call the dedicated REST path from the <a href="/brand/keyo-api-ref.html">API handbook</a>.</li>
+<li>Track spend in the console Wallet — $1 equals 500,000 quota units, and gift credit burns before recharged balance.</li>
+<li>Set a per-key spending cap before wiring production traffic.</li>
+</ol>
+<p class="meta">A verified first call is the acceptance test for the setup: the response should carry the payload shape documented in the handbook, the Wallet ledger should show a deduction in quota units (500,000 units = $1), and repeated calls should deduct linearly at the listed rate. Any mismatch usually means the model ID or endpoint is wrong — check both against <a href="/pricing-list">the pricing list</a> before debugging client code.</p>
 <h2>FAQ</h2><div class="faq"><details><summary>How many tokens does one Claude Code task use?</summary><p>Usage varies with repository context, tool results, repeated turns, caching and retries. The table uses an example budget of 100K input plus 10K output tokens. Estimate your own tasks from their cumulative billed usage.</p></details>
 <details><summary>Which listed model has the lowest token price?</summary><p>claude-haiku-5-5 has the lowest input and output rates in this table for the default group. Compare total usage and result quality to choose the best value for your workload.</p></details>
 <details><summary>Which API format does Claude Code require?</summary><p>Claude Code uses Anthropic Messages. KeyoAPI exposes POST /v1/messages; compatibility also depends on the model and client features. The example on this page uses OpenAI-compatible chat, which has a different request format.</p></details>
@@ -217,6 +234,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
 
   <a href="https://launchclash.com" target="_blank" rel="noopener noreferrer"><img src="https://launchclash.com/assets/images/badge.png" alt="LaunchClash" height="54" loading="lazy" style="height:44px;width:auto;" /></a>
 
+  <span class="foot-updated">Updated 2026-10-24</span>
 </footer>
 </body>
 </html>

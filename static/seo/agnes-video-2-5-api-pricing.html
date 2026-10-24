@@ -80,6 +80,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
 <h1>Agnes Video 2.5 API Pricing — KeyoAPI Video Generation Rates</h1>
 
 <p class="lead">Agnes Video 2.5 video generation API. KeyoAPI hosts agnes-video-2.5 at 720p / 1080p / 2k, text-to-video and image-to-video, up to 12 seconds per clip, billed per second.</p>
+<p class="def"><strong>Agnes Video 2.5 API Pricing</strong> is a model-family pricing lane on KeyoAPI — a prepaid AI API gateway where one Bearer key and one wallet ($1 = 500,000 quota units) cover chat, speech, vision, OCR and video models.</p>
 <div class="btnrow">
   <a class="btn btn-primary" href="/sign-up">Get API key</a>
   <a class="btn btn-secondary" href="/pricing">Open Model Square</a>
@@ -126,6 +127,15 @@ ul{margin:0 0 14px;padding-left:1.2em}
   -H &quot;Content-Type: application/json&quot; \
   -d '{&quot;model&quot;:&quot;agnes-video-2.5&quot;,&quot;prompt&quot;:&quot;A drone shot over neon city rain, cinematic&quot;,&quot;duration&quot;:5,&quot;resolution&quot;:&quot;720p&quot;,&quot;aspectRatio&quot;:&quot;landscape&quot;}'
 # Poll GET /v1/tasks/{id} with the same key: processing = still rendering, completed = ready url</pre>
+<h2>Get started in five steps</h2>
+<ol class="steps">
+<li>Create an account — new users receive $10 of gift credit for prototyping.</li>
+<li>Create an API key in the <a href="/sign-in">console</a>.</li>
+<li>Point your OpenAI SDK at <code>https://www.keyoapi.xyz/v1</code> with the model ID from this page, or call the dedicated REST path from the <a href="/brand/keyo-api-ref.html">API handbook</a>.</li>
+<li>Track spend in the console Wallet — $1 equals 500,000 quota units, and gift credit burns before recharged balance.</li>
+<li>Set a per-key spending cap before wiring production traffic.</li>
+</ol>
+<p class="meta">A verified first call is the acceptance test for the setup: the response should carry the payload shape documented in the handbook, the Wallet ledger should show a deduction in quota units (500,000 units = $1), and repeated calls should deduct linearly at the listed rate. Any mismatch usually means the model ID or endpoint is wrong — check both against <a href="/pricing-list">the pricing list</a> before debugging client code.</p>
 <h2>FAQ</h2>
 <div class="faq"><details><summary>How long can an Agnes Video 2.5 clip be?</summary><p>1 to 12 seconds, default 5. You are billed per generated second at the resolution you request.</p></details>
 <details><summary>Does Agnes Video 2.5 support image-to-video?</summary><p>Yes — pass up to 9 https image URLs in the images field to animate a still, or leave it out for text-to-video.</p></details>
@@ -180,6 +190,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
 
   <a href="https://launchclash.com" target="_blank" rel="noopener noreferrer"><img src="https://launchclash.com/assets/images/badge.png" alt="LaunchClash" height="54" loading="lazy" style="height:44px;width:auto;" /></a>
 
+  <span class="foot-updated">Updated 2026-10-24</span>
 </footer>
 </body>
 </html>

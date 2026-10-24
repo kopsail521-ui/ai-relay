@@ -80,6 +80,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
 <h1>DeepSeek API Pricing — KeyoAPI Rates &amp; Official Context</h1>
 
 <p class="lead">This page puts current KeyoAPI sell rates for DeepSeek V4.1 Flash, V4.1 Flash 1017 snapshot, V4 Flash, and V4 Pro 0813 next to typical official list context — one OpenAI-compatible key.</p>
+<p class="def"><strong>DeepSeek API Pricing</strong> is a model-family pricing lane on KeyoAPI — a prepaid AI API gateway where one Bearer key and one wallet ($1 = 500,000 quota units) cover chat, speech, vision, OCR and video models.</p>
 <div class="btnrow">
   <a class="btn btn-primary" href="/sign-up">Get API key</a>
   <a class="btn btn-secondary" href="/pricing">Open Model Square</a>
@@ -147,6 +148,15 @@ ul{margin:0 0 14px;padding-left:1.2em}
   -H "Authorization: Bearer $KEYO_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{"model":"deepseek-v4.1-flash","messages":[{"role":"user","content":"Hello"}]}'</pre>
+<h2>Get started in five steps</h2>
+<ol class="steps">
+<li>Create an account — new users receive $10 of gift credit for prototyping.</li>
+<li>Create an API key in the <a href="/sign-in">console</a>.</li>
+<li>Point your OpenAI SDK at <code>https://www.keyoapi.xyz/v1</code> with the model ID from this page, or call the dedicated REST path from the <a href="/brand/keyo-api-ref.html">API handbook</a>.</li>
+<li>Track spend in the console Wallet — $1 equals 500,000 quota units, and gift credit burns before recharged balance.</li>
+<li>Set a per-key spending cap before wiring production traffic.</li>
+</ol>
+<p class="meta">A verified first call is the acceptance test for the setup: the response should carry the payload shape documented in the handbook, the Wallet ledger should show a deduction in quota units (500,000 units = $1), and repeated calls should deduct linearly at the listed rate. Any mismatch usually means the model ID or endpoint is wrong — check both against <a href="/pricing-list">the pricing list</a> before debugging client code.</p>
 <h2>FAQ</h2>
 <div class="faq"><details><summary>Is Keyo’s DeepSeek API pricing cheaper than official?</summary><p>It depends on official promotions, cache discounts, peak/off-peak windows, and currency. Use this table for planning, then verify both Keyo live rates on <a href="/pricing">the pricing page</a> and DeepSeek’s current public list.</p></details>
 <details><summary>Which DeepSeek ID should I start with?</summary><p>Start with deepseek-v4.1-flash for general high-volume chat, or pin deepseek-v4.1-flash-1017 for the lowest-cost CED snapshot rate (~$0.02 / $0.06). Use deepseek-v4-flash when your stack already pins that catalog string — see <a href="/model/deepseek-v4-flash">the deepseek-v4-flash model page</a> for free-path and pricing context. Use deepseek-v4-pro-0813 when you specifically want the Pro ID. Confirm live rates on <a href="/pricing">the pricing page</a> before volume.</p></details>
@@ -201,6 +211,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
 
   <a href="https://launchclash.com" target="_blank" rel="noopener noreferrer"><img src="https://launchclash.com/assets/images/badge.png" alt="LaunchClash" height="54" loading="lazy" style="height:44px;width:auto;" /></a>
 
+  <span class="foot-updated">Updated 2026-10-24</span>
 </footer>
 </body>
 </html>

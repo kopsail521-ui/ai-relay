@@ -79,6 +79,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
 <main class="wrap">
 <h1>GPT-6.1 Sol vs GPT-6 Astra</h1>
 <p class="lead">Choosing between GPT-6.1 Sol and GPT-6 Astra starts with the price of a successful task. Both are listed on KeyoAPI with the same OpenAI-compatible chat endpoint; Sol costs one fifth as much per token in the default billing group. Compare answer quality and retries on your own workload before choosing a default.</p>
+<p class="def"><strong>GPT-6.1 Sol vs GPT-6 Astra</strong> is a capability lane on KeyoAPI — a prepaid AI API gateway where one Bearer key and one wallet ($1 = 500,000 quota units) cover chat, speech, vision, OCR and video models.</p>
 <div class="btnrow"><a class="btn btn-primary" href="/sign-up">Get API key</a><a class="btn btn-secondary" href="/pricing">Live prices</a><a class="btn btn-secondary" href="/models">Model guides</a></div>
 
 <h2>GPT 6.1 Sol pricing vs GPT 6 Astra</h2>
@@ -115,6 +116,22 @@ ul{margin:0 0 14px;padding-left:1.2em}
   -H &quot;Content-Type: application/json&quot; \
   -d '{&quot;model&quot;:&quot;gpt-6.1-sol&quot;,&quot;messages&quot;:[{&quot;role&quot;:&quot;user&quot;,&quot;content&quot;:&quot;Summarize this project brief in three actionable steps: ship a search feature, evaluate relevance, and report costs.&quot;}],&quot;max_tokens&quot;:400}'</code></pre>
 
+<h2>Key facts</h2>
+<ul class="facts">
+<li>Billing base: $1 of wallet balance = 500,000 quota units</li>
+<li>Gift credit: new users get $10, invites add $3 — spend-first on <code>:free</code> IDs</li>
+<li>OpenAI-compatible base URL: <code>https://www.keyoapi.xyz/v1</code>; dedicated REST for OCR, vision and video</li>
+<li>Live rates: <a href="/pricing-list">the full pricing list</a> is the authoritative source</li>
+</ul>
+<h2>Get started in five steps</h2>
+<ol class="steps">
+<li>Create an account — new users receive $10 of gift credit for prototyping.</li>
+<li>Create an API key in the <a href="/sign-in">console</a>.</li>
+<li>Point your OpenAI SDK at <code>https://www.keyoapi.xyz/v1</code> with the model ID from this page, or call the dedicated REST path from the <a href="/brand/keyo-api-ref.html">API handbook</a>.</li>
+<li>Track spend in the console Wallet — $1 equals 500,000 quota units, and gift credit burns before recharged balance.</li>
+<li>Set a per-key spending cap before wiring production traffic.</li>
+</ol>
+<p class="meta">A verified first call is the acceptance test for the setup: the response should carry the payload shape documented in the handbook, the Wallet ledger should show a deduction in quota units (500,000 units = $1), and repeated calls should deduct linearly at the listed rate. Any mismatch usually means the model ID or endpoint is wrong — check both against <a href="/pricing-list">the pricing list</a> before debugging client code.</p>
 <h2>FAQ</h2><div class="faq"><details><summary>Is GPT-6.1 Sol five times cheaper than GPT-6 Astra?</summary><p>In the checked default-group token rates, yes: both input and output cost one fifth as much. Total task cost can differ because the models may produce different output lengths or require different retry counts.</p></details>
 <details><summary>Which model is better for coding?</summary><p>The catalog prices do not answer that. Compare accepted patches, passing tests, completion rate and cost per accepted result on the same repository tasks. Use those results to choose your routing policy.</p></details>
 <details><summary>Where can I verify the current GPT 6.1 Sol price?</summary><p>See <a href="/model/gpt-6.1-sol">the gpt-6.1-sol model page</a> for the model guide and <a href="/pricing">the pricing page</a> for the live catalog. The broader rate table is on <a href="/openai-api-pricing">the OpenAI API pricing page</a>.</p></details></div>
@@ -170,6 +187,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
 
   <a href="https://launchclash.com" target="_blank" rel="noopener noreferrer"><img src="https://launchclash.com/assets/images/badge.png" alt="LaunchClash" height="54" loading="lazy" style="height:44px;width:auto;" /></a>
 
+  <span class="foot-updated">Updated 2026-10-24</span>
 </footer>
 </body>
 </html>

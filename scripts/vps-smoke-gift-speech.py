@@ -157,12 +157,20 @@ def cleanup(conn, uid):
 def http_call(method, path, token_key, headers, payload=None, timeout=REQUEST_TIMEOUT):
     headers = dict(headers)
     headers.setdefault("Authorization", "Bearer sk-" + token_key)
-    req = urllib.request.Request(BASE_URL + path, data=payload, headers=headers, method=method)
-    try:
-        with urllib.request.urlopen(req, timeout=timeout) as resp:
-            return resp.status, resp.read()
-    except urllib.error.HTTPError as e:
-        return e.code, e.read()
+    last = (0, b"")
+    for _attempt in range(4):  # 1 try + 3 retries on new-api cpu-overload 503
+        req = urllib.request.Request(BASE_URL + path, data=payload, headers=headers, method=method)
+        try:
+            with urllib.request.urlopen(req, timeout=timeout) as resp:
+                last = (resp.status, resp.read())
+        except urllib.error.HTTPError as e:
+            last = (e.code, e.read())
+        except urllib.error.URLError as e:
+            last = (0, str(e).encode("utf-8", "replace"))
+        if last[0] != 503 or b"system_cpu_overloaded" not in last[1]:
+            break
+        time.sleep(12)
+    return last
 
 
 def http_json(method, path, token_key, headers, body=None, timeout=REQUEST_TIMEOUT):

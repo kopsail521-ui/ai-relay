@@ -86,6 +86,10 @@ if (!fs.existsSync(CATALOG_PATH)) {
   console.error("Missing catalog:", CATALOG_PATH);
   process.exit(1);
 }
+// Bump on every deploy-relevant change; the smoke workflow asserts this
+// marker via /healthz so a stale process on :3010 cannot serve traffic
+// unnoticed (ghost nohup processes from old runbooks).
+const BUILD_ID = "gift-twins-2026-10-24b";
 const catalog = JSON.parse(fs.readFileSync(CATALOG_PATH, "utf8"));
 const modelMap = Object.fromEntries(catalog.models.map((m) => [m.id, m]));
 
@@ -911,6 +915,7 @@ const server = http.createServer(async (req, res) => {
   if (urlPath === "/healthz") {
     return json(res, 200, {
       ok: true,
+      build: BUILD_ID,
       key: !!GITEE_KEY,
       models: catalog.models.length,
       db: fs.existsSync(DB_PATH),

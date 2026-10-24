@@ -2,7 +2,7 @@
  * sync-live-glm-free.mjs
  * 
  * 自动化上架 UnoRouter 的 glm-5.2 模型到 Keyo 平台，
- * 作为赠送金模型 glm-5.3:free，标价：输入 $1.198 / 输出 $7.4872 每百万 tokens。
+ * 作为赠送金模型 glm-5.3:free，标价：输入 $1.198 / 输出 $3.85 每百万 tokens。
  */
 import fs from "fs";
 import path from "path";
@@ -36,9 +36,9 @@ const headers = {
 const MODEL_NAME = "glm-5.3:free";
 const UPSTREAM_MODEL = "glm-5.2";
 const INPUT_PRICE_PER_1M = 1.198;
-const OUTPUT_PRICE_PER_1M = 7.4872;
+const OUTPUT_PRICE_PER_1M = 3.85;
 const MODEL_RATIO = INPUT_PRICE_PER_1M / 2; // 0.599
-const COMPLETION_RATIO = OUTPUT_PRICE_PER_1M / INPUT_PRICE_PER_1M; // 6.24974958263773
+const COMPLETION_RATIO = OUTPUT_PRICE_PER_1M / INPUT_PRICE_PER_1M; // 3.2136894824707845
 
 async function main() {
   console.log(`Connecting to ${baseUrl}...`);

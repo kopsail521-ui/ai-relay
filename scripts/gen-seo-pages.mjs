@@ -1165,7 +1165,7 @@ ${contentGuideLinks("cost-guide")}
   return layout({
     title: "AI API Pricing List - KeyoAPI Models & Rates",
     description:
-      "KeyoAPI pricing list: gift-credit models plus GPT-class, Claude-class, video generation, Whisper, OCR, vision, TTS model IDs with indicative USD rates.",
+      "KeyoAPI pricing list: GPT-class, Claude-class, video generation, Whisper, OCR, vision, and TTS model IDs with indicative USD rates on one prepaid key.",
     canonical: `${site}/pricing-list`,
     h1: "AI API Pricing List: Models, Rates & Endpoints",
     bodyHtml,

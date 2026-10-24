@@ -1,5 +1,5 @@
 {
-  "note": "UnoRouter 赠送金模型：glm-5.3:free（映射到上游 glm-5.2）。标价：输入 $1.198 / 输出 $7.4872 每 100 万 tokens。",
+  "note": "UnoRouter 赠送金模型：glm-5.3:free（映射到上游 glm-5.2）。标价：输入 $1.198 / 输出 $3.85 每 100 万 tokens。",
   "base_url": "https://api.unorouter.com",
   "channel_name": "Keyo Chat Free",
   "models": [
@@ -10,10 +10,10 @@
       "icon": "Zhipu.Color",
       "tags": "大语言模型",
       "price_in": 1.198,
-      "price_out": 7.4872,
+      "price_out": 3.85,
       "model_ratio": 0.599,
-      "completion_ratio": 6.24974958263773,
-      "desc_zh": "智谱 GLM 5.3 赠送金模型（上游 glm-5.2）。标价：输入 $1.198 / 输出 $7.4872 每 100 万 tokens。"
+      "completion_ratio": 3.2136894824707847,
+      "desc_zh": "智谱 GLM 5.3 赠送金模型（上游 glm-5.2）。标价：输入 $1.198 / 输出 $3.85 每 100 万 tokens。"
     }
   ]
 }

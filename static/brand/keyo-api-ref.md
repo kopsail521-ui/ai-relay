@@ -153,7 +153,7 @@ curl https://www.keyoapi.xyz/v1/videos/generations \
 
 免费（`:free` 后缀）：`Atria-dawn-v2:free`、`DeepSeek-Prover-V2-7B:free`
 
-赠送金 ID（`:free` 后缀）现有 `Atria-dawn-v2:free`、`DeepSeek-Prover-V2-7B:free`、`keyo-flash2:free`（对话）与 `SenseVoiceSmall:free`、`GLM-ASR:free`（语音识别）、`Spark-TTS-0.5B:free`（语音合成，异步）。`:free` 不是 $0 计费：按基础模型费率、优先扣赠送金（新用户一次性 $10，邀请 +$3）。完整名单以 https://www.keyoapi.xyz/free-models 为准，会动态调整。客户端的“连接测试成功”只说明测试请求通过；流式聊天还应确认收到 `choices[].delta.content` 和结束标记 `[DONE]`。若某个付费模型返回余额不足，先核对账户余额；账户仍有余额时保留 request id 联系支持，勿反复重试。
+赠送金 ID（`:free` 后缀）现有 `Atria-dawn-v2:free`、`DeepSeek-Prover-V2-7B:free`、`keyo-flash2:free`（对话）与 `SenseVoiceSmall:free`、`GLM-ASR:free`（语音识别）、`Spark-TTS-0.5B:free`（语音合成，异步）。`:free` 不是 $0 计费：按对应赠送金费率、优先扣赠送金（新用户一次性 $10，邀请 +$3）。完整名单以 https://www.keyoapi.xyz/free-models 为准，会动态调整。客户端的“连接测试成功”只说明测试请求通过；流式聊天还应确认收到 `choices[].delta.content` 和结束标记 `[DONE]`。若某个付费模型返回余额不足，先核对账户余额；账户仍有余额时保留 request id 联系支持，勿反复重试。
 
 付费：`gpt-5.6-luna` · `gpt-5.6-terra` · `gpt-5.6-sol` · `gpt-6-luna` · `gpt-6-sol` · `gpt-6-astra` · `claude-sonnet-5` · `claude-sonnet-5-5` · `claude-opus-5` · `claude-opus-5-5` · `claude-fable-5` · `claude-fable-5-1` · `gemini-3.7-flash` · `gemini-3.8-flash` · `grok-4.7` · `grok-4.6` · `minimax-m3` · `glm-5.3` · `glm-5.3-flash` · `glm-5.2` · `deepseek-v4.1-flash` · `deepseek-v4-pro-0813` · `deepseek-v4-flash-0731` · `deepseek-v4-pro` · `deepseek-v4-flash` · `kimi-k3` · `kimi-k2.7-code` · `qwen3.8-flash` · `hy4-preview` · `mimo-v2.6-pro` · `mimo-v2.6-flash` · `qwen3.8-max-0902`
 

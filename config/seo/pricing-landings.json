@@ -1456,6 +1456,12 @@
       "endpoint": "POST /v1/chat/completions"
     },
     {
+      "model": "MiniMax-M3.1-Flash",
+      "category": "llm",
+      "keyo": "~$0.09 / $0.36 per 1M in/out",
+      "endpoint": "POST /v1/chat/completions"
+    },
+    {
       "model": "seedance-2.5",
       "category": "video",
       "keyo": "$0.1336 / second",

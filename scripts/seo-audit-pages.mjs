@@ -43,8 +43,8 @@ function listFiles(dir, ext, base = "") {
 const files = [
   ...listFiles(seoDir, ".html")
     .filter((f) => !f.includes("landing-templates"))
-    // SPA shells (by design) and the noindex redirect stub are not content pages
-    .filter((f) => !/spa[-_]shell|deepseek-v4-pro\.html$/.test(f)),
+    // SPA shells + noindex redirect stubs (by design) are not content pages
+    .filter((f) => !/spa[-_]shell|deepseek-v4-pro\.html$|wan3\.0-video-api-pricing\.html$/.test(f)),
   ...["keyo-docs.html", "keyo-api-ref.html", "faq.html"].map((f) =>
     path.join(brandDir, f)
   ),

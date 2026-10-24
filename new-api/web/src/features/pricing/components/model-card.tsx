@@ -299,9 +299,12 @@ export const ModelCard = memo(function ModelCard(props: ModelCardProps) {
         </div>
         <ModelPerfBadge perf={props.perf} className='row-span-2 self-start' />
 
-        <div className='flex min-w-0 flex-wrap items-center gap-x-2.5 gap-y-0.5 sm:gap-x-3 sm:gap-y-1'>
+        <div className='col-start-1 row-start-2 flex min-w-0 flex-wrap items-center gap-x-2.5 gap-y-0.5 sm:gap-x-3 sm:gap-y-1'>
           {bottomTags.map((item) => (
-            <span key={item} className='text-muted-foreground/70 text-xs'>
+            <span
+              key={item}
+              className='text-muted-foreground/70 max-w-full text-xs break-all'
+            >
               {item}
             </span>
           ))}

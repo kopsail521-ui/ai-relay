@@ -92,10 +92,10 @@ const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), "keyo-infinitetalk-test-")
 const dbPath = path.join(tempDir, "one-api.db");
 const db = new DatabaseSync(dbPath);
 db.exec(`
-  CREATE TABLE users (id INTEGER PRIMARY KEY, quota INTEGER, used_quota INTEGER, request_count INTEGER);
+  CREATE TABLE users (id INTEGER PRIMARY KEY, quota INTEGER, used_quota INTEGER, request_count INTEGER, gift_quota INTEGER DEFAULT 0);
   CREATE TABLE tokens (id INTEGER PRIMARY KEY, user_id INTEGER, name TEXT, status INTEGER, remain_quota INTEGER, used_quota INTEGER, unlimited_quota INTEGER, key TEXT, deleted_at INTEGER);
   CREATE TABLE logs (user_id INTEGER, created_at INTEGER, type INTEGER, content TEXT, username TEXT, token_name TEXT, model_name TEXT, quota INTEGER, prompt_tokens INTEGER, completion_tokens INTEGER, use_time INTEGER, is_stream INTEGER, channel_id INTEGER, token_id INTEGER, "group" TEXT, ip TEXT, request_id TEXT, upstream_request_id TEXT, other TEXT);
-  INSERT INTO users VALUES (1, 1000000, 0, 0);
+  INSERT INTO users (id, quota, used_quota, request_count) VALUES (1, 1000000, 0, 0);
   INSERT INTO tokens VALUES (1, 1, 'test', 1, 1000000, 0, 0, 'mock', NULL);
 `);
 db.close();
@@ -150,7 +150,7 @@ const child = spawn(process.execPath, [serviceFile], {
     NEW_API_BASE: `http://127.0.0.1:${newApiPort}`,
     NEW_API_DB: dbPath,
     CATALOG: path.join(repoRoot, "services", "gitee-passthrough", "catalog.json"),
-    INFINITETALK_SUBMIT_TIMEOUT_MS: "80",
+    INFINITETALK_SUBMIT_TIMEOUT_MS: "1000",
   },
   stdio: ["ignore", "pipe", "pipe"],
 });
@@ -277,7 +277,7 @@ try {
   assert.equal(userQuota(), quotaAfterSuccess);
   upstreamOmitTaskId = false;
 
-  upstreamDelayMs = 200;
+  upstreamDelayMs = 1500;
   const timeoutResponse = await fetch(
     `http://127.0.0.1:${servicePort}/v1/async/videos/image-to-video`,
     {

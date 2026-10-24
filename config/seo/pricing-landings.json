@@ -597,7 +597,7 @@
         },
         {
           "model": "Qwen3-TTS",
-          "official": "Async flagship TTS with clone-friendly voices",
+          "official": "Asynchronous text-to-speech; confirm separate cloning fields before using samples",
           "keyo": "~$0.548 / 10K characters",
           "note": "POST /v1/async/audio/speech · guide /model/Qwen3-TTS"
         },
@@ -605,7 +605,7 @@
           "model": "gemini-3.8-flash-tts",
           "official": "Gemini-native sync TTS — token-billed, audio inline as base64 WAV",
           "keyo": "~$0.44 / $8.82 per 1M in/out",
-          "note": "Gemini-native POST /v1beta/models/gemini-3.8-flash-tts:generateContent · not on /v1/audio/speech · guide /model/gemini-3.8-flash-tts"
+          "note": "Gemini-native POST /v1beta/models/gemini-3.8-flash-tts:generateContent · also supports OpenAI-compatible POST /v1/audio/speech · guide /model/gemini-3.8-flash-tts"
         },
         {
           "model": "eleven-v4",
@@ -630,7 +630,7 @@
       },
       "body": [
         "Teams call a text to speech API for IVR, voice agents, course narration, and avatar pipelines. Keyo keeps STT (Whisper) and TTS on one prepaid balance so you are not juggling three vendor consoles.",
-        "Indicative rates above come from the live Keyo catalog — confirm /model/IndexTTS-2, /model/CosyVoice3, /model/Qwen3-TTS, and /model/gemini-3.8-flash-tts (live rates on /pricing). Prefer IndexTTS-2 when the product needs audio inside one request; prefer CosyVoice3 or Qwen3-TTS when jobs are already async. Gemini 3.8 Flash TTS bills per token, not per 10K characters — it is not covered by the ~$0.548–$1.37 / 10K characters range above, and it calls a Gemini-native endpoint rather than the OpenAI-compatible /v1/audio/speech.",
+        "Indicative rates above come from the live Keyo catalog — confirm /model/IndexTTS-2, /model/CosyVoice3, /model/Qwen3-TTS, and /model/gemini-3.8-flash-tts (live rates on /pricing). Prefer IndexTTS-2 when the product needs audio inside one request; prefer CosyVoice3 or Qwen3-TTS when jobs are already async. Gemini 3.8 Flash TTS bills per token, not per 10K characters — it is not covered by the ~$0.548–$1.37 / 10K characters range above, and it supports both the Gemini-native endpoint and the compatible /v1/audio/speech endpoint; see the handbook for their different response formats.",
         "How to call CosyVoice3 API (and siblings): set base URL https://www.keyoapi.xyz/v1, authenticate with your Keyo key, pass the model id. Full CosyVoice3 walkthrough: /model/CosyVoice3. Also /model/IndexTTS-2, /model/Qwen3-TTS. Voice clone angle: /voice-cloning-api. Talking video: /ai-avatar-video-generator.",
         "Create a key at /sign-up, then open /pricing (Model Square) for interactive try/buy."
       ],
@@ -638,11 +638,11 @@
       "faqs": [
         {
           "q": "Which TTS model should I start with?",
-          "a": "Start with IndexTTS-2 for sync demos; move to CosyVoice3 or Qwen3-TTS for batch/async and clone-heavy workloads. See /model/CosyVoice3 for the CosyVoice3 API call shape, and confirm live rates on /pricing."
+          "a": "Start with IndexTTS-2 for sync demos; move to CosyVoice3 or Qwen3-TTS for batch/async and basic speech workloads. See /model/CosyVoice3 for the CosyVoice3 API call shape, and confirm live rates on /pricing."
         },
         {
           "q": "Is there a free TTS model?",
-          "a": "Not as a permanent gift-credit TTS ID today. Use gift-credit chat twins to draft scripts, then meter TTS. See /free-models and /model/CosyVoice3."
+          "a": "Spark-TTS-0.5B:free is listed as a gift-credit TTS ID. The :free suffix does not promise every model has a zero rate; check the current per-model rate and wallet fallback rules. See /free-models and /model/CosyVoice3."
         },
         {
           "q": "Can I pair TTS with avatars?",
@@ -653,61 +653,61 @@
     {
       "slug": "voice-cloning-api",
       "navLabel": "Voice clone API",
-      "h1": "Voice Cloning API — CosyVoice3 & Qwen3-TTS on KeyoAPI",
+      "h1": "Voice Cloning API — Check the Integration Contract",
       "title": "Voice Cloning API | CosyVoice3 & Qwen3-TTS on KeyoAPI",
-      "metaDescription": "Voice cloning API on KeyoAPI via CosyVoice3 and Qwen3-TTS async speech. Clone-friendly TTS from ~$0.548 / 10K characters, same key as Whisper.",
+      "metaDescription": "Understand basic speech synthesis versus voice cloning on KeyoAPI. Confirm reference-audio, enrollment and voice-ID fields before implementing cloning.",
       "targetKeywords": [
         "voice cloning api",
         "voice clone api",
         "cloned voice tts api"
       ],
-      "tableHeading": "Clone-friendly speech models",
+      "tableHeading": "Documented speech endpoints",
       "colOfficial": "Fit",
       "bodyHeading": "Rates and endpoints",
-      "lead": "Need a voice cloning API without standing up a research stack? KeyoAPI exposes clone-friendly async TTS (CosyVoice3, Qwen3-TTS) behind one prepaid key — draft scripts with free chat twins, synthesize, then optionally animate with Duix or InfiniteTalk.",
+      "lead": "Basic text-to-speech and voice cloning are different operations. The examples on this page synthesize text; they do not supply a reference speaker. Confirm the chosen model’s reference-audio and voice-ID contract with support before building cloning.",
       "rows": [
         {
           "model": "Qwen3-TTS",
-          "official": "Async TTS with rapid voice cloning for brand / locale voices",
+          "official": "Asynchronous basic text-to-speech",
           "keyo": "~$0.548 / 10K characters",
           "note": "POST /v1/async/audio/speech · guide /model/Qwen3-TTS"
         },
         {
           "model": "CosyVoice3",
-          "official": "Async multilingual zero-shot speech; strong for longer narration",
+          "official": "Asynchronous basic text-to-speech",
           "keyo": "~$1.37 / 10K characters",
           "note": "POST /v1/async/audio/speech · guide /model/CosyVoice3"
         },
         {
           "model": "IndexTTS-2",
-          "official": "Sync TTS when you need audio in one round trip (clone where schema allows)",
+          "official": "Synchronous basic text-to-speech",
           "keyo": "~$1.37 / 10K characters",
           "note": "POST /v1/audio/speech · guide /model/IndexTTS-2"
         }
       ],
       "freeKiller": {
-        "title": "Consent and abuse first",
-        "body": "Clone samples only with rights clearance. Rate-limit tenant clones, reject celebrity likeness without licenses, and keep a default voice fallback. Keyo provides the inference API — your product owns consent UX and policy."
+        "title": "Before using a reference voice",
+        "body": "Obtain the supported sample format, required fields, enrollment steps and voice-ID lifecycle for the chosen model. Those details are not documented in the basic TTS example below; do not guess parameters or promise speaker reproduction from text alone."
       },
       "body": [
-        "Use it for brand-consistent voices across IVR, support bots, and avatar video. Keyo collocates clone-friendly TTS with Whisper STT and talking-avatar models so the full loop shares one balance.",
-        "Indicative rates above are catalog snapshots — confirm /pricing/Qwen3-TTS and /pricing/CosyVoice3. There is no separate upload playground: after /sign-up, try from the interactive pricing page for each model id.",
-        "How to call: async create via POST /v1/async/audio/speech with model=Qwen3-TTS or CosyVoice3, then poll /v1/task/{id}. Broader TTS map: /tts-api. Avatar handoff: /ai-avatar-video-generator.",
-        "For sync-only demos without a clone workflow, IndexTTS-2 on /v1/audio/speech is often enough."
+        "Use POST /v1/async/audio/speech with model=Qwen3-TTS or CosyVoice3 and an inputs string for basic speech synthesis. Save id/task_id, then query GET /v1/task/{id} until status=completed and an audio URL is available. See /brand/keyo-api-ref.html#section-8.",
+        "Reference-voice cloning needs its own confirmed request contract. This page does not provide sample upload/enrollment or a reusable voice-ID schema. Ask support for that contract before submitting clone samples; do not copy a voice field from a different model.",
+        "For synchronous basic speech, see IndexTTS-2 on POST /v1/audio/speech. The complete endpoint map is in /tts-api. Current applicable rates and groups are shown in /pricing.",
+        "A timed-out task submission may already have succeeded. Preserve its task or request ID; retry status GET requests using the original ID instead of creating replacement jobs automatically."
       ],
-      "curlExample": "curl https://www.keyoapi.xyz/v1/async/audio/speech \\\n  -H \"Authorization: Bearer $KEYO_API_KEY\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\"model\":\"Qwen3-TTS\",\"input\":\"Hello from a cloned brand voice.\"}'\n# then: GET /v1/task/{id}",
+      "curlExample": "curl https://www.keyoapi.xyz/v1/async/audio/speech \\\n  -H \"Authorization: Bearer $KEYO_API_KEY\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\"model\":\"Qwen3-TTS\",\"inputs\":\"Hello from KeyoAPI text-to-speech.\"}'\n# Basic TTS only. Save id/task_id and query GET /v1/task/{id}.",
       "faqs": [
         {
-          "q": "Do you store my clone samples?",
-          "a": "Follow Keyo docs and your own retention policy. Treat clone audio as sensitive PII; minimize retention in your app layer."
+          "q": "Does the basic example clone a voice?",
+          "a": "No. It sends only text. Confirm the reference-audio, enrollment and voice-ID contract for your model before implementing cloning."
         },
         {
-          "q": "Voice cloning vs plain TTS?",
-          "a": "Plain TTS uses stock voices; cloning targets a specific speaker sample. Prefer Qwen3-TTS or CosyVoice3 for clone workflows; see each model guide for schema details."
+          "q": "Which fields identify the reference speaker?",
+          "a": "That model-specific contract is not specified on this page. Obtain it from support; do not guess field names."
         },
         {
-          "q": "How do I try it?",
-          "a": "Create a key at /sign-up, then open /pricing/Qwen3-TTS or /pricing/CosyVoice3. No second playground."
+          "q": "How do I start with basic speech?",
+          "a": "Create a key at /keys after signing in, then follow /brand/keyo-api-ref.html#section-8. Check current model rates on /pricing."
         }
       ]
     },
@@ -1249,19 +1249,19 @@
       "rows": [
         {
           "model": "agnes-video-2.5",
-          "official": "Agnes AI list via grsai — verify before budgeting",
+          "official": "Model pricing context — verify current specifications before budgeting",
           "keyo": "~$0.0205 / second",
           "note": "720p output · POST /v1/videos/generations"
         },
         {
           "model": "agnes-video-2.5",
-          "official": "Agnes AI list via grsai — verify before budgeting",
+          "official": "Model pricing context — verify current specifications before budgeting",
           "keyo": "~$0.0349 / second",
           "note": "1080p output · POST /v1/videos/generations"
         },
         {
           "model": "agnes-video-2.5",
-          "official": "Agnes AI list via grsai — verify before budgeting",
+          "official": "Model pricing context — verify current specifications before budgeting",
           "keyo": "~$0.0473 / second",
           "note": "2k output · POST /v1/videos/generations"
         }
@@ -1329,7 +1329,7 @@
       },
       "body": [
         "video-enhance-pro is a generative video enhancement tool: you submit an existing video and get back a higher-quality version. Call POST /v1/async/videos/enhance with model=video-enhance-pro, the source video as video_url (https), and the target resolution (720p / 1080p / 2k; default 1080p).",
-        "The call returns a task id immediately — poll GET /v1/tasks/{id} with the same key until it returns the result URL. Billing is per second of successfully processed video, so a 10-second 1080p clip costs about $0.68.",
+        "Save the task ID returned by the create request — poll GET /v1/task/{id} with the same key until status completed includes a result URL; stop on failed or cancelled. Billing is per second of successfully processed video, so a 10-second 1080p clip costs about $0.68.",
         "Keyo rates above are indicative sell prices from the live Keyo catalog; confirm under /pricing before volume. For removing burned-in subtitles on the same key see /subtitle-erase-pro-api-pricing; for generation see /seedance-2-5-api-pricing, /minimax-h3-api-pricing, /flux-3-video-api-pricing and /wan3-video-api-pricing on /pricing-list."
       ],
       "faqs": [
@@ -1339,14 +1339,14 @@
         },
         {
           "q": "How do I submit a video?",
-          "a": "POST /v1/async/videos/enhance with model, video_url (https link to your source video) and resolution. Then poll GET /v1/tasks/{id} for the result URL."
+          "a": "POST /v1/async/videos/enhance with model, video_url (https link to your source video) and resolution. Then poll GET /v1/task/{id} for the result URL."
         },
         {
           "q": "Can I enhance to 4K?",
           "a": "The current tiers are 720p, 1080p and 2k. Submit at the highest tier you need — the tool upscales and restores detail generatively."
         }
       ],
-      "curlExample": "curl https://www.keyoapi.xyz/v1/async/videos/enhance \\\n  -H \"Authorization: Bearer $KEYO_API_KEY\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\"model\":\"video-enhance-pro\",\"video_url\":\"https://example.com/clip.mp4\",\"resolution\":\"1080p\"}'\n# Poll GET /v1/tasks/{id} with the same key until it returns the result url"
+      "curlExample": "curl https://www.keyoapi.xyz/v1/async/videos/enhance \\\n  -H \"Authorization: Bearer $KEYO_API_KEY\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\"model\":\"video-enhance-pro\",\"video_url\":\"https://example.com/clip.mp4\",\"resolution\":\"1080p\"}'\n# Poll GET /v1/task/{id} with the same key until status completed includes a result URL; stop on failed or cancelled"
     },
     {
       "slug": "subtitle-erase-pro-api-pricing",
@@ -1374,7 +1374,7 @@
       },
       "body": [
         "subtitle-erase-pro removes burned-in (hard) subtitles from video and reconstructs the area behind them. Call POST /v1/async/videos/subtitle-erase with model=subtitle-erase-pro and the source video as video_url (https).",
-        "The call returns a task id immediately — poll GET /v1/tasks/{id} with the same key until it returns the cleaned video URL. Billing is per second of successfully processed video; a 60-second clip costs about $1.10.",
+        "Save the task ID returned by the create request — poll GET /v1/task/{id} with the same key until status completed includes the cleaned video URL; stop on failed or cancelled. Billing is per second of successfully processed video; a 60-second clip costs about $1.10.",
         "Keyo rates above are indicative sell prices from the live Keyo catalog; confirm under /pricing before volume. Pair it with /video-enhance-pro-api-pricing for restore-then-upscale workflows; for generation see /seedance-2-5-api-pricing, /minimax-h3-api-pricing, /flux-3-video-api-pricing and /wan3-video-api-pricing on /pricing-list."
       ],
       "faqs": [
@@ -1388,10 +1388,10 @@
         },
         {
           "q": "How do I submit a video?",
-          "a": "POST /v1/async/videos/subtitle-erase with model and video_url (https link to your video). Then poll GET /v1/tasks/{id} for the cleaned video URL."
+          "a": "POST /v1/async/videos/subtitle-erase with model and video_url (https link to your video). Then poll GET /v1/task/{id} for the cleaned video URL."
         }
       ],
-      "curlExample": "curl https://www.keyoapi.xyz/v1/async/videos/subtitle-erase \\\n  -H \"Authorization: Bearer $KEYO_API_KEY\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\"model\":\"subtitle-erase-pro\",\"video_url\":\"https://example.com/subtitled.mp4\"}'\n# Poll GET /v1/tasks/{id} with the same key until it returns the result url"
+      "curlExample": "curl https://www.keyoapi.xyz/v1/async/videos/subtitle-erase \\\n  -H \"Authorization: Bearer $KEYO_API_KEY\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\"model\":\"subtitle-erase-pro\",\"video_url\":\"https://example.com/subtitled.mp4\"}'\n# Poll GET /v1/task/{id} with the same key until status completed includes a result URL; stop on failed or cancelled"
     },
     {
       "slug": "nano-banana-api-pricing",
@@ -1428,12 +1428,13 @@
       ],
       "freeKiller": {
         "title": "No free image tier — wire your client on gift credits",
-        "body": "The gift-credit IDs are chat and speech models only — image generation has no free tier. They bill at normal rates from your one-time $10 new-user credit (fair-use limits) and are the right place to prove out base URL, auth and retry wiring. Then switch model= to a nano-banana tier on the same key; images bill per generated image at the rates on this page."
+        "body": "The gift-credit IDs are chat and speech models only — image generation has no free tier. They bill at normal rates from your one-time $10 new-user credit (fair-use limits) and are the right place to prove out base URL, auth and retry wiring. Then switch model= to a nano-banana tier on the same key; images bill per generated image at the applicable model and group rate in /pricing."
       },
       "body": [
-        "Nano Banana is Google's image generation family. On KeyoAPI all three tiers run on the same OpenAI-compatible endpoint: POST /v1/images/generations with model=nano-banana-2.1 (newer release, $0.0123 per image), model=nano-banana-2 (base lane, $0.0205) or model=nano-banana-pro (top tier with higher resolution and finer editing control, $0.0274). The model string is the only thing that changes between tiers.",
-        "Billing is per generated image and the endpoint returns synchronously — no task polling. Keyo rates above are indicative sell prices from the live Keyo catalog; confirm the interactive card under /pricing before volume, and treat official Google figures as planning context — list bands move.",
-        "Per-tier walkthroughs live on the model guides: /model/nano-banana-2.1, /model/nano-banana-2 and /model/nano-banana-pro. For other image lanes on the same key (gpt-image and friends) see /pricing-list."
+        "Nano Banana is Google's image generation family. On KeyoAPI all three tiers run on the same OpenAI-compatible endpoint: POST /v1/images/generations with model=nano-banana-2.1 (newer release, $0.0123 per image), model=nano-banana-2 (base lane, $0.0205) or model=nano-banana-pro (top tier with higher resolution and finer editing control, $0.0274). Use each model’s documented aspect-ratio and imageSize limits.",
+        "Billing is per generated image. A request can return a result immediately or HTTP 202 with a continuing task; save task_id and query GET /v1/images/tasks/{task_id} with the same API key. Keyo rates above are indicative sell prices from the live Keyo catalog; confirm the interactive card under /pricing before volume, and treat official Google figures as planning context — list bands move.",
+        "Per-tier walkthroughs live on the model guides: /model/nano-banana-2.1, /model/nano-banana-2 and /model/nano-banana-pro. For other image lanes on the same key (gpt-image and friends) see /pricing-list.",
+        "Use aspectRatio (for example 1:1) and imageSize (1K, 2K or 4K); do not send GPT-style pixel sizes. Keep the returned task_id: HTTP 202 means the same task is still running. Query GET /v1/images/tasks/{task_id} with the same API key until HTTP 200, status=succeeded and data[].url is nonempty. See /brand/keyo-api-ref.html#section-3 for reference images, idempotency and error recovery."
       ],
       "faqs": [
         {
@@ -1442,14 +1443,14 @@
         },
         {
           "q": "How is Nano Banana billed on KeyoAPI?",
-          "a": "Per generated image, at the tier's rate. The images endpoint returns synchronously — there is no task polling."
+          "a": "Per generated image, at the tier's rate. The images endpoint may return HTTP 202 while processing. Save task_id and poll GET /v1/images/tasks/{task_id}; do not resubmit a new generation."
         },
         {
           "q": "How do I try Nano Banana on Keyo?",
           "a": "Create a key at /sign-up and open /pricing (Model Square) to find the nano-banana tiers, or start with a gift-credit ID on /free-models to wire your client first."
         }
       ],
-      "curlExample": "curl https://www.keyoapi.xyz/v1/images/generations \\\n  -H \"Authorization: Bearer $KEYO_API_KEY\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\"model\":\"nano-banana-2.1\",\"prompt\":\"a mug of coffee on a desk, studio light\",\"size\":\"1024x1024\"}'\n# Synchronous: the response returns image URLs directly — no task polling"
+      "curlExample": "curl https://www.keyoapi.xyz/v1/images/generations \\\n  -H \"Authorization: Bearer $KEYO_API_KEY\" \\\n  -H \"Idempotency-Key: replace-with-a-unique-key-for-this-image\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\"model\":\"nano-banana-2.1\",\"prompt\":\"a mug of coffee on a desk, studio light\",\"aspectRatio\":\"1:1\",\"imageSize\":\"1K\",\"replyType\":\"async\"}'\n# Save task_id; query GET /v1/images/tasks/{task_id} with the same key."
     }
   ],
   "catalogRows": [

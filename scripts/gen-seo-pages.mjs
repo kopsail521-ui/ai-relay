@@ -4,6 +4,7 @@
  * Usage: node scripts/gen-seo-pages.mjs
  * Selected HTML only: node scripts/gen-seo-pages.mjs --pages=models,model/gpt-6.1-sol
  * Selected runs also refresh sitemap, robots and Caddy fragments.
+ * Add --html-only to update selected HTML without touching deployment metadata.
  *
  * User-facing copy: do not use meta-talk such as "crawlable", "for SEO",
  * "search engines", "this page targets", "search demand", "searches are",
@@ -24,6 +25,12 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.join(__dirname, "..");
 const outDir = path.join(root, "static/seo");
 const site = "https://www.keyoapi.xyz";
+
+// T-001 entity disambiguation: the ONE canonical definition sentence. Must
+// stay byte-identical across homepage hero, about lead, both JSON-LD
+// descriptions, llms.txt (static/brand/llms.txt) and content/facts.md.
+const SITE_DEFINITION =
+  "KeyoAPI is a prepaid AI API gateway — one key for chat, speech, OCR and digital humans on a single balance.";
 
 const pages = JSON.parse(
   fs.readFileSync(path.join(root, "config/seo/model-pages.json"), "utf8")
@@ -76,8 +83,10 @@ for (const p of [...pricingLandings.pages, ...contentLandings.pages]) {
     if (r.model && !landingByModel.has(r.model)) landingByModel.set(r.model, p.slug);
   }
 }
+const htmlOnly = process.argv.includes("--html-only");
 const selectedPages = new Set(
   process.argv.slice(2).flatMap((arg) => {
+    if (arg === "--html-only") return [];
     if (!arg.startsWith("--pages=")) throw new Error(`Unknown argument: ${arg}`);
     const keys = arg.slice("--pages=".length).split(",");
     if (keys.some((key) => !key.trim())) {
@@ -86,6 +95,9 @@ const selectedPages = new Set(
     return keys;
   })
 );
+if (htmlOnly && !selectedPages.size) {
+  throw new Error("--html-only requires an explicit --pages selection");
+}
 const freeCfg = JSON.parse(
   fs.readFileSync(path.join(root, "config/sensenova-free-models.json"), "utf8")
 );
@@ -182,6 +194,8 @@ function linkifySitePaths(raw, currentPath) {
       "/pricing-list",
       "/free-models",
       "/brand/keyo-api-ref.html",
+      "/keys",
+      "/wallet",
       "/sign-up",
       "/sign-in",
       "/compare",
@@ -192,15 +206,15 @@ function linkifySitePaths(raw, currentPath) {
     .map((p) => p.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"));
   // Do not linkify "/pricing" inside foreign paths like openai.com/api/pricing
   const re = new RegExp(
-    `(\\/brand\\/blog\\/article\\/[A-Za-z0-9][A-Za-z0-9_-]*\\/?|\\/(?:pricing|model)\\/[A-Za-z0-9](?:[A-Za-z0-9._-]*[A-Za-z0-9_-])?|${literals.join("|")}|(?<![A-Za-z0-9./])\\/pricing)(?![A-Za-z0-9_/-])`,
+    `(\\/brand\\/blog\\/article\\/[A-Za-z0-9][A-Za-z0-9_-]*\\/?|\\/(?:pricing|model)\\/[A-Za-z0-9](?:[A-Za-z0-9._-]*[A-Za-z0-9_-])?|${literals.join("|")}|(?<![A-Za-z0-9./])\\/pricing)(#[A-Za-z0-9_-]+)?(?![A-Za-z0-9_/-])`,
     "g"
   );
-  let linked = s.replace(re, (m) => {
-    const href = rewritePricingIdPath(m, currentPath);
+  let linked = s.replace(re, (_match, route, fragment = "") => {
+    const href = rewritePricingIdPath(route, currentPath) + fragment;
     if (currentPath && href === currentPath) {
       return "this page";
     }
-    return `<a href="${href}">${esc(pathLabel(href))}</a>`;
+    return `<a href="${href}">${esc(pathLabel(href.split("#")[0]))}</a>`;
   });
   // Deduplicate adjacent identical anchors: <a href="X">Label</a> · the same <a href="X">
   linked = linked.replace(/(<a\s+href="([^"]+)">([^<]+)<\/a>)\s*·\s*(?:guide\s*)?<a\s+href="\2">\3<\/a>/gi, "$1");
@@ -246,6 +260,8 @@ function pathLabel(href) {
     "/brand/keyo-api-ref.html": "the API endpoint reference",
     "/sign-up": "the sign-up page",
     "/sign-in": "the sign-in page",
+    "/keys": "the API keys page",
+    "/wallet": "the wallet",
     "/about": "the about page",
   };
   if (fixed[href]) return fixed[href];
@@ -671,7 +687,7 @@ function renderHome() {
     .slice(0, 12)
     .map(
       (m) =>
-        `<a href="/free-models"><span class="grid-title"><code>${esc(m.id)}</code></span><span class="grid-meta">Gift credits</span></a>`
+        `<a href="/free-models"><span class="grid-title"><code>${esc(m.id)}</code></span><span class="grid-meta">Gift Credit</span></a>`
     )
     .join("\n");
   const modelFoot = pages.models
@@ -703,8 +719,7 @@ function renderHome() {
     "@type": "WebApplication",
     name: "KeyoAPI",
     url: site,
-    description:
-      "Prepaid AI API gateway: OpenAI-compatible chat/image/speech plus dedicated REST for OCR, vision, TTS and digital humans — one key, one balance.",
+    description: SITE_DEFINITION,
     applicationCategory: "DeveloperApplication",
     offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
   })}</script>
@@ -739,9 +754,9 @@ ${nav()}
   <div class="inner">
     <div>
       <h1>One key for chat, speech, OCR &amp; digital humans</h1>
-      <p class="sub">OpenAI-compatible chat, image and speech — plus OCR, TTS and talking-avatar APIs on the same prepaid balance.</p>
+      <p class="sub">${SITE_DEFINITION}</p>
       <div class="actions">
-        <a class="btn btn-primary" href="/sign-up">Start free — get API key</a>
+        <a class="btn btn-primary" href="/sign-up">Start with $10 Credit — Get API Key</a>
         <a class="btn btn-secondary" href="/brand/keyo-docs.html">Docs</a>
         <a class="btn btn-secondary" href="/models">Browse Models</a>
       </div>
@@ -792,7 +807,7 @@ ${headlineRows}
 <div class="grid">
 ${freeCards}
 </div>
-<p class="meta"><a href="/free-models">See all free model IDs →</a></p>
+<p class="meta"><a href="/free-models">See all gift-credit model IDs &amp; rules →</a></p>
 <h2>Featured models</h2>
 <div class="grid">
 ${featured}
@@ -802,7 +817,7 @@ ${featured}
 <pre><code>export OPENAI_BASE_URL=https://www.keyoapi.xyz/v1
 export OPENAI_API_KEY=sk-...
 # chat (OpenAI SDK): model=gpt-6-astra | claude-fable-5-1 | deepseek-v4.1-flash
-# free: model=Atria-dawn-v2:free | DeepSeek-Prover-V2-7B:free (see /free-models)
+# gift-credit: model=Atria-dawn-v2:free | DeepSeek-Prover-V2-7B:free (see /free-models)
 # speech / vision / video: IndexTTS-2 · sam3 · RMBG-2.0 · MiniMax-H3 — see Docs</code></pre>
 </div>
 <footer class="foot">
@@ -949,13 +964,13 @@ function renderAbout() {
     .slice(0, 12)
     .map(
       (m) =>
-        `<a href="/free-models"><span class="grid-title"><code>${esc(m.id)}</code></span><span class="grid-meta">Gift credits</span></a>`
+        `<a href="/free-models"><span class="grid-title"><code>${esc(m.id)}</code></span><span class="grid-meta">Gift Credit</span></a>`
     )
     .join("\n");
   const bodyHtml = `
-<p class="lead">KeyoAPI is a developer-first <strong>AI API relay</strong>: chat, image and speech are OpenAI-compatible, while OCR, vision tools, async video/docs and digital-human models run on dedicated REST paths — <strong>same key, same prepaid balance</strong>. No five vendor dashboards, no five invoices.</p>
+<p class="lead">${SITE_DEFINITION} Chat, image and speech are OpenAI-compatible, while OCR, vision tools, async video/docs and digital-human models run on dedicated REST paths — <strong>same key, same prepaid balance</strong>. No five vendor dashboards, no five invoices.</p>
 <div class="btnrow">
-  <a class="btn btn-primary" href="/sign-up">Start free — get API key</a>
+  <a class="btn btn-primary" href="/sign-up">Start with $10 Credit — Get API Key</a>
   <a class="btn btn-secondary" href="/brand/keyo-docs.html">Docs</a>
   <a class="btn btn-secondary" href="/models">Browse Models</a>
 </div>
@@ -999,14 +1014,13 @@ ${freeCards}
 <h2>Start building</h2>
 <p>Grab a key and make your first request in minutes — free models included.</p>
 <div class="btnrow">
-  <a class="btn btn-primary" href="/sign-up">Start free — get API key</a>
+  <a class="btn btn-primary" href="/sign-up">Start with $10 Credit — Get API Key</a>
   <a class="btn btn-secondary" href="/models">All model guides</a>
 </div>
 `;
   return layout({
     title: "About KeyoAPI — One Key for Chat, Image, Video, Speech, OCR & Digital Humans",
-    description:
-      "KeyoAPI is an AI API relay: chat, image, video and speech endpoints; OCR, vision, TTS-async and digital-human models use dedicated REST paths — same key, same prepaid balance, with gift-credit IDs (new users: $10; per invite: $3).",
+    description: `${SITE_DEFINITION} Chat, image, video and speech endpoints are OpenAI-compatible; OCR, TTS-async and digital-human models use dedicated REST paths — with gift-credit IDs (new users: $10; per invite: $3).`,
     canonical: `${site}/about`,
     h1: "One key for chat, image, video, speech, OCR & digital humans",
     bodyHtml,
@@ -1015,8 +1029,7 @@ ${freeCards}
       "@type": "AboutPage",
       name: "About KeyoAPI",
       url: `${site}/about`,
-      description:
-        "About KeyoAPI — prepaid AI API gateway with OpenAI-compatible chat, image, video, speech and dedicated REST for OCR, vision and avatars.",
+      description: SITE_DEFINITION,
     },
   });
 }
@@ -1738,6 +1751,7 @@ for (const [key, render] of renderers) {
   fs.writeFileSync(path.join(outDir, `${key}.html`), render());
   generatedCount++;
 }
+if (!htmlOnly) {
 fs.writeFileSync(path.join(outDir, "robots.txt"), writeRobots());
 fs.writeFileSync(path.join(outDir, "sitemap.xml"), writeSitemap());
 if (!selectedPages.size) {
@@ -1756,10 +1770,11 @@ fs.writeFileSync(
   path.join(root, "scripts/caddy-landing-handles.caddyfragment"),
   caddyLandingHandlesTemplate() + "\n"
 );
+}
 
 console.log(
   "Generated",
   generatedCount,
-  "HTML pages + robots.txt + sitemap.xml ->",
+  htmlOnly ? "HTML pages ->" : "HTML pages + robots.txt + sitemap.xml ->",
   outDir
 );

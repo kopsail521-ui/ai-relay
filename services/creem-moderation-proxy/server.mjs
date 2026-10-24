@@ -1,7 +1,6 @@
 /**
  * Creem Moderation proxy — screens image prompts before New API.
- * Also injects a small fix so Google OAuth buttons are not stuck disabled
- * when Privacy/Terms consent checkbox is unchecked (Creem review).
+ * Enriches public model metadata and serves scoped marketplace UI patches.
  * Also hosts POST /v1/uploads (+ /v1/files) → public /uploads/{id}.ext URLs
  * for Path B video / OCR reference media (local files → https).
  *
@@ -15,16 +14,11 @@
  *   UPLOAD_PUBLIC_BASE=https://www.keyoapi.xyz/uploads
  *   UPLOAD_MAX_BYTES=104857600
  *   UPLOAD_TTL_HOURS=48
- *   RANKINGS_DISPLAY_MULTIPLIER=10
- *   RANKINGS_SYNTHETIC=1|0   (default 1: day-seeded fake public rankings)
  */
 import http from "http";
 import { looksLikeMissingVideo } from "./video-routing.mjs";
+import { normalizePublicModelMetadata } from "./public-model-metadata.mjs";
 import { parseMultipart, parseImageBody, validateUploadAuth, checkStorageSpace, checkUploadStorage, storageErrorCode, decodeBase64Upload } from "./media-input.mjs";
-import {
-  rankingsSyntheticEnabled,
-  buildSyntheticRankings,
-} from "./rankings-synthetic.mjs";
 import { URL } from "url";
 import zlib from "zlib";
 import { promisify } from "util";
@@ -600,9 +594,9 @@ function enrichPricingPayload(payload) {
   // 全局端点字典：确保所有用到的端点类型都有定义
   const defaultEndpoints = {
     "openai": { path: "/v1/chat/completions", method: "POST" },
-    "openai-response": { path: "/v1/chat/completions", method: "POST" },
+    "openai-response": { path: "/v1/responses", method: "POST" },
     "anthropic": { path: "/v1/messages", method: "POST" },
-    "gemini": { path: "/v1/models/{model}:generateContent", method: "POST" },
+    "gemini": { path: "/v1beta/models/{model}:generateContent", method: "POST" },
     "image-generation": { path: "/v1/images/generations", method: "POST" },
     "image-processing": { path: "/v1/images/edits", method: "POST" },
     "embeddings": { path: "/v1/embeddings", method: "POST" },
@@ -699,15 +693,11 @@ function enrichPricingPayload(payload) {
       next.tags = "视频处理";
       next.supported_endpoint_types = ["openai-video"];
     } else if (name === "Spark-TTS-0.5B") {
-      if (!next.model_price || next.model_price <= 0) next.model_price = 0.013699;
       next.tags = "语音合成";
       next.supported_endpoint_types = ["openai-audio"];
     } else if (name === "SenseVoiceSmall") {
-      if (!next.model_price || next.model_price <= 0) next.model_price = 0.006849;
       next.tags = "语音识别";
       next.supported_endpoint_types = ["openai-audio"];
-    } else if (name === "Duix-Avatar") {
-      next.model_price = 0.0685;
     } else if (name === "glm-5.3:free") {
       next.tags = "大语言模型";
       next.supported_endpoint_types = ["openai"];
@@ -766,40 +756,7 @@ function enrichPricingPayload(payload) {
   // Group pricing data (usable_group / group_ratio / auto_groups / enable_groups)
   // must stay intact: the detail-page group price tables for the Claude series
   // and per-second video models render directly from these fields.
-  return { ...payload, data, vendors: vendorsUsed, supported_endpoint: mergedEndpoints };
-}
-
-/** 排行榜展示倍率：只放大 token 展示量，不改库、不影响扣费。份额/增速不变。 */
-const RANKINGS_DISPLAY_MULTIPLIER = Math.max(
-  1,
-  Number(process.env.RANKINGS_DISPLAY_MULTIPLIER || 10) || 10
-);
-
-function scaleRankingsPayload(payload, mul = RANKINGS_DISPLAY_MULTIPLIER) {
-  if (!payload || mul === 1) return payload;
-  const data = payload.data && typeof payload.data === "object" ? payload.data : payload;
-  if (!data || typeof data !== "object") return payload;
-
-  const scaleArr = (arr, key) => {
-    if (!Array.isArray(arr)) return;
-    for (const row of arr) {
-      if (!row || typeof row !== "object") continue;
-      if (typeof row[key] === "number") row[key] = Math.round(row[key] * mul);
-    }
-  };
-
-  scaleArr(data.models, "total_tokens");
-  scaleArr(data.vendors, "total_tokens");
-  if (data.models_history) {
-    scaleArr(data.models_history.points, "tokens");
-    scaleArr(data.models_history.models, "total");
-  }
-  if (data.vendor_share_history) {
-    scaleArr(data.vendor_share_history.points, "tokens");
-    scaleArr(data.vendor_share_history.vendors, "total");
-  }
-  data.__keyo_rankings_mul = mul;
-  return payload.data ? { ...payload, data } : data;
+  return normalizePublicModelMetadata({ ...payload, data, vendors: vendorsUsed, supported_endpoint: mergedEndpoints }, MARKETPLACE_COPY);
 }
 
 function buildLocaleDescScript() {
@@ -826,7 +783,6 @@ const BILLING_UNIT_SCRIPT = buildBillingUnitScript();
 const MODELS_PUBLIC_SCRIPT = `<script>(function(){if(window.__keyoModelsPublic)return;window.__keyoModelsPublic=1;function mapPath(p){if(p==="/models")return"/pricing";if(p.indexOf("/models/")===0)return"/pricing"+p.slice(7);return null}function rewriteUrl(u){try{var x=new URL(u,location.origin);if(x.origin!==location.origin)return u;var n=mapPath(x.pathname);return n?n+x.search+x.hash:u}catch(e){return u}}function bounce(){var n=mapPath(location.pathname);if(n)location.replace(n+location.search+location.hash)}bounce();var _ps=history.pushState;history.pushState=function(s,t,u){if(typeof u==="string")u=rewriteUrl(u);return _ps.call(this,s,t,u)};var _rs=history.replaceState;history.replaceState=function(s,t,u){if(typeof u==="string")u=rewriteUrl(u);return _rs.call(this,s,t,u)};document.addEventListener("click",function(e){var a=e.target&&e.target.closest&&e.target.closest("a[href]");if(!a)return;var href=a.getAttribute("href");if(!href||href.charAt(0)==="#")return;try{var x=new URL(href,location.origin);if(x.origin!==location.origin)return;var n=mapPath(x.pathname);if(!n)return;e.preventDefault();e.stopPropagation();location.assign(n+x.search+x.hash)}catch(err){}},true)})();</script>`;
 
 const PRICING_SORT_SCRIPT = `<script>(function(){if(window.__keyoPricingSort)return;window.__keyoPricingSort=1;var order=[],vendors=[],orderMap={},vendorMap={},origSort=Array.prototype.sort,origToSorted=Array.prototype.toSorted;function rebuildMaps(){orderMap={};vendorMap={};for(var i=0;i<order.length;i++)orderMap[order[i]]=i;for(var j=0;j<vendors.length;j++)vendorMap[vendors[j]]=j}function capture(d){try{if(!d||!d.data)return;order=[];for(var i=0;i<d.data.length;i++){var n=d.data[i]&&(d.data[i].model_name||d.data[i].model||d.data[i].key);if(n)order.push(String(n))}vendors=[];var vs=d.vendors||[];for(var k=0;k<vs.length;k++){var vn=vs[k]&&vs[k].name;if(vn)vendors.push(String(vn))}rebuildMaps()}catch(e){}}function looksLikeModels(arr){if(!arr||arr.length<2)return false;var hit=0;for(var i=0;i<Math.min(arr.length,8);i++){var o=arr[i];if(o&&typeof o==='object'&&(o.model_name||o.model||o.key))hit++}return hit>=2}function looksLikeVendors(arr){if(!arr||arr.length<2||!vendors.length)return false;var o=arr[0];return!!(o&&typeof o==='object'&&o.name!=null&&('id' in o||'icon' in o))}function isPriceSort(cmp){if(!cmp)return false;try{var s=Function.prototype.toString.call(cmp);if(/localeCompare/i.test(s)&&!/model_price|price-low|price-high|inputPrice|outputPrice/i.test(s))return false;if(/model_price|getModelPrice|price-low|price-high|inputPrice|outputPrice|quota_type/i.test(s))return true}catch(e){}return false}function byVendorOrder(a,b){var na=String(a.model_name||a.model||a.key||'');var nb=String(b.model_name||b.model||b.key||'');var ra=orderMap[na],rb=orderMap[nb];if(ra==null)ra=9000;if(rb==null)rb=9000;if(ra!==rb)return ra-rb;return 0}function sortHook(cmp){try{if(looksLikeModels(this)){if(isPriceSort(cmp))return origSort.apply(this,arguments);if(order.length)return origSort.call(this,byVendorOrder);return this}if(looksLikeVendors(this)&&vendors.length)return origSort.call(this,function(a,b){var ra=vendorMap[a.name],rb=vendorMap[b.name];if(ra==null)ra=9000;if(rb==null)rb=9000;return ra-rb})}catch(e){}return origSort.apply(this,arguments)}Array.prototype.sort=sortHook;if(origToSorted){Array.prototype.toSorted=function(cmp){var c=this.slice();sortHook.call(c,cmp);return c}}var origLC=String.prototype.localeCompare;String.prototype.localeCompare=function(other){try{var a=String(this),b=String(other==null?'':other);if(orderMap[a]!=null&&orderMap[b]!=null)return orderMap[a]-orderMap[b]}catch(e){}return origLC.apply(this,arguments)};function maybeCaptureUrl(u,text){try{if(u&&String(u).indexOf('/api/pricing')>=0)capture(JSON.parse(text))}catch(e){}}try{var desc=Object.getOwnPropertyDescriptor(XMLHttpRequest.prototype,'responseText');if(desc&&desc.get){Object.defineProperty(XMLHttpRequest.prototype,'responseText',{configurable:true,enumerable:true,get:function(){var t=desc.get.call(this);if(this.readyState===4&&this.__keyoUrl&&!this.__keyoCap){this.__keyoCap=1;maybeCaptureUrl(this.__keyoUrl,t)}return t}})}var desc2=Object.getOwnPropertyDescriptor(XMLHttpRequest.prototype,'response');if(desc2&&desc2.get){Object.defineProperty(XMLHttpRequest.prototype,'response',{configurable:true,enumerable:true,get:function(){var t=desc2.get.call(this);if(this.readyState===4&&this.__keyoUrl&&!this.__keyoCap2&&typeof t==='string'){this.__keyoCap2=1;maybeCaptureUrl(this.__keyoUrl,t)}else if(this.readyState===4&&this.__keyoUrl&&!this.__keyoCap2&&t&&typeof t==='object'){this.__keyoCap2=1;capture(t)}return t}})}}catch(e){}var XO=XMLHttpRequest.prototype.open;XMLHttpRequest.prototype.open=function(m,u){this.__keyoUrl=u;this.__keyoCap=0;this.__keyoCap2=0;return XO.apply(this,arguments)};var oparse=JSON.parse;JSON.parse=function(text){var v=oparse.apply(this,arguments);try{if(v&&Array.isArray(v.data)&&v.data.length&&v.data[0]&&(v.data[0].model_name||v.data[0].model)&&(v.vendors||v.auto_groups||v.group_ratio!=null))capture(v)}catch(e){}return v};var ofetch=window.fetch;window.fetch=function(){var args=arguments;return ofetch.apply(this,args).then(function(res){try{var u='';if(typeof args[0]==='string')u=args[0];else if(args[0]&&args[0].url)u=args[0].url;if(u&&u.indexOf('/api/pricing')>=0){return res.clone().json().then(function(d){capture(d);return res}).catch(function(){return res})}}catch(e){}return res})};var __kl=function(){try{var v=(localStorage.getItem('i18nextLng')||'').toLowerCase().replace(/_/g,'-');if(v.indexOf('zh-tw')===0||v.indexOf('zh-hk')===0||v.indexOf('zh-hant')===0)return '↑↓ 推薦順序';if(v.indexOf('zh')===0)return '↑↓ 推荐顺序';if(v.indexOf('ja')===0)return '↑↓ おすすめ順';if(v.indexOf('fr')===0)return '↑↓ Ordre recommandé';if(v.indexOf('ru')===0)return '↑↓ Рекомендуемый порядок';if(v.indexOf('vi')===0)return '↑↓ Thứ tự đề xuất';return '↑↓ Recommended order'}catch(e){return '↑↓ Recommended order'}};function fixLabel(){try{document.querySelectorAll('button').forEach(function(el){var t=(el.textContent||'').replace(/\\s+/g,' ').trim();if(t==='名称'||t==='↑↓ 名称'||/^↑↓\\s*名称$/.test(t)||t==='Name'||t==='↑↓ Name')el.textContent=__kl()})}catch(e){}}setInterval(fixLabel,800);try{ofetch('/api/pricing').then(function(r){return r.json()}).then(capture).catch(function(){})}catch(e){}})();</script>`;
-const OAUTH_ENABLE_SCRIPT = `<script>(function(){var MSG={zhCN:'请先勾选同意隐私政策和服务条款',zhTW:'請先勾選同意隱私權政策與服務條款',en:'Please check the box to agree to the Privacy Policy and Terms first',ja:'先にプライバシーポリシーと利用規約に同意してください',fr:'Veuillez d\\'abord cocher la case pour accepter la politique de confidentialité et les conditions',ru:'Сначала отметьте согласие с политикой конфиденциальности и условиями',vi:'Vui lòng tích vào ô đồng ý Chính sách quyền riêng tư và Điều khoản trước'};function lang(){try{var v=(localStorage.getItem('i18nextLng')||'').trim();if(!v&&document.documentElement)v=document.documentElement.lang||'';v=v.replace(/_/g,'-');var l=v.toLowerCase();if(l==='zhcn'||l==='zh-cn'||l==='zh-hans'||l==='zh')return 'zhCN';if(l==='zhtw'||l==='zh-tw'||l==='zh-hk'||l==='zh-mo'||l.indexOf('zh-hant')===0)return 'zhTW';if(l.indexOf('ja')===0)return 'ja';if(l.indexOf('fr')===0)return 'fr';if(l.indexOf('ru')===0)return 'ru';if(l.indexOf('vi')===0)return 'vi';if(MSG[v])return v}catch(e){}return 'en'}function msg(){return MSG[lang()]||MSG.en}function isGoogleBtn(b){var t=(b.textContent||'').replace(/\\s+/g,' ').trim();if(!t||t.length>80||!/Google/i.test(t))return false;return /Continue with|使用\\s*Google|Google\\s*で続行|Google\\s*で続ける|Continuer avec|Продолжить с|Tiếp tục với|繼續/i.test(t)}function legalOk(){var cb=document.getElementById('legal-consent');if(!cb)return true;if(cb.getAttribute('data-state')==='checked')return true;if(cb.getAttribute('aria-checked')==='true')return true;if(cb.checked===true)return true;return false}function remind(){var box=document.getElementById('legal-consent-box')||document.getElementById('legal-consent');if(box){try{box.scrollIntoView({behavior:'smooth',block:'center'})}catch(e){}var t=box.closest?box.closest('#legal-consent-box')||box:box;t.style.outline='2px solid #ef4444';t.style.outlineOffset='4px';setTimeout(function(){t.style.outline='';t.style.outlineOffset=''},2500)}var text=msg();var old=document.getElementById('keyo-legal-toast');if(old)old.remove();var el=document.createElement('div');el.id='keyo-legal-toast';el.setAttribute('role','alert');el.textContent=text;el.style.cssText='position:fixed;top:20px;left:50%;transform:translateX(-50%);z-index:2147483647;background:#dc2626;color:#fff;padding:12px 18px;border-radius:10px;font:14px/1.45 system-ui,sans-serif;box-shadow:0 10px 30px rgba(0,0,0,.28);max-width:min(920px,92vw);text-align:center';document.body.appendChild(el);setTimeout(function(){if(el.parentNode)el.parentNode.removeChild(el)},3000);try{if(window.sonner&&typeof window.sonner.error==='function')window.sonner.error(text)}catch(e){}}function enable(){try{document.querySelectorAll('button').forEach(function(b){if(!isGoogleBtn(b))return;b.disabled=false;b.removeAttribute('disabled');b.removeAttribute('aria-disabled');b.classList.remove('pointer-events-none','opacity-50');b.style.pointerEvents='auto';b.style.opacity='1'})}catch(e){}}document.addEventListener('click',function(e){var b=e.target&&e.target.closest&&e.target.closest('button');if(!b||!isGoogleBtn(b))return;if(legalOk())return;e.preventDefault();e.stopPropagation();e.stopImmediatePropagation();remind()},true);enable();setInterval(enable,400)})();</script>`;
 
 /** Copy toast often sticks (hover pause / closeButton). Force dismiss after 2s. */
 const COPY_TOAST_AUTOCLOSE_SCRIPT = `<script>(function(){if(window.__keyoCopyToastV1)return;window.__keyoCopyToastV1=1;var RE=/已复制到剪贴板|已複製到剪貼簿|Copied to clipboard|クリップボードにコピー|Copié dans le presse-papiers|Скопировано в буфер|Đã sao chép vào bộ nhớ tạm/i;function dismiss(el){try{var btn=el.querySelector('[data-close-button],button[aria-label*="Close"],button[aria-label*="close"],button[aria-label*="关闭"],button[aria-label*="關閉"]');if(btn){btn.click();return}el.setAttribute('data-removed','true');if(el.parentNode)el.parentNode.removeChild(el)}catch(e){}}function scan(){try{document.querySelectorAll('[data-sonner-toast],li[data-sonner-toast],[data-styled=true]').forEach(function(el){if(el.getAttribute('data-keyo-copy-ac')==='1')return;var t=(el.textContent||'').replace(/\\s+/g,' ').trim();if(!RE.test(t))return;el.setAttribute('data-keyo-copy-ac','1');setTimeout(function(){dismiss(el)},2000)})}catch(e){}}setInterval(scan,300);try{new MutationObserver(scan).observe(document.documentElement,{childList:true,subtree:true})}catch(e){}})();</script>`;
@@ -1253,31 +1209,6 @@ async function proxyRequest(req, res, bodyBuf) {
     }
   }
 
-  // 排行榜：token 展示 ×N（默认 10），不改库内真实用量
-  if (
-    req.method === "GET" &&
-    pathOnly === "/api/rankings" &&
-    ctype.includes("application/json") &&
-    buf.length > 0
-  ) {
-    try {
-      const enc = upstreamRes.headers.get("content-encoding") || "";
-      let raw = await decodeBody(buf, enc);
-      const parsed = JSON.parse(raw.toString("utf8"));
-      if (!(parsed && parsed.success === false)) {
-        scaleRankingsPayload(parsed, RANKINGS_DISPLAY_MULTIPLIER);
-      }
-      buf = Buffer.from(JSON.stringify(parsed), "utf8");
-      delete outHeaders["content-encoding"];
-      delete outHeaders["Content-Encoding"];
-      outHeaders["content-length"] = String(buf.length);
-      delete outHeaders["Content-Length"];
-      outHeaders["content-type"] = "application/json; charset=utf-8";
-    } catch (e) {
-      console.error("[rankings-scale]", e.message || e);
-    }
-  }
-
   const isSpaShell =
     req.method === "GET" &&
     ctype.includes("text/html") &&
@@ -1286,10 +1217,9 @@ async function proxyRequest(req, res, bodyBuf) {
   // Auth pages use the same SPA document as the console, but they do not need
   // the pricing/model marketing patches. Injecting those large scripts into
   // every SPA response made /sign-in and /sign-up parse and execute roughly
-  // 150 KB of unrelated code before the form could render. Keep the auth
-  // patch, which is needed for the consent-gated OAuth buttons, and scope the
-  // other patches to the pages that actually use them.
-  const isAuthPage = /^\/sign-(?:in|up)(?:\/|$)/.test(pathOnly);
+  // 150 KB of unrelated code before the form could render. Consent and loading
+  // states are controlled by the auth UI itself.
+  const isAuthPage = /^\/(?:sign-in|sign-up|login|register|forgot-password|reset|user\/reset|otp)(?:\/|$)/.test(pathOnly);
   // Pricing patches must ship on every non-auth SPA shell. If we only inject on
   // /pricing HTML, client-side navigations from / or /console never get the
   // Group price-table script — users still see native「按分组定价」only.
@@ -1301,17 +1231,6 @@ async function proxyRequest(req, res, bodyBuf) {
       let htmlBuf = await decodeBody(buf, enc);
       let html = htmlBuf.toString("utf8");
       let changed = false;
-      if (
-        isAuthPage &&
-        html.includes("</body>") &&
-        !html.includes("keyo-oauth-enable")
-      ) {
-        html = html.replace(
-          "</body>",
-          `<!--keyo-oauth-enable-->${OAUTH_ENABLE_SCRIPT}</body>`
-        );
-        changed = true;
-      }
       if (wantPricingPatches && !html.includes("keyo-copy-toast-v1")) {
         const ac = `<!--keyo-copy-toast-v1-->${COPY_TOAST_AUTOCLOSE_SCRIPT}`;
         if (html.includes("<head>")) {
@@ -1349,7 +1268,7 @@ async function proxyRequest(req, res, bodyBuf) {
       }
       if (wantPricingPatches) {
         html = html.replace(/<!--keyo-model-icons(?:-v\d+)?-->[\s\S]*?<\/script>/g, "");
-        const ic = `<!--keyo-model-icons-v5-->${MODEL_ICON_SCRIPT}`;
+        const ic = `<!--keyo-model-icons-v6-->${MODEL_ICON_SCRIPT}`;
         if (html.includes("<head>")) {
           html = html.replace("<head>", `<head>${ic}`);
           changed = true;
@@ -1452,17 +1371,6 @@ const server = http.createServer(async (req, res) => {
           code: "base_url_missing_v1",
         },
       });
-    }
-
-    // Public leaderboard: day-seeded synthetic payload (smooth chart, capped growth).
-    if (
-      req.method === "GET" &&
-      pathOnly === "/api/rankings" &&
-      rankingsSyntheticEnabled()
-    ) {
-      const u = new URL(req.url || "/", "http://local");
-      const period = u.searchParams.get("period") || "week";
-      return json(res, 200, buildSyntheticRankings(period));
     }
 
     if (
@@ -1644,6 +1552,19 @@ const server = http.createServer(async (req, res) => {
     }
 
     let forwardBody = bodyBuf;
+    // Some OpenAI clients attach this vendor extension to every model. The
+    // Nemotron route rejects it before generation; other models retain it.
+    if (req.method === "POST" && pathOnly === "/v1/chat/completions" &&
+        String(req.headers["content-type"] || "").includes("application/json")) {
+      try {
+        const payload = JSON.parse(bodyBuf.toString("utf8"));
+        if (payload.model === "nemotron-3-ultra-550b-a55b:free") {
+          delete payload.enable_thinking;
+          if (payload.extra_body && typeof payload.extra_body === "object") delete payload.extra_body.enable_thinking;
+          forwardBody = Buffer.from(JSON.stringify(payload));
+        }
+      } catch { /* Preserve malformed JSON for the API's normal validation. */ }
+    }
 
     await proxyRequest(req, res, forwardBody);
   } catch (e) {
@@ -1658,7 +1579,7 @@ const server = http.createServer(async (req, res) => {
 
 server.listen(PORT, HOST, () => {
   console.log(
-    `creem-moderation-proxy on http://${HOST}:${PORT} -> ${UPSTREAM} (creem ${TEST_MODE ? "test" : "live"}; rankings×${RANKINGS_DISPLAY_MULTIPLIER}; synth=${rankingsSyntheticEnabled() ? "on" : "off"}; uploads ${UPLOAD_DIR} → ${UPLOAD_PUBLIC_BASE})`
+    `creem-moderation-proxy on http://${HOST}:${PORT} -> ${UPSTREAM} (creem ${TEST_MODE ? "test" : "live"}; rankings=actual; uploads ${UPLOAD_DIR} → ${UPLOAD_PUBLIC_BASE})`
   );
 });
 

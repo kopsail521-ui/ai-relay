@@ -307,11 +307,11 @@
 
   function rewrite(root, u) {
     if (!root || !u) return;
-    if (u.unit === "request" || u.unit === "page" || u.unit === "character")
-      return;
+    if (!u.unit || u.unit === "token") return;
     var tw = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, null);
     var n;
     while ((n = tw.nextNode())) {
+      if (n.parentElement && n.parentElement.closest('code,pre,textarea,input')) continue;
       var t = norm(n.nodeValue);
       if (!t) continue;
       var nv = swapLabel(t, u);
@@ -321,7 +321,7 @@
       var nodes = root.querySelectorAll("span,div,p,button,a,label,li");
       for (var i = 0; i < nodes.length; i++) {
         var el = nodes[i];
-        if (!el || (el.children && el.children.length)) continue;
+        if (!el || el.closest('code,pre,textarea,input') || (el.children && el.children.length)) continue;
         var ct = norm(el.textContent);
         var nv2 = swapLabel(ct, u);
         if (nv2 != null && ct !== nv2) el.textContent = nv2;
@@ -496,18 +496,10 @@
 
   function rewriteListCards() {
     try {
-      var ids = unitIds();
-      if (!ids.length) return;
-      var cards = document.querySelectorAll(
-        "article,[class*=Card],[class*=card],li,div"
-      );
+      var cards = document.querySelectorAll('[data-keyo-billing-model]');
       for (var i = 0; i < cards.length; i++) {
         var el = cards[i];
-        if (!el || (el.children && el.children.length > 40)) continue;
-        var tx = (el.innerText || "").slice(0, 700);
-        if (!tx || tx.length < 10 || tx.length > 1200) continue;
-        if (tx.indexOf("基础价格") >= 0 || tx.indexOf("定价") >= 0) continue;
-        var mid = resolveId(tx, ids);
+        var mid = el.getAttribute('data-keyo-billing-model');
         if (!mid) continue;
         rewrite(el, meta(mid));
       }
@@ -556,8 +548,8 @@
     }, 25);
   }
 
-  // Fast 80ms interval loop guarantees zero visible flicker & instantaneous welding
-  setInterval(tick, 80);
+  // Mutations and clicks handle updates; avoid a full-page scan 12 times/sec.
+  setInterval(tick, 1500);
 
   try {
     new MutationObserver(schedule).observe(document.documentElement, {

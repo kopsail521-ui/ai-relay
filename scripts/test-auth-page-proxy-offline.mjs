@@ -56,6 +56,23 @@ function waitForExitOrOutput(child, timeoutMs = 5000) {
 let finishChatStream;
 let lastChatBody;
 const upstream = http.createServer(async (req, res) => {
+  if (req.url === "/api/pricing") {
+    res.writeHead(200, { "content-type": "application/json" });
+    res.end(JSON.stringify({
+      success: true,
+      group_ratio: { default: 1 },
+      supported_endpoint: { openai: { path: "/v1/embeddings", method: "POST" } },
+      data: ["gpt-6-luna", "InfiniteTalk", "seedance-2.5", "eleven-v4", "suno_music"].map((model_name) => ({
+        model_name, supported_endpoint_types: ["openai"], model_price: 0, model_ratio: 1,
+      })),
+    }));
+    return;
+  }
+  if (req.url === "/api/rankings") {
+    res.writeHead(200, { "content-type": "application/json" });
+    res.end(JSON.stringify({ success: true, data: { total_tokens: 123, rankings: [] } }));
+    return;
+  }
   if (req.url === "/v1/chat/completions") {
     const chunks = [];
     for await (const chunk of req) chunks.push(chunk);
@@ -90,6 +107,8 @@ const child = spawn(process.execPath, [proxyFile], {
     LISTEN_HOST: "127.0.0.1",
     UPSTREAM_URL: `http://127.0.0.1:${upstreamPort}`,
     CREEM_API_KEY: "",
+    RANKINGS_SYNTHETIC: "1",
+    RANKINGS_DISPLAY_MULTIPLIER: "10",
   },
   stdio: ["ignore", "pipe", "pipe"],
 });
@@ -107,14 +126,35 @@ try {
   const authResponse = await fetch(`http://127.0.0.1:${proxyPort}/sign-up`);
   const authBody = await authResponse.text();
   assert.equal(authResponse.status, 200);
-  assert.match(authBody, /keyo-oauth-enable/);
-  assert.doesNotMatch(authBody, /keyo-pricing-sort-v\d+|keyo-model-icons-v3|keyo-locale-desc/);
+  assert.doesNotMatch(authBody, /keyo-oauth-enable|keyo-pricing-sort-v\d+|keyo-model-icons-v\d+|keyo-locale-desc/);
+  for (const route of ["/sign-in", "/forgot-password", "/reset", "/user/reset", "/otp"]) {
+    const body = await (await fetch(`http://127.0.0.1:${proxyPort}${route}`)).text();
+    assert.doesNotMatch(body, /keyo-oauth-enable|keyo-pricing-sort-v\d+|keyo-model-icons-v\d+/);
+  }
 
   const pricingResponse = await fetch(`http://127.0.0.1:${proxyPort}/pricing`);
   const pricingBody = await pricingResponse.text();
   assert.equal(pricingResponse.status, 200);
   assert.ok(/keyo-pricing-sort-v\d+/.test(pricingBody));
-  assert.match(pricingBody, /keyo-model-icons-v3/);
+  assert.match(pricingBody, /keyo-model-icons-v6/);
+
+  const catalog = await (await fetch(`http://127.0.0.1:${proxyPort}/api/pricing`)).json();
+  assert.equal(catalog.supported_endpoint.openai.path, "/v1/chat/completions");
+  assert.equal(catalog.supported_endpoint["openai-response"].path, "/v1/responses");
+  assert.equal(catalog.supported_endpoint.gemini.path, "/v1beta/models/{model}:generateContent");
+  const infinite = catalog.data.find((m) => m.model_name === "InfiniteTalk");
+  assert.equal(infinite.capability, "digital-human");
+  assert.ok(!infinite.supported_endpoint_types.includes("openai"));
+  assert.equal(catalog.supported_endpoint[infinite.supported_endpoint_types[0]].poll_path, "/v1/task/{id}");
+  const eleven = catalog.data.find((m) => m.model_name === "eleven-v4");
+  assert.equal(eleven.billing_unit, "million_chars");
+  assert.equal(eleven.model_price, 0);
+  assert.deepEqual(catalog.group_ratio, { default: 1 });
+  const unknown = catalog.data.find((m) => m.model_name === "suno_music");
+  assert.deepEqual(unknown.supported_endpoint_types, []);
+  assert.equal(unknown.contract_status, "pending");
+  const rankings = await (await fetch(`http://127.0.0.1:${proxyPort}/api/rankings`)).json();
+  assert.equal(rankings.data.total_tokens, 123);
 
   const streamedResponse = await Promise.race([
     fetch(`http://127.0.0.1:${proxyPort}/v1/chat/completions`, {

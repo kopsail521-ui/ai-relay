@@ -35,7 +35,7 @@ import {
 } from '../lib/dynamic-price'
 import { parseTags } from '../lib/filters'
 import { isGiftCreditModel } from '../lib/gift-credit'
-import { isTokenBasedModel } from '../lib/model-helpers'
+import { isTokenBasedModel, hasDedicatedPriceUnit } from '../lib/model-helpers'
 import {
   formatPrice,
   formatRequestPrice,
@@ -43,6 +43,7 @@ import {
 } from '../lib/price'
 import type { PricingModel, TokenUnit } from '../types'
 import { ModelBillingModeBadge } from './model-billing-mode-badge'
+import { ModelUnitPrice } from './model-unit-price'
 
 // ----------------------------------------------------------------------------
 // Pricing Table Columns
@@ -109,18 +110,26 @@ export function usePricingColumns(
     {
       accessorKey: 'price',
       meta: {
-        label: t('Input / Output (per {{unit}})', { unit: tokenUnitLabel }),
+        label: t('Price'),
       },
       header: ({ column }) => (
-        <DataTableColumnHeader
-          column={column}
-          title={t('Input / Output (per {{unit}})', { unit: tokenUnitLabel })}
-        />
+        <DataTableColumnHeader column={column} title={t('Price')} />
       ),
       cell: ({ row }) => {
         const model = row.original
         const showRechargePrice =
           !isGiftCreditModel(model) && (options.showRechargePrice ?? false)
+        if (hasDedicatedPriceUnit(model)) {
+          return (
+            <ModelUnitPrice
+              model={model}
+              showRechargePrice={showRechargePrice}
+              priceRate={priceRate}
+              usdExchangeRate={usdExchangeRate}
+              selectedGroup={selectedGroup}
+            />
+          )
+        }
         if (isGiftCreditModel(model) && !model.gift_billing_rate_available) {
           return (
             <span className='text-muted-foreground text-xs'>
@@ -266,6 +275,7 @@ export function usePricingColumns(
       header: t('Cached'),
       cell: ({ row }) => {
         const model = row.original
+        if (hasDedicatedPriceUnit(model)) return <span>—</span>
         const showRechargePrice =
           !isGiftCreditModel(model) && (options.showRechargePrice ?? false)
         if (isGiftCreditModel(model) && !model.gift_billing_rate_available) {

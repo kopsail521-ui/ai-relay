@@ -4,19 +4,19 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>CosyVoice3 API — How to Call Hosted TTS | KeyoAPI</title>
-<meta name="description" content="CosyVoice3 API on KeyoAPI: call async multilingual TTS via POST /v1/async/audio/speech with model=CosyVoice3. About $1.37 / 10K characters." />
+<meta name="description" content="CosyVoice3 async text-to-speech API on KeyoAPI: JSON submission, task polling and audio results. Check voice-cloning requirements before using reference samples." />
 <link rel="canonical" href="https://www.keyoapi.xyz/model/CosyVoice3" />
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://www.keyoapi.xyz/model/CosyVoice3" />
 <meta property="og:title" content="CosyVoice3 API — How to Call Hosted TTS | KeyoAPI" />
-<meta property="og:description" content="CosyVoice3 API on KeyoAPI: call async multilingual TTS via POST /v1/async/audio/speech with model=CosyVoice3. About $1.37 / 10K characters." />
+<meta property="og:description" content="CosyVoice3 async text-to-speech API on KeyoAPI: JSON submission, task polling and audio results. Check voice-cloning requirements before using reference samples." />
 <meta property="og:image" content="https://www.keyoapi.xyz/brand/logo.svg" />
 <link rel="icon" href="/brand/logo.svg" type="image/svg+xml" />
 <link rel="stylesheet" href="/brand/keyo-theme.css" />
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content="CosyVoice3 API — How to Call Hosted TTS | KeyoAPI" />
-<meta name="twitter:description" content="CosyVoice3 API on KeyoAPI: call async multilingual TTS via POST /v1/async/audio/speech with model=CosyVoice3. About $1.37 / 10K characters." />
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"SoftwareApplication","name":"KeyoAPI CosyVoice3","applicationCategory":"DeveloperApplication","url":"https://www.keyoapi.xyz/model/CosyVoice3","description":"CosyVoice3 API on KeyoAPI: call async multilingual TTS via POST /v1/async/audio/speech with model=CosyVoice3. About $1.37 / 10K characters.","offers":{"@type":"Offer","priceCurrency":"USD","description":"$1.37 / 10K characters"}}</script>
+<meta name="twitter:description" content="CosyVoice3 async text-to-speech API on KeyoAPI: JSON submission, task polling and audio results. Check voice-cloning requirements before using reference samples." />
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"SoftwareApplication","name":"KeyoAPI CosyVoice3","applicationCategory":"DeveloperApplication","url":"https://www.keyoapi.xyz/model/CosyVoice3","description":"CosyVoice3 async text-to-speech API on KeyoAPI: JSON submission, task polling and audio results. Check voice-cloning requirements before using reference samples.","offers":{"@type":"Offer","priceCurrency":"USD","description":"$1.37 / 10K characters"}}</script>
 <script defer src="/brand/keyo-track.js"></script>
 <style>.wrap{max-width:880px;margin:0 auto;padding:28px 24px 48px}
 .footer{display:flex;flex-wrap:wrap;gap:10px 16px;max-width:1080px;margin:0 auto;padding:24px 24px 40px;border-top:1px solid var(--line);font-size:13px;color:var(--muted)}
@@ -79,7 +79,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
 <main class="wrap">
 <h1>CosyVoice3 API — How to Call Multilingual Zero-Shot TTS</h1>
 
-<p class="lead">Looking for a CosyVoice3 API without self-hosting GPUs?</p>
+<p class="lead">CosyVoice3 provides asynchronous text-to-speech on KeyoAPI. The documented example performs basic speech synthesis; reference-voice enrollment requires a separate confirmed contract.</p>
 <p class="meta">Listed price: <span class="ok">$1.37 / 10K characters</span> · Live catalog: <a href="/pricing">Model Square</a> · Static list: <a href="/pricing-list">pricing list</a>.</p>
 <div class="btnrow">
   <a class="btn btn-primary" href="/sign-up">Get API key</a>
@@ -87,7 +87,12 @@ ul{margin:0 0 14px;padding-left:1.2em}
   <a class="btn btn-secondary" href="/compare">Compare API prices</a>
 </div>
 <h2>Overview</h2>
-<p>KeyoAPI exposes CosyVoice3 as async multilingual zero-shot TTS on the same OpenAI-style key you use for Whisper and chat. How to call CosyVoice3 API on Keyo: create a key at <a href="/sign-up">the sign-up page</a>, set Authorization: Bearer YOUR_KEY, POST https://www.keyoapi.xyz/v1/async/audio/speech with JSON {&quot;model&quot;:&quot;CosyVoice3&quot;,&quot;input&quot;:&quot;...&quot;}, then poll GET /v1/task/{id} until the audio URL is ready. Prefer IndexTTS-2 when you need audio back inside a single HTTP round trip. About $1.37 per 10,000 characters — confirm live rates on <a href="/pricing-list">the full pricing list</a>. Product voiceovers, localized support replies, game NPCs, and digital humans (pair with Duix-Avatar or InfiniteTalk via <a href="/ai-avatar-video-generator">the AI avatar video generator page</a>). If you want hosted inference instead of a research install, KeyoAPI is that path. Normalize text before synthesis, store voice ids per locale, and CDN-cache finished audio. Try it from <a href="/pricing-list">the full pricing list</a>. Broader TTS map: <a href="/tts-api">the TTS API guide</a>.</p>
+<p>CosyVoice3 is an asynchronous text-to-speech option on KeyoAPI. Submit text with your existing API key, save the returned task identifier, and retrieve the finished audio when processing completes. It shares the account wallet with speech recognition, chat and avatar tasks, but each capability has its own request fields and result rules.</p>
+<p>The documented basic request is POST /v1/async/audio/speech with Content-Type: application/json. Send model=CosyVoice3 and an inputs string containing the text to read. The input alias is also accepted. This request asks for speech synthesis; it does not enroll a speaker or identify a reference voice. Adding a model name alone cannot reproduce a particular person's voice.</p>
+<p>After submission, save id or task_id before doing other work. Query GET /v1/task/{id} with the same API key while status is processing. A completed response provides url or output.file_url for the audio. Stop on failed or cancelled and preserve the error and request identifier for support. Do not use the plural video query path /v1/tasks/{id} for this endpoint.</p>
+<p>Voice cloning needs more than text: a supported reference sample format, model-specific fields, any enrollment step, and rules for obtaining and reusing a voice identifier. This page does not provide that contract. Confirm those details with support before building a cloning workflow or uploading samples. Do not invent reference_audio, speaker_id or voice parameters from another model's examples. Until the contract is confirmed, use the basic synthesis example without promising a cloned voice.</p>
+<p>For application integration, store the task ID with your own request record. A temporary query failure can be retried with that same ID. A submission timeout is ambiguous and should not trigger an automatic replacement speech task: the original may already be processing. Keep API keys on the server and record errors without authorization headers or raw private media.</p>
+<p>Check <a href="/pricing">the pricing page</a> for the model's currently applicable rate and account group. Read <a href="/brand/keyo-api-ref.html#section-8">the API endpoint reference</a> for the asynchronous speech flow, <a href="/tts-api">the TTS API guide</a> for the sync and async endpoint map, and <a href="/voice-cloning-api">the voice cloning API guide</a> for the distinction between synthesis and cloning. If you need audio bytes in a single response, compare the separately documented synchronous models instead of changing the async task URL.</p>
 
 
 <h2>Quick start</h2>

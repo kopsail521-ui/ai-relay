@@ -22,6 +22,7 @@ import { StatusBadge, type StatusVariant } from '@/components/status-badge'
 
 import { isDynamicPricingModel } from '../lib/dynamic-price'
 import { isGiftCreditModel } from '../lib/gift-credit'
+import { getModelContract } from '../lib/model-api-contracts'
 import { isTokenBasedModel } from '../lib/model-helpers'
 import type { PricingModel } from '../types'
 
@@ -38,6 +39,23 @@ export function ModelBillingModeBadge(props: ModelBillingModeBadgeProps) {
   if (isGiftCreditModel(props.model)) {
     label = t('Gift-credit models')
     variant = 'success'
+  } else if (getModelContract(props.model.model_name)?.kind === 'unknown') {
+    label = t('Billing method not confirmed. Contact support.')
+    variant = 'warning'
+  } else if (props.model.has_price_tiers) {
+    label = t('Priced by specification')
+    variant = 'info'
+  } else if (props.model.billing_unit && props.model.billing_unit !== 'token') {
+    const labels = {
+      request: 'Per Request',
+      second: 'Per second',
+      page: 'Per page',
+      character: 'Per character',
+      '10k_chars': 'Per 10,000 characters',
+      million_chars: 'Per 1,000,000 input characters',
+    }
+    label = t(labels[props.model.billing_unit])
+    variant = 'info'
   } else if (isDynamicPricingModel(props.model)) {
     label = t('Dynamic Pricing')
     variant = 'warning'

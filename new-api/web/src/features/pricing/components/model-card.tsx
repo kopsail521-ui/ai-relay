@@ -31,11 +31,12 @@ import {
 } from '../lib/dynamic-price'
 import { parseTags } from '../lib/filters'
 import { isGiftCreditModel } from '../lib/gift-credit'
-import { isTokenBasedModel } from '../lib/model-helpers'
+import { isTokenBasedModel, hasDedicatedPriceUnit } from '../lib/model-helpers'
 import { formatPrice, formatRequestPrice } from '../lib/price'
 import type { PricingModel, TokenUnit } from '../types'
 import { ModelBillingModeBadge } from './model-billing-mode-badge'
 import { ModelPerfBadge, type ModelPerfBadgeData } from './model-perf-badge'
+import { ModelUnitPrice } from './model-unit-price'
 
 export interface ModelCardProps {
   model: PricingModel
@@ -67,7 +68,10 @@ export const ModelCard = memo(function ModelCard(props: ModelCardProps) {
   const isDynamicPricing =
     props.model.billing_mode === 'tiered_expr' &&
     Boolean(props.model.billing_expr)
-  const hasCachedPrice = isTokenBased && props.model.cache_ratio != null
+  const hasCachedPrice =
+    !hasDedicatedPriceUnit(props.model) &&
+    isTokenBased &&
+    props.model.cache_ratio != null
   const dynamicSummary = isDynamicPricing
     ? getDynamicPricingSummary(props.model, {
         tokenUnit,
@@ -94,7 +98,17 @@ export const ModelCard = memo(function ModelCard(props: ModelCardProps) {
   }
 
   let priceSummary: ReactNode
-  if (dynamicSummary) {
+  if (hasDedicatedPriceUnit(props.model)) {
+    priceSummary = (
+      <ModelUnitPrice
+        model={props.model}
+        showRechargePrice={showRechargePrice}
+        priceRate={priceRate}
+        usdExchangeRate={usdExchangeRate}
+        selectedGroup={props.selectedGroup}
+      />
+    )
+  } else if (dynamicSummary) {
     if (dynamicSummary.isSpecialExpression) {
       priceSummary = (
         <span className='min-w-0'>
@@ -203,6 +217,7 @@ export const ModelCard = memo(function ModelCard(props: ModelCardProps) {
 
   return (
     <div
+      data-keyo-billing-model={props.model.model_name}
       className={cn(
         'group relative flex flex-col rounded-xl border p-3 transition-colors sm:p-5',
         'hover:bg-muted/20'
@@ -211,7 +226,10 @@ export const ModelCard = memo(function ModelCard(props: ModelCardProps) {
       {/* Header: icon + name + price + actions */}
       <div className='flex items-start justify-between gap-2.5 sm:gap-3'>
         <div className='flex min-w-0 items-start gap-2.5 sm:gap-3'>
-          <div className='bg-muted/40 flex size-9 shrink-0 items-center justify-center rounded-lg sm:size-10 sm:rounded-xl'>
+          <div
+            data-keyo-model-icon={props.model.model_name}
+            className='bg-muted/40 flex size-9 shrink-0 items-center justify-center rounded-lg sm:size-10 sm:rounded-xl'
+          >
             {modelIcon || (
               <span className='text-muted-foreground text-sm font-bold'>
                 {initial}

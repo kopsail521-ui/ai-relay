@@ -13,6 +13,9 @@ on:
       - ".github/workflows/keyo-new-api.yml"
       - "scripts/vps-pull-keyo-console.sh"
       - "scripts/vps-recreate-new-api-container.sh"
+      - "scripts/vps-deploy-console.sh"
+      - "scripts/vps-safe-pull-preserve-blog.sh"
+      - ".github/workflows/keyo-release-offline.yml"
   workflow_dispatch:
 
 concurrency:
@@ -24,8 +27,12 @@ permissions:
   packages: write
 
 jobs:
+  verify:
+    uses: ./.github/workflows/keyo-release-offline.yml
+
   build:
     name: Build and push
+    needs: verify
     runs-on: ubuntu-latest
     steps:
       - name: Check out
@@ -44,6 +51,8 @@ jobs:
       - name: Image metadata
         id: meta
         uses: docker/metadata-action@dc802804100637a589fabce1cb79ff13a1411302 # v6.2.0
+        env:
+          DOCKER_METADATA_SHORT_SHA_LENGTH: 7
         with:
           images: ghcr.io/${{ github.repository_owner }}/keyo-new-api
           tags: |
@@ -92,9 +101,10 @@ jobs:
           KEY: ${{ secrets.KEYO_VPS_SSH_KEY }}
           ACTOR: ${{ github.actor }}
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          IMAGE: ghcr.io/${{ github.repository_owner }}/keyo-new-api:main
+          IMAGE_BASE: ghcr.io/${{ github.repository_owner }}/keyo-new-api
         run: |
           set -euo pipefail
+          IMAGE="${IMAGE_BASE}:sha-${GITHUB_SHA:0:7}"
           if [ -z "${USER}" ]; then USER=admin; fi
           if [ -z "${KEY}" ]; then
             echo "::error::KEYO_VPS_HOST is set but secrets.KEYO_VPS_SSH_KEY is empty. Create the repository secret at Settings > Secrets and variables > Actions > Secrets (name exactly KEYO_VPS_SSH_KEY)."
@@ -110,7 +120,6 @@ jobs:
           # Preserve the GEO blog (bare git pull would reset index/sitemap
           # and orphan published articles), then rebuild from the catalog.
           sudo bash /opt/ai-relay/scripts/vps-safe-pull-preserve-blog.sh
-          sudo php /opt/ai-relay/scripts/geoflow-rebuild-blog.php || true
           echo "${GH_TOKEN}" | sudo docker login ghcr.io -u "${ACTOR}" --password-stdin
           sudo docker pull "${IMAGE}"
           sudo docker logout ghcr.io || true

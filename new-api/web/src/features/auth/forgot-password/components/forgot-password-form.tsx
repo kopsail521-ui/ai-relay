@@ -42,6 +42,7 @@ import {
 } from '@/features/auth/constants'
 import { useTurnstile } from '@/features/auth/hooks/use-turnstile'
 import { useCountdown } from '@/hooks/use-countdown'
+import { useStatus } from '@/hooks/use-status'
 import { cn } from '@/lib/utils'
 
 export function ForgotPasswordForm({
@@ -50,6 +51,8 @@ export function ForgotPasswordForm({
 }: React.HTMLAttributes<HTMLFormElement>) {
   const { t } = useTranslation()
   const [isLoading, setIsLoading] = useState(false)
+  const { status } = useStatus()
+  const resetAvailable = status?.password_reset_available !== false
 
   const {
     isTurnstileEnabled,
@@ -71,6 +74,7 @@ export function ForgotPasswordForm({
   const turnstileReady = !isTurnstileEnabled || Boolean(turnstileToken)
 
   async function onSubmit(data: z.infer<typeof forgotPasswordFormSchema>) {
+    if (!resetAvailable || isLoading) return
     if (!validateTurnstile()) return
 
     setIsLoading(true)
@@ -79,15 +83,40 @@ export function ForgotPasswordForm({
       if (res?.success) {
         form.reset()
         startCountdown()
-        toast.success(t('Reset email sent, please check your inbox'))
+        toast.success(
+          t(
+            'If this email is bound to an account and email delivery succeeds, you will receive a reset link.'
+          )
+        )
       } else {
         toast.error(res?.message || t('Failed to send reset email'))
       }
-    } catch (_error) {
+    } catch {
       // Errors are handled by global interceptor
     } finally {
       setIsLoading(false)
     }
+  }
+
+  if (!resetAvailable) {
+    return (
+      <div
+        role='status'
+        className='bg-muted/30 space-y-3 rounded-lg border p-4 text-sm'
+      >
+        <p>
+          {t(
+            'Email password reset is currently unavailable. If you use Google, sign in with Google. Accounts without a bound email need help from support.'
+          )}
+        </p>
+        <a
+          href='/brand/faq.html'
+          className='text-primary underline underline-offset-4'
+        >
+          {t('Help and support')}
+        </a>
+      </div>
+    )
   }
 
   return (
@@ -102,7 +131,7 @@ export function ForgotPasswordForm({
           name='email'
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Email</FormLabel>
+              <FormLabel>{t('Email')}</FormLabel>
               <FormControl>
                 <Input
                   placeholder='name@example.com'

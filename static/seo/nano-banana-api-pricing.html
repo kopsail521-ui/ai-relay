@@ -114,21 +114,23 @@ ul{margin:0 0 14px;padding-left:1.2em}
 </table></div>
 
 <h2>No free image tier — wire your client on gift credits</h2>
-<p>The gift-credit IDs are chat and speech models only — image generation has no free tier. They bill at normal rates from your one-time $10 new-user credit (fair-use limits) and are the right place to prove out base URL, auth and retry wiring. Then switch model= to a nano-banana tier on the same key; images bill per generated image at the rates on this page.</p>
+<p>The gift-credit IDs are chat and speech models only — image generation has no free tier. They bill at normal rates from your one-time $10 new-user credit (fair-use limits) and are the right place to prove out base URL, auth and retry wiring. Then switch model= to a nano-banana tier on the same key; images bill per generated image at the applicable model and group rate in <a href="/pricing">the pricing page</a>.</p>
 
 <h2>Rates and how to call</h2>
-<p>Nano Banana is Google's image generation family. On KeyoAPI all three tiers run on the same OpenAI-compatible endpoint: POST /v1/images/generations with model=nano-banana-2.1 (newer release, $0.0123 per image), model=nano-banana-2 (base lane, $0.0205) or model=nano-banana-pro (top tier with higher resolution and finer editing control, $0.0274). The model string is the only thing that changes between tiers.</p>
-<p>Billing is per generated image and the endpoint returns synchronously — no task polling. Keyo rates above are indicative sell prices from the live Keyo catalog; confirm the interactive card under <a href="/pricing">the pricing page</a> before volume, and treat official Google figures as planning context — list bands move.</p>
+<p>Nano Banana is Google's image generation family. On KeyoAPI all three tiers run on the same OpenAI-compatible endpoint: POST /v1/images/generations with model=nano-banana-2.1 (newer release, $0.0123 per image), model=nano-banana-2 (base lane, $0.0205) or model=nano-banana-pro (top tier with higher resolution and finer editing control, $0.0274). Use each model’s documented aspect-ratio and imageSize limits.</p>
+<p>Billing is per generated image. A request can return a result immediately or HTTP 202 with a continuing task; save task_id and query GET /v1/images/tasks/{task_id} with the same API key. Keyo rates above are indicative sell prices from the live Keyo catalog; confirm the interactive card under <a href="/pricing">the pricing page</a> before volume, and treat official Google figures as planning context — list bands move.</p>
 <p>Per-tier walkthroughs live on the model guides: <a href="/model/nano-banana-2.1">the nano-banana-2.1 model page</a>, <a href="/model/nano-banana-2">the nano-banana-2 model page</a> and <a href="/model/nano-banana-pro">the nano-banana-pro model page</a>. For other image lanes on the same key (gpt-image and friends) see <a href="/pricing-list">the full pricing list</a>.</p>
+<p>Use aspectRatio (for example 1:1) and imageSize (1K, 2K or 4K); do not send GPT-style pixel sizes. Keep the returned task_id: HTTP 202 means the same task is still running. Query GET /v1/images/tasks/{task_id} with the same API key until HTTP 200, status=succeeded and data[].url is nonempty. See <a href="/brand/keyo-api-ref.html#section-3">the API endpoint reference</a> for reference images, idempotency and error recovery.</p>
 
 <pre>curl https://www.keyoapi.xyz/v1/images/generations \
   -H &quot;Authorization: Bearer $KEYO_API_KEY&quot; \
+  -H &quot;Idempotency-Key: replace-with-a-unique-key-for-this-image&quot; \
   -H &quot;Content-Type: application/json&quot; \
-  -d '{&quot;model&quot;:&quot;nano-banana-2.1&quot;,&quot;prompt&quot;:&quot;a mug of coffee on a desk, studio light&quot;,&quot;size&quot;:&quot;1024x1024&quot;}'
-# Synchronous: the response returns image URLs directly — no task polling</pre>
+  -d '{&quot;model&quot;:&quot;nano-banana-2.1&quot;,&quot;prompt&quot;:&quot;a mug of coffee on a desk, studio light&quot;,&quot;aspectRatio&quot;:&quot;1:1&quot;,&quot;imageSize&quot;:&quot;1K&quot;,&quot;replyType&quot;:&quot;async&quot;}'
+# Save task_id; query GET /v1/images/tasks/{task_id} with the same key.</pre>
 <h2>FAQ</h2>
 <div class="faq"><details><summary>Which Nano Banana tier should I use?</summary><p>Start with nano-banana-2.1 — the newer release at the lowest per-image rate ($0.0123). Keep nano-banana-2 where your stack pins the base lane ($0.0205), and escalate to nano-banana-pro ($0.0274) when you need higher resolution and finer editing control for commercial work.</p></details>
-<details><summary>How is Nano Banana billed on KeyoAPI?</summary><p>Per generated image, at the tier's rate. The images endpoint returns synchronously — there is no task polling.</p></details>
+<details><summary>How is Nano Banana billed on KeyoAPI?</summary><p>Per generated image, at the tier's rate. The images endpoint may return HTTP 202 while processing. Save task_id and poll GET /v1/images/tasks/{task_id}; do not resubmit a new generation.</p></details>
 <details><summary>How do I try Nano Banana on Keyo?</summary><p>Create a key at <a href="/sign-up">the sign-up page</a> and open <a href="/pricing">the pricing page</a> (Model Square) to find the nano-banana tiers, or start with a gift-credit ID on <a href="/free-models">the gift-credit models page</a> to wire your client first.</p></details></div>
 <p class="meta">Also see <a href="/compare">the model comparison page</a>, <a href="/free-models">the gift-credit models page</a>, <a href="/pricing-list">the full pricing list</a>, and <a href="/model/nano-banana-2.1">Nano Banana 2.1</a> · <a href="/model/nano-banana-2">Nano Banana 2</a> · <a href="/model/nano-banana-pro">Nano Banana Pro</a>.</p>
 

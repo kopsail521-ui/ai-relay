@@ -5,6 +5,8 @@ name: Smoke test speech gift twins
 # Creates a throwaway user+token in the new-api SQLite DB, runs three real
 # calls against the public endpoint, asserts success + gift-credit billing,
 # then cleans up the token/user.
+# Pushes run offline contracts only; real calls require workflow_dispatch with
+# run_real_models=true. Deployment authorization alone never starts generation.
 #
 # The remote pipeline lives in scripts/vps-run-gift-speech-smoke.sh and is
 # streamed via `ssh 'sudo bash -s' < script` — no nested-quote escaping.

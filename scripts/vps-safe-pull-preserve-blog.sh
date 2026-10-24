@@ -8,38 +8,67 @@ set -euo pipefail
 
 ROOT="${ROOT:-/opt/ai-relay}"
 BLOG="$ROOT/static/brand/blog"
-STASH="/tmp/keyo-geo-blog-preserve-$(date +%s)"
+STASH=$(mktemp -d "${TMPDIR:-/tmp}/keyo-geo-blog-preserve.XXXXXX")
 
 cd "$ROOT"
 
 sudo mkdir -p "$BLOG/article" "$STASH/article"
 if [[ -d "$BLOG/article" ]]; then
-  sudo cp -a "$BLOG/article/." "$STASH/article/" 2>/dev/null || true
+  sudo cp -a "$BLOG/article/." "$STASH/article/"
 fi
-[[ -f "$BLOG/index.html" ]] && sudo cp -a "$BLOG/index.html" "$STASH/index.html" || true
-[[ -f "$BLOG/sitemap.txt" ]] && sudo cp -a "$BLOG/sitemap.txt" "$STASH/sitemap.txt" || true
+if [[ -f "$BLOG/index.html" ]]; then sudo cp -a "$BLOG/index.html" "$STASH/index.html"; fi
+if [[ -f "$BLOG/sitemap.txt" ]]; then sudo cp -a "$BLOG/sitemap.txt" "$STASH/sitemap.txt"; fi
 sudo chown -R "$(whoami):$(whoami)" "$STASH" 2>/dev/null || true
 echo "==> preserved article/ + index/sitemap -> $STASH"
+
+# Keep both sides of the tracked-file boundary. A tracked article changed in
+# Git must win over an older VPS copy; an intentionally deleted tracked file
+# must not be resurrected either. The entire article directory is gitignored,
+# so `git ls-files --others --exclude-standard` would miss live CMS articles.
+declare -A tracked_before=()
+while IFS= read -r -d '' path; do
+  tracked_before["$path"]=1
+done < <(git ls-files -z -- static/brand/blog/article)
+
+unmanaged=0
+while IFS= read -r -d '' article; do
+  path="static/brand/blog/article/${article#"$STASH/article/"}"
+  if [[ -z "${tracked_before[$path]+tracked}" ]]; then
+    unmanaged=$((unmanaged + 1))
+  fi
+done < <(find "$STASH/article" -type f -print0)
+
+# The catalog rebuild keeps newly published CMS pages discoverable. Refuse
+# before resetting anything if we cannot rebuild their index, rather than
+# restoring an obsolete tracked index over a newly fixed template.
+if [[ "$unmanaged" -gt 0 && -f "$ROOT/scripts/geoflow-rebuild-blog.php" ]] && ! command -v php >/dev/null 2>&1; then
+  echo "ABORT: php-cli is required to rebuild the index of preserved CMS articles; backup: $STASH" >&2
+  exit 1
+fi
 
 sudo chown -R "$(whoami):$(whoami)" "$ROOT" 2>/dev/null || true
 # Stash tracked changes (index/sitemap) as a backup for this run; it is
 # dropped again at the end once the /tmp restore has succeeded, so repeated
 # pulls do not pile up stash entries.
 stash_before=$(git stash list 2>/dev/null | wc -l)
-git stash push -u -m "wb-preserve-$(date +%s)" 2>/dev/null || true
+git stash push -u -m "wb-preserve-$(date +%s)"
 git fetch origin
 git reset --hard origin/main
 
 sudo mkdir -p "$BLOG/article"
-if [[ -d "$STASH/article" ]]; then
-  sudo cp -a "$STASH/article/." "$BLOG/article/"
-fi
-[[ -f "$STASH/index.html" ]] && sudo cp -a "$STASH/index.html" "$BLOG/index.html" || true
-[[ -f "$STASH/sitemap.txt" ]] && sudo cp -a "$STASH/sitemap.txt" "$BLOG/sitemap.txt" || true
-sudo sed -i 's/>Free models</>Gift-credit models</g' "$BLOG/index.html" 2>/dev/null || true
-echo "==> restored GEO article content (geoflow-agent PHP kept from git)"
+restored=0
+while IFS= read -r -d '' article; do
+  path="static/brand/blog/article/${article#"$STASH/article/"}"
+  if [[ -n "${tracked_before[$path]+tracked}" ]] || git ls-files --error-unmatch -- "$path" >/dev/null 2>&1; then
+    continue
+  fi
+  sudo mkdir -p "$(dirname "$ROOT/$path")"
+  sudo cp -a "$article" "$ROOT/$path"
+  restored=$((restored + 1))
+done < <(find "$STASH/article" -type f -print0)
+echo "==> restored $restored unmanaged article files; Git owns tracked article content and templates"
 if [[ -f "$ROOT/scripts/geoflow-rebuild-blog.php" ]] && command -v php >/dev/null 2>&1; then
-  sudo php "$ROOT/scripts/geoflow-rebuild-blog.php" 2>/dev/null || true
+  sudo php "$ROOT/scripts/geoflow-rebuild-blog.php"
   echo "==> refreshed blog index using latest template"
 fi
 

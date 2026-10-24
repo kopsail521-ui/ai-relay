@@ -1,22 +1,22 @@
-# KeyoAPI — Full call handbook (copy this to your AI)
+# KeyoAPI — API integration handbook (copy to AI)
 
-> **For users:** Copy this **entire page** to your AI, then add:  
-> 1) Your API Key (`sk-...`)  
-> 2) The model name (from “All models” below)  
-> 3) What you want (e.g. MiniMax-H3, 5s landscape video, prompt is …)  
+> **For users:** Copy this **entire page** to your AI, then add:
+> 1) Your API Key (`sk-...`)
+> 2) The model name (from “All models” below)
+> 3) What you want (e.g. MiniMax-H3, 5s landscape video, prompt is …)
 > The AI will pick the right path and fields. You do not need to understand the tech.
 >
-> **For the AI:** You are a KeyoAPI calling assistant. Follow paths, fields, and poll rules exactly.  
-> - Base URL: `https://www.keyoapi.xyz/v1`  
-> - Header: `Authorization: Bearer <user key>`  
-> - Find the capability family for the model, then apply that template. Video models must use their own section — never mix fields.  
+> **For the AI:** You are a KeyoAPI calling assistant. Follow paths, fields, and poll rules exactly.
+> - Base URL: `https://www.keyoapi.xyz/v1`
+> - Header: `Authorization: Bearer <user key>`
+> - Find the capability family for the model, then apply that template. Video models must use their own section — never mix fields.
 > - Identify async completion by family: image success is HTTP 200 + `status:"succeeded"` + nonempty `data[].url` (§3); video / TTS / document parsing / InfiniteTalk success is `completed` (§0.6). Poll while pending, then return the result URL/text.
 > - Video Path B accepts **JSON only**; its media must be **public `http(s)` URLs**.
-> - Per-model video fields / modes / forbidden rules are in **§4 / §5 of this handbook** (user pastes this page — do not require other docs).  
-> - Local files only: **first** `POST /v1/uploads` (alias `/v1/files`) → use returned `url` in Path B / OCR JSON.  
+> - Per-model video fields / modes / forbidden rules are in **§4 / §5 of this handbook** (user pastes this page — do not require other docs).
+> - Local files only: **first** `POST /v1/uploads` (alias `/v1/files`) → use returned `url` in Path B / OCR JSON.
 > - **Forbidden:** local paths in JSON, `data:base64` or direct multipart on Video Path B, invented `POST /v1/assets` / `asset://`; image references accept base64 (§3).
 > - Images at `/v1/images/edits` / ASR / matting / upscale / MinerU / InfiniteTalk accept multipart `-F file=@` / `-F image=@` using the field required by each endpoint (no prior upload needed).
-> - Model list in this handbook is authoritative; you may also `GET /v1/models`.
+> - This handbook covers documented integrations, not every catalog entry. Check `GET /v1/models` for IDs available to the key and `/pricing` for group eligibility. A catalog entry alone does not establish its input or polling contract; see §1.14 before using unlisted templates.
 
 ---
 
@@ -28,10 +28,10 @@
 | Shape | Used for | Example paths |
 |------|-----------|----------|
 | OpenAI-compatible | Text chat, model list, embeddings, image generation, ASR, OCR | `POST /v1/chat/completions` · `GET /v1/models` · `POST /v1/embeddings` · `POST /v1/images/generations` · `POST /v1/audio/transcriptions` |
-| OpenAI-shaped (partial) | Sync TTS, content moderation | `POST /v1/audio/speech` — covers only `GLM-TTS` / `Step-Audio-TTS-3B` / `IndexTTS-2` (see §1.6 / §7), other TTS runs async (§1.7 / §8); `POST /v1/moderations` — `model` + `input` matches OpenAI, response contract in §13 |
+| OpenAI-shaped (partial) | Sync TTS, content moderation | `POST /v1/audio/speech` — covers `GLM-TTS` / `Step-Audio-TTS-3B` / `IndexTTS-2` / `eleven-v4` / `eleven-v4-turbo` / `gemini-3.8-flash-tts` (see §1.6 / §7), other TTS runs async (§1.7 / §8); `POST /v1/moderations` — `model` + `input` matches OpenAI, response contract in §13 |
 | Dedicated REST | Visual processing, async video, digital human, document parsing, System One / structured decisions, video tools | Matting / upscale / unwarp / detect / segment / pose (§1.10) · Path B video (§5) · Digital humans (InfiniteTalk / Duix-Avatar, §1.11 / §12) · MinerU document parsing (§1.9 / §10) · Structured decisions (`POST /v1/systemone` & `POST /v1/decisions`, §1.11b) · video tools (§1.11a) — different paths, same key and balance |
 
-Rule: switch models by changing `model`; change the path only when the capability itself is not OpenAI-shaped.
+Rule: change only `model` when both models explicitly share the same documented request contract. Paths, required fields, accepted parameters and polling rules can differ even within one capability.
 
 ---
 
@@ -43,6 +43,18 @@ Rule: switch models by changing `model`; change the path only when the capabilit
 | Video Path A (`/v1/videos`) | `GET /v1/videos/{id}` |
 | TTS async / docs / digital human (InfiniteTalk / Duix-Avatar) | `GET /v1/task/{id}` (**singular task**) |
 | Image tasks | `GET /v1/images/tasks/{task_id}` (image-specific path) |
+
+---
+
+## 0.2 Errors, retries and duplicate submissions
+
+- Use the documented API path exactly once after the base URL; do not append a second `/v1`.
+- `400`: fix parameters. `401/403`: check the key and permissions. Insufficient balance/quota is not a temporary busy response; do not loop retries.
+- For `429`, respect the full `Retry-After` interval. If it exceeds the operation deadline, defer or stop instead of retrying earlier.
+- Retry temporary **GET status queries** with bounded backoff using the same saved task ID. A query timeout does not establish task failure.
+- A timed-out **POST create** may already have created a billable task. Save its receipt/request ID and reconcile it; do not create a replacement automatically. Only use idempotent replay on an endpoint that explicitly documents support. Image idempotency is described in §3.3; do not assume the same feature exists for video, TTS or avatars.
+- Use a new image idempotency key for a new operation. Reuse the original key and identical parameters only when recovering that same operation.
+- `:free` identifies gift-credit billing, not a promise of a permanent zero rate. Check each model’s rate and the wallet: gift-credit exhaustion may fall back to paid balance. See https://www.keyoapi.xyz/free-models.
 
 ---
 
@@ -86,12 +98,12 @@ Path B poll success:
 
 ## 0.5 Local media upload (file → public URL)
 
-For: **Path B video** (MiniMax / Wan / FLUX / Omni / Grok-imagine), **Unlimited-OCR** / multimodal chat `image_url.url`.  
+For: **Path B video** (MiniMax / Wan / FLUX / Omni), **Unlimited-OCR** / multimodal chat `image_url.url`.
 Not for: ASR, matting, upscale, MinerU, InfiniteTalk, Duix-Avatar (those accept multipart directly).
 
-`POST https://www.keyoapi.xyz/v1/uploads`  
-Alias: `POST https://www.keyoapi.xyz/v1/files`  
-Header: `Authorization: Bearer sk-...`  
+`POST https://www.keyoapi.xyz/v1/uploads`
+Alias: `POST https://www.keyoapi.xyz/v1/files`
+Header: `Authorization: Bearer sk-...`
 Body: `multipart/form-data`, field `file` (also accepts `image` / `audio` / `video`)
 
 ```bash
@@ -113,7 +125,7 @@ Success response:
 ```
 
 Rules:
-- Put the returned **`url`** into downstream JSON (`image_urls`, `images`, `video_urls`, `audios`, `image.url`, …).
+- Put the returned **`url`** into downstream JSON (`image_urls`, `images`, `video_urls`, `audios`, `image_url.url`, …).
 - Allowed: jpg/png/webp/gif/bmp, mp3/wav/m4a/aac/ogg/flac, mp4/webm/mov/mkv, pdf.
 - Default max ~**100MB**; files expire in ~**48h** (`expires_at`) — submit the video job before expiry.
 - There is **no** `POST /v1/assets` and **no** `asset://`.
@@ -136,7 +148,7 @@ Same pattern for other Path B models: upload once, map `url` to that model’s f
 
 ---
 
-## 1. All models (by capability)
+## 1. Documented model integrations (by capability)
 
 ### 1.1 Chat → `POST /v1/chat/completions`
 
@@ -144,7 +156,7 @@ Gift-credit (the `:free` suffix): `Atria-dawn-v2:free` · `DeepSeek-Prover-V2-7B
 
 Gift-credit IDs (`:free` suffix) include the chat lanes above, plus `GLM-ASR:free` and `SenseVoiceSmall:free` (ASR, §1.5) and `Spark-TTS-0.5B:free` (TTS, §1.7). Calls bill at dedicated gift-credit rates from your gift credit first (one-time $10 for new users, +$3 per invite). Full live list and rates: https://www.keyoapi.xyz/free-models.
 
-Paid: `gpt-5.6-luna` · `gpt-5.6-terra` · `gpt-5.6-sol` · `gpt-6-luna` · `gpt-6-sol` · `gpt-6-astra` · `gpt-6.1-sol` · `claude-sonnet-5` · `claude-sonnet-5-5` · `claude-opus-5` · `claude-opus-5-5` · `claude-haiku-5-5` · `claude-fable-5` · `claude-fable-5-1` · `gemini-3.7-flash` · `gemini-3.8-flash` · `gemini-4-argon` · `gemini-4-barium` · `grok-4.7` · `grok-4.6` · `minimax-m3` · `MiniMax-M3.1-Flash` · `glm-5.3` · `glm-5.3-flash` · `glm-5.2` · `deepseek-v4.1-flash` · `deepseek-v4.1-flash-1017` · `deepseek-v4-pro-0813` · `deepseek-v4-flash-0731` · `deepseek-v4-pro` · `deepseek-v4-flash` · `kimi-k3` · `kimi-k2.7-code` · `qwen3.8-flash` · `hy4-preview` · `mimo-v2.6-pro` · `mimo-v2.6-flash` · `qwen3.8-max-0902`
+Paid: `gpt-5.6-luna` · `gpt-5.6-terra` · `gpt-5.6-sol` · `gpt-6-luna` · `gpt-6-sol` · `gpt-6-astra` · `gpt-6.1-sol` · `claude-sonnet-5` · `claude-sonnet-5-5` · `claude-opus-5` · `claude-opus-5-5` · `claude-haiku-5-5` · `claude-fable-5` · `claude-fable-5-1` · `gemini-3.7-flash` · `gemini-3.8-flash` · `gemini-4-argon` · `gemini-4-barium` · `grok-4.7` · `grok-4.6` · `minimax-m3` · `MiniMax-M3.1-Flash` · `glm-5.3` · `glm-5.3-flash` · `glm-5.2` · `deepseek-v4.1-flash` · `deepseek-v4.1-flash-1017` · `deepseek-v4-pro-0813` · `deepseek-v4-flash-0731` · `deepseek-v4-pro` · `deepseek-v4-flash` · `kimi-k3` · `kimi-k2.7-code` · `qwen3.8-flash` · `hy4-preview` · `mimo-v2.6-pro` · `mimo-v2.6-flash` · `qwen3.8-max-0902` · `DeepSeek-Prover-V2-7B` · `Atria-dawn-v2`
 
 ### 1.2 Images → `POST /v1/images/generations`
 
@@ -253,10 +265,16 @@ Embedding example:
 ```
 
 ---
+### 1.14 Catalog entries without a complete copyable contract here
+
+`gpt-image-2.5-sunburst-vip` · `gpt-image-2.5-flare-vip` · `gpt-image-2-4K` · `gpt-image-2-2K` · `DiffusionGemma-26B-A4B-it-Jev` · `gemini-3.1-flash-tts-preview` · `grok-image-2.0` · `MiniMax-H3-vip` · `SemIf-OpenJev-4B` · `suno_music_open` · `keyo-super-resolution-1080p` · `keyo-super-resolution-4k` · `keyo-super-resolution-2k` · `keyo-voice-clone` · `keyo-video-subtitle-removal` · `keyo-tts` · `keyo-song` · `keyo-asr` · `suno_music` · `laya-multilingual`
+
+These IDs may appear in the live catalog, but this handbook does not yet specify all required fields, supported modes and result semantics for them. In particular, music, voice enrollment and structured decision models must not be treated as ordinary chat/TTS requests. Before a chargeable submission, obtain the model-specific integration contract from support. Do not guess fields, substitute another model, or assume the image models listed here use the §3 image task endpoint.
+
 
 ## 2. Chat (shared template)
 
-`POST https://www.keyoapi.xyz/v1/chat/completions`  
+`POST https://www.keyoapi.xyz/v1/chat/completions`
 `Content-Type: application/json`
 
 Replace `model` with the user’s chat model id.
@@ -271,6 +289,15 @@ Replace `model` with the user’s chat model id.
 Streaming: add `"stream": true` if needed.
 
 ---
+
+### 2.1 ZCode / Cursor client setup
+
+1. Add a custom OpenAI-compatible provider.
+2. Base URL: `https://www.keyoapi.xyz/v1`. Select `Chat Completions (/chat/completions)` when the client offers a format selector. Do not add another `/v1` or put the complete endpoint in a base-URL field.
+3. Enter your KeyoAPI key. Copy the full model ID from https://www.keyoapi.xyz/pricing or `GET /v1/models`, preserving prefixes, punctuation and `:free`.
+4. Check the model’s rate and wallet. `:free` is a gift-credit entry, not a promise of a zero rate; paid-balance fallback may apply. Insufficient balance needs a billing correction, not repeated retries.
+5. A successful connection probe does not establish working chat, streaming or tools. Confirm a visible text reply first, then separately check streaming and tool calls required by your workflow. Compatibility varies by model and client version; not every combination has been verified.
+
 
 ## 3. Image generation and references (model-specific parameters)
 
@@ -449,9 +476,9 @@ Text / single image / first & last frame / multi-reference in one endpoint; fiel
 
 ## 5. Video Path B (per model)
 
-Shared: `POST https://www.keyoapi.xyz/v1/videos/generations`  
-Shared poll: `GET https://www.keyoapi.xyz/v1/tasks/{task_id}`  
-Media: public https URLs only. For local files, use §0.5 `POST /v1/uploads` first, then paste the returned `url`.  
+Shared: `POST https://www.keyoapi.xyz/v1/videos/generations`
+Shared poll: `GET https://www.keyoapi.xyz/v1/tasks/{task_id}`
+Media: public https URLs only. For local files, use §0.5 `POST /v1/uploads` first, then paste the returned `url`.
 **This section is the full video field contract for the AI** — follow each model subsection; never mix fields across models.
 
 **Submit success (task id):**
@@ -463,8 +490,8 @@ Media: public https URLs only. For local files, use §0.5 `POST /v1/uploads` fir
   "data": [{ "id": "task_xxx", "task_id": "task_xxx", "status": "submitted" }]
 }
 ```
-Read **`id` / `task_id` / `data[0].task_id` (any)** then poll `GET /v1/tasks/{id}`.  
-Terminal: `status`/`data.status` = `completed` (or `failed`).  
+Read **`id` / `task_id` / `data[0].task_id` (any)** then poll `GET /v1/tasks/{id}`.
+Terminal: `status`/`data.status` = `completed` (or `failed`).
 Video: prefer top-level **`url`**, or `data.result.videos[0].url[0]` (`url` is an array). See §0.6.
 
 ### 5.0 Duration / resolution hard limits (read first)
@@ -480,11 +507,11 @@ Video: prefer top-level **`url`**, or `data.result.videos[0].url[0]` (`url` is a
 
 ### 5.1 MiniMax-H3
 
-Required: `model` `prompt` `aspectRatio` `resolution` `duration`  
+Required: `model` `prompt` `aspectRatio` `resolution` `duration`
 `aspectRatio`: only `landscape` or `portrait` (aliases `16:9` / `9:16`). `square` / `1:1` is not supported.
-`resolution`: `480p` | `768p` | `1080p` (1080p max 10s)  
-`duration`: integer **1–15**  
-Optional: `images` (max 9 https URLs), `audios` (max 3), `seed`  
+`resolution`: `480p` | `768p` | `1080p` (1080p max 10s)
+`duration`: integer **1–15**
+Optional: `images` (max 9 https URLs), `audios` (max 3), `seed`
 Do **not** send `image_with_roles` or `first_frame_image` (those are Seedance/Wan).
 
 Submit returns `id` immediately while the video is still generating (`status=processing`). Poll `GET /v1/tasks/{id}` with the same key: `processing` while running, `completed` plus `url` when done. In-progress is not a failure.
@@ -535,12 +562,12 @@ Required: `model` `prompt`. Recommended: `duration` (or `seconds`).
 |------|------|------|
 | `duration` / `seconds` | **integer 4–15** | `5` |
 
-Values `1`/`2`/`3` or `>15` are rejected. Resolution is in the model id — usually omit `resolution`.  
-Modes (do not mix):  
-- **First frame:** `first_frame_image` (or `generation_type":"first_frame"`)  
-- **Reference (1 image OK):** `image_urls` / `images` — a single image is REFERENCE, not default first-frame  
-- **First+last:** `image_with_roles` (`first_frame`+`last_frame`)  
-- **Multimodal ref:** `image_urls` + `video_urls` / `audios` (**never** with `first_frame_image`)  
+Values `1`/`2`/`3` or `>15` are rejected. Resolution is in the model id — usually omit `resolution`.
+Modes (do not mix):
+- **First frame:** `first_frame_image` (or `generation_type":"first_frame"`)
+- **Reference (1 image OK):** `image_urls` / `images` — a single image is REFERENCE, not default first-frame
+- **First+last:** `image_with_roles` (`first_frame`+`last_frame`)
+- **Multimodal ref:** `image_urls` + `video_urls` / `audios` (**never** with `first_frame_image`)
 Optional: `size` (e.g. `1280x720`), `aspect_ratio`.
 
 Text-to-video:
@@ -600,9 +627,9 @@ Reference image + audio (never mix with first_frame_image):
 
 ### 5.3 wan3.0-video
 
-`resolution`: `480P` | `720P` | `1080P`  
-`duration`: `2`–`30`, or `-1`  
-Modes: t2v; first frame (`image_urls`×1); first+last; **reference** (`generation_type":"reference"` + media); `file_url` XOR `link_url`.  
+`resolution`: `480P` | `720P` | `1080P`
+`duration`: `2`–`30`, or `-1`
+Modes: t2v; first frame (`image_urls`×1); first+last; **reference** (`generation_type":"reference"` + media); `file_url` XOR `link_url`.
 **Forbidden:** mixing frame roles with reference family; both `file_url` and `link_url`.
 
 Text-to-video:
@@ -683,7 +710,7 @@ Continue:
 
 ### 5.5 gemini-omni-1.1-flash
 
-**Do not send `duration` / `seconds`.**  
+**Do not send `duration` / `seconds`.**
 Also: `image_urls`, `first_frame_image`+`last_frame_image`, `video_urls`≤1 XOR `extend_from_task_id`.
 
 Text-to-video:
@@ -709,8 +736,8 @@ First/last frames:
 
 ### 5.5b gemini-omni-1.1-flash-ext
 
-`duration` must be `4`|`6`|`8`|`10`.  
-`generation_type` `frame` (exactly 1 image) or `reference` (0/1/3 images — **never 2**).  
+`duration` must be `4`|`6`|`8`|`10`.
+`generation_type` `frame` (exactly 1 image) or `reference` (0/1/3 images — **never 2**).
 If `video_urls` present, omit duration.
 
 ```json
@@ -734,7 +761,7 @@ Text / single image / first & last frame / multi-reference all go through `POST 
 
 ## 6. ASR
 
-`POST https://www.keyoapi.xyz/v1/audio/transcriptions`  
+`POST https://www.keyoapi.xyz/v1/audio/transcriptions`
 `multipart/form-data`: `model` + `file` (+ optional `language`)
 
 ```bash
@@ -751,7 +778,7 @@ Pick model from §1.5.
 
 ## 7. TTS sync
 
-`POST https://www.keyoapi.xyz/v1/audio/speech`  
+`POST https://www.keyoapi.xyz/v1/audio/speech`
 Models: `GLM-TTS` · `Step-Audio-TTS-3B` · `IndexTTS-2` · `eleven-v4` · `eleven-v4-turbo` · `gemini-3.8-flash-tts` (native endpoint `POST /v1beta/models/gemini-3.8-flash-tts:generateContent`)
 
 ```json
@@ -768,8 +795,8 @@ Response is audio bytes — save to a file.
 
 ## 8. TTS async
 
-`POST https://www.keyoapi.xyz/v1/async/audio/speech`  
-Poll: `GET /v1/task/{id}` (singular)  
+`POST https://www.keyoapi.xyz/v1/async/audio/speech`
+Poll: `GET /v1/task/{id}` (singular)
 Models: `Qwen3-TTS` · `CosyVoice3` · `Spark-TTS-0.5B` · `Spark-TTS-0.5B:free`
 
 ```json
@@ -779,11 +806,13 @@ Models: `Qwen3-TTS` · `CosyVoice3` · `Spark-TTS-0.5B` · `Spark-TTS-0.5B:free`
 }
 ```
 
+The example above performs basic text-to-speech, not voice cloning. No reference-audio enrollment or reusable voice-ID contract is documented here. Confirm the chosen model’s required clone-sample and voice fields with support before implementing cloning; do not invent `voice`, `reference_audio` or other fields.
+
 ---
 
 ## 9. OCR (Unlimited-OCR)
 
-`POST /v1/chat/completions`  
+`POST /v1/chat/completions`
 
 Local image: §0.5 upload first, then put returned `url` in `image_url.url`.
 
@@ -817,7 +846,7 @@ curl https://www.keyoapi.xyz/v1/async/documents/parse \
 
 ## 11. Vision multipart (matting / upscale / unwarp / detect / seg / pose)
 
-Shared: `-F model=...` + `-F image=@file` (**local files OK** — §0.5 not required)  
+Shared: `-F model=...` + `-F image=@file` (**local files OK** — §0.5 not required)
 Paths/models: §1.10.
 
 Matting example:
@@ -834,7 +863,7 @@ Upscale: use `/v1/images/upscaling` with `Real-ESRGAN` or `AnimeSharp`.
 
 ## 12. InfiniteTalk (image + audio → talking video)
 
-`POST /v1/async/videos/image-to-video` → `GET /v1/task/{id}`  
+`POST /v1/async/videos/image-to-video` → `GET /v1/task/{id}`
 
 Multipart accepts **local files directly** (no §0.5 needed).
 Upload a portrait image directly as `cond_video`; there is no need to turn it into a static video. Upload the driving audio as `cond_audio`. **Audio must be 15 seconds or shorter per job**. Split longer tracks yourself; each chunk bills as a separate request. Resolutions: **480P / 720P**; aspect ratio follows the input image. Do not blindly retry a submission that returned no task `id`.
@@ -852,16 +881,24 @@ curl https://www.keyoapi.xyz/v1/async/videos/image-to-video \
 
 ## 13. Moderations
 
-`POST /v1/moderations`
+`POST /v1/moderations` with JSON. Choose the input modality for the model; changing only `model` does not turn text into an image.
 
+| Models | Input |
+| --- | --- |
+| `keyo-text-moderation`, `Security-semantic-filtering` | Text in `input` |
+| `nsfw-classifier`, `nonescape-v0` | Image content inside `input`; see the image example below |
+
+Text example:
 ```json
-{
-  "model": "keyo-text-moderation",
-  "input": "text to moderate"
-}
+{"model":"keyo-text-moderation","input":"Text to review"}
 ```
 
-Pick model from §1.12.
+Image example (`nonescape-v0` uses the same input envelope for AI-image detection):
+```json
+{"model":"nsfw-classifier","input":[{"type":"image_url","image_url":{"url":"https://example.com/image.png"}}]}
+```
+
+Keep `image_url` inside `input`, not at the request root. The image input envelope supports a public HTTP(S) URL or an image data URL. Use §0.5 for a local file. Model-specific image-size limits and score meanings are not specified here; obtain them before setting production thresholds. Do not interpret a transport success or an arbitrary score as a safety verdict.
 
 ---
 
@@ -876,12 +913,12 @@ curl https://www.keyoapi.xyz/v1/models \
 
 ## 15. AI checklist (before every call)
 
-1. Is the model name in §1? If not, `GET /v1/models` or ask the user.  
-2. Pick the correct path (chat / image / video A / video B / ASR / TTS sync|async / vision).  
-3. If Video Path B: open the matching §5 subsection — do not reuse another model’s fields.  
-4. Local media for Path B or OCR: §0.5 upload first, then paste `url`.  
+1. Does the model have a documented contract? Check §1 and `GET /v1/models`. Confirm §1.14 models with support before submitting; do not infer a request schema from a catalog entry.
+2. Pick the correct path (chat / image / video A / video B / ASR / TTS sync|async / vision).
+3. If Video Path B: open the matching §5 subsection — do not reuse another model’s fields.
+4. Local media for Path B or OCR: §0.5 upload first, then paste `url`.
 5. Handle async by family: images use `/v1/images/tasks/{task_id}`; HTTP 200 + `status:"succeeded"` + nonempty `data[].url` means success, and 202 means keep polling. Retry temporary query errors on the same task; handle terminal task errors per §3.3. Other async families use their `tasks` / `task` path, with `processing` while pending and `completed` / `failed` / `cancelled` at termination. Handle terminal responses returned at submission directly.
-6. Return results simply to the user.  
+6. Return results simply to the user.
 7. Do not invent field names (incl. `/v1/assets`, `asset://`).
 
 ---
@@ -891,7 +928,7 @@ curl https://www.keyoapi.xyz/v1/models \
 | Mistake | Fix |
 |---------|-----|
 | MiniMax with `image_with_roles` / `first_frame_image` | Use `images` / `audios` / `aspectRatio` |
-| grok-imagine prompt only | Add `image:{"url":"https://..."}` (local file → §0.5 first) |
+| Current `grok-video-1.5` text-to-video | Use the §4 chat request with a text content item; images are optional for text-to-video. Do not apply legacy `grok-imagine` field rules |
 | Local path or base64 in video JSON | `POST /v1/uploads`, put returned `url` in JSON; or text-to-video |
 | Multipart / `-F file=@` for Path B | For Path B, upload first, then JSON + `image_urls` etc.; images at `/v1/images/edits`, ASR / matting / upscale / MinerU / digital humans (InfiniteTalk / Duix-Avatar) and similar endpoints accept direct multipart using their own fields |
 | Calling `POST /v1/assets` or `asset://` | **None** — use `POST /v1/uploads` (or `/v1/files`) |

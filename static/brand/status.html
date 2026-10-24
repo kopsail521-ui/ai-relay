@@ -4,7 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>KeyoAPI Status</title>
-<meta name="description" content="KeyoAPI service status — OpenAI-compatible API gateway uptime check." />
+<meta name="description" content="KeyoAPI public status endpoint reachability. Individual model health is not tested here." />
 <link rel="canonical" href="https://www.keyoapi.xyz/status" />
 <link rel="icon" href="/brand/logo.svg" type="image/svg+xml" />
 <link rel="stylesheet" href="/brand/keyo-theme.css" />
@@ -36,7 +36,7 @@
 </header>
   <div class="k-page">
     <h1>Service Status</h1>
-    <p class="sub">KeyoAPI — OpenAI-compatible API gateway</p>
+    <p class="sub">Public status endpoint reachability</p>
     <div class="k-card">
       <div class="row">
         <span class="dot" id="dot"></span>
@@ -44,6 +44,7 @@
       </div>
       <dl id="meta"></dl>
     </div>
+    <p>This page checks the public configuration endpoint only. It does not run models or verify login, payments, streaming, task creation, or task completion. Individual service health is not measured here.</p>
     <p class="k-foot">
       Support: <a href="mailto:kopsail521@gmail.com">kopsail521@gmail.com</a><br />
       Docs: <a href="/brand/keyo-docs.html">the KeyoAPI documentation</a> ·
@@ -56,32 +57,42 @@
   const dot = document.getElementById("dot");
   const headline = document.getElementById("headline");
   const meta = document.getElementById("meta");
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 10000);
+  function showRows(rows) {
+    meta.replaceChildren();
+    for (const [label, value] of rows) {
+      const row = document.createElement("div");
+      row.className = "pair";
+      const term = document.createElement("dt");
+      const detail = document.createElement("dd");
+      term.textContent = label;
+      detail.textContent = String(value);
+      row.append(term, detail);
+      meta.append(row);
+    }
+  }
   try {
-    const r = await fetch("/api/status", { cache: "no-store" });
+    const r = await fetch("/api/status", { cache: "no-store", signal: controller.signal });
     if (!r.ok) throw new Error("status " + r.status);
     const j = await r.json();
+    if (j.success === false) throw new Error(j.message || "Status endpoint reported an error");
     const d = j.data || j;
     dot.className = "dot ok";
-    headline.textContent = "All systems operational";
+    headline.textContent = "Public status endpoint reachable";
     const rows = [
-      ["System", d.system_name || "KeyoAPI"],
-      ["Version", d.version || "—"],
+      ["Website", d.system_name || "KeyoAPI"],
       ["API endpoint", "https://www.keyoapi.xyz/v1"],
+      ["Model and task health", "Not tested"],
       ["Checked", new Date().toISOString()],
     ];
-    meta.innerHTML = rows
-      .map(
-        ([k, v]) =>
-          `<div class="pair"><dt>${k}</dt><dd>${String(v)}</dd></div>`
-      )
-      .join("");
+    showRows(rows);
   } catch (e) {
     dot.className = "dot bad";
     headline.textContent = "Unable to reach API status";
-    meta.innerHTML =
-      '<div class="pair"><dt>Error</dt><dd>' +
-      String(e.message || e) +
-      "</dd></div>";
+    showRows([["Error", e.name === "AbortError" ? "No response within 10 seconds" : e.message || e]]);
+  } finally {
+    clearTimeout(timeout);
   }
 })();
 </script>

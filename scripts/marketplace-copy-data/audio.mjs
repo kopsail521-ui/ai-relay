@@ -80,7 +80,7 @@ export default {
     usageEn: "voice announcements, video dubbing, voice assistants"
   },
   "eleven-v4-turbo": {
-    unit: "token", in: "40", out: "40",
+    unit: "million_chars", per: "40",
     fam: "ElevenLabs Eleven V4 Turbo 语音合成模型",
     famEn: "ElevenLabs' Eleven V4 Turbo speech synthesis model",
     feat: "高速高保真语音合成，适合实时交互场景",
@@ -90,7 +90,7 @@ export default {
     usageEn: "real-time voice dialogue, live dubbing, interactive apps"
   },
   "eleven-v4": {
-    unit: "token", in: "80", out: "80",
+    unit: "million_chars", per: "80",
     fam: "ElevenLabs Eleven V4 语音合成模型",
     famEn: "ElevenLabs' Eleven V4 speech synthesis model",
     feat: "顶级自然度与角色表现力，适合专业配音",

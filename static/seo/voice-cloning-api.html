@@ -4,19 +4,19 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Voice Cloning API | CosyVoice3 &amp; Qwen3-TTS on KeyoAPI</title>
-<meta name="description" content="Voice cloning API on KeyoAPI via CosyVoice3 and Qwen3-TTS async speech. Clone-friendly TTS from ~$0.548 / 10K characters, same key as Whisper." />
+<meta name="description" content="Understand basic speech synthesis versus voice cloning on KeyoAPI. Confirm reference-audio, enrollment and voice-ID fields before implementing cloning." />
 <link rel="canonical" href="https://www.keyoapi.xyz/voice-cloning-api" />
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://www.keyoapi.xyz/voice-cloning-api" />
 <meta property="og:title" content="Voice Cloning API | CosyVoice3 &amp; Qwen3-TTS on KeyoAPI" />
-<meta property="og:description" content="Voice cloning API on KeyoAPI via CosyVoice3 and Qwen3-TTS async speech. Clone-friendly TTS from ~$0.548 / 10K characters, same key as Whisper." />
+<meta property="og:description" content="Understand basic speech synthesis versus voice cloning on KeyoAPI. Confirm reference-audio, enrollment and voice-ID fields before implementing cloning." />
 <meta property="og:image" content="https://www.keyoapi.xyz/brand/logo.svg" />
 <link rel="icon" href="/brand/logo.svg" type="image/svg+xml" />
 <link rel="stylesheet" href="/brand/keyo-theme.css" />
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content="Voice Cloning API | CosyVoice3 &amp; Qwen3-TTS on KeyoAPI" />
-<meta name="twitter:description" content="Voice cloning API on KeyoAPI via CosyVoice3 and Qwen3-TTS async speech. Clone-friendly TTS from ~$0.548 / 10K characters, same key as Whisper." />
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebPage","name":"Voice Cloning API | CosyVoice3 & Qwen3-TTS on KeyoAPI","url":"https://www.keyoapi.xyz/voice-cloning-api","description":"Voice cloning API on KeyoAPI via CosyVoice3 and Qwen3-TTS async speech. Clone-friendly TTS from ~$0.548 / 10K characters, same key as Whisper."}</script>
+<meta name="twitter:description" content="Understand basic speech synthesis versus voice cloning on KeyoAPI. Confirm reference-audio, enrollment and voice-ID fields before implementing cloning." />
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebPage","name":"Voice Cloning API | CosyVoice3 & Qwen3-TTS on KeyoAPI","url":"https://www.keyoapi.xyz/voice-cloning-api","description":"Understand basic speech synthesis versus voice cloning on KeyoAPI. Confirm reference-audio, enrollment and voice-ID fields before implementing cloning."}</script>
 <script defer src="/brand/keyo-track.js"></script>
 <style>.wrap{max-width:880px;margin:0 auto;padding:28px 24px 48px}
 .footer{display:flex;flex-wrap:wrap;gap:10px 16px;max-width:1080px;margin:0 auto;padding:24px 24px 40px;border-top:1px solid var(--line);font-size:13px;color:var(--muted)}
@@ -77,9 +77,9 @@ ul{margin:0 0 14px;padding-left:1.2em}
   </nav>
 </header>
 <main class="wrap">
-<h1>Voice Cloning API — CosyVoice3 &amp; Qwen3-TTS on KeyoAPI</h1>
+<h1>Voice Cloning API — Check the Integration Contract</h1>
 
-<p class="lead">Need a voice cloning API without standing up a research stack? KeyoAPI exposes clone-friendly async TTS (CosyVoice3, Qwen3-TTS) behind one prepaid key — draft scripts with free chat twins, synthesize, then optionally animate with Duix or InfiniteTalk.</p>
+<p class="lead">Basic text-to-speech and voice cloning are different operations. The examples on this page synthesize text; they do not supply a reference speaker. Confirm the chosen model’s reference-audio and voice-ID contract with support before building cloning.</p>
 <div class="btnrow">
   <a class="btn btn-primary" href="/sign-up">Get API key</a>
   <a class="btn btn-secondary" href="/pricing">Open Model Square</a>
@@ -87,50 +87,50 @@ ul{margin:0 0 14px;padding-left:1.2em}
   <a class="btn btn-secondary" href="/free-models">Gift-credit models</a>
 </div>
 
-<h2>Clone-friendly speech models</h2>
+<h2>Documented speech endpoints</h2>
 <p class="meta">Indicative figures for planning. Confirm live Keyo sell rates on interactive <a href="/pricing">Model Square</a> or the static <a href="/pricing-list">pricing list</a>.</p>
 <div class="table-scroll"><table>
 <thead><tr><th>Model ID</th><th>Fit</th><th>KeyoAPI</th><th>Notes</th></tr></thead>
 <tbody>
 <tr>
   <td><a href="/model/Qwen3-TTS"><code>Qwen3-TTS</code></a></td>
-  <td>Async TTS with rapid voice cloning for brand / locale voices</td>
+  <td>Asynchronous basic text-to-speech</td>
   <td class="ok">~$0.548 / 10K characters</td>
   <td>POST /v1/async/audio/speech · guide <a href="/model/Qwen3-TTS">the Qwen3-TTS model page</a></td>
 </tr>
 <tr>
   <td><a href="/model/CosyVoice3"><code>CosyVoice3</code></a></td>
-  <td>Async multilingual zero-shot speech; strong for longer narration</td>
+  <td>Asynchronous basic text-to-speech</td>
   <td class="ok">~$1.37 / 10K characters</td>
   <td>POST /v1/async/audio/speech · guide <a href="/model/CosyVoice3">the CosyVoice3 model page</a></td>
 </tr>
 <tr>
   <td><a href="/model/IndexTTS-2"><code>IndexTTS-2</code></a></td>
-  <td>Sync TTS when you need audio in one round trip (clone where schema allows)</td>
+  <td>Synchronous basic text-to-speech</td>
   <td class="ok">~$1.37 / 10K characters</td>
   <td>POST /v1/audio/speech · guide <a href="/model/IndexTTS-2">the IndexTTS-2 model page</a></td>
 </tr>
 </tbody>
 </table></div>
 
-<h2>Consent and abuse first</h2>
-<p>Clone samples only with rights clearance. Rate-limit tenant clones, reject celebrity likeness without licenses, and keep a default voice fallback. Keyo provides the inference API — your product owns consent UX and policy.</p>
+<h2>Before using a reference voice</h2>
+<p>Obtain the supported sample format, required fields, enrollment steps and voice-ID lifecycle for the chosen model. Those details are not documented in the basic TTS example below; do not guess parameters or promise speaker reproduction from text alone.</p>
 
 <h2>Rates and endpoints</h2>
-<p>Use it for brand-consistent voices across IVR, support bots, and avatar video. Keyo collocates clone-friendly TTS with Whisper STT and talking-avatar models so the full loop shares one balance.</p>
-<p>Indicative rates above are catalog snapshots — confirm <a href="/model/Qwen3-TTS">the Qwen3-TTS model page</a> and <a href="/model/CosyVoice3">the CosyVoice3 model page</a>. There is no separate upload playground: after <a href="/sign-up">the sign-up page</a>, try from the interactive pricing page for each model id.</p>
-<p>How to call: async create via POST /v1/async/audio/speech with model=Qwen3-TTS or CosyVoice3, then poll /v1/task/{id}. Broader TTS map: <a href="/tts-api">the TTS API guide</a>. Avatar handoff: <a href="/ai-avatar-video-generator">the AI avatar video generator page</a>.</p>
-<p>For sync-only demos without a clone workflow, IndexTTS-2 on /v1/audio/speech is often enough.</p>
+<p>Use POST /v1/async/audio/speech with model=Qwen3-TTS or CosyVoice3 and an inputs string for basic speech synthesis. Save id/task_id, then query GET /v1/task/{id} until status=completed and an audio URL is available. See <a href="/brand/keyo-api-ref.html#section-8">the API endpoint reference</a>.</p>
+<p>Reference-voice cloning needs its own confirmed request contract. This page does not provide sample upload/enrollment or a reusable voice-ID schema. Ask support for that contract before submitting clone samples; do not copy a voice field from a different model.</p>
+<p>For synchronous basic speech, see IndexTTS-2 on POST /v1/audio/speech. The complete endpoint map is in <a href="/tts-api">the TTS API guide</a>. Current applicable rates and groups are shown in <a href="/pricing">the pricing page</a>.</p>
+<p>A timed-out task submission may already have succeeded. Preserve its task or request ID; retry status GET requests using the original ID instead of creating replacement jobs automatically.</p>
 
 <pre>curl https://www.keyoapi.xyz/v1/async/audio/speech \
   -H &quot;Authorization: Bearer $KEYO_API_KEY&quot; \
   -H &quot;Content-Type: application/json&quot; \
-  -d '{&quot;model&quot;:&quot;Qwen3-TTS&quot;,&quot;input&quot;:&quot;Hello from a cloned brand voice.&quot;}'
-# then: GET /v1/task/{id}</pre>
+  -d '{&quot;model&quot;:&quot;Qwen3-TTS&quot;,&quot;inputs&quot;:&quot;Hello from KeyoAPI text-to-speech.&quot;}'
+# Basic TTS only. Save id/task_id and query GET /v1/task/{id}.</pre>
 <h2>FAQ</h2>
-<div class="faq"><details><summary>Do you store my clone samples?</summary><p>Follow Keyo docs and your own retention policy. Treat clone audio as sensitive PII; minimize retention in your app layer.</p></details>
-<details><summary>Voice cloning vs plain TTS?</summary><p>Plain TTS uses stock voices; cloning targets a specific speaker sample. Prefer Qwen3-TTS or CosyVoice3 for clone workflows; see each model guide for schema details.</p></details>
-<details><summary>How do I try it?</summary><p>Create a key at <a href="/sign-up">the sign-up page</a>, then open <a href="/model/Qwen3-TTS">the Qwen3-TTS model page</a> or <a href="/model/CosyVoice3">the CosyVoice3 model page</a>. No second playground.</p></details></div>
+<div class="faq"><details><summary>Does the basic example clone a voice?</summary><p>No. It sends only text. Confirm the reference-audio, enrollment and voice-ID contract for your model before implementing cloning.</p></details>
+<details><summary>Which fields identify the reference speaker?</summary><p>That model-specific contract is not specified on this page. Obtain it from support; do not guess field names.</p></details>
+<details><summary>How do I start with basic speech?</summary><p>Create a key at <a href="/keys">the API keys page</a> after signing in, then follow <a href="/brand/keyo-api-ref.html#section-8">the API endpoint reference</a>. Check current model rates on <a href="/pricing">the pricing page</a>.</p></details></div>
 <p class="meta">Also see <a href="/compare">the model comparison page</a>, <a href="/free-models">the gift-credit models page</a>, <a href="/pricing-list">the full pricing list</a>, and <a href="/tts-api">Text to Speech</a> · <a href="/model/CosyVoice3">CosyVoice3</a> · <a href="/model/Qwen3-TTS">Qwen3-TTS</a>.</p>
 
 </main>

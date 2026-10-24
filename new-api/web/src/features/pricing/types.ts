@@ -40,6 +40,15 @@ export type PricingModel = {
   model_ratio: number
   completion_ratio: number
   model_price?: number
+  billing_unit?:
+    | 'token'
+    | 'request'
+    | 'second'
+    | 'page'
+    | 'character'
+    | '10k_chars'
+    | 'million_chars'
+  has_price_tiers?: boolean
   /** Whether the catalog contains the rates used to bill this gift-credit model. */
   gift_billing_rate_available?: boolean
   cache_ratio?: number | null

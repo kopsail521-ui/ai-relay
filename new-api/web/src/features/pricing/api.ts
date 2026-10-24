@@ -26,6 +26,13 @@ import type { PricingData } from './types'
 
 // Get model pricing data
 export async function getPricing(): Promise<PricingData> {
-  const res = await api.get('/api/pricing')
+  const res = await api.get('/api/pricing', { timeout: 15_000 })
+  if (
+    !res.data?.success ||
+    !Array.isArray(res.data.data) ||
+    !Array.isArray(res.data.vendors)
+  ) {
+    throw new Error('Model catalog is unavailable')
+  }
   return res.data
 }

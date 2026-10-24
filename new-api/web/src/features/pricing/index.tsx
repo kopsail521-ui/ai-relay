@@ -34,6 +34,7 @@ import {
   ModelCardGrid,
   ModelDetailsDrawer,
 } from './components'
+import { PricingLoadError } from './components/pricing-load-error'
 import { EXCLUDED_GROUPS, VIEW_MODES } from './constants'
 import { useFilters } from './hooks/use-filters'
 import { usePricingData } from './hooks/use-pricing-data'
@@ -58,6 +59,9 @@ export function Pricing() {
     endpointMap,
     autoGroups,
     isLoading,
+    isFetching,
+    error,
+    refetch,
     priceRate,
     usdExchangeRate,
   } = usePricingData()
@@ -166,6 +170,19 @@ export function Pricing() {
     )
   }
 
+  if (error) {
+    return (
+      <PublicLayout>
+        <PricingLoadError
+          onRetry={() => {
+            void refetch()
+          }}
+          isRetrying={isFetching}
+        />
+      </PublicLayout>
+    )
+  }
+
   return (
     <PublicLayout showMainContainer={false}>
       <div className='relative'>
@@ -199,10 +216,15 @@ export function Pricing() {
                 'Discover curated AI models, compare pricing and capabilities, and choose the right model for every scenario.'
               )}
             </p>
-                        <div className='mx-auto mt-4 max-w-2xl rounded-xl border border-emerald-500/30 bg-emerald-500/10 p-3 text-center text-xs text-emerald-800 dark:text-emerald-300 sm:text-sm'>
+            <div className='mx-auto mt-4 max-w-2xl rounded-xl border border-emerald-500/30 bg-emerald-500/10 p-3 text-center text-xs text-emerald-800 sm:text-sm dark:text-emerald-300'>
               🎁 <strong>{t('New user bonus:')}</strong>{' '}
-              {t('Register to get $10 welcome gift credits + $3 per invite — test gift-credit models (:free) with no credit card required!')}{' '}
-              <a href='/sign-up' className='ml-1 font-semibold underline underline-offset-2 hover:opacity-80'>
+              {t(
+                'Register to get $10 welcome gift credits + $3 per invite — test gift-credit models (:free) with no credit card required!'
+              )}{' '}
+              <a
+                href='/sign-up'
+                className='ml-1 font-semibold underline underline-offset-2 hover:opacity-80'
+              >
                 {t('Get started →')}
               </a>
             </div>

@@ -270,3 +270,26 @@ export function formatRequestPrice(
     abbreviate: false,
   })
 }
+
+/** Display a verified billing unit without converting characters to token units. */
+export function formatBillingUnitPrice(
+  model: PricingModel,
+  showWithRecharge = false,
+  priceRate = 1,
+  usdExchangeRate = 1,
+  selectedGroup?: string
+): string {
+  const ratio = getDisplayGroupRatio(model, selectedGroup)
+  const base =
+    model.quota_type === QUOTA_TYPE_VALUES.REQUEST
+      ? (model.model_price || 0) * ratio
+      : calculateTokenPrice(model, 'input', ratio)
+  return formatCurrencyFromUSD(
+    applyRechargeRate(base, showWithRecharge, priceRate, usdExchangeRate),
+    {
+      digitsLarge: 6,
+      digitsSmall: 8,
+      abbreviate: false,
+    }
+  )
+}

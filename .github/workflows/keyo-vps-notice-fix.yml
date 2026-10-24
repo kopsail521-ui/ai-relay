@@ -4,9 +4,6 @@ name: Fix notice Acceptable-Use link on VPS
 # /user-agreement to /brand/aup.html inside the New API options table,
 # then restarts the container. The fix script itself is idempotent, so
 # re-running this workflow is safe.
-#
-# Triggers automatically once when this workflow file lands on main
-# (paths filter below) and stays available via workflow_dispatch.
 
 on:
   push:
@@ -39,6 +36,7 @@ jobs:
           KEY: ${{ secrets.KEYO_VPS_SSH_KEY }}
         run: |
           set -euo pipefail
+          echo "host length: ${#HOST}  user length: ${#USER}  key length: ${#KEY}"
           if [ -z "${USER}" ]; then USER=admin; fi
           if [ -z "${KEY}" ]; then
             echo "::error::KEYO_VPS_HOST is set but secrets.KEYO_VPS_SSH_KEY is empty."
@@ -48,15 +46,8 @@ jobs:
           printf '%s\n' "${KEY}" > "${HOME}/.ssh/keyo_vps"
           chmod 600 "${HOME}/.ssh/keyo_vps"
           ssh -i "${HOME}/.ssh/keyo_vps" -o StrictHostKeyChecking=accept-new \
-            "${USER}@${HOST}" "sudo -n true && bash -s" <<'EOF'
-          set -euo pipefail
-          cd /opt/ai-relay
-          sudo git fetch origin
-          sudo git checkout origin/main -- scripts/vps-fix-notice-links.py
-          sudo python3 scripts/vps-fix-notice-links.py
-          sudo docker restart new-api
-          echo NOTICE_FIX_SCRIPT_DONE
-          EOF
+            "${USER}@${HOST}" \
+            "sudo -n true && cd /opt/ai-relay && sudo git fetch origin && sudo git checkout origin/main -- scripts/vps-fix-notice-links.py && sudo python3 scripts/vps-fix-notice-links.py && sudo docker restart new-api && echo NOTICE_FIX_SCRIPT_DONE"
 
       - name: Verify notice link live
         run: |

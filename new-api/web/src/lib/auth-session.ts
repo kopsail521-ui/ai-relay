@@ -318,18 +318,30 @@ function runRefresh(refreshEpoch: number): Promise<RefreshOutcome> {
 async function performRefreshWithBrowserLock(
   refreshEpoch: number
 ): Promise<RefreshOutcome> {
+  let lockWaitTimer: ReturnType<typeof globalThis.setTimeout> | undefined
   try {
     if (typeof navigator === 'undefined' || !navigator.locks) {
       return runRefresh(refreshEpoch)
     }
-    return navigator.locks.request(
+    // A background/frozen tab can hold this lock indefinitely. Limit only the
+    // queue wait; once acquired the existing HTTP timeout governs refresh.
+    const controller = new AbortController()
+    lockWaitTimer = globalThis.setTimeout(() => controller.abort(), 3000)
+    return await navigator.locks.request(
       'new-api:auth-refresh',
-      { mode: 'exclusive' },
-      () => runRefresh(refreshEpoch)
+      { mode: 'exclusive', signal: controller.signal },
+      () => {
+        globalThis.clearTimeout(lockWaitTimer)
+        return runRefresh(refreshEpoch)
+      }
     )
   } catch (error: unknown) {
-    useAuthStore.getState().auth.setBootstrapState('idle')
+    if (authEpoch === refreshEpoch) {
+      useAuthStore.getState().auth.setBootstrapState('idle')
+    }
     return { kind: 'transient_error', error }
+  } finally {
+    globalThis.clearTimeout(lockWaitTimer)
   }
 }
 

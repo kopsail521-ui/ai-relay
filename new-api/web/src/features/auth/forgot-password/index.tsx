@@ -33,9 +33,15 @@ export function ForgotPassword() {
           </h2>
           <p className='text-muted-foreground text-left text-sm sm:text-base'>
             {t(
-              'Enter your registered email and we will send you a link to reset your password.'
+              'Password recovery requires an email already bound to your account. Google accounts should sign in with Google.'
             )}
           </p>
+          <Link
+            to='/sign-in'
+            className='inline-block text-sm underline underline-offset-4'
+          >
+            {t('Back to sign in')}
+          </Link>
           <p className='text-muted-foreground text-left text-sm sm:text-base'>
             {t("Don't have an account?")}{' '}
             <Link

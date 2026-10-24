@@ -1,12 +1,13 @@
 name: Probe kimi-k3 gateway metrics
 
 on:
-  push:
-    branches: [main]
-    paths:
-      - "scripts/vps-probe-kimi.py"
-      - ".github/workflows/keyo-probe-kimi.yml"
   workflow_dispatch:
+    inputs:
+      run_real_model:
+        description: 'Explicitly authorize a real kimi-k3 request and production probe setup'
+        type: boolean
+        required: true
+        default: false
 
 concurrency:
   group: keyo-probe-kimi
@@ -18,7 +19,7 @@ permissions:
 jobs:
   probe:
     name: Run field probe for kimi-k3
-    if: vars.KEYO_VPS_HOST != ''
+    if: github.event_name == 'workflow_dispatch' && inputs.run_real_model && vars.KEYO_VPS_HOST != ''
     runs-on: ubuntu-latest
     concurrency:
       group: keyo-vps-mutex

@@ -950,15 +950,15 @@
     "price_key_en": "Per request"
   },
   "RMBG-2.0": {
-    "description": "BRIA AI RMBG 2.0 背景移除模型。高精度抠图，一键去除图像背景。支持图像模态。适合电商图片处理、人像抠图、设计素材。",
+    "description": "腾讯 RMBG 2.0 背景移除模型。高精度抠图，一键去除图像背景。支持图像模态。适合电商图片处理、人像抠图、设计素材。",
     "descriptions": {
-      "zhCN": "BRIA AI RMBG 2.0 背景移除模型。高精度抠图，一键去除图像背景。支持图像模态。适合电商图片处理、人像抠图、设计素材。",
-      "zhTW": "BRIA AI RMBG 2.0 背景移除模型。高精度去背，一鍵去除圖像背景。支援圖像模态。適合電商圖片處理、人像去背、設計素材。",
-      "en": "BRIA AI's RMBG 2.0 background removal model. high-precision background removal in one step. image modality. Ideal for e-commerce image processing, portrait cutout, design assets.",
-      "fr": "BRIA AI's RMBG 2.0 background removal model. high-precision background removal in one step. image modality. Idéal pour e-commerce image processing, portrait cutout, design assets.",
-      "ru": "BRIA AI's RMBG 2.0 background removal model. high-precision background removal in one step. image modality. Подходит для e-commerce image processing, portrait cutout, design assets.",
-      "ja": "BRIA AI's RMBG 2.0 background removal model. high-precision background removal in one step. image modality. e-commerce image processing, portrait cutout, design assets 向け。",
-      "vi": "BRIA AI's RMBG 2.0 background removal model. high-precision background removal in one step. image modality. Phù hợp cho e-commerce image processing, portrait cutout, design assets."
+      "zhCN": "腾讯 RMBG 2.0 背景移除模型。高精度抠图，一键去除图像背景。支持图像模态。适合电商图片处理、人像抠图、设计素材。",
+      "zhTW": "腾讯 RMBG 2.0 背景移除模型。高精度去背，一鍵去除圖像背景。支援圖像模态。適合電商圖片處理、人像去背、設計素材。",
+      "en": "Tencent's RMBG 2.0 background removal model. high-precision background removal in one step. image modality. Ideal for e-commerce image processing, portrait cutout, design assets.",
+      "fr": "Tencent's RMBG 2.0 background removal model. high-precision background removal in one step. image modality. Idéal pour e-commerce image processing, portrait cutout, design assets.",
+      "ru": "Tencent's RMBG 2.0 background removal model. high-precision background removal in one step. image modality. Подходит для e-commerce image processing, portrait cutout, design assets.",
+      "ja": "Tencent's RMBG 2.0 background removal model. high-precision background removal in one step. image modality. e-commerce image processing, portrait cutout, design assets 向け。",
+      "vi": "Tencent's RMBG 2.0 background removal model. high-precision background removal in one step. image modality. Phù hợp cho e-commerce image processing, portrait cutout, design assets."
     },
     "unit": "request",
     "badge": {
@@ -988,8 +988,8 @@
       "ja": "リクエストごと",
       "vi": "Mỗi lần gọi"
     },
-    "description_zh": "BRIA AI RMBG 2.0 背景移除模型。高精度抠图，一键去除图像背景。支持图像模态。适合电商图片处理、人像抠图、设计素材。",
-    "description_en": "BRIA AI's RMBG 2.0 background removal model. high-precision background removal in one step. image modality. Ideal for e-commerce image processing, portrait cutout, design assets.",
+    "description_zh": "腾讯 RMBG 2.0 背景移除模型。高精度抠图，一键去除图像背景。支持图像模态。适合电商图片处理、人像抠图、设计素材。",
+    "description_en": "Tencent's RMBG 2.0 background removal model. high-precision background removal in one step. image modality. Ideal for e-commerce image processing, portrait cutout, design assets.",
     "badge_zh": "按次计费",
     "badge_en": "Per Request",
     "suffix_zh": "/次",
@@ -3193,15 +3193,15 @@
     }
   },
   "seedance-2.5": {
-    "description": "字节 Seedance 2.5 视频生成大模型。新一代高保真长时长视频生成，单次最高30秒，支持多模态参考与480p/720p/1080p多分辨率。适合高质量短剧、广告营销与专业内容创作。",
+    "description": "字节 Seedance 2.5 视频生成模型。新一代高保真视频生成，支持多种分辨率档位。支持视频模态。适合高质量视频创作、专业内容制作。",
     "descriptions": {
-      "zhCN": "字节 Seedance 2.5 视频生成大模型。新一代高保真长时长视频生成，单次最高30秒，支持多模态参考与480p/720p/1080p多分辨率。适合高质量短剧、广告营销与专业内容创作。",
-      "zhTW": "字節 Seedance 2.5 影片生成大模型。新一代高保真長時長影片生成，單次最高30秒，支援多模態參考與480p/720p/1080p多解析度。適合高質量短劇、廣告營銷與專業內容創作。",
-      "en": "ByteDance's flagship Seedance 2.5 video generation model. High-fidelity video generation up to 30s across 480p/720p/1080p resolutions with multimodal reference support.",
-      "fr": "Modèle phare Seedance 2.5 de ByteDance pour la génération vidéo haute fidélité jusqu'à 30s.",
-      "ru": "Флагманская модель генерации видео Seedance 2.5 от ByteDance с поддержкой до 30 секунд.",
-      "ja": "ByteDanceのフラッグシップ動画生成モデルSeedance 2.5。最大30秒の高解像度動画生成。",
-      "vi": "Mô hình tạo video cao cấp Seedance 2.5 của ByteDance, hỗ trợ độ dài lên đến 30 giây."
+      "zhCN": "字节 Seedance 2.5 视频生成模型。新一代高保真视频生成，支持多种分辨率档位。支持视频模态。适合高质量视频创作、专业内容制作。",
+      "zhTW": "字节 Seedance 2.5 影片生成模型。新一代高保真影片生成，支援多種解析度檔位。支援影片模态。適合高質量影片創作、专业內容制作。",
+      "en": "ByteDance's Seedance 2.5 video generation model. next-generation high-fidelity video generation across resolution tiers. video modality. Ideal for high-quality video creation, professional content production.",
+      "fr": "ByteDance's Seedance 2.5 video generation model. next-generation high-fidelity video generation across resolution tiers. video modality. Idéal pour high-quality video creation, professional content production.",
+      "ru": "ByteDance's Seedance 2.5 video generation model. next-generation high-fidelity video generation across resolution tiers. video modality. Подходит для high-quality video creation, professional content production.",
+      "ja": "ByteDance's Seedance 2.5 video generation model. next-generation high-fidelity video generation across resolution tiers. video modality. high-quality video creation, professional content production 向け。",
+      "vi": "ByteDance's Seedance 2.5 video generation model. next-generation high-fidelity video generation across resolution tiers. video modality. Phù hợp cho high-quality video creation, professional content production."
     },
     "unit": "second",
     "badge": {
@@ -3213,8 +3213,26 @@
       "ja": "秒課金",
       "vi": "Theo giây"
     },
-    "description_zh": "字节 Seedance 2.5 视频生成大模型。支持 480p / 720p / 1080p，单次最高30秒。",
-    "description_en": "ByteDance's flagship Seedance 2.5 video model, up to 30 seconds across 480p/720p/1080p.",
+    "suffix": {
+      "zhCN": "/秒",
+      "zhTW": "/秒",
+      "en": "/ second",
+      "fr": "/ seconde",
+      "ru": "/ секунду",
+      "ja": "/ 秒",
+      "vi": "/ giây"
+    },
+    "price_key": {
+      "zhCN": "每秒",
+      "zhTW": "每秒",
+      "en": "Per second",
+      "fr": "Par seconde",
+      "ru": "За секунду",
+      "ja": "秒ごと",
+      "vi": "Mỗi giây"
+    },
+    "description_zh": "字节 Seedance 2.5 视频生成模型。新一代高保真视频生成，支持多种分辨率档位。支持视频模态。适合高质量视频创作、专业内容制作。",
+    "description_en": "ByteDance's Seedance 2.5 video generation model. next-generation high-fidelity video generation across resolution tiers. video modality. Ideal for high-quality video creation, professional content production.",
     "badge_zh": "按秒计费",
     "badge_en": "Per Second",
     "suffix_zh": "/秒",
@@ -3279,15 +3297,15 @@
     }
   },
   "seedance-2.0": {
-    "description": "字节 Seedance 2.0 标准满血版视频生成模型。高保真运动控制，主体一致性强，支持480p/720p/1080p分辨率与多图音视频多模态参考。",
+    "description": "字节 Seedance 2.0 视频生成模型。成熟的视频生成能力，支持多分辨率与参考视频。支持视频模态。适合短视频创作、广告与营销内容。",
     "descriptions": {
-      "zhCN": "字节 Seedance 2.0 标准满血版视频生成模型。高保真运动控制，主体一致性强，支持480p/720p/1080p分辨率与多图音视频多模态参考。",
-      "zhTW": "字節 Seedance 2.0 標準滿血版影片生成模型。高保真運動控制，主體一致性強，支援480p/720p/1080p解析度與多模態參考。",
-      "en": "ByteDance Seedance 2.0 standard full-tier video generation model. Cinematic motion and subject consistency across 480p/720p/1080p.",
-      "fr": "Modèle standard Seedance 2.0 de ByteDance pour la génération de vidéo cinématique.",
-      "ru": "Стандартная флагманская модель генерации видео Seedance 2.0 от ByteDance.",
-      "ja": "ByteDanceの標準フルスペック動画生成モデルSeedance 2.0。",
-      "vi": "Mô hình tạo video tiêu chuẩn Seedance 2.0 của ByteDance."
+      "zhCN": "字节 Seedance 2.0 视频生成模型。成熟的视频生成能力，支持多分辨率与参考视频。支持视频模态。适合短视频创作、广告与营销内容。",
+      "zhTW": "字节 Seedance 2.0 影片生成模型。成熟的影片生成能力，支援多解析度与参考影片。支援影片模态。適合短影片創作、廣告与行銷內容。",
+      "en": "ByteDance's Seedance 2.0 video generation model. mature video generation with multiple resolutions and reference video support. video modality. Ideal for short video creation, advertising and marketing content.",
+      "fr": "ByteDance's Seedance 2.0 video generation model. mature video generation with multiple resolutions and reference video support. video modality. Idéal pour short video creation, advertising and marketing content.",
+      "ru": "ByteDance's Seedance 2.0 video generation model. mature video generation with multiple resolutions and reference video support. video modality. Подходит для short video creation, advertising and marketing content.",
+      "ja": "ByteDance's Seedance 2.0 video generation model. mature video generation with multiple resolutions and reference video support. video modality. short video creation, advertising and marketing content 向け。",
+      "vi": "ByteDance's Seedance 2.0 video generation model. mature video generation with multiple resolutions and reference video support. video modality. Phù hợp cho short video creation, advertising and marketing content."
     },
     "unit": "second",
     "badge": {
@@ -3299,8 +3317,26 @@
       "ja": "秒課金",
       "vi": "Theo giây"
     },
-    "description_zh": "字节 Seedance 2.0 标准满血版视频生成模型。",
-    "description_en": "ByteDance Seedance 2.0 standard video model, starting at $0.085479 / sec.",
+    "suffix": {
+      "zhCN": "/秒",
+      "zhTW": "/秒",
+      "en": "/ second",
+      "fr": "/ seconde",
+      "ru": "/ секунду",
+      "ja": "/ 秒",
+      "vi": "/ giây"
+    },
+    "price_key": {
+      "zhCN": "每秒",
+      "zhTW": "每秒",
+      "en": "Per second",
+      "fr": "Par seconde",
+      "ru": "За секунду",
+      "ja": "秒ごと",
+      "vi": "Mỗi giây"
+    },
+    "description_zh": "字节 Seedance 2.0 视频生成模型。成熟的视频生成能力，支持多分辨率与参考视频。支持视频模态。适合短视频创作、广告与营销内容。",
+    "description_en": "ByteDance's Seedance 2.0 video generation model. mature video generation with multiple resolutions and reference video support. video modality. Ideal for short video creation, advertising and marketing content.",
     "badge_zh": "按秒计费",
     "badge_en": "Per Second",
     "suffix_zh": "/秒",
@@ -3451,9 +3487,9 @@
     }
   },
   "MiniMax-H3": {
-    "description": "MiniMax H3 视频生成模型。支持特惠接力组（480p/768p）与官方尊享组（720p/1080p/2k），从文本与参考图像生成高质连贯视频。",
+    "description": "MiniMax H3 视频生成模型。从文本或图像生成高质量视频，支持多种分辨率与风格。支持视频模态。适合短视频创作、广告素材、动态内容生成。",
     "descriptions": {
-      "zhCN": "MiniMax H3 视频生成模型。支持特惠接力组（480p/768p）与官方尊享组（720p/1080p/2k），从文本与参考图像生成高质连贯视频。",
+      "zhCN": "MiniMax H3 视频生成模型。从文本或图像生成高质量视频，支持多种分辨率与风格。支持视频模态。适合短视频创作、广告素材、动态内容生成。",
       "zhTW": "MiniMax H3 影片生成模型。从文本或圖像生成高質量影片，支援多種解析度与風格。支援影片模态。適合短影片創作、廣告素材、動態內容生成。",
       "en": "MiniMax's H3 video generation model. text-to-video and image-to-video with high quality and multiple resolutions. video modality. Ideal for short video creation, ad assets, dynamic content.",
       "fr": "MiniMax's H3 video generation model. text-to-video and image-to-video with high quality and multiple resolutions. video modality. Idéal pour short video creation, ad assets, dynamic content.",
@@ -3489,7 +3525,7 @@
       "ja": "秒ごと",
       "vi": "Mỗi giây"
     },
-    "description_zh": "MiniMax H3 视频生成模型。支持特惠接力组（480p/768p）与官方尊享组（720p/1080p/2k），从文本与参考图像生成高质连贯视频。",
+    "description_zh": "MiniMax H3 视频生成模型。从文本或图像生成高质量视频，支持多种分辨率与风格。支持视频模态。适合短视频创作、广告素材、动态内容生成。",
     "description_en": "MiniMax's H3 video generation model. text-to-video and image-to-video with high quality and multiple resolutions. video modality. Ideal for short video creation, ad assets, dynamic content.",
     "badge_zh": "按秒计费",
     "badge_en": "Per Second",
@@ -6672,42 +6708,42 @@
       "ja": "ElevenLabs' Eleven V4 speech synthesis model. top-tier naturalness and character performance for professional dubbing. audio modality. audiobooks, character dubbing, post-production 向け。",
       "vi": "ElevenLabs' Eleven V4 speech synthesis model. top-tier naturalness and character performance for professional dubbing. audio modality. Phù hợp cho audiobooks, character dubbing, post-production."
     },
-    "unit": "token",
+    "unit": "million_chars",
     "badge": {
-      "zhCN": "按 Token 计费",
-      "zhTW": "按 Token 計費",
-      "en": "Token-based",
-      "fr": "Au token",
-      "ru": "По токенам",
-      "ja": "Token 課金",
-      "vi": "Theo token"
+      "zhCN": "按字符计费",
+      "zhTW": "按字元計費",
+      "en": "Per character",
+      "fr": "Par caractère",
+      "ru": "За символ",
+      "ja": "文字課金",
+      "vi": "Theo ký tự"
     },
     "suffix": {
-      "zhCN": "",
-      "zhTW": "",
-      "en": "",
-      "fr": "",
-      "ru": "",
-      "ja": "",
-      "vi": ""
+      "zhCN": "/百万字符",
+      "zhTW": "/百萬字元",
+      "en": "/ 1M characters",
+      "fr": "/ 1M caractères",
+      "ru": "/ 1M символов",
+      "ja": "/ 100万文字",
+      "vi": "/ 1M ký tự"
     },
     "price_key": {
-      "zhCN": "",
-      "zhTW": "",
-      "en": "",
-      "fr": "",
-      "ru": "",
-      "ja": "",
-      "vi": ""
+      "zhCN": "每百万字符",
+      "zhTW": "每百萬字元",
+      "en": "Per 1M characters",
+      "fr": "Par 1M caractères",
+      "ru": "За 1M символов",
+      "ja": "100万文字ごと",
+      "vi": "Mỗi 1M ký tự"
     },
     "description_zh": "ElevenLabs Eleven V4 语音合成模型。顶级自然度与角色表现力，适合专业配音。支持音频模态。适合有声书、角色配音、影视后期。",
     "description_en": "ElevenLabs' Eleven V4 speech synthesis model. top-tier naturalness and character performance for professional dubbing. audio modality. Ideal for audiobooks, character dubbing, post-production.",
-    "badge_zh": "按 Token 计费",
-    "badge_en": "Token-based",
-    "suffix_zh": "",
-    "suffix_en": "",
-    "price_key_zh": "",
-    "price_key_en": ""
+    "badge_zh": "按字符计费",
+    "badge_en": "Per character",
+    "suffix_zh": "/百万字符",
+    "suffix_en": "/ 1M characters",
+    "price_key_zh": "每百万字符",
+    "price_key_en": "Per 1M characters"
   },
   "eleven-v4-turbo": {
     "description": "ElevenLabs Eleven V4 Turbo 语音合成模型。高速高保真语音合成，适合实时交互场景。支持音频模态。适合实时语音对话、直播配音、互动应用。",
@@ -6720,42 +6756,42 @@
       "ja": "ElevenLabs' Eleven V4 Turbo speech synthesis model. high-speed, high-fidelity speech synthesis for real-time interaction. audio modality. real-time voice dialogue, live dubbing, interactive apps 向け。",
       "vi": "ElevenLabs' Eleven V4 Turbo speech synthesis model. high-speed, high-fidelity speech synthesis for real-time interaction. audio modality. Phù hợp cho real-time voice dialogue, live dubbing, interactive apps."
     },
-    "unit": "token",
+    "unit": "million_chars",
     "badge": {
-      "zhCN": "按 Token 计费",
-      "zhTW": "按 Token 計費",
-      "en": "Token-based",
-      "fr": "Au token",
-      "ru": "По токенам",
-      "ja": "Token 課金",
-      "vi": "Theo token"
+      "zhCN": "按字符计费",
+      "zhTW": "按字元計費",
+      "en": "Per character",
+      "fr": "Par caractère",
+      "ru": "За символ",
+      "ja": "文字課金",
+      "vi": "Theo ký tự"
     },
     "suffix": {
-      "zhCN": "",
-      "zhTW": "",
-      "en": "",
-      "fr": "",
-      "ru": "",
-      "ja": "",
-      "vi": ""
+      "zhCN": "/百万字符",
+      "zhTW": "/百萬字元",
+      "en": "/ 1M characters",
+      "fr": "/ 1M caractères",
+      "ru": "/ 1M символов",
+      "ja": "/ 100万文字",
+      "vi": "/ 1M ký tự"
     },
     "price_key": {
-      "zhCN": "",
-      "zhTW": "",
-      "en": "",
-      "fr": "",
-      "ru": "",
-      "ja": "",
-      "vi": ""
+      "zhCN": "每百万字符",
+      "zhTW": "每百萬字元",
+      "en": "Per 1M characters",
+      "fr": "Par 1M caractères",
+      "ru": "За 1M символов",
+      "ja": "100万文字ごと",
+      "vi": "Mỗi 1M ký tự"
     },
     "description_zh": "ElevenLabs Eleven V4 Turbo 语音合成模型。高速高保真语音合成，适合实时交互场景。支持音频模态。适合实时语音对话、直播配音、互动应用。",
     "description_en": "ElevenLabs' Eleven V4 Turbo speech synthesis model. high-speed, high-fidelity speech synthesis for real-time interaction. audio modality. Ideal for real-time voice dialogue, live dubbing, interactive apps.",
-    "badge_zh": "按 Token 计费",
-    "badge_en": "Token-based",
-    "suffix_zh": "",
-    "suffix_en": "",
-    "price_key_zh": "",
-    "price_key_en": ""
+    "badge_zh": "按字符计费",
+    "badge_en": "Per character",
+    "suffix_zh": "/百万字符",
+    "suffix_en": "/ 1M characters",
+    "price_key_zh": "每百万字符",
+    "price_key_en": "Per 1M characters"
   },
   "gemini-4-argon": {
     "description": "Google Gemini 4 Argon 旗舰多模态模型。在深度推理与创造性任务上具备出色能力，支持多模态输入。支持 1M 上下文。支持文本与图像模态。适合深度分析、创意内容、企业级 AI 应用。",
@@ -7489,15 +7525,15 @@
     }
   },
   "glm-5.3:free": {
-    "description": "智谱 GLM 5.3 赠送金模型。在通用对话、复杂推理与中文场景下表现出色。调用按对应模型费率计费（输入 .198 / 输出 .85 每 100 万 tokens），优先扣减赠送金，赠送金不足时扣充值余额。支持 128K 上下文。支持文本模态。",
+    "description": "智谱 GLM 5.3 赠送金模型。按模型费率计费，优先扣减赠送金，不足时使用充值余额，实际价格见分组价格表。支持文本模态。适合对话、推理与编程。",
     "descriptions": {
-      "zhCN": "智谱 GLM 5.3 赠送金模型。在通用对话、复杂推理与中文场景下表现出色。调用按对应模型费率计费（输入 .198 / 输出 .85 每 100 万 tokens），优先扣减赠送金，赠送金不足时扣充值余额。支持 128K 上下文。支持文本模态。",
-      "zhTW": "智譜 GLM 5.3 贈送金模型。在通用對話、複雜推理與中文場景下表現出色。呼叫按對應模型費率計費（輸入 .198 / 輸出 .85 每 100 萬 tokens），優先扣減贈送金，贈送金不足時扣儲值餘額。支援 128K 上下文。支援文本模態。",
-      "en": "Zhipu GLM 5.3 gift-credit edition. Excels at complex reasoning, coding, and bilingual tasks. Billed at model rate (.198 input / .85 output per 1M tokens); gift credits are used first, with any shortfall charged to your recharge balance. 128K context window. Text modality.",
-      "fr": "Modèle avec crédits offerts GLM 5.3 de Zhipu. Tarification à 1,198 $ entrée / 3,85 $ sortie par million de tokens. Les crédits offerts sont débités en priorité. Contexte 128K.",
-      "ru": "Модель с подарочными кредитами Zhipu GLM 5.3. Списание .198 за вход / .85 за выход на 1 млн токенов. Подарочные кредиты списываются первыми. Контекст 128K.",
-      "ja": "Zhipu GLM 5.3 ギフトクレジット版。1Mトークンあたり入力 .198 / 出力 .85。ギフトクレジットが優先して消費されます。128Kコンテキスト対応。",
-      "vi": "Phiên bản tín dụng quà tặng Zhipu GLM 5.3. Tính phí .198 đầu vào / .85 đầu ra mỗi 1 triệu token. Ưu tiên trừ tín dụng quà tặng. Cửa sổ ngữ cảnh 128K."
+      "zhCN": "智谱 GLM 5.3 赠送金模型。按模型费率计费，优先扣减赠送金，不足时使用充值余额，实际价格见分组价格表。支持文本模态。适合对话、推理与编程。",
+      "zhTW": "智谱 GLM 5.3 贈送金模型。按模型费率計費，优先扣减贈送金，不足时使用儲值餘額，实际價格见分组價格表。支援文本模态。適合對話、推理与程式設計。",
+      "en": "Zhipu GLM 5.3 gift-credit edition. billed at the model rate using gift credits first, then recharge balance; see the group price table for current rates. text modality. Ideal for chat, reasoning and coding.",
+      "fr": "Zhipu GLM 5.3 gift-credit edition. billed at the model rate using gift credits first, then recharge balance; see the group price table for current rates. text modality. Idéal pour chat, reasoning and coding.",
+      "ru": "Zhipu GLM 5.3 gift-credit edition. billed at the model rate using gift credits first, then recharge balance; see the group price table for current rates. text modality. Подходит для chat, reasoning and coding.",
+      "ja": "Zhipu GLM 5.3 gift-credit edition. billed at the model rate using gift credits first, then recharge balance; see the group price table for current rates. text modality. chat, reasoning and coding 向け。",
+      "vi": "Zhipu GLM 5.3 gift-credit edition. billed at the model rate using gift credits first, then recharge balance; see the group price table for current rates. text modality. Phù hợp cho chat, reasoning and coding."
     },
     "unit": "token",
     "badge": {
@@ -7527,8 +7563,8 @@
       "ja": "",
       "vi": ""
     },
-    "description_zh": "智谱 GLM 5.3 赠送金模型。调用按对应模型费率计费（输入 .198 / 输出 .4872 每 100 万 tokens），优先扣减赠送金，赠送金不足时扣充值余额。支持 128K 上下文。",
-    "description_en": "Zhipu GLM 5.3 gift-credit edition. Billed at model rate (.198 in / .4872 out per 1M tokens); gift credits used first. 128K context window.",
+    "description_zh": "智谱 GLM 5.3 赠送金模型。按模型费率计费，优先扣减赠送金，不足时使用充值余额，实际价格见分组价格表。支持文本模态。适合对话、推理与编程。",
+    "description_en": "Zhipu GLM 5.3 gift-credit edition. billed at the model rate using gift credits first, then recharge balance; see the group price table for current rates. text modality. Ideal for chat, reasoning and coding.",
     "badge_zh": "按 Token 计费",
     "badge_en": "Token-based",
     "suffix_zh": "",
@@ -7664,15 +7700,15 @@
     "price_key_en": ""
   },
   "deepseek-v4.1-flash-1017:free": {
-    "description": "DeepSeek V4.1 Flash 1017 赠送金模型。基于 CED 架构与 1M 上下文，具备原生多模态视觉理解能力。可用赠送金调用（按对应费率计费，输入 $0.072 / 输出 $0.20 每 100 万 tokens），优先扣减赠送金，赠送金不足时扣充值余额。支持文本与图像模态。",
+    "description": "DeepSeek V4.1 Flash 1017 赠送金模型。按模型费率计费，优先扣减赠送金，不足时使用充值余额，实际价格见分组价格表。支持文本与图像模态。适合对话与视觉理解。",
     "descriptions": {
-      "zhCN": "DeepSeek V4.1 Flash 1017 赠送金模型。基于 CED 架构与 1M 上下文，具备原生多模态视觉理解能力。可用赠送金调用（按对应费率计费，输入 $0.072 / 输出 $0.20 每 100 万 tokens），优先扣减赠送金，赠送金不足时扣充值余额。支持文本与图像模态。",
-      "zhTW": "DeepSeek V4.1 Flash 1017 贈送金模型。基於 CED 架構與 1M 上下文，具備原生多模態視覺理解能力。可用贈送金呼叫（按對應費率計費，輸入 $0.072 / 輸出 $0.20 每 100 萬 tokens），優先扣減贈送金，贈送金不足時扣儲值餘額。支援文本與圖像模態。",
-      "en": "DeepSeek V4.1 Flash 1017 gift-credit edition. Features CED architecture and 1M context with native vision understanding. Billed at model rate ($0.072 input / $0.20 output per 1M tokens); gift credits are used first, with any shortfall charged to recharge balance. Text and image modalities.",
-      "fr": "Édition avec crédits offerts DeepSeek V4.1 Flash 1017. Architecture CED et contexte 1M. Tarification à 0,072 $ entrée / 0,20 $ sortie par million de tokens. Les crédits offerts sont débités en priorité.",
-      "ru": "Модель с подарочными кредитами DeepSeek V4.1 Flash 1017. Архитектура CED и контекст 1M. Списание $0.072 за вход / $0.20 за выход на 1 млн токенов. Подарочные кредиты расходуются первыми.",
-      "ja": "DeepSeek V4.1 Flash 1017 ギフトクレジット版。CED アーキテクチャと 1M コンテキスト。1Mトークンあたり入力 $0.072 / 出力 $0.20。ギフトクレジットが優先して消費されます。",
-      "vi": "Phiên bản tín dụng quà tặng DeepSeek V4.1 Flash 1017. Kiến trúc CED và ngữ cảnh 1M. Tính phí $0.072 đầu vào / $0.20 đầu ra mỗi 1 triệu token. Ưu tiên trừ tín dụng quà tặng."
+      "zhCN": "DeepSeek V4.1 Flash 1017 赠送金模型。按模型费率计费，优先扣减赠送金，不足时使用充值余额，实际价格见分组价格表。支持文本与图像模态。适合对话与视觉理解。",
+      "zhTW": "DeepSeek V4.1 Flash 1017 贈送金模型。按模型费率計費，优先扣减贈送金，不足时使用儲值餘額，实际價格见分组價格表。支援文本与圖像模态。適合對話与視覺理解。",
+      "en": "DeepSeek V4.1 Flash 1017 gift-credit edition. billed at the model rate using gift credits first, then recharge balance; see the group price table for current rates. text and image modality. Ideal for chat and visual understanding.",
+      "fr": "DeepSeek V4.1 Flash 1017 gift-credit edition. billed at the model rate using gift credits first, then recharge balance; see the group price table for current rates. text and image modality. Idéal pour chat and visual understanding.",
+      "ru": "DeepSeek V4.1 Flash 1017 gift-credit edition. billed at the model rate using gift credits first, then recharge balance; see the group price table for current rates. text and image modality. Подходит для chat and visual understanding.",
+      "ja": "DeepSeek V4.1 Flash 1017 gift-credit edition. billed at the model rate using gift credits first, then recharge balance; see the group price table for current rates. text and image modality. chat and visual understanding 向け。",
+      "vi": "DeepSeek V4.1 Flash 1017 gift-credit edition. billed at the model rate using gift credits first, then recharge balance; see the group price table for current rates. text and image modality. Phù hợp cho chat and visual understanding."
     },
     "unit": "token",
     "badge": {
@@ -7702,8 +7738,8 @@
       "ja": "",
       "vi": ""
     },
-    "description_zh": "DeepSeek V4.1 Flash 1017 赠送金模型。调用按对应模型费率计费（输入 $0.072 / 输出 $0.20 每 100 万 tokens），优先扣减赠送金，赠送金不足时扣充值余额。支持 1M 上下文。",
-    "description_en": "DeepSeek V4.1 Flash 1017 gift-credit edition. Billed at model rate ($0.072 in / $0.20 out per 1M tokens); gift credits used first. 1M context window.",
+    "description_zh": "DeepSeek V4.1 Flash 1017 赠送金模型。按模型费率计费，优先扣减赠送金，不足时使用充值余额，实际价格见分组价格表。支持文本与图像模态。适合对话与视觉理解。",
+    "description_en": "DeepSeek V4.1 Flash 1017 gift-credit edition. billed at the model rate using gift credits first, then recharge balance; see the group price table for current rates. text and image modality. Ideal for chat and visual understanding.",
     "badge_zh": "按 Token 计费",
     "badge_en": "Token-based",
     "suffix_zh": "",
@@ -7767,5 +7803,533 @@
     "suffix_en": "",
     "price_key_zh": "",
     "price_key_en": ""
+  },
+  "seedance-2.5-1080p": {
+    "description": "字节 Seedance 2.5 1080p 视频生成模型。以全高清分辨率生成高保真视频内容。支持视频模态。适合高清视频创作、专业内容制作。",
+    "descriptions": {
+      "zhCN": "字节 Seedance 2.5 1080p 视频生成模型。以全高清分辨率生成高保真视频内容。支持视频模态。适合高清视频创作、专业内容制作。",
+      "zhTW": "字节 Seedance 2.5 1080p 影片生成模型。以全高清解析度生成高保真影片內容。支援影片模态。適合高清影片創作、专业內容制作。",
+      "en": "ByteDance's Seedance 2.5 1080p video generation model. full-HD video generation with high fidelity. video modality. Ideal for HD video creation, professional content production.",
+      "fr": "ByteDance's Seedance 2.5 1080p video generation model. full-HD video generation with high fidelity. video modality. Idéal pour HD video creation, professional content production.",
+      "ru": "ByteDance's Seedance 2.5 1080p video generation model. full-HD video generation with high fidelity. video modality. Подходит для HD video creation, professional content production.",
+      "ja": "ByteDance's Seedance 2.5 1080p video generation model. full-HD video generation with high fidelity. video modality. HD video creation, professional content production 向け。",
+      "vi": "ByteDance's Seedance 2.5 1080p video generation model. full-HD video generation with high fidelity. video modality. Phù hợp cho HD video creation, professional content production."
+    },
+    "unit": "second",
+    "badge": {
+      "zhCN": "按秒计费",
+      "zhTW": "按秒計費",
+      "en": "Per Second",
+      "fr": "Par seconde",
+      "ru": "За секунду",
+      "ja": "秒課金",
+      "vi": "Theo giây"
+    },
+    "suffix": {
+      "zhCN": "/秒",
+      "zhTW": "/秒",
+      "en": "/ second",
+      "fr": "/ seconde",
+      "ru": "/ секунду",
+      "ja": "/ 秒",
+      "vi": "/ giây"
+    },
+    "price_key": {
+      "zhCN": "每秒",
+      "zhTW": "每秒",
+      "en": "Per second",
+      "fr": "Par seconde",
+      "ru": "За секунду",
+      "ja": "秒ごと",
+      "vi": "Mỗi giây"
+    },
+    "description_zh": "字节 Seedance 2.5 1080p 视频生成模型。以全高清分辨率生成高保真视频内容。支持视频模态。适合高清视频创作、专业内容制作。",
+    "description_en": "ByteDance's Seedance 2.5 1080p video generation model. full-HD video generation with high fidelity. video modality. Ideal for HD video creation, professional content production.",
+    "badge_zh": "按秒计费",
+    "badge_en": "Per Second",
+    "suffix_zh": "/秒",
+    "suffix_en": "/ second",
+    "price_key_zh": "每秒",
+    "price_key_en": "Per second"
+  },
+  "seedance-2.5-720p": {
+    "description": "字节 Seedance 2.5 720p 视频生成模型。以 720p 分辨率快速生成高质量视频，兼顾成本。支持视频模态。适合高质量短视频、内容营销。",
+    "descriptions": {
+      "zhCN": "字节 Seedance 2.5 720p 视频生成模型。以 720p 分辨率快速生成高质量视频，兼顾成本。支持视频模态。适合高质量短视频、内容营销。",
+      "zhTW": "字节 Seedance 2.5 720p 影片生成模型。以 720p 解析度快速生成高質量影片，兼顾成本。支援影片模态。適合高質量短影片、內容行銷。",
+      "en": "ByteDance's Seedance 2.5 720p video generation model. high-quality 720p video generation with better cost efficiency. video modality. Ideal for high-quality short video, content marketing.",
+      "fr": "ByteDance's Seedance 2.5 720p video generation model. high-quality 720p video generation with better cost efficiency. video modality. Idéal pour high-quality short video, content marketing.",
+      "ru": "ByteDance's Seedance 2.5 720p video generation model. high-quality 720p video generation with better cost efficiency. video modality. Подходит для high-quality short video, content marketing.",
+      "ja": "ByteDance's Seedance 2.5 720p video generation model. high-quality 720p video generation with better cost efficiency. video modality. high-quality short video, content marketing 向け。",
+      "vi": "ByteDance's Seedance 2.5 720p video generation model. high-quality 720p video generation with better cost efficiency. video modality. Phù hợp cho high-quality short video, content marketing."
+    },
+    "unit": "second",
+    "badge": {
+      "zhCN": "按秒计费",
+      "zhTW": "按秒計費",
+      "en": "Per Second",
+      "fr": "Par seconde",
+      "ru": "За секунду",
+      "ja": "秒課金",
+      "vi": "Theo giây"
+    },
+    "suffix": {
+      "zhCN": "/秒",
+      "zhTW": "/秒",
+      "en": "/ second",
+      "fr": "/ seconde",
+      "ru": "/ секунду",
+      "ja": "/ 秒",
+      "vi": "/ giây"
+    },
+    "price_key": {
+      "zhCN": "每秒",
+      "zhTW": "每秒",
+      "en": "Per second",
+      "fr": "Par seconde",
+      "ru": "За секунду",
+      "ja": "秒ごと",
+      "vi": "Mỗi giây"
+    },
+    "description_zh": "字节 Seedance 2.5 720p 视频生成模型。以 720p 分辨率快速生成高质量视频，兼顾成本。支持视频模态。适合高质量短视频、内容营销。",
+    "description_en": "ByteDance's Seedance 2.5 720p video generation model. high-quality 720p video generation with better cost efficiency. video modality. Ideal for high-quality short video, content marketing.",
+    "badge_zh": "按秒计费",
+    "badge_en": "Per Second",
+    "suffix_zh": "/秒",
+    "suffix_en": "/ second",
+    "price_key_zh": "每秒",
+    "price_key_en": "Per second"
+  },
+  "seedance-2.0-1080p": {
+    "description": "字节 Seedance 2.0 1080p 视频生成模型。成熟的 1080p 视频生成能力，画面稳定自然。支持视频模态。适合高清视频创作、动态视觉内容。",
+    "descriptions": {
+      "zhCN": "字节 Seedance 2.0 1080p 视频生成模型。成熟的 1080p 视频生成能力，画面稳定自然。支持视频模态。适合高清视频创作、动态视觉内容。",
+      "zhTW": "字节 Seedance 2.0 1080p 影片生成模型。成熟的 1080p 影片生成能力，画面穩定自然。支援影片模态。適合高清影片創作、動態視覺內容。",
+      "en": "ByteDance's Seedance 2.0 1080p video generation model. mature 1080p video generation with stable, natural visuals. video modality. Ideal for HD video creation, dynamic visual content.",
+      "fr": "ByteDance's Seedance 2.0 1080p video generation model. mature 1080p video generation with stable, natural visuals. video modality. Idéal pour HD video creation, dynamic visual content.",
+      "ru": "ByteDance's Seedance 2.0 1080p video generation model. mature 1080p video generation with stable, natural visuals. video modality. Подходит для HD video creation, dynamic visual content.",
+      "ja": "ByteDance's Seedance 2.0 1080p video generation model. mature 1080p video generation with stable, natural visuals. video modality. HD video creation, dynamic visual content 向け。",
+      "vi": "ByteDance's Seedance 2.0 1080p video generation model. mature 1080p video generation with stable, natural visuals. video modality. Phù hợp cho HD video creation, dynamic visual content."
+    },
+    "unit": "second",
+    "badge": {
+      "zhCN": "按秒计费",
+      "zhTW": "按秒計費",
+      "en": "Per Second",
+      "fr": "Par seconde",
+      "ru": "За секунду",
+      "ja": "秒課金",
+      "vi": "Theo giây"
+    },
+    "suffix": {
+      "zhCN": "/秒",
+      "zhTW": "/秒",
+      "en": "/ second",
+      "fr": "/ seconde",
+      "ru": "/ секунду",
+      "ja": "/ 秒",
+      "vi": "/ giây"
+    },
+    "price_key": {
+      "zhCN": "每秒",
+      "zhTW": "每秒",
+      "en": "Per second",
+      "fr": "Par seconde",
+      "ru": "За секунду",
+      "ja": "秒ごと",
+      "vi": "Mỗi giây"
+    },
+    "description_zh": "字节 Seedance 2.0 1080p 视频生成模型。成熟的 1080p 视频生成能力，画面稳定自然。支持视频模态。适合高清视频创作、动态视觉内容。",
+    "description_en": "ByteDance's Seedance 2.0 1080p video generation model. mature 1080p video generation with stable, natural visuals. video modality. Ideal for HD video creation, dynamic visual content.",
+    "badge_zh": "按秒计费",
+    "badge_en": "Per Second",
+    "suffix_zh": "/秒",
+    "suffix_en": "/ second",
+    "price_key_zh": "每秒",
+    "price_key_en": "Per second"
+  },
+  "seedance-2.0-1080p-fast": {
+    "description": "字节 Seedance 2.0 1080p 快速版视频生成模型。在保持高清画质的同时显著提升生成速度。支持视频模态。适合时效性强的视频创作、批量素材生成。",
+    "descriptions": {
+      "zhCN": "字节 Seedance 2.0 1080p 快速版视频生成模型。在保持高清画质的同时显著提升生成速度。支持视频模态。适合时效性强的视频创作、批量素材生成。",
+      "zhTW": "字节 Seedance 2.0 1080p 快速版影片生成模型。在保持高清畫質的同时显著提升生成速度。支援影片模态。適合時效性强的影片創作、批量素材生成。",
+      "en": "ByteDance's fast Seedance 2.0 1080p video generation model. faster generation while keeping 1080p quality. video modality. Ideal for time-sensitive video creation, batch asset generation.",
+      "fr": "ByteDance's fast Seedance 2.0 1080p video generation model. faster generation while keeping 1080p quality. video modality. Idéal pour time-sensitive video creation, batch asset generation.",
+      "ru": "ByteDance's fast Seedance 2.0 1080p video generation model. faster generation while keeping 1080p quality. video modality. Подходит для time-sensitive video creation, batch asset generation.",
+      "ja": "ByteDance's fast Seedance 2.0 1080p video generation model. faster generation while keeping 1080p quality. video modality. time-sensitive video creation, batch asset generation 向け。",
+      "vi": "ByteDance's fast Seedance 2.0 1080p video generation model. faster generation while keeping 1080p quality. video modality. Phù hợp cho time-sensitive video creation, batch asset generation."
+    },
+    "unit": "second",
+    "badge": {
+      "zhCN": "按秒计费",
+      "zhTW": "按秒計費",
+      "en": "Per Second",
+      "fr": "Par seconde",
+      "ru": "За секунду",
+      "ja": "秒課金",
+      "vi": "Theo giây"
+    },
+    "suffix": {
+      "zhCN": "/秒",
+      "zhTW": "/秒",
+      "en": "/ second",
+      "fr": "/ seconde",
+      "ru": "/ секунду",
+      "ja": "/ 秒",
+      "vi": "/ giây"
+    },
+    "price_key": {
+      "zhCN": "每秒",
+      "zhTW": "每秒",
+      "en": "Per second",
+      "fr": "Par seconde",
+      "ru": "За секунду",
+      "ja": "秒ごと",
+      "vi": "Mỗi giây"
+    },
+    "description_zh": "字节 Seedance 2.0 1080p 快速版视频生成模型。在保持高清画质的同时显著提升生成速度。支持视频模态。适合时效性强的视频创作、批量素材生成。",
+    "description_en": "ByteDance's fast Seedance 2.0 1080p video generation model. faster generation while keeping 1080p quality. video modality. Ideal for time-sensitive video creation, batch asset generation.",
+    "badge_zh": "按秒计费",
+    "badge_en": "Per Second",
+    "suffix_zh": "/秒",
+    "suffix_en": "/ second",
+    "price_key_zh": "每秒",
+    "price_key_en": "Per second"
+  },
+  "seedance-2.0-1080p-mini": {
+    "description": "字节 Seedance 2.0 1080p 轻量版视频生成模型。以更低成本提供 1080p 视频生成能力。支持视频模态。适合预算敏感型视频内容、批量创作。",
+    "descriptions": {
+      "zhCN": "字节 Seedance 2.0 1080p 轻量版视频生成模型。以更低成本提供 1080p 视频生成能力。支持视频模态。适合预算敏感型视频内容、批量创作。",
+      "zhTW": "字节 Seedance 2.0 1080p 輕量版影片生成模型。以更低成本提供 1080p 影片生成能力。支援影片模态。適合預算敏感型影片內容、批量創作。",
+      "en": "ByteDance's lightweight Seedance 2.0 1080p video generation model. 1080p video generation at a lower cost. video modality. Ideal for budget-sensitive video content, batch creation.",
+      "fr": "ByteDance's lightweight Seedance 2.0 1080p video generation model. 1080p video generation at a lower cost. video modality. Idéal pour budget-sensitive video content, batch creation.",
+      "ru": "ByteDance's lightweight Seedance 2.0 1080p video generation model. 1080p video generation at a lower cost. video modality. Подходит для budget-sensitive video content, batch creation.",
+      "ja": "ByteDance's lightweight Seedance 2.0 1080p video generation model. 1080p video generation at a lower cost. video modality. budget-sensitive video content, batch creation 向け。",
+      "vi": "ByteDance's lightweight Seedance 2.0 1080p video generation model. 1080p video generation at a lower cost. video modality. Phù hợp cho budget-sensitive video content, batch creation."
+    },
+    "unit": "second",
+    "badge": {
+      "zhCN": "按秒计费",
+      "zhTW": "按秒計費",
+      "en": "Per Second",
+      "fr": "Par seconde",
+      "ru": "За секунду",
+      "ja": "秒課金",
+      "vi": "Theo giây"
+    },
+    "suffix": {
+      "zhCN": "/秒",
+      "zhTW": "/秒",
+      "en": "/ second",
+      "fr": "/ seconde",
+      "ru": "/ секунду",
+      "ja": "/ 秒",
+      "vi": "/ giây"
+    },
+    "price_key": {
+      "zhCN": "每秒",
+      "zhTW": "每秒",
+      "en": "Per second",
+      "fr": "Par seconde",
+      "ru": "За секунду",
+      "ja": "秒ごと",
+      "vi": "Mỗi giây"
+    },
+    "description_zh": "字节 Seedance 2.0 1080p 轻量版视频生成模型。以更低成本提供 1080p 视频生成能力。支持视频模态。适合预算敏感型视频内容、批量创作。",
+    "description_en": "ByteDance's lightweight Seedance 2.0 1080p video generation model. 1080p video generation at a lower cost. video modality. Ideal for budget-sensitive video content, batch creation.",
+    "badge_zh": "按秒计费",
+    "badge_en": "Per Second",
+    "suffix_zh": "/秒",
+    "suffix_en": "/ second",
+    "price_key_zh": "每秒",
+    "price_key_en": "Per second"
+  },
+  "seedance-2.0-720p": {
+    "description": "字节 Seedance 2.0 720p 视频生成模型。成熟的 720p 视频生成，画质与成本平衡。支持视频模态。适合短视频创作、广告素材。",
+    "descriptions": {
+      "zhCN": "字节 Seedance 2.0 720p 视频生成模型。成熟的 720p 视频生成，画质与成本平衡。支持视频模态。适合短视频创作、广告素材。",
+      "zhTW": "字节 Seedance 2.0 720p 影片生成模型。成熟的 720p 影片生成，畫質与成本平衡。支援影片模态。適合短影片創作、廣告素材。",
+      "en": "ByteDance's Seedance 2.0 720p video generation model. mature 720p video generation balancing quality and cost. video modality. Ideal for short video creation, advertising assets.",
+      "fr": "ByteDance's Seedance 2.0 720p video generation model. mature 720p video generation balancing quality and cost. video modality. Idéal pour short video creation, advertising assets.",
+      "ru": "ByteDance's Seedance 2.0 720p video generation model. mature 720p video generation balancing quality and cost. video modality. Подходит для short video creation, advertising assets.",
+      "ja": "ByteDance's Seedance 2.0 720p video generation model. mature 720p video generation balancing quality and cost. video modality. short video creation, advertising assets 向け。",
+      "vi": "ByteDance's Seedance 2.0 720p video generation model. mature 720p video generation balancing quality and cost. video modality. Phù hợp cho short video creation, advertising assets."
+    },
+    "unit": "second",
+    "badge": {
+      "zhCN": "按秒计费",
+      "zhTW": "按秒計費",
+      "en": "Per Second",
+      "fr": "Par seconde",
+      "ru": "За секунду",
+      "ja": "秒課金",
+      "vi": "Theo giây"
+    },
+    "suffix": {
+      "zhCN": "/秒",
+      "zhTW": "/秒",
+      "en": "/ second",
+      "fr": "/ seconde",
+      "ru": "/ секунду",
+      "ja": "/ 秒",
+      "vi": "/ giây"
+    },
+    "price_key": {
+      "zhCN": "每秒",
+      "zhTW": "每秒",
+      "en": "Per second",
+      "fr": "Par seconde",
+      "ru": "За секунду",
+      "ja": "秒ごと",
+      "vi": "Mỗi giây"
+    },
+    "description_zh": "字节 Seedance 2.0 720p 视频生成模型。成熟的 720p 视频生成，画质与成本平衡。支持视频模态。适合短视频创作、广告素材。",
+    "description_en": "ByteDance's Seedance 2.0 720p video generation model. mature 720p video generation balancing quality and cost. video modality. Ideal for short video creation, advertising assets.",
+    "badge_zh": "按秒计费",
+    "badge_en": "Per Second",
+    "suffix_zh": "/秒",
+    "suffix_en": "/ second",
+    "price_key_zh": "每秒",
+    "price_key_en": "Per second"
+  },
+  "seedance-2.0-720p-fast": {
+    "description": "字节 Seedance 2.0 720p 快速版视频生成模型。快速生成 720p 视频，适合高迭代节奏。支持视频模态。适合快速原型、社交短视频。",
+    "descriptions": {
+      "zhCN": "字节 Seedance 2.0 720p 快速版视频生成模型。快速生成 720p 视频，适合高迭代节奏。支持视频模态。适合快速原型、社交短视频。",
+      "zhTW": "字节 Seedance 2.0 720p 快速版影片生成模型。快速生成 720p 影片，適合高迭代节奏。支援影片模态。適合快速原型、社交短影片。",
+      "en": "ByteDance's fast Seedance 2.0 720p video generation model. fast 720p generation for rapid iteration workflows. video modality. Ideal for rapid prototyping, social short video.",
+      "fr": "ByteDance's fast Seedance 2.0 720p video generation model. fast 720p generation for rapid iteration workflows. video modality. Idéal pour rapid prototyping, social short video.",
+      "ru": "ByteDance's fast Seedance 2.0 720p video generation model. fast 720p generation for rapid iteration workflows. video modality. Подходит для rapid prototyping, social short video.",
+      "ja": "ByteDance's fast Seedance 2.0 720p video generation model. fast 720p generation for rapid iteration workflows. video modality. rapid prototyping, social short video 向け。",
+      "vi": "ByteDance's fast Seedance 2.0 720p video generation model. fast 720p generation for rapid iteration workflows. video modality. Phù hợp cho rapid prototyping, social short video."
+    },
+    "unit": "second",
+    "badge": {
+      "zhCN": "按秒计费",
+      "zhTW": "按秒計費",
+      "en": "Per Second",
+      "fr": "Par seconde",
+      "ru": "За секунду",
+      "ja": "秒課金",
+      "vi": "Theo giây"
+    },
+    "suffix": {
+      "zhCN": "/秒",
+      "zhTW": "/秒",
+      "en": "/ second",
+      "fr": "/ seconde",
+      "ru": "/ секунду",
+      "ja": "/ 秒",
+      "vi": "/ giây"
+    },
+    "price_key": {
+      "zhCN": "每秒",
+      "zhTW": "每秒",
+      "en": "Per second",
+      "fr": "Par seconde",
+      "ru": "За секунду",
+      "ja": "秒ごと",
+      "vi": "Mỗi giây"
+    },
+    "description_zh": "字节 Seedance 2.0 720p 快速版视频生成模型。快速生成 720p 视频，适合高迭代节奏。支持视频模态。适合快速原型、社交短视频。",
+    "description_en": "ByteDance's fast Seedance 2.0 720p video generation model. fast 720p generation for rapid iteration workflows. video modality. Ideal for rapid prototyping, social short video.",
+    "badge_zh": "按秒计费",
+    "badge_en": "Per Second",
+    "suffix_zh": "/秒",
+    "suffix_en": "/ second",
+    "price_key_zh": "每秒",
+    "price_key_en": "Per second"
+  },
+  "seedance-2.0-720p-mini": {
+    "description": "字节 Seedance 2.0 720p 轻量版视频生成模型。以最低成本获得 720p 视频生成能力。支持视频模态。适合低成本批量视频、内容测试。",
+    "descriptions": {
+      "zhCN": "字节 Seedance 2.0 720p 轻量版视频生成模型。以最低成本获得 720p 视频生成能力。支持视频模态。适合低成本批量视频、内容测试。",
+      "zhTW": "字节 Seedance 2.0 720p 輕量版影片生成模型。以最低成本获得 720p 影片生成能力。支援影片模态。適合低成本批量影片、內容測試。",
+      "en": "ByteDance's lightweight Seedance 2.0 720p video generation model. 720p video generation at the lowest cost. video modality. Ideal for low-cost batch video, content testing.",
+      "fr": "ByteDance's lightweight Seedance 2.0 720p video generation model. 720p video generation at the lowest cost. video modality. Idéal pour low-cost batch video, content testing.",
+      "ru": "ByteDance's lightweight Seedance 2.0 720p video generation model. 720p video generation at the lowest cost. video modality. Подходит для low-cost batch video, content testing.",
+      "ja": "ByteDance's lightweight Seedance 2.0 720p video generation model. 720p video generation at the lowest cost. video modality. low-cost batch video, content testing 向け。",
+      "vi": "ByteDance's lightweight Seedance 2.0 720p video generation model. 720p video generation at the lowest cost. video modality. Phù hợp cho low-cost batch video, content testing."
+    },
+    "unit": "second",
+    "badge": {
+      "zhCN": "按秒计费",
+      "zhTW": "按秒計費",
+      "en": "Per Second",
+      "fr": "Par seconde",
+      "ru": "За секунду",
+      "ja": "秒課金",
+      "vi": "Theo giây"
+    },
+    "suffix": {
+      "zhCN": "/秒",
+      "zhTW": "/秒",
+      "en": "/ second",
+      "fr": "/ seconde",
+      "ru": "/ секунду",
+      "ja": "/ 秒",
+      "vi": "/ giây"
+    },
+    "price_key": {
+      "zhCN": "每秒",
+      "zhTW": "每秒",
+      "en": "Per second",
+      "fr": "Par seconde",
+      "ru": "За секунду",
+      "ja": "秒ごと",
+      "vi": "Mỗi giây"
+    },
+    "description_zh": "字节 Seedance 2.0 720p 轻量版视频生成模型。以最低成本获得 720p 视频生成能力。支持视频模态。适合低成本批量视频、内容测试。",
+    "description_en": "ByteDance's lightweight Seedance 2.0 720p video generation model. 720p video generation at the lowest cost. video modality. Ideal for low-cost batch video, content testing.",
+    "badge_zh": "按秒计费",
+    "badge_en": "Per Second",
+    "suffix_zh": "/秒",
+    "suffix_en": "/ second",
+    "price_key_zh": "每秒",
+    "price_key_en": "Per second"
+  },
+  "SenseVoiceSmall:free": {
+    "description": "阿里 SenseVoice Small 语音识别模型（赠送金版）。按模型费率计费，优先扣减赠送金，不足时使用充值余额，实际价格见分组价格表。支持音频模态。适合实时语音转写、语音指令、内容审核辅助。",
+    "descriptions": {
+      "zhCN": "阿里 SenseVoice Small 语音识别模型（赠送金版）。按模型费率计费，优先扣减赠送金，不足时使用充值余额，实际价格见分组价格表。支持音频模态。适合实时语音转写、语音指令、内容审核辅助。",
+      "zhTW": "阿里 SenseVoice Small 語音辨識模型（贈送金版）。按模型费率計費，优先扣减贈送金，不足时使用儲值餘額，实际價格见分组價格表。支援音訊模态。適合即時語音转写、語音指令、內容審核輔助。",
+      "en": "Alibaba's SenseVoice Small speech recognition model (gift-credit edition). billed at the model rate using gift credits first, then recharge balance; see the group price table for current rates. audio modality. Ideal for real-time transcription, voice commands, content moderation assistance.",
+      "fr": "Alibaba's SenseVoice Small speech recognition model (gift-credit edition). billed at the model rate using gift credits first, then recharge balance; see the group price table for current rates. audio modality. Idéal pour real-time transcription, voice commands, content moderation assistance.",
+      "ru": "Alibaba's SenseVoice Small speech recognition model (gift-credit edition). billed at the model rate using gift credits first, then recharge balance; see the group price table for current rates. audio modality. Подходит для real-time transcription, voice commands, content moderation assistance.",
+      "ja": "Alibaba's SenseVoice Small speech recognition model (gift-credit edition). billed at the model rate using gift credits first, then recharge balance; see the group price table for current rates. audio modality. real-time transcription, voice commands, content moderation assistance 向け。",
+      "vi": "Alibaba's SenseVoice Small speech recognition model (gift-credit edition). billed at the model rate using gift credits first, then recharge balance; see the group price table for current rates. audio modality. Phù hợp cho real-time transcription, voice commands, content moderation assistance."
+    },
+    "unit": "request",
+    "badge": {
+      "zhCN": "按次计费",
+      "zhTW": "按次計費",
+      "en": "Per Request",
+      "fr": "Par requête",
+      "ru": "За запрос",
+      "ja": "リクエスト課金",
+      "vi": "Theo lần gọi"
+    },
+    "suffix": {
+      "zhCN": "/次",
+      "zhTW": "/次",
+      "en": "/ request",
+      "fr": "/ requête",
+      "ru": "/ запрос",
+      "ja": "/ 回",
+      "vi": "/ lần"
+    },
+    "price_key": {
+      "zhCN": "每次请求",
+      "zhTW": "每次請求",
+      "en": "Per request",
+      "fr": "Par requête",
+      "ru": "За запрос",
+      "ja": "リクエストごと",
+      "vi": "Mỗi lần gọi"
+    },
+    "description_zh": "阿里 SenseVoice Small 语音识别模型（赠送金版）。按模型费率计费，优先扣减赠送金，不足时使用充值余额，实际价格见分组价格表。支持音频模态。适合实时语音转写、语音指令、内容审核辅助。",
+    "description_en": "Alibaba's SenseVoice Small speech recognition model (gift-credit edition). billed at the model rate using gift credits first, then recharge balance; see the group price table for current rates. audio modality. Ideal for real-time transcription, voice commands, content moderation assistance.",
+    "badge_zh": "按次计费",
+    "badge_en": "Per Request",
+    "suffix_zh": "/次",
+    "suffix_en": "/ request",
+    "price_key_zh": "每次请求",
+    "price_key_en": "Per request"
+  },
+  "GLM-ASR:free": {
+    "description": "智谱 GLM ASR 语音识别模型（赠送金版）。按模型费率计费，优先扣减赠送金，不足时使用充值余额，实际价格见分组价格表。支持音频模态。适合会议记录、客服质检、字幕生成。",
+    "descriptions": {
+      "zhCN": "智谱 GLM ASR 语音识别模型（赠送金版）。按模型费率计费，优先扣减赠送金，不足时使用充值余额，实际价格见分组价格表。支持音频模态。适合会议记录、客服质检、字幕生成。",
+      "zhTW": "智谱 GLM ASR 語音辨識模型（贈送金版）。按模型费率計費，优先扣减贈送金，不足时使用儲值餘額，实际價格见分组價格表。支援音訊模态。適合会议记录、客服質檢、字幕生成。",
+      "en": "Zhipu's GLM ASR speech recognition model (gift-credit edition). billed at the model rate using gift credits first, then recharge balance; see the group price table for current rates. audio modality. Ideal for meeting notes, support quality analysis, subtitle generation.",
+      "fr": "Zhipu's GLM ASR speech recognition model (gift-credit edition). billed at the model rate using gift credits first, then recharge balance; see the group price table for current rates. audio modality. Idéal pour meeting notes, support quality analysis, subtitle generation.",
+      "ru": "Zhipu's GLM ASR speech recognition model (gift-credit edition). billed at the model rate using gift credits first, then recharge balance; see the group price table for current rates. audio modality. Подходит для meeting notes, support quality analysis, subtitle generation.",
+      "ja": "Zhipu's GLM ASR speech recognition model (gift-credit edition). billed at the model rate using gift credits first, then recharge balance; see the group price table for current rates. audio modality. meeting notes, support quality analysis, subtitle generation 向け。",
+      "vi": "Zhipu's GLM ASR speech recognition model (gift-credit edition). billed at the model rate using gift credits first, then recharge balance; see the group price table for current rates. audio modality. Phù hợp cho meeting notes, support quality analysis, subtitle generation."
+    },
+    "unit": "request",
+    "badge": {
+      "zhCN": "按次计费",
+      "zhTW": "按次計費",
+      "en": "Per Request",
+      "fr": "Par requête",
+      "ru": "За запрос",
+      "ja": "リクエスト課金",
+      "vi": "Theo lần gọi"
+    },
+    "suffix": {
+      "zhCN": "/次",
+      "zhTW": "/次",
+      "en": "/ request",
+      "fr": "/ requête",
+      "ru": "/ запрос",
+      "ja": "/ 回",
+      "vi": "/ lần"
+    },
+    "price_key": {
+      "zhCN": "每次请求",
+      "zhTW": "每次請求",
+      "en": "Per request",
+      "fr": "Par requête",
+      "ru": "За запрос",
+      "ja": "リクエストごと",
+      "vi": "Mỗi lần gọi"
+    },
+    "description_zh": "智谱 GLM ASR 语音识别模型（赠送金版）。按模型费率计费，优先扣减赠送金，不足时使用充值余额，实际价格见分组价格表。支持音频模态。适合会议记录、客服质检、字幕生成。",
+    "description_en": "Zhipu's GLM ASR speech recognition model (gift-credit edition). billed at the model rate using gift credits first, then recharge balance; see the group price table for current rates. audio modality. Ideal for meeting notes, support quality analysis, subtitle generation.",
+    "badge_zh": "按次计费",
+    "badge_en": "Per Request",
+    "suffix_zh": "/次",
+    "suffix_en": "/ request",
+    "price_key_zh": "每次请求",
+    "price_key_en": "Per request"
+  },
+  "Spark-TTS-0.5B:free": {
+    "description": "Spark TTS 0.5B 轻量语音合成模型（赠送金版）。按模型费率计费，优先扣减赠送金，不足时使用充值余额，实际价格见分组价格表。支持音频模态。适合语音提示、轻量配音、原型验证。",
+    "descriptions": {
+      "zhCN": "Spark TTS 0.5B 轻量语音合成模型（赠送金版）。按模型费率计费，优先扣减赠送金，不足时使用充值余额，实际价格见分组价格表。支持音频模态。适合语音提示、轻量配音、原型验证。",
+      "zhTW": "Spark TTS 0.5B 輕量語音合成模型（贈送金版）。按模型费率計費，优先扣减贈送金，不足时使用儲值餘額，实际價格见分组價格表。支援音訊模态。適合語音提示、輕量配音、原型验证。",
+      "en": "Spark TTS 0.5B lightweight speech synthesis model (gift-credit edition). billed at the model rate using gift credits first, then recharge balance; see the group price table for current rates. audio modality. Ideal for voice prompts, lightweight dubbing, prototyping.",
+      "fr": "Spark TTS 0.5B lightweight speech synthesis model (gift-credit edition). billed at the model rate using gift credits first, then recharge balance; see the group price table for current rates. audio modality. Idéal pour voice prompts, lightweight dubbing, prototyping.",
+      "ru": "Spark TTS 0.5B lightweight speech synthesis model (gift-credit edition). billed at the model rate using gift credits first, then recharge balance; see the group price table for current rates. audio modality. Подходит для voice prompts, lightweight dubbing, prototyping.",
+      "ja": "Spark TTS 0.5B lightweight speech synthesis model (gift-credit edition). billed at the model rate using gift credits first, then recharge balance; see the group price table for current rates. audio modality. voice prompts, lightweight dubbing, prototyping 向け。",
+      "vi": "Spark TTS 0.5B lightweight speech synthesis model (gift-credit edition). billed at the model rate using gift credits first, then recharge balance; see the group price table for current rates. audio modality. Phù hợp cho voice prompts, lightweight dubbing, prototyping."
+    },
+    "unit": "request",
+    "badge": {
+      "zhCN": "按次计费",
+      "zhTW": "按次計費",
+      "en": "Per Request",
+      "fr": "Par requête",
+      "ru": "За запрос",
+      "ja": "リクエスト課金",
+      "vi": "Theo lần gọi"
+    },
+    "suffix": {
+      "zhCN": "/次",
+      "zhTW": "/次",
+      "en": "/ request",
+      "fr": "/ requête",
+      "ru": "/ запрос",
+      "ja": "/ 回",
+      "vi": "/ lần"
+    },
+    "price_key": {
+      "zhCN": "每次请求",
+      "zhTW": "每次請求",
+      "en": "Per request",
+      "fr": "Par requête",
+      "ru": "За запрос",
+      "ja": "リクエストごと",
+      "vi": "Mỗi lần gọi"
+    },
+    "description_zh": "Spark TTS 0.5B 轻量语音合成模型（赠送金版）。按模型费率计费，优先扣减赠送金，不足时使用充值余额，实际价格见分组价格表。支持音频模态。适合语音提示、轻量配音、原型验证。",
+    "description_en": "Spark TTS 0.5B lightweight speech synthesis model (gift-credit edition). billed at the model rate using gift credits first, then recharge balance; see the group price table for current rates. audio modality. Ideal for voice prompts, lightweight dubbing, prototyping.",
+    "badge_zh": "按次计费",
+    "badge_en": "Per Request",
+    "suffix_zh": "/次",
+    "suffix_en": "/ request",
+    "price_key_zh": "每次请求",
+    "price_key_en": "Per request"
   }
 }

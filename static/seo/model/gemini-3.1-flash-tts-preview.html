@@ -89,7 +89,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
 <p>Endpoint: <code>POST /v1beta/models/gemini-3.1-flash-tts-preview:generateContent</code></p>
 <p>Model: <code>model=gemini-3.1-flash-tts-preview</code></p>
 <pre><code>curl https://www.keyoapi.xyz/v1beta/models/gemini-3.1-flash-tts-preview:generateContent \
-  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Authorization: Bearer $KEYO_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{"contents":[{"parts":[{"text":"Hello from Gemini 3.1 Flash TTS."}]}],"generationConfig":{"responseModalities":["AUDIO"],"speechConfig":{"voiceConfig":{"prebuiltVoiceConfig":{"voiceName":"Kore"}}}}}'</code></pre>
 <p>Auth uses the same Bearer API key as chat. Full notes: <a href="/brand/keyo-docs.html">Keyo docs</a>.</p>

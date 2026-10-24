@@ -89,22 +89,26 @@ ul{margin:0 0 14px;padding-left:1.2em}
 <h2>Overview</h2>
 <p>Nano Banana Pro is the top tier of Google's Nano Banana image family, served on KeyoAPI through the OpenAI-compatible /v1/images/generations endpoint. If you already call chat, Whisper, or OCR with a KeyoAPI key, image generation is one more model string — no Google Cloud project, no second credential.</p>
 <p>Pricing is per generated image: $0.0274 on pro, against <a href="/model/nano-banana-2">the nano-banana-2 model page</a> at $0.0205 (base lane) and <a href="/model/nano-banana-2.1">the nano-banana-2.1 model page</a> at $0.0123 (newer release). Pro earns its premium when fidelity dominates — higher resolution output and finer editing control for commercial visuals, detailed image work and art direction. All three tiers run on the same key, so escalating a prompt from <a href="/model/nano-banana-2.1">the nano-banana-2.1 model page</a> to pro is a model-string change.</p>
-<p>Call it with POST /v1/images/generations, model=nano-banana-pro, and a prompt. size is optional (1024x1024 by default). Responses come back in the OpenAI images shape synchronously — no task polling — so existing clients and SDKs work after pointing base_url at https://www.keyoapi.xyz/v1. Confirm live rates on <a href="/pricing-list">the full pricing list</a> before volume work.</p>
+<p>Call it with POST /v1/images/generations, model=nano-banana-pro, and a prompt. Use aspectRatio=&quot;1:1&quot; and imageSize=&quot;1K&quot; to request a square 1K image. Responses come back in the OpenAI images shape with a result or an HTTP 202 task receipt — so existing clients and SDKs work after pointing base_url at https://www.keyoapi.xyz/v1. Confirm live rates on <a href="/pricing-list">the full pricing list</a> before volume work.</p>
+<p>Use aspectRatio (for example 1:1) and imageSize (1K, 2K or 4K); do not send GPT-style pixel sizes. Keep the returned task_id: HTTP 202 means the same task is still running. Query GET /v1/images/tasks/{task_id} with the same API key until HTTP 200, status=succeeded and data[].url is nonempty. A new generation needs a new idempotency key. Recover the same operation with its original key and identical parameters; do not change the key just because the result is slow. Temporary GET errors should retry the same saved task, not create another image. See <a href="/brand/keyo-api-ref.html#section-3">the API endpoint reference</a> for the complete image contract.</p>
+<p>Keep the task receipt and request parameters with your project before waiting for an image. A temporary query failure should resume the same task ID. A new prompt is a new operation and needs a new idempotency key; recovery of the same operation retains its existing key and parameters. Download a successful image while its result URL remains available, and record terminal errors instead of starting a replacement automatically.</p>
 
 
 <h2>Quick start</h2>
 <div class="card">
 <p>Base URL: <code>https://www.keyoapi.xyz/v1</code></p>
 <p>Endpoint: <code>POST /v1/images/generations</code></p>
-<p>Model: <code>model=nano-banana-pro · prompt required · size optional (e.g. 1024x1024)</code></p>
+<p>Model: <code>model=nano-banana-pro · prompt required · aspectRatio=1:1 · imageSize=1K</code></p>
 <pre><code>curl https://www.keyoapi.xyz/v1/images/generations \
-  -H &quot;Authorization: Bearer YOUR_API_KEY&quot; \
+  -H &quot;Authorization: Bearer $KEYO_API_KEY&quot; \
+  -H &quot;Idempotency-Key: replace-with-a-unique-key-for-this-image&quot; \
   -H &quot;Content-Type: application/json&quot; \
-  -d '{&quot;model&quot;:&quot;nano-banana-pro&quot;,&quot;prompt&quot;:&quot;a mug of coffee on a desk, studio light&quot;,&quot;size&quot;:&quot;1024x1024&quot;}'</code></pre>
+  -d '{&quot;model&quot;:&quot;nano-banana-pro&quot;,&quot;prompt&quot;:&quot;a mug of coffee on a desk, studio light&quot;,&quot;aspectRatio&quot;:&quot;1:1&quot;,&quot;imageSize&quot;:&quot;1K&quot;,&quot;replyType&quot;:&quot;async&quot;}'
+# Save task_id; query GET /v1/images/tasks/{task_id} with the same key.</code></pre>
 <p>Auth uses the same Bearer API key as chat. Full notes: <a href="/brand/keyo-docs.html">Keyo docs</a>.</p>
 </div>
 <h2>FAQ</h2>
-<div class="faq"><details><summary>How do I call the Nano Banana Pro API?</summary><p>Use your KeyoAPI Bearer key and POST to /v1/images/generations with model=nano-banana-pro and a prompt. The endpoint is OpenAI-compatible, so existing image clients work with a base URL change.</p></details>
+<div class="faq"><details><summary>How do I call the Nano Banana Pro API?</summary><p>POST /v1/images/generations with the exact model ID, prompt, aspectRatio, imageSize and replyType:&quot;async&quot;. Read HTTP 202 and task_id, then poll GET /v1/images/tasks/{task_id} until HTTP 200, status:&quot;succeeded&quot; and non-empty data[].url. SDK custom fields may require extra_body. See the image contract in the integration handbook before submitting.</p></details>
 <details><summary>Nano Banana Pro vs 2 vs 2.1 — which one?</summary><p>nano-banana-pro is the top tier at $0.0274 per image with higher resolution and finer editing control; nano-banana-2 is the base lane at $0.0205; nano-banana-2.1 is the newer release at $0.0123. All three run on the same key — see <a href="/model/nano-banana-2.1">the nano-banana-2.1 model page</a>, <a href="/model/nano-banana-2">the nano-banana-2 model page</a> and <a href="/pricing-list">the full pricing list</a>.</p></details></div>
 <h2>Related models</h2>
 <div class="grid"><a href="/model/nano-banana-2.1">Nano Banana 2.1 API</a>

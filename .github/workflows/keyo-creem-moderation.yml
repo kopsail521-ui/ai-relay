@@ -23,8 +23,12 @@ permissions:
   contents: read
 
 jobs:
+  verify:
+    uses: ./.github/workflows/keyo-release-offline.yml
+
   deploy:
     name: Redeploy proxy on VPS
+    needs: verify
     if: vars.KEYO_VPS_HOST != ''
     runs-on: ubuntu-latest
     # Serialize VPS access across the console/static/blog/proxy deploy jobs:

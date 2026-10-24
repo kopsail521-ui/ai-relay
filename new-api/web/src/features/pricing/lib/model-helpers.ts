@@ -18,6 +18,7 @@ For commercial licensing, please contact support@quantumnous.com
 */
 import { EXCLUDED_GROUPS, FILTER_ALL, QUOTA_TYPE_VALUES } from '../constants'
 import type { PricingModel } from '../types'
+import { getModelContract } from './model-api-contracts'
 
 // ----------------------------------------------------------------------------
 // Model Helper Utilities
@@ -106,4 +107,13 @@ export function replaceModelInPath(path: string, modelName: string): string {
  */
 export function isTokenBasedModel(model: PricingModel): boolean {
   return model.quota_type === QUOTA_TYPE_VALUES.TOKEN
+}
+
+/** Show explicit non-token billing units and specification-based prices. */
+export function hasDedicatedPriceUnit(model: PricingModel): boolean {
+  return Boolean(
+    getModelContract(model.model_name)?.kind === 'unknown' ||
+    model.has_price_tiers ||
+    (model.billing_unit && model.billing_unit !== 'token')
+  )
 }

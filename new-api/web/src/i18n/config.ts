@@ -16,34 +16,48 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 For commercial licensing, please contact support@quantumnous.com
 */
-import i18n from 'i18next'
+import i18n, { type BackendModule } from 'i18next'
 import LanguageDetector from 'i18next-browser-languagedetector'
 import { initReactI18next } from 'react-i18next'
 
 import { toIntlLocale, convertDetectedLanguage } from './languages'
 import en from './locales/en.json'
-import fr from './locales/fr.json'
-import ja from './locales/ja.json'
-import ru from './locales/ru.json'
-import vi from './locales/vi.json'
-import zhTW from './locales/zh-TW.json'
-import zhCN from './locales/zh.json'
 
-export const resources = {
-  en,
-  zhCN,
-  fr,
-  ru,
-  ja,
-  vi,
-  zhTW,
-} as const
+// Keep the readable fallback in the entry bundle. Download other dictionaries
+// only when detected/selected, rather than sending all seven on every visit.
+export const resources = { en } as const
+const localeLoaders = {
+  zhCN: () => import('./locales/zh.json'),
+  fr: () => import('./locales/fr.json'),
+  ru: () => import('./locales/ru.json'),
+  ja: () => import('./locales/ja.json'),
+  vi: () => import('./locales/vi.json'),
+  zhTW: () => import('./locales/zh-TW.json'),
+}
+
+export const lazyLocaleBackend: BackendModule = {
+  type: 'backend',
+  init: () => undefined,
+  async read(language, namespace) {
+    if (namespace !== 'translation') {
+      throw new Error('Unsupported interface translation namespace')
+    }
+    const load = localeLoaders[language as keyof typeof localeLoaders]
+    if (!load) {
+      throw new Error('Unsupported interface language')
+    }
+    const locale = await load()
+    return locale.default.translation
+  },
+}
 
 i18n
   .use(LanguageDetector)
   .use(initReactI18next)
+  .use(lazyLocaleBackend)
   .init({
     resources,
+    partialBundledLanguages: true,
     fallbackLng: 'en',
     supportedLngs: ['en', 'zhCN', 'fr', 'ru', 'ja', 'vi', 'zhTW'],
     load: 'currentOnly',
@@ -63,7 +77,8 @@ i18n
 
 // Keep <html lang> in sync with the interface language for a11y / SEO.
 function syncDocumentLang(lng: string | undefined) {
-  document.documentElement.lang = toIntlLocale(lng ?? i18n.language) ?? 'en'
+  document.documentElement.lang =
+    toIntlLocale(i18n.resolvedLanguage ?? lng ?? i18n.language) ?? 'en'
 }
 
 i18n.on('languageChanged', syncDocumentLang)

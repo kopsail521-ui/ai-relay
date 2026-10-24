@@ -618,6 +618,7 @@
         <a href="#access" data-i18n="tocAccess"></a>
         <a href="#chat" data-i18n="tocChat"></a>
         <a href="#image" data-i18n="tocImage"></a>
+        <a href="#video" data-i18n="tocVideo"></a>
         <a href="#capabilities" data-i18n="tocCaps"></a>
         <a href="#clients" data-i18n="tocClients"></a>
         <a href="#support" data-i18n="tocSupport"></a>
@@ -652,7 +653,7 @@
           <div class="cred">
             <div class="label">API Key</div>
             <div class="value note" data-i18n="apiKeyNote"></div>
-            <a class="btn-copy" href="https://www.keyoapi.xyz" target="_blank" rel="noopener noreferrer" style="text-decoration:none;display:inline-flex;align-items:center;" data-i18n="goCreate"></a>
+            <a class="btn-copy" href="/keys" target="_top" style="text-decoration:none;display:inline-flex;align-items:center;" data-i18n="goCreate"></a>
           </div>
           <div class="cred">
             <div class="label" data-i18n="authLabel"></div>
@@ -690,6 +691,10 @@
               </tr>
             </thead>
             <tbody>
+<tr><td class="model"><button type="button" class="model-btn" data-copy="gpt-6-astra">gpt-6-astra</button></td><td class="note-cell" data-i18n="nGpt6Astra"></td></tr>
+<tr><td class="model"><button type="button" class="model-btn" data-copy="gpt-6.1-sol">gpt-6.1-sol</button></td><td class="note-cell" data-i18n="nGpt61Sol"></td></tr>
+<tr><td class="model"><button type="button" class="model-btn" data-copy="gpt-6-sol">gpt-6-sol</button></td><td class="note-cell" data-i18n="nGpt6Sol"></td></tr>
+<tr><td class="model"><button type="button" class="model-btn" data-copy="gpt-6-luna">gpt-6-luna</button></td><td class="note-cell" data-i18n="nGpt6Luna"></td></tr>
 <tr><td class="model"><button type="button" class="model-btn" data-copy="gpt-5.6-luna">gpt-5.6-luna</button></td><td class="note-cell" data-i18n="nLuna"></td></tr>
 <tr><td class="model"><button type="button" class="model-btn" data-copy="gpt-5.6-terra">gpt-5.6-terra</button></td><td class="note-cell" data-i18n="nTerra"></td></tr>
 <tr><td class="model"><button type="button" class="model-btn" data-copy="gpt-5.6-sol">gpt-5.6-sol</button></td><td class="note-cell" data-i18n="nSol"></td></tr>
@@ -705,12 +710,27 @@
 <tr><td class="model"><button type="button" class="model-btn" data-copy="kimi-k3">kimi-k3</button></td><td class="note-cell" data-i18n="nKimi"></td></tr>
 <tr><td class="model"><button type="button" class="model-btn" data-copy="grok-4.7">grok-4.7</button></td><td class="note-cell" data-i18n="nGrok"></td></tr>
 <tr><td class="model"><button type="button" class="model-btn" data-copy="minimax-m3">minimax-m3</button></td><td class="note-cell" data-i18n="nMinimax"></td></tr>
+<tr><td class="model"><button type="button" class="model-btn" data-copy="glm-5.3">glm-5.3</button></td><td class="note-cell" data-i18n="nGlm53"></td></tr>
+<tr><td class="model"><button type="button" class="model-btn" data-copy="glm-5.3-flash">glm-5.3-flash</button></td><td class="note-cell" data-i18n="nGlm53Flash"></td></tr>
 <tr><td class="model"><button type="button" class="model-btn" data-copy="glm-5.2">glm-5.2</button></td><td class="note-cell" data-i18n="nGlm"></td></tr>
             </tbody>
           </table>
         </div>
         <p class="hint" data-i18n-html="allModelsHint"></p>
         <p class="hint" data-i18n-html="chatHint"></p>
+        <div class="endpoint">
+          <span class="method">POST</span>
+          <span class="path">/v1/messages</span>
+          <button type="button" class="btn-copy" data-copy="https://www.keyoapi.xyz/v1/messages" data-i18n="copyUrl"></button>
+        </div>
+        <div class="code-block">
+          <div class="code-bar">
+            <span class="lang">cURL · Anthropic / Claude Code</span>
+            <button type="button" class="btn-copy" data-copy-target="curl-messages" data-i18n="copy"></button>
+          </div>
+          <pre id="curl-messages"></pre>
+        </div>
+        <p class="hint" data-i18n-html="messagesHint"></p>
       </section>
 
       <section id="image">
@@ -732,71 +752,152 @@
           <pre id="curl-image"></pre>
         </div>
 
+        <p class="hint" data-i18n-html="imageSizeHint"></p>
         <div class="table-wrap">
           <table>
             <thead>
               <tr>
                 <th data-i18n="thModel"></th>
+                <th>size / aspectRatio + imageSize</th>
+                <th>quality</th>
+                <th>background</th>
+                <th>mask</th>
               </tr>
             </thead>
             <tbody>
-<tr><td class="model"><button type="button" class="model-btn" data-copy="gpt-image-2.5">gpt-image-2.5</button></td></tr>
-<tr><td class="model"><button type="button" class="model-btn" data-copy="gpt-image-2.5-flare">gpt-image-2.5-flare</button></td></tr>
-<tr><td class="model"><button type="button" class="model-btn" data-copy="gpt-image-2.5-sunburst">gpt-image-2.5-sunburst</button></td></tr>
-<tr><td class="model"><button type="button" class="model-btn" data-copy="gpt-image-2">gpt-image-2</button></td></tr>
-<tr><td class="model"><button type="button" class="model-btn" data-copy="gpt-image-2-vip">gpt-image-2-vip</button></td></tr>
-<tr><td class="model"><button type="button" class="model-btn" data-copy="nano-banana-2.1">nano-banana-2.1</button></td></tr>
-<tr><td class="model"><button type="button" class="model-btn" data-copy="nano-banana-2">nano-banana-2</button></td></tr>
-<tr><td class="model"><button type="button" class="model-btn" data-copy="nano-banana-pro">nano-banana-pro</button></td></tr>
+<tr><td class="model"><button type="button" class="model-btn" data-copy="gpt-image-2.5">gpt-image-2.5</button></td><td data-i18n="imageBaseSize"></td><td>auto</td><td>—</td><td>HTTP(S) URL</td></tr>
+<tr><td class="model"><button type="button" class="model-btn" data-copy="gpt-image-2.5-flare">gpt-image-2.5-flare</button></td><td data-i18n="imageListedSize"></td><td>low / medium / high</td><td>transparent</td><td>HTTP(S) URL</td></tr>
+<tr><td class="model"><button type="button" class="model-btn" data-copy="gpt-image-2.5-sunburst">gpt-image-2.5-sunburst</button></td><td data-i18n="imageListedSize"></td><td>low / medium / high / xhigh / max</td><td>transparent</td><td>HTTP(S) URL</td></tr>
+<tr><td class="model"><button type="button" class="model-btn" data-copy="gpt-image-2">gpt-image-2</button></td><td data-i18n="imageBaseSize"></td><td>auto</td><td>—</td><td>HTTP(S) URL</td></tr>
+<tr><td class="model"><button type="button" class="model-btn" data-copy="gpt-image-2-vip">gpt-image-2-vip</button></td><td data-i18n="imageVipSize"></td><td>medium</td><td>transparent</td><td>HTTP(S) URL</td></tr>
+<tr><td class="model"><button type="button" class="model-btn" data-copy="nano-banana-2.1">nano-banana-2.1</button></td><td>aspectRatio + imageSize: 1K / 2K / 4K</td><td>—</td><td>—</td><td>—</td></tr>
+<tr><td class="model"><button type="button" class="model-btn" data-copy="nano-banana-2">nano-banana-2</button></td><td>aspectRatio + imageSize: 1K / 2K / 4K</td><td>—</td><td>—</td><td>—</td></tr>
+<tr><td class="model"><button type="button" class="model-btn" data-copy="nano-banana-pro">nano-banana-pro</button></td><td>aspectRatio + imageSize: 1K / 2K / 4K</td><td>—</td><td>—</td><td>—</td></tr>
             </tbody>
           </table>
         </div>
+        <p class="hint" data-i18n-html="imageRefsHint"></p>
+        <div class="endpoint">
+          <span class="method">POST</span>
+          <span class="path">/v1/images/edits</span>
+          <button type="button" class="btn-copy" data-copy="https://www.keyoapi.xyz/v1/images/edits" data-i18n="copyUrl"></button>
+        </div>
+        <div class="code-block">
+          <div class="code-bar"><span class="lang">cURL · multipart</span><button type="button" class="btn-copy" data-copy-target="curl-image-edit" data-i18n="copy"></button></div>
+          <pre id="curl-image-edit"></pre>
+        </div>
+        <p class="hint" data-i18n-html="imageTasksHint"></p>
+        <div class="endpoint"><span class="method">GET</span><span class="path">/v1/images/tasks/{task_id}</span></div>
+        <div class="code-block">
+          <div class="code-bar"><span class="lang">cURL · task</span><button type="button" class="btn-copy" data-copy-target="curl-image-task" data-i18n="copy"></button></div>
+          <pre id="curl-image-task"></pre>
+        </div>
+        <p class="hint" data-i18n-html="imageReplayHint"></p>
+        <p class="hint" data-i18n-html="imageBillingHint"></p>
+      </section>
+
+            <section id="video">
+        <div class="sec-head">
+          <span class="num">04</span>
+          <h2 data-i18n="videoTitle"></h2>
+        </div>
+        <div class="endpoint">
+          <span class="method">POST</span>
+          <span class="path">/v1/videos/generations</span>
+          <button type="button" class="btn-copy" data-copy="https://www.keyoapi.xyz/v1/videos/generations" data-i18n="copyUrl"></button>
+        </div>
+
+        <div class="code-block">
+          <div class="code-bar">
+            <span class="lang">cURL · submit</span>
+            <button type="button" class="btn-copy" data-copy-target="curl-video" data-i18n="copy"></button>
+          </div>
+          <pre id="curl-video"></pre>
+        </div>
+
+        <p class="hint" data-i18n-html="videoSizeHint"></p>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th data-i18n="thModel"></th>
+                <th>resolution</th>
+                <th>duration</th>
+                <th data-i18n="thNote"></th>
+              </tr>
+            </thead>
+            <tbody>
+<tr><td class="model"><button type="button" class="model-btn" data-copy="seedance-2.5">seedance-2.5</button></td><td>480p / 720p (default) / 1080p</td><td>4–30s (default 5s)</td><td data-i18n="nSeedance25"></td></tr>
+<tr><td class="model"><button type="button" class="model-btn" data-copy="seedance-2.0">seedance-2.0</button></td><td>480p / 720p (default) / 1080p</td><td>4–15s (default 5s)</td><td data-i18n="nSeedance20"></td></tr>
+<tr><td class="model"><button type="button" class="model-btn" data-copy="seedance-2.0-fast">seedance-2.0-fast</button></td><td>480p / 720p (default) / 1080p</td><td>4–15s (default 5s)</td><td data-i18n="nSeedanceFast"></td></tr>
+<tr><td class="model"><button type="button" class="model-btn" data-copy="seedance-2.0-mini">seedance-2.0-mini</button></td><td>480p / 720p (default) / 1080p</td><td>4–15s (default 5s)</td><td data-i18n="nSeedanceMini"></td></tr>
+<tr><td class="model"><button type="button" class="model-btn" data-copy="MiniMax-H3">MiniMax-H3</button></td><td>480p / 768p / 1080p</td><td>5s / 6s</td><td data-i18n="nMinimaxH3"></td></tr>
+<tr><td class="model"><button type="button" class="model-btn" data-copy="flux-3-video">flux-3-video</button></td><td>draft / hd / fhd</td><td>5s</td><td data-i18n="nFluxVideo"></td></tr>
+<tr><td class="model"><button type="button" class="model-btn" data-copy="wan3.0-video">wan3.0-video</button></td><td>480P / 720P / 1080P</td><td>5s</td><td data-i18n="nWanVideo"></td></tr>
+<tr><td class="model"><button type="button" class="model-btn" data-copy="agnes-video-2.5">agnes-video-2.5</button></td><td>720p / 1080p / 2k</td><td>1–12s (default 5s)</td><td data-i18n="nAgnesVideo"></td></tr>
+<tr><td class="model"><button type="button" class="model-btn" data-copy="video-enhance-pro">video-enhance-pro</button></td><td>720p / 1080p (default) / 2k</td><td>Input duration</td><td data-i18n="nVideoEnhance"></td></tr>
+<tr><td class="model"><button type="button" class="model-btn" data-copy="subtitle-erase-pro">subtitle-erase-pro</button></td><td>Native resolution</td><td>Input duration</td><td data-i18n="nSubtitleErase"></td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="endpoint"><span class="method">POST</span><span class="path">/v1/async/videos/enhance</span><button type="button" class="btn-copy" data-copy="https://www.keyoapi.xyz/v1/async/videos/enhance" data-i18n="copyUrl"></button></div>
+        <div class="endpoint"><span class="method">POST</span><span class="path">/v1/async/videos/subtitle-erase</span><button type="button" class="btn-copy" data-copy="https://www.keyoapi.xyz/v1/async/videos/subtitle-erase" data-i18n="copyUrl"></button></div>
+        <p class="hint" data-i18n-html="videoTaskHint"></p>
+        <div class="endpoint"><span class="method">GET</span><span class="path">/v1/tasks/{id}</span></div>
+        <div class="code-block">
+          <div class="code-bar"><span class="lang">cURL · task</span><button type="button" class="btn-copy" data-copy-target="curl-video-task" data-i18n="copy"></button></div>
+          <pre id="curl-video-task"></pre>
+        </div>
+        <div class="endpoint"><span class="method">GET</span><span class="path">/v1/task/{id}</span></div>
+        <div class="code-block"><div class="code-bar"><span class="lang">cURL · video tools / async TTS / avatars</span><button type="button" class="btn-copy" data-copy-target="curl-video-tool-task" data-i18n="copy"></button></div><pre id="curl-video-tool-task"></pre></div>
+        <p class="hint" data-i18n-html="videoBillingHint"></p>
       </section>
 
       <section id="capabilities">
         <div class="sec-head">
-          <span class="num">04</span>
+          <span class="num">05</span>
           <h2 data-i18n="capsTitle"></h2>
         </div>
         <p class="sec-desc" data-i18n="capsDesc"></p>
         <div class="cap-grid">
-          <a class="cap-card" href="/brand/keyo-api-ref.html" target="_blank" rel="noopener noreferrer">
+          <a class="cap-card" href="/brand/keyo-api-ref.html#section-5" target="_blank" rel="noopener noreferrer">
             <span class="cap-name" data-i18n="capVideo"></span>
             <span class="cap-sub" data-i18n="capVideoSub"></span>
           </a>
-          <a class="cap-card" href="/brand/keyo-api-ref.html" target="_blank" rel="noopener noreferrer">
+          <a class="cap-card" href="/brand/keyo-api-ref.html#section-6" target="_blank" rel="noopener noreferrer">
             <span class="cap-name" data-i18n="capAsr"></span>
             <span class="cap-sub" data-i18n="capAsrSub"></span>
           </a>
-          <a class="cap-card" href="/brand/keyo-api-ref.html" target="_blank" rel="noopener noreferrer">
+          <a class="cap-card" href="/brand/keyo-api-ref.html#section-7" target="_blank" rel="noopener noreferrer">
             <span class="cap-name" data-i18n="capTts"></span>
             <span class="cap-sub" data-i18n="capTtsSub"></span>
           </a>
-          <a class="cap-card" href="/brand/keyo-api-ref.html" target="_blank" rel="noopener noreferrer">
+          <a class="cap-card" href="/brand/keyo-api-ref.html#section-9" target="_blank" rel="noopener noreferrer">
             <span class="cap-name" data-i18n="capOcr"></span>
             <span class="cap-sub" data-i18n="capOcrSub"></span>
           </a>
-          <a class="cap-card" href="/brand/keyo-api-ref.html" target="_blank" rel="noopener noreferrer">
+          <a class="cap-card" href="/brand/keyo-api-ref.html#section-11" target="_blank" rel="noopener noreferrer">
             <span class="cap-name" data-i18n="capVision"></span>
             <span class="cap-sub" data-i18n="capVisionSub"></span>
           </a>
-          <a class="cap-card" href="/brand/keyo-api-ref.html" target="_blank" rel="noopener noreferrer">
+          <a class="cap-card" href="/brand/keyo-api-ref.html#section-12" target="_blank" rel="noopener noreferrer">
             <span class="cap-name" data-i18n="capAvatar"></span>
             <span class="cap-sub" data-i18n="capAvatarSub"></span>
           </a>
-          <a class="cap-card" href="/brand/keyo-api-ref.html" target="_blank" rel="noopener noreferrer">
+          <a class="cap-card" href="/brand/keyo-api-ref.html#section-1-11b" target="_blank" rel="noopener noreferrer">
             <span class="cap-name" data-i18n="capDecision"></span>
             <span class="cap-sub" data-i18n="capDecisionSub"></span>
           </a>
-          <a class="cap-card" href="/brand/keyo-api-ref.html" target="_blank" rel="noopener noreferrer">
+          <a class="cap-card" href="/brand/keyo-api-ref.html#section-13" target="_blank" rel="noopener noreferrer">
             <span class="cap-name" data-i18n="capModeration"></span>
             <span class="cap-sub" data-i18n="capModerationSub"></span>
           </a>
-          <a class="cap-card" href="/brand/keyo-api-ref.html" target="_blank" rel="noopener noreferrer">
+          <a class="cap-card" href="/brand/keyo-api-ref.html#section-1-13" target="_blank" rel="noopener noreferrer">
             <span class="cap-name" data-i18n="capEmbed"></span>
             <span class="cap-sub" data-i18n="capEmbedSub"></span>
           </a>
-          <a class="cap-card" href="/brand/keyo-api-ref.html" target="_blank" rel="noopener noreferrer">
+          <a class="cap-card" href="/brand/keyo-api-ref.html#section-1-14" target="_blank" rel="noopener noreferrer">
             <span class="cap-name" data-i18n="capMusic"></span>
             <span class="cap-sub" data-i18n="capMusicSub"></span>
           </a>
@@ -805,7 +906,7 @@
 
       <section id="clients">
         <div class="sec-head">
-          <span class="num">05</span>
+          <span class="num">06</span>
           <h2 data-i18n="clientsTitle"></h2>
         </div>
         <p class="sec-desc" data-i18n="clientsDesc"></p>
@@ -846,6 +947,7 @@
           </div>
         </div>
 
+        <div class="client-card"><h3 data-i18n="clientSetupTitle"></h3><p data-i18n-html="clientSetupBody"></p></div>
         <div class="code-block">
           <div class="code-bar">
             <span class="lang">Python · OpenAI SDK</span>
@@ -857,7 +959,7 @@
 
       <section id="support">
         <div class="sec-head">
-          <span class="num">06</span>
+          <span class="num">07</span>
           <h2 data-i18n="supportTitle"></h2>
         </div>
         <div class="footer-note" data-i18n-html="supportBody"></div>
@@ -873,12 +975,14 @@
 <script>
 const I18N = {
   "en": {
+    "messagesHint": "Anthropic Messages format (Claude Code / Anthropic SDK). Set <code>ANTHROPIC_BASE_URL=https://www.keyoapi.xyz</code>. Accepts both <code>x-api-key: YOUR_KEY</code> and <code>Authorization: Bearer YOUR_KEY</code> with header <code>anthropic-version: 2023-06-01</code>.",
     "title": "KeyoAPI Docs",
     "docTitle": "KeyoAPI Integration Docs",
     "heroSub": "One Base URL + one API Key. OpenAI-compatible — works with Cursor, ChatBox, and official SDKs.",
     "tocAccess": "Connection",
     "tocChat": "Chat",
     "tocImage": "Images",
+    "tocVideo": "Video",
     "tocClients": "Clients",
     "tocSupport": "Billing & support",
     "accessTitle": "Connection",
@@ -910,6 +1014,26 @@ const I18N = {
     "nGlm": "Zhipu GLM",
     "chatHint": "Click a model name to copy. Billed by token usage (console is source of truth). Top up when quota runs out.",
     "imageTitle": "Images",
+    "videoTitle": "Video generation",
+    "nGpt6Astra": "GPT-6 flagship reasoning & agent tier",
+    "nGpt61Sol": "GPT-6.1 balanced general coding",
+    "nGpt6Sol": "GPT-6 premium reasoning",
+    "nGpt6Luna": "GPT-6 budget high-speed",
+    "nGlm53": "GLM-5.3 flagship Chinese/English LLM",
+    "nGlm53Flash": "GLM-5.3 Flash ultra-fast budget",
+    "nVideoEnhance": "Video enhancement & super-resolution (POST /v1/async/videos/enhance)",
+    "nSubtitleErase": "Hard-subtitle & watermark removal (POST /v1/async/videos/subtitle-erase)",
+    "nSeedance25": "ByteDance 2.5 flagship · high fidelity up to 30s",
+    "nSeedance20": "ByteDance 2.0 standard full-tier",
+    "nSeedanceFast": "ByteDance 2.0 Fast accelerated generation",
+    "nSeedanceMini": "ByteDance 2.0 Mini budget tier",
+    "nMinimaxH3": "MiniMax Hailuo video generation",
+    "nFluxVideo": "Black Forest Labs FLUX.3 video",
+    "nWanVideo": "Alibaba Tongyi Wanxiang 3.0 video",
+    "nAgnesVideo": "Agnes 2.5 video generation",
+    "videoSizeHint": "Use each model’s own resolution and duration rules in the handbook.",
+    "videoTaskHint": "Video generation: <code>GET /v1/tasks/{id}</code>. Video enhancement, subtitle removal, async TTS and avatars: <code>GET /v1/task/{id}</code>. Save the returned id and use the same API key. Poll every 3–5 seconds while <code>processing</code>; success is <code>status: \"completed\"</code> plus a result URL. Stop on <code>failed</code> or <code>cancelled</code>. Images use <code>/v1/images/tasks/{task_id}</code> and their own success rule.",
+    "videoBillingHint": "Rates depend on the model and output settings. Reference-video tasks may also bill reference duration. Check <a href=\"/pricing\">current model pricing</a> and the matching handbook section before submitting.",
     "clientsTitle": "Clients",
     "clientsDesc": "Fill these in common tools. Model names must match the table exactly.",
     "clientsTools": "ChatBox / Cursor etc.",
@@ -920,7 +1044,7 @@ const I18N = {
     "listModels": "List models",
     "copyCurl": "Copy curl",
     "supportTitle": "Billing & support",
-    "supportBody": "<strong>Console</strong>: <a href=\"https://www.keyoapi.xyz\" target=\"_blank\" rel=\"noopener noreferrer\">https://www.keyoapi.xyz</a> — check usage; keep tokens private.<br /><strong>Top-up</strong>: pay as agreed, then an admin adds quota (online payments may follow).<br /><strong>Common errors</strong>: wrong model name, invalid key, insufficient balance.",
+    "supportBody": "<strong>Top up</strong>: sign in → <a href=\"/wallet\" target=\"_top\">Wallet</a> → choose an available payment method. Confirm the amount and credited balance shown before paying. Check the payment record if credit is not reflected; contact support with the order ID. View usage in the console and keep API keys private.",
     "footA": "KeyoAPI · One endpoint, many models",
     "footB": "OpenAI-compatible · usage-based billing",
     "copied": "Copied",
@@ -933,7 +1057,7 @@ const I18N = {
     "allModelsHint": "Above are starter picks. All 100+ models with live per-token pricing: <a href=\"https://www.keyoapi.xyz/pricing\" target=\"_blank\" rel=\"noopener noreferrer\">Model Square</a>.",
     "tocCaps": "All capabilities",
     "capsTitle": "All capabilities",
-    "capsDesc": "One API key covers every capability below. Each card opens the matching handbook section with request formats and models.",
+    "capsDesc": "Open the matching handbook section for documented request formats, model support and limits.",
     "capVideo": "Video generation",
     "capVideoSub": "Text/image to video, dubbing, subtitle erase",
     "capAsr": "Speech recognition",
@@ -953,18 +1077,22 @@ const I18N = {
     "capEmbed": "Embeddings",
     "capEmbedSub": "Vectors for retrieval",
     "capMusic": "Music generation",
-    "capMusicSub": "Lyrics to full songs",
+    "capMusicSub": "Check integration contract availability",
     "manualTitle": "Full AI handbook (copy to any AI)",
-    "manualSub": "Every endpoint, field and limit in one page — paste it to an AI assistant and it calls correctly.",
-    "manualCta": "Open handbook →"
+    "manualSub": "Paths, fields and polling rules for documented integrations. Confirm the contract for catalog models not documented here before submitting.",
+    "manualCta": "Open handbook →",
+    "clientSetupTitle": "ZCode / Cursor",
+    "clientSetupBody": "In ZCode or Cursor, add a custom OpenAI-compatible provider: <strong>Base URL</strong> <code>https://www.keyoapi.xyz/v1</code>; <strong>API format</strong> <code>Chat Completions (/chat/completions)</code>; paste your KeyoAPI key and the complete model ID copied from <a href=\"/pricing\" target=\"_top\">the catalog</a>. Keep prefixes and <code>:free</code> suffixes. Do not append another <code>/v1</code> or the full endpoint to a Base URL field.<br><code>:free</code> uses gift-credit billing; it does not promise a zero rate. Check the model rate and wallet, including paid-balance fallback. On insufficient balance, resolve the billing error instead of repeating requests. A successful connection test is only a probe: test actual text output separately, then the streaming and tool features you need. Compatibility can vary by model and client; it has not been verified for every combination."
   },
   "zhCN": {
+    "messagesHint": "Anthropic Messages 原生格式（适用于 Claude Code / Anthropic SDK）。设置 <code>ANTHROPIC_BASE_URL=https://www.keyoapi.xyz</code>。支持 <code>x-api-key: YOUR_KEY</code> 与 <code>Authorization: Bearer YOUR_KEY</code>，需携带 <code>anthropic-version: 2023-06-01</code> 请求头。",
     "title": "KeyoAPI 接入文档",
     "docTitle": "KeyoAPI 接入文档",
     "heroSub": "一个 Base URL + 一把 API Key，兼容 OpenAI 协议。可直接用于 Cursor、ChatBox 与官方 SDK。",
     "tocAccess": "接入信息",
     "tocChat": "文本对话",
     "tocImage": "图片生成",
+    "tocVideo": "视频生成",
     "tocClients": "客户端接入",
     "tocSupport": "充值与支持",
     "accessTitle": "接入信息",
@@ -972,7 +1100,7 @@ const I18N = {
     "apiKeyNote": "登录控制台 →「令牌」创建，或由客服发放的 sk-...",
     "authLabel": "鉴权头",
     "authValue": "Authorization: Bearer sk-你的密钥",
-    "goCreate": "去创建",
+    "goCreate": "创建 API Key",
     "copy": "复制",
     "copyUrl": "复制完整 URL",
     "chatTitle": "文本对话",
@@ -996,6 +1124,26 @@ const I18N = {
     "nGlm": "智谱",
     "chatHint": "点击模型名即可复制。计费按 token 用量，以控制台实时扣费为准；额度用完需充值。",
     "imageTitle": "图片生成",
+    "videoTitle": "视频生成",
+    "nGpt6Astra": "GPT-6 旗舰推理与智能体主力",
+    "nGpt61Sol": "GPT-6.1 均衡编程与日常主力",
+    "nGpt6Sol": "GPT-6 高档推理",
+    "nGpt6Luna": "GPT-6 便宜高速档",
+    "nGlm53": "智谱 GLM-5.3 旗舰通用模型",
+    "nGlm53Flash": "智谱 GLM-5.3 Flash 极速低成本",
+    "nVideoEnhance": "视频画质增强与超分（POST /v1/async/videos/enhance）",
+    "nSubtitleErase": "视频硬字幕与去水印（POST /v1/async/videos/subtitle-erase）",
+    "nSeedance25": "字节 2.5 旗舰 · 新一代高保真长时长视频",
+    "nSeedance20": "字节 2.0 标准满血版",
+    "nSeedanceFast": "字节 2.0 Fast 极速版",
+    "nSeedanceMini": "字节 2.0 Mini 精简经济版",
+    "nMinimaxH3": "MiniMax 海螺视频大模型",
+    "nFluxVideo": "Black Forest Labs 视频大模型",
+    "nWanVideo": "阿里通义万相 3.0 视频生成",
+    "nAgnesVideo": "Agnes 2.5 高清视频生成",
+    "videoSizeHint": "分辨率与时长按手册中对应模型的规则填写。",
+    "videoTaskHint": "视频生成查询 <code>GET /v1/tasks/{id}</code>；视频增强、擦字幕、异步 TTS 和数字人查询 <code>GET /v1/task/{id}</code>。保存回执 ID，并使用同一把 API Key；<code>processing</code> 时每 3–5 秒查一次，<code>status: \"completed\"</code> 且有结果 URL 才是成功；<code>failed</code> / <code>cancelled</code> 时停止。图片使用 <code>/v1/images/tasks/{task_id}</code>，按图片规则判断成功。",
+    "videoBillingHint": "费率取决于模型、输出规格等条件；有参考视频的任务可能同时计算参考时长。提交前核对 <a href=\"/pricing\">当前模型价格</a> 和手册对应章节。",
     "clientsTitle": "客户端接入",
     "clientsDesc": "在常见工具里这样填；模型名必须与上表完全一致。",
     "clientsTools": "ChatBox / Cursor 等",
@@ -1006,7 +1154,7 @@ const I18N = {
     "listModels": "查可用模型",
     "copyCurl": "复制 curl",
     "supportTitle": "充值与支持",
-    "supportBody": "<strong>控制台</strong>：<a href=\"https://www.keyoapi.xyz\" target=\"_blank\" rel=\"noopener noreferrer\">https://www.keyoapi.xyz</a> · 可查看用量，令牌请自行保管。<br /><strong>充值</strong>：按约定付款后由管理员加额度（或后续开通在线支付）。<br /><strong>常见报错</strong>：模型名写错、Key 无效、余额不足。",
+    "supportBody": "<strong>充值</strong>：登录 → <a href=\"/wallet\" target=\"_top\">钱包</a> → 选择当前可用的付款方式，付款前核对金额与到账额度。未到账先查支付记录，联系支持时提供订单号。用量在控制台查看，请妥善保管 API Key。",
     "footA": "KeyoAPI · 一个地址，多模型",
     "footB": "OpenAI 兼容 · 按量计费",
     "copied": "已复制",
@@ -1019,7 +1167,7 @@ const I18N = {
     "allModelsHint": "以上为推荐起步模型。全部 100+ 模型与实时价格见 <a href=\"https://www.keyoapi.xyz/pricing\" target=\"_blank\" rel=\"noopener noreferrer\">模型广场</a>。",
     "tocCaps": "全部能力",
     "capsTitle": "全部能力",
-    "capsDesc": "同一把 API Key 即可调用以下全部能力。每张卡片跳到完整手册对应章节，含请求格式与模型清单。",
+    "capsDesc": "按能力查看已文档化的路径、字段和限制；每张卡片跳到对应章节。",
     "capVideo": "视频生成",
     "capVideoSub": "文/图生视频、配音、字幕擦除",
     "capAsr": "语音识别",
@@ -1039,12 +1187,15 @@ const I18N = {
     "capEmbed": "向量（Embeddings）",
     "capEmbedSub": "检索用向量化",
     "capMusic": "音乐生成",
-    "capMusicSub": "歌词生成完整歌曲",
+    "capMusicSub": "查看接入合同可用性",
     "manualTitle": "完整调用手册（复制给 AI 用）",
-    "manualSub": "全部端点、字段与限制集中一页 — 整页复制给任意 AI 助手即可正确调用。",
-    "manualCta": "打开手册 →"
+    "manualSub": "已文档化接口的路径、字段与轮询规则。目录型号未写明接入合同时，请先确认合同，不要猜测字段。",
+    "manualCta": "打开手册 →",
+    "clientSetupTitle": "ZCode / Cursor",
+    "clientSetupBody": "在 ZCode 或 Cursor 中添加自定义 OpenAI 兼容供应商：<strong>Base URL</strong> 填 <code>https://www.keyoapi.xyz/v1</code>；<strong>API 格式</strong> 选 <code>Chat Completions (/chat/completions)</code>；填入你的 KeyoAPI Key，并从<a href=\"/pricing\" target=\"_top\">模型目录</a>复制完整模型 ID，保留前缀及 <code>:free</code> 后缀。Base URL 不要再重复加 <code>/v1</code>，也不要填完整的 <code>/chat/completions</code> 地址。<br><code>:free</code> 是赠送金计费入口，不等于零费率；先核对该型号费率与钱包，注意赠送金不足可能扣充值余额。余额不足先解决账务错误，不要反复重试。绿色“连接成功”仅说明探针通过：还需实际确认文本输出，再检查所需的流式响应和工具调用。不同模型与客户端版本的兼容性可能不同，本站未验证每一种组合。"
   },
   "zhTW": {
+    "messagesHint": "Anthropic Messages 原生格式（適用於 Claude Code / Anthropic SDK）。設定 <code>ANTHROPIC_BASE_URL=https://www.keyoapi.xyz</code>。支援 <code>x-api-key: YOUR_KEY</code> 與 <code>Authorization: Bearer YOUR_KEY</code>，需攜帶 <code>anthropic-version: 2023-06-01</code> 標頭。",
     "title": "KeyoAPI 接入文件",
     "docTitle": "KeyoAPI 接入文件",
     "heroSub": "一個 Base URL + 一把 API Key，相容 OpenAI 協定。可直接用於 Cursor、ChatBox 與官方 SDK。",
@@ -1092,7 +1243,7 @@ const I18N = {
     "listModels": "查可用模型",
     "copyCurl": "複製 curl",
     "supportTitle": "儲值與支援",
-    "supportBody": "<strong>控制台</strong>：<a href=\"https://www.keyoapi.xyz\" target=\"_blank\" rel=\"noopener noreferrer\">https://www.keyoapi.xyz</a> · 可查看用量，令牌請自行保管。<br /><strong>儲值</strong>：依約定付款後由管理員加額度（或後續開通線上支付）。<br /><strong>常見錯誤</strong>：模型名寫錯、Key 無效、餘額不足。",
+    "supportBody": "<strong>儲值</strong>：登入 → <a href=\"/wallet\" target=\"_top\">錢包</a> → 選擇目前可用付款方式，付款前核對金額與入帳額度。未入帳先查付款紀錄，聯絡支援時提供訂單號。請妥善保管 API Key。",
     "footA": "KeyoAPI · 一個位址，多模型",
     "footB": "OpenAI 相容 · 按量計費",
     "copied": "已複製",
@@ -1105,7 +1256,7 @@ const I18N = {
     "allModelsHint": "以上為推薦起步模型。全部 100+ 模型與即時價格見 <a href=\"https://www.keyoapi.xyz/pricing\" target=\"_blank\" rel=\"noopener noreferrer\">模型廣場</a>。",
     "tocCaps": "全部能力",
     "capsTitle": "全部能力",
-    "capsDesc": "同一把 API Key 即可呼叫以下全部能力。每張卡片連到完整手冊對應章節，含請求格式與模型清單。",
+    "capsDesc": "依能力查看已文件化的路徑、欄位與限制；每張卡片連到對應章節。",
     "capVideo": "影片生成",
     "capVideoSub": "文/圖生影片、配音、字幕擦除",
     "capAsr": "語音辨識",
@@ -1125,12 +1276,36 @@ const I18N = {
     "capEmbed": "向量（Embeddings）",
     "capEmbedSub": "檢索用向量化",
     "capMusic": "音樂生成",
-    "capMusicSub": "歌詞生成完整歌曲",
+    "capMusicSub": "查看接入契約可用性",
     "manualTitle": "完整呼叫手冊（複製給 AI 用）",
-    "manualSub": "全部端點、欄位與限制集中一頁 — 整頁複製給任意 AI 助手即可正確呼叫。",
-    "manualCta": "開啟手冊 →"
+    "manualSub": "已文件化介面的路徑、欄位與輪詢規則；未提供接入契約的型號請先確認，不要猜測欄位。",
+    "manualCta": "開啟手冊 →",
+    "tocVideo": "影片生成",
+    "videoTitle": "影片生成",
+    "videoSizeHint": "解析度與時長請依手冊中對應模型的規則填寫。",
+    "videoTaskHint": "影片生成查詢 <code>GET /v1/tasks/{id}</code>；影片增強、移除字幕、非同步 TTS 與數位人查詢 <code>GET /v1/task/{id}</code>。保存回執 ID，使用相同 API Key；<code>processing</code> 時每 3–5 秒查詢，<code>status: \"completed\"</code> 且有結果 URL 才是成功；<code>failed</code> / <code>cancelled</code> 時停止。圖片使用 <code>/v1/images/tasks/{task_id}</code> 與圖片專用完成規則。",
+    "videoBillingHint": "費率取決於模型與輸出規格；參考影片任務可能同時計算參考時長。提交前核對 <a href=\"/pricing\">目前模型價格</a> 與手冊對應章節。",
+    "nGpt6Astra": "GPT-6 flagship reasoning & agent tier",
+    "nGpt61Sol": "GPT-6.1 balanced general coding",
+    "nGpt6Sol": "GPT-6 premium reasoning",
+    "nGpt6Luna": "GPT-6 budget high-speed",
+    "nGlm53": "GLM-5.3 flagship Chinese/English LLM",
+    "nGlm53Flash": "GLM-5.3 Flash ultra-fast budget",
+    "nSeedance25": "ByteDance 2.5 flagship · high fidelity up to 30s",
+    "nSeedance20": "ByteDance 2.0 standard full-tier",
+    "nSeedanceFast": "ByteDance 2.0 Fast accelerated generation",
+    "nSeedanceMini": "ByteDance 2.0 Mini budget tier",
+    "nMinimaxH3": "MiniMax Hailuo video generation",
+    "nFluxVideo": "Black Forest Labs FLUX.3 video",
+    "nWanVideo": "Alibaba Tongyi Wanxiang 3.0 video",
+    "nAgnesVideo": "Agnes 2.5 video generation",
+    "nVideoEnhance": "Video enhancement & super-resolution (POST /v1/async/videos/enhance)",
+    "nSubtitleErase": "Hard-subtitle & watermark removal (POST /v1/async/videos/subtitle-erase)",
+    "clientSetupTitle": "ZCode / Cursor",
+    "clientSetupBody": "在 ZCode 或 Cursor 新增自訂 OpenAI 相容供應商：<strong>Base URL</strong> 填 <code>https://www.keyoapi.xyz/v1</code>；<strong>API 格式</strong> 選 <code>Chat Completions (/chat/completions)</code>；填入 KeyoAPI Key，並從<a href=\"/pricing\" target=\"_top\">模型目錄</a>複製完整模型 ID，保留前綴與 <code>:free</code>。不要重複加 <code>/v1</code> 或填入完整端點。<br><code>:free</code> 使用贈送金計費，不保證零費率；先核對費率、錢包與充值餘額回退規則。餘額不足應先解決帳務錯誤。連線測試成功只是探針通過，仍須確認實際文字、串流與工具呼叫；各模型及客戶端版本並非全部完成驗證。"
   },
   "ja": {
+    "messagesHint": "Anthropic Messages 形式（Claude Code / Anthropic SDK 対応）。<code>ANTHROPIC_BASE_URL=https://www.keyoapi.xyz</code> を設定。<code>x-api-key: YOUR_KEY</code> または <code>Authorization: Bearer YOUR_KEY</code>（<code>anthropic-version: 2023-06-01</code>）をサポート。",
     "title": "KeyoAPI ドキュメント",
     "docTitle": "KeyoAPI 連携ドキュメント",
     "heroSub": "1つの Base URL と 1つの API Key。OpenAI 互換で Cursor / ChatBox / 公式 SDK にそのまま使えます。",
@@ -1178,7 +1353,7 @@ const I18N = {
     "listModels": "利用可能モデル",
     "copyCurl": "curl をコピー",
     "supportTitle": "課金とサポート",
-    "supportBody": "<strong>コンソール</strong>：<a href=\"https://www.keyoapi.xyz\" target=\"_blank\" rel=\"noopener noreferrer\">https://www.keyoapi.xyz</a> — 使用量を確認。トークンは厳重に。<br /><strong>チャージ</strong>：合意どおり支払い後、管理者が枠を追加（オンライン決済は後日）。<br /><strong>よくあるエラー</strong>：モデル名ミス、無効キー、残高不足。",
+    "supportBody": "<strong>チャージ</strong>：ログイン → <a href=\"/wallet\" target=\"_top\">ウォレット</a> → 利用可能な支払い方法。支払前に金額と付与額を確認してください。反映されない場合は支払い履歴を確認し、注文 ID を添えてサポートへ連絡してください。API キーは非公開で保管してください。",
     "footA": "KeyoAPI · ひとつのエンドポイントで多モデル",
     "footB": "OpenAI 互換 · 従量課金",
     "copied": "コピー済み",
@@ -1191,7 +1366,7 @@ const I18N = {
     "allModelsHint": "上記はスターター向けです。100 以上の全モデルとリアルタイム価格は <a href=\"https://www.keyoapi.xyz/pricing\" target=\"_blank\" rel=\"noopener noreferrer\">モデル広場</a> を参照。",
     "tocCaps": "すべての機能",
     "capsTitle": "すべての機能",
-    "capsDesc": "同じ API Key で以下すべての機能を呼び出せます。各カードは完全ハンドブックの該当セクション（リクエスト形式・モデル一覧つき）へリンクします。",
+    "capsDesc": "Open the matching handbook section for documented request formats, model support and limits.",
     "capVideo": "動画生成",
     "capVideoSub": "テキスト/画像から動画・吹き替え・字幕消去",
     "capAsr": "音声認識",
@@ -1211,12 +1386,36 @@ const I18N = {
     "capEmbed": "エンベディング",
     "capEmbedSub": "検索用ベクトル化",
     "capMusic": "音楽生成",
-    "capMusicSub": "歌詞から完全な楽曲を生成",
+    "capMusicSub": "Check integration contract availability",
     "manualTitle": "完全呼び出しハンドブック（AI にコピー）",
-    "manualSub": "全エンドポイント・フィールド・制限を 1 ページに集約。AI アシスタントに貼り付けるだけで正しく呼び出せます。",
-    "manualCta": "ハンドブックを開く →"
+    "manualSub": "Paths, fields and polling rules for documented integrations. Confirm the contract for catalog models not documented here before submitting.",
+    "manualCta": "ハンドブックを開く →",
+    "tocVideo": "動画生成",
+    "videoTitle": "動画生成",
+    "videoSizeHint": "解像度と長さは、ハンドブックの各モデルの規則に従ってください。",
+    "videoTaskHint": "動画生成: <code>GET /v1/tasks/{id}</code>。動画補正・字幕除去・非同期 TTS・アバター: <code>GET /v1/task/{id}</code>。返された ID を保存し、同じ API キーで照会します。<code>processing</code> 中は3〜5秒ごとに確認し、<code>status: \"completed\"</code> と結果 URL があれば成功です。<code>failed</code> / <code>cancelled</code> で停止します。画像は <code>/v1/images/tasks/{task_id}</code> と画像専用の完了条件を使います。",
+    "videoBillingHint": "料金はモデルと出力設定によって異なります。参照動画の長さも課金対象となる場合があります。送信前に <a href=\"/pricing\">現在の料金</a> と該当モデルの説明を確認してください。",
+    "nGpt6Astra": "GPT-6 flagship reasoning & agent tier",
+    "nGpt61Sol": "GPT-6.1 balanced general coding",
+    "nGpt6Sol": "GPT-6 premium reasoning",
+    "nGpt6Luna": "GPT-6 budget high-speed",
+    "nGlm53": "GLM-5.3 flagship Chinese/English LLM",
+    "nGlm53Flash": "GLM-5.3 Flash ultra-fast budget",
+    "nSeedance25": "ByteDance 2.5 flagship · high fidelity up to 30s",
+    "nSeedance20": "ByteDance 2.0 standard full-tier",
+    "nSeedanceFast": "ByteDance 2.0 Fast accelerated generation",
+    "nSeedanceMini": "ByteDance 2.0 Mini budget tier",
+    "nMinimaxH3": "MiniMax Hailuo video generation",
+    "nFluxVideo": "Black Forest Labs FLUX.3 video",
+    "nWanVideo": "Alibaba Tongyi Wanxiang 3.0 video",
+    "nAgnesVideo": "Agnes 2.5 video generation",
+    "nVideoEnhance": "Video enhancement & super-resolution (POST /v1/async/videos/enhance)",
+    "nSubtitleErase": "Hard-subtitle & watermark removal (POST /v1/async/videos/subtitle-erase)",
+    "clientSetupTitle": "ZCode / Cursor",
+    "clientSetupBody": "In ZCode or Cursor, add a custom OpenAI-compatible provider: <strong>Base URL</strong> <code>https://www.keyoapi.xyz/v1</code>; <strong>API format</strong> <code>Chat Completions (/chat/completions)</code>; paste your KeyoAPI key and the complete model ID copied from <a href=\"/pricing\" target=\"_top\">the catalog</a>. Keep prefixes and <code>:free</code> suffixes. Do not append another <code>/v1</code> or the full endpoint to a Base URL field.<br><code>:free</code> uses gift-credit billing; it does not promise a zero rate. Check the model rate and wallet, including paid-balance fallback. On insufficient balance, resolve the billing error instead of repeating requests. A successful connection test is only a probe: test actual text output separately, then the streaming and tool features you need. Compatibility can vary by model and client; it has not been verified for every combination."
   },
   "fr": {
+    "messagesHint": "Format Anthropic Messages (Claude Code / SDK Anthropic). Définissez <code>ANTHROPIC_BASE_URL=https://www.keyoapi.xyz</code>. Accepte <code>x-api-key: YOUR_KEY</code> et <code>Authorization: Bearer YOUR_KEY</code> avec l’en-tête <code>anthropic-version: 2023-06-01</code>.",
     "title": "Docs KeyoAPI",
     "docTitle": "Documentation d’intégration KeyoAPI",
     "heroSub": "Une Base URL + une clé API. Compatible OpenAI — Cursor, ChatBox et SDK officiels.",
@@ -1264,7 +1463,7 @@ const I18N = {
     "listModels": "Lister les modèles",
     "copyCurl": "Copier curl",
     "supportTitle": "Paiement & support",
-    "supportBody": "<strong>Console</strong> : <a href=\"https://www.keyoapi.xyz\" target=\"_blank\" rel=\"noopener noreferrer\">https://www.keyoapi.xyz</a> — usage ; gardez les jetons privés.<br /><strong>Recharge</strong> : paiement convenu, puis quota ajouté par un admin.<br /><strong>Erreurs fréquentes</strong> : mauvais modèle, clé invalide, solde insuffisant.",
+    "supportBody": "<strong>Recharger</strong> : connexion → <a href=\"/wallet\" target=\"_top\">Portefeuille</a> → moyen de paiement disponible. Vérifiez le montant et le crédit avant de payer. En cas de crédit manquant, consultez l’historique puis contactez le support avec l’ID de commande. Gardez vos clés privées.",
     "footA": "KeyoAPI · Un endpoint, plusieurs modèles",
     "footB": "Compatible OpenAI · facturation à l’usage",
     "copied": "Copié",
@@ -1277,7 +1476,7 @@ const I18N = {
     "allModelsHint": "Ci-dessus, une sélection de départ. Les 100+ modèles et les prix en direct : <a href=\"https://www.keyoapi.xyz/pricing\" target=\"_blank\" rel=\"noopener noreferrer\">place des modèles</a>.",
     "tocCaps": "Toutes les capacités",
     "capsTitle": "Toutes les capacités",
-    "capsDesc": "Une seule clé API pour toutes les capacités ci-dessous. Chaque carte ouvre la section correspondante du manuel complet (formats et modèles inclus).",
+    "capsDesc": "Open the matching handbook section for documented request formats, model support and limits.",
     "capVideo": "Génération vidéo",
     "capVideoSub": "Texte/image vers vidéo, doublage, effacement de sous-titres",
     "capAsr": "Reconnaissance vocale",
@@ -1297,12 +1496,36 @@ const I18N = {
     "capEmbed": "Embeddings",
     "capEmbedSub": "Vectorisation pour la recherche",
     "capMusic": "Génération musicale",
-    "capMusicSub": "Paroles vers chansons complètes",
+    "capMusicSub": "Check integration contract availability",
     "manualTitle": "Manuel complet (à copier à une IA)",
-    "manualSub": "Tous les endpoints, champs et limites sur une page — collez-la à un assistant IA pour des appels corrects.",
-    "manualCta": "Ouvrir le manuel →"
+    "manualSub": "Paths, fields and polling rules for documented integrations. Confirm the contract for catalog models not documented here before submitting.",
+    "manualCta": "Ouvrir le manuel →",
+    "tocVideo": "Vidéo",
+    "videoTitle": "Génération vidéo",
+    "videoSizeHint": "Respectez les règles de résolution et de durée propres à chaque modèle dans le manuel.",
+    "videoTaskHint": "Génération vidéo : <code>GET /v1/tasks/{id}</code>. Amélioration vidéo, suppression de sous-titres, TTS asynchrone et avatars : <code>GET /v1/task/{id}</code>. Conservez l’ID et utilisez la même clé. Vérifiez toutes les 3–5 secondes pendant <code>processing</code>. Le succès exige <code>status: \"completed\"</code> et une URL de résultat ; arrêtez sur <code>failed</code> ou <code>cancelled</code>. Les images utilisent <code>/v1/images/tasks/{task_id}</code> et leurs propres règles.",
+    "videoBillingHint": "Les tarifs dépendent du modèle et des paramètres. La durée des vidéos de référence peut aussi être facturée. Consultez <a href=\"/pricing\">les tarifs actuels</a> et la section du manuel avant l’envoi.",
+    "nGpt6Astra": "GPT-6 flagship reasoning & agent tier",
+    "nGpt61Sol": "GPT-6.1 balanced general coding",
+    "nGpt6Sol": "GPT-6 premium reasoning",
+    "nGpt6Luna": "GPT-6 budget high-speed",
+    "nGlm53": "GLM-5.3 flagship Chinese/English LLM",
+    "nGlm53Flash": "GLM-5.3 Flash ultra-fast budget",
+    "nSeedance25": "ByteDance 2.5 flagship · high fidelity up to 30s",
+    "nSeedance20": "ByteDance 2.0 standard full-tier",
+    "nSeedanceFast": "ByteDance 2.0 Fast accelerated generation",
+    "nSeedanceMini": "ByteDance 2.0 Mini budget tier",
+    "nMinimaxH3": "MiniMax Hailuo video generation",
+    "nFluxVideo": "Black Forest Labs FLUX.3 video",
+    "nWanVideo": "Alibaba Tongyi Wanxiang 3.0 video",
+    "nAgnesVideo": "Agnes 2.5 video generation",
+    "nVideoEnhance": "Video enhancement & super-resolution (POST /v1/async/videos/enhance)",
+    "nSubtitleErase": "Hard-subtitle & watermark removal (POST /v1/async/videos/subtitle-erase)",
+    "clientSetupTitle": "ZCode / Cursor",
+    "clientSetupBody": "In ZCode or Cursor, add a custom OpenAI-compatible provider: <strong>Base URL</strong> <code>https://www.keyoapi.xyz/v1</code>; <strong>API format</strong> <code>Chat Completions (/chat/completions)</code>; paste your KeyoAPI key and the complete model ID copied from <a href=\"/pricing\" target=\"_top\">the catalog</a>. Keep prefixes and <code>:free</code> suffixes. Do not append another <code>/v1</code> or the full endpoint to a Base URL field.<br><code>:free</code> uses gift-credit billing; it does not promise a zero rate. Check the model rate and wallet, including paid-balance fallback. On insufficient balance, resolve the billing error instead of repeating requests. A successful connection test is only a probe: test actual text output separately, then the streaming and tool features you need. Compatibility can vary by model and client; it has not been verified for every combination."
   },
   "ru": {
+    "messagesHint": "Формат Anthropic Messages (для Claude Code / Anthropic SDK). Укажите <code>ANTHROPIC_BASE_URL=https://www.keyoapi.xyz</code>. Поддерживает <code>x-api-key: YOUR_KEY</code> и <code>Authorization: Bearer YOUR_KEY</code> с заголовком <code>anthropic-version: 2023-06-01</code>.",
     "title": "Документация KeyoAPI",
     "docTitle": "Документация по подключению KeyoAPI",
     "heroSub": "Один Base URL + один API Key. Совместимо с OpenAI — Cursor, ChatBox и официальные SDK.",
@@ -1350,7 +1573,7 @@ const I18N = {
     "listModels": "Список моделей",
     "copyCurl": "Копировать curl",
     "supportTitle": "Оплата и поддержка",
-    "supportBody": "<strong>Консоль</strong>: <a href=\"https://www.keyoapi.xyz\" target=\"_blank\" rel=\"noopener noreferrer\">https://www.keyoapi.xyz</a> — расход; храните токены.<br /><strong>Пополнение</strong>: оплата по договорённости, админ добавляет квоту.<br /><strong>Частые ошибки</strong>: неверная модель, неверный ключ, мало баланса.",
+    "supportBody": "<strong>Пополнение</strong>: войдите → <a href=\"/wallet\" target=\"_top\">Кошелёк</a> → доступный способ оплаты. До оплаты проверьте сумму и начисляемый баланс. Если баланс не обновился, проверьте историю и передайте поддержке ID заказа. Не публикуйте API-ключи.",
     "footA": "KeyoAPI · Один endpoint — много моделей",
     "footB": "Совместимо с OpenAI · оплата по использованию",
     "copied": "Скопировано",
@@ -1363,7 +1586,7 @@ const I18N = {
     "allModelsHint": "Выше — стартовый подбор. Все 100+ моделей и актуальные цены: <a href=\"https://www.keyoapi.xyz/pricing\" target=\"_blank\" rel=\"noopener noreferrer\">площадка моделей</a>.",
     "tocCaps": "Все возможности",
     "capsTitle": "Все возможности",
-    "capsDesc": "Один API-ключ открывает все возможности ниже. Каждая карточка ведёт в нужный раздел полного справочника (форматы запросов и списки моделей).",
+    "capsDesc": "Open the matching handbook section for documented request formats, model support and limits.",
     "capVideo": "Генерация видео",
     "capVideoSub": "Текст/картинка в видео, озвучка, удаление субтитров",
     "capAsr": "Распознавание речи",
@@ -1383,12 +1606,36 @@ const I18N = {
     "capEmbed": "Эмбеддинги",
     "capEmbedSub": "Векторы для поиска",
     "capMusic": "Генерация музыки",
-    "capMusicSub": "Текст песни в готовый трек",
+    "capMusicSub": "Check integration contract availability",
     "manualTitle": "Полный справочник (скопируйте ИИ)",
-    "manualSub": "Все эндпоинты, поля и лимиты на одной странице — вставьте ассистенту ИИ, и он вызовет всё верно.",
-    "manualCta": "Открыть справочник →"
+    "manualSub": "Paths, fields and polling rules for documented integrations. Confirm the contract for catalog models not documented here before submitting.",
+    "manualCta": "Открыть справочник →",
+    "tocVideo": "Видео",
+    "videoTitle": "Генерация видео",
+    "videoSizeHint": "Разрешение и длительность задаются по правилам конкретной модели в руководстве.",
+    "videoTaskHint": "Генерация видео: <code>GET /v1/tasks/{id}</code>. Улучшение видео, удаление субтитров, асинхронный TTS и аватары: <code>GET /v1/task/{id}</code>. Сохраните ID и используйте тот же API-ключ. При <code>processing</code> проверяйте каждые 3–5 секунд. Успех: <code>status: \"completed\"</code> и URL результата. Остановитесь при <code>failed</code> или <code>cancelled</code>. Для изображений используйте <code>/v1/images/tasks/{task_id}</code> и отдельные правила завершения.",
+    "videoBillingHint": "Тариф зависит от модели и параметров. Может учитываться и длительность референсного видео. Перед отправкой проверьте <a href=\"/pricing\">текущие цены</a> и раздел руководства.",
+    "nGpt6Astra": "GPT-6 flagship reasoning & agent tier",
+    "nGpt61Sol": "GPT-6.1 balanced general coding",
+    "nGpt6Sol": "GPT-6 premium reasoning",
+    "nGpt6Luna": "GPT-6 budget high-speed",
+    "nGlm53": "GLM-5.3 flagship Chinese/English LLM",
+    "nGlm53Flash": "GLM-5.3 Flash ultra-fast budget",
+    "nSeedance25": "ByteDance 2.5 flagship · high fidelity up to 30s",
+    "nSeedance20": "ByteDance 2.0 standard full-tier",
+    "nSeedanceFast": "ByteDance 2.0 Fast accelerated generation",
+    "nSeedanceMini": "ByteDance 2.0 Mini budget tier",
+    "nMinimaxH3": "MiniMax Hailuo video generation",
+    "nFluxVideo": "Black Forest Labs FLUX.3 video",
+    "nWanVideo": "Alibaba Tongyi Wanxiang 3.0 video",
+    "nAgnesVideo": "Agnes 2.5 video generation",
+    "nVideoEnhance": "Video enhancement & super-resolution (POST /v1/async/videos/enhance)",
+    "nSubtitleErase": "Hard-subtitle & watermark removal (POST /v1/async/videos/subtitle-erase)",
+    "clientSetupTitle": "ZCode / Cursor",
+    "clientSetupBody": "In ZCode or Cursor, add a custom OpenAI-compatible provider: <strong>Base URL</strong> <code>https://www.keyoapi.xyz/v1</code>; <strong>API format</strong> <code>Chat Completions (/chat/completions)</code>; paste your KeyoAPI key and the complete model ID copied from <a href=\"/pricing\" target=\"_top\">the catalog</a>. Keep prefixes and <code>:free</code> suffixes. Do not append another <code>/v1</code> or the full endpoint to a Base URL field.<br><code>:free</code> uses gift-credit billing; it does not promise a zero rate. Check the model rate and wallet, including paid-balance fallback. On insufficient balance, resolve the billing error instead of repeating requests. A successful connection test is only a probe: test actual text output separately, then the streaming and tool features you need. Compatibility can vary by model and client; it has not been verified for every combination."
   },
   "vi": {
+    "messagesHint": "Định dạng Anthropic Messages (cho Claude Code / Anthropic SDK). Đặt <code>ANTHROPIC_BASE_URL=https://www.keyoapi.xyz</code>. Hỗ trợ <code>x-api-key: YOUR_KEY</code> và <code>Authorization: Bearer YOUR_KEY</code> với header <code>anthropic-version: 2023-06-01</code>.",
     "title": "Tài liệu KeyoAPI",
     "docTitle": "Tài liệu tích hợp KeyoAPI",
     "heroSub": "Một Base URL + một API Key. Tương thích OpenAI — dùng với Cursor, ChatBox và SDK chính thức.",
@@ -1436,7 +1683,7 @@ const I18N = {
     "listModels": "Liệt kê model",
     "copyCurl": "Sao chép curl",
     "supportTitle": "Nạp tiền & hỗ trợ",
-    "supportBody": "<strong>Console</strong>: <a href=\"https://www.keyoapi.xyz\" target=\"_blank\" rel=\"noopener noreferrer\">https://www.keyoapi.xyz</a> — xem usage; giữ token riêng.<br /><strong>Nạp tiền</strong>: thanh toán theo thỏa thuận, admin cộng hạn mức.<br /><strong>Lỗi thường gặp</strong>: sai model, key lỗi, hết số dư.",
+    "supportBody": "<strong>Nạp tiền</strong>: đăng nhập → <a href=\"/wallet\" target=\"_top\">Ví</a> → chọn phương thức thanh toán hiện có. Kiểm tra số tiền và số dư được cộng trước khi trả. Nếu chưa nhận được, kiểm tra lịch sử và liên hệ hỗ trợ kèm mã đơn. Giữ API key riêng tư.",
     "footA": "KeyoAPI · Một endpoint, nhiều mô hình",
     "footB": "Tương thích OpenAI · tính theo usage",
     "copied": "Đã sao chép",
@@ -1449,7 +1696,7 @@ const I18N = {
     "allModelsHint": "Trên đây là các mẫu khởi đầu. Toàn bộ 100+ mô hình và giá theo thời gian thực: <a href=\"https://www.keyoapi.xyz/pricing\" target=\"_blank\" rel=\"noopener noreferrer\">quảng trường mô hình</a>.",
     "tocCaps": "Tất cả năng lực",
     "capsTitle": "Tất cả năng lực",
-    "capsDesc": "Một API Key dùng cho mọi năng lực dưới đây. Mỗi thẻ mở đúng mục trong sổ tay đầy đủ (kèm định dạng và danh sách mô hình).",
+    "capsDesc": "Open the matching handbook section for documented request formats, model support and limits.",
     "capVideo": "Tạo video",
     "capVideoSub": "Chữ/ảnh thành video, lồng tiếng, xoá phụ đề",
     "capAsr": "Nhận diện giọng nói",
@@ -1469,12 +1716,99 @@ const I18N = {
     "capEmbed": "Embeddings",
     "capEmbedSub": "Vector hóa cho truy xuất",
     "capMusic": "Tạo nhạc",
-    "capMusicSub": "Lời ca thành bài hát hoàn chỉnh",
+    "capMusicSub": "Check integration contract availability",
     "manualTitle": "Sổ tay đầy đủ (copy cho AI)",
-    "manualSub": "Toàn bộ endpoint, trường và giới hạn trong một trang — dán vào trợ lý AI là gọi đúng.",
-    "manualCta": "Mở sổ tay →"
+    "manualSub": "Paths, fields and polling rules for documented integrations. Confirm the contract for catalog models not documented here before submitting.",
+    "manualCta": "Mở sổ tay →",
+    "tocVideo": "Video",
+    "videoTitle": "Tạo video",
+    "videoSizeHint": "Điền độ phân giải và thời lượng theo quy tắc riêng của từng mô hình trong tài liệu.",
+    "videoTaskHint": "Tạo video: <code>GET /v1/tasks/{id}</code>. Nâng chất lượng video, xóa phụ đề, TTS bất đồng bộ và avatar: <code>GET /v1/task/{id}</code>. Lưu ID và dùng cùng API key. Kiểm tra mỗi 3–5 giây khi <code>processing</code>; chỉ thành công khi <code>status: \"completed\"</code> kèm URL kết quả. Dừng khi <code>failed</code> hoặc <code>cancelled</code>. Ảnh dùng <code>/v1/images/tasks/{task_id}</code> và quy tắc hoàn tất riêng.",
+    "videoBillingHint": "Giá tùy mô hình và thông số đầu ra. Thời lượng video tham chiếu cũng có thể được tính phí. Trước khi gửi, xem <a href=\"/pricing\">giá hiện tại</a> và phần tài liệu tương ứng.",
+    "nGpt6Astra": "GPT-6 flagship reasoning & agent tier",
+    "nGpt61Sol": "GPT-6.1 balanced general coding",
+    "nGpt6Sol": "GPT-6 premium reasoning",
+    "nGpt6Luna": "GPT-6 budget high-speed",
+    "nGlm53": "GLM-5.3 flagship Chinese/English LLM",
+    "nGlm53Flash": "GLM-5.3 Flash ultra-fast budget",
+    "nSeedance25": "ByteDance 2.5 flagship · high fidelity up to 30s",
+    "nSeedance20": "ByteDance 2.0 standard full-tier",
+    "nSeedanceFast": "ByteDance 2.0 Fast accelerated generation",
+    "nSeedanceMini": "ByteDance 2.0 Mini budget tier",
+    "nMinimaxH3": "MiniMax Hailuo video generation",
+    "nFluxVideo": "Black Forest Labs FLUX.3 video",
+    "nWanVideo": "Alibaba Tongyi Wanxiang 3.0 video",
+    "nAgnesVideo": "Agnes 2.5 video generation",
+    "nVideoEnhance": "Video enhancement & super-resolution (POST /v1/async/videos/enhance)",
+    "nSubtitleErase": "Hard-subtitle & watermark removal (POST /v1/async/videos/subtitle-erase)",
+    "clientSetupTitle": "ZCode / Cursor",
+    "clientSetupBody": "In ZCode or Cursor, add a custom OpenAI-compatible provider: <strong>Base URL</strong> <code>https://www.keyoapi.xyz/v1</code>; <strong>API format</strong> <code>Chat Completions (/chat/completions)</code>; paste your KeyoAPI key and the complete model ID copied from <a href=\"/pricing\" target=\"_top\">the catalog</a>. Keep prefixes and <code>:free</code> suffixes. Do not append another <code>/v1</code> or the full endpoint to a Base URL field.<br><code>:free</code> uses gift-credit billing; it does not promise a zero rate. Check the model rate and wallet, including paid-balance fallback. On insufficient balance, resolve the billing error instead of repeating requests. A successful connection test is only a probe: test actual text output separately, then the streaming and tool features you need. Compatibility can vary by model and client; it has not been verified for every combination."
   }
 };
+
+// Image documentation follows the model contract and persistent task API.
+Object.assign(I18N.en, {
+  imageBaseSize: 'size: ratio / listed 1K pixels',
+  imageListedSize: 'size: listed 1K/2K/4K pixels / auto',
+  imageVipSize: 'size: constrained 1K–4K pixels / auto',
+  imageSizeHint: 'All eight models support text and reference images. Nano uses <code>aspectRatio</code> + <code>imageSize</code> (native 1K / 2K / 4K); GPT pixel sizes are invalid for Nano. Nano common ratios: auto, 1:1, 16:9, 9:16, 4:3, 3:4, 3:2, 2:3, 5:4, 4:5, 21:9. Nano 2 / 2.1 additionally accept 1:4, 4:1, 1:8, 8:1; Pro does not. GPT VIP / flare / sunburst use pixels or auto, not ratio strings. Common 16:9 sizes: 1280x720 / 2048x1152 / 3840x2160. VIP custom pixels: edges divisible by 16, longest edge ≤3840, ratio ≤3:1, total pixels 655,360–8,294,400. flare / sunburst only accept listed sizes. Optional fields are model-specific; — means unsupported. <a href="/brand/keyo-api-ref.en.md">Full size tables: §3.1</a>.',
+  imageRefsHint: 'JSON <code>images</code> accepts HTTP(S) URLs, image data URLs and valid raw image base64 (aliases: image_urls / image_url / image). Local files can be uploaded directly with multipart to <code>/v1/images/edits</code>; reference files become base64 input. Do not put local paths in JSON. Only <code>n=1</code> and <code>response_format=url</code> are supported. <code>stream=true</code>, b64_json output, binary/base64 masks and <code>-F mask=@...</code> are unsupported; GPT masks require an HTTP(S) URL. Nano has no mask support.',
+  imageTasksHint: '<code>replyType=async</code> returns HTTP 202 while pending, with task_id, status, result_url and billing. An existing terminal task (for example, on idempotent replay) can return 200 (success) or 502 (task failure / unknown submission outcome) directly. <code>replyType=json</code> (default) waits for the result; if the wait expires while pending, it returns 202 for the same continuing task. Query with the same API Key: reserved / submitting / running return 202; image success returns 200 with <code>status=succeeded</code> and nonempty <code>data[].url</code>. Other async families use their own completion rules. Recorded terminal task errors return 502 with error.code and error.task_id. For image_submission_unknown, keep the ID and contact support; do not create another generation. A temporary query error, image_task_unavailable, also returns 502 and may contain only request_id without task_id; it does not mean the task failed. Retry GET using the same saved task ID. Submission forwarding errors (image_forwarding_failed) may also omit task_id: query the original task if you have its ID; otherwise replay the original idempotency key and parameters. Handle other errors by their actual HTTP status and error.code; they are not all terminal task failures.',
+  imageReplayHint: '<code>Idempotency-Key</code>: 1–128 visible ASCII characters. Same API Key, idempotency key and generation parameters replay the original task/result without creating a new image; conflicting parameters return 409. After a timeout or disconnect, query the original task or replay the original key and parameters. Use a new key only for an intentional new image.',
+  imageBillingHint: 'Quota is reserved at submission and settled once on delivery of the result response. Failed generation or a missing valid result releases the reservation without settling an image charge. Reservations expire after 600 seconds by default; tasks/results remain, and later retrieval of an unsettled result needs sufficient balance. A first success may show billing.charged=false before settlement; it does not mean free. GET/idempotent replay of a settled result is not charged again. Keep task_id for billing support.'
+});
+Object.assign(I18N.zhCN, {
+  imageBaseSize: 'size：比例 / 表内 1K 像素',
+  imageListedSize: 'size：表内 1K/2K/4K 像素 / auto',
+  imageVipSize: 'size：约束内 1K–4K 像素 / auto',
+  imageSizeHint: '八个型号均支持文生图与参考图。Nano 用 <code>aspectRatio</code> + <code>imageSize</code> 原生 1K / 2K / 4K，不接受 GPT 像素尺寸。Nano 公共比例：auto、1:1、16:9、9:16、4:3、3:4、3:2、2:3、5:4、4:5、21:9；2 / 2.1 另支持 1:4、4:1、1:8、8:1，Pro 不支持这四种。GPT VIP / flare / sunburst 用像素或 auto，不传比例串；常用 16:9 为 1280x720 / 2048x1152 / 3840x2160。VIP 自定义尺寸须边长为 16 的倍数、最长边 ≤3840、比例 ≤3:1、总像素 655,360–8,294,400；flare / sunburst 只接受表内尺寸。字段均可选，— 表示不支持。<a href="/brand/keyo-api-ref.md">完整尺寸表见 §3.1</a>。',
+  imageRefsHint: 'JSON 的 <code>images</code> 支持 HTTP(S) URL、图片 data URL 和有效图片原始 base64（别名 image_urls / image_url / image）。本地图可直接 multipart 上传到 <code>/v1/images/edits</code>，参考图文件转为 base64 输入；不要把本机路径写进 JSON。只支持 <code>n=1</code>、<code>response_format=url</code>。<code>stream=true</code>、b64_json 输出、binary/base64 mask、<code>-F mask=@...</code> 未支持；GPT mask 只收 HTTP(S) URL，Nano 不支持 mask。',
+  imageTasksHint: '<code>replyType=async</code> 在任务尚未完成时返回 HTTP 202，含 task_id、status、result_url 和 billing；已有终态（如幂等重放）可直接返回 200（成功）或 502（任务失败 / 提交结果不确定）。<code>replyType=json</code>（默认）等待结果；等待超时且任务尚未完成时返回同一任务的 202，任务继续。用同一把 API Key 查询：reserved / submitting / running 返回 202；图片成功返回 200，以 <code>status=succeeded</code> 和非空 <code>data[].url</code> 判断完成，其它异步能力按各自契约判断。已记录的任务终态错误返回 502，含 error.code / error.task_id；image_submission_unknown 时保留 ID 联系支持，不重新生成。临时查询错误 image_task_unavailable 也返回 502，可仅含 request_id 而无 task_id，不代表任务失败：用已保存的同一任务 ID 重试 GET。提交转发错误 image_forwarding_failed 也可能无 task_id；有 ID 就查询原任务，无 ID 就用原幂等键和参数重放。其它错误按实际 HTTP 状态和 error.code 处理，不能一律视为任务终态失败。',
+  imageReplayHint: '<code>Idempotency-Key</code> 为 1–128 个可见 ASCII 字符。同一把 Key、相同幂等键和生成参数重放取回原任务/结果，不新生成；参数冲突返回 409。等待超时或连接中断后查原任务，或用原幂等键和参数重放；有意新建图片才使用新键。',
+  imageBillingHint: '提交预留额度，交付结果响应时结算一次；生成失败或缺少有效图片时不结算图片费用并释放预留。预留默认 600 秒到期释放，仍保留任务/结果，后续取回未结算结果需足够余额。首次成功的 billing.charged=false 可能是结算前快照，不表示免费；已结算结果的 GET/幂等重放不再次收费。账单问题保留 task_id 联系支持。'
+});
+Object.assign(I18N.zhTW, {
+  imageBaseSize: 'size：比例 / 表內 1K 像素',
+  imageListedSize: 'size：表內 1K/2K/4K 像素 / auto',
+  imageVipSize: 'size：約束內 1K–4K 像素 / auto',
+  imageSizeHint: '八個型號均支援文生圖與參考圖。Nano 用 <code>aspectRatio</code> + <code>imageSize</code> 原生 1K / 2K / 4K，不接受 GPT 像素尺寸。Nano 公共比例：auto、1:1、16:9、9:16、4:3、3:4、3:2、2:3、5:4、4:5、21:9；2 / 2.1 另支援 1:4、4:1、1:8、8:1，Pro 不支援這四種。GPT VIP / flare / sunburst 用像素或 auto，不傳比例字串。常用 16:9：1280x720 / 2048x1152 / 3840x2160。VIP 自訂尺寸須邊長為 16 的倍數、最長邊 ≤3840、比例 ≤3:1、總像素 655,360–8,294,400；flare / sunburst 只接受表內尺寸。欄位均可選，— 表示不支援。<a href="/brand/keyo-api-ref.md">完整尺寸表見 §3.1</a>。',
+  imageRefsHint: 'JSON <code>images</code> 支援 HTTP(S) URL、圖片 data URL 和有效圖片原始 base64（別名 image_urls / image_url / image）。本機圖片可直接 multipart 上傳至 <code>/v1/images/edits</code>，參考檔案轉為 base64；不要把本機路徑寫進 JSON。僅支援 <code>n=1</code>、<code>response_format=url</code>。stream=true、b64_json 輸出、binary/base64 mask 和 <code>-F mask=@...</code> 未支援；GPT mask 僅收 HTTP(S) URL，Nano 不支援 mask。',
+  imageTasksHint: '<code>replyType=async</code> 在任務尚未完成時返回 HTTP 202，含 task_id、status、result_url、billing；已有終態（如冪等重放）可直接返回 200（成功）或 502（任務失敗 / 提交結果不確定）。<code>replyType=json</code>（預設）等待結果；逾時且任務尚未完成時返回同一任務的 202，任務繼續。以同一 API Key 查詢：reserved / submitting / running 返回 202；圖片成功返回 200，<code>status=succeeded</code> 且 <code>data[].url</code> 非空，其它非同步能力按各自契約判斷。已記錄的任務終態錯誤返回 502，含 error.code / error.task_id；image_submission_unknown 時保留 ID 聯絡支援，不重新生成。暫時查詢錯誤 image_task_unavailable 也返回 502，可僅含 request_id 而無 task_id，不代表任務失敗：以已保存的同一任務 ID 重試 GET。提交轉發錯誤 image_forwarding_failed 也可能無 task_id；有 ID 就查詢原任務，無 ID 就用原冪等鍵和參數重放。其它錯誤按實際 HTTP 狀態和 error.code 處理，不能一律視為任務終態失敗。',
+  imageReplayHint: '<code>Idempotency-Key</code>：1–128 個可見 ASCII 字元。相同 API Key、冪等鍵及生成參數重放取得原任務/結果，不新生成；參數衝突返回 409。逾時或斷線後查原任務，或重放原鍵及參數；有意建立新圖片才使用新鍵。',
+  imageBillingHint: '提交時預留額度，交付結果回應時結算一次；生成失敗或缺少有效圖片時不結算並釋放預留。預留預設 600 秒後到期釋放，仍保留任務/結果，稍後取得未結算結果需足夠餘額。首次成功的 billing.charged=false 可能是結算前快照，不代表免費；已結算結果的 GET/冪等重放不再次收費。帳單問題請保留 task_id。'
+});
+Object.assign(I18N.ja, {
+  imageBaseSize: 'size: 比率 / 表の1Kピクセル', imageListedSize: 'size: 表の1K/2K/4Kピクセル / auto', imageVipSize: 'size: 制約内の1K–4Kピクセル / auto',
+  imageSizeHint: '全8モデルでテキストと参照画像に対応。Nano は <code>aspectRatio</code> + <code>imageSize</code>（1K / 2K / 4K）を使い、GPT のピクセル指定は使えません。共通比率: auto, 1:1, 16:9, 9:16, 4:3, 3:4, 3:2, 2:3, 5:4, 4:5, 21:9。Nano 2 / 2.1 は 1:4, 4:1, 1:8, 8:1 にも対応、Pro は非対応。GPT VIP / flare / sunburst はピクセルまたは auto。16:9 の例: 1280x720 / 2048x1152 / 3840x2160。VIP のカスタム値は各辺16の倍数、最長辺≤3840、比率≤3:1、655,360–8,294,400ピクセル。flare / sunburst は表の値のみ。任意項目、— は非対応。<a href="/brand/keyo-api-ref.en.md">完全な寸法表 §3.1</a>。',
+  imageRefsHint: 'JSON <code>images</code> は HTTP(S) URL、画像 data URL、有効な画像の生base64に対応（別名 image_urls / image_url / image）。ローカル画像は multipart で <code>/v1/images/edits</code> に直接送信し、base64入力に変換されます。JSONにローカルパスは不可。<code>n=1</code>、<code>response_format=url</code> のみ。stream=true、b64_json出力、binary/base64 mask、<code>-F mask=@...</code> は非対応。GPT mask は HTTP(S) URLのみ、Nano mask は非対応。',
+  imageTasksHint: '<code>replyType=async</code> は未完了時に HTTP 202（task_id、status、result_url、billing）を返します。既に終態のタスク（冪等再送など）は200（成功）または502（タスク失敗 / 送信結果不明）を直接返す場合があります。<code>replyType=json</code>（既定）は結果を待ち、待機時間超過時にまだ未完了なら同じ継続中タスクの202を返します。同じAPI Keyで照会: reserved / submitting / running は202、画像の成功は200と <code>status=succeeded</code>、空でない <code>data[].url</code>。他の非同期機能は各契約で完了を判定します。記録済みのタスク終態エラーは502と error.code / error.task_id。image_submission_unknown はIDを保存してサポートへ連絡し、新規生成しないでください。一時的な照会エラー image_task_unavailable も502で、task_id がなく request_id のみの場合があります。タスク失敗を意味しないため、保存済みの同じタスクIDでGETを再試行してください。送信転送エラー image_forwarding_failed も task_id がない場合があります。IDがあれば元のタスクを照会し、なければ元の冪等キーとパラメータで再送してください。他のエラーは実際のHTTPステータスと error.code で判断し、すべてをタスクの終態失敗として扱わないでください。',
+  imageReplayHint: '<code>Idempotency-Key</code> は表示可能なASCII 1–128文字。同じAPI Key・冪等キー・生成パラメータの再送は元のタスク/結果を取得し、新規生成しません。異なるパラメータは409。タイムアウトや切断後は元のタスクを照会するか同じキーとパラメータで再送。新しい画像を意図する時だけ新しいキーを使います。',
+  imageBillingHint: '送信時に枠を予約し、結果応答の引き渡し時に1回精算。失敗や有効な結果がない場合は精算せず予約を解放。予約は既定600秒で解放されてもタスク/結果は保存され、未精算結果の取得には十分な残高が必要。初回成功の billing.charged=false は精算前の値で無料を意味しません。精算済み結果のGET/冪等再送は再課金なし。請求の相談にはtask_idを保存。'
+});
+Object.assign(I18N.fr, {
+  imageBaseSize: 'size : ratio / pixels 1K listés', imageListedSize: 'size : pixels 1K/2K/4K listés / auto', imageVipSize: 'size : pixels 1K–4K sous contraintes / auto',
+  imageSizeHint: 'Les 8 modèles acceptent texte et images de référence. Nano utilise <code>aspectRatio</code> + <code>imageSize</code> (1K / 2K / 4K), pas les dimensions GPT en pixels. Ratios communs : auto, 1:1, 16:9, 9:16, 4:3, 3:4, 3:2, 2:3, 5:4, 4:5, 21:9. Nano 2 / 2.1 acceptent aussi 1:4, 4:1, 1:8, 8:1 ; Pro non. GPT VIP / flare / sunburst : pixels ou auto. Exemple 16:9 : 1280x720 / 2048x1152 / 3840x2160. VIP personnalisé : côtés multiples de 16, côté maximal ≤3840, ratio ≤3:1, 655,360–8,294,400 pixels. flare / sunburst : valeurs listées uniquement. Champs facultatifs ; — indique non pris en charge. <a href="/brand/keyo-api-ref.en.md">Tableaux complets §3.1</a>.',
+  imageRefsHint: '<code>images</code> en JSON accepte URL HTTP(S), data URL image et base64 brut valide (alias : image_urls / image_url / image). Envoyez les fichiers locaux directement en multipart à <code>/v1/images/edits</code> ; ils sont convertis en base64. Aucun chemin local dans le JSON. Uniquement <code>n=1</code> et <code>response_format=url</code>. stream=true, sortie b64_json, masques binary/base64 et <code>-F mask=@...</code> non pris en charge. GPT mask : URL HTTP(S) uniquement ; Nano : aucun mask.',
+  imageTasksHint: '<code>replyType=async</code> renvoie HTTP 202 tant que la tâche est en cours, avec task_id, status, result_url et billing. Une tâche déjà dans un état terminal (par exemple lors du rejeu idempotent) peut renvoyer directement 200 (succès) ou 502 (échec de tâche / résultat de soumission inconnu). <code>replyType=json</code> (défaut) attend le résultat ; si le délai expire alors que la tâche est encore en cours, 202 pour la même tâche qui continue. Consultez avec la même clé : reserved / submitting / running donnent 202 ; succès image : 200, <code>status=succeeded</code> et <code>data[].url</code> non vide. Les autres fonctions asynchrones suivent leurs propres règles de fin. Les erreurs terminales de tâche enregistrées donnent 502 avec error.code / error.task_id. Pour image_submission_unknown, conservez cet ID et contactez le support sans nouvelle génération. Une erreur temporaire de consultation, image_task_unavailable, donne aussi 502 et peut contenir uniquement request_id sans task_id ; elle ne signifie pas que la tâche a échoué. Réessayez GET avec le même ID de tâche conservé. Une erreur de transmission de soumission, image_forwarding_failed, peut aussi omettre task_id : consultez la tâche initiale si vous avez son ID, sinon rejouez la clé idempotente et les paramètres initiaux. Traitez les autres erreurs selon leur statut HTTP réel et error.code ; elles ne sont pas toutes des échecs terminaux de tâche.',
+  imageReplayHint: '<code>Idempotency-Key</code> : 1–128 caractères ASCII visibles. Même clé API, clé idempotente et paramètres : récupération de la tâche/résultat initial sans nouvelle image ; conflit de paramètres : 409. Après délai ou déconnexion, consultez la tâche ou renvoyez la clé et les paramètres initiaux. Nouvelle clé seulement pour une nouvelle image volontaire.',
+  imageBillingHint: 'Quota réservé à la soumission, facturé une fois à la remise de la réponse résultat. Échec ou résultat valide absent : réservation libérée sans facturation image. Expiration par défaut après 600 secondes ; tâche/résultat conservés, solde suffisant requis pour récupérer un résultat non facturé. billing.charged=false au premier succès peut précéder la facturation et ne signifie pas gratuit. GET/rejeu idempotent sans nouvelle facturation pour un résultat déjà facturé. Conservez task_id pour le support.'
+});
+Object.assign(I18N.ru, {
+  imageBaseSize: 'size: соотношение / пиксели 1K из таблицы', imageListedSize: 'size: пиксели 1K/2K/4K из таблицы / auto', imageVipSize: 'size: пиксели 1K–4K с ограничениями / auto',
+  imageSizeHint: 'Все 8 моделей поддерживают текст и референсы. Nano использует <code>aspectRatio</code> + <code>imageSize</code> (1K / 2K / 4K), а не размеры GPT в пикселях. Общие пропорции: auto, 1:1, 16:9, 9:16, 4:3, 3:4, 3:2, 2:3, 5:4, 4:5, 21:9. Nano 2 / 2.1 также поддерживают 1:4, 4:1, 1:8, 8:1, Pro — нет. GPT VIP / flare / sunburst: пиксели или auto. Пример 16:9: 1280x720 / 2048x1152 / 3840x2160. VIP: стороны кратны 16, длинная ≤3840, пропорция ≤3:1, 655,360–8,294,400 пикселей. flare / sunburst принимают только табличные значения. Поля необязательны; — означает нет поддержки. <a href="/brand/keyo-api-ref.en.md">Полные таблицы §3.1</a>.',
+  imageRefsHint: 'JSON <code>images</code> принимает HTTP(S) URL, data URL изображения и корректный исходный base64 (псевдонимы: image_urls / image_url / image). Локальные файлы отправляйте multipart на <code>/v1/images/edits</code>; они преобразуются в base64. Локальные пути в JSON недопустимы. Только <code>n=1</code> и <code>response_format=url</code>. stream=true, вывод b64_json, binary/base64 mask и <code>-F mask=@...</code> не поддерживаются. GPT mask: только HTTP(S) URL; у Nano mask не поддерживается.',
+  imageTasksHint: '<code>replyType=async</code> возвращает HTTP 202 с task_id, status, result_url, billing, пока задача не завершена. Задача, уже находящаяся в конечном состоянии (например, при идемпотентном повторе), может сразу вернуть 200 (успех) или 502 (сбой задачи / неизвестный результат отправки). <code>replyType=json</code> (по умолчанию) ждёт результат; по истечении ожидания возвращает 202 той же продолжающейся задачи, если она ещё не завершена. Запрос с тем же API Key: reserved / submitting / running — 202; успех изображения — 200, <code>status=succeeded</code>, непустой <code>data[].url</code>. Другие асинхронные функции используют свои правила завершения. Записанные конечные ошибки задачи возвращают 502 с error.code / error.task_id. При image_submission_unknown сохраните ID и обратитесь в поддержку, не создавайте новую генерацию. Временная ошибка запроса image_task_unavailable также возвращает 502 и может содержать только request_id без task_id; это не означает сбой задачи. Повторите GET с тем же сохранённым ID задачи. Ошибка передачи отправки image_forwarding_failed тоже может не содержать task_id: если ID есть, проверьте исходную задачу; иначе повторите исходный ключ идемпотентности и параметры. Другие ошибки обрабатывайте по фактическому HTTP-статусу и error.code; не все они означают конечный сбой задачи.',
+  imageReplayHint: '<code>Idempotency-Key</code>: 1–128 видимых ASCII-символов. Тот же API Key, ключ идемпотентности и параметры возвращают исходную задачу/результат без новой генерации; конфликт параметров — 409. После тайм-аута или разрыва связи проверяйте исходную задачу или повторяйте исходный ключ и параметры. Новый ключ нужен лишь для намеренно нового изображения.',
+  imageBillingHint: 'Квота резервируется при отправке, списание выполняется один раз при передаче ответа с результатом. Сбой генерации или отсутствие корректного результата освобождает резерв без списания. Резерв истекает через 600 секунд по умолчанию, задача/результат сохраняются; для получения ещё не оплаченного результата нужен достаточный баланс. billing.charged=false при первом успехе может быть снимком до расчёта, а не бесплатностью. Повторный GET/идемпотентный POST оплаченного результата не списывает снова. Для поддержки сохраните task_id.'
+});
+Object.assign(I18N.vi, {
+  imageBaseSize: 'size: tỷ lệ / pixel 1K trong bảng', imageListedSize: 'size: pixel 1K/2K/4K trong bảng / auto', imageVipSize: 'size: pixel 1K–4K theo giới hạn / auto',
+  imageSizeHint: 'Cả 8 model hỗ trợ văn bản và ảnh tham chiếu. Nano dùng <code>aspectRatio</code> + <code>imageSize</code> (1K / 2K / 4K), không nhận kích thước pixel GPT. Tỷ lệ chung: auto, 1:1, 16:9, 9:16, 4:3, 3:4, 3:2, 2:3, 5:4, 4:5, 21:9. Nano 2 / 2.1 còn nhận 1:4, 4:1, 1:8, 8:1; Pro không nhận. GPT VIP / flare / sunburst dùng pixel hoặc auto. Ví dụ 16:9: 1280x720 / 2048x1152 / 3840x2160. VIP tùy chỉnh: cạnh chia hết cho 16, cạnh dài ≤3840, tỷ lệ ≤3:1, 655,360–8,294,400 pixel. flare / sunburst chỉ nhận giá trị trong bảng. Các trường là tùy chọn; — là không hỗ trợ. <a href="/brand/keyo-api-ref.en.md">Bảng đầy đủ §3.1</a>.',
+  imageRefsHint: 'JSON <code>images</code> nhận URL HTTP(S), data URL ảnh và base64 ảnh thô hợp lệ (bí danh: image_urls / image_url / image). Tệp cục bộ có thể tải trực tiếp bằng multipart tới <code>/v1/images/edits</code>, được đổi thành đầu vào base64. Không điền đường dẫn cục bộ vào JSON. Chỉ <code>n=1</code>, <code>response_format=url</code>. Không hỗ trợ stream=true, đầu ra b64_json, binary/base64 mask hay <code>-F mask=@...</code>. GPT mask chỉ nhận URL HTTP(S); Nano không hỗ trợ mask.',
+  imageTasksHint: '<code>replyType=async</code> trả HTTP 202 khi tác vụ chưa hoàn tất, với task_id, status, result_url, billing. Tác vụ đã có trạng thái kết thúc (ví dụ khi gửi lại cùng khóa lũy đẳng) có thể trả trực tiếp 200 (thành công) hoặc 502 (tác vụ thất bại / chưa rõ kết quả gửi). <code>replyType=json</code> (mặc định) chờ kết quả; nếu hết thời gian chờ khi chưa hoàn tất, trả 202 cho cùng tác vụ vẫn tiếp tục. Dùng cùng API Key để kiểm tra: reserved / submitting / running trả 202; ảnh thành công trả 200, <code>status=succeeded</code> và <code>data[].url</code> không rỗng. Các chức năng bất đồng bộ khác dùng quy tắc hoàn tất riêng. Lỗi kết thúc tác vụ đã được ghi nhận trả 502 với error.code / error.task_id. Với image_submission_unknown, giữ ID và liên hệ hỗ trợ, không tạo lần sinh mới. Lỗi truy vấn tạm thời image_task_unavailable cũng trả 502 và có thể chỉ chứa request_id mà không có task_id; điều này không có nghĩa tác vụ thất bại. Thử lại GET với cùng ID tác vụ đã lưu. Lỗi chuyển tiếp gửi image_forwarding_failed cũng có thể thiếu task_id: nếu có ID, truy vấn tác vụ ban đầu; nếu không, gửi lại khóa lũy đẳng và tham số ban đầu. Xử lý lỗi khác theo trạng thái HTTP thực tế và error.code; không coi mọi lỗi là thất bại kết thúc tác vụ.',
+  imageReplayHint: '<code>Idempotency-Key</code>: 1–128 ký tự ASCII hiển thị. Cùng API Key, khóa lũy đẳng và tham số sinh sẽ lấy lại tác vụ/kết quả ban đầu, không sinh ảnh mới; tham số xung đột trả 409. Khi hết thời gian chờ hoặc mất kết nối, kiểm tra tác vụ hoặc gửi lại khóa và tham số ban đầu. Chỉ dùng khóa mới khi chủ ý tạo ảnh mới.',
+  imageBillingHint: 'Hạn mức được giữ khi gửi, tính phí một lần khi giao phản hồi kết quả. Sinh thất bại hoặc thiếu kết quả ảnh hợp lệ sẽ giải phóng hạn mức giữ mà không tính phí ảnh. Mặc định giải phóng sau 600 giây, vẫn lưu tác vụ/kết quả; lấy kết quả chưa thanh toán sau đó cần đủ số dư. billing.charged=false ở thành công đầu tiên có thể là trạng thái trước tính phí, không có nghĩa miễn phí. GET/gửi lại lũy đẳng kết quả đã thanh toán không tính phí lại. Giữ task_id để hỗ trợ hóa đơn.'
+});
 
 const LANG_LABELS = {
   en: 'English',
@@ -1510,43 +1844,41 @@ function escapeHtml(s) {
 function renderSamples(dict) {
   const key = dict.yourKey || 'sk-YOUR_KEY';
   const hello = dict.hello || 'Hello';
-  const chat = document.getElementById('curl-chat');
-  const image = document.getElementById('curl-image');
-  const models = document.getElementById('curl-models');
-  const py = document.getElementById('py-sdk');
-  if (chat) {
-    chat.innerHTML = '<code><span class="tok-cmd">curl</span> https://www.keyoapi.xyz/v1/chat/completions \\\n' +
-      '  -H <span class="tok-str">"Authorization: Bearer ' + escapeHtml(key) + '"</span> \\\n' +
-      '  -H <span class="tok-str">"Content-Type: application/json"</span> \\\n' +
-      '  -d <span class="tok-str">\'{\n    "model": "gpt-5.6-luna",\n    "messages": [{"role":"user","content":"' + escapeHtml(hello) + '"}]\n  }\'</span></code>';
+  function setText(id, value) {
+    const el = document.getElementById(id);
+    if (el) el.textContent = value;
   }
-  if (image) {
-    image.innerHTML = '<code><span class="tok-cmd">curl</span> https://www.keyoapi.xyz/v1/images/generations \\\n' +
-      '  -H <span class="tok-str">"Authorization: Bearer ' + escapeHtml(key) + '"</span> \\\n' +
-      '  -H <span class="tok-str">"Content-Type: application/json"</span> \\\n' +
-      '  -d <span class="tok-str">\'{\n    "model": "nano-banana-2",\n    "prompt": "a red circle on white background",\n    "size": "1024x1024"\n  }\'</span></code>';
+  function jsonCurl(id, endpoint, body, extraHeaders = []) {
+    const headers = ['Authorization: Bearer ' + key, ...extraHeaders, 'Content-Type: application/json'];
+    const lines = ['curl https://www.keyoapi.xyz' + endpoint, ...headers.map(h => '  -H "' + h + '"')];
+    const json = JSON.stringify(body, null, 2).replace(/'/g, "'\\''");
+    setText(id, lines.join(' \\\n') + " \\\n  -d '" + json + "'");
   }
-  if (models) {
-    models.textContent = 'curl https://www.keyoapi.xyz/v1/models \\\n  -H "Authorization: Bearer ' + key + '"';
-  }
-  if (py) {
-    py.innerHTML = '<code><span class="tok-cmd">from</span> openai <span class="tok-cmd">import</span> OpenAI\n' +
-      'client = OpenAI(\n' +
-      '    base_url=<span class="tok-str">"https://www.keyoapi.xyz/v1"</span>,\n' +
-      '    api_key=<span class="tok-str">"' + escapeHtml(key) + '"</span>,\n' +
-      ')\n' +
-      'r = client.chat.completions.create(\n' +
-      '    model=<span class="tok-str">"gpt-5.6-luna"</span>,\n' +
-      '    messages=[{<span class="tok-str">"role"</span>: <span class="tok-str">"user"</span>, <span class="tok-str">"content"</span>: <span class="tok-str">"' + escapeHtml(hello) + '"</span>}],\n' +
-      ')\n' +
-      'print(r.choices[0].message.content)</code>';
-  }
+  jsonCurl('curl-chat', '/v1/chat/completions', {
+    model: 'Atria-dawn-v2:free', messages: [{role: 'user', content: hello}]
+  });
+  jsonCurl('curl-image', '/v1/images/generations', {
+    model: 'nano-banana-2', prompt: 'a red circle on white background',
+    aspectRatio: '1:1', imageSize: '2K', n: 1, response_format: 'url', replyType: 'async'
+  }, ['Idempotency-Key: replace-with-a-unique-key-for-this-image']);
+  setText('curl-image-edit', 'curl https://www.keyoapi.xyz/v1/images/edits \\\n  -H "Authorization: Bearer ' + key + '" \\\n  -H "Idempotency-Key: replace-with-a-unique-key-for-this-edit" \\\n  -F model=nano-banana-2 \\\n  -F prompt="Preserve identity; use watercolor style" \\\n  -F image=@./reference.png \\\n  -F aspectRatio=16:9 \\\n  -F imageSize=2K \\\n  -F n=1 \\\n  -F response_format=url \\\n  -F replyType=async');
+  setText('curl-image-task', 'curl https://www.keyoapi.xyz/v1/images/tasks/img_TASK_ID \\\n  -H "Authorization: Bearer ' + key + '"');
+  jsonCurl('curl-video', '/v1/videos/generations', {
+    model: 'seedance-2.5', prompt: 'A red paper boat drifting on calm water at sunset', duration: 5, resolution: '720p'
+  });
+  setText('curl-video-task', 'curl https://www.keyoapi.xyz/v1/tasks/TASK_ID \\\n  -H "Authorization: Bearer ' + key + '"');
+  setText('curl-video-tool-task', 'curl https://www.keyoapi.xyz/v1/task/TASK_ID \\\n  -H "Authorization: Bearer ' + key + '"');
+  jsonCurl('curl-messages', '/v1/messages', {
+    model: 'claude-sonnet-5-5', max_tokens: 1024, messages: [{role: 'user', content: hello}]
+  }, ['anthropic-version: 2023-06-01']);
+  setText('curl-models', 'curl https://www.keyoapi.xyz/v1/models \\\n  -H "Authorization: Bearer ' + key + '"');
+  setText('py-sdk', 'from openai import OpenAI\nclient = OpenAI(\n    base_url="https://www.keyoapi.xyz/v1",\n    api_key="' + key + '",\n)\nr = client.chat.completions.create(\n    model="Atria-dawn-v2:free",\n    messages=[{"role": "user", "content": ' + JSON.stringify(hello) + '}],\n)\nprint(r.choices[0].message.content)');
 }
 
 function applyLang(raw) {
   const code = normalizeLang(raw);
   current = code;
-  const dict = I18N[code] || I18N.en;
+  const dict = { ...I18N.en, ...(I18N[code] || {}) };
   document.documentElement.lang = code === 'zhCN' ? 'zh-CN' : code === 'zhTW' ? 'zh-TW' : code;
   document.title = dict.title || 'KeyoAPI Docs';
   document.querySelectorAll('[data-i18n]').forEach((el) => {

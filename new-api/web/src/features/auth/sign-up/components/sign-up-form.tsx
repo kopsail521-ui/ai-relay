@@ -272,6 +272,16 @@ export function SignUpForm({
         {...props}
       >
         {/* Username Field */}
+        {!emailVerificationRequired && (
+          <p
+            role='note'
+            className='text-muted-foreground rounded-lg border p-3 text-xs'
+          >
+            {t(
+              'Username registration does not bind an email. Save your password. Email recovery requires a verified email bound in account settings; otherwise contact support. You can also register with an available sign-in provider.'
+            )}
+          </p>
+        )}
         <FormField
           control={form.control}
           name='username'

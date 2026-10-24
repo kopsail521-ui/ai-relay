@@ -1,6 +1,6 @@
 (function () {
-  if (window.__keyoModelIconsV5) return;
-  window.__keyoModelIconsV5 = 1;
+  if (window.__keyoModelIconsV6) return;
+  window.__keyoModelIconsV6 = 1;
   var MAP = window.__keyoIconMap || {};
   var LOGO = "/brand/logo.svg";
   var need = {};
@@ -28,20 +28,10 @@
       }
     } catch (e) {}
   }
-  function srcFor(t) {
-    if (!t) return "";
-    t = String(t).replace(/\s+/g, " ").trim();
-    if (!t || t.length > 80) return "";
-    if (need[t]) return need[t];
-    var keys = Object.keys(need);
-    for (var i = 0; i < keys.length; i++) {
-      var k = keys[i];
-      if (k.indexOf(t) === 0 || t.indexOf(k) === 0) return need[k];
-    }
-    return "";
-  }
   function paint(slot, src, alt) {
     if (!slot || !src) return;
+    if (slot.matches('a,button,input,[role="tablist"],[role="tab"]') ||
+        slot.querySelector('a,button,input,select,textarea,[role="tablist"],[role="tab"]')) return;
     if (
       slot.getAttribute("data-keyo-icon") === "1" &&
       slot.getAttribute("data-keyo-icon-src") === src
@@ -66,36 +56,14 @@
   }
   function apply() {
     try {
-      var slots = document.querySelectorAll(
-        '[class*="size-9"],[class*="size-10"],[class*="bg-muted/40"],[class*="bg-muted\\/40"]'
-      );
+      // Only components can designate icon containers. Style classes are also
+      // used by tabs and must never authorize destructive DOM replacement.
+      var slots = document.querySelectorAll('[data-keyo-model-icon]');
       for (var i = 0; i < slots.length; i++) {
         var slot = slots[i];
-        var root = slot.parentElement;
-        var h = root && root.querySelector("h3");
-        var t = h && (h.textContent || "").replace(/\s+/g, " ").trim();
-        var src = srcFor(t);
+        var t = slot.getAttribute('data-keyo-model-icon');
+        var src = need[t];
         if (src) paint(slot, src, t);
-      }
-      var nodes = document.querySelectorAll("h3,h2");
-      for (var j = 0; j < nodes.length; j++) {
-        var el = nodes[j];
-        var name = (el.textContent || "").replace(/\s+/g, " ").trim();
-        var href = srcFor(name);
-        if (!href) continue;
-        var p = el.parentElement;
-        var slot2 = null;
-        for (var d = 0; d < 6 && p; d++) {
-          var cand = p.querySelector(
-            '[class*="bg-muted/40"],[class*="bg-muted\\/40"],[class*="size-9"],[class*="size-10"]'
-          );
-          if (cand) {
-            slot2 = cand;
-            break;
-          }
-          p = p.parentElement;
-        }
-        if (slot2) paint(slot2, href, name);
       }
     } catch (e) {}
   }
@@ -110,7 +78,7 @@
       })
       .catch(function () {});
   } catch (e) {}
-  setInterval(apply, 500);
+  setInterval(apply, 1500);
   try {
     new MutationObserver(function () {
       apply();

@@ -74,7 +74,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
 </header>
 <main class="wrap">
 <h1>Gemini 3.8 Flash TTS API on KeyoAPI — Low-Latency Speech</h1>
-<p class="lead">Gemini 3.8 Flash TTS for controllable, low-latency speech on the same Keyo API key as chat — calls use Gemini-native generateContent, not the OpenAI-compatible /v1/audio/speech endpoint.</p>
+<p class="lead">Gemini 3.8 Flash TTS for controllable, low-latency speech on the same Keyo API key as chat — calls support Gemini-native generateContent and the OpenAI-compatible /v1/audio/speech endpoint. The two routes return audio differently; see the handbook.</p>
 <p class="meta">Listed price: <span class="ok">~$0.44 / $8.82 per 1M in/out</span> · Live catalog: <a href="/pricing">Model Square</a> · Static list: <a href="/pricing-list">pricing list</a>.</p>
 <div class="btnrow">
   <a class="btn btn-primary" href="/sign-up">Get API key</a>
@@ -89,9 +89,9 @@ ul{margin:0 0 14px;padding-left:1.2em}
 <p>Endpoint: <code>POST /v1beta/models/gemini-3.8-flash-tts:generateContent</code></p>
 <p>Model: <code>model=gemini-3.8-flash-tts</code></p>
 <pre><code>curl https://www.keyoapi.xyz/v1beta/models/gemini-3.8-flash-tts:generateContent \
-  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Authorization: Bearer $KEYO_API_KEY" \
   -H "Content-Type: application/json" \
-  -d '{"contents":[{"parts":[{"text":"Hello from Gemini 3.8 Flash TTS."}]}],"generationConfig":{"responseModalities":["AUDIO"],"speechConfig":{"voiceConfig":{"prebuiltVoiceConfig":{"voiceName":"Kore"}}}}}'</code></pre>
+  -d '{"contents":[{"parts":[{"text":"Hello from Gemini 3.8 Flash TTS."}]}],"generationConfig":{"responseModalities":["AUDIO"],"speechConfig":{"voiceConfig":{"prebuiltVoiceConfig":{"voiceName":"Kore"}}}}}'</code></pre><p>Alternatively, use <code>POST /v1/audio/speech</code> with <code>model=gemini-3.8-flash-tts</code> and text <code>input</code>; this compatible route returns audio bytes. See <a href="/brand/keyo-api-ref.html#section-7">the speech contract</a> for required fields and supported options. Do not parse that audio response as JSON.</p>
 <p>Auth uses the same Bearer API key as chat. Full notes: <a href="/brand/keyo-docs.html">Keyo docs</a>.</p>
 </div>
 <h2>FAQ</h2>

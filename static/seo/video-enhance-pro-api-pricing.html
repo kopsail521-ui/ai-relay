@@ -118,17 +118,17 @@ ul{margin:0 0 14px;padding-left:1.2em}
 
 <h2>Rates and how to call</h2>
 <p>video-enhance-pro is a generative video enhancement tool: you submit an existing video and get back a higher-quality version. Call POST /v1/async/videos/enhance with model=video-enhance-pro, the source video as video_url (https), and the target resolution (720p / 1080p / 2k; default 1080p).</p>
-<p>The call returns a task id immediately — poll GET /v1/tasks/{id} with the same key until it returns the result URL. Billing is per second of successfully processed video, so a 10-second 1080p clip costs about $0.68.</p>
+<p>Save the task ID returned by the create request — poll GET /v1/task/{id} with the same key until status completed includes a result URL; stop on failed or cancelled. Billing is per second of successfully processed video, so a 10-second 1080p clip costs about $0.68.</p>
 <p>Keyo rates above are indicative sell prices from the live Keyo catalog; confirm under <a href="/pricing">the pricing page</a> before volume. For removing burned-in subtitles on the same key see <a href="/subtitle-erase-pro-api-pricing">the subtitle erase pro api pricing page</a>; for generation see <a href="/seedance-2-5-api-pricing">the seedance 2 5 api pricing page</a>, <a href="/minimax-h3-api-pricing">the minimax h3 api pricing page</a>, <a href="/flux-3-video-api-pricing">the flux 3 video api pricing page</a> and <a href="/wan3-video-api-pricing">the wan3 video api pricing page</a> on <a href="/pricing-list">the full pricing list</a>.</p>
 
 <pre>curl https://www.keyoapi.xyz/v1/async/videos/enhance \
   -H &quot;Authorization: Bearer $KEYO_API_KEY&quot; \
   -H &quot;Content-Type: application/json&quot; \
   -d '{&quot;model&quot;:&quot;video-enhance-pro&quot;,&quot;video_url&quot;:&quot;https://example.com/clip.mp4&quot;,&quot;resolution&quot;:&quot;1080p&quot;}'
-# Poll GET /v1/tasks/{id} with the same key until it returns the result url</pre>
+# Poll GET /v1/task/{id} with the same key until status completed includes a result URL; stop on failed or cancelled</pre>
 <h2>FAQ</h2>
 <div class="faq"><details><summary>How is Video Enhance Pro billed?</summary><p>Per second of processed video at the target resolution — 720p $0.0342/s, 1080p $0.0685/s, 2k $0.1370/s (indicative). A 10-second 1080p enhancement costs about $0.68.</p></details>
-<details><summary>How do I submit a video?</summary><p>POST /v1/async/videos/enhance with model, video_url (https link to your source video) and resolution. Then poll GET /v1/tasks/{id} for the result URL.</p></details>
+<details><summary>How do I submit a video?</summary><p>POST /v1/async/videos/enhance with model, video_url (https link to your source video) and resolution. Then poll GET /v1/task/{id} for the result URL.</p></details>
 <details><summary>Can I enhance to 4K?</summary><p>The current tiers are 720p, 1080p and 2k. Submit at the highest tier you need — the tool upscales and restores detail generatively.</p></details></div>
 <p class="meta">Also see <a href="/compare">the model comparison page</a>, <a href="/free-models">the gift-credit models page</a>, <a href="/pricing-list">the full pricing list</a>, and <a href="/subtitle-erase-pro-api-pricing">Subtitle Erase Pro pricing</a> · <a href="/agnes-video-2-5-api-pricing">Agnes Video 2.5 pricing</a> · <a href="/seedance-2-5-api-pricing">Seedance 2.5 pricing</a>.</p>
 

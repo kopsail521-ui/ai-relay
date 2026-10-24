@@ -27,10 +27,11 @@ import { resolveGiftCreditPricing } from '../lib/gift-credit'
 export function usePricingData() {
   const { status } = useStatus()
 
-  const { data, isLoading, error, refetch } = useQuery({
+  const { data, isLoading, isFetching, error, refetch } = useQuery({
     queryKey: ['pricing'],
     queryFn: getPricing,
     staleTime: 5 * 60 * 1000,
+    retry: 1,
   })
 
   // Ensure rates never reach zero to prevent division errors
@@ -73,6 +74,7 @@ export function usePricingData() {
     endpointMap: data?.supported_endpoint ?? {},
     autoGroups: data?.auto_groups ?? [],
     isLoading,
+    isFetching,
     error,
     refetch,
     priceRate,

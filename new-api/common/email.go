@@ -34,6 +34,18 @@ func shouldAuthenticateSMTP() bool {
 	return SMTPAccount != "" && SMTPToken != ""
 }
 
+// EmailDeliveryConfigured reports configuration readiness, not delivery success.
+// An unauthenticated relay is supported when an explicit sender is configured
+// without an SMTP account. A configured account requires its authentication token.
+func EmailDeliveryConfigured() bool {
+	sender := strings.TrimSpace(SMTPFrom)
+	if sender == "" {
+		sender = strings.TrimSpace(SMTPAccount)
+	}
+	return strings.TrimSpace(SMTPServer) != "" && SMTPPort > 0 && SMTPPort <= 65535 &&
+		strings.Contains(sender, "@") && (strings.TrimSpace(SMTPAccount) == "" || strings.TrimSpace(SMTPToken) != "")
+}
+
 func smtpTLSConfig() *tls.Config {
 	return &tls.Config{
 		ServerName:         SMTPServer,

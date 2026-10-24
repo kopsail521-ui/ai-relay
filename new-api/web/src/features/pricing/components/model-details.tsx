@@ -76,7 +76,11 @@ import {
 } from '../lib/dynamic-price'
 import { parseTags } from '../lib/filters'
 import { isGiftCreditModel } from '../lib/gift-credit'
-import { getAvailableGroups, isTokenBasedModel } from '../lib/model-helpers'
+import {
+  getAvailableGroups,
+  isTokenBasedModel,
+  hasDedicatedPriceUnit,
+} from '../lib/model-helpers'
 import { formatFixedPrice, formatGroupPrice } from '../lib/price'
 import type {
   ModelCapability,
@@ -88,6 +92,8 @@ import { DynamicPricingBreakdown } from './dynamic-pricing-breakdown'
 import { ModelBillingModeBadge } from './model-billing-mode-badge'
 import { ModelDetailsApi } from './model-details-api'
 import { ModelDetailsPerformance } from './model-details-performance'
+import { ModelUnitPrice } from './model-unit-price'
+import { PricingLoadError } from './pricing-load-error'
 
 // ----------------------------------------------------------------------------
 // Local UI helpers
@@ -546,7 +552,12 @@ function ModelHeader(props: { model: PricingModel }) {
   return (
     <header className='pb-4'>
       <div className='flex items-center gap-2.5'>
-        {modelIcon}
+        <span
+          data-keyo-model-icon={model.model_name}
+          className='flex size-7 shrink-0 items-center justify-center'
+        >
+          {modelIcon}
+        </span>
         <h1 className='font-mono text-xl font-bold tracking-tight sm:text-2xl'>
           {model.model_name}
         </h1>
@@ -587,6 +598,24 @@ function PriceSection(props: {
   showRechargePrice: boolean
 }) {
   const { t } = useTranslation()
+  if (hasDedicatedPriceUnit(props.model)) {
+    return (
+      <section data-keyo-billing-model={props.model.model_name}>
+        <SectionTitle>{t('Base Price')}</SectionTitle>
+        <ModelUnitPrice
+          model={props.model}
+          showRechargePrice={props.showRechargePrice}
+          priceRate={props.priceRate}
+          usdExchangeRate={props.usdExchangeRate}
+        />
+        <p className='text-muted-foreground mt-2 text-xs'>
+          {t(
+            'Open the full integration handbook for model-specific billing details.'
+          )}
+        </p>
+      </section>
+    )
+  }
   const isTokenBased = isTokenBasedModel(props.model)
   const tokenUnitLabel = props.tokenUnit === 'K' ? '1K' : '1M'
   const baseGroupKey = '_base'
@@ -1224,16 +1253,18 @@ export function ModelDetailsContent(props: ModelDetailsContentProps) {
                     billingExpr={props.model.billing_expr}
                   />
                 )}
-                <GroupPricingSection
-                  model={props.model}
-                  groupRatio={props.groupRatio}
-                  usableGroup={props.usableGroup}
-                  autoGroups={props.autoGroups}
-                  priceRate={props.priceRate}
-                  usdExchangeRate={props.usdExchangeRate}
-                  tokenUnit={props.tokenUnit}
-                  showRechargePrice={showRechargePrice}
-                />
+                {!hasDedicatedPriceUnit(props.model) && (
+                  <GroupPricingSection
+                    model={props.model}
+                    groupRatio={props.groupRatio}
+                    usableGroup={props.usableGroup}
+                    autoGroups={props.autoGroups}
+                    priceRate={props.priceRate}
+                    usdExchangeRate={props.usdExchangeRate}
+                    tokenUnit={props.tokenUnit}
+                    showRechargePrice={showRechargePrice}
+                  />
+                )}
               </>
             ) : (
               <p className='text-muted-foreground text-sm'>
@@ -1306,6 +1337,9 @@ export function ModelDetails() {
     endpointMap,
     autoGroups,
     isLoading,
+    isFetching,
+    error,
+    refetch,
     priceRate,
     usdExchangeRate,
   } = usePricingData()
@@ -1325,11 +1359,11 @@ export function ModelDetails() {
 
   usePageMeta({
     title: model
-      ? `${model.model_name} - OpenAI Compatible API | KeyoAPI`
+      ? `${model.model_name} - AI Model API | KeyoAPI`
       : `${modelId} - AI Model | KeyoAPI`,
     description: model
-      ? `Use ${model.model_name} through KeyoAPI OpenAI-compatible API. Pricing, capabilities, endpoints and example requests.`
-      : `Model ${modelId} on KeyoAPI OpenAI-compatible API gateway.`,
+      ? `Use ${model.model_name} through KeyoAPI. Pricing, capabilities, model-specific endpoints and example requests.`
+      : `Model ${modelId} on the KeyoAPI model API platform.`,
     canonical: `${SITE_ORIGIN}/pricing/${encodeURIComponent(modelId ?? '')}`,
   })
 
@@ -1358,6 +1392,17 @@ export function ModelDetails() {
             ))}
           </div>
         </div>
+      </PublicLayout>
+    )
+  }
+
+  if (error) {
+    return (
+      <PublicLayout>
+        <PricingLoadError
+          isRetrying={isFetching}
+          onRetry={() => void refetch()}
+        />
       </PublicLayout>
     )
   }

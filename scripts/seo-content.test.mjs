@@ -345,12 +345,11 @@ test("deepseek pricing math and FAQ q7 link integrity", () => {
   assert.match(faqHtml, /per second \/ 按秒计费|video models are per second/, "FAQ must mention per-second video billing");
 });
 
-test("video enhance and subtitle erase standardize on /v1/tasks/{id} without singular task endpoint", () => {
+test("video tools use their singular task endpoint consistently with the contract", () => {
   for (const page of ["video-enhance-pro-api-pricing.html", "subtitle-erase-pro-api-pricing.html"]) {
     const html = fs.readFileSync(path.join(seoRoot, page), "utf8");
-    assert.doesNotMatch(html, /\/v1\/task\/\{id\}/, `${page} must not mention singular /v1/task/{id}`);
-    assert.doesNotMatch(html, /\(singular\)/i, `${page} must not mention (singular)`);
-    assert.match(html, /\/v1\/tasks\/\{id\}/, `${page} must mention plural /v1/tasks/{id}`);
+    assert.doesNotMatch(html, /\/v1\/tasks\/\{id\}/, `${page} must not use the video-generation task route`);
+    assert.match(html, /\/v1\/task\/\{id\}/, `${page} must use the tool task route`);
   }
 });
 

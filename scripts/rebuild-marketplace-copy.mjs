@@ -69,6 +69,7 @@ const PRICE = {
 };
 
 const BADGE = {
+  million_chars: { zhCN: "按字符计费", zhTW: "按字元計費", en: "Per character", fr: "Par caractère", ru: "За символ", ja: "文字課金", vi: "Theo ký tự" },
   token: { zhCN: "按 Token 计费", zhTW: "按 Token 計費", en: "Token-based", fr: "Au token", ru: "По токенам", ja: "Token 課金", vi: "Theo token" },
   request: { zhCN: "按次计费", zhTW: "按次計費", en: "Per Request", fr: "Par requête", ru: "За запрос", ja: "リクエスト課金", vi: "Theo lần gọi" },
   second: { zhCN: "按秒计费", zhTW: "按秒計費", en: "Per Second", fr: "Par seconde", ru: "За секунду", ja: "秒課金", vi: "Theo giây" },
@@ -78,6 +79,7 @@ const BADGE = {
 };
 
 const SUFFIX = {
+  million_chars: { zhCN: "/百万字符", zhTW: "/百萬字元", en: "/ 1M characters", fr: "/ 1M caractères", ru: "/ 1M символов", ja: "/ 100万文字", vi: "/ 1M ký tự" },
   token: { zhCN: "", zhTW: "", en: "", fr: "", ru: "", ja: "", vi: "" },
   request: { zhCN: "/次", zhTW: "/次", en: "/ request", fr: "/ requête", ru: "/ запрос", ja: "/ 回", vi: "/ lần" },
   second: { zhCN: "/秒", zhTW: "/秒", en: "/ second", fr: "/ seconde", ru: "/ секунду", ja: "/ 秒", vi: "/ giây" },
@@ -87,6 +89,7 @@ const SUFFIX = {
 };
 
 const PRICE_KEY = {
+  million_chars: { zhCN: "每百万字符", zhTW: "每百萬字元", en: "Per 1M characters", fr: "Par 1M caractères", ru: "За 1M символов", ja: "100万文字ごと", vi: "Mỗi 1M ký tự" },
   token: { zhCN: "", zhTW: "", en: "", fr: "", ru: "", ja: "", vi: "" },
   request: { zhCN: "每次请求", zhTW: "每次請求", en: "Per request", fr: "Par requête", ru: "За запрос", ja: "リクエストごと", vi: "Mỗi lần gọi" },
   second: { zhCN: "每秒", zhTW: "每秒", en: "Per second", fr: "Par seconde", ru: "За секунду", ja: "秒ごと", vi: "Mỗi giây" },

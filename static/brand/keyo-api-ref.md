@@ -1,22 +1,22 @@
-# KeyoAPI — 完整调用手册（复制给 AI 用）
+# KeyoAPI — API 接入手册（复制给 AI 用）
 
-> **给用户：** 把**整页**复制发给 AI，并写上：  
-> 1）你的 API Key（`sk-...`）  
-> 2）要用的模型名（从下方「全部模型」里抄）  
-> 3）你想做什么（例如：用 MiniMax-H3 生成 5 秒横屏视频，提示词是……）  
+> **给用户：** 把**整页**复制发给 AI，并写上：
+> 1）你的 API Key（`sk-...`）
+> 2）要用的模型名（从下方「全部模型」里抄）
+> 3）你想做什么（例如：用 MiniMax-H3 生成 5 秒横屏视频，提示词是……）
 > AI 会按本手册选对路径和字段并帮你调用。你不需要看懂技术细节。
 >
-> **给 AI：** 你是调用 KeyoAPI 的助手。严格按本手册的路径、字段、轮询方式执行。  
-> - Base URL: `https://www.keyoapi.xyz/v1`  
-> - Header: `Authorization: Bearer <用户提供的 key>`  
-> - 先根据模型名找到所属「能力族」，再套用该族模板；视频模型必须用对应小节的字段，禁止混用。  
+> **给 AI：** 你是调用 KeyoAPI 的助手。严格按本手册的路径、字段、轮询方式执行。
+> - Base URL: `https://www.keyoapi.xyz/v1`
+> - Header: `Authorization: Bearer <用户提供的 key>`
+> - 先根据模型名找到所属「能力族」，再套用该族模板；视频模型必须用对应小节的字段，禁止混用。
 > - 异步任务按能力族判断终态：图片成功是 HTTP 200 + `status:"succeeded"` + 非空 `data[].url`（§3）；视频 / TTS / 文档解析 / InfiniteTalk 成功是 `completed`（§0.6）。尚未完成时轮询，再把结果 URL/文本交给用户。
 > - 视频 Path B **只收 JSON**；其中的图/视频/音频必须是**公网 `http(s)` URL**。
-> - 视频各模型的字段、模式、禁止项以本手册 **§4 / §5** 为准（用户复制本页给你即可，不必另找文档）。  
-> - 用户只有本机文件时：**先** `POST /v1/uploads`（别名 `/v1/files`）拿到 `url`，再填进 Path B / OCR 的 JSON。  
+> - 视频各模型的字段、模式、禁止项以本手册 **§4 / §5** 为准（用户复制本页给你即可，不必另找文档）。
+> - 用户只有本机文件时：**先** `POST /v1/uploads`（别名 `/v1/files`）拿到 `url`，再填进 Path B / OCR 的 JSON。
 > - **禁止**：JSON 中的本机路径、视频 Path B 的 `data:base64` 或直接 multipart、臆造的 `POST /v1/assets` / `asset://`；图片参考图支持 base64（§3）。
 > - 图片 `/v1/images/edits` / ASR / 抠图 / 超分 / MinerU / InfiniteTalk 等 multipart 接口可直接 `-F file=@` / `-F image=@`（按各接口字段），不必先上传。
-> - 完整模型列表以本手册为准；也可用 `GET /v1/models` 校验是否在售。
+> - 本手册覆盖已文档化接口，不等于全部在售目录。用 `GET /v1/models` 核对该 Key 可用的 ID，并在 `/pricing` 核对分组；目录中存在型号不代表可套用任一模板。未明确接入合同的型号见 §1.14。
 
 ---
 
@@ -42,7 +42,19 @@
 | OpenAI 形状（部分覆盖） | TTS 同步、内容审核 | `POST /v1/audio/speech`——覆盖 `GLM-TTS` / `Step-Audio-TTS-3B` / `IndexTTS-2` / `eleven-v4` / `eleven-v4-turbo` / `gemini-3.8-flash-tts`（见 §1.6 / §7，Gemini TTS 原生亦走 `POST /v1beta/models/...:generateContent`），其它 TTS 走异步（§1.7 / §8）；`POST /v1/moderations`——`model` + `input` 与 OpenAI 同形，响应契约见 §13 |
 | 专属 REST | 视觉处理、异步视频、数字人、文档解析、系统一/结构化决策、视频工具 | 抠图/超分/展平/检测/分割/姿态（§1.10）· Path B 视频（§5）· 数字人说话视频（InfiniteTalk / Duix-Avatar，§1.11 / §12）· 文档解析 MinerU（§1.9 / §10）· 结构化决策（`POST /v1/systemone` 与 `POST /v1/decisions`，§1.11b）· 视频工具（§1.11a）——路径不同，Key 和余额相同 |
 
-规则：换模型只改 `model`；只有能力本身不是 OpenAI 形状时，才换路径。
+规则：只有两个模型明确共享同一请求合同时，才能只改 `model`；同一能力内的路径、必填字段、支持参数与查询规则也可能不同。
+
+---
+
+## 0.2 错误、重试与重复提交
+
+- Base URL 与路径只拼接一次，避免重复 `/v1`。
+- `400` 先修参数；`401/403` 核对密钥与权限；余额／额度不足不等于繁忙，不要循环重试。
+- `429` 按完整 `Retry-After` 等待；等待超过本次任务期限时，延后或停止，不能缩短服务端要求的等待时间。
+- 临时的 **GET 查询错误**可限次退避重试，始终使用已保存的同一任务 ID；查询超时不等于任务生成失败。
+- **POST 创建超时**时任务可能已创建并计费。保留回执／request ID 并核对结果，不能自动创建替代任务。只有端点明确支持幂等时才可用原键重放；图片幂等见 §3.3，不要推定视频、TTS 或数字人也支持。
+- 每个新图片操作使用新的幂等键；仅恢复同一操作时，复用原键和完全相同参数。
+- `:free` 表示赠送金计费入口，不保证永久零费率。逐型号核对费率及钱包；赠送金不足可能自动扣充值余额。见 https://www.keyoapi.xyz/free-models。
 
 ---
 
@@ -97,12 +109,12 @@ Path B 轮询成功示例：
 
 ## 0.5 本地素材上传（本机图/音/视频 → 公网 URL）
 
-用于：**Path B 视频**（MiniMax / Wan / FLUX / Omni / Grok-imagine）、**Unlimited-OCR** / 多模态 chat 的 `image_url.url`。  
+用于：**Path B 视频**（MiniMax / Wan / FLUX / Omni）、**Unlimited-OCR** / 多模态 chat 的 `image_url.url`。
 不用于：ASR、抠图、超分、MinerU、InfiniteTalk、Duix-Avatar（那些接口直接 multipart）。
 
-`POST https://www.keyoapi.xyz/v1/uploads`  
-别名：`POST https://www.keyoapi.xyz/v1/files`  
-Header：`Authorization: Bearer sk-...`  
+`POST https://www.keyoapi.xyz/v1/uploads`
+别名：`POST https://www.keyoapi.xyz/v1/files`
+Header：`Authorization: Bearer sk-...`
 Body：`multipart/form-data`，字段名 `file`（也接受 `image` / `audio` / `video`）
 
 ```bash
@@ -143,11 +155,11 @@ curl https://www.keyoapi.xyz/v1/videos/generations \
   -d "{\"model\":\"MiniMax-H3\",\"prompt\":\"人物按参考图动起来\",\"aspectRatio\":\"landscape\",\"resolution\":\"480p\",\"duration\":5,\"images\":[\"$URL\"]}"
 ```
 
-其它 Path B 模型同样：上传一次，把 `url` 换成该模型字段（Wan→`image_urls`，Grok-imagine→`image.url`，FLUX→`image_urls`/`video_url`，Omni→`first_frame_image` 等）。
+其它 Path B 模型同样：上传一次，把 `url` 换成该模型字段（Wan→`image_urls`，FLUX→`image_urls`/`video_url`，Omni→`first_frame_image` 等）。
 
 ---
 
-## 1. 全部模型速查（按能力）
+## 1. 已文档化模型速查（按能力）
 
 ### 1.1 文本对话 → `POST /v1/chat/completions`
 
@@ -155,7 +167,7 @@ curl https://www.keyoapi.xyz/v1/videos/generations \
 
 赠送金 ID（`:free` 后缀）包含上述对话模型，以及 `GLM-ASR:free`、`SenseVoiceSmall:free`（语音识别，见 §1.5）与 `Spark-TTS-0.5B:free`（语音合成，见 §1.7）。`:free` 按对应赠送金费率、优先扣赠送金（新用户一次性 $10，邀请 +$3）。完整名单与实时费率以 https://www.keyoapi.xyz/free-models 为准，会动态调整。客户端的“连接测试成功”只说明测试请求通过；流式聊天还应确认收到 `choices[].delta.content` 和结束标记 `[DONE]`。若某个付费模型返回余额不足，先核对账户余额；账户仍有余额时保留 request id 联系支持，勿反复重试。
 
-付费：`gpt-5.6-luna` · `gpt-5.6-terra` · `gpt-5.6-sol` · `gpt-6-luna` · `gpt-6-sol` · `gpt-6-astra` · `gpt-6.1-sol` · `claude-sonnet-5` · `claude-sonnet-5-5` · `claude-opus-5` · `claude-opus-5-5` · `claude-haiku-5-5` · `claude-fable-5` · `claude-fable-5-1` · `gemini-3.7-flash` · `gemini-3.8-flash` · `gemini-4-argon` · `gemini-4-barium` · `grok-4.7` · `grok-4.6` · `minimax-m3` · `MiniMax-M3.1-Flash` · `glm-5.3` · `glm-5.3-flash` · `glm-5.2` · `deepseek-v4.1-flash` · `deepseek-v4.1-flash-1017` · `deepseek-v4-pro-0813` · `deepseek-v4-flash-0731` · `deepseek-v4-pro` · `deepseek-v4-flash` · `kimi-k3` · `kimi-k2.7-code` · `qwen3.8-flash` · `hy4-preview` · `mimo-v2.6-pro` · `mimo-v2.6-flash` · `qwen3.8-max-0902`
+付费：`gpt-5.6-luna` · `gpt-5.6-terra` · `gpt-5.6-sol` · `gpt-6-luna` · `gpt-6-sol` · `gpt-6-astra` · `gpt-6.1-sol` · `claude-sonnet-5` · `claude-sonnet-5-5` · `claude-opus-5` · `claude-opus-5-5` · `claude-haiku-5-5` · `claude-fable-5` · `claude-fable-5-1` · `gemini-3.7-flash` · `gemini-3.8-flash` · `gemini-4-argon` · `gemini-4-barium` · `grok-4.7` · `grok-4.6` · `minimax-m3` · `MiniMax-M3.1-Flash` · `glm-5.3` · `glm-5.3-flash` · `glm-5.2` · `deepseek-v4.1-flash` · `deepseek-v4.1-flash-1017` · `deepseek-v4-pro-0813` · `deepseek-v4-flash-0731` · `deepseek-v4-pro` · `deepseek-v4-flash` · `kimi-k3` · `kimi-k2.7-code` · `qwen3.8-flash` · `hy4-preview` · `mimo-v2.6-pro` · `mimo-v2.6-flash` · `qwen3.8-max-0902` · `DeepSeek-Prover-V2-7B` · `Atria-dawn-v2`
 
 ### 1.2 文生图 → `POST /v1/images/generations`
 
@@ -265,10 +277,16 @@ curl https://www.keyoapi.xyz/v1/systemone \
 
 
 ---
+### 1.14 目录中尚未在本页提供完整接入合同的型号
+
+`gpt-image-2.5-sunburst-vip` · `gpt-image-2.5-flare-vip` · `gpt-image-2-4K` · `gpt-image-2-2K` · `DiffusionGemma-26B-A4B-it-Jev` · `gemini-3.1-flash-tts-preview` · `grok-image-2.0` · `MiniMax-H3-vip` · `SemIf-OpenJev-4B` · `suno_music_open` · `keyo-super-resolution-1080p` · `keyo-super-resolution-4k` · `keyo-super-resolution-2k` · `keyo-voice-clone` · `keyo-video-subtitle-removal` · `keyo-tts` · `keyo-song` · `keyo-asr` · `suno_music` · `laya-multilingual`
+
+这些 ID 可能出现在实时目录中，但本页尚未完整列出其必填字段、支持模式与结果语义。音乐、音色注册及结构化决策尤其不能直接套普通 chat／TTS 模板。付费提交前请向支持获取该型号接入合同；不要猜字段、擅自换模型，也不要推定这里列出的图片型号使用 §3 的图片任务路径。
+
 
 ## 2. 文本对话（全模型共用模板）
 
-`POST https://www.keyoapi.xyz/v1/chat/completions`  
+`POST https://www.keyoapi.xyz/v1/chat/completions`
 `Content-Type: application/json`
 
 把 `model` 换成用户指定的对话模型名。
@@ -283,6 +301,15 @@ curl https://www.keyoapi.xyz/v1/systemone \
 流式：加 `"stream": true`（若用户需要）。
 
 ---
+
+### 2.1 ZCode / Cursor 怎么填
+
+1. 添加自定义 OpenAI 兼容供应商。
+2. Base URL 填 `https://www.keyoapi.xyz/v1`。有 API 格式选项时选择 `Chat Completions (/chat/completions)`；不要重复加 `/v1`，也不要把完整端点填到 Base URL。
+3. 填自己的 KeyoAPI Key；从 https://www.keyoapi.xyz/pricing 或 `GET /v1/models` 复制完整模型 ID，保留前缀、标点和 `:free` 后缀。
+4. 核对该型号费率与钱包；`:free` 是赠送金入口，不等于零费率，赠送金不足可能扣充值余额。余额不足先解决账务错误，不要反复重试。
+5. 绿色“连接成功”只表示探针通过，不代表正常聊天、流式和工具调用全部可用。先确认实际文字回复，再分别检查工作流需要的流式与工具能力；不同模型、客户端版本并非全部验证。
+
 
 ## 3. 图片生成与参考图（按型号选参数）
 
@@ -461,9 +488,9 @@ GET 进行中返回 202；完成返回 **HTTP 200**，以图片接口的 `status
 
 ## 5. 视频 Path B（按模型 · 字段不同）
 
-统一：`POST https://www.keyoapi.xyz/v1/videos/generations`  
-统一轮询：`GET https://www.keyoapi.xyz/v1/tasks/{task_id}`  
-媒体：只能公网 https URL。本机文件先走 §0.5 `POST /v1/uploads`，再把返回的 `url` 填入下方字段。  
+统一：`POST https://www.keyoapi.xyz/v1/videos/generations`
+统一轮询：`GET https://www.keyoapi.xyz/v1/tasks/{task_id}`
+媒体：只能公网 https URL。本机文件先走 §0.5 `POST /v1/uploads`，再把返回的 `url` 填入下方字段。
 **本节即 AI 调用视频的完整字段合同**——按模型小节执行，禁止跨模型套字段。
 
 **提交成功响应（取 task id）：**
@@ -475,8 +502,8 @@ GET 进行中返回 202；完成返回 **HTTP 200**，以图片接口的 `status
   "data": [{ "id": "task_xxx", "task_id": "task_xxx", "status": "submitted" }]
 }
 ```
-读 **`id` / `task_id` / `data[0].task_id` 任一即可**，再 `GET /v1/tasks/{id}` 轮询。  
-终态：`status`/`data.status` = `completed`（或 `failed`）。  
+读 **`id` / `task_id` / `data[0].task_id` 任一即可**，再 `GET /v1/tasks/{id}` 轮询。
+终态：`status`/`data.status` = `completed`（或 `failed`）。
 成片：**优先读顶层 `url`**，也可用 `data.result.videos[0].url[0]`（`url` 为数组）。详见 §0.6。
 
 ### 5.0 各模型时长 / 分辨率硬限制（必读）
@@ -492,11 +519,11 @@ GET 进行中返回 202；完成返回 **HTTP 200**，以图片接口的 `status
 
 ### 5.1 MiniMax-H3
 
-必填：`model` `prompt` `aspectRatio` `resolution` `duration`  
+必填：`model` `prompt` `aspectRatio` `resolution` `duration`
 `aspectRatio`：只能是 `landscape`（横屏）或 `portrait`（竖屏）。也可用 `16:9` / `9:16`。不支持 `square` / `1:1`。
-`resolution`：`480p` | `768p` | `1080p`（1080p 最长 10 秒）  
-`duration`：整数 **1–15**  
-可选：`images`（最多 9 张 https）、`audios`（最多 3 段）、`seed`  
+`resolution`：`480p` | `768p` | `1080p`（1080p 最长 10 秒）
+`duration`：整数 **1–15**
+可选：`images`（最多 9 张 https）、`audios`（最多 3 段）、`seed`
 **禁止**当主字段用：`image_with_roles`、`first_frame_image`（与 Seedance/Wan 不同）
 
 提交成功会马上返回 `id`，这时视频还在生成。请用同一把 Key 轮询 `GET /v1/tasks/{id}`：进行中是 `processing`，完成是 `completed` 并带 `url`。进行中不是失败。
@@ -547,12 +574,12 @@ GET 进行中返回 202；完成返回 **HTTP 200**，以图片接口的 `status
 |------|------|------|
 | `duration` / `seconds` | **整数 4–15** | `5` |
 
-传 `1`/`2`/`3` 或 `>15` 会直接被拒。分辨率写在 model id 里，一般不必再传 `resolution`。  
-模式（勿混用）：  
-- **首帧**：`first_frame_image`（或 `generation_type":"first_frame"`）  
-- **参考（单图也可）**：`image_urls` / `images` —— 单张也是参考生，不是默认首帧  
-- **首尾帧**：`image_with_roles`（`first_frame`+`last_frame`）  
-- **参考音视频**：`image_urls` + `video_urls` / `audios`（**禁止**和 `first_frame_image` 混用）  
+传 `1`/`2`/`3` 或 `>15` 会直接被拒。分辨率写在 model id 里，一般不必再传 `resolution`。
+模式（勿混用）：
+- **首帧**：`first_frame_image`（或 `generation_type":"first_frame"`）
+- **参考（单图也可）**：`image_urls` / `images` —— 单张也是参考生，不是默认首帧
+- **首尾帧**：`image_with_roles`（`first_frame`+`last_frame`）
+- **参考音视频**：`image_urls` + `video_urls` / `audios`（**禁止**和 `first_frame_image` 混用）
 可选：`size`（如 `1280x720`）、`aspect_ratio`。
 
 文生：
@@ -612,15 +639,15 @@ GET 进行中返回 202；完成返回 **HTTP 200**，以图片接口的 `status
 
 ### 5.3 wan3.0-video
 
-`resolution`：`480P` | `720P` | `1080P`（可写小写，网关会归一）  
-`duration`：`2`–`30`，或 `-1`（模型自选时长）  
-`size` / `aspect_ratio`：`adaptive` | `16:9` | `4:3` | `1:1` | `3:4` | `9:16`  
+`resolution`：`480P` | `720P` | `1080P`（可写小写，网关会归一）
+`duration`：`2`–`30`，或 `-1`（模型自选时长）
+`size` / `aspect_ratio`：`adaptive` | `16:9` | `4:3` | `1:1` | `3:4` | `9:16`
 
-模式（帧族与参考族互斥）：  
-- **文生**：仅 prompt + resolution + duration  
-- **首帧**：`image_urls` 1 张（默认帧族）  
-- **首尾帧**：`image_urls` 2 张，或 `image_with_roles`  
-- **参考**：必须 `generation_type":"reference"` + `image_urls` / `video_urls` / `audio_urls`（prompt 可用「图1」「视频1」）  
+模式（帧族与参考族互斥）：
+- **文生**：仅 prompt + resolution + duration
+- **首帧**：`image_urls` 1 张（默认帧族）
+- **首尾帧**：`image_urls` 2 张，或 `image_with_roles`
+- **参考**：必须 `generation_type":"reference"` + `image_urls` / `video_urls` / `audio_urls`（prompt 可用「图1」「视频1」）
 - **文件/网页**：`file_url` **或** `link_url`（二选一）
 
 文生：
@@ -668,11 +695,11 @@ GET 进行中返回 202；完成返回 **HTTP 200**，以图片接口的 `status
 
 ### 5.4 flux-3-video
 
-`duration`：整数 `5`–`20`  
-`resolution`：`hd` | `fhd`（也可用 `tier`：`DRAFT`/`HD`/`FHD`；`DRAFT`≡`draft:true`+hd）  
-`aspect_ratio`：`21:9` | `2:1` | `16:9` | `4:3` | `1:1` | `3:4` | `9:16` | `auto`  
-`image_urls`：1=首帧；2=首+尾；3–10=关键帧  
-`video_url` / `video_urls`：续写（有视频时优先于图）  
+`duration`：整数 `5`–`20`
+`resolution`：`hd` | `fhd`（也可用 `tier`：`DRAFT`/`HD`/`FHD`；`DRAFT`≡`draft:true`+hd）
+`aspect_ratio`：`21:9` | `2:1` | `16:9` | `4:3` | `1:1` | `3:4` | `9:16` | `auto`
+`image_urls`：1=首帧；2=首+尾；3–10=关键帧
+`video_url` / `video_urls`：续写（有视频时优先于图）
 草稿：`draft:true`（仅 hd）；成片：`draft_from_task_id` 且**不要**带 prompt
 
 文生：
@@ -714,8 +741,8 @@ GET 进行中返回 202；完成返回 **HTTP 200**，以图片接口的 `status
 
 ### 5.5 gemini-omni-1.1-flash
 
-**禁止传 `duration` / `seconds`**（时长由模型决定约 3–10s）。  
-`resolution`：`360p`|`720p`|`1080p`|`4k`；`aspect_ratio`：`16:9`|`9:16`。  
+**禁止传 `duration` / `seconds`**（时长由模型决定约 3–10s）。
+`resolution`：`360p`|`720p`|`1080p`|`4k`；`aspect_ratio`：`16:9`|`9:16`。
 可用：`image_urls`、`first_frame_image`+`last_frame_image`、`video_urls`（≤1）或 `extend_from_task_id`（与 video_urls 互斥）。
 
 文生：
@@ -741,8 +768,8 @@ GET 进行中返回 202；完成返回 **HTTP 200**，以图片接口的 `status
 
 ### 5.5b gemini-omni-1.1-flash-ext
 
-`duration` **必须**是 `4`|`6`|`8`|`10`。  
-`generation_type`：`frame`（恰好 1 张图）或 `reference`（图数量为 **0/1/3，禁止恰好 2**）。  
+`duration` **必须**是 `4`|`6`|`8`|`10`。
+`generation_type`：`frame`（恰好 1 张图）或 `reference`（图数量为 **0/1/3，禁止恰好 2**）。
 有 `video_urls` 时**不要**再传 duration。
 
 ```json
@@ -766,7 +793,7 @@ GET 进行中返回 202；完成返回 **HTTP 200**，以图片接口的 `status
 
 ## 6. 语音识别 ASR
 
-`POST https://www.keyoapi.xyz/v1/audio/transcriptions`  
+`POST https://www.keyoapi.xyz/v1/audio/transcriptions`
 `multipart/form-data`：`model` + `file`（+ 可选 `language`）
 
 ```bash
@@ -783,7 +810,7 @@ curl https://www.keyoapi.xyz/v1/audio/transcriptions \
 
 ## 7. TTS 同步
 
-`POST https://www.keyoapi.xyz/v1/audio/speech`  
+`POST https://www.keyoapi.xyz/v1/audio/speech`
 模型：`GLM-TTS` · `Step-Audio-TTS-3B` · `IndexTTS-2` · `eleven-v4` · `eleven-v4-turbo` · `gemini-3.8-flash-tts`（原生端点 `POST /v1beta/models/gemini-3.8-flash-tts:generateContent`）
 
 ```json
@@ -800,8 +827,8 @@ curl https://www.keyoapi.xyz/v1/audio/transcriptions \
 
 ## 8. TTS 异步
 
-`POST https://www.keyoapi.xyz/v1/async/audio/speech`  
-轮询：`GET /v1/task/{id}`（单数）  
+`POST https://www.keyoapi.xyz/v1/async/audio/speech`
+轮询：`GET /v1/task/{id}`（单数）
 模型：`Qwen3-TTS` · `CosyVoice3` · `Spark-TTS-0.5B` · `Spark-TTS-0.5B:free`
 
 ```json
@@ -813,11 +840,13 @@ curl https://www.keyoapi.xyz/v1/audio/transcriptions \
 
 提交成功至少含 `id` / `task_id`。轮询到 `status=completed` 后读 **`url`** 或 `output.file_url`（§0.6）。
 
+以上示例是基础文字转语音，不是音色克隆。本页尚未提供参考音频注册或可复用音色 ID 的完整合同；需要克隆时先向支持确认该型号的样本及音色字段，不要臆造 `voice`、`reference_audio` 等参数。
+
 ---
 
 ## 9. OCR（Unlimited-OCR）
 
-`POST /v1/chat/completions`  
+`POST /v1/chat/completions`
 
 本机图片：先 §0.5 上传，把返回的 `url` 填进 `image_url.url`。
 
@@ -853,7 +882,7 @@ curl https://www.keyoapi.xyz/v1/async/documents/parse \
 
 ## 11. 视觉 multipart（抠图 / 超分 / 展平 / 检测 / 分割 / 姿态）
 
-统一：`-F model=...` + `-F image=@文件`（**可直接传本机文件**，不必先走 §0.5）  
+统一：`-F model=...` + `-F image=@文件`（**可直接传本机文件**，不必先走 §0.5）
 路径与模型见 §1.10。
 
 抠图示例：
@@ -870,7 +899,7 @@ curl https://www.keyoapi.xyz/v1/images/mattings \
 
 ## 12. InfiniteTalk（图+音频 → 说话视频）
 
-`POST /v1/async/videos/image-to-video` → `GET /v1/task/{id}`  
+`POST /v1/async/videos/image-to-video` → `GET /v1/task/{id}`
 
 multipart **可直接传本机文件**（不必先走 §0.5）。
 `cond_video` 可以直接上传人物图片，无须先制成静态视频；`cond_audio` 上传驱动音频。**当前单任务音频最多 15 秒**。长音频需自行切段，拆片会按次计费。分辨率支持 **480P / 720P**；画幅跟随输入图。没有拿到任务 `id` 时不要盲目重试。
@@ -890,16 +919,24 @@ curl https://www.keyoapi.xyz/v1/async/videos/image-to-video \
 
 ## 13. 内容审核
 
-`POST /v1/moderations`
+`POST /v1/moderations`，JSON 提交。输入模态必须匹配模型；只改 `model` 不会把文本变成图片。
 
+| 模型 | 输入 |
+| --- | --- |
+| `keyo-text-moderation`、`Security-semantic-filtering` | `input` 文本 |
+| `nsfw-classifier`、`nonescape-v0` | 图片内容放入 `input`，见下例 |
+
+文本示例：
 ```json
-{
-  "model": "keyo-text-moderation",
-  "input": "要审核的文本"
-}
+{"model":"keyo-text-moderation","input":"要审核的文本"}
 ```
 
-模型从 §1.12 选取。
+图片示例（`nonescape-v0` 的 AI 图片检测也使用这一输入封装）：
+```json
+{"model":"nsfw-classifier","input":[{"type":"image_url","image_url":{"url":"https://example.com/image.png"}}]}
+```
+
+`image_url` 必须放在 `input` 内，不能放请求顶层。图片输入封装支持公网 HTTP(S) URL 或图片 data URL；本地文件可先按 §0.5 上传。本页未定义逐模型的图片大小上限和分数含义，设置生产阈值前请确认；HTTP 成功或任意一个分数都不能直接当作审核结论。
 
 ---
 
@@ -914,12 +951,12 @@ curl https://www.keyoapi.xyz/v1/models \
 
 ## 15. AI 执行清单（每次调用前自检）
 
-1. 用户给的模型名是否在 §1？若否，`GET /v1/models` 核对或请用户改名。  
-2. 选对路径（对话 / 图 / 视频 A / 视频 B / ASR / TTS 同步或异步 / 扩展）。  
-3. 若是视频 Path B：打开 §5 对应小节，**不要**套其它模型字段。  
-4. 用户要传本机图/音/视频给 Path B 或 OCR：先 §0.5 上传再填 `url`。  
+1. 用户型号是否有明确接入合同？先核对 §1 和 `GET /v1/models`；§1.14 的型号先确认合同，不能猜路径或仅凭目录存在就提交。
+2. 选对路径（对话 / 图 / 视频 A / 视频 B / ASR / TTS 同步或异步 / 扩展）。
+3. 若是视频 Path B：打开 §5 对应小节，**不要**套其它模型字段。
+4. 用户要传本机图/音/视频给 Path B 或 OCR：先 §0.5 上传再填 `url`。
 5. 异步按族处理：图片用 `/v1/images/tasks/{task_id}`，HTTP 200 + `status:"succeeded"` + 非空 `data[].url` 为成功，202 继续查；临时查询错误重试同一任务，任务终态错误按 §3.3 处理。其它异步用对应 `tasks` / `task` 路径，进行中是 `processing`，终态为 `completed` / `failed` / `cancelled`。提交已返回终态时直接处理。
-6. 把结果（文本、图片 URL、视频 URL、错误信息）用中文简单告诉用户。  
+6. 把结果（文本、图片 URL、视频 URL、错误信息）用中文简单告诉用户。
 7. 不要编造本手册没有的字段名（含 `/v1/assets`、`asset://`）。
 
 ---
@@ -929,7 +966,7 @@ curl https://www.keyoapi.xyz/v1/models \
 | 现象/错误做法 | 正确做法 |
 |---------------|----------|
 | MiniMax 用了 `image_with_roles` / `first_frame_image` | 改用 `images` / `audios` / `aspectRatio` |
-| grok-imagine 只传 prompt | 必须加 `image:{"url":"https://..."}`（本机图先 §0.5） |
+| 当前 `grok-video-1.5` 纯文生视频 | 按 §4 发送含文本内容的 chat 请求；纯文生不强制传图，不套旧 `grok-imagine` 的字段规则 |
 | 视频 JSON 塞了本机路径或 base64 | 先 `POST /v1/uploads`，把返回的 `url` 填进 JSON；或改文生 |
 | 对 Path B 用 multipart / `-F file=@` | Path B 先 uploads，再 JSON + `image_urls` 等；图片 `/v1/images/edits`、ASR/抠图/超分/MinerU/InfiniteTalk 等接口可按各自字段直接 multipart |
 | 调用 `POST /v1/assets` 或 `asset://` | **没有**；用 `POST /v1/uploads`（或 `/v1/files`） |

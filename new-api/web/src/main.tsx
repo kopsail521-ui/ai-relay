@@ -24,17 +24,18 @@ import {
 import { RouterProvider, createRouter } from '@tanstack/react-router'
 import { AxiosError } from 'axios'
 import i18next from 'i18next'
-import { StrictMode } from 'react'
+import { StrictMode, Suspense } from 'react'
 import ReactDOM from 'react-dom/client'
 import { toast } from 'sonner'
 
+import { LoadingState } from '@/components/loading-state'
 import { getStatus } from '@/lib/api'
 import { installBuildMetadata } from '@/lib/build-metadata'
-import { applyPageMeta, setDefaultBrandingTitle } from '@/lib/seo'
 import { applyFaviconToDom } from '@/lib/dom-utils'
-import '@/lib/dayjs'
 import { initializeFrontendCache } from '@/lib/frontend-cache'
+import '@/lib/dayjs'
 import { handleServerError } from '@/lib/handle-server-error'
+import { applyPageMeta, setDefaultBrandingTitle } from '@/lib/seo'
 
 import { DirectionProvider } from './context/direction-provider'
 import { FontProvider } from './context/font-provider'
@@ -102,6 +103,8 @@ const router = createRouter({
   context: { queryClient },
   defaultPreload: 'intent',
   defaultPreloadStaleTime: 0,
+  defaultPendingComponent: () => <LoadingState className='min-h-svh' />,
+  defaultPendingMs: 150,
 })
 
 // Register the router instance for type safety
@@ -176,7 +179,18 @@ if (!rootElement.innerHTML) {
         <ThemeProvider>
           <FontProvider>
             <DirectionProvider>
-              <RouterProvider router={router} />
+              <Suspense
+                fallback={
+                  <div
+                    role='status'
+                    className='flex min-h-svh items-center justify-center'
+                  >
+                    {i18next.t('Loading...')}
+                  </div>
+                }
+              >
+                <RouterProvider router={router} />
+              </Suspense>
             </DirectionProvider>
           </FontProvider>
         </ThemeProvider>

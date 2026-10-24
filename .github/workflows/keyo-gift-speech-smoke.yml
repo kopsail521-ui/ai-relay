@@ -5,6 +5,11 @@ name: Smoke test speech gift twins
 # Creates a throwaway user+token in the new-api SQLite DB, runs three real
 # calls against the public endpoint, asserts success + gift-credit billing,
 # then cleans up the token/user.
+#
+# The remote pipeline lives in scripts/vps-run-gift-speech-smoke.sh and is
+# streamed via `ssh 'sudo bash -s' < script` — no nested-quote escaping.
+# The real-call smoke job is manual-only (workflow_dispatch with
+# run_real_models=true); pushes only run the offline contract tests.
 # Requires the same repo variable/secret as the other VPS jobs:
 #   vars.KEYO_VPS_HOST (+ optional vars.KEYO_VPS_USER)
 #   secrets.KEYO_VPS_SSH_KEY
@@ -14,10 +19,17 @@ on:
     branches: [main]
     paths:
       - "scripts/vps-smoke-gift-speech.py"
+      - "scripts/vps-run-gift-speech-smoke.sh"
       - "scripts/test-gitee-passthrough-unit.mjs"
       - "services/gitee-passthrough/**"
       - ".github/workflows/keyo-gift-speech-smoke.yml"
   workflow_dispatch:
+    inputs:
+      run_real_models:
+        description: 'Explicitly authorize real voice generation and temporary production test-account writes'
+        type: boolean
+        required: true
+        default: false
 
 concurrency:
   group: keyo-gift-speech-smoke
@@ -27,15 +39,24 @@ permissions:
   contents: read
 
 jobs:
+  offline:
+    name: Offline speech contract tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+      - run: node scripts/test-gitee-passthrough-unit.mjs
+
   smoke:
     name: Smoke speech gift twins
-    if: vars.KEYO_VPS_HOST != ''
+    needs: offline
+    if: github.event_name == 'workflow_dispatch' && inputs.run_real_models && vars.KEYO_VPS_HOST != ''
     runs-on: ubuntu-latest
     # Serialize VPS access across the console/static/blog/speech jobs.
     concurrency:
       group: keyo-vps-mutex
       cancel-in-progress: false
     steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
       - name: Run smoke test over SSH
         env:
           HOST: ${{ vars.KEYO_VPS_HOST }}
@@ -56,92 +77,5 @@ jobs:
           printf '%s\n' "${KEY}" > "${HOME}/.ssh/keyo_vps"
           chmod 600 "${HOME}/.ssh/keyo_vps"
           ssh -i "${HOME}/.ssh/keyo_vps" -o StrictHostKeyChecking=accept-new \
-            "${USER}@${HOST}" "sudo -n true && sudo bash -c '
-              set -e
-              cd /opt/ai-relay
-              bash scripts/vps-safe-pull-preserve-blog.sh >/tmp/safe-pull.log 2>&1 || {
-                mkdir -p /opt/ai-relay/static/brand
-                {
-                  echo "smoke_exit=97"
-                  echo "smoke_time=\$(date -u +%FT%TZ)"
-                  echo "SAFE_PULL_FAILED"
-                  tail -20 /tmp/safe-pull.log
-                } > /opt/ai-relay/static/brand/smoke-status.txt
-                chmod 644 /opt/ai-relay/static/brand/smoke-status.txt
-                exit 1
-              }
-              # Rebuild the gitee passthrough image so the container picks up
-              # the server.mjs committed in this push (gift-credit twins
-              # support: model normalization + gift-first billing).
-              EXPECTED_BUILD=gift-twins-2026-10-24b
-              bash scripts/vps-passthrough-rebuild.txt >/tmp/passthrough-rebuild.log 2>&1 || {
-                cat /tmp/passthrough-rebuild.log
-                echo "PASSTHROUGH_REBUILD_FAILED"
-                exit 1
-              }
-              tail -5 /tmp/passthrough-rebuild.log
-              # A stale non-docker process can still own :3010 (ghost from old
-              # runbooks); the new container then crash-loops on EADDRINUSE and
-              # the ghost serves requests with old code. Verify the /healthz
-              # build marker and recover if it mismatches.
-              HZ=""
-              for i in 1 2 3 4 5 6 7 8 9 10; do
-                HZ=\$(curl -sS --max-time 3 http://127.0.0.1:3010/healthz 2>/dev/null || true)
-                case "\$HZ" in *"\$EXPECTED_BUILD"*) break;; esac
-                sleep 3
-                HZ=""
-              done
-              if [ -z "\$HZ" ]; then
-                echo "PASSTHROUGH_BUILD_MISMATCH — healthz now: \$(curl -sS --max-time 3 http://127.0.0.1:3010/healthz 2>/dev/null || true)"
-                echo "PORT 3010 OWNERS:"
-                ss -ltnp | grep ":3010" || true
-                PIDS=\$(ss -ltnp | grep ":3010" | grep -o "pid=[0-9]*" | cut -d= -f2 | sort -u)
-                if [ -n "\$PIDS" ]; then
-                  echo "KILLING STALE PID(S) ON 3010: \$PIDS"
-                  kill -9 \$PIDS 2>/dev/null || true
-                  sleep 2
-                  docker restart ai-relay-gitee-passthrough >/dev/null 2>&1 || true
-                fi
-                for i in 1 2 3 4 5 6 7 8 9 10; do
-                  HZ=\$(curl -sS --max-time 3 http://127.0.0.1:3010/healthz 2>/dev/null || true)
-                  case "\$HZ" in *"\$EXPECTED_BUILD"*) break;; esac
-                  sleep 3
-                  HZ=""
-                done
-              fi
-              if [ -z "\$HZ" ]; then
-                mkdir -p /opt/ai-relay/static/brand
-                {
-                  echo "smoke_exit=98"
-                  echo "smoke_time=\$(date -u +%FT%TZ)"
-                  echo "PASSTHROUGH_BUILD_MISMATCH after ghost cleanup"
-                  docker ps -a --filter name=ai-relay-gitee-passthrough --format "{{.Status}}" 2>/dev/null || true
-                  docker logs --tail 20 ai-relay-gitee-passthrough 2>&1 | tail -20 || true
-                  ss -ltnp | grep ":3010" || true
-                } > /opt/ai-relay/static/brand/smoke-status.txt
-                chmod 644 /opt/ai-relay/static/brand/smoke-status.txt
-                echo "PASSTHROUGH_STALE_BUILD"
-                exit 1
-              fi
-              echo "PASSTHROUGH_BUILD_OK: \$HZ"
-              # CPU cooldown: docker build spikes the small VPS above new-api's
-              # 90% overload guard, which 503-rejects the smoke calls.
-              for i in 1 2 3 4 5 6 7 8 9 10 11 12; do
-                IDLE=\$(vmstat 1 2 | tail -1 | tr -s " " | sed -e "s/^ //" | cut -d" " -f15)
-                if [ -n "\$IDLE" ] && [ "\$IDLE" -ge 15 ] 2>/dev/null; then break; fi
-                sleep 5
-              done
-              set +e
-              OUT=\$(python3 /opt/ai-relay/scripts/vps-smoke-gift-speech.py /opt/ai-relay/data/new-api/one-api.db 2>&1)
-              CODE=\$?
-              echo \"\$OUT\"
-              # Public diagnostic channel: read at /brand/smoke-status.txt
-              mkdir -p /opt/ai-relay/static/brand
-              {
-                echo \"smoke_exit=\$CODE\"
-                echo \"smoke_time=\$(date -u +%FT%TZ)\"
-                echo \"\$OUT\"
-              } > /opt/ai-relay/static/brand/smoke-status.txt
-              chmod 644 /opt/ai-relay/static/brand/smoke-status.txt
-              exit \$CODE
-            '"
+            "${USER}@${HOST}" 'sudo -n true && sudo bash -s' \
+            < scripts/vps-run-gift-speech-smoke.sh

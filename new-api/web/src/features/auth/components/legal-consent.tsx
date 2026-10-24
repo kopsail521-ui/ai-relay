@@ -95,7 +95,6 @@ export function LegalConsent({
               {t('Privacy Policy')}
             </a>
           )}
-          .
         </span>
       </Label>
     </div>

@@ -68,6 +68,9 @@ export function SignUpForm({
   const [isWeChatDialogOpen, setIsWeChatDialogOpen] = useState(false)
   const [isWeChatSubmitting, setIsWeChatSubmitting] = useState(false)
   const [turnstileWidgetKey, setTurnstileWidgetKey] = useState(0)
+  // Invite codes normally arrive via ?aff= links; the manual field lets the
+  // invitee type one in so the attribution is not lost when the link is gone.
+  const [inviteCode, setInviteCode] = useState(() => getAffiliateCode())
   const legalConsentErrorMessage = t(
     'Please check the box to agree to the Privacy Policy and Terms first'
   )
@@ -387,6 +390,24 @@ export function SignUpForm({
             </FormItem>
           )}
         />
+
+        {/* Invite Code Field (optional) */}
+        <FormItem>
+          <Label htmlFor='signup-invite-code'>
+            {t('Invite code (optional)')}
+          </Label>
+          <Input
+            id='signup-invite-code'
+            placeholder={t('Enter invite code')}
+            value={inviteCode}
+            onChange={(e) => {
+              const next = e.target.value.trim()
+              setInviteCode(next)
+              saveAffiliateCode(next)
+            }}
+            autoComplete='off'
+          />
+        </FormItem>
 
         {/* Turnstile */}
         {isTurnstileEnabled && (

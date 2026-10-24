@@ -1,0 +1,24 @@
+# Fix Notice Acceptable-Use link (run on VPS)
+#
+# Why: the system announcement ("Welcome to KeyoAPI") links both
+# "Terms of Service" and "Acceptable Use" to /user-agreement. The real
+# AUP lives at /brand/aup.html.
+#
+# Usage:
+#   cd /opt/ai-relay && sudo git fetch origin && \
+#   sudo git checkout origin/main -- scripts/vps-fix-notice-links.py && \
+#   sudo python3 scripts/vps-fix-notice-links.py && \
+#   sudo docker restart new-api
+#
+# Verify afterwards:
+#   curl -s https://www.keyoapi.xyz/api/notice | grep -o 'aup.html' | head -1
+#   # expect: aup.html
+set -e
+cd /opt/ai-relay
+sudo git fetch origin
+sudo git checkout origin/main -- scripts/vps-fix-notice-links.py
+sudo python3 scripts/vps-fix-notice-links.py
+sudo docker restart new-api
+sleep 8
+echo "verify:"
+curl -s https://www.keyoapi.xyz/api/notice | grep -o 'aup.html' | head -1 || echo "NOT YET — wait for container to boot and retry curl"

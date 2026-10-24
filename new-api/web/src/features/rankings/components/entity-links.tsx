@@ -17,8 +17,11 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 For commercial licensing, please contact support@quantumnous.com
 */
 import { Link } from '@tanstack/react-router'
+import { useTranslation } from 'react-i18next'
 
 import { cn } from '@/lib/utils'
+
+import { localizeVendorName } from '../lib/vendor-display'
 
 type EntityLinkBaseProps = {
   className?: string
@@ -67,6 +70,7 @@ type VendorLinkProps = EntityLinkBaseProps & {
  * wraps.
  */
 export function VendorLink(props: VendorLinkProps) {
+  const { i18n } = useTranslation()
   return (
     <Link
       to='/pricing'
@@ -76,7 +80,8 @@ export function VendorLink(props: VendorLinkProps) {
         props.className
       )}
     >
-      {props.children ?? props.vendor}
+      {props.children ??
+        localizeVendorName(props.vendor, i18n.language ?? 'en')}
     </Link>
   )
 }

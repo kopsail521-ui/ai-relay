@@ -5422,7 +5422,7 @@
     "Gift-credit models": "ギフトクレジット対象モデル",
     "Usage billed · gift credits first": "従量課金 · ギフトクレジットを優先",
     "Calls are billed at the corresponding model rate. Gift credits are used first; any shortfall is charged to your recharge balance.": "呼び出しは対応するモデルの料金で課金されます。ギフトクレジットが優先的に使われ、不足分はチャージ残高から自動的に差し引かれます。",
-    "Gift-credit models are billed by usage. Gift credits are used first; any shortfall is charged to your recharge balance.": "ギフトクレジット対象モデルは従量課金です。ギフトクレジットが優先的に使われ、不足分はチャージ残高から自動的に差し引かれます。",
+    "Gift-credit models are billed by usage. Gift credits are used first; any shortfall is charged to your recharge balance.": "ギフトクレジットモデルは各モデルの料金で課金されます（すべて $0 とは限りません）。ギフトクレジットを優先的に消費し、不足分はチャージ残高から支払われます。",
     "See the corresponding model for billing rates.": "料金は対応するモデルの価格をご確認ください。",
     "Gift-credit balance": "ギフトクレジット残高",
     "Other models use your recharge balance.": "その他のモデルはチャージ残高を使用します。",
@@ -5434,5 +5434,7 @@
     "Gift credits credited to inviter for gift-credit models on each successful signup. Default $3. ({{formattedQuota}})": "紹介による登録が成功するたびに、紹介者にギフトクレジット対象モデル用のクレジットを付与します。デフォルトは $3 です。（{{formattedQuota}}）",
     "Pre-Consume for Zero-Cost Models": "料金ゼロのモデルの事前消費"
   },
-  "Recommended order": "おすすめ順"
+  "Recommended order": "おすすめ順",
+  "Invite code (optional)": "招待コード（任意）",
+  "Enter invite code": "招待コードを入力"
 }

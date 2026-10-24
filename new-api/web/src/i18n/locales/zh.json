@@ -5467,7 +5467,7 @@
     "Gift-credit models": "赠送金模型",
     "Usage billed · gift credits first": "按量扣费 · 赠送金优先",
     "Calls are billed at the corresponding model rate. Gift credits are used first; any shortfall is charged to your recharge balance.": "调用按对应模型费率计费，优先扣赠送金；赠送金不足时自动扣充值余额。",
-    "Gift-credit models are billed by usage. Gift credits are used first; any shortfall is charged to your recharge balance.": "赠送金模型按用量计费，优先扣赠送金；赠送金不足时自动扣充值余额。",
+    "Gift-credit models are billed by usage. Gift credits are used first; any shortfall is charged to your recharge balance.": "赠送金模型按各自费率计费（并非全部 $0）：优先扣赠送金，不足时自动扣充值余额。",
     "See the corresponding model for billing rates.": "具体扣费标准见对应模型价格。",
     "Gift-credit balance": "赠送金余额",
     "Other models use your recharge balance.": "其他模型使用充值余额。",
@@ -5482,5 +5482,7 @@
     "New user bonus:": "新用户专享：",
     "Register to get $10 welcome gift credits + $3 per invite — test gift-credit models (:free) with no credit card required!": "注册即送 $10 体验赠送金（每邀请一人再得 $3）——无需绑卡，直接免费测试赠送金模型（:free）！",
     "Get started →": "立即注册领取 →"
-  }
+  },
+  "Invite code (optional)": "邀请码（可选）",
+  "Enter invite code": "输入邀请码"
 }

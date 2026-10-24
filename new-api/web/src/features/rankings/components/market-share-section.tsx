@@ -292,9 +292,7 @@ function VendorList(props: {
           <VendorLink
             vendor={vendor.vendor}
             className='text-foreground min-w-0 flex-1 truncate text-sm font-medium'
-          >
-            {vendor.vendor}
-          </VendorLink>
+          />
           <div className='shrink-0 text-right'>
             <div className='text-foreground font-mono text-sm font-semibold tabular-nums'>
               {formatTokens(vendor.total_tokens)}

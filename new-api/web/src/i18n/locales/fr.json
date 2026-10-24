@@ -5427,5 +5427,7 @@
     "Gift credits credited to inviter for gift-credit models on each successful signup. Default $3. ({{formattedQuota}})": "Crédits offerts au parrain pour les modèles à crédits offerts à chaque inscription réussie. Par défaut : 3 $. ({{formattedQuota}})",
     "Pre-Consume for Zero-Cost Models": "Préconsommation pour les modèles à tarif nul"
   },
-  "Recommended order": "Ordre recommandé"
+  "Recommended order": "Ordre recommandé",
+  "Invite code (optional)": "Code d'invitation (facultatif)",
+  "Enter invite code": "Saisir le code d'invitation"
 }

@@ -21,6 +21,7 @@ import { useTranslation } from 'react-i18next'
 import { getLobeIcon } from '@/lib/lobe-icon'
 
 import { formatTokens } from '../lib/format'
+import { vendorIconName } from '../lib/vendor-icon'
 import type { ModelRanking } from '../types'
 import { ModelLink, VendorLink } from './entity-links'
 import { GrowthText } from './growth-text'
@@ -83,7 +84,10 @@ function ModelList(props: {
             {row.rank}.
           </span>
           <span className='shrink-0'>
-            {getLobeIcon(row.vendor_icon, compact ? 20 : 22)}
+            {getLobeIcon(
+              vendorIconName(row.vendor_icon, row.vendor),
+              compact ? 20 : 22
+            )}
           </span>
           <div className='min-w-0 flex-1'>
             <ModelLink
@@ -104,9 +108,7 @@ function ModelList(props: {
               }
             >
               {t('by')}{' '}
-              <VendorLink vendor={row.vendor}>
-                {row.vendor}
-              </VendorLink>
+              <VendorLink vendor={row.vendor} />
             </p>
           </div>
           <div className='shrink-0 text-right'>

@@ -254,7 +254,10 @@ export function PublicHeader(props: PublicHeaderProps) {
                 <NotificationPopover
                   open={notifications.popoverOpen}
                   onOpenChange={notifications.setPopoverOpen}
-                  unreadCount={notifications.unreadCount}
+                  // Anonymous visitors have no read history, so every
+                  // announcement would show as "unread"; hide the count
+                  // badge until the user signs in.
+                  unreadCount={isAuthenticated ? notifications.unreadCount : 0}
                   activeTab={notifications.activeTab}
                   onTabChange={notifications.setActiveTab}
                   notice={notifications.notice}

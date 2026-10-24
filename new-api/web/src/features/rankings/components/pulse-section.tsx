@@ -27,6 +27,7 @@ import { useTranslation } from 'react-i18next'
 import { getLobeIcon } from '@/lib/lobe-icon'
 import { cn } from '@/lib/utils'
 
+import { vendorIconName } from '../lib/vendor-icon'
 import type { RankingMover } from '../types'
 import { ModelLink, VendorLink } from './entity-links'
 
@@ -111,7 +112,9 @@ function PulseEmpty(props: { label: string }) {
 function MoverRow(props: { row: RankingMover; intent: 'up' | 'down' }) {
   return (
     <li className='flex items-center gap-3 px-4 py-2'>
-      <span className='shrink-0'>{getLobeIcon(props.row.vendor_icon, 20)}</span>
+      <span className='shrink-0'>
+        {getLobeIcon(vendorIconName(props.row.vendor_icon, props.row.vendor), 20)}
+      </span>
       <div className='min-w-0 flex-1'>
         <ModelLink
           modelName={props.row.model_name}
@@ -121,9 +124,7 @@ function MoverRow(props: { row: RankingMover; intent: 'up' | 'down' }) {
         </ModelLink>
         <p className='text-muted-foreground/80 truncate text-[11px]'>
           #{props.row.current_rank} ·{' '}
-          <VendorLink vendor={props.row.vendor}>
-            {props.row.vendor}
-          </VendorLink>
+          <VendorLink vendor={props.row.vendor} />
         </p>
       </div>
       <span

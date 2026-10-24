@@ -5433,5 +5433,7 @@
     "Gift credits credited to inviter for gift-credit models on each successful signup. Default $3. ({{formattedQuota}})": "Подарочные кредиты пригласившему для моделей с подарочными кредитами за каждую успешную регистрацию. По умолчанию $3. ({{formattedQuota}})",
     "Pre-Consume for Zero-Cost Models": "Предварительное списание для моделей с нулевым тарифом"
   },
-  "Recommended order": "Рекомендуемый порядок"
+  "Recommended order": "Рекомендуемый порядок",
+  "Invite code (optional)": "Код приглашения (необязательно)",
+  "Enter invite code": "Введите код приглашения"
 }

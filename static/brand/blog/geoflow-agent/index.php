@@ -388,7 +388,7 @@ function rebuild_index_and_sitemap(string $blogDir, string $site, array $catalog
     <h1>Blog</h1>
     <p class="sub">Guides for OpenAI-compatible APIs, custom base URLs, and multi-model gateways.</p>
 ' . implode("\n", $cards) . '
-    <p class="k-foot"><a href="/">← KeyoAPI home</a> · <a href="/pricing-list">Pricing list</a> · <a href="/free-models">Free models</a> · <a href="/model/CosyVoice3">CosyVoice3 API</a> · <a href="/tts-api">TTS API</a></p>
+    <p class="k-foot"><a href="/">← KeyoAPI home</a> · <a href="/pricing-list">Pricing list</a> · <a href="/free-models">Gift-credit models</a> · <a href="/model/CosyVoice3">CosyVoice3 API</a> · <a href="/tts-api">TTS API</a></p>
   </div>
 </body>
 </html>

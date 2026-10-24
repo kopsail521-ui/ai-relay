@@ -1,0 +1,49 @@
+# KeyoAPI
+
+> KeyoAPI is a prepaid AI API gateway — one key for chat, speech, OCR and digital humans on a single balance.
+
+KeyoAPI aggregates many model providers behind one prepaid account and one API key.
+Chat, image and speech endpoints are OpenAI-compatible; OCR, vision tools, async
+video and digital-human models run on dedicated REST paths — same key, same balance.
+
+## Facts
+
+- Base URL: `https://www.keyoapi.xyz/v1`
+- Auth: `Authorization: Bearer sk-<key>` (OpenAI SDK compatible)
+- Billing: prepaid wallet, per-model metered (token / per-request / per-task by model)
+- Gift credit: new users get $10; referrals add $3 per invite — gift credits are
+  spent first on eligible `:free` model IDs (billed at each model's gift-credit
+  rate, not $0; fair-use limits apply)
+- Model catalog and live rates: https://www.keyoapi.xyz/pricing-list and https://www.keyoapi.xyz/models
+
+## Documentation
+
+- [API Docs (quickstart)](https://www.keyoapi.xyz/brand/keyo-docs.html): first request in minutes, endpoint map
+- [API Reference & AI Handbook](https://www.keyoapi.xyz/brand/keyo-api-ref.html): full model/endpoint reference with request examples
+- [FAQ](https://www.keyoapi.xyz/brand/faq.html): billing, gift credit, limits
+- [Gift-credit models](https://www.keyoapi.xyz/free-models): the `:free` ID list and rules
+- [Pricing list](https://www.keyoapi.xyz/pricing-list): every model with rate and endpoint
+- [Model comparison](https://www.keyoapi.xyz/compare) · [About](https://www.keyoapi.xyz/about) · [Blog](https://www.keyoapi.xyz/brand/blog/)
+
+## Endpoint families
+
+- Chat (OpenAI-compatible): `POST /v1/chat/completions` — GPT-class, Claude-class, Gemini-class, DeepSeek, GLM, Kimi, MiniMax, Qwen and more
+- Speech recognition: `POST /v1/audio/transcriptions` — Whisper large-v3 / -turbo, SenseVoiceSmall, GLM-ASR, Fun-ASR
+- Speech synthesis: `POST /v1/audio/speech` (sync) and `POST /v1/async/audio/speech` (async) — GLM-TTS, IndexTTS-2, CosyVoice3, Qwen3-TTS, Step-Audio-TTS-3B, Spark-TTS-0.5B, eleven-v4 / eleven-v4-turbo, gemini-3.8-flash-tts
+- Vision & image tools: `POST /v1/images/*` dedicated REST — sam3, VajraV1, RMBG-2.0 (background removal), Real-ESRGAN upscaling
+- OCR & documents: dedicated REST — MinerU2.5-Pro, Unlimited-OCR
+- Async video generation: `POST /v1/async/videos/*` + `GET /v1/task/{id}` — seedance-2.5 / seedance-2.0, MiniMax-H3 video, Flux-3-Video, Wan3, Agnes video, video-enhance-pro, subtitle-erase-pro
+- Digital humans: `POST /v1/async/videos/audio-video-to-video` (Duix-Avatar), image-to-video (InfiniteTalk)
+- Decision routing: `POST /v1/decisions` (Cloudflare Clef) and `POST /v1/systemone` (System One models)
+
+## Gift-credit IDs (prototype lane)
+
+Chat: `Atria-dawn-v2:free`, `DeepSeek-Prover-V2-7B:free`, `keyo-flash:free`, `keyo-flash2:free`, `glm-5.3:free`, `deepseek-v4.1-flash-1017:free`
+Speech: `SenseVoiceSmall:free`, `GLM-ASR:free`, `Spark-TTS-0.5B:free`
+Full rules: https://www.keyoapi.xyz/free-models
+
+## Policies
+
+- Rate limits and fair-use rules apply to gift-credit IDs
+- Acceptable use: https://www.keyoapi.xyz/brand/aup.html
+- Privacy: https://www.keyoapi.xyz/brand/privacy.html

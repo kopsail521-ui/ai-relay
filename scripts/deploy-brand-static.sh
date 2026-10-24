@@ -118,6 +118,13 @@ ${DOMAIN} {
 		header Content-Type text/plain
 		file_server
 	}
+	# llms.txt for AI crawlers (llmstxt.org convention). Without this handle
+	# the SPA catch-all used to answer /llms.txt with a JS shell.
+	handle /llms.txt {
+		root * ${ROOT}/static/brand
+		header Content-Type text/plain
+		file_server
+	}
 	@sitemaps path /sitemap.xml /sitemap-live.xml
 	handle @sitemaps {
 		root * ${ROOT}/static/seo

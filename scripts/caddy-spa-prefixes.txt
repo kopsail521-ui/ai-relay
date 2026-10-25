@@ -1,0 +1,69 @@
+# SPA deep-link prefixes served by the console shell (Caddy @spa_deep).
+# Source of truth: new-api/web/src/routes (TanStack file routes) plus the
+# legacy aliases from new-api/web/src/lib/legacy-route.ts and classic
+# new-api bookmarks. One path (with optional /* companion) per line.
+# UPDATE THIS FILE when the console ships new routes, or deep links will
+# start returning 404 after the next deploy.
+/pricing/*
+/login
+/login/*
+/register
+/register/*
+/forgot-password
+/forgot-password/*
+/otp
+/otp/*
+/reset
+/reset/*
+/oauth
+/oauth/*
+/user
+/user/*
+/blog
+/blog/*
+/docs
+/docs/*
+/integrations
+/integrations/*
+/use-cases
+/use-cases/*
+/status
+/status/*
+/privacy-policy
+/privacy-policy/*
+/user-agreement
+/user-agreement/*
+/chat
+/chat/*
+/chat2link
+/playground
+/playground/*
+/keys
+/keys/*
+/token
+/token/*
+/topup
+/topup/*
+/task
+/task/*
+/wallet
+/wallet/*
+/subscriptions
+/subscriptions/*
+/profile
+/profile/*
+/channels
+/channels/*
+/redemption-codes
+/redemption-codes/*
+/system-info
+/system-info/*
+/system-settings
+/system-settings/*
+/usage-logs
+/usage-logs/*
+/users
+/users/*
+/funnel
+/funnel/*
+/models/*

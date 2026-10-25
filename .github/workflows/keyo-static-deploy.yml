@@ -20,6 +20,7 @@ on:
       - "scripts/caddy-seo-handles.caddyfragment"
       - "scripts/caddy-landing-handles.caddyfragment"
       - "scripts/deploy-brand-static.sh"
+      - "scripts/caddy-spa-prefixes.txt"
       - "scripts/patch-spa-shell-noindex.sh"
       - "scripts/vps-static-deploy.sh"
       - "scripts/vps-safe-pull-preserve-blog.sh"

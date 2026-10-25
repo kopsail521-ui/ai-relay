@@ -26,8 +26,12 @@ main() {
 }
 
 mkdir -p "$ROOT/static/brand"
+# Redact repo identity + absolute paths before mirroring to the public file
+# (it sits behind basic_auth, but do not write secrets even there).
 set +e
-main 2>&1 | tee "$STATUS"
+main 2>&1 \
+  | sed -E 's|https://github\.com/[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+|[redacted-repo]|g; s|/opt/ai-relay|~|g' \
+  | tee "$STATUS"
 code="${PIPESTATUS[0]}"
 set -e
 chmod 644 "$STATUS" 2>/dev/null || true

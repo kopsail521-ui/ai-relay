@@ -98,6 +98,21 @@ if [[ -z "${LANDING_HANDLES//[[:space:]]/}" ]]; then
 fi
 echo "==> Pricing landing handles: $(grep -c 'handle /' <<<"$LANDING_HANDLES" || true)"
 
+# SPA deep-link whitelist (single source: scripts/caddy-spa-prefixes.txt,
+# maintained against new-api/web/src/routes). Missing file = refuse to deploy
+# with a wildcard shell (fail closed to 404s, never to the old catch-all).
+SPA_PREFIX_FILE="${REPO_ROOT}/scripts/caddy-spa-prefixes.txt"
+if [[ ! -s "$SPA_PREFIX_FILE" ]]; then
+  echo "ERROR: missing/empty $SPA_PREFIX_FILE" >&2
+  exit 1
+fi
+SPA_PATH_MATCHER="$(grep -vE '^\s*(#|$)' "$SPA_PREFIX_FILE" | tr '\n' ' ')"
+if [[ -z "${SPA_PATH_MATCHER//[[:space:]]/}" ]]; then
+  echo "ERROR: $SPA_PREFIX_FILE has no path entries" >&2
+  exit 1
+fi
+echo "==> SPA deep-link prefixes: $(grep -vcE '^\s*(#|$)' "$SPA_PREFIX_FILE")"
+
 if [[ -z "$PHP_FPM_SOCK" ]]; then
   echo "ERROR: php-fpm socket missing — install with: sudo apt-get install -y php8.3-fpm php8.3-cli && sudo systemctl enable --now php8.3-fpm" >&2
   exit 1
@@ -137,6 +152,17 @@ ${DOMAIN} {
 	handle /llms.txt {
 		root * ${ROOT}/static/brand
 		header Content-Type text/plain
+		file_server
+	}
+	# Ops diagnostics (deploy/smoke status). NEVER public: they carry repo
+	# URLs, absolute paths and git state. basic_auth + robots.txt disallow;
+	# the tee that writes them also redacts repo URLs and root paths.
+	@ops_diag path /brand/deploy-status.txt /brand/smoke-status.txt
+	handle @ops_diag {
+		basic_auth {
+			keyo \$2b\$10\$/7vmP94Gi4IBqwxzU/qEO.mCoaruycj8gZST892JOMZjYTdZtfqpq
+		}
+		root * ${ROOT}/static/brand
 		file_server
 	}
 	@sitemaps path /sitemap.xml /sitemap-live.xml
@@ -306,7 +332,7 @@ ${GEOFLOW_AGENT_BLOCK}
 	handle @looks_like_file {
 		respond 404
 	}
-	@spa_deep path /pricing/* /login /login/* /register /register/* /forgot-password /forgot-password/* /otp /otp/* /reset /reset/* /oauth /oauth/* /user /user/* /blog /blog/* /docs /docs/* /integrations /integrations/* /use-cases /use-cases/* /status /status/* /privacy-policy /privacy-policy/* /user-agreement /user-agreement/* /chat /chat/* /chat2link /playground /playground/* /keys /keys/* /token /token/* /topup /topup/* /task /task/* /wallet /wallet/* /subscriptions /subscriptions/* /profile /profile/* /channels /channels/* /redemption-codes /redemption-codes/* /system-info /system-info/* /system-settings /system-settings/* /usage-logs /usage-logs/* /users /users/* /funnel /funnel/* /models/*
+	@spa_deep path ${SPA_PATH_MATCHER}
 	handle @spa_deep {
 		header X-Robots-Tag "noindex, nofollow"
 		reverse_proxy 127.0.0.1:3001 {
@@ -319,6 +345,7 @@ ${GEOFLOW_AGENT_BLOCK}
 }
 EOF
 
+caddy fmt --overwrite /etc/caddy/Caddyfile
 caddy validate --config /etc/caddy/Caddyfile
 systemctl reload caddy
 
@@ -353,6 +380,9 @@ verify_check "SPA pricing deep link alive"     "/pricing/deepseek-v4.1-flash" 20
 verify_check "home 200 html"                   "/"             200 "text/html"
 verify_check "SPA sign-in alive"               "/sign-in"      200 "text/html"
 verify_check "SPA wallet deep link alive"      "/wallet"       200 "text/html"
+verify_check "SPA console alias alive"         "/console"      200 "text/html"
+verify_check "SPA keys deep link alive"        "/keys"         200 "text/html"
+verify_check "SPA topup deep link alive"       "/topup"        200 "text/html"
 verify_check "robots declares sitemap"         "/robots.txt"   200 "text/plain" "Sitemap: https://www.keyoapi.xyz/sitemap.xml"
 
 if [[ "$verify_failed" -ne 0 ]]; then

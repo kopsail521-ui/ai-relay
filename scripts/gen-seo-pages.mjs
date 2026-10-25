@@ -1741,6 +1741,9 @@ Disallow: /setup
 Disallow: /admin
 Disallow: /api/
 Disallow: /__spa_raw
+# Ops diagnostics (basic_auth'd, and never for crawlers either)
+Disallow: /brand/deploy-status.txt
+Disallow: /brand/smoke-status.txt
 # SPA i18n shells (en/zh/ja/…): not translated landing pages — do not index.
 Disallow: /en
 Disallow: /zh

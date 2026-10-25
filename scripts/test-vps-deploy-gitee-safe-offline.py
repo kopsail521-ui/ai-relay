@@ -337,6 +337,21 @@ class GiteeReleaseTests(unittest.TestCase):
         with contextlib.redirect_stdout(out): gitee.error_marker('fixture', RuntimeError('never-print-this'))
         self.assertNotIn('never-print-this', out.getvalue())
 
+    def test_runtime_changes_never_trigger_legacy_provisioning_or_real_models(self):
+        workflows = SCRIPTS.parent / '.github/workflows'
+        for filename in ('keyo-apimart-passthrough.yml', 'keyo-speech-gift-twins.yml'):
+            source = (workflows / filename).read_text(encoding='utf8')
+            self.assertNotRegex(source, r'(?m)^  push:')
+            self.assertIn('workflow_dispatch:', source)
+        safe = (workflows / 'keyo-gitee-safe.yml').read_text(encoding='utf8')
+        self.assertIn('services/gitee-passthrough/**', safe)
+        self.assertIn('server.integration.test.mjs', safe)
+        self.assertIn('vps-deploy-gitee-safe.py --inspect', safe)
+        self.assertIn('vps-deploy-gitee-safe.py --deploy', safe)
+        self.assertIn('needs: verify', safe)
+        self.assertNotIn('vps-run-gift-speech-smoke', safe)
+        self.assertNotIn('vps-redeploy-gitee-passthrough', safe)
+
 
 if __name__ == '__main__':
     unittest.main()

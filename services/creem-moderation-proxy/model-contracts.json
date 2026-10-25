@@ -820,33 +820,11 @@
   },
   "video-enhance-pro": {
     "kind": "video-processing",
-    "requests": [
-      {
-        "label": "/v1/async/videos/enhance",
-        "path": "/v1/async/videos/enhance",
-        "body": {
-          "model": "video-enhance-pro",
-          "video_url": "https://example.com/source.mp4"
-        },
-        "pollPath": "/v1/task/{id}",
-        "noteKey": "Replace example media URLs with your own public HTTPS URLs. Upload local files first."
-      }
-    ]
+    "requests": []
   },
   "subtitle-erase-pro": {
     "kind": "video-processing",
-    "requests": [
-      {
-        "label": "/v1/async/videos/subtitle-erase",
-        "path": "/v1/async/videos/subtitle-erase",
-        "body": {
-          "model": "subtitle-erase-pro",
-          "video_url": "https://example.com/source.mp4"
-        },
-        "pollPath": "/v1/task/{id}",
-        "noteKey": "Replace example media URLs with your own public HTTPS URLs. Upload local files first."
-      }
-    ]
+    "requests": []
   },
   "sam3": {
     "kind": "image-processing",

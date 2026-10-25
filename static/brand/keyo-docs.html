@@ -853,14 +853,11 @@
 <tr><td class="model"><button type="button" class="model-btn" data-copy="MiniMax-H3">MiniMax-H3</button></td><td data-i18n="minimaxResolutionSummary"></td><td data-i18n="minimaxDurationSummary"></td><td data-i18n="nMinimaxH3"></td></tr>
 <tr><td class="model"><button type="button" class="model-btn" data-copy="flux-3-video">flux-3-video</button></td><td>draft / hd / fhd</td><td>5s</td><td data-i18n="nFluxVideo"></td></tr>
 <tr><td class="model"><button type="button" class="model-btn" data-copy="wan3.0-video">wan3.0-video</button></td><td>480P / 720P / 1080P</td><td>5s</td><td data-i18n="nWanVideo"></td></tr>
-<tr><td class="model"><button type="button" class="model-btn" data-copy="video-enhance-pro">video-enhance-pro</button></td><td>720p / 1080p (default) / 2k</td><td>Input duration</td><td data-i18n="nVideoEnhance"></td></tr>
-<tr><td class="model"><button type="button" class="model-btn" data-copy="subtitle-erase-pro">subtitle-erase-pro</button></td><td>Native resolution</td><td>Input duration</td><td data-i18n="nSubtitleErase"></td></tr>
             </tbody>
           </table>
         </div>
 
-        <div class="endpoint"><span class="method">POST</span><span class="path">/v1/async/videos/enhance</span><button type="button" class="btn-copy" data-copy="https://www.keyoapi.xyz/v1/async/videos/enhance" data-i18n="copyUrl"></button></div>
-        <div class="endpoint"><span class="method">POST</span><span class="path">/v1/async/videos/subtitle-erase</span><button type="button" class="btn-copy" data-copy="https://www.keyoapi.xyz/v1/async/videos/subtitle-erase" data-i18n="copyUrl"></button></div>
+        <p class="hint" data-i18n-html="videoToolsPendingHint"></p>
         <p class="hint" data-i18n-html="videoTaskHint"></p>
         <div class="endpoint"><span class="method">GET</span><span class="path">/v1/tasks/{id}</span></div>
         <div class="code-block">
@@ -868,7 +865,7 @@
           <pre id="curl-video-task"></pre>
         </div>
         <div class="endpoint"><span class="method">GET</span><span class="path">/v1/task/{id}</span></div>
-        <div class="code-block"><div class="code-bar"><span class="lang">Bash · curl · video tools / async TTS / avatars</span><button type="button" class="btn-copy" data-copy-target="curl-video-tool-task" data-i18n="copy"></button></div><pre id="curl-video-tool-task"></pre></div>
+        <div class="code-block"><div class="code-bar"><span class="lang">Bash · curl · async TTS / avatars</span><button type="button" class="btn-copy" data-copy-target="curl-video-tool-task" data-i18n="copy"></button></div><pre id="curl-video-tool-task"></pre></div>
         <p class="hint" data-i18n-html="videoBillingHint"></p>
       </section>
 
@@ -1893,6 +1890,45 @@ Object.assign(I18N.vi, {
   minimaxDurationSummary: 'Số giây nguyên: không ảnh 4–15; có ảnh 1–15',
   nMinimaxH3: 'Chỉ tham chiếu âm thanh/video vẫn là không ảnh, không hỗ trợ seed. Có ảnh: tối đa 9 ảnh, seed nguyên tùy chọn. Tối đa 3 đoạn âm thanh. Mặc định không ảnh: 768p / 5 giây.'
 });
+
+const VIDEO_TOOL_STATUS_COPY = {
+  en: {
+    capVideoSub: 'Text/image to video with model-specific media references',
+    videoToolsPendingHint: '<strong>Currently unavailable:</strong> <code>subtitle-erase-pro</code> and <code>video-enhance-pro</code> do not have an open integration contract. Do not submit to <code>/v1/async/videos/subtitle-erase</code> or <code>/v1/async/videos/enhance</code>. These are not available video-generation modes.',
+    videoTaskHint: 'Video generation: <code>GET /v1/tasks/{id}</code>. Async TTS and avatars: <code>GET /v1/task/{id}</code>. Save the returned id and use the same API key. Poll every 3–5 seconds while <code>processing</code>; success is <code>status: "completed"</code> plus a result URL. Stop on <code>failed</code> or <code>cancelled</code>. Images use <code>/v1/images/tasks/{task_id}</code> and their own success rule.'
+  },
+  zhCN: {
+    capVideoSub: '文生/图生视频，参考媒体按型号选择',
+    videoToolsPendingHint: '<strong>暂不可用：</strong><code>subtitle-erase-pro</code> 和 <code>video-enhance-pro</code> 的接入合同尚未开放。请勿向 <code>/v1/async/videos/subtitle-erase</code> 或 <code>/v1/async/videos/enhance</code> 提交；不要当作已开放的视频生成模式。',
+    videoTaskHint: '视频生成查询 <code>GET /v1/tasks/{id}</code>；异步 TTS 和数字人查询 <code>GET /v1/task/{id}</code>。保存回执 ID，使用同一把 API Key；<code>processing</code> 时每 3–5 秒查一次，<code>status: "completed"</code> 且有结果 URL 才成功；<code>failed</code> / <code>cancelled</code> 时停止。图片使用 <code>/v1/images/tasks/{task_id}</code> 和图片专用完成规则。'
+  },
+  zhTW: {
+    capVideoSub: '文生/圖生影片，參考媒體依型號選擇',
+    videoToolsPendingHint: '<strong>暫不可用：</strong><code>subtitle-erase-pro</code> 與 <code>video-enhance-pro</code> 的接入契約尚未開放。請勿向 <code>/v1/async/videos/subtitle-erase</code> 或 <code>/v1/async/videos/enhance</code> 提交；勿視為已開放的影片生成模式。',
+    videoTaskHint: '影片生成查詢 <code>GET /v1/tasks/{id}</code>；非同步 TTS 與數位人查詢 <code>GET /v1/task/{id}</code>。保存回執 ID，使用相同 API Key；<code>processing</code> 時每 3–5 秒查詢，<code>status: "completed"</code> 且有結果 URL 才成功；<code>failed</code> / <code>cancelled</code> 時停止。圖片使用 <code>/v1/images/tasks/{task_id}</code> 和圖片專用完成規則。'
+  },
+  ja: {
+    capVideoSub: 'テキスト/画像から動画。参照素材はモデルごとの指定に従います',
+    videoToolsPendingHint: '<strong>現在利用不可：</strong><code>subtitle-erase-pro</code> と <code>video-enhance-pro</code> の接続仕様は未公開です。<code>/v1/async/videos/subtitle-erase</code> または <code>/v1/async/videos/enhance</code> に送信しないでください。利用可能な動画生成モードではありません。',
+    videoTaskHint: '動画生成: <code>GET /v1/tasks/{id}</code>。非同期 TTS・アバター: <code>GET /v1/task/{id}</code>。IDを保存し、同じAPIキーで照会します。<code>processing</code> 中は3〜5秒ごとに確認し、<code>status: "completed"</code> と結果URLがあれば成功です。<code>failed</code> / <code>cancelled</code> で停止。画像は <code>/v1/images/tasks/{task_id}</code> と画像専用の完了条件を使います。'
+  },
+  fr: {
+    capVideoSub: 'Texte/image vers vidéo, références propres à chaque modèle',
+    videoToolsPendingHint: '<strong>Actuellement indisponibles :</strong> les contrats d’intégration de <code>subtitle-erase-pro</code> et <code>video-enhance-pro</code> ne sont pas ouverts. Ne soumettez pas à <code>/v1/async/videos/subtitle-erase</code> ni à <code>/v1/async/videos/enhance</code>. Ce ne sont pas des modes vidéo disponibles.',
+    videoTaskHint: 'Génération vidéo : <code>GET /v1/tasks/{id}</code>. TTS asynchrone et avatars : <code>GET /v1/task/{id}</code>. Conservez l’ID et utilisez la même clé. Vérifiez toutes les 3–5 secondes pendant <code>processing</code>. Succès : <code>status: "completed"</code> et une URL de résultat ; arrêtez sur <code>failed</code> ou <code>cancelled</code>. Les images utilisent <code>/v1/images/tasks/{task_id}</code> et leurs propres règles.'
+  },
+  ru: {
+    capVideoSub: 'Текст/изображение в видео с референсами по правилам модели',
+    videoToolsPendingHint: '<strong>Сейчас недоступны:</strong> контракты интеграции <code>subtitle-erase-pro</code> и <code>video-enhance-pro</code> не открыты. Не отправляйте запросы на <code>/v1/async/videos/subtitle-erase</code> или <code>/v1/async/videos/enhance</code>. Это не доступные режимы генерации видео.',
+    videoTaskHint: 'Генерация видео: <code>GET /v1/tasks/{id}</code>. Асинхронный TTS и аватары: <code>GET /v1/task/{id}</code>. Сохраните ID и используйте тот же API-ключ. При <code>processing</code> проверяйте каждые 3–5 секунд. Успех: <code>status: "completed"</code> и URL результата. Остановитесь при <code>failed</code> или <code>cancelled</code>. Изображения используют <code>/v1/images/tasks/{task_id}</code> и отдельные правила.'
+  },
+  vi: {
+    capVideoSub: 'Chữ/ảnh thành video, tham chiếu theo từng model',
+    videoToolsPendingHint: '<strong>Hiện chưa khả dụng:</strong> hợp đồng tích hợp cho <code>subtitle-erase-pro</code> và <code>video-enhance-pro</code> chưa mở. Không gửi tới <code>/v1/async/videos/subtitle-erase</code> hoặc <code>/v1/async/videos/enhance</code>. Đây không phải chế độ video đang khả dụng.',
+    videoTaskHint: 'Tạo video: <code>GET /v1/tasks/{id}</code>. TTS bất đồng bộ và avatar: <code>GET /v1/task/{id}</code>. Lưu ID, dùng cùng khóa API. Kiểm tra mỗi 3–5 giây khi <code>processing</code>; thành công cần <code>status: "completed"</code> kèm URL kết quả. Dừng khi <code>failed</code> hoặc <code>cancelled</code>. Ảnh dùng <code>/v1/images/tasks/{task_id}</code> và quy tắc riêng.'
+  }
+};
+for (const [language, copy] of Object.entries(VIDEO_TOOL_STATUS_COPY)) Object.assign(I18N[language], copy);
 
 const LANG_LABELS = {
   en: 'English',

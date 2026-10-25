@@ -102,9 +102,16 @@ after = cur.execute(
     "WHERE a.model IN (%s) AND a.enabled=1 ORDER BY a.model" % ",".join("?" * len(DEAD)),
     DEAD,
 ).fetchall()
-report("AFTER (must only be the protected lane):", after)
-bad = [dict(r) for r in after if r["group"] != PROTECTED_GROUP]
+report("AFTER (grsai non-Pro lanes must be gone; zex/aicopy/Pro rows may remain):", after)
+# The Pro lane is routed by the ledger straight to aicopy regardless of the
+# channel's base_url, so protected-group rows are never failures. Only
+# non-Pro rows on grsai-backed channels mean a live dead lane.
+bad = [
+    dict(r)
+    for r in after
+    if r["group"] != PROTECTED_GROUP and PROVIDER in str(r["base_url"]).lower()
+]
 if bad:
-    print("VERIFY_FAILED non-protected lanes remain:", bad)
+    print("VERIFY_FAILED grsai lanes remain:", bad)
     sys.exit(2)
 print("CLEANUP_OK")

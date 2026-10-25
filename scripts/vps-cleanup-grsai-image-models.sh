@@ -36,33 +36,19 @@ if [[ "$healthy" != 1 ]]; then
   exit 1
 fi
 
-# Public verification straight from the new-api container: the dead lane must
-# be gone and the live lane must remain for both marketplace SKUs.
+# Public pricing is report-only here: the HD group may legitimately remain
+# advertised via the live zex channel, and pricing cannot distinguish channel
+# providers. The authoritative check is the python AFTER step (no grsai lane).
 python3 - <<'PYEOF'
-import json, time, urllib.request
+import json, urllib.request
 
-def pricing():
-    with urllib.request.urlopen("http://127.0.0.1:3000/api/pricing", timeout=20) as r:
-        return json.load(r)
-
-ok = False
-for _ in range(15):
-    try:
-        rows = {
-            m["model_name"]: m.get("enable_groups")
-            for m in pricing().get("data", [])
-            if m.get("model_name") in ("gpt-image-2.5-sunburst", "gpt-image-2.5-flare")
-        }
-        print("PRICING_GROUPS", json.dumps(rows, ensure_ascii=False))
-        if rows and all(
-            g and "GPT-Image-HD" not in g and "GPT-Image-Pro" in g
-            for g in rows.values()
-        ):
-            ok = True
-            break
-    except Exception as e:
-        print("verify retry:", e)
-    time.sleep(4)
-print("VERIFY_OK" if ok else "VERIFY_PENDING: pricing cache may need another minute; DB state is authoritative")
+with urllib.request.urlopen("http://127.0.0.1:3000/api/pricing", timeout=20) as r:
+    j = json.load(r)
+rows = {
+    m["model_name"]: m.get("enable_groups")
+    for m in j.get("data", [])
+    if m.get("model_name", "").startswith("gpt-image-2.5")
+}
+print("PRICING_GROUPS", json.dumps(rows, ensure_ascii=False))
 PYEOF
 printf 'DONE_IMAGE_HD_CLEANUP backup=%s\n' "$BACKUP"

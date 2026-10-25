@@ -45,6 +45,12 @@ if [[ -z "$PHP_FPM_SOCK" ]]; then
   echo "WARN: no php-fpm sock found yet (needed before Caddy rewrite)" >&2
 fi
 
+# GEO P1: snapshot current state so post-deploy verification can auto-rollback.
+rm -rf "$SEO_DIR.bak-deploy" "$BRAND_DIR.bak-deploy"
+[[ -d "$SEO_DIR" ]] && cp -a "$SEO_DIR" "$SEO_DIR.bak-deploy" || true
+[[ -d "$BRAND_DIR" ]] && cp -a "$BRAND_DIR" "$BRAND_DIR.bak-deploy" || true
+[[ -f /etc/caddy/Caddyfile ]] && cp -a /etc/caddy/Caddyfile /etc/caddy/Caddyfile.bak-deploy || true
+
 if [[ -d "$REPO_BRAND" && "$(realpath "$REPO_BRAND")" != "$(realpath "$BRAND_DIR")" ]]; then
   cp -a "$REPO_BRAND/." "$BRAND_DIR/"
   echo "==> Copied brand pages to $BRAND_DIR"
@@ -54,6 +60,14 @@ fi
 if [[ -d "$REPO_SEO" && -f "$REPO_SEO/index.html" && "$(realpath "$REPO_SEO")" != "$(realpath "$SEO_DIR")" ]]; then
   cp -a "$REPO_SEO/." "$SEO_DIR/"
   echo "==> Copied SEO pages to $SEO_DIR"
+  # Atomic replace for files crawlers poll (sitemap/robots/index): never a
+  # truncated/instant — cp truncates in place, install+mv renames atomically.
+  for f in sitemap.xml robots.txt index.html; do
+    if [[ -f "$REPO_SEO/$f" ]]; then
+      install -m 644 "$REPO_SEO/$f" "$SEO_DIR/.deploy-$f.$$" \
+        && mv -f "$SEO_DIR/.deploy-$f.$$" "$SEO_DIR/$f"
+    fi
+  done
 elif [[ -f "$SEO_DIR/index.html" ]]; then
   echo "==> SEO already in place at $SEO_DIR (skip copy)"
 else
@@ -271,16 +285,98 @@ ${GEOFLOW_AGENT_BLOCK}
 			hide .git .gitignore
 		}
 	}
-	handle {
+	# ---- Fallback discipline (GEO P0, 2026-10-25) ------------------------------
+	# The old bare catch-all proxied EVERYTHING unmatched to the SPA (:3001),
+	# so any miss — /sitemap.txt, junk URLs, sitemap.xml during its replace
+	# window — returned 200 + 448KB HTML shell. GSC logged the sitemap as
+	# "type: unknown / couldn't fetch" and every mistyped URL became a
+	# crawled-not-indexed duplicate. Replace with ordered rules:
+	#   1) backend API + embedded assets always reach new-api
+	#   2) file-looking paths (.xml/.txt/…) never get the shell — hard 404
+	#   3) SPA deep links (real router prefixes from new-api/web/src/routes)
+	#      keep the console working, noindexed
+	#   4) everything else is a real 404
+	@backend_api path /api /api/* /v1 /v1/* /v1beta /v1beta/* /assets /assets/* /mj /mj/* /pg /pg/* /suno /suno/* /authz /authz/* /custom-oauth-provider /custom-oauth-provider/* /perf-metrics* /performance*
+	handle @backend_api {
 		reverse_proxy 127.0.0.1:3001 {
 			header_up Accept-Encoding identity
 		}
+	}
+	@looks_like_file path_regexp file_ext \.[A-Za-z0-9]{1,8}$
+	handle @looks_like_file {
+		respond 404
+	}
+	@spa_deep path /pricing/* /login /login/* /register /register/* /forgot-password /forgot-password/* /otp /otp/* /reset /reset/* /oauth /oauth/* /user /user/* /blog /blog/* /docs /docs/* /integrations /integrations/* /use-cases /use-cases/* /status /status/* /privacy-policy /privacy-policy/* /user-agreement /user-agreement/* /chat /chat/* /chat2link /playground /playground/* /keys /keys/* /token /token/* /topup /topup/* /task /task/* /wallet /wallet/* /subscriptions /subscriptions/* /profile /profile/* /channels /channels/* /redemption-codes /redemption-codes/* /system-info /system-info/* /system-settings /system-settings/* /usage-logs /usage-logs/* /users /users/* /funnel /funnel/* /models/*
+	handle @spa_deep {
+		header X-Robots-Tag "noindex, nofollow"
+		reverse_proxy 127.0.0.1:3001 {
+			header_up Accept-Encoding identity
+		}
+	}
+	handle {
+		respond 404
 	}
 }
 EOF
 
 caddy validate --config /etc/caddy/Caddyfile
 systemctl reload caddy
+
+# ---- GEO P1: post-deploy invariants; any failure rolls the deploy back ----
+echo "==> Post-deploy verification (sitemap / 404 discipline / SPA deep links)"
+verify_failed=0
+verify_check() {
+  local desc="$1" url="$2" want_code="$3" want_type="${4:-}" want_body="${5:-}"
+  local bodyf hdr code ctype head ok
+  bodyf=$(mktemp)
+  hdr=$(curl -sS -o "$bodyf" -D - --max-time 20 "https://${DOMAIN}${url}" 2>/dev/null || true)
+  code=$(awk 'NR==1{print $2}' <<<"$hdr")
+  ctype=$(grep -i '^content-type:' <<<"$hdr" | head -1 | tr -d '\r')
+  head=$(head -c 300 "$bodyf")
+  ok=1
+  [[ "$code" == "$want_code" ]] || ok=0
+  if [[ -n "$want_type" && "$ctype" != *"$want_type"* ]]; then ok=0; fi
+  if [[ -n "$want_body" && "$head" != *"$want_body"* ]]; then ok=0; fi
+  if [[ "$ok" == 1 ]]; then
+    echo "VERIFY_OK   $desc (code=$code type=$ctype)"
+  else
+    echo "VERIFY_FAIL $desc — want code=$want_code type=*$want_type* body~*$want_body*; got code=$code type=$ctype body=$(head -c 80 "$bodyf" | tr '\n' ' ')"
+    verify_failed=1
+  fi
+  rm -f "$bodyf"
+}
+verify_check "root sitemap 200 xml"            "/sitemap.xml"  200 "text/xml"  "<?xml"
+verify_check "blog sitemap 200 plain"          "/brand/blog/sitemap.txt" 200 "text/plain" "https://"
+verify_check "junk file ext is 404"            "/sitemap.txt"  404
+verify_check "junk path is 404"                "/this-path-does-not-exist-98765" 404
+verify_check "SPA pricing deep link alive"     "/pricing/deepseek-v4.1-flash" 200 "text/html"
+verify_check "home 200 html"                   "/"             200 "text/html"
+verify_check "SPA sign-in alive"               "/sign-in"      200 "text/html"
+verify_check "SPA wallet deep link alive"      "/wallet"       200 "text/html"
+verify_check "robots declares sitemap"         "/robots.txt"   200 "text/plain" "Sitemap: https://www.keyoapi.xyz/sitemap.xml"
+
+if [[ "$verify_failed" -ne 0 ]]; then
+  echo "==> VERIFY_FAILED — rolling back static dirs + Caddyfile"
+  if [[ -d "$SEO_DIR.bak-deploy" ]]; then
+    rm -rf "${SEO_DIR}.restore"
+    cp -a "$SEO_DIR.bak-deploy" "${SEO_DIR}.restore"
+    rm -rf "$SEO_DIR"
+    mv "${SEO_DIR}.restore" "$SEO_DIR"
+  fi
+  if [[ -d "$BRAND_DIR.bak-deploy" ]]; then
+    rm -rf "${BRAND_DIR}.restore"
+    cp -a "$BRAND_DIR.bak-deploy" "${BRAND_DIR}.restore"
+    rm -rf "$BRAND_DIR"
+    mv "${BRAND_DIR}.restore" "$BRAND_DIR"
+  fi
+  if [[ -f /etc/caddy/Caddyfile.bak-deploy ]]; then
+    cp -a /etc/caddy/Caddyfile.bak-deploy /etc/caddy/Caddyfile
+  fi
+  caddy validate --config /etc/caddy/Caddyfile && systemctl reload caddy
+  echo "ROLLBACK_DONE"
+  exit 1
+fi
+rm -rf "$SEO_DIR.bak-deploy" "$BRAND_DIR.bak-deploy" /etc/caddy/Caddyfile.bak-deploy
 
 echo "==> Check"
 # NB: write to temp files, never `curl | head -c N` — head closes the pipe,

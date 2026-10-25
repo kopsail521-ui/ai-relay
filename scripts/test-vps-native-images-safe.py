@@ -39,6 +39,9 @@ class Engine:
     def __init__(self, root, failure=None, backup='stopped'):
         self.failure, self.events, self.new_started = failure, [], False
         self.warmup_checks = 0
+        self.stop_timeout_seen = False
+        self.pending_stop_inspects = 0
+        self.rollback_start_conflicts = 0
         original = baseline.fixture('native', root)
         original['Image'] = OLD_IMAGE
         original['HostConfig']['NetworkMode'] = 'host'
@@ -69,12 +72,22 @@ class Engine:
         container = self.containers[name]
         action = tail[0] if tail else ''
         if method == 'GET' and action == 'json':
+            if name == release.NAME and self.pending_stop_inspects:
+                self.pending_stop_inspects -= 1
+                if self.pending_stop_inspects == 0:
+                    container['State'] = {'Running': False, 'Restarting': False, 'Pid': 0}
             return copy.deepcopy(container)
         if method == 'DELETE':
             del self.containers[name]
         elif action == 'update':
             container['HostConfig']['RestartPolicy'] = copy.deepcopy(body['RestartPolicy'])
         elif action == 'stop':
+            if name == release.NAME and not self.stop_timeout_seen and self.failure in ('stop-timeout', 'stop-failure-after-request'):
+                self.stop_timeout_seen = True
+                self.pending_stop_inspects = 2
+                if self.failure == 'stop-timeout':
+                    raise TimeoutError('fixture-secret transport timed out while stop was still pending')
+                raise release.DockerFailure(400)
             container['State'] = {'Running': False, 'Restarting': False, 'Pid': 0}
         elif action == 'rename':
             if self.failure == 'rename' and name == release.NAME:
@@ -83,6 +96,9 @@ class Engine:
             self.containers[new_name] = self.containers.pop(name)
         elif action == 'start':
             is_new = container['Image'] == NEW_IMAGE
+            if not is_new and self.failure == 'rollback-start-conflict' and self.rollback_start_conflicts < 2:
+                self.rollback_start_conflicts += 1
+                raise release.DockerFailure(409)
             if is_new and self.failure == 'start':
                 raise RuntimeError('Injected start failure')
             self.new_started = is_new
@@ -118,7 +134,7 @@ class Engine:
 
     def health(self, name, port, config=None, service=None):
         self.events.append(('HEALTH', name, None))
-        if self.containers[name]['Image'] == NEW_IMAGE and self.failure == 'health':
+        if self.containers[name]['Image'] == NEW_IMAGE and self.failure in ('health', 'rollback-start-conflict'):
             raise RuntimeError('Injected new health failure')
         if self.containers[name]['Image'] == NEW_IMAGE and self.failure == 'unstable':
             self.containers[name]['State']['Pid'] += 1
@@ -198,6 +214,28 @@ class NativeReleaseTests(unittest.TestCase):
         self.assertIn('NATIVE_RELEASE_OK', output)
         self.assertEqual(engine.warmup_checks, 2)
 
+    def test_ambiguous_stop_timeout_waits_for_stopped_before_rename(self):
+        engine = Engine(self.root, failure='stop-timeout')
+        output = self.run_engine(engine)
+        self.assertIn('NATIVE_RELEASE_OK', output)
+        self.assertIn('docker_socket_timeout', output)
+        self.assertNotIn('fixture-secret', output)
+        self.assertEqual(engine.pending_stop_inspects, 0)
+
+    def test_failed_stop_response_rolls_back_after_pending_stop_finishes(self):
+        engine = Engine(self.root, failure='stop-failure-after-request')
+        with self.assertRaisesRegex(RuntimeError, 'previous native service restored'):
+            self.run_engine(engine)
+        self.assertEqual(engine.pending_stop_inspects, 0)
+        self.assert_original_running(engine)
+
+    def test_rollback_start_retries_docker_conflicts_with_backoff(self):
+        engine = Engine(self.root, failure='rollback-start-conflict')
+        with self.assertRaisesRegex(RuntimeError, 'previous native service restored'):
+            self.run_engine(engine)
+        self.assertEqual(engine.rollback_start_conflicts, 2)
+        self.assert_original_running(engine)
+
     def test_changed_pinned_image_or_unknown_active_backup_never_mutates(self):
         for case in ('image', 'active', 'pid'):
             engine = Engine(self.root, backup='known-loop')
@@ -256,6 +294,43 @@ class NativeReleaseTests(unittest.TestCase):
             with self.assertRaises(RuntimeError) as caught:
                 release.run_command(['docker', 'inspect', 'fixture'])
         self.assertNotIn('fixture-secret', str(caught.exception))
+
+    def test_docker_api_204_and_304_are_successful_without_json(self):
+        for status in (204, 304):
+            connection = Mock()
+            connection.getresponse.return_value = types.SimpleNamespace(status=status, read=lambda: b'')
+            with patch.object(release, 'NativeUnixHTTP', return_value=connection) as factory:
+                self.assertIsNone(release.docker_api('POST', '/containers/fixture/stop?t=30'))
+            factory.assert_called_once_with('localhost', timeout=95)
+            connection.close.assert_called_once()
+
+    def test_docker_api_error_only_exports_http_status(self):
+        connection = Mock()
+        connection.getresponse.return_value = types.SimpleNamespace(status=409, read=lambda: b'{"message":"fixture-secret"}')
+        with patch.object(release, 'NativeUnixHTTP', return_value=connection):
+            with self.assertRaises(release.DockerFailure) as caught:
+                release.docker_api('POST', '/containers/fixture/start')
+        self.assertEqual(caught.exception.status, 409)
+        self.assertNotIn('fixture-secret', str(caught.exception))
+
+    def test_unix_socket_deadline_exceeds_docker_stop_deadline(self):
+        fake_socket = Mock()
+        with patch.object(release.socket, 'socket', return_value=fake_socket), patch.object(release.socket, 'AF_UNIX', 1, create=True):
+            connection = release.NativeUnixHTTP('localhost', timeout=95)
+            connection.connect()
+        fake_socket.settimeout.assert_called_once_with(95)
+        fake_socket.connect.assert_called_once_with('/var/run/docker.sock')
+
+    def test_sanitized_stage_markers_never_export_exception_text(self):
+        output = io.StringIO()
+        with contextlib.redirect_stdout(output):
+            release.error_marker('stop_original', TimeoutError('fixture-secret'))
+            release.error_marker('rollback_start_original', release.DockerFailure(409))
+        text = output.getvalue()
+        self.assertNotIn('fixture-secret', text)
+        records = [json.loads(line) for line in text.splitlines()]
+        self.assertEqual(records[0]['category'], 'docker_socket_timeout')
+        self.assertEqual(records[1]['docker_status'], 409)
 
     def test_workflow_routes_image_changes_away_from_legacy_deployment(self):
         legacy = (ROOT / '.github/workflows/keyo-apimart-passthrough.yml').read_text(encoding='utf8')

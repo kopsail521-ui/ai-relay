@@ -7,11 +7,13 @@ No generation, upstream, authentication or database requests are issued here.
 import copy
 import fcntl
 import hashlib
+import http.client
 import importlib.util
 import json
 import os
 from pathlib import Path
 import re
+import socket
 import subprocess
 import sys
 import time
@@ -24,12 +26,64 @@ SOURCES = ('server.mjs', 'video-contracts.mjs', 'task-responses.mjs',
            'image-contracts.mjs', 'image-ledger.mjs', 'image-service.mjs', 'catalog.json')
 KNOWN_LOOP_NAME = NAME + '-images-rollback'
 KNOWN_LOOP_IMAGE = 'sha256:df7b55a4f1ac22c1dba65fc650273e6ead60755e8ca58f50c7fbd812dca3ccd7'
+DOCKER_TIMEOUT_SECONDS = 95
+
+
+class DockerFailure(RuntimeError):
+    def __init__(self, status):
+        self.status = status
+        super().__init__('Docker operation failed with status=' + str(status))
+
+
+class NativeUnixHTTP(http.client.HTTPConnection):
+    def connect(self):
+        self.sock = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
+        # A stop?t=30 can consume all 30 seconds before Docker kills PID 1.
+        # The transport must outlive that server-side deadline and its response.
+        self.sock.settimeout(DOCKER_TIMEOUT_SECONDS)
+        self.sock.connect('/var/run/docker.sock')
+
+
+def docker_api(method, route, body=None):
+    connection = NativeUnixHTTP('localhost', timeout=DOCKER_TIMEOUT_SECONDS)
+    try:
+        connection.request(method, '/v1.41' + route,
+                           json.dumps(body) if body is not None else None,
+                           {'Content-Type': 'application/json'})
+        response = connection.getresponse()
+        data = response.read()
+        if response.status >= 400:
+            raise DockerFailure(response.status)
+        # 204 and idempotent 304 stop/start responses both have no JSON body.
+        return json.loads(data) if data else None
+    finally:
+        connection.close()
+
+
+def error_marker(stage, error):
+    category = 'operation_failed'
+    if isinstance(error, TimeoutError):
+        category = 'docker_socket_timeout'
+    elif isinstance(error, DockerFailure):
+        category = 'docker_http_error'
+    elif isinstance(error, (ConnectionError, OSError)):
+        category = 'local_transport_error'
+    elif isinstance(error, ValueError):
+        category = 'invalid_response'
+    record = {'result': 'NATIVE_RELEASE_STAGE_ERROR', 'stage': stage, 'category': category}
+    status = getattr(error, 'status', None)
+    if isinstance(status, int) and 400 <= status <= 599:
+        record['docker_status'] = status
+    print(json.dumps(record), flush=True)
 
 
 def load_helper():
     spec = importlib.util.spec_from_file_location('keyo_image_deployment', ROOT / 'scripts/vps-deploy-images.py')
     helper = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(helper)
+    # Keep inspect-preserving construction/storage validation, but never inherit
+    # the old helper's 30-second socket timeout for a 30-second Docker stop.
+    helper.api = docker_api
     return helper
 
 
@@ -159,23 +213,86 @@ def update_restart(helper, name, policy):
     helper.api('POST', '/containers/' + name + '/update', {'RestartPolicy': copy.deepcopy(policy)})
 
 
+def stopped(info):
+    state = info.get('State') or {}
+    return state.get('Running') is False and state.get('Restarting') is False and state.get('Pid') == 0
+
+
+def stop_and_wait(helper, name, expected_id):
+    # A timed-out HTTP response is an unknown operation outcome. Re-inspect and
+    # wait/retry the SAME stop; never race rename/start against a stopping PID.
+    for attempt in range(3):
+        info = helper.inspect(name)
+        if info.get('Id') != expected_id:
+            raise RuntimeError('Unexpected container identity during native stop')
+        if stopped(info):
+            return
+        try:
+            helper.api('POST', '/containers/' + name + '/stop?t=30')
+        except (TimeoutError, ConnectionError, OSError, DockerFailure) as error:
+            error_marker('stop_wait_retry', error)
+            if isinstance(error, DockerFailure) and error.status not in (304, 409, 500, 503):
+                raise
+        for _ in range(5):
+            info = helper.inspect(name)
+            if info.get('Id') != expected_id:
+                raise RuntimeError('Unexpected container identity during native stop')
+            if stopped(info):
+                return
+            time.sleep(1)
+        time.sleep(attempt + 1)
+    raise RuntimeError('Native container did not finish stopping')
+
+
+def start_with_backoff(helper, name, expected_id):
+    for attempt in range(4):
+        info = helper.inspect(name)
+        if info.get('Id') != expected_id:
+            raise RuntimeError('Unexpected container identity during native start')
+        state = info.get('State') or {}
+        if state.get('Running') is True and state.get('Restarting') is False and state.get('Pid', 0) > 0:
+            return
+        try:
+            helper.api('POST', '/containers/' + name + '/start')
+            return
+        except (TimeoutError, ConnectionError, OSError, DockerFailure) as error:
+            error_marker('start_wait_retry', error)
+            if isinstance(error, DockerFailure) and error.status not in (304, 409, 500, 503):
+                raise
+            if attempt == 3:
+                raise
+            time.sleep(2 ** attempt)
+
+
 def restore_native(helper, original, backup, replacement_image):
-    current = missing_container(helper, NAME)
-    if current is not None and current.get('Id') != original.get('Id'):
-        if current.get('Image') != replacement_image:
-            raise RuntimeError('Unexpected native container blocks rollback')
-        update_restart(helper, NAME, {'Name': 'no', 'MaximumRetryCount': 0})
-        helper.api('POST', '/containers/' + NAME + '/stop?t=30')
-        helper.api('DELETE', '/containers/' + NAME + '?force=true')
-        current = None
-    if current is None:
-        saved = helper.inspect(backup)
-        if saved.get('Id') != original.get('Id'):
-            raise RuntimeError('Unexpected native backup blocks rollback')
-        helper.api('POST', '/containers/' + backup + '/rename?name=' + NAME)
-    update_restart(helper, NAME, original['HostConfig']['RestartPolicy'])
-    helper.api('POST', '/containers/' + NAME + '/start')
-    verify(helper, NAME, original['Config'], original['Image'])
+    stage = 'rollback_inspect'
+    try:
+        current = missing_container(helper, NAME)
+        if current is not None and current.get('Id') != original.get('Id'):
+            if current.get('Image') != replacement_image:
+                raise RuntimeError('Unexpected native container blocks rollback')
+            stage = 'rollback_stop_replacement'
+            update_restart(helper, NAME, {'Name': 'no', 'MaximumRetryCount': 0})
+            stop_and_wait(helper, NAME, current['Id'])
+            helper.api('DELETE', '/containers/' + NAME + '?force=true')
+            current = None
+        if current is None:
+            stage = 'rollback_rename_original'
+            saved = helper.inspect(backup)
+            if saved.get('Id') != original.get('Id'):
+                raise RuntimeError('Unexpected native backup blocks rollback')
+            helper.api('POST', '/containers/' + backup + '/rename?name=' + NAME)
+        stage = 'rollback_wait_original_stop'
+        stop_and_wait(helper, NAME, original['Id'])
+        stage = 'rollback_restore_restart_policy'
+        update_restart(helper, NAME, original['HostConfig']['RestartPolicy'])
+        stage = 'rollback_start_original'
+        start_with_backoff(helper, NAME, original['Id'])
+        stage = 'rollback_verify_original'
+        verify(helper, NAME, original['Config'], original['Image'])
+    except Exception as error:
+        error_marker(stage, error)
+        raise
 
 
 def deploy_native():
@@ -206,20 +323,27 @@ def deploy_native():
             raise RuntimeError('Known inactive native restart loop changed; current service retained')
         runtime_preflight(helper, original)
         update_restart(helper, name, {'Name': 'no', 'MaximumRetryCount': 0})
-        helper.api('POST', '/containers/' + name + '/stop?t=15')
+        stop_and_wait(helper, name, helper.inspect(name)['Id'])
         stopped = helper.inspect(name).get('State') or {}
         if stopped.get('Running') or stopped.get('Restarting') or stopped.get('Pid', 0):
             raise RuntimeError('Known native restart loop did not stop; current service retained')
-        print('NATIVE_KNOWN_RESTART_LOOP_STOPPED')
+        print('NATIVE_KNOWN_RESTART_LOOP_STOPPED', flush=True)
     # No environment values, arbitrary Docker output or request logs are printed.
+    stage = 'disable_original_restart'
     try:
         update_restart(helper, NAME, {'Name': 'no', 'MaximumRetryCount': 0})
-        helper.api('POST', '/containers/' + NAME + '/stop?t=30')
+        stage = 'stop_original'
+        stop_and_wait(helper, NAME, original['Id'])
+        stage = 'rename_original'
         helper.api('POST', '/containers/' + NAME + '/rename?name=' + backup)
-        helper.api('POST', '/containers/create?name=' + NAME, plan)
-        helper.api('POST', '/containers/' + NAME + '/start')
+        stage = 'create_replacement'
+        created = helper.api('POST', '/containers/create?name=' + NAME, plan)
+        stage = 'start_replacement'
+        start_with_backoff(helper, NAME, created['Id'])
+        stage = 'verify_replacement'
         pid = verify(helper, NAME, plan, built_image, expected)
-    except Exception:
+    except Exception as error:
+        error_marker(stage, error)
         try:
             restore_native(helper, original, backup, built_image)
         except Exception:

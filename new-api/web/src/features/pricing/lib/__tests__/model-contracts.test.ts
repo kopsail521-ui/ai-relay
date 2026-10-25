@@ -59,15 +59,69 @@ describe('model-specific integration examples', () => {
     expect(getModelRequests('nsfw-classifier')).toEqual([])
   })
 
-  it('uses speech bytes for Gemini TTS and video tasks for FLUX video', () => {
+  it('uses native Gemini TTS with an audio response stored as JSON', () => {
     expect(getModelRequests('gemini-3.8-flash-tts')[0]).toMatchObject({
-      path: '/v1/audio/speech',
-      output: 'speech.wav',
+      path: '/v1beta/models/gemini-3.8-flash-tts:generateContent',
+      body: {
+        contents: [
+          {
+            role: 'user',
+            parts: [{ text: 'Hello, welcome to KeyoAPI' }],
+          },
+        ],
+        generationConfig: {
+          responseModalities: ['AUDIO'],
+          speechConfig: {
+            voiceConfig: { prebuiltVoiceConfig: { voiceName: 'Kore' } },
+          },
+        },
+      },
+      output: 'response.json',
     })
+    expect(getModelRequests('gemini-3.8-flash-tts')[0].body).not.toHaveProperty(
+      'model'
+    )
+    expect(getModelRequests('gemini-3.8-flash-tts')[0].noteKey).toContain(
+      'candidates[].content.parts[].inlineData'
+    )
+    for (const lang of [
+      'curl',
+      'python',
+      'typescript',
+      'javascript',
+    ] as const) {
+      const sample = buildRequestSample(
+        lang,
+        getModelRequests('gemini-3.8-flash-tts')[0],
+        'https://www.keyoapi.xyz'
+      )
+      expect(sample).toContain(
+        'https://www.keyoapi.xyz/v1beta/models/gemini-3.8-flash-tts:generateContent'
+      )
+      expect(sample).toContain('response.json')
+      expect(sample).not.toContain('speech.wav')
+      expect(sample).not.toContain('/v1/audio/speech')
+    }
+    expect(getModelRequests('gemini-3.1-flash-tts-preview')).toEqual([])
+  })
+
+  it('keeps FLUX video on the video task endpoint', () => {
     expect(getModelRequests('flux-3-video')[0].path).toBe(
       '/v1/videos/generations'
     )
-    expect(getModelRequests('gemini-3.1-flash-tts-preview')).toEqual([])
+  })
+
+  it('uses the supported 768p resolution for the default H3 text example', () => {
+    expect(getModelRequests('MiniMax-H3')[0]).toMatchObject({
+      path: '/v1/videos/generations',
+      body: { model: 'MiniMax-H3', resolution: '768p', duration: 5 },
+      pollPath: '/v1/tasks/{id}',
+    })
+  })
+
+  it('does not publish executable examples for unverified video processing tools', () => {
+    expect(getModelRequests('video-enhance-pro')).toEqual([])
+    expect(getModelRequests('subtitle-erase-pro')).toEqual([])
   })
 
   it('generates Gemini REST examples that explicitly use this service and an API-key header', () => {

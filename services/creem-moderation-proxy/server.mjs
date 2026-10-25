@@ -697,7 +697,7 @@ function enrichPricingPayload(payload) {
     }
     if (name === "gemini-3.8-flash-tts") {
       next.tags = "语音合成";
-      next.supported_endpoint_types = ["openai-audio"];
+      next.supported_endpoint_types = ["gemini"];
     } else if (name === "grok-image-2.0") {
       next.tags = "图片";
       next.supported_endpoint_types = ["image-generation"];

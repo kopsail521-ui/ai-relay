@@ -307,13 +307,19 @@
     "kind": "speech",
     "requests": [
       {
-        "label": "/v1/audio/speech",
-        "path": "/v1/audio/speech",
+        "label": "/v1beta/models/gemini-3.8-flash-tts:generateContent",
+        "path": "/v1beta/models/gemini-3.8-flash-tts:generateContent",
         "body": {
-          "model": "gemini-3.8-flash-tts",
-          "input": "Hello, welcome to KeyoAPI"
+          "contents": [
+            { "role": "user", "parts": [{ "text": "Hello, welcome to KeyoAPI" }] }
+          ],
+          "generationConfig": {
+            "responseModalities": ["AUDIO"],
+            "speechConfig": { "voiceConfig": { "prebuiltVoiceConfig": { "voiceName": "Kore" } } }
+          }
         },
-        "output": "speech.wav"
+        "output": "response.json",
+        "noteKey": "The response is JSON containing base64 audio in candidates[].content.parts[].inlineData. Decode data and handle its mimeType before saving or playing audio."
       }
     ]
   },
@@ -695,7 +701,7 @@
           "model": "MiniMax-H3",
           "prompt": "A red paper boat drifting on calm water at sunset",
           "aspectRatio": "landscape",
-          "resolution": "480p",
+          "resolution": "768p",
           "duration": 5
         },
         "pollPath": "/v1/tasks/{id}"
@@ -820,33 +826,11 @@
   },
   "video-enhance-pro": {
     "kind": "video-processing",
-    "requests": [
-      {
-        "label": "/v1/async/videos/enhance",
-        "path": "/v1/async/videos/enhance",
-        "body": {
-          "model": "video-enhance-pro",
-          "video_url": "https://example.com/source.mp4"
-        },
-        "pollPath": "/v1/task/{id}",
-        "noteKey": "Replace example media URLs with your own public HTTPS URLs. Upload local files first."
-      }
-    ]
+    "requests": []
   },
   "subtitle-erase-pro": {
     "kind": "video-processing",
-    "requests": [
-      {
-        "label": "/v1/async/videos/subtitle-erase",
-        "path": "/v1/async/videos/subtitle-erase",
-        "body": {
-          "model": "subtitle-erase-pro",
-          "video_url": "https://example.com/source.mp4"
-        },
-        "pollPath": "/v1/task/{id}",
-        "noteKey": "Replace example media URLs with your own public HTTPS URLs. Upload local files first."
-      }
-    ]
+    "requests": []
   },
   "sam3": {
     "kind": "image-processing",

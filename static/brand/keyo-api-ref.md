@@ -40,8 +40,8 @@
 | 形态 | 用在什么上 | 路径示例 |
 |------|-----------|----------|
 | OpenAI 兼容 | 文本对话、模型列表、向量、文生图、语音识别、OCR | `POST /v1/chat/completions` · `GET /v1/models` · `POST /v1/embeddings` · `POST /v1/images/generations` · `POST /v1/audio/transcriptions` |
-| OpenAI 形状（部分覆盖） | TTS 同步、内容审核 | `POST /v1/audio/speech`——覆盖 `GLM-TTS` / `Step-Audio-TTS-3B` / `IndexTTS-2` / `eleven-v4` / `eleven-v4-turbo` / `gemini-3.8-flash-tts`（见 §1.6 / §7，Gemini TTS 原生亦走 `POST /v1beta/models/...:generateContent`），其它 TTS 走异步（§1.7 / §8）；`POST /v1/moderations`——`model` + `input` 与 OpenAI 同形，响应契约见 §13 |
-| 专属 REST | 视觉处理、异步视频、数字人、文档解析、系统一/结构化决策、视频工具 | 抠图/超分/展平/检测/分割/姿态（§1.10）· Path B 视频（§5）· 数字人说话视频（InfiniteTalk / Duix-Avatar，§1.11 / §12）· 文档解析 MinerU（§1.9 / §10）· 结构化决策（`POST /v1/systemone` 与 `POST /v1/decisions`，§1.11b）· 视频工具（§1.11a）——路径不同，Key 和余额相同 |
+| OpenAI 形状（部分覆盖） | TTS 同步、内容审核 | `POST /v1/audio/speech`——覆盖 `GLM-TTS` / `Step-Audio-TTS-3B` / `IndexTTS-2` / `eleven-v4` / `eleven-v4-turbo`（见 §1.6 / §7.1）；Gemini TTS 用原生接口（§7.2），其它 TTS 走异步（§1.7 / §8）；`POST /v1/moderations`——`model` + `input` 与 OpenAI 同形，响应契约见 §13 |
+| 专属 REST | 视觉处理、异步视频、数字人、文档解析、系统一/结构化决策 | 抠图/超分/展平/检测/分割/姿态（§1.10）· Path B 视频（§5）· 数字人说话视频（InfiniteTalk / Duix-Avatar，§1.11 / §12）· 文档解析 MinerU（§1.9 / §10）· 结构化决策（`POST /v1/systemone` 与 `POST /v1/decisions`，§1.11b）· 视频工具（§1.11a）——路径不同，Key 和余额相同 |
 
 规则：只有两个模型明确共享同一请求合同时，才能只改 `model`；同一能力内的路径、必填字段、支持参数与查询规则也可能不同。
 
@@ -64,7 +64,7 @@
 异步任务：**提交 → 拿到 id → 尚未完成时按族轮询 → 读 url/文本**。提交已返回成功结果或任务终态错误时直接处理；不要混轮询路径。
 
 **图片任务（§3）：** 进行中返回 HTTP 202，`status` 为 `reserved` / `submitting` / `running`；成功为 HTTP 200 + `status:"succeeded"` + 非空 `data[].url`。已记录的任务终态错误返回 HTTP 502，含 `error.task_id`；临时查询错误不代表任务失败，应重试同一任务的 GET（详见 §3.3）。
-**视频 / TTS / 文档解析 / 数字人（InfiniteTalk / Duix-Avatar）的归一状态：** `processing` | `completed` | `failed` | `cancelled`。这些接口可能仍带 `status_raw`（如 `succeeded` / `success` / `waiting`），以归一后的 `status` 为准；此规则不适用于图片任务。
+**视频 / TTS / 文档解析 / 数字人（InfiniteTalk / Duix-Avatar）的 GET 轮询响应归一状态：** `processing` | `completed` | `failed` | `cancelled`。提交响应可能仍含 `waiting` 等原始状态，先保存 `id` / `task_id` 再按对应路径 GET 查询，不要把正常排队状态判成失败。GET 响应可能同时带 `status_raw`（如 `succeeded` / `success` / `waiting`），以归一后的 `status` 为准；此规则不适用于图片任务。
 
 | 能力族 | 提交后取 id | 轮询直到 | 结果怎么拿 |
 |--------|-------------|---------|------------|
@@ -75,7 +75,8 @@
 | 视频 Path A（自动转发） | `id` | `status` = `completed` | 读 **`url`**。Path A 已无独立模型，仅作为 Path B 的自动转发入口 |
 | Chat / OCR | — | — | `choices[0].message.content` |
 | ASR | — | — | `text` |
-| TTS 同步 | — | — | **响应体就是音频字节**（不是 JSON） |
+| OpenAI 兼容 TTS 同步（§7.1） | — | — | **响应体就是音频字节**（不是 JSON） |
+| Gemini 原生 TTS（§7.2） | — | — | JSON 的 `candidates[].content.parts[].inlineData`，按 `mimeType` 解码 base64 `data` 为音频文件 |
 | 上传 | — | — | 响应里的 **`url`** |
 
 **单数 task 路径的临时查询错误：** `GET /v1/task/{id}` 返回 HTTP 502、`error.code="task_query_unavailable"` 时，保留原任务 ID，按 `Retry-After` 等待后继续查询同一个 GET。该错误不表示任务已 `failed`，不要重新 POST 创建任务。
@@ -192,9 +193,11 @@ Path A 已无独立模型：打到这里的 wan / Seedance / FLUX / MiniMax / Ge
 
 `whisper-large-v3-turbo` · `whisper-large-v3` · `SenseVoiceSmall` · `GLM-ASR` · `MOSS-Audio-8B-Thinking`
 
-### 1.6 TTS 同步 → `POST /v1/audio/speech`（返回音频字节）
+### 1.6 TTS 同步（按模型区分协议）
 
-`GLM-TTS` · `Step-Audio-TTS-3B` · `IndexTTS-2` · `eleven-v4`（$80/1M 字符） · `eleven-v4-turbo`（$40/1M 字符） · `gemini-3.8-flash-tts`（支持 Google 原生 `POST /v1beta/models/gemini-3.8-flash-tts:generateContent` 与 OpenAI 兼容语音端点）
+OpenAI 兼容 `POST /v1/audio/speech`，返回音频字节：`GLM-TTS` · `Step-Audio-TTS-3B` · `IndexTTS-2` · `eleven-v4`（$80/1M 字符） · `eleven-v4-turbo`（$40/1M 字符），见 §7.1。
+
+`gemini-3.8-flash-tts` **仅使用** `POST /v1beta/models/gemini-3.8-flash-tts:generateContent`，返回含 base64 音频的 JSON，见 §7.2；不要提交到 `/v1/audio/speech`。`gemini-3.1-flash-tts-preview` 尚未在本手册提供完整合同，见 §1.14。
 
 ### 1.7 TTS 异步 → `POST /v1/async/audio/speech` → 轮询 `GET /v1/task/{id}`
 
@@ -224,14 +227,9 @@ Path A 已无独立模型：打到这里的 wan / Seedance / FLUX / MiniMax / Ge
 - **图/视频+音频驱动**（`POST /v1/async/videos/image-to-video`）：`InfiniteTalk`（multipart：`model` + `prompt` + `cond_video` + `cond_audio`，约 $0.342/次）
 - **音视频驱动口型同步**（`POST /v1/async/videos/audio-video-to-video`）：`Duix-Avatar`（multipart 必填：`model=Duix-Avatar`、`ref_audio` 音频文件、`ref_video` 视频文件，最长 60 秒，分档计费从 $0.0685/秒 起）
 
-### 1.11a 视频工具（异步按秒）→ `GET /v1/task/{id}`
+### 1.11a 视频工具（暂不可用）
 
-| 能力 | 路径 | 模型 | 售价（约） |
-|------|------|------|------------|
-| 硬字幕擦除（精细化） | `POST /v1/async/videos/subtitle-erase` | `subtitle-erase-pro` | **$0.018265/秒** |
-| 画质增强（Pro） | `POST /v1/async/videos/enhance` | `video-enhance-pro` | 720p **$0.034247/秒** · 1080p **$0.068493/秒** · 2K **$0.136986/秒** |
-
-JSON 提交（示例）含 `model` + 视频 URL（或平台约定的 `video_url` / `url` 字段）；按成功处理时长折算秒计费。
+`subtitle-erase-pro`（字幕擦除）与 `video-enhance-pro`（视频增强）**暂不可用，接入合同尚未开放**。请勿向 `/v1/async/videos/subtitle-erase` 或 `/v1/async/videos/enhance` 提交，也不要为这两项能力创建或轮询任务。可用状态更新前不提供可复制请求示例；请先向支持确认。
 
 ### 1.11b 结构化决策 → `POST /v1/systemone` 与 `POST /v1/decisions`
 
@@ -284,7 +282,7 @@ curl https://www.keyoapi.xyz/v1/systemone \
 ---
 ### 1.14 目录中尚未在本页提供完整接入合同的型号
 
-`agnes-video-2.5` · `gpt-image-2-4K` · `gpt-image-2-2K` · `DiffusionGemma-26B-A4B-it-Jev` · `gemini-3.1-flash-tts-preview` · `grok-image-2.0` · `MiniMax-H3-vip` · `SemIf-OpenJev-4B` · `suno_music_open` · `keyo-super-resolution-1080p` · `keyo-super-resolution-4k` · `keyo-super-resolution-2k` · `keyo-voice-clone` · `keyo-video-subtitle-removal` · `keyo-tts` · `keyo-song` · `keyo-asr` · `suno_music` · `laya-multilingual`
+`subtitle-erase-pro` · `video-enhance-pro` · `agnes-video-2.5` · `gpt-image-2-4K` · `gpt-image-2-2K` · `DiffusionGemma-26B-A4B-it-Jev` · `gemini-3.1-flash-tts-preview` · `grok-image-2.0` · `MiniMax-H3-vip` · `SemIf-OpenJev-4B` · `suno_music_open` · `keyo-super-resolution-1080p` · `keyo-super-resolution-4k` · `keyo-super-resolution-2k` · `keyo-voice-clone` · `keyo-video-subtitle-removal` · `keyo-tts` · `keyo-song` · `keyo-asr` · `suno_music` · `laya-multilingual`
 
 这些 ID 可能出现在实时目录中，但本页尚未完整列出其必填字段、支持模式与结果语义。音乐、音色注册及结构化决策尤其不能直接套普通 chat／TTS 模板。付费提交前请向支持获取该型号接入合同；不要猜字段、擅自换模型，也不要推定这里列出的图片型号使用 §3 的图片任务路径。
 
@@ -850,8 +848,10 @@ curl https://www.keyoapi.xyz/v1/audio/transcriptions \
 
 ## 7. TTS 同步
 
+### 7.1 OpenAI 兼容语音接口（返回音频字节）
+
 `POST https://www.keyoapi.xyz/v1/audio/speech`
-模型：`GLM-TTS` · `Step-Audio-TTS-3B` · `IndexTTS-2` · `eleven-v4` · `eleven-v4-turbo` · `gemini-3.8-flash-tts`（原生端点 `POST /v1beta/models/gemini-3.8-flash-tts:generateContent`）
+模型：`GLM-TTS` · `Step-Audio-TTS-3B` · `IndexTTS-2` · `eleven-v4` · `eleven-v4-turbo`。Gemini TTS 使用下节原生接口。
 
 ```json
 {
@@ -864,6 +864,113 @@ curl https://www.keyoapi.xyz/v1/audio/transcriptions \
 响应为音频字节，保存为文件即可。
 
 ---
+
+### 7.2 Gemini 原生 TTS（返回 JSON，需要解码）
+
+`gemini-3.8-flash-tts` 仅使用 **`POST /v1beta/models/gemini-3.8-flash-tts:generateContent`**。使用你的 KeyoAPI Key 作 Bearer 鉴权；模型已在路径中，不要再传 OpenAI 的 `model` / `input` / `voice` 请求结构，也不要调用 `/v1/audio/speech`。
+
+```bash
+curl https://www.keyoapi.xyz/v1beta/models/gemini-3.8-flash-tts:generateContent \
+  -H "Authorization: Bearer sk-YOUR_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+  "contents": [
+    {
+      "role": "user",
+      "parts": [
+        {
+          "text": "你好，欢迎使用 KeyoAPI。"
+        }
+      ]
+    }
+  ],
+  "generationConfig": {
+    "responseModalities": [
+      "AUDIO"
+    ],
+    "speechConfig": {
+      "voiceConfig": {
+        "prebuiltVoiceConfig": {
+          "voiceName": "Kore"
+        }
+      }
+    }
+  }
+}' \
+  --output gemini-tts-response.json
+```
+
+以上为 **Bash（macOS / Linux / Windows Git Bash）** 命令，替换 Key 后执行。返回的是 JSON，保存在 `gemini-tts-response.json`，不是 WAV 文件。读取 `candidates[].content.parts[].inlineData.mimeType` 和 base64 `data`，解码后才是音频；无音频、请求错误或只有文本时，不应当报告语音已生成。
+
+**按 MIME 类型处理：** `audio/wav` 是完整 WAV，base64 解码后直接保存，不再额外加 WAV 头。`audio/L16;codec=pcm;rate=24000` 是本模型的 16 位小端、单声道 PCM，按 MIME 中的 `rate` 封装 WAV；未指定时采用该模型文档默认 24000 Hz。其它 MIME 需要对应的解码器，以下示例会明确停止，不会把未知格式改名成 WAV。
+
+把下方 Python 3 标准库代码保存为 `decode-gemini-tts.py`，与 JSON 放在同一目录，再执行 `python decode-gemini-tts.py`。它选择第一个含音频的 candidate，将每个音频 part 分别保存为 `speech-1.wav`、`speech-2.wav` 等，并打印真实文件路径；不要拼接不同 candidate 的替代结果。
+
+```python
+import base64
+import io
+import json
+import wave
+from pathlib import Path
+
+
+def save_gemini_audio(payload, output_dir="."):
+    if payload.get("error"):
+        raise RuntimeError(payload["error"])
+    audio_parts = []
+    for candidate in payload.get("candidates", []):
+        audio_parts = [part["inlineData"]
+                       for part in candidate.get("content", {}).get("parts", [])
+                       if part.get("inlineData", {}).get("data")]
+        if audio_parts:
+            break  # Choose one candidate; never concatenate alternative candidates.
+    if not audio_parts:
+        raise ValueError("No inline audio returned; inspect the saved JSON response")
+    output_dir = Path(output_dir)
+    output_dir.mkdir(parents=True, exist_ok=True)
+    files = []
+    for index, part in enumerate(audio_parts, 1):
+        raw = base64.b64decode(part["data"], validate=True)
+        if not raw:
+            raise ValueError("Empty audio data")
+        mime = part.get("mimeType", "").lower()
+        media_type = mime.split(";", 1)[0].strip()
+        params = dict(item.strip().split("=", 1)
+                      for item in mime.split(";")[1:] if "=" in item)
+        target = output_dir / f"speech-{index}.wav"
+        if media_type in ("audio/wav", "audio/x-wav", "audio/wave"):
+            with wave.open(io.BytesIO(raw), "rb") as audio:
+                audio.getparams()  # Verify a WAV container before saving it unchanged.
+            target.write_bytes(raw)
+        elif media_type == "audio/l16":
+            # Gemini L16 is signed 16-bit little-endian PCM, mono, 24 kHz by default.
+            rate = int(params.get("rate", "24000").strip('"'))
+            channels = int(params.get("channels", "1").strip('"'))
+            if rate <= 0 or channels != 1 or len(raw) % 2:
+                raise ValueError("Invalid PCM rate, channel count or byte length")
+            if params.get("codec", "pcm").strip('"') != "pcm":
+                raise ValueError("Unsupported PCM codec; inspect mimeType")
+            with wave.open(str(target), "wb") as audio:
+                audio.setnchannels(channels)
+                audio.setsampwidth(2)
+                audio.setframerate(rate)
+                audio.writeframes(raw)
+        else:
+            raise ValueError(f"Unsupported audio MIME type: {mime!r}; do not rename it to WAV")
+        files.append(str(target))
+    return files
+
+
+if __name__ == "__main__":
+    response = json.loads(Path("gemini-tts-response.json").read_text(encoding="utf-8"))
+    for filename in save_gemini_audio(response):
+        print(filename)
+```
+
+字段与音频格式说明可参考 [Gemini 原生语音文档](https://ai.google.dev/gemini-api/docs/generate-content/speech-generation?hl=en)。本站的鉴权地址与 Key 以本节为准。
+
+---
+
 
 ## 8. TTS 异步
 
@@ -1018,3 +1125,8 @@ curl https://www.keyoapi.xyz/v1/models \
 ---
 
 价格与余额：控制台 https://www.keyoapi.xyz/pricing · 手册页（复制给 AI）https://www.keyoapi.xyz/brand/keyo-api-ref.html · 给人看的说明 https://www.keyoapi.xyz/brand/keyo-docs.html
+
+
+## 17. 暂不可用的视频工具
+
+`subtitle-erase-pro`（字幕擦除）与 `video-enhance-pro`（视频增强）**暂不可用，接入合同尚未开放**。请勿向 `/v1/async/videos/subtitle-erase` 或 `/v1/async/videos/enhance` 提交，也不要为这两项能力创建或轮询任务。可用状态更新前不提供可复制请求示例；请先向支持确认。

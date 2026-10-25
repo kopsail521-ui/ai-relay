@@ -307,13 +307,19 @@
     "kind": "speech",
     "requests": [
       {
-        "label": "/v1/audio/speech",
-        "path": "/v1/audio/speech",
+        "label": "/v1beta/models/gemini-3.8-flash-tts:generateContent",
+        "path": "/v1beta/models/gemini-3.8-flash-tts:generateContent",
         "body": {
-          "model": "gemini-3.8-flash-tts",
-          "input": "Hello, welcome to KeyoAPI"
+          "contents": [
+            { "role": "user", "parts": [{ "text": "Hello, welcome to KeyoAPI" }] }
+          ],
+          "generationConfig": {
+            "responseModalities": ["AUDIO"],
+            "speechConfig": { "voiceConfig": { "prebuiltVoiceConfig": { "voiceName": "Kore" } } }
+          }
         },
-        "output": "speech.wav"
+        "output": "response.json",
+        "noteKey": "The response is JSON containing base64 audio in candidates[].content.parts[].inlineData. Decode data and handle its mimeType before saving or playing audio."
       }
     ]
   },

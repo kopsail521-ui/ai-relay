@@ -29,8 +29,8 @@
 | Shape | Used for | Example paths |
 |------|-----------|----------|
 | OpenAI-compatible | Text chat, model list, embeddings, image generation, ASR, OCR | `POST /v1/chat/completions` · `GET /v1/models` · `POST /v1/embeddings` · `POST /v1/images/generations` · `POST /v1/audio/transcriptions` |
-| OpenAI-shaped (partial) | Sync TTS, content moderation | `POST /v1/audio/speech` — covers `GLM-TTS` / `Step-Audio-TTS-3B` / `IndexTTS-2` / `eleven-v4` / `eleven-v4-turbo` / `gemini-3.8-flash-tts` (see §1.6 / §7), other TTS runs async (§1.7 / §8); `POST /v1/moderations` — `model` + `input` matches OpenAI, response contract in §13 |
-| Dedicated REST | Visual processing, async video, digital human, document parsing, System One / structured decisions, video tools | Matting / upscale / unwarp / detect / segment / pose (§1.10) · Path B video (§5) · Digital humans (InfiniteTalk / Duix-Avatar, §1.11 / §12) · MinerU document parsing (§1.9 / §10) · Structured decisions (`POST /v1/systemone` & `POST /v1/decisions`, §1.11b) · video tools (§1.11a) — different paths, same key and balance |
+| OpenAI-shaped (partial) | Sync TTS, content moderation | `POST /v1/audio/speech` — covers `GLM-TTS` / `Step-Audio-TTS-3B` / `IndexTTS-2` / `eleven-v4` / `eleven-v4-turbo` (see §1.6 / §7.1); Gemini TTS uses its native endpoint (§7.2), other TTS runs async (§1.7 / §8); `POST /v1/moderations` — `model` + `input` matches OpenAI, response contract in §13 |
+| Dedicated REST | Visual processing, async video, digital human, document parsing, System One / structured decisions | Matting / upscale / unwarp / detect / segment / pose (§1.10) · Path B video (§5) · Digital humans (InfiniteTalk / Duix-Avatar, §1.11 / §12) · MinerU document parsing (§1.9 / §10) · Structured decisions (`POST /v1/systemone` & `POST /v1/decisions`, §1.11b) — different paths, same key and balance |
 
 Rule: change only `model` when both models explicitly share the same documented request contract. Paths, required fields, accepted parameters and polling rules can differ even within one capability.
 
@@ -64,7 +64,7 @@ Rule: change only `model` when both models explicitly share the same documented 
 Async flow: **submit → read id → poll by family while pending → read url/text**. Handle a success result or terminal task error returned at submission directly. Never mix poll paths.
 
 **Image tasks (§3):** pending responses are HTTP 202 with `status` = `reserved` / `submitting` / `running`; success is HTTP 200 + `status:"succeeded"` + nonempty `data[].url`. Recorded terminal task errors return HTTP 502 with `error.task_id`; temporary query errors do not mean the task failed — retry GET for the same task (§3.3).
-**Normalized status for video / TTS / document parsing / digital humans (InfiniteTalk / Duix-Avatar):** `processing` | `completed` | `failed` | `cancelled`. These responses may keep `status_raw` such as `succeeded` / `success` / `waiting`; use normalized `status` for these families. This rule does not apply to image tasks.
+**Normalized status in GET polling responses for video / TTS / document parsing / digital humans (InfiniteTalk / Duix-Avatar):** `processing` | `completed` | `failed` | `cancelled`. Submission responses may still contain raw states such as `waiting`: first save `id` / `task_id`, then query the matching GET path. A queued submission is not a failure. GET responses may keep `status_raw` such as `succeeded` / `success` / `waiting`; use normalized `status` for these families. This rule does not apply to image tasks.
 
 | Family | Submit id | Poll until | Result |
 |--------|-----------|------------|--------|
@@ -75,7 +75,8 @@ Async flow: **submit → read id → poll by family while pending → read url/t
 | Video Path A (auto-forward) | `id` | `status` = `completed` | read **`url`**. Path A has no own models; it only forwards to Path B |
 | Chat / OCR | — | — | `choices[0].message.content` |
 | ASR | — | — | `text` |
-| TTS sync | — | — | **raw audio bytes** (not JSON) |
+| OpenAI-compatible sync TTS (§7.1) | — | — | **raw audio bytes** (not JSON) |
+| Gemini native TTS (§7.2) | — | — | JSON `candidates[].content.parts[].inlineData`: decode base64 `data` to an audio file according to `mimeType` |
 | Uploads | — | — | response **`url`** |
 
 **Temporary query errors on the singular task path:** when `GET /v1/task/{id}` returns HTTP 502 with `error.code="task_query_unavailable"`, keep the original task ID, wait for `Retry-After`, then retry the same GET. This does not mean the task is `failed`; do not POST a new task.
@@ -181,9 +182,11 @@ Path A has no own models: wan / Seedance / FLUX / MiniMax / Gemini Omni posted h
 
 `whisper-large-v3-turbo` · `whisper-large-v3` · `SenseVoiceSmall` · `GLM-ASR` · `MOSS-Audio-8B-Thinking`
 
-### 1.6 TTS sync → `POST /v1/audio/speech` (audio bytes)
+### 1.6 Sync TTS (model-specific protocols)
 
-`GLM-TTS` · `Step-Audio-TTS-3B` · `IndexTTS-2` · `eleven-v4` ($80/1M chars) · `eleven-v4-turbo` ($40/1M chars) · `gemini-3.8-flash-tts` (supports Google-native `POST /v1beta/models/gemini-3.8-flash-tts:generateContent` and OpenAI-compatible speech endpoint)
+OpenAI-compatible `POST /v1/audio/speech` returns audio bytes for `GLM-TTS` · `Step-Audio-TTS-3B` · `IndexTTS-2` · `eleven-v4` ($80/1M chars) · `eleven-v4-turbo` ($40/1M chars); see §7.1.
+
+`gemini-3.8-flash-tts` **uses only** `POST /v1beta/models/gemini-3.8-flash-tts:generateContent`, which returns JSON containing base64 audio (§7.2). Do not send it to `/v1/audio/speech`. A complete contract for `gemini-3.1-flash-tts-preview` is not documented here; see §1.14.
 
 ### 1.7 TTS async → `POST /v1/async/audio/speech` → poll `GET /v1/task/{id}`
 
@@ -213,14 +216,9 @@ Path A has no own models: wan / Seedance / FLUX / MiniMax / Gemini Omni posted h
 - **Image/video + audio driving** (`POST /v1/async/videos/image-to-video`): `InfiniteTalk` (multipart: `model` + `prompt` + `cond_video` + `cond_audio`, ~$0.342/request)
 - **Audio + video driving lip-sync** (`POST /v1/async/videos/audio-video-to-video`): `Duix-Avatar` (multipart required: `model=Duix-Avatar`, `ref_audio` audio file, `ref_video` video file, up to 60s, tiered pricing from $0.0685/sec)
 
-### 1.11a Video tools (async, per-second) → `GET /v1/task/{id}`
+### 1.11a Video tools (currently unavailable)
 
-| Capability | Path | Model | Sell (approx.) |
-|------------|------|-------|----------------|
-| Hard-subtitle erase (refined) | `POST /v1/async/videos/subtitle-erase` | `subtitle-erase-pro` | **$0.018265/sec** |
-| Video quality enhance (pro) | `POST /v1/async/videos/enhance` | `video-enhance-pro` | 720p **$0.034247/sec** · 1080p **$0.068493/sec** · 2K **$0.136986/sec** |
-
-Submit JSON with `model` + video URL (`video_url` / `url`). Billed by successful processed duration in seconds.
+`subtitle-erase-pro` (subtitle removal) and `video-enhance-pro` (video enhancement) are **currently unavailable; their integration contracts are not open**. Do not submit to `/v1/async/videos/subtitle-erase` or `/v1/async/videos/enhance`, or create or poll tasks for these capabilities. No copyable request example is provided until availability is confirmed; check with support first.
 
 ### 1.11b Structured decisions → `POST /v1/systemone` & `POST /v1/decisions`
 
@@ -272,7 +270,7 @@ Embedding example:
 ---
 ### 1.14 Catalog entries without a complete copyable contract here
 
-`agnes-video-2.5` · `gpt-image-2-4K` · `gpt-image-2-2K` · `DiffusionGemma-26B-A4B-it-Jev` · `gemini-3.1-flash-tts-preview` · `grok-image-2.0` · `MiniMax-H3-vip` · `SemIf-OpenJev-4B` · `suno_music_open` · `keyo-super-resolution-1080p` · `keyo-super-resolution-4k` · `keyo-super-resolution-2k` · `keyo-voice-clone` · `keyo-video-subtitle-removal` · `keyo-tts` · `keyo-song` · `keyo-asr` · `suno_music` · `laya-multilingual`
+`subtitle-erase-pro` · `video-enhance-pro` · `agnes-video-2.5` · `gpt-image-2-4K` · `gpt-image-2-2K` · `DiffusionGemma-26B-A4B-it-Jev` · `gemini-3.1-flash-tts-preview` · `grok-image-2.0` · `MiniMax-H3-vip` · `SemIf-OpenJev-4B` · `suno_music_open` · `keyo-super-resolution-1080p` · `keyo-super-resolution-4k` · `keyo-super-resolution-2k` · `keyo-voice-clone` · `keyo-video-subtitle-removal` · `keyo-tts` · `keyo-song` · `keyo-asr` · `suno_music` · `laya-multilingual`
 
 These IDs may appear in the live catalog, but this handbook does not yet specify all required fields, supported modes and result semantics for them. In particular, music, voice enrollment and structured decision models must not be treated as ordinary chat/TTS requests. Before a chargeable submission, obtain the model-specific integration contract from support. Do not guess fields, substitute another model, or assume the image models listed here use the §3 image task endpoint.
 
@@ -818,8 +816,10 @@ Pick model from §1.5.
 
 ## 7. TTS sync
 
+### 7.1 OpenAI-compatible speech endpoint (audio bytes)
+
 `POST https://www.keyoapi.xyz/v1/audio/speech`
-Models: `GLM-TTS` · `Step-Audio-TTS-3B` · `IndexTTS-2` · `eleven-v4` · `eleven-v4-turbo` · `gemini-3.8-flash-tts` (native endpoint `POST /v1beta/models/gemini-3.8-flash-tts:generateContent`)
+Models: `GLM-TTS` · `Step-Audio-TTS-3B` · `IndexTTS-2` · `eleven-v4` · `eleven-v4-turbo`. Gemini TTS uses the native endpoint in the next section.
 
 ```json
 {
@@ -832,6 +832,113 @@ Models: `GLM-TTS` · `Step-Audio-TTS-3B` · `IndexTTS-2` · `eleven-v4` · `elev
 Response is audio bytes — save to a file.
 
 ---
+
+### 7.2 Gemini native TTS (JSON response; decode audio)
+
+`gemini-3.8-flash-tts` uses only **`POST /v1beta/models/gemini-3.8-flash-tts:generateContent`** with your KeyoAPI key as Bearer authentication. The model is already in the path. Do not send the OpenAI `model` / `input` / `voice` body or call `/v1/audio/speech` for this model.
+
+```bash
+curl https://www.keyoapi.xyz/v1beta/models/gemini-3.8-flash-tts:generateContent \
+  -H "Authorization: Bearer sk-YOUR_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+  "contents": [
+    {
+      "role": "user",
+      "parts": [
+        {
+          "text": "Hello, welcome to KeyoAPI."
+        }
+      ]
+    }
+  ],
+  "generationConfig": {
+    "responseModalities": [
+      "AUDIO"
+    ],
+    "speechConfig": {
+      "voiceConfig": {
+        "prebuiltVoiceConfig": {
+          "voiceName": "Kore"
+        }
+      }
+    }
+  }
+}' \
+  --output gemini-tts-response.json
+```
+
+This is a **Bash command (macOS / Linux / Windows Git Bash)**; replace the key before running it. The saved `gemini-tts-response.json` is a JSON response, not a WAV file. Read `candidates[].content.parts[].inlineData.mimeType` and base64 `data`, then decode the audio. An error, missing audio or text-only response is not a completed speech result.
+
+**Use the MIME type:** `audio/wav` is a complete WAV: decode base64 and save it without adding another header. `audio/L16;codec=pcm;rate=24000` is this model’s signed 16-bit little-endian, mono PCM; wrap it in WAV using the MIME `rate`, or the documented 24000 Hz default if omitted. Other MIME types require their own decoders. The example stops explicitly instead of renaming an unknown format to WAV.
+
+Save this Python 3 standard-library code as `decode-gemini-tts.py` beside the JSON, then run `python decode-gemini-tts.py`. It chooses the first candidate containing audio, saves its audio parts separately as `speech-1.wav`, `speech-2.wav`, etc., and prints the actual file paths. Do not concatenate alternative candidates.
+
+```python
+import base64
+import io
+import json
+import wave
+from pathlib import Path
+
+
+def save_gemini_audio(payload, output_dir="."):
+    if payload.get("error"):
+        raise RuntimeError(payload["error"])
+    audio_parts = []
+    for candidate in payload.get("candidates", []):
+        audio_parts = [part["inlineData"]
+                       for part in candidate.get("content", {}).get("parts", [])
+                       if part.get("inlineData", {}).get("data")]
+        if audio_parts:
+            break  # Choose one candidate; never concatenate alternative candidates.
+    if not audio_parts:
+        raise ValueError("No inline audio returned; inspect the saved JSON response")
+    output_dir = Path(output_dir)
+    output_dir.mkdir(parents=True, exist_ok=True)
+    files = []
+    for index, part in enumerate(audio_parts, 1):
+        raw = base64.b64decode(part["data"], validate=True)
+        if not raw:
+            raise ValueError("Empty audio data")
+        mime = part.get("mimeType", "").lower()
+        media_type = mime.split(";", 1)[0].strip()
+        params = dict(item.strip().split("=", 1)
+                      for item in mime.split(";")[1:] if "=" in item)
+        target = output_dir / f"speech-{index}.wav"
+        if media_type in ("audio/wav", "audio/x-wav", "audio/wave"):
+            with wave.open(io.BytesIO(raw), "rb") as audio:
+                audio.getparams()  # Verify a WAV container before saving it unchanged.
+            target.write_bytes(raw)
+        elif media_type == "audio/l16":
+            # Gemini L16 is signed 16-bit little-endian PCM, mono, 24 kHz by default.
+            rate = int(params.get("rate", "24000").strip('"'))
+            channels = int(params.get("channels", "1").strip('"'))
+            if rate <= 0 or channels != 1 or len(raw) % 2:
+                raise ValueError("Invalid PCM rate, channel count or byte length")
+            if params.get("codec", "pcm").strip('"') != "pcm":
+                raise ValueError("Unsupported PCM codec; inspect mimeType")
+            with wave.open(str(target), "wb") as audio:
+                audio.setnchannels(channels)
+                audio.setsampwidth(2)
+                audio.setframerate(rate)
+                audio.writeframes(raw)
+        else:
+            raise ValueError(f"Unsupported audio MIME type: {mime!r}; do not rename it to WAV")
+        files.append(str(target))
+    return files
+
+
+if __name__ == "__main__":
+    response = json.loads(Path("gemini-tts-response.json").read_text(encoding="utf-8"))
+    for filename in save_gemini_audio(response):
+        print(filename)
+```
+
+See the [Gemini native speech documentation](https://ai.google.dev/gemini-api/docs/generate-content/speech-generation?hl=en) for the field and audio format definitions. Use the KeyoAPI URL and authentication shown here.
+
+---
+
 
 ## 8. TTS async
 
@@ -980,3 +1087,8 @@ curl https://www.keyoapi.xyz/v1/models \
 ---
 
 Pricing: https://www.keyoapi.xyz/pricing · Handbook (copy to AI): https://www.keyoapi.xyz/brand/keyo-api-ref.html · Human docs: https://www.keyoapi.xyz/brand/keyo-docs.html
+
+
+## 17. Currently unavailable video tools
+
+`subtitle-erase-pro` (subtitle removal) and `video-enhance-pro` (video enhancement) are **currently unavailable; their integration contracts are not open**. Do not submit to `/v1/async/videos/subtitle-erase` or `/v1/async/videos/enhance`, or create or poll tasks for these capabilities. No copyable request example is provided until availability is confirmed; check with support first.

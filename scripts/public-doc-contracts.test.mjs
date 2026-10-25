@@ -1,6 +1,8 @@
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
+import os from 'node:os';
 import path from 'node:path';
+import { spawnSync } from 'node:child_process';
 import vm from 'node:vm';
 import test from 'node:test';
 import { fileURLToPath } from 'node:url';
@@ -9,7 +11,7 @@ import { validateVideoClientBody, hasMiniMaxImage, buildOpenluxMiniMaxH3Body, bu
 import { runPowerShellDocFixtures } from './test-doc-powershell-offline.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const read = file => fs.readFileSync(path.join(root, file), 'utf8');
+const read = file => fs.readFileSync(path.join(root, file), 'utf8').replaceAll('\r\n', '\n');
 const quick = read('static/brand/keyo-docs.html');
 const viewer = read('static/brand/keyo-api-ref.html');
 const decode = text => text.replaceAll('&quot;', '"').replaceAll('&#39;', "'").replaceAll('&lt;', '<').replaceAll('&gt;', '>').replaceAll('&amp;', '&');
@@ -24,6 +26,124 @@ function quickSamples(dictionary) {
   context.renderSamples(dictionary);
   return nodes;
 }
+
+const geminiTtsPath = '/v1beta/models/gemini-3.8-flash-tts:generateContent';
+function checkGeminiTtsBody(body, label) {
+  assert.equal(body.contents?.[0]?.role, 'user', label);
+  assert.ok(body.contents[0].parts[0].text?.length, label);
+  assert.deepEqual(body.generationConfig?.responseModalities, ['AUDIO'], label);
+  assert.equal(body.generationConfig?.speechConfig?.voiceConfig?.prebuiltVoiceConfig?.voiceName, 'Kore', label);
+  for (const field of ['model', 'input', 'voice']) assert.equal(body[field], undefined, `${label}: OpenAI field ${field} in native request`);
+}
+
+function checkGeminiTtsCurl(sample, label) {
+  assert.ok(sample.includes('https://www.keyoapi.xyz' + geminiTtsPath), label);
+  assert.match(sample, /Authorization: Bearer /, label);
+  assert.match(sample, /--output gemini-tts-response\.json/, label);
+  assert.doesNotMatch(sample, /--output \S+\.wav/, label);
+  assert.ok(!sample.includes('\\n'), `${label} has literal newline escapes`);
+  const json = sample.match(/-d '([\s\S]+)'/)?.[1].replaceAll("'\\''", "'");
+  assert.ok(json, `${label} missing native request JSON`);
+  checkGeminiTtsBody(JSON.parse(json), label);
+}
+
+test('marketplace frontend and backend expose identical copyable model contracts', () => {
+  assert.deepEqual(
+    JSON.parse(read('new-api/web/src/features/pricing/lib/model-contracts.json')),
+    JSON.parse(read('services/creem-moderation-proxy/model-contracts.json')),
+  );
+});
+
+test('Gemini TTS examples and model-page copy contracts use native JSON audio, distinct from OpenAI speech', () => {
+  const contracts = JSON.parse(read('services/creem-moderation-proxy/model-contracts.json'));
+  const native = contracts['gemini-3.8-flash-tts'].requests;
+  assert.equal(native.length, 1);
+  assert.equal(native[0].path, geminiTtsPath);
+  assert.match(native[0].output, /\.json$/);
+  checkGeminiTtsBody(native[0].body, 'model page');
+  assert.deepEqual(contracts['gemini-3.1-flash-tts-preview'].requests, []);
+  assert.match(quick, /data-copy-target="curl-gemini-tts"/);
+  for (const [language, dictionary] of Object.entries(i18n)) {
+    checkGeminiTtsCurl(quickSamples(dictionary).get('curl-gemini-tts').textContent, language);
+    assert.match(dictionary.geminiTtsHint, /inlineData\.mimeType/, language);
+    assert.match(dictionary.geminiTtsHint, /base64/, language);
+    assert.match(dictionary.geminiTtsHint, /section-7-2/, language);
+  }
+  for (const file of ['static/brand/keyo-api-ref.md', 'static/brand/keyo-api-ref.en.md']) {
+    const markdown = read(file);
+    const nativeSection = markdown.split('### 7.2 ')[1].split('## 8. ')[0];
+    checkGeminiTtsCurl(nativeSection.match(/```bash\n([\s\S]+?)\n```/)[1], file);
+    assert.match(nativeSection, /inlineData\.mimeType/);
+    assert.match(nativeSection, /audio\/L16/);
+    const openai = markdown.split('### 7.1 ')[1].split('### 7.2 ')[0];
+    assert.doesNotMatch(openai, /gemini-3\.[18]-flash-tts/);
+    assert.match(openai, /GLM-TTS/);
+    assert.ok(markdown.split('### 1.14 ')[1].split('## 2. ')[0].includes('gemini-3.1-flash-tts-preview'));
+  }
+  const onepage = read('docs/客户接入一页纸.md').split('### 6.3 ')[1].split('## 7. ')[0];
+  checkGeminiTtsCurl(onepage.match(/```bash\n([\s\S]+?)\n```/)[1], 'one-page guide');
+});
+
+test('copied Gemini Python decoder handles WAV and PCM fixtures and rejects false audio results', () => {
+  const candidates = [process.env.KEYO_DOC_PYTHON, 'python3', 'python'].filter(Boolean);
+  const python = candidates.find(command => spawnSync(command, ['-c', 'import sys; assert sys.version_info >= (3, 8)'], { encoding:'utf8', windowsHide:true }).status === 0);
+  assert.ok(python, 'Python 3.8+ is required for the offline copied-decoder fixture; set KEYO_DOC_PYTHON if needed');
+  const fixture = `import base64, io, json, runpy, sys, tempfile, wave
+from pathlib import Path
+decode = runpy.run_path(sys.argv[1], run_name="fixture")["save_gemini_audio"]
+pcm = bytes([0, 0, 1, 0, 255, 127, 0, 128])
+def part(mime, raw=pcm):
+    return {"inlineData": {"mimeType": mime, "data": base64.b64encode(raw).decode("ascii")}}
+def payload(*parts):
+    return {"candidates": [{"content": {"parts": list(parts)}}]}
+def reject(data, output):
+    try:
+        decode(data, output)
+    except Exception:
+        return
+    raise AssertionError("Invalid audio response was accepted")
+with tempfile.TemporaryDirectory(dir=sys.argv[2]) as temporary:
+    output = Path(temporary)
+    for index, (mime, rate) in enumerate([( "audio/L16;codec=pcm;rate=24000", 24000), ("audio/L16;rate=16000;channels=1", 16000), ("audio/L16", 24000)]):
+        files = decode(payload({"text": "spoken text"}, part(mime)), output / str(index))
+        assert len(files) == 1
+        with wave.open(files[0], "rb") as audio:
+            assert (audio.getnchannels(), audio.getsampwidth(), audio.getframerate()) == (1, 2, rate)
+            assert audio.readframes(audio.getnframes()) == pcm
+    buffer = io.BytesIO()
+    with wave.open(buffer, "wb") as audio:
+        audio.setnchannels(1); audio.setsampwidth(2); audio.setframerate(24000); audio.writeframes(pcm)
+    wav = buffer.getvalue()
+    files = decode(payload(part("audio/wav", wav)), output / "wav")
+    assert Path(files[0]).read_bytes() == wav, "Complete WAV was wrapped a second time"
+    alternatives = payload(part("audio/L16"), part("audio/L16", pcm[::-1]))
+    alternatives["candidates"].append({"content": {"parts": [part("audio/L16", b"ignored")]}})
+    files = decode(alternatives, output / "parts")
+    assert len(files) == 2, "Alternative candidates were incorrectly concatenated"
+    for bad in [{"error": {"message": "fixture"}}, payload({"text": "no audio"}), payload(part("audio/mpeg")), payload(part("audio/wav", b"not-a-wave")), payload(part("audio/L16", b"x")), payload(part("audio/L16;rate=0")), payload(part("audio/L16;channels=2")), {"candidates":[{"content":{"parts":[{"inlineData":{"mimeType":"audio/L16","data":"invalid-base64!"}}]}}]}]:
+        reject(bad, output / "invalid")
+print(json.dumps({"pcmCases":3,"wavPreserved":True,"multipartPreserved":True,"rejectedCases":8}))
+`;
+  const temporary = fs.mkdtempSync(path.join(os.tmpdir(), 'keyo-doc-decoder-'));
+  assert.equal(path.dirname(temporary), path.resolve(os.tmpdir()));
+  const moduleFile = path.join(temporary, 'copied_decoder.py');
+  try {
+    let expected;
+    for (const file of ['static/brand/keyo-api-ref.md', 'static/brand/keyo-api-ref.en.md']) {
+      const section = read(file).split('### 7.2 ')[1].split('## 8. ')[0];
+      const source = section.match(/```python\n([\s\S]+?)\n```/)[1];
+      if (expected) assert.equal(source, expected, 'Chinese and English decoder snippets drifted');
+      expected = source;
+      fs.writeFileSync(moduleFile, source, 'utf8');
+      const result = spawnSync(python, ['-c', fixture, moduleFile, temporary], { encoding:'utf8', windowsHide:true });
+      assert.equal(result.status, 0, `${file}: ${result.stderr}`);
+      assert.deepEqual(JSON.parse(result.stdout), { pcmCases:3, wavPreserved:true, multipartPreserved:true, rejectedCases:8 });
+    }
+  } finally {
+    if (fs.existsSync(moduleFile)) fs.unlinkSync(moduleFile);
+    fs.rmdirSync(temporary);
+  }
+});
 
 test('all seven languages produce valid copied JSON and distinct task URLs', () => {
   for (const [language, dictionary] of Object.entries(i18n)) {
@@ -187,6 +307,31 @@ test('image completion rules remain distinct from other asynchronous task famili
     assert.match(dictionary.videoTaskHint, /\/v1\/tasks\/\{id\}/, `${language} video path`);
     assert.match(dictionary.videoTaskHint, /\/v1\/task\/\{id\}/, `${language} tools path`);
     assert.match(dictionary.videoTaskHint, /\/v1\/images\/tasks\/\{task_id\}/, `${language} distinct image path`);
+  }
+});
+
+test('unavailable video tools expose a pending notice instead of executable requests', () => {
+  const contracts = JSON.parse(read('services/creem-moderation-proxy/model-contracts.json'));
+  for (const id of ['subtitle-erase-pro', 'video-enhance-pro']) {
+    assert.deepEqual(contracts[id].requests, [], `${id} must not offer a copyable request`);
+    assert.ok(!quick.includes(`data-copy="${id}"`), `${id} has a model copy button`);
+    for (const dictionary of Object.values(i18n)) assert.ok(dictionary.videoToolsPendingHint.includes(id));
+  }
+  assert.doesNotMatch(quick, /data-copy="https:\/\/www\.keyoapi\.xyz\/v1\/async\/videos\/(?:enhance|subtitle-erase)"/);
+  for (const [language, dictionary] of Object.entries(i18n)) {
+    assert.match(dictionary.videoToolsPendingHint, /\/v1\/async\/videos\/subtitle-erase/);
+    assert.match(dictionary.videoToolsPendingHint, /\/v1\/async\/videos\/enhance/);
+    assert.doesNotMatch(dictionary.capVideoSub, /subtitle|字幕|субтитр|phụ đề/i, `${language} capability card promises unavailable subtitle removal`);
+  }
+  for (const file of ['static/brand/keyo-api-ref.md', 'static/brand/keyo-api-ref.en.md']) {
+    const markdown = read(file);
+    const notice = markdown.split('### 1.11a ')[1].split('### 1.11b ')[0];
+    assert.doesNotMatch(notice, /```|`POST /);
+    assert.match(markdown, /## 17\./);
+    assert.match(markdown, /task_query_unavailable/);
+    assert.match(markdown, /Retry-After/);
+    assert.match(markdown, /GET.*(?:轮询响应|polling responses)/);
+    assert.match(markdown, /waiting/);
   }
 });
 

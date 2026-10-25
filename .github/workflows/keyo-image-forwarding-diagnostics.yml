@@ -1,0 +1,45 @@
+name: Diagnose image forwarding read only
+
+# Manual only. No git pull, deployment, model call, auth probe or raw log output.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: keyo-image-forwarding-diagnostics
+  cancel-in-progress: false
+  queue: max
+
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    if: vars.KEYO_VPS_HOST != ''
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+      - name: Read sanitized image transport evidence over SSH
+        env:
+          HOST: ${{ vars.KEYO_VPS_HOST }}
+          USER: ${{ vars.KEYO_VPS_USER }}
+          KEY: ${{ secrets.KEYO_VPS_SSH_KEY }}
+        run: |
+          set -euo pipefail
+          if [ -z "${USER}" ]; then USER=admin; fi
+          if [ -z "${KEY}" ]; then
+            echo "::error::Existing VPS SSH credential is unavailable."
+            exit 1
+          fi
+          install -m 700 -d "${HOME}/.ssh"
+          printf '%s\n' "${KEY}" > "${HOME}/.ssh/keyo_image_diag"
+          chmod 600 "${HOME}/.ssh/keyo_image_diag"
+          trap 'rm -f "${HOME}/.ssh/keyo_image_diag"' EXIT
+          ssh -T -i "${HOME}/.ssh/keyo_image_diag" -o BatchMode=yes \
+            -o ConnectTimeout=20 -o ServerAliveInterval=15 \
+            -o StrictHostKeyChecking=accept-new "${USER}@${HOST}" \
+            'sudo -n true && command -v python3 >/dev/null && sudo -n env PYTHONDONTWRITEBYTECODE=1 python3 -' \
+            < scripts/vps-image-forwarding-diagnostics.py 2> "${RUNNER_TEMP}/keyo-image-diag-ssh.stderr" || {
+              echo "::error::Read-only SSH/Python diagnostic unavailable; nothing installed or changed."
+              exit 1
+            }

@@ -52,4 +52,4 @@ jobs:
           printf '%s\n' "${KEY}" > "${HOME}/.ssh/keyo_vps"
           chmod 600 "${HOME}/.ssh/keyo_vps"
           ssh -i "${HOME}/.ssh/keyo_vps" -o StrictHostKeyChecking=accept-new \
-            "${USER}@${HOST}" "sudo -n true && cd /opt/ai-relay && sudo git pull --ff-only origin main && sudo bash scripts/vps-cleanup-grsai-image-models.sh"
+            "${USER}@${HOST}" "sudo -n true && sudo RELOAD_CADDY=0 bash /opt/ai-relay/scripts/vps-safe-pull-preserve-blog.sh && sudo bash /opt/ai-relay/scripts/vps-cleanup-grsai-image-models.sh"

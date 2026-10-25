@@ -168,6 +168,59 @@ test("explicit group tokens stay locked to their own group", (t) => {
   assert.equal(group, "default");
 });
 
+test("4K on the grsai lane fails over to the Pro lane (customer 4K report)", async (t) => {
+  // Prices from production: sunburst HD = 12329 quota; Pro 4K = 14795 → HD is
+  // cheapest at 4K, so smart routing submits there first. grsai answers 500
+  // for this size; the task must then complete on the Pro (aicopy) lane.
+  const f = fixture(t);
+  const SUN = "gpt-image-2.5-sunburst"; // high-tier model: 4K pixel sizes valid
+  f.database((db) => {
+    db.prepare('INSERT INTO abilities(channel_id,model,"group",enabled) VALUES(1,?,\'default\',1),(3,?,\'GPT-Image-Pro\',1)').run(SUN, SUN);
+    db.prepare("INSERT OR REPLACE INTO options(key,value) VALUES('ModelPrice',?)").run(JSON.stringify({ [MODEL]: 0.0247, [SUN]: 0.0247 }));
+  });
+  const { fetchImpl, calls } = mockFetch([
+    { status: 500, body: { error: "upstream boom" } },                    // grsai submit 5xx
+    { status: 200, body: { data: [{ url: "https://aicopy.example/4k.png" }] } }, // aicopy submit (sync image)
+  ]);
+  const svc = new ImageService({ ledger: f.ledger, models: { [MODEL]: { id: MODEL, kind: "image" }, [SUN]: { id: SUN, kind: "image" } },
+    origin: ORIGIN, key: "k", aicopyOrigin: AICOPY, aicopyKey: "k2", fetchImpl, pollIntervalMs: 1, transportMs: 200, waitMs: 200 });
+  t.after(() => svc.stop());
+
+  const res = resLike();
+  await svc.handle({ method: "POST", url: "/v1/images/generations", socket: { remoteAddress: IP },
+    headers: { authorization: "Bearer sk-routing-1", "idempotency-key": "fx-4k" } },
+    res, { model: SUN, prompt: "p", size: "2448x3264", replyType: "async" });
+
+  const id = res.body.task_id;
+  assert.equal(res.status, 202);
+  await svc.jobs.get(id);
+  const row = f.ledger.get(id);
+  assert.equal(row.state, "ready");
+  assert.equal(row.using_group, "GPT-Image-Pro"); // failed over from grsai HD
+  assert.deepEqual(JSON.parse(row.result).data[0].url, "https://aicopy.example/4k.png");
+  assert.deepEqual(calls, [`${ORIGIN}/v1/api/generate`, `${AICOPY}/v1/images/generations`]);
+});
+
+test("grsai sync submit response with image and no task id is accepted directly", async (t) => {
+  const f = fixture(t);
+  const { fetchImpl } = mockFetch([
+    { status: 200, body: { data: [{ url: "https://grsai.example/direct.png" }] } },
+  ]);
+  const svc = new ImageService({ ledger: f.ledger, models: { [MODEL]: { id: MODEL, kind: "image" } },
+    origin: ORIGIN, key: "k", aicopyOrigin: AICOPY, aicopyKey: "k2", fetchImpl, pollIntervalMs: 1, transportMs: 200, waitMs: 200 });
+  t.after(() => svc.stop());
+
+  const res = resLike();
+  await svc.handle({ method: "POST", url: "/v1/images/generations", socket: { remoteAddress: IP },
+    headers: { authorization: "Bearer sk-routing-1", "idempotency-key": "fx-sync" } },
+    res, { model: MODEL, prompt: "p", replyType: "async" });
+
+  await svc.jobs.get(res.body.task_id);
+  const row = f.ledger.get(res.body.task_id);
+  assert.equal(row.state, "ready");
+  assert.deepEqual(JSON.parse(row.result).data[0].url, "https://grsai.example/direct.png");
+});
+
 test("policy rejections never fail over", async (t) => {
   const f = fixture(t);
   f.database((db) => db.prepare('INSERT INTO abilities(channel_id,model,"group",enabled) VALUES(3,?,\'GPT-Image-Pro\',1)').run(MODEL));

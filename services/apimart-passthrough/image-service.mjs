@@ -148,7 +148,21 @@ export class ImageService {
           this.ledger.failed(row.id, "image_submission_rejected");
           return "failed";
         }
-        if (!id || up.status < 200 || up.status >= 300) {
+        if (!id && up.status >= 200 && up.status < 300 && result.urls.length) {
+          // Sync upstream: the submit response carried the finished image and
+          // no task id. Store the result directly instead of failing.
+          this.ledger.submitted(row.id, `grsai_sync_${crypto.randomUUID()}`);
+          this.ledger.ready(row.id, { created: up.payload?.created || row.created_at, data: result.urls.map((url) => ({ url })) });
+          return "ready";
+        }
+        if (!id || up.status >= 500) {
+          // A 5xx is a definitive upstream refusal (no task id exists to poll),
+          // so it is failover-eligible like any other generation failure. Only
+          // transport-level throws stay submit_unknown (a task may exist).
+          if (up.status >= 500) {
+            this.ledger.failed(row.id, "image_generation_failed");
+            return "failed";
+          }
           this.ledger.failed(row.id, "image_submission_unknown", "submit_unknown"); return "submit_unknown";
         }
         // Durable upstream ID comes before any terminal result or client response.

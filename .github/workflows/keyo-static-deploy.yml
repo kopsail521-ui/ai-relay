@@ -49,6 +49,9 @@ jobs:
       queue: max
       cancel-in-progress: false
     steps:
+      # Stream the deploy script from the checkout so the CURRENT version
+      # runs even when safe-pull itself is what is broken on the VPS.
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
       - name: Pull and deploy over SSH
         env:
           HOST: ${{ vars.KEYO_VPS_HOST }}
@@ -69,4 +72,5 @@ jobs:
           printf '%s\n' "${KEY}" > "${HOME}/.ssh/keyo_vps"
           chmod 600 "${HOME}/.ssh/keyo_vps"
           ssh -i "${HOME}/.ssh/keyo_vps" -o StrictHostKeyChecking=accept-new \
-            "${USER}@${HOST}" "sudo -n true && sudo bash /opt/ai-relay/scripts/vps-static-deploy.sh"
+            "${USER}@${HOST}" 'sudo -n true && sudo bash -s' \
+            < scripts/vps-static-deploy.sh

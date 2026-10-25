@@ -45,6 +45,25 @@ test("model-specific dimensions and quality reject unsupported requests before b
   assert.throws(() => normalizeImageRequest("gpt-image-2-vip", { prompt: "x", mask: ref }), /mask only/);
 });
 
+test("GPT resolution aliases normalize to pixels and retain model restrictions", () => {
+  const pixels = { "1K": "1024x1024", "2K": "2048x2048", "4K": "3840x2160" };
+  for (const model of ["gpt-image-2", "gpt-image-2.5"]) {
+    assert.equal(normalizeImageRequest(model, { prompt: "x", size: "1K" }).request.aspectRatio, pixels["1K"]);
+    for (const size of ["2K", "4K"]) {
+      assert.throws(() => normalizeImageRequest(model, { prompt: "x", size }), error => error.status === 400 && error.param === "size" && /1K/.test(error.message));
+    }
+  }
+  for (const model of ["gpt-image-2-vip", "gpt-image-2.5-flare", "gpt-image-2.5-sunburst"]) {
+    for (const [size, expected] of Object.entries(pixels)) {
+      assert.equal(normalizeImageRequest(model, { prompt: "x", size }).request.aspectRatio, expected);
+    }
+  }
+  for (const model of ["nano-banana-2", "nano-banana-2.1", "nano-banana-pro"]) {
+    assert.throws(() => normalizeImageRequest(model, { prompt: "x", size: "4K" }), error => error.status === 400 && error.param === "size");
+    assert.equal(normalizeImageRequest(model, { prompt: "x", imageSize: "4K", aspectRatio: "16:9" }).request.imageSize, "4K");
+  }
+});
+
 test("Nano independent resolution aliases and controls", () => {
   const normalized = normalizeImageRequest("nano-banana-2.1", { prompt: "x", aspect_ratio: "1:4", resolution: "4K", size: "1:4" });
   assert.equal(normalized.request.aspectRatio, "1:4"); assert.equal(normalized.request.imageSize, "4K");

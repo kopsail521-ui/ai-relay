@@ -62,3 +62,50 @@ confirmed that the live container was running without restarting and that
 `/app/server.mjs` exactly matched the committed fix's SHA-256:
 `4e8f9e1ba68c9e3b6da9566613c05ba4a7f1ff1e4074efe763ae19fa5edb62e4`.
 No paid production generation was submitted for acceptance.
+
+## Follow-up: references in the tens of megabytes
+
+The repeated report supplied the same three request IDs. Two retained records
+date from before the first release; they do not identify a new failure after
+deployment. A subsequent read-only diagnostic
+[40162224632](https://github.com/kopsail521-ui/ai-relay/actions/runs/40162224632)
+confirmed the fixed proxy source, no restart/OOM state for the current proxy or
+native service, and no forwarding-failure markers in the current proxy's bounded
+log window. This does not establish the outcome of an unobserved customer request.
+
+Additional isolated testing found two independent defects:
+
+- GPT `size`/`resolution` aliases such as `1K`, `2K` and `4K` reassigned a `const`
+  binding, causing a runtime error before validation. The binding is now mutable;
+  supported aliases normalize correctly and unsupported model sizes still return
+  400. Reference image dimensions do not select output resolution.
+- A native JSON body exceeding 32 MiB destroyed its incoming socket when leaving
+  the default request iterator. The complete proxy/native fixture reproduced
+  `502 image_forwarding_failed` for two 13 MiB inline references after base64
+  expansion. Known-length and chunked bodies now return the intended
+  `413 image_body_too_large` without creating a task, reserving funds or submitting
+  to a provider. The iterator leaves the socket writable and drains rejected input.
+
+The expanded complete-chain fixture accepts individual 15 MiB and 20 MiB binary
+multipart references. It checks the exact forwarded SHA-256, mocked completion,
+task polling, equivalent JSON replay, one provider submission and one charge in
+the isolated SQLite fixture. Over-limit JSON and large multipart text fields
+remain explicit 413s even on retry, with no task or balance change. These are
+synthetic byte fixtures with a local mock provider, not actual 4K image generation.
+
+Existing limits remain: 20 MiB per multipart image, 32 MiB total multipart body,
+64 KiB per multipart text field, and 32 MiB after normalization to JSON. Base64
+expands bytes by approximately 4/3, so the combined inline binary budget is less
+than 24 MiB once JSON and other fields are included. Large base64 belongs in JSON;
+local image uploads should be file parts with a filename, not multipart text.
+HTTP(S) image URLs avoid inline file expansion but must be retrievable by the
+image service. No image compression or model substitution was introduced.
+
+Validation: all 43 native image tests, the complete proxy/native/wallet fixture,
+10 new native deployment checks and 30 reused deployment helper checks pass.
+The older clipboard packager's separate pre-existing packaging failure is outside
+the new deployment path. The new image-only workflow preserves runtime settings,
+persistent mounts and retained backups; it builds before replacing the native
+container, verifies seven source hashes and stable listener ownership twice,
+and rolls back only that service on a failed check. Public acceptance uses GET
+metadata requests. No real model or customer key is used.

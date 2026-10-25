@@ -10,8 +10,11 @@ on:
   push:
     branches: [main]
     paths:
-      - "services/apimart-passthrough/**"
-      - ".github/workflows/keyo-apimart-passthrough.yml"
+      - "services/apimart-passthrough/server.mjs"
+      - "services/apimart-passthrough/video-contracts.mjs"
+      - "services/apimart-passthrough/task-responses.mjs"
+      - "services/apimart-passthrough/catalog.json"
+      - "services/apimart-passthrough/Dockerfile"
       - "scripts/vps-deploy-seedance-merge.sh"
       - "scripts/vps-add-apimart-videos.py"
       - "scripts/vps-add-deepseek-v41.py"

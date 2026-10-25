@@ -3,6 +3,7 @@ import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import http from "node:http";
+import { createHash } from "node:crypto";
 import { spawn } from "node:child_process";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import { DatabaseSync } from "node:sqlite";
@@ -138,8 +139,8 @@ INSERT INTO users(id,status,quota,"group") VALUES(1,1,${originalQuota},'default'
 INSERT INTO tokens(id,user_id,key,name,status,expired_time,remain_quota,unlimited_quota,"group") VALUES(1,1,'integration-fixture','fixture',1,-1,${originalQuota},0,'default');
 `);
   db.prepare("INSERT INTO channels(id,status,base_url,name) VALUES(1,1,?,'fixture')").run(origin);
-  for (const model of ["nano-banana-2", "gpt-image-2-vip"]) db.prepare('INSERT INTO abilities(channel_id,model,"group",enabled) VALUES(1,?,\'default\',1)').run(model);
-  for (const [name, value] of Object.entries({ ModelPrice: { "nano-banana-2": 0.02, "gpt-image-2-vip": 0.02 }, GroupRatio: { default: 1 }, UserUsableGroups: { default: "Default" } })) db.prepare("INSERT INTO options(key,value) VALUES(?,?)").run(name, JSON.stringify(value));
+  for (const model of ["nano-banana-2", "gpt-image-2", "gpt-image-2-vip"]) db.prepare('INSERT INTO abilities(channel_id,model,"group",enabled) VALUES(1,?,\'default\',1)').run(model);
+  for (const [name, value] of Object.entries({ ModelPrice: { "nano-banana-2": 0.02, "gpt-image-2": 0.02, "gpt-image-2-vip": 0.02 }, GroupRatio: { default: 1 }, UserUsableGroups: { default: "Default" } })) db.prepare("INSERT INTO options(key,value) VALUES(?,?)").run(name, JSON.stringify(value));
   db.close();
   const nativePort = await sparePort();
   const proxyPort = await sparePort();
@@ -147,14 +148,14 @@ INSERT INTO tokens(id,user_id,key,name,status,expired_time,remain_quota,unlimite
   const proxyBase = `http://127.0.0.1:${proxyPort}`;
   const native = start(copyService("apimart-passthrough"), {
     PORT: String(nativePort), LISTEN_HOST: "127.0.0.1", GRSAI_API_KEY: "fixture-upstream-key", GRSAI_BASE_URL: origin,
-    NEW_API_DB: dbPath, NEW_API_BASE: origin, QUOTA_PER_USD: "500000", IMAGE_POLL_INTERVAL_MS: "15", IMAGE_POLL_MAX_MS: "50", IMAGE_TRANSPORT_TIMEOUT_MS: "1000",
+    NEW_API_DB: dbPath, NEW_API_BASE: origin, QUOTA_PER_USD: "500000", IMAGE_POLL_INTERVAL_MS: "15", IMAGE_POLL_MAX_MS: "50", IMAGE_TRANSPORT_TIMEOUT_MS: "5000",
     IMAGE_TRUSTED_PROXIES: "127.0.0.1/32", IMAGE_RECOVERY_INTERVAL_MS: "50",
   });
   await healthy(nativeBase, native);
   const proxy = start(copyService("creem-moderation-proxy"), {
     PORT: String(proxyPort), LISTEN_HOST: "127.0.0.1", UPSTREAM_URL: origin, VIDEO_GEN_URL: nativeBase,
     VIDEO_CATALOG: path.join(temp, "services/apimart-passthrough/catalog.json"), CREEM_API_KEY: "fixture-moderation-key", CREEM_TEST_MODE: "true",
-    UPLOAD_DIR: path.join(temp, "uploads"), UPLOAD_PUBLIC_BASE: `${proxyBase}/uploads`, IMAGE_FORWARD_TIMEOUT_MS: "3000", UPLOAD_AUTH_TIMEOUT_MS: "1000",
+    UPLOAD_DIR: path.join(temp, "uploads"), UPLOAD_PUBLIC_BASE: `${proxyBase}/uploads`, IMAGE_FORWARD_TIMEOUT_MS: "8000", UPLOAD_AUTH_TIMEOUT_MS: "1000",
   });
   await healthy(proxyBase, proxy);
 
@@ -235,7 +236,105 @@ INSERT INTO tokens(id,user_id,key,name,status,expired_time,remain_quota,unlimite
   assert.equal(finalWallet.user.quota, originalQuota - perImageQuota * 3);
   assert.equal(finalWallet.logs.length, 3);
   assert.equal(new Set(finalWallet.logs.map((row) => row.request_id)).size, 3);
-  console.log("PASS: isolated moderation + native + wallet integration (multipart 4K input, task/replay, failures, polling outage, timeout, policy, uploads, once-only billing)");
+
+  // Keep the original wallet assertions above intact. These larger references
+  // exercise the same real moderation -> native service -> SQLite billing path,
+  // with every provider HTTP request still restricted to the local fixture.
+  for (const sizeMiB of [15, 20]) {
+    const bytes = Buffer.alloc(sizeMiB * 1024 * 1024, 65);
+    bytes.set([255, 216, 255]);
+    const expectedHash = createHash("sha256").update(bytes).digest("hex");
+    const prompt = `large-reference-${sizeMiB}MiB`;
+    const idem = `large-reference-${sizeMiB}MiB-once`;
+    const beforeWallet = wallet();
+    const beforeSubmit = submitCount;
+    const largeForm = new FormData();
+    largeForm.append("model", "gpt-image-2"); largeForm.append("prompt", prompt);
+    largeForm.append("size", "1K"); largeForm.append("replyType", "async");
+    largeForm.append("image", new Blob([bytes], { type: "image/jpeg" }), "reference.jpg");
+    const response = await fetch(`${proxyBase}/v1/images/edits`, {
+      method: "POST", headers: { authorization: `Bearer ${key}`, "idempotency-key": idem }, body: largeForm,
+    });
+    const acceptedBody = await response.json();
+    assert.equal(response.status, 202, `${sizeMiB}MiB reference: ${JSON.stringify(acceptedBody)}`);
+    assert.match(acceptedBody.task_id, /^img_/);
+    assert.equal(response.headers.get("x-image-task-id"), acceptedBody.task_id);
+    const completed = await ready(proxyBase, acceptedBody.task_id);
+    assert.equal(completed.response.status, 200);
+    assert.equal(completed.body.task_id, acceptedBody.task_id);
+    assert.equal(completed.body.data[0].url, "https://example.invalid/result.png");
+    assert.equal(submitCount, beforeSubmit + 1);
+    const forwarded = received.at(-1);
+    assert.equal(forwarded.model, "gpt-image-2"); assert.equal(forwarded.prompt, prompt);
+    assert.equal(forwarded.aspectRatio, "1024x1024"); assert.equal(forwarded.images.length, 1);
+    assert.ok(forwarded.images[0].startsWith("data:image/jpeg;base64,"));
+    const forwardedBytes = Buffer.from(forwarded.images[0].slice("data:image/jpeg;base64,".length), "base64");
+    assert.equal(forwardedBytes.length, bytes.length);
+    assert.equal(createHash("sha256").update(forwardedBytes).digest("hex"), expectedHash);
+    await delay(30);
+    const chargedWallet = wallet();
+    assert.equal(chargedWallet.user.quota, beforeWallet.user.quota - perImageQuota);
+    assert.equal(chargedWallet.user.used_quota, beforeWallet.user.used_quota + perImageQuota);
+    assert.equal(chargedWallet.user.request_count, beforeWallet.user.request_count + 1);
+    assert.equal(chargedWallet.token.remain_quota, beforeWallet.token.remain_quota - perImageQuota);
+    assert.equal(chargedWallet.token.used_quota, beforeWallet.token.used_quota + perImageQuota);
+    assert.equal(chargedWallet.logs.length, beforeWallet.logs.length + 1);
+    assert.equal(chargedWallet.logs.at(-1).request_id, acceptedBody.task_id);
+    assert.equal(chargedWallet.logs.at(-1).quota, perImageQuota);
+
+    // Replaying equivalent canonical JSON must recover the existing task even
+    // though its original request arrived as multipart and used a size alias.
+    const replayResponse = await fetch(`${proxyBase}/v1/images/generations`, {
+      method: "POST", headers: { ...headers, "idempotency-key": idem },
+      body: JSON.stringify({ model: "gpt-image-2", prompt, size: "1024x1024", replyType: "async", images: [forwarded.images[0]] }),
+    });
+    assert.equal(replayResponse.status, 200);
+    assert.equal((await replayResponse.json()).task_id, acceptedBody.task_id);
+    await Promise.all([ready(proxyBase, acceptedBody.task_id), ready(proxyBase, acceptedBody.task_id)]);
+    await delay(30);
+    assert.equal(submitCount, beforeSubmit + 1);
+    assert.deepEqual(wallet(), chargedWallet);
+    console.log(`PASS: ${sizeMiB}MiB multipart reference -> 202, SHA-256 preserved, same task on replay, one provider POST and charge`);
+  }
+
+  const rejectedWallet = wallet();
+  const rejectedSubmit = submitCount;
+  const rejectedDb = new DatabaseSync(dbPath);
+  const rejectedTasks = rejectedDb.prepare("SELECT COUNT(*) AS count FROM keyo_image_tasks").get().count;
+  rejectedDb.close();
+  const oversizedRef = "data:image/jpeg;base64," + Buffer.alloc(13 * 1024 * 1024, 65).toString("base64");
+  const oversizedBody = JSON.stringify({ model: "gpt-image-2", prompt: "combined-json-over-32MiB", replyType: "async", images: [oversizedRef, oversizedRef] });
+  assert.ok(Buffer.byteLength(oversizedBody) > 32 * 1024 * 1024);
+  for (let attempt = 0; attempt < 2; attempt++) {
+    const response = await fetch(`${proxyBase}/v1/images/edits`, { method: "POST", headers: { ...headers, "idempotency-key": "combined-json-over-limit" }, body: oversizedBody });
+    const rejected = await response.json();
+    assert.equal(response.status, 413, JSON.stringify(rejected));
+    assert.equal(rejected.error.code, "image_body_too_large");
+    assert.equal(rejected.task_id, undefined); assert.equal(rejected.error.task_id, undefined);
+    assert.equal(response.headers.get("x-image-task-id"), null);
+    assert.equal(submitCount, rejectedSubmit); assert.deepEqual(wallet(), rejectedWallet);
+  }
+
+  // Multipart image text fields currently retain the generic 64KiB text cap.
+  // Record the explicit 413 contract; do not silently relax it in this fixture.
+  const textForm = new FormData();
+  textForm.append("model", "gpt-image-2"); textForm.append("prompt", "large-multipart-text-reference"); textForm.append("replyType", "async");
+  textForm.append("image", "data:image/jpeg;base64," + Buffer.alloc(15 * 1024 * 1024, 65).toString("base64"));
+  for (let attempt = 0; attempt < 2; attempt++) {
+    const response = await fetch(`${proxyBase}/v1/images/edits`, { method: "POST", headers: { authorization: `Bearer ${key}`, "idempotency-key": "multipart-text-over-limit" }, body: textForm });
+    const rejected = await response.json();
+    assert.equal(response.status, 413, JSON.stringify(rejected));
+    assert.equal(rejected.error.code, "payload_too_large");
+    assert.equal(rejected.task_id, undefined); assert.equal(rejected.error.task_id, undefined);
+    assert.equal(response.headers.get("x-image-task-id"), null);
+    assert.equal(submitCount, rejectedSubmit); assert.deepEqual(wallet(), rejectedWallet);
+  }
+  const afterRejectedDb = new DatabaseSync(dbPath);
+  assert.equal(afterRejectedDb.prepare("SELECT COUNT(*) AS count FROM keyo_image_tasks").get().count, rejectedTasks);
+  afterRejectedDb.close();
+  assert.equal(standardImageCalls, 0);
+  console.log("PASS: >32MiB combined JSON and large multipart text return 413, including retries, without tasks, provider submissions or billing");
+  console.log("PASS: isolated moderation + native + wallet integration (multipart 4K input, task/replay, failures, polling outage, timeout, policy, uploads, large references, once-only billing)");
 } finally {
   for (const child of children) {
     if (child.exitCode === null) {

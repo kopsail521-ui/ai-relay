@@ -199,10 +199,21 @@ export class ImageService {
     return work;
   }
   async readJson(req) {
+    const tooLarge = () => new ImageError(413, "image_body_too_large", `Image request body exceeds ${this.maxBodyBytes} bytes after JSON/base64 encoding`);
+    if (Number(req.headers["content-length"]) > this.maxBodyBytes) {
+      req.resume();
+      throw tooLarge();
+    }
     const chunks = []; let bytes = 0;
-    for await (const chunk of req) {
+    // Breaking a normal IncomingMessage async iterator destroys its socket.
+    // Leave the connection writable so the gateway receives the real 413
+    // instead of ECONNRESET/502 while it is still uploading a large buffer.
+    for await (const chunk of req.iterator({ destroyOnReturn: false })) {
       bytes += chunk.length;
-      if (bytes > this.maxBodyBytes) throw new ImageError(413, "image_body_too_large", "Image request body exceeds limit");
+      if (bytes > this.maxBodyBytes) {
+        req.resume();
+        throw tooLarge();
+      }
       chunks.push(chunk);
     }
     try { return JSON.parse(Buffer.concat(chunks).toString("utf8")); }

@@ -115,7 +115,7 @@ function validatePixels(value, model) {
 
 function normalizedOptions(model, body) {
   const nano = model.startsWith("nano-banana");
-  const sizeAlias = pickAlias(body, nano ? ["size"] : ["size", "resolution"], "size");
+  let sizeAlias = pickAlias(body, nano ? ["size"] : ["size", "resolution"], "size");
   const aspect = pickAlias(body, ["aspectRatio", "aspect_ratio"], "aspectRatio");
   const imageSize = pickAlias(body, nano ? ["imageSize", "image_size", "resolution"] : ["imageSize", "image_size"], "imageSize");
   const quality = body.quality == null ? "" : asString(body.quality, "quality").toLowerCase();

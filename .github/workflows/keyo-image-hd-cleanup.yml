@@ -1,0 +1,55 @@
+name: Cleanup delisted grsai image models
+
+# Removes the grsai-delisted gpt-image-2.5 family from grsai-backed channels
+# on the VPS so smart routing only offers the live GPT-Image-Pro lane.
+# Backs up the DB, edits channels/abilities only, restarts new-api, verifies.
+# Requires the same repo variable/secret as the other VPS deploys:
+#   vars.KEYO_VPS_HOST (+ optional vars.KEYO_VPS_USER)
+#   secrets.KEYO_VPS_SSH_KEY
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "scripts/cleanup-grsai-image-models.py"
+      - "scripts/vps-cleanup-grsai-image-models.sh"
+      - ".github/workflows/keyo-image-hd-cleanup.yml"
+  workflow_dispatch:
+
+concurrency:
+  group: keyo-image-hd-cleanup
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  cleanup:
+    name: Clean dead image lanes on VPS
+    if: vars.KEYO_VPS_HOST != ''
+    runs-on: ubuntu-latest
+    concurrency:
+      group: keyo-vps-mutex
+      cancel-in-progress: false
+    steps:
+      - name: Run cleanup over SSH
+        env:
+          HOST: ${{ vars.KEYO_VPS_HOST }}
+          USER: ${{ vars.KEYO_VPS_USER }}
+          KEY: ${{ secrets.KEYO_VPS_SSH_KEY }}
+        run: |
+          set -euo pipefail
+          if [ -z "${HOST}" ]; then
+            echo "KEYO_VPS_HOST is empty; skip"
+            exit 0
+          fi
+          if [ -z "${USER}" ]; then USER=admin; fi
+          if [ -z "${KEY}" ]; then
+            echo "::error::KEYO_VPS_HOST is set but secrets.KEYO_VPS_SSH_KEY is empty."
+            exit 1
+          fi
+          install -m 700 -d "${HOME}/.ssh"
+          printf '%s\n' "${KEY}" > "${HOME}/.ssh/keyo_vps"
+          chmod 600 "${HOME}/.ssh/keyo_vps"
+          ssh -i "${HOME}/.ssh/keyo_vps" -o StrictHostKeyChecking=accept-new \
+            "${USER}@${HOST}" "sudo -n true && cd /opt/ai-relay && sudo git pull --ff-only origin main && sudo bash scripts/vps-cleanup-grsai-image-models.sh"

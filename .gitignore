@@ -39,6 +39,8 @@ scripts/_*.txt
 # (untracked files get stashed-and-dropped; ignored files do not)
 static/brand/smoke-status.txt
 static/brand/deploy-status.txt
+static/brand/smoke-status-e0cf117e.txt
+static/brand/deploy-status-e0cf117e.txt
 
 # GEO auto-published CMS articles (VPS-only; do not wipe on git reset)
 static/brand/blog/article/*

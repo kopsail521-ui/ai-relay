@@ -10,7 +10,7 @@
 set -e
 cd /opt/ai-relay
 
-STATUS_FILE=/opt/ai-relay/static/brand/smoke-status.txt
+STATUS_FILE=/opt/ai-relay/static/brand/smoke-status-e0cf117e.txt
 write_status() {
   mkdir -p /opt/ai-relay/static/brand
   cat > "$STATUS_FILE"

@@ -50,7 +50,10 @@ Disallow: /setup
 Disallow: /admin
 Disallow: /api/
 Disallow: /__spa_raw
-# Ops diagnostics (basic_auth'd, and never for crawlers either)
+# Ops diagnostics (basic_auth'd, rotated paths 2026-10-25; old paths kept
+# until the files age off disk — do not remove the old Disallows before then)
+Disallow: /brand/deploy-status-e0cf117e.txt
+Disallow: /brand/smoke-status-e0cf117e.txt
 Disallow: /brand/deploy-status.txt
 Disallow: /brand/smoke-status.txt
 # SPA i18n shells (en/zh/ja/…): not translated landing pages — do not index.

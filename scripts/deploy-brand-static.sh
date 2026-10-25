@@ -155,12 +155,14 @@ ${DOMAIN} {
 		file_server
 	}
 	# Ops diagnostics (deploy/smoke status). NEVER public: they carry repo
-	# URLs, absolute paths and git state. basic_auth + robots.txt disallow;
-	# the tee that writes them also redacts repo URLs and root paths.
-	@ops_diag path /brand/deploy-status.txt /brand/smoke-status.txt
+	# state and operational detail. basic_auth + robots.txt disallow + rotated
+	# unguessable paths (2026-10-25). Old paths stay matched until the files
+	# age off disk — deploys copy but never delete, and an unmatched old file
+	# would silently become public 200 again.
+	@ops_diag path /brand/deploy-status-e0cf117e.txt /brand/smoke-status-e0cf117e.txt /brand/deploy-status.txt /brand/smoke-status.txt
 	handle @ops_diag {
 		basic_auth {
-			keyo \$2b\$10\$/7vmP94Gi4IBqwxzU/qEO.mCoaruycj8gZST892JOMZjYTdZtfqpq
+			keyo \$2b\$10\$t3yhsgFVbemrJ56tOLe6oeABhzuVne3dA7nw3J05IF9XgF/NmtlCu
 		}
 		root * ${ROOT}/static/brand
 		uri strip_prefix /brand

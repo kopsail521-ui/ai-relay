@@ -12,7 +12,7 @@
 
 set -euo pipefail
 ROOT="${ROOT:-/opt/ai-relay}"
-STATUS="$ROOT/static/brand/deploy-status.txt"
+STATUS="$ROOT/static/brand/deploy-status-e0cf117e.txt"
 
 main() {
   # RELOAD_CADDY must be passed explicitly: the inner sudo strips it from the

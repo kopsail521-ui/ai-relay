@@ -1,0 +1,38 @@
+name: Recover observed stopped native service
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: keyo-vps-mutex
+  cancel-in-progress: false
+  queue: max
+
+jobs:
+  recover:
+    if: vars.KEYO_VPS_HOST != ''
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+      - name: Start the pinned stopped native container and verify health
+        env:
+          KEYO_RECOVERY_HOST: ${{ vars.KEYO_VPS_HOST }}
+          KEYO_RECOVERY_USER: ${{ vars.KEYO_VPS_USER }}
+          KEYO_RECOVERY_KEY: ${{ secrets.KEYO_VPS_SSH_KEY }}
+        run: |
+          set -euo pipefail
+          if [ -z "${KEYO_RECOVERY_USER}" ]; then KEYO_RECOVERY_USER=admin; fi
+          test -n "${KEYO_RECOVERY_KEY}"
+          install -m 700 -d "${HOME}/.ssh"
+          printf '%s\n' "${KEYO_RECOVERY_KEY}" > "${HOME}/.ssh/keyo_native_recovery"
+          chmod 600 "${HOME}/.ssh/keyo_native_recovery"
+          trap 'rm -f "${HOME}/.ssh/keyo_native_recovery"' EXIT
+          ssh -T -i "${HOME}/.ssh/keyo_native_recovery" -o BatchMode=yes \
+            -o ConnectTimeout=20 -o StrictHostKeyChecking=accept-new \
+            "${KEYO_RECOVERY_USER}@${KEYO_RECOVERY_HOST}" \
+            'sudo -n env PYTHONDONTWRITEBYTECODE=1 python3 -' \
+            < scripts/vps-recover-stopped-native.py

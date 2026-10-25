@@ -1,0 +1,58 @@
+name: Reconcile diagnosed dedicated media owner safely
+
+# One-time repair of the observed October 25 name/owner mismatch. No model calls.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: keyo-gitee-adopt-owner
+  cancel-in-progress: false
+  queue: max
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+      - uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6.4.0
+        with:
+          node-version: 22
+      - run: sudo apt-get update -qq && sudo apt-get install -y --no-install-recommends ffmpeg
+      - run: node --test services/gitee-passthrough/server.integration.test.mjs
+      - run: node scripts/test-gitee-passthrough-infinitetalk-offline.mjs
+      - run: python3 scripts/test-vps-deploy-gitee-safe-offline.py
+      - run: python3 scripts/test-vps-adopt-gitee-owner-safe-offline.py
+
+  reconcile:
+    needs: verify
+    if: vars.KEYO_VPS_HOST != ''
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    concurrency:
+      group: keyo-vps-mutex
+      cancel-in-progress: false
+      queue: max
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+      - name: Adopt only the diagnosed owner, then release reviewed media gateway
+        env:
+          HOST: ${{ vars.KEYO_VPS_HOST }}
+          USER: ${{ vars.KEYO_VPS_USER }}
+          KEY: ${{ secrets.KEYO_VPS_SSH_KEY }}
+          RELEASE_SHA: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          if [ -z "${USER}" ]; then USER=admin; fi
+          test -n "${KEY}"
+          [[ "${RELEASE_SHA}" =~ ^[0-9a-f]{40}$ ]]
+          install -m 700 -d "${HOME}/.ssh"
+          printf '%s\n' "${KEY}" > "${HOME}/.ssh/keyo_owner_reconcile"
+          chmod 600 "${HOME}/.ssh/keyo_owner_reconcile"
+          trap 'rm -f "${HOME}/.ssh/keyo_owner_reconcile"' EXIT
+          ssh -T -i "${HOME}/.ssh/keyo_owner_reconcile" -o BatchMode=yes \
+            -o ConnectTimeout=20 -o ServerAliveInterval=15 \
+            -o StrictHostKeyChecking=accept-new "${USER}@${HOST}" \
+            "sudo -n true && sudo -n env RELOAD_CADDY=0 bash /opt/ai-relay/scripts/vps-safe-pull-preserve-blog.sh && sudo -n python3 -c 'import subprocess,sys; sys.exit(subprocess.check_output([\"git\",\"-C\",\"/opt/ai-relay\",\"rev-parse\",\"HEAD\"],text=True).strip()!=sys.argv[1])' '${RELEASE_SHA}' && sudo -n env PYTHONDONTWRITEBYTECODE=1 python3 /opt/ai-relay/scripts/vps-adopt-gitee-owner-safe.py --canonical-id ed589cc1c5914da14122e8b9730be28577477f6e4d9695cb07ca6f06b0fc59b6 --owner-id 9a352470f9bf89d5e62a8816ffb51e78024a40e019d6ba69bb43b0c1053be9cb --owner-name ai-relay-gitee-passthrough-clef-backup-20261014000149-83576 --pid 1858 --start-ticks 924 && sudo -n env PYTHONDONTWRITEBYTECODE=1 python3 /opt/ai-relay/scripts/vps-deploy-gitee-safe.py --inspect && sudo -n env PYTHONDONTWRITEBYTECODE=1 python3 /opt/ai-relay/scripts/vps-deploy-gitee-safe.py --deploy"

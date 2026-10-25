@@ -93,7 +93,7 @@ if (!fs.existsSync(CATALOG_PATH)) {
 // Bump on every deploy-relevant change; the smoke workflow asserts this
 // marker via /healthz so a stale process on :3010 cannot serve traffic
 // unnoticed (ghost nohup processes from old runbooks).
-const BUILD_ID = "buffered-upload-headers-2026-10-25";
+const BUILD_ID = "buffered-upload-guard-2026-10-25";
 const catalog = JSON.parse(fs.readFileSync(CATALOG_PATH, "utf8"));
 const modelMap = Object.fromEntries(catalog.models.map((m) => [m.id, m]));
 
@@ -996,9 +996,23 @@ const server = http.createServer(async (req, res) => {
     });
   }
 
-  const bodyBuf = ["GET", "HEAD"].includes(req.method || "")
-    ? Buffer.alloc(0)
-    : await readBody(req);
+  let bodyBuf;
+  try {
+    bodyBuf = ["GET", "HEAD"].includes(req.method || "")
+      ? Buffer.alloc(0)
+      : await readBody(req);
+  } catch {
+    // A client can abandon an upload before any billing or forwarding.
+    // Its aborted stream must not reject the async HTTP listener.
+    if (req.destroyed || res.destroyed || res.writableEnded) return;
+    return json(res, 400, {
+      error: {
+        message: "Unable to read the complete request body. Upload the complete file and try again.",
+        type: "invalid_request_error",
+        code: "request_body_unavailable",
+      },
+    });
+  }
 
   if (urlPath.startsWith("/v1/task/")) {
     // A rejected promise returned from the async HTTP listener is otherwise an

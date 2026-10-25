@@ -30,7 +30,7 @@ fi
 # Rebuild the gitee passthrough image so the container picks up the
 # server.mjs committed in this push (gift-credit twins support: model
 # normalization + gift-first billing).
-EXPECTED_BUILD=buffered-upload-headers-2026-10-25
+EXPECTED_BUILD=buffered-upload-guard-2026-10-25
 if ! bash scripts/vps-passthrough-rebuild.txt >/tmp/passthrough-rebuild.log 2>&1; then
   cat /tmp/passthrough-rebuild.log
   {

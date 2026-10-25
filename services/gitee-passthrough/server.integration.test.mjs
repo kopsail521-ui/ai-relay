@@ -77,9 +77,11 @@ globalThis.fetch = (input, init) => {
     res.writeHead(202, { "content-type": "application/json" });
     res.end(JSON.stringify({ task_id: "local-task", status: "waiting" }));
   });
+  let authProbeObserved;
   const auth = http.createServer((req, res) => {
     res.writeHead(200, { "content-type": "application/json" });
     res.end('{"data":[]}');
+    authProbeObserved?.();
   });
   const upPort = await listen(upstream), authPort = await listen(auth);
   const probe = http.createServer(), servicePort = await listen(probe);
@@ -197,5 +199,30 @@ globalThis.fetch = (input, init) => {
     assert.ok(Date.now() - started < 2500, "the gateway must bound a query that receives no response");
     assert.equal(received.length - before, 1, "the gateway must not retry a timed-out query internally");
     assert.equal(child.exitCode, null);
+  });
+  await t.test("an interrupted upload keeps the gateway alive and never submits a task", async () => {
+    const authObserved = new Promise((resolve) => { authProbeObserved = resolve; });
+    const before = received.length;
+    const request = http.request(`http://127.0.0.1:${servicePort}/v1/async/documents/parse`, {
+      method: "POST",
+      headers: { authorization: "Bearer sk-local-client-only", "content-type": "application/octet-stream", "content-length": 1048576 },
+    });
+    request.on("error", () => {});
+    request.setTimeout(3000, () => request.destroy(new Error("Local partial upload timed out")));
+    request.write(Buffer.alloc(1024));
+    await authObserved;
+    authProbeObserved = undefined;
+    const healthUrl = `http://127.0.0.1:${servicePort}/healthz`;
+    assert.equal((await fetch(healthUrl, { signal: AbortSignal.timeout(3000) })).status, 200);
+    const closed = new Promise((resolve) => request.once("close", resolve));
+    request.destroy();
+    await closed;
+    const health = await fetch(healthUrl, { signal: AbortSignal.timeout(3000) }).catch((error) => {
+      throw new Error(`Gateway failed after interrupted upload: ${output}`, { cause: error });
+    });
+    assert.equal(health.status, 200);
+    assert.equal((await health.json()).ok, true);
+    assert.equal(child.exitCode, null, "a client abandoning an upload must not terminate the gateway");
+    assert.equal(received.length, before, "an incomplete upload must never be forwarded");
   });
 });

@@ -103,6 +103,7 @@ class OwnerDiagnosticTests(unittest.TestCase):
             with patch.object(diag.os, 'readlink', side_effect=lambda path: links[str(path)]):
                 report = diag.process_summary(1858, info, proc)
             self.assertTrue(report['docker_entry_script'])
+            self.assertEqual(report['docker_owner_id'], CID)
             self.assertTrue(report['cgroup_matches_canonical'])
             self.assertTrue(report['mount_namespace_is_canonical'])
             self.assertFalse(report['mount_namespace_is_host'])
@@ -143,6 +144,64 @@ class OwnerDiagnosticTests(unittest.TestCase):
             with self.assertRaises(RuntimeError):
                 loaded.api(method, route)
         original.assert_called_once_with('GET', '/containers/' + diag.NAME + '/json')
+
+    def test_only_freshly_observed_exact_owner_id_can_be_inspected(self):
+        with tempfile.TemporaryDirectory() as temp:
+            proc = Path(temp)
+            self.proc_fixture(proc, cgroup='0::/system.slice/docker-' + CID + '.scope\n')
+            helper = types.SimpleNamespace(api=Mock(return_value=container()))
+            original = helper.api
+            module = types.SimpleNamespace(load_helper=lambda: helper)
+            loader = types.SimpleNamespace(exec_module=lambda _: None)
+            with patch.object(diag.importlib.util, 'spec_from_file_location', return_value=types.SimpleNamespace(loader=loader)), \
+                    patch.object(diag.importlib.util, 'module_from_spec', return_value=module):
+                loaded = diag.load_helper(proc)
+            with self.assertRaises(RuntimeError):
+                loaded.api('GET', '/containers/' + CID + '/json')
+            self.assertEqual(loaded.inspect_observed_owner(1858)['Id'], CID)
+            original.assert_called_once_with('GET', '/containers/' + CID + '/json')
+            with self.assertRaises(RuntimeError):
+                loaded.api('GET', '/containers/' + CID + '/json')
+            with self.assertRaises(ValueError):
+                loaded.inspect_observed_owner('../environ')
+
+    def test_actual_owner_filtered_config_mounts_and_partial_source_manifest(self):
+        with tempfile.TemporaryDirectory() as temp:
+            proc = Path(temp)
+            directory, _ = self.proc_fixture(proc, cgroup='0::/docker/' + CID + '\n')
+            app = directory / 'root/app'
+            app.mkdir(parents=True)
+            (app / 'server.mjs').write_text('old server')
+            (app / 'catalog.json').write_text('{"models":[]}')
+            info = container()
+            info['Name'] = '/gitee-running-legacy'
+            info['State'].update(Pid=1858, Status='running', Running=True, Restarting=False)
+            helper = types.SimpleNamespace(inspect_observed_owner=Mock(return_value=info))
+            process = {'pid': 1858, 'docker_owner_id': CID, 'parent_pid': 1, 'start_ticks': 123456}
+            result = diag.observed_owner_summary(helper, process, container(), proc)
+            self.assertEqual(result['container']['name'], 'gitee-running-legacy')
+            self.assertTrue(result['inspected_identity_matches_observed'])
+            self.assertTrue(result['container_main_pid_is_listener'])
+            self.assertTrue(result['wallet_mount_matches_canonical'])
+            self.assertIsNotNone(result['source_files_sha256']['server.mjs'])
+            self.assertIsNotNone(result['source_files_sha256']['catalog.json'])
+            self.assertIsNone(result['source_files_sha256']['decisions.mjs'])
+            self.assertNotIn(PRIVATE, json.dumps(result))
+
+    def test_changed_owner_identity_does_not_report_source_as_verified(self):
+        with tempfile.TemporaryDirectory() as temp:
+            proc = Path(temp)
+            self.proc_fixture(proc)
+            info = container()
+            info['Id'] = 'f' * 64
+            info['State']['Pid'] = 1858
+            info['Mounts'][0]['Source'] = '/opt/ai-relay/other-wallet'
+            helper = types.SimpleNamespace(inspect_observed_owner=Mock(return_value=info))
+            process = {'pid': 1858, 'docker_owner_id': CID, 'parent_pid': 1, 'start_ticks': 123456}
+            result = diag.observed_owner_summary(helper, process, container(), proc)
+            self.assertFalse(result['inspected_identity_matches_observed'])
+            self.assertFalse(result['wallet_mount_matches_canonical'])
+            self.assertTrue(all(value is None for value in result['source_files_sha256'].values()))
 
     def test_main_failure_prints_no_exception_data(self):
         output = io.StringIO()

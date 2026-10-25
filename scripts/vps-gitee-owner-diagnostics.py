@@ -34,7 +34,12 @@ def digest(value):
     return hashlib.sha256(str(value).encode()).hexdigest()
 
 
-def load_helper():
+def docker_owner_ids(cgroup):
+    return sorted({identity for line in cgroup.splitlines() for identity in
+                   re.findall(r'(?:^|/)docker(?:-|/)([0-9a-f]{64})(?:\.scope)?(?=/|$)', line.strip())})
+
+
+def load_helper(proc=Path('/proc')):
     spec = importlib.util.spec_from_file_location('keyo_owner_native_readonly',
                                                 ROOT / 'scripts/vps-deploy-native-images-safe.py')
     module = importlib.util.module_from_spec(spec)
@@ -42,13 +47,29 @@ def load_helper():
     module.ROOT = ROOT
     helper = module.load_helper()
     original_api = helper.api
+    allowed_routes = {'/containers/' + NAME + '/json'}
 
     def readonly_api(method, route, body=None):
-        if method != 'GET' or route != '/containers/' + NAME + '/json' or body is not None:
+        if method != 'GET' or route not in allowed_routes or body is not None:
             raise RuntimeError('Read-only diagnostic refuses this Docker operation')
         return original_api(method, route)
 
     helper.api = readonly_api
+
+    def inspect_observed_owner(pid):
+        if integer(pid, 1) is None:
+            raise ValueError('Invalid observed PID')
+        ids = docker_owner_ids(limited_bytes(proc / str(pid) / 'cgroup', 16384).decode(errors='replace'))
+        if len(ids) != 1:
+            raise ValueError('No unique Docker identity observed')
+        route = '/containers/' + ids[0] + '/json'
+        allowed_routes.add(route)
+        try:
+            return helper.api('GET', route)
+        finally:
+            allowed_routes.remove(route)
+
+    helper.inspect_observed_owner = inspect_observed_owner
     return helper
 
 
@@ -70,7 +91,8 @@ def selected_env(config):
 def container_summary(info):
     state, config, host = info.get('State') or {}, info.get('Config') or {}, info.get('HostConfig') or {}
     result = {
-        'name': NAME,
+        'name': str(info.get('Name', NAME)).lstrip('/')
+                if re.fullmatch(r'/?[A-Za-z0-9][A-Za-z0-9_.-]{0,150}', str(info.get('Name', NAME))) else None,
         'container_id': info.get('Id') if re.fullmatch(r'[0-9a-f]{64}', str(info.get('Id'))) else None,
         'image_id': info.get('Image') if re.fullmatch(r'sha256:[0-9a-f]{64}', str(info.get('Image'))) else None,
         'state': {key: state.get(key) is True for key in ('Running', 'Restarting', 'Dead', 'OOMKilled')},
@@ -159,6 +181,7 @@ def process_summary(pid, canonical, proc=Path('/proc')):
         canonical_pid = integer((canonical.get('State') or {}).get('Pid'), 1)
         canonical_ns = namespace(proc / str(canonical_pid)) if canonical_pid else None
         identity = canonical.get('Id') or ''
+        owner_ids = docker_owner_ids(cgroup)
         units = set()
         for entry in cgroup.splitlines():
             for part in entry.split('/'):
@@ -176,6 +199,7 @@ def process_summary(pid, canonical, proc=Path('/proc')):
                       docker_entry_script=node and candidate == '/app/server.mjs',
                       argument_count=len(args), recognized_service_units=sorted(units),
                       docker_cgroup=bool(re.search(r'(?:docker[-/])[0-9a-f]{64}', cgroup)),
+                      docker_owner_id=owner_ids[0] if len(owner_ids) == 1 else None,
                       cgroup_matches_canonical=bool(re.fullmatch(r'[0-9a-f]{64}', identity) and identity in cgroup),
                       mount_namespace_is_host=own_ns == host_ns if own_ns and host_ns else None,
                       mount_namespace_is_canonical=own_ns == canonical_ns if own_ns and canonical_ns else None)
@@ -215,6 +239,50 @@ def source_manifest():
     return result
 
 
+def wallet_mount_identity(info):
+    db = selected_env(info.get('Config') or {}).get('NEW_API_DB', '/data/one-api.db')
+    if not db:
+        return None
+    candidates = [mount for mount in info.get('Mounts') or []
+                  if isinstance(mount.get('Destination'), str) and
+                  (db == mount['Destination'] or db.startswith(mount['Destination'].rstrip('/') + '/'))]
+    if not candidates:
+        return None
+    mount = max(candidates, key=lambda item: len(item['Destination']))
+    return tuple(mount.get(key) for key in ('Type', 'Source', 'Name', 'Destination', 'RW'))
+
+
+def observed_owner_summary(helper, process, canonical, proc=Path('/proc')):
+    result = {'listener_pid': process['pid'], 'observed_owner_id': process.get('docker_owner_id')}
+    if not result['observed_owner_id']:
+        return dict(result, status='no_unique_docker_owner')
+    try:
+        info = helper.inspect_observed_owner(process['pid'])
+        result['container'] = container_summary(info)
+        identity_matches = info.get('Id') == result['observed_owner_id']
+        pid_matches = (info.get('State') or {}).get('Pid') == process['pid']
+        identity = process_stat(proc / str(process['pid']))
+        stable = identity['start_ticks'] == process.get('start_ticks') and identity['parent_pid'] == process.get('parent_pid')
+        result.update(status='ok', inspected_identity_matches_observed=identity_matches,
+                      container_main_pid_is_listener=pid_matches, process_identity_still_matches=stable,
+                      same_image_as_canonical=info.get('Image') == canonical.get('Image'),
+                      wallet_mount_matches_canonical=wallet_mount_identity(info) == wallet_mount_identity(canonical)
+                          if wallet_mount_identity(info) and wallet_mount_identity(canonical) else None)
+        # Read only known source names through this process's mount namespace.
+        # These are disk hashes; they do not prove the already-loaded module bytes.
+        hashes = {}
+        for name in SOURCES:
+            path = proc / str(process['pid']) / 'root/app' / name
+            try:
+                hashes[name] = hashlib.sha256(limited_bytes(path, 8 * 1024 * 1024)).hexdigest() if path.is_file() and not path.is_symlink() and identity_matches and pid_matches and stable else None
+            except (OSError, ValueError):
+                hashes[name] = None
+        result['source_files_sha256'] = hashes
+    except Exception:
+        result['status'] = 'owner_inspect_unavailable_or_changed'
+    return result
+
+
 def collect(helper):
     info = helper.inspect(NAME)
     first = listeners()
@@ -225,6 +293,8 @@ def collect(helper):
               'limits': ['Process environ, env files, database contents and request logs are not read. Command lines are parsed internally; only allowlisted identity fields are output.',
                          'Host file hashes describe files currently on disk, not modules loaded by an older Node process.',
                          'The real process configuration may differ from the stopped container; do not restart, kill or migrate on this evidence alone.']}
+    report['observed_owner_containers'] = [observed_owner_summary(helper, process, info)
+                                           for process in report['processes']]
     second = listeners()
     report['listener_stable_across_probe'] = first == second
     return report

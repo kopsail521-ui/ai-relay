@@ -163,6 +163,7 @@ ${DOMAIN} {
 			keyo \$2b\$10\$/7vmP94Gi4IBqwxzU/qEO.mCoaruycj8gZST892JOMZjYTdZtfqpq
 		}
 		root * ${ROOT}/static/brand
+		uri strip_prefix /brand
 		file_server
 	}
 	@sitemaps path /sitemap.xml /sitemap-live.xml

@@ -15,6 +15,26 @@ const listen = async (server) => { server.listen(0, '127.0.0.1'); await once(ser
 const bodyOf = async (req) => { const chunks = []; for await (const part of req) chunks.push(part); return Buffer.concat(chunks); };
 const send = (res, status, body, headers = {}) => { res.writeHead(status, { 'content-type': 'application/json', ...headers }); res.end(JSON.stringify(body)); };
 
+// fetch cannot send Expect or chunked framing explicitly. Exercise the actual
+// client HTTP protocol used by curl for larger uploads instead of mocking it.
+function uploadRequest(url, body, headers, chunked = false) {
+  return new Promise((resolve, reject) => {
+    const req = http.request(url, { method: 'POST', headers }, async res => {
+      try { resolve({ status: res.statusCode, headers: res.headers, body: JSON.parse((await bodyOf(res)).toString()) }); }
+      catch (error) { reject(error); }
+    });
+    req.on('error', reject);
+    req.setTimeout(5000, () => req.destroy(new Error('Local upload timed out')));
+    if (headers.expect) {
+      req.once('continue', () => req.end(body));
+      req.flushHeaders();
+    } else if (chunked) {
+      req.write(body.subarray(0, Math.floor(body.length / 2)));
+      req.end(body.subarray(Math.floor(body.length / 2)));
+    } else req.end(body);
+  });
+}
+
 test('local HTTP integration: moderation, native JSON/multipart, tasks, auth/storage and video routes', { timeout: 30000 }, async () => {
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'relay-proxy-integration-'));
   const catalog = path.join(dir, 'catalog.json');
@@ -100,7 +120,50 @@ test('local HTTP integration: moderation, native JSON/multipart, tasks, auth/sto
     }
     assert.ok(screened.some(item => item.prompt === 'edit with local file'));
     assert.ok(screened.every(item => !item.external_id.includes('Bearer') && !item.external_id.includes('local-mock-key')));
+    for (const scenario of [
+      { name: 'curl-single-1.2MiB', model: models[0], sizes: [Math.ceil(1.2 * 1024 * 1024)], expect: true },
+      { name: 'curl-multiple-over-1MiB', model: 'gpt-image-2.5-sunburst', sizes: [700 * 1024, 700 * 1024], expect: true },
+      { name: 'curl-single-5MiB', model: 'gpt-image-2.5-flare', sizes: [5 * 1024 * 1024], expect: true },
+      { name: 'chunked-references', model: models[0], sizes: [1200 * 1024], chunked: true },
+      { name: 'json-reference-with-expect', model: models[0], sizes: [1200 * 1024], expect: true, json: true },
+      { name: 'legacy-multipart-with-expect', model: 'other-model', sizes: [1200 * 1024], expect: true, legacy: true },
+    ]) {
+      const references = scenario.sizes.map((size, i) => Buffer.alloc(size, 65 + i));
+      const form = scenario.json ? Buffer.from(JSON.stringify({ model: scenario.model, prompt: scenario.name, replyType: 'async', images: references.map(bytes => 'data:image/jpeg;base64,' + bytes.toString('base64')) })) : multipart([
+        { field: 'model', data: scenario.model }, { field: 'prompt', data: scenario.name }, { field: 'replyType', data: 'async' },
+        ...references.map((data, i) => ({ field: 'image[]', filename: `reference-${i}.jpg`, mime: 'image/jpeg', data })),
+      ]);
+      const before = scenario.legacy ? upstreamImages.length : submitted.length;
+      const idem = `upload-${scenario.name}`;
+      const r = await uploadRequest(base + '/v1/images/edits', form, {
+        authorization: 'Bearer local', 'content-type': scenario.json ? 'application/json' : 'multipart/form-data; boundary=local-boundary',
+        'idempotency-key': idem, 'x-end-to-end': 'preserve-me', connection: 'keep-alive, x-client-hop', 'x-client-hop': 'remove-me',
+        ...(scenario.expect ? { expect: '100-continue' } : {}),
+        ...(scenario.chunked ? { 'transfer-encoding': 'chunked' } : { 'content-length': String(form.length) }),
+      }, scenario.chunked);
+      assert.equal(r.status, scenario.legacy ? 200 : 202, scenario.name + ': ' + JSON.stringify(r.body));
+      const last = scenario.legacy ? upstreamImages.at(-1) : submitted.at(-1);
+      assert.equal(scenario.legacy ? upstreamImages.length : submitted.length, before + 1, 'exactly one forwarding attempt');
+      assert.equal(last.headers.expect, undefined);
+      assert.equal(last.headers['transfer-encoding'], undefined);
+      assert.equal(last.headers['x-client-hop'], undefined);
+      assert.equal(last.headers.authorization, 'Bearer local');
+      assert.equal(last.headers['idempotency-key'], idem);
+      assert.equal(last.headers['x-end-to-end'], 'preserve-me');
+      if (scenario.legacy) {
+        assert.deepEqual(last.body, form);
+        assert.equal(last.headers['content-length'], String(form.length));
+      } else {
+        assert.equal(last.body.model, scenario.model);
+        assert.equal(last.body.replyType, 'async');
+        assert.equal(last.body.images.length, references.length);
+        for (const [i, bytes] of references.entries()) assert.equal(last.body.images[i], 'data:image/jpeg;base64,' + bytes.toString('base64'));
+        assert.equal(last.headers['content-length'], String(Buffer.byteLength(JSON.stringify(last.body))));
+        assert.equal(r.headers['x-image-task-id'], 'task-local');
+      }
+    }
     let count = submitted.length;
+    const compatibilityCount = upstreamImages.length;
     moderationDecision = 'deny';
     assert.equal((await post('/v1/images/edits', imageForm, { 'content-type': 'multipart/form-data; boundary=local-boundary' })).status, 400);
     assert.equal(submitted.length, count);
@@ -110,9 +173,9 @@ test('local HTTP integration: moderation, native JSON/multipart, tasks, auth/sto
     const unsupported = await post('/v1/images/variations', { model: models[0], prompt: 'x' }); assert.equal(unsupported.status, 400); assert.equal((await unsupported.json()).error.code, 'unsupported_image_operation');
     nativeMode = 'disconnect';
     const failed = await post('/v1/images/generations', { model: models[0], prompt: 'x' }); assert.equal(failed.status, 502); assert.equal((await failed.json()).error.code, 'image_forwarding_failed');
-    assert.equal(upstreamImages.length, 0);
-    const taskFailed = await fetch(base + '/v1/images/tasks/task-local'); assert.equal(taskFailed.status, 502); assert.equal(upstreamImages.length, 0);
-    nativeMode = 'hang'; const began = Date.now(); assert.equal((await post('/v1/images/generations', { model: models[0], prompt: 'x' })).status, 502); assert.ok(Date.now() - began < 3000); assert.equal(upstreamImages.length, 0);
+    assert.equal(upstreamImages.length, compatibilityCount);
+    const taskFailed = await fetch(base + '/v1/images/tasks/task-local'); assert.equal(taskFailed.status, 502); assert.equal(upstreamImages.length, compatibilityCount);
+    nativeMode = 'hang'; const began = Date.now(); assert.equal((await post('/v1/images/generations', { model: models[0], prompt: 'x' })).status, 502); assert.ok(Date.now() - began < 3000); assert.equal(upstreamImages.length, compatibilityCount);
     nativeMode = 'ok'; assert.equal((await fetch(base + '/v1/images/tasks/task-local')).status, 200); assert.equal(nativeTasks.at(-1), '/v1/images/tasks/task-local');
     const legacyForm = multipart([{ field: 'model', data: 'other-model' }, { field: 'prompt', data: 'x' }, { field: 'image', filename: 'a.png', mime: 'image/png', data: bytes }]);
     assert.equal((await post('/v1/images/edits', legacyForm, { 'content-type': 'multipart/form-data; boundary=local-boundary' })).status, 200);

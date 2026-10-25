@@ -213,11 +213,23 @@ function qsOf(url) {
 const IMAGE_FORWARD_TIMEOUT_MS = Math.min(600000, Math.max(1000, Number(process.env.IMAGE_FORWARD_TIMEOUT_MS) || 360000));
 const UPLOAD_AUTH_TIMEOUT_MS = Math.min(30000, Math.max(100, Number(process.env.UPLOAD_AUTH_TIMEOUT_MS) || 5000));
 
+function proxyRequestHeaders(incoming, target) {
+  const headers = { ...incoming };
+  // The client body is already buffered (and may have been normalized to JSON).
+  // Its 100-continue handshake/framing belongs to that connection, not fetch's
+  // next connection. curl adds Expect to larger uploads; undici rejects it.
+  const connectionHeaders = String(headers.connection || '').split(',').map(name => name.trim().toLowerCase()).filter(Boolean);
+  for (const name of ['expect', 'content-length', 'host', 'connection', 'keep-alive', 'proxy-connection', 'transfer-encoding', 'te', 'trailer', 'upgrade', 'proxy-authenticate', 'proxy-authorization', ...connectionHeaders]) {
+    delete headers[name];
+  }
+  headers.host = target.host;
+  headers['accept-encoding'] = 'identity';
+  return headers;
+}
+
 async function proxyRaw(targetUrl, req, bodyBuf, timeoutMs = IMAGE_FORWARD_TIMEOUT_MS) {
   const target = new URL(targetUrl);
-  const headers = { ...req.headers, host: target.host };
-  delete headers["content-length"];
-  headers["accept-encoding"] = "identity";
+  const headers = proxyRequestHeaders(req.headers, target);
   const upstreamRes = await fetch(target, {
     method: req.method,
     headers,
@@ -1145,10 +1157,8 @@ async function decodeBody(buf, encoding) {
 
 async function proxyRequest(req, res, bodyBuf) {
   const target = new URL(req.url || "/", UPSTREAM);
-  const headers = { ...req.headers, host: target.host };
-  delete headers["content-length"];
   // 避免与 Caddy encode gzip 叠压，导致前端 JS 传输中断、官网白屏
-  headers["accept-encoding"] = "identity";
+  const headers = proxyRequestHeaders(req.headers, target);
 
   const upstreamRes = await fetch(target, {
     method: req.method,

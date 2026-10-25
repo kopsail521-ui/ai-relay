@@ -51,6 +51,22 @@ class ImageDiagnosticsTests(unittest.TestCase):
         self.assertNotIn('fixture-secret', json.dumps(exported))
         self.assertNotIn('CREEM_API_KEY', exported)
 
+    def test_aggregate_transport_failures_without_exporting_other_identifiers(self):
+        line = '2026-10-25T04:00:00Z [native-image] forwarding failed id=aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa reason=TypeError cause=UND_ERR_NOT_SUPPORTED'
+        totals = diagnostics.failure_totals(line + '\n' + line + '\n' + line + ' body=fixture-secret')
+        self.assertEqual(totals['counts'], {'TypeError/UND_ERR_NOT_SUPPORTED': 2})
+        self.assertEqual(totals['latest_timestamp'], '2026-10-25T04:00:00Z')
+        self.assertNotIn('aaaaaaaa', json.dumps(totals))
+        self.assertNotIn('fixture-secret', json.dumps(totals))
+
+    def test_resource_state_exports_only_numeric_limits_and_oom_status(self):
+        record = diagnostics.safe_container_record('ai-relay-apimart-passthrough', {
+            'State': {'OOMKilled': True, 'ExitCode': 137, 'Error': 'fixture-secret'},
+            'RestartCount': 2, 'HostConfig': {'Memory': 123, 'MemorySwap': 456, 'LogConfig': 'fixture-secret'},
+        })
+        self.assertEqual(record['resource_state'], {'oom_killed': True, 'exit_code': 137, 'restart_count': 2, 'Memory': 123, 'MemorySwap': 456})
+        self.assertNotIn('fixture-secret', json.dumps(record))
+
     def test_main_only_executes_read_commands_and_sanitizes_both_log_streams(self):
         seen = []
         def command(args, timeout=20):

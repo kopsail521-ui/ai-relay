@@ -85,6 +85,22 @@ def numeric_limits(env_entries):
             for key in NUMERIC_ENV_KEYS}
 
 
+def failure_totals(raw):
+    totals = {}
+    latest = None
+    for line in raw.splitlines():
+        match = LOG_RECORD.fullmatch(line)
+        if match:
+            name = match['name'] if match['name'] in ERROR_NAMES else 'unrecognized'
+            cause = match['cause'] if match['cause'] in ERROR_CODES else 'unrecognized'
+            key = name + '/' + cause
+            totals[key] = totals.get(key, 0) + 1
+            if match['timestamp']:
+                latest = max(latest or '', match['timestamp'])
+    # No customer identifiers or raw exception text are included in aggregates.
+    return {'counts': totals, 'latest_timestamp': latest}
+
+
 def safe_container_record(name, info):
     config, state = info.get('Config') or {}, info.get('State') or {}
     image = str(info.get('Image', ''))
@@ -98,6 +114,13 @@ def safe_container_record(name, info):
         'pid': pid if isinstance(pid, int) and not isinstance(pid, bool) and pid >= 0 else None,
         'started_at': started if re.fullmatch(TIMESTAMP, started) else None,
         'numeric_env_limits': numeric_limits(config.get('Env') or []),
+        'resource_state': {
+            'oom_killed': state.get('OOMKilled') is True,
+            'exit_code': state.get('ExitCode') if type(state.get('ExitCode')) is int else None,
+            'restart_count': info.get('RestartCount') if type(info.get('RestartCount')) is int else None,
+            **{key: value for key, value in (info.get('HostConfig') or {}).items()
+               if key in ('Memory', 'MemorySwap') and type(value) is int},
+        },
     }
 
 
@@ -130,6 +153,7 @@ def container_evidence(name):
     code, stdout, stderr = command(['docker', 'logs', '--timestamps', '--since', '48h', '--tail', '20000', name])
     record['log_status'] = 'read' if code == 0 else 'unavailable'
     record['matched_failures'] = safe_failure_records(stdout + '\n' + stderr) if code == 0 else []
+    record['forwarding_failure_totals'] = failure_totals(stdout + '\n' + stderr) if code == 0 else None
     return record
 
 

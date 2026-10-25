@@ -96,7 +96,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
 <p>Audio format and duration limits follow the endpoint contract: sync speech returns audio bytes directly, while async speech submits a task and returns a pollable id. Always verify live rates on the pricing list — speech models meter per request, per second or per 10k characters depending on the model.</p>
 <h2>Request contract</h2>
 <p>Speech requests split by direction. Transcription uploads audio as multipart form data with the model field, returning JSON text; synthesis posts JSON (or multipart for some clones) and returns audio bytes synchronously, or a task id for async lanes that you poll on the task endpoint until the render completes. Both directions authenticate with the same Bearer key as chat, and both deduct from the same prepaid wallet at the per-request or per-character rate listed above.</p>
-<h2>Compare within the family</h2>
+<h2>Adjacent models to compare</h2>
 <ul>
 <li><a href="/model/whisper-large-v3-turbo">whisper-large-v3-turbo</a> — $0.0103 / request</li>
 <li><a href="/model/CosyVoice3">CosyVoice3</a> — $1.37 / 10K characters</li>
@@ -106,7 +106,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
 <ul class="facts">
 <li>Listed price: <strong>$0.0103 / request</strong></li>
 <li>Billing base: $1 of wallet balance = 500,000 quota units</li>
-<li>Gift-credit twin: <code>whisper-large-v3:free</code> — new users get $10 gift credit, invites add $3, gift credits spend first</li>
+<li>Gift credit: new users get $10, invites add $3 (spend-first on <code>:free</code> IDs)</li>
 <li>Endpoint: <code>POST /v1/audio/transcriptions</code> with Bearer auth on <code>https://www.keyoapi.xyz/v1</code></li>
 </ul>
 <h2>Pricing and billing</h2>
@@ -195,7 +195,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
 
   <a href="https://launchclash.com" target="_blank" rel="noopener noreferrer"><img src="https://launchclash.com/assets/images/badge.png" alt="LaunchClash" height="54" loading="lazy" style="height:44px;width:auto;" /></a>
 
-  <span class="foot-updated">Updated 2026-10-24</span>
+  <span class="foot-updated">Updated 2026-10-25</span>
 </footer>
 </body>
 </html>

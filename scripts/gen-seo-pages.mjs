@@ -630,7 +630,11 @@ function renderModel(m) {
     )
     .join("\n");
   const curl = m.curlExample || "";
-  const twin = isFreeId(`${m.id}:free`) ? `${m.id}:free` : "";
+  // Gift-credit twin must come from the real catalog (allFreeModels), never
+  // from a suffix test — isFreeId(`x:free`) is always true, which fabricated
+  // nonexistent twins like gpt-5.6-luna:free on every model page.
+  const freeCatalogIds = new Set(allFreeModels().map((f) => f.id));
+  const twin = freeCatalogIds.has(`${m.id}:free`) ? `${m.id}:free` : "";
   const catLabel =
     ({
       chat: "chat (LLM)",
@@ -736,7 +740,7 @@ ${renderContentSections(m.guideSections, modelPath)}
 <p>${familyNotes[1]}</p>
 <h2>Request contract</h2>
 <p>${contractNote}</p>
-${familyLis ? `<h2>Compare within the family</h2>\n<ul>\n${familyLis}\n</ul>` : ""}
+${familyLis ? `<h2>Adjacent models to compare</h2>\n<ul>\n${familyLis}\n</ul>` : ""}
 <h2>Key facts</h2>
 ${factsHtml}
 <h2>Pricing and billing</h2>

@@ -96,7 +96,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
 <p>Per-request billing makes cost proportional to document count, not page count, unless the model row states otherwise — verify on the pricing list. Handwriting-heavy or mixed-layout documents are the usual accuracy boundary.</p>
 <h2>Request contract</h2>
 <p>OCR accepts a file upload on its dedicated REST path and returns extracted text or structured markdown in the response body. The same Bearer key authorizes it, and billing lands on the same wallet per request. For pipelines, expect the response to pair raw text with layout hints; feed the extraction straight into a chat call on the same key to summarize, classify or answer questions over the document.</p>
-<h2>Compare within the family</h2>
+<h2>Adjacent models to compare</h2>
 <ul>
 <li><a href="/model/Unlimited-OCR">Unlimited-OCR</a> — ~$1.92 / $1.92 per 1M in/out tokens</li>
 <li><a href="/model/UVDoc">UVDoc</a> — $0.0137 / request</li>
@@ -106,7 +106,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
 <ul class="facts">
 <li>Listed price: <strong>$0.0137 / page</strong></li>
 <li>Billing base: $1 of wallet balance = 500,000 quota units</li>
-<li>Gift-credit twin: <code>MinerU2.5-Pro:free</code> — new users get $10 gift credit, invites add $3, gift credits spend first</li>
+<li>Gift credit: new users get $10, invites add $3 (spend-first on <code>:free</code> IDs)</li>
 <li>Endpoint: <code>POST /v1/async/documents/parse</code> with Bearer auth on <code>https://www.keyoapi.xyz/v1</code></li>
 </ul>
 <h2>Pricing and billing</h2>
@@ -196,7 +196,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
 
   <a href="https://launchclash.com" target="_blank" rel="noopener noreferrer"><img src="https://launchclash.com/assets/images/badge.png" alt="LaunchClash" height="54" loading="lazy" style="height:44px;width:auto;" /></a>
 
-  <span class="foot-updated">Updated 2026-10-24</span>
+  <span class="foot-updated">Updated 2026-10-25</span>
 </footer>
 </body>
 </html>

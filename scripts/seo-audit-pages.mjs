@@ -87,12 +87,13 @@ function audit(file) {
     /\b20\d{2}-\d{2}-\d{2}\b/.test(body) ||
     /<time[\s>]/i.test(body);
 
-  // definition block: a paragraph with a "<Subject> is a ..." sentence of 20+ words
+  // definition block: a paragraph with a definitional sentence of 20+ words
+  // ("X is a …" or verb-form definitions: documents/explains/covers)
   const paragraphs = (body.match(/<p[\s>][^>]*>[\s\S]*?<\/p>/gi) || []).map((x) =>
     x.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim()
   );
   const hasDef = paragraphs.some(
-    (t) => /\bis an?\b/.test(t) && t.split(" ").length >= 20
+    (t) => /\b(is an?|documents|explains|covers|refers to)\b/.test(t) && t.split(" ").length >= 20
   );
 
   // numeric-facts block: a ul/ol/table whose text carries >=3 distinct numbers

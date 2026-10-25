@@ -148,3 +148,13 @@ The same documentation update removes malformed duplicated headings in existing
 introductory copy and its unsupported universal async video query path. All nine
 existing public documentation contract tests pass. No real generation was used
 for either release or recovery acceptance.
+
+Documentation publication
+[40163577446](https://github.com/kopsail521-ui/ai-relay/actions/runs/40163577446)
+and the console mirror build/deployment
+[40163577437](https://github.com/kopsail521-ui/ai-relay/actions/runs/40163577437)
+both completed successfully. The console update completed at **12:57:52
+(Asia/Shanghai)**. Public GETs for both handbook Markdown editions and both HTML
+entry pages returned 200 and matched commit `c1e1f6d` exactly after line-ending
+normalization. A final public acceptance check verified all 125 pricing contracts
+and reachable sign-in, sign-up and pricing pages with zero model calls.

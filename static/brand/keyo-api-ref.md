@@ -373,6 +373,16 @@ VIP 还支持满足全部约束的自定义像素：最长边 ≤ 3840、两边�
 
 JSON 的 `images` 数组支持 HTTP(S) 图片 URL、`data:image/png;base64,...` 等图片 data URL，以及有效图片的原始 base64；别名为 `image_urls` / `image_url` / `image`。不要把本机路径写进 JSON。
 
+**参考图大小限制**（1 MiB = 1,048,576 字节）：
+
+- 直接上传或内联 base64 的图片，单张原始文件 / 解码后数据最多 **20 MiB**；整个 multipart 请求（含文件、文字字段和 boundary）最多 **32 MiB**。
+- 文件转换为 base64 后，含图片和其它参数的完整 JSON 请求仍须不超过 **32 MiB**。base64 约为原始数据的 **4/3**；多图不能把每张 20 MiB 简单相加，原始图片合计应小于约 24 MiB，并为提示词、JSON 字段等留出余量。原始 multipart 未到 32 MiB，也可能因转换后的 JSON 超限而被拒绝。
+- multipart 图片应使用带 `filename` 的**文件 part**（如 `-F image=@./reference.jpg`），不要把大段 base64 当作 `-F image=...` 文本字段；普通文本 part 上限为 **64 KiB**。已有 base64 内容请放在 JSON 的 `images` 中，仍遵守上述单图及 JSON 总量限制。
+
+multipart 文件 / 请求体超限或完整 JSON 请求体超限返回 **HTTP 413**，不会创建生成任务；调整大小或改用可访问的 HTTP(S) 图片 URL 后再提交，不要原样重试超限请求。
+
+**输入与输出分开设置：** 参考图为 4K 不代表输出也支持 4K。参考图上传受上述字节限制约束；输出 `size` / `imageSize` 按 §3.1 的型号能力选择，GPT 基础型号仍只支持其列出的 1K 输出尺寸。
+
 ```json
 {
   "model": "gpt-image-2-vip",

@@ -361,6 +361,16 @@ VIP additionally accepts custom pixels satisfying every constraint: longest edge
 
 The JSON `images` array accepts HTTP(S) image URLs, image data URLs such as `data:image/png;base64,...`, and valid raw image base64. Aliases: `image_urls` / `image_url` / `image`. Never put a local filesystem path in JSON.
 
+**Reference image size limits** (1 MiB = 1,048,576 bytes):
+
+- Each uploaded file or inline base64 image may contain at most **20 MiB** of original / decoded image bytes. The entire multipart request, including files, text fields and boundaries, may not exceed **32 MiB**.
+- After file-to-base64 conversion, the complete JSON request, including images and all other parameters, must still fit within **32 MiB**. Base64 uses about **4/3** of the original bytes. Do not add together the 20 MiB per-image allowances: keep combined original image bytes below approximately 24 MiB and leave room for the prompt, JSON fields and other parameters. A multipart body below 32 MiB can still be rejected if its converted JSON exceeds the limit.
+- Send multipart images as **file parts with a filename**, for example `-F image=@./reference.jpg`. Do not put large base64 strings in ordinary `-F image=...` text fields, which have a **64 KiB** limit. Put existing base64 strings in JSON `images` instead, subject to the same decoded-image and total JSON limits.
+
+Oversized multipart files / request bodies or oversized complete JSON bodies return **HTTP 413** without creating a generation task. Reduce the payload or use an accessible HTTP(S) image URL before submitting again; do not retry the same oversized payload unchanged.
+
+**Input and output sizes are separate:** a 4K reference does not imply support for 4K output. Reference uploads follow the byte limits above; choose output `size` / `imageSize` from the selected model's capabilities in §3.1. GPT base models still only support their listed 1K output sizes.
+
 ```json
 {
   "model": "gpt-image-2-vip",

@@ -102,10 +102,49 @@ HTTP(S) image URLs avoid inline file expansion but must be retrievable by the
 image service. No image compression or model substitution was introduced.
 
 Validation: all 43 native image tests, the complete proxy/native/wallet fixture,
-10 new native deployment checks and 30 reused deployment helper checks pass.
+17 native deployment checks and 30 reused deployment helper checks pass.
 The older clipboard packager's separate pre-existing packaging failure is outside
 the new deployment path. The new image-only workflow preserves runtime settings,
 persistent mounts and retained backups; it builds before replacing the native
 container, verifies seven source hashes and stable listener ownership twice,
 and rolls back only that service on a failed check. Public acceptance uses GET
 metadata requests. No real model or customer key is used.
+
+## Follow-up production acceptance and deployment incident
+
+The first native release
+[40162631462](https://github.com/kopsail521-ui/ai-relay/actions/runs/40162631462)
+passed its offline checks but failed during replacement. The shared Docker
+helper's 30-second socket deadline raced a `stop?t=30` operation. The original
+container stopped before rename; rollback attempted startup while stop was
+still pending and did not complete. This caused a temporary native image/video
+service interruption. Public pricing and login GETs remained reachable and did
+not establish native service health.
+
+Recovery
+[40163175823](https://github.com/kopsail521-ui/ai-relay/actions/runs/40163175823)
+started only the stopped original container after checking its pinned image,
+original start timestamp, host port and empty listener. It verified the same
+container, PID 904698 and two ledger health checks without replacing storage or
+environment settings. Seven offline recovery tests cover the guards and success
+path. The deployment runner now uses a 95-second Docker socket deadline, waits
+for confirmed stopped state and retries transient rollback startup conflicts.
+Sanitized stage and status markers preserve useful failure evidence.
+
+Release
+[40163280563](https://github.com/kopsail521-ui/ai-relay/actions/runs/40163280563)
+then passed all verify and deployment steps at **12:50:42 on 2026-10-25
+(Asia/Shanghai)**. The live native container owns port 3011 with PID 905469,
+image `sha256:a3a8c7b9c910c454970a914742cba55ae7ed36df9a17d97d612e7f8aa8bf8d2f`.
+All seven live source hashes match commit `f44b458` exactly, including both image
+fixes from `434c7d7`. Two stable rounds and public GET metadata checks passed.
+Read-only follow-up
+[40163385679](https://github.com/kopsail521-ui/ai-relay/actions/runs/40163385679)
+confirmed the native and proxy containers running without restart/OOM state.
+
+Public Chinese/English handbooks, all seven quickstart languages and document
+mirrors now explain the actual upload limits and input/output size distinction.
+The same documentation update removes malformed duplicated headings in existing
+introductory copy and its unsupported universal async video query path. All nine
+existing public documentation contract tests pass. No real generation was used
+for either release or recovery acceptance.

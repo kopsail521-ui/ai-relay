@@ -262,20 +262,21 @@
     <header class="hero">
       <div class="eyebrow" data-i18n="eyebrow">AI Handbook</div>
       <h1 data-i18n="title">Copy to AI · integration handbook</h1>
-<p class="def">The KeyoAPI API reference is an endpoint handbook for a prepaid AI API gateway where one Bearer key and one wallet (<h1 data-i18n="title">Copy to AI · integration handbook</h1> = 500,000 quota units) cover chat, speech, vision, OCR and video models.</p>
+<p class="def">The KeyoAPI API reference documents model IDs, endpoint paths, request fields and task queries.</p>
 <h2>Key facts</h2>
 <ul class="facts">
-<li>Billing base: <h1 data-i18n="title">Copy to AI · integration handbook</h1> of wallet balance = 500,000 quota units</li>
-<li>Gift credit: new users get <h1 data-i18n="title">Copy to AI · integration handbook</h1>0, invites add $3 — spend-first on <code>:free</code> IDs</li>
+<li>Authenticate with your KeyoAPI key in the <code>Authorization: Bearer &lt;API_KEY&gt;</code> header.</li>
 <li>OpenAI-compatible base URL: <code>https://www.keyoapi.xyz/v1</code></li>
-<li>Async video contract: submit, then poll <code>GET /v1/task/{id}</code></li>
+<li>Use the exact model ID and endpoint documented for that model; dedicated REST capabilities use their own request fields.</li>
+<li>Asynchronous tasks have different query paths. Save the returned ID and use the path documented for that capability.</li>
 </ul>
-<h2>How to call any model</h2>
+<h2>Get started in five steps</h2>
 <ol class="steps">
-<li>Create an account and an API key — new users receive <h1 data-i18n="title">Copy to AI · integration handbook</h1>0 of gift credit.</li>
-<li>Pick the exact model ID from <a href="/pricing-list">the pricing list</a>.</li>
-<li>Use the OpenAI-compatible path for chat/speech, or the dedicated REST path this handbook documents for OCR, vision and video.</li>
-<li>Verify the first call against the Wallet ledger (500,000 units = <h1 data-i18n="title">Copy to AI · integration handbook</h1>).</li>
+<li><a href="/sign-up">Create an account</a> or sign in to your existing account.</li>
+<li>Create an API key in the <a href="/sign-in">console</a>.</li>
+<li>Set the Base URL to <code>https://www.keyoapi.xyz/v1</code> for OpenAI-compatible clients.</li>
+<li>Choose the exact model ID and its endpoint from this handbook; use its documented fields.</li>
+<li>Save the returned request ID and any task ID. Query asynchronous tasks through the path documented for that model.</li>
 </ol>
       <p data-i18n="sub">One page for beginners: copy everything, add your key + model + goal. Your AI calls KeyoAPI for you.</p>
     </header>
@@ -533,7 +534,7 @@ JSON 提交（示例）含 `model` + 视频 URL（或平台约定的 `video_url`
 curl https://www.keyoapi.xyz/v1/systemone \
   -H &quot;Authorization: Bearer sk-你的密钥&quot; \
   -H &quot;Content-Type: application/json&quot; \
-  -d '{
+  -d &#39;{
     &quot;model&quot;: &quot;jev-1.13.0&quot;,
     &quot;state&quot;: &quot;Customer was charged twice and asks for a refund.&quot;,
     &quot;questions&quot;: {
@@ -544,7 +545,7 @@ curl https://www.keyoapi.xyz/v1/systemone \
         &quot;criteria&quot;:{&quot;billing&quot;:&quot;Charges and refunds&quot;,&quot;tech&quot;:&quot;Bugs and outages&quot;}
       }
     }
-  }'
+  }&#39;
 ```
 
 ### 1.12 内容审核 → `POST /v1/moderations`
@@ -664,6 +665,16 @@ VIP 还支持满足全部约束的自定义像素：最长边 ≤ 3840、两边�
 
 JSON 的 `images` 数组支持 HTTP(S) 图片 URL、`data:image/png;base64,...` 等图片 data URL，以及有效图片的原始 base64；别名为 `image_urls` / `image_url` / `image`。不要把本机路径写进 JSON。
 
+**参考图大小限制**（1 MiB = 1,048,576 字节）：
+
+- 直接上传或内联 base64 的图片，单张原始文件 / 解码后数据最多 **20 MiB**；整个 multipart 请求（含文件、文字字段和 boundary）最多 **32 MiB**。
+- 文件转换为 base64 后，含图片和其它参数的完整 JSON 请求仍须不超过 **32 MiB**。base64 约为原始数据的 **4/3**；多图不能把每张 20 MiB 简单相加，原始图片合计应小于约 24 MiB，并为提示词、JSON 字段等留出余量。原始 multipart 未到 32 MiB，也可能因转换后的 JSON 超限而被拒绝。
+- multipart 图片应使用带 `filename` 的**文件 part**（如 `-F image=@./reference.jpg`），不要把大段 base64 当作 `-F image=...` 文本字段；普通文本 part 上限为 **64 KiB**。已有 base64 内容请放在 JSON 的 `images` 中，仍遵守上述单图及 JSON 总量限制。
+
+multipart 文件 / 请求体超限或完整 JSON 请求体超限返回 **HTTP 413**，不会创建生成任务；调整大小或改用可访问的 HTTP(S) 图片 URL 后再提交，不要原样重试超限请求。
+
+**输入与输出分开设置：** 参考图为 4K 不代表输出也支持 4K。参考图上传受上述字节限制约束；输出 `size` / `imageSize` 按 §3.1 的型号能力选择，GPT 基础型号仍只支持其列出的 1K 输出尺寸。
+
 ```json
 {
   &quot;model&quot;: &quot;gpt-image-2-vip&quot;,
@@ -682,7 +693,7 @@ curl https://www.keyoapi.xyz/v1/images/edits \
   -H &quot;Authorization: Bearer sk-...&quot; \
   -H &quot;Idempotency-Key: cat-edit-001&quot; \
   -F model=nano-banana-2 \
-  -F 'prompt=保持人物身份，改为水彩画风' \
+  -F &#39;prompt=保持人物身份，改为水彩画风&#39; \
   -F image=@./reference.png \
   -F aspectRatio=16:9 \
   -F imageSize=2K \
@@ -1199,7 +1210,7 @@ multipart **可直接传本机文件**（不必先走 §0.5）。
 curl https://www.keyoapi.xyz/v1/async/videos/image-to-video \
   -H &quot;Authorization: Bearer sk-...&quot; \
   -F model=InfiniteTalk \
-  -F 'prompt=人物自然地面对镜头口播，保持身份和背景稳定' \
+  -F &#39;prompt=人物自然地面对镜头口播，保持身份和背景稳定&#39; \
   -F cond_video=@face.png \
   -F cond_audio=@speech.wav
 ```

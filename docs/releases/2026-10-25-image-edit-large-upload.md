@@ -46,3 +46,19 @@ by approximately one third. This change removes the accidental approximately
 
 Pushing the proxy change to main runs the existing offline release checks,
 safe proxy deployment, source/PID ownership verification and public GET checks.
+
+## Production acceptance
+
+Fix `0584893` was automatically deployed by
+[40160965317](https://github.com/kopsail521-ui/ai-relay/actions/runs/40160965317)
+at 12:12 on 2026-10-25 (Asia/Shanghai). The 24 deployment regression checks,
+HTTP integration and other offline release checks passed. Deployment verified
+four source files and stable process ownership twice (`PID=897513`), followed
+by `PUBLIC_PROXY_RELEASE_OK` without model calls.
+
+A second read-only diagnostic
+[40161059629](https://github.com/kopsail521-ui/ai-relay/actions/runs/40161059629)
+confirmed that the live container was running without restarting and that
+`/app/server.mjs` exactly matched the committed fix's SHA-256:
+`4e8f9e1ba68c9e3b6da9566613c05ba4a7f1ff1e4074efe763ae19fa5edb62e4`.
+No paid production generation was submitted for acceptance.

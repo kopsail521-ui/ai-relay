@@ -17,6 +17,7 @@
 > - **Forbidden:** local paths in JSON, `data:base64` or direct multipart on Video Path B, invented `POST /v1/assets` / `asset://`; image references accept base64 (§3).
 > - Images at `/v1/images/edits` / ASR / matting / upscale / MinerU / InfiniteTalk accept multipart `-F file=@` / `-F image=@` using the field required by each endpoint (no prior upload needed).
 > - This handbook covers documented integrations, not every catalog entry. Check `GET /v1/models` for IDs available to the key and `/pricing` for group eligibility. A catalog entry alone does not establish its input or polling contract; see §1.14 before using unlisted templates.
+> - Identify the shell before running commands. The `bash` / curl examples use macOS / Linux Bash or Windows Git Bash; backslashes do not continue PowerShell lines. On Windows PowerShell 5.1 / 7, use §2.2. Construct requests for other endpoints using their documented fields rather than running the Bash commands unchanged.
 
 ---
 
@@ -76,6 +77,8 @@ Async flow: **submit → read id → poll by family while pending → read url/t
 | ASR | — | — | `text` |
 | TTS sync | — | — | **raw audio bytes** (not JSON) |
 | Uploads | — | — | response **`url`** |
+
+**Temporary query errors on the singular task path:** when `GET /v1/task/{id}` returns HTTP 502 with `error.code="task_query_unavailable"`, keep the original task ID, wait for `Retry-After`, then retry the same GET. This does not mean the task is `failed`; do not POST a new task.
 
 Path B poll success:
 ```json
@@ -160,7 +163,9 @@ Paid: `gpt-5.6-luna` · `gpt-5.6-terra` · `gpt-5.6-sol` · `gpt-6-luna` · `gpt
 
 ### 1.2 Images → `POST /v1/images/generations`
 
-`gpt-image-2.5` · `gpt-image-2.5-flare` · `gpt-image-2.5-sunburst` · `gpt-image-2` · `gpt-image-2-vip` · `nano-banana-2.1` · `nano-banana-2` · `nano-banana-pro`
+`gpt-image-2.5-flare` · `gpt-image-2.5-sunburst` · `gpt-image-2` · `gpt-image-2-vip` · `nano-banana-2.1` · `nano-banana-2` · `nano-banana-pro`
+
+The currently documented 2.5 variants are `gpt-image-2.5-flare` and `gpt-image-2.5-sunburst`. Check the complete model ID and available groups on `/pricing` before submitting. The group selected for the API key must have an available channel for that model; do not add or remove model suffixes.
 
 ### 1.3 Video Path A → `POST /v1/videos` (forward only)
 
@@ -168,7 +173,7 @@ Path A has no own models: wan / Seedance / FLUX / MiniMax / Gemini Omni posted h
 
 ### 1.4 Video Path B → `POST /v1/videos/generations` → poll `GET /v1/tasks/{id}`
 
-`wan3.0-video` · `flux-3-video` · `MiniMax-H3` · `seedance-2.5` · `seedance-2.0` · `seedance-2.0-fast` · `seedance-2.0-mini` · `agnes-video-2.5` · `gemini-omni-1.1-flash` · `gemini-omni-1.1-flash-ext`
+`wan3.0-video` · `flux-3-video` · `MiniMax-H3` · `seedance-2.5` · `seedance-2.0` · `seedance-2.0-fast` · `seedance-2.0-mini` · `gemini-omni-1.1-flash` · `gemini-omni-1.1-flash-ext`
 
 (Fields differ by model — see §5. Seedance also supports fixed-resolution SKUs such as `seedance-2.0-720p` / `seedance-2.0-1080p`.)
 
@@ -267,7 +272,7 @@ Embedding example:
 ---
 ### 1.14 Catalog entries without a complete copyable contract here
 
-`gpt-image-2.5-sunburst-vip` · `gpt-image-2.5-flare-vip` · `gpt-image-2-4K` · `gpt-image-2-2K` · `DiffusionGemma-26B-A4B-it-Jev` · `gemini-3.1-flash-tts-preview` · `grok-image-2.0` · `MiniMax-H3-vip` · `SemIf-OpenJev-4B` · `suno_music_open` · `keyo-super-resolution-1080p` · `keyo-super-resolution-4k` · `keyo-super-resolution-2k` · `keyo-voice-clone` · `keyo-video-subtitle-removal` · `keyo-tts` · `keyo-song` · `keyo-asr` · `suno_music` · `laya-multilingual`
+`agnes-video-2.5` · `gpt-image-2-4K` · `gpt-image-2-2K` · `DiffusionGemma-26B-A4B-it-Jev` · `gemini-3.1-flash-tts-preview` · `grok-image-2.0` · `MiniMax-H3-vip` · `SemIf-OpenJev-4B` · `suno_music_open` · `keyo-super-resolution-1080p` · `keyo-super-resolution-4k` · `keyo-super-resolution-2k` · `keyo-voice-clone` · `keyo-video-subtitle-removal` · `keyo-tts` · `keyo-song` · `keyo-asr` · `suno_music` · `laya-multilingual`
 
 These IDs may appear in the live catalog, but this handbook does not yet specify all required fields, supported modes and result semantics for them. In particular, music, voice enrollment and structured decision models must not be treated as ordinary chat/TTS requests. Before a chargeable submission, obtain the model-specific integration contract from support. Do not guess fields, substitute another model, or assume the image models listed here use the §3 image task endpoint.
 
@@ -299,11 +304,32 @@ Streaming: add `"stream": true` if needed.
 5. A successful connection probe does not establish working chat, streaming or tools. Confirm a visible text reply first, then separately check streaming and tool calls required by your workflow. Compatibility varies by model and client version; not every combination has been verified.
 
 
+### 2.2 Copyable Windows PowerShell 5.1 / 7 example
+
+Replace `$apiKey` and run the complete example. `Invoke-RestMethod` sends UTF-8 JSON bytes, avoiding curl aliases, Bash line continuation and command-line JSON quoting differences. A real chat request uses the selected model’s current rate.
+
+```powershell
+$apiKey = 'sk-YOUR_KEY'
+$body = @{
+  model = 'gpt-5.6-luna'
+  messages = @(@{ role = 'user'; content = 'Hello' })
+} | ConvertTo-Json -Depth 6
+$request = @{
+  Uri = 'https://www.keyoapi.xyz/v1/chat/completions'
+  Method = 'Post'
+  Headers = @{ Authorization = "Bearer $apiKey" }
+  ContentType = 'application/json; charset=utf-8'
+  Body = [System.Text.Encoding]::UTF8.GetBytes($body)
+}
+$response = Invoke-RestMethod @request
+$response.choices[0].message.content
+```
+
 ## 3. Image generation and references (model-specific parameters)
 
 Text-to-image: `POST https://www.keyoapi.xyz/v1/images/generations`, JSON.
 Image-to-image: add `images` to the same endpoint, or upload local files directly to `POST /v1/images/edits` using multipart.
-All eight models use the same generation contract for text and reference images; references do not disable the output size fields.
+The seven documented models below use the same generation contract for text and reference images; references do not disable the output size fields.
 
 ```json
 {
@@ -324,7 +350,6 @@ These fields are optional. Use only values supported by the selected model. A `m
 | model | Size fields | quality | background | mask |
 |-------|-------------|---------|------------|------|
 | `gpt-image-2` | `size`: ratio or listed 1K pixels | `auto` | Unsupported | HTTP(S) URL |
-| `gpt-image-2.5` | `size`: ratio or listed 1K pixels | `auto` | Unsupported | HTTP(S) URL |
 | `gpt-image-2-vip` | `size`: constrained 1K–4K pixels or `auto` | `medium` | `transparent` | HTTP(S) URL |
 | `gpt-image-2.5-flare` | `size`: listed 1K/2K/4K pixels or `auto` | `low` / `medium` / `high` | `transparent` | HTTP(S) URL |
 | `gpt-image-2.5-sunburst` | `size`: listed 1K/2K/4K pixels or `auto` | `low` / `medium` / `high` / `xhigh` / `max` | `transparent` | HTTP(S) URL |
@@ -335,7 +360,7 @@ These fields are optional. Use only values supported by the selected model. A `m
 **Nano native resolution:** select `1K` / `2K` / `4K` with `imageSize` and the frame shape with `aspectRatio`. GPT pixel values such as `1024x1024` / `3840x2160` are not valid for Nano.
 Common Nano ratios: `auto` / `1:1` / `16:9` / `9:16` / `4:3` / `3:4` / `3:2` / `2:3` / `5:4` / `4:5` / `21:9`. `nano-banana-2` and `nano-banana-2.1` also support `1:4` / `4:1` / `1:8` / `8:1`; Pro does not support these extreme ratios.
 
-**GPT base models (`gpt-image-2` / `gpt-image-2.5`):** ratios are `auto` / `1:1` / `16:9` / `9:16` / `4:3` / `3:4` / `3:2` / `2:3` / `5:4` / `4:5` / `21:9` / `9:21` / `1:2` / `2:1`. Supported 1K pixels:
+**GPT base model (`gpt-image-2`):** ratios are `auto` / `1:1` / `16:9` / `9:16` / `4:3` / `3:4` / `3:2` / `2:3` / `5:4` / `4:5` / `21:9` / `9:21` / `1:2` / `2:1`. Supported 1K pixels:
 `1024x1024` · `1672x941` · `941x1672` · `1443x1090` · `1090x1443` · `1536x1024` · `1024x1536` · `1408x1120` · `1120x1408` · `1920x832` · `832x1920` · `896x1792` · `1792x896`.
 
 **GPT VIP / flare / sunburst:** use pixels (or `auto`), not ratio strings such as `16:9`. All three accept these sizes:
@@ -508,7 +533,8 @@ Video: prefer top-level **`url`**, or `data.result.videos[0].url[0]` (`url` is a
 
 | model | duration / seconds | resolution / size | notes |
 |------|--------------------|-------------------|------|
-| `MiniMax-H3` | **1–15** (1080p **max 10**) | `480p` / `768p` / `1080p` | `aspectRatio` required |
+| `MiniMax-H3` without a reference image (audio / video references allowed) | Integer **4–15** (default 5) | `768p` / `2k` (default `768p`) | `seed` unsupported |
+| `MiniMax-H3` with a reference image | Integer **1–15** | `480p` / `720p` / `768p` / `1080p` / `2k` | Up to 9 `images`; `seed` available only in this mode |
 | All Seedance `*-720p` / `*-1080p` | **4–15** (default 5) | in model id | `<4` or `>15` rejected |
 | `wan3.0-video` | **2–30** or `-1` | e.g. `720P` | `-1` = model picks length |
 | `flux-3-video` | **5–20** | `hd` / `fhd` | draft is `draft:true` (hd only), not `resolution:"draft"` |
@@ -519,9 +545,13 @@ Video: prefer top-level **`url`**, or `data.result.videos[0].url[0]` (`url` is a
 
 Required: `model` `prompt` `aspectRatio` `resolution` `duration`
 `aspectRatio`: only `landscape` or `portrait` (aliases `16:9` / `9:16`). `square` / `1:1` is not supported.
-`resolution`: `480p` | `768p` | `1080p` (1080p max 10s)
-`duration`: integer **1–15**
-Optional: `images` (max 9 https URLs), `audios` (max 3), `seed`
+**Choose parameters by whether the request includes a reference image:**
+
+- **Without a reference image** (text only, or audio / video references only): `resolution` supports only `768p` / `2k`; `duration` must be an integer **4–15**; `seed` is unsupported. Omitted resolution / duration default to `768p` / 5 seconds.
+- **With a reference image:** `resolution` supports `480p` / `720p` / `768p` / `1080p` / `2k`; `duration` must be an integer **1–15**; up to 9 `images`. Optional `seed` must be an integer.
+- Optional `audios`: up to 3 clips. Requests without images also support `videos` references. All media must use public HTTP(S) URLs.
+
+An image-free request with `480p` / `720p` / `1080p`, a 1–3 second or fractional duration, or `seed` returns HTTP 400. Correct the parameters before submitting again.
 Do **not** send `image_with_roles` or `first_frame_image` (those are Seedance/Wan).
 
 Submit returns `id` immediately while the video is still generating (`status=processing`). Poll `GET /v1/tasks/{id}` with the same key: `processing` while running, `completed` plus `url` when done. In-progress is not a failure.
@@ -532,7 +562,7 @@ Text-to-video:
   "model": "MiniMax-H3",
   "prompt": "a red balloon rising slowly in a blue sky, cinematic light",
   "aspectRatio": "landscape",
-  "resolution": "480p",
+  "resolution": "768p",
   "duration": 5
 }
 ```

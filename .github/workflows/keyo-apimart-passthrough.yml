@@ -7,21 +7,8 @@ name: Redeploy video passthrough on VPS
 #   secrets.KEYO_VPS_SSH_KEY
 
 on:
-  push:
-    branches: [main]
-    paths:
-      - "services/apimart-passthrough/server.mjs"
-      - "services/apimart-passthrough/video-contracts.mjs"
-      - "services/apimart-passthrough/task-responses.mjs"
-      - "services/apimart-passthrough/catalog.json"
-      - "services/apimart-passthrough/Dockerfile"
-      - "scripts/vps-deploy-seedance-merge.sh"
-      - "scripts/vps-add-apimart-videos.py"
-      - "scripts/vps-add-deepseek-v41.py"
-      - "scripts/vps-deploy-deepseek-v41.sh"
-      - "scripts/vps-add-minimax-m31-flash.py"
-      - "config/openlux-paid-chat-models.json"
-      - "config/unorouter-paid-models.json"
+  # Legacy catalog/database provisioning is explicit; ordinary runtime releases
+  # use keyo-image-native.yml and retain the inspected container configuration.
   workflow_dispatch:
 
 concurrency:

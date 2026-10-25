@@ -17,6 +17,7 @@
 > - **禁止**：JSON 中的本机路径、视频 Path B 的 `data:base64` 或直接 multipart、臆造的 `POST /v1/assets` / `asset://`；图片参考图支持 base64（§3）。
 > - 图片 `/v1/images/edits` / ASR / 抠图 / 超分 / MinerU / InfiniteTalk 等 multipart 接口可直接 `-F file=@` / `-F image=@`（按各接口字段），不必先上传。
 > - 本手册覆盖已文档化接口，不等于全部在售目录。用 `GET /v1/models` 核对该 Key 可用的 ID，并在 `/pricing` 核对分组；目录中存在型号不代表可套用任一模板。未明确接入合同的型号见 §1.14。
+> - 执行命令前识别 shell：本页 `bash` / curl 示例用于 macOS / Linux Bash 或 Windows Git Bash，反斜杠不是 PowerShell 续行符。Windows PowerShell 5.1 / 7 使用 §2.2；其它接口也应按其字段构造请求，不要原样执行 Bash 命令。
 
 ---
 
@@ -76,6 +77,8 @@
 | ASR | — | — | `text` |
 | TTS 同步 | — | — | **响应体就是音频字节**（不是 JSON） |
 | 上传 | — | — | 响应里的 **`url`** |
+
+**单数 task 路径的临时查询错误：** `GET /v1/task/{id}` 返回 HTTP 502、`error.code="task_query_unavailable"` 时，保留原任务 ID，按 `Retry-After` 等待后继续查询同一个 GET。该错误不表示任务已 `failed`，不要重新 POST 创建任务。
 
 Path B 轮询成功示例：
 ```json
@@ -171,7 +174,9 @@ curl https://www.keyoapi.xyz/v1/videos/generations \
 
 ### 1.2 文生图 → `POST /v1/images/generations`
 
-`gpt-image-2.5` · `gpt-image-2.5-flare` · `gpt-image-2.5-sunburst` · `gpt-image-2` · `gpt-image-2-vip` · `nano-banana-2.1` · `nano-banana-2` · `nano-banana-pro`
+`gpt-image-2.5-flare` · `gpt-image-2.5-sunburst` · `gpt-image-2` · `gpt-image-2-vip` · `nano-banana-2.1` · `nano-banana-2` · `nano-banana-pro`
+
+当前已文档化的 2.5 系列为 `gpt-image-2.5-flare` 和 `gpt-image-2.5-sunburst`。提交前在 `/pricing` 核对完整型号及可用分组，API Key 所选分组须有该型号的可用渠道；不要自行添加或删除型号后缀。
 
 ### 1.3 视频 Path A → `POST /v1/videos`（仅自动转发）
 
@@ -179,7 +184,7 @@ Path A 已无独立模型：打到这里的 wan / Seedance / FLUX / MiniMax / Ge
 
 ### 1.4 视频 Path B → `POST /v1/videos/generations` → 轮询 `GET /v1/tasks/{id}`
 
-`wan3.0-video` · `flux-3-video` · `MiniMax-H3` · `seedance-2.5` · `seedance-2.0` · `seedance-2.0-fast` · `seedance-2.0-mini` · `agnes-video-2.5` · `gemini-omni-1.1-flash` · `gemini-omni-1.1-flash-ext`
+`wan3.0-video` · `flux-3-video` · `MiniMax-H3` · `seedance-2.5` · `seedance-2.0` · `seedance-2.0-fast` · `seedance-2.0-mini` · `gemini-omni-1.1-flash` · `gemini-omni-1.1-flash-ext`
 
 （字段因模型而异，见第 5 节。Seedance 亦兼容固定分辨率 SKU 如 `seedance-2.0-720p` / `seedance-2.0-1080p` 等。）
 
@@ -279,7 +284,7 @@ curl https://www.keyoapi.xyz/v1/systemone \
 ---
 ### 1.14 目录中尚未在本页提供完整接入合同的型号
 
-`gpt-image-2.5-sunburst-vip` · `gpt-image-2.5-flare-vip` · `gpt-image-2-4K` · `gpt-image-2-2K` · `DiffusionGemma-26B-A4B-it-Jev` · `gemini-3.1-flash-tts-preview` · `grok-image-2.0` · `MiniMax-H3-vip` · `SemIf-OpenJev-4B` · `suno_music_open` · `keyo-super-resolution-1080p` · `keyo-super-resolution-4k` · `keyo-super-resolution-2k` · `keyo-voice-clone` · `keyo-video-subtitle-removal` · `keyo-tts` · `keyo-song` · `keyo-asr` · `suno_music` · `laya-multilingual`
+`agnes-video-2.5` · `gpt-image-2-4K` · `gpt-image-2-2K` · `DiffusionGemma-26B-A4B-it-Jev` · `gemini-3.1-flash-tts-preview` · `grok-image-2.0` · `MiniMax-H3-vip` · `SemIf-OpenJev-4B` · `suno_music_open` · `keyo-super-resolution-1080p` · `keyo-super-resolution-4k` · `keyo-super-resolution-2k` · `keyo-voice-clone` · `keyo-video-subtitle-removal` · `keyo-tts` · `keyo-song` · `keyo-asr` · `suno_music` · `laya-multilingual`
 
 这些 ID 可能出现在实时目录中，但本页尚未完整列出其必填字段、支持模式与结果语义。音乐、音色注册及结构化决策尤其不能直接套普通 chat／TTS 模板。付费提交前请向支持获取该型号接入合同；不要猜字段、擅自换模型，也不要推定这里列出的图片型号使用 §3 的图片任务路径。
 
@@ -311,11 +316,32 @@ curl https://www.keyoapi.xyz/v1/systemone \
 5. 绿色“连接成功”只表示探针通过，不代表正常聊天、流式和工具调用全部可用。先确认实际文字回复，再分别检查工作流需要的流式与工具能力；不同模型、客户端版本并非全部验证。
 
 
+### 2.2 Windows PowerShell 5.1 / 7 可复制示例
+
+替换 `$apiKey` 后完整执行。使用 `Invoke-RestMethod` 和 UTF-8 JSON 字节，避免 `curl` 别名、Bash 续行及命令行 JSON 引号差异。以下真实聊天请求按所选模型当前费率计费。
+
+```powershell
+$apiKey = 'sk-YOUR_KEY'
+$body = @{
+  model = 'gpt-5.6-luna'
+  messages = @(@{ role = 'user'; content = '你好' })
+} | ConvertTo-Json -Depth 6
+$request = @{
+  Uri = 'https://www.keyoapi.xyz/v1/chat/completions'
+  Method = 'Post'
+  Headers = @{ Authorization = "Bearer $apiKey" }
+  ContentType = 'application/json; charset=utf-8'
+  Body = [System.Text.Encoding]::UTF8.GetBytes($body)
+}
+$response = Invoke-RestMethod @request
+$response.choices[0].message.content
+```
+
 ## 3. 图片生成与参考图（按型号选参数）
 
 文生图：`POST https://www.keyoapi.xyz/v1/images/generations`，JSON。
 图生图：同一接口加 `images`；本地文件可直接 `POST /v1/images/edits`，multipart。
-八个型号的文生图与图生图使用同一套生成契约；参考图不会让输出尺寸字段失效。
+以下七个已文档化型号的文生图与图生图使用同一套生成契约；参考图不会让输出尺寸字段失效。
 
 ```json
 {
@@ -336,7 +362,6 @@ curl https://www.keyoapi.xyz/v1/systemone \
 | model | 尺寸字段 | quality | background | mask |
 |-------|----------|---------|------------|------|
 | `gpt-image-2` | `size`：比例或表内 1K 像素 | `auto` | 不支持 | HTTP(S) URL |
-| `gpt-image-2.5` | `size`：比例或表内 1K 像素 | `auto` | 不支持 | HTTP(S) URL |
 | `gpt-image-2-vip` | `size`：约束内 1K–4K 像素或 `auto` | `medium` | `transparent` | HTTP(S) URL |
 | `gpt-image-2.5-flare` | `size`：表内 1K/2K/4K 像素或 `auto` | `low` / `medium` / `high` | `transparent` | HTTP(S) URL |
 | `gpt-image-2.5-sunburst` | `size`：表内 1K/2K/4K 像素或 `auto` | `low` / `medium` / `high` / `xhigh` / `max` | `transparent` | HTTP(S) URL |
@@ -347,7 +372,7 @@ curl https://www.keyoapi.xyz/v1/systemone \
 **Nano 原生分辨率：** 用 `imageSize` 选 `1K` / `2K` / `4K`，用 `aspectRatio` 选画幅；不要套 GPT 的 `1024x1024` / `3840x2160` 像素写法。
 Nano 的公共比例：`auto` / `1:1` / `16:9` / `9:16` / `4:3` / `3:4` / `3:2` / `2:3` / `5:4` / `4:5` / `21:9`；`nano-banana-2` 和 `nano-banana-2.1` 另支持 `1:4` / `4:1` / `1:8` / `8:1`，Pro 不支持这些极宽/极高比例。
 
-**GPT 基础版（`gpt-image-2` / `gpt-image-2.5`）：** 比例为 `auto` / `1:1` / `16:9` / `9:16` / `4:3` / `3:4` / `3:2` / `2:3` / `5:4` / `4:5` / `21:9` / `9:21` / `1:2` / `2:1`。1K 像素值为：
+**GPT 基础版（`gpt-image-2`）：** 比例为 `auto` / `1:1` / `16:9` / `9:16` / `4:3` / `3:4` / `3:2` / `2:3` / `5:4` / `4:5` / `21:9` / `9:21` / `1:2` / `2:1`。1K 像素值为：
 `1024x1024` · `1672x941` · `941x1672` · `1443x1090` · `1090x1443` · `1536x1024` · `1024x1536` · `1408x1120` · `1120x1408` · `1920x832` · `832x1920` · `896x1792` · `1792x896`。
 
 **GPT VIP / flare / sunburst：** 使用像素值（或 `auto`），不要传 `16:9` 等比例串。三者共同支持的档位如下：
@@ -520,7 +545,8 @@ GET 进行中返回 202；完成返回 **HTTP 200**，以图片接口的 `status
 
 | model | duration / seconds | resolution / size | 备注 |
 |------|--------------------|-------------------|------|
-| `MiniMax-H3` | **1–15**（1080p **最长 10**） | `480p` / `768p` / `1080p` | 必填 `aspectRatio` |
+| `MiniMax-H3` 无参考图（可有音频 / 视频参考） | 整数 **4–15**（默认 5） | `768p` / `2k`（默认 `768p`） | 不支持 `seed` |
+| `MiniMax-H3` 有参考图 | 整数 **1–15** | `480p` / `720p` / `768p` / `1080p` / `2k` | `images` 最多 9 张；`seed` 只在此模式可用 |
 | Seedance 全部 `*-720p` / `*-1080p` | **4–15**（默认 5） | 写在 model id 里 | `<4` 或 `>15` 直接拒 |
 | `wan3.0-video` | **2–30** 或 `-1` | 如 `720P` | `-1` = 模型自选时长 |
 | `flux-3-video` | **5–20** | `hd` / `fhd` | 草稿用 `draft:true`（仅 hd），不是 `resolution:"draft"` |
@@ -531,9 +557,13 @@ GET 进行中返回 202；完成返回 **HTTP 200**，以图片接口的 `status
 
 必填：`model` `prompt` `aspectRatio` `resolution` `duration`
 `aspectRatio`：只能是 `landscape`（横屏）或 `portrait`（竖屏）。也可用 `16:9` / `9:16`。不支持 `square` / `1:1`。
-`resolution`：`480p` | `768p` | `1080p`（1080p 最长 10 秒）
-`duration`：整数 **1–15**
-可选：`images`（最多 9 张 https）、`audios`（最多 3 段）、`seed`
+**先判断有无参考图，不能混用两套参数：**
+
+- **没有参考图**（纯文生，或仅有参考音频 / 视频）：`resolution` 只支持 `768p` / `2k`；`duration` 为整数 **4–15**；不支持 `seed`。省略分辨率 / 时长时默认 `768p` / 5 秒。
+- **有参考图**：`resolution` 支持 `480p` / `720p` / `768p` / `1080p` / `2k`；`duration` 为整数 **1–15**；`images` 最多 9 张，`seed` 可选且须为整数。
+- `audios` 可选，最多 3 段；无图模式也支持 `videos` 参考。媒体均使用公网 HTTP(S) URL。
+
+无图请求传 `480p` / `720p` / `1080p`、1–3 秒、非整数时长或 `seed` 会返回 HTTP 400；修正参数后再提交，不要循环重试。
 **禁止**当主字段用：`image_with_roles`、`first_frame_image`（与 Seedance/Wan 不同）
 
 提交成功会马上返回 `id`，这时视频还在生成。请用同一把 Key 轮询 `GET /v1/tasks/{id}`：进行中是 `processing`，完成是 `completed` 并带 `url`。进行中不是失败。
@@ -544,7 +574,7 @@ GET 进行中返回 202；完成返回 **HTTP 200**，以图片接口的 `status
   "model": "MiniMax-H3",
   "prompt": "一只红气球在蓝天缓缓上升，电影感，自然光",
   "aspectRatio": "landscape",
-  "resolution": "480p",
+  "resolution": "768p",
   "duration": 5
 }
 ```

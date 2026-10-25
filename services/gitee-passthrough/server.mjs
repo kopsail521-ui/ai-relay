@@ -68,6 +68,10 @@ const DB_PATH = process.env.NEW_API_DB || "/data/one-api.db";
 const CATALOG_PATH =
   process.env.CATALOG || path.join(__dirname, "catalog.json");
 const QUOTA_PER_USD = Number(process.env.QUOTA_PER_USD || 500000);
+const TASK_QUERY_TIMEOUT_MS = Math.min(
+  60000,
+  Math.max(1000, Number(process.env.GITEE_TASK_QUERY_TIMEOUT_MS) || 30000)
+);
 const handleDecisions = createDecisionsHandler({ dbPath: DB_PATH, quotaPerUsd: QUOTA_PER_USD });
 
 const PASSTHROUGH_PREFIXES = [
@@ -89,7 +93,7 @@ if (!fs.existsSync(CATALOG_PATH)) {
 // Bump on every deploy-relevant change; the smoke workflow asserts this
 // marker via /healthz so a stale process on :3010 cannot serve traffic
 // unnoticed (ghost nohup processes from old runbooks).
-const BUILD_ID = "gift-twins-2026-10-24b";
+const BUILD_ID = "buffered-upload-headers-2026-10-25";
 const catalog = JSON.parse(fs.readFileSync(CATALOG_PATH, "utf8"));
 const modelMap = Object.fromEntries(catalog.models.map((m) => [m.id, m]));
 
@@ -725,6 +729,26 @@ function upstreamCreds(modelId) {
   return { origin: GITEE_ORIGIN, key: GITEE_KEY };
 }
 
+function proxyRequestHeaders(incoming) {
+  const headers = { ...incoming };
+  // readBody has already buffered the incoming entity. Its handshake and
+  // framing apply only to the client connection; fetch frames a new request.
+  // In particular, curl's Expect and streamed Transfer-Encoding are rejected
+  // by undici before any request reaches the upstream.
+  const connectionHeaders = String(headers.connection || "")
+    .split(",")
+    .map((name) => name.trim().toLowerCase())
+    .filter(Boolean);
+  for (const name of [
+    "expect", "content-length", "host", "connection", "keep-alive",
+    "proxy-connection", "transfer-encoding", "te", "trailer", "upgrade",
+    "proxy-authenticate", "proxy-authorization", ...connectionHeaders,
+  ]) {
+    delete headers[name];
+  }
+  return headers;
+}
+
 async function proxyToGitee(
   req,
   res,
@@ -733,9 +757,7 @@ async function proxyToGitee(
 ) {
   const { origin, key } = upstreamCreds(modelId);
   const target = `${origin}${req.url}`;
-  const headers = { ...req.headers };
-  delete headers.host;
-  delete headers["content-length"];
+  const headers = proxyRequestHeaders(req.headers);
   headers.authorization = `Bearer ${key}`;
   headers["x-failover-enabled"] = headers["x-failover-enabled"] || "true";
 
@@ -979,7 +1001,22 @@ const server = http.createServer(async (req, res) => {
     : await readBody(req);
 
   if (urlPath.startsWith("/v1/task/")) {
-    return proxyToGitee(req, res, bodyBuf);
+    // A rejected promise returned from the async HTTP listener is otherwise an
+    // unhandled rejection that terminates the whole gateway. Query failures do
+    // not imply task failure and must never trigger a replacement submission.
+    try {
+      return await proxyToGitee(req, res, bodyBuf, { timeoutMs: TASK_QUERY_TIMEOUT_MS });
+    } catch {
+      res.setHeader("Retry-After", "3");
+      return json(res, 502, {
+        error: {
+          message: "Task status is temporarily unavailable. Retry querying the same task ID; do not submit a new task.",
+          type: "server_error",
+          code: "task_query_unavailable",
+          task_id: urlPath.split("/")[3] || "",
+        },
+      });
+    }
   }
 
   let forwardBuf = bodyBuf;

@@ -422,6 +422,8 @@ ${landingLinks}
   <a href="https://startupfa.me" target="_blank" rel="dofollow noopener">Featured on Startup Fame</a>
   <a href="https://submitaitools.org" target="_blank" rel="noopener noreferrer"><img src="https://submitaitools.org/static_submitaitools/images/submitaitools.png" alt="Submit AI Tools" width="200" height="60" loading="lazy" style="height:44px;width:auto;border-radius:10px;" /></a>
   <a href="https://startupbase.io/product/keyoapi" target="_blank" rel="noopener noreferrer"><img src="https://statics.startupbase.io/site/badges/launched-on-sb-dark.svg" alt="Launched on StartupBase" width="200" height="54" loading="lazy" style="height:44px;width:auto;" /></a>
+  <a href="https://seektool.ai/" title="SeekTool.ai Tools Directory" target="_blank" rel="dofollow noopener">SeekTool.ai Tools Directory</a>
+
 
   <a href="https://launchclash.com" target="_blank" rel="noopener noreferrer"><img src="https://launchclash.com/assets/images/badge.png" alt="LaunchClash" height="54" loading="lazy" style="height:44px;width:auto;" /></a>
 
@@ -1012,6 +1014,8 @@ ${modelFoot}
     <a href="https://startupfa.me" target="_blank" rel="dofollow noopener">Startup Fame</a>
     <a href="https://submitaitools.org" target="_blank" rel="noopener noreferrer"><img src="https://submitaitools.org/static_submitaitools/images/submitaitools.png" alt="Submit AI Tools" width="200" height="60" loading="lazy" style="height:32px;width:auto;border-radius:10px;vertical-align:middle;" /></a>
   <a href="https://startupbase.io/product/keyoapi" target="_blank" rel="noopener noreferrer"><img src="https://statics.startupbase.io/site/badges/launched-on-sb-dark.svg" alt="Launched on StartupBase" width="200" height="54" loading="lazy" style="height:44px;width:auto;" /></a>
+  <a href="https://seektool.ai/" title="SeekTool.ai Tools Directory" target="_blank" rel="dofollow noopener">SeekTool.ai Tools Directory</a>
+
 
   <a href="https://launchclash.com" target="_blank" rel="noopener noreferrer"><img src="https://launchclash.com/assets/images/badge.png" alt="LaunchClash" height="54" loading="lazy" style="height:44px;width:auto;" /></a>
 

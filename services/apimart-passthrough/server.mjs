@@ -1011,20 +1011,26 @@ const server = http.createServer(async (req, res) => {
       }
 
       let useOpenlux = effectiveUpstream === "openlux" || isOpenluxMeta(pendingMeta);
+      // MiniMax text/reference-audio tasks use their native query contract.
+      // Use the persisted submission route, not the catalog's image-mode route.
+      const isMiniMaxNative = effectiveUpstream === "openlux" &&
+        ["MiniMax-H3", "MiniMax-H3-vip"].includes(pending.model);
 
       const tryPoll = async (openlux) => {
         const key = openlux ? OPENLUX_KEY : APIMART_KEY;
         const origin = openlux ? OPENLUX_ORIGIN : APIMART_ORIGIN;
         if (!key) return null;
         const path = openlux
-          ? `/v1/videos/${tid}${qsOf(req.url)}`
+          ? isMiniMaxNative
+            ? `/minimax/v2/query/video_generation/${encodeURIComponent(tid)}${qsOf(req.url)}`
+            : `/v1/videos/${tid}${qsOf(req.url)}`
           : `/v1/tasks/${tid}${qsOf(req.url)}`;
         return proxyOrigin(origin, key, req, bodyBuf, path);
       };
 
       let up = await tryPoll(useOpenlux);
       if (looksLikeMiss(up) || up.status === 404) {
-        if (effectiveUpstream === "openlux" && (AICOPY_KEY || AIONE_KEY)) {
+        if (effectiveUpstream === "openlux" && !isMiniMaxNative && (AICOPY_KEY || AIONE_KEY)) {
           const fb = await proxyOrigin(
             AICOPY_ORIGIN || AIONE_ORIGIN,
             AICOPY_KEY || AIONE_KEY,

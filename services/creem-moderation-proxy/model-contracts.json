@@ -695,7 +695,7 @@
           "model": "MiniMax-H3",
           "prompt": "A red paper boat drifting on calm water at sunset",
           "aspectRatio": "landscape",
-          "resolution": "480p",
+          "resolution": "768p",
           "duration": 5
         },
         "pollPath": "/v1/tasks/{id}"

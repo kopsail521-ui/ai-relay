@@ -7,14 +7,8 @@ name: Add speech gift twins on VPS
 #   secrets.KEYO_VPS_SSH_KEY
 
 on:
-  push:
-    branches: [main]
-    paths:
-      - "services/gitee-passthrough/**"
-      - "scripts/vps-redeploy-gitee-passthrough.sh"
-      - "scripts/vps-add-gitee-speech-gift-twins.py"
-      - "scripts/vps-free-rename-atria-prover.py"
-      - ".github/workflows/keyo-speech-gift-twins.yml"
+  # Database provisioning is explicit; ordinary runtime releases use
+  # keyo-gitee-safe.yml and retain the inspected container configuration.
   workflow_dispatch:
 
 concurrency:

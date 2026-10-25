@@ -1,10 +1,18 @@
-name: Deploy native image gateway safely
+name: Deploy native media gateway safely
 
 on:
   push:
     branches: [main]
     paths:
       - 'services/apimart-passthrough/image-*.mjs'
+      - 'services/apimart-passthrough/server.mjs'
+      - 'services/apimart-passthrough/video-contracts.mjs'
+      - 'services/apimart-passthrough/task-responses.mjs'
+      - 'services/apimart-passthrough/catalog.json'
+      - 'services/apimart-passthrough/Dockerfile'
+      - 'services/apimart-passthrough/video-*.test.mjs'
+      - 'scripts/test-video-contracts-offline.mjs'
+      - 'scripts/test-task-responses-offline.mjs'
       - 'scripts/vps-deploy-native-images-safe.py'
       - 'scripts/test-vps-native-images-safe.py'
       - 'scripts/vps-deploy-images.py'
@@ -34,6 +42,9 @@ jobs:
       - run: python3 scripts/test-vps-native-images-safe.py
       - run: node --test services/apimart-passthrough/image-*.test.mjs
       - run: node scripts/test-image-gateway-integration.mjs
+      - run: node scripts/test-video-contracts-offline.mjs
+      - run: node scripts/test-task-responses-offline.mjs
+      - run: node --test services/apimart-passthrough/video-*.test.mjs
       - run: node scripts/test-auth-page-proxy-offline.mjs
 
   deploy:
@@ -50,7 +61,7 @@ jobs:
       - uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6.4.0
         with:
           node-version: 22
-      - name: Preserve runtime configuration and deploy native images only
+      - name: Preserve runtime configuration and deploy native media only
         env:
           HOST: ${{ vars.KEYO_VPS_HOST }}
           USER: ${{ vars.KEYO_VPS_USER }}

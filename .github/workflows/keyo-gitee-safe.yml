@@ -1,0 +1,75 @@
+name: Deploy dedicated media gateway safely
+
+# Upload fixtures use loopback services. Release probes only inspect local health.
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'services/gitee-passthrough/**'
+      - 'scripts/vps-deploy-gitee-safe.py'
+      - 'scripts/test-vps-deploy-gitee-safe-offline.py'
+      - 'scripts/vps-deploy-native-images-safe.py'
+      - 'scripts/vps-deploy-images.py'
+      - '.github/workflows/keyo-gitee-safe.yml'
+  workflow_dispatch:
+    inputs:
+      action:
+        description: 'Inspect runtime only, or deploy reviewed source without model calls'
+        type: choice
+        options: [inspect, deploy]
+        default: inspect
+        required: true
+
+permissions:
+  contents: read
+
+concurrency:
+  group: keyo-gitee-safe
+  cancel-in-progress: false
+  queue: max
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+      - uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6.4.0
+        with:
+          node-version: 22
+      - run: node --test services/gitee-passthrough/server.integration.test.mjs
+      - run: node scripts/test-gitee-passthrough-infinitetalk-offline.mjs
+      - run: python3 scripts/test-vps-deploy-gitee-safe-offline.py
+
+  release:
+    needs: verify
+    if: vars.KEYO_VPS_HOST != ''
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    concurrency:
+      group: keyo-vps-mutex
+      cancel-in-progress: false
+      queue: max
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+      - name: Inspect or preserve and deploy the dedicated media process
+        env:
+          HOST: ${{ vars.KEYO_VPS_HOST }}
+          USER: ${{ vars.KEYO_VPS_USER }}
+          KEY: ${{ secrets.KEYO_VPS_SSH_KEY }}
+          RELEASE_ACTION: ${{ github.event_name == 'push' && 'deploy' || inputs.action }}
+        run: |
+          set -euo pipefail
+          if [ -z "${USER}" ]; then USER=admin; fi
+          if [ -z "${KEY}" ]; then
+            echo "::error::Existing VPS SSH credential is unavailable."
+            exit 1
+          fi
+          case "${RELEASE_ACTION}" in inspect|deploy) ;; *) exit 1 ;; esac
+          install -m 700 -d "${HOME}/.ssh"
+          printf '%s\n' "${KEY}" > "${HOME}/.ssh/keyo_dedicated_release"
+          chmod 600 "${HOME}/.ssh/keyo_dedicated_release"
+          trap 'rm -f "${HOME}/.ssh/keyo_dedicated_release"' EXIT
+          ssh -T -i "${HOME}/.ssh/keyo_dedicated_release" -o BatchMode=yes \
+            -o ConnectTimeout=20 -o ServerAliveInterval=15 \
+            -o StrictHostKeyChecking=accept-new "${USER}@${HOST}" \
+            "sudo -n true && sudo -n env RELOAD_CADDY=0 bash /opt/ai-relay/scripts/vps-safe-pull-preserve-blog.sh && sudo -n env PYTHONDONTWRITEBYTECODE=1 python3 /opt/ai-relay/scripts/vps-deploy-gitee-safe.py --inspect && if [ '${RELEASE_ACTION}' = deploy ]; then sudo -n env PYTHONDONTWRITEBYTECODE=1 python3 /opt/ai-relay/scripts/vps-deploy-gitee-safe.py --deploy; fi"

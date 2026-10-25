@@ -684,12 +684,22 @@
           <button type="button" class="btn-copy" data-copy="https://www.keyoapi.xyz/v1/chat/completions" data-i18n="copyUrl"></button>
         </div>
 
+        <p class="hint" data-i18n-html="shellBashHint"></p>
         <div class="code-block">
           <div class="code-bar">
-            <span class="lang">cURL</span>
+            <span class="lang">Bash · curl</span>
             <button type="button" class="btn-copy" data-copy-target="curl-chat" data-i18n="copy"></button>
           </div>
           <pre id="curl-chat"></pre>
+        </div>
+
+        <p class="hint" id="powershell-chat" data-i18n-html="shellPowerShellHint"></p>
+        <div class="code-block">
+          <div class="code-bar">
+            <span class="lang">PowerShell 5.1 / 7 · Windows</span>
+            <button type="button" class="btn-copy" data-copy-target="ps-chat" data-i18n="copy"></button>
+          </div>
+          <pre id="ps-chat"></pre>
         </div>
 
         <div class="table-wrap">
@@ -735,7 +745,7 @@
         </div>
         <div class="code-block">
           <div class="code-bar">
-            <span class="lang">cURL · Anthropic / Claude Code</span>
+            <span class="lang">Bash · curl · Anthropic / Claude Code</span>
             <button type="button" class="btn-copy" data-copy-target="curl-messages" data-i18n="copy"></button>
           </div>
           <pre id="curl-messages"></pre>
@@ -756,7 +766,7 @@
 
         <div class="code-block">
           <div class="code-bar">
-            <span class="lang">cURL</span>
+            <span class="lang">Bash · curl</span>
             <button type="button" class="btn-copy" data-copy-target="curl-image" data-i18n="copy"></button>
           </div>
           <pre id="curl-image"></pre>
@@ -775,7 +785,6 @@
               </tr>
             </thead>
             <tbody>
-<tr><td class="model"><button type="button" class="model-btn" data-copy="gpt-image-2.5">gpt-image-2.5</button></td><td data-i18n="imageBaseSize"></td><td>auto</td><td>—</td><td>HTTP(S) URL</td></tr>
 <tr><td class="model"><button type="button" class="model-btn" data-copy="gpt-image-2.5-flare">gpt-image-2.5-flare</button></td><td data-i18n="imageListedSize"></td><td>low / medium / high</td><td>transparent</td><td>HTTP(S) URL</td></tr>
 <tr><td class="model"><button type="button" class="model-btn" data-copy="gpt-image-2.5-sunburst">gpt-image-2.5-sunburst</button></td><td data-i18n="imageListedSize"></td><td>low / medium / high / xhigh / max</td><td>transparent</td><td>HTTP(S) URL</td></tr>
 <tr><td class="model"><button type="button" class="model-btn" data-copy="gpt-image-2">gpt-image-2</button></td><td data-i18n="imageBaseSize"></td><td>auto</td><td>—</td><td>HTTP(S) URL</td></tr>
@@ -793,13 +802,13 @@
           <button type="button" class="btn-copy" data-copy="https://www.keyoapi.xyz/v1/images/edits" data-i18n="copyUrl"></button>
         </div>
         <div class="code-block">
-          <div class="code-bar"><span class="lang">cURL · multipart</span><button type="button" class="btn-copy" data-copy-target="curl-image-edit" data-i18n="copy"></button></div>
+          <div class="code-bar"><span class="lang">Bash · curl · multipart</span><button type="button" class="btn-copy" data-copy-target="curl-image-edit" data-i18n="copy"></button></div>
           <pre id="curl-image-edit"></pre>
         </div>
         <p class="hint" data-i18n-html="imageTasksHint"></p>
         <div class="endpoint"><span class="method">GET</span><span class="path">/v1/images/tasks/{task_id}</span></div>
         <div class="code-block">
-          <div class="code-bar"><span class="lang">cURL · task</span><button type="button" class="btn-copy" data-copy-target="curl-image-task" data-i18n="copy"></button></div>
+          <div class="code-bar"><span class="lang">Bash · curl · task</span><button type="button" class="btn-copy" data-copy-target="curl-image-task" data-i18n="copy"></button></div>
           <pre id="curl-image-task"></pre>
         </div>
         <p class="hint" data-i18n-html="imageReplayHint"></p>
@@ -819,7 +828,7 @@
 
         <div class="code-block">
           <div class="code-bar">
-            <span class="lang">cURL · submit</span>
+            <span class="lang">Bash · curl · submit</span>
             <button type="button" class="btn-copy" data-copy-target="curl-video" data-i18n="copy"></button>
           </div>
           <pre id="curl-video"></pre>
@@ -841,10 +850,9 @@
 <tr><td class="model"><button type="button" class="model-btn" data-copy="seedance-2.0">seedance-2.0</button></td><td>480p / 720p (default) / 1080p</td><td>4–15s (default 5s)</td><td data-i18n="nSeedance20"></td></tr>
 <tr><td class="model"><button type="button" class="model-btn" data-copy="seedance-2.0-fast">seedance-2.0-fast</button></td><td>480p / 720p (default) / 1080p</td><td>4–15s (default 5s)</td><td data-i18n="nSeedanceFast"></td></tr>
 <tr><td class="model"><button type="button" class="model-btn" data-copy="seedance-2.0-mini">seedance-2.0-mini</button></td><td>480p / 720p (default) / 1080p</td><td>4–15s (default 5s)</td><td data-i18n="nSeedanceMini"></td></tr>
-<tr><td class="model"><button type="button" class="model-btn" data-copy="MiniMax-H3">MiniMax-H3</button></td><td>480p / 768p / 1080p</td><td>5s / 6s</td><td data-i18n="nMinimaxH3"></td></tr>
+<tr><td class="model"><button type="button" class="model-btn" data-copy="MiniMax-H3">MiniMax-H3</button></td><td data-i18n="minimaxResolutionSummary"></td><td data-i18n="minimaxDurationSummary"></td><td data-i18n="nMinimaxH3"></td></tr>
 <tr><td class="model"><button type="button" class="model-btn" data-copy="flux-3-video">flux-3-video</button></td><td>draft / hd / fhd</td><td>5s</td><td data-i18n="nFluxVideo"></td></tr>
 <tr><td class="model"><button type="button" class="model-btn" data-copy="wan3.0-video">wan3.0-video</button></td><td>480P / 720P / 1080P</td><td>5s</td><td data-i18n="nWanVideo"></td></tr>
-<tr><td class="model"><button type="button" class="model-btn" data-copy="agnes-video-2.5">agnes-video-2.5</button></td><td>720p / 1080p / 2k</td><td>1–12s (default 5s)</td><td data-i18n="nAgnesVideo"></td></tr>
 <tr><td class="model"><button type="button" class="model-btn" data-copy="video-enhance-pro">video-enhance-pro</button></td><td>720p / 1080p (default) / 2k</td><td>Input duration</td><td data-i18n="nVideoEnhance"></td></tr>
 <tr><td class="model"><button type="button" class="model-btn" data-copy="subtitle-erase-pro">subtitle-erase-pro</button></td><td>Native resolution</td><td>Input duration</td><td data-i18n="nSubtitleErase"></td></tr>
             </tbody>
@@ -856,11 +864,11 @@
         <p class="hint" data-i18n-html="videoTaskHint"></p>
         <div class="endpoint"><span class="method">GET</span><span class="path">/v1/tasks/{id}</span></div>
         <div class="code-block">
-          <div class="code-bar"><span class="lang">cURL · task</span><button type="button" class="btn-copy" data-copy-target="curl-video-task" data-i18n="copy"></button></div>
+          <div class="code-bar"><span class="lang">Bash · curl · task</span><button type="button" class="btn-copy" data-copy-target="curl-video-task" data-i18n="copy"></button></div>
           <pre id="curl-video-task"></pre>
         </div>
         <div class="endpoint"><span class="method">GET</span><span class="path">/v1/task/{id}</span></div>
-        <div class="code-block"><div class="code-bar"><span class="lang">cURL · video tools / async TTS / avatars</span><button type="button" class="btn-copy" data-copy-target="curl-video-tool-task" data-i18n="copy"></button></div><pre id="curl-video-tool-task"></pre></div>
+        <div class="code-block"><div class="code-bar"><span class="lang">Bash · curl · video tools / async TTS / avatars</span><button type="button" class="btn-copy" data-copy-target="curl-video-tool-task" data-i18n="copy"></button></div><pre id="curl-video-tool-task"></pre></div>
         <p class="hint" data-i18n-html="videoBillingHint"></p>
       </section>
 
@@ -1761,7 +1769,7 @@ Object.assign(I18N.en, {
   imageBaseSize: 'size: ratio / listed 1K pixels',
   imageListedSize: 'size: listed 1K/2K/4K pixels / auto',
   imageVipSize: 'size: constrained 1K–4K pixels / auto',
-  imageSizeHint: 'All eight models support text and reference images. Nano uses <code>aspectRatio</code> + <code>imageSize</code> (native 1K / 2K / 4K); GPT pixel sizes are invalid for Nano. Nano common ratios: auto, 1:1, 16:9, 9:16, 4:3, 3:4, 3:2, 2:3, 5:4, 4:5, 21:9. Nano 2 / 2.1 additionally accept 1:4, 4:1, 1:8, 8:1; Pro does not. GPT VIP / flare / sunburst use pixels or auto, not ratio strings. Common 16:9 sizes: 1280x720 / 2048x1152 / 3840x2160. VIP custom pixels: edges divisible by 16, longest edge ≤3840, ratio ≤3:1, total pixels 655,360–8,294,400. flare / sunburst only accept listed sizes. Optional fields are model-specific; — means unsupported. <a href="/brand/keyo-api-ref.en.md">Full size tables: §3.1</a>.',
+  imageSizeHint: 'The seven documented models support text and reference images. Current 2.5 variants: <code>gpt-image-2.5-flare</code> / <code>gpt-image-2.5-sunburst</code>. Check the exact ID and available group on <a href="/pricing">Pricing</a>; select an API-key group with an available channel for that model. Nano uses <code>aspectRatio</code> + <code>imageSize</code> (native 1K / 2K / 4K); GPT pixel sizes are invalid for Nano. Nano common ratios: auto, 1:1, 16:9, 9:16, 4:3, 3:4, 3:2, 2:3, 5:4, 4:5, 21:9. Nano 2 / 2.1 additionally accept 1:4, 4:1, 1:8, 8:1; Pro does not. GPT VIP / flare / sunburst use pixels or auto, not ratio strings. Common 16:9 sizes: 1280x720 / 2048x1152 / 3840x2160. VIP custom pixels: edges divisible by 16, longest edge ≤3840, ratio ≤3:1, total pixels 655,360–8,294,400. flare / sunburst only accept listed sizes. Optional fields are model-specific; — means unsupported. <a href="/brand/keyo-api-ref.en.md">Full size tables: §3.1</a>.',
   imageRefsHint: 'JSON <code>images</code> accepts HTTP(S) URLs, image data URLs and valid raw image base64 (aliases: image_urls / image_url / image). Local files can be uploaded directly with multipart to <code>/v1/images/edits</code>; reference files become base64 input. Do not put local paths in JSON. Only <code>n=1</code> and <code>response_format=url</code> are supported. <code>stream=true</code>, b64_json output, binary/base64 masks and <code>-F mask=@...</code> are unsupported; GPT masks require an HTTP(S) URL. Nano has no mask support.<br><strong>Reference limits:</strong> each uploaded / inline image ≤20 MiB of original / decoded bytes; entire multipart body ≤32 MiB; complete JSON including converted files ≤32 MiB. Base64 uses about 4/3 of the original bytes, so per-image 20 MiB allowances cannot be added together: keep combined originals below approximately 24 MiB and leave room for other fields. Use multipart file parts with a filename; put existing base64 in JSON images, not multipart text fields (64 KiB limit). Oversized multipart files / bodies or JSON bodies return 413 before task creation. A 4K reference is separate from output size / imageSize; output must follow the selected model, including the listed 1K-only sizes of GPT base models.',
   imageTasksHint: '<code>replyType=async</code> returns HTTP 202 while pending, with task_id, status, result_url and billing. An existing terminal task (for example, on idempotent replay) can return 200 (success) or 502 (task failure / unknown submission outcome) directly. <code>replyType=json</code> (default) waits for the result; if the wait expires while pending, it returns 202 for the same continuing task. Query with the same API Key: reserved / submitting / running return 202; image success returns 200 with <code>status=succeeded</code> and nonempty <code>data[].url</code>. Other async families use their own completion rules. Recorded terminal task errors return 502 with error.code and error.task_id. For image_submission_unknown, keep the ID and contact support; do not create another generation. A temporary query error, image_task_unavailable, also returns 502 and may contain only request_id without task_id; it does not mean the task failed. Retry GET using the same saved task ID. Submission forwarding errors (image_forwarding_failed) may also omit task_id: query the original task if you have its ID; otherwise replay the original idempotency key and parameters. Handle other errors by their actual HTTP status and error.code; they are not all terminal task failures.',
   imageReplayHint: '<code>Idempotency-Key</code>: 1–128 visible ASCII characters. Same API Key, idempotency key and generation parameters replay the original task/result without creating a new image; conflicting parameters return 409. After a timeout or disconnect, query the original task or replay the original key and parameters. Use a new key only for an intentional new image.',
@@ -1771,7 +1779,7 @@ Object.assign(I18N.zhCN, {
   imageBaseSize: 'size：比例 / 表内 1K 像素',
   imageListedSize: 'size：表内 1K/2K/4K 像素 / auto',
   imageVipSize: 'size：约束内 1K–4K 像素 / auto',
-  imageSizeHint: '八个型号均支持文生图与参考图。Nano 用 <code>aspectRatio</code> + <code>imageSize</code> 原生 1K / 2K / 4K，不接受 GPT 像素尺寸。Nano 公共比例：auto、1:1、16:9、9:16、4:3、3:4、3:2、2:3、5:4、4:5、21:9；2 / 2.1 另支持 1:4、4:1、1:8、8:1，Pro 不支持这四种。GPT VIP / flare / sunburst 用像素或 auto，不传比例串；常用 16:9 为 1280x720 / 2048x1152 / 3840x2160。VIP 自定义尺寸须边长为 16 的倍数、最长边 ≤3840、比例 ≤3:1、总像素 655,360–8,294,400；flare / sunburst 只接受表内尺寸。字段均可选，— 表示不支持。<a href="/brand/keyo-api-ref.md">完整尺寸表见 §3.1</a>。',
+  imageSizeHint: '七个已文档化型号均支持文生图与参考图。当前 2.5 系列为 <code>gpt-image-2.5-flare</code> / <code>gpt-image-2.5-sunburst</code>；先在<a href="/pricing">模型目录</a>核对完整 ID 和可用分组，API Key 须选择有该型号可用渠道的分组。Nano 用 <code>aspectRatio</code> + <code>imageSize</code> 原生 1K / 2K / 4K，不接受 GPT 像素尺寸。Nano 公共比例：auto、1:1、16:9、9:16、4:3、3:4、3:2、2:3、5:4、4:5、21:9；2 / 2.1 另支持 1:4、4:1、1:8、8:1，Pro 不支持这四种。GPT VIP / flare / sunburst 用像素或 auto，不传比例串；常用 16:9 为 1280x720 / 2048x1152 / 3840x2160。VIP 自定义尺寸须边长为 16 的倍数、最长边 ≤3840、比例 ≤3:1、总像素 655,360–8,294,400；flare / sunburst 只接受表内尺寸。字段均可选，— 表示不支持。<a href="/brand/keyo-api-ref.md">完整尺寸表见 §3.1</a>。',
   imageRefsHint: 'JSON 的 <code>images</code> 支持 HTTP(S) URL、图片 data URL 和有效图片原始 base64（别名 image_urls / image_url / image）。本地图可直接 multipart 上传到 <code>/v1/images/edits</code>，参考图文件转为 base64 输入；不要把本机路径写进 JSON。只支持 <code>n=1</code>、<code>response_format=url</code>。<code>stream=true</code>、b64_json 输出、binary/base64 mask、<code>-F mask=@...</code> 未支持；GPT mask 只收 HTTP(S) URL，Nano 不支持 mask。<br><strong>参考图限制：</strong>直接上传 / 内联图片每张原始或解码后数据 ≤20 MiB；整个 multipart 请求 ≤32 MiB；含文件转换结果的完整 JSON 请求也须 ≤32 MiB。base64 约为原图的 4/3，多图不能按每张 20 MiB 简单相加：原图合计应小于约 24 MiB，还须为其它字段留余量。multipart 使用带 filename 的文件 part；已有 base64 放 JSON images，不放普通 multipart 文本字段（上限 64 KiB）。multipart 文件 / 请求体或 JSON 请求体超限返回 413，不创建任务。4K 参考图与输出 size / imageSize 分开；输出仍按型号能力，GPT 基础型号只支持列出的 1K 输出尺寸。',
   imageTasksHint: '<code>replyType=async</code> 在任务尚未完成时返回 HTTP 202，含 task_id、status、result_url 和 billing；已有终态（如幂等重放）可直接返回 200（成功）或 502（任务失败 / 提交结果不确定）。<code>replyType=json</code>（默认）等待结果；等待超时且任务尚未完成时返回同一任务的 202，任务继续。用同一把 API Key 查询：reserved / submitting / running 返回 202；图片成功返回 200，以 <code>status=succeeded</code> 和非空 <code>data[].url</code> 判断完成，其它异步能力按各自契约判断。已记录的任务终态错误返回 502，含 error.code / error.task_id；image_submission_unknown 时保留 ID 联系支持，不重新生成。临时查询错误 image_task_unavailable 也返回 502，可仅含 request_id 而无 task_id，不代表任务失败：用已保存的同一任务 ID 重试 GET。提交转发错误 image_forwarding_failed 也可能无 task_id；有 ID 就查询原任务，无 ID 就用原幂等键和参数重放。其它错误按实际 HTTP 状态和 error.code 处理，不能一律视为任务终态失败。',
   imageReplayHint: '<code>Idempotency-Key</code> 为 1–128 个可见 ASCII 字符。同一把 Key、相同幂等键和生成参数重放取回原任务/结果，不新生成；参数冲突返回 409。等待超时或连接中断后查原任务，或用原幂等键和参数重放；有意新建图片才使用新键。',
@@ -1781,7 +1789,7 @@ Object.assign(I18N.zhTW, {
   imageBaseSize: 'size：比例 / 表內 1K 像素',
   imageListedSize: 'size：表內 1K/2K/4K 像素 / auto',
   imageVipSize: 'size：約束內 1K–4K 像素 / auto',
-  imageSizeHint: '八個型號均支援文生圖與參考圖。Nano 用 <code>aspectRatio</code> + <code>imageSize</code> 原生 1K / 2K / 4K，不接受 GPT 像素尺寸。Nano 公共比例：auto、1:1、16:9、9:16、4:3、3:4、3:2、2:3、5:4、4:5、21:9；2 / 2.1 另支援 1:4、4:1、1:8、8:1，Pro 不支援這四種。GPT VIP / flare / sunburst 用像素或 auto，不傳比例字串。常用 16:9：1280x720 / 2048x1152 / 3840x2160。VIP 自訂尺寸須邊長為 16 的倍數、最長邊 ≤3840、比例 ≤3:1、總像素 655,360–8,294,400；flare / sunburst 只接受表內尺寸。欄位均可選，— 表示不支援。<a href="/brand/keyo-api-ref.md">完整尺寸表見 §3.1</a>。',
+  imageSizeHint: '七個已文件化型號均支援文生圖與參考圖。目前 2.5 系列為 <code>gpt-image-2.5-flare</code> / <code>gpt-image-2.5-sunburst</code>；先在<a href="/pricing">模型目錄</a>核對完整 ID 與可用分組，API Key 須選擇有該型號可用渠道的分組。Nano 用 <code>aspectRatio</code> + <code>imageSize</code> 原生 1K / 2K / 4K，不接受 GPT 像素尺寸。Nano 公共比例：auto、1:1、16:9、9:16、4:3、3:4、3:2、2:3、5:4、4:5、21:9；2 / 2.1 另支援 1:4、4:1、1:8、8:1，Pro 不支援這四種。GPT VIP / flare / sunburst 用像素或 auto，不傳比例字串。常用 16:9：1280x720 / 2048x1152 / 3840x2160。VIP 自訂尺寸須邊長為 16 的倍數、最長邊 ≤3840、比例 ≤3:1、總像素 655,360–8,294,400；flare / sunburst 只接受表內尺寸。欄位均可選，— 表示不支援。<a href="/brand/keyo-api-ref.md">完整尺寸表見 §3.1</a>。',
   imageRefsHint: 'JSON <code>images</code> 支援 HTTP(S) URL、圖片 data URL 和有效圖片原始 base64（別名 image_urls / image_url / image）。本機圖片可直接 multipart 上傳至 <code>/v1/images/edits</code>，參考檔案轉為 base64；不要把本機路徑寫進 JSON。僅支援 <code>n=1</code>、<code>response_format=url</code>。stream=true、b64_json 輸出、binary/base64 mask 和 <code>-F mask=@...</code> 未支援；GPT mask 僅收 HTTP(S) URL，Nano 不支援 mask。<br><strong>參考圖限制：</strong>直接上傳 / 內嵌圖片每張原始或解碼後資料 ≤20 MiB；整個 multipart 請求 ≤32 MiB；包含檔案轉換結果的完整 JSON 請求亦須 ≤32 MiB。base64 約為原圖的 4/3，多圖不能將每張 20 MiB 直接相加：原圖合計應小於約 24 MiB，並為其它欄位預留空間。multipart 使用帶 filename 的檔案 part；已有 base64 放 JSON images，不放普通 multipart 文字欄位（上限 64 KiB）。multipart 檔案 / 請求體或 JSON 請求體超限返回 413，不建立任務。4K 參考圖與輸出 size / imageSize 分開；輸出仍依型號能力，GPT 基礎型號僅支援列出的 1K 輸出尺寸。',
   imageTasksHint: '<code>replyType=async</code> 在任務尚未完成時返回 HTTP 202，含 task_id、status、result_url、billing；已有終態（如冪等重放）可直接返回 200（成功）或 502（任務失敗 / 提交結果不確定）。<code>replyType=json</code>（預設）等待結果；逾時且任務尚未完成時返回同一任務的 202，任務繼續。以同一 API Key 查詢：reserved / submitting / running 返回 202；圖片成功返回 200，<code>status=succeeded</code> 且 <code>data[].url</code> 非空，其它非同步能力按各自契約判斷。已記錄的任務終態錯誤返回 502，含 error.code / error.task_id；image_submission_unknown 時保留 ID 聯絡支援，不重新生成。暫時查詢錯誤 image_task_unavailable 也返回 502，可僅含 request_id 而無 task_id，不代表任務失敗：以已保存的同一任務 ID 重試 GET。提交轉發錯誤 image_forwarding_failed 也可能無 task_id；有 ID 就查詢原任務，無 ID 就用原冪等鍵和參數重放。其它錯誤按實際 HTTP 狀態和 error.code 處理，不能一律視為任務終態失敗。',
   imageReplayHint: '<code>Idempotency-Key</code>：1–128 個可見 ASCII 字元。相同 API Key、冪等鍵及生成參數重放取得原任務/結果，不新生成；參數衝突返回 409。逾時或斷線後查原任務，或重放原鍵及參數；有意建立新圖片才使用新鍵。',
@@ -1789,7 +1797,7 @@ Object.assign(I18N.zhTW, {
 });
 Object.assign(I18N.ja, {
   imageBaseSize: 'size: 比率 / 表の1Kピクセル', imageListedSize: 'size: 表の1K/2K/4Kピクセル / auto', imageVipSize: 'size: 制約内の1K–4Kピクセル / auto',
-  imageSizeHint: '全8モデルでテキストと参照画像に対応。Nano は <code>aspectRatio</code> + <code>imageSize</code>（1K / 2K / 4K）を使い、GPT のピクセル指定は使えません。共通比率: auto, 1:1, 16:9, 9:16, 4:3, 3:4, 3:2, 2:3, 5:4, 4:5, 21:9。Nano 2 / 2.1 は 1:4, 4:1, 1:8, 8:1 にも対応、Pro は非対応。GPT VIP / flare / sunburst はピクセルまたは auto。16:9 の例: 1280x720 / 2048x1152 / 3840x2160。VIP のカスタム値は各辺16の倍数、最長辺≤3840、比率≤3:1、655,360–8,294,400ピクセル。flare / sunburst は表の値のみ。任意項目、— は非対応。<a href="/brand/keyo-api-ref.en.md">完全な寸法表 §3.1</a>。',
+  imageSizeHint: '記載の7モデルでテキストと参照画像に対応。現在の2.5系は <code>gpt-image-2.5-flare</code> / <code>gpt-image-2.5-sunburst</code> です。<a href="/pricing">料金ページ</a>で正確なIDと利用可能なグループを確認し、そのモデルの利用可能なチャネルがあるAPIキーのグループを選択してください。Nano は <code>aspectRatio</code> + <code>imageSize</code>（1K / 2K / 4K）を使い、GPT のピクセル指定は使えません。共通比率: auto, 1:1, 16:9, 9:16, 4:3, 3:4, 3:2, 2:3, 5:4, 4:5, 21:9。Nano 2 / 2.1 は 1:4, 4:1, 1:8, 8:1 にも対応、Pro は非対応。GPT VIP / flare / sunburst はピクセルまたは auto。16:9 の例: 1280x720 / 2048x1152 / 3840x2160。VIP のカスタム値は各辺16の倍数、最長辺≤3840、比率≤3:1、655,360–8,294,400ピクセル。flare / sunburst は表の値のみ。任意項目、— は非対応。<a href="/brand/keyo-api-ref.en.md">完全な寸法表 §3.1</a>。',
   imageRefsHint: 'JSON <code>images</code> は HTTP(S) URL、画像 data URL、有効な画像の生base64に対応（別名 image_urls / image_url / image）。ローカル画像は multipart で <code>/v1/images/edits</code> に直接送信し、base64入力に変換されます。JSONにローカルパスは不可。<code>n=1</code>、<code>response_format=url</code> のみ。stream=true、b64_json出力、binary/base64 mask、<code>-F mask=@...</code> は非対応。GPT mask は HTTP(S) URLのみ、Nano mask は非対応。<br><strong>参照画像の上限：</strong>アップロード / インライン画像は元データ・復号後で1枚20 MiB以下、multipart全体は32 MiB以下、ファイル変換後の完全なJSONも32 MiB以下です。base64は元データの約4/3になるため、各画像20 MiBを単純に合算できません。元画像の合計を約24 MiB未満にし、他の項目用の余裕も確保してください。multipartはfilename付きファイルpartを使い、既存base64はJSON imagesへ入れます。通常のmultipartテキスト項目は64 KiBまでです。multipartのファイル・本文またはJSON本文の超過は413となり、タスクは作成されません。4K参照画像と出力size / imageSizeは別です。出力はモデルの対応範囲に従い、GPT基本モデルは記載の1K出力サイズのみ対応します。',
   imageTasksHint: '<code>replyType=async</code> は未完了時に HTTP 202（task_id、status、result_url、billing）を返します。既に終態のタスク（冪等再送など）は200（成功）または502（タスク失敗 / 送信結果不明）を直接返す場合があります。<code>replyType=json</code>（既定）は結果を待ち、待機時間超過時にまだ未完了なら同じ継続中タスクの202を返します。同じAPI Keyで照会: reserved / submitting / running は202、画像の成功は200と <code>status=succeeded</code>、空でない <code>data[].url</code>。他の非同期機能は各契約で完了を判定します。記録済みのタスク終態エラーは502と error.code / error.task_id。image_submission_unknown はIDを保存してサポートへ連絡し、新規生成しないでください。一時的な照会エラー image_task_unavailable も502で、task_id がなく request_id のみの場合があります。タスク失敗を意味しないため、保存済みの同じタスクIDでGETを再試行してください。送信転送エラー image_forwarding_failed も task_id がない場合があります。IDがあれば元のタスクを照会し、なければ元の冪等キーとパラメータで再送してください。他のエラーは実際のHTTPステータスと error.code で判断し、すべてをタスクの終態失敗として扱わないでください。',
   imageReplayHint: '<code>Idempotency-Key</code> は表示可能なASCII 1–128文字。同じAPI Key・冪等キー・生成パラメータの再送は元のタスク/結果を取得し、新規生成しません。異なるパラメータは409。タイムアウトや切断後は元のタスクを照会するか同じキーとパラメータで再送。新しい画像を意図する時だけ新しいキーを使います。',
@@ -1797,7 +1805,7 @@ Object.assign(I18N.ja, {
 });
 Object.assign(I18N.fr, {
   imageBaseSize: 'size : ratio / pixels 1K listés', imageListedSize: 'size : pixels 1K/2K/4K listés / auto', imageVipSize: 'size : pixels 1K–4K sous contraintes / auto',
-  imageSizeHint: 'Les 8 modèles acceptent texte et images de référence. Nano utilise <code>aspectRatio</code> + <code>imageSize</code> (1K / 2K / 4K), pas les dimensions GPT en pixels. Ratios communs : auto, 1:1, 16:9, 9:16, 4:3, 3:4, 3:2, 2:3, 5:4, 4:5, 21:9. Nano 2 / 2.1 acceptent aussi 1:4, 4:1, 1:8, 8:1 ; Pro non. GPT VIP / flare / sunburst : pixels ou auto. Exemple 16:9 : 1280x720 / 2048x1152 / 3840x2160. VIP personnalisé : côtés multiples de 16, côté maximal ≤3840, ratio ≤3:1, 655,360–8,294,400 pixels. flare / sunburst : valeurs listées uniquement. Champs facultatifs ; — indique non pris en charge. <a href="/brand/keyo-api-ref.en.md">Tableaux complets §3.1</a>.',
+  imageSizeHint: 'Les 7 modèles documentés acceptent texte et images de référence. Variantes 2.5 actuelles : <code>gpt-image-2.5-flare</code> / <code>gpt-image-2.5-sunburst</code>. Vérifiez l’ID exact et les groupes disponibles sur <a href="/pricing">la page des tarifs</a>, puis choisissez pour la clé API un groupe disposant d’un canal pour ce modèle. Nano utilise <code>aspectRatio</code> + <code>imageSize</code> (1K / 2K / 4K), pas les dimensions GPT en pixels. Ratios communs : auto, 1:1, 16:9, 9:16, 4:3, 3:4, 3:2, 2:3, 5:4, 4:5, 21:9. Nano 2 / 2.1 acceptent aussi 1:4, 4:1, 1:8, 8:1 ; Pro non. GPT VIP / flare / sunburst : pixels ou auto. Exemple 16:9 : 1280x720 / 2048x1152 / 3840x2160. VIP personnalisé : côtés multiples de 16, côté maximal ≤3840, ratio ≤3:1, 655,360–8,294,400 pixels. flare / sunburst : valeurs listées uniquement. Champs facultatifs ; — indique non pris en charge. <a href="/brand/keyo-api-ref.en.md">Tableaux complets §3.1</a>.',
   imageRefsHint: '<code>images</code> en JSON accepte URL HTTP(S), data URL image et base64 brut valide (alias : image_urls / image_url / image). Envoyez les fichiers locaux directement en multipart à <code>/v1/images/edits</code> ; ils sont convertis en base64. Aucun chemin local dans le JSON. Uniquement <code>n=1</code> et <code>response_format=url</code>. stream=true, sortie b64_json, masques binary/base64 et <code>-F mask=@...</code> non pris en charge. GPT mask : URL HTTP(S) uniquement ; Nano : aucun mask.<br><strong>Limites des références :</strong> chaque image envoyée / intégrée ≤20 MiB de données originales / décodées ; multipart complet ≤32 MiB ; JSON complet après conversion des fichiers ≤32 MiB. Le base64 représente environ 4/3 des octets originaux : ne cumulez pas les plafonds de 20 MiB ; gardez les originaux combinés sous environ 24 MiB avec une marge pour les autres champs. Utilisez des parties fichier multipart avec filename ; placez le base64 existant dans JSON images, pas dans les champs texte multipart (64 KiB maximum). Un dépassement de fichier / corps multipart ou de corps JSON renvoie 413 sans créer de tâche. Une référence 4K ne définit pas la sortie size / imageSize : respectez le modèle, notamment les seules dimensions 1K listées pour les modèles GPT de base.',
   imageTasksHint: '<code>replyType=async</code> renvoie HTTP 202 tant que la tâche est en cours, avec task_id, status, result_url et billing. Une tâche déjà dans un état terminal (par exemple lors du rejeu idempotent) peut renvoyer directement 200 (succès) ou 502 (échec de tâche / résultat de soumission inconnu). <code>replyType=json</code> (défaut) attend le résultat ; si le délai expire alors que la tâche est encore en cours, 202 pour la même tâche qui continue. Consultez avec la même clé : reserved / submitting / running donnent 202 ; succès image : 200, <code>status=succeeded</code> et <code>data[].url</code> non vide. Les autres fonctions asynchrones suivent leurs propres règles de fin. Les erreurs terminales de tâche enregistrées donnent 502 avec error.code / error.task_id. Pour image_submission_unknown, conservez cet ID et contactez le support sans nouvelle génération. Une erreur temporaire de consultation, image_task_unavailable, donne aussi 502 et peut contenir uniquement request_id sans task_id ; elle ne signifie pas que la tâche a échoué. Réessayez GET avec le même ID de tâche conservé. Une erreur de transmission de soumission, image_forwarding_failed, peut aussi omettre task_id : consultez la tâche initiale si vous avez son ID, sinon rejouez la clé idempotente et les paramètres initiaux. Traitez les autres erreurs selon leur statut HTTP réel et error.code ; elles ne sont pas toutes des échecs terminaux de tâche.',
   imageReplayHint: '<code>Idempotency-Key</code> : 1–128 caractères ASCII visibles. Même clé API, clé idempotente et paramètres : récupération de la tâche/résultat initial sans nouvelle image ; conflit de paramètres : 409. Après délai ou déconnexion, consultez la tâche ou renvoyez la clé et les paramètres initiaux. Nouvelle clé seulement pour une nouvelle image volontaire.',
@@ -1805,7 +1813,7 @@ Object.assign(I18N.fr, {
 });
 Object.assign(I18N.ru, {
   imageBaseSize: 'size: соотношение / пиксели 1K из таблицы', imageListedSize: 'size: пиксели 1K/2K/4K из таблицы / auto', imageVipSize: 'size: пиксели 1K–4K с ограничениями / auto',
-  imageSizeHint: 'Все 8 моделей поддерживают текст и референсы. Nano использует <code>aspectRatio</code> + <code>imageSize</code> (1K / 2K / 4K), а не размеры GPT в пикселях. Общие пропорции: auto, 1:1, 16:9, 9:16, 4:3, 3:4, 3:2, 2:3, 5:4, 4:5, 21:9. Nano 2 / 2.1 также поддерживают 1:4, 4:1, 1:8, 8:1, Pro — нет. GPT VIP / flare / sunburst: пиксели или auto. Пример 16:9: 1280x720 / 2048x1152 / 3840x2160. VIP: стороны кратны 16, длинная ≤3840, пропорция ≤3:1, 655,360–8,294,400 пикселей. flare / sunburst принимают только табличные значения. Поля необязательны; — означает нет поддержки. <a href="/brand/keyo-api-ref.en.md">Полные таблицы §3.1</a>.',
+  imageSizeHint: 'Все 7 документированных моделей поддерживают текст и референсы. Текущие варианты 2.5: <code>gpt-image-2.5-flare</code> / <code>gpt-image-2.5-sunburst</code>. Проверьте точный ID и доступные группы на <a href="/pricing">странице тарифов</a>; выберите для API-ключа группу с доступным каналом этой модели. Nano использует <code>aspectRatio</code> + <code>imageSize</code> (1K / 2K / 4K), а не размеры GPT в пикселях. Общие пропорции: auto, 1:1, 16:9, 9:16, 4:3, 3:4, 3:2, 2:3, 5:4, 4:5, 21:9. Nano 2 / 2.1 также поддерживают 1:4, 4:1, 1:8, 8:1, Pro — нет. GPT VIP / flare / sunburst: пиксели или auto. Пример 16:9: 1280x720 / 2048x1152 / 3840x2160. VIP: стороны кратны 16, длинная ≤3840, пропорция ≤3:1, 655,360–8,294,400 пикселей. flare / sunburst принимают только табличные значения. Поля необязательны; — означает нет поддержки. <a href="/brand/keyo-api-ref.en.md">Полные таблицы §3.1</a>.',
   imageRefsHint: 'JSON <code>images</code> принимает HTTP(S) URL, data URL изображения и корректный исходный base64 (псевдонимы: image_urls / image_url / image). Локальные файлы отправляйте multipart на <code>/v1/images/edits</code>; они преобразуются в base64. Локальные пути в JSON недопустимы. Только <code>n=1</code> и <code>response_format=url</code>. stream=true, вывод b64_json, binary/base64 mask и <code>-F mask=@...</code> не поддерживаются. GPT mask: только HTTP(S) URL; у Nano mask не поддерживается.<br><strong>Ограничения референсов:</strong> загруженное / встроенное изображение — до 20 MiB исходных / декодированных данных; весь multipart — до 32 MiB; полный JSON после преобразования файлов — также до 32 MiB. Base64 занимает примерно 4/3 исходного объёма: нельзя складывать лимиты 20 MiB для каждого файла. Сумма оригиналов должна быть меньше примерно 24 MiB с запасом для остальных полей. В multipart используйте файловые части с filename; готовый base64 передавайте в JSON images, а не текстовых полях multipart (лимит 64 KiB). Превышение размера файла / тела multipart или тела JSON возвращает 413 без создания задачи. Референс 4K не задаёт выходной size / imageSize: соблюдайте возможности модели, включая только перечисленные размеры 1K у базовых GPT.',
   imageTasksHint: '<code>replyType=async</code> возвращает HTTP 202 с task_id, status, result_url, billing, пока задача не завершена. Задача, уже находящаяся в конечном состоянии (например, при идемпотентном повторе), может сразу вернуть 200 (успех) или 502 (сбой задачи / неизвестный результат отправки). <code>replyType=json</code> (по умолчанию) ждёт результат; по истечении ожидания возвращает 202 той же продолжающейся задачи, если она ещё не завершена. Запрос с тем же API Key: reserved / submitting / running — 202; успех изображения — 200, <code>status=succeeded</code>, непустой <code>data[].url</code>. Другие асинхронные функции используют свои правила завершения. Записанные конечные ошибки задачи возвращают 502 с error.code / error.task_id. При image_submission_unknown сохраните ID и обратитесь в поддержку, не создавайте новую генерацию. Временная ошибка запроса image_task_unavailable также возвращает 502 и может содержать только request_id без task_id; это не означает сбой задачи. Повторите GET с тем же сохранённым ID задачи. Ошибка передачи отправки image_forwarding_failed тоже может не содержать task_id: если ID есть, проверьте исходную задачу; иначе повторите исходный ключ идемпотентности и параметры. Другие ошибки обрабатывайте по фактическому HTTP-статусу и error.code; не все они означают конечный сбой задачи.',
   imageReplayHint: '<code>Idempotency-Key</code>: 1–128 видимых ASCII-символов. Тот же API Key, ключ идемпотентности и параметры возвращают исходную задачу/результат без новой генерации; конфликт параметров — 409. После тайм-аута или разрыва связи проверяйте исходную задачу или повторяйте исходный ключ и параметры. Новый ключ нужен лишь для намеренно нового изображения.',
@@ -1813,11 +1821,77 @@ Object.assign(I18N.ru, {
 });
 Object.assign(I18N.vi, {
   imageBaseSize: 'size: tỷ lệ / pixel 1K trong bảng', imageListedSize: 'size: pixel 1K/2K/4K trong bảng / auto', imageVipSize: 'size: pixel 1K–4K theo giới hạn / auto',
-  imageSizeHint: 'Cả 8 model hỗ trợ văn bản và ảnh tham chiếu. Nano dùng <code>aspectRatio</code> + <code>imageSize</code> (1K / 2K / 4K), không nhận kích thước pixel GPT. Tỷ lệ chung: auto, 1:1, 16:9, 9:16, 4:3, 3:4, 3:2, 2:3, 5:4, 4:5, 21:9. Nano 2 / 2.1 còn nhận 1:4, 4:1, 1:8, 8:1; Pro không nhận. GPT VIP / flare / sunburst dùng pixel hoặc auto. Ví dụ 16:9: 1280x720 / 2048x1152 / 3840x2160. VIP tùy chỉnh: cạnh chia hết cho 16, cạnh dài ≤3840, tỷ lệ ≤3:1, 655,360–8,294,400 pixel. flare / sunburst chỉ nhận giá trị trong bảng. Các trường là tùy chọn; — là không hỗ trợ. <a href="/brand/keyo-api-ref.en.md">Bảng đầy đủ §3.1</a>.',
+  imageSizeHint: 'Cả 7 model được tài liệu hóa hỗ trợ văn bản và ảnh tham chiếu. Các biến thể 2.5 hiện tại: <code>gpt-image-2.5-flare</code> / <code>gpt-image-2.5-sunburst</code>. Kiểm tra ID chính xác và nhóm khả dụng tại <a href="/pricing">trang giá</a>; chọn nhóm cho khóa API có kênh khả dụng của model đó. Nano dùng <code>aspectRatio</code> + <code>imageSize</code> (1K / 2K / 4K), không nhận kích thước pixel GPT. Tỷ lệ chung: auto, 1:1, 16:9, 9:16, 4:3, 3:4, 3:2, 2:3, 5:4, 4:5, 21:9. Nano 2 / 2.1 còn nhận 1:4, 4:1, 1:8, 8:1; Pro không nhận. GPT VIP / flare / sunburst dùng pixel hoặc auto. Ví dụ 16:9: 1280x720 / 2048x1152 / 3840x2160. VIP tùy chỉnh: cạnh chia hết cho 16, cạnh dài ≤3840, tỷ lệ ≤3:1, 655,360–8,294,400 pixel. flare / sunburst chỉ nhận giá trị trong bảng. Các trường là tùy chọn; — là không hỗ trợ. <a href="/brand/keyo-api-ref.en.md">Bảng đầy đủ §3.1</a>.',
   imageRefsHint: 'JSON <code>images</code> nhận URL HTTP(S), data URL ảnh và base64 ảnh thô hợp lệ (bí danh: image_urls / image_url / image). Tệp cục bộ có thể tải trực tiếp bằng multipart tới <code>/v1/images/edits</code>, được đổi thành đầu vào base64. Không điền đường dẫn cục bộ vào JSON. Chỉ <code>n=1</code>, <code>response_format=url</code>. Không hỗ trợ stream=true, đầu ra b64_json, binary/base64 mask hay <code>-F mask=@...</code>. GPT mask chỉ nhận URL HTTP(S); Nano không hỗ trợ mask.<br><strong>Giới hạn ảnh tham chiếu:</strong> mỗi ảnh tải lên / nhúng ≤20 MiB dữ liệu gốc / sau giải mã; toàn bộ multipart ≤32 MiB; JSON hoàn chỉnh sau khi chuyển đổi tệp cũng ≤32 MiB. Base64 có dung lượng khoảng 4/3 dữ liệu gốc, nên không được cộng đơn giản mức 20 MiB của từng ảnh: giữ tổng ảnh gốc dưới khoảng 24 MiB và chừa chỗ cho các trường khác. Dùng phần tệp multipart có filename; đặt base64 có sẵn trong JSON images, không dùng trường văn bản multipart (giới hạn 64 KiB). Tệp / nội dung multipart hoặc nội dung JSON vượt giới hạn trả 413, không tạo tác vụ. Ảnh tham chiếu 4K độc lập với đầu ra size / imageSize; đầu ra phải theo khả năng từng model, GPT cơ bản chỉ hỗ trợ các kích thước 1K đã liệt kê.',
   imageTasksHint: '<code>replyType=async</code> trả HTTP 202 khi tác vụ chưa hoàn tất, với task_id, status, result_url, billing. Tác vụ đã có trạng thái kết thúc (ví dụ khi gửi lại cùng khóa lũy đẳng) có thể trả trực tiếp 200 (thành công) hoặc 502 (tác vụ thất bại / chưa rõ kết quả gửi). <code>replyType=json</code> (mặc định) chờ kết quả; nếu hết thời gian chờ khi chưa hoàn tất, trả 202 cho cùng tác vụ vẫn tiếp tục. Dùng cùng API Key để kiểm tra: reserved / submitting / running trả 202; ảnh thành công trả 200, <code>status=succeeded</code> và <code>data[].url</code> không rỗng. Các chức năng bất đồng bộ khác dùng quy tắc hoàn tất riêng. Lỗi kết thúc tác vụ đã được ghi nhận trả 502 với error.code / error.task_id. Với image_submission_unknown, giữ ID và liên hệ hỗ trợ, không tạo lần sinh mới. Lỗi truy vấn tạm thời image_task_unavailable cũng trả 502 và có thể chỉ chứa request_id mà không có task_id; điều này không có nghĩa tác vụ thất bại. Thử lại GET với cùng ID tác vụ đã lưu. Lỗi chuyển tiếp gửi image_forwarding_failed cũng có thể thiếu task_id: nếu có ID, truy vấn tác vụ ban đầu; nếu không, gửi lại khóa lũy đẳng và tham số ban đầu. Xử lý lỗi khác theo trạng thái HTTP thực tế và error.code; không coi mọi lỗi là thất bại kết thúc tác vụ.',
   imageReplayHint: '<code>Idempotency-Key</code>: 1–128 ký tự ASCII hiển thị. Cùng API Key, khóa lũy đẳng và tham số sinh sẽ lấy lại tác vụ/kết quả ban đầu, không sinh ảnh mới; tham số xung đột trả 409. Khi hết thời gian chờ hoặc mất kết nối, kiểm tra tác vụ hoặc gửi lại khóa và tham số ban đầu. Chỉ dùng khóa mới khi chủ ý tạo ảnh mới.',
   imageBillingHint: 'Hạn mức được giữ khi gửi, tính phí một lần khi giao phản hồi kết quả. Sinh thất bại hoặc thiếu kết quả ảnh hợp lệ sẽ giải phóng hạn mức giữ mà không tính phí ảnh. Mặc định giải phóng sau 600 giây, vẫn lưu tác vụ/kết quả; lấy kết quả chưa thanh toán sau đó cần đủ số dư. billing.charged=false ở thành công đầu tiên có thể là trạng thái trước tính phí, không có nghĩa miễn phí. GET/gửi lại lũy đẳng kết quả đã thanh toán không tính phí lại. Giữ task_id để hỗ trợ hóa đơn.'
+});
+
+Object.assign(I18N.en, {
+  shellBashHint: 'Examples labeled <strong>Bash · curl</strong> use backslash line continuation and run in macOS / Linux Bash or Windows Git Bash. In Windows PowerShell 5.1 / 7, use the separate PowerShell example below; do not paste the Bash commands unchanged.',
+  shellPowerShellHint: '<strong>Windows PowerShell 5.1 / 7:</strong> replace the API key before copying this complete example. It sends UTF-8 JSON bytes with <code>Invoke-RestMethod</code>; no curl alias or Bash line continuation is required. A real request uses the selected model’s current rate.'
+});
+Object.assign(I18N.zhCN, {
+  shellBashHint: '标为 <strong>Bash · curl</strong> 的示例使用反斜杠续行，适用于 macOS / Linux Bash 或 Windows Git Bash。Windows PowerShell 5.1 / 7 请使用下方独立示例，不要直接粘贴 Bash 命令。',
+  shellPowerShellHint: '<strong>Windows PowerShell 5.1 / 7：</strong>替换 API Key 后完整复制以下示例。使用 <code>Invoke-RestMethod</code> 发送 UTF-8 JSON 字节，不依赖 curl 别名或 Bash 续行。真实调用按所选模型当前费率计费。'
+});
+Object.assign(I18N.zhTW, {
+  shellBashHint: '標為 <strong>Bash · curl</strong> 的範例使用反斜線續行，適用於 macOS / Linux Bash 或 Windows Git Bash。Windows PowerShell 5.1 / 7 請使用下方獨立範例，勿直接貼上 Bash 命令。',
+  shellPowerShellHint: '<strong>Windows PowerShell 5.1 / 7：</strong>替換 API Key 後完整複製以下範例。以 <code>Invoke-RestMethod</code> 傳送 UTF-8 JSON 位元組，不依賴 curl 別名或 Bash 續行。實際呼叫按所選模型目前費率計費。'
+});
+Object.assign(I18N.ja, {
+  shellBashHint: '<strong>Bash · curl</strong> の例はバックスラッシュで改行を継続し、macOS / Linux Bash または Windows Git Bash で実行します。Windows PowerShell 5.1 / 7 では下の専用例を使い、Bash コマンドをそのまま貼り付けないでください。',
+  shellPowerShellHint: '<strong>Windows PowerShell 5.1 / 7：</strong>API キーを置き換え、例全体をコピーしてください。<code>Invoke-RestMethod</code> で UTF-8 JSON バイト列を送信します。curl エイリアスや Bash の改行継続は不要です。実際の呼び出しは選択モデルの現行料金で課金されます。'
+});
+Object.assign(I18N.fr, {
+  shellBashHint: 'Les exemples <strong>Bash · curl</strong> utilisent une barre oblique inverse pour continuer les lignes et fonctionnent dans Bash sous macOS / Linux ou Git Bash sous Windows. Dans Windows PowerShell 5.1 / 7, utilisez l’exemple dédié ci-dessous sans coller les commandes Bash telles quelles.',
+  shellPowerShellHint: '<strong>Windows PowerShell 5.1 / 7 :</strong> remplacez la clé API et copiez cet exemple complet. <code>Invoke-RestMethod</code> envoie les octets JSON en UTF-8, sans alias curl ni continuation Bash. Un appel réel est facturé au tarif actuel du modèle choisi.'
+});
+Object.assign(I18N.ru, {
+  shellBashHint: 'Примеры <strong>Bash · curl</strong> используют обратную косую черту для переноса строк и выполняются в Bash на macOS / Linux или Git Bash на Windows. В Windows PowerShell 5.1 / 7 используйте отдельный пример ниже, а не исходные команды Bash.',
+  shellPowerShellHint: '<strong>Windows PowerShell 5.1 / 7:</strong> замените API-ключ и скопируйте пример целиком. <code>Invoke-RestMethod</code> отправляет JSON как байты UTF-8 без псевдонима curl и переноса строк Bash. Реальный вызов оплачивается по текущему тарифу выбранной модели.'
+});
+Object.assign(I18N.vi, {
+  shellBashHint: 'Ví dụ <strong>Bash · curl</strong> dùng dấu gạch chéo ngược để nối dòng, chạy trong Bash trên macOS / Linux hoặc Git Bash trên Windows. Với Windows PowerShell 5.1 / 7, dùng ví dụ riêng bên dưới, không dán nguyên lệnh Bash.',
+  shellPowerShellHint: '<strong>Windows PowerShell 5.1 / 7:</strong> thay khóa API rồi sao chép toàn bộ ví dụ. <code>Invoke-RestMethod</code> gửi JSON dạng byte UTF-8, không cần bí danh curl hay nối dòng Bash. Lệnh gọi thật được tính theo giá hiện tại của model đã chọn.'
+});
+
+// MiniMax request modes have different resolution, duration and seed contracts.
+Object.assign(I18N.en, {
+  minimaxResolutionSummary: 'No image: 768p / 2k; with images: 480p / 720p / 768p / 1080p / 2k',
+  minimaxDurationSummary: 'Integer seconds: no image 4–15; with images 1–15',
+  nMinimaxH3: 'No image includes audio/video-only references; seed is unsupported. With images: up to 9 images, optional integer seed. Up to 3 audio clips. No-image defaults: 768p / 5s.'
+});
+Object.assign(I18N.zhCN, {
+  minimaxResolutionSummary: '无图：768p / 2k；有图：480p / 720p / 768p / 1080p / 2k',
+  minimaxDurationSummary: '整数秒：无图 4–15；有图 1–15',
+  nMinimaxH3: '仅音频/视频参考仍属无图，不支持 seed。有图最多 9 张，可传整数 seed。音频最多 3 段。无图默认 768p / 5 秒。'
+});
+Object.assign(I18N.zhTW, {
+  minimaxResolutionSummary: '無圖：768p / 2k；有圖：480p / 720p / 768p / 1080p / 2k',
+  minimaxDurationSummary: '整數秒：無圖 4–15；有圖 1–15',
+  nMinimaxH3: '僅音訊/影片參考仍屬無圖，不支援 seed。有圖最多 9 張，可傳整數 seed。音訊最多 3 段。無圖預設 768p / 5 秒。'
+});
+Object.assign(I18N.ja, {
+  minimaxResolutionSummary: '画像なし: 768p / 2k；画像あり: 480p / 720p / 768p / 1080p / 2k',
+  minimaxDurationSummary: '整数秒：画像なし 4–15；画像あり 1–15',
+  nMinimaxH3: '音声/動画参照だけの場合も画像なしで、seed非対応。画像ありは最大9枚、整数seedは任意。音声は最大3件。画像なしの既定値: 768p / 5秒。'
+});
+Object.assign(I18N.fr, {
+  minimaxResolutionSummary: 'Sans image : 768p / 2k ; avec images : 480p / 720p / 768p / 1080p / 2k',
+  minimaxDurationSummary: 'Secondes entières : sans image 4–15 ; avec images 1–15',
+  nMinimaxH3: 'Une référence audio/vidéo seule reste sans image : seed non pris en charge. Avec images : 9 maximum, seed entier facultatif. 3 audios maximum. Défauts sans image : 768p / 5s.'
+});
+Object.assign(I18N.ru, {
+  minimaxResolutionSummary: 'Без изображения: 768p / 2k; с изображениями: 480p / 720p / 768p / 1080p / 2k',
+  minimaxDurationSummary: 'Целые секунды: без изображения 4–15; с изображениями 1–15',
+  nMinimaxH3: 'Только аудио/видеореференсы относятся к режиму без изображения; seed недоступен. До 9 изображений, seed целый и необязательный. До 3 аудиоклипов. По умолчанию без изображения: 768p / 5с.'
+});
+Object.assign(I18N.vi, {
+  minimaxResolutionSummary: 'Không ảnh: 768p / 2k; có ảnh: 480p / 720p / 768p / 1080p / 2k',
+  minimaxDurationSummary: 'Số giây nguyên: không ảnh 4–15; có ảnh 1–15',
+  nMinimaxH3: 'Chỉ tham chiếu âm thanh/video vẫn là không ảnh, không hỗ trợ seed. Có ảnh: tối đa 9 ảnh, seed nguyên tùy chọn. Tối đa 3 đoạn âm thanh. Mặc định không ảnh: 768p / 5 giây.'
 });
 
 const LANG_LABELS = {
@@ -1867,6 +1941,22 @@ function renderSamples(dict) {
   jsonCurl('curl-chat', '/v1/chat/completions', {
     model: 'Atria-dawn-v2:free', messages: [{role: 'user', content: hello}]
   });
+  setText('ps-chat', [
+    "$apiKey = '" + key.replace(/'/g, "''") + "'",
+    "$body = @{",
+    "  model = 'gpt-5.6-luna'",
+    "  messages = @(@{ role = 'user'; content = '" + hello.replace(/'/g, "''") + "' })",
+    "} | ConvertTo-Json -Depth 6",
+    "$request = @{",
+    "  Uri = 'https://www.keyoapi.xyz/v1/chat/completions'",
+    "  Method = 'Post'",
+    '  Headers = @{ Authorization = "Bearer $apiKey" }',
+    "  ContentType = 'application/json; charset=utf-8'",
+    "  Body = [System.Text.Encoding]::UTF8.GetBytes($body)",
+    "}",
+    "$response = Invoke-RestMethod @request",
+    "$response.choices[0].message.content"
+  ].join('\n'));
   jsonCurl('curl-image', '/v1/images/generations', {
     model: 'nano-banana-2', prompt: 'a red circle on white background',
     aspectRatio: '1:1', imageSize: '2K', n: 1, response_format: 'url', replyType: 'async'

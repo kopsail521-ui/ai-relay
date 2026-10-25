@@ -211,9 +211,31 @@ function validateVideoClientBody(modelId, body) {
     const dur = body.duration ?? body.seconds;
     if (dur != null) {
       const n = Number(dur);
-      if (!Number.isFinite(n) || n < 1 || n > 15) {
-        return { param: "duration", message: "MiniMax-H3 duration must be 1–15 seconds" };
+      const minSeconds = hasMiniMaxImage(body) ? 1 : 4;
+      if (!Number.isFinite(n) || !Number.isInteger(n) || n < minSeconds || n > 15) {
+        return { param: "duration", message: `MiniMax-H3 duration must be an integer ${minSeconds}–15 seconds` };
       }
+    }
+    if (!hasMiniMaxImage(body)) {
+      // The native text route only offers these two resolutions. Do not silently
+      // turn the customer's requested 480p/720p/1080p into another output tier.
+      if (res && !["768p", "2k"].includes(res)) {
+        return { param: "resolution", message: "MiniMax-H3 without a reference image supports resolution=768p or 2k only" };
+      }
+      if (body.seed != null) {
+        return { param: "seed", message: "MiniMax-H3 seed is not supported without a reference image" };
+      }
+    } else if (body.seed != null && !Number.isInteger(Number(body.seed))) {
+      return { param: "seed", message: "MiniMax-H3 seed must be an integer" };
+    }
+    const imageCount = ["images", "image_urls"].reduce((n, key) => n + (Array.isArray(body[key]) ? body[key].length : 0), 0);
+    if (imageCount > 9) return { param: "images", message: "MiniMax-H3 supports at most 9 reference images" };
+    const audioCount = ["audios", "audio_urls"].reduce((n, key) => n + (Array.isArray(body[key]) ? body[key].length : 0), 0) + (body.audio_url ? 1 : 0);
+    if (audioCount > 3) return { param: "audios", message: "MiniMax-H3 supports at most 3 reference audio clips" };
+    const videoCount = ["videos", "video_urls"].reduce((n, key) => n + (Array.isArray(body[key]) ? body[key].length : 0), 0) + (body.video_url ? 1 : 0);
+    if (videoCount > 3) return { param: "video_urls", message: "MiniMax-H3 supports at most 3 reference video clips" };
+    if ((body.first_frame_image || body.input_reference) && (audioCount || videoCount || imageCount)) {
+      return { param: "first_frame_image", message: "MiniMax-H3 first-frame mode cannot mix with reference images, video or audio; use images[] for reference mode" };
     }
     return null;
   }
@@ -509,6 +531,7 @@ function buildAioneVideoBody(meta, body) {
   if (clientRes && /^(480p|720p|1080p|2k|4k)$/i.test(clientRes)) {
     extra.resolution = clientRes.toLowerCase();
   }
+  if (body.seed != null && Number.isInteger(Number(body.seed))) extra.seed = Number(body.seed);
 
   // Image mode is user-chosen — do NOT force "1 image = first frame".
   //   first_frame_image / input_reference / image_with_roles(first|last)
@@ -741,6 +764,11 @@ function buildGrsaiVideoBody(meta, body) {
  * Keyo Path B JSON → aicopy POST /v1/videos with resolution mapping & relay fallback
  */
 function buildAicopyVideoBody(meta, body, clientGroup = "default") {
+  // Both inventories expose the same /v1/videos schema. Seedance must keep
+  // its catalog SKU, duration and media roles instead of using H3 tier names.
+  if (String(meta?.id || "").startsWith("seedance-")) {
+    return buildAioneVideoBody(meta, body);
+  }
   const est = meta?.estimate || {};
   let duration = Number(body.duration ?? body.seconds);
   if (!Number.isFinite(duration) || duration <= 0) {
@@ -794,8 +822,8 @@ function buildAicopyVideoBody(meta, body, clientGroup = "default") {
   };
   if (Array.isArray(body.images)) for (const u of body.images) pushImg(u);
   if (Array.isArray(body.image_urls)) for (const u of body.image_urls) pushImg(u);
-  if (typeof body.image_url === "string") pushImg(body.image_url);
-  if (typeof body.image === "string") pushImg(body.image);
+  if (body.image_url) pushImg(body.image_url);
+  if (body.image) pushImg(body.image);
   if (typeof body.first_frame_image === "string") pushImg(body.first_frame_image);
   if (body.input_reference) {
     if (typeof body.input_reference === "string") pushImg(body.input_reference);
@@ -811,13 +839,26 @@ function buildAicopyVideoBody(meta, body, clientGroup = "default") {
     resolution: resolution,
     _relayCandidates: relayCandidates,
   };
+  // Unified video API schema: optional controls and references belong in extra.
+  // Keep them intact so unsupported capabilities return an explicit error.
+  const extra = { resolution };
+  const aspect = mapAspectToAione(body.aspectRatio || body.aspect_ratio || body.ratio);
+  if (aspect) extra.aspect_ratio = aspect;
+  if (body.seed != null && Number.isInteger(Number(body.seed))) extra.seed = Number(body.seed);
+  const audios = [...(Array.isArray(body.audios) ? body.audios : []), ...(Array.isArray(body.audio_urls) ? body.audio_urls : []), body.audio_url]
+    .map(firstHttpsUrl).filter(Boolean);
+  if (audios.length) extra.reference_audios = audios.map(url => ({ url }));
+  const videos = [...(Array.isArray(body.videos) ? body.videos : []), ...(Array.isArray(body.video_urls) ? body.video_urls : []), body.video_url]
+    .map(firstHttpsUrl).filter(Boolean);
+  if (videos.length) extra.reference_videos = videos.map(url => ({ url }));
+  out.extra = extra;
 
-  if (images.length === 1) {
-    out.image = images[0];
-    out.images = images;
-  } else if (images.length > 1) {
-    out.image = images[0];
-    out.images = images.slice(0, 9);
+  if (images.length) {
+    if (body.first_frame_image || body.input_reference) {
+      out.input_reference = { url: images[0] };
+    } else {
+      extra.reference_images = images.map(url => ({ url, role: "reference_image" }));
+    }
   }
 
   return out;
@@ -847,25 +888,17 @@ function buildOpenluxMiniMaxH3Body(meta, body, clientGroup = "default") {
   if (!Number.isFinite(duration) || duration <= 0) {
     duration = Number(est.default_seconds || 5);
   }
-  if (duration < 1) duration = 1;
+  if (duration < 4) duration = 4;
   if (duration > 15) duration = 15;
   duration = Math.trunc(duration);
 
   let resolution = String(body.resolution || "").toLowerCase().trim();
   if (!resolution) {
-    if (meta?.id === "MiniMax-H3-vip" || clientGroup === "vip") {
-      resolution = "1080p";
-    } else {
-      resolution = String(est.default_resolution || "768p").toLowerCase();
-    }
+    resolution = "768p";
   }
 
-  let upRes = "768P";
-  if (resolution === "2k") upRes = "2K";
-  else if (resolution === "1080p") upRes = "1080P";
-  else if (resolution === "768p") upRes = "768P";
-  else if (resolution === "720p" || resolution === "480p") upRes = "768P";
-  else upRes = "768P";
+  if (!["768p", "2k"].includes(resolution)) throw new Error("MiniMax-H3 without a reference image supports resolution=768p or 2k only");
+  const upRes = resolution === "2k" ? "2K" : "768P";
 
   const ar = String(body.aspectRatio || body.aspect_ratio || body.ratio || "").trim().toLowerCase();
   let ratio = "16:9";
@@ -877,9 +910,20 @@ function buildOpenluxMiniMaxH3Body(meta, body, clientGroup = "default") {
 
   const prompt = String(body.prompt || body.text || "").trim();
 
+  const content = [{ type: "text", text: prompt }];
+  for (const [keys, singular, type, role] of [
+    [["audios", "audio_urls"], "audio_url", "audio_url", "reference_audio"],
+    [["videos", "video_urls"], "video_url", "video_url", "reference_video"],
+  ]) {
+    const refs = [...keys.flatMap(key => Array.isArray(body[key]) ? body[key] : []), body[singular]];
+    for (const ref of refs) {
+      const url = firstHttpsUrl(ref);
+      if (url) content.push({ type, [type]: { url }, role });
+    }
+  }
   return {
     model: "MiniMax-H3",
-    content: [{ type: "text", text: prompt }],
+    content,
     resolution: upRes,
     duration: duration,
     ratio: ratio,

@@ -332,7 +332,7 @@ verify_check() {
   hdr=$(curl -sS -o "$bodyf" -D - --max-time 20 "https://${DOMAIN}${url}" 2>/dev/null || true)
   code=$(awk 'NR==1{print $2}' <<<"$hdr")
   ctype=$(grep -i '^content-type:' <<<"$hdr" | head -1 | tr -d '\r')
-  head=$(head -c 300 "$bodyf")
+  head=$(head -c 4000 "$bodyf")
   ok=1
   [[ "$code" == "$want_code" ]] || ok=0
   if [[ -n "$want_type" && "$ctype" != *"$want_type"* ]]; then ok=0; fi

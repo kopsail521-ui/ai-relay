@@ -14,5 +14,16 @@ ROOT="${ROOT:-/opt/ai-relay}"
 # Caddy itself, so keep the pull quiet here.
 sudo RELOAD_CADDY="${RELOAD_CADDY:-0}" bash "$ROOT/scripts/vps-safe-pull-preserve-blog.sh"
 sudo cp -a /etc/caddy/Caddyfile "/etc/caddy/Caddyfile.bak.$(date +%Y%m%d-%H%M%S)"
-sudo bash "$ROOT/scripts/deploy-brand-static.sh"
+# Public diagnostic channel (GitHub job logs are not readable without admin):
+# mirror the deploy output to /brand/deploy-status.txt, preserve exit code.
+sudo mkdir -p "$ROOT/static/brand"
+DEPLOY_OUT=$(sudo bash "$ROOT/scripts/deploy-brand-static.sh" 2>&1) && DEPLOY_CODE=0 || DEPLOY_CODE=$?
+{
+  echo "deploy_exit=$DEPLOY_CODE"
+  echo "deploy_time=$(date -u +%FT%TZ)"
+  echo "$DEPLOY_OUT"
+} | sudo tee "$ROOT/static/brand/deploy-status.txt" >/dev/null
+sudo chmod 644 "$ROOT/static/brand/deploy-status.txt"
+echo "$DEPLOY_OUT"
+exit "$DEPLOY_CODE"
 echo DONE_STATIC_DEPLOY

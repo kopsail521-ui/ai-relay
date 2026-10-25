@@ -64,6 +64,8 @@ class Engine:
         self.foreign_pid = None
         self.stop_timeout = False
         self.build_hook = None
+        self.old_build = 'old-reviewed'
+        self.new_build = gitee.expected_build()
         self.old_sources = {name: 'a' * 64 for name in gitee.SOURCES}
         self.new_sources = gitee.manifest()
 
@@ -127,6 +129,10 @@ class Engine:
             sources = self.old_sources if item['Id'] == 'fixture-original' else self.new_sources
             if self.fail_sources and item['Id'] != 'fixture-original':
                 sources = dict(sources, **{'server.mjs': 'f' * 64})
+            if args[3] == 'node':
+                return json.dumps(sources)
+            if any(value is None for value in sources.values()):
+                raise RuntimeError('Legacy source file is absent')
             return '\n'.join(value + '  /app/' + name for name, value in sources.items()) + '\n'
         raise AssertionError('Unrecognized local fixture command')
 
@@ -141,7 +147,7 @@ class Engine:
         item = self.containers[gitee.NAME]
         if item['Id'] != 'fixture-original' and self.fail_health:
             raise RuntimeError('Private health failed never-print-this')
-        return {'build': 'old-reviewed' if item['Id'] == 'fixture-original' else gitee.expected_build(),
+        return {'build': self.old_build if item['Id'] == 'fixture-original' else self.new_build,
                 'ok': True, 'database_present': True, 'models': 20}
 
 
@@ -164,6 +170,7 @@ class GiteeReleaseTests(unittest.TestCase):
         patch.object(gitee.http.client, 'HTTPConnection', side_effect=AssertionError('Real HTTP forbidden')).start()
         patch.object(native.subprocess, 'run', side_effect=AssertionError('Real subprocess forbidden')).start()
         self.engine = Engine(self.root)
+        self.real_local_health = gitee.local_health
         patch.object(helper, 'api', self.engine.api).start()
         patch.object(helper, 'run_checked', self.engine.build).start()
         patch.object(native, 'run_command', self.engine.command).start()
@@ -252,6 +259,82 @@ class GiteeReleaseTests(unittest.TestCase):
         stop = next(i for i, e in enumerate(self.engine.events) if e[0] == 'POST' and '/stop?' in e[1])
         self.assertLess(build, stop)
         self.assertEqual(self.engine.containers[gitee.NAME]['Config']['Env'], self.engine.original['Config']['Env'])
+
+    def test_legacy_missing_sources_and_build_can_upgrade_to_complete_reviewed_release(self):
+        self.engine.old_sources.update({'decisions.mjs': None, 'fix-marketplace-meta.mjs': None})
+        self.engine.old_build = None
+        result = json.loads(self.run_release())
+        self.assertEqual(result['result'], 'GITEE_RELEASE_OK')
+        self.assertEqual(result['build'], 'fixture-reviewed-build')
+        self.assertEqual(result['source_sha256'], gitee.manifest())
+
+    def test_failed_release_restores_exact_legacy_sources_and_absent_build(self):
+        self.engine.old_sources.update({'decisions.mjs': None, 'fix-marketplace-meta.mjs': None})
+        self.engine.old_build = None
+        self.engine.fail_health = True
+        with self.assertRaisesRegex(RuntimeError, 'previous service restored'):
+            self.run_release()
+        self.assert_original()
+        self.assertEqual(gitee.source_hashes(native, gitee.NAME), self.engine.old_sources)
+        self.assertIsNone(self.engine.health(self.engine.original['Config'])['build'])
+
+    def test_replacement_missing_source_is_rejected_and_rolls_back_legacy(self):
+        self.engine.old_sources['decisions.mjs'] = None
+        self.engine.old_build = None
+        self.engine.new_sources['decisions.mjs'] = None
+        with self.assertRaisesRegex(RuntimeError, 'previous service restored'):
+            self.run_release()
+        self.assert_original()
+
+    def test_replacement_without_build_is_rejected_and_rolls_back_legacy(self):
+        self.engine.old_sources['fix-marketplace-meta.mjs'] = None
+        self.engine.old_build = None
+        self.engine.new_build = None
+        with self.assertRaisesRegex(RuntimeError, 'previous service restored'):
+            self.run_release()
+        self.assert_original()
+
+    def test_source_manifest_accepts_only_four_known_sha256_or_null_entries(self):
+        valid = {name: 'a' * 64 for name in gitee.SOURCES}
+        valid['decisions.mjs'] = None
+        with patch.object(native, 'run_command', return_value=json.dumps(valid)):
+            self.assertEqual(gitee.source_hashes(native, gitee.NAME), valid)
+        for value in ('a' * 63, 'G' * 64, 123, True, {}, []):
+            with self.subTest(value=value), patch.object(native, 'run_command',
+                     return_value=json.dumps(dict(valid, **{'server.mjs': value}))):
+                with self.assertRaises(RuntimeError): gitee.source_hashes(native, gitee.NAME)
+        for invalid in ({}, {'unknown': 'a' * 64}, dict(valid, unknown=None), []):
+            with self.subTest(manifest=invalid), patch.object(native, 'run_command', return_value=json.dumps(invalid)):
+                with self.assertRaises(RuntimeError): gitee.source_hashes(native, gitee.NAME)
+
+    def test_local_health_accepts_absent_legacy_build_but_rejects_invalid_build_values(self):
+        healthy = {'ok': True, 'db': True, 'key': True, 'models': 20}
+        for build in ('absent', None, 'legacy-build'):
+            body = dict(healthy)
+            if build != 'absent': body['build'] = build
+            response = Mock(status=200)
+            response.read.return_value = json.dumps(body).encode()
+            connection = Mock()
+            connection.getresponse.return_value = response
+            with self.subTest(build=build), patch.object(gitee.http.client, 'HTTPConnection', return_value=connection):
+                result = self.real_local_health(self.engine.original['Config'])
+                self.assertEqual(result['build'], None if build == 'absent' else build)
+                connection.request.assert_called_once_with('GET', '/healthz')
+                connection.close.assert_called_once()
+        for build in ('', 123, False, 'contains space', '../not-safe'):
+            response = Mock(status=200)
+            response.read.return_value = json.dumps(dict(healthy, build=build)).encode()
+            connection = Mock()
+            connection.getresponse.return_value = response
+            with self.subTest(build=build), patch.object(gitee.http.client, 'HTTPConnection', return_value=connection):
+                with self.assertRaises(RuntimeError): self.real_local_health(self.engine.original['Config'])
+
+    def test_new_verification_cannot_use_a_legacy_expected_manifest_or_build(self):
+        for sources, build in ((self.engine.old_sources, None),
+                               (dict(self.engine.old_sources, **{'decisions.mjs': None}), 'fixture-reviewed-build')):
+            with self.subTest(build=build), self.assertRaises(RuntimeError):
+                gitee.verify(native, helper, self.engine.original['Image'], self.engine.original['Id'],
+                             self.engine.original['Config'], sources, build)
 
     def test_build_failure_does_not_stop_current_service(self):
         self.engine.fail_build = True

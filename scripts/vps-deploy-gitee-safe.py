@@ -133,15 +133,24 @@ def runtime_preflight(native, helper, original):
 
 
 def source_hashes(native, name):
-    raw = native.run_command(['docker', 'exec', name, 'sha256sum', *('/app/' + source for source in SOURCES)])
-    hashes = {}
-    for line in raw.splitlines():
-        match = re.fullmatch(r'([0-9a-f]{64})\s+/app/([A-Za-z0-9_.-]+)', line)
-        if not match or match[2] not in SOURCES or match[2] in hashes:
-            raise RuntimeError('Invalid Gitee source manifest')
-        hashes[match[2]] = match[1]
-    if set(hashes) != set(SOURCES):
-        raise RuntimeError('Incomplete Gitee source manifest')
+    # Older rollback images can predate individual modules. Preserve their
+    # absence explicitly; new releases still require every reviewed hash.
+    script = """const fs = require('node:fs');
+const crypto = require('node:crypto');
+const paths = %s;
+process.stdout.write(JSON.stringify(Object.fromEntries(paths.map(path => [
+  path.slice('/app/'.length),
+  fs.existsSync(path) ? crypto.createHash('sha256').update(fs.readFileSync(path)).digest('hex') : null
+]))));""" % json.dumps(['/app/' + source for source in SOURCES])
+    raw = native.run_command(['docker', 'exec', name, 'node', '--input-type=commonjs', '-e', script])
+    try:
+        hashes = json.loads(raw)
+    except (TypeError, ValueError):
+        raise RuntimeError('Invalid Gitee source manifest') from None
+    if (not isinstance(hashes, dict) or set(hashes) != set(SOURCES)
+            or any(value is not None and (not isinstance(value, str) or not re.fullmatch(r'[0-9a-f]{64}', value))
+                   for value in hashes.values())):
+        raise RuntimeError('Invalid Gitee source manifest')
     return hashes
 
 
@@ -157,11 +166,12 @@ def local_health(config):
         if response.status != 200 or len(raw) > 65536:
             raise RuntimeError('Invalid local Gitee health response')
         body = json.loads(raw)
+        build = body.get('build')
         if (body.get('ok') is not True or body.get('db') is not True or body.get('key') is not True
                 or not isinstance(body.get('models'), int) or body['models'] <= 0
-                or not re.fullmatch(r'[A-Za-z0-9_.-]{1,100}', str(body.get('build', '')))):
+                or (build is not None and (not isinstance(build, str) or not re.fullmatch(r'[A-Za-z0-9_.-]{1,100}', build)))):
             raise RuntimeError('Gitee health is not ready')
-        return {'build': body['build'], 'ok': True, 'database_present': True, 'models': body['models']}
+        return {'build': build, 'ok': True, 'database_present': True, 'models': body['models']}
     finally:
         connection.close()
 
@@ -210,7 +220,10 @@ def inspect_only(native, helper):
     print(json.dumps(record), flush=True)
 
 
-def verify(native, helper, image, identity, config, sources, build):
+def verify(native, helper, image, identity, config, sources, build, *, allow_legacy=False):
+    if not allow_legacy and (not isinstance(build, str) or not re.fullmatch(r'[A-Za-z0-9_.-]{1,100}', build)
+                             or set(sources) != set(SOURCES) or any(value is None for value in sources.values())):
+        raise RuntimeError('New Gitee releases require complete source hashes and a reviewed build')
     # Bounded startup followed by two consecutive stable complete checks.
     for attempt in range(20):
         try:
@@ -249,7 +262,8 @@ def restore(native, helper, original, backup, replacement_image, original_source
     native.stop_and_wait(helper, NAME, original['Id'])
     native.update_restart(helper, NAME, original['HostConfig']['RestartPolicy'])
     native.start_with_backoff(helper, NAME, original['Id'])
-    verify(native, helper, original['Image'], original['Id'], original['Config'], original_sources, original_build)
+    verify(native, helper, original['Image'], original['Id'], original['Config'], original_sources, original_build,
+           allow_legacy=True)
 
 
 def deploy(native, helper):

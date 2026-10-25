@@ -1169,7 +1169,7 @@ const server = http.createServer(async (req, res) => {
         return json(res, 502, {
           error: {
             message:
-              "upstream accepted submit but returned no task_id; retry or contact support",
+              "Task submission outcome is unknown because no task ID was returned. Do not resubmit; contact support to recover the original task.",
             type: "server_error",
             code: "missing_task_id",
           },

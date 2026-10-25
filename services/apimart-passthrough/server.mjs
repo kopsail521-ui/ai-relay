@@ -17,7 +17,7 @@
  *   MARKUP=1.2
  */
 import http from "http";
-import { extractTaskId, normalizeVideoPoll, taskStatus } from "./task-responses.mjs";
+import { extractTaskId, normalizeVideoPoll, taskStatus, canTryNextVideoModel } from "./task-responses.mjs";
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
@@ -1360,10 +1360,10 @@ const server = http.createServer(async (req, res) => {
         delete sendBody._relayCandidates;
         bodyBuf = Buffer.from(JSON.stringify(sendBody), "utf8");
         up = await proxyOrigin(upOrigin, upKey, submitReq, bodyBuf, submitPath);
-        if (up.status >= 200 && up.status < 300) {
-          const t = up.buf.toString("utf8");
-          if (extractTaskId(t)) break;
-        }
+        // Only a known model rejection proves that no task was created.
+        // Success without an ID, server errors and transport failures must not
+        // trigger another generation under a different candidate model.
+        if (!canTryNextVideoModel(up.status, up.buf.toString("utf8"))) break;
         if (i < relayList.length - 1) {
           console.warn(`[relay] MiniMax-H3 upstream ${cand} failed (${up.status}), trying next candidate: ${relayList[i + 1]}`);
         }
@@ -1403,7 +1403,7 @@ const server = http.createServer(async (req, res) => {
         text = JSON.stringify({
           error: {
             message:
-              "upstream accepted submit but returned no task_id; retry or contact support",
+              "Video submission outcome is unknown because no task ID was returned. Do not resubmit; contact support to recover the original task.",
             type: "server_error",
             code: "missing_task_id",
           },

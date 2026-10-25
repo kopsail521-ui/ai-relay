@@ -17,6 +17,18 @@ export function extractTaskId(payload) {
   } catch { return ''; }
 }
 
+/** Change model candidates only after a definitive, model-specific rejection.
+ * A task ID or an ambiguous response may already represent a created task.
+ */
+export function canTryNextVideoModel(httpStatus, raw) {
+  if (![400, 404, 422].includes(httpStatus) || extractTaskId(raw)) return false;
+  try {
+    const payload = typeof raw === 'string' ? JSON.parse(raw) : raw;
+    const code = String(payload?.error?.code || payload?.code || '').toLowerCase();
+    return ['model_not_found', 'unknown_model', 'invalid_model', 'model_not_available'].includes(code);
+  } catch { return false; }
+}
+
 /** Best-effort extraction of why an upstream task failed, for client-visible errors. */
 function upstreamFailureReason(j, d) {
   const nodes = [j, d, j?.task];

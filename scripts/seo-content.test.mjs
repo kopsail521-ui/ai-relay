@@ -400,7 +400,8 @@ test("about model categories cards, deepseek cheapest title, and modern model re
 
   const dsHtml = fs.readFileSync(path.join(seoRoot, "deepseek-api-pricing.html"), "utf8");
   assert.match(dsHtml, /<h2>Cheapest current-generation DeepSeek API rate on Keyo<\/h2>/, "deepseek-api-pricing must specify current-generation");
-  assert.match(dsHtml, /lowest absolute rate snapshot tier/i, "deepseek-api-pricing must qualify snapshot tier");
+  assert.match(dsHtml, /cheapest current-generation production DeepSeek Flash lane/i, "deepseek-api-pricing must scope the cheapest claim to the DeepSeek Flash lane");
+  assert.doesNotMatch(dsHtml, /lowest absolute rate snapshot tier/i, "deepseek-api-pricing must not claim 0731 is the lowest absolute tier");
 
   const whisperHtml = fs.readFileSync(path.join(seoRoot, "model/whisper-large-v3.html"), "utf8");
   assert.match(whisperHtml, /gpt-6-luna for cost, claude-sonnet-5-5 for denser reasoning/, "whisper-large-v3 must recommend modern models");

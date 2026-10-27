@@ -115,7 +115,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
 </table></div>
 
 <h2>No free video tier — prototype on gift-credit IDs</h2>
-<p>The gift-credit IDs are chat and speech models only — there is no free video tier. They bill at normal rates from your one-time $10 new-user credit (fair-use limits) and are the right place to prove out base URL, auth and retry wiring. Then switch model= to seedance-2.5 on the same key; video bills per generated second at the rates on this page.</p>
+<p>The gift-credit IDs are chat and speech models only — there is no free video tier. They bill at dedicated gift-credit rates from your one-time $10 new-user credit (fair-use limits) and are the right place to prove out base URL, auth and retry wiring. Then switch model= to seedance-2.5 on the same key; video bills per generated second at the rates on this page.</p>
 
 <h2>Rates and how to call</h2>
 <p>Seedance is ByteDance's video generation family. On KeyoAPI you call the same OpenAI-compatible endpoint you already use for chat: set OPENAI_BASE_URL=https://www.keyoapi.xyz/v1, send POST /v1/videos/generations with model=seedance-2.5, pass your desired resolution (480p, 720p default, or 1080p), and pay per second of generated video from your prepaid wallet.</p>

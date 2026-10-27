@@ -58,7 +58,7 @@
       ],
       "freeKiller": {
         "title": "A gift-credit prototyping lane on the same key",
-        "body": "Google Gemini free tiers are usually quota- or trial-shaped. On the same Keyo key you can call Atria-dawn-v2:free and other gift-credit catalog IDs on /free-models — gift-credit IDs that bill at normal rates from your one-time $10 new-user credit (fair-use rate limits apply). Prototype there, then meter paid Gemini-class traffic."
+        "body": "Google Gemini free tiers are usually quota- or trial-shaped. On the same Keyo key you can call Atria-dawn-v2:free and other gift-credit catalog IDs on /free-models — gift-credit IDs that bill at dedicated gift-credit rates from your one-time $10 new-user credit (fair-use rate limits apply). Prototype there, then meter paid Gemini-class traffic."
       },
       "body": [
         "Engineers comparing Gemini API pricing usually already want Google-class models with clearer unit economics — or one prepaid balance across Gemini-class IDs plus DeepSeek, GLM, Whisper, OCR, and TTS. Official Google surfaces win on brand trust; KeyoAPI wins when you want that stack without five invoices.",
@@ -145,7 +145,7 @@
       ],
       "freeKiller": {
         "title": "Prototype on gift-credit models, then meter DeepSeek on the same key",
-        "body": "To prototype on the same key, use catalog free IDs on /free-models — gift-credit IDs that bill at normal rates from your one-time $10 new-user credit (fair-use rate limits) — including deepseek-v4.1-flash-1017:free and DeepSeek-Prover-V2-7B:free. When you meter DeepSeek chat, switch model= to deepseek-v4.1-flash, deepseek-v4.1-flash-1017, deepseek-v4-flash, or deepseek-v4-pro-0813 without changing base URL or auth — those are separate IDs, not one upgrade ladder. Free-path vs pricing detail for Flash: /model/deepseek-v4-flash."
+        "body": "To prototype on the same key, use catalog free IDs on /free-models — gift-credit IDs that bill at dedicated gift-credit rates from your one-time $10 new-user credit (fair-use rate limits) — including deepseek-v4.1-flash-1017:free and DeepSeek-Prover-V2-7B:free. When you meter DeepSeek chat, switch model= to deepseek-v4.1-flash, deepseek-v4.1-flash-1017, deepseek-v4-flash, or deepseek-v4-pro-0813 without changing base URL or auth — those are separate IDs, not one upgrade ladder. Free-path vs pricing detail for Flash: /model/deepseek-v4-flash."
       },
       "body": [
         "Compare DeepSeek rates across official platforms, aggregators, and a multi-model API. KeyoAPI is the third option — OpenAI-compatible base URL, prepaid balance, and Gemini/Whisper/OCR on the same key when DeepSeek is only part of the stack.",
@@ -170,7 +170,7 @@
       "cheapestNote": {
         "title": "Cheapest current-generation DeepSeek API rate on Keyo",
         "body": [
-          "While the earlier snapshot deepseek-v4-flash-0731 is the lowest absolute rate snapshot tier on the table at ~$0.09 / $0.17 per 1M in/out, the cheapest current-generation production DeepSeek Flash lane is deepseek-v4.1-flash at ~$0.14 / $0.56 per 1M in/out, with its October 17 snapshot edition deepseek-v4.1-flash-1017 setting the lowest absolute current-generation unit rate at ~$0.02 / $0.06 per 1M in/out. deepseek-v4.1-flash is the recommended default for batch, classification, and agent loops.",
+          "The earlier snapshot deepseek-v4-flash-0731 sits at ~$0.09 / $0.17 per 1M in/out, while the cheapest current-generation production DeepSeek Flash lane is deepseek-v4.1-flash at ~$0.14 / $0.56 per 1M in/out, with its October 17 snapshot edition deepseek-v4.1-flash-1017 setting the lowest absolute current-generation unit rate at ~$0.02 / $0.06 per 1M in/out. deepseek-v4.1-flash is the recommended default for batch, classification, and agent loops.",
           "The other rows are separate products, not rungs on a ladder: deepseek-v4.1-flash-1017 at ~$0.02 / $0.06 (October 17 CED snapshot), deepseek-v4-flash at ~$0.44 / $1.32 (legacy catalog string), deepseek-v4-flash-0731 at ~$0.09 / $0.17 (earlier snapshot), and deepseek-v4-pro-0813 with its alias deepseek-v4-pro at ~$0.14 / $0.29 each. So \"cheap\" here is a task choice, not a tier you upgrade through.",
           "Cost math: 50M input + 10M output tokens/month on deepseek-v4.1-flash ≈ $7.00 + $5.60 ≈ $12.60 (or ≈ $1.00 + $0.60 ≈ $1.60 on the -1017 snapshot). The same mix on deepseek-v4-flash (~$0.44 / $1.32) ≈ $22.00 + $13.20 ≈ $35.20. Confirm live rates on /pricing-list."
         ]
@@ -227,7 +227,7 @@
       ],
       "freeKiller": {
         "title": "Prototype on gift-credit models, then meter GLM on the same key",
-        "body": "To prototype on the same key, use any gift-credit catalog ID on the free models page — calls bill at normal rates from your one-time $10 new-user credit (fair-use rate limits). When you meter GLM traffic, switch model= to glm-5.3-flash or glm-5.3 without changing base URL or auth."
+        "body": "To prototype on the same key, use any gift-credit catalog ID on the free models page — calls bill at dedicated gift-credit rates from your one-time $10 new-user credit (fair-use rate limits). When you meter GLM traffic, switch model= to glm-5.3-flash or glm-5.3 without changing base URL or auth."
       },
       "body": [
         "The GLM family on KeyoAPI covers three chat lanes and two speech lanes on one OpenAI-compatible key: glm-5.3 and glm-5.3-flash for chat, glm-5.2 at its own band, plus GLM-ASR (~$0.007 per request) and GLM-TTS (~$0.014 per request). No separate Zhipu account, no second invoice.",
@@ -315,7 +315,7 @@
       ],
       "freeKiller": {
         "title": "Prototype on gift-credit models, then promote to Claude",
-        "body": "Keyo does not ship Anthropic-branded free Claude IDs. To prototype on the same key, use gift-credit catalog IDs on /free-models — gift-credit IDs that bill at normal rates from your one-time $10 new-user credit (fair-use rate limits). When quality gates pass, switch model= to claude-sonnet-5 or another Claude ID without changing base URL or auth."
+        "body": "Keyo does not ship Anthropic-branded free Claude IDs. To prototype on the same key, use gift-credit catalog IDs on /free-models — gift-credit IDs that bill at dedicated gift-credit rates from your one-time $10 new-user credit (fair-use rate limits). When quality gates pass, switch model= to claude-sonnet-5 or another Claude ID without changing base URL or auth."
       },
       "body": [
         "Anthropic API pricing at a glance: the table above lists indicative Keyo sell rates for Claude-class IDs next to typical Anthropic public list bands. Teams comparing Anthropic API pricing (and Claude API pricing) usually already want Anthropic-class chat or agents with clearer unit economics — or one prepaid balance across Claude-class IDs plus GPT-class, DeepSeek, Whisper, OCR, and TTS. Official Anthropic surfaces win on brand trust; KeyoAPI wins when you want that stack without five invoices.",
@@ -428,11 +428,11 @@
       ],
       "freeKiller": {
         "title": "Prototype on gift-credit models, then promote to GPT-class",
-        "body": "To prototype on the same key, use free catalog IDs on /free-models — gift-credit IDs that bill at normal rates from your one-time $10 new-user credit (fair-use rate limits). When quality gates pass, switch model= to gpt-6-astra, gpt-5.6-luna, deepseek-v4.1-flash, or kimi-k3 without changing base URL or auth. Guides: /model/gpt-6-astra, /model/deepseek-v4-flash, /model/kimi-k3."
+        "body": "To prototype on the same key, use free catalog IDs on /free-models — gift-credit IDs that bill at dedicated gift-credit rates from your one-time $10 new-user credit (fair-use rate limits). When quality gates pass, switch model= to gpt-6-astra, gpt-5.6-luna, deepseek-v4.1-flash, or kimi-k3 without changing base URL or auth. Guides: /model/gpt-6-astra, /model/deepseek-v4-flash, /model/kimi-k3."
       },
       "body": [
         "Teams that search ChatGPT API pricing, OpenAI API pricing, or OpenAI API costs usually need GPT-class chat inside an OpenAI SDK with clearer unit economics — or one prepaid balance that also covers Claude, DeepSeek, Whisper, OCR, and TTS. Official OpenAI / ChatGPT surfaces win on brand trust and first-party product UI. KeyoAPI is for when you want that stack without five invoices and without rewriting clients when you swap models.",
-        "Keyo rates in the table are indicative sell prices from the live Keyo catalog. On Keyo, gpt-6-astra is OpenAI’s gpt-6-astra model ID (confirm live rates on /model/gpt-6-astra). Always confirm interactive try/buy under /pricing (Model Square) for gpt-6-astra, gpt-5.6-luna, gpt-5.6-terra, and gpt-5.6-sol before contracting volume. OpenAI list bands, cached-input discounts, and model renames change — treat official figures as planning context only. Keyo GPT-5.6 IDs remain GPT-class twins on an OpenAI-compatible API, not OpenAI first-party model names.",
+        "Keyo rates in the table are indicative sell prices from the live Keyo catalog. On Keyo, gpt-6-astra is a Keyo-hosted, OpenAI-compatible GPT-class model ID (confirm live rates on /model/gpt-6-astra). Always confirm interactive try/buy under /pricing (Model Square) for gpt-6-astra, gpt-5.6-luna, gpt-5.6-terra, and gpt-5.6-sol before contracting volume. OpenAI list bands, cached-input discounts, and model renames change — treat official figures as planning context only. Keyo GPT-5.6 IDs remain GPT-class twins on an OpenAI-compatible API, not OpenAI first-party model names.",
         "Worked planning example (indicative only): suppose a batch path burns 50M input tokens and 10M output tokens per month. At Luna ~$0.10 / $0.62 per 1M in/out that is roughly $5 input + $6.20 output ≈ $11.20 before retries and overhead. At Terra ~$0.37 / $2.21 the same mix is roughly $18.50 + $22.10 ≈ $40.60. Put high-volume classification on Luna and keep product chat on Terra so the expensive model only sees the traffic that needs it. Re-run the math on /pricing before you budget.",
         "Integration steps: (1) create an account at /sign-up and top up Wallet; (2) create an API key in console; (3) set base URL https://www.keyoapi.xyz/v1 (OPENAI_BASE_URL or sdk base_url); (4) call POST /v1/chat/completions with model gpt-6-astra, gpt-5.6-luna, gpt-5.6-terra, or gpt-5.6-sol; (5) try/buy interactively from /pricing/{modelId} — there is no separate upload playground. Longer guides: /model/gpt-6-astra, /model/gpt-5.6-luna, /model/gpt-5.6-terra, /model/gpt-5.6-sol.",
         "Routing tip: keep GPT-class for product chat defaults; shift bulk classification, tagging, and draft rewrites to gpt-5.6-luna or deepseek-v4-flash on the same key. Escalate only failing slices to Terra, Sol, or gpt-6-astra after automated validators reject output. For Claude dollars see /claude-api-pricing; for Gemini see /gemini-api-pricing; for DeepSeek see /deepseek-api-pricing; for Grok see /grok-api-pricing; for free prototyping see /free-models; for a side-by-side catalog see /compare.",
@@ -449,7 +449,7 @@
         },
         {
           "q": "Is gpt-6-astra the OpenAI model?",
-          "a": "Yes. On Keyo, model=gpt-6-astra is OpenAI’s GPT-6 Astra. Guide: /model/gpt-6-astra. Separate Keyo GPT-5.6-* IDs are GPT-class twins, not OpenAI first-party names."
+          "a": "No — gpt-6-astra is a Keyo-hosted, OpenAI-compatible GPT-class model ID, not an OpenAI first-party model name. The SDK shape is OpenAI-compatible, so the same client code works. Guide: /model/gpt-6-astra."
         },
         {
           "q": "Are gpt-5.6-* the same as OpenAI GPT-5?",
@@ -808,7 +808,7 @@
       ],
       "freeKiller": {
         "title": "Prototype on gift-credit models, then call Grok",
-        "body": "Keyo does not ship an xAI-branded free Grok ID. To prototype on the same key, use gift-credit catalog IDs on /free-models — gift-credit IDs that bill at normal rates from your one-time $10 new-user credit (fair-use rate limits) — then switch model= to grok-4.7 without changing base URL or auth."
+        "body": "Keyo does not ship an xAI-branded free Grok ID. To prototype on the same key, use gift-credit catalog IDs on /free-models — gift-credit IDs that bill at dedicated gift-credit rates from your one-time $10 new-user credit (fair-use rate limits) — then switch model= to grok-4.7 without changing base URL or auth."
       },
       "body": [
         "Teams comparing Grok API pricing usually want xAI-class chat with clearer unit economics — or one prepaid balance that also covers GPT-class, Claude, DeepSeek, Whisper, and vision. Official xAI surfaces win on brand-first features; KeyoAPI wins when you want that model string on an OpenAI-compatible client without a second vendor stack.",
@@ -1028,7 +1028,7 @@
       ],
       "freeKiller": {
         "title": "No free video tier — prototype on gift-credit IDs",
-        "body": "The gift-credit IDs are chat and speech models only — there is no free video tier. They bill at normal rates from your one-time $10 new-user credit (fair-use limits) and are the right place to prove out base URL, auth and retry wiring. Then switch model= to seedance-2.5 on the same key; video bills per generated second at the rates on this page."
+        "body": "The gift-credit IDs are chat and speech models only — there is no free video tier. They bill at dedicated gift-credit rates from your one-time $10 new-user credit (fair-use limits) and are the right place to prove out base URL, auth and retry wiring. Then switch model= to seedance-2.5 on the same key; video bills per generated second at the rates on this page."
       },
       "body": [
         "Seedance is ByteDance's video generation family. On KeyoAPI you call the same OpenAI-compatible endpoint you already use for chat: set OPENAI_BASE_URL=https://www.keyoapi.xyz/v1, send POST /v1/videos/generations with model=seedance-2.5, pass your desired resolution (480p, 720p default, or 1080p), and pay per second of generated video from your prepaid wallet.",
@@ -1085,7 +1085,7 @@
       ],
       "freeKiller": {
         "title": "No free video tier — prototype on gift-credit IDs",
-        "body": "The gift-credit IDs are chat and speech models only — there is no free video tier. They bill at normal rates from your one-time $10 new-user credit (fair-use limits) and are the right place to prove out base URL, auth and retry wiring. Then switch model= to MiniMax-H3 on the same key; video bills per generated second from about $0.0205 (480p) at the rates on this page."
+        "body": "The gift-credit IDs are chat and speech models only — there is no free video tier. They bill at dedicated gift-credit rates from your one-time $10 new-user credit (fair-use limits) and are the right place to prove out base URL, auth and retry wiring. Then switch model= to MiniMax-H3 on the same key; video bills per generated second from about $0.0205 (480p) at the rates on this page."
       },
       "body": [
         "MiniMax-H3 is MiniMax's video generation model, billed per second of output on KeyoAPI. Use the standard OpenAI-compatible flow: set OPENAI_BASE_URL=https://www.keyoapi.xyz/v1 and POST /v1/videos/generations with model=MiniMax-H3; the resolution you request (480p / 768p / 1080p) decides the per-second rate.",
@@ -1154,7 +1154,7 @@
       ],
       "freeKiller": {
         "title": "No free video tier — prototype on gift-credit IDs",
-        "body": "The gift-credit IDs are chat and speech models only — there is no free video tier. They bill at normal rates from your one-time $10 new-user credit (fair-use limits) and are the right place to prove out base URL, auth and retry wiring. Then switch model= to flux-3-video on the same key; video bills per generated second — the DRAFT tier starts at about $0.0576."
+        "body": "The gift-credit IDs are chat and speech models only — there is no free video tier. They bill at dedicated gift-credit rates from your one-time $10 new-user credit (fair-use limits) and are the right place to prove out base URL, auth and retry wiring. Then switch model= to flux-3-video on the same key; video bills per generated second — the DRAFT tier starts at about $0.0576."
       },
       "body": [
         "FLUX.3 Video is Black Forest Labs' video generation line. On KeyoAPI you call the OpenAI-compatible /v1/videos/generations endpoint with model=flux-3-video and pick a quality tier (DRAFT / HD / FHD) — or V2V tiers when you start from video. Billing is per second of generated output from your prepaid wallet.",
@@ -1211,7 +1211,7 @@
       ],
       "freeKiller": {
         "title": "No free video tier — prototype on gift-credit IDs",
-        "body": "The gift-credit IDs are chat and speech models only — there is no free video tier. They bill at normal rates from your one-time $10 new-user credit (fair-use limits) and are the right place to prove out base URL, auth and retry wiring. Then switch model= to wan3.0-video on the same key; video bills per generated second — 480P starts at about $0.0411."
+        "body": "The gift-credit IDs are chat and speech models only — there is no free video tier. They bill at dedicated gift-credit rates from your one-time $10 new-user credit (fair-use limits) and are the right place to prove out base URL, auth and retry wiring. Then switch model= to wan3.0-video on the same key; video bills per generated second — 480P starts at about $0.0411."
       },
       "body": [
         "Wan 3.0 is Alibaba's video generation model, available on KeyoAPI as wan3.0-video. Use the OpenAI-compatible /v1/videos/generations endpoint with your Keyo key; the output resolution (480P / 720P / 1080P) decides the per-second rate.",
@@ -1268,7 +1268,7 @@
       ],
       "freeKiller": {
         "title": "No free video tier — prototype on gift-credit IDs",
-        "body": "The gift-credit IDs are chat and speech models only — there is no free video tier. They bill at normal rates from your one-time $10 new-user credit (fair-use limits) and are the right place to prove out base URL, auth and retry wiring. Then switch model= to agnes-video-2.5 on the same key; video bills per generated second — 720p starts at about $0.0205."
+        "body": "The gift-credit IDs are chat and speech models only — there is no free video tier. They bill at dedicated gift-credit rates from your one-time $10 new-user credit (fair-use limits) and are the right place to prove out base URL, auth and retry wiring. Then switch model= to agnes-video-2.5 on the same key; video bills per generated second — 720p starts at about $0.0205."
       },
       "body": [
         "Agnes Video 2.5 is a text-to-video and image-to-video model. On KeyoAPI you POST /v1/videos/generations with model=agnes-video-2.5, a prompt, and the output resolution (720p / 1080p / 2k); clips run 1–12 seconds (default 5) and billing is per generated second from your prepaid wallet.",
@@ -1325,7 +1325,7 @@
       ],
       "freeKiller": {
         "title": "No free tier — prototype on gift-credit IDs",
-        "body": "The gift-credit IDs are chat and speech models only — this tool has no free tier. They bill at normal rates from your one-time $10 new-user credit (fair-use limits) and are the right place to prove out base URL, auth and retry wiring. Then point your submit-and-poll loop at /v1/async/videos/enhance with the same key; billing is per second of processed video at the rates on this page."
+        "body": "The gift-credit IDs are chat and speech models only — this tool has no free tier. They bill at dedicated gift-credit rates from your one-time $10 new-user credit (fair-use limits) and are the right place to prove out base URL, auth and retry wiring. Then point your submit-and-poll loop at /v1/async/videos/enhance with the same key; billing is per second of processed video at the rates on this page."
       },
       "body": [
         "video-enhance-pro is a generative video enhancement tool: you submit an existing video and get back a higher-quality version. Call POST /v1/async/videos/enhance with model=video-enhance-pro, the source video as video_url (https), and the target resolution (720p / 1080p / 2k; default 1080p).",
@@ -1370,7 +1370,7 @@
       ],
       "freeKiller": {
         "title": "No free tier — prototype on gift-credit IDs",
-        "body": "The gift-credit IDs are chat and speech models only — this tool has no free tier. They bill at normal rates from your one-time $10 new-user credit (fair-use limits) and are the right place to prove out base URL, auth and retry wiring. Then point your submit-and-poll loop at /v1/async/videos/subtitle-erase with the same key; billing is per second of processed video at about $0.0183."
+        "body": "The gift-credit IDs are chat and speech models only — this tool has no free tier. They bill at dedicated gift-credit rates from your one-time $10 new-user credit (fair-use limits) and are the right place to prove out base URL, auth and retry wiring. Then point your submit-and-poll loop at /v1/async/videos/subtitle-erase with the same key; billing is per second of processed video at about $0.0183."
       },
       "body": [
         "subtitle-erase-pro removes burned-in (hard) subtitles from video and reconstructs the area behind them. Call POST /v1/async/videos/subtitle-erase with model=subtitle-erase-pro and the source video as video_url (https).",
@@ -1428,7 +1428,7 @@
       ],
       "freeKiller": {
         "title": "No free image tier — wire your client on gift credits",
-        "body": "The gift-credit IDs are chat and speech models only — image generation has no free tier. They bill at normal rates from your one-time $10 new-user credit (fair-use limits) and are the right place to prove out base URL, auth and retry wiring. Then switch model= to a nano-banana tier on the same key; images bill per generated image at the applicable model and group rate in /pricing."
+        "body": "The gift-credit IDs are chat and speech models only — image generation has no free tier. They bill at dedicated gift-credit rates from your one-time $10 new-user credit (fair-use limits) and are the right place to prove out base URL, auth and retry wiring. Then switch model= to a nano-banana tier on the same key; images bill per generated image at the applicable model and group rate in /pricing."
       },
       "body": [
         "Nano Banana is Google's image generation family. On KeyoAPI all three tiers run on the same OpenAI-compatible endpoint: POST /v1/images/generations with model=nano-banana-2.1 (newer release, $0.0123 per image), model=nano-banana-2 (base lane, $0.0205) or model=nano-banana-pro (top tier with higher resolution and finer editing control, $0.0274). Use each model’s documented aspect-ratio and imageSize limits.",

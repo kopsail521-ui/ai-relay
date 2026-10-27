@@ -115,7 +115,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
 </table></div>
 
 <h2>No free video tier — prototype on gift-credit IDs</h2>
-<p>The gift-credit IDs are chat and speech models only — there is no free video tier. They bill at normal rates from your one-time $10 new-user credit (fair-use limits) and are the right place to prove out base URL, auth and retry wiring. Then switch model= to MiniMax-H3 on the same key; video bills per generated second from about $0.0205 (480p) at the rates on this page.</p>
+<p>The gift-credit IDs are chat and speech models only — there is no free video tier. They bill at dedicated gift-credit rates from your one-time $10 new-user credit (fair-use limits) and are the right place to prove out base URL, auth and retry wiring. Then switch model= to MiniMax-H3 on the same key; video bills per generated second from about $0.0205 (480p) at the rates on this page.</p>
 
 <h2>Rates and how to call</h2>
 <p>MiniMax-H3 is MiniMax's video generation model, billed per second of output on KeyoAPI. Use the standard OpenAI-compatible flow: set OPENAI_BASE_URL=https://www.keyoapi.xyz/v1 and POST /v1/videos/generations with model=MiniMax-H3; the resolution you request (480p / 768p / 1080p) decides the per-second rate.</p>

@@ -6,6 +6,7 @@ import json
 import os
 from pathlib import Path
 import re
+import sqlite3
 import subprocess
 import time
 
@@ -128,7 +129,8 @@ def kernel_events():
                 ('oom', r'out of memory|oom-kill|Killed process'),
                 ('disk_io_error', r'I/O error|EXT4-fs error'),
                 ('disk_full', r'No space left'), ('blocked_task', r'blocked for more than'),
-                ('lockup_or_panic', r'lockup|watchdog|panic')) if re.search(expression, message, re.I)]
+                ('lockup_or_panic', r'soft lockup|hard LOCKUP|Kernel panic|watchdog: BUG'),
+                ('boot_watchdog_setup', r'NMI watchdog.*(?:enabled|permanently disabled)|watchdog.*initialized')) if re.search(expression, message, re.I)]
             victim = re.search(r'Killed process (\d+) \(([A-Za-z0-9_. -]{1,50})\)', message)
             events.append({'timestamp_usec': row.get('__REALTIME_TIMESTAMP'), 'kinds': kinds,
                            'victim_pid': int(victim[1]) if victim else None,
@@ -136,6 +138,64 @@ def kernel_events():
         except (ValueError, TypeError):
             pass
     return {'query_status': code, 'events': events, 'raw_messages_omitted': True}
+
+
+def previous_boot_ends():
+    result = []
+    for boot in ('-1', '-2'):
+        code, raw = command(['journalctl', '-b', boot, '-r', '-n', '35', '--no-pager', '-o', 'json'])
+        rows = []
+        for line in raw.splitlines():
+            try:
+                row = json.loads(line)
+                message = str(row.get('MESSAGE', ''))
+                kinds = [kind for kind, pattern in (
+                    ('clean_shutdown', r'Reached target (?:Shutdown|Power-Off|Reboot)|Shutting down|Stopping.*(?:Docker|Caddy)|systemd-shutdown'),
+                    ('oom', r'Out of memory|oom-kill|Killed process'),
+                    ('blocked_or_io_error', r'I/O error|blocked for more than|No space left'),
+                    ('service_failure', r'Failed to start|Main process exited|Failed with result')) if re.search(pattern, message, re.I)]
+                unit = str(row.get('_SYSTEMD_UNIT', ''))
+                rows.append({'timestamp_usec': row.get('__REALTIME_TIMESTAMP'), 'kinds': kinds,
+                             'unit': unit if re.fullmatch(r'[A-Za-z0-9_.@:-]{1,200}', unit) else '[other]'})
+            except (ValueError, TypeError):
+                pass
+        result.append({'boot': boot, 'query_status': code, 'last_records_metadata': rows})
+    return result
+
+
+def task_aggregate():
+    # Fixed aggregate SELECT only. No IDs, prompts, image URLs, balances or keys.
+    path = Path('/opt/ai-relay/data/new-api/one-api.db')
+    if not path.is_file():
+        return {'unavailable': True}
+    db = None
+    try:
+        db = sqlite3.connect(path.as_uri() + '?mode=ro', uri=True, timeout=0.2)
+        db.execute('PRAGMA query_only=ON')
+        db.execute('PRAGMA busy_timeout=200')
+        exists = db.execute("SELECT 1 FROM sqlite_master WHERE type='table' AND name='keyo_image_tasks'").fetchone()
+        if not exists:
+            return {'table_present': False}
+        rows = db.execute('SELECT state,COUNT(*),MIN(created_at),MAX(created_at) FROM keyo_image_tasks GROUP BY state').fetchall()
+        return {'table_present': True, 'states': [dict(state=row[0], count=row[1],
+                oldest_created=row[2], newest_created=row[3]) for row in rows]}
+    except Exception as error:
+        return {'error_class': type(error).__name__}
+    finally:
+        if db is not None:
+            db.close()
+
+
+def bounded_directory_usage():
+    paths = ['/opt/ai-relay/data/logs', '/opt/ai-relay/static/uploads', '/opt/ai-relay/data', '/tmp']
+    code, raw = command(['du', '-sk', *paths], timeout=10)
+    rows = []
+    for line in raw.splitlines():
+        value, _, path = line.partition('\t')
+        if value.isdigit() and path in paths:
+            rows.append({'path': path, 'kib': int(value)})
+    return {'status': code, 'usage': rows,
+            'preserved_blog_temp_count': sum(1 for _ in Path('/tmp').glob('keyo-geo-blog-preserve.*'))}
 
 
 def local_health(port, path):
@@ -184,6 +244,8 @@ def main():
               'journal_caps': [line.strip() for line in read('/etc/systemd/journald.conf').splitlines()
                                if re.fullmatch(r'(?:SystemMaxUse|RuntimeMaxUse|SystemKeepFree|MaxRetentionSec)=[A-Za-z0-9 .]+', line)],
               'database_file_sizes': database_sizes, 'kernel_events': kernel_events(),
+              'previous_boot_ends': previous_boot_ends(), 'image_task_aggregate': task_aggregate(),
+              'selected_directory_usage': bounded_directory_usage(),
               'local_health': [local_health(port, path) for port, path in (
                   (3000, '/api/status'), (3001, '/healthz'), (3010, '/healthz'), (3011, '/healthz'))]}
     print(json.dumps(report, sort_keys=True), flush=True)

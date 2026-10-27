@@ -411,6 +411,10 @@ test("about model categories cards, deepseek cheapest title, and modern model re
   assert.match(openaiHtml, /cheapest metered chat lane/i, "openai-api-pricing FAQ must scope the cheapest claim to metered lanes");
   assert.match(openaiHtml, /gift-credit catalog at ~\$0\.01 \/ \$0\.04/i, "openai-api-pricing FAQ must name the gift-credit floor");
   assert.doesNotMatch(openaiHtml, /cheapest chat lane overall/i, "openai-api-pricing must not claim an overall cheapest metered lane");
+  // Fifth-recurrence guard: generational qualifier required on twin superlatives
+  // (gpt-6-luna is GPT-class too and cheaper than the 5.6 family).
+  assert.doesNotMatch(openaiHtml, /cheapest GPT-class twin/i, "twin superlatives must carry a generational qualifier (GPT-5-class, not GPT-class)");
+  assert.match(openaiHtml, /cheapest GPT-5-class twin/i, "openai-api-pricing FAQ must scope the twin claim to GPT-5-class");
 
   // astra page: no cross-family flagship mispriced into Adjacent, no OpenAI
   // brand-ownership claims (H1/FAQ agreement).

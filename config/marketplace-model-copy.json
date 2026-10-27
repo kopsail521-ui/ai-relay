@@ -5777,6 +5777,54 @@
     "price_key_zh": "",
     "price_key_en": ""
   },
+  "gpt-6.1-terra": {
+    "description": "OpenAI 第六代 Terra 系列的新款对话与推理模型。在复杂推理、全栈编码与长程智能体任务上表现均衡高效。支持 1M 上下文。支持文本模态。适合智能体编排、复杂代码生成、深度数据分析。",
+    "descriptions": {
+      "zhCN": "OpenAI 第六代 Terra 系列的新款对话与推理模型。在复杂推理、全栈编码与长程智能体任务上表现均衡高效。支持 1M 上下文。支持文本模态。适合智能体编排、复杂代码生成、深度数据分析。",
+      "zhTW": "OpenAI 第六代 Terra 系列的新款對話與推理模型。在複雜推理、全栈編碼与长程智能體任務上表現均衡高效。支援 1M 上下文。支援文本模态。適合智能體编排、複雜代碼生成、深度數據分析。",
+      "en": "OpenAI's new Terra-series model in the sixth generation for conversation and reasoning. Efficient and balanced across complex reasoning, full-stack coding, and long-horizon agent tasks. 1M context window. text modality. Ideal for agent orchestration, complex code generation, deep data analysis.",
+      "fr": "Nouveau modèle OpenAI de la série Terra de sixième génération pour la conversation et le raisonnement. Efficace et équilibré en raisonnement complexe, codage full-stack et tâches agent à long horizon. Fenêtre de contexte 1M. modalité texte. Idéal pour l'orchestration d'agents, le code complexe, l'analyse de données.",
+      "ru": "Новая модель OpenAI серии Terra шестого поколения для диалога и рассуждений. Эффективна и сбалансирована в сложных рассуждениях, полностековой разработке и длительных агентных задачах. Контекст 1M. Текстовая модальность. Подходит для оркестрации агентов, сложного кода, анализа данных.",
+      "ja": "OpenAI 第六世代 Terra シリーズの新たな対話・推論モデル。複雑な推論、フルスタックコーディング、長期的なエージェントタスクでバランスよく高効率。1M コンテキスト。テキストモダリティ。エージェントオーケストレーション、複雑なコード生成、データ分析に最適。",
+      "vi": "Mô hình hội thoại và suy luận mới của OpenAI thuộc dòng Terra thế hệ thứ sáu. Hiệu quả cân bằng trong suy luận phức tạp, lập trình full-stack và tác vụ agent dài hạn. Cửa sổ ngữ cảnh 1M. Hỗ trợ văn bản. Phù hợp cho điều phối agent, tạo mã phức tạp, phân tích dữ liệu."
+    },
+    "unit": "token",
+    "badge": {
+      "zhCN": "按 Token 计费",
+      "zhTW": "按 Token 計費",
+      "en": "Token-based",
+      "fr": "Au token",
+      "ru": "По токенам",
+      "ja": "Token 課金",
+      "vi": "Theo token"
+    },
+    "suffix": {
+      "zhCN": "",
+      "zhTW": "",
+      "en": "",
+      "fr": "",
+      "ru": "",
+      "ja": "",
+      "vi": ""
+    },
+    "price_key": {
+      "zhCN": "",
+      "zhTW": "",
+      "en": "",
+      "fr": "",
+      "ru": "",
+      "ja": "",
+      "vi": ""
+    },
+    "description_zh": "OpenAI 第六代 Terra 系列的新款对话与推理模型。在复杂推理、全栈编码与长程智能体任务上表现均衡高效。支持 1M 上下文。支持文本模态。适合智能体编排、复杂代码生成、深度数据分析。",
+    "description_en": "OpenAI's new Terra-series model in the sixth generation for conversation and reasoning. Efficient and balanced across complex reasoning, full-stack coding, and long-horizon agent tasks. 1M context window. text modality. Ideal for agent orchestration, complex code generation, deep data analysis.",
+    "badge_zh": "按 Token 计费",
+    "badge_en": "Token-based",
+    "suffix_zh": "",
+    "suffix_en": "",
+    "price_key_zh": "",
+    "price_key_en": ""
+  },
   "suno_music_open": {
     "description": "Suno 音乐生成模型。根据文字描述生成完整歌曲，支持自定义与续写。支持音乐模态。适合音乐创作、背景音乐、灵感试听。",
     "descriptions": {

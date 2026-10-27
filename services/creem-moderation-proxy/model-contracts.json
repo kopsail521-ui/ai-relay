@@ -3,6 +3,10 @@
     "kind": "chat",
     "requests": []
   },
+  "gpt-6.1-terra": {
+    "kind": "chat",
+    "requests": []
+  },
   "gpt-6-sol": {
     "kind": "chat",
     "requests": []

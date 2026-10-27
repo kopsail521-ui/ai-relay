@@ -59,6 +59,17 @@
 | grok voice 3.0 相关页面/承诺 | 控制台未上架，等上架再建页 | C |
 | gemini-omni 说成 per-request / chat 端点 | video 类 + /v1/videos/generations 按秒 | B |
 
+## 最高级纪律（cheapest / lowest / only，三轮复盘沉淀）
+
+写任何 `cheapest / lowest / only` 之前，先问：**比较集合包不包含 `/free-models` 那 9 行？**
+
+- 包含 → 措辞必须出现 `gift-credit`（如 "the cheapest lanes overall sit in the gift-credit catalog at ~$0.01 / $0.04"）；
+- 不包含 → 必须写 `metered` 或家族限定（如 "cheapest metered chat lane"、"cheapest Claude-class lane"）；
+- **禁止**裸写 `cheapest … overall` 指向任何 metered ID（曾三次复现：gpt-6-luna、deepseek-v4.1-flash、-1017 各错一次）。
+
+同规则适用于品牌归属（`is X's …`：写前查 console 目录确认归属）与模板变量（`{id}` 等：改句先 grep 变量和路径片段）。
+以上三条已固化为 `scripts/seo-content.test.mjs` 的断言，违规会在 CI 直接失败。
+
 ## 待确认（E，不得对外引用）
 
 - Spark-TTS-0.5B:free 端到端链路（passthrough 修复已上主线，等手动授权冒烟跑通后升 C→B）

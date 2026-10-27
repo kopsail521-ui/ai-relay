@@ -43,4 +43,4 @@ jobs:
           chmod 600 "${HOME}/.ssh/keyo_vps"
           ssh -i "${HOME}/.ssh/keyo_vps" -o StrictHostKeyChecking=accept-new \
             -o ConnectTimeout=25 \
-            "${USER}@${HOST}" "sudo -n true && sudo bash /opt/ai-relay/scripts/vps-emergency-diag.sh"
+            "${USER}@${HOST}" "sudo -n true && sudo RELOAD_CADDY=0 bash /opt/ai-relay/scripts/vps-safe-pull-preserve-blog.sh && sudo bash /opt/ai-relay/scripts/vps-emergency-diag.sh"

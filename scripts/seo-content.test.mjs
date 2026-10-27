@@ -419,7 +419,9 @@ test("about model categories cards, deepseek cheapest title, and modern model re
   // model for high volume"): the Routing tip must name the cheapest metered
   // DeepSeek ID for bulk lanes, never the 22x legacy v4-flash.
   assert.match(openaiHtml, /bulk classification, tagging, and draft rewrites to gpt-5\.6-luna or deepseek-v4\.1-flash-1017/i, "openai Routing tip must route bulk lanes to the cheapest metered DeepSeek ID");
-  assert.match(openaiHtml, /Guides: \/model\/gpt-6-astra, \/model\/deepseek-v4\.1-flash, \/model\/kimi-k3\./, "openai Guides list must link each named model to its own page");
+  // The generator linkifies raw paths into natural-word anchors — assert on hrefs.
+  assert.match(openaiHtml, /Guides: <a href="\/model\/gpt-6-astra">[^<]*<\/a>, <a href="\/model\/deepseek-v4\.1-flash">[^<]*<\/a>, <a href="\/model\/kimi-k3">/, "openai Guides list must link each named model to its own page");
+  assert.doesNotMatch(openaiHtml, /Guides: <a href="\/model\/deepseek-v4-flash"/, "openai Guides list must not point the v4.1-flash row at the 22x legacy page");
 
   // astra page: no cross-family flagship mispriced into Adjacent, no OpenAI
   // brand-ownership claims (H1/FAQ agreement).

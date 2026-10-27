@@ -31,6 +31,14 @@ df -h / /opt/ai-relay 2>&1 | head -5
 echo "--- top disk consumers ---"
 du -sh /var/lib/docker/containers/*/*-json.log 2>/dev/null | sort -rh | head -10
 du -sh "$ROOT/data" /opt/ai-relay/data/new-api/one-api.db* /opt/ai-relay/static/uploads 2>/dev/null | sort -rh | head -10
+echo "--- top-level dirs on / (one level) ---"
+du -xhd1 / 2>/dev/null | sort -rh | head -15
+echo "--- docker system df ---"
+docker system df 2>&1 | head -10
+echo "--- files larger than 300MB ---"
+find / -xdev -type f -size +300M -exec ls -lh {} \; 2>/dev/null | awk '{print $5, $9}' | sort -rh | head -20
+echo "--- journald config ---"
+grep -E "SystemMaxUse|MaxRetentionSec" /etc/systemd/journald.conf 2>/dev/null || echo "no SystemMaxUse set in journald.conf"
 echo "--- docker daemon log rotation config ---"
 docker info --format '{{.LoggingDriver}}' 2>&1 || true
 cat /etc/docker/daemon.json 2>/dev/null | head -20 || echo "no /etc/docker/daemon.json"

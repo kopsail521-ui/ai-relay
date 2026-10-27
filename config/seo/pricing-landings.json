@@ -170,9 +170,9 @@
       "cheapestNote": {
         "title": "Cheapest current-generation DeepSeek API rate on Keyo",
         "body": [
-          "While the earlier snapshot deepseek-v4-flash-0731 is the lowest absolute rate snapshot tier on the table at ~$0.09 / $0.17 per 1M in/out, the cheapest current-generation production chat lane on Keyo is deepseek-v4.1-flash at ~$0.14 / $0.56 per 1M in/out, with its October 17 snapshot edition deepseek-v4.1-flash-1017 setting the lowest absolute current-generation unit rate at ~$0.02 / $0.06 per 1M in/out. deepseek-v4.1-flash is the recommended default for batch, classification, and agent loops.",
+          "While the earlier snapshot deepseek-v4-flash-0731 is the lowest absolute rate snapshot tier on the table at ~$0.09 / $0.17 per 1M in/out, the cheapest current-generation production DeepSeek Flash lane is deepseek-v4.1-flash at ~$0.14 / $0.56 per 1M in/out, with its October 17 snapshot edition deepseek-v4.1-flash-1017 setting the lowest absolute current-generation unit rate at ~$0.02 / $0.06 per 1M in/out. deepseek-v4.1-flash is the recommended default for batch, classification, and agent loops.",
           "The other rows are separate products, not rungs on a ladder: deepseek-v4.1-flash-1017 at ~$0.02 / $0.06 (October 17 CED snapshot), deepseek-v4-flash at ~$0.44 / $1.32 (legacy catalog string), deepseek-v4-flash-0731 at ~$0.09 / $0.17 (earlier snapshot), and deepseek-v4-pro-0813 with its alias deepseek-v4-pro at ~$0.14 / $0.29 each. So \"cheap\" here is a task choice, not a tier you upgrade through.",
-          "Cost math: 50M input + 10M output tokens/month on deepseek-v4.1-flash ≈ $7.00 + $5.60 ≈ $12.60 (or ≈ $1.08 + $0.60 ≈ $1.68 on the -1017 snapshot). The same mix on deepseek-v4-flash (~$0.44 / $1.32) ≈ $22.00 + $13.20 ≈ $35.20. Confirm live rates on /pricing-list."
+          "Cost math: 50M input + 10M output tokens/month on deepseek-v4.1-flash ≈ $7.00 + $5.60 ≈ $12.60 (or ≈ $1.00 + $0.60 ≈ $1.60 on the -1017 snapshot). The same mix on deepseek-v4-flash (~$0.44 / $1.32) ≈ $22.00 + $13.20 ≈ $35.20. Confirm live rates on /pricing-list."
         ]
       }
     },
@@ -389,7 +389,7 @@
       "navLabel": "OpenAI pricing",
       "h1": "OpenAI / ChatGPT API Pricing — KeyoAPI Rates & Costs",
       "title": "OpenAI & ChatGPT API Pricing | KeyoAPI",
-      "metaDescription": "ChatGPT API pricing and OpenAI API costs on KeyoAPI: gpt-6-astra (OpenAI) ~$1.84/$9.19, deepseek-v4.1-flash ~$0.14/$0.56, gpt-5.6-luna ~$0.10/$0.62 per 1M — one prepaid key.",
+      "metaDescription": "ChatGPT API pricing and OpenAI API costs on KeyoAPI: gpt-6-astra (Keyo-hosted) ~$1.84/$9.19, deepseek-v4.1-flash ~$0.14/$0.56, gpt-5.6-luna ~$0.10/$0.62 per 1M — one prepaid key.",
       "targetKeywords": [
         "chatgpt api pricing",
         "openai api pricing",
@@ -417,7 +417,7 @@
           "model": "gpt-6-astra",
           "official": "OpenAI gpt-6-astra official list — confirm on OpenAI public pricing",
           "keyo": "~$1.84 / $9.19 per 1M in/out",
-          "note": "OpenAI flagship ID on Keyo · /model/gpt-6-astra"
+          "note": "Flagship GPT-class ID on Keyo · /model/gpt-6-astra"
         },
         {
           "model": "gpt-5.6-luna",
@@ -630,7 +630,7 @@
       },
       "body": [
         "Teams call a text to speech API for IVR, voice agents, course narration, and avatar pipelines. Keyo keeps STT (Whisper) and TTS on one prepaid balance so you are not juggling three vendor consoles.",
-        "Indicative rates above come from the live Keyo catalog — confirm /model/IndexTTS-2, /model/CosyVoice3, /model/Qwen3-TTS, and /model/gemini-3.8-flash-tts (live rates on /pricing). Prefer IndexTTS-2 when the product needs audio inside one request; prefer CosyVoice3 or Qwen3-TTS when jobs are already async. Gemini 3.8 Flash TTS bills per token, not per 10K characters — it is not covered by the ~$0.548–$1.37 / 10K characters range above, and it supports both the Gemini-native endpoint and the compatible /v1/audio/speech endpoint; see the handbook for their different response formats.",
+        "Indicative rates above come from the live Keyo catalog — confirm /model/IndexTTS-2, /model/CosyVoice3, /model/Qwen3-TTS, and /model/gemini-3.8-flash-tts (live rates on /pricing). Prefer IndexTTS-2 when the product needs audio inside one request; prefer CosyVoice3 or Qwen3-TTS when jobs are already async. Gemini 3.8 Flash TTS bills per token, not per 10K characters — it is not covered by the ~$0.40–$1.37 / 10K characters range above, and it supports both the Gemini-native endpoint and the compatible /v1/audio/speech endpoint; see the handbook for their different response formats.",
         "How to call CosyVoice3 API (and siblings): set base URL https://www.keyoapi.xyz/v1, authenticate with your Keyo key, pass the model id. Full CosyVoice3 walkthrough: /model/CosyVoice3. Also /model/IndexTTS-2, /model/Qwen3-TTS. Voice clone angle: /voice-cloning-api. Talking video: /ai-avatar-video-generator.",
         "Create a key at /sign-up, then open /pricing (Model Square) for interactive try/buy."
       ],

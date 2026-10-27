@@ -29,4 +29,16 @@ Implementation references: [systemd resource control](https://www.freedesktop.or
 
 ## Rollout evidence
 
-Pending deployment and live verification; do not treat prepared controls as already applied.
+Application changes were published in `0e7548f0c039246c1a92a19c2dd6aa640d197ef1`. The console, moderation, native media and dedicated media deployments all succeeded. [Offline release verification](https://github.com/kopsail521-ui/ai-relay/actions/runs/40538587404) passed on Linux and Windows. Local checks also passed the 70-test Node suite, the two-layer HTTP image integration, deployment/rollback fixtures and recorder/retention fixtures. Live acceptance made no model-generation requests.
+
+[Host installation](https://github.com/kopsail521-ui/ai-relay/actions/runs/40538890426) completed at 2026-10-28 00:19 Beijing time. The rollout replaced and verified all 7 containers, retaining stopped originals for rollback. A rollback marker in the workflow's verification job comes from the intentional failed-health fixture; the production apply job completed successfully.
+
+[Final read-only verification](https://github.com/kopsail521-ui/ai-relay/actions/runs/40540662364), sampled at 00:25 Beijing time after the last console deployment, confirmed:
+
+- All 7 application containers were running under `keyo-services.slice`, with zero restarts and `OOMKilled=false`. Limits were retained after the console deployment: new-api/moderation/native media 192MiB each, Gitee 96MiB, pricing 80MiB, and Volc/Unofree 64MiB each. Every active container used JSON log rotation at 10MiB × 3.
+- The kernel reported `memory.max=536870912`, `memory.swap.max=134217728`, and `io.max=253:0 rbps=max wbps=max riops=900 wiops=600`. Aggregate memory usage was about 202MiB, swap usage was zero, and aggregate `oom`/`oom_kill` counters were zero. The memory-limit reclaim counter was nonzero during rollout; these limits can still constrain cache and throughput under load.
+- Host MemAvailable was about 262MiB. The three latest recorder samples showed CPU busy 0.62–2.71%, I/O wait 0.03–1.04%, and disk reads 0–101 IOPS. These are short observations at current traffic, not a load-capacity guarantee.
+- All four local health endpoints returned HTTP 200 in 0.001–0.745 seconds. Public GETs of `/`, `/login`, `/api/status`, and `/api/pricing` also returned 200; measured external durations were 3.3–7.5 seconds, including the client/network path.
+- The recorder was active/running, using about 11MiB within its 48MiB ceiling, with samples continuing at approximately 15-second intervals. The retention timer was active/waiting.
+
+The additional scheduled-task metadata exposed no command text or credentials. The incident-window systemd events only identified sysstat collection; that is insufficient to identify the original I/O initiator. The cloud's 10/27 finding remains excessive I/O latency or reaching the disk's IOPS limit. The new controls and recorder reduce resource exhaustion risk and provide evidence for a recurrence; they do not establish an exact trigger for the previous incident or guarantee that every future overload can be served.

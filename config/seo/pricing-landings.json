@@ -62,7 +62,7 @@
       },
       "body": [
         "Engineers comparing Gemini API pricing usually already want Google-class models with clearer unit economics — or one prepaid balance across Gemini-class IDs plus DeepSeek, GLM, Whisper, OCR, and TTS. Official Google surfaces win on brand trust; KeyoAPI wins when you want that stack without five invoices.",
-        "Keyo rates above are indicative sell prices from the live Keyo catalog. Always confirm interactive pricing pages under /pricing/{modelId} before contracting volume. Catalog IDs can change as Google ships new stables — this page tracks what Keyo currently lists.",
+        "Keyo rates above are indicative sell prices from the live Keyo catalog. Always confirm interactive pricing pages under /pricing (Model Square) before contracting volume. Catalog IDs can change as Google ships new stables — this page tracks what Keyo currently lists.",
         "How to call: set OPENAI_BASE_URL=https://www.keyoapi.xyz/v1, use your Keyo API key, and pass the Gemini model string (for example gemini-3.8-flash) to POST /v1/chat/completions (for video models gemini-omni-1.1-flash and -ext, use POST /v1/videos/generations as detailed in /pricing-list and the API handbook). Many Google-native features remain Google-console only; Keyo focuses on OpenAI-compatible chat access for overseas developer stacks.",
         "When Gemini list prices spike your margin, keep Gemini for multimodal strengths and shift plain text volume to deepseek-v4.1-flash or gpt-6-luna on the same key. For pure free prototyping, start on /free-models, then promote to Gemini paid IDs when quality gates pass."
       ],
@@ -327,7 +327,7 @@
       "faqs": [
         {
           "q": "Is this page about Anthropic API pricing or Claude API pricing?",
-          "a": "Both. Anthropic is the vendor brand; Claude is the model family. Keyo lists Claude-class model IDs (Sonnet, Opus, Fable) with indicative sell rates versus typical Anthropic public list bands — confirm live on /pricing/{id}."
+          "a": "Both. Anthropic is the vendor brand; Claude is the model family. Keyo lists Claude-class model IDs (Sonnet, Opus, Fable) with indicative sell rates versus typical Anthropic public list bands — confirm live on /pricing-list."
         },
         {
           "q": "How much does the Anthropic API cost on Keyo?",
@@ -415,7 +415,7 @@
         },
         {
           "model": "gpt-6-astra",
-          "official": "OpenAI gpt-6-astra official list — confirm on OpenAI public pricing",
+          "official": "Keyo-hosted GPT-class flagship — Keyo sell rate only; no official same-generation list price exists (not an OpenAI first-party model)",
           "keyo": "~$1.84 / $9.19 per 1M in/out",
           "note": "Flagship GPT-class ID on Keyo · /model/gpt-6-astra"
         },
@@ -434,14 +434,14 @@
         "Teams that search ChatGPT API pricing, OpenAI API pricing, or OpenAI API costs usually need GPT-class chat inside an OpenAI SDK with clearer unit economics — or one prepaid balance that also covers Claude, DeepSeek, Whisper, OCR, and TTS. Official OpenAI / ChatGPT surfaces win on brand trust and first-party product UI. KeyoAPI is for when you want that stack without five invoices and without rewriting clients when you swap models.",
         "Keyo rates in the table are indicative sell prices from the live Keyo catalog. On Keyo, gpt-6-astra is a Keyo-hosted, OpenAI-compatible GPT-class model ID (confirm live rates on /model/gpt-6-astra). Always confirm interactive try/buy under /pricing (Model Square) for gpt-6-astra, gpt-5.6-luna, gpt-5.6-terra, and gpt-5.6-sol before contracting volume. OpenAI list bands, cached-input discounts, and model renames change — treat official figures as planning context only. Keyo GPT-5.6 IDs remain GPT-class twins on an OpenAI-compatible API, not OpenAI first-party model names.",
         "Worked planning example (indicative only): suppose a batch path burns 50M input tokens and 10M output tokens per month. At Luna ~$0.10 / $0.62 per 1M in/out that is roughly $5 input + $6.20 output ≈ $11.20 before retries and overhead. At Terra ~$0.37 / $2.21 the same mix is roughly $18.50 + $22.10 ≈ $40.60. Put high-volume classification on Luna and keep product chat on Terra so the expensive model only sees the traffic that needs it. Re-run the math on /pricing before you budget.",
-        "Integration steps: (1) create an account at /sign-up and top up Wallet; (2) create an API key in console; (3) set base URL https://www.keyoapi.xyz/v1 (OPENAI_BASE_URL or sdk base_url); (4) call POST /v1/chat/completions with model gpt-6-astra, gpt-5.6-luna, gpt-5.6-terra, or gpt-5.6-sol; (5) try/buy interactively from /pricing/{modelId} — there is no separate upload playground. Longer guides: /model/gpt-6-astra, /model/gpt-5.6-luna, /model/gpt-5.6-terra, /model/gpt-5.6-sol.",
+        "Integration steps: (1) create an account at /sign-up and top up Wallet; (2) create an API key in console; (3) set base URL https://www.keyoapi.xyz/v1 (OPENAI_BASE_URL or sdk base_url); (4) call POST /v1/chat/completions with model gpt-6-astra, gpt-5.6-luna, gpt-5.6-terra, or gpt-5.6-sol; (5) try/buy interactively on /pricing (Model Square) — there is no separate upload playground. Longer guides: /model/gpt-6-astra, /model/gpt-5.6-luna, /model/gpt-5.6-terra, /model/gpt-5.6-sol.",
         "Routing tip: keep GPT-class for product chat defaults; shift bulk classification, tagging, and draft rewrites to gpt-5.6-luna or deepseek-v4-flash on the same key. Escalate only failing slices to Terra, Sol, or gpt-6-astra after automated validators reject output. For Claude dollars see /claude-api-pricing; for Gemini see /gemini-api-pricing; for DeepSeek see /deepseek-api-pricing; for Grok see /grok-api-pricing; for free prototyping see /free-models; for a side-by-side catalog see /compare.",
         "Cost hygiene that actually moves the bill: truncate unused chat history, prefer structured short outputs for batch jobs, cache identical prompts by hash, and measure tokens from the response usage object rather than guessing. Confirm live Keyo sell rates on Model Square after every catalog change."
       ],
       "faqs": [
         {
           "q": "Is this page about ChatGPT API pricing or OpenAI API pricing?",
-          "a": "Both searches land here. ChatGPT is the consumer product brand; the developer surface is the OpenAI API. Keyo lists GPT-class IDs (including gpt-6-astra) with indicative sell rates — confirm live on /pricing/{id}."
+          "a": "Both searches land here. ChatGPT is the consumer product brand; the developer surface is the OpenAI API. Keyo lists GPT-class IDs (including gpt-6-astra) with indicative sell rates — confirm live on /pricing-list."
         },
         {
           "q": "Is Keyo cheaper than OpenAI API pricing?",
@@ -453,7 +453,7 @@
         },
         {
           "q": "Are gpt-5.6-* the same as OpenAI GPT-5?",
-          "a": "No. They are Keyo GPT-class model IDs on an OpenAI-compatible gateway. Use them when you want OpenAI SDK shape and Keyo unit economics; confirm live rates on /pricing/{id}."
+          "a": "No. They are Keyo GPT-class model IDs on an OpenAI-compatible gateway. Use them when you want OpenAI SDK shape and Keyo unit economics; confirm live rates on /pricing-list."
         },
         {
           "q": "Do you offer a free OpenAI / GPT model?",
@@ -473,7 +473,7 @@
         },
         {
           "q": "How do I estimate OpenAI API costs on Keyo?",
-          "a": "Multiply expected millions of input/output tokens by the live /pricing/{model} rates (for example gpt-6-astra or gpt-5.6-luna), add retries, then confirm on Model Square. A worked example is on this page; for a side-by-side catalog see /compare."
+          "a": "Multiply expected millions of input/output tokens by the live rates on /pricing-list (for example gpt-6-astra or gpt-5.6-luna), add retries, then confirm on Model Square. A worked example is on this page; for a side-by-side catalog see /compare."
         },
         {
           "q": "KeyoAPI vs OpenRouter for gpt-6-astra and gpt-5.6 lanes?",
@@ -481,7 +481,7 @@
         },
         {
           "q": "Cheapest OpenAI-compatible option on Keyo?",
-          "a": "The lowest-priced chat lane on the same key is gpt-6-luna (~$0.03 / $0.15 per 1M in/out). The cheapest GPT-class twin is gpt-5.6-luna (~$0.10 / $0.62). Neither needs a base_url or SDK change."
+          "a": "The lowest-priced GPT-class lane on the same key is gpt-6-luna (~$0.03 / $0.15 per 1M in/out) — the cheapest chat lane overall is the DeepSeek snapshot ID deepseek-v4.1-flash-1017 at ~$0.02 / $0.06 (see /deepseek-api-pricing). The cheapest GPT-class twin is gpt-5.6-luna (~$0.10 / $0.62). None need a base_url or SDK change."
         }
       ],
       "curlExample": "# cURL — gpt-6-astra on Keyo\ncurl https://www.keyoapi.xyz/v1/chat/completions \\\n  -H \"Authorization: Bearer $KEYO_API_KEY\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\"model\":\"gpt-6-astra\",\"messages\":[{\"role\":\"user\",\"content\":\"Hello from GPT-6 Astra\"}]}'\n\n# Python — OpenAI SDK pointed at Keyo\nfrom openai import OpenAI\nclient = OpenAI(base_url=\"https://www.keyoapi.xyz/v1\", api_key=\"YOUR_KEYO_API_KEY\")\nr = client.chat.completions.create(\n    model=\"gpt-6-astra\",\n    messages=[{\"role\": \"user\", \"content\": \"Summarize this log line in one sentence.\"}],\n)\nprint(r.choices[0].message.content)",
@@ -752,7 +752,7 @@
       ],
       "freeKiller": {
         "title": "Productize the loop, not a single model",
-        "body": "Typical product loop: draft script → TTS (optionally cloned) → avatar render → CDN cache. Cap max duration, show queue ETA, and moderate deepfake abuse. Try/buy each model from its /pricing/{id} page after /sign-up — no separate upload playground."
+        "body": "Typical product loop: draft script → TTS (optionally cloned) → avatar render → CDN cache. Cap max duration, show queue ETA, and moderate deepfake abuse. Try/buy each model from /pricing (Model Square) after /sign-up — no separate upload playground."
       },
       "body": [
         "Duix Avatar API (downstream use): product teams often search “duix avatar” when they need a talking-face render they can meter in SaaS — Keyo exposes that as model=Duix-Avatar on an async video endpoint, not as a consumer editor.",
@@ -852,7 +852,7 @@
       "rows": [
         {
           "model": "gpt-6-astra",
-          "official": "OpenAI gpt-6-astra list — confirm on OpenAI public pricing",
+          "official": "Keyo gpt-6-astra sell rate — Keyo-hosted GPT-class flagship, not an OpenAI first-party model",
           "keyo": "~$1.84 / $9.19 per 1M in/out",
           "note": "Same model string on Keyo · /model/gpt-6-astra"
         },
@@ -888,7 +888,7 @@
       "body": [
         "Why teams look for an OpenAI API alternative: lower sell rates on high-volume paths, one prepaid wallet across GPT-class plus DeepSeek/Claude/speech/vision, or payment and access friction on first-party billing. Official OpenAI wins on first-party product features and brand trust. KeyoAPI is for when you want OpenAI SDK shape plus multi-model routing without five invoices.",
         "How to switch (two lines): set OPENAI_BASE_URL=https://www.keyoapi.xyz/v1 (or sdk base_url), use your Keyo API key as Authorization Bearer, keep POST /v1/chat/completions. Then pass model=gpt-6-astra for flagship chat, or deepseek-v4.1-flash / gpt-5.6-luna for cheaper bulk. Full price planning table: /compare. OpenAI-side unit economics: /openai-api-pricing.",
-        "Migration notes that actually break builds: (1) tool-calling / vision / streaming parity is not 1:1 with every OpenAI first-party feature — verify against live docs for your workload; (2) Keyo gpt-5.6-* IDs are GPT-class twins, not OpenAI first-party GPT-5 names; (3) visual processing, async video, digital-human and document-parsing jobs use dedicated REST paths — see /pricing-list; (4) rates above are indicative — confirm interactive /pricing/{id} before volume.",
+        "Migration notes that actually break builds: (1) tool-calling / vision / streaming parity is not 1:1 with every OpenAI first-party feature — verify against live docs for your workload; (2) Keyo gpt-5.6-* IDs are GPT-class twins, not OpenAI first-party GPT-5 names; (3) visual processing, async video, digital-human and document-parsing jobs use dedicated REST paths — see /pricing-list; (4) rates above are indicative — confirm interactive /pricing-list before volume.",
         "When to stay on official OpenAI: you need first-party Assistants, specific OpenAI product surfaces, or enterprise contracts that require OpenAI as the contracting party. When Keyo fits: you already speak OpenAI SDK, want cheaper bulk lanes or multi-vendor IDs on one key, and can accept prepaid credits instead of OpenAI billing."
       ],
       "curlExample": "curl https://www.keyoapi.xyz/v1/chat/completions \\\n  -H \"Authorization: Bearer $KEYO_API_KEY\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\"model\":\"gpt-6-astra\",\"messages\":[{\"role\":\"user\",\"content\":\"Hello from an OpenAI API alternative\"}]}'",

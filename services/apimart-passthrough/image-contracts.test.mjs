@@ -32,7 +32,7 @@ test("every reference alias is validated without truncation or silent drop", () 
 });
 
 test("model-specific dimensions and quality reject unsupported requests before billing", () => {
-  assert.throws(() => normalizeImageRequest("gpt-image-2", { prompt: "x", size: "3840x2160" }), /1K/);
+  assert.equal(normalizeImageRequest("gpt-image-2", { prompt: "x", size: "3840x2160" }).request.aspectRatio, "3840x2160");
   assert.equal(normalizeImageRequest("gpt-image-2", { prompt: "x", size: "21:9" }).request.aspectRatio, "21:9");
   assert.throws(() => normalizeImageRequest("gpt-image-2-vip", { prompt: "x", size: "16:9" }), /pixel/);
   assert.throws(() => normalizeImageRequest("gpt-image-2-vip", { prompt: "x", quality: "high" }), /quality/);
@@ -47,11 +47,14 @@ test("model-specific dimensions and quality reject unsupported requests before b
 
 test("GPT resolution aliases normalize to pixels and retain model restrictions", () => {
   const pixels = { "1K": "1024x1024", "2K": "2048x2048", "4K": "3840x2160" };
-  for (const model of ["gpt-image-2", "gpt-image-2.5"]) {
-    assert.equal(normalizeImageRequest(model, { prompt: "x", size: "1K" }).request.aspectRatio, pixels["1K"]);
-    for (const size of ["2K", "4K"]) {
-      assert.throws(() => normalizeImageRequest(model, { prompt: "x", size }), error => error.status === 400 && error.param === "size" && /1K/.test(error.message));
-    }
+  // gpt-image-2 is a multi-tier model: 1K/2K/4K all accepted.
+  for (const [size, expected] of Object.entries(pixels)) {
+    assert.equal(normalizeImageRequest("gpt-image-2", { prompt: "x", size }).request.aspectRatio, expected);
+  }
+  // gpt-image-2.5 base stays 1K-only.
+  assert.equal(normalizeImageRequest("gpt-image-2.5", { prompt: "x", size: "1K" }).request.aspectRatio, pixels["1K"]);
+  for (const size of ["2K", "4K"]) {
+    assert.throws(() => normalizeImageRequest("gpt-image-2.5", { prompt: "x", size }), error => error.status === 400 && error.param === "size" && /1K/.test(error.message));
   }
   for (const model of ["gpt-image-2-vip", "gpt-image-2.5-flare", "gpt-image-2.5-sunburst"]) {
     for (const [size, expected] of Object.entries(pixels)) {

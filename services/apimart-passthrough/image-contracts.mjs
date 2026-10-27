@@ -10,6 +10,9 @@ const GPT_HIGH_SIZES = new Set([
   "624x1456", "1248x2912", "1648x3840", "688x2048", "1280x3840", "2048x688",
   "3840x1280", "1536x768", "3072x1536", "3840x1920", "768x1536", "1536x3072", "1920x3840",
 ]);
+// gpt-image-2 is a multi-tier model: every documented 1K base size plus the
+// 2K/4K high sizes (default group stays 1K, GPT-Image-Pro accepts all).
+const GPT_ALL_SIZES = new Set([...GPT_BASE_SIZES, ...GPT_HIGH_SIZES]);
 const GPT_RATIOS = new Set(["auto", "1:1", "16:9", "9:16", "4:3", "3:4", "3:2", "2:3", "5:4", "4:5", "21:9", "9:21", "1:2", "2:1"]);
 const NANO_RATIOS = new Set([
   "auto", "1:1", "16:9", "9:16", "4:3", "3:4", "3:2", "2:3", "5:4", "4:5", "21:9",
@@ -99,7 +102,13 @@ function validatePixels(value, model) {
   if (!m) throw invalid(`Invalid size "${value}" for ${model}`, "size");
   const w = Number(m[1]);
   const h = Number(m[2]);
-  if (model === "gpt-image-2" || model === "gpt-image-2.5") {
+  if (model === "gpt-image-2") {
+    // gpt-image-2 is a multi-tier model (default 1K, GPT-Image-Pro native
+    // 1K/2K/4K, GPT-Image-HD async 1K/2K/4K): accept all documented sizes.
+    if (!GPT_ALL_SIZES.has(`${w}x${h}`)) throw invalid(`Unsupported size "${value}" for ${model}; use a documented 1K/2K/4K pixel size`, "size");
+    return `${w}x${h}`;
+  }
+  if (model === "gpt-image-2.5") {
     if (!GPT_BASE_SIZES.has(`${w}x${h}`)) throw invalid(`Unsupported 1K size "${value}" for ${model}; use a supported 1K size or aspect ratio`, "size");
     return `${w}x${h}`;
   }

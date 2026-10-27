@@ -246,6 +246,40 @@ def stability_history():
     return result
 
 
+def scheduled_task_metadata():
+    # Only schedules and broad categories, never shell command text, inline
+    # credentials or usernames from root/user crontabs.
+    files = [Path('/etc/crontab'), *Path('/etc/cron.d').glob('*'), *Path('/var/spool/cron/crontabs').glob('*')]
+    crons = []
+    for path in files[:80]:
+        for line in read(path).splitlines():
+            match = re.match(r'^\s*((?:[0-9*/,-]+\s+){4}[0-9*/,-]+|@(?:reboot|hourly|daily|weekly|monthly|yearly))\s+(.+)$', line)
+            if not match:
+                continue
+            categories = [name for name in ('php', 'python', 'node', 'docker', 'backup', 'apt', 'updatedb', 'logrotate', 'fstrim', 'fwupd') if re.search(r'\b' + name + r'\b', match[2], re.I)]
+            crons.append({'schedule': match[1].strip(), 'categories': categories})
+    _, raw = command(['systemctl', 'list-timers', '--all', '--output=json', '--no-pager'])
+    timers = []
+    try:
+        for row in json.loads(raw):
+            unit = row.get('unit', '')
+            if re.fullmatch(r'[A-Za-z0-9_.@:-]{1,200}', unit):
+                timers.append({key: row.get(key) for key in ('unit', 'activates', 'last', 'next')})
+    except (ValueError, TypeError):
+        pass
+    _, raw = command(['journalctl', '--since', '2026-10-27 22:15:00', '--until', '2026-10-27 22:25:00', '_COMM=systemd', '--no-pager', '-o', 'json', '-n', '200'])
+    events = []
+    for line in raw.splitlines():
+        try:
+            row = json.loads(line)
+            unit = row.get('UNIT') or row.get('OBJECT_SYSTEMD_UNIT') or ''
+            if re.fullmatch(r'[A-Za-z0-9_.@:-]{1,200}', unit):
+                events.append({'timestamp_usec': row.get('__REALTIME_TIMESTAMP'), 'unit': unit})
+        except (ValueError, TypeError):
+            pass
+    return {'cron_schedules': crons, 'timers': timers, 'outage_systemd_unit_events': events, 'command_text_omitted': True}
+
+
 def main():
     before = snapshot()
     time.sleep(3)
@@ -283,6 +317,7 @@ def main():
               'selected_directory_usage': bounded_directory_usage(),
               'stability_history': stability_history(),
               'docker_cgroup_driver_version': cgroup_info,
+              'scheduled_tasks': scheduled_task_metadata(),
               'local_health': [local_health(port, path) for port, path in (
                   (3000, '/api/status'), (3001, '/healthz'), (3010, '/healthz'), (3011, '/healthz'))]}
     print(json.dumps(report, sort_keys=True), flush=True)

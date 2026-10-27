@@ -60,5 +60,9 @@ df -h / | tail -1
 docker system df 2>&1 | head -6
 
 echo "===== NOTE ====="
-echo "daemon.json + journald.conf apply after next docker/journald restart or VPS reboot."
+echo "daemon.json apply after next docker daemon restart or VPS reboot."
+echo "===== ACTIVATE JOURNALD CAP (zero container impact) ====="
+systemctl restart systemd-journald
+sleep 2
+journalctl --disk-usage 2>&1 | head -2
 echo "DONE_FREEZE_CLEANUP"

@@ -403,6 +403,22 @@ test("about model categories cards, deepseek cheapest title, and modern model re
   assert.match(dsHtml, /cheapest current-generation production DeepSeek Flash lane/i, "deepseek-api-pricing must scope the cheapest claim to the DeepSeek Flash lane");
   assert.doesNotMatch(dsHtml, /lowest absolute rate snapshot tier/i, "deepseek-api-pricing must not claim 0731 is the lowest absolute tier");
 
+  // Superlative discipline: 'cheapest/lowest … overall' claims must account
+  // for the gift-credit catalog (three prior review rounds caught the same
+  // class of error). The openai FAQ names both the metered floor and the
+  // gift-credit floor.
+  const openaiHtml = fs.readFileSync(path.join(seoRoot, "openai-api-pricing.html"), "utf8");
+  assert.match(openaiHtml, /cheapest metered chat lane/i, "openai-api-pricing FAQ must scope the cheapest claim to metered lanes");
+  assert.match(openaiHtml, /gift-credit catalog at ~\$0\.01 \/ \$0\.04/i, "openai-api-pricing FAQ must name the gift-credit floor");
+  assert.doesNotMatch(openaiHtml, /cheapest chat lane overall/i, "openai-api-pricing must not claim an overall cheapest metered lane");
+
+  // astra page: no cross-family flagship mispriced into Adjacent, no OpenAI
+  // brand-ownership claims (H1/FAQ agreement).
+  const astraHtml = fs.readFileSync(path.join(seoRoot, "model/gpt-6-astra.html"), "utf8");
+  assert.doesNotMatch(astraHtml, /claude-fable-5-1/i, "astra Adjacent must not pair the 4x-more-expensive cross-family fable tier");
+  assert.doesNotMatch(astraHtml, /OpenAI flagship/i, "astra must not claim OpenAI brand ownership");
+  assert.match(astraHtml, /Keyo-hosted GPT-class Flagship Chat/, "astra H1 must be Keyo-hosted");
+
   const whisperHtml = fs.readFileSync(path.join(seoRoot, "model/whisper-large-v3.html"), "utf8");
   assert.match(whisperHtml, /gpt-6-luna for cost, claude-sonnet-5-5 for denser reasoning/, "whisper-large-v3 must recommend modern models");
   assert.doesNotMatch(whisperHtml, /gpt-5\.6-luna for cost, claude-sonnet-5 for denser reasoning/, "whisper-large-v3 must not recommend legacy models");

@@ -481,7 +481,7 @@
         },
         {
           "q": "Cheapest OpenAI-compatible option on Keyo?",
-          "a": "The lowest-priced GPT-class lane on the same key is gpt-6-luna (~$0.03 / $0.15 per 1M in/out) — the cheapest chat lane overall is the DeepSeek snapshot ID deepseek-v4.1-flash-1017 at ~$0.02 / $0.06 (see /deepseek-api-pricing). The cheapest GPT-class twin is gpt-5.6-luna (~$0.10 / $0.62). None need a base_url or SDK change."
+          "a": "The lowest-priced GPT-class lane on the same key is gpt-6-luna (~$0.03 / $0.15 per 1M in/out). The cheapest metered chat lane is the DeepSeek snapshot ID deepseek-v4.1-flash-1017 at ~$0.02 / $0.06 (see /deepseek-api-pricing); the cheapest lanes overall sit in the gift-credit catalog at ~$0.01 / $0.04 per 1M (see /free-models). The cheapest GPT-class twin is gpt-5.6-luna (~$0.10 / $0.62). None need a base_url or SDK change."
         }
       ],
       "curlExample": "# cURL — gpt-6-astra on Keyo\ncurl https://www.keyoapi.xyz/v1/chat/completions \\\n  -H \"Authorization: Bearer $KEYO_API_KEY\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\"model\":\"gpt-6-astra\",\"messages\":[{\"role\":\"user\",\"content\":\"Hello from GPT-6 Astra\"}]}'\n\n# Python — OpenAI SDK pointed at Keyo\nfrom openai import OpenAI\nclient = OpenAI(base_url=\"https://www.keyoapi.xyz/v1\", api_key=\"YOUR_KEYO_API_KEY\")\nr = client.chat.completions.create(\n    model=\"gpt-6-astra\",\n    messages=[{\"role\": \"user\", \"content\": \"Summarize this log line in one sentence.\"}],\n)\nprint(r.choices[0].message.content)",

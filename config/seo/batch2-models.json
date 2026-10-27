@@ -915,7 +915,7 @@
       "related": [
         "gpt-6-sol",
         "gpt-6-luna",
-        "claude-fable-5-1"
+        "claude-opus-5-5"
       ],
       "endpoint": "POST /v1/chat/completions",
       "codeHint": "model=gpt-6-astra",
@@ -938,7 +938,7 @@
         },
         {
           "q": "When should I use Astra vs Sol or Luna?",
-          "a": "Use Luna for bulk cheap paths, Sol as a balanced default, and Astra as the OpenAI flagship escalate lane when quality gates fail. Same Keyo key — change only the model string."
+          "a": "Use Luna for bulk cheap paths, Sol as a balanced default, and Astra as the flagship escalate lane when quality gates fail. Same Keyo key — change only the model string."
         }
       ],
       "body": "Looking for a GPT-6 Astra API? On KeyoAPI, gpt-6-astra is a Keyo-hosted, OpenAI-compatible GPT-class model ID (~$1.84 / $9.19 per 1M in/out — confirm on /pricing/gpt-6-astra). Create a key at /sign-up, set base URL to https://www.keyoapi.xyz/v1, and call POST /v1/chat/completions with model=gpt-6-astra — the same request shape as the OpenAI API, prepaid on a Keyo wallet that also covers Whisper, Claude-class, and TTS.\n\nGPT-6 Astra price vs nearby Keyo lanes (indicative): gpt-6-luna ~$0.03 / $0.15 per 1M, gpt-6-sol ~$0.37 / $1.84, gpt-6-astra ~$1.84 / $9.19. Astra is roughly 5× Sol on output dollars — worth it when Sol fails quality gates and you need the flagship quality band; not worth it as the default for every classification job. Confirm live rows on /pricing/gpt-6-astra, /pricing/gpt-6-sol, and /pricing/gpt-6-luna.\n\nHow to use GPT-6 Astra: (1) register at /sign-up and top up Wallet; (2) mint an API key in console; (3) set OPENAI_BASE_URL or sdk base_url to https://www.keyoapi.xyz/v1; (4) POST /v1/chat/completions with Authorization: Bearer YOUR_KEY and model=gpt-6-astra; (5) read usage from the response and re-check /pricing/gpt-6-astra before volume contracts. Keep the OpenAI Python/Node SDK — only swap base_url, key, and model string.\n\ngpt 6 astra free / lowest-cost trial: Keyo does not ship a permanent $0 Astra ID. Draft and smoke-test on /free-models ($0 IDs covered by your $10 welcome credit, fair-use), run production defaults on gpt-6-sol or gpt-6.1-sol, and escalate only failing slices to gpt-6-astra so you only pay flagship rates where quality needs it. Broader OpenAI / ChatGPT API pricing context: /openai-api-pricing. Side-by-side planning: /compare.",

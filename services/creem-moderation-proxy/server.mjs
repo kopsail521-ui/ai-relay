@@ -379,6 +379,12 @@ function reorderPricingPayload(payload) {
   const vendors = Array.isArray(payload.vendors) ? payload.vendors : [];
   if (!models) return payload;
 
+  // 下架模型从公开模型广场隐藏，但渠道 abilities 保留，老名称仍可直接调用。
+  const hidden = new Set(Array.isArray(MARKETPLACE_COPY.__hidden__) ? MARKETPLACE_COPY.__hidden__ : []);
+  const visibleModels = hidden.size
+    ? models.filter((m) => !hidden.has(String(m.model_name || m.model || m.key || "")))
+    : models;
+
   const vendorName = Object.fromEntries(
     vendors.map((v) => [v.id, v.name || ""])
   );
@@ -390,7 +396,7 @@ function reorderPricingPayload(payload) {
     return String(a.name || "").localeCompare(String(b.name || ""), "zh");
   });
 
-  const sortedModels = [...models].sort((a, b) => {
+  const sortedModels = [...visibleModels].sort((a, b) => {
     const va = vendorName[a.vendor_id] || "";
     const vb = vendorName[b.vendor_id] || "";
     const ra = vendorRank(va);

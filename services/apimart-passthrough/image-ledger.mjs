@@ -175,7 +175,8 @@ export class ImageLedger {
    * With smart routing enabled the candidate set is every group that has an
    * enabled channel for the model (not just the token's own group), priced and
    * sorted ascending so the cheapest group executes first. GPT-Image-Pro uses
-   * its fixed per-request quota; other groups use ModelPrice × group ratio.
+   * its fixed per-request quota, unless the model has a per-model price in the
+   * ProModelPrice option; other groups use ModelPrice × group ratio.
    * Returns { plans, sawChannel } — sawChannel distinguishes "no channel
    * anywhere" from "channel exists but no group prices the model".
    */
@@ -208,7 +209,14 @@ export class ImageLedger {
       sawChannel = true;
       let quota;
       if (candidate === "GPT-Image-Pro") {
-        quota = is4k ? 14795 : 5918;
+        // GPT-Image-Pro bills a fixed quota by default, but models whose
+        // upstream cost is higher can opt into a per-model USD price via the
+        // ProModelPrice option (e.g. gpt-image-2 on aicopy = $0.06 cost).
+        const proPrices = read("ProModelPrice", {});
+        const proPrice = proPrices && proPrices[model];
+        quota = typeof proPrice === "number" && proPrice > 0
+          ? Math.round(proPrice * this.quotaPerUsd)
+          : (is4k ? 14795 : 5918);
       } else if (typeof quotaOverride === "number" && quotaOverride > 0) {
         quota = quotaOverride;
       } else {

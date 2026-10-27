@@ -2727,15 +2727,15 @@
     "price_key_en": ""
   },
   "gpt-image-2": {
-    "description": "OpenAI GPT Image 2 图像生成模型。文生图与图生图能力成熟，支持多种风格与尺寸。支持图像模态。适合产品原型、内容配图、设计探索。",
+    "description": "OpenAI GPT Image 2 图像生成模型，统一入口覆盖多档画质：默认分组 1K 快速出图；专业分组（GPT-Image-Pro）原生支持 1K/2K/4K；高清分组（GPT-Image-HD）异步出图 1K/2K/4K。支持文生图与图生图。适合产品原型、内容配图、设计探索。",
     "descriptions": {
-      "zhCN": "OpenAI GPT Image 2 图像生成模型。文生图与图生图能力成熟，支持多种风格与尺寸。支持图像模态。适合产品原型、内容配图、设计探索。",
-      "zhTW": "OpenAI GPT Image 2 圖像生成模型。文生圖与圖生圖能力成熟，支援多種風格与尺寸。支援圖像模态。適合產品原型、內容配圖、設計探索。",
-      "en": "OpenAI's GPT Image 2 image generation model. text-to-image and image-to-image with broad style and size support. image modality. Ideal for product mockups, content illustrations, design exploration.",
-      "fr": "OpenAI's GPT Image 2 image generation model. text-to-image and image-to-image with broad style and size support. image modality. Idéal pour product mockups, content illustrations, design exploration.",
-      "ru": "OpenAI's GPT Image 2 image generation model. text-to-image and image-to-image with broad style and size support. image modality. Подходит для product mockups, content illustrations, design exploration.",
-      "ja": "OpenAI's GPT Image 2 image generation model. text-to-image and image-to-image with broad style and size support. image modality. product mockups, content illustrations, design exploration 向け。",
-      "vi": "OpenAI's GPT Image 2 image generation model. text-to-image and image-to-image with broad style and size support. image modality. Phù hợp cho product mockups, content illustrations, design exploration."
+      "zhCN": "OpenAI GPT Image 2 图像生成模型，统一入口覆盖多档画质：默认分组 1K 快速出图；专业分组（GPT-Image-Pro）原生支持 1K/2K/4K；高清分组（GPT-Image-HD）异步出图 1K/2K/4K。支持文生图与图生图。适合产品原型、内容配图、设计探索。",
+      "zhTW": "OpenAI GPT Image 2 圖像生成模型，統一入口覆蓋多檔畫質：預設分組 1K 快速出圖；專業分組（GPT-Image-Pro）原生支援 1K/2K/4K；高畫質分組（GPT-Image-HD）非同步出圖 1K/2K/4K。支援文生圖與圖生圖。適合產品原型、內容配圖、設計探索。",
+      "en": "OpenAI GPT Image 2 image generation model with one entry covering multiple quality tiers: 1K fast output on the default group; native 1K/2K/4K on GPT-Image-Pro; async 1K/2K/4K on GPT-Image-HD. text-to-image and image-to-image. Ideal for product mockups, content illustrations, design exploration.",
+      "fr": "Modèle de génération d'images OpenAI GPT Image 2, une entrée unique pour plusieurs niveaux de qualité : 1K rapide sur le groupe par défaut ; 1K/2K/4K natif sur GPT-Image-Pro ; 1K/2K/4K asynchrone sur GPT-Image-HD. Text-to-image et image-to-image. Idéal pour les maquettes produit, illustrations de contenu, exploration de design.",
+      "ru": "Модель генерации изображений OpenAI GPT Image 2 — один вход для нескольких уровней качества: быстрый 1K в группе default; нативный 1K/2K/4K в GPT-Image-Pro; асинхронный 1K/2K/4K в GPT-Image-HD. Текст-в-изображение и изображение-в-изображение. Подходит для макетов продуктов, иллюстраций контента, дизайн-исследований.",
+      "ja": "OpenAI GPT Image 2 画像生成モデル。1つのエントリで複数の画質に対応：default グループで 1K 高速出力、GPT-Image-Pro で 1K/2K/4K ネイティブ、GPT-Image-HD で非同期 1K/2K/4K。テキストから画像、画像から画像に対応。プロトタイプ、コンテンツ図版、デザイン探索に最適。",
+      "vi": "Mô hình tạo ảnh OpenAI GPT Image 2 với một điểm truy cập duy nhất cho nhiều mức chất lượng: 1K nhanh trên nhóm default; 1K/2K/4K gốc trên GPT-Image-Pro; 1K/2K/4K bất đồng bộ trên GPT-Image-HD. Hỗ trợ văn bản-thành-ảnh và ảnh-thành-ảnh. Phù hợp cho mockup sản phẩm, minh họa nội dung, khám phá thiết kế."
     },
     "unit": "request",
     "badge": {
@@ -2765,14 +2765,80 @@
       "ja": "リクエストごと",
       "vi": "Mỗi lần gọi"
     },
-    "description_zh": "OpenAI GPT Image 2 图像生成模型。文生图与图生图能力成熟，支持多种风格与尺寸。支持图像模态。适合产品原型、内容配图、设计探索。",
-    "description_en": "OpenAI's GPT Image 2 image generation model. text-to-image and image-to-image with broad style and size support. image modality. Ideal for product mockups, content illustrations, design exploration.",
+    "description_zh": "OpenAI GPT Image 2 图像生成模型，统一入口覆盖多档画质：默认分组 1K 快速出图；专业分组（GPT-Image-Pro）原生支持 1K/2K/4K；高清分组（GPT-Image-HD）异步出图 1K/2K/4K。支持文生图与图生图。适合产品原型、内容配图、设计探索。",
+    "description_en": "OpenAI GPT Image 2 image generation model with one entry covering multiple quality tiers: 1K fast output on the default group; native 1K/2K/4K on GPT-Image-Pro; async 1K/2K/4K on GPT-Image-HD. text-to-image and image-to-image. Ideal for product mockups, content illustrations, design exploration.",
     "badge_zh": "按次计费",
     "badge_en": "Per Request",
     "suffix_zh": "/次",
     "suffix_en": "/ request",
     "price_key_zh": "每次请求",
-    "price_key_en": "Per request"
+    "price_key_en": "Per request",
+    "price_table": {
+      "columns": {
+        "zhCN": [
+          "分组 / 梯队",
+          "分辨率",
+          "价格 (/次)"
+        ],
+        "zhTW": [
+          "分組 / 梯隊",
+          "解析度",
+          "價格 (/次)"
+        ],
+        "en": [
+          "Group / Tier",
+          "Resolution",
+          "Price (/request)"
+        ],
+        "fr": [
+          "Groupe / Niveau",
+          "Résolution",
+          "Prix (/requête)"
+        ],
+        "ru": [
+          "Группа / Уровень",
+          "Разрешение",
+          "Цена (/запрос)"
+        ],
+        "ja": [
+          "グループ / 段階",
+          "解像度",
+          "価格 (/回)"
+        ],
+        "vi": [
+          "Nhóm / Hạng",
+          "Độ phân giải",
+          "Giá (/lần)"
+        ]
+      },
+      "rows": [
+        [
+          "default (标准组)",
+          "1K",
+          "$0.006849 / 次"
+        ],
+        [
+          "GPT-Image-Pro (专业组)",
+          "1K / 2K / 4K",
+          "$0.08 / 次"
+        ],
+        [
+          "GPT-Image-HD (高清组)",
+          "1K",
+          "$0.09 / 次"
+        ],
+        [
+          "GPT-Image-HD (高清组)",
+          "2K",
+          "$0.15 / 次"
+        ],
+        [
+          "GPT-Image-HD (高清组)",
+          "4K",
+          "$0.15 / 次"
+        ]
+      ]
+    }
   },
   "gpt-image-2-vip": {
     "description": "OpenAI GPT Image 2 的高规格图像生成模型。提供更高分辨率与更精细的细节还原能力。支持图像模态。适合高质量商业视觉、印刷物料、精细艺术创作。",
@@ -8331,5 +8397,10 @@
     "suffix_en": "/ request",
     "price_key_zh": "每次请求",
     "price_key_en": "Per request"
-  }
+  },
+  "__hidden__": [
+    "gpt-image-2-vip",
+    "gpt-image-2-2K",
+    "gpt-image-2-4K"
+  ]
 }

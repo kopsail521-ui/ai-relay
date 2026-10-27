@@ -140,7 +140,7 @@
           "model": "deepseek-v4-pro",
           "official": "DeepSeek V4 Pro (base) — verify on api-docs.deepseek.com",
           "keyo": "~$0.14 / $0.29 per 1M in/out",
-          "note": "Same catalog rates as deepseek-v4-pro-0813; alias redirects there — the paid twin of Atria-dawn-v2:free on /free-models"
+          "note": "Same catalog rates as deepseek-v4-pro-0813; alias redirects there. Gift-credit prototyping IDs live separately on /free-models"
         }
       ],
       "freeKiller": {
@@ -170,7 +170,7 @@
       "cheapestNote": {
         "title": "Cheapest current-generation DeepSeek API rate on Keyo",
         "body": [
-          "The earlier snapshot deepseek-v4-flash-0731 sits at ~$0.09 / $0.17 per 1M in/out, while the cheapest current-generation production DeepSeek Flash lane is deepseek-v4.1-flash at ~$0.14 / $0.56 per 1M in/out, with its October 17 snapshot edition deepseek-v4.1-flash-1017 setting the lowest absolute current-generation unit rate at ~$0.02 / $0.06 per 1M in/out. deepseek-v4.1-flash is the recommended default for batch, classification, and agent loops.",
+          "The earlier snapshot deepseek-v4-flash-0731 sits at ~$0.09 / $0.17 per 1M in/out, the standard current-generation DeepSeek Flash lane is deepseek-v4.1-flash at ~$0.14 / $0.56 per 1M in/out, and its October 17 snapshot edition deepseek-v4.1-flash-1017 sets the cheapest current-generation unit rate at ~$0.02 / $0.06 per 1M in/out. deepseek-v4.1-flash-1017 is the recommended default for batch, classification, and agent loops unless long-context limits dominate.",
           "The other rows are separate products, not rungs on a ladder: deepseek-v4.1-flash-1017 at ~$0.02 / $0.06 (October 17 CED snapshot), deepseek-v4-flash at ~$0.44 / $1.32 (legacy catalog string), deepseek-v4-flash-0731 at ~$0.09 / $0.17 (earlier snapshot), and deepseek-v4-pro-0813 with its alias deepseek-v4-pro at ~$0.14 / $0.29 each. So \"cheap\" here is a task choice, not a tier you upgrade through.",
           "Cost math: 50M input + 10M output tokens/month on deepseek-v4.1-flash ≈ $7.00 + $5.60 ≈ $12.60 (or ≈ $1.00 + $0.60 ≈ $1.60 on the -1017 snapshot). The same mix on deepseek-v4-flash (~$0.44 / $1.32) ≈ $22.00 + $13.20 ≈ $35.20. Confirm live rates on /pricing-list."
         ]
@@ -322,7 +322,7 @@
         "Keyo rates above are indicative sell prices from the live Keyo catalog. Always confirm interactive pages under /pricing/claude-sonnet-5, /pricing/claude-opus-5, /pricing/claude-opus-5-5, /pricing/claude-fable-5, and /pricing/claude-fable-5-1 before contracting volume. Anthropic list bands and context tiers change — treat official figures as planning context. For the per-token math behind these rows — what one request actually costs and how to sanity-check it against real traffic — see the guide: /brand/blog/article/zxeywzwx/.",
         "How to call: set OPENAI_BASE_URL=https://www.keyoapi.xyz/v1, use your Keyo API key, and pass a Claude model string (for example claude-sonnet-5) to POST /v1/chat/completions. Longer guides live at /model/claude-sonnet-5, /model/claude-opus-5, /model/claude-opus-5-5, and the Fable pages.",
         "When Claude returns HTTP 529 overloaded (or you are planning retries around Claude API overloaded errors), see the developer playbook: /brand/blog/article/ncx234u2/ — retry/backoff and fallback patterns on the same Keyo key.",
-        "When Anthropic / Claude list prices spike your margin, keep Claude for hard reasoning and shift bulk classification or drafts to gpt-6-luna or deepseek-v4.1-flash on the same key. For OpenAI / GPT dollars see /openai-api-pricing; for Gemini dollars see /gemini-api-pricing; for DeepSeek see /deepseek-api-pricing; for Grok see /grok-api-pricing; for free prototyping see /free-models."
+        "When Anthropic / Claude list prices spike your margin, keep Claude for hard reasoning and shift bulk classification or drafts to gpt-6-luna or deepseek-v4.1-flash-1017 on the same key. For OpenAI / GPT dollars see /openai-api-pricing; for Gemini dollars see /gemini-api-pricing; for DeepSeek see /deepseek-api-pricing; for Grok see /grok-api-pricing; for free prototyping see /free-models."
       ],
       "faqs": [
         {

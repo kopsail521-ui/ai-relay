@@ -39,14 +39,14 @@
       "official": "OpenAI flagship tier list often ~$2.50 / $10.00–$15.00 per 1M in/out",
       "keyo_model": "gpt-6-astra",
       "keyo_price": "~$1.84 / $9.19 per 1M in/out",
-      "note": "OpenAI model ID on Keyo OpenAI-compatible /v1/chat/completions"
+      "note": "Keyo-hosted GPT-class ID on an OpenAI-compatible /v1/chat/completions"
     },
     {
       "capability": "High-volume budget LLM",
       "official": "DeepSeek official Flash-class list often ~$0.14–$0.28 / $0.28–$1.10 per 1M in/out (confirm on platform.deepseek.com; not an OpenAI GPT mini equivalent)",
       "keyo_model": "deepseek-v4.1-flash",
       "keyo_price": "~$0.14 / $0.56 per 1M in/out",
-      "note": "Same-family budget Flash lane on Keyo — confirm live /pricing"
+      "note": "Same-family budget Flash lane on Keyo; a cheaper snapshot edition deepseek-v4.1-flash-1017 (~$0.02 / $0.06 per 1M) exists — see /deepseek-api-pricing"
     },
     {
       "capability": "Claude-class flagship",

@@ -127,7 +127,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
   <td><a href="/model/deepseek-v4-pro"><code>deepseek-v4-pro</code></a></td>
   <td>DeepSeek V4 Pro (base) — verify on api-docs.deepseek.com</td>
   <td class="ok">~$0.14 / $0.29 per 1M in/out</td>
-  <td>Same catalog rates as deepseek-v4-pro-0813; alias redirects there — the paid twin of Atria-dawn-v2:free on <a href="/free-models">the gift-credit models page</a></td>
+  <td>Same catalog rates as deepseek-v4-pro-0813; alias redirects there. Gift-credit prototyping IDs live separately on <a href="/free-models">the gift-credit models page</a></td>
 </tr>
 </tbody>
 </table></div>
@@ -135,7 +135,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
 <h2>Prototype on gift-credit models, then meter DeepSeek on the same key</h2>
 <p>To prototype on the same key, use catalog free IDs on <a href="/free-models">the gift-credit models page</a> — gift-credit IDs that bill at dedicated gift-credit rates from your one-time $10 new-user credit (fair-use rate limits) — including deepseek-v4.1-flash-1017:free and DeepSeek-Prover-V2-7B:free. When you meter DeepSeek chat, switch model= to deepseek-v4.1-flash, deepseek-v4.1-flash-1017, deepseek-v4-flash, or deepseek-v4-pro-0813 without changing base URL or auth — those are separate IDs, not one upgrade ladder. Free-path vs pricing detail for Flash: <a href="/model/deepseek-v4-flash">the deepseek-v4-flash model page</a>.</p>
 <h2>Cheapest current-generation DeepSeek API rate on Keyo</h2>
-<p>The earlier snapshot deepseek-v4-flash-0731 sits at ~$0.09 / $0.17 per 1M in/out, while the cheapest current-generation production DeepSeek Flash lane is deepseek-v4.1-flash at ~$0.14 / $0.56 per 1M in/out, with its October 17 snapshot edition deepseek-v4.1-flash-1017 setting the lowest absolute current-generation unit rate at ~$0.02 / $0.06 per 1M in/out. deepseek-v4.1-flash is the recommended default for batch, classification, and agent loops.</p>
+<p>The earlier snapshot deepseek-v4-flash-0731 sits at ~$0.09 / $0.17 per 1M in/out, the standard current-generation DeepSeek Flash lane is deepseek-v4.1-flash at ~$0.14 / $0.56 per 1M in/out, and its October 17 snapshot edition deepseek-v4.1-flash-1017 sets the cheapest current-generation unit rate at ~$0.02 / $0.06 per 1M in/out. deepseek-v4.1-flash-1017 is the recommended default for batch, classification, and agent loops unless long-context limits dominate.</p>
 <p>The other rows are separate products, not rungs on a ladder: deepseek-v4.1-flash-1017 at ~$0.02 / $0.06 (October 17 CED snapshot), deepseek-v4-flash at ~$0.44 / $1.32 (legacy catalog string), deepseek-v4-flash-0731 at ~$0.09 / $0.17 (earlier snapshot), and deepseek-v4-pro-0813 with its alias deepseek-v4-pro at ~$0.14 / $0.29 each. So &quot;cheap&quot; here is a task choice, not a tier you upgrade through.</p>
 <p>Cost math: 50M input + 10M output tokens/month on deepseek-v4.1-flash ≈ $7.00 + $5.60 ≈ $12.60 (or ≈ $1.00 + $0.60 ≈ $1.60 on the -1017 snapshot). The same mix on deepseek-v4-flash (~$0.44 / $1.32) ≈ $22.00 + $13.20 ≈ $35.20. Confirm live rates on <a href="/pricing-list">the full pricing list</a>.</p>
 <h2>Rates and how to call</h2>

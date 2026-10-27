@@ -400,7 +400,9 @@ test("about model categories cards, deepseek cheapest title, and modern model re
 
   const dsHtml = fs.readFileSync(path.join(seoRoot, "deepseek-api-pricing.html"), "utf8");
   assert.match(dsHtml, /<h2>Cheapest current-generation DeepSeek API rate on Keyo<\/h2>/, "deepseek-api-pricing must specify current-generation");
-  assert.match(dsHtml, /cheapest current-generation production DeepSeek Flash lane/i, "deepseek-api-pricing must scope the cheapest claim to the DeepSeek Flash lane");
+  assert.match(dsHtml, /standard current-generation DeepSeek Flash lane/i, "deepseek-api-pricing must not call v4.1-flash the cheapest (that is -1017)");
+  assert.match(dsHtml, /deepseek-v4.1-flash-1017 is the recommended default for batch/i, "deepseek-api-pricing must route batch defaults to -1017");
+  assert.doesNotMatch(dsHtml, /deepseek-v4.1-flash is the recommended default/i, "deepseek-api-pricing must not route batch defaults to the 7x standard lane");
   assert.doesNotMatch(dsHtml, /lowest absolute rate snapshot tier/i, "deepseek-api-pricing must not claim 0731 is the lowest absolute tier");
 
   // Superlative discipline: 'cheapest/lowest … overall' claims must account
@@ -429,6 +431,17 @@ test("about model categories cards, deepseek cheapest title, and modern model re
   assert.doesNotMatch(astraHtml, /claude-fable-5-1/i, "astra Adjacent must not pair the 4x-more-expensive cross-family fable tier");
   assert.doesNotMatch(astraHtml, /OpenAI flagship/i, "astra must not claim OpenAI brand ownership");
   assert.match(astraHtml, /Keyo-hosted GPT-class Flagship Chat/, "astra H1 must be Keyo-hosted");
+
+  // 10x per-call price fix (console: RMBG-2.0 / VajraV1 / Real-ESRGAN / AnimeSharp are $0.006849, not $0.0685)
+  const rmbgHtml = fs.readFileSync(path.join(seoRoot, "model/RMBG-2.0.html"), "utf8");
+  assert.match(rmbgHtml, /\$0\.00685 \/ request/, "RMBG-2.0 must carry the console per-call price");
+  assert.doesNotMatch(rmbgHtml, /0\.0685/, "RMBG-2.0 must not carry the 10x price");
+  // /compare astra row: no OpenAI brand ownership
+  const compareHtml = fs.readFileSync(path.join(seoRoot, "compare.html"), "utf8");
+  assert.doesNotMatch(compareHtml, /OpenAI model ID on Keyo/i, "compare must not claim OpenAI brand ownership for gpt-6-astra");
+  // claude bulk lane -> -1017
+  const claudeHtml = fs.readFileSync(path.join(seoRoot, "claude-api-pricing.html"), "utf8");
+  assert.match(claudeHtml, /drafts to gpt-6-luna or deepseek-v4.1-flash-1017/i, "claude Routing tip must route bulk lanes to -1017");
 
   const whisperHtml = fs.readFileSync(path.join(seoRoot, "model/whisper-large-v3.html"), "utf8");
   assert.match(whisperHtml, /gpt-6-luna for cost, claude-sonnet-5-5 for denser reasoning/, "whisper-large-v3 must recommend modern models");

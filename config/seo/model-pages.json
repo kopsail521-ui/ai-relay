@@ -380,13 +380,13 @@
       ],
       "h1": "GPT-5.6 Luna API — High-Volume GPT-5.6 Lane",
       "title": "GPT-5.6 Luna API | High-Volume GPT-5.6 Tier on KeyoAPI",
-      "metaDescription": "GPT-5.6 Luna API on KeyoAPI: ~$0.10/$0.62 per 1M tokens (indicative). OpenAI-compatible chat for high-volume classification and batch. Try at /pricing/gpt-5.6-luna.",
+      "metaDescription": "GPT-5.6 Luna API on KeyoAPI: ~$0.10/$0.62 per 1M tokens (indicative). OpenAI-compatible chat for high-volume classification and batch. Try with your KeyoAPI key.",
       "priceLabel": "~$0.10 / $0.62 per 1M in/out",
       "priceUnit": "per_1m_tokens",
       "related": [
         "gpt-5.6-terra",
-        "claude-sonnet-5",
-        "whisper-large-v3-turbo"
+        "gpt-6-luna",
+        "claude-sonnet-5"
       ],
       "endpoint": "POST /v1/chat/completions",
       "codeHint": "model=gpt-5.6-luna",

@@ -12,7 +12,7 @@ the dollar-zero to be followed by whitespace/punctuation rather than digits.
 """
 import re, glob, sys
 
-MECH = re.compile(r'welcome credit')
+MECH = re.compile(r'welcome credit|赠送金|赠金', re.I)
 NEG = re.compile(r'does not ship|no permanent|not yet listed|not as a', re.I)
 # "$0" not followed by a digit (excludes $0.09 etc.)
 FREE_CLAIM = re.compile(r'\$0(?![\d])')
@@ -51,18 +51,18 @@ for f in page_files:
     # heading (the heading usually carries the mechanism sentence).
     body = re.search(r'<body[^>]*>([\s\S]*)</body>', src)
     text = re.sub(r'<[^>]+>', ' ', body.group(1) if body else src)
-    text = text.replace('. ', '.\n')
+    text = text.replace('. ', '.\n').replace('。', '。\n')
     # Drop JSON-LD blocks embedded in the body
     text = re.sub(r'\{"@context".*?\}\s*', ' ', text, flags=re.S)
     # sentence split
-    sents = re.split(r'(?<=[.!?])\s+', text)
+    sents = re.split(r'(?<=[.!?。])\s+', text)
     for s in sents:
         # Card grids, code comments and link lists get flattened into
         # punctuation-less fragments; a real body sentence ends with a
         # terminator and has some length. Fragments are adjudicated by the
         # sentence that introduces their section, which the split already
         # covers separately.
-        if not s.rstrip().endswith(('.', '!', '?')) or len(s.split()) < 8:
+        if not s.rstrip().endswith(('.', '!', '?', '。')) or len(s.split()) < 8:
             continue
         # A flattened card grid stacks many "$0" price tags into one run;
         # real copy never has more than two $0 mentions in a sentence.

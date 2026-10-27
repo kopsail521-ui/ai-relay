@@ -1199,12 +1199,39 @@ ${freeCards}
 }
 
 function renderCompare() {
-  const llmRows = pages.models
+  const seenIds = new Set(pages.models.map((m) => m.modelId || m.id));
+  const compareExtra = [];
+  for (const r of pricingLandings.catalogRows || []) {
+    const id = r.model;
+    if (!id || seenIds.has(id)) continue;
+    seenIds.add(id);
+    compareExtra.push({
+      id,
+      category: r.category || "llm",
+      priceLabel: r.keyo,
+      endpoint: r.endpoint || "POST /v1/chat/completions",
+      guide: false,
+    });
+  }
+  const allModels = [...pages.models, ...compareExtra];
+  const llmRows = allModels
     .filter((m) => m.category === "llm")
-    .map(
-      (m) =>
-        `<tr><td><a href="/model/${encodeURIComponent(m.id)}">${esc(m.id)}</a></td><td>${esc(m.priceLabel)}</td><td><a href="/model/${encodeURIComponent(m.id)}">Guide</a></td></tr>`
-    )
+    .map((m) => {
+      const hasGuide = m.guide !== false;
+      const landing = landingByModel.get(m.id);
+      const modelCell = hasGuide
+        ? `<a href="/model/${encodeURIComponent(m.id)}">${esc(m.id)}</a>`
+        : landing
+          ? `<a href="/${landing}">${esc(m.id)}</a>`
+          : esc(m.id);
+      const guideLabel = landing && landing.includes("pricing") ? "Pricing" : "Guide";
+      const guide = hasGuide
+        ? `<a href="/model/${encodeURIComponent(m.id)}">Guide</a>`
+        : landing
+          ? `<a href="/${landing}">${guideLabel}</a>`
+          : `List`;
+      return `<tr><td>${modelCell}</td><td>${esc(m.priceLabel)}</td><td>${guide}</td></tr>`;
+    })
     .join("\n");
   const bodyHtml = `
 <p class="lead">This <strong>LLM API pricing comparison</strong> (and broader <strong>AI API price comparison</strong>) page puts KeyoAPI sell rates next to typical official list bands for GPT-class, Claude-class, DeepSeek, Whisper, and vision APIs — useful when you want one prepaid key without juggling five vendor invoices.</p>
@@ -1235,7 +1262,7 @@ ${contentGuideLinks("cost-guide")}
 <p>For token-metered chat IDs: expected cost ≈ (input millions × input $/1M) + (output millions × output $/1M), then add retries. Pull the $/1M figures from <a href="/pricing">the live pricing page</a> or the rows on this page — do not hard-code a spreadsheet forever. Worked OpenAI-side example: <a href="/openai-api-pricing">the OpenAI API pricing page</a>. Brand hubs: <a href="/claude-api-pricing">Claude / Anthropic</a>, <a href="/grok-api-pricing">Grok</a>, <a href="/gemini-api-pricing">Gemini</a>, <a href="/deepseek-api-pricing">DeepSeek</a>.</p>
 <h2>How to use this comparison</h2>
 <p>One OpenAI-compatible SDK, one prepaid balance, and multimodal add-ons on one invoice. Swap <code>base_url</code> + key; keep your existing client for chat / image / speech paths.</p>
-<p>Recommended rollout: start with <a href="${featuredHref("deepseek-v4.1-flash")}"><code>deepseek-v4.1-flash</code></a> on high-volume paths, <a href="${featuredHref("gpt-6-astra")}"><code>gpt-6-astra</code></a> or <a href="${featuredHref("gpt-5.6-terra")}"><code>gpt-5.6-terra</code></a> as default chat, escalate to <a href="${featuredHref("grok-4.7")}"><code>grok-4.7</code></a> or Claude-class lanes when you need denser reasoning.</p>
+<p>Recommended rollout: start with <a href="/deepseek-api-pricing"><code>deepseek-v4.1-flash-1017</code></a> (~$0.02 / $0.06) or <a href="${featuredHref("gpt-6-luna")}"><code>gpt-6-luna</code></a> (~$0.03 / $0.15) on high-volume paths, <a href="${featuredHref("deepseek-v4.1-flash")}"><code>deepseek-v4.1-flash</code></a> or <a href="${featuredHref("gpt-5.6-terra")}"><code>gpt-5.6-terra</code></a> as everyday default chat, escalate to <a href="${featuredHref("grok-4.7")}"><code>grok-4.7</code></a> or Claude-class lanes when you need denser reasoning.</p>
 <p>Evaluating KeyoAPI as an OpenRouter alternative? The short version: both aggregate many model providers behind one API key and an OpenAI-compatible chat endpoint, so migration is the same two-line change (<code>base_url</code> + key). KeyoAPI is prepaid-wallet billing on one invoice with gift-credit prototyping IDs (new users: $10; per invite: $3; fair-use) on the same key; OpenRouter is credit-based with per-model free tiers where offered. Compare specific lanes above before volume decisions, and confirm live rates on <a href="/pricing">Model Square</a> either way.</p>
 <h2>Related guides</h2>
 <ul>
@@ -1422,6 +1449,7 @@ ${rows}
 <h2>Gift-credit rules (read before you ship)</h2>
 <ul>
   <li><strong>Price:</strong> gift-credit IDs are <strong>billed at dedicated gift-credit rates</strong> (see table above and full pricing list). Gift credits are used first; any shortfall is charged to your recharge balance.</li>
+  <li><strong>Dedicated gift rates:</strong> gift-credit catalog IDs (with <code>:free</code> suffix) draw from promotional credits ($10 welcome credit, +$3 per invite) and operate on dedicated gift-pool rates. For maximum cash unit economics on standard wallet top-ups, call the un-suffixed base twin IDs on <a href="/pricing-list">the full pricing list</a>.</li>
   <li><strong>Complimentary credits:</strong> calls draw from your <strong>gift-credit balance</strong> (new users: $10; per successful invite: $3). When it runs out, top up to keep calling.</li>
   <li><strong>Fair use:</strong> gift-credit traffic has <strong>rate / concurrency limits</strong>. Limits can tighten under abuse. Do not treat gift-credit IDs as an unlimited production SLA.</li>
   <li><strong>Availability:</strong> some <code>:free</code> IDs may be added or removed from the catalog. Check <a href="/pricing">Model Square</a> before hard-coding.</li>

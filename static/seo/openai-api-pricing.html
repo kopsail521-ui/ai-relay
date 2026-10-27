@@ -79,7 +79,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
 <main class="wrap">
 <h1>OpenAI / ChatGPT API Pricing — KeyoAPI Rates &amp; Costs</h1>
 
-<p class="lead">Searching ChatGPT API pricing, OpenAI API pricing, or OpenAI API costs? This page compares indicative KeyoAPI sell rates for GPT-class IDs — including OpenAI gpt-6-astra — with typical public OpenAI list bands, then shows a simple token-cost planning method on one OpenAI-compatible base URL and prepaid wallet.</p>
+<p class="lead">Searching ChatGPT API pricing, OpenAI API pricing, or OpenAI API costs? This page compares indicative KeyoAPI sell rates for GPT-class IDs — including OpenAI-compatible gpt-6-astra — with typical public OpenAI list bands, then shows a simple token-cost planning method on one OpenAI-compatible base URL and prepaid wallet.</p>
 <p class="def"><strong>OpenAI / ChatGPT API Pricing</strong> is a model-family pricing lane on KeyoAPI — a prepaid AI API gateway where one Bearer key and one wallet ($1 = 500,000 quota units) cover chat, speech, vision, OCR and video models.</p>
 <div class="btnrow">
   <a class="btn btn-primary" href="/sign-up">Get API key</a>
@@ -122,8 +122,8 @@ ul{margin:0 0 14px;padding-left:1.2em}
 
 <h2>Prototype on gift-credit models, then promote to GPT-class</h2>
 <p>To prototype on the same key, use free catalog IDs on <a href="/free-models">the gift-credit models page</a> — gift-credit IDs that bill at normal rates from your one-time $10 new-user credit (fair-use rate limits). When quality gates pass, switch model= to gpt-6-astra, gpt-5.6-luna, deepseek-v4.1-flash, or kimi-k3 without changing base URL or auth. Guides: <a href="/model/gpt-6-astra">the gpt-6-astra model page</a>, <a href="/model/deepseek-v4-flash">the deepseek-v4-flash model page</a>, <a href="/model/kimi-k3">the kimi-k3 model page</a>.</p>
-<h2>Cheapest OpenAI-class API on Keyo — and the cheapest chat lane overall</h2>
-<p>If you searched for a cheap OpenAI API, two different questions are hiding in there. (1) The cheapest GPT-class lane on Keyo is gpt-5.6-luna at ~$0.10 / $0.62 per 1M in/out — GPT-5-class twins under the same OpenAI-compatible base URL. (2) The cheapest chat lane of any brand on that same key is gpt-6-luna at ~$0.03 / $0.15 per 1M in/out — already named above; deepseek-v4.1-flash (~$0.14 / $0.56) is the DeepSeek lane when you want that family instead.</p>
+<h2>Cheapest OpenAI-class API on Keyo</h2>
+<p>If you searched for a cheap OpenAI API, two different questions are hiding in there. (1) The cheapest GPT-5-class lane on Keyo is gpt-5.6-luna at ~$0.10 / $0.62 per 1M in/out — GPT-5-class twins under the same OpenAI-compatible base URL. (2) The cheapest GPT-6-class lane on that same key is gpt-6-luna at ~$0.03 / $0.15 per 1M in/out; deepseek-v4.1-flash-1017 (~$0.02 / $0.06) is also available when you want high-volume entry lanes in other families.</p>
 <p>Both ride one key, one base URL and one prepaid wallet, so the cheapest way to test OpenAI-shaped code is usually to prototype on a gift-credit ID from <a href="/free-models">the gift-credit models page</a>, then move only the traffic that needs GPT-class quality onto luna.</p>
 <p>Cost math: 50M input + 10M output tokens/month on luna ≈ $5.00 in + $6.20 out ≈ $11.20. The same mix on gpt-6-astra at ~$1.84 / $9.19 ≈ $92.00 + $91.90 ≈ $183.90. Confirm live Keyo rates on <a href="/pricing-list">the full pricing list</a> before you budget.</p>
 <h2>Rates and how to call</h2>
@@ -142,7 +142,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
 
 
 
-<pre># cURL — OpenAI gpt-6-astra on Keyo
+<pre># cURL — gpt-6-astra on Keyo
 curl https://www.keyoapi.xyz/v1/chat/completions \
   -H &quot;Authorization: Bearer $KEYO_API_KEY&quot; \
   -H &quot;Content-Type: application/json&quot; \
@@ -166,7 +166,7 @@ print(r.choices[0].message.content)</pre>
 </ol>
 <p class="meta">A verified first call is the acceptance test for the setup: the response should carry the payload shape documented in the handbook, the Wallet ledger should show a deduction in quota units (500,000 units = $1), and repeated calls should deduct linearly at the listed rate. Any mismatch usually means the model ID or endpoint is wrong — check both against <a href="/pricing-list">the pricing list</a> before debugging client code.</p>
 <h2>FAQ</h2>
-<div class="faq"><details><summary>Is this page about ChatGPT API pricing or OpenAI API pricing?</summary><p>Both searches land here. ChatGPT is the consumer product brand; the developer surface is the OpenAI API. Keyo lists GPT-class IDs (including OpenAI gpt-6-astra) with indicative sell rates — confirm live on /pricing/{id}.</p></details>
+<div class="faq"><details><summary>Is this page about ChatGPT API pricing or OpenAI API pricing?</summary><p>Both searches land here. ChatGPT is the consumer product brand; the developer surface is the OpenAI API. Keyo lists GPT-class IDs (including gpt-6-astra) with indicative sell rates — confirm live on /pricing/{id}.</p></details>
 <details><summary>Is Keyo cheaper than OpenAI API pricing?</summary><p>Often on the Keyo rows we list versus current OpenAI public list bands — but OpenAI’s list, prompt caching, and batch discounts change. Treat this table as a planning snapshot and verify both sides before you commit.</p></details>
 <details><summary>Is gpt-6-astra the OpenAI model?</summary><p>Yes. On Keyo, model=gpt-6-astra is OpenAI’s GPT-6 Astra. Guide: <a href="/model/gpt-6-astra">the gpt-6-astra model page</a>. Separate Keyo GPT-5.6-* IDs are GPT-class twins, not OpenAI first-party names.</p></details>
 <details><summary>Are gpt-5.6-* the same as OpenAI GPT-5?</summary><p>No. They are Keyo GPT-class model IDs on an OpenAI-compatible gateway. Use them when you want OpenAI SDK shape and Keyo unit economics; confirm live rates on /pricing/{id}.</p></details>
@@ -229,7 +229,7 @@ print(r.choices[0].message.content)</pre>
 
   <a href="https://launchclash.com" target="_blank" rel="noopener noreferrer"><img src="https://launchclash.com/assets/images/badge.png" alt="LaunchClash" height="54" loading="lazy" style="height:44px;width:auto;" /></a>
 
-  <span class="foot-updated">Updated 2026-10-25</span>
+  <span class="foot-updated">Updated 2026-10-27</span>
 </footer>
 </body>
 </html>

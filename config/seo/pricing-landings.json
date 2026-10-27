@@ -43,7 +43,7 @@
           "model": "gemini-omni-1.1-flash",
           "official": "Google Omni / multimodal list — verify on Google",
           "keyo": "~$0.11 per request",
-          "note": "Request-metered Omni Flash",
+          "note": "Request-metered Omni Flash video generation via POST /v1/videos/generations",
           "category": "video",
           "endpoint": "POST /v1/videos/generations"
         },
@@ -51,7 +51,7 @@
           "model": "gemini-omni-1.1-flash-ext",
           "official": "Extended Omni list — verify on Google",
           "keyo": "~$0.42 per request",
-          "note": "Request-metered Omni Ext",
+          "note": "Request-metered Omni Ext video generation via POST /v1/videos/generations",
           "category": "video",
           "endpoint": "POST /v1/videos/generations"
         }
@@ -63,7 +63,7 @@
       "body": [
         "Engineers comparing Gemini API pricing usually already want Google-class models with clearer unit economics — or one prepaid balance across Gemini-class IDs plus DeepSeek, GLM, Whisper, OCR, and TTS. Official Google surfaces win on brand trust; KeyoAPI wins when you want that stack without five invoices.",
         "Keyo rates above are indicative sell prices from the live Keyo catalog. Always confirm interactive pricing pages under /pricing/{modelId} before contracting volume. Catalog IDs can change as Google ships new stables — this page tracks what Keyo currently lists.",
-        "How to call: set OPENAI_BASE_URL=https://www.keyoapi.xyz/v1, use your Keyo API key, and pass the Gemini model string (for example gemini-3.8-flash) to POST /v1/chat/completions. Many Google-native features remain Google-console only; Keyo focuses on OpenAI-compatible chat access for overseas developer stacks.",
+        "How to call: set OPENAI_BASE_URL=https://www.keyoapi.xyz/v1, use your Keyo API key, and pass the Gemini model string (for example gemini-3.8-flash) to POST /v1/chat/completions (for video models gemini-omni-1.1-flash and -ext, use POST /v1/videos/generations as detailed in /pricing-list and the API handbook). Many Google-native features remain Google-console only; Keyo focuses on OpenAI-compatible chat access for overseas developer stacks.",
         "When Gemini list prices spike your margin, keep Gemini for multimodal strengths and shift plain text volume to deepseek-v4.1-flash or gpt-6-luna on the same key. For pure free prototyping, start on /free-models, then promote to Gemini paid IDs when quality gates pass."
       ],
       "faqs": [
@@ -73,7 +73,7 @@
         },
         {
           "q": "Do you offer a free Gemini model?",
-          "a": "Yes — Atria-dawn-v2:free is a gift-credit catalog ID billed from your $10 welcome credit (fair-use). Other gift-credit IDs on /free-models sit on the same API key beside paid Gemini traffic."
+          "a": "Keyo does not ship a Google-branded free Gemini ID. To prototype on the same key without commitment, you can test gift-credit IDs such as Atria-dawn-v2:free on /free-models from your $10 welcome credit (fair-use), then promote to paid Gemini-class models without changing credentials."
         },
         {
           "q": "Is Gemini 4 Argon available on KeyoAPI?",
@@ -399,7 +399,7 @@
         "cheap openai api",
         "gpt api pricing"
       ],
-      "lead": "Searching ChatGPT API pricing, OpenAI API pricing, or OpenAI API costs? This page compares indicative KeyoAPI sell rates for GPT-class IDs — including OpenAI gpt-6-astra — with typical public OpenAI list bands, then shows a simple token-cost planning method on one OpenAI-compatible base URL and prepaid wallet.",
+      "lead": "Searching ChatGPT API pricing, OpenAI API pricing, or OpenAI API costs? This page compares indicative KeyoAPI sell rates for GPT-class IDs — including OpenAI-compatible gpt-6-astra — with typical public OpenAI list bands, then shows a simple token-cost planning method on one OpenAI-compatible base URL and prepaid wallet.",
       "rows": [
         {
           "model": "deepseek-v4.1-flash",
@@ -441,7 +441,7 @@
       "faqs": [
         {
           "q": "Is this page about ChatGPT API pricing or OpenAI API pricing?",
-          "a": "Both searches land here. ChatGPT is the consumer product brand; the developer surface is the OpenAI API. Keyo lists GPT-class IDs (including OpenAI gpt-6-astra) with indicative sell rates — confirm live on /pricing/{id}."
+          "a": "Both searches land here. ChatGPT is the consumer product brand; the developer surface is the OpenAI API. Keyo lists GPT-class IDs (including gpt-6-astra) with indicative sell rates — confirm live on /pricing/{id}."
         },
         {
           "q": "Is Keyo cheaper than OpenAI API pricing?",
@@ -484,11 +484,11 @@
           "a": "The lowest-priced chat lane on the same key is gpt-6-luna (~$0.03 / $0.15 per 1M in/out). The cheapest GPT-class twin is gpt-5.6-luna (~$0.10 / $0.62). Neither needs a base_url or SDK change."
         }
       ],
-      "curlExample": "# cURL — OpenAI gpt-6-astra on Keyo\ncurl https://www.keyoapi.xyz/v1/chat/completions \\\n  -H \"Authorization: Bearer $KEYO_API_KEY\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\"model\":\"gpt-6-astra\",\"messages\":[{\"role\":\"user\",\"content\":\"Hello from GPT-6 Astra\"}]}'\n\n# Python — OpenAI SDK pointed at Keyo\nfrom openai import OpenAI\nclient = OpenAI(base_url=\"https://www.keyoapi.xyz/v1\", api_key=\"YOUR_KEYO_API_KEY\")\nr = client.chat.completions.create(\n    model=\"gpt-6-astra\",\n    messages=[{\"role\": \"user\", \"content\": \"Summarize this log line in one sentence.\"}],\n)\nprint(r.choices[0].message.content)",
+      "curlExample": "# cURL — gpt-6-astra on Keyo\ncurl https://www.keyoapi.xyz/v1/chat/completions \\\n  -H \"Authorization: Bearer $KEYO_API_KEY\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\"model\":\"gpt-6-astra\",\"messages\":[{\"role\":\"user\",\"content\":\"Hello from GPT-6 Astra\"}]}'\n\n# Python — OpenAI SDK pointed at Keyo\nfrom openai import OpenAI\nclient = OpenAI(base_url=\"https://www.keyoapi.xyz/v1\", api_key=\"YOUR_KEYO_API_KEY\")\nr = client.chat.completions.create(\n    model=\"gpt-6-astra\",\n    messages=[{\"role\": \"user\", \"content\": \"Summarize this log line in one sentence.\"}],\n)\nprint(r.choices[0].message.content)",
       "cheapestNote": {
-        "title": "Cheapest OpenAI-class API on Keyo — and the cheapest chat lane overall",
+        "title": "Cheapest OpenAI-class API on Keyo",
         "body": [
-          "If you searched for a cheap OpenAI API, two different questions are hiding in there. (1) The cheapest GPT-class lane on Keyo is gpt-5.6-luna at ~$0.10 / $0.62 per 1M in/out — GPT-5-class twins under the same OpenAI-compatible base URL. (2) The cheapest chat lane of any brand on that same key is gpt-6-luna at ~$0.03 / $0.15 per 1M in/out — already named above; deepseek-v4.1-flash (~$0.14 / $0.56) is the DeepSeek lane when you want that family instead.",
+          "If you searched for a cheap OpenAI API, two different questions are hiding in there. (1) The cheapest GPT-5-class lane on Keyo is gpt-5.6-luna at ~$0.10 / $0.62 per 1M in/out — GPT-5-class twins under the same OpenAI-compatible base URL. (2) The cheapest GPT-6-class lane on that same key is gpt-6-luna at ~$0.03 / $0.15 per 1M in/out; deepseek-v4.1-flash-1017 (~$0.02 / $0.06) is also available when you want high-volume entry lanes in other families.",
           "Both ride one key, one base URL and one prepaid wallet, so the cheapest way to test OpenAI-shaped code is usually to prototype on a gift-credit ID from /free-models, then move only the traffic that needs GPT-class quality onto luna.",
           "Cost math: 50M input + 10M output tokens/month on luna ≈ $5.00 in + $6.20 out ≈ $11.20. The same mix on gpt-6-astra at ~$1.84 / $9.19 ≈ $92.00 + $91.90 ≈ $183.90. Confirm live Keyo rates on /pricing-list before you budget."
         ]
@@ -570,9 +570,9 @@
     {
       "slug": "tts-api",
       "navLabel": "Text to Speech",
-      "h1": "Text to Speech API on KeyoAPI — IndexTTS-2, CosyVoice3 & Qwen3-TTS",
+      "h1": "Text to Speech API on KeyoAPI — IndexTTS-2, ElevenLabs & Async TTS",
       "title": "Text to Speech API | TTS Models on KeyoAPI",
-      "metaDescription": "Text to speech API on KeyoAPI: IndexTTS-2 (sync), CosyVoice3 & Qwen3-TTS (async). From ~$0.548–$1.37 / 10K characters. One key with Whisper and avatars.",
+      "metaDescription": "Text to speech API on KeyoAPI: ElevenLabs v4, IndexTTS-2, CosyVoice3 & Qwen3-TTS. Sync and async TTS from ~$0.40 / 10K characters. One key with Whisper and avatars.",
       "targetKeywords": [
         "text to speech api",
         "tts api",
@@ -581,7 +581,7 @@
       "tableHeading": "TTS models on Keyo",
       "colOfficial": "Shape",
       "bodyHeading": "Rates and endpoints",
-      "lead": "Looking for a text to speech API you can call from the same OpenAI-style key as Whisper and chat? KeyoAPI hosts sync IndexTTS-2 plus async CosyVoice3 and Qwen3-TTS — pick latency vs batch, then drive Duix-Avatar or InfiniteTalk when you need a talking face.",
+      "lead": "Looking for a text to speech API you can call from the same OpenAI-style key as Whisper and chat? KeyoAPI hosts sync IndexTTS-2 and ElevenLabs v4 plus async CosyVoice3 and Qwen3-TTS — pick latency vs batch, then drive Duix-Avatar or InfiniteTalk when you need a talking face.",
       "rows": [
         {
           "model": "IndexTTS-2",

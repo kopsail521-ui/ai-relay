@@ -1,0 +1,197 @@
+#!/usr/bin/env python3
+"""Bounded host resource evidence; no deploy, DB reads, request logs or model calls."""
+import datetime
+import http.client
+import json
+import os
+from pathlib import Path
+import re
+import subprocess
+import time
+
+
+def command(args, timeout=12):
+    try:
+        result = subprocess.run(args, capture_output=True, text=True, timeout=timeout, check=False)
+        return result.returncode, result.stdout[:4 * 1024 * 1024]
+    except (OSError, subprocess.TimeoutExpired):
+        return -1, ''
+
+
+def read(path, limit=65536):
+    try:
+        with open(path, encoding='utf-8', errors='replace') as stream:
+            return stream.read(limit)
+    except OSError:
+        return ''
+
+
+def numeric_lines(path, keys=None):
+    result = {}
+    for line in read(path).splitlines():
+        match = re.fullmatch(r'([A-Za-z0-9_()]+):?\s+(\d+)(?:\s+kB)?', line)
+        if match and (keys is None or match[1] in keys):
+            result[match[1]] = int(match[2])
+    return result
+
+
+def snapshot():
+    return {
+        'monotonic': time.monotonic(),
+        'memory_kib': numeric_lines('/proc/meminfo', {
+            'MemTotal', 'MemAvailable', 'MemFree', 'SwapTotal', 'SwapFree',
+            'Dirty', 'Writeback', 'Slab', 'SReclaimable', 'Cached', 'AnonPages'}),
+        'vmstat': numeric_lines('/proc/vmstat', {
+            'pswpin', 'pswpout', 'pgmajfault', 'oom_kill', 'allocstall_normal',
+            'allocstall_movable', 'pgscan_kswapd', 'pgscan_direct'}),
+        'pressure': {kind: read('/proc/pressure/' + kind, 2048).strip()
+                     for kind in ('cpu', 'memory', 'io')},
+        'cpu': read('/proc/stat').splitlines()[0],
+        'loadavg': read('/proc/loadavg', 128).strip(),
+    }
+
+
+def processes():
+    result = []
+    for item in Path('/proc').iterdir():
+        if not item.name.isdigit():
+            continue
+        status = read(item / 'status')
+        values = {}
+        for key in ('VmRSS', 'RssAnon', 'VmSwap', 'Threads'):
+            match = re.search(r'^' + key + r':\s+(\d+)', status, re.M)
+            if match:
+                values[key] = int(match[1])
+        name = read(item / 'comm', 256).strip()
+        if not re.fullmatch(r'[A-Za-z0-9_.:/ -]{1,128}', name):
+            name = '[other process]'
+        state = re.search(r'^State:\s+([A-Za-z])', status, re.M)
+        result.append(dict(pid=int(item.name), name=name,
+                           state=state[1] if state else None, **values))
+    return sorted(result, key=lambda item: item.get('VmRSS', 0), reverse=True)[:18]
+
+
+def disks():
+    result = []
+    for path in ('/', '/var/lib/docker', '/opt/ai-relay/data/new-api'):
+        try:
+            stat = os.statvfs(path)
+            result.append({'path': path, 'total_bytes': stat.f_blocks * stat.f_frsize,
+                           'available_bytes': stat.f_bavail * stat.f_frsize,
+                           'free_inodes': stat.f_favail, 'total_inodes': stat.f_files})
+        except OSError:
+            result.append({'path': path, 'unavailable': True})
+    return result
+
+
+def containers():
+    code, names = command(['docker', 'ps', '-a', '--format', '{{.Names}}'])
+    result = []
+    if code:
+        return {'unavailable': True}
+    for name in names.splitlines()[:100]:
+        if not re.fullmatch(r'[A-Za-z0-9_.-]{1,200}', name):
+            continue
+        code, raw = command(['docker', 'inspect', name])
+        try:
+            info = json.loads(raw)[0] if code == 0 else {}
+            state, host = info.get('State') or {}, info.get('HostConfig') or {}
+            log = host.get('LogConfig') or {}
+            log_options = {k: v for k, v in (log.get('Config') or {}).items()
+                           if k in ('max-size', 'max-file', 'compress')}
+            log_path = Path(info.get('LogPath') or '/nonexistent')
+            log_size = log_path.stat().st_size if log_path.is_file() else None
+            result.append({'name': name, 'image_id': info.get('Image'),
+                           'state': {key: state.get(key) for key in (
+                               'Status', 'Running', 'Restarting', 'Pid', 'OOMKilled', 'ExitCode', 'StartedAt', 'FinishedAt')},
+                           'restarts': info.get('RestartCount'), 'created': info.get('Created'),
+                           'memory_limit': host.get('Memory'), 'memory_swap_limit': host.get('MemorySwap'),
+                           'nano_cpus': host.get('NanoCpus'), 'pids_limit': host.get('PidsLimit'),
+                           'log_driver': log.get('Type'), 'log_options': log_options,
+                           'log_size_bytes': log_size,
+                           'health': (state.get('Health') or {}).get('Status')})
+        except (ValueError, IndexError, OSError):
+            result.append({'name': name, 'inspect_unavailable': True})
+    return result
+
+
+def kernel_events():
+    pattern = 'Out of memory|oom-kill|Killed process|I/O error|EXT4-fs error|No space left|blocked for more than|watchdog|soft lockup|hard LOCKUP|panic|Memory cgroup out of memory'
+    code, raw = command(['journalctl', '--since', '7 days ago', '--no-pager',
+                         '-o', 'json', '_TRANSPORT=kernel', '--grep', pattern, '-n', '120'], 15)
+    events = []
+    for line in raw.splitlines():
+        try:
+            row = json.loads(line)
+            message = str(row.get('MESSAGE', ''))
+            kinds = [kind for kind, expression in (
+                ('oom', r'out of memory|oom-kill|Killed process'),
+                ('disk_io_error', r'I/O error|EXT4-fs error'),
+                ('disk_full', r'No space left'), ('blocked_task', r'blocked for more than'),
+                ('lockup_or_panic', r'lockup|watchdog|panic')) if re.search(expression, message, re.I)]
+            victim = re.search(r'Killed process (\d+) \(([A-Za-z0-9_. -]{1,50})\)', message)
+            events.append({'timestamp_usec': row.get('__REALTIME_TIMESTAMP'), 'kinds': kinds,
+                           'victim_pid': int(victim[1]) if victim else None,
+                           'victim_name': victim[2] if victim else None})
+        except (ValueError, TypeError):
+            pass
+    return {'query_status': code, 'events': events, 'raw_messages_omitted': True}
+
+
+def local_health(port, path):
+    start = time.monotonic()
+    connection = http.client.HTTPConnection('127.0.0.1', port, timeout=4)
+    try:
+        connection.request('GET', path)
+        response = connection.getresponse()
+        response.read(512 * 1024)
+        return {'port': port, 'status': response.status, 'seconds': round(time.monotonic() - start, 3)}
+    except Exception as error:
+        return {'port': port, 'error_class': type(error).__name__}
+    finally:
+        connection.close()
+
+
+def main():
+    before = snapshot()
+    time.sleep(3)
+    after = snapshot()
+    duration = after['monotonic'] - before['monotonic']
+    deltas = {key: value - before['vmstat'].get(key, value) for key, value in after['vmstat'].items()}
+    _, stats = command(['docker', 'stats', '--no-stream', '--format',
+                       '{{.Name}}|{{.MemUsage}}|{{.CPUPerc}}|{{.PIDs}}|{{.BlockIO}}'], 12)
+    _, disk = command(['docker', 'system', 'df'], 12)
+    _, boots = command(['journalctl', '--list-boots', '--no-pager', '-n', '6'])
+    _, journal_size = command(['journalctl', '--disk-usage'])
+    daemon = {}
+    try:
+        config = json.loads(read('/etc/docker/daemon.json'))
+        daemon = {'log_driver': config.get('log-driver'),
+                  'log_options': {key: value for key, value in (config.get('log-opts') or {}).items()
+                                  if key in ('max-size', 'max-file', 'compress')}}
+    except (ValueError, TypeError):
+        pass
+    database_sizes = {path.name: path.stat().st_size for path in
+                      Path('/opt/ai-relay/data/new-api').glob('one-api.db*') if path.is_file()}
+    report = {'result': 'RESOURCE_READONLY_OK', 'time_utc': datetime.datetime.now(datetime.timezone.utc).isoformat(),
+              'mode': 'read-only; no env files, request logs, DB contents, deploys or model calls',
+              'uptime_seconds': float(read('/proc/uptime').split()[0]), 'cpu_count': os.cpu_count(),
+              'before': before, 'after': after, 'sample_seconds': round(duration, 3),
+              'vmstat_delta': deltas, 'disks': disks(), 'top_processes': processes(),
+              'containers': containers(), 'docker_stats': stats.splitlines(),
+              'docker_disk_summary': disk.splitlines(), 'docker_default_logs': daemon,
+              'boot_history': boots.splitlines(), 'journal_disk_usage': journal_size.strip(),
+              'journal_caps': [line.strip() for line in read('/etc/systemd/journald.conf').splitlines()
+                               if re.fullmatch(r'(?:SystemMaxUse|RuntimeMaxUse|SystemKeepFree|MaxRetentionSec)=[A-Za-z0-9 .]+', line)],
+              'database_file_sizes': database_sizes, 'kernel_events': kernel_events(),
+              'local_health': [local_health(port, path) for port, path in (
+                  (3000, '/api/status'), (3001, '/healthz'), (3010, '/healthz'), (3011, '/healthz'))]}
+    print(json.dumps(report, sort_keys=True), flush=True)
+
+
+if __name__ == '__main__':
+    try:
+        main()
+    except Exception as error:
+        print(json.dumps({'result': 'RESOURCE_READONLY_FAILED', 'error_class': type(error).__name__}), flush=True)
+        raise SystemExit(1)

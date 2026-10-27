@@ -1,0 +1,43 @@
+name: Apply VPS stability limits and bounded history
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0
+      - uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e
+        with:
+          node-version: 22
+      - run: python3 scripts/test-vps-stability.py
+      - run: node --test services/creem-moderation-proxy/request-budget.test.mjs
+  apply:
+    needs: verify
+    if: vars.KEYO_VPS_HOST != ''
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    concurrency:
+      group: keyo-vps-mutex
+      cancel-in-progress: false
+      queue: max
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0
+      - name: Apply inspected limits with rollback, then inspect
+        env:
+          HOST: ${{ vars.KEYO_VPS_HOST }}
+          USER: ${{ vars.KEYO_VPS_USER }}
+          KEY: ${{ secrets.KEYO_VPS_SSH_KEY }}
+        run: |
+          set -euo pipefail
+          if [ -z "${USER}" ]; then USER=admin; fi
+          test -n "${KEY}"
+          install -m 700 -d "${HOME}/.ssh"
+          printf '%s\n' "${KEY}" > "${HOME}/.ssh/keyo_stability"
+          chmod 600 "${HOME}/.ssh/keyo_stability"
+          trap 'rm -f "${HOME}/.ssh/keyo_stability"' EXIT
+          ssh -T -i "${HOME}/.ssh/keyo_stability" -o BatchMode=yes \
+            -o ConnectTimeout=20 -o ServerAliveInterval=15 -o ServerAliveCountMax=2 \
+            -o StrictHostKeyChecking=accept-new "${USER}@${HOST}" \
+            'sudo -n env RELOAD_CADDY=0 bash /opt/ai-relay/scripts/vps-safe-pull-preserve-blog.sh && sudo -n env PYTHONDONTWRITEBYTECODE=1 python3 /opt/ai-relay/scripts/vps-stability-hardening.py --apply && sudo -n env PYTHONDONTWRITEBYTECODE=1 python3 /opt/ai-relay/scripts/vps-resource-readonly-diagnostics.py'

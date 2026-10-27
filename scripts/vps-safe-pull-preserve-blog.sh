@@ -95,4 +95,7 @@ if [[ "${RELOAD_CADDY:-0}" == "1" ]]; then
   sudo bash "$ROOT/scripts/deploy-brand-static.sh"
 fi
 
+# This run's verified restore is complete; remove only its own mktemp backup.
+# Failed runs retain the backup for recovery.
+case "$STASH" in "${TMPDIR:-/tmp}"/keyo-geo-blog-preserve.*) sudo rm -rf -- "$STASH" ;; *) exit 1 ;; esac
 echo "DONE_SAFE_PULL_PRESERVE_BLOG"

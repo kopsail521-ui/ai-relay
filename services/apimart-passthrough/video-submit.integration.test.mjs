@@ -23,7 +23,7 @@ async function close(server) {
 test('video submission changes candidates only after definitive model rejection', { timeout: 20000 }, async t => {
   const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'keyo-video-submit-'));
   const wallet = path.join(tmp, 'wallet.db'), pending = path.join(tmp, 'pending.db');
-  for (const filename of ['server.mjs', 'video-contracts.mjs', 'task-responses.mjs', 'image-contracts.mjs', 'image-ledger.mjs', 'image-service.mjs', 'catalog.json']) {
+  for (const filename of ['server.mjs', 'request-budget.mjs', 'video-contracts.mjs', 'task-responses.mjs', 'image-contracts.mjs', 'image-ledger.mjs', 'image-service.mjs', 'catalog.json']) {
     let source = fs.readFileSync(path.join(dir, filename), 'utf8');
     if (filename === 'server.mjs') source = source.replace('loadEnvFile();', '// never read developer or VPS credentials');
     fs.writeFileSync(path.join(tmp, filename), source);
@@ -91,6 +91,24 @@ test('video submission changes candidates only after definitive model rejection'
     });
     return { status: response.status, body: await response.json(), requests: received.slice(before) };
   }
+
+  await t.test('aborted upload does not exit the gateway or submit upstream', async () => {
+    const count = received.length;
+    const partial = http.request(origin + '/v1/videos/generations', { method: 'POST', headers: { Authorization: 'Bearer sk-local-valid', 'content-type': 'application/json', 'content-length': '4096' } });
+    partial.on('error', () => {});
+    partial.write('{"model":"MiniMax-H3","prompt":"partial');
+    for (let i = 0; i < 50; i++) {
+      const status = await (await fetch(origin + '/healthz')).json();
+      if (status.resources.active_requests === 1) break;
+      await new Promise(resolve => setTimeout(resolve, 10));
+      if (i === 49) throw new Error('partial upload was not admitted');
+    }
+    partial.destroy();
+    await new Promise(resolve => setTimeout(resolve, 50));
+    assert.equal(child.exitCode, null);
+    assert.equal((await fetch(origin + '/healthz')).status, 200);
+    assert.equal(received.length, count);
+  });
 
   for (const status of [200, 202, 500, 502, 503, 504]) await t.test(`HTTP ${status} without task ID submits exactly once`, async () => {
     const result = await submit([

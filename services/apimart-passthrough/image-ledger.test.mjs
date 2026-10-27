@@ -107,6 +107,41 @@ function service(t, ledger, fetchImpl) {
   t.after(() => svc.stop());
   return svc;
 }
+
+test("worker saturation rejects before billing; deadline releases media without resubmitting", { timeout: 10000 }, async t => {
+  const f = fixture(t);
+  let posts = 0, polls = 0, complete = false;
+  const fetchImpl = async (url, options) => {
+    if (options.method === 'POST') { posts++; return Response.json({ id: 'bounded-upstream', status: 'running' }); }
+    polls++;
+    return Response.json(complete ? { status: 'succeeded', results: [{ url: 'https://example.invalid/complete.png' }] } : { status: 'running' });
+  };
+  const svc = new ImageService({ ledger: f.ledger, models: { [MODEL]: { id: MODEL, kind: 'image' } }, origin: ORIGIN, key: 'fixture', fetchImpl, maxJobs: 1, maxJobMs: 250, pollIntervalMs: 5 });
+  t.after(() => svc.stop());
+  const first = await request(svc);
+  assert.equal(first.status, 202);
+  assert.equal(svc.budget.requests, 1, 'async response must retain the media budget');
+  const second = await request(svc, { idempotencyKey: 'another', body: { model: MODEL, prompt: 'another', replyType: 'async' } });
+  assert.equal(second.status, 503);
+  assert.equal(posts, 1);
+  uncharged(f, COST);
+  await Promise.all([...svc.jobs.values()]);
+  assert.equal(svc.jobs.size, 0); assert.equal(svc.budget.requests, 0);
+  assert.equal(f.ledger.get(first.body.task_id).state, 'running');
+  assert.equal(f.ledger.get(first.body.task_id).upstream_id, 'bounded-upstream');
+  const count = polls;
+  f.advance(1000);
+  const restarted = new ImageService({ ledger: f.ledger, models: {}, origin: ORIGIN, key: 'fixture', fetchImpl, maxJobMs: 250 });
+  t.after(() => restarted.stop());
+  restarted.recover();
+  assert.equal(restarted.jobs.size, 0, 'expired tasks do not restart automatic polling');
+  assert.equal(polls, count);
+  complete = true;
+  await request(restarted, { method: 'GET', url: '/v1/images/tasks/' + first.body.task_id });
+  await Promise.all([...restarted.jobs.values()]);
+  assert.equal(f.ledger.get(first.body.task_id).state, 'ready');
+  assert.equal(posts, 1, 'querying a paused task never creates another generation');
+});
 async function request(svc, { method = "POST", url = "/v1/images/generations", token = 1, idempotencyKey = "fixture-key", body = { model: MODEL, prompt: "fixture prompt", replyType: "async" } } = {}) {
   const req = { method, url, socket: { remoteAddress: IP }, headers: { authorization: `Bearer sk-fixture-${token}`, ...(idempotencyKey === null ? {} : { "idempotency-key": idempotencyKey }) } };
   const res = new EventEmitter();

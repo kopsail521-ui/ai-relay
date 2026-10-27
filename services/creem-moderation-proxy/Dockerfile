@@ -1,6 +1,6 @@
 FROM node:22-alpine
 WORKDIR /app
-COPY video-routing.mjs media-input.mjs server.mjs marketplace-model-copy.json model-contracts.json public-model-metadata.mjs model-icon-map.json billing-unit-inject.js model-icon-inject.js ./
+COPY video-routing.mjs media-input.mjs request-budget.mjs server.mjs marketplace-model-copy.json model-contracts.json public-model-metadata.mjs model-icon-map.json billing-unit-inject.js model-icon-inject.js ./
 ENV NODE_ENV=production
 EXPOSE 3001
 CMD ["node", "server.mjs"]

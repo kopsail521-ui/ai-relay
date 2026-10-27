@@ -1,12 +1,12 @@
 import { normalizeImageRequest, extractImageResult, is4KSize } from "./image-contracts.mjs";
 import { ImageError, imageClientIp } from "./image-ledger.mjs";
+import { RequestBudget, resourceError } from "./request-budget.mjs";
 
 const SUCCESS = new Set(["succeeded", "success", "completed", "done"]);
 const FAILURE = new Set(["failed", "violation", "rejected", "cancelled", "canceled", "error"]);
-const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 export class ImageService {
-  constructor({ ledger, models, origin, key, aicopyOrigin = "https://api.aicopy.top", aicopyKey = "", fetchImpl = fetch, pollIntervalMs = 5000, waitMs = 180000, transportMs = 60000, trustedProxies = "", maxBodyBytes = 32 * 1024 * 1024, smartRouting = true }) {
+  constructor({ ledger, models, origin, key, aicopyOrigin = "https://api.aicopy.top", aicopyKey = "", fetchImpl = fetch, pollIntervalMs = 5000, waitMs = 180000, transportMs = 60000, trustedProxies = "", maxBodyBytes = 32 * 1024 * 1024, smartRouting = true, maxJobs = 2, maxJobMs = 900000, budget = new RequestBudget({ maxBytes: 32 * 1024 * 1024, maxRequests: 4 }) }) {
     this.ledger = ledger; this.models = models;
     this.origin = (origin || "").replace(/\/$/, "");
     this.key = key;
@@ -15,8 +15,12 @@ export class ImageService {
     this.fetch = fetchImpl;
     this.pollIntervalMs = pollIntervalMs; this.waitMs = waitMs; this.transportMs = transportMs; this.trustedProxies = trustedProxies; this.maxBodyBytes = maxBodyBytes; this.smartRouting = smartRouting;
     this.jobs = new Map(); this.stopped = false;
+    if (![maxJobs, maxJobMs].every(n => Number.isSafeInteger(n) && n > 0)) throw new Error("Invalid image worker limits");
+    this.maxJobs = maxJobs; this.maxJobMs = maxJobMs; this.budget = budget;
+    this.controllers = new Set(); this.sleeps = new Map(); this.pollCooldown = new Map();
   }
   error(res, e, id) {
+    if (e.code === "request_capacity_exceeded") res.setHeader?.("Retry-After", "5");
     return this.send(res, e.status || 503, { error: { message: e.status ? e.message : "Image task service temporarily unavailable", type: e.status === 400 ? "invalid_request_error" : "server_error", code: e.code || "image_service_unavailable", ...(e.param ? { param: e.param } : {}), ...(id ? { task_id: id } : {}) } });
   }
   send(res, status, body, deliveryId) {
@@ -43,13 +47,14 @@ export class ImageService {
     if (!Array.isArray(result.data) || !result.data.length) throw new ImageError(503, "image_result_unavailable", "Stored image result unavailable");
     return this.send(res, 200, { ...result, id: row.id, task_id: row.id, status: "succeeded", billing: { quota: row.quota, charged: !!row.charged } }, row.id);
   }
-  async transport(path, method, body, originOverride, keyOverride) {
+  async transport(path, method, body, originOverride, keyOverride, timeoutMs = this.transportMs) {
     // Never forward client credentials, routing/idempotency headers or unrelated
     // proxy headers to the native provider. The local ledger owns idempotency.
     const origin = (originOverride || this.origin).replace(/\/$/, "");
     const key = keyOverride || this.key;
     const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), this.transportMs);
+    this.controllers.add(controller);
+    const timeout = setTimeout(() => controller.abort(), Math.max(1, Math.min(this.transportMs, timeoutMs)));
     try {
       const response = await this.fetch(`${origin}${path}`, {
         method, signal: controller.signal, headers: { Authorization: `Bearer ${key}`, "Content-Type": "application/json" },
@@ -67,7 +72,7 @@ export class ImageService {
       let json = null;
       try { json = JSON.parse(text); } catch {}
       return { status: response.status, payload: json };
-    } finally { clearTimeout(timeout); }
+    } finally { clearTimeout(timeout); this.controllers.delete(controller); }
   }
   acceptResult(row, up) {
     // A polling transport error leaves the existing upstream task running.
@@ -86,6 +91,12 @@ export class ImageService {
   }
   startJob(row, native, opts = {}) {
     if (this.jobs.has(row.id)) return this.jobs.get(row.id);
+    if (this.stopped || this.jobs.size >= this.maxJobs || (this.pollCooldown.get(row.id) || 0) > Date.now()) return Promise.resolve();
+    const deadline = Date.now() + this.maxJobMs;
+    // Old durable tasks can still be queried by ID, but never occupy an
+    // automatic worker forever. A client query makes at most one GET for them.
+    const pollOnce = !native && row.created_at * 1000 < this.ledger.clock() * 1000 - this.maxJobMs;
+    const remaining = () => Math.max(1, deadline - Date.now());
     // One attempt = submit + poll in the row's current group. Returns the
     // terminal outcome so the failover wrapper can decide whether another
     // group should take over: only definitive generation failures fail over;
@@ -107,7 +118,7 @@ export class ImageService {
           };
           let up;
           try {
-            up = await this.transport("/v1/images/generations", "POST", aicopyBody, this.aicopyOrigin, this.aicopyKey);
+            up = await this.transport("/v1/images/generations", "POST", aicopyBody, this.aicopyOrigin, this.aicopyKey, remaining());
           } catch {
             this.ledger.failed(row.id, "image_submission_unknown", "submit_unknown");
             return "submit_unknown";
@@ -136,7 +147,7 @@ export class ImageService {
         const lease = Math.ceil(this.transportMs / 1000) + 30;
         if (!this.ledger.submitting(row.id, lease)) return "submitting_conflict";
         let up;
-        try { up = await this.transport("/v1/api/generate", "POST", native); }
+        try { up = await this.transport("/v1/api/generate", "POST", native, undefined, undefined, remaining()); }
         catch { this.ledger.failed(row.id, "image_submission_unknown", "submit_unknown"); return "submit_unknown"; }
         const id = up.payload?.id || up.payload?.task_id || up.payload?.data?.id || up.payload?.data?.task_id;
         const result = extractImageResult(up.payload);
@@ -170,19 +181,22 @@ export class ImageService {
         row = this.ledger.get(row.id);
         if (this.acceptResult(row, up)) return this.ledger.get(row.id).state === "ready" ? "ready" : "failed";
       }
-      while (!this.stopped) {
+      let failures = 0;
+      while (!this.stopped && Date.now() < deadline) {
         row = this.ledger.get(row.id);
         if (row.state !== "running" || !row.upstream_id) return row.state === "ready" ? "ready" : row.state === "failed" ? "failed" : "abandoned";
         try {
-          const up = await this.transport(`/v1/api/result?id=${encodeURIComponent(row.upstream_id)}`, "GET");
+          const up = await this.transport(`/v1/api/result?id=${encodeURIComponent(row.upstream_id)}`, "GET", undefined, undefined, undefined, remaining());
           if (this.acceptResult(row, up)) {
             const done = this.ledger.get(row.id);
             return done.state === "ready" ? "ready" : done.state === "failed" ? "failed" : "abandoned";
           }
-        } catch { /* transient poll failure, never another POST */ }
-        await delay(this.pollIntervalMs);
+          failures = up.status >= 200 && up.status < 300 ? 0 : failures + 1;
+        } catch { failures++; /* transient poll failure, never another POST */ }
+        if (pollOnce) break;
+        await this.pause(Math.min(remaining(), 30000, this.pollIntervalMs * 2 ** Math.min(failures, 5)));
       }
-      return "stopped";
+      return "paused";
     };
     const work = (async () => {
       let current = row;
@@ -192,7 +206,7 @@ export class ImageService {
       // continue in the next-cheapest group that serves this model, keeping
       // the customer-facing task id (and polling URL) unchanged.
       const tried = new Set([current.using_group]);
-      for (;;) {
+      while (!this.stopped && Date.now() < deadline) {
         let next;
         try { next = this.ledger.candidatesFor(current, { origin: this.origin, is4k: !!opts.is4k, excludeGroups: [...tried] })[0]; }
         catch { return; }
@@ -208,33 +222,23 @@ export class ImageService {
       // Any storage failure leaves the durable row for recovery; never submit
       // again after an uncertain write. Do not expose internal provider details.
       console.error(`[image] task recovery required task=${row.id}`);
-    }).finally(() => this.jobs.delete(row.id));
+    }).finally(() => {
+      this.jobs.delete(row.id);
+      this.pollCooldown.set(row.id, Date.now() + 60000);
+      if (this.pollCooldown.size > 512) this.pollCooldown.delete(this.pollCooldown.keys().next().value);
+    });
     this.jobs.set(row.id, work);
     return work;
   }
-  async readJson(req) {
-    const tooLarge = () => new ImageError(413, "image_body_too_large", `Image request body exceeds ${this.maxBodyBytes} bytes after JSON/base64 encoding`);
-    if (Number(req.headers["content-length"]) > this.maxBodyBytes) {
-      req.resume();
-      throw tooLarge();
-    }
-    const chunks = []; let bytes = 0;
-    // Breaking a normal IncomingMessage async iterator destroys its socket.
-    // Leave the connection writable so the gateway receives the real 413
-    // instead of ECONNRESET/502 while it is still uploading a large buffer.
-    for await (const chunk of req.iterator({ destroyOnReturn: false })) {
-      bytes += chunk.length;
-      if (bytes > this.maxBodyBytes) {
-        req.resume();
-        throw tooLarge();
-      }
-      chunks.push(chunk);
-    }
-    try { return JSON.parse(Buffer.concat(chunks).toString("utf8")); }
+  async readJson(req, lease) {
+    let buffer;
+    try { buffer = await lease.read(req, this.maxBodyBytes); }
+    catch (error) { if (error.status === 413) error.code = "image_body_too_large"; throw error; }
+    try { return JSON.parse(buffer.toString("utf8")); }
     catch { throw new ImageError(400, "invalid_json", "Invalid JSON body"); }
   }
   async handle(req, res, bodyOverride) {
-    let id;
+    let id, lease;
     try {
       const apiKey = /^Bearer\s+(.+)$/i.exec(String(req.headers.authorization || ""))?.[1]?.trim() || "";
       const ip = imageClientIp(req, this.trustedProxies);
@@ -250,7 +254,11 @@ export class ImageService {
         return this.delivery(res, row);
       }
       if (req.method !== "POST") throw new ImageError(405, "method_not_allowed", "Use POST to generate images");
-      const body = bodyOverride || await this.readJson(req);
+      if (this.stopped || this.jobs.size >= this.maxJobs) throw resourceError();
+      lease = this.budget.acquire();
+      let body;
+      if (bodyOverride) { lease.grow(Buffer.byteLength(JSON.stringify(bodyOverride))); body = bodyOverride; }
+      else body = await this.readJson(req, lease);
       const meta = this.models[body?.model];
       const normalized = normalizeImageRequest(body?.model, body);
       if (!meta || meta.kind !== "image") throw new ImageError(400, "image_model_unsupported", "Image model unavailable");
@@ -259,6 +267,10 @@ export class ImageService {
       const { row, fresh } = this.ledger.reserve({ apiKey, model: meta.id, requestHash: normalized.requestHash, idempotencyKey: req.headers["idempotency-key"], ip, origin: this.origin, is4k });
       id = row.id;
       const job = this.startJob(row, fresh ? { ...normalized.request, model: meta.upstream_model || meta.id, replyType: "async" } : undefined, { is4k });
+      // Async HTTP responses finish before generation. Keep the budget until
+      // the worker releases reference media, including any failover attempt.
+      const held = lease; lease = undefined;
+      job.finally(() => held.release());
       if (normalized.replyType === "async") return ["ready", "failed", "submit_unknown"].includes(row.state) ? this.delivery(res, row) : this.pending(res, row);
       // Bound the HTTP wait, not the lifetime of the persistent task. Disconnect
       // ends this wait while generation continues with the same durable ID.
@@ -271,11 +283,14 @@ export class ImageService {
       clearTimeout(timer);
       res.removeListener("close", closeHandler);
       return this.delivery(res, this.ledger.get(id));
-    } catch (e) { return this.error(res, e, id); }
+    } catch (e) {
+      if (e.code === "request_capacity_exceeded") req.resume?.();
+      if (!req.aborted) return this.error(res, e, id);
+    } finally { lease?.release(); }
   }
   recover() {
     if (this.stopped) return;
-    try { for (const row of this.ledger.recoverable()) this.startJob(row); }
+    try { for (const row of this.ledger.recoverable({ createdAfter: this.ledger.clock() - Math.ceil(this.maxJobMs / 1000), limit: this.maxJobs })) this.startJob(row); }
     catch { console.error("[image] recovery unavailable; image submissions fail closed"); }
   }
   startRecovery(intervalMs = 30000) {
@@ -283,5 +298,16 @@ export class ImageService {
     this.recoveryTimer = setInterval(() => this.recover(), intervalMs);
     this.recoveryTimer.unref();
   }
-  stop() { this.stopped = true; clearInterval(this.recoveryTimer); }
+  pause(ms) {
+    return new Promise(resolve => {
+      const timer = setTimeout(() => { this.sleeps.delete(timer); resolve(); }, ms);
+      this.sleeps.set(timer, resolve);
+    });
+  }
+  stop() {
+    this.stopped = true; clearInterval(this.recoveryTimer);
+    for (const controller of this.controllers) controller.abort();
+    for (const [timer, resolve] of this.sleeps) { clearTimeout(timer); resolve(); }
+    this.sleeps.clear();
+  }
 }

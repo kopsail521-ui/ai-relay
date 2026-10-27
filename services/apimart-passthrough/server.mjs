@@ -24,6 +24,7 @@ import { fileURLToPath } from "url";
 import { DatabaseSync } from "node:sqlite";
 import { ImageLedger } from "./image-ledger.mjs";
 import { ImageService } from "./image-service.mjs";
+import { RequestBudget } from "./request-budget.mjs";
 
 import {
   firstHttpsUrl,
@@ -152,11 +153,10 @@ function extractBearer(req) {
   return m ? m[1].trim() : "";
 }
 
-async function readBody(req) {
-  const chunks = [];
-  for await (const chunk of req) chunks.push(chunk);
-  return Buffer.concat(chunks);
-}
+const requestBudget = new RequestBudget({
+  maxBytes: Number(process.env.REQUEST_BUFFER_BUDGET_BYTES || 33554432),
+  maxRequests: Number(process.env.REQUEST_MAX_INFLIGHT || 4),
+});
 
 function tokenKeyCandidates(apiKey) {
   const raw = String(apiKey || "").trim();
@@ -807,6 +807,9 @@ const imageService = new ImageService({
   waitMs: Number(process.env.IMAGE_POLL_MAX_MS || 180000),
   transportMs: Number(process.env.IMAGE_TRANSPORT_TIMEOUT_MS || 60000),
   trustedProxies: process.env.IMAGE_TRUSTED_PROXIES || "",
+  budget: requestBudget,
+  maxJobs: Number(process.env.IMAGE_MAX_JOBS || 2),
+  maxJobMs: Number(process.env.IMAGE_JOB_MAX_MS || 900000),
   smartRouting: IMAGE_SMART_ROUTING,
 });
 imageService.startRecovery();
@@ -830,6 +833,7 @@ const server = http.createServer(async (req, res) => {
       db: fs.existsSync(DB_PATH),
       db_path: DB_PATH,
       image_ledger: imageLedger.health(),
+      resources: { ...requestBudget.health(), image_jobs: imageService.jobs.size },
       inventory_a: !!APIMART_KEY,
       inventory_b: !!OPENLUX_KEY,
       inventory_c: !!GRSAI_KEY,
@@ -869,11 +873,13 @@ const server = http.createServer(async (req, res) => {
     });
   }
 
-  let bodyBuf = ["GET", "HEAD"].includes(req.method || "")
-    ? Buffer.alloc(0)
-    : await readBody(req);
-
+  let lease, bodyBuf;
   try {
+    if (["GET", "HEAD"].includes(req.method || "")) bodyBuf = Buffer.alloc(0);
+    else {
+      lease = requestBudget.acquire();
+      bodyBuf = await lease.read(req, Number(process.env.VIDEO_MAX_BODY_BYTES || 33554432));
+    }
     if (isPollPath(urlPath)) {
       const tid = pollId(urlPath);
       const pending = getPending(tid);
@@ -1436,9 +1442,13 @@ const server = http.createServer(async (req, res) => {
     });
     res.end(out.buf);
   } catch (e) {
-    json(res, 502, {
-      error: { message: String(e.message || e), type: "server_error" },
+    if (res.destroyed || res.writableEnded || req.aborted) return;
+    if (e.code === "request_capacity_exceeded") { req.resume(); res.setHeader("Retry-After", "5"); res.setHeader("Connection", "close"); }
+    json(res, e.status || 502, {
+      error: { message: e.status ? e.message : "Media request failed", type: "server_error", ...(e.code ? { code: e.code } : {}) },
     });
+  } finally {
+    lease?.release();
   }
 });
 

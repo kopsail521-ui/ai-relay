@@ -16,6 +16,7 @@
  *   UPLOAD_TTL_HOURS=48
  */
 import http from "http";
+import { RequestBudget } from "./request-budget.mjs";
 import { looksLikeMissingVideo } from "./video-routing.mjs";
 import { normalizePublicModelMetadata } from "./public-model-metadata.mjs";
 import { parseMultipart, parseImageBody, validateUploadAuth, checkStorageSpace, checkUploadStorage, storageErrorCode, decodeBase64Upload } from "./media-input.mjs";
@@ -822,25 +823,13 @@ function json(res, status, body) {
   res.end(data);
 }
 
+const requestBudget = new RequestBudget({
+  maxBytes: Number(process.env.REQUEST_BUFFER_BUDGET_BYTES || 33554432),
+  maxRequests: Number(process.env.REQUEST_MAX_INFLIGHT || 8),
+});
+const requestLeases = new WeakMap();
 async function readBodyLimited(req, maxBytes) {
-  const declared = Number(req.headers["content-length"] || 0);
-  if (declared > maxBytes) {
-    const err = new Error("payload too large");
-    err.code = "payload_too_large";
-    throw err;
-  }
-  const chunks = [];
-  let n = 0;
-  for await (const chunk of req) {
-    n += chunk.length;
-    if (n > maxBytes) {
-      const err = new Error("payload too large");
-      err.code = "payload_too_large";
-      throw err;
-    }
-    chunks.push(chunk);
-  }
-  return Buffer.concat(chunks);
+  return requestLeases.get(req).read(req, maxBytes);
 }
 
 function ensureUploadDir() {
@@ -1066,7 +1055,7 @@ async function handleUploadPost(req, res) {
   });
 }
 
-function handleUploadGet(req, res, pathOnly) {
+async function handleUploadGet(req, res, pathOnly) {
   const name = path.basename(pathOnly);
   if (!/^[a-f0-9]{32}\.[a-z0-9]+$/i.test(name)) {
     return json(res, 404, {
@@ -1104,15 +1093,16 @@ function handleUploadGet(req, res, pathOnly) {
     }
     const ext = path.extname(name).toLowerCase();
     const mime = UPLOAD_EXT_MIME[ext] || "application/octet-stream";
-    const buf = fs.readFileSync(full);
     res.writeHead(200, {
       "Content-Type": mime,
-      "Content-Length": buf.length,
+      "Content-Length": st.size,
       "Cache-Control": "public, max-age=3600",
       "X-Content-Type-Options": "nosniff",
     });
-    res.end(buf);
+    if (req.method === "HEAD") return res.end();
+    await pipeline(fs.createReadStream(full), res);
   } catch (e) {
+    if (res.destroyed || res.headersSent) return;
     console.error("[uploads] get", e.message || e);
     return json(res, 500, {
       error: { message: "Failed to read upload", type: "api_error" },
@@ -1366,6 +1356,7 @@ if (!uploadStorageHealth.ok) {
 setInterval(purgeExpiredUploads, 60 * 60 * 1000).unref?.();
 
 const server = http.createServer(async (req, res) => {
+  let lease;
   try {
     const pathOnly = (req.url || "/").split("?")[0];
     if (redirectPublicPaths(req, res)) return;
@@ -1384,7 +1375,7 @@ const server = http.createServer(async (req, res) => {
     }
     if (req.method === "GET" && pathOnly === "/healthz") {
       // Startup result is immutable here: read-only diagnostics never write.
-      return json(res, uploadStorageHealth.ok ? 200 : 503, { ok: uploadStorageHealth.ok, storage: uploadStorageHealth.ok ? "ready" : uploadStorageHealth.code });
+      return json(res, uploadStorageHealth.ok ? 200 : 503, { ok: uploadStorageHealth.ok, storage: uploadStorageHealth.ok ? "ready" : uploadStorageHealth.code, resources: requestBudget.health() });
     }
     if (pathOnly === "/chat/completions") {
       return json(res, 404, {
@@ -1396,6 +1387,10 @@ const server = http.createServer(async (req, res) => {
       });
     }
 
+    if (!["GET", "HEAD", "OPTIONS"].includes(req.method || "")) {
+      lease = requestBudget.acquire();
+      requestLeases.set(req, lease);
+    }
     if (
       req.method === "POST" &&
       (pathOnly === "/v1/uploads" || pathOnly === "/v1/files")
@@ -1407,13 +1402,13 @@ const server = http.createServer(async (req, res) => {
       (req.method === "GET" || req.method === "HEAD") &&
       pathOnly.startsWith("/uploads/")
     ) {
-      handleUploadGet(req, res, pathOnly);
+      await handleUploadGet(req, res, pathOnly);
       return;
     }
 
     let bodyBuf;
     try {
-      bodyBuf = ["GET", "HEAD"].includes(req.method || "")
+      bodyBuf = ["GET", "HEAD", "OPTIONS"].includes(req.method || "")
         ? Buffer.alloc(0)
         : await readBodyLimited(req, PROXY_MAX_BODY_BYTES);
     } catch (e) {
@@ -1591,12 +1586,28 @@ const server = http.createServer(async (req, res) => {
 
     await proxyRequest(req, res, forwardBody);
   } catch (e) {
-    console.error("[proxy]", e);
-    if (!res.headersSent) {
+    if (e.code === "request_body_budget_exceeded" && !res.headersSent && !res.destroyed) {
+      res.setHeader("Connection", "close");
+      const image = IMAGE_PATHS.has((req.url || "").split("?")[0]);
+      return json(res, 413, { error: { message: e.message, type: "invalid_request_error", code: image ? "image_body_too_large" : e.code } });
+    }
+    if (e.code === "request_capacity_exceeded") {
+      req.resume();
+      if (!res.headersSent && !res.destroyed) {
+        res.setHeader("Retry-After", "5");
+        res.setHeader("Connection", "close");
+        return json(res, 503, { error: { message: e.message, type: "api_error", code: e.code } });
+      }
+    }
+    if (!req.aborted) console.error("[proxy]", e.code || "request_failed");
+    if (!res.headersSent && !res.destroyed) {
       json(res, 502, {
         error: { message: "Bad gateway", type: "api_error" },
       });
     }
+  } finally {
+    lease?.release();
+    requestLeases.delete(req);
   }
 });
 

@@ -22,7 +22,7 @@ import time
 ROOT = Path('/opt/ai-relay')
 NAME = 'ai-relay-apimart-passthrough'
 SOURCE_DIR = 'services/apimart-passthrough'
-SOURCES = ('server.mjs', 'video-contracts.mjs', 'task-responses.mjs',
+SOURCES = ('server.mjs', 'request-budget.mjs', 'video-contracts.mjs', 'task-responses.mjs',
            'image-contracts.mjs', 'image-ledger.mjs', 'image-service.mjs', 'catalog.json')
 KNOWN_LOOP_NAME = NAME + '-images-rollback'
 KNOWN_LOOP_IMAGE = 'sha256:df7b55a4f1ac22c1dba65fc650273e6ead60755e8ca58f50c7fbd812dca3ccd7'

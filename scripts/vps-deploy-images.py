@@ -108,6 +108,12 @@ def replacement(container, service, image):
     body.pop('Healthcheck', None) if body.get('Healthcheck') is None else None
     body['Image'] = image
     body['HostConfig'] = copy.deepcopy(container['HostConfig'])
+    log = body['HostConfig'].setdefault('LogConfig', {})
+    if not log.get('Type') or log['Type'] == 'json-file':
+        log['Type'] = 'json-file'
+        options = log.setdefault('Config', {})
+        options.setdefault('max-size', '10m')
+        options.setdefault('max-file', '3')
     # Preserve named AND anonymous volumes too: Config.Volumes alone would create
     # new anonymous volumes. Binds/structured Mounts take precedence.
     configured = set()

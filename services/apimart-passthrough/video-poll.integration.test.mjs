@@ -23,7 +23,7 @@ async function close(server) {
 test('persisted video routes query the right protocol and retain task ownership', { timeout: 20000 }, async t => {
   const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'keyo-video-poll-'));
   const wallet = path.join(tmp, 'wallet.db'), pending = path.join(tmp, 'pending.db');
-  for (const filename of ['server.mjs', 'video-contracts.mjs', 'task-responses.mjs', 'image-contracts.mjs', 'image-ledger.mjs', 'image-service.mjs', 'catalog.json']) {
+  for (const filename of ['server.mjs', 'request-budget.mjs', 'video-contracts.mjs', 'task-responses.mjs', 'image-contracts.mjs', 'image-ledger.mjs', 'image-service.mjs', 'catalog.json']) {
     let source = fs.readFileSync(path.join(dir, filename), 'utf8');
     if (filename === 'server.mjs') source = source.replace('loadEnvFile();', '// no developer or VPS env in this local fixture');
     fs.writeFileSync(path.join(tmp, filename), source);

@@ -46,9 +46,12 @@ export class ImageLedger {
   db() {
     // Do not create an empty wallet database if the mount is missing.
     if (!fs.existsSync(this.dbPath)) fail(503, "image_billing_unavailable", "Image billing database unavailable");
+    let db;
     try {
-      const db = new DatabaseSync(this.dbPath);
-      db.exec("PRAGMA busy_timeout=5000");
+      db = new DatabaseSync(this.dbPath);
+      // Synchronous SQLite waits block every request in this Node process.
+      // Fail closed quickly; clients can retry without changing task identity.
+      db.exec("PRAGMA busy_timeout=100");
       db.exec(`CREATE TABLE IF NOT EXISTS keyo_image_tasks (
         id TEXT PRIMARY KEY, token_id INTEGER NOT NULL, user_id INTEGER NOT NULL,
         model TEXT NOT NULL, request_hash TEXT NOT NULL, idempotency_key TEXT,
@@ -62,6 +65,7 @@ export class ImageLedger {
       CREATE INDEX IF NOT EXISTS keyo_image_recovery ON keyo_image_tasks(state,lease_until);`);
       return db;
     } catch {
+      try { db?.close(); } catch {}
       fail(503, "image_billing_unavailable", "Image billing database unavailable");
     }
   }
@@ -367,14 +371,14 @@ export class ImageLedger {
       return { ok: true, storage: "new_api_sqlite", reservation_ttl_seconds: this.reservationTtl, dedup_seconds: this.dedupSeconds, delivery_ack_writable: true };
     } catch { return { ok: false, storage: "new_api_sqlite", reservation_ttl_seconds: this.reservationTtl, dedup_seconds: this.dedupSeconds, delivery_ack_writable: false }; }
   }
-  recoverable() {
+  recoverable({ createdAfter = 0, limit = 64 } = {}) {
     return this.transaction((db) => {
       this.expire(db);
       for (const row of db.prepare("SELECT * FROM keyo_image_tasks WHERE state IN ('reserved','submitting') AND lease_until<=?").all(this.clock())) {
         this.release(db, row);
         db.prepare("UPDATE keyo_image_tasks SET state='submit_unknown',error_code='image_submission_unknown',lease_until=0 WHERE id=?").run(row.id);
       }
-      return db.prepare("SELECT * FROM keyo_image_tasks WHERE state='running' AND upstream_id IS NOT NULL").all();
+      return db.prepare("SELECT * FROM keyo_image_tasks WHERE state='running' AND upstream_id IS NOT NULL AND created_at>=? ORDER BY created_at DESC LIMIT ?").all(createdAfter, limit);
     });
   }
 }

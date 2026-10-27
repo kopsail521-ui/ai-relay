@@ -24,6 +24,8 @@ sudo docker inspect "$NAME" >/dev/null
 [[ -r "$ENV_FILE" ]] || { echo "ABORT: moderation env file is not readable" >&2; exit 1; }
 RESTART=$(sudo docker inspect "$NAME" --format '{{.HostConfig.RestartPolicy.Name}}{{if .HostConfig.RestartPolicy.MaximumRetryCount}}:{{.HostConfig.RestartPolicy.MaximumRetryCount}}{{end}}')
 WAS_RUNNING=$(sudo docker inspect "$NAME" --format '{{.State.Running}}')
+RUNTIME_ARGS_TEXT=$(sudo docker inspect "$NAME" | python3 "$ROOT/scripts/vps-runtime-args.py")
+mapfile -t RUNTIME_ARGS <<< "$RUNTIME_ARGS_TEXT"
 
 # Do not replace a customized upload path, credentials, or limits with the
 # deployment defaults. Capture values in memory without printing inspect data.
@@ -97,7 +99,7 @@ fi
 
 # Capture the checkout version before building. Check the actual container files
 # as well as process ownership, so a stale image or source bind cannot pass.
-SOURCE_NAMES=(server.mjs public-model-metadata.mjs model-contracts.json model-icon-inject.js)
+SOURCE_NAMES=(server.mjs request-budget.mjs public-model-metadata.mjs model-contracts.json model-icon-inject.js)
 SOURCE_PATHS=()
 EXPECTED_SOURCE=''
 for source_name in "${SOURCE_NAMES[@]}"; do
@@ -207,6 +209,7 @@ sudo docker update --restart=no "$NAME" >/dev/null
 sudo docker stop "$NAME" >/dev/null
 sudo docker rename "$NAME" "$OLD"
 sudo docker run -d --name "$NAME" --restart "${RESTART:-always}" --network host \
+  "${RUNTIME_ARGS[@]}" \
   --env-file "$ENV_FILE" \
   "${ENV_ARGS[@]}" \
   "${MOUNT_ARGS[@]}" \

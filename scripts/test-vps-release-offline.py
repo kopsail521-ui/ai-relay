@@ -69,6 +69,8 @@ elif tool == 'docker':
                 output = '\n'.join('|'.join(m) for m in s.get('mounts', []))
             else:
                 code = 2
+        else:
+            output = json.dumps([{'HostConfig': s.get('runtime', {'LogConfig': {'Type': 'json-file', 'Config': {}}})}])
     elif cmd == 'build':
         code = 1 if mode == 'build' else 0
     elif cmd == 'exec':
@@ -264,6 +266,8 @@ exec env "$@"
     def proxy_fixture(self, failure='', with_backup=False, create_upload=True):
         root = self.base / 'proxy live'
         write(root / 'scripts/vps-safe-pull-preserve-blog.sh', '#!/bin/bash\nexit 0\n')
+        write(root / 'scripts/vps-runtime-args.py', (REPO / 'scripts/vps-runtime-args.py').read_text())
+        self.add_script('python3', '#!/bin/bash\nif command -v cygpath >/dev/null; then exec "$MOCK_PYTHON" "$(cygpath -w "$1")"; else exec "$MOCK_PYTHON" "$@"; fi\n')
         write(root / '.env.moderation', 'OFFLINE_FIXTURE=not-a-secret\n')
         if create_upload:
             (root / 'static/uploads').mkdir(parents=True)
@@ -271,7 +275,7 @@ exec env "$@"
                                       'restart': 'unless-stopped'}}, 'events': []}
         state['env_file'] = str(root / '.env.moderation')
         state['source_hashes'] = {}
-        for file in ('server.mjs', 'public-model-metadata.mjs', 'model-contracts.json', 'model-icon-inject.js'):
+        for file in ('server.mjs', 'request-budget.mjs', 'public-model-metadata.mjs', 'model-contracts.json', 'model-icon-inject.js'):
             content = 'offline-source-' + file
             write(root / 'services/creem-moderation-proxy' / file, content)
             state['source_hashes'][file] = hashlib.sha256(content.encode()).hexdigest()
@@ -349,7 +353,7 @@ exec env "$@"
         self.assertEqual(run[run.index('--network') + 1], 'host')
         self.assertEqual(len([e for e in events if e[0] == 'curl']), 2)
         self.assertEqual(len([e for e in events if e[:2] == ['docker', 'exec']]), 2)
-        self.assertIn('VERIFIED_PROXY_PID=222 SOURCE_FILES=4 STABLE_CHECKS=2', result.stdout)
+        self.assertIn('VERIFIED_PROXY_PID=222 SOURCE_FILES=5 STABLE_CHECKS=2', result.stdout)
         self.assertIn('DONE_REDEPLOY_CREEM_MODERATION', result.stdout)
 
     def test_success_keeps_first_rollback_container(self):

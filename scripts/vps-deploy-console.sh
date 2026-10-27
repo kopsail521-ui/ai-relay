@@ -24,6 +24,9 @@ RST=$(sudo docker inspect "$NAME" --format '{{.HostConfig.RestartPolicy.Name}}')
 CMD=$(sudo docker inspect "$NAME" --format '{{range .Config.Cmd}}{{printf " %s" .}}{{end}}')
 
 ARGS=()
+RUNTIME_ARGS_TEXT=$(sudo docker inspect "$NAME" | python3 /opt/ai-relay/scripts/vps-runtime-args.py)
+mapfile -t RUNTIME_ARGS <<< "$RUNTIME_ARGS_TEXT"
+ARGS+=("${RUNTIME_ARGS[@]}")
 if [ "$NET" = "host" ]; then
   ARGS+=(--network host)
 else

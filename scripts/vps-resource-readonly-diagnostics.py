@@ -97,6 +97,13 @@ def containers():
         try:
             info = json.loads(raw)[0] if code == 0 else {}
             state, host = info.get('State') or {}, info.get('HostConfig') or {}
+            cgroup_usage = {}
+            if state.get('Running') and isinstance(state.get('Pid'), int):
+                value = read('/proc/' + str(state['Pid']) + '/cgroup', 4096).strip()
+                if value.startswith('0::/') and re.fullmatch(r'0::/[A-Za-z0-9_.@:/-]+', value) and '..' not in value:
+                    base = Path('/sys/fs/cgroup') / value[4:]
+                    cgroup_usage = {key: read(base / key, 64).strip() for key in ('memory.current', 'memory.max', 'memory.swap.current')}
+                    cgroup_usage['memory.stat'] = {key: val for key, val in numeric_lines(base / 'memory.stat').items() if key in ('anon', 'file', 'kernel')}
             log = host.get('LogConfig') or {}
             log_options = {k: v for k, v in (log.get('Config') or {}).items()
                            if k in ('max-size', 'max-file', 'compress')}
@@ -108,6 +115,8 @@ def containers():
                            'restarts': info.get('RestartCount'), 'created': info.get('Created'),
                            'memory_limit': host.get('Memory'), 'memory_swap_limit': host.get('MemorySwap'),
                            'nano_cpus': host.get('NanoCpus'), 'pids_limit': host.get('PidsLimit'),
+                           'cgroup_parent': host.get('CgroupParent'),
+                           'cgroup_memory': cgroup_usage,
                            'log_driver': log.get('Type'), 'log_options': log_options,
                            'log_size_bytes': log_size,
                            'health': (state.get('Health') or {}).get('Status')})
@@ -212,6 +221,31 @@ def local_health(port, path):
         connection.close()
 
 
+def stability_history():
+    result = {}
+    control = Path('/sys/fs/cgroup/keyo.slice/keyo-services.slice')
+    result['aggregate_limits'] = {key: read(control / key, 4096).strip() for key in ('memory.current', 'memory.max', 'memory.swap.current', 'memory.swap.max', 'memory.events', 'io.max')}
+    for unit in ('keyo-services.slice', 'keyo-stability-recorder.service', 'keyo-stability-retention.timer'):
+        _, state = command(['systemctl', 'show', unit, '--property=ActiveState,SubState,MemoryCurrent,MemoryMax,MemorySwapMax,ControlGroup', '--no-pager'])
+        result[unit] = state.splitlines()
+    path = Path('/var/log/keyo-stability/resources.jsonl')
+    try:
+        with path.open('rb') as stream:
+            stream.seek(max(0, path.stat().st_size - 65536))
+            tail = stream.read(65536).decode('utf8', 'replace').splitlines()
+        rows = []
+        for line in tail:
+            try:
+                rows.append(json.loads(line))
+            except (ValueError, TypeError):
+                pass
+        result['recent_samples'] = rows[-3:]
+        result['history_file_bytes'] = path.stat().st_size
+    except OSError:
+        result['history_available'] = False
+    return result
+
+
 def main():
     before = snapshot()
     time.sleep(3)
@@ -223,6 +257,7 @@ def main():
     _, disk = command(['docker', 'system', 'df'], 12)
     _, boots = command(['journalctl', '--list-boots', '--no-pager', '-n', '6'])
     _, journal_size = command(['journalctl', '--disk-usage'])
+    _, cgroup_info = command(['docker', 'info', '--format', '{{.CgroupDriver}}|{{.CgroupVersion}}'])
     daemon = {}
     try:
         config = json.loads(read('/etc/docker/daemon.json'))
@@ -246,6 +281,8 @@ def main():
               'database_file_sizes': database_sizes, 'kernel_events': kernel_events(),
               'previous_boot_ends': previous_boot_ends(), 'image_task_aggregate': task_aggregate(),
               'selected_directory_usage': bounded_directory_usage(),
+              'stability_history': stability_history(),
+              'docker_cgroup_driver_version': cgroup_info,
               'local_health': [local_health(port, path) for port, path in (
                   (3000, '/api/status'), (3001, '/healthz'), (3010, '/healthz'), (3011, '/healthz'))]}
     print(json.dumps(report, sort_keys=True), flush=True)

@@ -43,6 +43,8 @@ jobs:
       - run: python3 scripts/test-vps-release-offline.py
       - run: node scripts/test-auth-page-proxy-offline.mjs
       - run: node --test services/creem-moderation-proxy/server.integration.test.mjs
+      - run: node --test services/creem-moderation-proxy/request-budget.test.mjs
+      - run: python3 scripts/test-vps-stability.py
       - run: node scripts/test-video-contracts-offline.mjs
       - run: node scripts/test-task-responses-offline.mjs
       - run: node --test scripts/public-doc-contracts.test.mjs

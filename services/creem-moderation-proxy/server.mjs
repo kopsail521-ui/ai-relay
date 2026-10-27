@@ -149,7 +149,14 @@ function loadVideoGenModels() {
     try {
       if (!fs.existsSync(p)) continue;
       const j = JSON.parse(fs.readFileSync(p, "utf8"));
-      const ids = (j.models || []).map((m) => m.id).filter(Boolean);
+      // Video-generation routing must exclude image-kind models: image models
+      // in the catalog are served by the native image service via
+      // /v1/images/generations, while their async /v1/videos lane (if any) is
+      // handled by New API (sora adapter), not the video-gen service.
+      const ids = (j.models || [])
+        .filter((m) => m.kind !== "image")
+        .map((m) => m.id)
+        .filter(Boolean);
       if (ids.length) {
         console.log(`[creem] VIDEO_GEN_MODELS from ${p} (${ids.length})`);
         return new Set(ids);

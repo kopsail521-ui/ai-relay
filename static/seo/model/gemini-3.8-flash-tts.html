@@ -4,19 +4,19 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Gemini 3.8 Flash TTS API on KeyoAPI | Speech</title>
-<meta name="description" content="Call gemini-3.8-flash-tts on KeyoAPI (~$0.44 / $8.82 per 1M). Gemini-style generateContent returns inline WAV audio." />
+<meta name="description" content="Call gemini-3.8-flash-tts on KeyoAPI (~$0.44 / $8.82 per 1M). Native generateContent returns JSON audio; decode according to inlineData.mimeType." />
 <link rel="canonical" href="https://www.keyoapi.xyz/model/gemini-3.8-flash-tts" />
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://www.keyoapi.xyz/model/gemini-3.8-flash-tts" />
 <meta property="og:title" content="Gemini 3.8 Flash TTS API on KeyoAPI | Speech" />
-<meta property="og:description" content="Call gemini-3.8-flash-tts on KeyoAPI (~$0.44 / $8.82 per 1M). Gemini-style generateContent returns inline WAV audio." />
+<meta property="og:description" content="Call gemini-3.8-flash-tts on KeyoAPI (~$0.44 / $8.82 per 1M). Native generateContent returns JSON audio; decode according to inlineData.mimeType." />
 <meta property="og:image" content="https://www.keyoapi.xyz/brand/logo.svg" />
 <link rel="icon" href="/brand/logo.svg" type="image/svg+xml" />
 <link rel="stylesheet" href="/brand/keyo-theme.css" />
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content="Gemini 3.8 Flash TTS API on KeyoAPI | Speech" />
-<meta name="twitter:description" content="Call gemini-3.8-flash-tts on KeyoAPI (~$0.44 / $8.82 per 1M). Gemini-style generateContent returns inline WAV audio." />
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"SoftwareApplication","name":"KeyoAPI gemini-3.8-flash-tts","applicationCategory":"DeveloperApplication","url":"https://www.keyoapi.xyz/model/gemini-3.8-flash-tts","description":"Call gemini-3.8-flash-tts on KeyoAPI (~$0.44 / $8.82 per 1M). Gemini-style generateContent returns inline WAV audio.","offers":{"@type":"Offer","priceCurrency":"USD","description":"~$0.44 / $8.82 per 1M in/out"}}</script>
+<meta name="twitter:description" content="Call gemini-3.8-flash-tts on KeyoAPI (~$0.44 / $8.82 per 1M). Native generateContent returns JSON audio; decode according to inlineData.mimeType." />
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"SoftwareApplication","name":"KeyoAPI gemini-3.8-flash-tts","applicationCategory":"DeveloperApplication","url":"https://www.keyoapi.xyz/model/gemini-3.8-flash-tts","description":"Call gemini-3.8-flash-tts on KeyoAPI (~$0.44 / $8.82 per 1M). Native generateContent returns JSON audio; decode according to inlineData.mimeType.","offers":{"@type":"Offer","priceCurrency":"USD","description":"~$0.44 / $8.82 per 1M in/out"}}</script>
 <style>.wrap{max-width:880px;margin:0 auto;padding:28px 24px 48px}
 .footer{display:flex;flex-wrap:wrap;gap:10px 16px;max-width:1080px;margin:0 auto;padding:24px 24px 40px;border-top:1px solid var(--line);font-size:13px;color:var(--muted)}
 .footer a{color:var(--ink-2);text-decoration:none}
@@ -74,7 +74,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
 </header>
 <main class="wrap">
 <h1>Gemini 3.8 Flash TTS API on KeyoAPI — Low-Latency Speech</h1>
-<p class="lead">Gemini 3.8 Flash TTS for controllable, low-latency speech on the same Keyo API key as chat — calls support Gemini-native generateContent and the OpenAI-compatible /v1/audio/speech endpoint. The two routes return audio differently; see the handbook.</p>
+<p class="lead">Gemini 3.8 Flash TTS for controllable, low-latency speech on the same Keyo API key as chat — use only Gemini-native generateContent. The /v1/audio/speech endpoint does not support this model; see the native response decoder in the handbook.</p>
 <p class="meta">Listed price: <span class="ok">~$0.44 / $8.82 per 1M in/out</span> · Live catalog: <a href="/pricing">Model Square</a> · Static list: <a href="/pricing-list">pricing list</a>.</p>
 <div class="btnrow">
   <a class="btn btn-primary" href="/sign-up">Get API key</a>
@@ -87,7 +87,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
 <li>Listed price: <strong>~$0.44 / $8.82 per 1M in/out tokens</strong> — audio-token metered; a per-call cost follows your input and output token counts</li>
 <li>Billing base: $1 of wallet balance = 500,000 quota units</li>
 <li>Gift credit: new users get $10, invites add $3 — spend-first on <code>:free</code> IDs</li>
-<li>Endpoint: <code>POST /v1beta/models/gemini-3.8-flash-tts:generateContent</code> with Bearer auth on <code>https://www.keyoapi.xyz/v1</code></li>
+<li>Endpoint: <code>POST /v1beta/models/gemini-3.8-flash-tts:generateContent</code> with Bearer auth; use the full URL <code>https://www.keyoapi.xyz/v1beta/models/gemini-3.8-flash-tts:generateContent</code> (do not append this native path to a base URL ending in /v1)</li>
 </ul>
 <h2>How to call it</h2>
 <ol class="steps">
@@ -97,7 +97,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
 </ol>
 <p class="meta">Verify with one cheap call before production: the Wallet ledger shows the deduction in quota units (500,000 units = $1), repeated calls deduct linearly at the listed rate, and a mismatch usually means the model ID or endpoint string is wrong — reconcile against <a href="/pricing-list">the pricing list</a>.</p>
 <h2>Overview</h2>
-<p>gemini-3.8-flash-tts is Gemini Flash text-to-speech on KeyoAPI. Indicative rates about $0.44 / $8.82 per 1M in/out — confirm live on <a href="/pricing-list">the full pricing list</a>. Call POST /v1beta/models/gemini-3.8-flash-tts:generateContent with responseModalities ["AUDIO"] and receive WAV audio inline (base64) in the same response. Use IndexTTS-2 or CosyVoice3 when you already run async TTS jobs.</p>
+<p>gemini-3.8-flash-tts is Gemini Flash text-to-speech on KeyoAPI. Indicative rates about $0.44 / $8.82 per 1M in/out — confirm live on <a href="/pricing-list">the full pricing list</a>. Call POST /v1beta/models/gemini-3.8-flash-tts:generateContent with responseModalities ["AUDIO"] and receive inline JSON audio (base64); inspect inlineData.mimeType and decode it before playback. Use IndexTTS-2 or CosyVoice3 when you already run async TTS jobs.</p>
 <h2>Quick start</h2>
 <div class="card">
 <p>Base URL: <code>https://www.keyoapi.xyz/v1</code></p>
@@ -106,11 +106,12 @@ ul{margin:0 0 14px;padding-left:1.2em}
 <pre><code>curl https://www.keyoapi.xyz/v1beta/models/gemini-3.8-flash-tts:generateContent \
   -H "Authorization: Bearer $KEYO_API_KEY" \
   -H "Content-Type: application/json" \
-  -d '{"contents":[{"parts":[{"text":"Hello from Gemini 3.8 Flash TTS."}]}],"generationConfig":{"responseModalities":["AUDIO"],"speechConfig":{"voiceConfig":{"prebuiltVoiceConfig":{"voiceName":"Kore"}}}}}'</code></pre><p>Alternatively, use <code>POST /v1/audio/speech</code> with <code>model=gemini-3.8-flash-tts</code> and text <code>input</code>; this compatible route returns audio bytes. See <a href="/brand/keyo-api-ref.html#section-7">the speech contract</a> for required fields and supported options. Do not parse that audio response as JSON.</p>
+  -d '{"contents":[{"role":"user","parts":[{"text":"Hello from Gemini 3.8 Flash TTS."}]}],"generationConfig":{"responseModalities":["AUDIO"],"speechConfig":{"voiceConfig":{"prebuiltVoiceConfig":{"voiceName":"Kore"}}}}}' \
+  --output gemini-tts-response.json</code></pre><p>Use only the native URL above. The response is JSON, not an audio file: decode candidates[].content.parts[].inlineData.data according to inlineData.mimeType. Save a complete WAV directly; wrap raw L16 PCM as WAV using its sample rate, mono, 16-bit little-endian. Unknown MIME or missing audio is an error. <a href="/brand/keyo-api-ref.html#section-7-2">Copy the Python decoder</a>. Do not save the JSON response as WAV.</p>
 <p>Auth uses the same Bearer API key as chat. Full notes: <a href="/brand/keyo-docs.html">Keyo docs</a>.</p>
 </div>
 <h2>FAQ</h2>
-<div class="faq"><details><summary>Sync or async?</summary><p>Sync: the generateContent response carries inline WAV audio (base64) in candidates[0].content.parts. Async TTS on Keyo remains Qwen3-TTS / CosyVoice3.</p></details>
+<div class="faq"><details><summary>Sync or async?</summary><p>Sync: generateContent returns JSON with inline audio and MIME metadata. Decode base64 and handle the declared format before playback. Async TTS on Keyo remains Qwen3-TTS / CosyVoice3.</p></details>
 <details><summary>Where is live pricing?</summary><p>Confirm live rates on <a href="/pricing-list">the full pricing list</a> or on <a href="/pricing">the pricing page</a> (Model Square). Indicative ~$0.44 / $8.82 per 1M in/out.</p></details></div>
 <h2>Related models</h2>
 <div class="grid"><a href="/model/gemini-3.8-flash">Gemini 3.8 Flash API</a>

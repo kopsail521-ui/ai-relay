@@ -79,7 +79,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
 <main class="wrap">
 <h1>Voice Cloning API — Check the Integration Contract</h1>
 
-<p class="lead">Basic text-to-speech and voice cloning are different operations. The examples on this page synthesize text; they do not supply a reference speaker. Confirm the chosen model’s reference-audio and voice-ID contract with support before building cloning.</p>
+<p class="lead">Reference-based speech requires the chosen model’s audio and transcript fields. A text-only request does not identify a reference speaker, and voice parameters cannot be copied between models.</p>
 <p class="def"><strong>Voice Cloning API</strong> is a model-family pricing lane on KeyoAPI — a prepaid AI API gateway where one Bearer key and one wallet ($1 = 500,000 quota units) cover chat, speech, vision, OCR and video models.</p>
 <div class="btnrow">
   <a class="btn btn-primary" href="/sign-up">Get API key</a>
@@ -95,19 +95,19 @@ ul{margin:0 0 14px;padding-left:1.2em}
 <tbody>
 <tr>
   <td><a href="/model/Qwen3-TTS"><code>Qwen3-TTS</code></a></td>
-  <td>Asynchronous basic text-to-speech</td>
+  <td>Array inputs; reference fields belong inside an item</td>
   <td class="ok">~$0.548 / 10K characters</td>
   <td>POST /v1/async/audio/speech · guide <a href="/model/Qwen3-TTS">the Qwen3-TTS model page</a></td>
 </tr>
 <tr>
   <td><a href="/model/CosyVoice3"><code>CosyVoice3</code></a></td>
-  <td>Asynchronous basic text-to-speech</td>
+  <td>Required prompt_wav_url and exact prompt_text</td>
   <td class="ok">~$1.37 / 10K characters</td>
   <td>POST /v1/async/audio/speech · guide <a href="/model/CosyVoice3">the CosyVoice3 model page</a></td>
 </tr>
 <tr>
   <td><a href="/model/IndexTTS-2"><code>IndexTTS-2</code></a></td>
-  <td>Synchronous basic text-to-speech</td>
+  <td>Required prompt_audio_url; separate emotion modes</td>
   <td class="ok">~$1.37 / 10K characters</td>
   <td>POST /v1/audio/speech · guide <a href="/model/IndexTTS-2">the IndexTTS-2 model page</a></td>
 </tr>
@@ -115,19 +115,21 @@ ul{margin:0 0 14px;padding-left:1.2em}
 </table></div>
 
 <h2>Before using a reference voice</h2>
-<p>Obtain the supported sample format, required fields, enrollment steps and voice-ID lifecycle for the chosen model. Those details are not documented in the basic TTS example below; do not guess parameters or promise speaker reproduction from text alone.</p>
+<p>Replace reference URL placeholders with real downloadable files and their exact transcripts. Index uses prompt_audio_url; Cosy uses prompt_wav_url plus prompt_text. Do not invent enrollment or reusable voice-ID fields.</p>
 
 <h2>Rates and endpoints</h2>
-<p>Use POST /v1/async/audio/speech with model=Qwen3-TTS or CosyVoice3 and an inputs string for basic speech synthesis. Save id/task_id, then query GET /v1/task/{id} until status=completed and an audio URL is available. See <a href="/brand/keyo-api-ref.html#section-8">the API endpoint reference</a>.</p>
-<p>Reference-voice cloning needs its own confirmed request contract. This page does not provide sample upload/enrollment or a reusable voice-ID schema. Ask support for that contract before submitting clone samples; do not copy a voice field from a different model.</p>
-<p>For synchronous basic speech, see IndexTTS-2 on POST /v1/audio/speech. The complete endpoint map is in <a href="/tts-api">the TTS API guide</a>. Current applicable rates and groups are shown in <a href="/pricing">the pricing page</a>.</p>
-<p>A timed-out task submission may already have succeeded. Preserve its task or request ID; retry status GET requests using the original ID instead of creating replacement jobs automatically.</p>
+<p>CosyVoice3 uses POST /v1/async/audio/speech with string inputs and required prompt_wav_url plus exact prompt_text. Reference audio must be at most 30 seconds, at least 16 kHz, WAV or MP3. Replace the example URL before submitting; it is not a working reference sample.</p>
+<p>IndexTTS-2 requires prompt_audio_url. Its sync request uses input; its async request uses string inputs. Text emotion mode uses use_emo_text and optional emo_text; audio emotion mode instead requires emo_audio_prompt_url. GLM reference examples use prompt_audio_url and matching prompt_text. Step reference fields are optional and WAV-only. Full examples: <a href="/brand/keyo-api-ref.html#section-7-1">the API endpoint reference</a>.</p>
+<p>Qwen3-TTS uses an inputs array with prompt and language in each item. Built-in speaker names are separate from reference mode; prompt_audio_url and prompt_text belong inside an array item. Spark has separate basic gender/pitch/speed and reference-audio modes. Do not replace these contracts with generic voice or reference_audio fields.</p>
+<p>Save id/task_id and query singular GET /v1/task/{id}. On completed, inspect the actual output. Download from url or output.file_url only when present, handling batch results item by item. Preserve an unexpected complete response for support; do not automatically submit again. Retry a temporary task_query_unavailable GET according to Retry-After without creating another task. A submission timeout without an ID has an unknown outcome; do not resubmit automatically.</p>
+<p>Style instructions and references do not guarantee a particular emotion, gender, accent or quality. These URL-based requests do not define sample enrollment or reusable voice IDs. Confirm those separate workflows with support. See <a href="/tts-api">the TTS API guide</a> for endpoints, <a href="/brand/keyo-api-ref.html#section-8">the API endpoint reference</a> for model-specific fields and <a href="/pricing">the pricing page</a> for current rates.</p>
 
-<pre>curl https://www.keyoapi.xyz/v1/async/audio/speech \
+<pre># Replace the URL and transcript with your real reference (not a working sample).
+curl https://www.keyoapi.xyz/v1/async/audio/speech \
   -H &quot;Authorization: Bearer $KEYO_API_KEY&quot; \
   -H &quot;Content-Type: application/json&quot; \
-  -d '{&quot;model&quot;:&quot;Qwen3-TTS&quot;,&quot;inputs&quot;:&quot;Hello from KeyoAPI text-to-speech.&quot;}'
-# Basic TTS only. Save id/task_id and query GET /v1/task/{id}.</pre>
+  -d '{&quot;model&quot;:&quot;CosyVoice3&quot;,&quot;inputs&quot;:&quot;Hello from KeyoAPI TTS.&quot;,&quot;prompt_wav_url&quot;:&quot;https://example.com/your-reference.wav&quot;,&quot;prompt_text&quot;:&quot;Replace with the exact transcript of your reference audio.&quot;}'
+# Save id/task_id, then GET /v1/task/{id}.</pre>
 <h2>Get started in five steps</h2>
 <ol class="steps">
 <li>Create an account — new users receive $10 of gift credit for prototyping.</li>
@@ -138,9 +140,9 @@ ul{margin:0 0 14px;padding-left:1.2em}
 </ol>
 <p class="meta">A verified first call is the acceptance test for the setup: the response should carry the payload shape documented in the handbook, the Wallet ledger should show a deduction in quota units (500,000 units = $1), and repeated calls should deduct linearly at the listed rate. Any mismatch usually means the model ID or endpoint is wrong — check both against <a href="/pricing-list">the pricing list</a> before debugging client code.</p>
 <h2>FAQ</h2>
-<div class="faq"><details><summary>Does the basic example clone a voice?</summary><p>No. It sends only text. Confirm the reference-audio, enrollment and voice-ID contract for your model before implementing cloning.</p></details>
-<details><summary>Which fields identify the reference speaker?</summary><p>That model-specific contract is not specified on this page. Obtain it from support; do not guess field names.</p></details>
-<details><summary>How do I start with basic speech?</summary><p>Create a key at <a href="/keys">the API keys page</a> after signing in, then follow <a href="/brand/keyo-api-ref.html#section-8">the API endpoint reference</a>. Check current model rates on <a href="/pricing">the pricing page</a>.</p></details></div>
+<div class="faq"><details><summary>Which fields identify the reference speaker?</summary><p>Index and GLM use prompt_audio_url; Cosy requires prompt_wav_url plus exact prompt_text. Qwen reference fields belong inside an inputs item. See the model-specific handbook examples.</p></details>
+<details><summary>Does a successful request guarantee a matched voice?</summary><p>No. HTTP success does not establish speaker similarity, gender, emotion or audio quality. Compare the result with your actual requirements.</p></details>
+<details><summary>Can I reuse a voice ID?</summary><p>These URL-based examples do not define enrollment or reusable voice IDs. Confirm that separate workflow with support before implementing it.</p></details></div>
 <p class="meta">Also see <a href="/compare">the model comparison page</a>, <a href="/free-models">the gift-credit models page</a>, <a href="/pricing-list">the full pricing list</a>, and <a href="/tts-api">Text to Speech</a> · <a href="/model/CosyVoice3">CosyVoice3</a> · <a href="/model/Qwen3-TTS">Qwen3-TTS</a>.</p>
 
 </main>

@@ -4,19 +4,19 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>IndexTTS-2 API — TTS &amp; Voice Cloning | KeyoAPI</title>
-<meta name="description" content="Hosted IndexTTS-2 API on KeyoAPI: sync text-to-speech via POST /v1/audio/speech. About $1.37 / 10K characters — no GPU, one API key." />
+<meta name="description" content="IndexTTS-2 API: required prompt_audio_url, text or audio emotion modes, synchronous audio bytes and asynchronous task support." />
 <link rel="canonical" href="https://www.keyoapi.xyz/model/IndexTTS-2" />
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://www.keyoapi.xyz/model/IndexTTS-2" />
 <meta property="og:title" content="IndexTTS-2 API — TTS &amp; Voice Cloning | KeyoAPI" />
-<meta property="og:description" content="Hosted IndexTTS-2 API on KeyoAPI: sync text-to-speech via POST /v1/audio/speech. About $1.37 / 10K characters — no GPU, one API key." />
+<meta property="og:description" content="IndexTTS-2 API: required prompt_audio_url, text or audio emotion modes, synchronous audio bytes and asynchronous task support." />
 <meta property="og:image" content="https://www.keyoapi.xyz/brand/logo.svg" />
 <link rel="icon" href="/brand/logo.svg" type="image/svg+xml" />
 <link rel="stylesheet" href="/brand/keyo-theme.css" />
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content="IndexTTS-2 API — TTS &amp; Voice Cloning | KeyoAPI" />
-<meta name="twitter:description" content="Hosted IndexTTS-2 API on KeyoAPI: sync text-to-speech via POST /v1/audio/speech. About $1.37 / 10K characters — no GPU, one API key." />
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"SoftwareApplication","name":"KeyoAPI IndexTTS-2","applicationCategory":"DeveloperApplication","url":"https://www.keyoapi.xyz/model/IndexTTS-2","description":"Hosted IndexTTS-2 API on KeyoAPI: sync text-to-speech via POST /v1/audio/speech. About $1.37 / 10K characters — no GPU, one API key.","offers":{"@type":"Offer","priceCurrency":"USD","description":"$1.37 / 10K characters"}}</script>
+<meta name="twitter:description" content="IndexTTS-2 API: required prompt_audio_url, text or audio emotion modes, synchronous audio bytes and asynchronous task support." />
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"SoftwareApplication","name":"KeyoAPI IndexTTS-2","applicationCategory":"DeveloperApplication","url":"https://www.keyoapi.xyz/model/IndexTTS-2","description":"IndexTTS-2 API: required prompt_audio_url, text or audio emotion modes, synchronous audio bytes and asynchronous task support.","offers":{"@type":"Offer","priceCurrency":"USD","description":"$1.37 / 10K characters"}}</script>
 <script defer src="/brand/keyo-track.js"></script>
 <style>.wrap{max-width:880px;margin:0 auto;padding:28px 24px 48px}
 .footer{display:flex;flex-wrap:wrap;gap:10px 16px;max-width:1080px;margin:0 auto;padding:24px 24px 40px;border-top:1px solid var(--line);font-size:13px;color:var(--muted)}
@@ -79,7 +79,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
 <main class="wrap">
 <h1>IndexTTS-2 API — Text to Speech and Voice Cloning</h1>
 
-<p class="lead">IndexTTS-2 is available on KeyoAPI as a hosted text-to-speech API: one REST call turns text into audio, with no model deployment and no separate vendor account.</p>
+<p class="lead">IndexTTS-2 synthesizes text using a required reference audio URL. Choose text or audio emotion mode and keep its fields together.</p>
 <p class="def"><strong>IndexTTS-2</strong> is a speech / audio model on KeyoAPI, a prepaid AI API gateway: call it at <code>POST /v1/audio/speech</code>, billed at $1.37 / 10K characters from the same balance that covers chat, vision, OCR and video models.</p>
 <p class="meta">Listed price: <span class="ok">$1.37 / 10K characters</span> · Live catalog: <a href="/pricing">Model Square</a> · Static list: <a href="/pricing-list">pricing list</a>.</p>
 <div class="btnrow">
@@ -88,7 +88,12 @@ ul{margin:0 0 14px;padding-left:1.2em}
   <a class="btn btn-secondary" href="/compare">Compare API prices</a>
 </div>
 <h2>Overview</h2>
-<p>If you need an IndexTTS-2 endpoint you can call from code today, this is the shortest path. It runs on the synchronous speech endpoint, so a request returns audio in one round trip. That makes it the simpler of KeyoAPI’s TTS paths. For long narration or batch queues, CosyVoice3 and Qwen3-TTS (async) are usually a better fit. About $1.37 per 10,000 characters—map script length to cost in your CMS. Confirm live rates on <a href="/pricing-list">the full pricing list</a> before locking a quote. Product voiceovers, IVR prompts, agent spoken replies, and digital-human pipelines (pair with InfiniteTalk or Duix-Avatar). The basic synchronous example uses text input. Reference-audio enrollment and reusable voice-ID fields are not documented on this page; confirm them before implementing cloning. POST /v1/audio/speech with model=IndexTTS-2. Docs: /brand/keyo-docs.html. Try/buy: <a href="/pricing-list">the full pricing list</a>. You do not need to deploy weights: authenticate, send your text, and write the returned audio bytes to disk or a CDN. Keep TTS next to Whisper on the same key for full duplex voice agents. Normalize numbers and abbreviations before synthesis. Cache identical scripts by content hash. Fail closed on celebrity likeness without rights. Measure listener completion, not only HTTP 200. Try it from <a href="/pricing-list">the full pricing list</a>. There is no separate upload playground.</p>
+<p>IndexTTS-2 synthesizes text using a reference audio file. A text string and a model name alone are not a complete request. The synchronous endpoint is POST /v1/audio/speech with model=IndexTTS-2, input and a required prompt_audio_url. This model shares the account key and wallet with chat, but its reference and emotion fields are specific to speech.</p>
+<p>Replace https://example.com/your-reference.wav in the example with a real audio URL the server can download directly without signing in. A local file path or base64 prompt_audio does not replace that URL field. Optional prompt_text must match the exact words in the reference file. Do not use voice=alloy or an unrelated service’s speaker ID as a substitute for reference audio.</p>
+<p>The example uses text emotion mode: use_emo_text is true, and optional emo_text can describe the intended delivery. Audio emotion mode is a separate branch requiring emo_audio_prompt_url, with emo_alpha between zero and one. Choose the appropriate mode instead of combining examples blindly. These controls guide synthesis; they do not guarantee a particular gender, emotion, accent or voice quality.</p>
+<p>A successful synchronous response contains audio bytes. Check the HTTP status and Content-Type before naming the file. Do not save a JSON error as an audio file or assume an unknown format is MP3 because of the filename. A request timeout does not prove that no processing occurred; keep the request identifier and error details instead of submitting repeated replacements automatically.</p>
+<p>For asynchronous IndexTTS-2, POST /v1/async/audio/speech with a string inputs instead of input, preserving the reference and emotion-mode fields. Save id or task_id, then poll the singular GET /v1/task/{id} with the same API key. On completed, inspect the actual output and use url or output.file_url only when present. Process batch results item by item; if the output shape is unexpected, keep the complete response for support instead of automatically submitting again. Stop on failed or cancelled. Retry a temporary task_query_unavailable GET according to Retry-After without creating another task.</p>
+<p>Read <a href="/brand/keyo-api-ref.html#section-7-1">the API endpoint reference</a> for synchronous fields and <a href="/brand/keyo-api-ref.html#section-8">the API endpoint reference</a> for asynchronous examples. Compare current model rates on <a href="/pricing">the pricing page</a> before integrating. The reference-based request does not define an enrollment system or reusable voice-ID lifecycle; confirm those separate workflows before building them.</p>
 
 <h2>Where it fits</h2>
 <p>Speech models on KeyoAPI split into transcription (audio in, text out via multipart upload) and synthesis (text in, audio out, some via async task polling). Both directions bill on the same prepaid wallet as chat, so voice features can ride an existing balance without a second vendor account. For pipelines, transcription feeds agents and logs; synthesis closes the loop for voice replies.</p>
@@ -132,16 +137,18 @@ ul{margin:0 0 14px;padding-left:1.2em}
 <p>Base URL: <code>https://www.keyoapi.xyz/v1</code></p>
 <p>Endpoint: <code>POST /v1/audio/speech</code></p>
 <p>Model: <code>model=IndexTTS-2</code></p>
-<pre><code>curl https://www.keyoapi.xyz/v1/audio/speech \
+<pre><code># Replace the URL with your own downloadable reference audio.
+curl https://www.keyoapi.xyz/v1/audio/speech \
   -H &quot;Authorization: Bearer YOUR_API_KEY&quot; \
   -H &quot;Content-Type: application/json&quot; \
-  -d '{&quot;model&quot;:&quot;IndexTTS-2&quot;,&quot;input&quot;:&quot;Hello from KeyoAPI TTS.&quot;}' \
-  --output out.mp3</code></pre>
+  -d '{&quot;model&quot;:&quot;IndexTTS-2&quot;,&quot;input&quot;:&quot;Hello from KeyoAPI TTS.&quot;,&quot;prompt_audio_url&quot;:&quot;https://example.com/your-reference.wav&quot;,&quot;use_emo_text&quot;:true}' \
+  --output speech.audio
+# Use the response Content-Type to choose the audio extension.</code></pre>
 <p>Auth uses the same Bearer API key as chat. Full notes: <a href="/brand/keyo-docs.html">Keyo docs</a>.</p>
 </div>
 <h2>FAQ</h2>
-<div class="faq"><details><summary>Is there a hosted IndexTTS-2 API?</summary><p>Yes. KeyoAPI serves IndexTTS-2 over POST /v1/audio/speech. You call it with an API key and pay per use — no self-hosting.</p></details>
-<details><summary>Sync or async?</summary><p>IndexTTS-2 uses the synchronous speech endpoint: one request returns audio. For long-form or batch jobs, prefer CosyVoice3 or Qwen3-TTS on the async path.</p></details>
+<div class="faq"><details><summary>Is there a hosted IndexTTS-2 API?</summary><p>Yes. POST /v1/audio/speech with model=IndexTTS-2, input and required prompt_audio_url. Text alone is incomplete; follow the model-specific reference and emotion-mode fields.</p></details>
+<details><summary>Sync or async?</summary><p>Sync: /v1/audio/speech returns audio bytes. Async: /v1/async/audio/speech uses inputs instead of input with the same reference fields, then GET /v1/task/{id}.</p></details>
 <details><summary>How do I try it?</summary><p>Create a key at <a href="/sign-up">the sign-up page</a>, then open <a href="/pricing-list">the full pricing list</a> for interactive try/buy. Gift-credit LLM IDs (separate from TTS; billed from your $10 welcome credit, fair-use) are listed at <a href="/free-models">the gift-credit models page</a>.</p></details>
 <details><summary>Price?</summary><p>About $1.37 per 10,000 characters — confirm live rates on <a href="/pricing-list">the full pricing list</a>.</p></details></div>
 <h2>Related models</h2>

@@ -848,20 +848,67 @@ curl https://www.keyoapi.xyz/v1/audio/transcriptions \
 
 ## 7. TTS 同步
 
-### 7.1 OpenAI 兼容语音接口（返回音频字节）
+### 7.1 同步语音：按型号填写字段
 
 `POST https://www.keyoapi.xyz/v1/audio/speech`
-模型：`GLM-TTS` · `Step-Audio-TTS-3B` · `IndexTTS-2` · `eleven-v4` · `eleven-v4-turbo`。Gemini TTS 使用下节原生接口。
+
+支持 `GLM-TTS`、`Step-Audio-TTS-3B`、`IndexTTS-2`、`eleven-v4`、`eleven-v4-turbo`。成功响应是音频字节；非 2xx 先读错误 JSON，不要存成音频。文件扩展名须匹配实际格式。
+
+**替换参考音频占位符：** `https://example.com/your-reference.wav` 不是可用样本。改成无需登录、服务端能直接下载的真实音频 URL；`prompt_text` 逐字对应参考音频。URL 字段不能放本地路径或 base64。
+
+#### GLM-TTS
 
 ```json
 {
   "model": "GLM-TTS",
-  "input": "你好，欢迎使用 KeyoAPI",
-  "voice": "alloy"
+  "input": "你好，欢迎使用 KeyoAPI。",
+  "prompt_audio_url": "https://example.com/your-reference.wav",
+  "prompt_text": "替换为参考音频实际说出的完整台词。",
+  "output_format": "wav"
 }
 ```
 
-响应为音频字节，保存为文件即可。
+使用参考音频与对应台词指定参考声音；不要用 `voice: "alloy"` 替代。本页不承诺无参考时的默认音色。base64 `prompt_audio` 变体尚未在此定义，按 URL 合同接入。
+
+#### Step-Audio-TTS-3B
+
+```json
+{
+  "model": "Step-Audio-TTS-3B",
+  "input": "你好，欢迎使用 KeyoAPI。",
+  "prompt_audio_url": "https://example.com/your-reference.wav",
+  "prompt_text": "替换为参考音频实际说出的完整台词。"
+}
+```
+
+参考字段可选；参考音频仅支持 WAV。省略参考时使用默认声音。尚无已确认的 `voice` 枚举，不能假定 `alloy`、`echo` 或任意字符串可换声线。返回音频不证明该参数生效，`speed` 不保证情绪、性别或音色。
+
+#### IndexTTS-2
+
+```json
+{
+  "model": "IndexTTS-2",
+  "input": "你好，欢迎使用 KeyoAPI。",
+  "prompt_audio_url": "https://example.com/your-reference.wav",
+  "use_emo_text": true,
+  "emo_text": "自然清晰地讲解。"
+}
+```
+
+`prompt_audio_url` 必填，可选对应 `prompt_text`。本例是文本情绪分支，`use_emo_text` 控制启用，`emo_text` 可选；音频情绪分支另需 `emo_audio_prompt_url`，`emo_alpha` 范围 0–1。不要混拼两种分支；base64 `prompt_audio` 不能替代必填 URL。异步见 §8.4。
+
+#### eleven-v4 / eleven-v4-turbo
+
+```json
+{
+  "model": "eleven-v4",
+  "input": "Hello, welcome to KeyoAPI.",
+  "voice": "george",
+  "response_format": "mp3"
+}
+```
+
+两型号同一路径。示例值 `george` 仍需按该型号及账号已确认有效的名称或 ID 替换；不要套另一服务的音色 ID，未确认名称不等于有效枚举。`Unknown voice` 表示名称未被接受。成功不保证中文、男声、情绪或口音；实际朗读与 `input` 不符时保留 request ID 和请求字段联系支持。
 
 ---
 
@@ -974,20 +1021,76 @@ if __name__ == "__main__":
 
 ## 8. TTS 异步
 
-`POST https://www.keyoapi.xyz/v1/async/audio/speech`
-轮询：`GET /v1/task/{id}`（单数）
-模型：`Qwen3-TTS` · `CosyVoice3` · `Spark-TTS-0.5B` · `Spark-TTS-0.5B:free`
+`POST https://www.keyoapi.xyz/v1/async/audio/speech` → `GET /v1/task/{id}`
+
+轮询路径为单数，使用同一把 Key。以下字段不能只改 `model` 互换；参考 URL 占位符须替换成可直接下载的真实文件，台词须与参考音频一致。
+
+### 8.1 Qwen3-TTS
 
 ```json
 {
   "model": "Qwen3-TTS",
-  "inputs": "你好，欢迎使用 KeyoAPI"
+  "output_format": "mp3",
+  "inputs": [
+    {
+      "prompt": "你好，欢迎使用 KeyoAPI。",
+      "language": "Chinese",
+      "speaker": "Vivian",
+      "instruction": "自然清晰地讲解。"
+    }
+  ]
 }
 ```
 
-提交成功至少含 `id` / `task_id`。轮询到 `status=completed` 后读 **`url`** 或 `output.file_url`（§0.6）。
+规范 `inputs` 为对象数组，每项必填 `prompt`、`language`（`Chinese` / `English`），每次最多 5 项。可选 `speaker` 名称：`Vivian`、`Serena`、`Uncle_Fu`、`Dylan`、`Eric`、`Ryan`、`Aiden`、`Ono_Anna`、`Sohee`，区分大小写；可选 `instruction` 是表达提示，不保证情绪或性别。这里没有通用 `voice`。旧客户端的 `input` / `inputs` 字符串或单对象由网关转成数组；新接入请直接传规范数组并显式写语言。参考声音模式的 `prompt_audio_url`、`prompt_text` 放在数组项内，不是顶层；可复用音色 ID 或注册流程仍需先确认。
 
-以上示例是基础文字转语音，不是音色克隆。本页尚未提供参考音频注册或可复用音色 ID 的完整合同；需要克隆时先向支持确认该型号的样本及音色字段，不要臆造 `voice`、`reference_audio` 等参数。
+### 8.2 CosyVoice3
+
+```json
+{
+  "model": "CosyVoice3",
+  "inputs": "你好，欢迎使用 KeyoAPI。",
+  "prompt_wav_url": "https://example.com/your-reference.wav",
+  "prompt_text": "替换为参考音频实际说出的完整台词。",
+  "instruct_text": "自然清晰地讲解。",
+  "speed": 1
+}
+```
+
+必填 `prompt_wav_url` 与 `prompt_text`。参考音频 ≤30 秒、≥16 kHz，支持 WAV / MP3。`instruct_text`、`speed`、`seed` 可选；语速范围 1–5。该型号 `inputs` 是字符串，不能照搬 Qwen 数组；只传文字而无参考音频不是完整请求。
+
+### 8.3 Spark-TTS-0.5B
+
+```json
+{
+  "model": "Spark-TTS-0.5B",
+  "inputs": "你好，欢迎使用 KeyoAPI。",
+  "gender": "male",
+  "pitch": 3,
+  "speed": 3
+}
+```
+
+基础合成显式填写 `gender`（`male` / `female`）；`pitch`、`speed` 均为 1–5，默认 3。克隆是另一个分支：必填 WAV `prompt_audio_url`，可选对应 `prompt_text`；不要随意混拼基础与克隆分支。`:free` 可用性、价格和钱包规则以模型页为准，不承诺免费或更高成功率。
+
+### 8.4 IndexTTS-2
+
+```json
+{
+  "model": "IndexTTS-2",
+  "inputs": "你好，欢迎使用 KeyoAPI。",
+  "prompt_audio_url": "https://example.com/your-reference.wav",
+  "use_emo_text": true
+}
+```
+
+参考音频与情绪分支规则同 §7.1，异步正文改用 `inputs` 字符串。
+
+先保存 `id` / `task_id`，提交状态可能为 `waiting`。GET 轮询 `completed` 后检查实际 `output`；仅当存在 `url` 或 `output.file_url` 时按该字段下载（§0.6），批量结果须按返回结构逐项处理，不能假设只有一个 URL，`failed` / `cancelled` 停止。查询返回临时 `502 task_query_unavailable` 时保留 ID，按 `Retry-After` 继续原 GET，不视为生成失败、不重建任务。提交超时且无 ID 时结果不明确，不要自动重复提交。
+
+完成但没有上述 URL 时保存完整响应联系支持，不要自动重新 POST。
+
+`keyo-tts` 仍无已开放的 TTS 合同，不要猜同步或异步路径。`laya-multilingual` 是分类/决策模型，`InfiniteTalk` 由已有音频驱动视频，均非文字转语音入口。
 
 ---
 

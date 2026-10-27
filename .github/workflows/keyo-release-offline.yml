@@ -8,6 +8,7 @@ on:
       - 'scripts/vps-redeploy-creem-moderation.sh'
       - 'scripts/test-vps-release-offline.py'
       - 'scripts/public-doc-contracts.test.mjs'
+      - 'scripts/public-tts-doc-contracts.test.mjs'
       - 'scripts/test-doc-powershell-offline.mjs'
       - 'static/brand/keyo-api-ref*'
       - 'static/brand/keyo-docs.html'
@@ -19,6 +20,7 @@ on:
       - 'scripts/vps-redeploy-creem-moderation.sh'
       - 'scripts/test-vps-release-offline.py'
       - 'scripts/public-doc-contracts.test.mjs'
+      - 'scripts/public-tts-doc-contracts.test.mjs'
       - 'scripts/test-doc-powershell-offline.mjs'
       - 'static/brand/keyo-api-ref*'
       - 'static/brand/keyo-docs.html'
@@ -44,6 +46,7 @@ jobs:
       - run: node scripts/test-video-contracts-offline.mjs
       - run: node scripts/test-task-responses-offline.mjs
       - run: node --test scripts/public-doc-contracts.test.mjs
+      - run: node --test scripts/public-tts-doc-contracts.test.mjs
 
   windows-docs:
     runs-on: windows-latest

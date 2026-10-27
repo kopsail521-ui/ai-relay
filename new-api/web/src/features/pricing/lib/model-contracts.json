@@ -315,11 +315,24 @@
         "path": "/v1beta/models/gemini-3.8-flash-tts:generateContent",
         "body": {
           "contents": [
-            { "role": "user", "parts": [{ "text": "Hello, welcome to KeyoAPI" }] }
+            {
+              "role": "user",
+              "parts": [
+                {
+                  "text": "Hello, welcome to KeyoAPI"
+                }
+              ]
+            }
           ],
           "generationConfig": {
             "responseModalities": ["AUDIO"],
-            "speechConfig": { "voiceConfig": { "prebuiltVoiceConfig": { "voiceName": "Kore" } } }
+            "speechConfig": {
+              "voiceConfig": {
+                "prebuiltVoiceConfig": {
+                  "voiceName": "Kore"
+                }
+              }
+            }
           }
         },
         "output": "response.json",
@@ -339,9 +352,17 @@
         "path": "/v1/async/audio/speech",
         "body": {
           "model": "Qwen3-TTS",
-          "inputs": "Hello, welcome to KeyoAPI"
+          "output_format": "mp3",
+          "inputs": [
+            {
+              "prompt": "Hello, welcome to KeyoAPI",
+              "language": "English",
+              "speaker": "Vivian"
+            }
+          ]
         },
-        "pollPath": "/v1/task/{id}"
+        "pollPath": "/v1/task/{id}",
+        "noteKey": "Qwen3-TTS uses an inputs array; each item has prompt and language (Chinese or English). Legacy text or single-object input is normalized only for this model; omitted language defaults to Chinese. This example selects a built-in speaker; it does not clone a voice."
       }
     ]
   },
@@ -353,9 +374,12 @@
         "path": "/v1/async/audio/speech",
         "body": {
           "model": "CosyVoice3",
-          "inputs": "Hello, welcome to KeyoAPI"
+          "inputs": "Hello, welcome to KeyoAPI",
+          "prompt_wav_url": "https://example.com/your-reference.wav",
+          "prompt_text": "Replace with the exact transcript of your reference audio."
         },
-        "pollPath": "/v1/task/{id}"
+        "pollPath": "/v1/task/{id}",
+        "noteKey": "Replace the reference URL with your accessible WAV or MP3 audio (at most 30 seconds, at least 16 kHz) and prompt_text with its exact transcript. These reference fields are required for this model; this is not a text-only built-in-voice example."
       }
     ]
   },
@@ -368,9 +392,12 @@
         "body": {
           "model": "GLM-TTS",
           "input": "Hello, welcome to KeyoAPI",
-          "voice": "alloy"
+          "prompt_audio_url": "https://example.com/your-reference.wav",
+          "prompt_text": "Replace with the exact transcript of your reference audio.",
+          "output_format": "wav"
         },
-        "output": "speech.wav"
+        "output": "speech.wav",
+        "noteKey": "Replace the reference URL with your accessible WAV audio and prompt_text with its exact transcript. Reference fields guide the voice; their availability is model-specific. Inspect the response Content-Type before choosing a file extension."
       }
     ]
   },
@@ -383,9 +410,11 @@
         "body": {
           "model": "Step-Audio-TTS-3B",
           "input": "Hello, welcome to KeyoAPI",
-          "voice": "alloy"
+          "prompt_audio_url": "https://example.com/your-reference.wav",
+          "prompt_text": "Replace with the exact transcript of your reference audio."
         },
-        "output": "speech.wav"
+        "output": "speech.audio",
+        "noteKey": "Replace the reference URL with your accessible WAV audio and prompt_text with its exact transcript. Reference fields guide the voice; their availability is model-specific. Inspect the response Content-Type before choosing a file extension."
       }
     ]
   },
@@ -398,9 +427,23 @@
         "body": {
           "model": "IndexTTS-2",
           "input": "Hello, welcome to KeyoAPI",
-          "voice": "alloy"
+          "prompt_audio_url": "https://example.com/your-reference.wav",
+          "use_emo_text": true
         },
-        "output": "speech.wav"
+        "output": "speech.audio",
+        "noteKey": "Replace the required reference URL with your accessible reference audio. This example uses text-based emotion control; emo_text is optional. Audio-based emotion control additionally requires emo_audio_prompt_url. Inspect the response Content-Type before choosing a file extension."
+      },
+      {
+        "label": "/v1/async/audio/speech",
+        "path": "/v1/async/audio/speech",
+        "body": {
+          "model": "IndexTTS-2",
+          "inputs": "Hello, welcome to KeyoAPI",
+          "prompt_audio_url": "https://example.com/your-reference.wav",
+          "use_emo_text": true
+        },
+        "pollPath": "/v1/task/{id}",
+        "noteKey": "Replace the required reference URL with your accessible reference audio. Async IndexTTS-2 uses inputs text and task polling; the sync endpoint uses input and returns audio bytes."
       }
     ]
   },
@@ -415,7 +458,8 @@
           "input": "Hello, welcome to KeyoAPI",
           "voice": "george"
         },
-        "output": "speech.mp3"
+        "output": "speech.mp3",
+        "noteKey": "Replace george with a voice name or ID confirmed for this model and your account. This legacy example does not establish a supported voice list."
       }
     ]
   },
@@ -430,7 +474,8 @@
           "input": "Hello, welcome to KeyoAPI",
           "voice": "george"
         },
-        "output": "speech.mp3"
+        "output": "speech.mp3",
+        "noteKey": "Replace george with a voice name or ID confirmed for this model and your account. This legacy example does not establish a supported voice list."
       }
     ]
   },
@@ -450,9 +495,13 @@
         "path": "/v1/async/audio/speech",
         "body": {
           "model": "Spark-TTS-0.5B:free",
-          "inputs": "Hello, welcome to KeyoAPI"
+          "inputs": "Hello, welcome to KeyoAPI",
+          "gender": "male",
+          "pitch": 3,
+          "speed": 3
         },
-        "pollPath": "/v1/task/{id}"
+        "pollPath": "/v1/task/{id}",
+        "noteKey": "This is standard speech generation with gender (male or female), pitch and speed (1 to 5). Voice cloning is a separate mode requiring prompt_audio_url; do not infer a cloned voice from this basic example."
       }
     ]
   },
@@ -464,9 +513,13 @@
         "path": "/v1/async/audio/speech",
         "body": {
           "model": "Spark-TTS-0.5B",
-          "inputs": "Hello, welcome to KeyoAPI"
+          "inputs": "Hello, welcome to KeyoAPI",
+          "gender": "male",
+          "pitch": 3,
+          "speed": 3
         },
-        "pollPath": "/v1/task/{id}"
+        "pollPath": "/v1/task/{id}",
+        "noteKey": "This is standard speech generation with gender (male or female), pitch and speed (1 to 5). Voice cloning is a separate mode requiring prompt_audio_url; do not infer a cloned voice from this basic example."
       }
     ]
   },
@@ -1047,9 +1100,7 @@
         "path": "/v1/embeddings",
         "body": {
           "model": "gemini-embedding-2-preview",
-          "input": [
-            "Text to retrieve"
-          ]
+          "input": ["Text to retrieve"]
         }
       }
     ]
@@ -1062,9 +1113,7 @@
         "path": "/v1/embeddings",
         "body": {
           "model": "WeMM-Embedding-9B",
-          "input": [
-            "Text to retrieve"
-          ]
+          "input": ["Text to retrieve"]
         }
       }
     ]
@@ -1077,9 +1126,7 @@
         "path": "/v1/embeddings",
         "body": {
           "model": "WeMM-Embedding-4B",
-          "input": [
-            "Text to retrieve"
-          ]
+          "input": ["Text to retrieve"]
         }
       }
     ]
@@ -1092,9 +1139,7 @@
         "path": "/v1/embeddings",
         "body": {
           "model": "WeMM-Embedding-2B",
-          "input": [
-            "Text to retrieve"
-          ]
+          "input": ["Text to retrieve"]
         }
       }
     ]

@@ -128,13 +128,13 @@ ul{margin:0 0 14px;padding-left:1.2em}
   <td><code>POST /v1/audio/speech</code></td>
   <td>Partial</td>
   <td><code>GLM-TTS</code>, <code>Step-Audio-TTS-3B</code>, <code>IndexTTS-2</code></td>
-  <td><strong>Not</strong> all TTS IDs: <code>gemini-3.8-flash-tts</code> and <code>gemini-3.1-flash-tts-preview</code> call Gemini-native <code>generateContent</code> instead · <a href="/gemini-api-pricing">the Gemini pricing page</a></td>
+  <td>Model-specific reference fields: Index requires <code>prompt_audio_url</code>; GLM and Step have separate reference contracts. <code>gemini-3.8-flash-tts</code> uses only native <code>generateContent</code>; <code>gemini-3.1-flash-tts-preview</code> remains pending, without a published request · <a href="/brand/keyo-api-ref.html#section-7-1">speech fields</a></td>
 </tr>
 <tr>
   <td><code>POST /v1/async/audio/speech</code></td>
   <td>No</td>
   <td><code>Qwen3-TTS</code>, <code>CosyVoice3</code> — poll <code>GET /v1/task/{id}</code></td>
-  <td>Asynchronous speech shares the key, not the OpenAI shape · <a href="/tts-api">the text to speech API page</a></td>
+  <td>Qwen uses an <code>inputs</code> array; Cosy requires reference audio plus its transcript · <a href="/tts-api">the text to speech API page</a></td>
 </tr>
 <tr>
   <td><code>POST /v1/images/mattings</code> · <code>upscaling</code> · <code>unwarping</code> · <code>object-detection</code> · <code>segmentation</code> · <code>pose-detection</code></td>

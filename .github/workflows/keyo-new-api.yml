@@ -30,9 +30,33 @@ jobs:
   verify:
     uses: ./.github/workflows/keyo-release-offline.yml
 
+  speech-contracts:
+    name: Verify speech forwarding without model calls
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: new-api
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+      - uses: actions/setup-go@924ae3a1cded613372ab5595356fb5720e22ba16 # v6.5.0
+        with:
+          go-version-file: new-api/go.mod
+          cache-dependency-path: |
+            new-api/go.sum
+            new-api/relaykit/go.sum
+      - name: Forward synthetic speech requests to loopback only
+        run: go test ./relay/channel/openai ./relay/channel/minimax ./relay/channel/volcengine -count=1
+      - name: Verify independent relaykit request contracts
+        working-directory: new-api/relaykit
+        env:
+          GOWORK: 'off'
+        run: |
+          go test ./dto -run '^TestAudioRequest' -count=1
+          go build ./...
+
   build:
     name: Build and push
-    needs: verify
+    needs: [verify, speech-contracts]
     runs-on: ubuntu-latest
     steps:
       - name: Check out
@@ -88,6 +112,7 @@ jobs:
     needs: build
     if: vars.KEYO_VPS_HOST != ''
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     # Serialize VPS access across the console/static/blog deploy jobs:
     # all three run git operations on /opt/ai-relay and must not overlap.
     concurrency:
@@ -114,7 +139,9 @@ jobs:
           install -m 700 -d "${HOME}/.ssh"
           printf '%s\n' "${KEY}" > "${HOME}/.ssh/keyo_vps"
           chmod 600 "${HOME}/.ssh/keyo_vps"
-          ssh -i "${HOME}/.ssh/keyo_vps" -o StrictHostKeyChecking=accept-new \
+          ssh -T -i "${HOME}/.ssh/keyo_vps" -o BatchMode=yes \
+            -o ConnectTimeout=20 -o ServerAliveInterval=15 -o ServerAliveCountMax=2 \
+            -o StrictHostKeyChecking=accept-new \
             "${USER}@${HOST}" "sudo -n true && bash -s" <<EOF
           set -euo pipefail
           cd /opt/ai-relay

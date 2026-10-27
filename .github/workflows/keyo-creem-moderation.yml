@@ -32,6 +32,7 @@ jobs:
     needs: verify
     if: vars.KEYO_VPS_HOST != ''
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     # Serialize VPS access across the console/static/blog/proxy deploy jobs:
     # all of them run git operations on /opt/ai-relay and must not overlap.
     concurrency:
@@ -59,7 +60,9 @@ jobs:
           install -m 700 -d "${HOME}/.ssh"
           printf '%s\n' "${KEY}" > "${HOME}/.ssh/keyo_vps"
           chmod 600 "${HOME}/.ssh/keyo_vps"
-          ssh -i "${HOME}/.ssh/keyo_vps" -o StrictHostKeyChecking=accept-new \
+          ssh -T -i "${HOME}/.ssh/keyo_vps" -o BatchMode=yes \
+            -o ConnectTimeout=20 -o ServerAliveInterval=15 -o ServerAliveCountMax=2 \
+            -o StrictHostKeyChecking=accept-new \
             "${USER}@${HOST}" "sudo -n true && sudo RELOAD_CADDY=0 bash /opt/ai-relay/scripts/vps-safe-pull-preserve-blog.sh && sudo bash /opt/ai-relay/scripts/vps-redeploy-creem-moderation.sh"
       - name: Verify the public proxy release without model calls
         run: node scripts/check-public-proxy-release.mjs

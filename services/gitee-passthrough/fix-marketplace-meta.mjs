@@ -106,8 +106,8 @@ export const RULES = {
     endpoints: EP.asr,
     icon: "OpenAI",
   },
-  "Qwen3-TTS": { vendor: "阿里巴巴", tag: "语音合成", endpoints: EP.tts, icon: "Qwen.Color" },
-  CosyVoice3: { vendor: "阿里巴巴", tag: "语音合成", endpoints: EP.tts, icon: "Qwen.Color" },
+  "Qwen3-TTS": { vendor: "阿里巴巴", tag: "语音合成", endpoints: EP.asyncTts, icon: "Qwen.Color" },
+  CosyVoice3: { vendor: "阿里巴巴", tag: "语音合成", endpoints: EP.asyncTts, icon: "Qwen.Color" },
   "GLM-TTS": { vendor: "智谱", tag: "语音合成", endpoints: EP.tts, icon: "Zhipu.Color" },
   "IndexTTS-2": {
     vendor: "哔哩哔哩",

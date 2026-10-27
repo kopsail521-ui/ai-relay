@@ -11,12 +11,25 @@ import (
 type AudioRequest struct {
 	Model          string          `json:"model"`
 	Input          string          `json:"input"`
-	Voice          string          `json:"voice"`
+	Voice          *string         `json:"voice,omitempty"`
 	Instructions   string          `json:"instructions,omitempty"`
 	ResponseFormat string          `json:"response_format,omitempty"`
 	Speed          *float64        `json:"speed,omitempty"`
 	StreamFormat   string          `json:"stream_format,omitempty"`
 	Metadata       json.RawMessage `json:"metadata,omitempty"`
+	// Provider speech options stay under their original HTTP field names.
+	// RawMessage preserves explicit zero, false and empty string values without
+	// inventing defaults or aliases between different providers' contracts.
+	PromptAudio        json.RawMessage `json:"prompt_audio,omitempty"`
+	PromptAudioURL     json.RawMessage `json:"prompt_audio_url,omitempty"`
+	PromptText         json.RawMessage `json:"prompt_text,omitempty"`
+	OutputFormat       json.RawMessage `json:"output_format,omitempty"`
+	ResponseDataFormat json.RawMessage `json:"response_data_format,omitempty"`
+	// IndexTTS-2 supports distinct audio and text emotion modes.
+	EmoAudioPromptURL json.RawMessage `json:"emo_audio_prompt_url,omitempty"`
+	EmoAlpha          json.RawMessage `json:"emo_alpha,omitempty"`
+	EmoText           json.RawMessage `json:"emo_text,omitempty"`
+	UseEmoText        json.RawMessage `json:"use_emo_text,omitempty"`
 	// vllm-omini
 	TaskType                json.RawMessage `json:"task_type,omitempty"`
 	Language                json.RawMessage `json:"language,omitempty"`

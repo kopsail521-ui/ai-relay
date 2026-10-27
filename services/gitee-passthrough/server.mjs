@@ -93,7 +93,7 @@ if (!fs.existsSync(CATALOG_PATH)) {
 // Bump on every deploy-relevant change; the smoke workflow asserts this
 // marker via /healthz so a stale process on :3010 cannot serve traffic
 // unnoticed (ghost nohup processes from old runbooks).
-const BUILD_ID = "buffered-upload-guard-2026-10-25";
+const BUILD_ID = "tts-model-contracts-2026-10-27";
 const catalog = JSON.parse(fs.readFileSync(CATALOG_PATH, "utf8"));
 const modelMap = Object.fromEntries(catalog.models.map((m) => [m.id, m]));
 
@@ -453,6 +453,73 @@ function freeTwinBase(modelId) {
 
 function normalizeModelId(modelId) {
   return freeTwinBase(modelId) || String(modelId || "").trim();
+}
+
+function prepareAsyncSpeechRequest(bodyBuf, contentType) {
+  if (!/json/i.test(String(contentType || ""))) {
+    return { error: "Async speech requires Content-Type: application/json." };
+  }
+  let body;
+  try {
+    body = JSON.parse(bodyBuf.toString("utf8"));
+  } catch {
+    return { error: "Invalid JSON body." };
+  }
+  if (!body || typeof body !== "object" || Array.isArray(body)) {
+    return { error: "Async speech requires a JSON object." };
+  }
+  if (typeof body.model !== "string" || !body.model.trim()) {
+    return { error: "Async speech requires model in the JSON body." };
+  }
+  if (body.inputs == null && body.input != null) {
+    body.inputs = body.input;
+  }
+  delete body.input;
+  const modelId = normalizeModelId(body.model);
+  if (modelId === "Qwen3-TTS") {
+    // Qwen's per-item contract differs from the other async speech models.
+    // Preserve old input/inputs text and single-object clients by adding only
+    // the missing array layer and the model's documented language default.
+    if (typeof body.inputs === "string") {
+      body.inputs = [{ prompt: body.inputs }];
+    } else if (body.inputs && typeof body.inputs === "object" && !Array.isArray(body.inputs)) {
+      body.inputs = [body.inputs];
+    }
+    if (!Array.isArray(body.inputs) || body.inputs.length < 1 || body.inputs.length > 5) {
+      return { error: "Qwen3-TTS inputs must contain 1 to 5 items with prompt and language." };
+    }
+    for (const [index, item] of body.inputs.entries()) {
+      if (!item || typeof item !== "object" || Array.isArray(item) ||
+          typeof item.prompt !== "string" || !item.prompt.trim()) {
+        return { error: `Qwen3-TTS inputs[${index}].prompt must be a non-empty string.` };
+      }
+      if (item.language == null) {
+        item.language = "Chinese";
+      }
+      if (!["Chinese", "English"].includes(item.language)) {
+        return { error: `Qwen3-TTS inputs[${index}].language must be Chinese or English.` };
+      }
+    }
+  } else if (
+    !(typeof body.inputs === "string" && body.inputs.trim()) &&
+    !(Array.isArray(body.inputs) && body.inputs.length)
+  ) {
+    return { error: "Async speech inputs must be a non-empty string or array." };
+  }
+  if (["CosyVoice3", "IndexTTS-2"].includes(modelId) &&
+      (typeof body.inputs !== "string" || !body.inputs.trim())) {
+    return { error: `${modelId} inputs must be a non-empty string; Qwen3-TTS array inputs do not apply to this model.` };
+  }
+  if (modelId === "CosyVoice3" &&
+      (typeof body.prompt_wav_url !== "string" || !body.prompt_wav_url.trim() ||
+       typeof body.prompt_text !== "string" || !body.prompt_text.trim())) {
+    return { error: "CosyVoice3 requires prompt_wav_url and prompt_text for the reference audio and its transcript." };
+  }
+  if (modelId === "IndexTTS-2" &&
+      (typeof body.prompt_audio_url !== "string" || !body.prompt_audio_url.trim())) {
+    return { error: "IndexTTS-2 requires prompt_audio_url for the reference audio." };
+  }
+  return { body: Buffer.from(JSON.stringify(body), "utf8") };
 }
 
 function escapeRegExp(s) {
@@ -933,6 +1000,20 @@ const server = http.createServer(async (req, res) => {
   if (await handleDecisions(req, res)) return;
 
   const urlPath = (req.url || "/").split("?")[0];
+  let speechPath = urlPath;
+  try {
+    speechPath = decodeURIComponent(new URL(req.url || "/", "http://localhost").pathname)
+      .replace(/\/+/g, "/");
+  } catch {}
+  if (speechPath.startsWith("/v1/async/audio/speech") && urlPath !== "/v1/async/audio/speech") {
+    return json(res, 400, {
+      error: {
+        message: "Async speech requires the exact path /v1/async/audio/speech without a suffix or trailing slash.",
+        type: "invalid_request_error",
+        code: "invalid_async_speech_path",
+      },
+    });
+  }
 
   if (urlPath === "/healthz") {
     return json(res, 200, {
@@ -1051,19 +1132,18 @@ const server = http.createServer(async (req, res) => {
     forwardBuf = prepared.body;
     req.headers["content-type"] = prepared.contentType;
   }
-  // The async speech contract uses `inputs` (plural). Accept the common
-  // OpenAI-style `input` alias so existing clients do not fail with 400.
-  if (
-    urlPath === "/v1/async/audio/speech" &&
-    bodyBuf.length &&
-    String(req.headers["content-type"] || "").includes("json")
-  ) {
-    try {
-      const body = JSON.parse(bodyBuf.toString("utf8") || "{}");
-      if (body.inputs == null && body.input != null) body.inputs = body.input;
-      delete body.input;
-      forwardBuf = Buffer.from(JSON.stringify(body), "utf8");
-    } catch {}
+  if (urlPath === "/v1/async/audio/speech") {
+    const prepared = prepareAsyncSpeechRequest(bodyBuf, req.headers["content-type"]);
+    if (prepared.error) {
+      return json(res, 400, {
+        error: {
+          message: prepared.error,
+          type: "invalid_request_error",
+          code: "invalid_async_speech_request",
+        },
+      });
+    }
+    forwardBuf = prepared.body;
   }
   let duixBillUsd = null;
   if (urlPath.includes("/async/videos/audio-video-to-video")) {
@@ -1097,6 +1177,16 @@ const server = http.createServer(async (req, res) => {
       error: {
         message: `Unknown or missing model: ${rawModelId || "(empty)"}`,
         type: "invalid_request_error",
+      },
+    });
+  }
+  if (urlPath === "/v1/async/audio/speech" &&
+      !modelMap[modelId].paths?.includes("v1/async/audio/speech")) {
+    return json(res, 400, {
+      error: {
+        message: `${modelId} does not support /v1/async/audio/speech. Use the endpoint documented for this model.`,
+        type: "invalid_request_error",
+        code: "unsupported_model_endpoint",
       },
     });
   }

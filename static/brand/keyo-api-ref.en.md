@@ -816,20 +816,67 @@ Pick model from §1.5.
 
 ## 7. TTS sync
 
-### 7.1 OpenAI-compatible speech endpoint (audio bytes)
+### 7.1 Synchronous speech: model-specific fields
 
 `POST https://www.keyoapi.xyz/v1/audio/speech`
-Models: `GLM-TTS` · `Step-Audio-TTS-3B` · `IndexTTS-2` · `eleven-v4` · `eleven-v4-turbo`. Gemini TTS uses the native endpoint in the next section.
+
+Models: `GLM-TTS`, `Step-Audio-TTS-3B`, `IndexTTS-2`, `eleven-v4`, `eleven-v4-turbo`. Success returns audio bytes. Read error JSON on non-2xx responses; never save it as audio. Match the file extension to the actual format.
+
+**Replace reference placeholders before submitting.** `https://example.com/your-reference.wav` is not a working sample. Use a real URL the server can download without signing in. `prompt_text` must match the exact reference transcript. URL fields do not accept local paths or base64.
+
+#### GLM-TTS
 
 ```json
 {
   "model": "GLM-TTS",
-  "input": "Hello, welcome to KeyoAPI",
-  "voice": "alloy"
+  "input": "Hello, welcome to KeyoAPI.",
+  "prompt_audio_url": "https://example.com/your-reference.wav",
+  "prompt_text": "Replace with the exact transcript of your reference audio.",
+  "output_format": "wav"
 }
 ```
 
-Response is audio bytes — save to a file.
+Use reference audio and its transcript. `voice: "alloy"` does not replace a reference. No particular default voice is promised without one. A base64 `prompt_audio` variant is not defined here; use the URL contract.
+
+#### Step-Audio-TTS-3B
+
+```json
+{
+  "model": "Step-Audio-TTS-3B",
+  "input": "Hello, welcome to KeyoAPI.",
+  "prompt_audio_url": "https://example.com/your-reference.wav",
+  "prompt_text": "Replace with the exact transcript of your reference audio."
+}
+```
+
+Reference fields are optional; references must be WAV. Omit them to use the default voice. No confirmed `voice` enumeration is published: do not assume `alloy`, `echo` or arbitrary strings select speakers. Receiving audio does not prove a voice option was applied; `speed` does not guarantee emotion, gender or identity.
+
+#### IndexTTS-2
+
+```json
+{
+  "model": "IndexTTS-2",
+  "input": "Hello, welcome to KeyoAPI.",
+  "prompt_audio_url": "https://example.com/your-reference.wav",
+  "use_emo_text": true,
+  "emo_text": "Explain naturally and clearly."
+}
+```
+
+`prompt_audio_url` is required; its matching `prompt_text` is optional. This is text emotion mode: `use_emo_text` enables optional `emo_text`. Audio emotion mode instead requires `emo_audio_prompt_url`; `emo_alpha` ranges from 0 to 1. Do not combine mode examples blindly. Base64 `prompt_audio` does not replace the required URL. Async: §8.4.
+
+#### eleven-v4 / eleven-v4-turbo
+
+```json
+{
+  "model": "eleven-v4",
+  "input": "Hello, welcome to KeyoAPI.",
+  "voice": "george",
+  "response_format": "mp3"
+}
+```
+
+Both use this endpoint. Replace the example value `george` with a name or ID confirmed valid for this model and account; do not copy voice IDs from another service or treat unconfirmed names as accepted. `Unknown voice` means the name was rejected. Success does not guarantee language, gender, emotion or accent. If spoken words differ from `input`, retain the request ID and fields for support.
 
 ---
 
@@ -940,20 +987,78 @@ See the [Gemini native speech documentation](https://ai.google.dev/gemini-api/do
 ---
 
 
-## 8. TTS async
+## 8. Asynchronous TTS
 
-`POST https://www.keyoapi.xyz/v1/async/audio/speech`
-Poll: `GET /v1/task/{id}` (singular)
-Models: `Qwen3-TTS` · `CosyVoice3` · `Spark-TTS-0.5B` · `Spark-TTS-0.5B:free`
+`POST https://www.keyoapi.xyz/v1/async/audio/speech` → `GET /v1/task/{id}`
+
+The poll path is singular; use the same key. Fields differ by model: changing only `model` is insufficient. Replace reference URL placeholders with real downloadable files and their exact transcripts.
+
+### 8.1 Qwen3-TTS
 
 ```json
 {
   "model": "Qwen3-TTS",
-  "inputs": "Hello, welcome to KeyoAPI"
+  "output_format": "mp3",
+  "inputs": [
+    {
+      "prompt": "Hello, welcome to KeyoAPI.",
+      "language": "English",
+      "speaker": "Vivian",
+      "instruction": "Explain naturally and clearly."
+    }
+  ]
 }
 ```
 
-The example above performs basic text-to-speech, not voice cloning. No reference-audio enrollment or reusable voice-ID contract is documented here. Confirm the chosen model’s required clone-sample and voice fields with support before implementing cloning; do not invent `voice`, `reference_audio` or other fields.
+Canonical `inputs` is an array of objects, each requiring `prompt` and `language` (`Chinese` / `English`), with at most 5 items. Optional, case-sensitive `speaker` names: `Vivian`, `Serena`, `Uncle_Fu`, `Dylan`, `Eric`, `Ryan`, `Aiden`, `Ono_Anna`, `Sohee`. Optional `instruction` guides expression without guaranteeing emotion or gender. There is no generic `voice`. The gateway converts legacy `input` / `inputs` strings or single objects to arrays; new clients should send the canonical array and explicit language. Reference mode puts `prompt_audio_url` and `prompt_text` inside an item, not at the top level. Confirm any enrollment or reusable voice-ID workflow first.
+
+### 8.2 CosyVoice3
+
+```json
+{
+  "model": "CosyVoice3",
+  "inputs": "Hello, welcome to KeyoAPI.",
+  "prompt_wav_url": "https://example.com/your-reference.wav",
+  "prompt_text": "Replace with the exact transcript of your reference audio.",
+  "instruct_text": "Explain naturally and clearly.",
+  "speed": 1
+}
+```
+
+`prompt_wav_url` and `prompt_text` are required. References must be ≤30 seconds, ≥16 kHz, WAV or MP3. Optional: `instruct_text`, `speed`, `seed`; speed ranges from 1 to 5. This model uses a string `inputs`, not Qwen’s array. Text without reference audio is incomplete.
+
+### 8.3 Spark-TTS-0.5B
+
+```json
+{
+  "model": "Spark-TTS-0.5B",
+  "inputs": "Hello, welcome to KeyoAPI.",
+  "gender": "male",
+  "pitch": 3,
+  "speed": 3
+}
+```
+
+For basic synthesis, explicitly send `gender` (`male` / `female`); `pitch` and `speed` range from 1 to 5, default 3. Cloning is a separate mode: required WAV `prompt_audio_url`, optional matching `prompt_text`. Do not mix the mode examples blindly. Check availability, price and wallet rules for `:free` on the model page; the suffix promises neither free usage nor higher success rates.
+
+### 8.4 IndexTTS-2
+
+```json
+{
+  "model": "IndexTTS-2",
+  "inputs": "Hello, welcome to KeyoAPI.",
+  "prompt_audio_url": "https://example.com/your-reference.wav",
+  "use_emo_text": true
+}
+```
+
+Apply the reference and emotion-mode rules in §7.1, using a string `inputs` for async requests.
+
+Save `id` / `task_id` first; submission status may be `waiting`. On GET `completed`, inspect the actual `output`. Download from `url` or `output.file_url` only when present (§0.6); handle batch outputs item by item rather than assuming a single URL; stop on `failed` / `cancelled`. For temporary `502 task_query_unavailable`, keep the ID and retry the original GET according to `Retry-After`; do not mark generation failed or create another task. A timed-out submission without an ID has an unknown outcome: do not resubmit automatically.
+
+If a completed response lacks the expected URL, keep the complete response for support; do not automatically POST again.
+
+`keyo-tts` has no published TTS contract; do not guess sync or async paths. `laya-multilingual` is a classification/decision model. `InfiniteTalk` makes video from existing audio. Neither is a text-to-speech endpoint.
 
 ---
 

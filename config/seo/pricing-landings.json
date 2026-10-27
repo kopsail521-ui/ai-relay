@@ -581,31 +581,31 @@
       "tableHeading": "TTS models on Keyo",
       "colOfficial": "Shape",
       "bodyHeading": "Rates and endpoints",
-      "lead": "Looking for a text to speech API you can call from the same OpenAI-style key as Whisper and chat? KeyoAPI hosts sync IndexTTS-2 and ElevenLabs v4 plus async CosyVoice3 and Qwen3-TTS — pick latency vs batch, then drive Duix-Avatar or InfiniteTalk when you need a talking face.",
+      "lead": "Choose the model’s endpoint and complete request fields: Qwen uses prompt/language arrays; CosyVoice and Index require reference audio; Gemini uses native generateContent.",
       "rows": [
         {
           "model": "IndexTTS-2",
-          "official": "Synchronous speech — audio in one HTTP round trip",
+          "official": "Reference-based speech; prompt_audio_url required",
           "keyo": "~$1.37 / 10K characters",
           "note": "POST /v1/audio/speech · guide /model/IndexTTS-2"
         },
         {
           "model": "CosyVoice3",
-          "official": "Async multilingual / zero-shot TTS for longer scripts",
+          "official": "Async speech; prompt_wav_url and exact prompt_text required",
           "keyo": "~$1.37 / 10K characters",
           "note": "POST /v1/async/audio/speech · guide /model/CosyVoice3"
         },
         {
           "model": "Qwen3-TTS",
-          "official": "Asynchronous text-to-speech; confirm separate cloning fields before using samples",
+          "official": "Async speech; inputs array with prompt and language",
           "keyo": "~$0.548 / 10K characters",
           "note": "POST /v1/async/audio/speech · guide /model/Qwen3-TTS"
         },
         {
           "model": "gemini-3.8-flash-tts",
-          "official": "Gemini-native sync TTS — token-billed, audio inline as base64 WAV",
+          "official": "Native JSON audio: decode according to inlineData.mimeType",
           "keyo": "~$0.44 / $8.82 per 1M in/out",
-          "note": "Gemini-native POST /v1beta/models/gemini-3.8-flash-tts:generateContent · also supports OpenAI-compatible POST /v1/audio/speech · guide /model/gemini-3.8-flash-tts"
+          "note": "Only POST /v1beta/models/gemini-3.8-flash-tts:generateContent · not /v1/audio/speech · guide /model/gemini-3.8-flash-tts"
         },
         {
           "model": "eleven-v4",
@@ -629,16 +629,17 @@
         "body": "Gift-credit chat twins (Atria-dawn-v2:free and other :free catalog IDs, billed from your $10 welcome credit) sit on the same key for script drafting. TTS rows above are metered — confirm live rates on Model Square. Guides: /model/IndexTTS-2, /model/CosyVoice3, /model/Qwen3-TTS."
       },
       "body": [
-        "Teams call a text to speech API for IVR, voice agents, course narration, and avatar pipelines. Keyo keeps STT (Whisper) and TTS on one prepaid balance so you are not juggling three vendor consoles.",
-        "Indicative rates above come from the live Keyo catalog — confirm /model/IndexTTS-2, /model/CosyVoice3, /model/Qwen3-TTS, and /model/gemini-3.8-flash-tts (live rates on /pricing). Prefer IndexTTS-2 when the product needs audio inside one request; prefer CosyVoice3 or Qwen3-TTS when jobs are already async. Gemini 3.8 Flash TTS bills per token, not per 10K characters — it is not covered by the ~$0.40–$1.37 / 10K characters range above, and it supports both the Gemini-native endpoint and the compatible /v1/audio/speech endpoint; see the handbook for their different response formats.",
-        "How to call CosyVoice3 API (and siblings): set base URL https://www.keyoapi.xyz/v1, authenticate with your Keyo key, pass the model id. Full CosyVoice3 walkthrough: /model/CosyVoice3. Also /model/IndexTTS-2, /model/Qwen3-TTS. Voice clone angle: /voice-cloning-api. Talking video: /ai-avatar-video-generator.",
-        "Create a key at /sign-up, then open /pricing (Model Square) for interactive try/buy."
+        "TTS models do not share one interchangeable request body. GLM-TTS, Step-Audio-TTS-3B, IndexTTS-2 and Eleven use POST /v1/audio/speech. Qwen3-TTS, CosyVoice3 and Spark-TTS-0.5B use POST /v1/async/audio/speech, then singular GET /v1/task/{id}.",
+        "Qwen3-TTS requires an inputs array of objects containing prompt and language (Chinese or English); speaker and instruction are optional model-specific controls. CosyVoice3 requires string inputs plus prompt_wav_url and its exact prompt_text, with a reference ≤30 seconds, ≥16 kHz, WAV/MP3. IndexTTS-2 requires prompt_audio_url and a chosen text/audio emotion branch. See /brand/keyo-api-ref.html#section-8 for complete examples.",
+        "GLM reference examples use prompt_audio_url plus its matching prompt_text; Step references are optional WAV. There is no confirmed interchangeable alloy/echo voice list for these models. Spark basic synthesis explicitly supplies gender, with pitch and speed from one to five. Eleven uses model-specific built-in names such as george; do not copy another service’s voice ID. Request success does not guarantee language, gender, emotion or voice quality.",
+        "Gemini 3.8 Flash TTS uses only POST /v1beta/models/gemini-3.8-flash-tts:generateContent, not /v1/audio/speech. Its JSON response contains inlineData.mimeType and base64 data; decode audio according to MIME and wrap raw PCM when needed. See /brand/keyo-api-ref.html#section-7-2 for the decoder. The preview TTS model and keyo-tts remain pending; laya is not TTS and InfiniteTalk needs existing audio.",
+        "Replace reference URL placeholders with real downloadable files and exact transcripts before submitting. Save task IDs; retry temporary task_query_unavailable GETs according to Retry-After without creating replacement jobs. Check current rates and account groups on /pricing."
       ],
-      "curlExample": "curl https://www.keyoapi.xyz/v1/audio/speech \\\n  -H \"Authorization: Bearer $KEYO_API_KEY\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\"model\":\"IndexTTS-2\",\"input\":\"Hello from KeyoAPI TTS.\"}'",
+      "curlExample": "curl https://www.keyoapi.xyz/v1/async/audio/speech \\\n  -H \"Authorization: Bearer $KEYO_API_KEY\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\"model\":\"Qwen3-TTS\",\"output_format\":\"mp3\",\"inputs\":[{\"prompt\":\"Hello from KeyoAPI TTS.\",\"language\":\"English\",\"speaker\":\"Vivian\"}]}'\n# Save id/task_id, then GET /v1/task/{id}.",
       "faqs": [
         {
           "q": "Which TTS model should I start with?",
-          "a": "Start with IndexTTS-2 for sync demos; move to CosyVoice3 or Qwen3-TTS for batch/async and basic speech workloads. See /model/CosyVoice3 for the CosyVoice3 API call shape, and confirm live rates on /pricing."
+          "a": "Use the complete model-specific request in /brand/keyo-api-ref.html: Qwen requires a prompt/language array; Cosy and Index need reference audio. Choose sync or async based on your application, and check live rates on /pricing."
         },
         {
           "q": "Is there a free TTS model?",
@@ -664,50 +665,51 @@
       "tableHeading": "Documented speech endpoints",
       "colOfficial": "Fit",
       "bodyHeading": "Rates and endpoints",
-      "lead": "Basic text-to-speech and voice cloning are different operations. The examples on this page synthesize text; they do not supply a reference speaker. Confirm the chosen model’s reference-audio and voice-ID contract with support before building cloning.",
+      "lead": "Reference-based speech requires the chosen model’s audio and transcript fields. A text-only request does not identify a reference speaker, and voice parameters cannot be copied between models.",
       "rows": [
         {
           "model": "Qwen3-TTS",
-          "official": "Asynchronous basic text-to-speech",
+          "official": "Array inputs; reference fields belong inside an item",
           "keyo": "~$0.548 / 10K characters",
           "note": "POST /v1/async/audio/speech · guide /model/Qwen3-TTS"
         },
         {
           "model": "CosyVoice3",
-          "official": "Asynchronous basic text-to-speech",
+          "official": "Required prompt_wav_url and exact prompt_text",
           "keyo": "~$1.37 / 10K characters",
           "note": "POST /v1/async/audio/speech · guide /model/CosyVoice3"
         },
         {
           "model": "IndexTTS-2",
-          "official": "Synchronous basic text-to-speech",
+          "official": "Required prompt_audio_url; separate emotion modes",
           "keyo": "~$1.37 / 10K characters",
           "note": "POST /v1/audio/speech · guide /model/IndexTTS-2"
         }
       ],
       "freeKiller": {
         "title": "Before using a reference voice",
-        "body": "Obtain the supported sample format, required fields, enrollment steps and voice-ID lifecycle for the chosen model. Those details are not documented in the basic TTS example below; do not guess parameters or promise speaker reproduction from text alone."
+        "body": "Replace reference URL placeholders with real downloadable files and their exact transcripts. Index uses prompt_audio_url; Cosy uses prompt_wav_url plus prompt_text. Do not invent enrollment or reusable voice-ID fields."
       },
       "body": [
-        "Use POST /v1/async/audio/speech with model=Qwen3-TTS or CosyVoice3 and an inputs string for basic speech synthesis. Save id/task_id, then query GET /v1/task/{id} until status=completed and an audio URL is available. See /brand/keyo-api-ref.html#section-8.",
-        "Reference-voice cloning needs its own confirmed request contract. This page does not provide sample upload/enrollment or a reusable voice-ID schema. Ask support for that contract before submitting clone samples; do not copy a voice field from a different model.",
-        "For synchronous basic speech, see IndexTTS-2 on POST /v1/audio/speech. The complete endpoint map is in /tts-api. Current applicable rates and groups are shown in /pricing.",
-        "A timed-out task submission may already have succeeded. Preserve its task or request ID; retry status GET requests using the original ID instead of creating replacement jobs automatically."
+        "CosyVoice3 uses POST /v1/async/audio/speech with string inputs and required prompt_wav_url plus exact prompt_text. Reference audio must be at most 30 seconds, at least 16 kHz, WAV or MP3. Replace the example URL before submitting; it is not a working reference sample.",
+        "IndexTTS-2 requires prompt_audio_url. Its sync request uses input; its async request uses string inputs. Text emotion mode uses use_emo_text and optional emo_text; audio emotion mode instead requires emo_audio_prompt_url. GLM reference examples use prompt_audio_url and matching prompt_text. Step reference fields are optional and WAV-only. Full examples: /brand/keyo-api-ref.html#section-7-1.",
+        "Qwen3-TTS uses an inputs array with prompt and language in each item. Built-in speaker names are separate from reference mode; prompt_audio_url and prompt_text belong inside an array item. Spark has separate basic gender/pitch/speed and reference-audio modes. Do not replace these contracts with generic voice or reference_audio fields.",
+        "Save id/task_id and query singular GET /v1/task/{id}. On completed, inspect the actual output. Download from url or output.file_url only when present, handling batch results item by item. Preserve an unexpected complete response for support; do not automatically submit again. Retry a temporary task_query_unavailable GET according to Retry-After without creating another task. A submission timeout without an ID has an unknown outcome; do not resubmit automatically.",
+        "Style instructions and references do not guarantee a particular emotion, gender, accent or quality. These URL-based requests do not define sample enrollment or reusable voice IDs. Confirm those separate workflows with support. See /tts-api for endpoints, /brand/keyo-api-ref.html#section-8 for model-specific fields and /pricing for current rates."
       ],
-      "curlExample": "curl https://www.keyoapi.xyz/v1/async/audio/speech \\\n  -H \"Authorization: Bearer $KEYO_API_KEY\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\"model\":\"Qwen3-TTS\",\"inputs\":\"Hello from KeyoAPI text-to-speech.\"}'\n# Basic TTS only. Save id/task_id and query GET /v1/task/{id}.",
+      "curlExample": "# Replace the URL and transcript with your real reference (not a working sample).\ncurl https://www.keyoapi.xyz/v1/async/audio/speech \\\n  -H \"Authorization: Bearer $KEYO_API_KEY\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\"model\":\"CosyVoice3\",\"inputs\":\"Hello from KeyoAPI TTS.\",\"prompt_wav_url\":\"https://example.com/your-reference.wav\",\"prompt_text\":\"Replace with the exact transcript of your reference audio.\"}'\n# Save id/task_id, then GET /v1/task/{id}.",
       "faqs": [
         {
-          "q": "Does the basic example clone a voice?",
-          "a": "No. It sends only text. Confirm the reference-audio, enrollment and voice-ID contract for your model before implementing cloning."
-        },
-        {
           "q": "Which fields identify the reference speaker?",
-          "a": "That model-specific contract is not specified on this page. Obtain it from support; do not guess field names."
+          "a": "Index and GLM use prompt_audio_url; Cosy requires prompt_wav_url plus exact prompt_text. Qwen reference fields belong inside an inputs item. See the model-specific handbook examples."
         },
         {
-          "q": "How do I start with basic speech?",
-          "a": "Create a key at /keys after signing in, then follow /brand/keyo-api-ref.html#section-8. Check current model rates on /pricing."
+          "q": "Does a successful request guarantee a matched voice?",
+          "a": "No. HTTP success does not establish speaker similarity, gender, emotion or audio quality. Compare the result with your actual requirements."
+        },
+        {
+          "q": "Can I reuse a voice ID?",
+          "a": "These URL-based examples do not define enrollment or reusable voice IDs. Confirm that separate workflow with support before implementing it."
         }
       ]
     },

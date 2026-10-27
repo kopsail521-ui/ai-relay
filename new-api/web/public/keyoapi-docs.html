@@ -919,6 +919,28 @@
         </div>
       </section>
 
+      <section id="tts">
+        <div class="sec-head"><h2 data-i18n="ttsTitle"></h2></div>
+        <p class="hint" data-i18n-html="ttsHint"></p>
+        <p class="hint" data-i18n-html="ttsRefsHint"></p>
+        <h3>GLM-TTS · POST /v1/audio/speech</h3>
+        <div class="code-block"><div class="code-bar"><span class="lang">Bash · curl</span><button type="button" class="btn-copy" data-copy-target="curl-tts-glm" data-i18n="copy"></button></div><pre id="curl-tts-glm"></pre></div>
+        <h3>Step-Audio-TTS-3B · POST /v1/audio/speech</h3>
+        <div class="code-block"><div class="code-bar"><span class="lang">Bash · curl</span><button type="button" class="btn-copy" data-copy-target="curl-tts-step" data-i18n="copy"></button></div><pre id="curl-tts-step"></pre></div>
+        <h3>IndexTTS-2 · POST /v1/audio/speech</h3>
+        <div class="code-block"><div class="code-bar"><span class="lang">Bash · curl</span><button type="button" class="btn-copy" data-copy-target="curl-tts-index" data-i18n="copy"></button></div><pre id="curl-tts-index"></pre></div>
+        <h3>eleven-v4 / eleven-v4-turbo · POST /v1/audio/speech</h3>
+        <div class="code-block"><div class="code-bar"><span class="lang">Bash · curl</span><button type="button" class="btn-copy" data-copy-target="curl-tts-eleven" data-i18n="copy"></button></div><pre id="curl-tts-eleven"></pre></div>
+        <h3>Qwen3-TTS · POST /v1/async/audio/speech</h3>
+        <div class="code-block"><div class="code-bar"><span class="lang">Bash · curl</span><button type="button" class="btn-copy" data-copy-target="curl-tts-qwen" data-i18n="copy"></button></div><pre id="curl-tts-qwen"></pre></div>
+        <h3>CosyVoice3 · POST /v1/async/audio/speech</h3>
+        <div class="code-block"><div class="code-bar"><span class="lang">Bash · curl</span><button type="button" class="btn-copy" data-copy-target="curl-tts-cosy" data-i18n="copy"></button></div><pre id="curl-tts-cosy"></pre></div>
+        <h3>Spark-TTS-0.5B · POST /v1/async/audio/speech</h3>
+        <div class="code-block"><div class="code-bar"><span class="lang">Bash · curl</span><button type="button" class="btn-copy" data-copy-target="curl-tts-spark" data-i18n="copy"></button></div><pre id="curl-tts-spark"></pre></div>
+        <div class="endpoint"><span class="method">GET</span><span class="path">/v1/task/{id}</span></div>
+        <div class="code-block"><div class="code-bar"><span class="lang">Bash · curl · task</span><button type="button" class="btn-copy" data-copy-target="curl-tts-task" data-i18n="copy"></button></div><pre id="curl-tts-task"></pre></div>
+      </section>
+
       <section id="gemini-tts">
         <h3 data-i18n="geminiTtsTitle"></h3>
         <p class="hint" data-i18n-html="geminiTtsHint"></p>
@@ -1926,6 +1948,59 @@ const GEMINI_TTS_COPY = {
 };
 for (const [language, copy] of Object.entries(GEMINI_TTS_COPY)) Object.assign(I18N[language], copy);
 
+const TTS_MODEL_COPY = {
+  "en": {
+    "ttsTitle": "Speech: use each model’s request fields",
+    "ttsHint": "Sync audio: <code>GLM-TTS / Step-Audio-TTS-3B / IndexTTS-2 / eleven-v4</code> use <code>/v1/audio/speech</code>. Qwen, CosyVoice and Spark use <code>/v1/async/audio/speech</code>, then singular <code>GET /v1/task/{id}</code>. Qwen <code>inputs</code> is an array of objects with <code>prompt + language</code>; Cosy/Spark use strings. Save the task ID; retry temporary <code>task_query_unavailable</code> GETs according to <code>Retry-After</code>, without creating another task.",
+    "ttsRefsHint": "Replace <code>https://example.com/your-reference.wav</code> with a real downloadable audio URL and replace <code>prompt_text</code> with its exact transcript. Index requires <code>prompt_audio_url</code>; Cosy requires <code>prompt_wav_url + prompt_text</code> (≤30 s, ≥16 kHz, WAV/MP3). Step references are optional WAV; arbitrary <code>voice</code> names are not confirmed. Spark basic mode requires <code>gender</code>. Eleven uses a model-specific name such as <code>george</code>. No gender, emotion or voice quality is guaranteed. <code>keyo-tts</code> remains pending; laya is not TTS and InfiniteTalk needs existing audio. <a href=\"/brand/keyo-api-ref.html#section-7-1\">Sync fields</a> · <a href=\"/brand/keyo-api-ref.html#section-8\">Async fields and limits</a>. The example voice value <code>george</code> must be replaced with a name or ID confirmed valid for this model and account.",
+    "ttsText": "Hello, welcome to KeyoAPI.",
+    "ttsLanguage": "English"
+  },
+  "zhCN": {
+    "ttsTitle": "语音合成：按型号填写字段",
+    "ttsHint": "同步 GLM / Step / Index / Eleven 使用 <code>/v1/audio/speech</code>；Qwen / Cosy / Spark 使用 <code>/v1/async/audio/speech</code>，再查单数 <code>GET /v1/task/{id}</code>。Qwen 的 <code>inputs</code> 是含 <code>prompt + language</code> 的对象数组，Cosy/Spark 则是字符串。先保存任务 ID；查询临时 <code>task_query_unavailable</code> 按 <code>Retry-After</code> 重试原 GET，不重建任务。",
+    "ttsRefsHint": "将 <code>https://example.com/your-reference.wav</code> 换成可直接下载的真实音频，<code>prompt_text</code> 换成该文件逐字台词。Index 必填 <code>prompt_audio_url</code>；Cosy 必填 <code>prompt_wav_url + prompt_text</code>（≤30秒、≥16kHz、WAV/MP3）。Step 参考可选且仅 WAV，未确认任意 <code>voice</code> 名称有效。Spark 基础分支须填 <code>gender</code>；Eleven 用该型号名称如 <code>george</code>。不保证性别、情绪或音质效果。<code>keyo-tts</code> 待确认，laya 非 TTS，InfiniteTalk 需要已有音频。<a href=\"/brand/keyo-api-ref.html#section-7-1\">同步字段</a> · <a href=\"/brand/keyo-api-ref.html#section-8\">异步字段与限制</a>。 示例音色值 <code>george</code> 仍须按该型号及账号已确认有效的名称或 ID 替换。",
+    "ttsText": "你好，欢迎使用 KeyoAPI。",
+    "ttsLanguage": "Chinese"
+  },
+  "zhTW": {
+    "ttsTitle": "語音合成：依型號填寫欄位",
+    "ttsHint": "同步 GLM / Step / Index / Eleven 使用 <code>/v1/audio/speech</code>；Qwen / Cosy / Spark 使用 <code>/v1/async/audio/speech</code>，再查單數 <code>GET /v1/task/{id}</code>。Qwen 的 <code>inputs</code> 是含 <code>prompt + language</code> 的物件陣列，Cosy/Spark 則是字串。先保存任務 ID；暫時的 <code>task_query_unavailable</code> 依 <code>Retry-After</code> 重試原 GET，不重建任務。",
+    "ttsRefsHint": "將 <code>https://example.com/your-reference.wav</code> 換成可直接下載的真實音訊，<code>prompt_text</code> 換成逐字台詞。Index 必填 <code>prompt_audio_url</code>；Cosy 必填 <code>prompt_wav_url + prompt_text</code>（≤30秒、≥16kHz、WAV/MP3）。Step 參考可選且僅 WAV，未確認任意 <code>voice</code> 名稱有效。Spark 基礎分支須填 <code>gender</code>；Eleven 使用型號名稱如 <code>george</code>。不保證性別、情緒或音質效果。<code>keyo-tts</code> 待確認，laya 非 TTS，InfiniteTalk 需要已有音訊。<a href=\"/brand/keyo-api-ref.html#section-7-1\">同步欄位</a> · <a href=\"/brand/keyo-api-ref.html#section-8\">非同步欄位與限制</a>。 範例音色值 <code>george</code> 仍須換成此型號及帳號已確認有效的名稱或 ID。",
+    "ttsText": "你好，欢迎使用 KeyoAPI。",
+    "ttsLanguage": "Chinese"
+  },
+  "ja": {
+    "ttsTitle": "音声合成：モデル別の入力",
+    "ttsHint": "同期 GLM / Step / Index / Eleven は <code>/v1/audio/speech</code>、Qwen / Cosy / Spark は <code>/v1/async/audio/speech</code> と単数形 <code>GET /v1/task/{id}</code> を使います。Qwen の <code>inputs</code> は <code>prompt + language</code> を含むオブジェクト配列、Cosy/Spark は文字列です。IDを保存し、一時的な <code>task_query_unavailable</code> は <code>Retry-After</code> に従い同じGETを再試行します。タスクを作り直さないでください。",
+    "ttsRefsHint": "例のURLを実際にダウンロード可能な音声に置き換え、<code>prompt_text</code> は正確な書き起こしにします。Index は <code>prompt_audio_url</code>、Cosy は <code>prompt_wav_url + prompt_text</code> が必須（≤30秒、≥16kHz、WAV/MP3）。Stepの参照は任意でWAVのみ、任意の <code>voice</code> 名は未確認です。Spark基本モードは <code>gender</code>、Elevenは <code>george</code> などの専用名を使います。性別・感情・音質を保証しません。<code>keyo-tts</code> は未確定、layaはTTSではなく、InfiniteTalkには既存音声が必要です。<a href=\"/brand/keyo-api-ref.html#section-7-1\">同期</a> · <a href=\"/brand/keyo-api-ref.html#section-8\">非同期と制限</a>。 例の <code>george</code> は、このモデルとアカウントで有効と確認した名前またはIDに置き換えてください。",
+    "ttsText": "Hello, welcome to KeyoAPI.",
+    "ttsLanguage": "English"
+  },
+  "fr": {
+    "ttsTitle": "Synthèse vocale : champs propres au modèle",
+    "ttsHint": "GLM / Step / Index / Eleven : <code>/v1/audio/speech</code>. Qwen / Cosy / Spark : <code>/v1/async/audio/speech</code>, puis <code>GET /v1/task/{id}</code> au singulier. Qwen exige un tableau <code>inputs</code> avec <code>prompt + language</code> ; Cosy/Spark utilisent une chaîne. Gardez l’ID et répétez le même GET sur <code>task_query_unavailable</code> selon <code>Retry-After</code>, sans recréer la tâche.",
+    "ttsRefsHint": "Remplacez l’URL d’exemple par un vrai fichier accessible et <code>prompt_text</code> par sa transcription exacte. Index exige <code>prompt_audio_url</code> ; Cosy exige <code>prompt_wav_url + prompt_text</code> (≤30 s, ≥16 kHz, WAV/MP3). La référence Step est facultative, WAV uniquement ; les noms <code>voice</code> arbitraires ne sont pas confirmés. Spark simple exige <code>gender</code> ; Eleven emploie un nom propre au modèle, tel <code>george</code>. Sexe, émotion et qualité ne sont pas garantis. <code>keyo-tts</code> reste en attente ; laya n’est pas TTS et InfiniteTalk exige un audio existant. <a href=\"/brand/keyo-api-ref.html#section-7-1\">Synchrone</a> · <a href=\"/brand/keyo-api-ref.html#section-8\">Asynchrone et limites</a>. Remplacez <code>george</code> par un nom ou ID confirmé valide pour ce modèle et ce compte.",
+    "ttsText": "Hello, welcome to KeyoAPI.",
+    "ttsLanguage": "English"
+  },
+  "ru": {
+    "ttsTitle": "Синтез речи: поля зависят от модели",
+    "ttsHint": "GLM / Step / Index / Eleven: <code>/v1/audio/speech</code>. Qwen / Cosy / Spark: <code>/v1/async/audio/speech</code>, затем <code>GET /v1/task/{id}</code> в единственном числе. Qwen принимает массив <code>inputs</code> с <code>prompt + language</code>; Cosy/Spark — строку. Сохраните ID. При <code>task_query_unavailable</code> повторяйте тот же GET по <code>Retry-After</code>, не создавая новую задачу.",
+    "ttsRefsHint": "Замените пример URL реальным доступным аудио, а <code>prompt_text</code> — его точной расшифровкой. Index требует <code>prompt_audio_url</code>; Cosy — <code>prompt_wav_url + prompt_text</code> (≤30 с, ≥16 кГц, WAV/MP3). Для Step ссылка необязательна, только WAV; произвольные имена <code>voice</code> не подтверждены. Spark требует <code>gender</code>; Eleven использует имя модели, например <code>george</code>. Пол, эмоции и качество не гарантируются. <code>keyo-tts</code> пока не подтверждён; laya не TTS, InfiniteTalk требует готовое аудио. <a href=\"/brand/keyo-api-ref.html#section-7-1\">Синхронно</a> · <a href=\"/brand/keyo-api-ref.html#section-8\">Асинхронно и ограничения</a>. Замените <code>george</code> именем или ID, подтверждённым для этой модели и аккаунта.",
+    "ttsText": "Hello, welcome to KeyoAPI.",
+    "ttsLanguage": "English"
+  },
+  "vi": {
+    "ttsTitle": "Tổng hợp giọng nói: trường theo từng mô hình",
+    "ttsHint": "GLM / Step / Index / Eleven dùng <code>/v1/audio/speech</code>. Qwen / Cosy / Spark dùng <code>/v1/async/audio/speech</code>, rồi <code>GET /v1/task/{id}</code> số ít. Qwen nhận mảng <code>inputs</code> chứa <code>prompt + language</code>; Cosy/Spark nhận chuỗi. Lưu ID; với <code>task_query_unavailable</code>, thử lại GET cũ theo <code>Retry-After</code>, không tạo tác vụ mới.",
+    "ttsRefsHint": "Thay URL ví dụ bằng tệp âm thanh tải được và <code>prompt_text</code> bằng bản chép chính xác. Index bắt buộc <code>prompt_audio_url</code>; Cosy bắt buộc <code>prompt_wav_url + prompt_text</code> (≤30 giây, ≥16 kHz, WAV/MP3). Tham chiếu Step là tùy chọn, chỉ WAV; tên <code>voice</code> tùy ý chưa được xác nhận. Spark cơ bản cần <code>gender</code>; Eleven dùng tên riêng như <code>george</code>. Không bảo đảm giới tính, cảm xúc hay chất lượng. <code>keyo-tts</code> đang chờ xác nhận; laya không phải TTS, InfiniteTalk cần âm thanh có sẵn. <a href=\"/brand/keyo-api-ref.html#section-7-1\">Đồng bộ</a> · <a href=\"/brand/keyo-api-ref.html#section-8\">Bất đồng bộ và giới hạn</a>. Thay <code>george</code> bằng tên hoặc ID đã xác nhận hợp lệ cho mô hình và tài khoản này.",
+    "ttsText": "Hello, welcome to KeyoAPI.",
+    "ttsLanguage": "English"
+  }
+};
+for (const [language, copy] of Object.entries(TTS_MODEL_COPY)) Object.assign(I18N[language], copy);
+
 const LANG_LABELS = {
   en: 'English',
   zhCN: '简体中文',
@@ -1982,6 +2057,17 @@ function renderSamples(dict) {
       speechConfig: { voiceConfig: { prebuiltVoiceConfig: { voiceName: 'Kore' } } }
     }
   }, [], 'gemini-tts-response.json');
+  const ttsText = dict.ttsText || 'Hello, welcome to KeyoAPI.';
+  const reference = 'https://example.com/your-reference.wav';
+  const transcript = 'Replace with the exact transcript of your reference audio.';
+  jsonCurl('curl-tts-glm', '/v1/audio/speech', { model:'GLM-TTS', input:ttsText, prompt_audio_url:reference, prompt_text:transcript, output_format:'wav' }, [], 'speech.wav');
+  jsonCurl('curl-tts-step', '/v1/audio/speech', { model:'Step-Audio-TTS-3B', input:ttsText, prompt_audio_url:reference, prompt_text:transcript }, [], 'speech.audio');
+  jsonCurl('curl-tts-index', '/v1/audio/speech', { model:'IndexTTS-2', input:ttsText, prompt_audio_url:reference, use_emo_text:true }, [], 'speech.audio');
+  jsonCurl('curl-tts-eleven', '/v1/audio/speech', { model:'eleven-v4', input:ttsText, voice:'george', response_format:'mp3' }, [], 'speech.mp3');
+  jsonCurl('curl-tts-qwen', '/v1/async/audio/speech', { model:'Qwen3-TTS', output_format:'mp3', inputs:[{prompt:ttsText, language:dict.ttsLanguage || 'English', speaker:'Vivian'}] });
+  jsonCurl('curl-tts-cosy', '/v1/async/audio/speech', { model:'CosyVoice3', inputs:ttsText, prompt_wav_url:reference, prompt_text:transcript, instruct_text:'Explain naturally and clearly.', speed:1 });
+  jsonCurl('curl-tts-spark', '/v1/async/audio/speech', { model:'Spark-TTS-0.5B', inputs:ttsText, gender:'male', pitch:3, speed:3 });
+  setText('curl-tts-task', 'curl https://www.keyoapi.xyz/v1/task/TASK_ID \\\n  -H "Authorization: Bearer ' + key + '"');
   setText('ps-chat', [
     "$apiKey = '" + key.replace(/'/g, "''") + "'",
     "$body = @{",

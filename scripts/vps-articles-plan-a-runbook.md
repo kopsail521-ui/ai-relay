@@ -1,11 +1,26 @@
 # Plan A — 27 篇存量博客文章的处置（预置 runbook，11-07 之后执行）
 
+## 射程边界（写死，勿扩大）
+
+**方案 A 只对 `/brand/blog/article/` 下的 27 篇生效。以下一律不碰：**
+
+- 三篇入门指南：`/brand/blog/openai-compatible-api-python.html`、`…-nodejs.html`、`…-cursor.html`
+- 全部 capability / 枢纽 / 对比页（`/ai-agent-api`、`/ai-story-api`、`/study-ai-api`、`/gemini-4-api`、`/compare`、`/models`、`/pricing-list`、`/free-models`、品牌枢纽 ×7、视频/语音枢纽 ×7 等）
+- 55 个未逐页审过的 model 页
+
+依据：审计对照样本显示，指南页与 capability 页结构清晰、有可跑代码、有真实价格表、零 hedge，
+是全站唯一能用外部流量验证的资产；把它们扫进 noindex 是自伤。**只撤 article/，其余保留。**
+
+计数口径：`/brand/blog/sitemap.txt` = 博客首页 1 + 指南 3 + article **27** = 31 条。
+
 ## 为什么预置
 
 - 停发日 10-10，静置期到 11-07。
 - 10-27 中期读数：已收录 7（持平）、已抓取未收录 20→21（恶化）、已发现未收录 30（持平）。
 - 结论：静置排除了「我们自己的改动导致」这一假设，但没有改变 Google 的收录判断。
   27 篇（10-10 之前批量生成、模板感重）继续挂在 sitemap 里只会持续稀释站点质量信号。
+  页内证据：15 篇同一分钟发布（2026-10-10T10:44:03/04）、14 篇 description 为「Learn how to…」模板、
+  4 篇公开否认站点已有能力、模板拼接残骸遍布。
 
 ## 铁律
 

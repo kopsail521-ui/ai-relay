@@ -452,6 +452,10 @@ test("about model categories cards, deepseek cheapest title, and modern model re
   const kimiHtml = fs.readFileSync(path.join(seoRoot, "model/kimi-k3.html"), "utf8");
   assert.doesNotMatch(kimiHtml, /0\.20 \/ \$1\.02/, "kimi-k3 must not carry the pre-correction rate");
   assert.match(kimiHtml, /0\.41 \/ \$2\.04/, "kimi-k3 must carry the console rate");
+  // Scattered-phrasing guard: the same wrong numbers must not survive in prose
+  // ("approximately $0.20 per 1M input tokens ... $1.02 per 1M output").
+  assert.doesNotMatch(kimiHtml, /\$0\.20\b/, "kimi-k3 must not carry $0.20 in any phrasing");
+  assert.doesNotMatch(kimiHtml, /\$1\.02\b/, "kimi-k3 must not carry $1.02 in any phrasing");
   assert.doesNotMatch(kimiHtml, /93% cost reduction/, "kimi batch claim must be scoped to the list-price baseline");
   assert.doesNotMatch(kimiHtml, /14 times/, "kimi cross-comparison must not quote the 14x list-price number");
   assert.doesNotMatch(kimiHtml, /Gateway Uptime/i, "kimi must not publish uptime from a 15-request probe");

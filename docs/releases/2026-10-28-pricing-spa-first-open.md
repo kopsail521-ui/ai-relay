@@ -20,4 +20,10 @@
 
 ## 发布
 
-待现有代理安全发布工作流完成后填入结果。全程不调用真实模型。
+已发布：修复提交 `3dfa5532177d6ffc4a1b5632ae9f2452c9ebd532`；[代理安全发布 40625829264](https://github.com/kopsail521-ui/ai-relay/actions/runs/40625829264) 全部成功，包含 Ubuntu 与 Windows 门禁。北京时间 2026-10-28 11:18 完成代理替换，五个运行源文件、监听进程归属及两次稳定检查通过，保留原运行环境和挂载。
+
+发布后公共 GET 验收通过：120 个模型目录、登录/注册页面的延迟加载器、定价页面及 JavaScript 入口均正常。证据：`tmp/pricing-spa-public-release.json`、`tmp/pricing-spa-release-full.log`。
+
+另取线上认证页中的真实加载器和线上 JavaScript，在隔离 DOM 中使用详情抽屉 fixture 重放登录页至定价页的导航；Claude / Duix / gpt-image 的三、四、五档价格全部显示，零刷新且仅下载一次价格脚本。结果 `PUBLIC_PRICING_SPA_DOM_OK`，证据 `tmp/pricing-spa-public-dom-result.json`。此验收没有执行完整 React 应用、没有登录用户账号，也未将隔离 DOM 验证冒充人工浏览器操作。
+
+全程真实模型调用数为 0。发布前已经打开的旧页面需要重新加载一次以取得新加载器，之后站内导航无需反复刷新。

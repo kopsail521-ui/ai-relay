@@ -804,6 +804,44 @@ function buildBillingUnitScript() {
 
 const LOCALE_DESC_SCRIPT = buildLocaleDescScript();
 const BILLING_UNIT_SCRIPT = buildBillingUnitScript();
+const PRICING_UI_PATH = "/api/marketplace/pricing-ui.js";
+const PRICING_UI_JS = [LOCALE_DESC_SCRIPT, BILLING_UNIT_SCRIPT]
+  .map((script) => script.slice("<script>".length, -"</script>".length))
+  .join("\n;\n");
+
+// Auth-started SPA sessions do not request another HTML shell on navigation.
+// Defer the existing pricing UI until that session actually visits pricing.
+function loadPricingOnNavigation() {
+  if (window.__keyoPricingLoaderV1) return;
+  window.__keyoPricingLoaderV1 = true;
+  var pending = false;
+  var loaded = false;
+  function load() {
+    if (!/^\/(?:pricing|models)(?:\/|$)/.test(location.pathname)) return;
+    if (pending || loaded || (window.__keyoBillWeldedV1 && window.__KEYO_MKT_COPY)) return;
+    pending = true;
+    var script = document.createElement("script");
+    script.src = "/api/marketplace/pricing-ui.js?v=20261028-1";
+    script.async = true;
+    script.onload = function () { loaded = true; pending = false; };
+    script.onerror = function () { pending = false; script.remove(); };
+    document.head.appendChild(script);
+  }
+  ["pushState", "replaceState"].forEach(function (name) {
+    var original = history[name];
+    history[name] = function () {
+      var result = original.apply(this, arguments);
+      load();
+      return result;
+    };
+  });
+  window.addEventListener("popstate", load);
+  window.addEventListener("pageshow", load);
+  window.addEventListener("online", load);
+  window.addEventListener("click", load);
+  load();
+}
+const PRICING_UI_LOADER = `<!--keyo-pricing-loader-v1--><script>(${loadPricingOnNavigation.toString()})();</script>`;
 
 /** 旧前端 SPA 仍可能把 /models 当需登录路由；尽早改写到公开 /pricing */
 const MODELS_PUBLIC_SCRIPT = `<script>(function(){if(window.__keyoModelsPublic)return;window.__keyoModelsPublic=1;function mapPath(p){if(p==="/models")return"/pricing";if(p.indexOf("/models/")===0)return"/pricing"+p.slice(7);return null}function rewriteUrl(u){try{var x=new URL(u,location.origin);if(x.origin!==location.origin)return u;var n=mapPath(x.pathname);return n?n+x.search+x.hash:u}catch(e){return u}}function bounce(){var n=mapPath(location.pathname);if(n)location.replace(n+location.search+location.hash)}bounce();var _ps=history.pushState;history.pushState=function(s,t,u){if(typeof u==="string")u=rewriteUrl(u);return _ps.call(this,s,t,u)};var _rs=history.replaceState;history.replaceState=function(s,t,u){if(typeof u==="string")u=rewriteUrl(u);return _rs.call(this,s,t,u)};document.addEventListener("click",function(e){var a=e.target&&e.target.closest&&e.target.closest("a[href]");if(!a)return;var href=a.getAttribute("href");if(!href||href.charAt(0)==="#")return;try{var x=new URL(href,location.origin);if(x.origin!==location.origin)return;var n=mapPath(x.pathname);if(!n)return;e.preventDefault();e.stopPropagation();location.assign(n+x.search+x.hash)}catch(err){}},true)})();</script>`;
@@ -1244,6 +1282,10 @@ async function proxyRequest(req, res, bodyBuf) {
       let htmlBuf = await decodeBody(buf, enc);
       let html = htmlBuf.toString("utf8");
       let changed = false;
+      if (isAuthPage && !html.includes("keyo-pricing-loader-v1")) {
+        html = html.replace("<head>", `<head>${PRICING_UI_LOADER}`);
+        changed = true;
+      }
       if (wantPricingPatches && !html.includes("keyo-copy-toast-v1")) {
         const ac = `<!--keyo-copy-toast-v1-->${COPY_TOAST_AUTOCLOSE_SCRIPT}`;
         if (html.includes("<head>")) {
@@ -1360,6 +1402,16 @@ const server = http.createServer(async (req, res) => {
   try {
     const pathOnly = (req.url || "/").split("?")[0];
     if (redirectPublicPaths(req, res)) return;
+    if (["GET", "HEAD"].includes(req.method) && pathOnly === PRICING_UI_PATH) {
+      res.writeHead(200, {
+        "Content-Type": "application/javascript; charset=utf-8",
+        "Content-Length": Buffer.byteLength(PRICING_UI_JS),
+        "Cache-Control": "no-cache",
+        "X-Content-Type-Options": "nosniff",
+      });
+      res.end(req.method === "HEAD" ? undefined : PRICING_UI_JS);
+      return;
+    }
     if (IMAGE_PATHS.has(pathOnly) || /^\/v1\/images\/tasks\/[^/]+$/.test(pathOnly)) {
       res.setHeader("Access-Control-Allow-Origin", "*");
       res.setHeader("Access-Control-Expose-Headers", "X-Image-Task-Id, Location, Retry-After, Idempotency-Key");

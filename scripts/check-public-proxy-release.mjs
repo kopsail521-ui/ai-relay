@@ -7,12 +7,15 @@ const contracts = JSON.parse(fs.readFileSync(new URL('../services/creem-moderati
 const checks = [];
 
 async function get(path) {
-  assert.ok(['/api/pricing', '/pricing', '/sign-in', '/sign-up'].includes(path));
+  assert.ok(['/api/pricing', '/pricing', '/sign-in', '/sign-up', '/api/marketplace/pricing-ui.js'].includes(path));
   const response = await fetch(base + path, {
     headers: { 'cache-control': 'no-cache', 'user-agent': 'Keyo-Public-Release-Acceptance' },
     signal: AbortSignal.timeout(15_000),
   });
   assert.equal(response.status, 200, `Public GET failed: ${path}`);
+  if (path === '/api/marketplace/pricing-ui.js') {
+    assert.match(response.headers.get('content-type'), /javascript/, 'Pricing UI must be served as JavaScript');
+  }
   return response.text();
 }
 
@@ -45,11 +48,15 @@ async function verify() {
   for (const path of ['/sign-in', '/sign-up']) {
     const body = await get(path);
     assert.ok(!/keyo-oauth-enable|keyo-model-icons-v\d+/.test(body), `Old marketing/auth injection: ${path}`);
+    assert.ok(body.includes('keyo-pricing-loader-v1'), `Missing SPA pricing loader: ${path}`);
     assert.ok(/<script[^>]+src=["'][^"']+\.js/.test(body), `Missing application script: ${path}`);
     checks.push({ path, status: 'pass' });
   }
   assert.ok((await get('/pricing')).includes('keyo-model-icons-v6'), 'Old pricing injection is serving public traffic');
   checks.push({ path: '/pricing', status: 'pass' });
+  const pricingUi = await get('/api/marketplace/pricing-ui.js');
+  assert.ok(pricingUi.includes('buildGroupPriceTable') && pricingUi.includes('__KEYO_MKT_COPY'), 'Missing group pricing runtime or model data');
+  checks.push({ path: '/api/marketplace/pricing-ui.js', status: 'pass' });
 }
 
 let failure;

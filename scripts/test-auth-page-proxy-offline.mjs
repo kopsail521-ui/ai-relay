@@ -9,6 +9,7 @@ import http from "node:http";
 import { spawn } from "node:child_process";
 import { fileURLToPath } from "node:url";
 import path from "node:path";
+import vm from "node:vm";
 
 const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const proxyFile = path.join(
@@ -127,6 +128,56 @@ try {
   const authBody = await authResponse.text();
   assert.equal(authResponse.status, 200);
   assert.doesNotMatch(authBody, /keyo-oauth-enable|keyo-pricing-sort-v\d+|keyo-model-icons-v\d+|keyo-locale-desc/);
+  const loader = authBody.match(/<!--keyo-pricing-loader-v1--><script>([\s\S]*?)<\/script>/)?.[1];
+  assert.ok(loader, "An auth-started SPA must be able to load group pricing without refreshing");
+  assert.ok(Buffer.byteLength(authBody) < 6000, "Auth HTML must not inline marketplace data");
+
+  const loadedScripts = [];
+  const events = new Map();
+  const browser = {
+    location: { pathname: "/sign-in" },
+    history: {
+      pushState(_state, _title, url) { browser.location.pathname = String(url).split("?")[0]; },
+      replaceState(_state, _title, url) { browser.location.pathname = String(url).split("?")[0]; },
+    },
+    addEventListener(name, callback) { events.set(name, callback); },
+    document: {
+      createElement() { return { remove() { this.removed = true; } }; },
+      head: { appendChild(script) { loadedScripts.push(script); } },
+    },
+  };
+  browser.window = browser;
+  vm.runInNewContext(loader, browser);
+  assert.equal(loadedScripts.length, 0, "Opening login must not download pricing UI");
+  browser.history.replaceState({}, "", "/console");
+  assert.equal(loadedScripts.length, 0, "Console navigation must not download pricing UI");
+  browser.history.pushState({}, "", "/pricing?model=claude-opus-5-5");
+  assert.equal(loadedScripts.length, 1, "First model-page visit must load group pricing");
+  browser.history.pushState({}, "", "/pricing/claude-opus-5-5");
+  assert.equal(loadedScripts.length, 1, "Concurrent navigation must not duplicate the download");
+  const failed = loadedScripts[0];
+  failed.onerror();
+  assert.equal(failed.removed, true);
+  events.get("online")();
+  assert.equal(loadedScripts.length, 2, "A failed download must be retriable after reconnection");
+  const pricingScript = loadedScripts[1];
+  assert.match(pricingScript.src, /^\/api\/marketplace\/pricing-ui\.js\?v=/);
+  const scriptResponse = await fetch(`http://127.0.0.1:${proxyPort}${pricingScript.src}`);
+  assert.equal(scriptResponse.status, 200);
+  assert.match(scriptResponse.headers.get("content-type"), /javascript/);
+  assert.equal(scriptResponse.headers.get("x-content-type-options"), "nosniff");
+  const scriptBody = await scriptResponse.text();
+  new vm.Script(scriptBody);
+  assert.match(scriptBody, /buildGroupPriceTable/);
+  assert.match(scriptBody, /claude-opus-5-5/);
+  const headResponse = await fetch(`http://127.0.0.1:${proxyPort}${pricingScript.src}`, { method: "HEAD" });
+  assert.equal(headResponse.status, 200);
+  assert.equal(await headResponse.text(), "");
+  pricingScript.onload();
+  browser.history.pushState({}, "", "/sign-in");
+  browser.location.pathname = "/pricing";
+  events.get("popstate")();
+  assert.equal(loadedScripts.length, 2, "Returning via browser history must reuse the loaded pricing UI");
   for (const route of ["/sign-in", "/forgot-password", "/reset", "/user/reset", "/otp"]) {
     const body = await (await fetch(`http://127.0.0.1:${proxyPort}${route}`)).text();
     assert.doesNotMatch(body, /keyo-oauth-enable|keyo-pricing-sort-v\d+|keyo-model-icons-v\d+/);

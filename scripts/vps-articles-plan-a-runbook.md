@@ -102,3 +102,12 @@ sudo caddy validate --config /etc/caddy/Caddyfile && sudo systemctl reload caddy
 
 - 再观察 2–3 周：已收录 7 是否回升、27 篇是否从「已发现未收录」消失、www 主机的「过去有问题」标记是否清除。
 - 若回升 → 保持；若仍不动 → 下一步才是文章内容重写（那是大工程，另立项目）。
+
+## 附：sitemap lastmod 说明（勿改 rebuild 逻辑）
+
+lastmod 是**内容哈希驱动**（`stableLastmod`：内容哈希不变则保留旧日期），2026-10-28 实测分布
+80 页 10-28 / 6 页 10-27 / 1 页 10-25，与 `config/seo/sitemap-lastmod.json` 缓存逐条吻合，
+属于正常形状——**不要"修"rebuild 写日期的逻辑**。
+
+B2-f 只做一件事：27 篇 article 的 sitemap 条目按真实发布日（09-25 / 09-28 / 10-10 三批）
+在生成时拉开 lastmod，与方案 A 同一次提交；不碰生成器逻辑。

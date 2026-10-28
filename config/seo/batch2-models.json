@@ -498,10 +498,10 @@
       ],
       "h1": "Kimi K3 API on KeyoAPI — 256K Context, Pricing & Benchmarks",
       "title": "Kimi K3 API Key & Pricing Guide (256K Context) | KeyoAPI",
-      "metaDescription": "Call kimi-k3 on KeyoAPI (~$0.20/$1.02 per 1M). 256K context window, SWE-bench 79.0%, live probe telemetry, and free prototyping path.",
-      "priceLabel": "~$0.20 / $1.02 per 1M in/out",
+      "metaDescription": "Call kimi-k3 on KeyoAPI (~$0.41/$2.04 per 1M). 256K context window, SWE-bench 79.0%, measured latency notes, and a gift-credit prototyping path.",
+      "priceLabel": "~$0.41 / $2.04 per 1M in/out",
       "priceUnit": "per_1m_tokens",
-      "lead": "Kimi K3 by Moonshot AI delivers 256K context window reasoning and coding performance on an OpenAI-compatible endpoint at ~$0.20 / $1.02 per 1M tokens.",
+      "lead": "Kimi K3 by Moonshot AI delivers 256K context window reasoning and coding performance on an OpenAI-compatible endpoint at ~$0.41 / $2.04 per 1M tokens.",
       "related": [
         "deepseek-v4.1-flash",
         "glm-5.3",
@@ -528,11 +528,11 @@
       "guideSections": [
         {
           "heading": "Live Gateway Performance & Telemetry (Field Tested)",
-          "html": "<div class=\"surfaces\">\n  <div class=\"surf\">\n    <h3>Time to First Token (TTFT)</h3>\n    <p><strong>p50:</strong> 9,779 ms (9.78s)</p>\n    <p><strong>p95:</strong> 19,962 ms (19.96s)</p>\n    <p class=\"meta\">Sampled over 15 live streaming probes</p>\n  </div>\n  <div class=\"surf\">\n    <h3>Generation Throughput</h3>\n    <p><strong>p50:</strong> 18.2 tok/s</p>\n    <p><strong>p95:</strong> 614.2 tok/s</p>\n    <p class=\"meta\">Streaming output token rate</p>\n  </div>\n  <div class=\"surf\">\n    <h3>Availability & Error Rate</h3>\n    <p><strong>Gateway Uptime:</strong> 60.0%</p>\n    <p><strong>Error Rate:</strong> 40.0% (upstream timeout / empty chunk)</p>\n    <p class=\"meta\">Direct measurement on 2026-10-19</p>\n  </div>\n  <div class=\"surf\">\n    <h3>Total End-to-End Latency</h3>\n    <p><strong>p50:</strong> 19,902 ms (19.90s)</p>\n    <p><strong>p95:</strong> 28,651 ms (28.65s)</p>\n    <p class=\"meta\">Full round-trip completion duration</p>\n  </div>\n</div>",
+          "html": "<div class=\"surfaces\">\n  <div class=\"surf\">\n    <h3>Time to First Token (TTFT)</h3>\n    <p><strong>p50:</strong> 9,779 ms (9.78s)</p>\n    <p><strong>p95:</strong> 19,962 ms (19.96s)</p>\n    <p class=\"meta\">Sampled over 15 live streaming probes</p>\n  </div>\n  <div class=\"surf\">\n    <h3>Generation Throughput</h3>\n    <p><strong>p50:</strong> 18.2 tok/s</p>\n    <p><strong>p95:</strong> 614.2 tok/s</p>\n    <p class=\"meta\">Streaming output token rate</p>\n  </div>\n  \n  <div class=\"surf\">\n    <h3>Total End-to-End Latency</h3>\n    <p><strong>p50:</strong> 19,902 ms (19.90s)</p>\n    <p><strong>p95:</strong> 28,651 ms (28.65s)</p>\n    <p class=\"meta\">Full round-trip completion duration</p>\n  </div>\n</div>",
           "paragraphs": [
             "The metrics above reflect real gateway telemetry measured on 2026-10-19 via automated streaming probes against https://www.keyoapi.xyz/v1/chat/completions using model kimi-k3. Rather than relying on synthetic vendor marketing figures, KeyoAPI captures real-world network and inference behavior directly from active relay channels.",
             "Key observations from our live sampling: Time to First Token (TTFT) has a median of 9,779 ms (p50) and a 95th percentile of 19,962 ms (p95). Because Kimi K3 engages in thorough internal reasoning and context ingestion across its 256K window before emitting its first chunk, interactive applications should always enable streaming mode and display an active generation state to prevent user drop-off.",
-            "Under heavy concurrent upstream load, our 15-request sampling recorded 9 successful completions (60.0% uptime) with 6 upstream timeouts or empty response chunks (40.0% error rate). In production architectures, client applications must implement exponential backoff retries (minimum 2s initial delay) or configure automatic fallback routing to deepseek-v4.1-flash or glm-5.3 for latency-critical paths."
+            "Under heavy concurrent upstream load, a 15-request spot check saw intermittent upstream timeouts — fifteen probes are not a statistically meaningful uptime metric, so this page publishes latency figures only. In production, implement exponential backoff retries (minimum 2s initial delay) or fallback routing to deepseek-v4.1-flash or glm-5.3 for latency-critical paths."
           ]
         },
         {
@@ -604,8 +604,8 @@
           "rows": [
             [
               "kimi-k3",
-              "~$0.20",
-              "~$1.02",
+              "~$0.41",
+              "~$2.04",
               "256K tokens",
               "Ultra-long context document analysis, deep reasoning & autonomous coding agents",
               "—"
@@ -620,14 +620,14 @@
             ],
             [
               "gpt-5.6-luna",
-              "~$0.15",
-              "~$0.60",
+              "~$0.10",
+              "~$0.62",
               "128K tokens",
               "Cost-efficient general-purpose GPT conversational assistant",
               "/model/gpt-5.6-luna"
             ],
             [
-              "claude-sonnet-5",
+              "claude-sonnet-5 (Anthropic list)",
               "~$3.00",
               "~$15.00",
               "200K tokens",
@@ -644,7 +644,7 @@
             ]
           ],
           "paragraphsAfter": [
-            "Notice that kimi-k3 provides 256K tokens of context—larger than Claude Sonnet 5 (200K) or GPT-5.6 Luna (128K)—while costing only ~$0.20 / $1.02 per million tokens. This represents a 93% cost reduction compared to proprietary Western frontier models, making large-context agent loops economically viable at enterprise volume."
+            "Notice that kimi-k3 provides 256K tokens of context — larger than claude-sonnet-5 (200K) or gpt-6-luna (128K). Against Anthropic’s official list price ($3.00 / $15.00) the 1,000-conversation workload runs about 7.4× cheaper on kimi-k3; against Keyo’s own claude-sonnet-5 (~$0.44 / $2.21) the gap narrows to single digits, and deepseek-v4.1-flash-1017 (~$0.02 / $0.06) undercuts both. Kimi’s case is the 256K window, not the unit price."
           ]
         },
         {
@@ -653,8 +653,8 @@
             "To ground token prices in actual budgeting numbers, consider an automated tier-2 customer support workload consisting of 1,000 multi-turn customer conversations.",
             "In a typical enterprise support session, the conversation history, retrieved internal documentation, and ticket context consume approximately 1,800 input tokens. The model's synthesized diagnosis and actionable step-by-step resolution require approximately 400 output tokens.",
             "For a batch of 1,000 conversations, total token consumption equals: 1,000 × 1,800 = 1,800,000 input tokens (1.8M), and 1,000 × 400 = 400,000 output tokens (0.4M).",
-            "Applying KeyoAPI’s kimi-k3 sell rates: Input cost = 1.8M × $0.20 / 1M = $0.360. Output cost = 0.4M × $1.02 / 1M = $0.408. Total cost for 1,000 resolved tickets = $0.360 + $0.408 = $0.768 (approximately $0.77 total).",
-            "At less than $0.00077 per customer interaction, developers can run comprehensive multi-agent retrieval and verification steps on every ticket without inflating operational burn rates. Running this same batch through claude-sonnet-5 ($3.00 / $15.00) would cost $11.40—over 14 times more expensive."
+            "Applying KeyoAPI’s kimi-k3 sell rates: Input cost = 1.8M × $0.41 / 1M = $0.738. Output cost = 0.4M × $2.04 / 1M = $0.816. Total cost for 1,000 resolved tickets ≈ $1.55.",
+            "That is about $0.00155 per customer interaction. For comparison, the same batch at Anthropic’s official list price for claude-sonnet-5 ($3.00 / $15.00) would cost $11.40 (~7.4× more), while Keyo’s own claude-sonnet-5 (~$0.44 / $2.21) lands at $1.68 — within ~8% of kimi-k3. Choose kimi-k3 for the 256K context window, not for the cheapest per-token rate."
           ]
         }
       ],
@@ -685,7 +685,7 @@
         },
         {
           "q": "How does kimi-k3 compare to deepseek-v4.1-flash for agent loops?",
-          "a": "deepseek-v4.1-flash is a lower-cost model (~$0.14 / $0.56 per 1M) with a 128K context window, best optimized for rapid intent classification and message triage. kimi-k3 (~$0.20 / $1.02 per 1M) offers twice the context window (256K) and superior SWE-bench verified coding capabilities (79.0%), making it the superior choice for primary code execution and long-document reasoning."
+          "a": "deepseek-v4.1-flash is a lower-cost model (~$0.14 / $0.56 per 1M) with a 128K context window, best optimized for rapid intent classification and message triage. kimi-k3 (~$0.41 / $2.04 per 1M) offers twice the context window (256K) and superior SWE-bench verified coding capabilities (79.0%), making it the superior choice for primary code execution and long-document reasoning."
         },
         {
           "q": "What error codes should I handle and what is the recommended retry policy?",

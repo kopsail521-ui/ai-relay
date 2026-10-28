@@ -118,6 +118,7 @@ test("Claude task budgets use exact rates and keep client compatibility qualifie
     ["claude-opus-5", 110300, 551500],
     ["claude-opus-5-5", 176470, 882350],
     ["claude-fable-5-1", 735300, 3676500],
+    ["claude-fable-5", 441175, 2205875],
   ];
   for (const [id, input, output] of expected) {
     const row = rates.get(id);
@@ -442,6 +443,21 @@ test("about model categories cards, deepseek cheapest title, and modern model re
   // claude bulk lane -> -1017
   const claudeHtml = fs.readFileSync(path.join(seoRoot, "claude-api-pricing.html"), "utf8");
   assert.match(claudeHtml, /drafts to gpt-6-luna or deepseek-v4.1-flash-1017/i, "claude Routing tip must route bulk lanes to -1017");
+
+  // Price-coherence guards (console is authoritative; the 2026-10 sweep caught
+  // a 10x per-call slip and two 2x token-rate slips).
+  const fable5Html = fs.readFileSync(path.join(seoRoot, "model/claude-fable-5.html"), "utf8");
+  assert.doesNotMatch(fable5Html, /8\.82 \/ \$44\.12/, "fable-5 must not carry the pre-correction rate");
+  assert.match(fable5Html, /4\.41 \/ \$22\.06/, "fable-5 must carry the console rate");
+  const kimiHtml = fs.readFileSync(path.join(seoRoot, "model/kimi-k3.html"), "utf8");
+  assert.doesNotMatch(kimiHtml, /0\.20 \/ \$1\.02/, "kimi-k3 must not carry the pre-correction rate");
+  assert.match(kimiHtml, /0\.41 \/ \$2\.04/, "kimi-k3 must carry the console rate");
+  assert.doesNotMatch(kimiHtml, /93% cost reduction/, "kimi batch claim must be scoped to the list-price baseline");
+  assert.doesNotMatch(kimiHtml, /14 times/, "kimi cross-comparison must not quote the 14x list-price number");
+  assert.doesNotMatch(kimiHtml, /Gateway Uptime/i, "kimi must not publish uptime from a 15-request probe");
+  const ccHtml = fs.readFileSync(path.join(seoRoot, "claude-code-api-pricing.html"), "utf8");
+  assert.match(ccHtml, /4\.41175/, "claude-code exact table must carry fable-5 $4.41175");
+  assert.match(ccHtml, /22\.05875/, "claude-code exact table must carry fable-5 $22.05875");
 
   const whisperHtml = fs.readFileSync(path.join(seoRoot, "model/whisper-large-v3.html"), "utf8");
   assert.match(whisperHtml, /gpt-6-luna for cost, claude-sonnet-5-5 for denser reasoning/, "whisper-large-v3 must recommend modern models");

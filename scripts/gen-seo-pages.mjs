@@ -425,6 +425,8 @@ ${landingLinks}
   <a href="https://seektool.ai/" title="SeekTool.ai Tools Directory" target="_blank" rel="dofollow noopener">SeekTool.ai Tools Directory</a>
 
 
+  <a href="https://showmebest.ai" target="_blank" rel="noopener noreferrer"><img src="https://showmebest.ai/badge/feature-badge-white.webp" alt="Featured on ShowMeBestAI" width="220" height="60" loading="lazy" style="height:44px;width:auto;" /></a>
+
   <a href="https://launchclash.com" target="_blank" rel="noopener noreferrer"><img src="https://launchclash.com/assets/images/badge.png" alt="LaunchClash" height="54" loading="lazy" style="height:44px;width:auto;" /></a>
 
   <span class="foot-updated">Updated ${BUILD_DATE}</span>
@@ -662,9 +664,14 @@ function renderModel(m) {
   const priceNum = Number(String(m.priceLabel).match(/\$([0-9][0-9.,]*)/)?.[1]?.replace(/,/g, ""));
   const fmtQty = (q) =>
     q >= 10 ? Math.floor(q).toLocaleString("en-US") : q >= 1 ? String(Math.round(q * 10) / 10) : q.toFixed(2);
+  const fmtTok = (n) =>
+    n >= 1e6 ? (n / 1e6).toFixed(2) + "M" : n >= 1e3 ? Math.round(n / 1e3) + "K" : String(Math.round(n));
+  const dualPrice = String(m.priceLabel).match(/~?\$([0-9.]+) \/ \$([0-9.]+) per 1M/);
   const billingExample =
     priceNum && priceNum > 0
-      ? `Concretely: at ${esc(m.priceLabel)}, $1 of balance buys about ${fmtQty(1 / priceNum)} metered units, and the $10 new-user gift credit covers roughly ${fmtQty(10 / priceNum)} before any top-up. Budget at the line item you actually ship — requests, seconds or characters — not at token level, and re-check the row on <a href="/pricing-list">the pricing list</a> when upstream rates move.`
+      ? dualPrice
+        ? `Concretely: at ${esc(m.priceLabel)}, $1 of balance buys roughly ${fmtTok(1e6 / parseFloat(dualPrice[1]))} input tokens (or ~${fmtTok(1e6 / parseFloat(dualPrice[2]))} output tokens at the output rate). Gift credit applies only to <code>:free</code> gift-credit IDs — see <a href="/free-models">the gift-credit catalog</a>. Budget at the token volumes you actually ship, and re-check the row on <a href="/pricing-list">the pricing list</a> when upstream rates move.`
+        : `Concretely: at ${esc(m.priceLabel)}, $1 of balance buys about ${fmtQty(1 / priceNum)} metered units. Gift credit applies only to <code>:free</code> gift-credit IDs — see <a href="/free-models">the gift-credit catalog</a>. Budget at the line item you actually ship — requests, seconds or characters — and re-check the row on <a href="/pricing-list">the pricing list</a> when upstream rates move.`
       : "";
   const checklist = `<h3>Before production</h3>
 <ul>
@@ -1016,6 +1023,8 @@ ${modelFoot}
   <a href="https://startupbase.io/product/keyoapi" target="_blank" rel="noopener noreferrer"><img src="https://statics.startupbase.io/site/badges/launched-on-sb-dark.svg" alt="Launched on StartupBase" width="200" height="54" loading="lazy" style="height:44px;width:auto;" /></a>
   <a href="https://seektool.ai/" title="SeekTool.ai Tools Directory" target="_blank" rel="dofollow noopener">SeekTool.ai Tools Directory</a>
 
+
+  <a href="https://showmebest.ai" target="_blank" rel="noopener noreferrer"><img src="https://showmebest.ai/badge/feature-badge-white.webp" alt="Featured on ShowMeBestAI" width="220" height="60" loading="lazy" style="height:32px;width:auto;" /></a>
 
   <a href="https://launchclash.com" target="_blank" rel="noopener noreferrer"><img src="https://launchclash.com/assets/images/badge.png" alt="LaunchClash" height="54" loading="lazy" style="height:44px;width:auto;" /></a>
 

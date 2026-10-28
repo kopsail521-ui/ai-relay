@@ -177,7 +177,15 @@ test('regenerating TTS SEO preserves corrected requests and hand-maintained TTS 
     for (const file of ['gen-seo-pages.mjs', 'caddy-seo-shared.mjs']) fs.copyFileSync(path.join(root, 'scripts', file), path.join(temp, 'scripts', file));
     for (const file of manual) fs.writeFileSync(path.join(temp, 'static/seo', `${file}.html`), read(`static/seo/${file}.html`));
     execFileSync(process.execPath, [path.join(temp, 'scripts/gen-seo-pages.mjs'), `--pages=${selected.join(',')}`, '--html-only'], { stdio:'pipe' });
-    for (const file of [...selected, ...manual]) assert.equal(fs.readFileSync(path.join(temp, 'static/seo', `${file}.html`), 'utf8').replaceAll('\r\n', '\n'), read(`static/seo/${file}.html`), file);
+    // Generated footers use the current day; manual pages must stay byte-identical.
+    const normalizeGenerated = (html) => html.replaceAll('\r\n', '\n')
+      .replace(/(<span class="foot-updated">Updated )\d{4}-\d{2}-\d{2}(<\/span>)/g, '$1[date]$2');
+    for (const file of selected) assert.equal(
+      normalizeGenerated(fs.readFileSync(path.join(temp, 'static/seo', `${file}.html`), 'utf8')),
+      normalizeGenerated(read(`static/seo/${file}.html`)), file);
+    for (const file of manual) assert.equal(
+      fs.readFileSync(path.join(temp, 'static/seo', `${file}.html`), 'utf8'),
+      read(`static/seo/${file}.html`), file);
     assert.equal(fs.existsSync(path.join(temp, 'static/seo/sitemap.xml')), false);
   } finally {
     fs.rmSync(temp, { recursive: true, force: true });

@@ -3955,6 +3955,54 @@
     "price_key_zh": "",
     "price_key_en": ""
   },
+  "kimi-k3.1-pro": {
+    "description": "Moonshot Kimi K3.1 Pro 新一代旗舰智能体模型。在超长上下文推理、深度文件理解与复杂多步规划上表现卓越。支持 256K 上下文。支持文本模态。适合长文档分析、研究报告、智能体工作流。",
+    "descriptions": {
+      "zhCN": "Moonshot Kimi K3.1 Pro 新一代旗舰智能体模型。在超长上下文推理、深度文件理解与复杂多步规划上表现卓越。支持 256K 上下文。支持文本模态。适合长文档分析、研究报告、智能体工作流。",
+      "zhTW": "Moonshot Kimi K3.1 Pro 新一代旗艦智能體模型。在超長上下文推理、深度文件理解與複雜多步規劃上表現卓越。支援 256K 上下文。支援文本模态。適合長文件分析、研究報告、智能體工作流。",
+      "en": "Moonshot's Kimi K3.1 Pro next-generation flagship agentic model. Exceptional long-context reasoning, deep document understanding, and complex multi-step planning. 256K context window. text modality. Ideal for long-document analysis, research reports, agent workflows.",
+      "fr": "Le nouveau modèle agentique phare de Moonshot, Kimi K3.1 Pro. Raisonnement exceptionnel sur de longs contextes, compréhension approfondie de documents et planification multi-étapes complexe. Fenêtre de contexte 256K. modalité texte. Idéal pour l'analyse de longs documents, rapports de recherche, workflows d'agents.",
+      "ru": "Новый флагманский агентный модель Moonshot Kimi K3.1 Pro. Выдающиеся рассуждения на длинном контексте, глубокое понимание документов и сложное многошаговое планирование. Контекст 256K. Текстовая модальность. Подходит для анализа длинных документов, исследовательских отчетов, агентных рабочих процессов.",
+      "ja": "Moonshot Kimi K3.1 Pro 次世代フラッグシップエージェントモデル。長文脈推論、深いドキュメント理解、複雑な多段階プランニングに優れる。256K コンテキスト。テキストモダリティ。長文分析、調査レポート、エージェントワークフローに最適。",
+      "vi": "Mô hình agent hàng đầu thế hệ mới Kimi K3.1 Pro của Moonshot. Vượt trội trong suy luận ngữ cảnh dài, hiểu sâu tài liệu và lập kế hoạch đa bước phức tạp. Cửa sổ ngữ cảnh 256K. Hỗ trợ văn bản. Phù hợp cho phân tích tài liệu dài, báo cáo nghiên cứu, quy trình agent."
+    },
+    "unit": "token",
+    "badge": {
+      "zhCN": "按 Token 计费",
+      "zhTW": "按 Token 計費",
+      "en": "Token-based",
+      "fr": "Au token",
+      "ru": "По токенам",
+      "ja": "Token 課金",
+      "vi": "Theo token"
+    },
+    "suffix": {
+      "zhCN": "",
+      "zhTW": "",
+      "en": "",
+      "fr": "",
+      "ru": "",
+      "ja": "",
+      "vi": ""
+    },
+    "price_key": {
+      "zhCN": "",
+      "zhTW": "",
+      "en": "",
+      "fr": "",
+      "ru": "",
+      "ja": "",
+      "vi": ""
+    },
+    "description_zh": "Moonshot Kimi K3.1 Pro 新一代旗舰智能体模型。在超长上下文推理、深度文件理解与复杂多步规划上表现卓越。支持 256K 上下文。支持文本模态。适合长文档分析、研究报告、智能体工作流。",
+    "description_en": "Moonshot's Kimi K3.1 Pro next-generation flagship agentic model. Exceptional long-context reasoning, deep document understanding, and complex multi-step planning. 256K context window. text modality. Ideal for long-document analysis, research reports, agent workflows.",
+    "badge_zh": "按 Token 计费",
+    "badge_en": "Token-based",
+    "suffix_zh": "",
+    "suffix_en": "",
+    "price_key_zh": "",
+    "price_key_en": ""
+  },
   "gpt-image-2.5-flare": {
     "description": "OpenAI GPT Image 2.5 Flare 图像生成模型。在细节丰富度与光影表现上更出色，兼顾速度与画质。支持图像模态。适合营销海报、电商产品图、创意插画。",
     "descriptions": {

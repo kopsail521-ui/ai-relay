@@ -123,6 +123,10 @@
     "kind": "chat",
     "requests": []
   },
+  "kimi-k3.1-pro": {
+    "kind": "chat",
+    "requests": []
+  },
   "kimi-k2.7-code": {
     "kind": "chat",
     "requests": []

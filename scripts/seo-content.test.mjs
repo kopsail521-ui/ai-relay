@@ -446,6 +446,15 @@ test("about model categories cards, deepseek cheapest title, and modern model re
 
   // Price-coherence guards (console is authoritative; the 2026-10 sweep caught
   // a 10x per-call slip and two 2x token-rate slips).
+  const freeModelsHtml = fs.readFileSync(path.join(seoRoot, "free-models.html"), "utf8");
+  assert.match(freeModelsHtml, /3\.6× base/, "gift twin rows must show the multiplier vs the base ID");
+  assert.match(freeModelsHtml, /5× base/, "glm-5.3:free must show the 5x multiplier");
+  // Guides must send new users to the cheapest metered ID (7x cheaper than v4.1-flash).
+  for (const g of ["openai-compatible-api-python.html", "openai-compatible-api-nodejs.html", "openai-compatible-api-cursor.html"]) {
+    const html = fs.readFileSync(path.join(root, "static/brand/blog", g), "utf8");
+    assert.match(html, /deepseek-v4\.1-flash-1017/, `${g} must use the cheapest metered model in its example`);
+    assert.doesNotMatch(html, /model[=:]\s*"deepseek-v4\.1-flash"/, `${g} must not use the 7x standard lane in examples`);
+  }
   const fable5Html = fs.readFileSync(path.join(seoRoot, "model/claude-fable-5.html"), "utf8");
   assert.doesNotMatch(fable5Html, /8\.82 \/ \$44\.12/, "fable-5 must not carry the pre-correction rate");
   assert.match(fable5Html, /4\.41 \/ \$22\.06/, "fable-5 must carry the console rate");

@@ -38,7 +38,7 @@ const client = new OpenAI({
 });
 
 const resp = await client.chat.completions.create({
-  model: "deepseek-v4.1-flash",
+  model: "deepseek-v4.1-flash-1017",
   messages: [{ role: "user", content: "Hello from KeyoAPI" }],
 });
 console.log(resp.choices[0].message.content);</code></pre>

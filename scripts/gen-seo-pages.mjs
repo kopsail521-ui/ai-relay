@@ -426,6 +426,7 @@ ${landingLinks}
 
 
   <a href="https://showmebest.ai" target="_blank" rel="noopener noreferrer"><img src="https://showmebest.ai/badge/feature-badge-white.webp" alt="Featured on ShowMeBestAI" width="220" height="60" loading="lazy" style="height:44px;width:auto;" /></a>
+  <a href="https://realisticai.io/ai-image-generator" target="_blank" rel="noopener noreferrer">Realistic AI</a>
 
   <a href="https://launchclash.com" target="_blank" rel="noopener noreferrer"><img src="https://launchclash.com/assets/images/badge.png" alt="LaunchClash" height="54" loading="lazy" style="height:44px;width:auto;" /></a>
 
@@ -1025,6 +1026,7 @@ ${modelFoot}
 
 
   <a href="https://showmebest.ai" target="_blank" rel="noopener noreferrer"><img src="https://showmebest.ai/badge/feature-badge-white.webp" alt="Featured on ShowMeBestAI" width="220" height="60" loading="lazy" style="height:32px;width:auto;" /></a>
+  <a href="https://realisticai.io/ai-image-generator" target="_blank" rel="noopener noreferrer">Realistic AI</a>
 
   <a href="https://launchclash.com" target="_blank" rel="noopener noreferrer"><img src="https://launchclash.com/assets/images/badge.png" alt="LaunchClash" height="54" loading="lazy" style="height:44px;width:auto;" /></a>
 

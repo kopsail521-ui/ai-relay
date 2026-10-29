@@ -16,21 +16,22 @@ STATUS="$ROOT/static/brand/deploy-status-e0cf117e.txt"
 
 main() {
   # Plan A (2026-10-28): the 27 pre-10-10 bulk articles stay readable (200)
-  # but leave the blog sitemap. The flag lives in the VPS-only geoflow
-  # config; safe-pull's blog rebuild runs after this and regenerates
-  # sitemap.txt without article URLs. Idempotent.
-  GEO_CFG="$ROOT/data/geoflow-agent/config.json"
-  if [ -f "$GEO_CFG" ]; then
-    sudo python3 - "$GEO_CFG" <<'PY' || true
+  # but leave the blog sitemap. geoflow-rebuild-blog.php reads
+  # data/geoflow-agent/gate.json (NOT config.json — verified in load_gate()).
+  # safe-pull's blog rebuild runs after this, so it regenerates sitemap.txt
+  # without article URLs. Idempotent.
+  GEO_GATE="$ROOT/data/geoflow-agent/gate.json"
+  if [ -f "$GEO_GATE" ]; then
+    sudo python3 - "$GEO_GATE" <<'PY' || true
 import json, sys
 p = sys.argv[1]
 with open(p, encoding="utf-8") as f:
-    cfg = json.load(f)
-if cfg.get("sitemap_include_articles"):
-    cfg["sitemap_include_articles"] = False
+    gate = json.load(f)
+if gate.get("sitemap_include_articles"):
+    gate["sitemap_include_articles"] = False
     with open(p, "w", encoding="utf-8") as f:
-        json.dump(cfg, f, ensure_ascii=False, indent=2)
-    print("plan-a: sitemap_include_articles -> false")
+        json.dump(gate, f, ensure_ascii=False, indent=2)
+    print("plan-a: gate.json sitemap_include_articles -> false")
 PY
   fi
 

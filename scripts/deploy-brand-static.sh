@@ -405,8 +405,11 @@ else
   echo "VERIFY_FAIL blog article missing noindex (got: ${ART_HEAD:-none})"
   verify_failed=1
 fi
-BLOG_SM=$(curl -sS --max-time 15 "https://${DOMAIN}/brand/blog/sitemap.txt" 2>/dev/null || true)
-if [[ "$BLOG_SM" == *"/article/"* ]]; then
+BLOG_SM=$(curl -sS --fail --max-time 15 "https://${DOMAIN}/brand/blog/sitemap.txt" 2>/dev/null || true)
+if [[ -z "$BLOG_SM" ]]; then
+  echo "VERIFY_FAIL blog sitemap unreachable (empty response)"
+  verify_failed=1
+elif [[ "$BLOG_SM" == *"/article/"* ]]; then
   echo "VERIFY_FAIL blog sitemap still lists article URLs"
   verify_failed=1
 else

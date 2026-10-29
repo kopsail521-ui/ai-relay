@@ -410,7 +410,7 @@ multipart 文件 / 请求体超限或完整 JSON 请求体超限返回 **HTTP 41
 {
   "model": "gpt-image-2-vip",
   "prompt": "参考图中的角色抱着一只狗",
-  "images": ["https://example.com/reference.png"],
+  "images": ["https://replace-me.invalid/reference.png"],
   "size": "3840x2160",
   "quality": "medium",
   "replyType": "async"
@@ -459,7 +459,7 @@ GET 进行中返回 202；完成返回 **HTTP 200**，以图片接口的 `status
   "id": "img_00000000-0000-4000-8000-000000000001",
   "task_id": "img_00000000-0000-4000-8000-000000000001",
   "status": "succeeded",
-  "data": [{ "url": "https://example.com/generated.png" }],
+  "data": [{ "url": "https://replace-me.invalid/generated.png" }],
   "billing": { "quota": 10000, "charged": true }
 }
 ```
@@ -487,7 +487,7 @@ GET 进行中返回 202；完成返回 **HTTP 200**，以图片接口的 `status
 {
   "model": "grok-video-1.5",
   "messages": [{"role": "user", "content": "a red paper boat drifting on calm water at sunset"}],
-  "image": "https://example.com/first.jpg",
+  "image": "https://replace-me.invalid/first.jpg",
   "duration": 10,
   "resolution": "720p"
 }
@@ -498,8 +498,8 @@ GET 进行中返回 202；完成返回 **HTTP 200**，以图片接口的 `status
 {
   "model": "grok-video-1.5",
   "messages": [{"role": "user", "content": "camera glides from the day scene into the night skyline"}],
-  "image": "https://example.com/first.jpg",
-  "last_frame": "https://example.com/last.jpg"
+  "image": "https://replace-me.invalid/first.jpg",
+  "last_frame": "https://replace-me.invalid/last.jpg"
 }
 ```
 
@@ -509,8 +509,8 @@ GET 进行中返回 202；完成返回 **HTTP 200**，以图片接口的 `status
   "model": "grok-video-1.5",
   "messages": [{"role": "user", "content": "the model from <IMAGE_0> wears the shirt from <IMAGE_1> and walks the runway"}],
   "reference_images": [
-    {"url": "https://example.com/model.jpg"},
-    {"url": "https://example.com/shirt.jpg"}
+    {"url": "https://replace-me.invalid/model.jpg"},
+    {"url": "https://replace-me.invalid/shirt.jpg"}
   ],
   "duration": 10,
   "aspect_ratio": "16:9"
@@ -585,8 +585,8 @@ GET 进行中返回 202；完成返回 **HTTP 200**，以图片接口的 `status
   "aspectRatio": "portrait",
   "resolution": "768p",
   "duration": 8,
-  "images": ["https://example.com/char.png"],
-  "audios": ["https://example.com/voice.mp3"]
+  "images": ["https://replace-me.invalid/char.png"],
+  "audios": ["https://replace-me.invalid/voice.mp3"]
 }
 ```
 
@@ -635,7 +635,7 @@ GET 进行中返回 202；完成返回 **HTTP 200**，以图片接口的 `status
   "model": "seedance-2.0-1080p-fast",
   "prompt": "人物抬头并向前走，动作自然",
   "duration": 5,
-  "first_frame_image": "https://example.com/first.jpg"
+  "first_frame_image": "https://replace-me.invalid/first.jpg"
 }
 ```
 
@@ -646,8 +646,8 @@ GET 进行中返回 202；完成返回 **HTTP 200**，以图片接口的 `status
   "prompt": "自然过渡并保持人物一致",
   "duration": 5,
   "image_with_roles": [
-    {"url": "https://example.com/a.jpg", "role": "first_frame"},
-    {"url": "https://example.com/b.jpg", "role": "last_frame"}
+    {"url": "https://replace-me.invalid/a.jpg", "role": "first_frame"},
+    {"url": "https://replace-me.invalid/b.jpg", "role": "last_frame"}
   ]
 }
 ```
@@ -658,7 +658,7 @@ GET 进行中返回 202；完成返回 **HTTP 200**，以图片接口的 `status
   "model": "seedance-2.0-720p-mini",
   "prompt": "保持参考图人物身份与服装",
   "duration": 5,
-  "image_urls": ["https://example.com/char.jpg"]
+  "image_urls": ["https://replace-me.invalid/char.jpg"]
 }
 ```
 
@@ -668,8 +668,8 @@ GET 进行中返回 202；完成返回 **HTTP 200**，以图片接口的 `status
   "model": "seedance-2.0-720p-mini",
   "prompt": "人物按参考音色说话，镜头缓慢推进",
   "duration": 5,
-  "image_urls": ["https://example.com/char.jpg"],
-  "audios": ["https://example.com/voice.mp3"]
+  "image_urls": ["https://replace-me.invalid/char.jpg"],
+  "audios": ["https://replace-me.invalid/voice.mp3"]
 }
 ```
 
@@ -706,8 +706,8 @@ GET 进行中返回 202；完成返回 **HTTP 200**，以图片接口的 `status
   "resolution": "720P",
   "duration": 5,
   "image_with_roles": [
-    {"url": "https://example.com/a.jpg", "role": "first_frame"},
-    {"url": "https://example.com/b.jpg", "role": "last_frame"}
+    {"url": "https://replace-me.invalid/a.jpg", "role": "first_frame"},
+    {"url": "https://replace-me.invalid/b.jpg", "role": "last_frame"}
   ]
 }
 ```
@@ -721,11 +721,11 @@ GET 进行中返回 202；完成返回 **HTTP 200**，以图片接口的 `status
   "duration": 5,
   "generation_type": "reference",
   "image_urls": [
-    "https://example.com/a.jpg",
-    "https://example.com/b.png",
-    "https://example.com/c.png"
+    "https://replace-me.invalid/a.jpg",
+    "https://replace-me.invalid/b.png",
+    "https://replace-me.invalid/c.png"
   ],
-  "video_urls": ["https://example.com/role.mp4"]
+  "video_urls": ["https://replace-me.invalid/role.mp4"]
 }
 ```
 
@@ -756,8 +756,8 @@ GET 进行中返回 202；完成返回 **HTTP 200**，以图片接口的 `status
   "model": "flux-3-video",
   "prompt": "花朵绽放，镜头缓慢推进",
   "image_urls": [
-    "https://example.com/bud.jpg",
-    "https://example.com/bloom.jpg"
+    "https://replace-me.invalid/bud.jpg",
+    "https://replace-me.invalid/bloom.jpg"
   ],
   "duration": 5,
   "resolution": "hd"
@@ -769,7 +769,7 @@ GET 进行中返回 202；完成返回 **HTTP 200**，以图片接口的 `status
 {
   "model": "flux-3-video",
   "prompt": "继续运动",
-  "video_url": "https://example.com/clip.mp4",
+  "video_url": "https://replace-me.invalid/clip.mp4",
   "duration": 5,
   "resolution": "hd"
 }
@@ -798,8 +798,8 @@ GET 进行中返回 202；完成返回 **HTTP 200**，以图片接口的 `status
 {
   "model": "gemini-omni-1.1-flash",
   "prompt": "平滑过渡，镜头推进",
-  "first_frame_image": "https://example.com/start.jpg",
-  "last_frame_image": "https://example.com/end.jpg",
+  "first_frame_image": "https://replace-me.invalid/start.jpg",
+  "last_frame_image": "https://replace-me.invalid/end.jpg",
   "resolution": "720p"
 }
 ```
@@ -816,9 +816,9 @@ GET 进行中返回 202；完成返回 **HTTP 200**，以图片接口的 `status
   "prompt": "多主体互动",
   "generation_type": "reference",
   "image_urls": [
-    "https://example.com/a.jpg",
-    "https://example.com/b.jpg",
-    "https://example.com/c.jpg"
+    "https://replace-me.invalid/a.jpg",
+    "https://replace-me.invalid/b.jpg",
+    "https://replace-me.invalid/c.jpg"
   ],
   "duration": 8,
   "resolution": "720p"
@@ -854,7 +854,7 @@ curl https://www.keyoapi.xyz/v1/audio/transcriptions \
 
 支持 `GLM-TTS`、`Step-Audio-TTS-3B`、`IndexTTS-2`、`eleven-v4`、`eleven-v4-turbo`。成功响应是音频字节；非 2xx 先读错误 JSON，不要存成音频。文件扩展名须匹配实际格式。
 
-**替换参考音频占位符：** `https://example.com/your-reference.wav` 不是可用样本。改成无需登录、服务端能直接下载的真实音频 URL；`prompt_text` 逐字对应参考音频。URL 字段不能放本地路径或 base64。
+**替换参考音频占位符：** `https://replace-me.invalid/your-reference.wav` 不是可用样本。改成无需登录、服务端能直接下载的真实音频 URL；`prompt_text` 逐字对应参考音频。URL 字段不能放本地路径或 base64。
 
 #### GLM-TTS
 
@@ -862,7 +862,7 @@ curl https://www.keyoapi.xyz/v1/audio/transcriptions \
 {
   "model": "GLM-TTS",
   "input": "你好，欢迎使用 KeyoAPI。",
-  "prompt_audio_url": "https://example.com/your-reference.wav",
+  "prompt_audio_url": "https://replace-me.invalid/your-reference.wav",
   "prompt_text": "替换为参考音频实际说出的完整台词。",
   "output_format": "wav"
 }
@@ -876,7 +876,7 @@ curl https://www.keyoapi.xyz/v1/audio/transcriptions \
 {
   "model": "Step-Audio-TTS-3B",
   "input": "你好，欢迎使用 KeyoAPI。",
-  "prompt_audio_url": "https://example.com/your-reference.wav",
+  "prompt_audio_url": "https://replace-me.invalid/your-reference.wav",
   "prompt_text": "替换为参考音频实际说出的完整台词。"
 }
 ```
@@ -889,7 +889,7 @@ curl https://www.keyoapi.xyz/v1/audio/transcriptions \
 {
   "model": "IndexTTS-2",
   "input": "你好，欢迎使用 KeyoAPI。",
-  "prompt_audio_url": "https://example.com/your-reference.wav",
+  "prompt_audio_url": "https://replace-me.invalid/your-reference.wav",
   "use_emo_text": true,
   "emo_text": "自然清晰地讲解。"
 }
@@ -1050,7 +1050,7 @@ if __name__ == "__main__":
 {
   "model": "CosyVoice3",
   "inputs": "你好，欢迎使用 KeyoAPI。",
-  "prompt_wav_url": "https://example.com/your-reference.wav",
+  "prompt_wav_url": "https://replace-me.invalid/your-reference.wav",
   "prompt_text": "替换为参考音频实际说出的完整台词。",
   "instruct_text": "自然清晰地讲解。",
   "speed": 1
@@ -1079,7 +1079,7 @@ if __name__ == "__main__":
 {
   "model": "IndexTTS-2",
   "inputs": "你好，欢迎使用 KeyoAPI。",
-  "prompt_audio_url": "https://example.com/your-reference.wav",
+  "prompt_audio_url": "https://replace-me.invalid/your-reference.wav",
   "use_emo_text": true
 }
 ```
@@ -1183,7 +1183,7 @@ curl https://www.keyoapi.xyz/v1/async/videos/image-to-video \
 
 图片示例（`nonescape-v0` 的 AI 图片检测也使用这一输入封装）：
 ```json
-{"model":"nsfw-classifier","input":[{"type":"image_url","image_url":{"url":"https://example.com/image.png"}}]}
+{"model":"nsfw-classifier","input":[{"type":"image_url","image_url":{"url":"https://replace-me.invalid/image.png"}}]}
 ```
 
 `image_url` 必须放在 `input` 内，不能放请求顶层。图片输入封装支持公网 HTTP(S) URL 或图片 data URL；本地文件可先按 §0.5 上传。本页未定义逐模型的图片大小上限和分数含义，设置生产阈值前请确认；HTTP 成功或任意一个分数都不能直接当作审核结论。

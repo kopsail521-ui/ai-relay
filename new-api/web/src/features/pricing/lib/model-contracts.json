@@ -379,7 +379,7 @@
         "body": {
           "model": "CosyVoice3",
           "inputs": "Hello, welcome to KeyoAPI",
-          "prompt_wav_url": "https://example.com/your-reference.wav",
+          "prompt_wav_url": "https://replace-me.invalid/your-reference.wav",
           "prompt_text": "Replace with the exact transcript of your reference audio."
         },
         "pollPath": "/v1/task/{id}",
@@ -396,7 +396,7 @@
         "body": {
           "model": "GLM-TTS",
           "input": "Hello, welcome to KeyoAPI",
-          "prompt_audio_url": "https://example.com/your-reference.wav",
+          "prompt_audio_url": "https://replace-me.invalid/your-reference.wav",
           "prompt_text": "Replace with the exact transcript of your reference audio.",
           "output_format": "wav"
         },
@@ -414,7 +414,7 @@
         "body": {
           "model": "Step-Audio-TTS-3B",
           "input": "Hello, welcome to KeyoAPI",
-          "prompt_audio_url": "https://example.com/your-reference.wav",
+          "prompt_audio_url": "https://replace-me.invalid/your-reference.wav",
           "prompt_text": "Replace with the exact transcript of your reference audio."
         },
         "output": "speech.audio",
@@ -431,7 +431,7 @@
         "body": {
           "model": "IndexTTS-2",
           "input": "Hello, welcome to KeyoAPI",
-          "prompt_audio_url": "https://example.com/your-reference.wav",
+          "prompt_audio_url": "https://replace-me.invalid/your-reference.wav",
           "use_emo_text": true
         },
         "output": "speech.audio",
@@ -443,7 +443,7 @@
         "body": {
           "model": "IndexTTS-2",
           "inputs": "Hello, welcome to KeyoAPI",
-          "prompt_audio_url": "https://example.com/your-reference.wav",
+          "prompt_audio_url": "https://replace-me.invalid/your-reference.wav",
           "use_emo_text": true
         },
         "pollPath": "/v1/task/{id}",
@@ -1017,7 +1017,7 @@
                 {
                   "type": "image_url",
                   "image_url": {
-                    "url": "https://example.com/document.png"
+                    "url": "https://replace-me.invalid/document.png"
                   }
                 }
               ]

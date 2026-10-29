@@ -89,7 +89,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
 </div>
 <h2>Overview</h2>
 <p>IndexTTS-2 synthesizes text using a reference audio file. A text string and a model name alone are not a complete request. The synchronous endpoint is POST /v1/audio/speech with model=IndexTTS-2, input and a required prompt_audio_url. This model shares the account key and wallet with chat, but its reference and emotion fields are specific to speech.</p>
-<p>Replace https://example.com/your-reference.wav in the example with a real audio URL the server can download directly without signing in. A local file path or base64 prompt_audio does not replace that URL field. Optional prompt_text must match the exact words in the reference file. Do not use voice=alloy or an unrelated service’s speaker ID as a substitute for reference audio.</p>
+<p>Replace https://replace-me.invalid/your-reference.wav in the example with a real audio URL the server can download directly without signing in. A local file path or base64 prompt_audio does not replace that URL field. Optional prompt_text must match the exact words in the reference file. Do not use voice=alloy or an unrelated service’s speaker ID as a substitute for reference audio.</p>
 <p>The example uses text emotion mode: use_emo_text is true, and optional emo_text can describe the intended delivery. Audio emotion mode is a separate branch requiring emo_audio_prompt_url, with emo_alpha between zero and one. Choose the appropriate mode instead of combining examples blindly. These controls guide synthesis; they do not guarantee a particular gender, emotion, accent or voice quality.</p>
 <p>A successful synchronous response contains audio bytes. Check the HTTP status and Content-Type before naming the file. Do not save a JSON error as an audio file or assume an unknown format is MP3 because of the filename. A request timeout does not prove that no processing occurred; keep the request identifier and error details instead of submitting repeated replacements automatically.</p>
 <p>For asynchronous IndexTTS-2, POST /v1/async/audio/speech with a string inputs instead of input, preserving the reference and emotion-mode fields. Save id or task_id, then poll the singular GET /v1/task/{id} with the same API key. On completed, inspect the actual output and use url or output.file_url only when present. Process batch results item by item; if the output shape is unexpected, keep the complete response for support instead of automatically submitting again. Stop on failed or cancelled. Retry a temporary task_query_unavailable GET according to Retry-After without creating another task.</p>
@@ -141,7 +141,7 @@ ul{margin:0 0 14px;padding-left:1.2em}
 curl https://www.keyoapi.xyz/v1/audio/speech \
   -H &quot;Authorization: Bearer YOUR_API_KEY&quot; \
   -H &quot;Content-Type: application/json&quot; \
-  -d '{&quot;model&quot;:&quot;IndexTTS-2&quot;,&quot;input&quot;:&quot;Hello from KeyoAPI TTS.&quot;,&quot;prompt_audio_url&quot;:&quot;https://example.com/your-reference.wav&quot;,&quot;use_emo_text&quot;:true}' \
+  -d '{&quot;model&quot;:&quot;IndexTTS-2&quot;,&quot;input&quot;:&quot;Hello from KeyoAPI TTS.&quot;,&quot;prompt_audio_url&quot;:&quot;https://replace-me.invalid/your-reference.wav&quot;,&quot;use_emo_text&quot;:true}' \
   --output speech.audio
 # Use the response Content-Type to choose the audio extension.</code></pre>
 <p>Auth uses the same Bearer API key as chat. Full notes: <a href="/brand/keyo-docs.html">Keyo docs</a>.</p>
@@ -211,7 +211,7 @@ curl https://www.keyoapi.xyz/v1/audio/speech \
 
   <a href="https://launchclash.com" target="_blank" rel="noopener noreferrer"><img src="https://launchclash.com/assets/images/badge.png" alt="LaunchClash" height="54" loading="lazy" style="height:44px;width:auto;" /></a>
 
-  <span class="foot-updated">Updated 2026-10-28</span>
+  <span class="foot-updated">Updated 2026-10-29</span>
 </footer>
 </body>
 </html>

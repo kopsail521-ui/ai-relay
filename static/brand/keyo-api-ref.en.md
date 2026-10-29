@@ -398,7 +398,7 @@ Oversized multipart files / request bodies or oversized complete JSON bodies ret
 {
   "model": "gpt-image-2-vip",
   "prompt": "the character from the reference holding a dog",
-  "images": ["https://example.com/reference.png"],
+  "images": ["https://replace-me.invalid/reference.png"],
   "size": "3840x2160",
   "quality": "medium",
   "replyType": "async"
@@ -447,7 +447,7 @@ GET returns 202 while pending and **HTTP 200** on completion. For images, succes
   "id": "img_00000000-0000-4000-8000-000000000001",
   "task_id": "img_00000000-0000-4000-8000-000000000001",
   "status": "succeeded",
-  "data": [{ "url": "https://example.com/generated.png" }],
+  "data": [{ "url": "https://replace-me.invalid/generated.png" }],
   "billing": { "quota": 10000, "charged": true }
 }
 ```
@@ -475,7 +475,7 @@ Text / single image / first & last frame / multi-reference in one endpoint; fiel
 {
   "model": "grok-video-1.5",
   "messages": [{"role": "user", "content": "a red paper boat drifting on calm water at sunset"}],
-  "image": "https://example.com/first.jpg",
+  "image": "https://replace-me.invalid/first.jpg",
   "duration": 10,
   "resolution": "720p"
 }
@@ -486,8 +486,8 @@ Text / single image / first & last frame / multi-reference in one endpoint; fiel
 {
   "model": "grok-video-1.5",
   "messages": [{"role": "user", "content": "camera glides from the day scene into the night skyline"}],
-  "image": "https://example.com/first.jpg",
-  "last_frame": "https://example.com/last.jpg"
+  "image": "https://replace-me.invalid/first.jpg",
+  "last_frame": "https://replace-me.invalid/last.jpg"
 }
 ```
 
@@ -497,8 +497,8 @@ Text / single image / first & last frame / multi-reference in one endpoint; fiel
   "model": "grok-video-1.5",
   "messages": [{"role": "user", "content": "the model from <IMAGE_0> wears the shirt from <IMAGE_1> and walks the runway"}],
   "reference_images": [
-    {"url": "https://example.com/model.jpg"},
-    {"url": "https://example.com/shirt.jpg"}
+    {"url": "https://replace-me.invalid/model.jpg"},
+    {"url": "https://replace-me.invalid/shirt.jpg"}
   ],
   "duration": 10,
   "aspect_ratio": "16:9"
@@ -573,8 +573,8 @@ Reference image + audio:
   "aspectRatio": "portrait",
   "resolution": "768p",
   "duration": 8,
-  "images": ["https://example.com/char.png"],
-  "audios": ["https://example.com/voice.mp3"]
+  "images": ["https://replace-me.invalid/char.png"],
+  "audios": ["https://replace-me.invalid/voice.mp3"]
 }
 ```
 
@@ -623,7 +623,7 @@ First frame:
   "model": "seedance-2.0-1080p-fast",
   "prompt": "Person looks up and walks forward, natural motion",
   "duration": 5,
-  "first_frame_image": "https://example.com/first.jpg"
+  "first_frame_image": "https://replace-me.invalid/first.jpg"
 }
 ```
 
@@ -634,8 +634,8 @@ First + last frames:
   "prompt": "Natural transition, keep identity consistent",
   "duration": 5,
   "image_with_roles": [
-    {"url": "https://example.com/a.jpg", "role": "first_frame"},
-    {"url": "https://example.com/b.jpg", "role": "last_frame"}
+    {"url": "https://replace-me.invalid/a.jpg", "role": "first_frame"},
+    {"url": "https://replace-me.invalid/b.jpg", "role": "last_frame"}
   ]
 }
 ```
@@ -646,7 +646,7 @@ Reference image (1 image is still REFERENCE, not first-frame):
   "model": "seedance-2.0-720p-mini",
   "prompt": "Keep identity and clothing from the reference",
   "duration": 5,
-  "image_urls": ["https://example.com/char.jpg"]
+  "image_urls": ["https://replace-me.invalid/char.jpg"]
 }
 ```
 
@@ -656,8 +656,8 @@ Reference image + audio (never mix with first_frame_image):
   "model": "seedance-2.0-720p-mini",
   "prompt": "Character speaks with the reference voice, slow push-in",
   "duration": 5,
-  "image_urls": ["https://example.com/char.jpg"],
-  "audios": ["https://example.com/voice.mp3"]
+  "image_urls": ["https://replace-me.invalid/char.jpg"],
+  "audios": ["https://replace-me.invalid/voice.mp3"]
 }
 ```
 
@@ -688,8 +688,8 @@ First/last frames:
   "resolution": "720P",
   "duration": 5,
   "image_with_roles": [
-    {"url": "https://example.com/a.jpg", "role": "first_frame"},
-    {"url": "https://example.com/b.jpg", "role": "last_frame"}
+    {"url": "https://replace-me.invalid/a.jpg", "role": "first_frame"},
+    {"url": "https://replace-me.invalid/b.jpg", "role": "last_frame"}
   ]
 }
 ```
@@ -702,8 +702,8 @@ Reference mode:
   "resolution": "480P",
   "duration": 5,
   "generation_type": "reference",
-  "image_urls": ["https://example.com/subject.jpg"],
-  "video_urls": ["https://example.com/motion.mp4"]
+  "image_urls": ["https://replace-me.invalid/subject.jpg"],
+  "video_urls": ["https://replace-me.invalid/motion.mp4"]
 }
 ```
 
@@ -727,8 +727,8 @@ Keyframes (2 = first+last):
   "model": "flux-3-video",
   "prompt": "Slow push-in as a flower opens",
   "image_urls": [
-    "https://example.com/bud.jpg",
-    "https://example.com/bloom.jpg"
+    "https://replace-me.invalid/bud.jpg",
+    "https://replace-me.invalid/bloom.jpg"
   ],
   "duration": 5,
   "resolution": "hd"
@@ -740,7 +740,7 @@ Continue:
 {
   "model": "flux-3-video",
   "prompt": "Continue the motion",
-  "video_url": "https://example.com/clip.mp4",
+  "video_url": "https://replace-me.invalid/clip.mp4",
   "duration": 5,
   "resolution": "hd"
 }
@@ -766,8 +766,8 @@ First/last frames:
 {
   "model": "gemini-omni-1.1-flash",
   "prompt": "smooth transition, camera slowly pushes in",
-  "first_frame_image": "https://example.com/start.jpg",
-  "last_frame_image": "https://example.com/end.jpg",
+  "first_frame_image": "https://replace-me.invalid/start.jpg",
+  "last_frame_image": "https://replace-me.invalid/end.jpg",
   "resolution": "720p"
 }
 ```
@@ -784,9 +784,9 @@ If `video_urls` present, omit duration.
   "prompt": "multi-subject interaction",
   "generation_type": "reference",
   "image_urls": [
-    "https://example.com/a.jpg",
-    "https://example.com/b.jpg",
-    "https://example.com/c.jpg"
+    "https://replace-me.invalid/a.jpg",
+    "https://replace-me.invalid/b.jpg",
+    "https://replace-me.invalid/c.jpg"
   ],
   "duration": 8,
   "resolution": "720p"
@@ -822,7 +822,7 @@ Pick model from §1.5.
 
 Models: `GLM-TTS`, `Step-Audio-TTS-3B`, `IndexTTS-2`, `eleven-v4`, `eleven-v4-turbo`. Success returns audio bytes. Read error JSON on non-2xx responses; never save it as audio. Match the file extension to the actual format.
 
-**Replace reference placeholders before submitting.** `https://example.com/your-reference.wav` is not a working sample. Use a real URL the server can download without signing in. `prompt_text` must match the exact reference transcript. URL fields do not accept local paths or base64.
+**Replace reference placeholders before submitting.** `https://replace-me.invalid/your-reference.wav` is not a working sample. Use a real URL the server can download without signing in. `prompt_text` must match the exact reference transcript. URL fields do not accept local paths or base64.
 
 #### GLM-TTS
 
@@ -830,7 +830,7 @@ Models: `GLM-TTS`, `Step-Audio-TTS-3B`, `IndexTTS-2`, `eleven-v4`, `eleven-v4-tu
 {
   "model": "GLM-TTS",
   "input": "Hello, welcome to KeyoAPI.",
-  "prompt_audio_url": "https://example.com/your-reference.wav",
+  "prompt_audio_url": "https://replace-me.invalid/your-reference.wav",
   "prompt_text": "Replace with the exact transcript of your reference audio.",
   "output_format": "wav"
 }
@@ -844,7 +844,7 @@ Use reference audio and its transcript. `voice: "alloy"` does not replace a refe
 {
   "model": "Step-Audio-TTS-3B",
   "input": "Hello, welcome to KeyoAPI.",
-  "prompt_audio_url": "https://example.com/your-reference.wav",
+  "prompt_audio_url": "https://replace-me.invalid/your-reference.wav",
   "prompt_text": "Replace with the exact transcript of your reference audio."
 }
 ```
@@ -857,7 +857,7 @@ Reference fields are optional; references must be WAV. Omit them to use the defa
 {
   "model": "IndexTTS-2",
   "input": "Hello, welcome to KeyoAPI.",
-  "prompt_audio_url": "https://example.com/your-reference.wav",
+  "prompt_audio_url": "https://replace-me.invalid/your-reference.wav",
   "use_emo_text": true,
   "emo_text": "Explain naturally and clearly."
 }
@@ -1018,7 +1018,7 @@ Canonical `inputs` is an array of objects, each requiring `prompt` and `language
 {
   "model": "CosyVoice3",
   "inputs": "Hello, welcome to KeyoAPI.",
-  "prompt_wav_url": "https://example.com/your-reference.wav",
+  "prompt_wav_url": "https://replace-me.invalid/your-reference.wav",
   "prompt_text": "Replace with the exact transcript of your reference audio.",
   "instruct_text": "Explain naturally and clearly.",
   "speed": 1
@@ -1047,7 +1047,7 @@ For basic synthesis, explicitly send `gender` (`male` / `female`); `pitch` and `
 {
   "model": "IndexTTS-2",
   "inputs": "Hello, welcome to KeyoAPI.",
-  "prompt_audio_url": "https://example.com/your-reference.wav",
+  "prompt_audio_url": "https://replace-me.invalid/your-reference.wav",
   "use_emo_text": true
 }
 ```
@@ -1147,7 +1147,7 @@ Text example:
 
 Image example (`nonescape-v0` uses the same input envelope for AI-image detection):
 ```json
-{"model":"nsfw-classifier","input":[{"type":"image_url","image_url":{"url":"https://example.com/image.png"}}]}
+{"model":"nsfw-classifier","input":[{"type":"image_url","image_url":{"url":"https://replace-me.invalid/image.png"}}]}
 ```
 
 Keep `image_url` inside `input`, not at the request root. The image input envelope supports a public HTTP(S) URL or an image data URL. Use §0.5 for a local file. Model-specific image-size limits and score meanings are not specified here; obtain them before setting production thresholds. Do not interpret a transport success or an arbitrary score as a safety verdict.

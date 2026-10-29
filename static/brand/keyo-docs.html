@@ -630,7 +630,7 @@
       <header class="hero">
         <div class="eyebrow">Documentation</div>
         <h1 data-i18n="docTitle"></h1>
-<p class="def">KeyoAPI Docs explains authentication, model selection, request formats and task queries for KeyoAPI.</p>
+<p class="def" data-i18n="heroIntro"></p>
 <h2>Get started in five steps</h2>
 <ol class="steps">
 <li><a href="/sign-up">Create an account</a> or sign in to your existing account.</li>
@@ -663,7 +663,7 @@
           <div class="cred">
             <div class="label">API Key</div>
             <div class="value note" data-i18n="apiKeyNote"></div>
-            <a class="btn-copy" href="/keys" target="_top" style="text-decoration:none;display:inline-flex;align-items:center;" data-i18n="goCreate"></a>
+            <a class="btn-copy" href="/sign-in?redirect=%2Fkeys" target="_top" style="text-decoration:none;display:inline-flex;align-items:center;" data-i18n="goCreate"></a>
           </div>
           <div class="cred">
             <div class="label" data-i18n="authLabel"></div>
@@ -1028,6 +1028,7 @@ const I18N = {
     "messagesHint": "Anthropic Messages format (Claude Code / Anthropic SDK). Set <code>ANTHROPIC_BASE_URL=https://www.keyoapi.xyz</code>. Accepts both <code>x-api-key: YOUR_KEY</code> and <code>Authorization: Bearer YOUR_KEY</code> with header <code>anthropic-version: 2023-06-01</code>.",
     "title": "KeyoAPI Docs",
     "docTitle": "KeyoAPI Integration Docs",
+    "heroIntro": "KeyoAPI documentation for authentication, model selection, request formats and task queries.",
     "heroSub": "One Base URL + one API Key. OpenAI-compatible — works with Cursor, ChatBox, and official SDKs.",
     "tocAccess": "Connection",
     "tocChat": "Chat",
@@ -1037,7 +1038,7 @@ const I18N = {
     "tocSupport": "Billing & support",
     "accessTitle": "Connection",
     "accessDesc": "Get the Base URL and key first — every request uses these two.",
-    "apiKeyNote": "Sign in → Tokens → create, or use a key from support: sk-...",
+    "apiKeyNote": "Sign in → Tokens → Create API key. Copy it once and keep it private.",
     "authLabel": "Auth header",
     "authValue": "Authorization: Bearer sk-YOUR_KEY",
     "goCreate": "Create key",
@@ -1091,7 +1092,7 @@ const I18N = {
     "listModels": "List models",
     "copyCurl": "Copy curl",
     "supportTitle": "Billing & support",
-    "supportBody": "<strong>Top up</strong>: sign in → <a href=\"/wallet\" target=\"_top\">Wallet</a> → choose an available payment method. Confirm the amount and credited balance shown before paying. Check the payment record if credit is not reflected; contact support with the order ID. View usage in the console and keep API keys private.",
+    "supportBody": "<strong>Top up</strong>: sign in → <a href=\"/sign-in?redirect=%2Fwallet\" target=\"_top\">Wallet</a> → choose an available payment method. Confirm the amount and credited balance shown before paying. Check the payment record if credit is not reflected; contact support with the order ID. View usage in the console and keep API keys private.",
     "footA": "KeyoAPI · One endpoint, many models",
     "footB": "OpenAI-compatible · usage-based billing",
     "copied": "Copied",
@@ -1134,6 +1135,7 @@ const I18N = {
     "messagesHint": "Anthropic Messages 原生格式（适用于 Claude Code / Anthropic SDK）。设置 <code>ANTHROPIC_BASE_URL=https://www.keyoapi.xyz</code>。支持 <code>x-api-key: YOUR_KEY</code> 与 <code>Authorization: Bearer YOUR_KEY</code>，需携带 <code>anthropic-version: 2023-06-01</code> 请求头。",
     "title": "KeyoAPI 接入文档",
     "docTitle": "KeyoAPI 接入文档",
+    "heroIntro": "KeyoAPI 接入文档：认证、模型选择、请求格式与任务查询。",
     "heroSub": "一个 Base URL + 一把 API Key，兼容 OpenAI 协议。可直接用于 Cursor、ChatBox 与官方 SDK。",
     "tocAccess": "接入信息",
     "tocChat": "文本对话",
@@ -1143,7 +1145,7 @@ const I18N = {
     "tocSupport": "充值与支持",
     "accessTitle": "接入信息",
     "accessDesc": "先备好地址和密钥，后面所有请求都用这两样。",
-    "apiKeyNote": "登录控制台 →「令牌」创建，或由客服发放的 sk-...",
+    "apiKeyNote": "登录控制台 →「令牌」→「创建 API Key」。创建后请立即复制并妥善保管。",
     "authLabel": "鉴权头",
     "authValue": "Authorization: Bearer sk-你的密钥",
     "goCreate": "创建 API Key",
@@ -1197,7 +1199,7 @@ const I18N = {
     "listModels": "查可用模型",
     "copyCurl": "复制 curl",
     "supportTitle": "充值与支持",
-    "supportBody": "<strong>充值</strong>：登录 → <a href=\"/wallet\" target=\"_top\">钱包</a> → 选择当前可用的付款方式，付款前核对金额与到账额度。未到账先查支付记录，联系支持时提供订单号。用量在控制台查看，请妥善保管 API Key。",
+    "supportBody": "<strong>充值</strong>：登录 → <a href=\"/sign-in?redirect=%2Fwallet\" target=\"_top\">钱包</a> → 选择当前可用的付款方式，付款前核对金额与到账额度。未到账先查支付记录，联系支持时提供订单号。用量在控制台查看，请妥善保管 API Key。",
     "footA": "KeyoAPI · 一个地址，多模型",
     "footB": "OpenAI 兼容 · 按量计费",
     "copied": "已复制",
@@ -1240,6 +1242,7 @@ const I18N = {
     "messagesHint": "Anthropic Messages 原生格式（適用於 Claude Code / Anthropic SDK）。設定 <code>ANTHROPIC_BASE_URL=https://www.keyoapi.xyz</code>。支援 <code>x-api-key: YOUR_KEY</code> 與 <code>Authorization: Bearer YOUR_KEY</code>，需攜帶 <code>anthropic-version: 2023-06-01</code> 標頭。",
     "title": "KeyoAPI 接入文件",
     "docTitle": "KeyoAPI 接入文件",
+    "heroIntro": "KeyoAPI 接入文件：驗證、模型選擇、請求格式與任務查詢。",
     "heroSub": "一個 Base URL + 一把 API Key，相容 OpenAI 協定。可直接用於 Cursor、ChatBox 與官方 SDK。",
     "tocAccess": "接入資訊",
     "tocChat": "文字對話",
@@ -1248,7 +1251,7 @@ const I18N = {
     "tocSupport": "儲值與支援",
     "accessTitle": "接入資訊",
     "accessDesc": "先備好位址和金鑰，後面所有請求都用這兩樣。",
-    "apiKeyNote": "登入控制台 →「令牌」建立，或由客服發放的 sk-...",
+    "apiKeyNote": "登入控制台 →「令牌」→「建立 API Key」。建立後請立即複製並妥善保管。",
     "authLabel": "驗證標頭",
     "authValue": "Authorization: Bearer sk-你的金鑰",
     "goCreate": "去建立",
@@ -1285,7 +1288,7 @@ const I18N = {
     "listModels": "查可用模型",
     "copyCurl": "複製 curl",
     "supportTitle": "儲值與支援",
-    "supportBody": "<strong>儲值</strong>：登入 → <a href=\"/wallet\" target=\"_top\">錢包</a> → 選擇目前可用付款方式，付款前核對金額與入帳額度。未入帳先查付款紀錄，聯絡支援時提供訂單號。請妥善保管 API Key。",
+    "supportBody": "<strong>儲值</strong>：登入 → <a href=\"/sign-in?redirect=%2Fwallet\" target=\"_top\">錢包</a> → 選擇目前可用付款方式，付款前核對金額與入帳額度。未入帳先查付款紀錄，聯絡支援時提供訂單號。請妥善保管 API Key。",
     "footA": "KeyoAPI · 一個位址，多模型",
     "footB": "OpenAI 相容 · 按量計費",
     "copied": "已複製",
@@ -1346,6 +1349,7 @@ const I18N = {
     "messagesHint": "Anthropic Messages 形式（Claude Code / Anthropic SDK 対応）。<code>ANTHROPIC_BASE_URL=https://www.keyoapi.xyz</code> を設定。<code>x-api-key: YOUR_KEY</code> または <code>Authorization: Bearer YOUR_KEY</code>（<code>anthropic-version: 2023-06-01</code>）をサポート。",
     "title": "KeyoAPI ドキュメント",
     "docTitle": "KeyoAPI 連携ドキュメント",
+    "heroIntro": "KeyoAPI の認証、モデル選択、リクエスト形式、タスク照会のドキュメントです。",
     "heroSub": "1つの Base URL と 1つの API Key。OpenAI 互換で Cursor / ChatBox / 公式 SDK にそのまま使えます。",
     "tocAccess": "接続情報",
     "tocChat": "チャット",
@@ -1354,7 +1358,7 @@ const I18N = {
     "tocSupport": "課金とサポート",
     "accessTitle": "接続情報",
     "accessDesc": "まず Base URL とキーを用意。以降のリクエストはすべてこの2つです。",
-    "apiKeyNote": "コンソールにログイン →「トークン」で作成、またはサポート発行の sk-...",
+    "apiKeyNote": "コンソールにログイン →「トークン」→「API キーを作成」。作成後すぐにコピーして安全に保管してください。",
     "authLabel": "認証ヘッダー",
     "authValue": "Authorization: Bearer sk-YOUR_KEY",
     "goCreate": "作成する",
@@ -1391,7 +1395,7 @@ const I18N = {
     "listModels": "利用可能モデル",
     "copyCurl": "curl をコピー",
     "supportTitle": "課金とサポート",
-    "supportBody": "<strong>チャージ</strong>：ログイン → <a href=\"/wallet\" target=\"_top\">ウォレット</a> → 利用可能な支払い方法。支払前に金額と付与額を確認してください。反映されない場合は支払い履歴を確認し、注文 ID を添えてサポートへ連絡してください。API キーは非公開で保管してください。",
+    "supportBody": "<strong>チャージ</strong>：ログイン → <a href=\"/sign-in?redirect=%2Fwallet\" target=\"_top\">ウォレット</a> → 利用可能な支払い方法。支払前に金額と付与額を確認してください。反映されない場合は支払い履歴を確認し、注文 ID を添えてサポートへ連絡してください。API キーは非公開で保管してください。",
     "footA": "KeyoAPI · ひとつのエンドポイントで多モデル",
     "footB": "OpenAI 互換 · 従量課金",
     "copied": "コピー済み",
@@ -1452,6 +1456,7 @@ const I18N = {
     "messagesHint": "Format Anthropic Messages (Claude Code / SDK Anthropic). Définissez <code>ANTHROPIC_BASE_URL=https://www.keyoapi.xyz</code>. Accepte <code>x-api-key: YOUR_KEY</code> et <code>Authorization: Bearer YOUR_KEY</code> avec l’en-tête <code>anthropic-version: 2023-06-01</code>.",
     "title": "Docs KeyoAPI",
     "docTitle": "Documentation d’intégration KeyoAPI",
+    "heroIntro": "Documentation KeyoAPI : authentification, modèles, formats de requête et suivi des tâches.",
     "heroSub": "Une Base URL + une clé API. Compatible OpenAI — Cursor, ChatBox et SDK officiels.",
     "tocAccess": "Connexion",
     "tocChat": "Chat",
@@ -1460,7 +1465,7 @@ const I18N = {
     "tocSupport": "Paiement & support",
     "accessTitle": "Connexion",
     "accessDesc": "Préparez l’URL et la clé — toutes les requêtes les utilisent.",
-    "apiKeyNote": "Connexion → Jetons → créer, ou clé fournie : sk-...",
+    "apiKeyNote": "Connectez-vous → Jetons → Créer une clé API. Copiez-la une seule fois et gardez-la privée.",
     "authLabel": "En-tête d’auth",
     "authValue": "Authorization: Bearer sk-YOUR_KEY",
     "goCreate": "Créer une clé",
@@ -1497,7 +1502,7 @@ const I18N = {
     "listModels": "Lister les modèles",
     "copyCurl": "Copier curl",
     "supportTitle": "Paiement & support",
-    "supportBody": "<strong>Recharger</strong> : connexion → <a href=\"/wallet\" target=\"_top\">Portefeuille</a> → moyen de paiement disponible. Vérifiez le montant et le crédit avant de payer. En cas de crédit manquant, consultez l’historique puis contactez le support avec l’ID de commande. Gardez vos clés privées.",
+    "supportBody": "<strong>Recharger</strong> : connexion → <a href=\"/sign-in?redirect=%2Fwallet\" target=\"_top\">Portefeuille</a> → moyen de paiement disponible. Vérifiez le montant et le crédit avant de payer. En cas de crédit manquant, consultez l’historique puis contactez le support avec l’ID de commande. Gardez vos clés privées.",
     "footA": "KeyoAPI · Un endpoint, plusieurs modèles",
     "footB": "Compatible OpenAI · facturation à l’usage",
     "copied": "Copié",
@@ -1558,6 +1563,7 @@ const I18N = {
     "messagesHint": "Формат Anthropic Messages (для Claude Code / Anthropic SDK). Укажите <code>ANTHROPIC_BASE_URL=https://www.keyoapi.xyz</code>. Поддерживает <code>x-api-key: YOUR_KEY</code> и <code>Authorization: Bearer YOUR_KEY</code> с заголовком <code>anthropic-version: 2023-06-01</code>.",
     "title": "Документация KeyoAPI",
     "docTitle": "Документация по подключению KeyoAPI",
+    "heroIntro": "Документация KeyoAPI: аутентификация, выбор моделей, форматы запросов и запросы задач.",
     "heroSub": "Один Base URL + один API Key. Совместимо с OpenAI — Cursor, ChatBox и официальные SDK.",
     "tocAccess": "Подключение",
     "tocChat": "Чат",
@@ -1566,7 +1572,7 @@ const I18N = {
     "tocSupport": "Оплата и поддержка",
     "accessTitle": "Подключение",
     "accessDesc": "Сначала Base URL и ключ — дальше все запросы используют их.",
-    "apiKeyNote": "Войти → Токены → создать, или ключ от поддержки: sk-...",
+    "apiKeyNote": "Войдите в консоль → «Токены» → «Создать API key». Скопируйте ключ один раз и храните его в секрете.",
     "authLabel": "Заголовок auth",
     "authValue": "Authorization: Bearer sk-YOUR_KEY",
     "goCreate": "Создать ключ",
@@ -1603,7 +1609,7 @@ const I18N = {
     "listModels": "Список моделей",
     "copyCurl": "Копировать curl",
     "supportTitle": "Оплата и поддержка",
-    "supportBody": "<strong>Пополнение</strong>: войдите → <a href=\"/wallet\" target=\"_top\">Кошелёк</a> → доступный способ оплаты. До оплаты проверьте сумму и начисляемый баланс. Если баланс не обновился, проверьте историю и передайте поддержке ID заказа. Не публикуйте API-ключи.",
+    "supportBody": "<strong>Пополнение</strong>: войдите → <a href=\"/sign-in?redirect=%2Fwallet\" target=\"_top\">Кошелёк</a> → доступный способ оплаты. До оплаты проверьте сумму и начисляемый баланс. Если баланс не обновился, проверьте историю и передайте поддержке ID заказа. Не публикуйте API-ключи.",
     "footA": "KeyoAPI · Один endpoint — много моделей",
     "footB": "Совместимо с OpenAI · оплата по использованию",
     "copied": "Скопировано",
@@ -1664,6 +1670,7 @@ const I18N = {
     "messagesHint": "Định dạng Anthropic Messages (cho Claude Code / Anthropic SDK). Đặt <code>ANTHROPIC_BASE_URL=https://www.keyoapi.xyz</code>. Hỗ trợ <code>x-api-key: YOUR_KEY</code> và <code>Authorization: Bearer YOUR_KEY</code> với header <code>anthropic-version: 2023-06-01</code>.",
     "title": "Tài liệu KeyoAPI",
     "docTitle": "Tài liệu tích hợp KeyoAPI",
+    "heroIntro": "Tài liệu KeyoAPI về xác thực, chọn mô hình, định dạng yêu cầu và tra cứu tác vụ.",
     "heroSub": "Một Base URL + một API Key. Tương thích OpenAI — dùng với Cursor, ChatBox và SDK chính thức.",
     "tocAccess": "Kết nối",
     "tocChat": "Chat",
@@ -1672,7 +1679,7 @@ const I18N = {
     "tocSupport": "Nạp tiền & hỗ trợ",
     "accessTitle": "Kết nối",
     "accessDesc": "Chuẩn bị Base URL và key trước — mọi request đều dùng hai thứ này.",
-    "apiKeyNote": "Đăng nhập → Token → tạo, hoặc key từ hỗ trợ: sk-...",
+    "apiKeyNote": "Đăng nhập → Token → Tạo API key. Sao chép một lần rồi giữ khóa riêng tư.",
     "authLabel": "Header xác thực",
     "authValue": "Authorization: Bearer sk-YOUR_KEY",
     "goCreate": "Tạo key",
@@ -1709,7 +1716,7 @@ const I18N = {
     "listModels": "Liệt kê model",
     "copyCurl": "Sao chép curl",
     "supportTitle": "Nạp tiền & hỗ trợ",
-    "supportBody": "<strong>Nạp tiền</strong>: đăng nhập → <a href=\"/wallet\" target=\"_top\">Ví</a> → chọn phương thức thanh toán hiện có. Kiểm tra số tiền và số dư được cộng trước khi trả. Nếu chưa nhận được, kiểm tra lịch sử và liên hệ hỗ trợ kèm mã đơn. Giữ API key riêng tư.",
+    "supportBody": "<strong>Nạp tiền</strong>: đăng nhập → <a href=\"/sign-in?redirect=%2Fwallet\" target=\"_top\">Ví</a> → chọn phương thức thanh toán hiện có. Kiểm tra số tiền và số dư được cộng trước khi trả. Nếu chưa nhận được, kiểm tra lịch sử và liên hệ hỗ trợ kèm mã đơn. Giữ API key riêng tư.",
     "footA": "KeyoAPI · Một endpoint, nhiều mô hình",
     "footB": "Tương thích OpenAI · tính theo usage",
     "copied": "Đã sao chép",
@@ -1952,21 +1959,21 @@ const TTS_MODEL_COPY = {
   "en": {
     "ttsTitle": "Speech: use each model’s request fields",
     "ttsHint": "Sync audio: <code>GLM-TTS / Step-Audio-TTS-3B / IndexTTS-2 / eleven-v4</code> use <code>/v1/audio/speech</code>. Qwen, CosyVoice and Spark use <code>/v1/async/audio/speech</code>, then singular <code>GET /v1/task/{id}</code>. Qwen <code>inputs</code> is an array of objects with <code>prompt + language</code>; Cosy/Spark use strings. Save the task ID; retry temporary <code>task_query_unavailable</code> GETs according to <code>Retry-After</code>, without creating another task.",
-    "ttsRefsHint": "Replace <code>https://example.com/your-reference.wav</code> with a real downloadable audio URL and replace <code>prompt_text</code> with its exact transcript. Index requires <code>prompt_audio_url</code>; Cosy requires <code>prompt_wav_url + prompt_text</code> (≤30 s, ≥16 kHz, WAV/MP3). Step references are optional WAV; arbitrary <code>voice</code> names are not confirmed. Spark basic mode requires <code>gender</code>. Eleven uses a model-specific name such as <code>george</code>. No gender, emotion or voice quality is guaranteed. <code>keyo-tts</code> remains pending; laya is not TTS and InfiniteTalk needs existing audio. <a href=\"/brand/keyo-api-ref.html#section-7-1\">Sync fields</a> · <a href=\"/brand/keyo-api-ref.html#section-8\">Async fields and limits</a>. The example voice value <code>george</code> must be replaced with a name or ID confirmed valid for this model and account.",
+    "ttsRefsHint": "Replace <code>https://replace-me.invalid/your-reference.wav</code> with a real downloadable audio URL and replace <code>prompt_text</code> with its exact transcript. Index requires <code>prompt_audio_url</code>; Cosy requires <code>prompt_wav_url + prompt_text</code> (≤30 s, ≥16 kHz, WAV/MP3). Step references are optional WAV; arbitrary <code>voice</code> names are not confirmed. Spark basic mode requires <code>gender</code>. Eleven uses a model-specific name such as <code>george</code>. No gender, emotion or voice quality is guaranteed. <code>keyo-tts</code> remains pending; laya is not TTS and InfiniteTalk needs existing audio. <a href=\"/brand/keyo-api-ref.html#section-7-1\">Sync fields</a> · <a href=\"/brand/keyo-api-ref.html#section-8\">Async fields and limits</a>. The example voice value <code>george</code> must be replaced with a name or ID confirmed valid for this model and account.",
     "ttsText": "Hello, welcome to KeyoAPI.",
     "ttsLanguage": "English"
   },
   "zhCN": {
     "ttsTitle": "语音合成：按型号填写字段",
     "ttsHint": "同步 GLM / Step / Index / Eleven 使用 <code>/v1/audio/speech</code>；Qwen / Cosy / Spark 使用 <code>/v1/async/audio/speech</code>，再查单数 <code>GET /v1/task/{id}</code>。Qwen 的 <code>inputs</code> 是含 <code>prompt + language</code> 的对象数组，Cosy/Spark 则是字符串。先保存任务 ID；查询临时 <code>task_query_unavailable</code> 按 <code>Retry-After</code> 重试原 GET，不重建任务。",
-    "ttsRefsHint": "将 <code>https://example.com/your-reference.wav</code> 换成可直接下载的真实音频，<code>prompt_text</code> 换成该文件逐字台词。Index 必填 <code>prompt_audio_url</code>；Cosy 必填 <code>prompt_wav_url + prompt_text</code>（≤30秒、≥16kHz、WAV/MP3）。Step 参考可选且仅 WAV，未确认任意 <code>voice</code> 名称有效。Spark 基础分支须填 <code>gender</code>；Eleven 用该型号名称如 <code>george</code>。不保证性别、情绪或音质效果。<code>keyo-tts</code> 待确认，laya 非 TTS，InfiniteTalk 需要已有音频。<a href=\"/brand/keyo-api-ref.html#section-7-1\">同步字段</a> · <a href=\"/brand/keyo-api-ref.html#section-8\">异步字段与限制</a>。 示例音色值 <code>george</code> 仍须按该型号及账号已确认有效的名称或 ID 替换。",
+    "ttsRefsHint": "将 <code>https://replace-me.invalid/your-reference.wav</code> 换成可直接下载的真实音频，<code>prompt_text</code> 换成该文件逐字台词。Index 必填 <code>prompt_audio_url</code>；Cosy 必填 <code>prompt_wav_url + prompt_text</code>（≤30秒、≥16kHz、WAV/MP3）。Step 参考可选且仅 WAV，未确认任意 <code>voice</code> 名称有效。Spark 基础分支须填 <code>gender</code>；Eleven 用该型号名称如 <code>george</code>。不保证性别、情绪或音质效果。<code>keyo-tts</code> 待确认，laya 非 TTS，InfiniteTalk 需要已有音频。<a href=\"/brand/keyo-api-ref.html#section-7-1\">同步字段</a> · <a href=\"/brand/keyo-api-ref.html#section-8\">异步字段与限制</a>。 示例音色值 <code>george</code> 仍须按该型号及账号已确认有效的名称或 ID 替换。",
     "ttsText": "你好，欢迎使用 KeyoAPI。",
     "ttsLanguage": "Chinese"
   },
   "zhTW": {
     "ttsTitle": "語音合成：依型號填寫欄位",
     "ttsHint": "同步 GLM / Step / Index / Eleven 使用 <code>/v1/audio/speech</code>；Qwen / Cosy / Spark 使用 <code>/v1/async/audio/speech</code>，再查單數 <code>GET /v1/task/{id}</code>。Qwen 的 <code>inputs</code> 是含 <code>prompt + language</code> 的物件陣列，Cosy/Spark 則是字串。先保存任務 ID；暫時的 <code>task_query_unavailable</code> 依 <code>Retry-After</code> 重試原 GET，不重建任務。",
-    "ttsRefsHint": "將 <code>https://example.com/your-reference.wav</code> 換成可直接下載的真實音訊，<code>prompt_text</code> 換成逐字台詞。Index 必填 <code>prompt_audio_url</code>；Cosy 必填 <code>prompt_wav_url + prompt_text</code>（≤30秒、≥16kHz、WAV/MP3）。Step 參考可選且僅 WAV，未確認任意 <code>voice</code> 名稱有效。Spark 基礎分支須填 <code>gender</code>；Eleven 使用型號名稱如 <code>george</code>。不保證性別、情緒或音質效果。<code>keyo-tts</code> 待確認，laya 非 TTS，InfiniteTalk 需要已有音訊。<a href=\"/brand/keyo-api-ref.html#section-7-1\">同步欄位</a> · <a href=\"/brand/keyo-api-ref.html#section-8\">非同步欄位與限制</a>。 範例音色值 <code>george</code> 仍須換成此型號及帳號已確認有效的名稱或 ID。",
+    "ttsRefsHint": "將 <code>https://replace-me.invalid/your-reference.wav</code> 換成可直接下載的真實音訊，<code>prompt_text</code> 換成逐字台詞。Index 必填 <code>prompt_audio_url</code>；Cosy 必填 <code>prompt_wav_url + prompt_text</code>（≤30秒、≥16kHz、WAV/MP3）。Step 參考可選且僅 WAV，未確認任意 <code>voice</code> 名稱有效。Spark 基礎分支須填 <code>gender</code>；Eleven 使用型號名稱如 <code>george</code>。不保證性別、情緒或音質效果。<code>keyo-tts</code> 待確認，laya 非 TTS，InfiniteTalk 需要已有音訊。<a href=\"/brand/keyo-api-ref.html#section-7-1\">同步欄位</a> · <a href=\"/brand/keyo-api-ref.html#section-8\">非同步欄位與限制</a>。 範例音色值 <code>george</code> 仍須換成此型號及帳號已確認有效的名稱或 ID。",
     "ttsText": "你好，欢迎使用 KeyoAPI。",
     "ttsLanguage": "Chinese"
   },
@@ -2058,7 +2065,7 @@ function renderSamples(dict) {
     }
   }, [], 'gemini-tts-response.json');
   const ttsText = dict.ttsText || 'Hello, welcome to KeyoAPI.';
-  const reference = 'https://example.com/your-reference.wav';
+  const reference = 'https://replace-me.invalid/your-reference.wav';
   const transcript = 'Replace with the exact transcript of your reference audio.';
   jsonCurl('curl-tts-glm', '/v1/audio/speech', { model:'GLM-TTS', input:ttsText, prompt_audio_url:reference, prompt_text:transcript, output_format:'wav' }, [], 'speech.wav');
   jsonCurl('curl-tts-step', '/v1/audio/speech', { model:'Step-Audio-TTS-3B', input:ttsText, prompt_audio_url:reference, prompt_text:transcript }, [], 'speech.audio');

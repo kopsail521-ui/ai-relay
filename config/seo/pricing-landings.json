@@ -697,7 +697,7 @@
         "Save id/task_id and query singular GET /v1/task/{id}. On completed, inspect the actual output. Download from url or output.file_url only when present, handling batch results item by item. Preserve an unexpected complete response for support; do not automatically submit again. Retry a temporary task_query_unavailable GET according to Retry-After without creating another task. A submission timeout without an ID has an unknown outcome; do not resubmit automatically.",
         "Style instructions and references do not guarantee a particular emotion, gender, accent or quality. These URL-based requests do not define sample enrollment or reusable voice IDs. Confirm those separate workflows with support. See /tts-api for endpoints, /brand/keyo-api-ref.html#section-8 for model-specific fields and /pricing for current rates."
       ],
-      "curlExample": "# Replace the URL and transcript with your real reference (not a working sample).\ncurl https://www.keyoapi.xyz/v1/async/audio/speech \\\n  -H \"Authorization: Bearer $KEYO_API_KEY\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\"model\":\"CosyVoice3\",\"inputs\":\"Hello from KeyoAPI TTS.\",\"prompt_wav_url\":\"https://example.com/your-reference.wav\",\"prompt_text\":\"Replace with the exact transcript of your reference audio.\"}'\n# Save id/task_id, then GET /v1/task/{id}.",
+      "curlExample": "# Replace the URL and transcript with your real reference (not a working sample).\ncurl https://www.keyoapi.xyz/v1/async/audio/speech \\\n  -H \"Authorization: Bearer $KEYO_API_KEY\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\"model\":\"CosyVoice3\",\"inputs\":\"Hello from KeyoAPI TTS.\",\"prompt_wav_url\":\"https://replace-me.invalid/your-reference.wav\",\"prompt_text\":\"Replace with the exact transcript of your reference audio.\"}'\n# Save id/task_id, then GET /v1/task/{id}.",
       "faqs": [
         {
           "q": "Which fields identify the reference speaker?",
@@ -1348,7 +1348,7 @@
           "a": "The current tiers are 720p, 1080p and 2k. Submit at the highest tier you need — the tool upscales and restores detail generatively."
         }
       ],
-      "curlExample": "curl https://www.keyoapi.xyz/v1/async/videos/enhance \\\n  -H \"Authorization: Bearer $KEYO_API_KEY\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\"model\":\"video-enhance-pro\",\"video_url\":\"https://example.com/clip.mp4\",\"resolution\":\"1080p\"}'\n# Poll GET /v1/task/{id} with the same key until status completed includes a result URL; stop on failed or cancelled"
+      "curlExample": "curl https://www.keyoapi.xyz/v1/async/videos/enhance \\\n  -H \"Authorization: Bearer $KEYO_API_KEY\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\"model\":\"video-enhance-pro\",\"video_url\":\"https://replace-me.invalid/clip.mp4\",\"resolution\":\"1080p\"}'\n# Poll GET /v1/task/{id} with the same key until status completed includes a result URL; stop on failed or cancelled"
     },
     {
       "slug": "subtitle-erase-pro-api-pricing",
@@ -1393,7 +1393,7 @@
           "a": "POST /v1/async/videos/subtitle-erase with model and video_url (https link to your video). Then poll GET /v1/task/{id} for the cleaned video URL."
         }
       ],
-      "curlExample": "curl https://www.keyoapi.xyz/v1/async/videos/subtitle-erase \\\n  -H \"Authorization: Bearer $KEYO_API_KEY\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\"model\":\"subtitle-erase-pro\",\"video_url\":\"https://example.com/subtitled.mp4\"}'\n# Poll GET /v1/task/{id} with the same key until status completed includes a result URL; stop on failed or cancelled"
+      "curlExample": "curl https://www.keyoapi.xyz/v1/async/videos/subtitle-erase \\\n  -H \"Authorization: Bearer $KEYO_API_KEY\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\"model\":\"subtitle-erase-pro\",\"video_url\":\"https://replace-me.invalid/subtitled.mp4\"}'\n# Poll GET /v1/task/{id} with the same key until status completed includes a result URL; stop on failed or cancelled"
     },
     {
       "slug": "nano-banana-api-pricing",

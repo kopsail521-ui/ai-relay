@@ -42,11 +42,11 @@ function checkBody(body, label) {
     assert.equal(body.voice, undefined, label);
   }
   if (['GLM-TTS', 'Step-Audio-TTS-3B', 'IndexTTS-2'].includes(body.model)) {
-    assert.equal(body.prompt_audio_url, 'https://example.com/your-reference.wav', label);
+    assert.equal(body.prompt_audio_url, 'https://replace-me.invalid/your-reference.wav', label);
     assert.equal(body.voice, undefined, label);
   }
   if (['GLM-TTS', 'Step-Audio-TTS-3B', 'CosyVoice3'].includes(body.model)) assert.ok(body.prompt_text?.length, label);
-  if (body.model === 'CosyVoice3') assert.equal(body.prompt_wav_url, 'https://example.com/your-reference.wav', label);
+  if (body.model === 'CosyVoice3') assert.equal(body.prompt_wav_url, 'https://replace-me.invalid/your-reference.wav', label);
   if (body.model === 'IndexTTS-2') assert.equal(body.use_emo_text, true, label);
   if (body.model === 'Spark-TTS-0.5B') {
     assert.ok(['male', 'female'].includes(body.gender), label);
@@ -164,6 +164,29 @@ test('Gemini SEO uses native JSON audio only and Eleven does not invent a voice 
   const compat = read('static/seo/openai-api-alternative.html');
   assert.match(compat, /gemini-3\.1-flash-tts-preview<\/code> remains pending/);
   assert.match(compat, /Index requires <code>prompt_audio_url/);
+});
+
+test('public copyable examples mark media URLs as explicit placeholders', () => {
+  const files = [
+    'static/brand/keyo-docs.html',
+    'static/brand/keyo-api-ref.html',
+    'static/brand/keyo-api-ref.md',
+    'static/brand/keyo-api-ref.en.md',
+    'docs/客户接入一页纸.md',
+    'static/seo/model/CosyVoice3.html',
+    'static/seo/model/IndexTTS-2.html',
+    'static/seo/voice-cloning-api.html',
+  ];
+  for (const file of files) {
+    const body = read(file);
+    assert.doesNotMatch(body, /https:\/\/example\.com\//, `${file}: stale example.com placeholder`);
+    assert.match(body, /https:\/\/replace-me\.invalid\//, `${file}: missing explicit placeholder`);
+  }
+  assert.match(quick, /data-i18n="heroIntro"/);
+  assert.match(dictionary.zhCN.heroIntro, /接入文档/);
+  assert.match(quick, /href="\/sign-in\?redirect=%2Fkeys"/);
+  assert.match(quick, /redirect=%2Fwallet/);
+  assert.doesNotMatch(dictionary.zhCN.apiKeyNote, /客服|发放/);
 });
 
 test('regenerating TTS SEO preserves corrected requests and hand-maintained TTS pages', () => {

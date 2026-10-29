@@ -1,5 +1,11 @@
 # Plan A — 27 篇存量博客文章的处置（预置 runbook，11-07 之后执行）
 
+> **执行记录：已于 2026-10-28 提前执行（提交 496e414 + f7ad817）。**
+> 实测：博客 sitemap 31 → 4 条（0 个 /article/ URL）；文章页 200 + `X-Robots-Tag: noindex, nofollow`；
+> 博客首页 200 且无 noindex；主 sitemap 87 条不变。
+> 下方步骤保留作为回滚/复核依据。注意：flag 在 `data/geoflow-agent/gate.json`（PHP 的 `load_gate()` 读这里），
+> 不是 `config.json`。
+
 ## 射程边界（写死，勿扩大）
 
 **方案 A 只对 `/brand/blog/article/` 下的 27 篇生效。以下一律不碰：**

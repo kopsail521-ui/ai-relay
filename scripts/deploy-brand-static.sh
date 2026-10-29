@@ -235,6 +235,16 @@ ${LANDING_HANDLES}
 		file_server
 	}
 ${GEOFLOW_AGENT_BLOCK}
+	# Plan A (2026-10-28): the 27 pre-10-10 bulk articles stay readable (200)
+	# but leave the index. The blog sitemap already excludes them (geoflow
+	# flag set by vps-static-deploy.sh). Must sit BEFORE @geo_blog.
+	@geo_blog_article path /brand/blog/article/*
+	handle @geo_blog_article {
+		header X-Robots-Tag "noindex, nofollow"
+		root * ${ROOT}/static
+		try_files {path} {path}.html {path}/index.html
+		file_server
+	}
 	# GEO blog (durable — must survive every Caddyfile rewrite):
 	#   /brand/blog/{slug}.html
 	#   /brand/blog/article/{id}/  (+ index.html)
@@ -387,6 +397,21 @@ verify_check "SPA console alias alive"         "/console"      200 "text/html"
 verify_check "SPA keys deep link alive"        "/keys"         200 "text/html"
 verify_check "SPA topup deep link alive"       "/topup"        200 "text/html"
 verify_check "robots declares sitemap"         "/robots.txt"   200 "text/plain" "Sitemap: https://www.keyoapi.xyz/sitemap.xml"
+# Plan A invariants: articles readable but noindexed; blog sitemap has no article URLs.
+ART_HEAD=$(curl -sSI --max-time 15 "https://${DOMAIN}/brand/blog/article/ooy10bjn/" 2>/dev/null | grep -i '^x-robots-tag' || true)
+if [[ "$ART_HEAD" == *noindex* ]]; then
+  echo "VERIFY_OK   blog article carries noindex"
+else
+  echo "VERIFY_FAIL blog article missing noindex (got: ${ART_HEAD:-none})"
+  verify_failed=1
+fi
+BLOG_SM=$(curl -sS --max-time 15 "https://${DOMAIN}/brand/blog/sitemap.txt" 2>/dev/null || true)
+if [[ "$BLOG_SM" == *"/article/"* ]]; then
+  echo "VERIFY_FAIL blog sitemap still lists article URLs"
+  verify_failed=1
+else
+  echo "VERIFY_OK   blog sitemap lists no article URLs ($(printf '%s' "$BLOG_SM" | wc -l) lines)"
+fi
 
 if [[ "$verify_failed" -ne 0 ]]; then
   echo "==> VERIFY_FAILED — rolling back static dirs + Caddyfile"

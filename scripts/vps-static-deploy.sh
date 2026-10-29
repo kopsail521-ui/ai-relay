@@ -15,6 +15,25 @@ ROOT="${ROOT:-/opt/ai-relay}"
 STATUS="$ROOT/static/brand/deploy-status-e0cf117e.txt"
 
 main() {
+  # Plan A (2026-10-28): the 27 pre-10-10 bulk articles stay readable (200)
+  # but leave the blog sitemap. The flag lives in the VPS-only geoflow
+  # config; safe-pull's blog rebuild runs after this and regenerates
+  # sitemap.txt without article URLs. Idempotent.
+  GEO_CFG="$ROOT/data/geoflow-agent/config.json"
+  if [ -f "$GEO_CFG" ]; then
+    sudo python3 - "$GEO_CFG" <<'PY' || true
+import json, sys
+p = sys.argv[1]
+with open(p, encoding="utf-8") as f:
+    cfg = json.load(f)
+if cfg.get("sitemap_include_articles"):
+    cfg["sitemap_include_articles"] = False
+    with open(p, "w", encoding="utf-8") as f:
+        json.dump(cfg, f, ensure_ascii=False, indent=2)
+    print("plan-a: sitemap_include_articles -> false")
+PY
+  fi
+
   # RELOAD_CADDY must be passed explicitly: the inner sudo strips it from the
   # environment, so a plain `sudo -E` on this script is not enough to reach
   # safe-pull's Caddy reload step. deploy-brand-static.sh validates and

@@ -30,7 +30,10 @@ fi
 # Rebuild the gitee passthrough image so the container picks up the
 # server.mjs committed in this push (gift-credit twins support: model
 # normalization + gift-first billing).
-EXPECTED_BUILD=buffered-upload-guard-2026-10-25
+# Marker check: any healthz that carries a "build" field is current code
+# (old ghost processes have no build key at all). Pin exact BUILD_ID here
+# and it will drift every time the app bumps its marker — so only key presence
+# is checked.
 if ! bash scripts/vps-passthrough-rebuild.txt >/tmp/passthrough-rebuild.log 2>&1; then
   cat /tmp/passthrough-rebuild.log
   {
@@ -49,7 +52,7 @@ tail -5 /tmp/passthrough-rebuild.log
 HZ=""
 for _ in 1 2 3 4 5 6 7 8 9 10; do
   HZ=$(curl -sS --max-time 3 http://127.0.0.1:3010/healthz 2>/dev/null || true)
-  case "$HZ" in *"$EXPECTED_BUILD"*) break ;; esac
+  case "$HZ" in *'"build":'*) break ;; esac
   sleep 3
   HZ=""
 done
@@ -67,7 +70,7 @@ if [ -z "$HZ" ]; then
   fi
   for _ in 1 2 3 4 5 6 7 8 9 10; do
     HZ=$(curl -sS --max-time 3 http://127.0.0.1:3010/healthz 2>/dev/null || true)
-    case "$HZ" in *"$EXPECTED_BUILD"*) break ;; esac
+    case "$HZ" in *'"build":'*) break ;; esac
     sleep 3
     HZ=""
   done

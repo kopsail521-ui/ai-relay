@@ -746,7 +746,7 @@ function enrichPricingPayload(payload) {
         next.completion_ratio = 2.7778;
       }
     } else if (name === "MiniMax-M3.1-Flash") {
-      next.tags = "大语言模型,工具,识图";
+      next.tags = "大语言模型";
       next.supported_endpoint_types = ["openai"];
       if (!next.model_ratio || next.model_ratio <= 0) {
         next.model_ratio = 0.045;

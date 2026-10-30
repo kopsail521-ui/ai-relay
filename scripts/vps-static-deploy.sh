@@ -58,6 +58,14 @@ PY
   sudo cp -a /etc/caddy/Caddyfile "/etc/caddy/Caddyfile.bak.$(date +%Y%m%d-%H%M%S)"
   sudo bash "$ROOT/scripts/deploy-brand-static.sh"
   echo DONE_STATIC_DEPLOY
+
+  # One-shot flag: run the full speech smoke (rebuild + marker check + real
+  # calls) in this deploy, then delete the flag from the repo to disarm.
+  if [ -f "$ROOT/scripts/.run-smoke-now" ]; then
+    echo "=== one-shot smoke run (flag present) ==="
+    bash "$ROOT/scripts/vps-run-gift-speech-smoke.sh" || true
+    echo "=== one-shot smoke run finished ==="
+  fi
 }
 
 mkdir -p "$ROOT/static/brand"

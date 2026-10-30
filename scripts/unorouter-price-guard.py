@@ -115,11 +115,12 @@ def ability_rows(conn: sqlite3.Connection, channel_id: int, model: str):
     return conn.execute("SELECT rowid, enabled FROM abilities WHERE channel_id=? AND model=?", (channel_id, model)).fetchall()
 
 
-def policy_for(config: dict, model: str, sell_input: float | None, sell_output: float | None):
+def policy_for(config: dict, model: str, sell_input: float | None, sell_output: float | None, explicit=None):
     overrides = config.get("model_overrides") or {}
     override = overrides.get(model) if isinstance(overrides, dict) else None
-    if not isinstance(override, dict):
-        override = {}
+    override = dict(override) if isinstance(override, dict) else {}
+    if isinstance(explicit, dict):
+        override.update({key: value for key, value in explicit.items() if value is not None})
     share = override.get("max_cost_share_of_sell", config.get("max_cost_share_of_sell", 0.8))
     try:
         share = float(share)
@@ -134,6 +135,40 @@ def policy_for(config: dict, model: str, sell_input: float | None, sell_output: 
     if max_output is None and sell_output is not None:
         max_output = sell_output * share
     return max_input, max_output, share
+
+
+def target_specs(config: dict) -> list[dict]:
+    """Normalize the original one-channel config and the multi-channel form."""
+    targets = config.get("targets")
+    if not isinstance(targets, list) or not targets:
+        return [config]
+    result = []
+    for target in targets:
+        if not isinstance(target, dict):
+            continue
+        merged = dict(config)
+        merged.update(target)
+        result.append(merged)
+    return result
+
+
+def model_specs(target: dict) -> list[dict]:
+    result = []
+    for item in target.get("models") or []:
+        if isinstance(item, str) and item.strip():
+            result.append({"public_model": item.strip(), "upstream_model": item.strip()})
+            continue
+        if not isinstance(item, dict):
+            continue
+        public = item.get("public_model") or item.get("model") or item.get("id")
+        if isinstance(public, str) and public.strip():
+            result.append({
+                "public_model": public.strip(),
+                "upstream_model": str(item.get("upstream_model") or item.get("upstream") or public).strip(),
+                "max_input_price": item.get("max_input_price"),
+                "max_output_price": item.get("max_output_price"),
+            })
+    return result
 
 
 def set_blocked(conn, channel_id: int, model: str, state: dict, reason: str) -> None:
@@ -158,18 +193,12 @@ def set_recovered(conn, channel_id: int, model: str, state: dict) -> None:
 def run(config: dict, db_path: Path, state_path: Path, catalog: dict | None = None, dry_run: bool = False) -> dict:
     if not config.get("enabled", False):
         return {"result": "PRICE_GUARD_DISABLED", "enforce": False}
-    models = config.get("models") or []
-    if isinstance(models, dict):
-        models = list(models)
-    if not isinstance(models, list) or not models:
+    targets = target_specs(config)
+    if not targets or not any(model_specs(target) for target in targets):
         return {"result": "PRICE_GUARD_NO_MODELS", "enforce": True}
     conn = sqlite3.connect(str(db_path), timeout=5)
     conn.execute("PRAGMA busy_timeout=5000")
     try:
-        target = target_channel(conn, config.get("channel_name", "Keyo Chat"))
-        if not target:
-            raise RuntimeError("target channel not found")
-        channel_id = int(target[0])
         state = read_json(state_path, {"models": {}})
         if not isinstance(state, dict):
             state = {"models": {}}
@@ -189,41 +218,47 @@ def run(config: dict, db_path: Path, state_path: Path, catalog: dict | None = No
         last_success = float(state.get("last_success_epoch") or 0)
         stale = fetch_error is not None and (not last_success or time.time() - last_success > stale_after)
         rows = []
-        for model in models:
-            if not isinstance(model, str) or not model.strip():
-                continue
-            model = model.strip()
-            sell_input, sell_output = sell_prices(conn, model)
-            max_input, max_output, share = policy_for(config, model, sell_input, sell_output)
-            current = (price_rows_by_model or {}).get(model)
-            reason = None
-            if stale:
-                reason = "price_data_stale"
-            elif current is None:
-                reason = "model_missing_from_catalog"
-            elif not current["online"]:
-                reason = "model_offline"
-            elif max_input is None or max_output is None:
-                reason = "sell_price_missing"
-            elif current["input_price"] is None or current["output_price"] is None:
-                reason = "upstream_price_missing"
-            elif current["input_price"] > max_input or current["output_price"] > max_output:
-                reason = "upstream_price_over_cap"
-            key = "%s:%s" % (channel_id, model)
-            entry = state.setdefault("models", {}).setdefault(key, {})
-            good = reason is None
-            entry["consecutive_good"] = int(entry.get("consecutive_good") or 0) + 1 if good else 0
-            if not dry_run:
-                if reason:
-                    set_blocked(conn, channel_id, model, state, reason)
-                elif entry["consecutive_good"] >= int(config.get("recovery_checks", 2)):
-                    set_recovered(conn, channel_id, model, state)
-                state.setdefault("models", {})[key] = entry
-            rows.append({"model": model, "reason": reason, "good": good,
-                         "input_price": current.get("input_price") if current else None,
-                         "output_price": current.get("output_price") if current else None,
-                         "max_input_price": max_input, "max_output_price": max_output,
-                         "max_cost_share_of_sell": share, "consecutive_good": entry["consecutive_good"]})
+        channel_ids = []
+        for target in targets:
+            channel = target_channel(conn, target.get("channel_name", "Keyo Chat"))
+            if not channel:
+                raise RuntimeError("target channel not found")
+            channel_id = int(channel[0])
+            channel_ids.append(channel_id)
+            for spec in model_specs(target):
+                public_model = spec["public_model"]
+                upstream_model = spec["upstream_model"]
+                sell_input, sell_output = sell_prices(conn, public_model)
+                max_input, max_output, share = policy_for(target, public_model, sell_input, sell_output, spec)
+                current = (price_rows_by_model or {}).get(upstream_model)
+                reason = None
+                if stale:
+                    reason = "price_data_stale"
+                elif current is None:
+                    reason = "model_missing_from_catalog"
+                elif not current["online"]:
+                    reason = "model_offline"
+                elif max_input is None or max_output is None:
+                    reason = "sell_price_missing"
+                elif current["input_price"] is None or current["output_price"] is None:
+                    reason = "upstream_price_missing"
+                elif current["input_price"] >= max_input or current["output_price"] >= max_output:
+                    reason = "upstream_price_over_cap"
+                key = "%s:%s" % (channel_id, public_model)
+                entry = state.setdefault("models", {}).setdefault(key, {})
+                good = reason is None
+                entry["consecutive_good"] = int(entry.get("consecutive_good") or 0) + 1 if good else 0
+                if not dry_run:
+                    if reason:
+                        set_blocked(conn, channel_id, public_model, state, reason)
+                    elif entry["consecutive_good"] >= int(config.get("recovery_checks", 2)):
+                        set_recovered(conn, channel_id, public_model, state)
+                    state.setdefault("models", {})[key] = entry
+                rows.append({"model": public_model, "upstream_model": upstream_model, "reason": reason, "good": good,
+                             "input_price": current.get("input_price") if current else None,
+                             "output_price": current.get("output_price") if current else None,
+                             "max_input_price": max_input, "max_output_price": max_output,
+                             "max_cost_share_of_sell": share, "consecutive_good": entry["consecutive_good"]})
         if fetch_error:
             state["last_error_class"] = fetch_error
         else:
@@ -233,7 +268,9 @@ def run(config: dict, db_path: Path, state_path: Path, catalog: dict | None = No
         if not dry_run:
             conn.commit()
             write_json(state_path, state)
-        return {"result": state["last_result"], "enforce": True, "channel_id": channel_id,
+        return {"result": state["last_result"], "enforce": True,
+                "channel_id": channel_ids[0] if len(channel_ids) == 1 else None,
+                "channel_ids": channel_ids,
                 "stale": stale, "fetch_error_class": fetch_error, "models": rows}
     finally:
         conn.close()

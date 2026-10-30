@@ -16,6 +16,11 @@ CATALOG = {"counts": {"models": 1}, "models": [{
     "online": True, "is_free": False,
 }]}
 
+FREE_CATALOG = {"counts": {"models": 1}, "models": [{
+    "model_name": "glm-5.2", "input_price": 0.010, "output_price": 0.080,
+    "online": True, "is_free": False,
+}]}
+
 
 def fixture():
     tmp = tempfile.TemporaryDirectory()
@@ -28,6 +33,7 @@ def fixture():
       CREATE TABLE abilities("group" TEXT, model TEXT, channel_id INTEGER, enabled INTEGER);
     """)
     conn.execute("INSERT INTO channels(id,name,deleted_at) VALUES(1,'Keyo Chat',NULL)")
+    conn.execute("INSERT INTO channels(id,name,deleted_at) VALUES(3,'Keyo Chat Free',NULL)")
     conn.execute("INSERT INTO abilities VALUES('default','demo-model',1,1)")
     conn.execute("INSERT INTO abilities VALUES('default','demo-model',2,1)")
     conn.execute("INSERT INTO options VALUES('ModelRatio','{\"demo-model\":0.05}')")
@@ -78,6 +84,22 @@ class GuardTests(unittest.TestCase):
         result = run(config, db, state, catalog=None)
         self.assertTrue(result["stale"])
         conn = sqlite3.connect(db); self.assertEqual(conn.execute("SELECT enabled FROM abilities WHERE channel_id=1").fetchone()[0], 0); conn.close()
+
+    def test_free_model_uses_upstream_mapping_and_strict_caps(self):
+        tmp, db, state = fixture(); self.addCleanup(tmp.cleanup)
+        conn = sqlite3.connect(db)
+        conn.execute("INSERT INTO abilities VALUES('default','glm-5.3:free',3,1)")
+        conn.commit(); conn.close()
+        config = {"enabled": True, "recovery_checks": 2, "targets": [{
+            "channel_name": "Keyo Chat Free",
+            "models": [{"public_model": "glm-5.3:free", "upstream_model": "glm-5.2",
+                         "max_input_price": 0.01, "max_output_price": 0.08}],
+        }]}
+        result = run(config, db, state, catalog=FREE_CATALOG)
+        self.assertEqual(result["models"][0]["reason"], "upstream_price_over_cap")
+        conn = sqlite3.connect(db)
+        self.assertEqual(conn.execute("SELECT enabled FROM abilities WHERE channel_id=3").fetchone()[0], 0)
+        conn.close()
 
 
 if __name__ == "__main__":

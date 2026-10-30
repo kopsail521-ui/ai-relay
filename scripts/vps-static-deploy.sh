@@ -62,6 +62,8 @@ PY
   # One-shot flag (or RUN_SPEECH_SMOKE=1 env): run the full speech smoke
   # (rebuild + marker check + real calls) in this deploy, then delete the
   # flag from the repo to disarm.
+  # Spark-TTS contract: the passthrough fills gender/pitch/speed defaults
+  # (server.mjs prepareAsyncSpeechRequest); see 1ea6ceb.
   if [ -f "$ROOT/scripts/.run-smoke-now" ] || [ "${RUN_SPEECH_SMOKE:-0}" = "1" ]; then
     echo "=== one-shot smoke run (flag present) ==="
     bash "$ROOT/scripts/vps-run-gift-speech-smoke.sh" || true

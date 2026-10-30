@@ -31,6 +31,7 @@ import { cn } from '@/lib/utils'
 type UserQuotaCellProps = {
   used: number
   remaining: number
+  giftRemaining: number
 }
 
 function getQuotaProgressColor(percentage: number): string {
@@ -41,9 +42,12 @@ function getQuotaProgressColor(percentage: number): string {
 
 export function UserQuotaCell(props: UserQuotaCellProps) {
   const { t } = useTranslation()
-  const total = props.used + props.remaining
-  const percentage = total > 0 ? (props.remaining / total) * 100 : 0
+  const totalRemaining = props.remaining + props.giftRemaining
+  const total = props.used + totalRemaining
+  const percentage = total > 0 ? (totalRemaining / total) * 100 : 0
   const formattedRemaining = formatQuota(props.remaining)
+  const formattedGiftRemaining = formatQuota(props.giftRemaining)
+  const formattedUsed = formatQuota(props.used)
   const formattedTotal = formatQuota(total)
 
   if (total === 0) {
@@ -64,13 +68,16 @@ export function UserQuotaCell(props: UserQuotaCellProps) {
           <div className='w-full min-w-0 cursor-help space-y-1.5 overflow-hidden' />
         }
       >
-        <div className='grid min-w-0 grid-cols-2 gap-x-4 text-xs'>
+        <div className='grid min-w-0 grid-cols-2 gap-x-3 text-xs'>
           <span className='min-w-0 truncate font-medium tabular-nums'>
-            {formattedRemaining}
+            {t('Recharge Balance')}: {formattedRemaining}
           </span>
-          <span className='text-muted-foreground min-w-0 truncate text-right tabular-nums'>
-            {formattedTotal}
+          <span className='min-w-0 truncate text-right font-medium tabular-nums'>
+            {t('Gift Credits')}: {formattedGiftRemaining}
           </span>
+        </div>
+        <div className='text-muted-foreground truncate text-xs tabular-nums'>
+          {t('Used:')} {formattedUsed}
         </div>
         <Progress
           value={percentage}
@@ -80,10 +87,13 @@ export function UserQuotaCell(props: UserQuotaCellProps) {
       <TooltipContent>
         <div className='space-y-1 text-xs'>
           <div>
-            {t('Used:')} {formatQuota(props.used)}
+            {t('Recharge Balance')}: {formattedRemaining}
           </div>
           <div>
-            {t('Remaining:')} {formattedRemaining}
+            {t('Gift Credits')}: {formattedGiftRemaining}
+          </div>
+          <div>
+            {t('Used:')} {formattedUsed}
           </div>
           <div>
             {t('Total:')} {formattedTotal}

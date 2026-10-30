@@ -1,0 +1,56 @@
+name: Enforce UnoRouter live price guard
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'config/unorouter-price-guard.json'
+      - 'scripts/unorouter-price-guard.py'
+      - 'scripts/unorouter-price-guard.service'
+      - 'scripts/unorouter-price-guard.timer'
+      - 'scripts/install-unorouter-price-guard.sh'
+      - '.github/workflows/keyo-unorouter-price-guard.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: keyo-unorouter-price-guard
+  cancel-in-progress: false
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0
+      - run: python3 scripts/test-unorouter-price-guard.py
+
+  install:
+    needs: verify
+    if: vars.KEYO_VPS_HOST != ''
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    concurrency:
+      group: keyo-vps-mutex
+      cancel-in-progress: false
+      queue: max
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0
+      - name: Install and run the price guard
+        env:
+          HOST: ${{ vars.KEYO_VPS_HOST }}
+          USER: ${{ vars.KEYO_VPS_USER }}
+          KEY: ${{ secrets.KEYO_VPS_SSH_KEY }}
+        run: |
+          set -euo pipefail
+          if [ -z "${USER}" ]; then USER=admin; fi
+          test -n "${KEY}"
+          install -m 700 -d "${HOME}/.ssh"
+          printf '%s\n' "${KEY}" > "${HOME}/.ssh/keyo_price_guard"
+          chmod 600 "${HOME}/.ssh/keyo_price_guard"
+          trap 'rm -f "${HOME}/.ssh/keyo_price_guard"' EXIT
+          ssh -T -i "${HOME}/.ssh/keyo_price_guard" -o BatchMode=yes \
+            -o ConnectTimeout=20 -o ServerAliveInterval=15 -o ServerAliveCountMax=2 \
+            -o StrictHostKeyChecking=accept-new "${USER}@${HOST}" \
+            'sudo -n true && sudo -n env RELOAD_CADDY=0 bash /opt/ai-relay/scripts/vps-safe-pull-preserve-blog.sh && sudo -n bash /opt/ai-relay/scripts/install-unorouter-price-guard.sh && sudo -n systemctl --no-pager --full status keyo-unorouter-price-guard.service && sudo -n python3 -c "import json; p=\"/opt/ai-relay/data/unorouter-price-guard.json\"; d=json.load(open(p)); print(json.dumps({\"result\":d.get(\"last_result\"),\"models\":len(d.get(\"models\",{})),\"last_success_at\":d.get(\"last_success_at\")},separators=(\",\",\":\")))"'

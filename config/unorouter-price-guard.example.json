@@ -1,0 +1,21 @@
+{
+  "enabled": false,
+  "channel_name": "Keyo Chat",
+  "catalog_url": "https://api.unorouter.com/api/pricing/catalog",
+  "request_timeout_sec": 15,
+  "stale_after_sec": 900,
+  "recovery_checks": 2,
+  "max_cost_share_of_sell": 0.8,
+  "models": [
+    "deepseek-v4.1-flash-1017",
+    "deepseek-v4.1-flash",
+    "glm-5.3",
+    "kimi-k3"
+  ],
+  "model_overrides": {
+    "deepseek-v4.1-flash-1017": {
+      "max_input_price": 0.01,
+      "max_output_price": 0.04
+    }
+  }
+}

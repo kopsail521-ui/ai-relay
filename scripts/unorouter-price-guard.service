@@ -1,0 +1,14 @@
+[Unit]
+Description=Keyo UnoRouter live price guard
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+User=root
+NoNewPrivileges=yes
+PrivateTmp=yes
+ProtectHome=yes
+ProtectSystem=strict
+ReadWritePaths=/opt/ai-relay/data
+ExecStart=/usr/bin/python3 /opt/ai-relay/scripts/unorouter-price-guard.py --config /opt/ai-relay/config/unorouter-price-guard.json --db /opt/ai-relay/data/new-api/one-api.db --state /opt/ai-relay/data/unorouter-price-guard.json

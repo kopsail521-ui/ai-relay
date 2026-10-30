@@ -7,6 +7,9 @@ on:
       - 'scripts/vps-safe-pull-preserve-blog.sh'
       - 'scripts/vps-redeploy-creem-moderation.sh'
       - 'scripts/test-vps-release-offline.py'
+      - 'scripts/unorouter-price-guard.py'
+      - 'scripts/test-unorouter-price-guard.py'
+      - 'config/unorouter-price-guard.example.json'
       - 'scripts/public-doc-contracts.test.mjs'
       - 'scripts/public-tts-doc-contracts.test.mjs'
       - 'scripts/test-doc-powershell-offline.mjs'
@@ -19,6 +22,9 @@ on:
       - 'scripts/vps-safe-pull-preserve-blog.sh'
       - 'scripts/vps-redeploy-creem-moderation.sh'
       - 'scripts/test-vps-release-offline.py'
+      - 'scripts/unorouter-price-guard.py'
+      - 'scripts/test-unorouter-price-guard.py'
+      - 'config/unorouter-price-guard.example.json'
       - 'scripts/public-doc-contracts.test.mjs'
       - 'scripts/public-tts-doc-contracts.test.mjs'
       - 'scripts/test-doc-powershell-offline.mjs'
@@ -45,6 +51,7 @@ jobs:
       - run: node --test services/creem-moderation-proxy/server.integration.test.mjs
       - run: node --test services/creem-moderation-proxy/request-budget.test.mjs
       - run: python3 scripts/test-vps-stability.py
+      - run: python3 scripts/test-unorouter-price-guard.py
       - run: node scripts/test-video-contracts-offline.mjs
       - run: node scripts/test-task-responses-offline.mjs
       - run: node --test scripts/public-doc-contracts.test.mjs

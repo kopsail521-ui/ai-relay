@@ -519,6 +519,20 @@ function prepareAsyncSpeechRequest(bodyBuf, contentType) {
       (typeof body.prompt_audio_url !== "string" || !body.prompt_audio_url.trim())) {
     return { error: "IndexTTS-2 requires prompt_audio_url for the reference audio." };
   }
+  if (modelId === "Spark-TTS-0.5B") {
+    // Upstream (gitee Spark-TTS) requires the gender+pitch+speed triplet
+    // together: when gender is present without pitch/speed it returns 400.
+    // Fill safe defaults so plain text-to-speech calls work out of the box;
+    // callers can still override all three.
+    if (body.gender != null) {
+      if (body.pitch == null) body.pitch = 3;
+      if (body.speed == null) body.speed = 3;
+    } else {
+      body.gender = "female";
+      body.pitch ??= 3;
+      body.speed ??= 3;
+    }
+  }
   return { body: Buffer.from(JSON.stringify(body), "utf8") };
 }
 

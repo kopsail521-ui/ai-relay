@@ -334,16 +334,27 @@ globalThis.fetch = (input, init) => {
           },
           { model: "Spark-TTS-0.5B", inputs: "hello", gender: "male", pitch: 3, speed: 3 },
           { model: "Spark-TTS-0.5B:free", inputs: "hello", gender: "female" },
+          { model: "Spark-TTS-0.5B:free", inputs: "hello" },
         ];
         for (const body of examples) {
           const before = received.length;
           const result = await submit(body);
           assert.equal(result.status, 202, JSON.stringify(result));
           assert.equal(received.length - before, 1);
-          assert.deepEqual(JSON.parse(received.at(-1).body.toString()), {
-            ...body,
-            model: body.model.replace(":free", ""),
-          });
+          const expected = { ...body, model: body.model.replace(":free", "") };
+          if (expected.model === "Spark-TTS-0.5B") {
+            // Upstream requires gender+pitch+speed together; plain calls get
+            // safe defaults so real users never hit the 400.
+            if (expected.gender == null) {
+              expected.gender = "female";
+              expected.pitch = expected.pitch ?? 3;
+              expected.speed = expected.speed ?? 3;
+            } else {
+              expected.pitch = expected.pitch ?? 3;
+              expected.speed = expected.speed ?? 3;
+            }
+          }
+          assert.deepEqual(JSON.parse(received.at(-1).body.toString()), expected);
         }
       },
     );

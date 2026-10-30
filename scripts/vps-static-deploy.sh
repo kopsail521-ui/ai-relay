@@ -59,9 +59,10 @@ PY
   sudo bash "$ROOT/scripts/deploy-brand-static.sh"
   echo DONE_STATIC_DEPLOY
 
-  # One-shot flag: run the full speech smoke (rebuild + marker check + real
-  # calls) in this deploy, then delete the flag from the repo to disarm.
-  if [ -f "$ROOT/scripts/.run-smoke-now" ]; then
+  # One-shot flag (or RUN_SPEECH_SMOKE=1 env): run the full speech smoke
+  # (rebuild + marker check + real calls) in this deploy, then delete the
+  # flag from the repo to disarm.
+  if [ -f "$ROOT/scripts/.run-smoke-now" ] || [ "${RUN_SPEECH_SMOKE:-0}" = "1" ]; then
     echo "=== one-shot smoke run (flag present) ==="
     bash "$ROOT/scripts/vps-run-gift-speech-smoke.sh" || true
     echo "=== one-shot smoke run finished ==="

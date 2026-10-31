@@ -64,6 +64,7 @@ PY
   # flag from the repo to disarm.
   # Spark-TTS contract: the passthrough fills gender/pitch/speed defaults
   # (server.mjs prepareAsyncSpeechRequest); see 1ea6ceb.
+  # Token lookup retry: validateToken retries read-only opens (SQLITE_BUSY).
   if [ -f "$ROOT/scripts/.run-smoke-now" ] || [ "${RUN_SPEECH_SMOKE:-0}" = "1" ]; then
     echo "=== one-shot smoke run (flag present) ==="
     bash "$ROOT/scripts/vps-run-gift-speech-smoke.sh" || true

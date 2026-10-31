@@ -129,7 +129,13 @@ function openDb(readonly = false) {
   if (!fs.existsSync(DB_PATH)) return null;
   try {
     // DatabaseSync requires options object (not undefined)
-    return new DatabaseSync(DB_PATH, readonly ? { readOnly: true } : {});
+    const db = new DatabaseSync(DB_PATH, readonly ? { readOnly: true } : {});
+    try {
+      // New API holds write locks frequently; give short opens time to wait
+      // instead of failing immediately with SQLITE_BUSY.
+      db.exec("PRAGMA busy_timeout=5000");
+    } catch {}
+    return db;
   } catch (e) {
     console.error("[gitee-passthrough] openDb failed:", e.message || e);
     return null;
@@ -208,7 +214,12 @@ async function probeNewApiToken(apiKey) {
 
 /** Validate New API token — DB hit is authoritative for billing; New API probe is fallback. */
 async function validateToken(apiKey) {
-  const db = openDb(true);
+  let db = null;
+  for (let attempt = 0; attempt < 3; attempt++) {
+    db = openDb(true);
+    if (db) break;
+    await new Promise((resolve) => setTimeout(resolve, 100 * (attempt + 1)));
+  }
   if (db) {
     try {
       const row = lookupTokenRow(db, apiKey);

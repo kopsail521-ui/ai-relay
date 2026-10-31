@@ -276,8 +276,17 @@ def find_task_url(data):
 
 def run_tts(token_key, model):
     body = json.dumps({"model": model, "inputs": TTS_TEXT}).encode("utf-8")
-    code, data = http_json("POST", "/v1/async/audio/speech", token_key,
-                           {"Content-Type": "application/json"}, body)
+    code, data = (0, {})
+    # Transient 401 (token_lookup_failed) happens when the passthrough's DB
+    # open hits a busy/locked SQLite; a short retry usually clears it.
+    for attempt in range(3):
+        code, data = http_json("POST", "/v1/async/audio/speech", token_key,
+                               {"Content-Type": "application/json"}, body)
+        if code not in (401, 0):
+            break
+        if attempt < 2:
+            print("smoke_retry=%s: submit %s on attempt %d" % (model, code, attempt + 1))
+            time.sleep(5)
     if code not in (200, 202):
         print("smoke_fail=%s: submit http %s: %s" % (model, code, json.dumps(data, ensure_ascii=False)[:300]))
         return False
@@ -323,6 +332,10 @@ def main():
     try:
         uid = ensure_user(conn)
         token_key = create_token(conn, uid)
+        # Release the write connection before making HTTP calls: keeping it
+        # open can make other processes see the DB as locked (hot journal) and
+        # fail read-only opens (the passthrough's token lookup).
+        conn.close()
         print("smoke_user_id=%d" % uid)
         print("smoke_token=%s" % (token_key[:4] + "****" + token_key[-4:]))
 
@@ -341,7 +354,11 @@ def main():
 
         # Billing assertion: the only paid twin (GLM-ASR) must have debited
         # the gift wallet, while the paid wallet stays at 0.
-        row = conn.execute("SELECT quota, gift_quota FROM users WHERE id=?", (uid,)).fetchone()
+        read_conn = db_connect()
+        try:
+            row = read_conn.execute("SELECT quota, gift_quota FROM users WHERE id=?", (uid,)).fetchone()
+        finally:
+            read_conn.close()
         paid = row["quota"]
         gift_after = row["gift_quota"]
         consumed = GIFT_TOPUP - gift_after
@@ -361,10 +378,11 @@ def main():
         return 1
     finally:
         try:
-            cleanup(conn, uid)
+            clean_conn = db_connect()
+            cleanup(clean_conn, uid)
+            clean_conn.close()
         except Exception:  # noqa: BLE001 - cleanup must never mask the result
             pass
-        conn.close()
 
 
 if __name__ == "__main__":
